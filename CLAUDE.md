@@ -73,6 +73,7 @@ pnpm --filter @provider/api run build && node --test tests/*.test.cjs tests/*.te
 
 | Документ | Что содержит |
 | --- | --- |
+| [README.md](README.md) | Обзор проекта, локальный запуск, состав репозитория — первое, что видит новый читатель |
 | [docs/current-state.md](docs/current-state.md) | Что реально работает, что demo, что не реализовано |
 | [docs/admin-design-system.md](docs/admin-design-system.md) | Обязательный источник дизайна/компонентов для `apps/admin` — next-shadcn-admin-dashboard |
 | [docs/web-design-system.md](docs/web-design-system.md) | Обязательный визуальный/UX-референс для `apps/web` — официальный dom.ru |
@@ -89,6 +90,11 @@ pnpm --filter @provider/api run build && node --test tests/*.test.cjs tests/*.te
 | [docs/research/](docs/research/) | Точечные read-only аудиты (переходные костыли, возможности стека) |
 
 Не откладывать doc-update «на потом», если код уже изменён.
+
+Минимум проверки перед завершением задачи:
+1. актуален ли [README.md](README.md);
+2. актуален ли профильный документ из таблицы выше по затронутой области;
+3. нет ли расхождения между фактическим кодом и описанным в документации поведением — не только в правленном абзаце, но и в остальном тексте того же файла.
 
 ---
 
