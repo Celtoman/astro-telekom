@@ -20,7 +20,7 @@ pnpm --filter @provider/database seed     # требует непустые ADMI
 pnpm dev:api                              # NestJS API — http://localhost:3000
 pnpm dev:web                              # Astro web — http://localhost:4321
 pnpm --filter @provider/admin dev         # http://localhost:3001
-pnpm --filter @provider/crm dev           # http://localhost:3002
+pnpm --filter @provider/crm dev           # http://localhost:3002 — временный прототип, см. «Дизайн-система» ниже
 pnpm dev:worker                           # BullMQ worker
 
 # Проверка перед коммитом
@@ -51,6 +51,22 @@ pnpm --filter @provider/api run build && node --test tests/*.test.cjs tests/*.te
 - Секреты только в `.env` (не коммитить). `.env.example` — актуальный список переменных; таблица по назначению — [docs/deployment.md](docs/deployment.md).
 - `apps/api/src/*.ts` — единственный источник кода API; рядом никогда не должно быть tracked `*.js`-дублей (уже устранялись как stale-артефакт, W-03).
 
+## Дизайн-система (жёсткие правила)
+
+### `apps/admin`
+
+Интерфейс `apps/admin` строится **только** на основе решений по дизайну и компонентов из [github.com/arhamkhnz/next-shadcn-admin-dashboard](https://github.com/arhamkhnz/next-shadcn-admin-dashboard) (живой пример — [next-shadcn-admin-dashboard.vercel.app/dashboard/default](https://next-shadcn-admin-dashboard.vercel.app/dashboard/default)). Это буквальное переиспользование кода shadcn/ui-компонентов (обычный для shadcn/ui workflow — копирование в проект), а не только визуальное подражание. Не изобретать новые UI-паттерны на голом CSS, если в референсе есть готовый блок.
+
+Технически это требует React-островов в Astro (`@astrojs/react`) и Tailwind CSS в `apps/admin` — на дату фиксации правила ни то ни другое не подключено. Текущий `apps/admin/src/pages/index.astro` — legacy demo UI (TD-08), написан до этого правила на чистом HTML/CSS/vanilla JS; не расширять его в старом стиле. Правило фиксирует направление будущей работы, миграция — предмет отдельной задачи. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
+
+### `apps/web`
+
+Публичная витрина `apps/web` визуально и по UX ориентируется на официальный сайт [dom.ru](https://dom.ru) — но это референс структуры/тона/визуального языка, **не код** (сайт не open-source) и **не источник контента для копирования** (`apps/web` — сайт партнёра/дилера, не сам Дом.ру; copyright-ограничения обязательны). При конфликте с [docs/decisions.md](docs/decisions.md) — приоритет у decisions.md. Полный DoD-чек — [docs/web-design-system.md](docs/web-design-system.md).
+
+### `apps/crm`
+
+Отдельного дизайн-правила нет — с 7 сентября 2026 `apps/crm` считается временным прототипом ([docs/decisions.md](docs/decisions.md), раздел 6): функциональность переезжает в раздел «Заявки» `apps/admin` и наследует его правило (next-shadcn-admin-dashboard). Миграция не начата, `apps/crm` пока работает как есть — не расширять его новыми фичами, не относящимися к прямому переносу в `apps/admin`.
+
 ## Документация проекта
 
 Живые документы — обновлять релевантный при любом значимом изменении кода/поведения, в том же коммите:
@@ -58,6 +74,8 @@ pnpm --filter @provider/api run build && node --test tests/*.test.cjs tests/*.te
 | Документ | Что содержит |
 | --- | --- |
 | [docs/current-state.md](docs/current-state.md) | Что реально работает, что demo, что не реализовано |
+| [docs/admin-design-system.md](docs/admin-design-system.md) | Обязательный источник дизайна/компонентов для `apps/admin` — next-shadcn-admin-dashboard |
+| [docs/web-design-system.md](docs/web-design-system.md) | Обязательный визуальный/UX-референс для `apps/web` — официальный dom.ru |
 | [docs/architecture.md](docs/architecture.md) | Приложения, потоки данных, границы модулей |
 | [docs/technology-baseline.md](docs/technology-baseline.md) | Версии, инфраструктура, правила сборки |
 | [docs/api-contracts.md](docs/api-contracts.md) | Реализованные HTTP-маршруты и их ограничения |
@@ -65,6 +83,7 @@ pnpm --filter @provider/api run build && node --test tests/*.test.cjs tests/*.te
 | [docs/deployment.md](docs/deployment.md) | Локальный/production контур, переменные, обязательные проверки |
 | [docs/worker.md](docs/worker.md) | Очереди, producer/consumer, поведение без Redis, graceful shutdown |
 | [docs/technical-debt.md](docs/technical-debt.md) | Приоритизированный долг (P0–P3) с доказательствами из кода |
+| [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md) | Что именно проверяет каждый файл в `tests/` — живой документ |
 | [docs/decisions.md](docs/decisions.md) | Согласованный продуктовый замысел — не подтверждает наличие в коде |
 | [docs/plans/2026-09-07-platform-stabilization-and-mvp.md](docs/plans/2026-09-07-platform-stabilization-and-mvp.md) | Исполнимый план задач до MVP |
 | [docs/research/](docs/research/) | Точечные read-only аудиты (переходные костыли, возможности стека) |
@@ -109,6 +128,7 @@ pnpm --filter @provider/api run build && node --test tests/*.test.cjs tests/*.te
 - При установке/обновлении/удалении pnpm-пакетов всегда коммитить `pnpm-lock.yaml` вместе с `package.json` соответствующего workspace в одном коммите.
 - Все Dockerfile используют `pnpm install --frozen-lockfile` — расхождение manifest/lockfile ломает Docker-билд.
 - Перед коммитом проверять, что `pnpm-lock.yaml` и изменённые `package.json` добавлены в `git add`.
+- После любого изменения зависимостей — запускать `pnpm audit --audit-level=high`. Baseline на 2026-09-07: 8 известных уязвимостей (3 moderate, 5 high), из них 7 — транзитивные через сам Prisma CLI/Studio (`lodash`, `deepmerge-ts`, `mysql2` — последний вообще не используется, проект работает только с PostgreSQL через `@prisma/adapter-pg`) и не блокируют коммит. Одна — прямая зависимость `apps/api`: `xlsx@0.18.5` (Prototype Pollution + ReDoS, парсит загружаемые пользователем файлы), см. TD-21. Новую уязвимость сверх этого baseline, особенно в прямых (не транзитивных через Prisma) зависимостях — не игнорировать, разобраться перед коммитом.
 
 ### Тестирование и проверки перед коммитом
 
@@ -117,7 +137,10 @@ pnpm --filter @provider/api run build && node --test tests/*.test.cjs tests/*.te
 - Коммит нельзя создавать, если появилось новое падение сверх известного baseline 34/36 (TD-01).
 - Если тесты/сборка упали из-за внесённых изменений — сначала исправить, потом коммитить.
 - При добавлении новой функциональности — добавить соответствующие тесты в `tests/`.
-- При изменении Prisma-схемы — прогнать `pnpm db:generate` и `pnpm db:validate`, проверить, что `apps/api/generated` остался единственным клиентом.
+- При изменении Prisma-схемы (`prisma/schema.prisma`) — прогнать `pnpm db:generate` и `pnpm db:validate`, проверить, что `apps/api/generated` остался единственным клиентом, и что тесты, читающие/пишущие изменённые модели, не сломались.
+- При изменении публичных интерфейсов (HTTP-маршруты в `apps/api/src/*.controller.ts`, экспортируемые функции/типы сервисов) — обновить тесты, которые их проверяют, а не оставлять их проверяющими старое поведение.
+- При изменении Prisma test-double/мока в тестах — сверить, что все поля и методы мока соответствуют актуальному интерфейсу `PrismaService`. Именно рассинхронизация мока с `lead.findMany` — причина TD-01; не повторять эту ошибку в других тестах.
+- **Живой документ покрытия**: [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md) фиксирует, что именно проверяет каждый файл в `tests/`. Обновлять его в том же коммите, что и любое добавление/удаление/существенное изменение теста — не оставлять устаревшим.
 
 ### Проверка результата
 
