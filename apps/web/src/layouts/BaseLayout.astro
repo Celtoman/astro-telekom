@@ -1,0 +1,107 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
+const supportPhone = import.meta.env.PUBLIC_SUPPORT_PHONE || '8 (800) 000-00-00';
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description,
+  url: Astro.url.href,
+  inLanguage: 'ru-RU',
+});
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.url} />
+    <script is:inline type="application/ld+json" set:html={jsonLd}></script>
+    {metrikaId && <script is:inline set:html={`window.__YANDEX_METRIKA_ID__=${metrikaId};(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t);a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(${metrikaId},'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});`}></script>}
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/kazan/">Домашний интернет</a>
+        <nav aria-label="Основная навигация">
+          <a href="/kazan/internet/">Интернет</a>
+          <a href="/kazan/internet-tv/">Интернет + ТВ</a>
+          <a href="/kazan/tv/">Телевидение</a>
+          <a href="/kazan/proverka-adresa/">Проверка адреса</a>
+        </nav>
+        <a class="phone subscriber-phone" href="tel:+78000000000" data-support-phone={supportPhone}>{supportPhone}</a>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>Подключение домашнего интернета в Казани</span>
+        <a href="/kazan/faq/">Вопросы и ответы</a>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<script is:inline>
+  const visitorPagesKey = 'provider_visited_pages';
+  try {
+    const pages = JSON.parse(sessionStorage.getItem(visitorPagesKey) || '[]');
+    if (!pages.includes(location.pathname)) pages.push(location.pathname);
+    sessionStorage.setItem(visitorPagesKey, JSON.stringify(pages.slice(-50)));
+  } catch { /* private browsing can disable sessionStorage */ }
+  const subscriberCookie = document.cookie.split(';').some((part) => part.trim().startsWith('domru_subscriber='));
+  if (subscriberCookie) {
+    document.querySelectorAll('.subscriber-phone').forEach((node) => {
+      const support = node.getAttribute('data-support-phone') || 'Официальная поддержка';
+      node.textContent = support;
+    });
+  }
+  document.addEventListener('click', (event) => {
+    const target = event.target.closest('a[href^="tel:"]');
+    if (target && typeof window.ym === 'function') window.ym(window.__YANDEX_METRIKA_ID__, 'reachGoal', 'phone_click');
+  });
+  document.addEventListener('submit', () => {
+    if (typeof window.ym === 'function') window.ym(window.__YANDEX_METRIKA_ID__, 'reachGoal', 'lead_form_submit');
+  });
+</script>
+
+<style is:global>
+  :root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #18202a; background: #f6f7f9; }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  a { color: inherit; }
+  .container { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+  .site-header { background: #fff; border-bottom: 1px solid #e7eaf0; }
+  .header-inner, .footer-inner { min-height: 72px; display: flex; align-items: center; gap: 24px; }
+  .brand { font-weight: 800; text-decoration: none; margin-right: auto; }
+  nav { display: flex; gap: 18px; font-size: 14px; }
+  nav a, .footer-inner a { text-decoration: none; }
+  nav a:hover, .footer-inner a:hover { text-decoration: underline; }
+  .phone { font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .hero { padding: 72px 0 56px; background: linear-gradient(135deg, #e8f4ff, #f6f7f9); }
+  .eyebrow { color: #1769aa; font-weight: 700; }
+  h1 { font-size: clamp(36px, 6vw, 64px); line-height: 1.02; max-width: 780px; margin: 16px 0; letter-spacing: -0.04em; }
+  h2 { font-size: 32px; margin: 0 0 24px; letter-spacing: -0.03em; }
+  .lead { font-size: 20px; line-height: 1.5; max-width: 680px; color: #526071; }
+  .section { padding: 56px 0; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: #fff; border: 1px solid #e3e8ef; border-radius: 18px; padding: 24px; box-shadow: 0 8px 24px rgb(21 40 66 / 5%); }
+  .card h3 { margin: 0 0 10px; font-size: 20px; }
+  .card p { color: #526071; line-height: 1.5; }
+  .card-link { display: inline-block; margin-top: 12px; color: #1769aa; font-weight: 700; text-decoration: none; }
+  .tariff-price { font-size: 24px; font-weight: 800; margin-top: 20px; }
+  .button { display: inline-block; background: #1268a5; color: #fff; border-radius: 10px; padding: 14px 20px; text-decoration: none; font-weight: 700; }
+  .site-footer { background: #18202a; color: #fff; }
+  @media (max-width: 800px) { .header-inner { flex-wrap: wrap; padding: 14px 0; } nav { order: 3; width: 100%; overflow-x: auto; } .grid { grid-template-columns: 1fr; } .hero { padding: 48px 0; } }
+</style>

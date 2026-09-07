@@ -1,0 +1,14 @@
+{
+  "name": "@provider/crm",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --port 3002",
+    "build": "astro build",
+    "preview": "astro preview --port 3002"
+  },
+  "dependencies": {
+    "@tabler/icons-webfont": "^3.46.0",
+    "astro": "^7.3.1"
+  }
+}

@@ -1,0 +1,35 @@
+---
+interface Block {
+  blockType: string;
+  data: Record<string, any>;
+}
+
+interface Props {
+  blocks: Block[];
+  tariffs: Array<{ slug: string; name: string; service: string; speed: string; price: string }>;
+}
+
+const { blocks, tariffs } = Astro.props;
+---
+
+{blocks.map((block: Block) => {
+  if (block.blockType === 'hero') {
+    return <section class="hero"><div class="container"><span class="eyebrow">{block.data.eyebrow}</span><h1>{block.data.title}</h1><p class="lead">{block.data.text}</p>{block.data.ctaHref && <a class="button" href={block.data.ctaHref}>{block.data.ctaText || 'Подробнее'}</a>}</div></section>;
+  }
+  if (block.blockType === 'rich_text') {
+    return <section class="section container"><h2>{block.data.title}</h2><p class="lead">{block.data.text}</p></section>;
+  }
+  if (block.blockType === 'tariff_grid') {
+    return <section class="section container"><h2>{block.data.title || 'Тарифы'}</h2><div class="grid">{tariffs.map((tariff: Props['tariffs'][number]) => <article class="card"><h3>{tariff.name}</h3><p>{tariff.service}. {tariff.speed}</p><div class="tariff-price">{tariff.price}</div><a class="card-link" href={`/kazan/${tariff.slug}/`}>О тарифе →</a></article>)}</div></section>;
+  }
+  return null;
+})}
+
+<style>
+  .container { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+  .hero { padding: 72px 0 56px; background: linear-gradient(135deg, #e8f4ff, #f6f7f9); }
+  .eyebrow { color: #1769aa; font-weight: 700; } h1 { font-size: clamp(36px, 6vw, 64px); line-height: 1.02; max-width: 780px; margin: 16px 0; }
+  .lead { font-size: 20px; line-height: 1.5; max-width: 680px; color: #526071; } .section { padding: 56px 0; } h2 { font-size: 32px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; } .card { background: #fff; border: 1px solid #e3e8ef; border-radius: 18px; padding: 24px; }
+  .card-link { color: #1769aa; font-weight: 700; text-decoration: none; } .tariff-price { font-size: 24px; font-weight: 800; margin: 20px 0; } .button { display: inline-block; background: #1268a5; color: #fff; border-radius: 10px; padding: 14px 20px; text-decoration: none; font-weight: 700; }
+</style>

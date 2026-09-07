@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { loadKazanData, pageMeta } from '../../../data/kazan';
+import BlockRenderer from '../../../components/BlockRenderer.astro';
+const { city, pages } = await loadKazanData();
+const page = pages.find((item: any) => item.slug === 'tv');
+const meta = pageMeta(pages, 'tv', `Телевидение в ${city.nameIn}`, `Телевидение для дома в ${city.nameIn}.`);
+---
+<BaseLayout title={meta.title} description={meta.description}>
+  {page?.blocks?.length ? <BlockRenderer blocks={page.blocks} tariffs={[]} /> : <><section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>Телевидение для дома</h1><p class="lead">Расскажите, что вам нужно подключить, и оператор уточнит доступные варианты.</p><a class="button" href="/kazan/proverka-adresa/">Оставить заявку</a></div></section>
+  <section class="section container"><h2>Как подключиться</h2><div class="grid"><article class="card"><h3>1. Проверьте адрес</h3><p>Укажите город и адрес объекта.</p></article><article class="card"><h3>2. Выберите услугу</h3><p>Оператор расскажет о доступных вариантах телевидения.</p></article><article class="card"><h3>3. Оставьте заявку</h3><p>Согласуйте дату и удобное время подключения.</p></article></div></section></>}
+</BaseLayout>

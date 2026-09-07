@@ -1,0 +1,1 @@
+ALTER TABLE "Tariff" ADD COLUMN "seo" JSONB;

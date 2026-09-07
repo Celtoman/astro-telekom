@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { loadKazanData } from '../../data/kazan';
+import type { TariffView } from '../../data/tariff-view';
+
+interface Props {
+  tariff: TariffView;
+}
+
+export async function getStaticPaths() {
+  const { tariffs } = await loadKazanData();
+  return tariffs.map((tariff) => ({ params: { slug: tariff.slug }, props: { tariff } }));
+}
+
+const { city } = await loadKazanData();
+const { tariff } = Astro.props as Props;
+const tariffSeo = tariff.seo && typeof tariff.seo === 'object' ? tariff.seo as Record<string, unknown> : {};
+const title = typeof tariffSeo.title === 'string' && tariffSeo.title ? tariffSeo.title : `${tariff.name} в ${city.nameIn}`;
+const description = typeof tariffSeo.description === 'string' && tariffSeo.description ? tariffSeo.description : `${tariff.name}: условия подключения в ${city.nameIn}.`;
+---
+<BaseLayout title={title} description={description}>
+  <section class="hero"><div class="container"><span class="eyebrow">{tariff.service} · {city.name}</span><h1>{tariff.name}</h1><p class="lead">{tariff.speed}. Возможность подключения необходимо подтвердить по адресу.</p><div class="tariff-price">{tariff.price}</div><a class="button" href="/kazan/proverka-adresa/">Проверить адрес</a></div></section>
+  <section class="section container"><h2>Подключение тарифа</h2><div class="grid"><article class="card"><h3>Проверка доступности</h3><p>Система проверит, доступна ли сеть по вашему адресу.</p></article><article class="card"><h3>Консультация</h3><p>Оператор уточнит условия и ответит на вопросы.</p></article><article class="card"><h3>Заявка</h3><p>Оставьте номер телефона, чтобы согласовать подключение.</p></article></div></section>
+</BaseLayout>

@@ -1,0 +1,16 @@
+{
+  "name": "@provider/database",
+  "private": true,
+  "scripts": {
+    "generate": "prisma generate --config ../../prisma.config.ts",
+    "validate": "prisma validate --config ../../prisma.config.ts",
+    "migrate:deploy": "prisma migrate deploy --config ../../prisma.config.ts",
+    "seed": "node --experimental-strip-types ../../prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.10.0"
+  },
+  "devDependencies": {
+    "prisma": "7.10.0"
+  }
+}

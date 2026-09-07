@@ -1,0 +1,33 @@
+{
+  "name": "@provider/api",
+  "private": true,
+  "scripts": {
+    "dev": "nest start --watch",
+    "generate": "prisma generate --config ../../prisma.config.ts",
+    "build": "pnpm run generate && nest build",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nestjs/common": "^12.0.1",
+    "@nestjs/core": "^12.0.1",
+    "@nestjs/platform-fastify": "^12.0.1",
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "^7.10.0",
+    "@prisma/client-runtime-utils": "7.10.0",
+    "@prisma/engines-version": "7.10.0-4.0edf323efd1d98336f3f0a68684b56f689b900d3",
+    "@prisma/instrumentation-contract": "7.10.0",
+    "pg": "8.23.0",
+    "bullmq": "^6.3.4",
+    "ioredis": "^6.0.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "xlsx": "0.18.5"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^12.0.0",
+    "@nestjs/schematics": "^12.0.0",
+    "@types/pg": "8.23.1",
+    "prisma": "7.10.0",
+    "typescript": "^6.0.3"
+  }
+}

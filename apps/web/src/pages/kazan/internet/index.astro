@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { loadKazanData, pageMeta } from '../../../data/kazan';
+import BlockRenderer from '../../../components/BlockRenderer.astro';
+const { city, tariffs, pages } = await loadKazanData();
+const internetTariffs = tariffs.filter((tariff) => tariff.service === 'Домашний интернет');
+const page = pages.find((item: any) => item.slug === 'internet');
+const meta = pageMeta(pages, 'internet', `Домашний интернет в ${city.nameIn}`, `Тарифы домашнего интернета в ${city.nameIn}.`);
+---
+<BaseLayout title={meta.title} description={meta.description}>
+  {page?.blocks?.length ? <BlockRenderer blocks={page.blocks} tariffs={internetTariffs} /> : <><section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>Домашний интернет</h1><p class="lead">Выберите скорость подключения и проверьте доступность по вашему адресу.</p><a class="button" href="/kazan/proverka-adresa/">Проверить адрес</a></div></section>
+  <section class="section container"><h2>Тарифы интернета</h2><div class="grid">{internetTariffs.map((tariff) => <article class="card"><h3>{tariff.name}</h3><p>{tariff.speed}</p><div class="tariff-price">{tariff.price}</div><a class="card-link" href={`/kazan/${tariff.slug}/`}>Подробнее →</a></article>)}</div></section></>}
+</BaseLayout>
