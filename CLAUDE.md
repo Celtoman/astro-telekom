@@ -23,16 +23,19 @@ pnpm --filter @provider/admin dev         # http://localhost:3001
 pnpm --filter @provider/crm dev           # http://localhost:3002 — временный прототип, см. «Дизайн-система» ниже
 pnpm dev:worker                           # BullMQ worker
 
-# Проверка перед коммитом
+# Проверка перед коммитом — один gate-скрипт
+pnpm check                                # lint -> db:validate -> ALLOW_DEMO_DATA=true build -> test, тот же порядок, что в CI
+# по отдельности:
 pnpm lint                                 # tsc --noEmit (api), astro check (web), node --check (worker)
 pnpm db:validate
 ALLOW_DEMO_DATA=true pnpm build           # без API apps/web build падает намеренно — см. «Известные особенности» ниже
-pnpm --filter @provider/api run build && node --test tests/*.test.cjs tests/*.test.mjs
+pnpm test                                 # node --test tests/*.test.cjs tests/*.test.mjs
+pnpm test:build                           # пересобрать apps/api, затем pnpm test — после правок в apps/api/src
 ```
 
-У `admin` и `crm` нет `lint`-скрипта (TD-18) — `pnpm lint` их не проверяет, это известный пробел, а не сбой команды. Нет единого `pnpm test` (TD-01) — тесты запускаются вручную командой выше.
+У `admin` и `crm` нет `lint`-скрипта (TD-18) — `pnpm lint` их не проверяет, это известный пробел, а не сбой команды.
 
-**Baseline тестов: 34/36.** Два падения в `tests/lead-check.test.cjs` — устаревший Prisma mock без `lead.findMany` (TD-01, известный долг). Не блокировать коммит из-за этих двух конкретных падений, но новых падений сверх baseline быть не должно — любое новое красное необходимо исправить до коммита.
+**Baseline тестов: 34/36.** `pnpm check`/`pnpm test` падают ровно на этих двух — устаревший Prisma mock без `lead.findMany` в `tests/lead-check.test.cjs` (TD-01, известный долг, issue [#1](https://github.com/Celtoman/astro-telekom/issues/1)). Не блокировать коммит из-за этих двух конкретных падений, но новых падений сверх baseline быть не должно — любое новое красное необходимо исправить до коммита. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master` и сейчас красный по этой же причине — ожидаемо, не регрессия.
 
 ## Архитектура
 
@@ -41,6 +44,16 @@ pnpm --filter @provider/api run build && node --test tests/*.test.cjs tests/*.te
 Только `apps/api` пишет в PostgreSQL — admin, CRM, web и worker обращаются к данным исключительно через HTTP API. `apps/web` собирается в **static output**: город и тарифы читаются из API один раз во время `astro build`, рантайм-изменения в БД не видны опубликованному сайту без внешней пересборки (`REBUILD_WEBHOOK_URL` — сейчас best-effort webhook без retry, TD-05).
 
 Полная карта модулей — [docs/architecture.md](docs/architecture.md). Точный статус по каждому направлению (реализовано / частично / demo) — [docs/current-state.md](docs/current-state.md). Переменные окружения по назначению и обязательная подготовка к деплою — [docs/deployment.md](docs/deployment.md).
+
+## Версионирование и релизы
+
+Единая версия на весь монорепозиторий (не по пакетам) — `package.json`, поле `version`. Автоматизировано через [release-please](https://github.com/googleapis/release-please) на основе Conventional Commits (`feat:`/`fix:`/`docs:`/`chore:` и т.д. — вся история коммитов уже в этом формате, не отступать от него).
+
+- `.github/workflows/release-please.yml` на каждый push в `master` обновляет **release PR** с версией и `CHANGELOG.md`.
+- **Релиз (git tag + GitHub Release) создаётся только после ручного merge этого PR** — не автоматически на каждый коммит. Это осознанный выбор вместо semantic-release: соответствует общему правилу проекта не выполнять значимые действия без явного подтверждения.
+- `feat:` → minor (0.X.0), `fix:`/остальные → patch (0.1.X) — версия ниже 1.0.0, пока проект остаётся локальным прототипом (`bump-minor-pre-major` в `release-please-config.json`).
+- Пакеты `private: true`, публикации в npm нет и не будет — release-please используется только для версии/тега/changelog, не для publish.
+- Не редактировать `.release-please-manifest.json` вручную вне релизного PR — им управляет workflow.
 
 ## Известные особенности этого проекта
 

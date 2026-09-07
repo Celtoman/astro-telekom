@@ -61,20 +61,25 @@ Seed создаст опубликованные `domru-kazan` и `kazan`, ше�
 ## Проверка рабочего дерева
 
 ```powershell
-pnpm lint
-pnpm db:validate
-pnpm build
-node --test tests/*.test.cjs tests/*.test.mjs
+pnpm check
 ```
 
-`apps/web` собирает публичные страницы Казани из данных, полученных от API во время `astro build`. Если API недоступен, сборка теперь осознанно падает с ненулевым кодом и указанием причины — это защита от публикации недостоверного контента (см. [технический долг](docs/technical-debt.md), TD-03). Для локальной сборки без поднятого API явно разрешите демонстрационные данные:
+Один скрипт, который делает `lint` → `db:validate` → `ALLOW_DEMO_DATA=true build` → `test` в этом порядке — тот же, что использует CI (`.github/workflows/ci.yml` на каждый push/PR в `master`). По отдельности:
 
 ```powershell
-$env:ALLOW_DEMO_DATA = "true"
-pnpm build
+pnpm lint
+pnpm db:validate
+$env:ALLOW_DEMO_DATA = "true"; pnpm build
+pnpm test
 ```
 
-На дату документации первые три команды (с поднятым API либо `ALLOW_DEMO_DATA=true`) проходят. Последняя команда воспроизводимо имеет два падения в `tests/lead-check.test.cjs`: тестовые double-объекты не содержат вызванный текущим контроллером `lead.findMany`. Это известный долг, а не зеленый тестовый контур.
+`apps/web` собирает публичные страницы Казани из данных, полученных от API во время `astro build`. Если API недоступен, сборка осознанно падает с ненулевым кодом и указанием причины — это защита от публикации недостоверного контента (см. [технический долг](docs/technical-debt.md), TD-03). `ALLOW_DEMO_DATA=true` явно разрешает демонстрационные данные для локальной сборки без поднятого API.
+
+На дату документации `pnpm check` воспроизводимо падает на `test`: два теста в `tests/lead-check.test.cjs` (тестовые double-объекты не содержат вызванный текущим контроллером `lead.findMany`) — известный долг ([TD-01](https://github.com/Celtoman/astro-telekom/issues/1)), не зелёный тестовый контур. CI сейчас красный по этой же причине.
+
+## Версионирование
+
+Единая версия на весь монорепозиторий, автоматизирована через [release-please](https://github.com/googleapis/release-please) на основе Conventional Commits. Release-please открывает PR с версией и `CHANGELOG.md` на каждый push в `master`; тег и GitHub Release создаются только после того, как этот PR смержен вручную — не автоматически. Подробности — [CLAUDE.md](CLAUDE.md), раздел «Версионирование и релизы».
 
 ## Безопасность и данные
 
