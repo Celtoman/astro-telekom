@@ -6,22 +6,22 @@
 
 | Технология | Версия в проекте | Использование |
 | --- | --- | --- |
-| Node.js | 22 в Dockerfiles; 22.22.2 в локальной проверке | API, worker, Astro build, Prisma CLI. |
+| Node.js | 22.23.2 в Dockerfiles и локальной проверке | API, worker, Astro build, Prisma CLI. |
 | pnpm | 11.19.0 | package manager, указан в root `packageManager`. |
 | TypeScript | 6.0.3 | API и web; API не повышается до TypeScript 7, пока Nest CLI требует Compiler API. |
 | Astro | 7.3.1 | Static web, admin и CRM. |
 | Vite | 8 через Astro | Сборка Astro-приложений. |
 | NestJS | 12.0.1 | HTTP API. |
-| Fastify | adapter NestJS 12 | HTTP transport API, body limit 35 MB. |
-| PostgreSQL | 18-alpine | Основное persistent store. |
+| Fastify | 5.12.3 через adapter NestJS 12 и корневой `overrides` в `pnpm-workspace.yaml` | HTTP transport API, body limit 35 MB. |
+| PostgreSQL | 18.6-alpine | Основное persistent store. |
 | Prisma | 7.10.0 | Схема, миграции и `@prisma/adapter-pg`. |
 | pg | 8.23.0 | Pool для Prisma PostgreSQL driver adapter. |
-| Redis | 8-alpine | Backend очередей. |
+| Redis | 8.10.1-alpine | Backend очередей. |
 | BullMQ | 6.3.4 | Очередь доставки лидов и worker listeners. |
 | ioredis | 6.0.0 | Redis connections для API и worker. |
 | xlsx | 0.18.5 | Разбор первого листа XLS/XLSX в API. |
 | Tabler Icons Webfont | 3.46.0 | Пиктограммы admin и CRM. |
-| Caddy | 2-alpine | Reverse proxy и static file server. |
+| Caddy | 2.11.4-alpine | Reverse proxy и static file server. |
 
 Диапазоны с `^` в manifests разрешаются lockfile при локальной установке. Для воспроизводимой поставки нужно применять `pnpm install --frozen-lockfile`; текущие Dockerfiles пока используют `--no-frozen-lockfile`, что записано как TD-17.
 

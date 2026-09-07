@@ -1,10 +1,10 @@
-FROM node:22-alpine AS build
+FROM node:22.23.2-alpine AS build
 WORKDIR /workspace
 RUN corepack enable
 COPY . .
 RUN pnpm install --no-frozen-lockfile
 
-FROM node:22-alpine
+FROM node:22.23.2-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=build /workspace/node_modules ./node_modules

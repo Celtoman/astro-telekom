@@ -1,4 +1,4 @@
-FROM node:22-alpine AS build
+FROM node:22.23.2-alpine AS build
 WORKDIR /workspace
 RUN corepack enable
 ENV DATABASE_URL=postgresql://provider:provider@localhost:5432/provider_platform
@@ -7,7 +7,7 @@ RUN pnpm install --no-frozen-lockfile
 RUN pnpm --filter @provider/database generate
 RUN pnpm --filter @provider/api run build
 
-FROM node:22-alpine
+FROM node:22.23.2-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=build /workspace/node_modules ./node_modules
