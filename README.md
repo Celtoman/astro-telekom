@@ -1,75 +1,75 @@
-# Платформа сайтов провайдера
+# Платформа партнерских сайтов провайдеров
 
-Платформа для партнерских сайтов провайдеров с городами, страницами, тарифами, проверкой адреса, заявками, админкой и CRM.
+Монорепозиторий локального прототипа платформы для партнерских сайтов интернет-провайдеров. В коде реализован первый вертикальный срез для Дом.ру и Казани: статическая публичная витрина, API, PostgreSQL-модель, импорт городов и тарифов, прием заявок, журнал заявок и фоновые доставочные задачи.
 
-Текущий первый вертикальный срез: **Дом.ру, Казань**.
+Текущий статус на 7 сентября 2026 года: **локальный прототип, не готовый к production**. Это не готовая мультигородская CMS и не развернутый сайт. Точная граница между работающими возможностями, демонстрационными интерфейсами и планом находится в [состоянии проекта](docs/current-state.md).
 
-## Стек
+## Документация
 
-- Astro — публичный HTML-first сайт;
-- NestJS + Fastify — API;
-- PostgreSQL + Prisma — данные и миграции;
-- Redis + BullMQ — фоновые задачи;
-- Astro-админка и Astro-CRM — интерфейсы первого прототипа; при наличии API-токена они подхватывают реальные города, тарифы и заявки, без него показывают демо-данные;
-- Docker Compose + Caddy — production-развертывание.
+- [Текущее состояние и границы](docs/current-state.md) — что доказано кодом, что зависит от окружения и что еще не реализовано.
+- [Архитектура](docs/architecture.md) — приложения, потоки данных и границы модулей.
+- [Технологическая база](docs/technology-baseline.md) — версии, инфраструктура и правила сборки.
+- [API-контракты](docs/api-contracts.md) — реализованные HTTP-маршруты и их ограничения.
+- [Модель данных](docs/data-model.md) — Prisma-схема и отличие модели от продуктового замысла.
+- [Развертывание](docs/deployment.md) — локальный и production-контуры, обязательные переменные и проверки.
+- [Фоновые задачи](docs/worker.md) — реальные очереди, их производители и обработчики.
+- [Технический долг](docs/technical-debt.md) — подтвержденные проблемы, риски и порядок устранения.
+- [План реализации](docs/plans/2026-09-07-platform-stabilization-and-mvp.md) — последовательность стабилизации и развития.
+- [Реестр решений](docs/decisions.md) — согласованный продуктовый замысел; не подтверждает наличие функции в коде.
+- [Исследование примеров](docs/research/README.md) — исторические наблюдения для проектирования структуры сайта.
 
-## Структура
+## Состав репозитория
 
 ```text
-apps/web       публичный сайт
-apps/admin     города, страницы и тарифы
-apps/crm       заявки и статусы операторов
-apps/api       API и бизнес-правила
-services/worker импорт и пересборка
-packages/database Prisma-пакет
-prisma/        схема, миграции и seed
-docs/          архитектура, API и deployment
+apps/web        Статический Astro-сайт, сейчас маршруты Казани
+apps/admin      Статическая Astro-админка: импорт подключен к API, многие экраны демонстрационные
+apps/crm        Статический Astro-журнал заявок с подключением к API
+apps/api        NestJS + Fastify API и бизнес-правила
+services/worker BullMQ workers для импорта, пересборки и доставки заявок
+packages/database Prisma package и сгенерированный клиент
+prisma/         Схема, миграции и seed
+deploy/         Конфигурация Caddy
+docs/           Документация и план развития
+tests/          Локальные модульные и контрактные проверки
 ```
 
-## Быстрый запуск инфраструктуры
+## Локальный запуск
 
-```bash
-copy .env.example .env
+Нужны Node.js 22+, Corepack, Docker Engine с Compose и pnpm 11.19.0.
+
+```powershell
+Copy-Item .env.example .env
 docker compose up -d postgres redis
-```
-
-Затем применить миграции и seed:
-
-```bash
-pnpm install
-pnpm --filter @provider/database generate
+pnpm install --frozen-lockfile
+pnpm db:generate
 pnpm --filter @provider/database migrate:deploy
 pnpm --filter @provider/database seed
 ```
 
-Для seed-администратора задаются `ADMIN_EMAIL` и `ADMIN_PASSWORD` в `.env`.
+Затем запускайте приложения в отдельных терминалах:
 
-Для Метрики задайте числовой `PUBLIC_YANDEX_METRIKA_ID` во время сборки публичного сайта. В шаблон автоматически попадут цели `phone_click` и `lead_form_submit`.
-
-Админка и журнал заявок используют `PUBLIC_API_URL` (по умолчанию `http://localhost:3000/api/v1`). Токен можно ввести через профиль в интерфейсе; он сохраняется только в `sessionStorage` текущей вкладки. Для XLS/XLSX-импорта тарифов задайте `PUBLIC_PROVIDER_ID` или укажите `providerId` в диалоге загрузки. Для импорта городов задайте `PUBLIC_SITE_ID` или укажите `siteId`: новые города появятся с набором типовых страниц в черновиках.
-
-Для контура заявок настройте `DOMRU_CONTRACT_API_URL` и `DOMRU_CONTRACT_API_KEY`, а для основной передачи — `TARIFNIK_API_URL` и `TARIFNIK_API_KEY`. `LEADS_EMAIL` и один из транспортов `RESEND_API_KEY` или `LEADS_EMAIL_WEBHOOK_URL` обязательны для резервной отправки после трех ошибок API. Секреты `LEAD_LINK_SECRET` и `SUBSCRIBER_COOKIE_SECRET` не добавляются в репозиторий.
-
-## Запуск приложений
-
-```bash
-pnpm --filter @provider/api run build
-pnpm --filter @provider/web dev
+```powershell
+pnpm dev:api
+pnpm dev:web
 pnpm --filter @provider/admin dev
 pnpm --filter @provider/crm dev
-pnpm --filter @provider/worker start
+pnpm dev:worker
 ```
 
-Production-сборка описана в [docs/deployment.md](docs/deployment.md), а полный список API — в [docs/api-contracts.md](docs/api-contracts.md).
+Seed создаст опубликованные `domru-kazan` и `kazan`, шесть базовых страниц и два демонстрационных тарифа без цен. Для входа в API seed требует непустые `ADMIN_EMAIL` и `ADMIN_PASSWORD` в `.env`.
 
-Согласованные продуктовые решения и открытые вопросы ведутся в [docs/decisions.md](docs/decisions.md).
+## Проверка рабочего дерева
 
-Актуальные версии и правила применения возможностей Astro, NestJS и Prisma — в [docs/technology-baseline.md](docs/technology-baseline.md).
+```powershell
+pnpm lint
+pnpm db:validate
+pnpm build
+node --test tests/*.test.cjs tests/*.test.mjs
+```
 
-## Исследование примеров
+На дату документации первые три команды проходят. Последняя команда воспроизводимо имеет два падения в `tests/lead-check.test.cjs`: тестовые double-объекты не содержат вызванный текущим контроллером `lead.findMany`. Это известный долг, а не зеленый тестовый контур.
 
-- [Индекс исследования](docs/research/README.md)
-- [Разбор сайтов](docs/research/sites.md)
-- [Блоки и перелинковка](docs/research/blocks-and-linking.md)
-- [Реестр источников](docs/research/sources.csv)
+## Безопасность и данные
+
+Не добавляйте `.env`, токены внешних API, пароли или реальные данные заявок в Git. В новом окружении интеграции покрытия, проверки договора, Tarifnik и email отключены, пока для них не заданы обязательные переменные. При таком состоянии заявки сохраняются в ручной проверке и не должны считаться переданными в кол-центр.
 

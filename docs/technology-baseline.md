@@ -1,29 +1,65 @@
 # Технологическая база
 
-Последняя проверка: 7 сентября 2026 года.
+Последняя сверка с `package.json`, `pnpm-lock.yaml`, Dockerfiles и Compose: 7 сентября 2026 года.
 
-## Версии
+## Зафиксированные версии
 
-- Astro 7.3.1 и Vite 8 — публичный сайт, админка и журнал заявок.
-- NestJS 12.0.1 — API.
-- Prisma Client и Prisma CLI 7.10.0 — модель данных и миграции.
-- `pg` 8.23.0 и `@prisma/adapter-pg` 7.10.0 — подключение API к PostgreSQL через актуальный Prisma driver adapter.
-- BullMQ 6.3.4 и ioredis 6.0.0 — фоновые процессы.
-- TypeScript 6.0.3 — последняя стабильная версия, совместимая с Nest CLI 12. TypeScript 7.0.2 временно не предоставляет Compiler API, который нужен CLI; повышение до 7.1 выполняется после появления поддержки у Nest.
-- Tabler Icons Webfont 3.46.0 — единый набор пиктограмм для админки и журнала заявок.
-- pnpm 11.19.0 — фиксированная версия package manager для повторяемых установок и CI.
-- `xlsx` 0.18.5 — серверное чтение готовых XLS/XLSX-файлов импорта; преобразование и фильтрация исходного конвейера остаются локальными.
-- Prisma 7 использует `prisma.config.ts` и PostgreSQL driver adapter `@prisma/adapter-pg`.
+| Технология | Версия в проекте | Использование |
+| --- | --- | --- |
+| Node.js | 22 в Dockerfiles; 22.22.2 в локальной проверке | API, worker, Astro build, Prisma CLI. |
+| pnpm | 11.19.0 | package manager, указан в root `packageManager`. |
+| TypeScript | 6.0.3 | API и web; API не повышается до TypeScript 7, пока Nest CLI требует Compiler API. |
+| Astro | 7.3.1 | Static web, admin и CRM. |
+| Vite | 8 через Astro | Сборка Astro-приложений. |
+| NestJS | 12.0.1 | HTTP API. |
+| Fastify | adapter NestJS 12 | HTTP transport API, body limit 35 MB. |
+| PostgreSQL | 18-alpine | Основное persistent store. |
+| Prisma | 7.10.0 | Схема, миграции и `@prisma/adapter-pg`. |
+| pg | 8.23.0 | Pool для Prisma PostgreSQL driver adapter. |
+| Redis | 8-alpine | Backend очередей. |
+| BullMQ | 6.3.4 | Очередь доставки лидов и worker listeners. |
+| ioredis | 6.0.0 | Redis connections для API и worker. |
+| xlsx | 0.18.5 | Разбор первого листа XLS/XLSX в API. |
+| Tabler Icons Webfont | 3.46.0 | Пиктограммы admin и CRM. |
+| Caddy | 2-alpine | Reverse proxy и static file server. |
 
-## Astro 7: применимость
+Диапазоны с `^` в manifests разрешаются lockfile при локальной установке. Для воспроизводимой поставки нужно применять `pnpm install --frozen-lockfile`; текущие Dockerfiles пока используют `--no-frozen-lockfile`, что записано как TD-17.
 
-| Возможность | Решение |
+## Принципы использования стека
+
+### Astro
+
+Все три Astro-приложения имеют `output: 'static'`. Public web использует `PUBLIC_SITE_URL` как `site`, выводит title, description, canonical и базовый JSON-LD `WebPage` в исходный HTML. JavaScript оставлен для формы адреса, хранения списка просмотренных страниц, подавления номера для действующего абонента и событий Метрики.
+
+Static mode означает, что API-данные читаются только при `astro build`. Для этого прототипа допустима локальная витрина с fallback, но production не должен собираться из fallback-данных.
+
+### NestJS и Fastify
+
+API имеет глобальный prefix `/api/v1`, включенный CORS из `CORS_ORIGINS` или `PUBLIC_SITE_URL`, и Fastify body limit 35 MB для импорта. Он не использует глобальный `ValidationPipe`; body-интерфейсы TypeScript не становятся runtime-валидацией. Для production DTO validation и rate limiting обязательны.
+
+### Prisma и PostgreSQL
+
+Datasource URL описан в `prisma.config.ts`, клиент генерируется в `apps/api/generated`. `PrismaService` использует `PrismaPg` поверх `pg.Pool`. В репозитории восемь последовательных миграций: initial model, sessions, tariff SEO, identity, tariff import runs, lead control/redirects, city imports и email fallback failure status.
+
+### Redis и BullMQ
+
+API создает `lead-deliveries` только при наличии `REDIS_URL`; без Redis использует process-local `queueMicrotask`/`setTimeout`. Worker всегда подключается к Redis. Для production требуются Redis и отдельный worker: process-local retry теряется при рестарте API.
+
+### Docker и Caddy
+
+`docker-compose.yml` поднимает только PostgreSQL и Redis для разработки. `docker-compose.prod.yml` описывает PostgreSQL, Redis, API, worker, web, admin, CRM и Caddy. Caddy направляет четыре домена на соответствующие контейнеры; отдельный `static.Caddyfile` обслуживает собранные Astro файлы и кэширует assets.
+
+Контейнерная схема конфигурационно валидна (`docker compose -f docker-compose.prod.yml config --no-interpolate`), но не была поднята с реальными доменами, секретами и интеграциями. Это не production certification.
+
+## Неподключенные или ограниченные возможности
+
+| Возможность | Текущее решение |
 | --- | --- |
-| Rust-компилятор, Markdown pipeline, queued rendering, Vite 8 | Используются автоматически через Astro 7. |
-| Статическая генерация чистого HTML | Основной режим публичного сайта. Все SEO-значимые страницы генерируются во время сборки. |
-| Фоновый dev server и JSON-логи | Используются в агентской разработке и CI при необходимости. |
-| Fonts API | Будет использован для самостоятельно размещаемых шрифтов публичного сайта; админка использует системный стек до утверждения бренд-шрифта. |
-| Advanced Routing | Не включается в статическом приложении. Он понадобится, если позже публичный фронтенд будет проксировать собственные API. |
-| Route Caching / CDN cache providers | Не включаются без SSR и выбранного CDN. Для статической выдачи кэшированием управляет Caddy/CDN через HTTP-заголовки. |
+| Astro SSR, route caching, CDN adapter | Не используются. |
+| React/Vue/Svelte UI layer | Не используется: Astro pages с inline browser JavaScript. |
+| Schema.org-спецификация Product/FAQ/Organization | Не реализована; выводится только `WebPage`. |
+| Queue для site rebuild и import | Worker слушает очереди, но API их не публикует. |
+| Monitoring, tracing, error tracker | Не подключены. |
+| CI/CD | В репозитории нет CI workflow. |
 
-Экспериментальные возможности не включаются в production без отдельной проверки совместимости и плана отката.
+Переходить на другие major-версии или включать экспериментальные возможности Astro/Nest/Prisma можно только с отдельной проверкой compatibility, migration plan и rollback.

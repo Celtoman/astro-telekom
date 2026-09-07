@@ -1,68 +1,73 @@
-# Архитектура платформы сайтов провайдера
+# Архитектура платформы
 
-## Зафиксированный стек
+## Статус архитектуры
 
-- Публичный сайт: Astro + TypeScript.
-- API: NestJS + Fastify.
-- Админка и CRM: отдельные Astro-приложения с HTML-интерфейсом и клиентским JavaScript для API-действий.
-- Хранилище данных: PostgreSQL + Prisma.
-- Фоновые задачи: Redis + BullMQ.
-- Развертывание: Docker Compose на VPS.
-- Reverse proxy и TLS: Caddy.
+В репозитории реализован локальный прототип статической витрины Дом.ру для Казани. Архитектура уже разделяет public web, backoffice API, CRM и worker, но публичная маршрутизация не использует универсальную модель `Site` и `City`. Поэтому схема ниже отражает реальный код и одновременно обозначает границу будущего расширения.
 
-## Приложения
+## Стек и приложения
 
-```text
-apps/
-  web/       Astro: публичные страницы и SEO
-  admin/     Astro: города, страницы, блоки, тарифы, импорт
-  crm/       Astro: заявки и статусы операторов
+| Зона | Реализация | Назначение |
+| --- | --- | --- |
+| `apps/web` | Astro 7, static output | SEO HTML, фиксированные маршруты Казани, форма проверки адреса. |
+| `apps/admin` | Astro 7, static output | Admin UI: реальные загрузки списка и XLS-import, остальное частично demo UI. |
+| `apps/crm` | Astro 7, static output | Просмотр лидов и смена операторского статуса через API. |
+| `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
+| `services/worker` | Node.js + BullMQ | Обработка доставок лидов; также слушает пока не используемые import/rebuild очереди. |
+| `prisma` / `packages/database` | Prisma 7 + PostgreSQL | Схема, миграции, seed и сгенерированный клиент. |
+| `deploy` | Caddy + Docker Compose | Образы, reverse proxy, TLS и persistent volumes. |
 
-apps/api/    NestJS: единый API и бизнес-правила
-
-services/
-  worker/    BullMQ: импорт, email, пересборка страниц
-
-packages/
-  database/  Prisma schema, миграции, seed
-```
-
-## Домены
+## Контуры и потоки
 
 ```text
-site.ru/                 публичный сайт
-site.ru/kazan/           город
-admin.site.ru/           админка
-crm.site.ru/             CRM
-api.site.ru/             API
+Браузер публичного сайта
+  -> Caddy -> static web
+  -> api.domain/api/v1/address-checks, /leads -> API -> PostgreSQL
+                                              -> Redis/BullMQ -> worker -> Tarifnik/email
+
+Браузер admin или CRM
+  -> Caddy -> static admin/crm
+  -> Bearer token or x-admin-token -> API -> PostgreSQL
+
+Изменение контента в API
+  -> прямой POST REBUILD_WEBHOOK_URL
+  -> внешний deployment должен пересобрать static web
 ```
 
-Админка и CRM используют единый API и единую базу. Дублировать тарифы или заявки между приложениями нельзя.
+В build-time `apps/web` вызывает `GET /public/sites/domru-kazan/cities/kazan` и генерирует HTML. В runtime публичная статическая витрина не читает PostgreSQL и не может сама увидеть изменения в API.
 
-## HTML-first правило
+## API-модули и их ответственность
 
-Все SEO-значимые элементы должны попадать в исходный HTML: H1, тексты, тарифы, ссылки, breadcrumbs, canonical, title, description и JSON-LD. JavaScript используется только для проверки адреса, форм, масок, фильтров и других интерактивных элементов.
+| Модуль | Реальная ответственность |
+| --- | --- |
+| `auth` и `AdminTokenGuard` | Создание 12-часовой Bearer-сессии, проверка роли, совместимый сервисный `x-admin-token`. |
+| `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; строгая валидация есть только у блоков. |
+| `tariff-import`, `city-import` | Валидация XLS/XLSX, сохранение отчета, transactional apply. |
+| `address-checks`, `coverage` | Сохранение проверки адреса и адаптер внешнего coverage API. |
+| `leads`, `domru-contract`, `lead-delivery`, `notifications` | Сохранение лида, дедупликация, проверка договора, API/email delivery. |
+| `crm-leads` | Список, карточка, смена статуса и повторная постановка доставки. |
+| `rebuild-queue` | Прямой best-effort webhook, а не очередь в текущей реализации. |
 
-По умолчанию страницы Astro пререндерятся статически. Изменение города, страницы или тарифа ставит задачу пересборки затронутых маршрутов. Динамический SSR разрешается только для маршрутов, которым действительно нужны данные на запросе.
+## Границы модулей
 
-## Основные модули API
+`apps/api` — единственный слой, который пишет доменные данные. Admin, CRM, worker и web не обращаются к PostgreSQL напрямую. `CoverageService`, `DomruContractService`, `LeadDeliveryService` и `NotificationsService` выступают адаптерами внешних интеграций; их URLs и ключи задаются окружением.
 
-- providers
-- sites
-- regions
-- cities
-- pages
-- page-blocks
-- tariffs
-- tariff-imports
-- address-checks
-- leads
-- crm-status-history
-- seo
-- аналитика: при заданном `PUBLIC_YANDEX_METRIKA_ID` включаются клики по телефону и отправка формы заявки;
-- users-and-roles
-- settings
+Практическое ограничение: `LeadDeliveryService` сам создает очередь `lead-deliveries`, а worker вызывает внутренний API endpoint. Это уже отделяет retry от браузерного запроса, но rebuild и import не используют аналогичный устойчивый путь.
 
-## Границы первого релиза
+## Модель публикации
 
-Первый вертикальный срез запускается для Дом.ру в Казани и включает главную города, интернет, интернет + ТВ, телевидение, страницу тарифа, проверку адреса, FAQ и обработку заявок.
+1. Сущности `Site`, `City`, `Page`, `Tariff` имеют статус `DRAFT`, `PUBLISHED` или `ARCHIVED`.
+2. Public API возвращает только опубликованные город, страницы и тарифы.
+3. Astro получает этот срез во время сборки и выпускает static HTML.
+4. CRUD API пытается вызвать `REBUILD_WEBHOOK_URL` после изменения данных.
+
+Пункт 4 не дает гарантии публикации: webhook не хранится в БД, не повторяется и не возвращает статус в UI. Нет preview, schedule, версии, rollback или доказательства успешной пересборки. Это ключевой архитектурный долг TD-05.
+
+## Что не является частью текущей реализации
+
+- Мультигородской и многосайтовый public routing.
+- SSR и runtime data fetching на публичных SEO-страницах.
+- Полная CMS с наследованием блоков, версиями и preview.
+- Аудит действий, корзина, редиректы и аналитический контур.
+- Подтвержденный production deployment и реальные внешние API-контракты.
+
+Детальный статус находится в [current-state.md](current-state.md), а шаги развития — в [плане реализации](plans/2026-09-07-platform-stabilization-and-mvp.md).

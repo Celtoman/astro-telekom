@@ -1,63 +1,54 @@
-# Модель данных первого релиза
+# Модель данных текущего прототипа
 
-## Основные сущности
+Источник правды: `prisma/schema.prisma` и восемь применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
 
-### Provider
+## Сущности контента и географии
 
-Провайдер: Дом.ру. Хранит название, логотип, юридические данные, API-настройки и партнерские ссылки.
+| Сущность | Реальные ключевые поля | Связи и статус |
+| --- | --- | --- |
+| `Provider` | `name`, unique `slug`, `legalData`, `settings` | Имеет sites и tariffs. |
+| `Site` | `providerId`, `name`, unique `slug`, `domain`, `settings`, `status` | Имеет regions, cities, pages, leads, checks, redirects, city imports. |
+| `Region` | `siteId`, `name`, `slug`, `phone`, `content` | Unique `(siteId, slug)`, содержит cities. |
+| `City` | site/region, names in three cases, legacy/office fields, `status`, `phone`, `seo`, `content` | Unique `(siteId, slug)`, имеет pages, tariffs, leads, checks, redirects. |
+| `Page` | site/city, `type`, `title`, `slug`, `status`, `seo`, `content` | Unique `(cityId, slug)`, имеет ordered blocks. |
+| `PageBlock` | `blockType`, `position`, `visible`, JSON `data`, optional `source` | Cascade delete с page. API разрешает hero, rich_text и tariff_grid. |
 
-### Site
+`PublishStatus` принимает `DRAFT`, `PUBLISHED`, `ARCHIVED`. В модели нет даты публикации, расписания, версии, preview token, автора изменения или корзины.
 
-Партнерский сайт провайдера. Связан с Provider и содержит домен, настройки бренда, аналитику и SEO-настройки.
+## Тарифы и импорты
 
-### Region и City
+`Tariff` хранит provider/city, name, slug, service type, standard/promo price, speed, promo text, connection fee, availability, external/identity keys, source, attributes, seo и publication status. Ограничения: unique `(cityId, slug)` и `(cityId, identityKey)`.
 
-Регион содержит телефон, общие условия и региональный контент. Город принадлежит региону и сайту, имеет slug, статус публикации, контакты, исходный URL миграции, офис, режим работы, формы названия в именительном, предложном и родительном падежах и локальные SEO-поля.
+`TariffImportRun` и `CityImportRun` сохраняют метаданные файла, счетчики, JSON report, `VALIDATED`/`APPLIED`/`FAILED` и время apply. Сырые файлы не сохраняются. Нет таблицы tariff history, import line history, version snapshot или rollback.
 
-### Page
+## Проверки и заявки
 
-Страница города определенного типа: home, internet, internet-tv, tv, tariff, address-check, faq. Страница содержит slug, SEO-поля, статус публикации и порядок блоков.
+| Сущность | Назначение |
+| --- | --- |
+| `AddressCheck` | Адрес, object type, status, raw provider response, site/city/page context. |
+| `Lead` | Контакты, адрес, UTM, URL/form/device/visited pages, address/contract results, processing status, external lead data, operator status. |
+| `LeadDeliveryAttempt` | Каждый API/email attempt, idempotency key, payload/response/error, next retry time. |
+| `LeadActivityEvent` | События браузера до формы. |
+| `LeadStatusHistory` | Операторские переходы NEW/IN_PROGRESS/CALL_LATER/CONNECTED/REJECTED. |
 
-### PageBlock
+`LeadProcessingStatus` отделяет delivery flow от операторского `LeadStatus`. Это реализованная и важная граница: delivery не должна заменять CRM-статус.
 
-Переиспользуемый блок страницы. Хранит тип блока, JSON-конфигурацию, порядок, видимость и источник наследования. Город или страница может скрыть, добавить или переопределить блок.
+## Доступ и технические записи
 
-### Tariff
+`User` содержит email, `passwordHash`, name, role, active и timestamps. `Session` хранит не raw token, а его SHA-256 hash и expiry. При reset password или deactivate API удаляет sessions пользователя.
 
-Отдельная запись тарифа для каждого города. Обязательные поля: city_id, name, slug, service_type, standard_price, promo_price, speed, availability, source, updated_at. Дополнительные поля для ТВ, оборудования, подключения и условий акции заполняются по типу тарифа.
+`Redirect` уже есть в схеме: site/city, source/target path, status, hits и timestamps. В текущем коде нет controller, routing или hit tracking, поэтому наличие таблицы не означает работу 301.
 
-Для импорта сохраняются external_tariff_id, identity_key, data_source и дата последнего обновления. `identity_key` строится по комбинации `{город_slug}-{post_title_lat}-{tarif_type}`. Поле `seo` хранит ручные переопределения Title и Description карточки тарифа.
+## Реальное наследование
 
-### Lead
-
-Заявка хранит имя, телефон, email при наличии, город, страницу, тариф, услугу, адрес, тип объекта, результат API-проверки, источник, UTM-метки, referrer, URL и название формы, время на сайте, тип устройства, историю посещенных страниц, результат проверки договора и дату создания. Поля `processingStatus`, `duplicateOfId`, `duplicateReason`, `deliveryKey`, `externalLeadId` и `externalStatus` отделяют фактическую обработку от операторского статуса заявки.
-
-### LeadDeliveryAttempt и LeadActivityEvent
-
-`LeadDeliveryAttempt` хранит каждую API/email-попытку передачи, ключ идемпотентности, payload, ответ, ошибку и время следующего повтора. `LeadActivityEvent` сохраняет последовательность событий посетителя до формы.
-
-### LeadStatusHistory
-
-История переходов заявки: новая, в работе, перезвонить позже, подключено, отказ. Каждое изменение хранит автора, дату и комментарий.
-
-### TariffImportRun
-
-Пакет XLS/XLSX хранит имя файла, провайдера, количество строк, валидных строк, ошибок и предупреждений, полный JSON-отчет, статус `VALIDATED`/`APPLIED`/`FAILED` и время применения. Сырые правила фильтрации и размножения по городам сюда не переносятся: администратор загружает подготовленный локально файл.
-
-### CityImportRun и Redirect
-
-`CityImportRun` хранит отчет XLS-проверки городов и позволяет применять только подтвержденный пакет. Новая строка создает регион при его отсутствии, город в статусе `DRAFT` и шесть типовых страниц в черновиках. `Redirect` резервирует старый путь, новый путь, статус, счетчик и последнее обращение: он нужен для управляемого 301 после смены slug.
-
-## Наследование контента
+Public city endpoint применяет shallow merge в таком порядке:
 
 ```text
-общий шаблон → сайт → регион → город → страница → тариф
+Provider.settings.content -> Site.settings.content -> Region.content -> City.content -> Page.content
 ```
 
-Более глубокий уровень переопределяет значение верхнего. Для каждого поля должен быть виден источник значения в админке.
+Значение deeper level заменяет значение того же top-level key. Для SEO endpoint объединяет City `seo` с Page или Tariff `seo`. Блоки, nested JSON values, templates и источник поля не наследуются автоматически. Полная модель «шаблон -> сайт -> регион -> город -> страница -> тариф» остается продуктовой целью, а не текущей реализацией.
 
-Публичный endpoint города собирает контент в порядке: `Provider.settings.content`, `Site.settings.content`, `Region.content`, `City.content`, `Page.content`. Остальные настройки провайдера и сайта не участвуют в публичной выдаче. Смешивание выполняется по ключам верхнего уровня; значение более глубокого уровня имеет приоритет. SEO пока наследуется только от города к странице или тарифу; полноценные шаблоны и наследование блоков требуют дальнейшей реализации.
+## Чего в модели нет
 
-## Пользователь и сессия
-
-Пользователь хранит email, хеш пароля, имя, роль и флаг активности. Доступные роли: `ADMIN`, `EDITOR`, `TARIFF_MANAGER`, `OPERATOR`. Сессия содержит только SHA-256 хеш выданного Bearer-токена и срок действия. Смена пароля или деактивация пользователя закрывает его сессии.
+Нет сущностей для media library, page template/version, scheduled publication, audit action, notification delivery, analytics aggregates, SEO validation, variable registry, category/collection, equipment, channel package, review, legal retention policy и provider integration profile. Перед добавлением этих сущностей нужно утвердить их interface и ownership, а не использовать неструктурированный JSON как постоянную замену.

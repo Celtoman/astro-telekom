@@ -1,97 +1,84 @@
-# API-контракты первого релиза
+# API-контракты текущего прототипа
 
-Базовый префикс: `/api/v1`.
+Базовый prefix: `/api/v1`. Документ описывает маршруты, зарегистрированные в `apps/api/src/module.ts` на 7 сентября 2026 года. Он не обещает endpoints из продукта, если их нет в коде.
 
-## Авторизация
+## Общие правила
 
-`POST /auth/login` принимает email и пароль и возвращает короткоживущий Bearer-токен сессии. Сессия хранится в базе в виде SHA-256 хеша токена. Для административных и CRM-запросов используется `Authorization: Bearer <token>`.
+- API работает на NestJS/Fastify и принимает JSON; server body limit — 35 MB.
+- `POST /auth/login` возвращает 12-часовой Bearer token. Сессия хранится как SHA-256 hash.
+- Защищенные маршруты принимают `Authorization: Bearer <token>`. Для сервисного сценария guard также принимает `x-admin-token`, если он равен `ADMIN_API_TOKEN`; этот путь обладает полными правами.
+- Роли: `ADMIN`, `EDITOR`, `TARIFF_MANAGER`, `OPERATOR`. `ADMIN` управляет provider/site/users; `TARIFF_MANAGER` — tariff routes; `ADMIN` и `OPERATOR` — CRM; остальные admin content routes доступны `ADMIN`/`EDITOR`.
+- Общий `ValidationPipe` не включен. Контроллеры проверяют часть полей вручную; нельзя считать TypeScript body-interface полноценной runtime-валидацией.
 
-Роли первого релиза: `ADMIN`, `EDITOR`, `TARIFF_MANAGER`, `OPERATOR`. Администратор управляет всем, редактор — городами и страницами, менеджер тарифов — тарифами, оператор — заявками CRM.
+## Public routes
 
-## Публичные методы
+| Method | Route | Реальное поведение |
+| --- | --- | --- |
+| GET | `/health` | Возвращает `{ status: "ok", service: "api" }`; не проверяет подключение к БД или внешние интеграции. |
+| GET | `/public/sites/:siteSlug/cities/:citySlug` | Возвращает опубликованный город, опубликованные страницы/тарифы, visible blocks и shallow inheritance content. |
+| POST | `/address-checks` | Проверяет адрес через `CoverageService`, сохраняет `AddressCheck`, возвращает публичный результат без raw provider response. |
+| POST | `/leads` | Сохраняет заявку, пытается выявить дубликат, при допустимом адресе проверяет договор и ставит delivery. |
 
-```text
-GET  /public/sites/:siteSlug/cities/:citySlug
-POST /address-checks
-POST /leads
-```
+Для `address-checks` и `leads` по умолчанию подставляется `siteSlug=domru-kazan`; endpoint публично принимает только published site/city/page/tariff. Этот default — свойство прототипа, не универсальный контракт платформы.
 
-Публичный GET возвращает только опубликованные сущности и подготовленные данные для генерации HTML. JSON-поля `content` и `seo` уже разрешены с учетом наследования уровней. Секреты API провайдера никогда не передаются клиенту.
+### `POST /address-checks`
 
-## Административные методы
+Тело: `address` обязателен; опциональны `siteSlug`, `citySlug`, `pageSlug`, `objectType`. Возможные статусы: `AVAILABLE`, `UNAVAILABLE`, `AMBIGUOUS`, `MANUAL_CHECK`, `ERROR`.
 
-```text
-GET/POST/PATCH /admin/cities
-POST           /admin/cities/import/validate
-POST           /admin/cities/import/apply
-GET            /admin/cities/imports
-GET            /admin/cities/imports/:id
-GET/POST/PATCH /admin/regions
-GET/POST/PATCH /admin/providers
-GET/POST/PATCH /admin/sites
-GET/POST/PATCH /admin/users
-GET/POST/PATCH /admin/pages
-GET/POST/PATCH /admin/tariffs
-POST           /admin/tariffs/import
-POST           /admin/tariffs/import/validate
-POST           /admin/tariffs/import/apply
-GET            /admin/tariffs/imports
-GET            /admin/tariffs/imports/:id
-GET/POST       /admin/pages/:pageId/blocks
-PATCH/DELETE   /admin/blocks/:id
-```
+Если не заданы обе переменные coverage-интеграции, ответ будет `MANUAL_CHECK`. API не интерпретирует это как `available: false`.
 
-Все административные запросы требуют Bearer-токен из `/auth/login`; права проверяются по роли пользователя. Изменения страниц, блоков, городов и тарифов отправляют событие на `REBUILD_WEBHOOK_URL`, если он настроен.
+### `POST /leads`
 
-Методы `/admin/users` доступны только `ADMIN`. Ответы никогда не содержат пароль и его хеш. При смене пароля или отключении пользователя его активные сессии удаляются. Нельзя отключить или понизить роль последнего активного администратора.
+Обязательны `phone` и `citySlug`. Также допускаются slug страницы/тарифа, ссылка на `addressCheckId`, контакты, адрес, service type, UTM, referrer, URL, form name, time on site, device, viewed pages и activity. Браузерные numeric IDs не принимаются: API разрешает только slug.
 
-`POST /admin/tariffs/import` принимает `providerId`, `cityId` и массив тарифов. Сопоставление выполняется по `identityKey` или по детерминированной комбинации `cityId + normalized_name + service_type`; существующие записи обновляются, новые создаются.
+Контроллер сравнивает телефон или нормализованный адрес с лидами того же сайта за последние 24 часа. Статусы обработки: `PENDING`, `DELIVERED`, `DUPLICATE_SUPPRESSED`, `ACTIVE_SUBSCRIBER_NOT_SENT`, `MANUAL_CHECK`, `ADDRESS_CLARIFICATION`, `MANUAL_CHECK_API`, `DELIVERY_ERROR_EMAIL_SENT`, `DELIVERY_ERROR_EMAIL_FAILED`.
 
-Для готового XLS/XLSX-файла используется двухшаговый конвейер:
+Без `DOMRU_CONTRACT_API_URL` результат проверки договора — `NOT_CONFIGURED`, а лид переводится в `MANUAL_CHECK_API`, поэтому delivery не запускается. Публичный ответ остается нейтральным: `{ id, status, message: "Заявка принята" }`, дополнительно может вернуть subscriber cookie.
 
-1. `POST /admin/tariffs/import/validate` принимает `providerId`, `fileName` и `fileBase64` (или уже разобранный массив `rows`). Сервер читает первый лист, проверяет обязательные поля `subekt_rf`, `gorod_name`, `gorod_slug`, `tarif_type`, `post_title`, `post_title_lat`, `nazvanie_tarifa`, `skorost_interneta`, `stoimost_tarifa`, контролирует статусы `-1/0/1`, булевы поля `0/1`, города выбранного провайдера и дубли ключа `{gorod_slug}-{post_title_lat}-{tarif_type}`. Ответ содержит отчет, ошибки, предупреждения и нормализованные строки.
-2. `POST /admin/tariffs/import/apply` принимает `runId` и применяет только валидированные строки. Импорт сохраняет обычную и акционную цену отдельно, `connection_cost = 0` трактуется как бесплатное подключение, а тарифы после подтверждения получают статус `PUBLISHED` согласно решению Q104.
+## Auth и административные routes
 
-Каждая проверка сохраняется в `TariffImportRun`; отчет доступен через `/admin/tariffs/imports`. Ошибочный пакет нельзя применить, повторное применение уже примененного отчета заблокировано.
+| Method | Route | Назначение |
+| --- | --- | --- |
+| POST | `/auth/login` | Email/password -> Bearer session. |
+| GET/POST/PATCH | `/admin/providers` | Provider records. Только ADMIN. |
+| GET/POST/PATCH | `/admin/sites` | Site records. Только ADMIN. |
+| GET/POST/PATCH | `/admin/users` | Пользователи, роли, deactivate/password reset. Только ADMIN. |
+| GET/POST/PATCH | `/admin/regions` | Region records. |
+| GET/POST/PATCH | `/admin/cities` | City records. |
+| GET/POST/PATCH | `/admin/pages` | Page records. |
+| GET/POST | `/admin/pages/:pageId/blocks` | Просмотр и создание blocks. |
+| PATCH/DELETE | `/admin/blocks/:id` | Изменение и удаление blocks. |
+| GET/POST/PATCH | `/admin/tariffs` | Tariff records. ADMIN или TARIFF_MANAGER. |
+| POST | `/admin/tariffs/import` | Старый программный import массива items. |
+| POST | `/admin/tariffs/import/validate` | XLS/XLSX или rows -> сохраненный validation report. |
+| POST | `/admin/tariffs/import/apply` | Применяет `runId`; опциональный `acceptedKeys` разрешает partial apply. |
+| GET | `/admin/tariffs/imports`, `/admin/tariffs/imports/:id` | История и полный report import. |
+| POST | `/admin/cities/import/validate` | XLS/XLSX или rows -> city import report. |
+| POST | `/admin/cities/import/apply` | Применяет run с optional per-row `create`/`update`/`skip`. |
+| GET | `/admin/cities/imports`, `/admin/cities/imports/:id` | История и полный report city import. |
 
-Импорт городов также разделен на проверку и применение. `POST /admin/cities/import/validate` принимает `siteId`, `fileName` и `fileBase64` либо `rows`. Поддерживаются колонки исходного файла: «Субъект РФ», «Город имен. падеж», «Город предлож. Падеж - dom_ru_v», «Город родит. Падеж», `Slug`, `URL города`, `adres_ofisa`, `rezhim_raboty_ofisa`. До записи сервис проверяет обязательные поля, латинский slug и дубли внутри файла, а для существующих slug показывает поля, которые будут изменены. `POST /admin/cities/import/apply` принимает `runId` и необязательный выбор действия по строкам: `create`, `update` или `skip`. Для нового города создаются черновики главной, трех услуг, проверки адреса и FAQ.
+CRUD routes вызывают `REBUILD_WEBHOOK_URL` best-effort, если он задан. Ответ CRUD не означает, что static web уже пересобран и опубликован.
 
-Блоки страницы управляются отдельными методами:
+### Import contracts
 
-```text
-GET    /admin/pages/:pageId/blocks
-POST   /admin/pages/:pageId/blocks
-PATCH  /admin/blocks/:id
-DELETE /admin/blocks/:id
-```
+Тарифный import читает первый лист и требует колонки `subekt_rf`, `gorod_name`, `gorod_slug`, `tarif_type`, `post_title`, `post_title_lat`, `nazvanie_tarifa`, `skorost_interneta`, `stoimost_tarifa`. Поддерживаются только типы `Интернет` и `Интернет+ТВ`. Отчет валидирует slug, города выбранного provider, дубли, скорость, цену, статусы `-1/0/1` и booleans `0/1`.
 
-Каждый блок имеет тип, позицию, видимость и JSON-конфигурацию. Это позволяет менять порядок проверенных блоков без редактирования шаблона Astro.
+Городской import принимает русские и латинские aliases для субъекта, грамматических форм, slug, legacy URL и офиса. Новый город получает шесть `DRAFT` страниц: home, internet, internet-tv, tv, address-check и faq.
 
-## CRM-методы
+Текущая реализация не удаляет/архивирует тарифы, которых нет в import report, и не создает redirects при смене slug. Это не нужно обходить на стороне клиента: продуктовую семантику необходимо утвердить и реализовать на сервере.
 
-```text
-GET   /crm/leads
-GET   /crm/leads/:id
-PATCH /crm/leads/:id/status
-POST  /crm/leads/:id/retry-delivery
-```
+## CRM и internal routes
 
-CRM не изменяет тарифы и контент. Оператор работает только с заявками и историей их обработки.
+| Method | Route | Поведение |
+| --- | --- | --- |
+| GET | `/crm/leads` | Возвращает полный список заявок с relations, без пагинации. |
+| GET | `/crm/leads/:id` | Детальная карточка с адресной проверкой, попытками и activity. |
+| PATCH | `/crm/leads/:id/status` | Изменяет операторский status и добавляет history с optimistic concurrency. |
+| POST | `/crm/leads/:id/retry-delivery` | Возвращает eligible lead в `PENDING` и ставит первую delivery attempt. |
+| POST | `/internal/lead-deliveries/:id` | Worker-only handler очереди. Защищен тем же guard. |
 
-## Проверка адреса
+`/crm/leads` сейчас возвращает PII без серверной пагинации и фильтрации. Admin/CRM UI должны использовать этот endpoint только в доверенном контуре после полноценного login/role flow.
 
-Запрос `POST /address-checks` принимает город, адрес, тип объекта и optional `siteSlug`/`pageSlug`. Адаптер передает их в API покрытия Дом.ру, если настроены `DOMRU_COVERAGE_API_URL` и `DOMRU_COVERAGE_API_KEY`. Ответ содержит `available`, статус проверки и список альтернативных предложений, если их вернул API.
+## Отсутствующие routes
 
-При ошибке внешнего API возвращается отдельный статус `MANUAL_CHECK` или `ERROR`, а не `available: false`. Для альтернатив без безопасной HTTP-ссылки API подставляет партнерский URL из `ALTERNATIVES_PARTNER_URL`.
-
-## Создание заявки
-
-`POST /leads` сохраняет телефон, имя, email, адрес, тип объекта, город, страницу, тариф, тип услуги, ссылку на проверку адреса, результат проверки, источник, UTM-метки, referrer, URL и название формы, время на сайте, устройство, просмотренные страницы и события до отправки. Ответ не раскрывает внутренние поля CRM и возвращает только идентификатор и пользовательский статус.
-
-Для публичной формы используются `siteSlug`, `citySlug`, optional `pageSlug` и `tariffSlug`. API самостоятельно разрешает их в идентификаторы базы и не принимает внутренние ID от браузера.
-
-Сайт и город должны быть опубликованы. Если передана страница или тариф, они также должны быть опубликованы. При привязке `addressCheckId` API использует сохраненные адрес, тип объекта и результат проверки, а не значения, присланные браузером.
-
-После записи сервис проверяет дубликат по нормализованному телефону **или** адресу за последние 24 часа. Дубликат сохраняется, связывается с исходной заявкой и получает `DUPLICATE_SUPPRESSED`; в Tarifnik не передается. Доступность по адресу, неоднозначный адрес и ошибка API получают свои статусы ручной проверки. Только адрес с доступной сетью проходит API проверки действующего абонента Дом.ру. Активный абонент сохраняется без передачи; публичный ответ остается нейтральным и включает подписанный 30-дневный флаг для скрытия номеров подключения в текущем браузере.
-
-Передача в Tarifnik использует единый ключ идемпотентности для всех попыток одной заявки: сразу, через 5 минут и через 30 минут. Каждая попытка, payload, ответ и ошибка хранятся в журнале заявки. После трех ошибок запускается email-резерв с защищенной 24-часовой ссылкой на карточку; статусы `DELIVERY_ERROR_EMAIL_SENT` и `DELIVERY_ERROR_EMAIL_FAILED` не смешиваются.
+В коде нет endpoints для redirects, action log, media, analytics, variables, publication schedule, preview, rollback, SEO validation, page templates, tariff history, callback statuses from Tarifnik и email fallback link verification. Их нельзя считать частью текущего API.
