@@ -47,13 +47,14 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 ## Версионирование и релизы
 
-Единая версия на весь монорепозиторий (не по пакетам) — `package.json`, поле `version`. Автоматизировано через [release-please](https://github.com/googleapis/release-please) на основе Conventional Commits (`feat:`/`fix:`/`docs:`/`chore:` и т.д. — вся история коммитов уже в этом формате, не отступать от него).
+Единая версия на весь монорепозиторий (не по пакетам) — `package.json`, поле `version`. Автоматизировано через [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) на основе Conventional Commits (`feat:`/`fix:`/`docs:`/`chore:` и т.д. — вся история коммитов уже в этом формате, не отступать от него).
 
-- `.github/workflows/release-please.yml` на каждый push в `master` обновляет **release PR** с версией и `CHANGELOG.md`.
-- **Релиз (git tag + GitHub Release) создаётся только после ручного merge этого PR** — не автоматически на каждый коммит. Это осознанный выбор вместо semantic-release: соответствует общему правилу проекта не выполнять значимые действия без явного подтверждения.
-- `feat:` → minor (0.X.0), `fix:`/остальные → patch (0.1.X) — версия ниже 1.0.0, пока проект остаётся локальным прототипом (`bump-minor-pre-major` в `release-please-config.json`).
-- Пакеты `private: true`, публикации в npm нет и не будет — release-please используется только для версии/тега/changelog, не для publish.
-- Не редактировать `.release-please-manifest.json` вручную вне релизного PR — им управляет workflow.
+- **Релиз запускается вручную**, когда решили зафиксировать версию: `pnpm release` (bump версии в `package.json`, обновление `CHANGELOG.md`, commit и git tag `vX.Y.Z` — всё прямо в `master`, без промежуточной ветки или PR), затем `git push --follow-tags`. Перед этим можно проверить, что будет сделано, без изменения файлов: `pnpm release:dry-run`.
+- **Не автоматически на каждый push** — соответствует общему правилу проекта не выполнять значимые действия без явного подтверждения; здесь подтверждение — это осознанный запуск `pnpm release`, а не merge PR.
+- **Изначально стоял `release-please`** (PR-based) — заменён в тот же день (8 сентября 2026) по требованию «всегда только одна ветка»: PR-механизм release-please структурно требует отдельной ветки на весь срок жизни PR. `commit-and-tag-version` коммитит и тегает напрямую в текущую ветку — веток не создаёт вообще.
+- **Пока версия ниже `1.0.0` — все релизы patch-bump** (`0.1.0 → 0.1.1 → ...`), `feat`/`fix` не различаются в номере версии. Это жёстко зашитое поведение инструмента (`commit-and-tag-version/lib/lifecycles/bump.js`: `semver.lt(currentVersion, '1.0.0') → preMajor = true`), простого флага для отключения нет; осознанно принято как есть, а не обойдено.
+- `.github/workflows/release.yml` создаёт GitHub Release при push git-тега (`v*`) — этому шагу ветка тоже не нужна.
+- Пакеты `private: true`, публикации в npm нет и не будет.
 
 ## Известные особенности этого проекта
 

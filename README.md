@@ -79,7 +79,7 @@ pnpm test
 
 ## Версионирование
 
-Единая версия на весь монорепозиторий, автоматизирована через [release-please](https://github.com/googleapis/release-please) на основе Conventional Commits. Release-please открывает PR с версией и `CHANGELOG.md` на каждый push в `master`; тег и GitHub Release создаются только после того, как этот PR смержен вручную — не автоматически. Подробности — [CLAUDE.md](CLAUDE.md), раздел «Версионирование и релизы».
+Единая версия на весь монорепозиторий, автоматизирована через [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) на основе Conventional Commits. Релиз запускается вручную командой `pnpm release` (`pnpm release:dry-run` — предпросмотр без изменений) прямо в `master`, без веток и PR; тег и GitHub Release создаются после `git push --follow-tags`. Подробности — [CLAUDE.md](CLAUDE.md), раздел «Версионирование и релизы».
 
 ## Безопасность и данные
 

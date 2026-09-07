@@ -5,6 +5,7 @@
   "packageManager": "pnpm@11.19.0",
   "devDependencies": {
     "@prisma/client": "7.10.0",
+    "commit-and-tag-version": "^13.1.2",
     "cross-env": "^10.1.0",
     "prisma": "7.10.0"
   },
@@ -19,6 +20,8 @@
     "db:validate": "pnpm --filter @provider/database validate",
     "test": "node --test tests/*.test.cjs tests/*.test.mjs",
     "test:build": "pnpm --filter @provider/api run build && pnpm test",
-    "check": "pnpm lint && pnpm db:validate && pnpm run build:ci && pnpm test"
+    "check": "pnpm lint && pnpm db:validate && pnpm run build:ci && pnpm test",
+    "release:dry-run": "commit-and-tag-version --dry-run",
+    "release": "commit-and-tag-version"
   }
 }
