@@ -1,0 +1,33 @@
+name: Задача (Task)
+description: Спланированный кусок работы, который закрывает один или несколько tech-debt issues — с чек-листом шагов.
+title: "Task N: "
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Task группирует связанные `tech-debt` issues и отслеживает прогресс через чек-лист шагов (нативные GitHub checkboxes — прогресс виден на странице issue автоматически). Обзор всей системы — [docs/task-management.md](../../docs/task-management.md).
+  - type: textarea
+    id: goal
+    attributes:
+      label: Цель
+      description: Что должно стать правдой, когда задача выполнена — не процесс, а результат.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Шаги
+      description: Чек-лист. Каждый шаг — проверяемое действие, не "разобраться" или "сделать красиво".
+      placeholder: |
+        - [ ] Шаг 1
+        - [ ] Шаг 2
+        - [ ] Commit
+    validations:
+      required: true
+  - type: input
+    id: related
+    attributes:
+      label: Связано
+      description: Номера tech-debt issues, которые эта задача закрывает (свяжи их как sub-issues после создания — см. docs/task-management.md), ссылки на decisions.md/design-system при необходимости.
+      placeholder: "Closes #N (TD-XX)"

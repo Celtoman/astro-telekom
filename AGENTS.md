@@ -83,7 +83,8 @@ pnpm --filter @provider/api run build && node --test tests/*.test.cjs tests/*.te
 | [docs/data-model.md](docs/data-model.md) | Prisma-схема и её отличие от продуктового замысла |
 | [docs/deployment.md](docs/deployment.md) | Локальный/production контур, переменные, обязательные проверки |
 | [docs/worker.md](docs/worker.md) | Очереди, producer/consumer, поведение без Redis, graceful shutdown |
-| [docs/technical-debt.md](docs/technical-debt.md) | Приоритизированный долг (P0–P3) с доказательствами из кода |
+| [docs/task-management.md](docs/task-management.md) | Как ведутся проблемы/задачи в GitHub Issues — обязательно перед работой с TD/issues |
+| [docs/technical-debt.md](docs/technical-debt.md) | Индекс приоритизированного долга (P0–P3), полный текст — в issues |
 | [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md) | Что именно проверяет каждый файл в `tests/` — живой документ |
 | [docs/decisions.md](docs/decisions.md) | Согласованный продуктовый замысел — не подтверждает наличие в коде |
 | [docs/plans/2026-09-07-platform-stabilization-and-mvp.md](docs/plans/2026-09-07-platform-stabilization-and-mvp.md) | Исполнимый план задач до MVP |
@@ -128,6 +129,17 @@ pnpm --filter @provider/api run build && node --test tests/*.test.cjs tests/*.te
 - Разрешением считаются только однозначные сообщения: «Применяй», «Ок», «Давай», «Да».
 - Без подтверждения — только анализ, план и варианты. Не редактируй файлы, не выдавай незавершённую работу за факт.
 - Если в процессе план нужно существенно изменить — остановись, опиши новую ситуацию, снова запроси подтверждение.
+
+### Управление задачами (GitHub Issues)
+
+Репозиторий: `Celtoman/astro-telekom`. Issue open/closed — единственный механический источник правды «решено / не решено». Полное описание системы (типы записей, labels, milestone, шаблоны, sub-issues, команды `gh`) — [docs/task-management.md](docs/task-management.md), обязательно к прочтению перед любой работой с проблемами/задачами. Ниже — только сжатые обязательные правила.
+
+- **Любая найденная проблема фиксируется сразу**, не откладывается на потом: `gh issue create --repo Celtoman/astro-telekom --title "..." --label "P0|P1|P2|P3" --label "tech-debt"` (или через шаблон `.github/ISSUE_TEMPLATE/tech-debt.yml`). Не держать находки только в памяти разговора или только в тексте ответа пользователю.
+- **Полный текст проблемы живёт только в issue**, не дублируется в `docs/technical-debt.md` — там только индекс (ID, ссылка, статус, одна строка сути). Дублирование текста — то, из-за чего документы расходились раньше; не повторять эту ошибку.
+- Спланированная работа — отдельный issue с label `task`, чек-листом шагов и milestone «MVP: безопасный Казань-релиз» (если входит в MVP); закрываемые проблемы привязываются как sub-issues (`gh api .../sub_issues`), не только текстовой ссылкой — точные команды в `docs/task-management.md`.
+- **Исправление проблемы закрывает issue в том же коммите** через `Closes #N` в теле коммита, либо issue закрывается вручную с комментарием, объясняющим почему. Нельзя коммитить исправление и оставлять issue формально открытым без причины.
+- Если проблема решена лишь частично — не закрывать issue «за компанию»; выделить оставшуюся часть в отдельный issue со ссылкой на родительский (как сделано для TD-03/[issue #4](https://github.com/Celtoman/astro-telekom/issues/4)).
+- Перед завершением задачи, которая касалась известной проблемы — проверить, не осталась ли ссылка на неё висеть открытой без причины.
 
 ### Управление зависимостями
 
