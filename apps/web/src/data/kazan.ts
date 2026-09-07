@@ -49,8 +49,14 @@ export async function loadKazanData(): Promise<{ city: CityView; tariffs: Tariff
       pages: data.pages || [],
       tariffs: (data.tariffs || []).map(tariffView),
     };
-  } catch {
-    return { city, tariffs, pages: [] };
+  } catch (error) {
+    if (process.env.ALLOW_DEMO_DATA === 'true') {
+      console.warn(`[kazan] ALLOW_DEMO_DATA=true: используются демонстрационные данные вместо ${apiUrl}. Причина: ${(error as Error).message}`);
+      return { city, tariffs, pages: [] };
+    }
+    throw new Error(
+      `Не удалось получить данные Казани из ${apiUrl}: ${(error as Error).message}. Поднимите API перед сборкой либо явно установите ALLOW_DEMO_DATA=true для демонстрационной сборки.`,
+    );
   }
 }
 

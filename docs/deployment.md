@@ -55,7 +55,6 @@ docker compose -f docker-compose.prod.yml exec api node --experimental-strip-typ
 
 ## Известные эксплуатационные ограничения
 
-- Dockerfiles применяют `pnpm install --no-frozen-lockfile`; dependency resolution может отличаться от lockfile.
 - Caddy reverse proxy не добавляет security headers из `static.Caddyfile`; он используется только внутри static image.
 - Нет мониторинга, alerting, лог-агрегации или автоматической backup policy.
 - Static web не получает изменения из БД без внешней пересборки.

@@ -13,7 +13,7 @@
 - Прием лида, deduplication, contract check, delivery attempts, CRM API.
 - Static admin/CRM prototypes и worker listeners.
 
-Release 0 не является production release: тестовый gate красный, public build допускает demo fallback, статический сайт не мультигородской, а admin UI частично имитирует данные.
+Release 0 не является production release: тестовый gate красный, статический сайт не мультигородской, а admin UI частично имитирует данные. Demo fallback в public build с 7 сентября 2026 требует явного `ALLOW_DEMO_DATA=true` и больше не срабатывает молча при недоступном API.
 
 ## Release 1 — безопасный MVP Казани
 
@@ -22,7 +22,7 @@ Release 0 не является production release: тестовый gate кра
 Условия завершения:
 
 1. Все automated checks green в чистом окружении.
-2. Production build блокируется, если API-данные отсутствуют или demo mode включен.
+2. Production build блокируется, если API-данные отсутствуют или demo mode включен. — Базовый механизм реализован (`ALLOW_DEMO_DATA`), осталось явно запрещать demo mode во внешних production CI/CD настройках.
 3. Импорт тарифов имеет утвержденную полную семантику и не оставляет устаревшие публичные предложения.
 4. Rebuild job имеет status/retry и подтвержденный результат HTML.
 5. Fallback link безопасно открывает нужную заявку либо удалена из письма.

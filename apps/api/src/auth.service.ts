@@ -35,13 +35,13 @@ export class AuthService {
     const rawToken = randomBytes(32).toString('base64url');
     const tokenHash = createHash('sha256').update(rawToken).digest('hex');
     const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 12);
-    await (this.prisma as any).session.create({ data: { userId: user.id, tokenHash, expiresAt } });
+    await this.prisma.session.create({ data: { userId: user.id, tokenHash, expiresAt } });
     return { token: rawToken, expiresAt, user: { id: user.id, email: user.email, role: user.role } };
   }
 
   async getUserByToken(token: string): Promise<AuthUser | null> {
     const tokenHash = createHash('sha256').update(token).digest('hex');
-    const session = await (this.prisma as any).session.findUnique({ where: { tokenHash }, include: { user: true } });
+    const session = await this.prisma.session.findUnique({ where: { tokenHash }, include: { user: true } });
     if (!session || session.expiresAt <= new Date() || !session.user.active) return null;
     return { id: session.user.id, email: session.user.email, role: session.user.role };
   }

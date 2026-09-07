@@ -2,7 +2,7 @@ FROM node:22.23.2-alpine AS build
 WORKDIR /workspace
 RUN corepack enable
 COPY . .
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 FROM node:22.23.2-alpine
 WORKDIR /app

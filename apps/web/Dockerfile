@@ -10,7 +10,7 @@ ENV PUBLIC_SITE_URL=$PUBLIC_SITE_URL
 ENV PUBLIC_YANDEX_METRIKA_ID=$PUBLIC_YANDEX_METRIKA_ID
 ENV PUBLIC_SUPPORT_PHONE=$PUBLIC_SUPPORT_PHONE
 COPY . .
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @provider/web run build
 
 FROM caddy:2.11.4-alpine

@@ -23,6 +23,10 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 
 Если API запущен без `REDIS_URL`, delivery выполняется в памяти процесса через `queueMicrotask` или `setTimeout`. Это удобно для локального прототипа, но restart API теряет запланированную попытку. Worker без `REDIS_URL` не стартует корректно как полноценный async consumer, поэтому production обязательно должен использовать Redis.
 
+## Остановка процесса
+
+Worker перехватывает `SIGINT`/`SIGTERM`: закрывает все три `Worker` (дожидаясь текущих задач через `close()`) и завершает Redis-соединение перед выходом. Live-проверка под реальной нагрузкой (`docker compose stop worker` с активной задачей) не выполнена — см. [workaround-audit.md](research/2026-09-07-workaround-audit.md), W-08.
+
 ## Необходимая доработка
 
 Очередь пересборки должна стать единым механизмом публикации с persistent job, retry и status. Либо неиспользуемые listeners `tariff-imports` и `site-rebuilds` надо удалить до появления producer. План этой работы — Task 4 в [плане реализации](plans/2026-09-07-platform-stabilization-and-mvp.md).

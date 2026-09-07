@@ -56,4 +56,18 @@ for (const worker of [importWorker, rebuildWorker, leadDeliveryWorker]) {
   worker.on('failed', (job, error) => console.error(`[worker] ${job?.queueName}/${job?.id} failed`, error));
 }
 
+let shuttingDown = false;
+async function shutdown(signal) {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  console.log(`[worker] received ${signal}, closing workers`);
+  await Promise.all([importWorker.close(), rebuildWorker.close(), leadDeliveryWorker.close()]);
+  await connection.quit();
+  console.log('[worker] shutdown complete');
+  process.exit(0);
+}
+
+process.on('SIGINT', () => void shutdown('SIGINT'));
+process.on('SIGTERM', () => void shutdown('SIGTERM'));
+
 console.log('[worker] tariff-imports, site-rebuilds and lead-deliveries are listening');

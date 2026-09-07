@@ -8,6 +8,7 @@ async function bootstrap() {
     new FastifyAdapter({ bodyLimit: 35 * 1024 * 1024 }),
   );
 
+  app.enableShutdownHooks();
   app.setGlobalPrefix('api/v1');
   app.enableCors({
     origin: (process.env.CORS_ORIGINS || process.env.PUBLIC_SITE_URL || 'http://localhost:4321')

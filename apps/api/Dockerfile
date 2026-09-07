@@ -3,7 +3,7 @@ WORKDIR /workspace
 RUN corepack enable
 ENV DATABASE_URL=postgresql://provider:provider@localhost:5432/provider_platform
 COPY . .
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @provider/database generate
 RUN pnpm --filter @provider/api run build
 

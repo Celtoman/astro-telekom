@@ -4,7 +4,7 @@ RUN corepack enable
 ARG PUBLIC_API_URL
 ENV PUBLIC_API_URL=$PUBLIC_API_URL
 COPY . .
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @provider/crm run build
 
 FROM caddy:2.11.4-alpine
