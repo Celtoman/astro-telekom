@@ -13,6 +13,7 @@ const SERVICE_STATUS_COLUMNS = [
   'srv_ont_status', 'srv_staticip_status',
 ];
 const BOOLEAN_COLUMNS = ['is_sticky', 'is_gaming_tarif'];
+const IMPORT_TRANSACTION_TIMEOUT_MS = 120_000;
 const IGNORED_ATTRIBUTE_COLUMNS = new Set([
   ...REQUIRED_IMPORT_COLUMNS,
   'staraia_stoimost', 'connection_cost', 'opisanie_aktsii', 'opisanie_tarifa', 'promo_feature',
@@ -128,9 +129,12 @@ export class TariffImportService {
     const candidates: ImportCandidate[] = [];
     const seen = new Set<string>();
     const keyCounts = new Map<string, number>();
+    const citySlugCounts = new Map<string, number>();
     for (const row of normalizedRows) {
       const candidateKey = `${slug(row.gorod_slug)}-${slug(row.post_title_lat)}-${text(row.tarif_type)}`;
       if (candidateKey !== '--') keyCounts.set(candidateKey, (keyCounts.get(candidateKey) || 0) + 1);
+      const citySlugKey = `${slug(row.gorod_slug)}|${slug(row.post_title_lat)}`;
+      if (citySlugKey !== '|') citySlugCounts.set(citySlugKey, (citySlugCounts.get(citySlugKey) || 0) + 1);
     }
 
     normalizedRows.forEach((row, index) => {
@@ -148,13 +152,27 @@ export class TariffImportService {
       if (citySlug && !cityBySlug.has(citySlug)) add('error', `Город «${citySlug}» не найден у выбранного провайдера`);
       if (!serviceType && !empty(row.tarif_type)) add('error', 'tarif_type должен быть «Интернет» или «Интернет+ТВ»');
       if (key && (keyCounts.get(key) || 0) > 1) add('error', `Дубликат ключа ${key} в одном файле`);
+      if (citySlug && tariffSlug && (citySlugCounts.get(`${citySlug}|${tariffSlug}`) || 0) > 1) {
+        add('error', `post_title_lat «${tariffSlug}» повторяется в городе «${citySlug}»`);
+      }
       if (key && seen.has(key)) add('error', `Дубликат ключа ${key} в одном файле`);
       if (key) seen.add(key);
 
       const speed = number(row.skorost_interneta);
       const currentPrice = number(row.stoimost_tarifa);
+      const tvChannelsTotal = number(row.tv_channels_total);
+      const tvChannelsHd = number(row.tv_channels_hd);
       if (speed === null || speed <= 0 || !Number.isInteger(speed)) add('error', 'skorost_interneta должен быть положительным целым числом');
       if (currentPrice === null || currentPrice <= 0) add('error', 'stoimost_tarifa должен быть больше нуля');
+      if (!empty(row.tv_channels_total) && (tvChannelsTotal === null || tvChannelsTotal < 0 || !Number.isInteger(tvChannelsTotal))) {
+        add('error', 'tv_channels_total должен быть целым числом от 0');
+      }
+      if (!empty(row.tv_channels_hd) && (tvChannelsHd === null || tvChannelsHd < 0 || !Number.isInteger(tvChannelsHd))) {
+        add('error', 'tv_channels_hd должен быть целым числом от 0');
+      }
+      if (tvChannelsTotal !== null && tvChannelsHd !== null && tvChannelsHd > tvChannelsTotal) {
+        add('error', 'tv_channels_hd не может быть больше tv_channels_total');
+      }
       for (const field of SERVICE_STATUS_COLUMNS) {
         if (empty(row[field])) continue;
         const value = number(row[field]);
@@ -180,6 +198,10 @@ export class TariffImportService {
         }
         const promoFeature = text(row.promo_feature);
         if (promoFeature && promoFeature.length < 165) attributes.promo_feature = promoFeature;
+        const tariffDescription = text(row.opisanie_tarifa);
+        if (tariffDescription) attributes.opisanie_tarifa = tariffDescription;
+        if (tvChannelsTotal !== null) attributes.tv_channels_total = tvChannelsTotal;
+        if (tvChannelsHd !== null) attributes.tv_channels_hd = tvChannelsHd;
         candidates.push({
           key, providerId, cityId: city.id, citySlug, name: text(row.post_title) || text(row.nazvanie_tarifa), slug: tariffSlug,
           serviceType, standardPrice: hasPromo ? oldPrice! : currentPrice, promoPrice: hasPromo ? currentPrice : null,
@@ -254,6 +276,6 @@ export class TariffImportService {
         });
       }
       return { created, updated, deleted: staleIds.length, applied: report.candidates.length };
-    });
+    }, { timeout: IMPORT_TRANSACTION_TIMEOUT_MS });
   }
 }

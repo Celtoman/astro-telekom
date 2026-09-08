@@ -4,12 +4,13 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [CLAUDE.md](../CLAUDE.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 75/75 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита.
+**Baseline: 82/82 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита.
 
 | Файл | Что проверяет |
 | --- | --- |
 | `tests/access.test.cjs` | `AdminTokenGuard`: одна авторизованная учетная запись администратора получает доступ ко всем admin/CRM-разделам; отсутствие credentials дает 401; корректный `x-admin-token` остается независимой машинной аутентификацией; пользовательская сессия не проходит на worker-only `/internal/*`. |
 | `tests/admin-auth-ui.test.mjs` | Admin `/` и `/login` используют React-roots; браузерные запросы отправляют HttpOnly cookie через `credentials: include`, проверяют session и logout, а raw Bearer/service token не читается и не хранится в UI. |
+| `tests/admin-tariffs-ui.test.mjs` | Admin `/tariffs` монтирует React-root и доступен из общего shell; экран подключает реальные list/import preview/atomic apply/import history/rebuild endpoints, не использует service token или browser storage; общий API client всегда отправляет HttpOnly cookie и сохраняет status/message ошибок API. |
 | `tests/admin-users.test.cjs` | Управление администраторами: последнюю активную учетную запись нельзя деактивировать; сброс пароля отзывает сессии и не возвращает данные пароля; создание требует валидный email и достаточно длинный пароль, не сохраняет роль и явно отклоняет устаревшее поле `role`. |
 | `tests/auth-session.test.cjs` | Browser auth: login не возвращает raw token и ставит hardened HttpOnly cookie; cookie проходит guard, logout удаляет hash-сессию и очищает cookie, `/auth/me` возвращает только идентичность администратора. |
 | `tests/block-validation.test.cjs` | Валидация `PageBlock`: валидные блоки и частичное изменение видимости принимаются; невалидная форма блока и попытка сменить `parent` отклоняются; исполняемые (`javascript:`) и protocol-relative CTA-ссылки отклоняются. |
@@ -22,7 +23,7 @@
 | `tests/rebuild-queue.test.cjs` | Persistent rebuild-flow: дедупликация изменений сайта, BullMQ attempts/backoff, RETRYING/FAILED без ложной публикации, success только по финальному provider status, следующая ревизия при изменении во время сборки и защита от stale job/result. |
 | `tests/rebuild-worker.test.mjs` | Worker-контракт: прямой вызов deployment provider, сохранение финального success через API, сохранение/повтор HTTP-ошибки и отказ считать обычный HTTP 2xx подтвержденной публикацией. |
 | `tests/tariff-identity.test.cjs` | Deterministic identity key тарифа: ручное переименование обновляет ключ и ставит rebuild правильного сайта; повторный импорт находит legacy-тариф по slug вместо создания дубликата. |
-| `tests/tariff-import.test.cjs` | Импорт тарифов: XLSX-парсер, validation diff и валидация; полный provider snapshot создает/обновляет все строки и удаляет отсутствующие атомарно; warnings требуют явного подтверждения, legacy partial apply отклоняется; ошибка записи откатывает пакет; пересборка ставится всем сайтам провайдера, включая deletion-only. |
+| `tests/tariff-import.test.cjs` | Импорт тарифов: XLSX-парсер, validation diff и валидация; описание и числовые TV-счетчики сохраняются в `attributes`, пустые значения не создают ключи, некорректные счетчики и повтор city+slug между разными service type отклоняются; полный provider snapshot создает/обновляет все строки и удаляет отсутствующие атомарно с timeout 120 секунд; warnings требуют явного подтверждения, legacy partial apply отклоняется; ошибка записи откатывает пакет; пересборка ставится всем сайтам провайдера, включая deletion-only. |
 | `tests/tariff-slug.test.cjs` | Ручная смена slug опубликованного тарифа атомарно создает опубликованный redirect и ставит rebuild; занятый опубликованной страницей URL и несовместимый существующий redirect блокируют изменение. |
 | `tests/web-build-data.test.mjs` | Три реальные сборки `apps/web`: успешная загрузка fixture через HTTP API и smoke готового `dist` (canonical, H1, реальная цена, robots, sitemap, root URL, отсутствие localhost); обязательный fail-fast без API; demo-данные только при явном `ALLOW_DEMO_DATA=true`. |
 

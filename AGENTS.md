@@ -35,7 +35,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 У `crm` нет `lint`-скрипта (остаток TD-18) — `pnpm lint` его не проверяет. `admin` с 8 сентября 2026 входит в общий Astro check.
 
-**Baseline тестов: 75/75.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют cookie-сессию admin, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+**Baseline тестов: 82/82.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют cookie-сессию admin, тарифный экран, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 

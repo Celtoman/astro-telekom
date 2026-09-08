@@ -37,6 +37,46 @@ test('validation creates the agreed identity key and separates promo price', asy
   assert.deepEqual(report.diff, { created: 1, updated: 0, deleted: 0, deletedTariffs: [] });
 });
 
+test('validation preserves tariff description and normalized TV channel counters in attributes', async () => {
+  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row({
+    opisanie_tarifa: '  Полное описание тарифа  ',
+    tv_channels_total: ' 215 ',
+    tv_channels_hd: 87,
+  })]);
+
+  assert.equal(report.errorRows, 0);
+  assert.equal(report.candidates[0].attributes.opisanie_tarifa, 'Полное описание тарифа');
+  assert.equal(report.candidates[0].attributes.tv_channels_total, 215);
+  assert.equal(report.candidates[0].attributes.tv_channels_hd, 87);
+});
+
+test('validation omits empty optional tariff details from attributes', async () => {
+  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row({
+    opisanie_tarifa: '   ',
+    tv_channels_total: null,
+    tv_channels_hd: '',
+  })]);
+
+  assert.equal(report.errorRows, 0);
+  assert.equal(Object.hasOwn(report.candidates[0].attributes, 'opisanie_tarifa'), false);
+  assert.equal(Object.hasOwn(report.candidates[0].attributes, 'tv_channels_total'), false);
+  assert.equal(Object.hasOwn(report.candidates[0].attributes, 'tv_channels_hd'), false);
+});
+
+test('validation rejects invalid TV channel counters', async () => {
+  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [
+    row({ post_title_lat: 'negative-total', tv_channels_total: -2 }),
+    row({ post_title_lat: 'fractional-hd', tv_channels_total: 100, tv_channels_hd: 10.5 }),
+    row({ post_title_lat: 'hd-over-total', tv_channels_total: 50, tv_channels_hd: 51 }),
+  ]);
+
+  assert.equal(report.validRows, 0);
+  assert.equal(report.errorRows, 3);
+  assert.ok(report.issues.some((issue) => issue.message.includes('tv_channels_total должен быть целым')));
+  assert.ok(report.issues.some((issue) => issue.message.includes('tv_channels_hd должен быть целым')));
+  assert.ok(report.issues.some((issue) => issue.message.includes('не может быть больше tv_channels_total')));
+});
+
 test('validation blocks duplicate keys, invalid service states and missing cities', async () => {
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [
     row({ srv_video_status: 2 }),
@@ -53,19 +93,34 @@ test('validation reports duplicate business keys before apply', async () => {
   assert.ok(report.issues.some((issue) => issue.message.includes('Дубликат ключа')));
 });
 
+test('validation rejects a city slug collision across different service types', async () => {
+  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [
+    row({ tarif_type: 'Интернет' }),
+    row({ tarif_type: 'Интернет+ТВ' }),
+  ]);
+
+  assert.equal(report.validRows, 0);
+  assert.equal(report.errorRows, 2);
+  assert.ok(report.issues.some((issue) => issue.message.includes('post_title_lat «giga-500»')));
+  assert.ok(report.issues.some((issue) => issue.message.includes('городе «kazan»')));
+});
+
 test('apply creates every validated row as one full package', async () => {
   const calls = [];
   const prisma = {
     city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', siteId: 'site-1' }] },
     tariff: { findMany: async () => [] },
-    $transaction: async (callback) => callback({
-      tariff: {
-        findMany: async () => [],
-        findFirst: async () => null,
-        create: async ({ data }) => { calls.push(data); return { id: 'tariff-1' }; },
-        update: async () => { throw new Error('unexpected update'); },
-      },
-    }),
+    $transaction: async (callback, options) => {
+      assert.deepEqual(options, { timeout: 120_000 });
+      return callback({
+        tariff: {
+          findMany: async () => [],
+          findFirst: async () => null,
+          create: async ({ data }) => { calls.push(data); return { id: 'tariff-1' }; },
+          update: async () => { throw new Error('unexpected update'); },
+        },
+      });
+    },
   };
   const instance = new TariffImportService(prisma);
   const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row()]);

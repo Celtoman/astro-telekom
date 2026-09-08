@@ -17,13 +17,17 @@
 
 Целевая архитектура — Astro как static-оболочка и маршрутизация, React-root для каждой интерактивной страницы или крупного раздела, Tailwind и shadcn/ui внутри React. Данные админка получает и изменяет во время работы через HTTP API; она не зависит от данных, зафиксированных во время `astro build`.
 
-`apps/admin` остается Astro 7 static output. React, Tailwind CSS и shadcn/ui используются в `/login`, защищенном shell `/` и `/lead-access/`. Legacy plain HTML/CSS/vanilla JS страница удалена; shell больше не показывает вымышленные KPI или service-token prompt.
+`apps/admin` остается Astro 7 static output. React, Tailwind CSS и shadcn/ui используются в `/login`, защищенном shell `/`, `/tariffs` и `/lead-access/`. Legacy plain HTML/CSS/vanilla JS страница удалена; shell больше не показывает вымышленные KPI или service-token prompt.
 
 1. Рендерить интерактивную страницу одним React-root через `@astrojs/react` внутри static Astro route.
 2. Использовать Tailwind CSS и локальные shadcn/ui-компоненты из `apps/admin/src/components/ui`.
 3. Переносить подходящие компоненты и паттерны из референса либо собирать отсутствующие экраны из shadcn/ui-примитивов в его визуальном языке; получать данные только через существующий HTTP API.
 
-Базовая инфраструктура этих трех пунктов работает на всех текущих admin routes. Это не означает, что рабочие разделы завершены: тарифы, города и заявки еще подключаются к API по одному вертикальному срезу в Task #29.
+Базовая инфраструктура этих трех пунктов работает на всех текущих admin routes. Первый рабочий вертикальный срез `/tariffs` подключает список, validation report, атомарный apply полного snapshot, историю импортов и persistent rebuild status через общий cookie-aware API client. Города и заявки еще подключаются к API по одному вертикальному срезу в Task #29.
+
+### Реализованный паттерн `/tariffs`
+
+Экран собран из dashboard-паттернов Card + Table + Badge + Alert + file Input и единого sidebar shell. Astro предоставляет статический маршрут, а React-root с `client:load` проверяет сессию и выполняет runtime HTTP-запросы. Preview явно показывает create/update/delete diff и issues; apply недоступен при errors и требует отдельного подтверждения warnings. После apply экран перечитывает каталог, историю import runs и rebuild status. Service token и browser storage не используются.
 
 ### Реализованный паттерн `/lead-access/`
 

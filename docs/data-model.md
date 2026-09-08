@@ -17,9 +17,9 @@
 
 ## Тарифы и импорты
 
-`Tariff` хранит provider/city, name, slug, service type, standard/promo price, speed, promo text, connection fee, availability, external/identity keys, source, attributes, seo и publication status. Ограничения: unique `(cityId, slug)` и `(cityId, identityKey)`.
+`Tariff` хранит provider/city, name, slug, service type, standard/promo price, speed, promo text, connection fee, availability, external/identity keys, source, attributes, seo и publication status. Source-specific поля полного описания и количества TV-каналов не дублируются в верхнем уровне: importer сохраняет их в JSON `attributes` под стабильными ключами `opisanie_tarifa` (string), `tv_channels_total` и `tv_channels_hd` (number); пустые значения не сохраняются. Ограничения: unique `(cityId, slug)` и `(cityId, identityKey)` — следовательно, один `post_title_lat` не может повторяться в городе даже у разных service type.
 
-`TariffImportRun` и `CityImportRun` сохраняют метаданные файла, счетчики, JSON report, `VALIDATED`/`APPLIED`/`FAILED` и время apply. Tariff report содержит preview diff полного provider snapshot; apply атомарно удаляет отсутствующие в snapshot тарифы. Опциональная связь исторической заявки с удаленным тарифом сбрасывается в `NULL`, сама заявка сохраняется. Сырые файлы не сохраняются. Нет таблицы tariff history, import line history, version snapshot или rollback.
+`TariffImportRun` и `CityImportRun` сохраняют метаданные файла, счетчики, JSON report, `VALIDATED`/`APPLIED`/`FAILED` и время apply. Tariff report содержит нормализованные candidates и preview diff полного provider snapshot; apply с transaction timeout 120 секунд атомарно удаляет отсутствующие в snapshot тарифы. Опциональная связь исторической заявки с удаленным тарифом сбрасывается в `NULL`, сама заявка сохраняется. Сырые файлы не сохраняются. Нет таблицы tariff history, import line history, version snapshot или rollback.
 
 ## Проверки и заявки
 
