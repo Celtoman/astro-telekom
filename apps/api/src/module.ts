@@ -24,6 +24,8 @@ import { DomruContractService } from './domru-contract.service';
 import { LeadDeliveryService } from './lead-delivery.service';
 import { LeadDeliveryController } from './lead-delivery.controller';
 import { CityImportService } from './city-import.service';
+import { LeadAccessController } from './lead-access.controller';
+import { LeadAccessService } from './lead-access.service';
 
 @Module({
   controllers: [
@@ -42,7 +44,8 @@ import { CityImportService } from './city-import.service';
     AdminSitesController,
     AdminUsersController,
     LeadDeliveryController,
+    LeadAccessController,
   ],
-  providers: [PrismaService, NotificationsService, AuthService, AdminTokenGuard, CoverageService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService],
+  providers: [PrismaService, NotificationsService, AuthService, AdminTokenGuard, CoverageService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService],
 })
 export class AppModule {}

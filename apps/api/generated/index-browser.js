@@ -291,6 +291,16 @@ exports.Prisma.LeadScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LeadAccessTokenScalarFieldEnum = {
+  id: 'id',
+  leadId: 'leadId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.LeadDeliveryAttemptScalarFieldEnum = {
   id: 'id',
   leadId: 'leadId',
@@ -477,6 +487,7 @@ exports.Prisma.ModelName = {
   CityImportRun: 'CityImportRun',
   AddressCheck: 'AddressCheck',
   Lead: 'Lead',
+  LeadAccessToken: 'LeadAccessToken',
   LeadDeliveryAttempt: 'LeadDeliveryAttempt',
   LeadActivityEvent: 'LeadActivityEvent',
   Redirect: 'Redirect',

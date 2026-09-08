@@ -69,6 +69,11 @@ export type AddressCheck = $Result.DefaultSelection<Prisma.$AddressCheckPayload>
  */
 export type Lead = $Result.DefaultSelection<Prisma.$LeadPayload>
 /**
+ * Model LeadAccessToken
+ * 
+ */
+export type LeadAccessToken = $Result.DefaultSelection<Prisma.$LeadAccessTokenPayload>
+/**
  * Model LeadDeliveryAttempt
  * 
  */
@@ -492,6 +497,16 @@ export class PrismaClient<
     * ```
     */
   get lead(): Prisma.LeadDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.leadAccessToken`: Exposes CRUD operations for the **LeadAccessToken** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LeadAccessTokens
+    * const leadAccessTokens = await prisma.leadAccessToken.findMany()
+    * ```
+    */
+  get leadAccessToken(): Prisma.LeadAccessTokenDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.leadDeliveryAttempt`: Exposes CRUD operations for the **LeadDeliveryAttempt** model.
@@ -1010,6 +1025,7 @@ export namespace Prisma {
     CityImportRun: 'CityImportRun',
     AddressCheck: 'AddressCheck',
     Lead: 'Lead',
+    LeadAccessToken: 'LeadAccessToken',
     LeadDeliveryAttempt: 'LeadDeliveryAttempt',
     LeadActivityEvent: 'LeadActivityEvent',
     Redirect: 'Redirect',
@@ -1031,7 +1047,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "provider" | "site" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
+      modelProps: "provider" | "site" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1849,6 +1865,80 @@ export namespace Prisma {
           }
         }
       }
+      LeadAccessToken: {
+        payload: Prisma.$LeadAccessTokenPayload<ExtArgs>
+        fields: Prisma.LeadAccessTokenFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LeadAccessTokenFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadAccessTokenPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LeadAccessTokenFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadAccessTokenPayload>
+          }
+          findFirst: {
+            args: Prisma.LeadAccessTokenFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadAccessTokenPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LeadAccessTokenFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadAccessTokenPayload>
+          }
+          findMany: {
+            args: Prisma.LeadAccessTokenFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadAccessTokenPayload>[]
+          }
+          create: {
+            args: Prisma.LeadAccessTokenCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadAccessTokenPayload>
+          }
+          createMany: {
+            args: Prisma.LeadAccessTokenCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LeadAccessTokenCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadAccessTokenPayload>[]
+          }
+          delete: {
+            args: Prisma.LeadAccessTokenDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadAccessTokenPayload>
+          }
+          update: {
+            args: Prisma.LeadAccessTokenUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadAccessTokenPayload>
+          }
+          deleteMany: {
+            args: Prisma.LeadAccessTokenDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LeadAccessTokenUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LeadAccessTokenUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadAccessTokenPayload>[]
+          }
+          upsert: {
+            args: Prisma.LeadAccessTokenUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadAccessTokenPayload>
+          }
+          aggregate: {
+            args: Prisma.LeadAccessTokenAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLeadAccessToken>
+          }
+          groupBy: {
+            args: Prisma.LeadAccessTokenGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LeadAccessTokenGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LeadAccessTokenCountArgs<ExtArgs>
+            result: $Utils.Optional<LeadAccessTokenCountAggregateOutputType> | number
+          }
+        }
+      }
       LeadDeliveryAttempt: {
         payload: Prisma.$LeadDeliveryAttemptPayload<ExtArgs>
         fields: Prisma.LeadDeliveryAttemptFieldRefs
@@ -2427,6 +2517,7 @@ export namespace Prisma {
     cityImportRun?: CityImportRunOmit
     addressCheck?: AddressCheckOmit
     lead?: LeadOmit
+    leadAccessToken?: LeadAccessTokenOmit
     leadDeliveryAttempt?: LeadDeliveryAttemptOmit
     leadActivityEvent?: LeadActivityEventOmit
     redirect?: RedirectOmit
@@ -2859,6 +2950,7 @@ export namespace Prisma {
     history: number
     deliveryAttempts: number
     activityEvents: number
+    accessTokens: number
     duplicates: number
   }
 
@@ -2866,6 +2958,7 @@ export namespace Prisma {
     history?: boolean | LeadCountOutputTypeCountHistoryArgs
     deliveryAttempts?: boolean | LeadCountOutputTypeCountDeliveryAttemptsArgs
     activityEvents?: boolean | LeadCountOutputTypeCountActivityEventsArgs
+    accessTokens?: boolean | LeadCountOutputTypeCountAccessTokensArgs
     duplicates?: boolean | LeadCountOutputTypeCountDuplicatesArgs
   }
 
@@ -2899,6 +2992,13 @@ export namespace Prisma {
    */
   export type LeadCountOutputTypeCountActivityEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LeadActivityEventWhereInput
+  }
+
+  /**
+   * LeadCountOutputType without action
+   */
+  export type LeadCountOutputTypeCountAccessTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadAccessTokenWhereInput
   }
 
   /**
@@ -15472,6 +15572,7 @@ export namespace Prisma {
     history?: boolean | Lead$historyArgs<ExtArgs>
     deliveryAttempts?: boolean | Lead$deliveryAttemptsArgs<ExtArgs>
     activityEvents?: boolean | Lead$activityEventsArgs<ExtArgs>
+    accessTokens?: boolean | Lead$accessTokensArgs<ExtArgs>
     duplicateOf?: boolean | Lead$duplicateOfArgs<ExtArgs>
     duplicates?: boolean | Lead$duplicatesArgs<ExtArgs>
     _count?: boolean | LeadCountOutputTypeDefaultArgs<ExtArgs>
@@ -15601,6 +15702,7 @@ export namespace Prisma {
     history?: boolean | Lead$historyArgs<ExtArgs>
     deliveryAttempts?: boolean | Lead$deliveryAttemptsArgs<ExtArgs>
     activityEvents?: boolean | Lead$activityEventsArgs<ExtArgs>
+    accessTokens?: boolean | Lead$accessTokensArgs<ExtArgs>
     duplicateOf?: boolean | Lead$duplicateOfArgs<ExtArgs>
     duplicates?: boolean | Lead$duplicatesArgs<ExtArgs>
     _count?: boolean | LeadCountOutputTypeDefaultArgs<ExtArgs>
@@ -15633,6 +15735,7 @@ export namespace Prisma {
       history: Prisma.$LeadStatusHistoryPayload<ExtArgs>[]
       deliveryAttempts: Prisma.$LeadDeliveryAttemptPayload<ExtArgs>[]
       activityEvents: Prisma.$LeadActivityEventPayload<ExtArgs>[]
+      accessTokens: Prisma.$LeadAccessTokenPayload<ExtArgs>[]
       duplicateOf: Prisma.$LeadPayload<ExtArgs> | null
       duplicates: Prisma.$LeadPayload<ExtArgs>[]
     }
@@ -16070,6 +16173,7 @@ export namespace Prisma {
     history<T extends Lead$historyArgs<ExtArgs> = {}>(args?: Subset<T, Lead$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     deliveryAttempts<T extends Lead$deliveryAttemptsArgs<ExtArgs> = {}>(args?: Subset<T, Lead$deliveryAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadDeliveryAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     activityEvents<T extends Lead$activityEventsArgs<ExtArgs> = {}>(args?: Subset<T, Lead$activityEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadActivityEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    accessTokens<T extends Lead$accessTokensArgs<ExtArgs> = {}>(args?: Subset<T, Lead$accessTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     duplicateOf<T extends Lead$duplicateOfArgs<ExtArgs> = {}>(args?: Subset<T, Lead$duplicateOfArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     duplicates<T extends Lead$duplicatesArgs<ExtArgs> = {}>(args?: Subset<T, Lead$duplicatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -16662,6 +16766,30 @@ export namespace Prisma {
   }
 
   /**
+   * Lead.accessTokens
+   */
+  export type Lead$accessTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenInclude<ExtArgs> | null
+    where?: LeadAccessTokenWhereInput
+    orderBy?: LeadAccessTokenOrderByWithRelationInput | LeadAccessTokenOrderByWithRelationInput[]
+    cursor?: LeadAccessTokenWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LeadAccessTokenScalarFieldEnum | LeadAccessTokenScalarFieldEnum[]
+  }
+
+  /**
    * Lead.duplicateOf
    */
   export type Lead$duplicateOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16720,6 +16848,1095 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: LeadInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LeadAccessToken
+   */
+
+  export type AggregateLeadAccessToken = {
+    _count: LeadAccessTokenCountAggregateOutputType | null
+    _min: LeadAccessTokenMinAggregateOutputType | null
+    _max: LeadAccessTokenMaxAggregateOutputType | null
+  }
+
+  export type LeadAccessTokenMinAggregateOutputType = {
+    id: string | null
+    leadId: string | null
+    tokenHash: string | null
+    expiresAt: Date | null
+    usedAt: Date | null
+    revokedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type LeadAccessTokenMaxAggregateOutputType = {
+    id: string | null
+    leadId: string | null
+    tokenHash: string | null
+    expiresAt: Date | null
+    usedAt: Date | null
+    revokedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type LeadAccessTokenCountAggregateOutputType = {
+    id: number
+    leadId: number
+    tokenHash: number
+    expiresAt: number
+    usedAt: number
+    revokedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type LeadAccessTokenMinAggregateInputType = {
+    id?: true
+    leadId?: true
+    tokenHash?: true
+    expiresAt?: true
+    usedAt?: true
+    revokedAt?: true
+    createdAt?: true
+  }
+
+  export type LeadAccessTokenMaxAggregateInputType = {
+    id?: true
+    leadId?: true
+    tokenHash?: true
+    expiresAt?: true
+    usedAt?: true
+    revokedAt?: true
+    createdAt?: true
+  }
+
+  export type LeadAccessTokenCountAggregateInputType = {
+    id?: true
+    leadId?: true
+    tokenHash?: true
+    expiresAt?: true
+    usedAt?: true
+    revokedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type LeadAccessTokenAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LeadAccessToken to aggregate.
+     */
+    where?: LeadAccessTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadAccessTokens to fetch.
+     */
+    orderBy?: LeadAccessTokenOrderByWithRelationInput | LeadAccessTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LeadAccessTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadAccessTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadAccessTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LeadAccessTokens
+    **/
+    _count?: true | LeadAccessTokenCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LeadAccessTokenMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LeadAccessTokenMaxAggregateInputType
+  }
+
+  export type GetLeadAccessTokenAggregateType<T extends LeadAccessTokenAggregateArgs> = {
+        [P in keyof T & keyof AggregateLeadAccessToken]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLeadAccessToken[P]>
+      : GetScalarType<T[P], AggregateLeadAccessToken[P]>
+  }
+
+
+
+
+  export type LeadAccessTokenGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadAccessTokenWhereInput
+    orderBy?: LeadAccessTokenOrderByWithAggregationInput | LeadAccessTokenOrderByWithAggregationInput[]
+    by: LeadAccessTokenScalarFieldEnum[] | LeadAccessTokenScalarFieldEnum
+    having?: LeadAccessTokenScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LeadAccessTokenCountAggregateInputType | true
+    _min?: LeadAccessTokenMinAggregateInputType
+    _max?: LeadAccessTokenMaxAggregateInputType
+  }
+
+  export type LeadAccessTokenGroupByOutputType = {
+    id: string
+    leadId: string
+    tokenHash: string
+    expiresAt: Date
+    usedAt: Date | null
+    revokedAt: Date | null
+    createdAt: Date
+    _count: LeadAccessTokenCountAggregateOutputType | null
+    _min: LeadAccessTokenMinAggregateOutputType | null
+    _max: LeadAccessTokenMaxAggregateOutputType | null
+  }
+
+  type GetLeadAccessTokenGroupByPayload<T extends LeadAccessTokenGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LeadAccessTokenGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LeadAccessTokenGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LeadAccessTokenGroupByOutputType[P]>
+            : GetScalarType<T[P], LeadAccessTokenGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LeadAccessTokenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leadId?: boolean
+    tokenHash?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+    revokedAt?: boolean
+    createdAt?: boolean
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leadAccessToken"]>
+
+  export type LeadAccessTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leadId?: boolean
+    tokenHash?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+    revokedAt?: boolean
+    createdAt?: boolean
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leadAccessToken"]>
+
+  export type LeadAccessTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leadId?: boolean
+    tokenHash?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+    revokedAt?: boolean
+    createdAt?: boolean
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leadAccessToken"]>
+
+  export type LeadAccessTokenSelectScalar = {
+    id?: boolean
+    leadId?: boolean
+    tokenHash?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+    revokedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type LeadAccessTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "leadId" | "tokenHash" | "expiresAt" | "usedAt" | "revokedAt" | "createdAt", ExtArgs["result"]["leadAccessToken"]>
+  export type LeadAccessTokenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }
+  export type LeadAccessTokenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }
+  export type LeadAccessTokenIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }
+
+  export type $LeadAccessTokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LeadAccessToken"
+    objects: {
+      lead: Prisma.$LeadPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      leadId: string
+      tokenHash: string
+      expiresAt: Date
+      usedAt: Date | null
+      revokedAt: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["leadAccessToken"]>
+    composites: {}
+  }
+
+  type LeadAccessTokenGetPayload<S extends boolean | null | undefined | LeadAccessTokenDefaultArgs> = $Result.GetResult<Prisma.$LeadAccessTokenPayload, S>
+
+  type LeadAccessTokenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LeadAccessTokenFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LeadAccessTokenCountAggregateInputType | true
+    }
+
+  export interface LeadAccessTokenDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LeadAccessToken'], meta: { name: 'LeadAccessToken' } }
+    /**
+     * Find zero or one LeadAccessToken that matches the filter.
+     * @param {LeadAccessTokenFindUniqueArgs} args - Arguments to find a LeadAccessToken
+     * @example
+     * // Get one LeadAccessToken
+     * const leadAccessToken = await prisma.leadAccessToken.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LeadAccessTokenFindUniqueArgs>(args: SelectSubset<T, LeadAccessTokenFindUniqueArgs<ExtArgs>>): Prisma__LeadAccessTokenClient<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LeadAccessToken that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LeadAccessTokenFindUniqueOrThrowArgs} args - Arguments to find a LeadAccessToken
+     * @example
+     * // Get one LeadAccessToken
+     * const leadAccessToken = await prisma.leadAccessToken.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LeadAccessTokenFindUniqueOrThrowArgs>(args: SelectSubset<T, LeadAccessTokenFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LeadAccessTokenClient<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LeadAccessToken that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadAccessTokenFindFirstArgs} args - Arguments to find a LeadAccessToken
+     * @example
+     * // Get one LeadAccessToken
+     * const leadAccessToken = await prisma.leadAccessToken.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LeadAccessTokenFindFirstArgs>(args?: SelectSubset<T, LeadAccessTokenFindFirstArgs<ExtArgs>>): Prisma__LeadAccessTokenClient<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LeadAccessToken that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadAccessTokenFindFirstOrThrowArgs} args - Arguments to find a LeadAccessToken
+     * @example
+     * // Get one LeadAccessToken
+     * const leadAccessToken = await prisma.leadAccessToken.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LeadAccessTokenFindFirstOrThrowArgs>(args?: SelectSubset<T, LeadAccessTokenFindFirstOrThrowArgs<ExtArgs>>): Prisma__LeadAccessTokenClient<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LeadAccessTokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadAccessTokenFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LeadAccessTokens
+     * const leadAccessTokens = await prisma.leadAccessToken.findMany()
+     * 
+     * // Get first 10 LeadAccessTokens
+     * const leadAccessTokens = await prisma.leadAccessToken.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const leadAccessTokenWithIdOnly = await prisma.leadAccessToken.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LeadAccessTokenFindManyArgs>(args?: SelectSubset<T, LeadAccessTokenFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LeadAccessToken.
+     * @param {LeadAccessTokenCreateArgs} args - Arguments to create a LeadAccessToken.
+     * @example
+     * // Create one LeadAccessToken
+     * const LeadAccessToken = await prisma.leadAccessToken.create({
+     *   data: {
+     *     // ... data to create a LeadAccessToken
+     *   }
+     * })
+     * 
+     */
+    create<T extends LeadAccessTokenCreateArgs>(args: SelectSubset<T, LeadAccessTokenCreateArgs<ExtArgs>>): Prisma__LeadAccessTokenClient<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LeadAccessTokens.
+     * @param {LeadAccessTokenCreateManyArgs} args - Arguments to create many LeadAccessTokens.
+     * @example
+     * // Create many LeadAccessTokens
+     * const leadAccessToken = await prisma.leadAccessToken.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LeadAccessTokenCreateManyArgs>(args?: SelectSubset<T, LeadAccessTokenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LeadAccessTokens and returns the data saved in the database.
+     * @param {LeadAccessTokenCreateManyAndReturnArgs} args - Arguments to create many LeadAccessTokens.
+     * @example
+     * // Create many LeadAccessTokens
+     * const leadAccessToken = await prisma.leadAccessToken.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LeadAccessTokens and only return the `id`
+     * const leadAccessTokenWithIdOnly = await prisma.leadAccessToken.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LeadAccessTokenCreateManyAndReturnArgs>(args?: SelectSubset<T, LeadAccessTokenCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LeadAccessToken.
+     * @param {LeadAccessTokenDeleteArgs} args - Arguments to delete one LeadAccessToken.
+     * @example
+     * // Delete one LeadAccessToken
+     * const LeadAccessToken = await prisma.leadAccessToken.delete({
+     *   where: {
+     *     // ... filter to delete one LeadAccessToken
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LeadAccessTokenDeleteArgs>(args: SelectSubset<T, LeadAccessTokenDeleteArgs<ExtArgs>>): Prisma__LeadAccessTokenClient<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LeadAccessToken.
+     * @param {LeadAccessTokenUpdateArgs} args - Arguments to update one LeadAccessToken.
+     * @example
+     * // Update one LeadAccessToken
+     * const leadAccessToken = await prisma.leadAccessToken.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LeadAccessTokenUpdateArgs>(args: SelectSubset<T, LeadAccessTokenUpdateArgs<ExtArgs>>): Prisma__LeadAccessTokenClient<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LeadAccessTokens.
+     * @param {LeadAccessTokenDeleteManyArgs} args - Arguments to filter LeadAccessTokens to delete.
+     * @example
+     * // Delete a few LeadAccessTokens
+     * const { count } = await prisma.leadAccessToken.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LeadAccessTokenDeleteManyArgs>(args?: SelectSubset<T, LeadAccessTokenDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LeadAccessTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadAccessTokenUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LeadAccessTokens
+     * const leadAccessToken = await prisma.leadAccessToken.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LeadAccessTokenUpdateManyArgs>(args: SelectSubset<T, LeadAccessTokenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LeadAccessTokens and returns the data updated in the database.
+     * @param {LeadAccessTokenUpdateManyAndReturnArgs} args - Arguments to update many LeadAccessTokens.
+     * @example
+     * // Update many LeadAccessTokens
+     * const leadAccessToken = await prisma.leadAccessToken.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LeadAccessTokens and only return the `id`
+     * const leadAccessTokenWithIdOnly = await prisma.leadAccessToken.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LeadAccessTokenUpdateManyAndReturnArgs>(args: SelectSubset<T, LeadAccessTokenUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LeadAccessToken.
+     * @param {LeadAccessTokenUpsertArgs} args - Arguments to update or create a LeadAccessToken.
+     * @example
+     * // Update or create a LeadAccessToken
+     * const leadAccessToken = await prisma.leadAccessToken.upsert({
+     *   create: {
+     *     // ... data to create a LeadAccessToken
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LeadAccessToken we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LeadAccessTokenUpsertArgs>(args: SelectSubset<T, LeadAccessTokenUpsertArgs<ExtArgs>>): Prisma__LeadAccessTokenClient<$Result.GetResult<Prisma.$LeadAccessTokenPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LeadAccessTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadAccessTokenCountArgs} args - Arguments to filter LeadAccessTokens to count.
+     * @example
+     * // Count the number of LeadAccessTokens
+     * const count = await prisma.leadAccessToken.count({
+     *   where: {
+     *     // ... the filter for the LeadAccessTokens we want to count
+     *   }
+     * })
+    **/
+    count<T extends LeadAccessTokenCountArgs>(
+      args?: Subset<T, LeadAccessTokenCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LeadAccessTokenCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LeadAccessToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadAccessTokenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LeadAccessTokenAggregateArgs>(args: Subset<T, LeadAccessTokenAggregateArgs>): Prisma.PrismaPromise<GetLeadAccessTokenAggregateType<T>>
+
+    /**
+     * Group by LeadAccessToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadAccessTokenGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LeadAccessTokenGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LeadAccessTokenGroupByArgs['orderBy'] }
+        : { orderBy?: LeadAccessTokenGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LeadAccessTokenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLeadAccessTokenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LeadAccessToken model
+   */
+  readonly fields: LeadAccessTokenFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LeadAccessToken.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LeadAccessTokenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    lead<T extends LeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeadDefaultArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LeadAccessToken model
+   */
+  interface LeadAccessTokenFieldRefs {
+    readonly id: FieldRef<"LeadAccessToken", 'String'>
+    readonly leadId: FieldRef<"LeadAccessToken", 'String'>
+    readonly tokenHash: FieldRef<"LeadAccessToken", 'String'>
+    readonly expiresAt: FieldRef<"LeadAccessToken", 'DateTime'>
+    readonly usedAt: FieldRef<"LeadAccessToken", 'DateTime'>
+    readonly revokedAt: FieldRef<"LeadAccessToken", 'DateTime'>
+    readonly createdAt: FieldRef<"LeadAccessToken", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LeadAccessToken findUnique
+   */
+  export type LeadAccessTokenFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadAccessToken to fetch.
+     */
+    where: LeadAccessTokenWhereUniqueInput
+  }
+
+  /**
+   * LeadAccessToken findUniqueOrThrow
+   */
+  export type LeadAccessTokenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadAccessToken to fetch.
+     */
+    where: LeadAccessTokenWhereUniqueInput
+  }
+
+  /**
+   * LeadAccessToken findFirst
+   */
+  export type LeadAccessTokenFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadAccessToken to fetch.
+     */
+    where?: LeadAccessTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadAccessTokens to fetch.
+     */
+    orderBy?: LeadAccessTokenOrderByWithRelationInput | LeadAccessTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LeadAccessTokens.
+     */
+    cursor?: LeadAccessTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadAccessTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadAccessTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeadAccessTokens.
+     */
+    distinct?: LeadAccessTokenScalarFieldEnum | LeadAccessTokenScalarFieldEnum[]
+  }
+
+  /**
+   * LeadAccessToken findFirstOrThrow
+   */
+  export type LeadAccessTokenFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadAccessToken to fetch.
+     */
+    where?: LeadAccessTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadAccessTokens to fetch.
+     */
+    orderBy?: LeadAccessTokenOrderByWithRelationInput | LeadAccessTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LeadAccessTokens.
+     */
+    cursor?: LeadAccessTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadAccessTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadAccessTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeadAccessTokens.
+     */
+    distinct?: LeadAccessTokenScalarFieldEnum | LeadAccessTokenScalarFieldEnum[]
+  }
+
+  /**
+   * LeadAccessToken findMany
+   */
+  export type LeadAccessTokenFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadAccessTokens to fetch.
+     */
+    where?: LeadAccessTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadAccessTokens to fetch.
+     */
+    orderBy?: LeadAccessTokenOrderByWithRelationInput | LeadAccessTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LeadAccessTokens.
+     */
+    cursor?: LeadAccessTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadAccessTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadAccessTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeadAccessTokens.
+     */
+    distinct?: LeadAccessTokenScalarFieldEnum | LeadAccessTokenScalarFieldEnum[]
+  }
+
+  /**
+   * LeadAccessToken create
+   */
+  export type LeadAccessTokenCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LeadAccessToken.
+     */
+    data: XOR<LeadAccessTokenCreateInput, LeadAccessTokenUncheckedCreateInput>
+  }
+
+  /**
+   * LeadAccessToken createMany
+   */
+  export type LeadAccessTokenCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LeadAccessTokens.
+     */
+    data: LeadAccessTokenCreateManyInput | LeadAccessTokenCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LeadAccessToken createManyAndReturn
+   */
+  export type LeadAccessTokenCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * The data used to create many LeadAccessTokens.
+     */
+    data: LeadAccessTokenCreateManyInput | LeadAccessTokenCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LeadAccessToken update
+   */
+  export type LeadAccessTokenUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LeadAccessToken.
+     */
+    data: XOR<LeadAccessTokenUpdateInput, LeadAccessTokenUncheckedUpdateInput>
+    /**
+     * Choose, which LeadAccessToken to update.
+     */
+    where: LeadAccessTokenWhereUniqueInput
+  }
+
+  /**
+   * LeadAccessToken updateMany
+   */
+  export type LeadAccessTokenUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LeadAccessTokens.
+     */
+    data: XOR<LeadAccessTokenUpdateManyMutationInput, LeadAccessTokenUncheckedUpdateManyInput>
+    /**
+     * Filter which LeadAccessTokens to update
+     */
+    where?: LeadAccessTokenWhereInput
+    /**
+     * Limit how many LeadAccessTokens to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LeadAccessToken updateManyAndReturn
+   */
+  export type LeadAccessTokenUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * The data used to update LeadAccessTokens.
+     */
+    data: XOR<LeadAccessTokenUpdateManyMutationInput, LeadAccessTokenUncheckedUpdateManyInput>
+    /**
+     * Filter which LeadAccessTokens to update
+     */
+    where?: LeadAccessTokenWhereInput
+    /**
+     * Limit how many LeadAccessTokens to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LeadAccessToken upsert
+   */
+  export type LeadAccessTokenUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LeadAccessToken to update in case it exists.
+     */
+    where: LeadAccessTokenWhereUniqueInput
+    /**
+     * In case the LeadAccessToken found by the `where` argument doesn't exist, create a new LeadAccessToken with this data.
+     */
+    create: XOR<LeadAccessTokenCreateInput, LeadAccessTokenUncheckedCreateInput>
+    /**
+     * In case the LeadAccessToken was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LeadAccessTokenUpdateInput, LeadAccessTokenUncheckedUpdateInput>
+  }
+
+  /**
+   * LeadAccessToken delete
+   */
+  export type LeadAccessTokenDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenInclude<ExtArgs> | null
+    /**
+     * Filter which LeadAccessToken to delete.
+     */
+    where: LeadAccessTokenWhereUniqueInput
+  }
+
+  /**
+   * LeadAccessToken deleteMany
+   */
+  export type LeadAccessTokenDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LeadAccessTokens to delete
+     */
+    where?: LeadAccessTokenWhereInput
+    /**
+     * Limit how many LeadAccessTokens to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LeadAccessToken without action
+   */
+  export type LeadAccessTokenDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadAccessToken
+     */
+    select?: LeadAccessTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadAccessToken
+     */
+    omit?: LeadAccessTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadAccessTokenInclude<ExtArgs> | null
   }
 
 
@@ -23622,6 +24839,19 @@ export namespace Prisma {
   export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
 
 
+  export const LeadAccessTokenScalarFieldEnum: {
+    id: 'id',
+    leadId: 'leadId',
+    tokenHash: 'tokenHash',
+    expiresAt: 'expiresAt',
+    usedAt: 'usedAt',
+    revokedAt: 'revokedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type LeadAccessTokenScalarFieldEnum = (typeof LeadAccessTokenScalarFieldEnum)[keyof typeof LeadAccessTokenScalarFieldEnum]
+
+
   export const LeadDeliveryAttemptScalarFieldEnum: {
     id: 'id',
     leadId: 'leadId',
@@ -24971,6 +26201,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryListRelationFilter
     deliveryAttempts?: LeadDeliveryAttemptListRelationFilter
     activityEvents?: LeadActivityEventListRelationFilter
+    accessTokens?: LeadAccessTokenListRelationFilter
     duplicateOf?: XOR<LeadNullableScalarRelationFilter, LeadWhereInput> | null
     duplicates?: LeadListRelationFilter
   }
@@ -25015,6 +26246,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryOrderByRelationAggregateInput
     deliveryAttempts?: LeadDeliveryAttemptOrderByRelationAggregateInput
     activityEvents?: LeadActivityEventOrderByRelationAggregateInput
+    accessTokens?: LeadAccessTokenOrderByRelationAggregateInput
     duplicateOf?: LeadOrderByWithRelationInput
     duplicates?: LeadOrderByRelationAggregateInput
   }
@@ -25062,6 +26294,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryListRelationFilter
     deliveryAttempts?: LeadDeliveryAttemptListRelationFilter
     activityEvents?: LeadActivityEventListRelationFilter
+    accessTokens?: LeadAccessTokenListRelationFilter
     duplicateOf?: XOR<LeadNullableScalarRelationFilter, LeadWhereInput> | null
     duplicates?: LeadListRelationFilter
   }, "id" | "deliveryKey">
@@ -25140,6 +26373,71 @@ export namespace Prisma {
     apiResult?: JsonNullableWithAggregatesFilter<"Lead">
     createdAt?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
+  }
+
+  export type LeadAccessTokenWhereInput = {
+    AND?: LeadAccessTokenWhereInput | LeadAccessTokenWhereInput[]
+    OR?: LeadAccessTokenWhereInput[]
+    NOT?: LeadAccessTokenWhereInput | LeadAccessTokenWhereInput[]
+    id?: StringFilter<"LeadAccessToken"> | string
+    leadId?: StringFilter<"LeadAccessToken"> | string
+    tokenHash?: StringFilter<"LeadAccessToken"> | string
+    expiresAt?: DateTimeFilter<"LeadAccessToken"> | Date | string
+    usedAt?: DateTimeNullableFilter<"LeadAccessToken"> | Date | string | null
+    revokedAt?: DateTimeNullableFilter<"LeadAccessToken"> | Date | string | null
+    createdAt?: DateTimeFilter<"LeadAccessToken"> | Date | string
+    lead?: XOR<LeadScalarRelationFilter, LeadWhereInput>
+  }
+
+  export type LeadAccessTokenOrderByWithRelationInput = {
+    id?: SortOrder
+    leadId?: SortOrder
+    tokenHash?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrderInput | SortOrder
+    revokedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    lead?: LeadOrderByWithRelationInput
+  }
+
+  export type LeadAccessTokenWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tokenHash?: string
+    AND?: LeadAccessTokenWhereInput | LeadAccessTokenWhereInput[]
+    OR?: LeadAccessTokenWhereInput[]
+    NOT?: LeadAccessTokenWhereInput | LeadAccessTokenWhereInput[]
+    leadId?: StringFilter<"LeadAccessToken"> | string
+    expiresAt?: DateTimeFilter<"LeadAccessToken"> | Date | string
+    usedAt?: DateTimeNullableFilter<"LeadAccessToken"> | Date | string | null
+    revokedAt?: DateTimeNullableFilter<"LeadAccessToken"> | Date | string | null
+    createdAt?: DateTimeFilter<"LeadAccessToken"> | Date | string
+    lead?: XOR<LeadScalarRelationFilter, LeadWhereInput>
+  }, "id" | "tokenHash">
+
+  export type LeadAccessTokenOrderByWithAggregationInput = {
+    id?: SortOrder
+    leadId?: SortOrder
+    tokenHash?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrderInput | SortOrder
+    revokedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: LeadAccessTokenCountOrderByAggregateInput
+    _max?: LeadAccessTokenMaxOrderByAggregateInput
+    _min?: LeadAccessTokenMinOrderByAggregateInput
+  }
+
+  export type LeadAccessTokenScalarWhereWithAggregatesInput = {
+    AND?: LeadAccessTokenScalarWhereWithAggregatesInput | LeadAccessTokenScalarWhereWithAggregatesInput[]
+    OR?: LeadAccessTokenScalarWhereWithAggregatesInput[]
+    NOT?: LeadAccessTokenScalarWhereWithAggregatesInput | LeadAccessTokenScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LeadAccessToken"> | string
+    leadId?: StringWithAggregatesFilter<"LeadAccessToken"> | string
+    tokenHash?: StringWithAggregatesFilter<"LeadAccessToken"> | string
+    expiresAt?: DateTimeWithAggregatesFilter<"LeadAccessToken"> | Date | string
+    usedAt?: DateTimeNullableWithAggregatesFilter<"LeadAccessToken"> | Date | string | null
+    revokedAt?: DateTimeNullableWithAggregatesFilter<"LeadAccessToken"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"LeadAccessToken"> | Date | string
   }
 
   export type LeadDeliveryAttemptWhereInput = {
@@ -26624,6 +27922,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
     duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
     duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
   }
@@ -26663,6 +27962,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
     duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
   }
 
@@ -26700,6 +28000,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
     duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
   }
@@ -26739,6 +28040,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
     duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 
@@ -26836,6 +28138,75 @@ export namespace Prisma {
     apiResult?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadAccessTokenCreateInput = {
+    id?: string
+    tokenHash: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    revokedAt?: Date | string | null
+    createdAt?: Date | string
+    lead: LeadCreateNestedOneWithoutAccessTokensInput
+  }
+
+  export type LeadAccessTokenUncheckedCreateInput = {
+    id?: string
+    leadId: string
+    tokenHash: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    revokedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type LeadAccessTokenUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lead?: LeadUpdateOneRequiredWithoutAccessTokensNestedInput
+  }
+
+  export type LeadAccessTokenUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    leadId?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadAccessTokenCreateManyInput = {
+    id?: string
+    leadId: string
+    tokenHash: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    revokedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type LeadAccessTokenUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadAccessTokenUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    leadId?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LeadDeliveryAttemptCreateInput = {
@@ -28346,6 +29717,12 @@ export namespace Prisma {
     none?: LeadActivityEventWhereInput
   }
 
+  export type LeadAccessTokenListRelationFilter = {
+    every?: LeadAccessTokenWhereInput
+    some?: LeadAccessTokenWhereInput
+    none?: LeadAccessTokenWhereInput
+  }
+
   export type LeadNullableScalarRelationFilter = {
     is?: LeadWhereInput | null
     isNot?: LeadWhereInput | null
@@ -28360,6 +29737,10 @@ export namespace Prisma {
   }
 
   export type LeadActivityEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LeadAccessTokenOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -28495,6 +29876,41 @@ export namespace Prisma {
     _max?: NestedEnumLeadStatusFilter<$PrismaModel>
   }
 
+  export type LeadScalarRelationFilter = {
+    is?: LeadWhereInput
+    isNot?: LeadWhereInput
+  }
+
+  export type LeadAccessTokenCountOrderByAggregateInput = {
+    id?: SortOrder
+    leadId?: SortOrder
+    tokenHash?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrder
+    revokedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LeadAccessTokenMaxOrderByAggregateInput = {
+    id?: SortOrder
+    leadId?: SortOrder
+    tokenHash?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrder
+    revokedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LeadAccessTokenMinOrderByAggregateInput = {
+    id?: SortOrder
+    leadId?: SortOrder
+    tokenHash?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrder
+    revokedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type EnumDeliveryChannelFilter<$PrismaModel = never> = {
     equals?: $Enums.DeliveryChannel | EnumDeliveryChannelFieldRefInput<$PrismaModel>
     in?: $Enums.DeliveryChannel[] | ListEnumDeliveryChannelFieldRefInput<$PrismaModel>
@@ -28507,11 +29923,6 @@ export namespace Prisma {
     in?: $Enums.DeliveryAttemptStatus[] | ListEnumDeliveryAttemptStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.DeliveryAttemptStatus[] | ListEnumDeliveryAttemptStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumDeliveryAttemptStatusFilter<$PrismaModel> | $Enums.DeliveryAttemptStatus
-  }
-
-  export type LeadScalarRelationFilter = {
-    is?: LeadWhereInput
-    isNot?: LeadWhereInput
   }
 
   export type LeadDeliveryAttemptLeadIdAttemptNumberChannelCompoundUniqueInput = {
@@ -30000,6 +31411,13 @@ export namespace Prisma {
     connect?: LeadActivityEventWhereUniqueInput | LeadActivityEventWhereUniqueInput[]
   }
 
+  export type LeadAccessTokenCreateNestedManyWithoutLeadInput = {
+    create?: XOR<LeadAccessTokenCreateWithoutLeadInput, LeadAccessTokenUncheckedCreateWithoutLeadInput> | LeadAccessTokenCreateWithoutLeadInput[] | LeadAccessTokenUncheckedCreateWithoutLeadInput[]
+    connectOrCreate?: LeadAccessTokenCreateOrConnectWithoutLeadInput | LeadAccessTokenCreateOrConnectWithoutLeadInput[]
+    createMany?: LeadAccessTokenCreateManyLeadInputEnvelope
+    connect?: LeadAccessTokenWhereUniqueInput | LeadAccessTokenWhereUniqueInput[]
+  }
+
   export type LeadCreateNestedOneWithoutDuplicatesInput = {
     create?: XOR<LeadCreateWithoutDuplicatesInput, LeadUncheckedCreateWithoutDuplicatesInput>
     connectOrCreate?: LeadCreateOrConnectWithoutDuplicatesInput
@@ -30032,6 +31450,13 @@ export namespace Prisma {
     connectOrCreate?: LeadActivityEventCreateOrConnectWithoutLeadInput | LeadActivityEventCreateOrConnectWithoutLeadInput[]
     createMany?: LeadActivityEventCreateManyLeadInputEnvelope
     connect?: LeadActivityEventWhereUniqueInput | LeadActivityEventWhereUniqueInput[]
+  }
+
+  export type LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput = {
+    create?: XOR<LeadAccessTokenCreateWithoutLeadInput, LeadAccessTokenUncheckedCreateWithoutLeadInput> | LeadAccessTokenCreateWithoutLeadInput[] | LeadAccessTokenUncheckedCreateWithoutLeadInput[]
+    connectOrCreate?: LeadAccessTokenCreateOrConnectWithoutLeadInput | LeadAccessTokenCreateOrConnectWithoutLeadInput[]
+    createMany?: LeadAccessTokenCreateManyLeadInputEnvelope
+    connect?: LeadAccessTokenWhereUniqueInput | LeadAccessTokenWhereUniqueInput[]
   }
 
   export type LeadUncheckedCreateNestedManyWithoutDuplicateOfInput = {
@@ -30141,6 +31566,20 @@ export namespace Prisma {
     deleteMany?: LeadActivityEventScalarWhereInput | LeadActivityEventScalarWhereInput[]
   }
 
+  export type LeadAccessTokenUpdateManyWithoutLeadNestedInput = {
+    create?: XOR<LeadAccessTokenCreateWithoutLeadInput, LeadAccessTokenUncheckedCreateWithoutLeadInput> | LeadAccessTokenCreateWithoutLeadInput[] | LeadAccessTokenUncheckedCreateWithoutLeadInput[]
+    connectOrCreate?: LeadAccessTokenCreateOrConnectWithoutLeadInput | LeadAccessTokenCreateOrConnectWithoutLeadInput[]
+    upsert?: LeadAccessTokenUpsertWithWhereUniqueWithoutLeadInput | LeadAccessTokenUpsertWithWhereUniqueWithoutLeadInput[]
+    createMany?: LeadAccessTokenCreateManyLeadInputEnvelope
+    set?: LeadAccessTokenWhereUniqueInput | LeadAccessTokenWhereUniqueInput[]
+    disconnect?: LeadAccessTokenWhereUniqueInput | LeadAccessTokenWhereUniqueInput[]
+    delete?: LeadAccessTokenWhereUniqueInput | LeadAccessTokenWhereUniqueInput[]
+    connect?: LeadAccessTokenWhereUniqueInput | LeadAccessTokenWhereUniqueInput[]
+    update?: LeadAccessTokenUpdateWithWhereUniqueWithoutLeadInput | LeadAccessTokenUpdateWithWhereUniqueWithoutLeadInput[]
+    updateMany?: LeadAccessTokenUpdateManyWithWhereWithoutLeadInput | LeadAccessTokenUpdateManyWithWhereWithoutLeadInput[]
+    deleteMany?: LeadAccessTokenScalarWhereInput | LeadAccessTokenScalarWhereInput[]
+  }
+
   export type LeadUpdateOneWithoutDuplicatesNestedInput = {
     create?: XOR<LeadCreateWithoutDuplicatesInput, LeadUncheckedCreateWithoutDuplicatesInput>
     connectOrCreate?: LeadCreateOrConnectWithoutDuplicatesInput
@@ -30207,6 +31646,20 @@ export namespace Prisma {
     deleteMany?: LeadActivityEventScalarWhereInput | LeadActivityEventScalarWhereInput[]
   }
 
+  export type LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput = {
+    create?: XOR<LeadAccessTokenCreateWithoutLeadInput, LeadAccessTokenUncheckedCreateWithoutLeadInput> | LeadAccessTokenCreateWithoutLeadInput[] | LeadAccessTokenUncheckedCreateWithoutLeadInput[]
+    connectOrCreate?: LeadAccessTokenCreateOrConnectWithoutLeadInput | LeadAccessTokenCreateOrConnectWithoutLeadInput[]
+    upsert?: LeadAccessTokenUpsertWithWhereUniqueWithoutLeadInput | LeadAccessTokenUpsertWithWhereUniqueWithoutLeadInput[]
+    createMany?: LeadAccessTokenCreateManyLeadInputEnvelope
+    set?: LeadAccessTokenWhereUniqueInput | LeadAccessTokenWhereUniqueInput[]
+    disconnect?: LeadAccessTokenWhereUniqueInput | LeadAccessTokenWhereUniqueInput[]
+    delete?: LeadAccessTokenWhereUniqueInput | LeadAccessTokenWhereUniqueInput[]
+    connect?: LeadAccessTokenWhereUniqueInput | LeadAccessTokenWhereUniqueInput[]
+    update?: LeadAccessTokenUpdateWithWhereUniqueWithoutLeadInput | LeadAccessTokenUpdateWithWhereUniqueWithoutLeadInput[]
+    updateMany?: LeadAccessTokenUpdateManyWithWhereWithoutLeadInput | LeadAccessTokenUpdateManyWithWhereWithoutLeadInput[]
+    deleteMany?: LeadAccessTokenScalarWhereInput | LeadAccessTokenScalarWhereInput[]
+  }
+
   export type LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput = {
     create?: XOR<LeadCreateWithoutDuplicateOfInput, LeadUncheckedCreateWithoutDuplicateOfInput> | LeadCreateWithoutDuplicateOfInput[] | LeadUncheckedCreateWithoutDuplicateOfInput[]
     connectOrCreate?: LeadCreateOrConnectWithoutDuplicateOfInput | LeadCreateOrConnectWithoutDuplicateOfInput[]
@@ -30219,6 +31672,20 @@ export namespace Prisma {
     update?: LeadUpdateWithWhereUniqueWithoutDuplicateOfInput | LeadUpdateWithWhereUniqueWithoutDuplicateOfInput[]
     updateMany?: LeadUpdateManyWithWhereWithoutDuplicateOfInput | LeadUpdateManyWithWhereWithoutDuplicateOfInput[]
     deleteMany?: LeadScalarWhereInput | LeadScalarWhereInput[]
+  }
+
+  export type LeadCreateNestedOneWithoutAccessTokensInput = {
+    create?: XOR<LeadCreateWithoutAccessTokensInput, LeadUncheckedCreateWithoutAccessTokensInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutAccessTokensInput
+    connect?: LeadWhereUniqueInput
+  }
+
+  export type LeadUpdateOneRequiredWithoutAccessTokensNestedInput = {
+    create?: XOR<LeadCreateWithoutAccessTokensInput, LeadUncheckedCreateWithoutAccessTokensInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutAccessTokensInput
+    upsert?: LeadUpsertWithoutAccessTokensInput
+    connect?: LeadWhereUniqueInput
+    update?: XOR<XOR<LeadUpdateToOneWithWhereWithoutAccessTokensInput, LeadUpdateWithoutAccessTokensInput>, LeadUncheckedUpdateWithoutAccessTokensInput>
   }
 
   export type LeadCreateNestedOneWithoutDeliveryAttemptsInput = {
@@ -31290,6 +32757,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
     duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
     duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
   }
@@ -31328,6 +32796,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
     duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
   }
 
@@ -32083,6 +33552,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
     duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
     duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
   }
@@ -32121,6 +33591,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
     duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
   }
 
@@ -32511,6 +33982,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
     duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
     duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
   }
@@ -32549,6 +34021,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
     duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
   }
 
@@ -32952,6 +34425,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
     duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
     duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
   }
@@ -32990,6 +34464,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
     duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
   }
 
@@ -33421,6 +34896,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
     duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
     duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
   }
@@ -33459,6 +34935,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
     duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
   }
 
@@ -33930,6 +35407,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LeadAccessTokenCreateWithoutLeadInput = {
+    id?: string
+    tokenHash: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    revokedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type LeadAccessTokenUncheckedCreateWithoutLeadInput = {
+    id?: string
+    tokenHash: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    revokedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type LeadAccessTokenCreateOrConnectWithoutLeadInput = {
+    where: LeadAccessTokenWhereUniqueInput
+    create: XOR<LeadAccessTokenCreateWithoutLeadInput, LeadAccessTokenUncheckedCreateWithoutLeadInput>
+  }
+
+  export type LeadAccessTokenCreateManyLeadInputEnvelope = {
+    data: LeadAccessTokenCreateManyLeadInput | LeadAccessTokenCreateManyLeadInput[]
+    skipDuplicates?: boolean
+  }
+
   export type LeadCreateWithoutDuplicatesInput = {
     id?: string
     name?: string | null
@@ -33964,6 +35469,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
     duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
   }
 
@@ -34002,6 +35508,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
   }
 
   export type LeadCreateOrConnectWithoutDuplicatesInput = {
@@ -34043,6 +35550,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
     duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
   }
 
@@ -34080,6 +35588,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
     duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
   }
 
@@ -34421,6 +35930,35 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"LeadActivityEvent"> | Date | string
   }
 
+  export type LeadAccessTokenUpsertWithWhereUniqueWithoutLeadInput = {
+    where: LeadAccessTokenWhereUniqueInput
+    update: XOR<LeadAccessTokenUpdateWithoutLeadInput, LeadAccessTokenUncheckedUpdateWithoutLeadInput>
+    create: XOR<LeadAccessTokenCreateWithoutLeadInput, LeadAccessTokenUncheckedCreateWithoutLeadInput>
+  }
+
+  export type LeadAccessTokenUpdateWithWhereUniqueWithoutLeadInput = {
+    where: LeadAccessTokenWhereUniqueInput
+    data: XOR<LeadAccessTokenUpdateWithoutLeadInput, LeadAccessTokenUncheckedUpdateWithoutLeadInput>
+  }
+
+  export type LeadAccessTokenUpdateManyWithWhereWithoutLeadInput = {
+    where: LeadAccessTokenScalarWhereInput
+    data: XOR<LeadAccessTokenUpdateManyMutationInput, LeadAccessTokenUncheckedUpdateManyWithoutLeadInput>
+  }
+
+  export type LeadAccessTokenScalarWhereInput = {
+    AND?: LeadAccessTokenScalarWhereInput | LeadAccessTokenScalarWhereInput[]
+    OR?: LeadAccessTokenScalarWhereInput[]
+    NOT?: LeadAccessTokenScalarWhereInput | LeadAccessTokenScalarWhereInput[]
+    id?: StringFilter<"LeadAccessToken"> | string
+    leadId?: StringFilter<"LeadAccessToken"> | string
+    tokenHash?: StringFilter<"LeadAccessToken"> | string
+    expiresAt?: DateTimeFilter<"LeadAccessToken"> | Date | string
+    usedAt?: DateTimeNullableFilter<"LeadAccessToken"> | Date | string | null
+    revokedAt?: DateTimeNullableFilter<"LeadAccessToken"> | Date | string | null
+    createdAt?: DateTimeFilter<"LeadAccessToken"> | Date | string
+  }
+
   export type LeadUpsertWithoutDuplicatesInput = {
     update: XOR<LeadUpdateWithoutDuplicatesInput, LeadUncheckedUpdateWithoutDuplicatesInput>
     create: XOR<LeadCreateWithoutDuplicatesInput, LeadUncheckedCreateWithoutDuplicatesInput>
@@ -34466,6 +36004,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
   }
 
@@ -34504,6 +36043,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
   }
 
   export type LeadUpsertWithWhereUniqueWithoutDuplicateOfInput = {
@@ -34520,6 +36060,174 @@ export namespace Prisma {
   export type LeadUpdateManyWithWhereWithoutDuplicateOfInput = {
     where: LeadScalarWhereInput
     data: XOR<LeadUpdateManyMutationInput, LeadUncheckedUpdateManyWithoutDuplicateOfInput>
+  }
+
+  export type LeadCreateWithoutAccessTokensInput = {
+    id?: string
+    name?: string | null
+    phone: string
+    email?: string | null
+    address?: string | null
+    objectType?: string | null
+    serviceType?: $Enums.ServiceType | null
+    source?: string | null
+    utm?: NullableJsonNullValueInput | InputJsonValue
+    referrer?: string | null
+    pageUrl?: string | null
+    formName?: string | null
+    timeOnSiteSeconds?: number | null
+    deviceType?: string | null
+    viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    processingStatus?: $Enums.LeadProcessingStatus
+    duplicateReason?: string | null
+    deliveryKey?: string | null
+    externalLeadId?: string | null
+    externalStatus?: string | null
+    contractResult?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.LeadStatus
+    apiResult?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutLeadsInput
+    city: CityCreateNestedOneWithoutLeadsInput
+    page?: PageCreateNestedOneWithoutLeadsInput
+    tariff?: TariffCreateNestedOneWithoutLeadsInput
+    addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
+    history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
+    activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
+    duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
+  }
+
+  export type LeadUncheckedCreateWithoutAccessTokensInput = {
+    id?: string
+    siteId: string
+    cityId: string
+    pageId?: string | null
+    tariffId?: string | null
+    addressCheckId?: string | null
+    name?: string | null
+    phone: string
+    email?: string | null
+    address?: string | null
+    objectType?: string | null
+    serviceType?: $Enums.ServiceType | null
+    source?: string | null
+    utm?: NullableJsonNullValueInput | InputJsonValue
+    referrer?: string | null
+    pageUrl?: string | null
+    formName?: string | null
+    timeOnSiteSeconds?: number | null
+    deviceType?: string | null
+    viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    processingStatus?: $Enums.LeadProcessingStatus
+    duplicateOfId?: string | null
+    duplicateReason?: string | null
+    deliveryKey?: string | null
+    externalLeadId?: string | null
+    externalStatus?: string | null
+    contractResult?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.LeadStatus
+    apiResult?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
+    activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
+  }
+
+  export type LeadCreateOrConnectWithoutAccessTokensInput = {
+    where: LeadWhereUniqueInput
+    create: XOR<LeadCreateWithoutAccessTokensInput, LeadUncheckedCreateWithoutAccessTokensInput>
+  }
+
+  export type LeadUpsertWithoutAccessTokensInput = {
+    update: XOR<LeadUpdateWithoutAccessTokensInput, LeadUncheckedUpdateWithoutAccessTokensInput>
+    create: XOR<LeadCreateWithoutAccessTokensInput, LeadUncheckedCreateWithoutAccessTokensInput>
+    where?: LeadWhereInput
+  }
+
+  export type LeadUpdateToOneWithWhereWithoutAccessTokensInput = {
+    where?: LeadWhereInput
+    data: XOR<LeadUpdateWithoutAccessTokensInput, LeadUncheckedUpdateWithoutAccessTokensInput>
+  }
+
+  export type LeadUpdateWithoutAccessTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    objectType?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceType?: NullableEnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    utm?: NullableJsonNullValueInput | InputJsonValue
+    referrer?: NullableStringFieldUpdateOperationsInput | string | null
+    pageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    formName?: NullableStringFieldUpdateOperationsInput | string | null
+    timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
+    duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
+    externalLeadId?: NullableStringFieldUpdateOperationsInput | string | null
+    externalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    contractResult?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    apiResult?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutLeadsNestedInput
+    city?: CityUpdateOneRequiredWithoutLeadsNestedInput
+    page?: PageUpdateOneWithoutLeadsNestedInput
+    tariff?: TariffUpdateOneWithoutLeadsNestedInput
+    addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
+    history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
+    activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
+    duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
+  }
+
+  export type LeadUncheckedUpdateWithoutAccessTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    cityId?: StringFieldUpdateOperationsInput | string
+    pageId?: NullableStringFieldUpdateOperationsInput | string | null
+    tariffId?: NullableStringFieldUpdateOperationsInput | string | null
+    addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    objectType?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceType?: NullableEnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    utm?: NullableJsonNullValueInput | InputJsonValue
+    referrer?: NullableStringFieldUpdateOperationsInput | string | null
+    pageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    formName?: NullableStringFieldUpdateOperationsInput | string | null
+    timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
+    duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
+    duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
+    externalLeadId?: NullableStringFieldUpdateOperationsInput | string | null
+    externalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    contractResult?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    apiResult?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
+    activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 
   export type LeadCreateWithoutDeliveryAttemptsInput = {
@@ -34555,6 +36263,7 @@ export namespace Prisma {
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
     duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
     duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
   }
@@ -34593,6 +36302,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
     duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
   }
 
@@ -34645,6 +36355,7 @@ export namespace Prisma {
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
     duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
   }
@@ -34683,6 +36394,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
     duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 
@@ -34719,6 +36431,7 @@ export namespace Prisma {
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
     duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
     duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
   }
@@ -34757,6 +36470,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
     duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
   }
 
@@ -34809,6 +36523,7 @@ export namespace Prisma {
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
     duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
   }
@@ -34847,6 +36562,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
     duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 
@@ -35075,6 +36791,7 @@ export namespace Prisma {
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
     duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
     duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
   }
@@ -35113,6 +36830,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
     duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
   }
 
@@ -35165,6 +36883,7 @@ export namespace Prisma {
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
     duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
   }
@@ -35203,6 +36922,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
     duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 
@@ -35790,6 +37510,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
     duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
   }
@@ -35828,6 +37549,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
     duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 
@@ -36293,6 +38015,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
     duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
   }
@@ -36331,6 +38054,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
     duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 
@@ -36555,6 +38279,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
     duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
   }
@@ -36593,6 +38318,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
     duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 
@@ -36733,6 +38459,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
     duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
   }
@@ -36771,6 +38498,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
     duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 
@@ -36873,6 +38601,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
     duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
   }
@@ -36911,6 +38640,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
     duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 
@@ -36973,6 +38703,15 @@ export namespace Prisma {
     id?: string
     type: string
     data?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type LeadAccessTokenCreateManyLeadInput = {
+    id?: string
+    tokenHash: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    revokedAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -37096,6 +38835,33 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LeadAccessTokenUpdateWithoutLeadInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadAccessTokenUncheckedUpdateWithoutLeadInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadAccessTokenUncheckedUpdateManyWithoutLeadInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tokenHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type LeadUpdateWithoutDuplicateOfInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37130,6 +38896,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
   }
 
@@ -37167,6 +38934,7 @@ export namespace Prisma {
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
     duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 

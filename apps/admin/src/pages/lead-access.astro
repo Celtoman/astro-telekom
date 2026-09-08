@@ -1,0 +1,29 @@
+---
+import '../styles/global.css';
+import { LeadAccessCard } from '../components/LeadAccessCard';
+
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Защищённый доступ к заявке</title>
+  </head>
+  <body>
+    <main class="flex min-h-screen items-center justify-center bg-muted/40 px-4 py-10">
+      <div class="flex w-full max-w-xl flex-col gap-5">
+        <header class="flex items-center gap-3 px-1">
+          <span class="flex size-9 items-center justify-center rounded-lg bg-primary font-heading text-lg font-semibold text-primary-foreground">д</span>
+          <div>
+            <p class="font-heading font-semibold">Дом.ру · Платформа</p>
+            <p class="text-sm text-muted-foreground">Защищённый просмотр заявки</p>
+          </div>
+        </header>
+        <LeadAccessCard apiUrl={apiUrl} client:load />
+      </div>
+    </main>
+  </body>
+</html>

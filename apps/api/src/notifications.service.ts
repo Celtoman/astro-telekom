@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { createHmac } from 'node:crypto';
+import { LeadAccessService } from './lead-access.service';
 
 interface LeadNotification {
   id: string;
@@ -15,6 +15,8 @@ interface LeadNotification {
 @Injectable()
 export class NotificationsService {
   private readonly logger = new Logger(NotificationsService.name);
+
+  constructor(private readonly leadAccess: LeadAccessService) {}
 
   async notifyLead(lead: LeadNotification) {
     const resendKey = process.env.RESEND_API_KEY;
@@ -60,20 +62,14 @@ export class NotificationsService {
     });
   }
 
-  protectedLeadUrl(leadId: string) {
-    const expires = Math.floor(Date.now() / 1000) + 60 * 60 * 24;
-    const secret = process.env.LEAD_LINK_SECRET || process.env.ADMIN_API_TOKEN || 'development-only-secret';
-    const signature = createHmac('sha256', secret).update(`${leadId}.${expires}`).digest('hex');
-    const base = (process.env.ADMIN_URL || 'http://localhost:3001').replace(/\/$/, '');
-    return `${base}/?lead=${encodeURIComponent(leadId)}&expires=${expires}&signature=${signature}`;
-  }
-
   async notifyDeliveryFallback(lead: LeadNotification) {
     const recipient = process.env.LEADS_EMAIL;
     if (!recipient) {
       throw new Error(`LEADS_EMAIL is not configured; email fallback cannot be sent for lead ${lead.id}`);
     }
-    const link = this.protectedLeadUrl(lead.id);
+    const { token } = await this.leadAccess.issue(lead.id);
+    const base = (process.env.ADMIN_URL || 'http://localhost:3001').replace(/\/$/, '');
+    const link = `${base}/lead-access/?lead=${encodeURIComponent(lead.id)}#token=${encodeURIComponent(token)}`;
     const text = [
       'Автоматическая передача заявки в кол-центр не удалась после трех попыток.',
       `Телефон: ${lead.phone}`,

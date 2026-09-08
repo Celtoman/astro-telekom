@@ -1,6 +1,6 @@
 # Модель данных текущего прототипа
 
-Источник правды: `prisma/schema.prisma` и восемь применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
+Источник правды: `prisma/schema.prisma` и девять применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
 
 ## Сущности контента и географии
 
@@ -30,12 +30,13 @@
 | `LeadDeliveryAttempt` | Каждый API/email attempt, idempotency key, payload/response/error, next retry time. |
 | `LeadActivityEvent` | События браузера до формы. |
 | `LeadStatusHistory` | Операторские переходы NEW/IN_PROGRESS/CALL_LATER/CONNECTED/REJECTED. |
+| `LeadAccessToken` | SHA-256 hash одноразовой fallback-ссылки, срок действия, отметки использования и отзыва; связан ровно с одной заявкой и удаляется каскадно. |
 
 `LeadProcessingStatus` отделяет delivery flow от операторского `LeadStatus`. Это реализованная и важная граница: delivery не должна заменять CRM-статус.
 
 ## Доступ и технические записи
 
-`User` содержит email, `passwordHash`, name, role, active и timestamps. `Session` хранит не raw token, а его SHA-256 hash и expiry. При reset password или deactivate API удаляет sessions пользователя.
+`User` содержит email, `passwordHash`, name, role, active и timestamps. `Session` хранит не raw token, а его SHA-256 hash и expiry. При reset password или deactivate API удаляет sessions пользователя. `LeadAccessToken` также хранит только hash: raw token существует лишь в одноразовой email-ссылке и не возвращается административными CRM routes.
 
 `Redirect` уже есть в схеме: site/city, source/target path, status, hits и timestamps. В текущем коде нет controller, routing или hit tracking, поэтому наличие таблицы не означает работу 301.
 

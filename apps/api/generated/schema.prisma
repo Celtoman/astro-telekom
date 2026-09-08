@@ -319,6 +319,7 @@ model Lead {
   history           LeadStatusHistory[]
   deliveryAttempts  LeadDeliveryAttempt[]
   activityEvents    LeadActivityEvent[]
+  accessTokens      LeadAccessToken[]
   duplicateOf       Lead?                 @relation("LeadDuplicates", fields: [duplicateOfId], references: [id])
   duplicates        Lead[]                @relation("LeadDuplicates")
 
@@ -326,6 +327,20 @@ model Lead {
   @@index([processingStatus, createdAt])
   @@index([siteId, phone, createdAt])
   @@index([siteId, duplicateOfId])
+}
+
+model LeadAccessToken {
+  id        String    @id @default(cuid())
+  leadId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  lead      Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId, createdAt])
+  @@index([expiresAt])
 }
 
 model LeadDeliveryAttempt {

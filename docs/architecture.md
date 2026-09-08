@@ -9,7 +9,7 @@
 | Зона | Реализация | Назначение |
 | --- | --- | --- |
 | `apps/web` | Astro 7, static output | SEO HTML, фиксированные маршруты Казани, форма проверки адреса. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
-| `apps/admin` | Astro 7, static output | Admin UI: реальные загрузки списка и XLS-import, остальное частично demo UI. Целевой стек — Astro как оболочка и маршрутизация, React-root для интерактивных экранов, Tailwind и shadcn/ui; референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). Ни React, ни Tailwind ещё не подключены. |
+| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | Admin UI: `/lead-access/` реализован как React-root с runtime API-запросом; импорт подключен к API, остальные части legacy `index.astro` частично demo. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/crm` | Astro 7, static output | Просмотр лидов и смена операторского статуса через API. **Временный прототип** — решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6): функциональность переносится в раздел «Заявки» `apps/admin`, отдельного приложения в целевой архитектуре не будет. Миграция не начата, `apps/crm` продолжает работать как есть. |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов; также слушает пока не используемые import/rebuild очереди. |
@@ -43,8 +43,8 @@
 | `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; строгая валидация есть только у блоков. |
 | `tariff-import`, `city-import` | Валидация XLS/XLSX, сохранение отчета, transactional apply. |
 | `address-checks`, `coverage` | Сохранение проверки адреса и адаптер внешнего coverage API. |
-| `leads`, `domru-contract`, `lead-delivery`, `notifications` | Сохранение лида, дедупликация, проверка договора, API/email delivery. |
-| `crm-leads` | Список, карточка, смена статуса и повторная постановка доставки. |
+| `leads`, `domru-contract`, `lead-delivery`, `notifications`, `lead-access` | Сохранение лида, дедупликация, проверка договора, API/email delivery и одноразовый доступ из fallback-письма. |
+| `crm-leads` | Список, карточка, смена статуса, повторная постановка доставки и отзыв fallback-доступа. |
 | `rebuild-queue` | Прямой best-effort webhook, а не очередь в текущей реализации. |
 
 ## Границы модулей

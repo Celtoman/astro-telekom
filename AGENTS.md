@@ -26,16 +26,16 @@ pnpm dev:worker                           # BullMQ worker
 # Проверка перед коммитом — один gate-скрипт
 pnpm check                                # lint -> db:validate -> ALLOW_DEMO_DATA=true build -> test, тот же порядок, что в CI
 # по отдельности:
-pnpm lint                                 # tsc --noEmit (api), astro check (web), node --check (worker)
+pnpm lint                                 # tsc --noEmit (api), astro check (web/admin), node --check (worker)
 pnpm db:validate
 ALLOW_DEMO_DATA=true pnpm build           # без API apps/web build падает намеренно — см. «Известные особенности» ниже
 pnpm test                                 # node --test tests/*.test.cjs tests/*.test.mjs
 pnpm test:build                           # пересобрать apps/api, затем pnpm test — после правок в apps/api/src
 ```
 
-У `admin` и `crm` нет `lint`-скрипта (TD-18) — `pnpm lint` их не проверяет, это известный пробел, а не сбой команды.
+У `crm` нет `lint`-скрипта (остаток TD-18) — `pnpm lint` его не проверяет. `admin` с 8 сентября 2026 входит в общий Astro check.
 
-**Baseline тестов: 38/38.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Prisma test-double в `tests/lead-check.test.cjs` синхронизирован с текущим `PublicLeadsController`, включая поиск дубликатов, транзакционное сохранение, проверку договора и постановку доставки. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+**Baseline тестов: 44/44.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Prisma test-double в `tests/lead-check.test.cjs` синхронизирован с текущим `PublicLeadsController`, а `tests/lead-access.test.cjs` проверяет одноразовый fallback-доступ. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 
@@ -71,7 +71,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 Референс дизайна и готовых UI-паттернов — [github.com/arhamkhnz/next-shadcn-admin-dashboard](https://github.com/arhamkhnz/next-shadcn-admin-dashboard) (живой пример — [next-shadcn-admin-dashboard.vercel.app/dashboard/default](https://next-shadcn-admin-dashboard.vercel.app/dashboard/default)). Целевой стек: Astro как static-оболочка и маршрутизация, React-root для интерактивной страницы или крупного раздела, Tailwind и shadcn/ui. Данные читаются и изменяются через HTTP API во время работы; Next.js-специфичный код не переносится как есть.
 
-Если в референсе есть подходящий блок, его переносят и адаптируют. Если блока нет, экран собирают из совместимых shadcn/ui-примитивов в стиле референса. Новый компонент допустим только при документированном отсутствии подходящего паттерна и не должен создавать параллельную дизайн-систему на ad-hoc CSS. Текущий `apps/admin/src/pages/index.astro` — legacy demo UI (TD-08), написанный на plain HTML/CSS/vanilla JS; не расширять его в старом стиле. Ни React, ни Tailwind пока не подключены. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
+Если в референсе есть подходящий блок, его переносят и адаптируют. Если блока нет, экран собирают из совместимых shadcn/ui-примитивов в стиле референса. Новый компонент допустим только при документированном отсутствии подходящего паттерна и не должен создавать параллельную дизайн-систему на ad-hoc CSS. Текущий `apps/admin/src/pages/index.astro` — legacy demo UI (TD-08), написанный на plain HTML/CSS/vanilla JS; не расширять его в старом стиле. React, Tailwind и базовые shadcn/ui-примитивы подключены для новых routes; первая реализация — `/lead-access/`. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
 
 ### `apps/web`
 

@@ -10,6 +10,8 @@
 | pnpm | 11.19.0 | package manager, указан в root `packageManager`. |
 | TypeScript | 6.0.3 | API и web; API не повышается до TypeScript 7, пока Nest CLI требует Compiler API. |
 | Astro | 7.3.1 | Static web, admin и CRM. |
+| React | 19.2.8 | Интерактивные страницы admin как React-roots внутри Astro. |
+| Tailwind CSS | 4.3.3 | Стили shadcn/ui в admin. |
 | Vite | 8 через Astro | Сборка Astro-приложений. |
 | NestJS | 12.0.1 | HTTP API. |
 | Fastify | 5.12.3 через adapter NestJS 12 и корневой `overrides` в `pnpm-workspace.yaml` | HTTP transport API, body limit 35 MB. |
@@ -39,7 +41,7 @@ API имеет глобальный prefix `/api/v1`, включенный CORS 
 
 ### Prisma и PostgreSQL
 
-Datasource URL описан в `prisma.config.ts`, клиент генерируется в `apps/api/generated`. `PrismaService` использует `PrismaPg` поверх `pg.Pool`. В репозитории восемь последовательных миграций: initial model, sessions, tariff SEO, identity, tariff import runs, lead control/redirects, city imports и email fallback failure status.
+Datasource URL описан в `prisma.config.ts`, клиент генерируется в `apps/api/generated`. `PrismaService` использует `PrismaPg` поверх `pg.Pool`. В репозитории девять последовательных миграций: initial model, sessions, tariff SEO, identity, tariff import runs, lead control/redirects, city imports, email fallback failure status и одноразовые tokens доступа к заявке.
 
 ### Redis и BullMQ
 
@@ -56,7 +58,7 @@ API создает `lead-deliveries` только при наличии `REDIS_U
 | Возможность | Текущее решение |
 | --- | --- |
 | Astro SSR, route caching, CDN adapter | Не используются. |
-| React/Vue/Svelte UI layer | Не используется: Astro pages с inline browser JavaScript. |
+| React UI layer | Используется в новых admin routes; legacy admin index, web и CRM пока остаются Astro pages с inline browser JavaScript. |
 | Schema.org-спецификация Product/FAQ/Organization | Не реализована; выводится только `WebPage`. |
 | Queue для site rebuild и import | Worker слушает очереди, но API их не публикует. |
 | Monitoring, tracing, error tracker | Не подключены. |

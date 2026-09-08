@@ -18,6 +18,7 @@
 | GET | `/public/sites/:siteSlug/cities/:citySlug` | Возвращает опубликованный город, опубликованные страницы/тарифы, visible blocks и shallow inheritance content. |
 | POST | `/address-checks` | Проверяет адрес через `CoverageService`, сохраняет `AddressCheck`, возвращает публичный результат без raw provider response. |
 | POST | `/leads` | Сохраняет заявку, пытается выявить дубликат, при допустимом адресе проверяет договор и ставит delivery. |
+| POST | `/lead-access/:leadId/consume` | Однократно обменивает 43-символьный fallback token на минимальную карточку одной заявки; истекший, измененный, отозванный, повторный или относящийся к другой заявке token возвращает 401. |
 
 Для `address-checks` и `leads` по умолчанию подставляется `siteSlug=domru-kazan`; endpoint публично принимает только published site/city/page/tariff. Этот default — свойство прототипа, не универсальный контракт платформы.
 
@@ -75,10 +76,11 @@ CRUD routes вызывают `REBUILD_WEBHOOK_URL` best-effort, если он з
 | GET | `/crm/leads/:id` | Детальная карточка с адресной проверкой, попытками и activity. |
 | PATCH | `/crm/leads/:id/status` | Изменяет операторский status и добавляет history с optimistic concurrency. |
 | POST | `/crm/leads/:id/retry-delivery` | Возвращает eligible lead в `PENDING` и ставит первую delivery attempt. |
+| POST | `/crm/leads/:id/revoke-fallback-access` | Отзывает все еще активные одноразовые fallback tokens заявки. Защищен CRM guard. |
 | POST | `/internal/lead-deliveries/:id` | Worker-only handler очереди. Защищен тем же guard. |
 
 `/crm/leads` сейчас возвращает PII без серверной пагинации и фильтрации. Admin/CRM UI должны использовать этот endpoint только в доверенном контуре после полноценного login/role flow.
 
 ## Отсутствующие routes
 
-В коде нет endpoints для redirects, action log, media, analytics, variables, publication schedule, preview, rollback, SEO validation, page templates, tariff history, callback statuses from Tarifnik и email fallback link verification. Их нельзя считать частью текущего API.
+В коде нет endpoints для redirects, action log, media, analytics, variables, publication schedule, preview, rollback, SEO validation, page templates, tariff history и callback statuses from Tarifnik. Их нельзя считать частью текущего API.

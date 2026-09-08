@@ -17,7 +17,7 @@
 1. Скопировать `.env.example` в `.env` и заменить все placeholders секретов и доменов.
 2. Задать `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` с host `postgres` для контейнерного API.
 3. Задать `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `CRM_DOMAIN`, `API_DOMAIN`. Во время image build из них формируются public API и canonical URLs.
-4. Задать случайные непустые `ADMIN_API_TOKEN`, `LEAD_LINK_SECRET`, `SUBSCRIBER_COOKIE_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`.
+4. Задать случайные непустые `ADMIN_API_TOKEN`, `SUBSCRIBER_COOKIE_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`.
 5. До включения заявок подтвердить и задать coverage, contract, Tarifnik и email variables. Пустое значение не означает безопасно работающую интеграцию.
 6. Убедиться, что DNS всех четырех доменов указывает на сервер и порты 80/443 доступны Caddy.
 
@@ -50,7 +50,7 @@ docker compose -f docker-compose.prod.yml exec api node --experimental-strip-typ
 | База и Redis | `DATABASE_URL`, `POSTGRES_*`, `REDIS_URL` |
 | Public build | `PUBLIC_SITE_URL`, `PUBLIC_API_URL`, `PUBLIC_SUPPORT_PHONE`, `PUBLIC_YANDEX_METRIKA_ID` |
 | Domains/CORS | `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `CRM_DOMAIN`, `API_DOMAIN`, `CORS_ORIGINS`, `ADMIN_URL`, `CRM_URL` |
-| Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `LEAD_LINK_SECRET`, `SUBSCRIBER_COOKIE_SECRET` |
+| Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
 | Coverage/contract | `DOMRU_COVERAGE_API_URL`, `DOMRU_COVERAGE_API_KEY`, `DOMRU_CONTRACT_API_URL`, `DOMRU_CONTRACT_API_KEY` |
 | Lead delivery | `TARIFNIK_API_URL`, `TARIFNIK_API_KEY`, `LEADS_EMAIL`, `RESEND_API_KEY` or `LEADS_EMAIL_WEBHOOK_URL`, `LEADS_EMAIL_FROM` |
 | Publishing | `REBUILD_WEBHOOK_URL`, `ENV_FILE` |
@@ -60,6 +60,6 @@ docker compose -f docker-compose.prod.yml exec api node --experimental-strip-typ
 - Caddy reverse proxy не добавляет security headers из `static.Caddyfile`; он используется только внутри static image.
 - Нет мониторинга, alerting, лог-агрегации или автоматической backup policy.
 - Static web не получает изменения из БД без внешней пересборки.
-- Fallback email link еще не открывает защищенную карточку: см. TD-02.
+- Fallback email link требует примененной миграции `0009_lead_access_tokens`; ссылка одноразовая, действует 24 часа и проверяется API. Raw token передается во fragment и не попадает в HTTP request к static admin.
 
 Полный список рисков и работа по закрытию — в [technical-debt.md](technical-debt.md).

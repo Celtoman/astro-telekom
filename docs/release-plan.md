@@ -13,7 +13,7 @@
 - Прием лида, deduplication, contract check, delivery attempts, CRM API.
 - Static admin/CRM prototypes и worker listeners.
 
-Release 0 не является production release: тестовый gate красный, статический сайт не мультигородской, а admin UI частично имитирует данные. Demo fallback в public build с 7 сентября 2026 требует явного `ALLOW_DEMO_DATA=true` и больше не срабатывает молча при недоступном API.
+Release 0 не является production release: тестовый gate зеленый, но статический сайт не мультигородской, а admin UI частично имитирует данные. Demo fallback в public build с 7 сентября 2026 требует явного `ALLOW_DEMO_DATA=true` и больше не срабатывает молча при недоступном API.
 
 ## Release 1 — безопасный MVP Казани
 

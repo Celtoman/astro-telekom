@@ -3,6 +3,7 @@ import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
 import { LeadDeliveryService } from './lead-delivery.service';
+import { LeadAccessService } from './lead-access.service';
 
 type LeadStatus = 'NEW' | 'IN_PROGRESS' | 'CALL_LATER' | 'CONNECTED' | 'REJECTED';
 
@@ -14,7 +15,11 @@ interface StatusBody {
 @Controller('crm/leads')
 @UseGuards(AdminTokenGuard)
 export class CrmLeadsController {
-  constructor(private readonly prisma: PrismaService, private readonly delivery: LeadDeliveryService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly delivery: LeadDeliveryService,
+    private readonly leadAccess: LeadAccessService,
+  ) {}
 
   @Get()
   list() {
@@ -42,6 +47,13 @@ export class CrmLeadsController {
     await this.prisma.lead.update({ where: { id }, data: { processingStatus: 'PENDING' } });
     await this.delivery.enqueue(id, 1, 0);
     return { id, processingStatus: 'PENDING', message: 'Повторная передача поставлена в очередь' };
+  }
+
+  @Post(':id/revoke-fallback-access')
+  async revokeFallbackAccess(@Param('id') id: string) {
+    const lead = await this.prisma.lead.findUnique({ where: { id }, select: { id: true } });
+    if (!lead) throw new NotFoundException('Заявка не найдена');
+    return { id, revokedTokens: await this.leadAccess.revoke(id) };
   }
 
   @Patch(':id/status')
