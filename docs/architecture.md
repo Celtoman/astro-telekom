@@ -9,7 +9,7 @@
 | Зона | Реализация | Назначение |
 | --- | --- | --- |
 | `apps/web` | Astro 7, static output | SEO HTML, фиксированные маршруты Казани, форма проверки адреса. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
-| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | Admin UI: `/lead-access/` реализован как React-root с runtime API-запросом; импорт подключен к API, остальные части legacy `index.astro` частично demo. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
+| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; тарифы, города и заявки пока не подключены к новому shell. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/crm` | Astro 7, static output | Просмотр лидов и смена операторского статуса через API. **Временный прототип** — решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6): функциональность переносится в раздел «Заявки» `apps/admin`, отдельного приложения в целевой архитектуре не будет. Миграция не начата, `apps/crm` продолжает работать как есть. |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов и пересборок сайта; также слушает пока не используемую import-очередь. |
@@ -26,7 +26,7 @@
 
 Браузер admin или CRM
   -> Caddy -> static admin/crm
-  -> Bearer token or x-admin-token -> API -> PostgreSQL
+  -> HttpOnly admin cookie (legacy CRM: Bearer) -> API -> PostgreSQL
 
 Изменение контента в API
   -> PostgreSQL SiteRebuild -> Redis/BullMQ -> worker
@@ -39,7 +39,7 @@
 
 | Модуль | Реальная ответственность |
 | --- | --- |
-| `auth` и `AdminTokenGuard` | Создание 12-часовой Bearer-сессии для единого уровня доступа администратора; совместимый сервисный `x-admin-token` используется как машинный credential. |
+| `auth` и `AdminTokenGuard` | Создание 12-часовой сессии, browser login/me/logout через HttpOnly cookie и совместимый Bearer для технических клиентов. `x-admin-token` — машинный credential; `/internal/*` принимает только его. |
 | `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; строгая валидация есть только у блоков. |
 | `tariff-import`, `city-import` | Валидация XLS/XLSX, сохранение отчета, transactional apply. |
 | `address-checks`, `coverage` | Сохранение проверки адреса и адаптер внешнего coverage API. |

@@ -23,12 +23,13 @@
 | TD-06 | [#7](https://github.com/Celtoman/astro-telekom/issues/7) ✅ | Full-snapshot import атомарно удаляет отсутствующие тарифы, требует подтверждения warnings и создает redirects при ручной смене URL |
 | TD-07 | [#8](https://github.com/Celtoman/astro-telekom/issues/8) 🟢 | Модель `Redirect` без controller/routing/управления |
 | TD-08 | [#9](https://github.com/Celtoman/astro-telekom/issues/9) 🟢 | Админка — demo UI вместо реальных данных; источник замены — [docs/admin-design-system.md](admin-design-system.md) |
-| TD-09 | [#10](https://github.com/Celtoman/astro-telekom/issues/10) 🟢 | `window.prompt` токен, нет login route/logout/route protection |
+| TD-09 | [#10](https://github.com/Celtoman/astro-telekom/issues/10) ✅ | Реализованы HttpOnly-cookie login/me/logout и auth-gated React shell; browser service-token удален |
 | TD-10 | [#11](https://github.com/Celtoman/astro-telekom/issues/11) 🟢 | Contract API и Tarifnik не настроены в `.env.example` |
 | TD-21 | [#12](https://github.com/Celtoman/astro-telekom/issues/12) 🟢 | `xlsx@0.18.5` уязвим к Prototype Pollution и ReDoS |
 | TD-22 | [#37](https://github.com/Celtoman/astro-telekom/issues/37) ✅ | Compose переведен на обязательный для PostgreSQL 18 volume mount `/var/lib/postgresql` |
 | TD-23 | [#38](https://github.com/Celtoman/astro-telekom/issues/38) ✅ | Seed использует явный ESM entrypoint сгенерированного Prisma client и снова запускается на Node 22 |
 | TD-24 | [#39](https://github.com/Celtoman/astro-telekom/issues/39) ✅ | City import использует transaction-local maps, bulk page insert и проходит полный пакет 207 строк |
+| TD-25 | [#40](https://github.com/Celtoman/astro-telekom/issues/40) ✅ | Пользовательские сессии отделены от worker-only `/internal/*`, доступных только по сервисному токену |
 
 ## P2
 

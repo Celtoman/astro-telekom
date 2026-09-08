@@ -28,3 +28,10 @@ test('service token remains machine authentication independent of administrator 
     else process.env.ADMIN_API_TOKEN = previous;
   }
 });
+
+test('administrator sessions cannot call worker-only internal routes', async () => {
+  await assert.rejects(
+    request('/api/v1/internal/site-rebuilds/id/start'),
+    error => error.getStatus() === 401,
+  );
+});

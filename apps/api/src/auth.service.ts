@@ -7,6 +7,8 @@ export interface AuthUser {
   email: string;
 }
 
+export const ADMIN_SESSION_COOKIE = 'admin_session';
+
 @Injectable()
 export class AuthService {
   constructor(private readonly prisma: PrismaService) {}
@@ -43,5 +45,10 @@ export class AuthService {
     const session = await this.prisma.session.findUnique({ where: { tokenHash }, include: { user: true } });
     if (!session || session.expiresAt <= new Date() || !session.user.active) return null;
     return { id: session.user.id, email: session.user.email };
+  }
+
+  async logout(token: string) {
+    const tokenHash = createHash('sha256').update(token).digest('hex');
+    await this.prisma.session.deleteMany({ where: { tokenHash } });
   }
 }

@@ -4,13 +4,14 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [CLAUDE.md](../CLAUDE.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 69/69 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита.
+**Baseline: 75/75 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита.
 
 | Файл | Что проверяет |
 | --- | --- |
-| `tests/access.test.cjs` | `AdminTokenGuard`: одна авторизованная учетная запись администратора получает доступ ко всем admin/CRM-разделам; отсутствие credentials дает 401; корректный `x-admin-token` остается независимой машинной аутентификацией. |
-| `tests/admin-forms.test.cjs` | Admin-формы корректно сбрасываются после того, как браузер очищает `event.currentTarget` (регрессия конкретного DOM-поведения). |
+| `tests/access.test.cjs` | `AdminTokenGuard`: одна авторизованная учетная запись администратора получает доступ ко всем admin/CRM-разделам; отсутствие credentials дает 401; корректный `x-admin-token` остается независимой машинной аутентификацией; пользовательская сессия не проходит на worker-only `/internal/*`. |
+| `tests/admin-auth-ui.test.mjs` | Admin `/` и `/login` используют React-roots; браузерные запросы отправляют HttpOnly cookie через `credentials: include`, проверяют session и logout, а raw Bearer/service token не читается и не хранится в UI. |
 | `tests/admin-users.test.cjs` | Управление администраторами: последнюю активную учетную запись нельзя деактивировать; сброс пароля отзывает сессии и не возвращает данные пароля; создание требует валидный email и достаточно длинный пароль, не сохраняет роль и явно отклоняет устаревшее поле `role`. |
+| `tests/auth-session.test.cjs` | Browser auth: login не возвращает raw token и ставит hardened HttpOnly cookie; cookie проходит guard, logout удаляет hash-сессию и очищает cookie, `/auth/me` возвращает только идентичность администратора. |
 | `tests/block-validation.test.cjs` | Валидация `PageBlock`: валидные блоки и частичное изменение видимости принимаются; невалидная форма блока и попытка сменить `parent` отклоняются; исполняемые (`javascript:`) и protocol-relative CTA-ссылки отклоняются. |
 | `tests/city-import.test.cjs` | Импорт городов: принимает реальные русские заголовки канонического XLSX; все 207 строк проходят без ошибок/warnings, формы Казани сохраняются; дубли и обязательные значения валидируются; новый город получает шесть `DRAFT` страниц bulk-операцией в транзакции с timeout; регион seed переиспользуется по нормализованному slug. |
 | `tests/coverage.test.cjs` | `CoverageService`/`AddressChecksController`: пустой или невалидный адрес никогда не вызывает внешний coverage API; неопубликованный сайт не вызывает внешний API; результат различает negative/unknown/malformed-ответ и сетевой сбой. |

@@ -5,9 +5,9 @@
 ## Общие правила
 
 - API работает на NestJS/Fastify и принимает JSON; server body limit — 35 MB.
-- `POST /auth/login` возвращает 12-часовой Bearer token. Сессия хранится как SHA-256 hash.
-- Защищенные маршруты принимают `Authorization: Bearer <token>`. Для сервисного сценария guard также принимает `x-admin-token`, если он равен `ADMIN_API_TOKEN`; этот путь обладает полными правами.
-- У пользовательского доступа один уровень — администратор. Любой активный пользователь с действующей Bearer-сессией имеет одинаковый полный доступ ко всем административным и CRM routes; ролевой модели нет. `x-admin-token` — машинный credential, а не пользовательская роль.
+- `POST /auth/login` создает 12-часовую сессию и возвращает только expiry и пользователя; raw token передается браузеру исключительно в `HttpOnly`, `SameSite=Strict` cookie `admin_session`. В PostgreSQL хранится SHA-256 hash.
+- Защищенные административные маршруты принимают cookie-сессию или совместимый `Authorization: Bearer <token>`. `x-admin-token`, совпадающий с `ADMIN_API_TOKEN`, предназначен для машинного сценария; `/internal/*` принимает только его и отклоняет пользовательские сессии.
+- У пользовательского доступа один уровень — администратор. Любой активный пользователь с действующей сессией имеет одинаковый полный доступ ко всем административным и CRM routes; ролевой модели нет.
 - Общий `ValidationPipe` не включен. Контроллеры проверяют часть полей вручную; нельзя считать TypeScript body-interface полноценной runtime-валидацией.
 
 ## Public routes
@@ -40,7 +40,9 @@
 
 | Method | Route | Назначение |
 | --- | --- | --- |
-| POST | `/auth/login` | Email/password -> Bearer session. |
+| POST | `/auth/login` | Email/password -> HttpOnly-cookie session; JSON не содержит raw token. |
+| GET | `/auth/me` | Проверяет cookie/Bearer-сессию и возвращает `{ user: { id, email } }`. |
+| POST | `/auth/logout` | Отзывает текущую persisted-сессию и очищает cookie; вызов идемпотентен. |
 | GET/POST/PATCH | `/admin/providers` | Provider records. |
 | GET/POST/PATCH | `/admin/sites` | Site records. |
 | GET/POST/PATCH | `/admin/users` | Учетные записи администраторов, deactivate/password reset. Поле `role` не поддерживается. |

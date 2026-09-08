@@ -35,7 +35,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 У `crm` нет `lint`-скрипта (остаток TD-18) — `pnpm lint` его не проверяет. `admin` с 8 сентября 2026 входит в общий Astro check.
 
-**Baseline тестов: 69/69.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют канонический справочник 207 городов и сопоставление регионов, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+**Baseline тестов: 75/75.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют cookie-сессию admin, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 
@@ -71,7 +71,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 Референс дизайна и готовых UI-паттернов — [github.com/arhamkhnz/next-shadcn-admin-dashboard](https://github.com/arhamkhnz/next-shadcn-admin-dashboard) (живой пример — [next-shadcn-admin-dashboard.vercel.app/dashboard/default](https://next-shadcn-admin-dashboard.vercel.app/dashboard/default)). Целевой стек: Astro как static-оболочка и маршрутизация, React-root для интерактивной страницы или крупного раздела, Tailwind и shadcn/ui. Данные читаются и изменяются через HTTP API во время работы; Next.js-специфичный код не переносится как есть.
 
-Если в референсе есть подходящий блок, его переносят и адаптируют. Если блока нет, экран собирают из совместимых shadcn/ui-примитивов в стиле референса. Новый компонент допустим только при документированном отсутствии подходящего паттерна и не должен создавать параллельную дизайн-систему на ad-hoc CSS. Текущий `apps/admin/src/pages/index.astro` — legacy demo UI (TD-08), написанный на plain HTML/CSS/vanilla JS; не расширять его в старом стиле. React, Tailwind и базовые shadcn/ui-примитивы подключены для новых routes; первая реализация — `/lead-access/`. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
+Если в референсе есть подходящий блок, его переносят и адаптируют. Если блока нет, экран собирают из совместимых shadcn/ui-примитивов в стиле референса. Новый компонент допустим только при документированном отсутствии подходящего паттерна и не должен создавать параллельную дизайн-систему на ad-hoc CSS. Legacy demo `index.astro` удален: текущие `/` и `/login` — React-root на Tailwind/shadcn с HttpOnly-cookie аутентификацией и честными состояниями; рабочие тарифы, города и заявки еще предстоит подключить к API. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
 
 ### `apps/web`
 

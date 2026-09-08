@@ -58,7 +58,7 @@ API создает `lead-deliveries` и `site-rebuilds` при наличии `R
 | Возможность | Текущее решение |
 | --- | --- |
 | Astro SSR, route caching, CDN adapter | Не используются. |
-| React UI layer | Используется в новых admin routes; legacy admin index, web и CRM пока остаются Astro pages с inline browser JavaScript. |
+| React UI layer | Используется в admin login, защищенном shell и fallback route; web и временный CRM пока остаются Astro pages с inline browser JavaScript. |
 | Schema.org-спецификация Product/FAQ/Organization | Не реализована; выводится только `WebPage`. |
 | Queue для import | Worker слушает `tariff-imports`, но API не публикует jobs: validate/apply выполняются напрямую. |
 | Monitoring, tracing, error tracker | Не подключены. |

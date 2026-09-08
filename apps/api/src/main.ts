@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import fastifyCookie from '@fastify/cookie';
 import { AppModule } from './module';
 
 async function bootstrap() {
@@ -8,6 +9,7 @@ async function bootstrap() {
     new FastifyAdapter({ bodyLimit: 35 * 1024 * 1024 }),
   );
 
+  await app.register(fastifyCookie);
   app.enableShutdownHooks();
   app.setGlobalPrefix('api/v1');
   app.enableCors({
