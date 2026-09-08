@@ -9,7 +9,7 @@
 | Node.js | 22.23.2 в Dockerfiles и локальной проверке | API, worker, Astro build, Prisma CLI. |
 | pnpm | 11.19.0 | package manager, указан в root `packageManager`. |
 | TypeScript | 6.0.3 | API и web; API не повышается до TypeScript 7, пока Nest CLI требует Compiler API. |
-| Astro | 7.3.1 | Static web, admin и CRM. |
+| Astro | 7.3.1 | Static web и admin. |
 | React | 19.2.8 | Интерактивные страницы admin как React-roots внутри Astro. |
 | Tailwind CSS | 4.3.3 | Стили shadcn/ui в admin. |
 | Vite | 8 через Astro | Сборка Astro-приложений. |
@@ -22,7 +22,7 @@
 | BullMQ | 6.3.4 | Очереди доставки лидов и пересборки сайта; import listener пока без producer. |
 | ioredis | 6.0.0 | Redis connections для API и worker. |
 | xlsx | 0.18.5 | Разбор первого листа XLS/XLSX в API. |
-| Tabler Icons Webfont | 3.46.0 | Пиктограммы admin и CRM. |
+| Tabler Icons Webfont | 3.46.0 | Пиктограммы admin. |
 | Caddy | 2.11.4-alpine | Reverse proxy и static file server. |
 
 Диапазоны с `^` в manifests разрешаются lockfile при локальной установке. Production Dockerfiles применяют `pnpm install --frozen-lockfile` вместе с root `.dockerignore`, исключающим `node_modules`, `.git` и build-артефакты из build context.
@@ -49,7 +49,7 @@ API создает `lead-deliveries` и `site-rebuilds` при наличии `R
 
 ### Docker и Caddy
 
-`docker-compose.yml` поднимает только PostgreSQL и Redis для разработки. `docker-compose.prod.yml` описывает PostgreSQL, Redis, API, worker, web, admin, CRM и Caddy. Оба файла монтируют PostgreSQL 18 volume в `/var/lib/postgresql` — корневой layout, обязательный для major-specific data directory PG18. Caddy направляет четыре домена на соответствующие контейнеры; отдельный `static.Caddyfile` обслуживает собранные Astro файлы и кэширует assets.
+`docker-compose.yml` поднимает только PostgreSQL и Redis для разработки. `docker-compose.prod.yml` описывает PostgreSQL, Redis, API, worker, web, admin и Caddy. Оба файла монтируют PostgreSQL 18 volume в `/var/lib/postgresql` — корневой layout, обязательный для major-specific data directory PG18. Caddy направляет три домена на соответствующие контейнеры; отдельный `static.Caddyfile` обслуживает собранные Astro файлы и кэширует assets.
 
 Контейнерная схема конфигурационно валидна (`docker compose -f docker-compose.prod.yml config --no-interpolate`), но не была поднята с реальными доменами, секретами и интеграциями. Это не production certification.
 
@@ -58,7 +58,7 @@ API создает `lead-deliveries` и `site-rebuilds` при наличии `R
 | Возможность | Текущее решение |
 | --- | --- |
 | Astro SSR, route caching, CDN adapter | Не используются. |
-| React UI layer | Используется в admin login, защищенном shell и fallback route; web и временный CRM пока остаются Astro pages с inline browser JavaScript. |
+| React UI layer | Используется в admin login, защищенном shell, тарифах, городах, заявках и fallback route; public web остается Astro pages с точечной клиентской интерактивностью. |
 | Schema.org-спецификация Product/FAQ/Organization | Не реализована; выводится только `WebPage`. |
 | Queue для import | Worker слушает `tariff-imports`, но API не публикует jobs: validate/apply выполняются напрямую. |
 | Monitoring, tracing, error tracker | Не подключены. |

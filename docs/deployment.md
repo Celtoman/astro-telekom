@@ -2,15 +2,15 @@
 
 Этот документ описывает текущую Compose-конфигурацию. Production deployment не выполнялся и не верифицировался; инструкция не является подтверждением готового боевого контура.
 
-`CRM` ниже — временный прототип: решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6) переносит его функциональность в раздел «Заявки» `apps/admin`, отдельного сервиса в целевой архитектуре не будет. Функциональная замена уже работает на `/leads`, но старый `CRM` пока продолжает деплоиться до отдельного шага вывода из эксплуатации; ниже описана фактическая текущая конфигурация, а не целевая.
+Отдельный CRM-frontend удален 9 сентября 2026 года после переноса журнала заявок в `/leads` `apps/admin`. API routes пока сохраняют префикс `/crm/leads` как внутреннее имя контракта; отдельного домена или сервиса для них нет.
 
 ## Контуры
 
 | Контур | Команда | Состав |
 | --- | --- | --- |
 | Локальная инфраструктура | `docker compose up -d postgres redis` | Только PostgreSQL и Redis с опубликованными портами 5432/6379. |
-| Локальные приложения | pnpm-команды из README | API, web, admin, CRM, worker в процессах хоста. |
-| Production-like | `docker compose -f docker-compose.prod.yml up -d --build` | PostgreSQL, Redis, API, worker, web, admin, CRM, Caddy. |
+| Локальные приложения | pnpm-команды из README | API, web, admin, worker в процессах хоста. |
+| Production-like | `docker compose -f docker-compose.prod.yml up -d --build` | PostgreSQL, Redis, API, worker, web, admin, Caddy. |
 
 PostgreSQL 18 хранит major-specific data directory внутри volume, смонтированного в `/var/lib/postgresql`. Не возвращать старый mount `/var/lib/postgresql/data`: официальный PG18 image отказывается запускаться с таким layout.
 
@@ -18,10 +18,10 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 
 1. Скопировать `.env.example` в `.env` и заменить все placeholders секретов и доменов.
 2. Задать `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` с host `postgres` для контейнерного API.
-3. Задать `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `CRM_DOMAIN`, `API_DOMAIN`. Во время image build из них формируются public API и canonical URLs.
+3. Задать `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN`. Во время image build из них формируются public API и canonical URLs.
 4. Задать случайные непустые `ADMIN_API_TOKEN`, `SUBSCRIBER_COOKIE_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`.
 5. До включения заявок подтвердить и задать coverage, contract, Tarifnik и email variables. Пустое значение не означает безопасно работающую интеграцию.
-6. Убедиться, что DNS всех четырех доменов указывает на сервер и порты 80/443 доступны Caddy.
+6. Убедиться, что DNS всех трех доменов указывает на сервер и порты 80/443 доступны Caddy.
 
 ## Порядок первого запуска
 
@@ -53,7 +53,7 @@ docker compose -f docker-compose.prod.yml exec api node /app/dist/seed.js
 | --- | --- |
 | База и Redis | `DATABASE_URL`, `POSTGRES_*`, `REDIS_URL` |
 | Public build | `PUBLIC_SITE_URL`, `PUBLIC_API_URL`, `PUBLIC_SUPPORT_PHONE`, `PUBLIC_YANDEX_METRIKA_ID` |
-| Domains/CORS | `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `CRM_DOMAIN`, `API_DOMAIN`, `CORS_ORIGINS`, `ADMIN_URL`, `CRM_URL` |
+| Domains/CORS | `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN`, `CORS_ORIGINS`, `ADMIN_URL` |
 | Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
 | Coverage/contract | `DOMRU_COVERAGE_API_URL`, `DOMRU_COVERAGE_API_KEY`, `DOMRU_CONTRACT_API_URL`, `DOMRU_CONTRACT_API_KEY` |
 | Lead delivery | `TARIFNIK_API_URL`, `TARIFNIK_API_KEY`, `LEADS_EMAIL`, `RESEND_API_KEY` or `LEADS_EMAIL_WEBHOOK_URL`, `LEADS_EMAIL_FROM` |

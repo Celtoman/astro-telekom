@@ -11,9 +11,9 @@
 - Статический Astro-сайт для Казани с четырьмя типами контентных страниц, FAQ, тарифными карточками и формой проверки адреса.
 - XLS-import городов/тарифов с validate/apply reports.
 - Прием лида, deduplication, contract check, delivery attempts, CRM API.
-- Static admin/CRM prototypes и worker listeners.
+- Static admin с рабочими экранами тарифов, городов и заявок, а также worker listeners.
 
-Release 0 не является production release: тестовый gate зеленый, но статический сайт не мультигородской, а admin UI частично имитирует данные. Demo fallback в public build с 7 сентября 2026 требует явного `ALLOW_DEMO_DATA=true` и больше не срабатывает молча при недоступном API.
+Release 0 не является production release: тестовый gate зеленый, но статический сайт не мультигородской, а часть запланированных admin-разделов еще не реализована. Demo fallback в public build с 7 сентября 2026 требует явного `ALLOW_DEMO_DATA=true` и больше не срабатывает молча при недоступном API.
 
 ## Release 1 — безопасный MVP Казани
 

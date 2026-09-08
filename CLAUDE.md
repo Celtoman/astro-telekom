@@ -20,7 +20,6 @@ pnpm --filter @provider/database seed     # требует непустые ADMI
 pnpm dev:api                              # NestJS API — http://localhost:3000
 pnpm dev:web                              # Astro web — http://localhost:4321
 pnpm --filter @provider/admin dev         # http://localhost:3001
-pnpm --filter @provider/crm dev           # http://localhost:3002 — временный прототип, см. «Дизайн-система» ниже
 pnpm dev:worker                           # BullMQ worker
 
 # Проверка перед коммитом — один gate-скрипт
@@ -33,15 +32,15 @@ pnpm test                                 # node --test tests/*.test.cjs tests/*
 pnpm test:build                           # пересобрать apps/api, затем pnpm test — после правок в apps/api/src
 ```
 
-У `crm` нет `lint`-скрипта (остаток TD-18) — `pnpm lint` его не проверяет. `admin` с 8 сентября 2026 входит в общий Astro check.
+`apps/crm` удален после переноса заявок в `/leads`; `admin` входит в общий Astro check.
 
-**Baseline тестов: 75/75.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют cookie-сессию admin, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+**Baseline тестов: 90/90.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют cookie-сессию и CORS admin, экраны тарифов, городов и заявок, отсутствие выведенного из эксплуатации CRM-workspace, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 
-Монорепозиторий pnpm (`pnpm-workspace.yaml`): `apps/web` / `apps/admin` / `apps/crm` — Astro 7, static output; `apps/api` — NestJS 12 + Fastify 5; `services/worker` — Node.js + BullMQ; `prisma/` + `packages/database` — Prisma 7 + PostgreSQL 18; `deploy/` — Caddy + Docker Compose.
+Монорепозиторий pnpm (`pnpm-workspace.yaml`): `apps/web` / `apps/admin` — Astro 7, static output; `apps/api` — NestJS 12 + Fastify 5; `services/worker` — Node.js + BullMQ; `prisma/` + `packages/database` — Prisma 7 + PostgreSQL 18; `deploy/` — Caddy + Docker Compose.
 
-Только `apps/api` пишет в PostgreSQL — admin, CRM, web и worker обращаются к данным исключительно через HTTP API. `apps/web` собирается в **static output**: город и тарифы читаются из API один раз во время `astro build`, рантайм-изменения в БД не видны опубликованному сайту без внешней пересборки. `site-rebuilds` хранится в PostgreSQL, выполняется worker с retry и считается завершенной только после финального ответа deployment provider.
+Только `apps/api` пишет в PostgreSQL — admin, web и worker обращаются к данным исключительно через HTTP API. `apps/web` собирается в **static output**: город и тарифы читаются из API один раз во время `astro build`, рантайм-изменения в БД не видны опубликованному сайту без внешней пересборки. `site-rebuilds` хранится в PostgreSQL, выполняется worker с retry и считается завершенной только после финального ответа deployment provider.
 
 Полная карта модулей — [docs/architecture.md](docs/architecture.md). Точный статус по каждому направлению (реализовано / частично / demo) — [docs/current-state.md](docs/current-state.md). Переменные окружения по назначению и обязательная подготовка к деплою — [docs/deployment.md](docs/deployment.md).
 
@@ -61,7 +60,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 - **`ALLOW_DEMO_DATA=true`** — единственный официальный способ собрать `apps/web` без живого API. Без флага и без API `astro build` падает намеренно с объяснением причины (`apps/web/src/data/kazan.ts`, `loadKazanData()`). Это осознанное поведение (TD-03 закрыт 2026-09-07) — не возвращать тихий fallback на демо-данные.
 - **Тесты зависят от собранного API**: `tests/*.test.cjs` импортируют `apps/api/dist/*.js`, а не `src/*.ts`. После любой правки в `apps/api/src` — обязательно `pnpm --filter @provider/api run build` перед `node --test`, иначе тесты либо не увидят изменений, либо массово упадут на устаревшем `dist`.
 - **Один генератор Prisma-клиента** — `prisma/schema.prisma` → `apps/api/generated`, это единственный source of truth. Дублирующий `packages/database/generated` уже был найден и удален как stale-артефакт (2026-09-07, см. `docs/research/2026-09-07-workaround-audit.md`, W-04) — если он появится снова, это ошибка конфигурации, а не второй валидный клиент.
-- **Docker всегда `--frozen-lockfile`** — все пять `Dockerfile` используют его намеренно вместе с root `.dockerignore`. Не откатывать на `--no-frozen-lockfile` ради удобства локальной отладки; при расхождении manifest/lockfile чинить lockfile через `pnpm install`, а не ослаблять флаг.
+- **Docker всегда `--frozen-lockfile`** — все четыре `Dockerfile` используют его намеренно вместе с root `.dockerignore`. Не откатывать на `--no-frozen-lockfile` ради удобства локальной отладки; при расхождении manifest/lockfile чинить lockfile через `pnpm install`, а не ослаблять флаг.
 - Секреты только в `.env` (не коммитить). `.env.example` — актуальный список переменных; таблица по назначению — [docs/deployment.md](docs/deployment.md).
 - `apps/api/src/*.ts` — единственный источник кода API; рядом никогда не должно быть tracked `*.js`-дублей (уже устранялись как stale-артефакт, W-03).
 
@@ -71,15 +70,11 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 Референс дизайна и готовых UI-паттернов — [github.com/arhamkhnz/next-shadcn-admin-dashboard](https://github.com/arhamkhnz/next-shadcn-admin-dashboard) (живой пример — [next-shadcn-admin-dashboard.vercel.app/dashboard/default](https://next-shadcn-admin-dashboard.vercel.app/dashboard/default)). Целевой стек: Astro как static-оболочка и маршрутизация, React-root для интерактивной страницы или крупного раздела, Tailwind и shadcn/ui. Данные читаются и изменяются через HTTP API во время работы; Next.js-специфичный код не переносится как есть.
 
-Если в референсе есть подходящий блок, его переносят и адаптируют. Если блока нет, экран собирают из совместимых shadcn/ui-примитивов в стиле референса. Новый компонент допустим только при документированном отсутствии подходящего паттерна и не должен создавать параллельную дизайн-систему на ad-hoc CSS. Legacy demo `index.astro` удален: текущие `/` и `/login` — React-root на Tailwind/shadcn с HttpOnly-cookie аутентификацией и честными состояниями; рабочие тарифы, города и заявки еще предстоит подключить к API. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
+Если в референсе есть подходящий блок, его переносят и адаптируют. Если блока нет, экран собирают из совместимых shadcn/ui-примитивов в стиле референса. Новый компонент допустим только при документированном отсутствии подходящего паттерна и не должен создавать параллельную дизайн-систему на ad-hoc CSS. Legacy demo `index.astro` удален: текущие `/`, `/login`, `/tariffs`, `/cities`, `/leads` и `/lead-access/` — React-root на Tailwind/shadcn с HttpOnly-cookie аутентификацией и честными состояниями. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
 
 ### `apps/web`
 
 Публичная витрина `apps/web` визуально и по UX ориентируется на официальный сайт [dom.ru](https://dom.ru) — но это референс структуры/тона/визуального языка, **не код** (сайт не open-source) и **не источник контента для копирования** (`apps/web` — сайт партнёра/дилера, не сам Дом.ру; copyright-ограничения обязательны). При конфликте с [docs/decisions.md](docs/decisions.md) — приоритет у decisions.md. Полный DoD-чек — [docs/web-design-system.md](docs/web-design-system.md).
-
-### `apps/crm`
-
-Отдельного дизайн-правила нет — с 7 сентября 2026 `apps/crm` считается временным прототипом ([docs/decisions.md](docs/decisions.md), раздел 6): функциональность переезжает в раздел «Заявки» `apps/admin` и наследует его правило (next-shadcn-admin-dashboard). Миграция не начата, `apps/crm` пока работает как есть — не расширять его новыми фичами, не относящимися к прямому переносу в `apps/admin`.
 
 ## Документация проекта
 

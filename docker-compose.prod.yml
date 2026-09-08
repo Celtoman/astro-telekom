@@ -77,21 +77,12 @@ services:
         PUBLIC_SITE_ID: ${PUBLIC_SITE_ID:-}
     restart: unless-stopped
 
-  crm:
-    build:
-      context: .
-      dockerfile: apps/crm/Dockerfile
-      args:
-        PUBLIC_API_URL: https://${API_DOMAIN}/api/v1
-    restart: unless-stopped
-
   caddy:
     image: caddy:2.11.4-alpine
     restart: unless-stopped
     environment:
       PUBLIC_DOMAIN: ${PUBLIC_DOMAIN}
       ADMIN_DOMAIN: ${ADMIN_DOMAIN}
-      CRM_DOMAIN: ${CRM_DOMAIN}
       API_DOMAIN: ${API_DOMAIN}
     ports:
       - "80:80"
@@ -103,7 +94,6 @@ services:
     depends_on:
       - web
       - admin
-      - crm
       - api
 
 volumes:

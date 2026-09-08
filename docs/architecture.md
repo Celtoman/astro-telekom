@@ -2,7 +2,7 @@
 
 ## Статус архитектуры
 
-В репозитории реализован локальный прототип статической витрины Дом.ру для Казани. Архитектура уже разделяет public web, backoffice API, CRM и worker, но публичная маршрутизация не использует универсальную модель `Site` и `City`. Поэтому схема ниже отражает реальный код и одновременно обозначает границу будущего расширения.
+В репозитории реализован локальный прототип статической витрины Дом.ру для Казани. Архитектура уже разделяет public web, admin, backoffice API и worker, но публичная маршрутизация не использует универсальную модель `Site` и `City`. Поэтому схема ниже отражает реальный код и одновременно обозначает границу будущего расширения.
 
 ## Стек и приложения
 
@@ -10,7 +10,6 @@
 | --- | --- | --- |
 | `apps/web` | Astro 7, static output | SEO HTML, фиксированные маршруты Казани, форма проверки адреса. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
 | `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, рабочие `/tariffs`, `/cities`, `/leads` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; заявки доступны как реальный master-detail журнал со сменой статуса. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
-| `apps/crm` | Astro 7, static output | **Временный дублирующий прототип** — решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6). Просмотр лидов и смена статуса уже перенесены в `/leads` `apps/admin`; отдельное приложение остается в репозитории только до следующего шага вывода из эксплуатации. |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов и пересборок сайта; также слушает пока не используемую import-очередь. |
 | `prisma` / `packages/database` | Prisma 7 + PostgreSQL | Схема, миграции, seed и сгенерированный клиент. |
@@ -24,9 +23,9 @@
   -> api.domain/api/v1/address-checks, /leads -> API -> PostgreSQL
                                               -> Redis/BullMQ -> worker -> Tarifnik/email
 
-Браузер admin или CRM
-  -> Caddy -> static admin/crm
-  -> HttpOnly admin cookie (legacy CRM: Bearer) -> API -> PostgreSQL
+Браузер admin
+  -> Caddy -> static admin
+  -> HttpOnly admin cookie -> API -> PostgreSQL
 
 Изменение контента в API
   -> PostgreSQL SiteRebuild -> Redis/BullMQ -> worker
@@ -49,7 +48,7 @@
 
 ## Границы модулей
 
-`apps/api` — единственный слой, который пишет доменные данные. Admin, CRM, worker и web не обращаются к PostgreSQL напрямую. `CoverageService`, `DomruContractService`, `LeadDeliveryService` и `NotificationsService` выступают адаптерами внешних интеграций; их URLs и ключи задаются окружением.
+`apps/api` — единственный слой, который пишет доменные данные. Admin, worker и web не обращаются к PostgreSQL напрямую. `CoverageService`, `DomruContractService`, `LeadDeliveryService` и `NotificationsService` выступают адаптерами внешних интеграций; их URLs и ключи задаются окружением. Префикс `/crm/leads` сохранен только в HTTP-контракте API; отдельного CRM-приложения или домена больше нет.
 
 `LeadDeliveryService` и `RebuildQueueService` создают очереди в API, а worker вызывает защищенные внутренние endpoints. Только API пишет в PostgreSQL. Для rebuild worker отдельно вызывает deployment provider и возвращает его success/error в API; `tariff-imports` остается listener без producer и не участвует в текущем import-flow.
 
