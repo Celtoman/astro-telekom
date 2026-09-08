@@ -10,7 +10,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| TD-01 | [#1](https://github.com/Celtoman/astro-telekom/issues/1) 🟢 | Полный тестовый запуск даёт 34/36 — Prisma mock без `lead.findMany` |
+| TD-01 | [#1](https://github.com/Celtoman/astro-telekom/issues/1) ✅ | Test-double синхронизирован с контроллером, добавлены сценарии дубликатов; release gate даёт 38/38 |
 | TD-02 | [#2](https://github.com/Celtoman/astro-telekom/issues/2) 🟢 | HMAC fallback-ссылка в email без серверной проверки подписи |
 | TD-03 | [#3](https://github.com/Celtoman/astro-telekom/issues/3) ✅ | Тихий demo-fallback в `apps/web` build — закрыто 7 сентября 2026, остаток в [#4](https://github.com/Celtoman/astro-telekom/issues/4) |
 

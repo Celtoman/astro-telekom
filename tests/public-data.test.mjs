@@ -1,7 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { publicContent, mergeContent } from '../apps/api/src/content-resolution.ts';
+import contentResolution from '../apps/api/dist/content-resolution.js';
 import { tariffView } from '../apps/web/src/data/tariff-view.ts';
+
+const { publicContent, mergeContent } = contentResolution;
 
 test('private provider and site settings never become inherited public content', () => {
   const provider = { apiKey: 'secret', content: { heading: 'Provider', text: 'Shared' } };

@@ -22,7 +22,7 @@
 | Админка | Частично реализовано | Авторизация токеном в `sessionStorage`, загрузка списков и два сценария XLS-import | Большинство чисел, таблиц и разделов — статический demo UI; для многих кнопок нет соответствующего API. |
 | CRM-интерфейс | Частично реализовано, **временный прототип** | Загрузка списка и карточки заявки, смена статуса через API | Нет отдельного входа, фильтров, пагинации, проверки защищенной fallback-ссылки и полноценного рабочего интерфейса. Решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6): отдельного `apps/crm` не будет, функциональность переезжает в раздел «Заявки» `apps/admin`. Миграция не начата. |
 | SEO и аналитика | Частично реализовано | HTML-first генерация, title/description/canonical/JSON-LD, robots, sitemap, события Метрики | Нет проверок перед публикацией, sitemap не включает `/`, нет Schema.org-профиля сущностей и реальной аналитики. |
-| Тестирование | Частично реализовано | `pnpm lint`, `pnpm db:validate`, `pnpm build`, `pnpm test`; 36 node tests | Полный тестовый запуск имеет 2 известных падения из-за устаревших mock-объектов Prisma. |
+| Тестирование | Частично реализовано | `pnpm lint`, `pnpm db:validate`, `pnpm build`, `pnpm test`; 38/38 node tests проходят | Нет browser/E2E-покрытия и отдельного lint для admin/CRM (TD-18). |
 
 ## Реализованный путь данных
 
@@ -75,8 +75,8 @@
 | `pnpm lint` | Успешно: TypeScript API, Astro web и syntax check worker. У admin и CRM нет lint-скриптов. |
 | `pnpm db:validate` | Успешно: Prisma schema валидна. |
 | `pnpm build` | Успешно с `ALLOW_DEMO_DATA=true` (или поднятым API): API, web, admin, CRM и worker собираются. Без флага и без API `apps/web` build осознанно падает — см. TD-03. |
-| `pnpm test` | 34/36 успешно; два теста лидов падают из-за устаревших mock-объектов. |
-| GitHub Actions CI | `.github/workflows/ci.yml` запускает `pnpm check` на каждый push и pull request в `master`; пока CI красный из-за тех же двух тестов. |
+| `pnpm test` | 38/38 успешно, включая дедупликацию лидов по нормализованному телефону и адресу. |
+| GitHub Actions CI | `.github/workflows/ci.yml` запускает `pnpm check` на каждый push и pull request в `master`; допустимого красного baseline нет. |
 | `docker compose -f docker-compose.prod.yml config --no-interpolate` | YAML и структура Compose читаются. Это не запуск контейнеров и не доказательство готовности production. |
 
 Все подтвержденные проблемы, их влияние и рекомендуемый порядок исправления перечислены в [техническом долге](technical-debt.md). Последовательность исполнения — в [плане реализации](plans/2026-09-07-platform-stabilization-and-mvp.md).
