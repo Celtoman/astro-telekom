@@ -46,6 +46,13 @@ export interface ImportCandidate {
   status: 'PUBLISHED';
 }
 
+export interface ImportDiff {
+  created: number;
+  updated: number;
+  deleted: number;
+  deletedTariffs: Array<{ id: string; cityId: string; name: string; slug: string }>;
+}
+
 export interface ImportReport {
   fileName: string;
   providerId: string;
@@ -56,6 +63,7 @@ export interface ImportReport {
   warningRows: number;
   issues: ImportIssue[];
   candidates: ImportCandidate[];
+  diff: ImportDiff;
 }
 
 const text = (value: unknown) => value === null || value === undefined ? '' : String(value).trim();
@@ -181,19 +189,46 @@ export class TariffImportService {
       }
     });
 
+    const existingTariffs = await this.prisma.tariff.findMany({
+      where: { providerId },
+      select: { id: true, cityId: true, name: true, slug: true, identityKey: true },
+    });
+    const matchedIds = new Set<string>();
+    let created = 0;
+    let updated = 0;
+    for (const candidate of candidates) {
+      const existing = existingTariffs.find((tariff) => tariff.cityId === candidate.cityId
+        && (tariff.identityKey === candidate.identityKey || tariff.slug === candidate.slug));
+      if (existing) {
+        matchedIds.add(existing.id);
+        updated += 1;
+      } else {
+        created += 1;
+      }
+    }
+    const deletedTariffs = existingTariffs
+      .filter((tariff) => !matchedIds.has(tariff.id))
+      .map(({ id, cityId, name, slug: tariffSlug }) => ({ id, cityId, name, slug: tariffSlug }));
     const errorRows = new Set(issues.filter((issue) => issue.level === 'error').map((issue) => issue.row)).size;
     const warningRows = new Set(issues.filter((issue) => issue.level === 'warning').map((issue) => issue.row)).size;
-    return { fileName, providerId, createdAt: new Date().toISOString(), totalRows: normalizedRows.length, validRows: candidates.length, errorRows, warningRows, issues, candidates };
+    return {
+      fileName, providerId, createdAt: new Date().toISOString(), totalRows: normalizedRows.length,
+      validRows: candidates.length, errorRows, warningRows, issues, candidates,
+      diff: { created, updated, deleted: deletedTariffs.length, deletedTariffs },
+    };
   }
 
-  async applyReport(report: ImportReport, acceptedKeys?: string[]) {
-    const accepted = acceptedKeys ? new Set(acceptedKeys) : null;
-    const rows = accepted ? report.candidates.filter((candidate) => accepted.has(candidate.key)) : report.candidates;
+  async applyReport(report: ImportReport, options: { confirmWarnings?: boolean } = {}, runId?: string) {
     if (report.errorRows > 0) throw new BadRequestException('Нельзя применить импорт с ошибками');
+    if (report.warningRows > 0 && !options.confirmWarnings) {
+      throw new BadRequestException('Перед применением необходимо явно подтвердить предупреждения импорта');
+    }
     return this.prisma.$transaction(async (transaction) => {
+      const existingTariffs = await transaction.tariff.findMany({ where: { providerId: report.providerId } });
+      const matchedIds = new Set<string>();
       let created = 0;
       let updated = 0;
-      for (const candidate of rows) {
+      for (const candidate of report.candidates) {
         const data = {
           providerId: candidate.providerId, cityId: candidate.cityId, name: candidate.name, slug: candidate.slug,
           serviceType: candidate.serviceType, standardPrice: candidate.standardPrice, promoPrice: candidate.promoPrice,
@@ -201,11 +236,24 @@ export class TariffImportService {
           availability: candidate.availability, identityKey: candidate.identityKey, dataSource: candidate.dataSource,
           attributes: candidate.attributes, status: candidate.status,
         } satisfies Prisma.TariffUncheckedCreateInput;
-        const existing = await transaction.tariff.findFirst({ where: { cityId: candidate.cityId, OR: [{ identityKey: candidate.identityKey }, { slug: candidate.slug }] } });
-        if (existing) { await transaction.tariff.update({ where: { id: existing.id }, data }); updated += 1; }
+        const existing = existingTariffs.find((tariff) => tariff.cityId === candidate.cityId
+          && (tariff.identityKey === candidate.identityKey || tariff.slug === candidate.slug));
+        if (existing) {
+          matchedIds.add(existing.id);
+          await transaction.tariff.update({ where: { id: existing.id }, data });
+          updated += 1;
+        }
         else { await transaction.tariff.create({ data }); created += 1; }
       }
-      return { created, updated, skipped: report.candidates.length - rows.length, applied: rows.length };
+      const staleIds = existingTariffs.filter((tariff) => !matchedIds.has(tariff.id)).map((tariff) => tariff.id);
+      if (staleIds.length) await transaction.tariff.deleteMany({ where: { id: { in: staleIds } } });
+      if (runId) {
+        await transaction.tariffImportRun.update({
+          where: { id: runId },
+          data: { status: 'APPLIED', appliedAt: new Date() },
+        });
+      }
+      return { created, updated, deleted: staleIds.length, applied: report.candidates.length };
     });
   }
 }

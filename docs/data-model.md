@@ -19,7 +19,7 @@
 
 `Tariff` хранит provider/city, name, slug, service type, standard/promo price, speed, promo text, connection fee, availability, external/identity keys, source, attributes, seo и publication status. Ограничения: unique `(cityId, slug)` и `(cityId, identityKey)`.
 
-`TariffImportRun` и `CityImportRun` сохраняют метаданные файла, счетчики, JSON report, `VALIDATED`/`APPLIED`/`FAILED` и время apply. Сырые файлы не сохраняются. Нет таблицы tariff history, import line history, version snapshot или rollback.
+`TariffImportRun` и `CityImportRun` сохраняют метаданные файла, счетчики, JSON report, `VALIDATED`/`APPLIED`/`FAILED` и время apply. Tariff report содержит preview diff полного provider snapshot; apply атомарно удаляет отсутствующие в snapshot тарифы. Опциональная связь исторической заявки с удаленным тарифом сбрасывается в `NULL`, сама заявка сохраняется. Сырые файлы не сохраняются. Нет таблицы tariff history, import line history, version snapshot или rollback.
 
 ## Проверки и заявки
 

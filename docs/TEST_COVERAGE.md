@@ -4,7 +4,7 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [CLAUDE.md](../CLAUDE.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 59/59 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита.
+**Baseline: 67/67 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита.
 
 | Файл | Что проверяет |
 | --- | --- |
@@ -21,7 +21,8 @@
 | `tests/rebuild-queue.test.cjs` | Persistent rebuild-flow: дедупликация изменений сайта, BullMQ attempts/backoff, RETRYING/FAILED без ложной публикации, success только по финальному provider status, следующая ревизия при изменении во время сборки и защита от stale job/result. |
 | `tests/rebuild-worker.test.mjs` | Worker-контракт: прямой вызов deployment provider, сохранение финального success через API, сохранение/повтор HTTP-ошибки и отказ считать обычный HTTP 2xx подтвержденной публикацией. |
 | `tests/tariff-identity.test.cjs` | Deterministic identity key тарифа: ручное переименование обновляет ключ и ставит rebuild правильного сайта; повторный импорт находит legacy-тариф по slug вместо создания дубликата. |
-| `tests/tariff-import.test.cjs` | Импорт тарифов: XLSX-парсер читает первый лист и сохраняет пустые ячейки как есть; валидация создаёт согласованный identity key и отдельно выделяет промо-цену; валидация блокирует дублирующиеся business-ключи, невалидные статусы услуг и отсутствующие города; отчёт валидации сообщает о дублирующихся ключах до применения; `apply` создаёт только валидированные строки с учётом `acceptedKeys`. |
+| `tests/tariff-import.test.cjs` | Импорт тарифов: XLSX-парсер, validation diff и валидация; полный provider snapshot создает/обновляет все строки и удаляет отсутствующие атомарно; warnings требуют явного подтверждения, legacy partial apply отклоняется; ошибка записи откатывает пакет; пересборка ставится всем сайтам провайдера, включая deletion-only. |
+| `tests/tariff-slug.test.cjs` | Ручная смена slug опубликованного тарифа атомарно создает опубликованный redirect и ставит rebuild; занятый опубликованной страницей URL и несовместимый существующий redirect блокируют изменение. |
 | `tests/web-build-data.test.mjs` | Три реальные сборки `apps/web`: успешная загрузка fixture через HTTP API и smoke готового `dist` (canonical, H1, реальная цена, robots, sitemap, root URL, отсутствие localhost); обязательный fail-fast без API; demo-данные только при явном `ALLOW_DEMO_DATA=true`. |
 
 ## Что не покрыто тестами (известные пробелы)

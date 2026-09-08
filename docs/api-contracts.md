@@ -52,7 +52,7 @@
 | GET/POST/PATCH | `/admin/tariffs` | Tariff records. ADMIN или TARIFF_MANAGER. |
 | POST | `/admin/tariffs/import` | Старый программный import массива items. |
 | POST | `/admin/tariffs/import/validate` | XLS/XLSX или rows -> сохраненный validation report. |
-| POST | `/admin/tariffs/import/apply` | Применяет `runId`; опциональный `acceptedKeys` разрешает partial apply. |
+| POST | `/admin/tariffs/import/apply` | Атомарно применяет полный snapshot по `runId`; при warnings требует `confirmWarnings: true`. |
 | GET | `/admin/tariffs/imports`, `/admin/tariffs/imports/:id` | История и полный report import. |
 | POST | `/admin/cities/import/validate` | XLS/XLSX или rows -> city import report. |
 | POST | `/admin/cities/import/apply` | Применяет run с optional per-row `create`/`update`/`skip`. |
@@ -67,11 +67,11 @@
 
 ### Import contracts
 
-Тарифный import читает первый лист и требует колонки `subekt_rf`, `gorod_name`, `gorod_slug`, `tarif_type`, `post_title`, `post_title_lat`, `nazvanie_tarifa`, `skorost_interneta`, `stoimost_tarifa`. Поддерживаются только типы `Интернет` и `Интернет+ТВ`. Отчет валидирует slug, города выбранного provider, дубли, скорость, цену, статусы `-1/0/1` и booleans `0/1`.
+Тарифный import читает первый лист и требует колонки `subekt_rf`, `gorod_name`, `gorod_slug`, `tarif_type`, `post_title`, `post_title_lat`, `nazvanie_tarifa`, `skorost_interneta`, `stoimost_tarifa`. Поддерживаются только типы `Интернет` и `Интернет+ТВ`. Отчет валидирует slug, города выбранного provider, дубли, скорость, цену, статусы `-1/0/1` и booleans `0/1`, а также возвращает preview diff с количеством создаваемых, обновляемых и удаляемых тарифов.
 
 Городской import принимает русские и латинские aliases для субъекта, грамматических форм, slug, legacy URL и офиса. Новый город получает шесть `DRAFT` страниц: home, internet, internet-tv, tv, address-check и faq.
 
-Текущая реализация не удаляет/архивирует тарифы, которых нет в import report, и не создает redirects при смене slug. Это не нужно обходить на стороне клиента: продуктовую семантику необходимо утвердить и реализовать на сервере.
+Apply трактует файл как полный snapshot провайдера: partial apply через `acceptedKeys` отклоняется, все строки применяются в одной транзакции, отсутствующие в новом файле тарифы удаляются, а статус import run меняется вместе с данными. После commit пересборка ставится для всех сайтов провайдера, включая сайты только с удалениями. Ручная смена city/slug тарифа атомарно создает redirect со старого URL; занятый опубликованной страницей URL или несовместимый существующий redirect возвращает conflict. Публичное обслуживание записей `Redirect` остается отдельной задачей TD-07.
 
 ## CRM и internal routes
 

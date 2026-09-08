@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
@@ -107,27 +107,23 @@ export class AdminTariffsController {
   }
 
   @Post('import/apply')
-  async applyImport(@Body() body: { runId?: string; acceptedKeys?: string[] }) {
+  async applyImport(@Body() body: { runId?: string; confirmWarnings?: boolean; acceptedKeys?: unknown }) {
     if (!body.runId) throw new BadRequestException('runId обязателен');
+    if (body.acceptedKeys !== undefined) throw new BadRequestException('Частичное применение acceptedKeys больше не поддерживается: импорт применяется целиком');
     const run = await this.prisma.tariffImportRun.findUnique({ where: { id: body.runId } });
     if (!run) throw new BadRequestException('Отчет импорта не найден');
     if (run.status === 'APPLIED') throw new BadRequestException('Этот импорт уже применен');
     const report = run.report as unknown as ImportReport;
+    let result;
     try {
-      const result = await this.imports.applyReport(report, body.acceptedKeys);
-      await this.prisma.tariffImportRun.update({ where: { id: run.id }, data: { status: 'APPLIED', appliedAt: new Date() } });
-      const cities = await this.prisma.city.findMany({
-        where: { id: { in: [...new Set(report.candidates.map((candidate) => candidate.cityId))] } },
-        select: { id: true, siteId: true },
-      });
-      for (const siteId of new Set(cities.map((city) => city.siteId))) {
-        await this.rebuild.enqueue({ entity: 'tariff-import', id: run.id, siteId });
-      }
-      return { runId: run.id, ...result };
+      result = await this.imports.applyReport(report, { confirmWarnings: body.confirmWarnings === true }, run.id);
     } catch (error) {
       await this.prisma.tariffImportRun.update({ where: { id: run.id }, data: { status: 'FAILED' } });
       throw error;
     }
+    const sites = await this.prisma.site.findMany({ where: { providerId: report.providerId }, select: { id: true } });
+    for (const site of sites) await this.rebuild.enqueue({ entity: 'tariff-import', id: run.id, siteId: site.id });
+    return { runId: run.id, ...result };
   }
 
   @Get('imports')
@@ -151,6 +147,45 @@ export class AdminTariffsController {
       body.name || existing.name,
       body.serviceType || existing.serviceType as ServiceType,
     );
+    const nextCityId = body.cityId || existing.cityId;
+    const nextSlug = body.slug || existing.slug;
+    if (nextCityId !== existing.cityId || nextSlug !== existing.slug) {
+      const result = await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+        const oldCity = await transaction.city.findUnique({ where: { id: existing.cityId }, select: { id: true, slug: true, siteId: true } });
+        const newCity = nextCityId === existing.cityId
+          ? oldCity
+          : await transaction.city.findUnique({ where: { id: nextCityId }, select: { id: true, slug: true, siteId: true } });
+        if (!oldCity || !newCity) throw new BadRequestException('Город тарифа не найден');
+        if (oldCity.siteId !== newCity.siteId) throw new BadRequestException('Нельзя перенести тариф между сайтами через изменение URL');
+
+        const sourcePath = `/${oldCity.slug}/${existing.slug}/`;
+        const targetPath = `/${newCity.slug}/${nextSlug}/`;
+        const occupiedPage = await transaction.page.findFirst({
+          where: { cityId: oldCity.id, slug: existing.slug, status: 'PUBLISHED' },
+          select: { id: true },
+        });
+        if (occupiedPage) throw new ConflictException(`URL ${sourcePath} занят опубликованной страницей`);
+        const redirect = await transaction.redirect.findUnique({
+          where: { siteId_sourcePath: { siteId: oldCity.siteId, sourcePath } },
+        });
+        if (redirect && redirect.targetPath !== targetPath) {
+          throw new ConflictException(`Для URL ${sourcePath} уже существует несовместимый редирект`);
+        }
+
+        const tariff = await transaction.tariff.update({ where: { id }, data: { ...body, identityKey } });
+        const redirectStatus = tariff.status === 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT';
+        if (redirect) {
+          await transaction.redirect.update({ where: { id: redirect.id }, data: { targetPath, status: redirectStatus } });
+        } else {
+          await transaction.redirect.create({
+            data: { siteId: oldCity.siteId, cityId: oldCity.id, sourcePath, targetPath, status: redirectStatus },
+          });
+        }
+        return { tariff, siteId: newCity.siteId };
+      });
+      await this.rebuild.enqueue({ entity: 'tariff', id: result.tariff.id, siteId: result.siteId });
+      return result.tariff;
+    }
     const tariff = await this.prisma.tariff.update({ where: { id }, data: { ...body, identityKey } });
     await this.rebuild.enqueue({ entity: 'tariff', id: tariff.id, siteId: await this.siteIdForCity(tariff.cityId) });
     return tariff;
