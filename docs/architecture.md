@@ -9,7 +9,7 @@
 | Зона | Реализация | Назначение |
 | --- | --- | --- |
 | `apps/web` | Astro 7, static output | SEO HTML, фиксированные маршруты Казани, форма проверки адреса. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
-| `apps/admin` | Astro 7, static output | Admin UI: реальные загрузки списка и XLS-import, остальное частично demo UI. Дизайн/компоненты жёстко зафиксированы на next-shadcn-admin-dashboard — [docs/admin-design-system.md](admin-design-system.md); ни React, ни Tailwind ещё не подключены. |
+| `apps/admin` | Astro 7, static output | Admin UI: реальные загрузки списка и XLS-import, остальное частично demo UI. Целевой стек — Astro как оболочка и маршрутизация, React-root для интерактивных экранов, Tailwind и shadcn/ui; референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). Ни React, ни Tailwind ещё не подключены. |
 | `apps/crm` | Astro 7, static output | Просмотр лидов и смена операторского статуса через API. **Временный прототип** — решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6): функциональность переносится в раздел «Заявки» `apps/admin`, отдельного приложения в целевой архитектуре не будет. Миграция не начата, `apps/crm` продолжает работать как есть. |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов; также слушает пока не используемые import/rebuild очереди. |

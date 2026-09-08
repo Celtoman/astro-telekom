@@ -69,9 +69,9 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 ### `apps/admin`
 
-Интерфейс `apps/admin` строится **только** на основе решений по дизайну и компонентов из [github.com/arhamkhnz/next-shadcn-admin-dashboard](https://github.com/arhamkhnz/next-shadcn-admin-dashboard) (живой пример — [next-shadcn-admin-dashboard.vercel.app/dashboard/default](https://next-shadcn-admin-dashboard.vercel.app/dashboard/default)). Это буквальное переиспользование кода shadcn/ui-компонентов (обычный для shadcn/ui workflow — копирование в проект), а не только визуальное подражание. Не изобретать новые UI-паттерны на голом CSS, если в референсе есть готовый блок.
+Референс дизайна и готовых UI-паттернов — [github.com/arhamkhnz/next-shadcn-admin-dashboard](https://github.com/arhamkhnz/next-shadcn-admin-dashboard) (живой пример — [next-shadcn-admin-dashboard.vercel.app/dashboard/default](https://next-shadcn-admin-dashboard.vercel.app/dashboard/default)). Целевой стек: Astro как static-оболочка и маршрутизация, React-root для интерактивной страницы или крупного раздела, Tailwind и shadcn/ui. Данные читаются и изменяются через HTTP API во время работы; Next.js-специфичный код не переносится как есть.
 
-Технически это требует React-островов в Astro (`@astrojs/react`) и Tailwind CSS в `apps/admin` — на дату фиксации правила ни то ни другое не подключено. Текущий `apps/admin/src/pages/index.astro` — legacy demo UI (TD-08), написан до этого правила на чистом HTML/CSS/vanilla JS; не расширять его в старом стиле. Правило фиксирует направление будущей работы, миграция — предмет отдельной задачи. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
+Если в референсе есть подходящий блок, его переносят и адаптируют. Если блока нет, экран собирают из совместимых shadcn/ui-примитивов в стиле референса. Новый компонент допустим только при документированном отсутствии подходящего паттерна и не должен создавать параллельную дизайн-систему на ad-hoc CSS. Текущий `apps/admin/src/pages/index.astro` — legacy demo UI (TD-08), написанный на plain HTML/CSS/vanilla JS; не расширять его в старом стиле. Ни React, ни Tailwind пока не подключены. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
 
 ### `apps/web`
 

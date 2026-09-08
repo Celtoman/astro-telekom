@@ -1,6 +1,6 @@
 # Технологическая база
 
-Последняя сверка с `package.json`, `pnpm-lock.yaml`, Dockerfiles и Compose: 7 сентября 2026 года.
+Последняя сверка с `package.json`, `pnpm-lock.yaml`, Dockerfiles, Compose и GitHub Actions: 8 сентября 2026 года.
 
 ## Зафиксированные версии
 
@@ -60,6 +60,6 @@ API создает `lead-deliveries` только при наличии `REDIS_U
 | Schema.org-спецификация Product/FAQ/Organization | Не реализована; выводится только `WebPage`. |
 | Queue для site rebuild и import | Worker слушает очереди, но API их не публикует. |
 | Monitoring, tracing, error tracker | Не подключены. |
-| CI/CD | В репозитории нет CI workflow. |
+| CI/CD | `.github/workflows/ci.yml` запускает `pnpm check` на push и pull request в `master`. Автоматического deployment-пайплайна нет; `.github/workflows/release.yml` только создаёт GitHub Release после push тега `v*`. |
 
 Переходить на другие major-версии или включать экспериментальные возможности Astro/Nest/Prisma можно только с отдельной проверкой compatibility, migration plan и rollback.
