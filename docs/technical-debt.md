@@ -30,10 +30,10 @@
 | TD-23 | [#38](https://github.com/Celtoman/astro-telekom/issues/38) ✅ | Seed использует явный ESM entrypoint сгенерированного Prisma client и снова запускается на Node 22 |
 | TD-24 | [#39](https://github.com/Celtoman/astro-telekom/issues/39) ✅ | City import использует transaction-local maps, bulk page insert и проходит полный пакет 207 строк |
 | TD-25 | [#40](https://github.com/Celtoman/astro-telekom/issues/40) ✅ | Пользовательские сессии отделены от worker-only `/internal/*`, доступных только по сервисному токену |
-| TD-27 | [#42](https://github.com/Celtoman/astro-telekom/issues/42) 🟢 | Импорт тарифов теряет полное описание и счетчики TV-каналов |
-| TD-28 | [#43](https://github.com/Celtoman/astro-telekom/issues/43) 🟢 | Snapshot тарифов содержит 63 строки с legacy city slug |
-| TD-30 | [#45](https://github.com/Celtoman/astro-telekom/issues/45) 🟢 | Реальный full-snapshot превышает стандартный transaction timeout Prisma |
-| TD-31 | [#46](https://github.com/Celtoman/astro-telekom/issues/46) 🟢 | Preview не видит city+slug коллизии между разными типами тарифа |
+| TD-27 | [#42](https://github.com/Celtoman/astro-telekom/issues/42) ✅ | Импорт тарифов сохраняет полное описание и нормализованные счетчики TV-каналов |
+| TD-28 | [#43](https://github.com/Celtoman/astro-telekom/issues/43) ✅ | Snapshot тарифов использует канонические slug из справочника 207 городов |
+| TD-30 | [#45](https://github.com/Celtoman/astro-telekom/issues/45) ✅ | Full-snapshot из 3 859 тарифов атомарно применяется с явным transaction timeout |
+| TD-31 | [#46](https://github.com/Celtoman/astro-telekom/issues/46) ✅ | Preview блокирует city+slug коллизии, генератор разводит допустимые пары типов |
 
 ## P2
 
@@ -55,7 +55,7 @@
 | TD-19 | [#21](https://github.com/Celtoman/astro-telekom/issues/21) ✅ | Устаревший tracked JS рядом с TS в `apps/api/src` — закрыто 7 сентября 2026 |
 | TD-20 | [#22](https://github.com/Celtoman/astro-telekom/issues/22) 🟢 | Повторяющаяся нумерация «4» в открытых вопросах `decisions.md` |
 | TD-26 | [#41](https://github.com/Celtoman/astro-telekom/issues/41) 🟢 | GitHub Actions используют устаревающий Node.js 20 runtime action |
-| TD-29 | [#44](https://github.com/Celtoman/astro-telekom/issues/44) 🟢 | README содержит устаревшее число тестов release gate |
+| TD-29 | [#44](https://github.com/Celtoman/astro-telekom/issues/44) ✅ | README и живой документ покрытия синхронизированы с baseline 82/82 |
 
 ## Невыполненные, но согласованные возможности
 
