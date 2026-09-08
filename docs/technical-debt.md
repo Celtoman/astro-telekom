@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | TD-01 | [#1](https://github.com/Celtoman/astro-telekom/issues/1) ✅ | Test-double синхронизирован с контроллером, добавлены сценарии дубликатов; release gate зеленый |
 | TD-02 | [#2](https://github.com/Celtoman/astro-telekom/issues/2) ✅ | HMAC-ссылка заменена серверным одноразовым token с TTL, отзывом и admin UI |
-| TD-03 | [#3](https://github.com/Celtoman/astro-telekom/issues/3) ✅ | Тихий demo-fallback в `apps/web` build — закрыто 7 сентября 2026, остаток в [#4](https://github.com/Celtoman/astro-telekom/issues/4) |
+| TD-03 | [#3](https://github.com/Celtoman/astro-telekom/issues/3) ✅ | Demo-data требуют явного флага; policy и final HTML защищены тестами [#4](https://github.com/Celtoman/astro-telekom/issues/4) |
 
 ## P1
 
@@ -36,7 +36,7 @@
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) 🟢 | `PageBlock` поддерживает только 3 типа блоков из библиотеки |
 | TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) 🟢 | Нет `ValidationPipe`, rate limiting, anti-abuse, PII retention |
 | TD-15 | [#17](https://github.com/Celtoman/astro-telekom/issues/17) 🟢 | Email-уведомление о лиде — fire-and-forget без журнала |
-| TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) 🟢 | `sitemap.xml` без корневой `/`, нет pre-publication SEO проверки |
+| TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) 🟢 | Root URL и базовый HTML smoke добавлены; остаются обязательный production origin и sitemap из опубликованных сущностей |
 | TD-17 | [#19](https://github.com/Celtoman/astro-telekom/issues/19) 🟢 | Миграции/seed вручную, health не проверяет БД |
 
 ## P3

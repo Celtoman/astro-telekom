@@ -35,7 +35,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 У `crm` нет `lint`-скрипта (остаток TD-18) — `pnpm lint` его не проверяет. `admin` с 8 сентября 2026 входит в общий Astro check.
 
-**Baseline тестов: 44/44.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Prisma test-double в `tests/lead-check.test.cjs` синхронизирован с текущим `PublicLeadsController`, а `tests/lead-access.test.cjs` проверяет одноразовый fallback-доступ. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+**Baseline тестов: 47/47.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Prisma test-double в `tests/lead-check.test.cjs` синхронизирован с текущим `PublicLeadsController`, `tests/lead-access.test.cjs` проверяет одноразовый fallback-доступ, а `tests/web-build-data.test.mjs` — реальные Astro build-policy и final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 

@@ -22,7 +22,7 @@ Release 0 не является production release: тестовый gate зел
 Условия завершения:
 
 1. Все automated checks green в чистом окружении.
-2. Production build блокируется, если API-данные отсутствуют или demo mode включен. — Базовый механизм реализован (`ALLOW_DEMO_DATA`), осталось явно запрещать demo mode во внешних production CI/CD настройках.
+2. Production build блокируется, если API-данные отсутствуют или demo mode включен. — API fail-fast и отдельный явный `ALLOW_DEMO_DATA` покрыты реальными build-тестами; осталось запрещать demo mode во внешних production CI/CD настройках.
 3. Импорт тарифов имеет утвержденную полную семантику и не оставляет устаревшие публичные предложения.
 4. Rebuild job имеет status/retry и подтвержденный результат HTML.
 5. Fallback link безопасно открывает нужную заявку либо удалена из письма.

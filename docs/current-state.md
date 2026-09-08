@@ -21,8 +21,8 @@
 | Фоновые задачи | Частично реализовано | Worker слушает три очереди, API ставит только `lead-deliveries` | Очереди импорта и пересборки не имеют производителя; пересборка сейчас идет прямым webhook без retry. |
 | Админка | Частично реализовано | React/Tailwind/shadcn подключены; `/lead-access/` проверяет одноразовую ссылку через API; legacy index загружает списки и два сценария XLS-import | Большинство чисел, таблиц и разделов legacy index — статический demo UI; для многих кнопок нет соответствующего API. |
 | CRM-интерфейс | Частично реализовано, **временный прототип** | Загрузка списка и карточки заявки, смена статуса через API | Нет отдельного входа, фильтров, пагинации и полноценного рабочего интерфейса. Решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6): отдельного `apps/crm` не будет, функциональность переезжает в раздел «Заявки» `apps/admin`; первый отдельный admin-экран для fallback-доступа уже перенесен. |
-| SEO и аналитика | Частично реализовано | HTML-first генерация, title/description/canonical/JSON-LD, robots, sitemap, события Метрики | Нет проверок перед публикацией, sitemap не включает `/`, нет Schema.org-профиля сущностей и реальной аналитики. |
-| Тестирование | Частично реализовано | `pnpm lint`, `pnpm db:validate`, `pnpm build`, `pnpm test`; 44/44 node tests проходят; admin входит в Astro check | Нет browser/E2E-покрытия и отдельного lint для CRM (остаток TD-18). |
+| SEO и аналитика | Частично реализовано | HTML-first генерация, title/description/canonical/JSON-LD, robots, sitemap с корневым URL, build-time smoke готового HTML, события Метрики | `PUBLIC_SITE_URL` пока не обязателен на уровне build, sitemap остается привязан к фиксированной Казани, нет Schema.org-профиля сущностей и реальной аналитики. |
+| Тестирование | Частично реализовано | `pnpm lint`, `pnpm db:validate`, `pnpm build`, `pnpm test`; 47/47 node tests проходят; admin входит в Astro check; public build-policy проверяется реальными сборками | Нет browser/E2E-покрытия и отдельного lint для CRM (остаток TD-18). |
 
 ## Реализованный путь данных
 
@@ -75,7 +75,7 @@
 | `pnpm lint` | Успешно: TypeScript API, Astro web/admin и syntax check worker. У CRM пока нет lint-скрипта. |
 | `pnpm db:validate` | Успешно: Prisma schema валидна. |
 | `pnpm build` | Успешно с `ALLOW_DEMO_DATA=true` (или поднятым API): API, web, admin, CRM и worker собираются. Без флага и без API `apps/web` build осознанно падает — см. TD-03. |
-| `pnpm test` | 44/44 успешно, включая дедупликацию лидов и безопасность одноразового fallback-доступа. |
+| `pnpm test` | 47/47 успешно, включая дедупликацию, одноразовый fallback-доступ и три сценария реальной Astro-сборки. |
 | GitHub Actions CI | `.github/workflows/ci.yml` запускает `pnpm check` на каждый push и pull request в `master`; допустимого красного baseline нет. |
 | `docker compose -f docker-compose.prod.yml config --no-interpolate` | YAML и структура Compose читаются. Это не запуск контейнеров и не доказательство готовности production. |
 

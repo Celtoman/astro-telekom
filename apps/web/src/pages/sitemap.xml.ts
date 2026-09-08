@@ -4,6 +4,7 @@ export async function GET({ site }: { site?: URL }) {
   const { tariffs } = await loadKazanData();
   const baseUrl = site?.origin || 'http://localhost:4321';
   const paths = [
+    '/',
     '/kazan/',
     '/kazan/internet/',
     '/kazan/internet-tv/',
