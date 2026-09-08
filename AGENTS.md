@@ -35,7 +35,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 У `crm` нет `lint`-скрипта (остаток TD-18) — `pnpm lint` его не проверяет. `admin` с 8 сентября 2026 входит в общий Astro check.
 
-**Baseline тестов: 85/85.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют cookie-сессию admin, экраны тарифов и городов, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+**Baseline тестов: 89/89.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют cookie-сессию и CORS admin, экраны тарифов, городов и заявок, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 
@@ -71,7 +71,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 Референс дизайна и готовых UI-паттернов — [github.com/arhamkhnz/next-shadcn-admin-dashboard](https://github.com/arhamkhnz/next-shadcn-admin-dashboard) (живой пример — [next-shadcn-admin-dashboard.vercel.app/dashboard/default](https://next-shadcn-admin-dashboard.vercel.app/dashboard/default)). Целевой стек: Astro как static-оболочка и маршрутизация, React-root для интерактивной страницы или крупного раздела, Tailwind и shadcn/ui. Данные читаются и изменяются через HTTP API во время работы; Next.js-специфичный код не переносится как есть.
 
-Если в референсе есть подходящий блок, его переносят и адаптируют. Если блока нет, экран собирают из совместимых shadcn/ui-примитивов в стиле референса. Новый компонент допустим только при документированном отсутствии подходящего паттерна и не должен создавать параллельную дизайн-систему на ad-hoc CSS. Legacy demo `index.astro` удален: текущие `/`, `/login`, `/tariffs` и `/cities` — React-root на Tailwind/shadcn с HttpOnly-cookie аутентификацией и честными состояниями; из основных разделов еще предстоит подключить к API только заявки. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
+Если в референсе есть подходящий блок, его переносят и адаптируют. Если блока нет, экран собирают из совместимых shadcn/ui-примитивов в стиле референса. Новый компонент допустим только при документированном отсутствии подходящего паттерна и не должен создавать параллельную дизайн-систему на ad-hoc CSS. Legacy demo `index.astro` удален: текущие `/`, `/login`, `/tariffs`, `/cities`, `/leads` и `/lead-access/` — React-root на Tailwind/shadcn с HttpOnly-cookie аутентификацией и честными состояниями. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
 
 ### `apps/web`
 
@@ -79,7 +79,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 ### `apps/crm`
 
-Отдельного дизайн-правила нет — с 7 сентября 2026 `apps/crm` считается временным прототипом ([docs/decisions.md](docs/decisions.md), раздел 6): функциональность переезжает в раздел «Заявки» `apps/admin` и наследует его правило (next-shadcn-admin-dashboard). Миграция не начата, `apps/crm` пока работает как есть — не расширять его новыми фичами, не относящимися к прямому переносу в `apps/admin`.
+Отдельного дизайн-правила нет — с 7 сентября 2026 `apps/crm` считается временным прототипом ([docs/decisions.md](docs/decisions.md), раздел 6). Его функциональность уже заменена разделом `/leads` в `apps/admin`; старое приложение пока остается в репозитории только до отдельного шага вывода из эксплуатации. Не расширять его новыми фичами.
 
 ## Документация проекта
 

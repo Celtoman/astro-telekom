@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import fastifyCookie from '@fastify/cookie';
 import { AppModule } from './module';
+import { ADMIN_CORS_METHODS } from './cors-options';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -17,6 +18,7 @@ async function bootstrap() {
       .split(',')
       .map((origin) => origin.trim())
       .filter(Boolean),
+    methods: ADMIN_CORS_METHODS,
     credentials: true,
   });
   await app.listen(process.env.PORT ? Number(process.env.PORT) : 3000, '0.0.0.0');

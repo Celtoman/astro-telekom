@@ -2,7 +2,7 @@
 
 Этот документ описывает текущую Compose-конфигурацию. Production deployment не выполнялся и не верифицировался; инструкция не является подтверждением готового боевого контура.
 
-`CRM` ниже — временный прототип: решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6) переносит его функциональность в раздел «Заявки» `apps/admin`, отдельного сервиса в целевой архитектуре не будет. Миграция не начата — `CRM` продолжает деплоиться как есть, ниже описана фактическая текущая конфигурация, а не целевая.
+`CRM` ниже — временный прототип: решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6) переносит его функциональность в раздел «Заявки» `apps/admin`, отдельного сервиса в целевой архитектуре не будет. Функциональная замена уже работает на `/leads`, но старый `CRM` пока продолжает деплоиться до отдельного шага вывода из эксплуатации; ниже описана фактическая текущая конфигурация, а не целевая.
 
 ## Контуры
 
@@ -31,7 +31,7 @@ docker compose -f docker-compose.prod.yml exec api npx prisma migrate deploy --c
 docker compose -f docker-compose.prod.yml exec api node /app/dist/seed.js
 ```
 
-После seed проверить пользовательский login и public city data. Browser login использует credentialed CORS и HttpOnly cookie: `ADMIN_URL` должен входить в `CORS_ORIGINS`; в `NODE_ENV=production` cookie имеет `Secure` и требует HTTPS. В текущем Compose миграции и seed не запускаются автоматически. API health endpoint проверяет только HTTP process, а не доступность PostgreSQL или актуальность schema; нельзя считать `healthy` доказательством готовности данных.
+После seed проверить пользовательский login и public city data. Browser login использует credentialed CORS и HttpOnly cookie: `ADMIN_URL` должен входить в `CORS_ORIGINS`; API явно разрешает browser-методы `GET`, `HEAD`, `POST`, `PATCH`, `DELETE`, `OPTIONS`; в `NODE_ENV=production` cookie имеет `Secure` и требует HTTPS. В текущем Compose миграции и seed не запускаются автоматически. API health endpoint проверяет только HTTP process, а не доступность PostgreSQL или актуальность schema; нельзя считать `healthy` доказательством готовности данных.
 
 Для первоначальной загрузки географии после запуска API выполнить `pnpm cities:import`, проверить счетчики validation report и затем `pnpm cities:import -- --apply`. Команда пишет только через административный API и приводит статусы к инварианту: Казань `PUBLISHED`, остальные города `DRAFT`. Исходник и детали находятся в [data/imports/README.md](../data/imports/README.md).
 

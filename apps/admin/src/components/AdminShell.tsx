@@ -32,7 +32,7 @@ export function AdminShell({ apiUrl, user, active, children }: {
           <Button className="justify-start" variant={navVariant("overview")} asChild><a href="/"><Home data-icon="inline-start" />Обзор</a></Button>
           <Button className="justify-start" variant={navVariant("tariffs")} asChild><a href="/tariffs"><PackageOpen data-icon="inline-start" />Тарифы</a></Button>
           <Button className="justify-start" variant={navVariant("cities")} asChild><a href="/cities"><Building2 data-icon="inline-start" />Города</a></Button>
-          <Button className="justify-start" variant={navVariant("leads")} disabled><Inbox data-icon="inline-start" />Заявки</Button>
+          <Button className="justify-start" variant={navVariant("leads")} asChild><a href="/leads"><Inbox data-icon="inline-start" />Заявки</a></Button>
         </nav>
       </aside>
       <main className="min-w-0">

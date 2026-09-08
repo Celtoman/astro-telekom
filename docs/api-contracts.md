@@ -5,6 +5,7 @@
 ## Общие правила
 
 - API работает на NestJS/Fastify и принимает JSON; server body limit — 35 MB.
+- Browser CORS использует credentialed requests для `ADMIN_URL` и явно разрешает методы `GET`, `HEAD`, `POST`, `PATCH`, `DELETE`, `OPTIONS`. Не полагаться на default methods Fastify CORS: без явного списка browser preflight блокирует существующие admin mutation routes.
 - `POST /auth/login` создает 12-часовую сессию и возвращает только expiry и пользователя; raw token передается браузеру исключительно в `HttpOnly`, `SameSite=Strict` cookie `admin_session`. В PostgreSQL хранится SHA-256 hash.
 - Защищенные административные маршруты принимают cookie-сессию или совместимый `Authorization: Bearer <token>`. `x-admin-token`, совпадающий с `ADMIN_API_TOKEN`, предназначен для машинного сценария; `/internal/*` принимает только его и отклоняет пользовательские сессии.
 - У пользовательского доступа один уровень — администратор. Любой активный пользователь с действующей сессией имеет одинаковый полный доступ ко всем административным и CRM routes; ролевой модели нет.
@@ -88,7 +89,7 @@ Apply трактует файл как полный snapshot провайдер�
 | POST | `/crm/leads/:id/revoke-fallback-access` | Отзывает все еще активные одноразовые fallback tokens заявки. Защищен CRM guard. |
 | POST | `/internal/lead-deliveries/:id` | Worker-only handler очереди. Защищен тем же guard. |
 
-`/crm/leads` сейчас возвращает PII без серверной пагинации и фильтрации. Admin/CRM UI должны использовать этот endpoint только в доверенном контуре после полноценного login-flow.
+`/crm/leads` сейчас возвращает PII без серверной пагинации и фильтрации. Admin `/leads` использует endpoint только после проверки HttpOnly-cookie сессии и фильтрует полученный список в браузере; для большого объема нужна отдельная серверная пагинация.
 
 ## Отсутствующие routes
 

@@ -9,8 +9,8 @@
 | Зона | Реализация | Назначение |
 | --- | --- | --- |
 | `apps/web` | Astro 7, static output | SEO HTML, фиксированные маршруты Казани, форма проверки адреса. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
-| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, рабочие `/tariffs`, `/cities` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; в новый shell еще не перенесен раздел заявок. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
-| `apps/crm` | Astro 7, static output | Просмотр лидов и смена операторского статуса через API. **Временный прототип** — решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6): функциональность переносится в раздел «Заявки» `apps/admin`, отдельного приложения в целевой архитектуре не будет. Миграция не начата, `apps/crm` продолжает работать как есть. |
+| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, рабочие `/tariffs`, `/cities`, `/leads` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; заявки доступны как реальный master-detail журнал со сменой статуса. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
+| `apps/crm` | Astro 7, static output | **Временный дублирующий прототип** — решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6). Просмотр лидов и смена статуса уже перенесены в `/leads` `apps/admin`; отдельное приложение остается в репозитории только до следующего шага вывода из эксплуатации. |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов и пересборок сайта; также слушает пока не используемую import-очередь. |
 | `prisma` / `packages/database` | Prisma 7 + PostgreSQL | Схема, миграции, seed и сгенерированный клиент. |

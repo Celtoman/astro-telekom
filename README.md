@@ -22,7 +22,7 @@
 
 ```text
 apps/web        Статический Astro-сайт, сейчас маршруты Казани
-apps/admin      Static Astro + React/Tailwind/shadcn: HttpOnly-cookie login-shell и fallback-доступ
+apps/admin      Static Astro + React/Tailwind/shadcn: login-shell, тарифы, города, заявки и fallback-доступ
 apps/crm        Статический Astro-журнал заявок с подключением к API
 apps/api        NestJS + Fastify API и бизнес-правила
 services/worker BullMQ workers для импорта, пересборки и доставки заявок
@@ -85,7 +85,7 @@ pnpm test
 
 `apps/web` собирает публичные страницы Казани из данных, полученных от API во время `astro build`. Если API недоступен, сборка осознанно падает с ненулевым кодом и указанием причины — это защита от публикации недостоверного контента (см. [технический долг](docs/technical-debt.md), TD-03). `ALLOW_DEMO_DATA=true` явно разрешает демонстрационные данные для локальной сборки без поднятого API.
 
-На дату документации release gate зеленый: `pnpm test` выполняет 85 тестов без падений. Актуальный состав сценариев, включая экраны тарифов и городов в админке, канонический справочник, full-snapshot импорт и реальные сборки public web, перечислен в [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md).
+На дату документации release gate зеленый: `pnpm test` выполняет 89 тестов без падений. Актуальный состав сценариев, включая экраны тарифов, городов и заявок в админке, browser CORS, канонический справочник, full-snapshot импорт и реальные сборки public web, перечислен в [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md).
 
 ## Версионирование
 
