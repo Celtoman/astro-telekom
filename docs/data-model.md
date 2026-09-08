@@ -1,13 +1,13 @@
 # Модель данных текущего прототипа
 
-Источник правды: `prisma/schema.prisma` и девять применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
+Источник правды: `prisma/schema.prisma` и десять применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
 
 ## Сущности контента и географии
 
 | Сущность | Реальные ключевые поля | Связи и статус |
 | --- | --- | --- |
 | `Provider` | `name`, unique `slug`, `legalData`, `settings` | Имеет sites и tariffs. |
-| `Site` | `providerId`, `name`, unique `slug`, `domain`, `settings`, `status` | Имеет regions, cities, pages, leads, checks, redirects, city imports. |
+| `Site` | `providerId`, `name`, unique `slug`, `domain`, `settings`, `status` | Имеет regions, cities, pages, leads, checks, redirects, city imports и rebuild status. |
 | `Region` | `siteId`, `name`, `slug`, `phone`, `content` | Unique `(siteId, slug)`, содержит cities. |
 | `City` | site/region, names in three cases, legacy/office fields, `status`, `phone`, `seo`, `content` | Unique `(siteId, slug)`, имеет pages, tariffs, leads, checks, redirects. |
 | `Page` | site/city, `type`, `title`, `slug`, `status`, `seo`, `content` | Unique `(cityId, slug)`, имеет ordered blocks. |
@@ -39,6 +39,8 @@
 `User` содержит email, `passwordHash`, name, role, active и timestamps. `Session` хранит не raw token, а его SHA-256 hash и expiry. При reset password или deactivate API удаляет sessions пользователя. `LeadAccessToken` также хранит только hash: raw token существует лишь в одноразовой email-ссылке и не возвращается административными CRM routes.
 
 `Redirect` уже есть в схеме: site/city, source/target path, status, hits и timestamps. В текущем коде нет controller, routing или hit tracking, поэтому наличие таблицы не означает работу 301.
+
+`SiteRebuild` — одна актуальная outbox/status-запись на `dedupeKey` сайта. Она хранит affected paths, последнюю причину, `requestedRevision`, `processingRevision`, `publishedRevision`, число попыток, ошибку и финальный ответ deployment provider. Ревизия считается опубликованной только при статусе `SUCCEEDED`; новая мутация во время активной сборки увеличивает requested revision и создает следующий job после завершения текущего.
 
 ## Реальное наследование
 

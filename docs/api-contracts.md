@@ -57,8 +57,13 @@
 | POST | `/admin/cities/import/validate` | XLS/XLSX или rows -> city import report. |
 | POST | `/admin/cities/import/apply` | Применяет run с optional per-row `create`/`update`/`skip`. |
 | GET | `/admin/cities/imports`, `/admin/cities/imports/:id` | История и полный report city import. |
+| GET | `/admin/rebuilds`, `/admin/rebuilds/:id` | Persistent статус пересборки; список можно фильтровать по `siteId`. |
+| POST | `/internal/site-rebuilds/:id/start` | Worker фиксирует начало попытки и получает payload/revision; только сервисный `x-admin-token`. |
+| POST | `/internal/site-rebuilds/:id/result` | Worker сохраняет финальный provider result или ошибку попытки; только сервисный `x-admin-token`. |
 
-CRUD routes вызывают `REBUILD_WEBHOOK_URL` best-effort, если он задан. Ответ CRUD не означает, что static web уже пересобран и опубликован.
+После успешной мутации content/city/tariff CRUD routes дожидаются сохранения `SiteRebuild` и постановки job, если доступен Redis. Ответ CRUD не означает, что static web уже пересобран: публикация подтверждена только когда `publishedRevision === requestedRevision` и статус равен `SUCCEEDED`.
+
+`SiteRebuild` дедуплицируется по сайту; `affectedPaths` сейчас всегда `["/*"]`, потому что пересобирается весь static artifact. BullMQ делает до трех попыток с exponential backoff 30 секунд. Deployment webhook получает `rebuildId`, `siteId`, `dedupeKey`, `affectedPaths`, `revision` и idempotency header `<rebuildId>:<revision>`; provider обязан дедуплицировать ключ и вернуть финальный JSON `{ "status": "SUCCEEDED", "deploymentId"?: "...", "url"?: "..." }`. HTTP 2xx без финального статуса считается ошибкой.
 
 ### Import contracts
 

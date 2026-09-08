@@ -29,13 +29,17 @@ export class AdminCitiesController {
   }
 
   @Post()
-  create(@Body() body: CityBody) {
-    return this.prisma.city.create({ data: body }).then((city: any) => { void this.rebuild.enqueue({ entity: 'city', id: city.id, siteId: city.siteId }); return city; });
+  async create(@Body() body: CityBody) {
+    const city = await this.prisma.city.create({ data: body });
+    await this.rebuild.enqueue({ entity: 'city', id: city.id, siteId: city.siteId });
+    return city;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body: Partial<CityBody>) {
-    return this.prisma.city.update({ where: { id }, data: body }).then((city: any) => { void this.rebuild.enqueue({ entity: 'city', id: city.id, siteId: city.siteId }); return city; });
+  async update(@Param('id') id: string, @Body() body: Partial<CityBody>) {
+    const city = await this.prisma.city.update({ where: { id }, data: body });
+    await this.rebuild.enqueue({ entity: 'city', id: city.id, siteId: city.siteId });
+    return city;
   }
 
   @Post('import/validate')
@@ -63,6 +67,7 @@ export class AdminCitiesController {
     try {
       const result = await this.imports.applyReport(report, body.actions);
       await this.prisma.cityImportRun.update({ where: { id: run.id }, data: { status: 'APPLIED', appliedAt: new Date() } });
+      await this.rebuild.enqueue({ entity: 'city-import', id: run.id, siteId: run.siteId });
       return { runId: run.id, ...result };
     } catch (error) {
       await this.prisma.cityImportRun.update({ where: { id: run.id }, data: { status: 'FAILED' } });

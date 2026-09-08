@@ -44,15 +44,21 @@ export class AdminTariffsController {
     return `${cityId}:${normalizedName}:${serviceType.toLowerCase()}`;
   }
 
+  private async siteIdForCity(cityId: string) {
+    return (await this.prisma.city.findUnique({ where: { id: cityId }, select: { siteId: true } }))?.siteId;
+  }
+
   @Get()
   list() {
     return this.prisma.tariff.findMany({ orderBy: { updatedAt: 'desc' }, include: { city: true, provider: { select: { id: true, name: true, slug: true } } } });
   }
 
   @Post()
-  create(@Body() body: TariffBody) {
+  async create(@Body() body: TariffBody) {
     const data = { ...body, identityKey: body.identityKey || this.identityKey(body.cityId, body.name, body.serviceType) };
-    return this.prisma.tariff.create({ data }).then((tariff: any) => { void this.rebuild.enqueue({ entity: 'tariff', id: tariff.id, siteId: undefined }); return tariff; });
+    const tariff = await this.prisma.tariff.create({ data });
+    await this.rebuild.enqueue({ entity: 'tariff', id: tariff.id, siteId: await this.siteIdForCity(tariff.cityId) });
+    return tariff;
   }
 
   @Post('import')
@@ -72,7 +78,8 @@ export class AdminTariffsController {
       }
       return imported;
     });
-    for (const tariff of tariffs) void this.rebuild.enqueue({ entity: 'tariff', id: tariff.id });
+    const siteId = await this.siteIdForCity(body.cityId);
+    await this.rebuild.enqueue({ entity: 'tariff-import', id: body.cityId, siteId });
     return { imported: tariffs.length, tariffs };
   }
 
@@ -109,7 +116,13 @@ export class AdminTariffsController {
     try {
       const result = await this.imports.applyReport(report, body.acceptedKeys);
       await this.prisma.tariffImportRun.update({ where: { id: run.id }, data: { status: 'APPLIED', appliedAt: new Date() } });
-      for (const candidate of report.candidates) void this.rebuild.enqueue({ entity: 'tariff', id: candidate.identityKey });
+      const cities = await this.prisma.city.findMany({
+        where: { id: { in: [...new Set(report.candidates.map((candidate) => candidate.cityId))] } },
+        select: { id: true, siteId: true },
+      });
+      for (const siteId of new Set(cities.map((city) => city.siteId))) {
+        await this.rebuild.enqueue({ entity: 'tariff-import', id: run.id, siteId });
+      }
       return { runId: run.id, ...result };
     } catch (error) {
       await this.prisma.tariffImportRun.update({ where: { id: run.id }, data: { status: 'FAILED' } });
@@ -139,7 +152,7 @@ export class AdminTariffsController {
       body.serviceType || existing.serviceType as ServiceType,
     );
     const tariff = await this.prisma.tariff.update({ where: { id }, data: { ...body, identityKey } });
-    void this.rebuild.enqueue({ entity: 'tariff', id: tariff.id });
+    await this.rebuild.enqueue({ entity: 'tariff', id: tariff.id, siteId: await this.siteIdForCity(tariff.cityId) });
     return tariff;
   }
 }

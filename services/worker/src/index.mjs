@@ -1,5 +1,6 @@
 import { Worker } from 'bullmq';
 import IORedis from 'ioredis';
+import { runRebuildJob } from './rebuild-job.mjs';
 
 const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
 const apiUrl = process.env.API_URL || 'http://localhost:3000/api/v1';
@@ -30,11 +31,12 @@ const importWorker = new Worker(
 
 const rebuildWorker = new Worker(
   'site-rebuilds',
-  async (job) => {
-    const rebuildUrl = process.env.REBUILD_WEBHOOK_URL;
-    if (!rebuildUrl) return { skipped: true, reason: 'REBUILD_WEBHOOK_URL is not configured' };
-    return jsonRequest(rebuildUrl, { method: 'POST', body: JSON.stringify(job.data) });
-  },
+  (job) => runRebuildJob(job, {
+    apiUrl,
+    adminToken,
+    rebuildUrl: process.env.REBUILD_WEBHOOK_URL,
+    jsonRequest,
+  }),
   { connection, concurrency: 1 },
 );
 

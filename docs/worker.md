@@ -6,7 +6,7 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 | --- | --- | --- | --- |
 | `lead-deliveries` | POST `/api/v1/internal/lead-deliveries/:id` с `ADMIN_API_TOKEN` | `LeadDeliveryService` в API | Работает при настроенном Redis и отдельном worker. |
 | `tariff-imports` | POST `/api/v1/admin/tariffs/import` | В коде не найден | Listener есть, producer нет. Админка вызывает validate/apply напрямую. |
-| `site-rebuilds` | POST `REBUILD_WEBHOOK_URL` | В коде не найден | Listener есть, producer нет. API вызывает webhook напрямую через `RebuildQueueService`. |
+| `site-rebuilds` | POST deployment provider, затем `/api/v1/internal/site-rebuilds/:id/result` | `RebuildQueueService` в API | Persistent job в PostgreSQL, три попытки BullMQ с exponential backoff 30 секунд. |
 
 ## Доставка заявок
 
@@ -21,12 +21,23 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 
 ## Поведение без Redis
 
-Если API запущен без `REDIS_URL`, delivery выполняется в памяти процесса через `queueMicrotask` или `setTimeout`. Это удобно для локального прототипа, но restart API теряет запланированную попытку. Worker без `REDIS_URL` не стартует корректно как полноценный async consumer, поэтому production обязательно должен использовать Redis.
+Если API запущен без `REDIS_URL`, delivery выполняется в памяти процесса через `queueMicrotask` или `setTimeout`. Это удобно для локального прототипа, но restart API теряет запланированную попытку. Rebuild при этом не вызывает deployment напрямую: запись остается в PostgreSQL со статусом `PENDING`. После запуска API с Redis незавершенные rebuild-записи повторно публикуются в BullMQ. Worker без `REDIS_URL` не стартует корректно как полноценный async consumer, поэтому production обязательно должен использовать Redis.
+
+## Пересборка статического сайта
+
+1. После успешной мутации content/city/tariff API синхронно создает или обновляет `SiteRebuild`; ответ CRUD означает, что outbox-запись сохранена, но не что сайт опубликован.
+2. Дедупликация идет по `site:<siteId>`. Поскольку текущий deployment выпускает весь static artifact, `affectedPaths` честно равен `["/*"]`.
+3. API ставит BullMQ job с тремя попытками и exponential backoff 30 секунд. Worker получает через внутренний `/start` endpoint номер ревизии и payload, затем сам вызывает deployment provider.
+4. Worker отправляет в `REBUILD_WEBHOOK_URL` поля `rebuildId`, `siteId`, `dedupeKey`, `affectedPaths`, `revision` и idempotency header `<rebuildId>:<revision>`. Провайдер обязан дедуплицировать этот ключ и вернуть финальный JSON `{ "status": "SUCCEEDED", "deploymentId"?: "...", "url"?: "..." }`. HTTP 2xx без этого статуса считается ошибкой и повторяется; success/error worker сохраняет через внутренний `/result` endpoint.
+5. Статусы `PENDING`, `QUEUED`, `RUNNING`, `RETRYING`, `SUCCEEDED`, `FAILED`, счетчик попыток, ошибка и ответ провайдера сохраняются в PostgreSQL и читаются через `/admin/rebuilds`.
+6. Если новая мутация приходит во время сборки, растет `requestedRevision`; после успеха текущей ревизии API ставит следующую, поэтому более новое изменение не считается опубликованным преждевременно.
+
+Контракт финального синхронного ответа выбран для текущего MVP. Конкретный deployment provider и live-проверка его длительного HTTP-ответа еще не настроены; до этого production-публикация не подтверждена.
 
 ## Остановка процесса
 
 Worker перехватывает `SIGINT`/`SIGTERM`: закрывает все три `Worker` (дожидаясь текущих задач через `close()`) и завершает Redis-соединение перед выходом. Live-проверка под реальной нагрузкой (`docker compose stop worker` с активной задачей) не выполнена — см. [workaround-audit.md](research/2026-09-07-workaround-audit.md), W-08.
 
-## Необходимая доработка
+## Оставшийся неиспользуемый listener
 
-Очередь пересборки должна стать единым механизмом публикации с persistent job, retry и status. Либо неиспользуемые listeners `tariff-imports` и `site-rebuilds` надо удалить до появления producer. План этой работы — Task 4 в [плане реализации](plans/2026-09-07-platform-stabilization-and-mvp.md).
+У `tariff-imports` по-прежнему нет producer: admin вызывает validate/apply через API напрямую. До отдельного решения этот listener не является частью надежного import-процесса.

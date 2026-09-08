@@ -19,7 +19,7 @@
 | ID | Issue | Суть |
 | --- | --- | --- |
 | TD-04 | [#5](https://github.com/Celtoman/astro-telekom/issues/5) 🟢 | Публичные маршруты жёстко привязаны к `domru-kazan`/`/kazan/` |
-| TD-05 | [#6](https://github.com/Celtoman/astro-telekom/issues/6) 🟢 | `RebuildQueueService` — прямой webhook без retry/статуса |
+| TD-05 | [#6](https://github.com/Celtoman/astro-telekom/issues/6) ✅ | Persistent rebuild-job: dedupe, BullMQ retry/backoff, API-статус и финальный результат provider |
 | TD-06 | [#7](https://github.com/Celtoman/astro-telekom/issues/7) 🟢 | Тарифный импорт не снимает с публикации отсутствующие строки |
 | TD-07 | [#8](https://github.com/Celtoman/astro-telekom/issues/8) 🟢 | Модель `Redirect` без controller/routing/управления |
 | TD-08 | [#9](https://github.com/Celtoman/astro-telekom/issues/9) 🟢 | Админка — demo UI вместо реальных данных; источник замены — [docs/admin-design-system.md](admin-design-system.md) |

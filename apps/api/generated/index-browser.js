@@ -142,6 +142,30 @@ exports.Prisma.SiteScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SiteRebuildScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  dedupeKey: 'dedupeKey',
+  status: 'status',
+  triggerEntity: 'triggerEntity',
+  triggerEntityId: 'triggerEntityId',
+  affectedPaths: 'affectedPaths',
+  requestedRevision: 'requestedRevision',
+  processingRevision: 'processingRevision',
+  publishedRevision: 'publishedRevision',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  lastError: 'lastError',
+  providerStatus: 'providerStatus',
+  providerDeploymentId: 'providerDeploymentId',
+  providerResponse: 'providerResponse',
+  queuedAt: 'queuedAt',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.RegionScalarFieldEnum = {
   id: 'id',
   siteId: 'siteId',
@@ -400,6 +424,15 @@ exports.PublishStatus = exports.$Enums.PublishStatus = {
   ARCHIVED: 'ARCHIVED'
 };
 
+exports.SiteRebuildStatus = exports.$Enums.SiteRebuildStatus = {
+  PENDING: 'PENDING',
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  RETRYING: 'RETRYING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED'
+};
+
 exports.PageType = exports.$Enums.PageType = {
   HOME: 'HOME',
   INTERNET: 'INTERNET',
@@ -478,6 +511,7 @@ exports.UserRole = exports.$Enums.UserRole = {
 exports.Prisma.ModelName = {
   Provider: 'Provider',
   Site: 'Site',
+  SiteRebuild: 'SiteRebuild',
   Region: 'Region',
   City: 'City',
   Page: 'Page',

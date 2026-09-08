@@ -19,7 +19,7 @@
 | Prisma | 7.10.0 | Схема, миграции и `@prisma/adapter-pg`. |
 | pg | 8.23.0 | Pool для Prisma PostgreSQL driver adapter. |
 | Redis | 8.10.1-alpine | Backend очередей. |
-| BullMQ | 6.3.4 | Очередь доставки лидов и worker listeners. |
+| BullMQ | 6.3.4 | Очереди доставки лидов и пересборки сайта; import listener пока без producer. |
 | ioredis | 6.0.0 | Redis connections для API и worker. |
 | xlsx | 0.18.5 | Разбор первого листа XLS/XLSX в API. |
 | Tabler Icons Webfont | 3.46.0 | Пиктограммы admin и CRM. |
@@ -41,11 +41,11 @@ API имеет глобальный prefix `/api/v1`, включенный CORS 
 
 ### Prisma и PostgreSQL
 
-Datasource URL описан в `prisma.config.ts`, клиент генерируется в `apps/api/generated`. `PrismaService` использует `PrismaPg` поверх `pg.Pool`. В репозитории девять последовательных миграций: initial model, sessions, tariff SEO, identity, tariff import runs, lead control/redirects, city imports, email fallback failure status и одноразовые tokens доступа к заявке.
+Datasource URL описан в `prisma.config.ts`, клиент генерируется в `apps/api/generated`. `PrismaService` использует `PrismaPg` поверх `pg.Pool`. В репозитории десять последовательных миграций; последняя добавляет persistent rebuild-job со статусом, ревизиями, попытками и результатом deployment provider.
 
 ### Redis и BullMQ
 
-API создает `lead-deliveries` только при наличии `REDIS_URL`; без Redis использует process-local `queueMicrotask`/`setTimeout`. Worker всегда подключается к Redis. Для production требуются Redis и отдельный worker: process-local retry теряется при рестарте API.
+API создает `lead-deliveries` и `site-rebuilds` при наличии `REDIS_URL`. Без Redis lead delivery использует process-local fallback, а rebuild остается в PostgreSQL как `PENDING` и восстанавливается при следующем запуске API с Redis. Worker всегда подключается к Redis; production требует Redis и отдельный worker.
 
 ### Docker и Caddy
 
@@ -60,7 +60,7 @@ API создает `lead-deliveries` только при наличии `REDIS_U
 | Astro SSR, route caching, CDN adapter | Не используются. |
 | React UI layer | Используется в новых admin routes; legacy admin index, web и CRM пока остаются Astro pages с inline browser JavaScript. |
 | Schema.org-спецификация Product/FAQ/Organization | Не реализована; выводится только `WebPage`. |
-| Queue для site rebuild и import | Worker слушает очереди, но API их не публикует. |
+| Queue для import | Worker слушает `tariff-imports`, но API не публикует jobs: validate/apply выполняются напрямую. |
 | Monitoring, tracing, error tracker | Не подключены. |
 | CI/CD | `.github/workflows/ci.yml` запускает `pnpm check` на push и pull request в `master`. Автоматического deployment-пайплайна нет; `.github/workflows/release.yml` только создаёт GitHub Release после push тега `v*`. |
 

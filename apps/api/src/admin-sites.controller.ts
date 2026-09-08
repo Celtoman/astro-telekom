@@ -25,12 +25,16 @@ export class AdminSitesController {
   }
 
   @Post()
-  create(@Body() body: SiteBody) {
-    return this.prisma.site.create({ data: body }).then((site: any) => { void this.rebuild.enqueue({ entity: 'site', id: site.id, siteId: site.id }); return site; });
+  async create(@Body() body: SiteBody) {
+    const site = await this.prisma.site.create({ data: body });
+    await this.rebuild.enqueue({ entity: 'site', id: site.id, siteId: site.id });
+    return site;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body: Partial<SiteBody>) {
-    return this.prisma.site.update({ where: { id }, data: body }).then((site: any) => { void this.rebuild.enqueue({ entity: 'site', id: site.id, siteId: site.id }); return site; });
+  async update(@Param('id') id: string, @Body() body: Partial<SiteBody>) {
+    const site = await this.prisma.site.update({ where: { id }, data: body });
+    await this.rebuild.enqueue({ entity: 'site', id: site.id, siteId: site.id });
+    return site;
   }
 }

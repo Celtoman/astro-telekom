@@ -4,18 +4,24 @@ const { AdminTariffsController } = require('../apps/api/dist/admin-tariffs.contr
 
 test('manual tariff rename refreshes the deterministic identity key', async () => {
   let saved;
-  const prisma = { tariff: {
-    findUnique: async () => ({ id: 'tariff', cityId: 'city', name: 'Старый тариф', serviceType: 'INTERNET' }),
-    update: async ({ data }) => { saved = data; return { id: 'tariff', ...data }; },
-  } };
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => {} });
+  let rebuild;
+  const prisma = {
+    city: { findUnique: async () => ({ siteId: 'site' }) },
+    tariff: {
+      findUnique: async () => ({ id: 'tariff', cityId: 'city', name: 'Старый тариф', serviceType: 'INTERNET' }),
+      update: async ({ data }) => { saved = data; return { id: 'tariff', cityId: 'city', ...data }; },
+    },
+  };
+  const controller = new AdminTariffsController(prisma, { enqueue: async (data) => { rebuild = data; } });
   await controller.update('tariff', { name: 'Новый тариф', serviceType: 'INTERNET_TV' });
   assert.equal(saved.identityKey, 'city:новый-тариф:internet_tv');
+  assert.equal(rebuild.siteId, 'site');
 });
 
 test('import updates legacy tariff found by its slug instead of creating a duplicate', async () => {
   const calls = { create: 0, update: 0 };
   const prisma = {
+    city: { findUnique: async () => ({ siteId: 'site' }) },
     $transaction: async (callback) => callback({ tariff: {
       findFirst: async ({ where }) => { assert.equal(where.OR[1].slug, 'internet-300'); return { id: 'legacy' }; },
       update: async ({ data }) => { calls.update += 1; return { id: 'legacy', ...data }; },

@@ -26,6 +26,7 @@ import { LeadDeliveryController } from './lead-delivery.controller';
 import { CityImportService } from './city-import.service';
 import { LeadAccessController } from './lead-access.controller';
 import { LeadAccessService } from './lead-access.service';
+import { RebuildQueueController } from './rebuild-queue.controller';
 
 @Module({
   controllers: [
@@ -45,6 +46,7 @@ import { LeadAccessService } from './lead-access.service';
     AdminUsersController,
     LeadDeliveryController,
     LeadAccessController,
+    RebuildQueueController,
   ],
   providers: [PrismaService, NotificationsService, AuthService, AdminTokenGuard, CoverageService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService],
 })

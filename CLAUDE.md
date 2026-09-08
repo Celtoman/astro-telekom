@@ -35,13 +35,13 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 У `crm` нет `lint`-скрипта (остаток TD-18) — `pnpm lint` его не проверяет. `admin` с 8 сентября 2026 входит в общий Astro check.
 
-**Baseline тестов: 47/47.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Prisma test-double в `tests/lead-check.test.cjs` синхронизирован с текущим `PublicLeadsController`, `tests/lead-access.test.cjs` проверяет одноразовый fallback-доступ, а `tests/web-build-data.test.mjs` — реальные Astro build-policy и final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+**Baseline тестов: 59/59.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Prisma test-double в `tests/lead-check.test.cjs` синхронизирован с текущим `PublicLeadsController`; отдельные suites проверяют одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 
 Монорепозиторий pnpm (`pnpm-workspace.yaml`): `apps/web` / `apps/admin` / `apps/crm` — Astro 7, static output; `apps/api` — NestJS 12 + Fastify 5; `services/worker` — Node.js + BullMQ; `prisma/` + `packages/database` — Prisma 7 + PostgreSQL 18; `deploy/` — Caddy + Docker Compose.
 
-Только `apps/api` пишет в PostgreSQL — admin, CRM, web и worker обращаются к данным исключительно через HTTP API. `apps/web` собирается в **static output**: город и тарифы читаются из API один раз во время `astro build`, рантайм-изменения в БД не видны опубликованному сайту без внешней пересборки (`REBUILD_WEBHOOK_URL` — сейчас best-effort webhook без retry, TD-05).
+Только `apps/api` пишет в PostgreSQL — admin, CRM, web и worker обращаются к данным исключительно через HTTP API. `apps/web` собирается в **static output**: город и тарифы читаются из API один раз во время `astro build`, рантайм-изменения в БД не видны опубликованному сайту без внешней пересборки. `site-rebuilds` хранится в PostgreSQL, выполняется worker с retry и считается завершенной только после финального ответа deployment provider.
 
 Полная карта модулей — [docs/architecture.md](docs/architecture.md). Точный статус по каждому направлению (реализовано / частично / demo) — [docs/current-state.md](docs/current-state.md). Переменные окружения по назначению и обязательная подготовка к деплою — [docs/deployment.md](docs/deployment.md).
 

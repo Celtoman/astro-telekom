@@ -28,7 +28,7 @@ export class AdminBlocksController {
     validateBlock(body);
     const block = await this.prisma.pageBlock.create({ data: { ...body, pageId } });
     const page = await this.prisma.page.findUnique({ where: { id: pageId }, select: { siteId: true } });
-    void this.rebuild.enqueue({ entity: 'page-block', id: block.id, siteId: page?.siteId });
+    await this.rebuild.enqueue({ entity: 'page-block', id: block.id, siteId: page?.siteId });
     return block;
   }
 
@@ -37,7 +37,7 @@ export class AdminBlocksController {
     validateBlock(body, true);
     const block = await this.prisma.pageBlock.update({ where: { id }, data: body });
     const page = await this.prisma.page.findUnique({ where: { id: block.pageId }, select: { siteId: true } });
-    void this.rebuild.enqueue({ entity: 'page-block', id: block.id, siteId: page?.siteId });
+    await this.rebuild.enqueue({ entity: 'page-block', id: block.id, siteId: page?.siteId });
     return block;
   }
 
@@ -45,7 +45,7 @@ export class AdminBlocksController {
   async remove(@Param('id') id: string) {
     const block = await this.prisma.pageBlock.delete({ where: { id } });
     const page = await this.prisma.page.findUnique({ where: { id: block.pageId }, select: { siteId: true } });
-    void this.rebuild.enqueue({ entity: 'page-block', id: block.id, siteId: page?.siteId });
+    await this.rebuild.enqueue({ entity: 'page-block', id: block.id, siteId: page?.siteId });
     return block;
   }
 }

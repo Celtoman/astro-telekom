@@ -24,6 +24,11 @@ export type Provider = $Result.DefaultSelection<Prisma.$ProviderPayload>
  */
 export type Site = $Result.DefaultSelection<Prisma.$SitePayload>
 /**
+ * Model SiteRebuild
+ * 
+ */
+export type SiteRebuild = $Result.DefaultSelection<Prisma.$SiteRebuildPayload>
+/**
  * Model Region
  * 
  */
@@ -221,6 +226,18 @@ export const CityImportStatus: {
 
 export type CityImportStatus = (typeof CityImportStatus)[keyof typeof CityImportStatus]
 
+
+export const SiteRebuildStatus: {
+  PENDING: 'PENDING',
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  RETRYING: 'RETRYING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED'
+};
+
+export type SiteRebuildStatus = (typeof SiteRebuildStatus)[keyof typeof SiteRebuildStatus]
+
 }
 
 export type PublishStatus = $Enums.PublishStatus
@@ -266,6 +283,10 @@ export const TariffImportStatus: typeof $Enums.TariffImportStatus
 export type CityImportStatus = $Enums.CityImportStatus
 
 export const CityImportStatus: typeof $Enums.CityImportStatus
+
+export type SiteRebuildStatus = $Enums.SiteRebuildStatus
+
+export const SiteRebuildStatus: typeof $Enums.SiteRebuildStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -407,6 +428,16 @@ export class PrismaClient<
     * ```
     */
   get site(): Prisma.SiteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.siteRebuild`: Exposes CRUD operations for the **SiteRebuild** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SiteRebuilds
+    * const siteRebuilds = await prisma.siteRebuild.findMany()
+    * ```
+    */
+  get siteRebuild(): Prisma.SiteRebuildDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.region`: Exposes CRUD operations for the **Region** model.
@@ -1016,6 +1047,7 @@ export namespace Prisma {
   export const ModelName: {
     Provider: 'Provider',
     Site: 'Site',
+    SiteRebuild: 'SiteRebuild',
     Region: 'Region',
     City: 'City',
     Page: 'Page',
@@ -1047,7 +1079,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "provider" | "site" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
+      modelProps: "provider" | "site" | "siteRebuild" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1196,6 +1228,80 @@ export namespace Prisma {
           count: {
             args: Prisma.SiteCountArgs<ExtArgs>
             result: $Utils.Optional<SiteCountAggregateOutputType> | number
+          }
+        }
+      }
+      SiteRebuild: {
+        payload: Prisma.$SiteRebuildPayload<ExtArgs>
+        fields: Prisma.SiteRebuildFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SiteRebuildFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SiteRebuildPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SiteRebuildFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SiteRebuildPayload>
+          }
+          findFirst: {
+            args: Prisma.SiteRebuildFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SiteRebuildPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SiteRebuildFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SiteRebuildPayload>
+          }
+          findMany: {
+            args: Prisma.SiteRebuildFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SiteRebuildPayload>[]
+          }
+          create: {
+            args: Prisma.SiteRebuildCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SiteRebuildPayload>
+          }
+          createMany: {
+            args: Prisma.SiteRebuildCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SiteRebuildCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SiteRebuildPayload>[]
+          }
+          delete: {
+            args: Prisma.SiteRebuildDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SiteRebuildPayload>
+          }
+          update: {
+            args: Prisma.SiteRebuildUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SiteRebuildPayload>
+          }
+          deleteMany: {
+            args: Prisma.SiteRebuildDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SiteRebuildUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SiteRebuildUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SiteRebuildPayload>[]
+          }
+          upsert: {
+            args: Prisma.SiteRebuildUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SiteRebuildPayload>
+          }
+          aggregate: {
+            args: Prisma.SiteRebuildAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSiteRebuild>
+          }
+          groupBy: {
+            args: Prisma.SiteRebuildGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SiteRebuildGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SiteRebuildCountArgs<ExtArgs>
+            result: $Utils.Optional<SiteRebuildCountAggregateOutputType> | number
           }
         }
       }
@@ -2508,6 +2614,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     provider?: ProviderOmit
     site?: SiteOmit
+    siteRebuild?: SiteRebuildOmit
     region?: RegionOmit
     city?: CityOmit
     page?: PageOmit
@@ -2660,6 +2767,7 @@ export namespace Prisma {
     checks: number
     redirects: number
     cityImports: number
+    rebuilds: number
   }
 
   export type SiteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2670,6 +2778,7 @@ export namespace Prisma {
     checks?: boolean | SiteCountOutputTypeCountChecksArgs
     redirects?: boolean | SiteCountOutputTypeCountRedirectsArgs
     cityImports?: boolean | SiteCountOutputTypeCountCityImportsArgs
+    rebuilds?: boolean | SiteCountOutputTypeCountRebuildsArgs
   }
 
   // Custom InputTypes
@@ -2730,6 +2839,13 @@ export namespace Prisma {
    */
   export type SiteCountOutputTypeCountCityImportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CityImportRunWhereInput
+  }
+
+  /**
+   * SiteCountOutputType without action
+   */
+  export type SiteCountOutputTypeCountRebuildsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SiteRebuildWhereInput
   }
 
 
@@ -4393,6 +4509,7 @@ export namespace Prisma {
     checks?: boolean | Site$checksArgs<ExtArgs>
     redirects?: boolean | Site$redirectsArgs<ExtArgs>
     cityImports?: boolean | Site$cityImportsArgs<ExtArgs>
+    rebuilds?: boolean | Site$rebuildsArgs<ExtArgs>
     _count?: boolean | SiteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["site"]>
 
@@ -4444,6 +4561,7 @@ export namespace Prisma {
     checks?: boolean | Site$checksArgs<ExtArgs>
     redirects?: boolean | Site$redirectsArgs<ExtArgs>
     cityImports?: boolean | Site$cityImportsArgs<ExtArgs>
+    rebuilds?: boolean | Site$rebuildsArgs<ExtArgs>
     _count?: boolean | SiteCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SiteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4464,6 +4582,7 @@ export namespace Prisma {
       checks: Prisma.$AddressCheckPayload<ExtArgs>[]
       redirects: Prisma.$RedirectPayload<ExtArgs>[]
       cityImports: Prisma.$CityImportRunPayload<ExtArgs>[]
+      rebuilds: Prisma.$SiteRebuildPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4877,6 +4996,7 @@ export namespace Prisma {
     checks<T extends Site$checksArgs<ExtArgs> = {}>(args?: Subset<T, Site$checksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AddressCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     redirects<T extends Site$redirectsArgs<ExtArgs> = {}>(args?: Subset<T, Site$redirectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RedirectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cityImports<T extends Site$cityImportsArgs<ExtArgs> = {}>(args?: Subset<T, Site$cityImportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CityImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    rebuilds<T extends Site$rebuildsArgs<ExtArgs> = {}>(args?: Subset<T, Site$rebuildsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5484,6 +5604,30 @@ export namespace Prisma {
   }
 
   /**
+   * Site.rebuilds
+   */
+  export type Site$rebuildsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    where?: SiteRebuildWhereInput
+    orderBy?: SiteRebuildOrderByWithRelationInput | SiteRebuildOrderByWithRelationInput[]
+    cursor?: SiteRebuildWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SiteRebuildScalarFieldEnum | SiteRebuildScalarFieldEnum[]
+  }
+
+  /**
    * Site without action
    */
   export type SiteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5499,6 +5643,1338 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SiteInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SiteRebuild
+   */
+
+  export type AggregateSiteRebuild = {
+    _count: SiteRebuildCountAggregateOutputType | null
+    _avg: SiteRebuildAvgAggregateOutputType | null
+    _sum: SiteRebuildSumAggregateOutputType | null
+    _min: SiteRebuildMinAggregateOutputType | null
+    _max: SiteRebuildMaxAggregateOutputType | null
+  }
+
+  export type SiteRebuildAvgAggregateOutputType = {
+    requestedRevision: number | null
+    processingRevision: number | null
+    publishedRevision: number | null
+    attempts: number | null
+    maxAttempts: number | null
+  }
+
+  export type SiteRebuildSumAggregateOutputType = {
+    requestedRevision: number | null
+    processingRevision: number | null
+    publishedRevision: number | null
+    attempts: number | null
+    maxAttempts: number | null
+  }
+
+  export type SiteRebuildMinAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    dedupeKey: string | null
+    status: $Enums.SiteRebuildStatus | null
+    triggerEntity: string | null
+    triggerEntityId: string | null
+    requestedRevision: number | null
+    processingRevision: number | null
+    publishedRevision: number | null
+    attempts: number | null
+    maxAttempts: number | null
+    lastError: string | null
+    providerStatus: string | null
+    providerDeploymentId: string | null
+    queuedAt: Date | null
+    startedAt: Date | null
+    completedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SiteRebuildMaxAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    dedupeKey: string | null
+    status: $Enums.SiteRebuildStatus | null
+    triggerEntity: string | null
+    triggerEntityId: string | null
+    requestedRevision: number | null
+    processingRevision: number | null
+    publishedRevision: number | null
+    attempts: number | null
+    maxAttempts: number | null
+    lastError: string | null
+    providerStatus: string | null
+    providerDeploymentId: string | null
+    queuedAt: Date | null
+    startedAt: Date | null
+    completedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SiteRebuildCountAggregateOutputType = {
+    id: number
+    siteId: number
+    dedupeKey: number
+    status: number
+    triggerEntity: number
+    triggerEntityId: number
+    affectedPaths: number
+    requestedRevision: number
+    processingRevision: number
+    publishedRevision: number
+    attempts: number
+    maxAttempts: number
+    lastError: number
+    providerStatus: number
+    providerDeploymentId: number
+    providerResponse: number
+    queuedAt: number
+    startedAt: number
+    completedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SiteRebuildAvgAggregateInputType = {
+    requestedRevision?: true
+    processingRevision?: true
+    publishedRevision?: true
+    attempts?: true
+    maxAttempts?: true
+  }
+
+  export type SiteRebuildSumAggregateInputType = {
+    requestedRevision?: true
+    processingRevision?: true
+    publishedRevision?: true
+    attempts?: true
+    maxAttempts?: true
+  }
+
+  export type SiteRebuildMinAggregateInputType = {
+    id?: true
+    siteId?: true
+    dedupeKey?: true
+    status?: true
+    triggerEntity?: true
+    triggerEntityId?: true
+    requestedRevision?: true
+    processingRevision?: true
+    publishedRevision?: true
+    attempts?: true
+    maxAttempts?: true
+    lastError?: true
+    providerStatus?: true
+    providerDeploymentId?: true
+    queuedAt?: true
+    startedAt?: true
+    completedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SiteRebuildMaxAggregateInputType = {
+    id?: true
+    siteId?: true
+    dedupeKey?: true
+    status?: true
+    triggerEntity?: true
+    triggerEntityId?: true
+    requestedRevision?: true
+    processingRevision?: true
+    publishedRevision?: true
+    attempts?: true
+    maxAttempts?: true
+    lastError?: true
+    providerStatus?: true
+    providerDeploymentId?: true
+    queuedAt?: true
+    startedAt?: true
+    completedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SiteRebuildCountAggregateInputType = {
+    id?: true
+    siteId?: true
+    dedupeKey?: true
+    status?: true
+    triggerEntity?: true
+    triggerEntityId?: true
+    affectedPaths?: true
+    requestedRevision?: true
+    processingRevision?: true
+    publishedRevision?: true
+    attempts?: true
+    maxAttempts?: true
+    lastError?: true
+    providerStatus?: true
+    providerDeploymentId?: true
+    providerResponse?: true
+    queuedAt?: true
+    startedAt?: true
+    completedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SiteRebuildAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SiteRebuild to aggregate.
+     */
+    where?: SiteRebuildWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SiteRebuilds to fetch.
+     */
+    orderBy?: SiteRebuildOrderByWithRelationInput | SiteRebuildOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SiteRebuildWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SiteRebuilds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SiteRebuilds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SiteRebuilds
+    **/
+    _count?: true | SiteRebuildCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SiteRebuildAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SiteRebuildSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SiteRebuildMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SiteRebuildMaxAggregateInputType
+  }
+
+  export type GetSiteRebuildAggregateType<T extends SiteRebuildAggregateArgs> = {
+        [P in keyof T & keyof AggregateSiteRebuild]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSiteRebuild[P]>
+      : GetScalarType<T[P], AggregateSiteRebuild[P]>
+  }
+
+
+
+
+  export type SiteRebuildGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SiteRebuildWhereInput
+    orderBy?: SiteRebuildOrderByWithAggregationInput | SiteRebuildOrderByWithAggregationInput[]
+    by: SiteRebuildScalarFieldEnum[] | SiteRebuildScalarFieldEnum
+    having?: SiteRebuildScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SiteRebuildCountAggregateInputType | true
+    _avg?: SiteRebuildAvgAggregateInputType
+    _sum?: SiteRebuildSumAggregateInputType
+    _min?: SiteRebuildMinAggregateInputType
+    _max?: SiteRebuildMaxAggregateInputType
+  }
+
+  export type SiteRebuildGroupByOutputType = {
+    id: string
+    siteId: string | null
+    dedupeKey: string
+    status: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonValue
+    requestedRevision: number
+    processingRevision: number
+    publishedRevision: number
+    attempts: number
+    maxAttempts: number
+    lastError: string | null
+    providerStatus: string | null
+    providerDeploymentId: string | null
+    providerResponse: JsonValue | null
+    queuedAt: Date | null
+    startedAt: Date | null
+    completedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SiteRebuildCountAggregateOutputType | null
+    _avg: SiteRebuildAvgAggregateOutputType | null
+    _sum: SiteRebuildSumAggregateOutputType | null
+    _min: SiteRebuildMinAggregateOutputType | null
+    _max: SiteRebuildMaxAggregateOutputType | null
+  }
+
+  type GetSiteRebuildGroupByPayload<T extends SiteRebuildGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SiteRebuildGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SiteRebuildGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SiteRebuildGroupByOutputType[P]>
+            : GetScalarType<T[P], SiteRebuildGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SiteRebuildSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    dedupeKey?: boolean
+    status?: boolean
+    triggerEntity?: boolean
+    triggerEntityId?: boolean
+    affectedPaths?: boolean
+    requestedRevision?: boolean
+    processingRevision?: boolean
+    publishedRevision?: boolean
+    attempts?: boolean
+    maxAttempts?: boolean
+    lastError?: boolean
+    providerStatus?: boolean
+    providerDeploymentId?: boolean
+    providerResponse?: boolean
+    queuedAt?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+  }, ExtArgs["result"]["siteRebuild"]>
+
+  export type SiteRebuildSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    dedupeKey?: boolean
+    status?: boolean
+    triggerEntity?: boolean
+    triggerEntityId?: boolean
+    affectedPaths?: boolean
+    requestedRevision?: boolean
+    processingRevision?: boolean
+    publishedRevision?: boolean
+    attempts?: boolean
+    maxAttempts?: boolean
+    lastError?: boolean
+    providerStatus?: boolean
+    providerDeploymentId?: boolean
+    providerResponse?: boolean
+    queuedAt?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+  }, ExtArgs["result"]["siteRebuild"]>
+
+  export type SiteRebuildSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    dedupeKey?: boolean
+    status?: boolean
+    triggerEntity?: boolean
+    triggerEntityId?: boolean
+    affectedPaths?: boolean
+    requestedRevision?: boolean
+    processingRevision?: boolean
+    publishedRevision?: boolean
+    attempts?: boolean
+    maxAttempts?: boolean
+    lastError?: boolean
+    providerStatus?: boolean
+    providerDeploymentId?: boolean
+    providerResponse?: boolean
+    queuedAt?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+  }, ExtArgs["result"]["siteRebuild"]>
+
+  export type SiteRebuildSelectScalar = {
+    id?: boolean
+    siteId?: boolean
+    dedupeKey?: boolean
+    status?: boolean
+    triggerEntity?: boolean
+    triggerEntityId?: boolean
+    affectedPaths?: boolean
+    requestedRevision?: boolean
+    processingRevision?: boolean
+    publishedRevision?: boolean
+    attempts?: boolean
+    maxAttempts?: boolean
+    lastError?: boolean
+    providerStatus?: boolean
+    providerDeploymentId?: boolean
+    providerResponse?: boolean
+    queuedAt?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SiteRebuildOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "dedupeKey" | "status" | "triggerEntity" | "triggerEntityId" | "affectedPaths" | "requestedRevision" | "processingRevision" | "publishedRevision" | "attempts" | "maxAttempts" | "lastError" | "providerStatus" | "providerDeploymentId" | "providerResponse" | "queuedAt" | "startedAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["siteRebuild"]>
+  export type SiteRebuildInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+  }
+  export type SiteRebuildIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+  }
+  export type SiteRebuildIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+  }
+
+  export type $SiteRebuildPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SiteRebuild"
+    objects: {
+      site: Prisma.$SitePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      siteId: string | null
+      dedupeKey: string
+      status: $Enums.SiteRebuildStatus
+      triggerEntity: string
+      triggerEntityId: string
+      affectedPaths: Prisma.JsonValue
+      requestedRevision: number
+      processingRevision: number
+      publishedRevision: number
+      attempts: number
+      maxAttempts: number
+      lastError: string | null
+      providerStatus: string | null
+      providerDeploymentId: string | null
+      providerResponse: Prisma.JsonValue | null
+      queuedAt: Date | null
+      startedAt: Date | null
+      completedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["siteRebuild"]>
+    composites: {}
+  }
+
+  type SiteRebuildGetPayload<S extends boolean | null | undefined | SiteRebuildDefaultArgs> = $Result.GetResult<Prisma.$SiteRebuildPayload, S>
+
+  type SiteRebuildCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SiteRebuildFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SiteRebuildCountAggregateInputType | true
+    }
+
+  export interface SiteRebuildDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SiteRebuild'], meta: { name: 'SiteRebuild' } }
+    /**
+     * Find zero or one SiteRebuild that matches the filter.
+     * @param {SiteRebuildFindUniqueArgs} args - Arguments to find a SiteRebuild
+     * @example
+     * // Get one SiteRebuild
+     * const siteRebuild = await prisma.siteRebuild.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SiteRebuildFindUniqueArgs>(args: SelectSubset<T, SiteRebuildFindUniqueArgs<ExtArgs>>): Prisma__SiteRebuildClient<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SiteRebuild that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SiteRebuildFindUniqueOrThrowArgs} args - Arguments to find a SiteRebuild
+     * @example
+     * // Get one SiteRebuild
+     * const siteRebuild = await prisma.siteRebuild.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SiteRebuildFindUniqueOrThrowArgs>(args: SelectSubset<T, SiteRebuildFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SiteRebuildClient<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SiteRebuild that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SiteRebuildFindFirstArgs} args - Arguments to find a SiteRebuild
+     * @example
+     * // Get one SiteRebuild
+     * const siteRebuild = await prisma.siteRebuild.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SiteRebuildFindFirstArgs>(args?: SelectSubset<T, SiteRebuildFindFirstArgs<ExtArgs>>): Prisma__SiteRebuildClient<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SiteRebuild that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SiteRebuildFindFirstOrThrowArgs} args - Arguments to find a SiteRebuild
+     * @example
+     * // Get one SiteRebuild
+     * const siteRebuild = await prisma.siteRebuild.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SiteRebuildFindFirstOrThrowArgs>(args?: SelectSubset<T, SiteRebuildFindFirstOrThrowArgs<ExtArgs>>): Prisma__SiteRebuildClient<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SiteRebuilds that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SiteRebuildFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SiteRebuilds
+     * const siteRebuilds = await prisma.siteRebuild.findMany()
+     * 
+     * // Get first 10 SiteRebuilds
+     * const siteRebuilds = await prisma.siteRebuild.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const siteRebuildWithIdOnly = await prisma.siteRebuild.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SiteRebuildFindManyArgs>(args?: SelectSubset<T, SiteRebuildFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SiteRebuild.
+     * @param {SiteRebuildCreateArgs} args - Arguments to create a SiteRebuild.
+     * @example
+     * // Create one SiteRebuild
+     * const SiteRebuild = await prisma.siteRebuild.create({
+     *   data: {
+     *     // ... data to create a SiteRebuild
+     *   }
+     * })
+     * 
+     */
+    create<T extends SiteRebuildCreateArgs>(args: SelectSubset<T, SiteRebuildCreateArgs<ExtArgs>>): Prisma__SiteRebuildClient<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SiteRebuilds.
+     * @param {SiteRebuildCreateManyArgs} args - Arguments to create many SiteRebuilds.
+     * @example
+     * // Create many SiteRebuilds
+     * const siteRebuild = await prisma.siteRebuild.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SiteRebuildCreateManyArgs>(args?: SelectSubset<T, SiteRebuildCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SiteRebuilds and returns the data saved in the database.
+     * @param {SiteRebuildCreateManyAndReturnArgs} args - Arguments to create many SiteRebuilds.
+     * @example
+     * // Create many SiteRebuilds
+     * const siteRebuild = await prisma.siteRebuild.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SiteRebuilds and only return the `id`
+     * const siteRebuildWithIdOnly = await prisma.siteRebuild.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SiteRebuildCreateManyAndReturnArgs>(args?: SelectSubset<T, SiteRebuildCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SiteRebuild.
+     * @param {SiteRebuildDeleteArgs} args - Arguments to delete one SiteRebuild.
+     * @example
+     * // Delete one SiteRebuild
+     * const SiteRebuild = await prisma.siteRebuild.delete({
+     *   where: {
+     *     // ... filter to delete one SiteRebuild
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SiteRebuildDeleteArgs>(args: SelectSubset<T, SiteRebuildDeleteArgs<ExtArgs>>): Prisma__SiteRebuildClient<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SiteRebuild.
+     * @param {SiteRebuildUpdateArgs} args - Arguments to update one SiteRebuild.
+     * @example
+     * // Update one SiteRebuild
+     * const siteRebuild = await prisma.siteRebuild.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SiteRebuildUpdateArgs>(args: SelectSubset<T, SiteRebuildUpdateArgs<ExtArgs>>): Prisma__SiteRebuildClient<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SiteRebuilds.
+     * @param {SiteRebuildDeleteManyArgs} args - Arguments to filter SiteRebuilds to delete.
+     * @example
+     * // Delete a few SiteRebuilds
+     * const { count } = await prisma.siteRebuild.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SiteRebuildDeleteManyArgs>(args?: SelectSubset<T, SiteRebuildDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SiteRebuilds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SiteRebuildUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SiteRebuilds
+     * const siteRebuild = await prisma.siteRebuild.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SiteRebuildUpdateManyArgs>(args: SelectSubset<T, SiteRebuildUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SiteRebuilds and returns the data updated in the database.
+     * @param {SiteRebuildUpdateManyAndReturnArgs} args - Arguments to update many SiteRebuilds.
+     * @example
+     * // Update many SiteRebuilds
+     * const siteRebuild = await prisma.siteRebuild.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SiteRebuilds and only return the `id`
+     * const siteRebuildWithIdOnly = await prisma.siteRebuild.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SiteRebuildUpdateManyAndReturnArgs>(args: SelectSubset<T, SiteRebuildUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SiteRebuild.
+     * @param {SiteRebuildUpsertArgs} args - Arguments to update or create a SiteRebuild.
+     * @example
+     * // Update or create a SiteRebuild
+     * const siteRebuild = await prisma.siteRebuild.upsert({
+     *   create: {
+     *     // ... data to create a SiteRebuild
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SiteRebuild we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SiteRebuildUpsertArgs>(args: SelectSubset<T, SiteRebuildUpsertArgs<ExtArgs>>): Prisma__SiteRebuildClient<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SiteRebuilds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SiteRebuildCountArgs} args - Arguments to filter SiteRebuilds to count.
+     * @example
+     * // Count the number of SiteRebuilds
+     * const count = await prisma.siteRebuild.count({
+     *   where: {
+     *     // ... the filter for the SiteRebuilds we want to count
+     *   }
+     * })
+    **/
+    count<T extends SiteRebuildCountArgs>(
+      args?: Subset<T, SiteRebuildCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SiteRebuildCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SiteRebuild.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SiteRebuildAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SiteRebuildAggregateArgs>(args: Subset<T, SiteRebuildAggregateArgs>): Prisma.PrismaPromise<GetSiteRebuildAggregateType<T>>
+
+    /**
+     * Group by SiteRebuild.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SiteRebuildGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SiteRebuildGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SiteRebuildGroupByArgs['orderBy'] }
+        : { orderBy?: SiteRebuildGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SiteRebuildGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSiteRebuildGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SiteRebuild model
+   */
+  readonly fields: SiteRebuildFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SiteRebuild.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SiteRebuildClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    site<T extends SiteRebuild$siteArgs<ExtArgs> = {}>(args?: Subset<T, SiteRebuild$siteArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SiteRebuild model
+   */
+  interface SiteRebuildFieldRefs {
+    readonly id: FieldRef<"SiteRebuild", 'String'>
+    readonly siteId: FieldRef<"SiteRebuild", 'String'>
+    readonly dedupeKey: FieldRef<"SiteRebuild", 'String'>
+    readonly status: FieldRef<"SiteRebuild", 'SiteRebuildStatus'>
+    readonly triggerEntity: FieldRef<"SiteRebuild", 'String'>
+    readonly triggerEntityId: FieldRef<"SiteRebuild", 'String'>
+    readonly affectedPaths: FieldRef<"SiteRebuild", 'Json'>
+    readonly requestedRevision: FieldRef<"SiteRebuild", 'Int'>
+    readonly processingRevision: FieldRef<"SiteRebuild", 'Int'>
+    readonly publishedRevision: FieldRef<"SiteRebuild", 'Int'>
+    readonly attempts: FieldRef<"SiteRebuild", 'Int'>
+    readonly maxAttempts: FieldRef<"SiteRebuild", 'Int'>
+    readonly lastError: FieldRef<"SiteRebuild", 'String'>
+    readonly providerStatus: FieldRef<"SiteRebuild", 'String'>
+    readonly providerDeploymentId: FieldRef<"SiteRebuild", 'String'>
+    readonly providerResponse: FieldRef<"SiteRebuild", 'Json'>
+    readonly queuedAt: FieldRef<"SiteRebuild", 'DateTime'>
+    readonly startedAt: FieldRef<"SiteRebuild", 'DateTime'>
+    readonly completedAt: FieldRef<"SiteRebuild", 'DateTime'>
+    readonly createdAt: FieldRef<"SiteRebuild", 'DateTime'>
+    readonly updatedAt: FieldRef<"SiteRebuild", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SiteRebuild findUnique
+   */
+  export type SiteRebuildFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    /**
+     * Filter, which SiteRebuild to fetch.
+     */
+    where: SiteRebuildWhereUniqueInput
+  }
+
+  /**
+   * SiteRebuild findUniqueOrThrow
+   */
+  export type SiteRebuildFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    /**
+     * Filter, which SiteRebuild to fetch.
+     */
+    where: SiteRebuildWhereUniqueInput
+  }
+
+  /**
+   * SiteRebuild findFirst
+   */
+  export type SiteRebuildFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    /**
+     * Filter, which SiteRebuild to fetch.
+     */
+    where?: SiteRebuildWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SiteRebuilds to fetch.
+     */
+    orderBy?: SiteRebuildOrderByWithRelationInput | SiteRebuildOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SiteRebuilds.
+     */
+    cursor?: SiteRebuildWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SiteRebuilds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SiteRebuilds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SiteRebuilds.
+     */
+    distinct?: SiteRebuildScalarFieldEnum | SiteRebuildScalarFieldEnum[]
+  }
+
+  /**
+   * SiteRebuild findFirstOrThrow
+   */
+  export type SiteRebuildFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    /**
+     * Filter, which SiteRebuild to fetch.
+     */
+    where?: SiteRebuildWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SiteRebuilds to fetch.
+     */
+    orderBy?: SiteRebuildOrderByWithRelationInput | SiteRebuildOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SiteRebuilds.
+     */
+    cursor?: SiteRebuildWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SiteRebuilds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SiteRebuilds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SiteRebuilds.
+     */
+    distinct?: SiteRebuildScalarFieldEnum | SiteRebuildScalarFieldEnum[]
+  }
+
+  /**
+   * SiteRebuild findMany
+   */
+  export type SiteRebuildFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    /**
+     * Filter, which SiteRebuilds to fetch.
+     */
+    where?: SiteRebuildWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SiteRebuilds to fetch.
+     */
+    orderBy?: SiteRebuildOrderByWithRelationInput | SiteRebuildOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SiteRebuilds.
+     */
+    cursor?: SiteRebuildWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SiteRebuilds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SiteRebuilds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SiteRebuilds.
+     */
+    distinct?: SiteRebuildScalarFieldEnum | SiteRebuildScalarFieldEnum[]
+  }
+
+  /**
+   * SiteRebuild create
+   */
+  export type SiteRebuildCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SiteRebuild.
+     */
+    data: XOR<SiteRebuildCreateInput, SiteRebuildUncheckedCreateInput>
+  }
+
+  /**
+   * SiteRebuild createMany
+   */
+  export type SiteRebuildCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SiteRebuilds.
+     */
+    data: SiteRebuildCreateManyInput | SiteRebuildCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SiteRebuild createManyAndReturn
+   */
+  export type SiteRebuildCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * The data used to create many SiteRebuilds.
+     */
+    data: SiteRebuildCreateManyInput | SiteRebuildCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SiteRebuild update
+   */
+  export type SiteRebuildUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SiteRebuild.
+     */
+    data: XOR<SiteRebuildUpdateInput, SiteRebuildUncheckedUpdateInput>
+    /**
+     * Choose, which SiteRebuild to update.
+     */
+    where: SiteRebuildWhereUniqueInput
+  }
+
+  /**
+   * SiteRebuild updateMany
+   */
+  export type SiteRebuildUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SiteRebuilds.
+     */
+    data: XOR<SiteRebuildUpdateManyMutationInput, SiteRebuildUncheckedUpdateManyInput>
+    /**
+     * Filter which SiteRebuilds to update
+     */
+    where?: SiteRebuildWhereInput
+    /**
+     * Limit how many SiteRebuilds to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SiteRebuild updateManyAndReturn
+   */
+  export type SiteRebuildUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * The data used to update SiteRebuilds.
+     */
+    data: XOR<SiteRebuildUpdateManyMutationInput, SiteRebuildUncheckedUpdateManyInput>
+    /**
+     * Filter which SiteRebuilds to update
+     */
+    where?: SiteRebuildWhereInput
+    /**
+     * Limit how many SiteRebuilds to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SiteRebuild upsert
+   */
+  export type SiteRebuildUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SiteRebuild to update in case it exists.
+     */
+    where: SiteRebuildWhereUniqueInput
+    /**
+     * In case the SiteRebuild found by the `where` argument doesn't exist, create a new SiteRebuild with this data.
+     */
+    create: XOR<SiteRebuildCreateInput, SiteRebuildUncheckedCreateInput>
+    /**
+     * In case the SiteRebuild was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SiteRebuildUpdateInput, SiteRebuildUncheckedUpdateInput>
+  }
+
+  /**
+   * SiteRebuild delete
+   */
+  export type SiteRebuildDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    /**
+     * Filter which SiteRebuild to delete.
+     */
+    where: SiteRebuildWhereUniqueInput
+  }
+
+  /**
+   * SiteRebuild deleteMany
+   */
+  export type SiteRebuildDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SiteRebuilds to delete
+     */
+    where?: SiteRebuildWhereInput
+    /**
+     * Limit how many SiteRebuilds to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SiteRebuild.site
+   */
+  export type SiteRebuild$siteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Site
+     */
+    select?: SiteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Site
+     */
+    omit?: SiteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteInclude<ExtArgs> | null
+    where?: SiteWhereInput
+  }
+
+  /**
+   * SiteRebuild without action
+   */
+  export type SiteRebuildDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
   }
 
 
@@ -24663,6 +26139,33 @@ export namespace Prisma {
   export type SiteScalarFieldEnum = (typeof SiteScalarFieldEnum)[keyof typeof SiteScalarFieldEnum]
 
 
+  export const SiteRebuildScalarFieldEnum: {
+    id: 'id',
+    siteId: 'siteId',
+    dedupeKey: 'dedupeKey',
+    status: 'status',
+    triggerEntity: 'triggerEntity',
+    triggerEntityId: 'triggerEntityId',
+    affectedPaths: 'affectedPaths',
+    requestedRevision: 'requestedRevision',
+    processingRevision: 'processingRevision',
+    publishedRevision: 'publishedRevision',
+    attempts: 'attempts',
+    maxAttempts: 'maxAttempts',
+    lastError: 'lastError',
+    providerStatus: 'providerStatus',
+    providerDeploymentId: 'providerDeploymentId',
+    providerResponse: 'providerResponse',
+    queuedAt: 'queuedAt',
+    startedAt: 'startedAt',
+    completedAt: 'completedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SiteRebuildScalarFieldEnum = (typeof SiteRebuildScalarFieldEnum)[keyof typeof SiteRebuildScalarFieldEnum]
+
+
   export const RegionScalarFieldEnum: {
     id: 'id',
     siteId: 'siteId',
@@ -25044,16 +26547,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'PageType'
+   * Reference to a field of type 'SiteRebuildStatus'
    */
-  export type EnumPageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PageType'>
+  export type EnumSiteRebuildStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SiteRebuildStatus'>
     
 
 
   /**
-   * Reference to a field of type 'PageType[]'
+   * Reference to a field of type 'SiteRebuildStatus[]'
    */
-  export type ListEnumPageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PageType[]'>
+  export type ListEnumSiteRebuildStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SiteRebuildStatus[]'>
     
 
 
@@ -25068,6 +26571,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PageType'
+   */
+  export type EnumPageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PageType'>
+    
+
+
+  /**
+   * Reference to a field of type 'PageType[]'
+   */
+  export type ListEnumPageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PageType[]'>
     
 
 
@@ -25327,6 +26844,7 @@ export namespace Prisma {
     checks?: AddressCheckListRelationFilter
     redirects?: RedirectListRelationFilter
     cityImports?: CityImportRunListRelationFilter
+    rebuilds?: SiteRebuildListRelationFilter
   }
 
   export type SiteOrderByWithRelationInput = {
@@ -25347,6 +26865,7 @@ export namespace Prisma {
     checks?: AddressCheckOrderByRelationAggregateInput
     redirects?: RedirectOrderByRelationAggregateInput
     cityImports?: CityImportRunOrderByRelationAggregateInput
+    rebuilds?: SiteRebuildOrderByRelationAggregateInput
   }
 
   export type SiteWhereUniqueInput = Prisma.AtLeast<{
@@ -25370,6 +26889,7 @@ export namespace Prisma {
     checks?: AddressCheckListRelationFilter
     redirects?: RedirectListRelationFilter
     cityImports?: CityImportRunListRelationFilter
+    rebuilds?: SiteRebuildListRelationFilter
   }, "id" | "slug">
 
   export type SiteOrderByWithAggregationInput = {
@@ -25400,6 +26920,143 @@ export namespace Prisma {
     status?: EnumPublishStatusWithAggregatesFilter<"Site"> | $Enums.PublishStatus
     createdAt?: DateTimeWithAggregatesFilter<"Site"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Site"> | Date | string
+  }
+
+  export type SiteRebuildWhereInput = {
+    AND?: SiteRebuildWhereInput | SiteRebuildWhereInput[]
+    OR?: SiteRebuildWhereInput[]
+    NOT?: SiteRebuildWhereInput | SiteRebuildWhereInput[]
+    id?: StringFilter<"SiteRebuild"> | string
+    siteId?: StringNullableFilter<"SiteRebuild"> | string | null
+    dedupeKey?: StringFilter<"SiteRebuild"> | string
+    status?: EnumSiteRebuildStatusFilter<"SiteRebuild"> | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFilter<"SiteRebuild"> | string
+    triggerEntityId?: StringFilter<"SiteRebuild"> | string
+    affectedPaths?: JsonFilter<"SiteRebuild">
+    requestedRevision?: IntFilter<"SiteRebuild"> | number
+    processingRevision?: IntFilter<"SiteRebuild"> | number
+    publishedRevision?: IntFilter<"SiteRebuild"> | number
+    attempts?: IntFilter<"SiteRebuild"> | number
+    maxAttempts?: IntFilter<"SiteRebuild"> | number
+    lastError?: StringNullableFilter<"SiteRebuild"> | string | null
+    providerStatus?: StringNullableFilter<"SiteRebuild"> | string | null
+    providerDeploymentId?: StringNullableFilter<"SiteRebuild"> | string | null
+    providerResponse?: JsonNullableFilter<"SiteRebuild">
+    queuedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
+    startedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
+    createdAt?: DateTimeFilter<"SiteRebuild"> | Date | string
+    updatedAt?: DateTimeFilter<"SiteRebuild"> | Date | string
+    site?: XOR<SiteNullableScalarRelationFilter, SiteWhereInput> | null
+  }
+
+  export type SiteRebuildOrderByWithRelationInput = {
+    id?: SortOrder
+    siteId?: SortOrderInput | SortOrder
+    dedupeKey?: SortOrder
+    status?: SortOrder
+    triggerEntity?: SortOrder
+    triggerEntityId?: SortOrder
+    affectedPaths?: SortOrder
+    requestedRevision?: SortOrder
+    processingRevision?: SortOrder
+    publishedRevision?: SortOrder
+    attempts?: SortOrder
+    maxAttempts?: SortOrder
+    lastError?: SortOrderInput | SortOrder
+    providerStatus?: SortOrderInput | SortOrder
+    providerDeploymentId?: SortOrderInput | SortOrder
+    providerResponse?: SortOrderInput | SortOrder
+    queuedAt?: SortOrderInput | SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    site?: SiteOrderByWithRelationInput
+  }
+
+  export type SiteRebuildWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    dedupeKey?: string
+    AND?: SiteRebuildWhereInput | SiteRebuildWhereInput[]
+    OR?: SiteRebuildWhereInput[]
+    NOT?: SiteRebuildWhereInput | SiteRebuildWhereInput[]
+    siteId?: StringNullableFilter<"SiteRebuild"> | string | null
+    status?: EnumSiteRebuildStatusFilter<"SiteRebuild"> | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFilter<"SiteRebuild"> | string
+    triggerEntityId?: StringFilter<"SiteRebuild"> | string
+    affectedPaths?: JsonFilter<"SiteRebuild">
+    requestedRevision?: IntFilter<"SiteRebuild"> | number
+    processingRevision?: IntFilter<"SiteRebuild"> | number
+    publishedRevision?: IntFilter<"SiteRebuild"> | number
+    attempts?: IntFilter<"SiteRebuild"> | number
+    maxAttempts?: IntFilter<"SiteRebuild"> | number
+    lastError?: StringNullableFilter<"SiteRebuild"> | string | null
+    providerStatus?: StringNullableFilter<"SiteRebuild"> | string | null
+    providerDeploymentId?: StringNullableFilter<"SiteRebuild"> | string | null
+    providerResponse?: JsonNullableFilter<"SiteRebuild">
+    queuedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
+    startedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
+    createdAt?: DateTimeFilter<"SiteRebuild"> | Date | string
+    updatedAt?: DateTimeFilter<"SiteRebuild"> | Date | string
+    site?: XOR<SiteNullableScalarRelationFilter, SiteWhereInput> | null
+  }, "id" | "dedupeKey">
+
+  export type SiteRebuildOrderByWithAggregationInput = {
+    id?: SortOrder
+    siteId?: SortOrderInput | SortOrder
+    dedupeKey?: SortOrder
+    status?: SortOrder
+    triggerEntity?: SortOrder
+    triggerEntityId?: SortOrder
+    affectedPaths?: SortOrder
+    requestedRevision?: SortOrder
+    processingRevision?: SortOrder
+    publishedRevision?: SortOrder
+    attempts?: SortOrder
+    maxAttempts?: SortOrder
+    lastError?: SortOrderInput | SortOrder
+    providerStatus?: SortOrderInput | SortOrder
+    providerDeploymentId?: SortOrderInput | SortOrder
+    providerResponse?: SortOrderInput | SortOrder
+    queuedAt?: SortOrderInput | SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SiteRebuildCountOrderByAggregateInput
+    _avg?: SiteRebuildAvgOrderByAggregateInput
+    _max?: SiteRebuildMaxOrderByAggregateInput
+    _min?: SiteRebuildMinOrderByAggregateInput
+    _sum?: SiteRebuildSumOrderByAggregateInput
+  }
+
+  export type SiteRebuildScalarWhereWithAggregatesInput = {
+    AND?: SiteRebuildScalarWhereWithAggregatesInput | SiteRebuildScalarWhereWithAggregatesInput[]
+    OR?: SiteRebuildScalarWhereWithAggregatesInput[]
+    NOT?: SiteRebuildScalarWhereWithAggregatesInput | SiteRebuildScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SiteRebuild"> | string
+    siteId?: StringNullableWithAggregatesFilter<"SiteRebuild"> | string | null
+    dedupeKey?: StringWithAggregatesFilter<"SiteRebuild"> | string
+    status?: EnumSiteRebuildStatusWithAggregatesFilter<"SiteRebuild"> | $Enums.SiteRebuildStatus
+    triggerEntity?: StringWithAggregatesFilter<"SiteRebuild"> | string
+    triggerEntityId?: StringWithAggregatesFilter<"SiteRebuild"> | string
+    affectedPaths?: JsonWithAggregatesFilter<"SiteRebuild">
+    requestedRevision?: IntWithAggregatesFilter<"SiteRebuild"> | number
+    processingRevision?: IntWithAggregatesFilter<"SiteRebuild"> | number
+    publishedRevision?: IntWithAggregatesFilter<"SiteRebuild"> | number
+    attempts?: IntWithAggregatesFilter<"SiteRebuild"> | number
+    maxAttempts?: IntWithAggregatesFilter<"SiteRebuild"> | number
+    lastError?: StringNullableWithAggregatesFilter<"SiteRebuild"> | string | null
+    providerStatus?: StringNullableWithAggregatesFilter<"SiteRebuild"> | string | null
+    providerDeploymentId?: StringNullableWithAggregatesFilter<"SiteRebuild"> | string | null
+    providerResponse?: JsonNullableWithAggregatesFilter<"SiteRebuild">
+    queuedAt?: DateTimeNullableWithAggregatesFilter<"SiteRebuild"> | Date | string | null
+    startedAt?: DateTimeNullableWithAggregatesFilter<"SiteRebuild"> | Date | string | null
+    completedAt?: DateTimeNullableWithAggregatesFilter<"SiteRebuild"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SiteRebuild"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SiteRebuild"> | Date | string
   }
 
   export type RegionWhereInput = {
@@ -26958,6 +28615,7 @@ export namespace Prisma {
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateInput = {
@@ -26977,6 +28635,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUpdateInput = {
@@ -26996,6 +28655,7 @@ export namespace Prisma {
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateInput = {
@@ -27015,6 +28675,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteCreateManyInput = {
@@ -27048,6 +28709,173 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SiteRebuildCreateInput = {
+    id?: string
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site?: SiteCreateNestedOneWithoutRebuildsInput
+  }
+
+  export type SiteRebuildUncheckedCreateInput = {
+    id?: string
+    siteId?: string | null
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SiteRebuildUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneWithoutRebuildsNestedInput
+  }
+
+  export type SiteRebuildUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SiteRebuildCreateManyInput = {
+    id?: string
+    siteId?: string | null
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SiteRebuildUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SiteRebuildUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -28892,6 +30720,12 @@ export namespace Prisma {
     none?: CityImportRunWhereInput
   }
 
+  export type SiteRebuildListRelationFilter = {
+    every?: SiteRebuildWhereInput
+    some?: SiteRebuildWhereInput
+    none?: SiteRebuildWhereInput
+  }
+
   export type RegionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -28917,6 +30751,10 @@ export namespace Prisma {
   }
 
   export type CityImportRunOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SiteRebuildOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -28980,6 +30818,213 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPublishStatusFilter<$PrismaModel>
     _max?: NestedEnumPublishStatusFilter<$PrismaModel>
+  }
+
+  export type EnumSiteRebuildStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SiteRebuildStatus | EnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SiteRebuildStatus[] | ListEnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SiteRebuildStatus[] | ListEnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSiteRebuildStatusFilter<$PrismaModel> | $Enums.SiteRebuildStatus
+  }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type SiteNullableScalarRelationFilter = {
+    is?: SiteWhereInput | null
+    isNot?: SiteWhereInput | null
+  }
+
+  export type SiteRebuildCountOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    dedupeKey?: SortOrder
+    status?: SortOrder
+    triggerEntity?: SortOrder
+    triggerEntityId?: SortOrder
+    affectedPaths?: SortOrder
+    requestedRevision?: SortOrder
+    processingRevision?: SortOrder
+    publishedRevision?: SortOrder
+    attempts?: SortOrder
+    maxAttempts?: SortOrder
+    lastError?: SortOrder
+    providerStatus?: SortOrder
+    providerDeploymentId?: SortOrder
+    providerResponse?: SortOrder
+    queuedAt?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SiteRebuildAvgOrderByAggregateInput = {
+    requestedRevision?: SortOrder
+    processingRevision?: SortOrder
+    publishedRevision?: SortOrder
+    attempts?: SortOrder
+    maxAttempts?: SortOrder
+  }
+
+  export type SiteRebuildMaxOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    dedupeKey?: SortOrder
+    status?: SortOrder
+    triggerEntity?: SortOrder
+    triggerEntityId?: SortOrder
+    requestedRevision?: SortOrder
+    processingRevision?: SortOrder
+    publishedRevision?: SortOrder
+    attempts?: SortOrder
+    maxAttempts?: SortOrder
+    lastError?: SortOrder
+    providerStatus?: SortOrder
+    providerDeploymentId?: SortOrder
+    queuedAt?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SiteRebuildMinOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    dedupeKey?: SortOrder
+    status?: SortOrder
+    triggerEntity?: SortOrder
+    triggerEntityId?: SortOrder
+    requestedRevision?: SortOrder
+    processingRevision?: SortOrder
+    publishedRevision?: SortOrder
+    attempts?: SortOrder
+    maxAttempts?: SortOrder
+    lastError?: SortOrder
+    providerStatus?: SortOrder
+    providerDeploymentId?: SortOrder
+    queuedAt?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SiteRebuildSumOrderByAggregateInput = {
+    requestedRevision?: SortOrder
+    processingRevision?: SortOrder
+    publishedRevision?: SortOrder
+    attempts?: SortOrder
+    maxAttempts?: SortOrder
+  }
+
+  export type EnumSiteRebuildStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SiteRebuildStatus | EnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SiteRebuildStatus[] | ListEnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SiteRebuildStatus[] | ListEnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSiteRebuildStatusWithAggregatesFilter<$PrismaModel> | $Enums.SiteRebuildStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSiteRebuildStatusFilter<$PrismaModel>
+    _max?: NestedEnumSiteRebuildStatusFilter<$PrismaModel>
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type SiteScalarRelationFilter = {
@@ -29152,43 +31197,9 @@ export namespace Prisma {
     _max?: NestedEnumPageTypeFilter<$PrismaModel>
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-  export type JsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type PageScalarRelationFilter = {
@@ -29232,54 +31243,12 @@ export namespace Prisma {
     position?: SortOrder
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type EnumServiceTypeFilter<$PrismaModel = never> = {
@@ -29449,17 +31418,6 @@ export namespace Prisma {
     not?: NestedEnumTariffImportStatusFilter<$PrismaModel> | $Enums.TariffImportStatus
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type TariffImportRunCountOrderByAggregateInput = {
     id?: SortOrder
     providerId?: SortOrder
@@ -29522,20 +31480,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTariffImportStatusFilter<$PrismaModel>
     _max?: NestedEnumTariffImportStatusFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumCityImportStatusFilter<$PrismaModel = never> = {
@@ -30401,6 +32345,13 @@ export namespace Prisma {
     connect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
   }
 
+  export type SiteRebuildCreateNestedManyWithoutSiteInput = {
+    create?: XOR<SiteRebuildCreateWithoutSiteInput, SiteRebuildUncheckedCreateWithoutSiteInput> | SiteRebuildCreateWithoutSiteInput[] | SiteRebuildUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutSiteInput | SiteRebuildCreateOrConnectWithoutSiteInput[]
+    createMany?: SiteRebuildCreateManySiteInputEnvelope
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+  }
+
   export type RegionUncheckedCreateNestedManyWithoutSiteInput = {
     create?: XOR<RegionCreateWithoutSiteInput, RegionUncheckedCreateWithoutSiteInput> | RegionCreateWithoutSiteInput[] | RegionUncheckedCreateWithoutSiteInput[]
     connectOrCreate?: RegionCreateOrConnectWithoutSiteInput | RegionCreateOrConnectWithoutSiteInput[]
@@ -30448,6 +32399,13 @@ export namespace Prisma {
     connectOrCreate?: CityImportRunCreateOrConnectWithoutSiteInput | CityImportRunCreateOrConnectWithoutSiteInput[]
     createMany?: CityImportRunCreateManySiteInputEnvelope
     connect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+  }
+
+  export type SiteRebuildUncheckedCreateNestedManyWithoutSiteInput = {
+    create?: XOR<SiteRebuildCreateWithoutSiteInput, SiteRebuildUncheckedCreateWithoutSiteInput> | SiteRebuildCreateWithoutSiteInput[] | SiteRebuildUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutSiteInput | SiteRebuildCreateOrConnectWithoutSiteInput[]
+    createMany?: SiteRebuildCreateManySiteInputEnvelope
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -30564,6 +32522,20 @@ export namespace Prisma {
     deleteMany?: CityImportRunScalarWhereInput | CityImportRunScalarWhereInput[]
   }
 
+  export type SiteRebuildUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<SiteRebuildCreateWithoutSiteInput, SiteRebuildUncheckedCreateWithoutSiteInput> | SiteRebuildCreateWithoutSiteInput[] | SiteRebuildUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutSiteInput | SiteRebuildCreateOrConnectWithoutSiteInput[]
+    upsert?: SiteRebuildUpsertWithWhereUniqueWithoutSiteInput | SiteRebuildUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: SiteRebuildCreateManySiteInputEnvelope
+    set?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    disconnect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    delete?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    update?: SiteRebuildUpdateWithWhereUniqueWithoutSiteInput | SiteRebuildUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: SiteRebuildUpdateManyWithWhereWithoutSiteInput | SiteRebuildUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
+  }
+
   export type RegionUncheckedUpdateManyWithoutSiteNestedInput = {
     create?: XOR<RegionCreateWithoutSiteInput, RegionUncheckedCreateWithoutSiteInput> | RegionCreateWithoutSiteInput[] | RegionUncheckedCreateWithoutSiteInput[]
     connectOrCreate?: RegionCreateOrConnectWithoutSiteInput | RegionCreateOrConnectWithoutSiteInput[]
@@ -30660,6 +32632,52 @@ export namespace Prisma {
     update?: CityImportRunUpdateWithWhereUniqueWithoutSiteInput | CityImportRunUpdateWithWhereUniqueWithoutSiteInput[]
     updateMany?: CityImportRunUpdateManyWithWhereWithoutSiteInput | CityImportRunUpdateManyWithWhereWithoutSiteInput[]
     deleteMany?: CityImportRunScalarWhereInput | CityImportRunScalarWhereInput[]
+  }
+
+  export type SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<SiteRebuildCreateWithoutSiteInput, SiteRebuildUncheckedCreateWithoutSiteInput> | SiteRebuildCreateWithoutSiteInput[] | SiteRebuildUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutSiteInput | SiteRebuildCreateOrConnectWithoutSiteInput[]
+    upsert?: SiteRebuildUpsertWithWhereUniqueWithoutSiteInput | SiteRebuildUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: SiteRebuildCreateManySiteInputEnvelope
+    set?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    disconnect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    delete?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    update?: SiteRebuildUpdateWithWhereUniqueWithoutSiteInput | SiteRebuildUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: SiteRebuildUpdateManyWithWhereWithoutSiteInput | SiteRebuildUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
+  }
+
+  export type SiteCreateNestedOneWithoutRebuildsInput = {
+    create?: XOR<SiteCreateWithoutRebuildsInput, SiteUncheckedCreateWithoutRebuildsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutRebuildsInput
+    connect?: SiteWhereUniqueInput
+  }
+
+  export type EnumSiteRebuildStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SiteRebuildStatus
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type SiteUpdateOneWithoutRebuildsNestedInput = {
+    create?: XOR<SiteCreateWithoutRebuildsInput, SiteUncheckedCreateWithoutRebuildsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutRebuildsInput
+    upsert?: SiteUpsertWithoutRebuildsInput
+    disconnect?: SiteWhereInput | boolean
+    delete?: SiteWhereInput | boolean
+    connect?: SiteWhereUniqueInput
+    update?: XOR<XOR<SiteUpdateToOneWithWhereWithoutRebuildsInput, SiteUpdateWithoutRebuildsInput>, SiteUncheckedUpdateWithoutRebuildsInput>
   }
 
   export type SiteCreateNestedOneWithoutRegionsInput = {
@@ -31120,14 +33138,6 @@ export namespace Prisma {
     connect?: PageWhereUniqueInput
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
@@ -31238,10 +33248,6 @@ export namespace Prisma {
 
   export type EnumTariffImportStatusFieldUpdateOperationsInput = {
     set?: $Enums.TariffImportStatus
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type ProviderUpdateOneRequiredWithoutTariffImportsNestedInput = {
@@ -31981,26 +33987,55 @@ export namespace Prisma {
     _max?: NestedEnumPublishStatusFilter<$PrismaModel>
   }
 
-  export type NestedEnumPageTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.PageType | EnumPageTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PageType[] | ListEnumPageTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PageType[] | ListEnumPageTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumPageTypeFilter<$PrismaModel> | $Enums.PageType
+  export type NestedEnumSiteRebuildStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SiteRebuildStatus | EnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SiteRebuildStatus[] | ListEnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SiteRebuildStatus[] | ListEnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSiteRebuildStatusFilter<$PrismaModel> | $Enums.SiteRebuildStatus
   }
 
-  export type NestedEnumPageTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PageType | EnumPageTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PageType[] | ListEnumPageTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PageType[] | ListEnumPageTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumPageTypeWithAggregatesFilter<$PrismaModel> | $Enums.PageType
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedEnumSiteRebuildStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SiteRebuildStatus | EnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SiteRebuildStatus[] | ListEnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SiteRebuildStatus[] | ListEnumSiteRebuildStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSiteRebuildStatusWithAggregatesFilter<$PrismaModel> | $Enums.SiteRebuildStatus
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPageTypeFilter<$PrismaModel>
-    _max?: NestedEnumPageTypeFilter<$PrismaModel>
+    _min?: NestedEnumSiteRebuildStatusFilter<$PrismaModel>
+    _max?: NestedEnumSiteRebuildStatusFilter<$PrismaModel>
   }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -32030,35 +34065,48 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPageTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PageType | EnumPageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PageType[] | ListEnumPageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PageType[] | ListEnumPageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPageTypeFilter<$PrismaModel> | $Enums.PageType
+  }
+
+  export type NestedEnumPageTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PageType | EnumPageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PageType[] | ListEnumPageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PageType[] | ListEnumPageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPageTypeWithAggregatesFilter<$PrismaModel> | $Enums.PageType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPageTypeFilter<$PrismaModel>
+    _max?: NestedEnumPageTypeFilter<$PrismaModel>
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-  export type NestedJsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedEnumServiceTypeFilter<$PrismaModel = never> = {
@@ -32139,17 +34187,6 @@ export namespace Prisma {
     not?: NestedEnumTariffImportStatusFilter<$PrismaModel> | $Enums.TariffImportStatus
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedEnumTariffImportStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TariffImportStatus | EnumTariffImportStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TariffImportStatus[] | ListEnumTariffImportStatusFieldRefInput<$PrismaModel>
@@ -32158,20 +34195,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTariffImportStatusFilter<$PrismaModel>
     _max?: NestedEnumTariffImportStatusFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumCityImportStatusFilter<$PrismaModel = never> = {
@@ -32343,6 +34366,7 @@ export namespace Prisma {
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutProviderInput = {
@@ -32361,6 +34385,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutProviderInput = {
@@ -32916,6 +34941,62 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SiteRebuildCreateWithoutSiteInput = {
+    id?: string
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SiteRebuildUncheckedCreateWithoutSiteInput = {
+    id?: string
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SiteRebuildCreateOrConnectWithoutSiteInput = {
+    where: SiteRebuildWhereUniqueInput
+    create: XOR<SiteRebuildCreateWithoutSiteInput, SiteRebuildUncheckedCreateWithoutSiteInput>
+  }
+
+  export type SiteRebuildCreateManySiteInputEnvelope = {
+    data: SiteRebuildCreateManySiteInput | SiteRebuildCreateManySiteInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProviderUpsertWithoutSitesInput = {
     update: XOR<ProviderUpdateWithoutSitesInput, ProviderUncheckedUpdateWithoutSitesInput>
     create: XOR<ProviderCreateWithoutSitesInput, ProviderUncheckedCreateWithoutSitesInput>
@@ -33199,6 +35280,141 @@ export namespace Prisma {
     appliedAt?: DateTimeNullableFilter<"CityImportRun"> | Date | string | null
   }
 
+  export type SiteRebuildUpsertWithWhereUniqueWithoutSiteInput = {
+    where: SiteRebuildWhereUniqueInput
+    update: XOR<SiteRebuildUpdateWithoutSiteInput, SiteRebuildUncheckedUpdateWithoutSiteInput>
+    create: XOR<SiteRebuildCreateWithoutSiteInput, SiteRebuildUncheckedCreateWithoutSiteInput>
+  }
+
+  export type SiteRebuildUpdateWithWhereUniqueWithoutSiteInput = {
+    where: SiteRebuildWhereUniqueInput
+    data: XOR<SiteRebuildUpdateWithoutSiteInput, SiteRebuildUncheckedUpdateWithoutSiteInput>
+  }
+
+  export type SiteRebuildUpdateManyWithWhereWithoutSiteInput = {
+    where: SiteRebuildScalarWhereInput
+    data: XOR<SiteRebuildUpdateManyMutationInput, SiteRebuildUncheckedUpdateManyWithoutSiteInput>
+  }
+
+  export type SiteRebuildScalarWhereInput = {
+    AND?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
+    OR?: SiteRebuildScalarWhereInput[]
+    NOT?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
+    id?: StringFilter<"SiteRebuild"> | string
+    siteId?: StringNullableFilter<"SiteRebuild"> | string | null
+    dedupeKey?: StringFilter<"SiteRebuild"> | string
+    status?: EnumSiteRebuildStatusFilter<"SiteRebuild"> | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFilter<"SiteRebuild"> | string
+    triggerEntityId?: StringFilter<"SiteRebuild"> | string
+    affectedPaths?: JsonFilter<"SiteRebuild">
+    requestedRevision?: IntFilter<"SiteRebuild"> | number
+    processingRevision?: IntFilter<"SiteRebuild"> | number
+    publishedRevision?: IntFilter<"SiteRebuild"> | number
+    attempts?: IntFilter<"SiteRebuild"> | number
+    maxAttempts?: IntFilter<"SiteRebuild"> | number
+    lastError?: StringNullableFilter<"SiteRebuild"> | string | null
+    providerStatus?: StringNullableFilter<"SiteRebuild"> | string | null
+    providerDeploymentId?: StringNullableFilter<"SiteRebuild"> | string | null
+    providerResponse?: JsonNullableFilter<"SiteRebuild">
+    queuedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
+    startedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
+    completedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
+    createdAt?: DateTimeFilter<"SiteRebuild"> | Date | string
+    updatedAt?: DateTimeFilter<"SiteRebuild"> | Date | string
+  }
+
+  export type SiteCreateWithoutRebuildsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    provider: ProviderCreateNestedOneWithoutSitesInput
+    regions?: RegionCreateNestedManyWithoutSiteInput
+    cities?: CityCreateNestedManyWithoutSiteInput
+    pages?: PageCreateNestedManyWithoutSiteInput
+    leads?: LeadCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckCreateNestedManyWithoutSiteInput
+    redirects?: RedirectCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteUncheckedCreateWithoutRebuildsInput = {
+    id?: string
+    providerId: string
+    name: string
+    slug: string
+    domain?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
+    cities?: CityUncheckedCreateNestedManyWithoutSiteInput
+    pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
+    redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteCreateOrConnectWithoutRebuildsInput = {
+    where: SiteWhereUniqueInput
+    create: XOR<SiteCreateWithoutRebuildsInput, SiteUncheckedCreateWithoutRebuildsInput>
+  }
+
+  export type SiteUpsertWithoutRebuildsInput = {
+    update: XOR<SiteUpdateWithoutRebuildsInput, SiteUncheckedUpdateWithoutRebuildsInput>
+    create: XOR<SiteCreateWithoutRebuildsInput, SiteUncheckedCreateWithoutRebuildsInput>
+    where?: SiteWhereInput
+  }
+
+  export type SiteUpdateToOneWithWhereWithoutRebuildsInput = {
+    where?: SiteWhereInput
+    data: XOR<SiteUpdateWithoutRebuildsInput, SiteUncheckedUpdateWithoutRebuildsInput>
+  }
+
+  export type SiteUpdateWithoutRebuildsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
+    regions?: RegionUpdateManyWithoutSiteNestedInput
+    cities?: CityUpdateManyWithoutSiteNestedInput
+    pages?: PageUpdateManyWithoutSiteNestedInput
+    leads?: LeadUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+  }
+
+  export type SiteUncheckedUpdateWithoutRebuildsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
+    cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
+    pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+  }
+
   export type SiteCreateWithoutRegionsInput = {
     id?: string
     name: string
@@ -33215,6 +35431,7 @@ export namespace Prisma {
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutRegionsInput = {
@@ -33233,6 +35450,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutRegionsInput = {
@@ -33321,6 +35539,7 @@ export namespace Prisma {
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutRegionsInput = {
@@ -33339,6 +35558,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithWhereUniqueWithoutRegionInput = {
@@ -33373,6 +35593,7 @@ export namespace Prisma {
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutCitiesInput = {
@@ -33391,6 +35612,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutCitiesInput = {
@@ -33702,6 +35924,7 @@ export namespace Prisma {
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutCitiesInput = {
@@ -33720,6 +35943,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type RegionUpsertWithoutCitiesInput = {
@@ -33847,6 +36071,7 @@ export namespace Prisma {
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutPagesInput = {
@@ -33865,6 +36090,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutPagesInput = {
@@ -34098,6 +36324,7 @@ export namespace Prisma {
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutPagesInput = {
@@ -34116,6 +36343,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutPagesInput = {
@@ -34664,6 +36892,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutCityImportsInput = {
@@ -34682,6 +36911,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutCityImportsInput = {
@@ -34716,6 +36946,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutCityImportsInput = {
@@ -34734,6 +36965,7 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteCreateWithoutChecksInput = {
@@ -34752,6 +36984,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutChecksInput = {
@@ -34770,6 +37003,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutChecksInput = {
@@ -34976,6 +37210,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutChecksInput = {
@@ -34994,6 +37229,7 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutChecksInput = {
@@ -35126,6 +37362,7 @@ export namespace Prisma {
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutLeadsInput = {
@@ -35144,6 +37381,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutLeadsInput = {
@@ -35629,6 +37867,7 @@ export namespace Prisma {
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutLeadsInput = {
@@ -35647,6 +37886,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutLeadsInput = {
@@ -36582,6 +38822,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutRedirectsInput = {
@@ -36600,6 +38841,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutRedirectsInput = {
@@ -36683,6 +38925,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutRedirectsInput = {
@@ -36701,6 +38944,7 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutRedirectsInput = {
@@ -37099,6 +39343,7 @@ export namespace Prisma {
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutProviderInput = {
@@ -37117,6 +39362,7 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateManyWithoutProviderInput = {
@@ -37343,6 +39589,29 @@ export namespace Prisma {
     report: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+  }
+
+  export type SiteRebuildCreateManySiteInput = {
+    id?: string
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type RegionUpdateWithoutSiteInput = {
@@ -37697,6 +39966,75 @@ export namespace Prisma {
     report?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SiteRebuildUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SiteRebuildUncheckedUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SiteRebuildUncheckedUpdateManyWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CityCreateManyRegionInput = {

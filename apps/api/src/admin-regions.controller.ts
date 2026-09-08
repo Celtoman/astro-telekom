@@ -22,12 +22,16 @@ export class AdminRegionsController {
   }
 
   @Post()
-  create(@Body() body: RegionBody) {
-    return this.prisma.region.create({ data: body }).then((region: any) => { void this.rebuild.enqueue({ entity: 'region', id: region.id, siteId: region.siteId }); return region; });
+  async create(@Body() body: RegionBody) {
+    const region = await this.prisma.region.create({ data: body });
+    await this.rebuild.enqueue({ entity: 'region', id: region.id, siteId: region.siteId });
+    return region;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body: Partial<RegionBody>) {
-    return this.prisma.region.update({ where: { id }, data: body }).then((region: any) => { void this.rebuild.enqueue({ entity: 'region', id: region.id, siteId: region.siteId }); return region; });
+  async update(@Param('id') id: string, @Body() body: Partial<RegionBody>) {
+    const region = await this.prisma.region.update({ where: { id }, data: body });
+    await this.rebuild.enqueue({ entity: 'region', id: region.id, siteId: region.siteId });
+    return region;
   }
 }

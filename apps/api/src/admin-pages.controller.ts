@@ -28,12 +28,16 @@ export class AdminPagesController {
   }
 
   @Post()
-  create(@Body() body: PageBody) {
-    return this.prisma.page.create({ data: body }).then((page: any) => { void this.rebuild.enqueue({ entity: 'page', id: page.id, siteId: page.siteId }); return page; });
+  async create(@Body() body: PageBody) {
+    const page = await this.prisma.page.create({ data: body });
+    await this.rebuild.enqueue({ entity: 'page', id: page.id, siteId: page.siteId });
+    return page;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body: Partial<PageBody>) {
-    return this.prisma.page.update({ where: { id }, data: body }).then((page: any) => { void this.rebuild.enqueue({ entity: 'page', id: page.id, siteId: page.siteId }); return page; });
+  async update(@Param('id') id: string, @Body() body: Partial<PageBody>) {
+    const page = await this.prisma.page.update({ where: { id }, data: body });
+    await this.rebuild.enqueue({ entity: 'page', id: page.id, siteId: page.siteId });
+    return page;
   }
 }

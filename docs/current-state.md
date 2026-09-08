@@ -11,25 +11,26 @@
 | Направление | Статус | Что есть сейчас | Граница или условие |
 | --- | --- | --- | --- |
 | Monorepo и локальная инфраструктура | Реализовано | pnpm workspace, Docker Compose, PostgreSQL 18, Redis 8 | Production-развертывание не выполнялось и не подтверждалось. |
-| Данные и миграции | Реализовано | Prisma-схема, 9 миграций, seed для Дом.ру/Казани | Нет истории изменений тарифа, корзины, версий контента и журнала действий. |
+| Данные и миграции | Реализовано | Prisma-схема, 10 миграций, seed для Дом.ру/Казани | Нет истории изменений тарифа, корзины, версий контента и журнала действий. |
 | API и доступ | Частично реализовано | NestJS/Fastify, Bearer-сессии, роли, сервисный `x-admin-token` | Нет DTO/глобальной валидации, rate limit, полноценного браузерного login-flow и аудита действий. |
 | Города и страницы | Частично реализовано | CRUD API, XLS-import с preview-отчетом, шесть черновых страниц новому городу | Нет публикационного workflow, расписания, preview, шаблонов и массовых операций. |
 | Тарифы | Частично реализовано | CRUD, XLS/XLSX validation/apply, ключ идентичности, SEO JSON | Импорт не снимает с публикации тарифы, которых нет в новом файле; нет истории, редиректов и редактора полной модели. |
 | Публичная витрина | Частично реализовано | Astro static, Казань, маршруты услуг, FAQ, карточки тарифов, robots и sitemap | Маршруты и навигация жестко завязаны на Казань; данные читаются только во время сборки. При недоступном API сборка теперь явно падает — демо-данные допустимы только с явным `ALLOW_DEMO_DATA=true`. |
 | Проверка адреса | Реализовано с зависимостью от окружения | API сохраняет проверку и различает AVAILABLE, UNAVAILABLE, AMBIGUOUS, MANUAL_CHECK, ERROR | Без настроенного внешнего API возвращается ручная проверка; реальный контракт не проверен. |
 | Заявки и CRM | Частично реализовано | Сохранение контекста, дубликаты, проверка договора, попытки доставки, CRM endpoints, серверно проверяемая одноразовая fallback-ссылка | Внешние контракты не проверены; нет политики хранения PII. |
-| Фоновые задачи | Частично реализовано | Worker слушает три очереди, API ставит только `lead-deliveries` | Очереди импорта и пересборки не имеют производителя; пересборка сейчас идет прямым webhook без retry. |
+| Фоновые задачи | Частично реализовано | API ставит `lead-deliveries` и persistent `site-rebuilds`; rebuild имеет дедупликацию по сайту, 3 попытки, backoff и статусы в PostgreSQL | У `tariff-imports` нет producer; live deployment provider не настроен и не проверен. |
 | Админка | Частично реализовано | React/Tailwind/shadcn подключены; `/lead-access/` проверяет одноразовую ссылку через API; legacy index загружает списки и два сценария XLS-import | Большинство чисел, таблиц и разделов legacy index — статический demo UI; для многих кнопок нет соответствующего API. |
 | CRM-интерфейс | Частично реализовано, **временный прототип** | Загрузка списка и карточки заявки, смена статуса через API | Нет отдельного входа, фильтров, пагинации и полноценного рабочего интерфейса. Решение от 7 сентября 2026 ([docs/decisions.md](decisions.md), раздел 6): отдельного `apps/crm` не будет, функциональность переезжает в раздел «Заявки» `apps/admin`; первый отдельный admin-экран для fallback-доступа уже перенесен. |
 | SEO и аналитика | Частично реализовано | HTML-first генерация, title/description/canonical/JSON-LD, robots, sitemap с корневым URL, build-time smoke готового HTML, события Метрики | `PUBLIC_SITE_URL` пока не обязателен на уровне build, sitemap остается привязан к фиксированной Казани, нет Schema.org-профиля сущностей и реальной аналитики. |
-| Тестирование | Частично реализовано | `pnpm lint`, `pnpm db:validate`, `pnpm build`, `pnpm test`; 47/47 node tests проходят; admin входит в Astro check; public build-policy проверяется реальными сборками | Нет browser/E2E-покрытия и отдельного lint для CRM (остаток TD-18). |
+| Тестирование | Частично реализовано | `pnpm lint`, `pnpm db:validate`, `pnpm build`, `pnpm test`; 59/59 node tests проходят; admin входит в Astro check; public build-policy проверяется реальными сборками | Нет browser/E2E-покрытия и отдельного lint для CRM (остаток TD-18). |
 
 ## Реализованный путь данных
 
 ```text
 Администратор или XLS
   -> NestJS API -> PostgreSQL через Prisma
-  -> webhook пересборки или API-очередь доставки
+  -> persistent SiteRebuild -> Redis/BullMQ -> worker
+  -> internal start/result API + deployment provider
 
 Публичная Astro-сборка
   -> GET /public/sites/domru-kazan/cities/kazan во время build
@@ -40,7 +41,7 @@
   -> POST /leads -> Lead -> очередь lead-deliveries -> Tarifnik или email fallback
 ```
 
-Главное следствие статической архитектуры: изменение данных в PostgreSQL не меняет уже опубликованный HTML само по себе. API вызывает `REBUILD_WEBHOOK_URL` напрямую, но успешный production-процесс пересборки и его обратная связь не реализованы в репозитории.
+Главное следствие статической архитектуры: изменение данных в PostgreSQL не меняет уже опубликованный HTML само по себе. API теперь сохраняет rebuild-job до ответа CRUD, worker выполняет его с retry, а статус `SUCCEEDED` появляется только после явного финального ответа deployment provider. Сам provider и live production-процесс пока не настроены и не проверены.
 
 ## Реализованные публичные маршруты
 
@@ -63,7 +64,8 @@
 | `DOMRU_CONTRACT_API_URL` | Новая заявка получает `MANUAL_CHECK_API`; доставка в Tarifnik не запускается. |
 | `TARIFNIK_API_KEY` | Pending-заявка остается не переданной; попытка логируется только в server log. |
 | `LEADS_EMAIL` и `RESEND_API_KEY` либо `LEADS_EMAIL_WEBHOOK_URL` | Обычное уведомление может тихо не уйти; email fallback завершится ошибкой. |
-| `REBUILD_WEBHOOK_URL` | API не инициирует пересборку статического сайта. |
+| `REBUILD_WEBHOOK_URL` | Rebuild-job повторяется и завершается `FAILED`; опубликованная ревизия не изменяется. |
+| `REDIS_URL` | Rebuild сохраняется как `PENDING`, но не выполняется до следующего запуска API с Redis. |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Seed не создаст пользователя для входа. |
 
 ## Результаты проверок
@@ -75,7 +77,7 @@
 | `pnpm lint` | Успешно: TypeScript API, Astro web/admin и syntax check worker. У CRM пока нет lint-скрипта. |
 | `pnpm db:validate` | Успешно: Prisma schema валидна. |
 | `pnpm build` | Успешно с `ALLOW_DEMO_DATA=true` (или поднятым API): API, web, admin, CRM и worker собираются. Без флага и без API `apps/web` build осознанно падает — см. TD-03. |
-| `pnpm test` | 47/47 успешно, включая дедупликацию, одноразовый fallback-доступ и три сценария реальной Astro-сборки. |
+| `pnpm test` | 59/59 успешно, включая rebuild producer/worker/retry/status, дедупликацию лидов, одноразовый fallback-доступ и три сценария реальной Astro-сборки. |
 | GitHub Actions CI | `.github/workflows/ci.yml` запускает `pnpm check` на каждый push и pull request в `master`; допустимого красного baseline нет. |
 | `docker compose -f docker-compose.prod.yml config --no-interpolate` | YAML и структура Compose читаются. Это не запуск контейнеров и не доказательство готовности production. |
 

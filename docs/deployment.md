@@ -40,7 +40,7 @@ docker compose -f docker-compose.prod.yml exec api node --experimental-strip-typ
 | Health | HTTP `GET https://<API_DOMAIN>/api/v1/health`; дополнительно ручной DB-read endpoint после его реализации. |
 | Публичный HTML | Открыть raw HTML `/`, `/kazan/`, service page, tariff page, robots и sitemap; проверить canonical без localhost. |
 | Интеграции | Sandbox или согласованный test contract coverage, contract check, Tarifnik и fallback email. |
-| Rebuild | Изменить тестовую сущность, дождаться deployment и проверить HTML после rebuild. Сейчас этот шаг не имеет persistent status. |
+| Rebuild | Изменить тестовую сущность, проверить переход `PENDING/QUEUED -> RUNNING -> SUCCEEDED` через `/admin/rebuilds`, затем проверить HTML и совпадение `publishedRevision === requestedRevision`. |
 | Backup/restore | Проверить резервную копию PostgreSQL и восстановление на отдельной БД. |
 
 ## Переменные окружения по назначению
@@ -60,6 +60,8 @@ docker compose -f docker-compose.prod.yml exec api node --experimental-strip-typ
 - Caddy reverse proxy не добавляет security headers из `static.Caddyfile`; он используется только внутри static image.
 - Нет мониторинга, alerting, лог-агрегации или автоматической backup policy.
 - Static web не получает изменения из БД без внешней пересборки.
+- Rebuild требует одновременно PostgreSQL, Redis, worker, API и provider, который возвращает финальный `{ "status": "SUCCEEDED" }`; наличие одной лишь webhook-точки не доказывает публикацию.
+- Для применения persistent rebuild-job нужна миграция `0010_site_rebuild_jobs`.
 - Fallback email link требует примененной миграции `0009_lead_access_tokens`; ссылка одноразовая, действует 24 часа и проверяется API. Raw token передается во fragment и не попадает в HTTP request к static admin.
 
 Полный список рисков и работа по закрытию — в [technical-debt.md](technical-debt.md).
