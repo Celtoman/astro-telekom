@@ -69,13 +69,6 @@ enum DeliveryAttemptStatus {
   SKIPPED
 }
 
-enum UserRole {
-  ADMIN
-  EDITOR
-  TARIFF_MANAGER
-  OPERATOR
-}
-
 enum TariffImportStatus {
   VALIDATED
   APPLIED
@@ -446,7 +439,6 @@ model User {
   email        String    @unique
   passwordHash String
   name         String?
-  role         UserRole
   active       Boolean   @default(true)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt

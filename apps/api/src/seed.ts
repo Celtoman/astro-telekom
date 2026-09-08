@@ -167,12 +167,11 @@ async function main() {
   if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
     await prisma.user.upsert({
       where: { email: process.env.ADMIN_EMAIL.toLowerCase() },
-      update: { passwordHash: hashPassword(process.env.ADMIN_PASSWORD), role: 'ADMIN', active: true },
+      update: { passwordHash: hashPassword(process.env.ADMIN_PASSWORD), active: true },
       create: {
         email: process.env.ADMIN_EMAIL.toLowerCase(),
         passwordHash: hashPassword(process.env.ADMIN_PASSWORD),
         name: 'Администратор',
-        role: 'ADMIN',
       },
     });
   }

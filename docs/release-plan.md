@@ -7,7 +7,7 @@
 Статус: **реализован, но с известными ограничениями**.
 
 - Monorepo, Docker Compose, Prisma migrations и seed.
-- NestJS API, sessions/roles и CRUD базовых сущностей.
+- NestJS API, Bearer-сессии с единым уровнем доступа администратора и CRUD базовых сущностей.
 - Статический Astro-сайт для Казани с четырьмя типами контентных страниц, FAQ, тарифными карточками и формой проверки адреса.
 - XLS-import городов/тарифов с validate/apply reports.
 - Прием лида, deduplication, contract check, delivery attempts, CRM API.
@@ -40,7 +40,7 @@ Release 0 не является production release: тестовый gate зел
 
 Цель: дать редактору управляемые версии, шаблоны/блоки, аудит, историю импортов и эксплуатационные панели без demo UI.
 
-Нужны: versioning, audit log, media, SEO validation, analytics, role-aware UI, policy-driven PII retention, monitoring, backup/restore и CI/CD.
+Нужны: versioning, audit log, media, SEO validation, analytics, управление учетными записями администраторов без ролевой модели, policy-driven PII retention, monitoring, backup/restore и CI/CD.
 
 ## Внешние зависимости
 

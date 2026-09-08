@@ -375,7 +375,6 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   name: 'name',
-  role: 'role',
   active: 'active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -499,13 +498,6 @@ exports.DeliveryAttemptStatus = exports.$Enums.DeliveryAttemptStatus = {
   SUCCEEDED: 'SUCCEEDED',
   FAILED: 'FAILED',
   SKIPPED: 'SKIPPED'
-};
-
-exports.UserRole = exports.$Enums.UserRole = {
-  ADMIN: 'ADMIN',
-  EDITOR: 'EDITOR',
-  TARIFF_MANAGER: 'TARIFF_MANAGER',
-  OPERATOR: 'OPERATOR'
 };
 
 exports.Prisma.ModelName = {

@@ -1,7 +1,6 @@
 import {
   CanActivate,
   ExecutionContext,
-  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -24,15 +23,6 @@ export class AdminTokenGuard implements CanActivate {
 
     const user = await this.auth.getUserByToken(authorization.slice(7));
     if (!user) throw new UnauthorizedException();
-    const path = request.url.split('?')[0];
-    const allowed = /^\/api\/v1\/admin\/(providers|sites|users)(\/|$)/.test(path)
-      ? user.role === 'ADMIN'
-      : path.includes('/crm/')
-      ? ['ADMIN', 'OPERATOR'].includes(user.role)
-      : path.includes('/admin/tariffs')
-        ? ['ADMIN', 'TARIFF_MANAGER'].includes(user.role)
-        : ['ADMIN', 'EDITOR'].includes(user.role);
-    if (!allowed) throw new ForbiddenException();
     (request as any).user = user;
     return true;
   }

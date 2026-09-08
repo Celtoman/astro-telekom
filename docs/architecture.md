@@ -39,7 +39,7 @@
 
 | Модуль | Реальная ответственность |
 | --- | --- |
-| `auth` и `AdminTokenGuard` | Создание 12-часовой Bearer-сессии, проверка роли, совместимый сервисный `x-admin-token`. |
+| `auth` и `AdminTokenGuard` | Создание 12-часовой Bearer-сессии для единого уровня доступа администратора; совместимый сервисный `x-admin-token` используется как машинный credential. |
 | `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; строгая валидация есть только у блоков. |
 | `tariff-import`, `city-import` | Валидация XLS/XLSX, сохранение отчета, transactional apply. |
 | `address-checks`, `coverage` | Сохранение проверки адреса и адаптер внешнего coverage API. |

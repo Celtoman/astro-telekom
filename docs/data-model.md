@@ -1,6 +1,6 @@
 # Модель данных текущего прототипа
 
-Источник правды: `prisma/schema.prisma` и десять применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
+Источник правды: `prisma/schema.prisma` и одиннадцать применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
 
 ## Сущности контента и географии
 
@@ -36,7 +36,7 @@
 
 ## Доступ и технические записи
 
-`User` содержит email, `passwordHash`, name, role, active и timestamps. `Session` хранит не raw token, а его SHA-256 hash и expiry. При reset password или deactivate API удаляет sessions пользователя. `LeadAccessToken` также хранит только hash: raw token существует лишь в одноразовой email-ссылке и не возвращается административными CRM routes.
+`User` содержит email, `passwordHash`, name, active и timestamps. Ролевой модели нет: любая активная учетная запись имеет единый уровень доступа администратора. `Session` хранит не raw token, а его SHA-256 hash и expiry. При reset password или deactivate API удаляет sessions пользователя. `LeadAccessToken` также хранит только hash: raw token существует лишь в одноразовой email-ссылке и не возвращается административными CRM routes.
 
 `Redirect` уже есть в схеме: site/city, source/target path, status, hits и timestamps. В текущем коде нет controller, routing или hit tracking, поэтому наличие таблицы не означает работу 301.
 

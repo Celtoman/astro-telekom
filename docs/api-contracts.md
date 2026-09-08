@@ -7,7 +7,7 @@
 - API работает на NestJS/Fastify и принимает JSON; server body limit — 35 MB.
 - `POST /auth/login` возвращает 12-часовой Bearer token. Сессия хранится как SHA-256 hash.
 - Защищенные маршруты принимают `Authorization: Bearer <token>`. Для сервисного сценария guard также принимает `x-admin-token`, если он равен `ADMIN_API_TOKEN`; этот путь обладает полными правами.
-- Роли: `ADMIN`, `EDITOR`, `TARIFF_MANAGER`, `OPERATOR`. `ADMIN` управляет provider/site/users; `TARIFF_MANAGER` — tariff routes; `ADMIN` и `OPERATOR` — CRM; остальные admin content routes доступны `ADMIN`/`EDITOR`.
+- У пользовательского доступа один уровень — администратор. Любой активный пользователь с действующей Bearer-сессией имеет одинаковый полный доступ ко всем административным и CRM routes; ролевой модели нет. `x-admin-token` — машинный credential, а не пользовательская роль.
 - Общий `ValidationPipe` не включен. Контроллеры проверяют часть полей вручную; нельзя считать TypeScript body-interface полноценной runtime-валидацией.
 
 ## Public routes
@@ -41,15 +41,15 @@
 | Method | Route | Назначение |
 | --- | --- | --- |
 | POST | `/auth/login` | Email/password -> Bearer session. |
-| GET/POST/PATCH | `/admin/providers` | Provider records. Только ADMIN. |
-| GET/POST/PATCH | `/admin/sites` | Site records. Только ADMIN. |
-| GET/POST/PATCH | `/admin/users` | Пользователи, роли, deactivate/password reset. Только ADMIN. |
+| GET/POST/PATCH | `/admin/providers` | Provider records. |
+| GET/POST/PATCH | `/admin/sites` | Site records. |
+| GET/POST/PATCH | `/admin/users` | Учетные записи администраторов, deactivate/password reset. Поле `role` не поддерживается. |
 | GET/POST/PATCH | `/admin/regions` | Region records. |
 | GET/POST/PATCH | `/admin/cities` | City records. |
 | GET/POST/PATCH | `/admin/pages` | Page records. |
 | GET/POST | `/admin/pages/:pageId/blocks` | Просмотр и создание blocks. |
 | PATCH/DELETE | `/admin/blocks/:id` | Изменение и удаление blocks. |
-| GET/POST/PATCH | `/admin/tariffs` | Tariff records. ADMIN или TARIFF_MANAGER. |
+| GET/POST/PATCH | `/admin/tariffs` | Tariff records. |
 | POST | `/admin/tariffs/import` | Старый программный import массива items. |
 | POST | `/admin/tariffs/import/validate` | XLS/XLSX или rows -> сохраненный validation report. |
 | POST | `/admin/tariffs/import/apply` | Атомарно применяет полный snapshot по `runId`; при warnings требует `confirmWarnings: true`. |
@@ -84,7 +84,7 @@ Apply трактует файл как полный snapshot провайдер�
 | POST | `/crm/leads/:id/revoke-fallback-access` | Отзывает все еще активные одноразовые fallback tokens заявки. Защищен CRM guard. |
 | POST | `/internal/lead-deliveries/:id` | Worker-only handler очереди. Защищен тем же guard. |
 
-`/crm/leads` сейчас возвращает PII без серверной пагинации и фильтрации. Admin/CRM UI должны использовать этот endpoint только в доверенном контуре после полноценного login/role flow.
+`/crm/leads` сейчас возвращает PII без серверной пагинации и фильтрации. Admin/CRM UI должны использовать этот endpoint только в доверенном контуре после полноценного login-flow.
 
 ## Отсутствующие routes
 
