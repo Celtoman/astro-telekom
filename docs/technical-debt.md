@@ -26,6 +26,9 @@
 | TD-09 | [#10](https://github.com/Celtoman/astro-telekom/issues/10) 🟢 | `window.prompt` токен, нет login route/logout/route protection |
 | TD-10 | [#11](https://github.com/Celtoman/astro-telekom/issues/11) 🟢 | Contract API и Tarifnik не настроены в `.env.example` |
 | TD-21 | [#12](https://github.com/Celtoman/astro-telekom/issues/12) 🟢 | `xlsx@0.18.5` уязвим к Prototype Pollution и ReDoS |
+| TD-22 | [#37](https://github.com/Celtoman/astro-telekom/issues/37) ✅ | Compose переведен на обязательный для PostgreSQL 18 volume mount `/var/lib/postgresql` |
+| TD-23 | [#38](https://github.com/Celtoman/astro-telekom/issues/38) ✅ | Seed использует явный ESM entrypoint сгенерированного Prisma client и снова запускается на Node 22 |
+| TD-24 | [#39](https://github.com/Celtoman/astro-telekom/issues/39) ✅ | City import использует transaction-local maps, bulk page insert и проходит полный пакет 207 строк |
 
 ## P2
 

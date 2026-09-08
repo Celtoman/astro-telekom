@@ -12,6 +12,8 @@
 | Локальные приложения | pnpm-команды из README | API, web, admin, CRM, worker в процессах хоста. |
 | Production-like | `docker compose -f docker-compose.prod.yml up -d --build` | PostgreSQL, Redis, API, worker, web, admin, CRM, Caddy. |
 
+PostgreSQL 18 хранит major-specific data directory внутри volume, смонтированного в `/var/lib/postgresql`. Не возвращать старый mount `/var/lib/postgresql/data`: официальный PG18 image отказывается запускаться с таким layout.
+
 ## Обязательная подготовка
 
 1. Скопировать `.env.example` в `.env` и заменить все placeholders секретов и доменов.
@@ -26,10 +28,12 @@
 ```powershell
 docker compose -f docker-compose.prod.yml up -d --build
 docker compose -f docker-compose.prod.yml exec api npx prisma migrate deploy --config /app/prisma.config.ts
-docker compose -f docker-compose.prod.yml exec api node --experimental-strip-types /app/prisma/seed.ts
+docker compose -f docker-compose.prod.yml exec api node /app/dist/seed.js
 ```
 
 После seed проверить пользовательский login и public city data. В текущем Compose миграции и seed не запускаются автоматически. API health endpoint проверяет только HTTP process, а не доступность PostgreSQL или актуальность schema; нельзя считать `healthy` доказательством готовности данных.
+
+Для первоначальной загрузки географии после запуска API выполнить `pnpm cities:import`, проверить счетчики validation report и затем `pnpm cities:import -- --apply`. Команда пишет только через административный API и приводит статусы к инварианту: Казань `PUBLISHED`, остальные города `DRAFT`. Исходник и детали находятся в [data/imports/README.md](../data/imports/README.md).
 
 ## Требуемые проверки до публикации
 

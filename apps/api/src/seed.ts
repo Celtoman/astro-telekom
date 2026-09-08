@@ -1,4 +1,4 @@
-import { PrismaClient } from '../apps/api/generated';
+import { PrismaClient } from '../generated/index.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { randomBytes, scryptSync } from 'node:crypto';
@@ -66,14 +66,14 @@ async function main() {
     },
   });
 
-  const pages: Array<{ type: string; title: string; slug: string }> = [
+  const pages = [
     { type: HOME, title: 'Домашний интернет в Казани', slug: '' },
     { type: INTERNET, title: 'Домашний интернет в Казани', slug: 'internet' },
     { type: INTERNET_TV, title: 'Интернет и ТВ в Казани', slug: 'internet-tv' },
     { type: TV, title: 'Телевидение в Казани', slug: 'tv' },
     { type: ADDRESS_CHECK, title: 'Проверка адреса в Казани', slug: 'proverka-adresa' },
     { type: FAQ, title: 'Вопросы и ответы — Казань', slug: 'faq' },
-  ];
+  ] as const;
 
   for (const page of pages) {
     await prisma.page.upsert({

@@ -39,9 +39,9 @@ const normalizeColumn = (value: string) => value.replace(/^\uFEFF/, '').trim().t
 const FIELD_ALIASES = {
   subject: ['subekt_rf', 'subject', 'region', 'subekt_rossiyskoy_federatsii', 'субъект_рф'],
   name: ['gorod_name', 'city_name', 'city', 'город', 'город_имен', 'город_имен_падеж', 'город_именительный_падеж'],
-  instrumental: ['gorod_v_imenitelnom_padezhe', 'gorod_v_imenitelnom', 'gorod_imenit_padezh', 'gorod_v_imenit_padezhe', 'город_имен_падеж'],
+  instrumental: ['gorod_v_imenitelnom_padezhe', 'gorod_v_imenitelnom', 'gorod_imenit_padezh', 'gorod_v_imenit_padezhe', 'город_имен_падеж', 'город_gorod_v_imenit_padezhe'],
   prepositional: ['dom_ru_v', 'gorod_v_predlozhnom_padezhe', 'gorod_predlozh_padezh', 'gorod_v_predlozhnom', 'город_предлож_падеж_dom_ru_v', 'город_предложный_падеж'],
-  genitive: ['gorod_v_roditelnom_padezhe', 'gorod_rodit_padezh', 'gorod_v_roditelnom', 'город_родит_падеж', 'город_родительный_падеж'],
+  genitive: ['gorod_v_roditelnom_padezhe', 'gorod_rodit_padezh', 'gorod_v_roditelnom', 'город_родит_падеж', 'город_родительный_падеж', 'город_родит_падеж_gorod_v_rodit_padezhe'],
   slug: ['gorod_slug', 'slug', 'city_slug'],
   legacyUrl: ['url_goroda', 'url_goroda_legacy', 'url', 'gorod_url', 'legacy_url', 'url_города', 'ссылка_города'],
   officeAddress: ['adres_ofisa', 'office_address', 'address_of_office'],
@@ -110,17 +110,31 @@ export class CityImportService {
   async applyReport(report: CityImportReport, actions?: Record<string, 'create' | 'update' | 'skip'>) {
     if (report.errorRows > 0) throw new BadRequestException('Нельзя применить импорт с ошибками');
     return this.prisma.$transaction(async (tx) => {
+      const regions = await tx.region.findMany({ where: { siteId: report.siteId } });
+      const regionsByName = new Map(regions.map((region) => [region.name, region]));
+      const regionsBySlug = new Map(regions.map((region) => [region.slug, region]));
+      const existingCities = await tx.city.findMany({
+        where: { siteId: report.siteId, slug: { in: report.candidates.map((candidate) => candidate.slug) } },
+      });
+      const citiesBySlug = new Map(existingCities.map((city) => [city.slug, city]));
       let created = 0; let updated = 0; let skipped = 0; let pagesCreated = 0;
       for (const candidate of report.candidates) {
         const action = actions?.[candidate.key] || (candidate.existingId ? 'update' : 'create');
         if (action === 'skip') { skipped += 1; continue; }
-        let region = await tx.region.findFirst({ where: { siteId: candidate.siteId, name: candidate.subject } });
-        if (!region) region = await tx.region.create({ data: { siteId: candidate.siteId, name: candidate.subject, slug: slugify(candidate.subject) } });
+        const regionSlug = slugify(candidate.subject);
+        let region = regionsByName.get(candidate.subject) || regionsBySlug.get(regionSlug);
+        if (!region) {
+          region = await tx.region.create({ data: { siteId: candidate.siteId, name: candidate.subject, slug: regionSlug } });
+          regionsByName.set(region.name, region);
+          regionsBySlug.set(region.slug, region);
+        }
         const data = { regionId: region.id, name: candidate.name, slug: candidate.slug, nameInstrumental: candidate.nameInstrumental, namePrepositional: candidate.namePrepositional, nameGenitive: candidate.nameGenitive, legacyUrl: candidate.legacyUrl, officeAddress: candidate.officeAddress, officeHours: candidate.officeHours };
-        const current = await tx.city.findFirst({ where: { siteId: candidate.siteId, slug: candidate.slug } });
+        const current = citiesBySlug.get(candidate.slug);
         if (current) {
           if (action === 'create') throw new BadRequestException(`Город «${candidate.slug}» уже существует`);
-          await tx.city.update({ where: { id: current.id }, data }); updated += 1;
+          const city = await tx.city.update({ where: { id: current.id }, data });
+          citiesBySlug.set(city.slug, city);
+          updated += 1;
         } else {
           if (action === 'update') throw new BadRequestException(`Город «${candidate.slug}» не найден для обновления`);
           const city = await tx.city.create({ data: { siteId: candidate.siteId, ...data, status: 'DRAFT', seo: {} as Prisma.InputJsonObject, content: {} as Prisma.InputJsonObject } });
@@ -128,11 +142,15 @@ export class CityImportService {
             ['HOME', 'home', 'Главная города'], ['INTERNET', 'internet', 'Домашний интернет'], ['INTERNET_TV', 'internet-tv', 'Интернет + ТВ'],
             ['TV', 'tv', 'Телевидение'], ['ADDRESS_CHECK', 'proverka-adresa', 'Проверка адреса'], ['FAQ', 'faq', 'Вопросы и ответы'],
           ] as const;
-          for (const [type, slug, title] of pages) { await tx.page.create({ data: { siteId: candidate.siteId, cityId: city.id, type, slug, title, status: 'DRAFT', seo: {}, content: {} } }); pagesCreated += 1; }
+          const pageResult = await tx.page.createMany({
+            data: pages.map(([type, slug, title]) => ({ siteId: candidate.siteId, cityId: city.id, type, slug, title, status: 'DRAFT' as const, seo: {}, content: {} })),
+          });
+          citiesBySlug.set(city.slug, city);
+          pagesCreated += pageResult.count;
           created += 1;
         }
       }
       return { created, updated, skipped, pagesCreated };
-    });
+    }, { timeout: 30_000 });
   }
 }
