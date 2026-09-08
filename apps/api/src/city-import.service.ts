@@ -107,8 +107,9 @@ export class CityImportService {
     return { fileName, siteId, createdAt: new Date().toISOString(), totalRows: rows.length, validRows: candidates.length, errorRows, warningRows, issues, candidates };
   }
 
-  async applyReport(report: CityImportReport, actions?: Record<string, 'create' | 'update' | 'skip'>) {
+  async applyReport(report: CityImportReport, actions?: Record<string, 'create' | 'update' | 'skip'>, confirmWarnings = false) {
     if (report.errorRows > 0) throw new BadRequestException('Нельзя применить импорт с ошибками');
+    if (report.warningRows > 0 && !confirmWarnings) throw new BadRequestException('Нужно явно подтвердить предупреждения импорта');
     return this.prisma.$transaction(async (tx) => {
       const regions = await tx.region.findMany({ where: { siteId: report.siteId } });
       const regionsByName = new Map(regions.map((region) => [region.name, region]));

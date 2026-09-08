@@ -31,7 +31,7 @@ export function AdminShell({ apiUrl, user, active, children }: {
         <nav className="mt-6 flex flex-col gap-1" aria-label="Разделы админки">
           <Button className="justify-start" variant={navVariant("overview")} asChild><a href="/"><Home data-icon="inline-start" />Обзор</a></Button>
           <Button className="justify-start" variant={navVariant("tariffs")} asChild><a href="/tariffs"><PackageOpen data-icon="inline-start" />Тарифы</a></Button>
-          <Button className="justify-start" variant={navVariant("cities")} disabled><Building2 data-icon="inline-start" />Города</Button>
+          <Button className="justify-start" variant={navVariant("cities")} asChild><a href="/cities"><Building2 data-icon="inline-start" />Города</a></Button>
           <Button className="justify-start" variant={navVariant("leads")} disabled><Inbox data-icon="inline-start" />Заявки</Button>
         </nav>
       </aside>

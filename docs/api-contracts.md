@@ -57,7 +57,7 @@
 | POST | `/admin/tariffs/import/apply` | Атомарно применяет полный snapshot по `runId`; при warnings требует `confirmWarnings: true`. |
 | GET | `/admin/tariffs/imports`, `/admin/tariffs/imports/:id` | История и полный report import. |
 | POST | `/admin/cities/import/validate` | XLS/XLSX или rows -> city import report. |
-| POST | `/admin/cities/import/apply` | Применяет run с optional per-row `create`/`update`/`skip`. |
+| POST | `/admin/cities/import/apply` | Применяет run с optional per-row `create`/`update`/`skip`; при warnings требует `confirmWarnings: true`. |
 | GET | `/admin/cities/imports`, `/admin/cities/imports/:id` | История и полный report city import. |
 | GET | `/admin/rebuilds`, `/admin/rebuilds/:id` | Persistent статус пересборки; список можно фильтровать по `siteId`. |
 | POST | `/internal/site-rebuilds/:id/start` | Worker фиксирует начало попытки и получает payload/revision; только сервисный `x-admin-token`. |
@@ -73,7 +73,7 @@
 
 Полное описание и TV-счетчики сохраняются в preview candidate и затем в `Tariff.attributes` под стабильными ключами `opisanie_tarifa`, `tv_channels_total`, `tv_channels_hd`. Описание очищается от внешних пробелов, счетчики нормализуются в числа, пустые значения не создают JSON-ключ. Это source-specific данные, отдельные top-level поля API для них не вводятся.
 
-Городской import принимает русские и латинские aliases для субъекта, грамматических форм, slug, legacy URL и офиса, включая фактические комбинированные заголовки канонического `data/imports/cities.xlsx`. В apply регионы и города предварительно загружаются в transaction-local maps, одинаковый нормализованный slug объединяет «Республика Татарстан» из seed и «Татарстан» из XLSX. Новый город получает через bulk insert шесть `DRAFT` страниц: home, internet, internet-tv, tv, address-check и faq; полный пакет выполняется с transaction timeout 30 секунд.
+Городской import принимает русские и латинские aliases для субъекта, грамматических форм, slug, legacy URL и офиса, включая фактические комбинированные заголовки канонического `data/imports/cities.xlsx`. Apply блокируется при errors, а при warnings требует явного `confirmWarnings: true`. Регионы и города предварительно загружаются в transaction-local maps, одинаковый нормализованный slug объединяет «Республика Татарстан» из seed и «Татарстан» из XLSX. Новый город получает через bulk insert шесть `DRAFT` страниц: home, internet, internet-tv, tv, address-check и faq; полный пакет выполняется с transaction timeout 30 секунд.
 
 Apply трактует файл как полный snapshot провайдера: partial apply через `acceptedKeys` отклоняется, все строки применяются в одной транзакции с timeout 120 секунд для канонического объема, отсутствующие в новом файле тарифы удаляются, а статус import run меняется вместе с данными. После commit пересборка ставится для всех сайтов провайдера, включая сайты только с удалениями. Ручная смена city/slug тарифа атомарно создает redirect со старого URL; занятый опубликованной страницей URL или несовместимый существующий redirect возвращает conflict. Публичное обслуживание записей `Redirect` остается отдельной задачей TD-07.
 

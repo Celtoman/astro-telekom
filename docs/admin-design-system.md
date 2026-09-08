@@ -1,6 +1,6 @@
 # Дизайн-система админки
 
-Актуализировано: 8 сентября 2026 года. Это обязательный источник истины для интерфейса `apps/admin` — не рекомендация, а жёсткое ограничение.
+Актуализировано: 9 сентября 2026 года. Это обязательный источник истины для интерфейса `apps/admin` — не рекомендация, а жёсткое ограничение.
 
 ## Правило
 
@@ -17,17 +17,21 @@
 
 Целевая архитектура — Astro как static-оболочка и маршрутизация, React-root для каждой интерактивной страницы или крупного раздела, Tailwind и shadcn/ui внутри React. Данные админка получает и изменяет во время работы через HTTP API; она не зависит от данных, зафиксированных во время `astro build`.
 
-`apps/admin` остается Astro 7 static output. React, Tailwind CSS и shadcn/ui используются в `/login`, защищенном shell `/`, `/tariffs` и `/lead-access/`. Legacy plain HTML/CSS/vanilla JS страница удалена; shell больше не показывает вымышленные KPI или service-token prompt.
+`apps/admin` остается Astro 7 static output. React, Tailwind CSS и shadcn/ui используются в `/login`, защищенном shell `/`, `/tariffs`, `/cities` и `/lead-access/`. Legacy plain HTML/CSS/vanilla JS страница удалена; shell больше не показывает вымышленные KPI или service-token prompt.
 
 1. Рендерить интерактивную страницу одним React-root через `@astrojs/react` внутри static Astro route.
 2. Использовать Tailwind CSS и локальные shadcn/ui-компоненты из `apps/admin/src/components/ui`.
 3. Переносить подходящие компоненты и паттерны из референса либо собирать отсутствующие экраны из shadcn/ui-примитивов в его визуальном языке; получать данные только через существующий HTTP API.
 
-Базовая инфраструктура этих трех пунктов работает на всех текущих admin routes. Первый рабочий вертикальный срез `/tariffs` подключает список, validation report, атомарный apply полного snapshot, историю импортов и persistent rebuild status через общий cookie-aware API client. Города и заявки еще подключаются к API по одному вертикальному срезу в Task #29.
+Базовая инфраструктура этих трех пунктов работает на всех текущих admin routes. Рабочие вертикальные срезы `/tariffs` и `/cities` подключают списки, validation reports, apply, историю импортов и persistent rebuild status через общий cookie-aware API client. В Task #29 осталось перенести в этот shell заявки.
 
 ### Реализованный паттерн `/tariffs`
 
 Экран собран из dashboard-паттернов Card + Table + Badge + Alert + file Input и единого sidebar shell. Astro предоставляет статический маршрут, а React-root с `client:load` проверяет сессию и выполняет runtime HTTP-запросы. Preview явно показывает create/update/delete diff и issues; apply недоступен при errors и требует отдельного подтверждения warnings. После apply экран перечитывает каталог, историю import runs и rebuild status. Service token и browser storage не используются.
+
+### Реализованный паттерн `/cities`
+
+Экран использует тот же dashboard-паттерн и общий shell: реальные счетчики 207/1/206, поиск по городу, slug и региону, таблицу статусов, XLS/XLSX preview, историю импортов и rebuild status. Preview различает create/update/unchanged, показывает issues, блокирует apply при errors и требует явного подтверждения warnings на UI и API. Пока платформа работает в односайтовом режиме: импорт разрешен только при ровно одном найденном сайте, чтобы будущая многосайтовость не привела к молчаливому выбору неправильной цели. Управление публикацией намеренно не вынесено на этот экран до появления отдельного workflow; импорт оставляет новые города и страницы в `DRAFT`.
 
 ### Реализованный паттерн `/lead-access/`
 

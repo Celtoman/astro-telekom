@@ -108,3 +108,18 @@ test('city import reuses a seed region with the same normalized slug', async () 
   assert.equal(result.created, 1);
   assert.equal(regionCreated, false);
 });
+
+test('city import warnings require explicit confirmation before apply', async () => {
+  let transactionCalled = false;
+  const prisma = {
+    ...validationPrisma(),
+    $transaction: async () => { transactionCalled = true; },
+  };
+  const report = await new CityImportService(prisma).validateRows('site-1', 'cities.xlsx', [row({
+    'Город родит. падеж': '',
+  })]);
+  const service = new CityImportService(prisma);
+
+  await assert.rejects(service.applyReport(report), /подтвердить предупреждения/i);
+  assert.equal(transactionCalled, false);
+});
