@@ -167,7 +167,9 @@ let catalogPromise: Promise<SiteCatalog> | undefined;
 
 export function loadSiteData(): Promise<SiteCatalog> {
   catalogPromise ??= (async () => {
-    const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+    const apiUrl = import.meta.env.SITE_DATA_API_URL
+      || import.meta.env.PUBLIC_API_URL
+      || 'http://localhost:3000/api/v1';
     try {
       const response = await fetch(`${apiUrl}/public/sites/${publicSiteSlug}/cities`, { signal: AbortSignal.timeout(5000) });
       if (!response.ok) throw new Error(`API responded ${response.status}`);

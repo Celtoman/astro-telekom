@@ -1,0 +1,248 @@
+import { readFile, readdir } from 'node:fs/promises';
+import { dirname, join, relative, resolve, sep } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+import { isLoopbackHostname, resolvePublicSiteUrl } from './public-site-url.mjs';
+
+const TEXT_ARTIFACT = /\.(?:html|xml|txt|caddy)$/i;
+
+async function collectFiles(directory) {
+  const files = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...await collectFiles(path));
+    else if (entry.isFile()) files.push(path);
+  }
+  return files;
+}
+
+function displayPath(distDirectory, path) {
+  return relative(distDirectory, path).split(sep).join('/');
+}
+
+function getAttribute(tag, name) {
+  const match = tag.match(new RegExp(`\\b${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, 'i'));
+  return match ? (match[1] ?? match[2] ?? match[3] ?? '') : undefined;
+}
+
+function tags(html, tagName, paired = false) {
+  const expression = paired
+    ? new RegExp(`<${tagName}\\b[^>]*>[\\s\\S]*?<\\/${tagName}>`, 'gi')
+    : new RegExp(`<${tagName}\\b[^>]*>`, 'gi');
+  return html.match(expression) || [];
+}
+
+function textContent(tag) {
+  return tag.replace(/<[^>]+>/g, '').replace(/&nbsp;/gi, ' ').trim();
+}
+
+function routeForHtml(distDirectory, path) {
+  const name = displayPath(distDirectory, path);
+  if (name === 'index.html') return '/';
+  if (name.endsWith('/index.html')) return `/${name.slice(0, -'/index.html'.length)}/`;
+  return null;
+}
+
+function decodeXml(value) {
+  return value
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'");
+}
+
+function wildcardRobotsBlocksSite(robots) {
+  let appliesToWildcard = false;
+  let groupHasRules = false;
+
+  for (const rawLine of robots.split(/\r?\n/)) {
+    const line = rawLine.replace(/\s*#.*$/, '').trim();
+    if (!line) continue;
+
+    const directive = line.match(/^([^:]+):\s*(.*)$/);
+    if (!directive) continue;
+
+    const name = directive[1].trim().toLowerCase();
+    const value = directive[2].trim();
+    if (name === 'user-agent') {
+      if (groupHasRules) {
+        appliesToWildcard = false;
+        groupHasRules = false;
+      }
+      if (value === '*') appliesToWildcard = true;
+      continue;
+    }
+
+    groupHasRules = true;
+    const normalizedRule = value.replace(/\*+/g, '*');
+    if (appliesToWildcard && name === 'disallow' && ['/', '/*', '/*$'].includes(normalizedRule)) return true;
+  }
+
+  return false;
+}
+
+function findLoopbackReference(content) {
+  const urlReferences = content.match(/\b(?:https?|wss?):\/\/[^\s"'<>]+/gi) || [];
+  for (const reference of urlReferences) {
+    try {
+      const hostname = new URL(reference).hostname;
+      if (isLoopbackHostname(hostname)) return `loopback URL ${hostname}`;
+    } catch {
+      // Invalid URLs are outside this check; their host-like fragments are still inspected below.
+    }
+  }
+
+  const candidates = content.match(/(?:\[[0-9a-f:.]+\]|(?:[a-z0-9-]+\.)*localhost\.?|(?:\d{1,3}\.){3}\d{1,3})/gi) || [];
+  const candidate = candidates.find((item) => isLoopbackHostname(item));
+  return candidate ? `loopback host ${candidate}` : undefined;
+}
+
+function validateDocumentMetadata(html, label, errors) {
+  const titleTags = tags(html, 'title', true);
+  if (titleTags.length !== 1 || !textContent(titleTags[0])) {
+    errors.push(`${label}: нужен ровно один непустой title`);
+  }
+
+  const descriptions = tags(html, 'meta').filter((tag) => getAttribute(tag, 'name')?.toLowerCase() === 'description');
+  if (descriptions.length !== 1 || !getAttribute(descriptions[0], 'content')?.trim()) {
+    errors.push(`${label}: нужен ровно один непустой meta description`);
+  }
+
+  const headings = tags(html, 'h1', true);
+  if (headings.length !== 1 || !textContent(headings[0])) {
+    errors.push(`${label}: нужен ровно один непустой H1`);
+  }
+}
+
+function validateIndexableHtml(html, route, expectedUrl, errors) {
+  validateDocumentMetadata(html, route, errors);
+
+  const canonicals = tags(html, 'link').filter((tag) => getAttribute(tag, 'rel')?.toLowerCase().split(/\s+/).includes('canonical'));
+  if (canonicals.length !== 1 || getAttribute(canonicals[0], 'href') !== expectedUrl) {
+    errors.push(`${route}: canonical должен быть ровно один и равен ${expectedUrl}`);
+  }
+
+  const robots = tags(html, 'meta').filter((tag) => getAttribute(tag, 'name')?.toLowerCase() === 'robots');
+  if (robots.some((tag) => getAttribute(tag, 'content')?.toLowerCase().split(/[\s,]+/).includes('noindex'))) {
+    errors.push(`${route}: URL из sitemap.xml не может содержать noindex`);
+  }
+}
+
+function validateNotFoundHtml(html, errors) {
+  validateDocumentMetadata(html, '404.html', errors);
+
+  const robots = tags(html, 'meta').filter((tag) => getAttribute(tag, 'name')?.toLowerCase() === 'robots');
+  const hasNoindex = robots.length === 1
+    && getAttribute(robots[0], 'content')?.toLowerCase().split(/[\s,]+/).includes('noindex');
+  if (!hasNoindex) errors.push('404.html: нужен ровно один meta robots с noindex');
+
+  const canonicals = tags(html, 'link').filter((tag) => getAttribute(tag, 'rel')?.toLowerCase().split(/\s+/).includes('canonical'));
+  if (canonicals.length > 0) errors.push('404.html: canonical для служебной страницы запрещен');
+
+}
+
+export async function verifyPublication({ distDirectory, publicSiteUrl, allowDemoData = false }) {
+  const origin = new URL(publicSiteUrl).origin;
+  const errors = [];
+  const files = await collectFiles(distDirectory);
+  const htmlFiles = files.filter((path) => path.toLowerCase().endsWith('.html'));
+  const htmlInventory = htmlFiles.map((path) => ({ path, route: routeForHtml(distDirectory, path) }));
+  const publicHtml = htmlInventory.filter(({ route }) => route !== null);
+  for (const { path, route } of htmlInventory) {
+    const name = displayPath(distDirectory, path);
+    if (route === null && name !== '404.html') {
+      errors.push(`${name}: HTML-файл не соответствует каноническому route-формату */index.html`);
+    }
+  }
+
+  const sitemapPath = join(distDirectory, 'sitemap.xml');
+  const robotsPath = join(distDirectory, 'robots.txt');
+  const notFoundPath = join(distDirectory, '404.html');
+  const [sitemap, robots, notFound] = await Promise.all([
+    readFile(sitemapPath, 'utf8'),
+    readFile(robotsPath, 'utf8'),
+    readFile(notFoundPath, 'utf8'),
+  ]);
+
+  if (!/<urlset\b[^>]*xmlns=["']http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9["']/i.test(sitemap)) {
+    errors.push('sitemap.xml: отсутствует корректный urlset namespace');
+  }
+
+  const locations = [...sitemap.matchAll(/<loc>([\s\S]*?)<\/loc>/gi)].map((match) => decodeXml(match[1].trim()));
+  const sitemapRoutes = [];
+  const seenLocations = new Set();
+  for (const location of locations) {
+    let url;
+    try {
+      url = new URL(location);
+    } catch {
+      errors.push(`sitemap.xml: некорректный абсолютный URL ${location}`);
+      continue;
+    }
+    if (url.origin !== origin || url.search || url.hash || !url.pathname.endsWith('/')) {
+      errors.push(`sitemap.xml: URL должен принадлежать ${origin}, не иметь query/hash и заканчиваться /: ${location}`);
+    }
+    if (seenLocations.has(url.href)) errors.push(`sitemap.xml: дублируется ${url.href}`);
+    seenLocations.add(url.href);
+    sitemapRoutes.push(url.pathname);
+  }
+
+  if (!sitemapRoutes.includes('/')) errors.push('sitemap.xml не содержит корневой URL /');
+
+  const htmlRoutes = new Set(publicHtml.map(({ route }) => route));
+  const sitemapRouteSet = new Set(sitemapRoutes);
+  for (const route of sitemapRouteSet) {
+    if (!htmlRoutes.has(route)) errors.push(`sitemap.xml содержит ${route}, но соответствующий HTML отсутствует`);
+  }
+  for (const route of htmlRoutes) {
+    if (!sitemapRouteSet.has(route)) errors.push(`HTML ${route} нет в sitemap.xml`);
+  }
+
+  for (const { path, route } of publicHtml) {
+    const html = await readFile(path, 'utf8');
+    validateIndexableHtml(html, route, `${origin}${route}`, errors);
+  }
+  validateNotFoundHtml(notFound, errors);
+
+  const sitemapDirectives = robots.split(/\r?\n/).filter((line) => /^\s*Sitemap\s*:/i.test(line));
+  if (sitemapDirectives.length !== 1 || sitemapDirectives[0].trim() !== `Sitemap: ${origin}/sitemap.xml`) {
+    errors.push(`robots.txt: нужна ровно одна директива Sitemap: ${origin}/sitemap.xml`);
+  }
+  if (wildcardRobotsBlocksSite(robots)) {
+    errors.push('robots.txt: группа User-agent: * закрывает весь сайт от индексации');
+  }
+
+  if (!allowDemoData) {
+    for (const path of files.filter((file) => TEXT_ARTIFACT.test(file))) {
+      const content = await readFile(path, 'utf8');
+      const leaked = findLoopbackReference(content);
+      if (leaked) errors.push(`${leaked} обнаружен в ${displayPath(distDirectory, path)}`);
+    }
+  }
+
+  if (errors.length > 0) {
+    throw new Error(`Pre-publication SEO gate failed:\n- ${errors.join('\n- ')}`);
+  }
+
+  return { indexablePages: sitemapRouteSet.size, htmlPages: htmlFiles.length };
+}
+
+async function runCli() {
+  const publicSiteUrl = resolvePublicSiteUrl(process.env);
+  const distDirectory = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
+  const result = await verifyPublication({
+    distDirectory,
+    publicSiteUrl,
+    allowDemoData: process.env.ALLOW_DEMO_DATA === 'true',
+  });
+  console.log(`Pre-publication SEO gate passed: ${result.indexablePages} indexable URL(s), ${result.htmlPages} HTML file(s).`);
+}
+
+const invokedPath = process.argv[1] ? pathToFileURL(resolve(process.argv[1])).href : '';
+if (invokedPath === import.meta.url) {
+  runCli().catch((error) => {
+    console.error(error instanceof Error ? error.message : error);
+    process.exitCode = 1;
+  });
+}

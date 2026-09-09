@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
 const webDist = join(repositoryRoot, 'apps', 'web', 'dist');
 const productionSite = 'https://partner.example.test';
+const browserApiUrl = 'https://api.partner.example.test/api/v1';
 
 const page = (type, slug, title) => ({ type, slug, title, status: 'PUBLISHED', seo: {}, blocks: [] });
 const tariff = (slug, name, speed, standardPrice) => ({
@@ -103,11 +104,13 @@ async function collectTextFiles(directory) {
 test('web build uses API data and final HTML passes the publication smoke contract', { timeout: 120_000 }, async () => {
   await withApiFixture(async (apiUrl) => {
     const build = await runWebBuild({
-      PUBLIC_API_URL: apiUrl,
+      SITE_DATA_API_URL: apiUrl,
+      PUBLIC_API_URL: browserApiUrl,
       PUBLIC_SITE_URL: productionSite,
       ALLOW_DEMO_DATA: '',
     });
     assert.equal(build.code, 0, build.output);
+    assert.match(build.output, /Pre-publication SEO gate passed: 10 indexable URL\(s\), 11 HTML file\(s\)\./);
   });
 
   const root = await readBuilt('index.html');
@@ -116,8 +119,10 @@ test('web build uses API data and final HTML passes the publication smoke contra
   const almetyevsk = await readBuilt(join('almetyevsk', 'index.html'));
   const almetyevskInternet = await readBuilt(join('almetyevsk', 'internet', 'index.html'));
   const almetyevskTariff = await readBuilt(join('almetyevsk', 'almet-internet-300', 'index.html'));
+  const kazanAddressCheck = await readBuilt(join('kazan', 'proverka-adresa', 'index.html'));
   const robots = await readBuilt('robots.txt');
   const sitemap = await readBuilt('sitemap.xml');
+  const notFound = await readBuilt('404.html');
   const redirectRoutes = await readBuilt('redirects.caddy');
 
   assert.match(root, /<link rel="canonical" href="https:\/\/partner\.example\.test\/">/);
@@ -136,6 +141,8 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(almetyevskInternet, /<h1>Домашний интернет<\/h1>/);
   assert.match(almetyevskTariff, /<h1>Альмет Интернет 300<\/h1>/);
   assert.match(almetyevskTariff, /650 ₽\/мес\./);
+  assert.match(kazanAddressCheck, /const apiUrl = "https:\/\/api\.partner\.example\.test\/api\/v1"/);
+  assert.doesNotMatch(kazanAddressCheck, /127\.0\.0\.1/);
   assert.match(robots, /Sitemap: https:\/\/partner\.example\.test\/sitemap\.xml/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/kazan\/<\/loc>/);
@@ -144,6 +151,8 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/internet\/<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/almet-internet-300\/<\/loc>/);
   assert.doesNotMatch(sitemap, /draft-city|draft-page|draft-tariff/);
+  assert.match(notFound, /<meta name="robots" content="noindex, follow">/);
+  assert.doesNotMatch(notFound, /rel="canonical"/);
   assert.match(redirectRoutes, /@redirect_0 path \/old-kazan\//);
   assert.match(redirectRoutes, /rewrite \* \/api\/v1\/public\/sites\/domru-kazan\/redirects\/redirect-old-kazan/);
   assert.match(redirectRoutes, /reverse_proxy \{\$API_UPSTREAM:api:3000\}/);
@@ -161,7 +170,8 @@ test('web build uses API data and final HTML passes the publication smoke contra
 
 test('web build is blocked when API is unavailable and demo mode is not explicit', { timeout: 120_000 }, async () => {
   const build = await runWebBuild({
-    PUBLIC_API_URL: 'http://127.0.0.1:1/api/v1',
+    SITE_DATA_API_URL: 'http://127.0.0.1:1/api/v1',
+    PUBLIC_API_URL: browserApiUrl,
     PUBLIC_SITE_URL: productionSite,
     ALLOW_DEMO_DATA: '',
   });
@@ -171,8 +181,24 @@ test('web build is blocked when API is unavailable and demo mode is not explicit
   assert.match(build.output, /ALLOW_DEMO_DATA=true/);
 });
 
+test('web production build is blocked without a clean HTTPS origin', { timeout: 120_000 }, async () => {
+  await withApiFixture(async (apiUrl) => {
+    for (const publicSiteUrl of ['', 'http://partner.example.test']) {
+      const build = await runWebBuild({
+        SITE_DATA_API_URL: apiUrl,
+        PUBLIC_API_URL: browserApiUrl,
+        PUBLIC_SITE_URL: publicSiteUrl,
+        ALLOW_DEMO_DATA: '',
+      });
+      assert.notEqual(build.code, 0, build.output);
+      assert.match(build.output, /PUBLIC_SITE_URL.*HTTPS origin/i);
+    }
+  });
+});
+
 test('web build uses demo data only when ALLOW_DEMO_DATA=true is explicit', { timeout: 120_000 }, async () => {
   const build = await runWebBuild({
+    SITE_DATA_API_URL: '',
     PUBLIC_API_URL: 'http://127.0.0.1:1/api/v1',
     PUBLIC_SITE_URL: productionSite,
     ALLOW_DEMO_DATA: 'true',
@@ -189,7 +215,8 @@ test('web build rejects a published page and tariff with the same city URL', { t
 
   await withApiFixture(async (apiUrl) => {
     const build = await runWebBuild({
-      PUBLIC_API_URL: apiUrl,
+      SITE_DATA_API_URL: apiUrl,
+      PUBLIC_API_URL: browserApiUrl,
       PUBLIC_SITE_URL: productionSite,
       ALLOW_DEMO_DATA: '',
     });
@@ -207,7 +234,8 @@ test('web build rejects redirect chains instead of publishing multiple hops', { 
 
   await withApiFixture(async (apiUrl) => {
     const build = await runWebBuild({
-      PUBLIC_API_URL: apiUrl,
+      SITE_DATA_API_URL: apiUrl,
+      PUBLIC_API_URL: browserApiUrl,
       PUBLIC_SITE_URL: productionSite,
       ALLOW_DEMO_DATA: '',
     });

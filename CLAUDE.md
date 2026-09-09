@@ -34,7 +34,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 `apps/crm` удален после переноса заявок в `/leads`; `admin` входит в общий Astro check.
 
-**Baseline тестов: 118/118.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют строгие public DTO/rate limit/honeypot, policy-driven PII purge, cookie-сессию и CORS admin, infrastructure/release readiness и migration dependency Compose, Node 24 runtime GitHub Actions, экраны тарифов, городов, заявок и редиректов, отсутствие выведенного из эксплуатации CRM-workspace, границу worker-only routes, безопасный XLSX-парсер и канонический справочник 207 городов, public catalog и multi-city static routes, full-snapshot импорт тарифов, одношаговый runtime 301 и hit tracking, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+**Baseline тестов: 125/125.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют строгие public DTO/rate limit/honeypot, policy-driven PII purge, cookie-сессию и CORS admin, infrastructure/release readiness и migration dependency Compose, Node 24 runtime GitHub Actions, экраны тарифов, городов, заявок и редиректов, отсутствие выведенного из эксплуатации CRM-workspace, границу worker-only routes, безопасный XLSX-парсер и канонический справочник 207 городов, public catalog и multi-city static routes, production origin и post-build SEO gate, full-snapshot импорт тарифов, одношаговый runtime 301 и hit tracking, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 
@@ -93,6 +93,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 | [docs/deployment.md](docs/deployment.md) | Локальный/production контур, переменные, обязательные проверки |
 | [docs/worker.md](docs/worker.md) | Очереди, producer/consumer, поведение без Redis, graceful shutdown |
 | [docs/task-management.md](docs/task-management.md) | Как ведутся проблемы/задачи в GitHub Issues — обязательно перед работой с TD/issues |
+| [docs/product-findings.md](docs/product-findings.md) | Входящий реестр продуктовых, UX/UI и дизайн-находок для отдельного обсуждения |
 | [docs/technical-debt.md](docs/technical-debt.md) | Индекс приоритизированного долга (P0–P3), полный текст — в issues |
 | [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md) | Что именно проверяет каждый файл в `tests/` — живой документ |
 | [docs/decisions.md](docs/decisions.md) | Согласованный продуктовый замысел — не подтверждает наличие в коде |
@@ -144,6 +145,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 Репозиторий: `Celtoman/astro-telekom`. Issue open/closed — единственный механический источник правды «решено / не решено». Полное описание системы (типы записей, labels, milestone, шаблоны, sub-issues, команды `gh`) — [docs/task-management.md](docs/task-management.md), обязательно к прочтению перед любой работой с проблемами/задачами. Ниже — только сжатые обязательные правила.
 
 - **Любая найденная проблема фиксируется сразу**, не откладывается на потом: `gh issue create --repo Celtoman/astro-telekom --title "..." --label "P0|P1|P2|P3" --label "tech-debt"` (или через шаблон `.github/ISSUE_TEMPLATE/tech-debt.yml`). Не держать находки только в памяти разговора или только в тексте ответа пользователю.
+- При действующем явном поручении владельца **любая продуктовая, UX/UI или дизайн-находка либо идея улучшения фиксируется сразу** в [docs/product-findings.md](docs/product-findings.md). Без такого поручения сначала сообщить находку и получить разрешение на изменение файла. Не реализовать находку внутри текущей задачи без отдельного обсуждения и согласования.
 - **Полный текст проблемы живёт только в issue**, не дублируется в `docs/technical-debt.md` — там только индекс (ID, ссылка, статус, одна строка сути). Дублирование текста — то, из-за чего документы расходились раньше; не повторять эту ошибку.
 - Спланированная работа — отдельный issue с label `task`, чек-листом шагов и milestone «MVP: безопасный Казань-релиз» (если входит в MVP); закрываемые проблемы привязываются как sub-issues (`gh api .../sub_issues`), не только текстовой ссылкой — точные команды в `docs/task-management.md`.
 - **Исправление проблемы закрывает issue в том же коммите** через `Closes #N` в теле коммита, либо issue закрывается вручную с комментарием, объясняющим почему. Нельзя коммитить исправление и оставлять issue формально открытым без причины.
@@ -182,11 +184,11 @@ pnpm test:build                           # пересобрать apps/api, з�
 ### Дальнейшие действия после проверки
 
 1. Убедиться, что всё работает самостоятельно (команды выше).
-2. Предложить пользователю проверить со своей стороны.
-3. После подтверждения пользователя — предложить коммит.
-4. После коммита — при необходимости предложить push.
+2. Сообщить пользователю результат и дать возможность проверить со своей стороны, не останавливая дальнейшую работу без явной просьбы о паузе.
+3. После успешных обязательных проверок самостоятельно создать Conventional Commit и перейти к следующей задаче; отдельного подтверждения на каждый commit не ждать.
+4. Push выполнять только после явного разрешения пользователя.
 
-Не предлагать коммит и push до того, как пользователь уведомлён о результате и получил возможность проверить.
+Если пользователь явно запросил режим review-before-commit для конкретной задачи, остановиться перед commit. В остальных случаях уведомление о результате не является блокирующим ожиданием.
 
 ### Стиль работы
 

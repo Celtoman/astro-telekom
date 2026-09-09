@@ -3,16 +3,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "dev": "cross-env ALLOW_DEMO_DATA=true astro dev",
+    "build": "astro build && node ./scripts/verify-publication.mjs",
     "preview": "astro preview",
-    "lint": "astro check"
+    "lint": "cross-env ALLOW_DEMO_DATA=true astro check"
   },
   "dependencies": {
     "astro": "^7.3.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "cross-env": "^10.1.0",
     "typescript": "6.0.3"
   }
 }

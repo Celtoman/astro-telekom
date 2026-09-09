@@ -33,9 +33,9 @@
 
 ### Astro
 
-Оба Astro-приложения имеют `output: 'static'`. Public web использует `PUBLIC_SITE_URL` как `site`, а `PUBLIC_SITE_SLUG` — для выбора build-time каталога; dynamic static paths строятся только для опубликованных городов, страниц и тарифов. Title, description, canonical и базовый JSON-LD `WebPage` выводятся в исходный HTML. JavaScript оставлен для формы адреса, хранения списка просмотренных страниц, подавления номера для действующего абонента и событий Метрики.
+Оба Astro-приложения имеют `output: 'static'`. Public web использует проверенный `PUBLIC_SITE_URL` как `site`, `PUBLIC_SITE_SLUG` — для выбора сайта, server-only `SITE_DATA_API_URL` — для чтения build-time каталога и `PUBLIC_API_URL` — для browser-форм; если отдельный build-time URL не задан, сохраняется совместимый fallback на публичный. Production принимает только чистый HTTPS site origin, локальный origin разрешен лишь при явном `ALLOW_DEMO_DATA=true`. Dynamic static paths строятся только для опубликованных городов, страниц и тарифов. Title, description, canonical от `Astro.site` и базовый JSON-LD `WebPage` выводятся в исходный HTML; служебная 404 получает `noindex` без canonical. JavaScript оставлен для формы адреса, хранения списка просмотренных страниц, подавления номера для действующего абонента и событий Метрики.
 
-Static mode означает, что контентные API-данные и список опубликованных redirect source paths читаются при `astro build`. Контент становится HTML, а redirects — валидируемым `redirects.caddy`, который container image переносит из публичного `/srv` в `/etc/caddy`; совпавший runtime-запрос обращается к API только для проверки правила, учета перехода и HTTP 301. Для этого прототипа допустима локальная витрина с fallback, но production не должен собираться из fallback-данных.
+Static mode означает, что контентные API-данные и список опубликованных redirect source paths читаются при `astro build`. Контент становится HTML, а redirects — валидируемым `redirects.caddy`, который container image переносит из публичного `/srv` в `/etc/caddy`; совпавший runtime-запрос обращается к API только для проверки правила, учета перехода и HTTP 301. Затем обязательный Node verifier проверяет соответствие sitemap и indexable `*/index.html`, отклоняет неизвестный плоский HTML и проверяет raw metadata/H1, robots без глобального запрета индексации, loopback-утечки, production origin и 404. Для этого прототипа допустима локальная витрина с fallback только при явном demo-флаге; production не собирается из fallback-данных или с локальным origin.
 
 ### NestJS и Fastify
 
@@ -53,7 +53,7 @@ API создает `lead-deliveries` и `site-rebuilds` при наличии `R
 
 `docker-compose.yml` поднимает только PostgreSQL и Redis для разработки. `docker-compose.prod.yml` описывает PostgreSQL, Redis, one-shot Prisma migrate, API, worker, web, admin и Caddy. `api` зависит от успешного завершения migrate и healthy Redis; Compose healthcheck использует DB/Redis-aware `/health/ready`. `web` зависит от healthy API, потому что его отдельный `web.Caddyfile` обслуживает static output и проксирует build-generated redirect matchers в API; admin продолжает использовать общий `static.Caddyfile`. Оба Compose-файла монтируют PostgreSQL 18 volume в `/var/lib/postgresql` — корневой layout, обязательный для major-specific data directory PG18. Внешний Caddy направляет три домена на соответствующие контейнеры.
 
-Контейнерная схема конфигурационно валидна (`docker compose -f docker-compose.prod.yml config --no-interpolate`), но не была поднята с реальными доменами, секретами и интеграциями. Это не production certification.
+Контейнерная схема конфигурационно валидна (`docker compose -f docker-compose.prod.yml config --no-interpolate`), но не была поднята с реальными доменами, секретами и интеграциями. Build-time `SITE_DATA_API_URL` задается отдельно от browser API, однако первый web image build все еще требует заранее доступный каталог: Compose runtime dependencies не управляют стадией Docker build ([#55](https://github.com/Celtoman/astro-telekom/issues/55)). Это не production certification.
 
 ## Неподключенные или ограниченные возможности
 

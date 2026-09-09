@@ -44,7 +44,7 @@ PII retention scheduler в worker
   -> cascade history/activity/delivery/tokens + orphan AddressCheck cleanup
 ```
 
-В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities`, валидирует уникальность каждого публичного пути, отсутствие redirect-цепочек и существование каждой цели. Он генерирует HTML только для опубликованного каталога и `redirects.caddy` только для опубликованных редиректов; при сборке container image этот файл переносится из document root в `/etc/caddy`. `PUBLIC_SITE_SLUG` выбирает сайт, по умолчанию `domru-kazan`. В runtime статические страницы не читают PostgreSQL; только совпавший старый URL проксируется внутренним Caddy в API для актуальной проверки статуса, HTTP 301 и атомарного учета перехода. Изменение каталога или правила требует успешной пересборки.
+В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities` через server-only `SITE_DATA_API_URL` (с совместимым fallback на `PUBLIC_API_URL`), валидирует уникальность каждого публичного пути, отсутствие redirect-цепочек и существование каждой цели. Отдельный `PUBLIC_API_URL` встраивается в browser-формы и не обязан совпадать с внутренним источником каталога. Web генерирует HTML только для опубликованного каталога и `redirects.caddy` только для опубликованных редиректов; при сборке container image этот файл переносится из document root в `/etc/caddy`. `PUBLIC_SITE_SLUG` выбирает сайт, по умолчанию `domru-kazan`. В runtime статические страницы не читают PostgreSQL; только совпавший старый URL проксируется внутренним Caddy в API для актуальной проверки статуса, HTTP 301 и атомарного учета перехода. Изменение каталога или правила требует успешной пересборки.
 
 ## API-модули и их ответственность
 

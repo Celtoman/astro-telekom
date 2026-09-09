@@ -6,9 +6,10 @@ interface Props {
   description: string;
   city?: CityView;
   pages?: PageView[];
+  indexable?: boolean;
 }
 
-const { title, description, city, pages } = Astro.props as Props;
+const { title, description, city, pages, indexable = true } = Astro.props as Props;
 const resolvedPages: PageView[] = pages || city?.pages || [];
 const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
 const supportPhone = city?.phone || import.meta.env.PUBLIC_SUPPORT_PHONE || '8 (800) 000-00-00';
@@ -24,12 +25,13 @@ const navItems = [
   return city && page?.slug ? [{ href: `/${city.slug}/${page.slug}/`, label }] : [];
 });
 const faqPage = pageByType.get('FAQ');
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   name: title,
   description,
-  url: Astro.url.href,
+  url: canonicalUrl.href,
   inLanguage: 'ru-RU',
 });
 ---
@@ -41,8 +43,8 @@ const jsonLd = JSON.stringify({
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={Astro.url} />
-    <script is:inline type="application/ld+json" set:html={jsonLd}></script>
+    {indexable ? <link rel="canonical" href={canonicalUrl} /> : <meta name="robots" content="noindex, follow" />}
+    {indexable && <script is:inline type="application/ld+json" set:html={jsonLd}></script>}
     {metrikaId && <script is:inline set:html={`window.__YANDEX_METRIKA_ID__=${metrikaId};(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t);a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(${metrikaId},'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});`}></script>}
   </head>
   <body>

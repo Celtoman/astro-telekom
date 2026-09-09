@@ -73,6 +73,7 @@ services:
       dockerfile: apps/web/Dockerfile
       args:
         PUBLIC_API_URL: https://${API_DOMAIN}/api/v1
+        SITE_DATA_API_URL: ${SITE_DATA_API_URL}
         PUBLIC_PROVIDER_ID: ${PUBLIC_PROVIDER_ID:-}
         PUBLIC_SITE_ID: ${PUBLIC_SITE_ID:-}
         PUBLIC_SITE_URL: https://${PUBLIC_DOMAIN}

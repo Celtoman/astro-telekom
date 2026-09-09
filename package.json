@@ -15,7 +15,7 @@
     "dev:worker": "pnpm --filter @provider/worker start",
     "build": "pnpm -r build",
     "build:ci": "cross-env ALLOW_DEMO_DATA=true pnpm build",
-    "lint": "pnpm -r lint && node --check scripts/import-cities.mjs",
+    "lint": "pnpm -r lint && node --check scripts/import-cities.mjs && node --check apps/web/scripts/public-site-url.mjs && node --check apps/web/scripts/verify-publication.mjs",
     "db:generate": "pnpm --filter @provider/database generate",
     "db:validate": "pnpm --filter @provider/database validate",
     "cities:import": "node scripts/import-cities.mjs",

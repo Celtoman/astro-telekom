@@ -50,8 +50,12 @@ test('readiness returns only sanitized dependency states', async () => {
 
 test('production Compose applies migrations before starting API and probes readiness', () => {
   const compose = readFileSync(join(repositoryRoot, 'docker-compose.prod.yml'), 'utf8');
+  const siteDataSource = readFileSync(join(repositoryRoot, 'apps', 'web', 'src', 'data', 'site.ts'), 'utf8');
   assert.match(compose, /^  migrate:\r?$/m);
   assert.match(compose, /migrate:\s+condition: service_completed_successfully/);
   assert.match(compose, /fetch\('http:\/\/localhost:3000\/api\/v1\/health\/ready'\)/);
   assert.match(compose, /node_modules\/prisma\/build\/index\.js["']?,\s*["']migrate["']?,\s*["']deploy/);
+  assert.match(compose, /PUBLIC_API_URL:\s*https:\/\/\$\{API_DOMAIN\}\/api\/v1/);
+  assert.match(compose, /SITE_DATA_API_URL:\s*\$\{SITE_DATA_API_URL\}/);
+  assert.match(siteDataSource, /import\.meta\.env\.SITE_DATA_API_URL\s*\|\|\s*import\.meta\.env\.PUBLIC_API_URL/);
 });

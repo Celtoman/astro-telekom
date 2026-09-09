@@ -35,6 +35,7 @@
 | TD-30 | [#45](https://github.com/Celtoman/astro-telekom/issues/45) ✅ | Full-snapshot из 3 859 тарифов атомарно применяется с явным transaction timeout |
 | TD-31 | [#46](https://github.com/Celtoman/astro-telekom/issues/46) ✅ | Preview блокирует city+slug коллизии, генератор разводит допустимые пары типов |
 | TD-33 | [#48](https://github.com/Celtoman/astro-telekom/issues/48) ✅ | Browser CORS явно разрешает `PATCH` и `DELETE` для admin mutation routes |
+| TD-37 | [#55](https://github.com/Celtoman/astro-telekom/issues/55) 🟢 | Первый web image build требует уже доступный build-time API и пока не имеет воспроизводимого bootstrap-порядка |
 
 ## P2
 
@@ -45,7 +46,7 @@
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) 🟢 | `PageBlock` поддерживает только 3 типа блоков из библиотеки |
 | TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) 🟢 | Public DTO/rate limit/honeypot и policy-driven purge реализованы; остается юридически утвердить и задать retention period |
 | TD-15 | [#17](https://github.com/Celtoman/astro-telekom/issues/17) 🟢 | Email-уведомление о лиде — fire-and-forget без журнала |
-| TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) 🟢 | Root URL, published-only sitemap и multi-city HTML smoke добавлены; остаются обязательный production origin и pre-publication SEO gate |
+| TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) ✅ | Production требует чистый HTTPS origin; post-build gate сверяет sitemap, robots, raw HTML и `noindex` 404 |
 | TD-17 | [#19](https://github.com/Celtoman/astro-telekom/issues/19) ✅ | One-shot migration job до API; readiness проверяет PostgreSQL/Redis, liveness отделен; seed остается явной безопасной операцией |
 
 ## P3
@@ -58,6 +59,9 @@
 | TD-26 | [#41](https://github.com/Celtoman/astro-telekom/issues/41) ✅ | GitHub Actions обновлены на Node 24 majors: checkout/setup-node v7, pnpm/action-setup v6 |
 | TD-29 | [#44](https://github.com/Celtoman/astro-telekom/issues/44) ✅ | README и живой документ покрытия синхронизированы с актуальным тестовым baseline |
 | TD-32 | [#47](https://github.com/Celtoman/astro-telekom/issues/47) ✅ | Карта admin routes синхронизирована с рабочими `/tariffs`, `/cities` и `/leads` |
+| TD-34 | [#52](https://github.com/Celtoman/astro-telekom/issues/52) 🟢 | Точное число тестов продублировано в пяти документах и требует ручной синхронизации |
+| TD-35 | [#53](https://github.com/Celtoman/astro-telekom/issues/53) ✅ | Build-time catalog API отделен в server-only `SITE_DATA_API_URL` от публичного browser `PUBLIC_API_URL` |
+| TD-36 | [#54](https://github.com/Celtoman/astro-telekom/issues/54) 🟢 | Публичный browser API URL не требует HTTPS и может сломать формы mixed-content блокировкой |
 
 ## Невыполненные, но согласованные возможности
 
