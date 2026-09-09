@@ -55,7 +55,7 @@
 | TD-18 | [#20](https://github.com/Celtoman/astro-telekom/issues/20) ✅ | Admin входит в общий Astro check; отдельный CRM-workspace удален 9 сентября 2026 года |
 | TD-19 | [#21](https://github.com/Celtoman/astro-telekom/issues/21) ✅ | Устаревший tracked JS рядом с TS в `apps/api/src` — закрыто 7 сентября 2026 |
 | TD-20 | [#22](https://github.com/Celtoman/astro-telekom/issues/22) 🟢 | Повторяющаяся нумерация «4» в открытых вопросах `decisions.md` |
-| TD-26 | [#41](https://github.com/Celtoman/astro-telekom/issues/41) 🟢 | GitHub Actions используют устаревающий Node.js 20 runtime action |
+| TD-26 | [#41](https://github.com/Celtoman/astro-telekom/issues/41) ✅ | GitHub Actions обновлены на Node 24 majors: checkout/setup-node v7, pnpm/action-setup v6 |
 | TD-29 | [#44](https://github.com/Celtoman/astro-telekom/issues/44) ✅ | README и живой документ покрытия синхронизированы с актуальным тестовым baseline |
 | TD-32 | [#47](https://github.com/Celtoman/astro-telekom/issues/47) ✅ | Карта admin routes синхронизирована с рабочими `/tariffs`, `/cities` и `/leads` |
 

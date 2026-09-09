@@ -64,6 +64,6 @@ API создает `lead-deliveries` и `site-rebuilds` при наличии `R
 | Schema.org-спецификация Product/FAQ/Organization | Не реализована; выводится только `WebPage`. |
 | Queue для import | Worker слушает `tariff-imports`, но API не публикует jobs: validate/apply выполняются напрямую. |
 | Monitoring, tracing, error tracker | Не подключены. |
-| CI/CD | `.github/workflows/ci.yml` запускает `pnpm check` на push и pull request в `master`. Автоматического deployment-пайплайна нет; `.github/workflows/release.yml` только создаёт GitHub Release после push тега `v*`. |
+| CI/CD | `.github/workflows/ci.yml` запускает `pnpm check` на push и pull request в `master`; JavaScript actions используют Node 24 majors (`actions/checkout@v7`, `actions/setup-node@v7`, `pnpm/action-setup@v6`). Автоматического deployment-пайплайна нет; `.github/workflows/release.yml` только создаёт GitHub Release после push тега `v*`. |
 
 Переходить на другие major-версии или включать экспериментальные возможности Astro/Nest/Prisma можно только с отдельной проверкой compatibility, migration plan и rollback.
