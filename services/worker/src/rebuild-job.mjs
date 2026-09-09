@@ -1,3 +1,5 @@
+import { runCoolifyDeployment } from './coolify-deployment.mjs';
+
 const parseProviderResponse = async (response) => {
   const raw = await response.text();
   let parsed = null;
@@ -25,20 +27,46 @@ export async function runRebuildJob(job, options) {
 
   let result;
   try {
-    if (!rebuildUrl) throw new Error('REBUILD_WEBHOOK_URL is not configured');
-    const response = await fetchImpl(rebuildUrl, {
-      method: 'POST',
-      signal: AbortSignal.timeout(15 * 60 * 1000),
-      headers: { 'content-type': 'application/json', 'idempotency-key': `${rebuild.rebuildId}:${rebuild.revision}` },
-      body: JSON.stringify(rebuild),
-    });
-    result = await parseProviderResponse(response);
+    const provider = options.provider || 'webhook';
+    if (provider === 'coolify') {
+      result = await runCoolifyDeployment(rebuild, {
+        ...options,
+        fetchImpl,
+        existingDeploymentId: rebuild.providerDeploymentId,
+        existingProviderStatus: rebuild.providerStatus,
+        onProgress: (progress) => jsonRequest(`${endpoint}/provider-progress`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ revision: rebuild.revision, ...progress }),
+        }),
+      });
+    } else if (provider === 'webhook') {
+      if (!rebuildUrl) throw new Error('REBUILD_WEBHOOK_URL is not configured');
+      const response = await fetchImpl(rebuildUrl, {
+        method: 'POST',
+        signal: AbortSignal.timeout(15 * 60 * 1000),
+        headers: { 'content-type': 'application/json', 'idempotency-key': `${rebuild.rebuildId}:${rebuild.revision}` },
+        body: JSON.stringify(rebuild),
+      });
+      result = await parseProviderResponse(response);
+    } else {
+      throw new Error(`Unsupported REBUILD_PROVIDER: ${provider}`);
+    }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
+    const providerFailure = error && typeof error === 'object' ? error : {};
     await jsonRequest(`${endpoint}/result`, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ attemptNumber, maxAttempts, revision: rebuild.revision, error: message }),
+      body: JSON.stringify({
+        attemptNumber,
+        maxAttempts,
+        revision: rebuild.revision,
+        error: message,
+        ...(providerFailure.deploymentId ? { deploymentId: providerFailure.deploymentId } : {}),
+        ...(providerFailure.providerStatus ? { providerStatus: providerFailure.providerStatus } : {}),
+        ...(providerFailure.providerResponse ? { providerResponse: providerFailure.providerResponse } : {}),
+      }),
     });
     throw error;
   }

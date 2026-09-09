@@ -35,8 +35,16 @@ export class RebuildQueueController {
   @Post('internal/site-rebuilds/:id/result')
   result(
     @Param('id') id: string,
-    @Body() body: { attemptNumber?: number; maxAttempts?: number; revision?: number; result?: { status: 'SUCCEEDED'; deploymentId?: string; url?: string }; error?: string },
+    @Body() body: { attemptNumber?: number; maxAttempts?: number; revision?: number; result?: { status: 'SUCCEEDED'; deploymentId?: string; url?: string }; error?: string; deploymentId?: string; providerStatus?: string; providerResponse?: unknown },
   ) {
     return this.rebuilds.reportResult(id, body);
+  }
+
+  @Post('internal/site-rebuilds/:id/provider-progress')
+  providerProgress(
+    @Param('id') id: string,
+    @Body() body: { revision?: number; deploymentId?: string; providerStatus?: string; providerResponse?: unknown },
+  ) {
+    return this.rebuilds.recordProviderProgress(id, body);
   }
 }

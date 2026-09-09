@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Queue } from 'bullmq';
 import IORedis from 'ioredis';
 import { Prisma } from '../generated';
@@ -21,6 +21,15 @@ type AttemptResult = {
   revision?: number;
   result?: ProviderResult;
   error?: string;
+  deploymentId?: string;
+  providerStatus?: string;
+  providerResponse?: unknown;
+};
+type ProviderProgress = {
+  revision?: number;
+  deploymentId?: string;
+  providerStatus?: string;
+  providerResponse?: unknown;
 };
 
 @Injectable()
@@ -142,7 +151,31 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
       dedupeKey: running.dedupeKey,
       affectedPaths: running.affectedPaths,
       revision,
+      providerDeploymentId: running.providerDeploymentId,
+      providerStatus: running.providerStatus,
     };
+  }
+
+  async recordProviderProgress(id: string, body: ProviderProgress) {
+    const rebuild = await this.get(id);
+    const revision = Math.max(1, Math.floor(Number(body.revision) || rebuild.processingRevision));
+    const deploymentId = typeof body.deploymentId === 'string' ? body.deploymentId.trim() : '';
+    const providerStatus = typeof body.providerStatus === 'string' ? body.providerStatus.trim().toUpperCase() : '';
+    if (!deploymentId || deploymentId.length > 200) throw new BadRequestException('deploymentId is required');
+    if (!providerStatus || providerStatus.length > 100) throw new BadRequestException('providerStatus is required');
+    const saved = await this.prisma.siteRebuild.updateMany({
+      where: { id, status: 'RUNNING', processingRevision: revision, publishedRevision: { lt: revision } },
+      data: {
+        providerDeploymentId: deploymentId,
+        providerStatus,
+        ...(body.providerResponse !== undefined
+          ? { providerResponse: body.providerResponse as Prisma.InputJsonValue }
+          : {}),
+      },
+    });
+    return saved.count === 1
+      ? { saved: true, revision, deploymentId, providerStatus }
+      : { saved: false, skipped: true, reason: 'stale_attempt' };
   }
 
   async reportResult(id: string, body: AttemptResult) {
@@ -155,6 +188,8 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
     }
 
     const message = (body.error || 'rebuild provider did not return final status SUCCEEDED').slice(0, 2000);
+    const deploymentId = typeof body.deploymentId === 'string' ? body.deploymentId.trim().slice(0, 200) : '';
+    const providerStatus = typeof body.providerStatus === 'string' ? body.providerStatus.trim().toUpperCase().slice(0, 100) : 'FAILED';
     const failed = await this.prisma.siteRebuild.updateMany({
       where: { id, processingRevision: revision, publishedRevision: { lt: revision } },
       data: {
@@ -162,7 +197,11 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
         attempts: attempt,
         maxAttempts: attemptLimit,
         lastError: message,
-        providerStatus: 'FAILED',
+        providerStatus: providerStatus || 'FAILED',
+        ...(deploymentId ? { providerDeploymentId: deploymentId } : {}),
+        ...(body.providerResponse !== undefined
+          ? { providerResponse: body.providerResponse as Prisma.InputJsonValue }
+          : {}),
         completedAt: attempt < attemptLimit ? null : new Date(),
       },
     });

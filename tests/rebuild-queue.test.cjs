@@ -213,6 +213,43 @@ test('a stale BullMQ job is skipped after its revision was already published', a
   assert.equal(f.getRecord().status, 'SUCCEEDED');
 });
 
+test('provider progress stores a deployment UUID only for the running revision', async () => {
+  const f = fixture({
+    record: {
+      id: 'rebuild-1',
+      dedupeKey: 'site:site-1',
+      siteId: 'site-1',
+      status: 'RUNNING',
+      affectedPaths: ['/*'],
+      requestedRevision: 4,
+      processingRevision: 4,
+      publishedRevision: 2,
+      attempts: 1,
+      maxAttempts: 3,
+      providerDeploymentId: null,
+      providerStatus: null,
+    },
+  });
+
+  const stored = await f.service.recordProviderProgress('rebuild-1', {
+    revision: 4,
+    deploymentId: 'deployment-42',
+    providerStatus: 'IN_PROGRESS',
+    providerResponse: { deployment_uuid: 'deployment-42', status: 'in_progress' },
+  });
+
+  assert.equal(stored.saved, true);
+  assert.equal(f.getRecord().providerDeploymentId, 'deployment-42');
+  assert.equal(f.getRecord().providerStatus, 'IN_PROGRESS');
+  const stale = await f.service.recordProviderProgress('rebuild-1', {
+    revision: 3,
+    deploymentId: 'stale-deployment',
+    providerStatus: 'QUEUED',
+  });
+  assert.equal(stale.skipped, true);
+  assert.equal(f.getRecord().providerDeploymentId, 'deployment-42');
+});
+
 test('a late success cannot overwrite a newer running revision', async () => {
   const f = fixture({
     record: {

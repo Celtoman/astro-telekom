@@ -23,7 +23,7 @@ Production Compose запускает one-shot `migrate` из API image посл
 
 В Coolify images собираются без сетевой зависимости от API. После запуска PostgreSQL/Redis и миграций healthy API разрешает явный `bootstrap-seed` (`RUN_BOOTSTRAP_SEED=true` только на первом deploy), затем one-shot `web-publish` выполняет реальный Astro build и post-build SEO gate из внутреннего каталога. Проверенный `dist` копируется в release-каталог persistent volume и атомарно назначается текущей публикацией; web server стартует только после успешного publisher.
 
-Автоматический rebuild требует отдельного Coolify adapter: deploy API сначала возвращает `deployment_uuid`, а worker должен опрашивать его до финального success/failure. Текущий синхронный provider contract для этого не подходит ([#57](https://github.com/Celtoman/astro-telekom/issues/57)).
+Автоматический rebuild поддерживает отдельный Coolify adapter: deploy API сначала возвращает `deployment_uuid`, worker сохраняет его через internal progress endpoint и опрашивает deployment до `finished`/failure с bounded timeout. `queued`/`in_progress` не публикуют ревизию; BullMQ retry продолжает сохраненный deployment вместо повторного запуска. Legacy synchronous webhook сохранен как отдельный provider mode. Код #57 готов локально, реальный Coolify rehearsal еще не выполнен.
 
 Готовность инфраструктуры не смешивается с готовностью бизнеса: защищенный `/admin/readiness` отдельно проверяет наличие конфигурации coverage, contract, Tarifnik, fallback email, deployment provider и валидного PII retention period. Он возвращает только статусы и имена пропущенных переменных; реальная доступность, договорный статус интеграций и legal basis подтверждаются sandbox/rehearsal, а не наличием строки в environment.
 
@@ -43,7 +43,7 @@ Production Compose запускает one-shot `migrate` из API image посл
 
 Изменение контента в API
   -> PostgreSQL SiteRebuild -> Redis/BullMQ -> worker
-  -> internal start/result API + REBUILD_WEBHOOK_URL -> финальный результат deployment
+  -> internal start/progress/result API -> webhook или Coolify start/poll -> финальный результат deployment
 
 PII retention scheduler в worker
   -> worker-only API -> serializable bounded delete в PostgreSQL
@@ -63,7 +63,7 @@ PII retention scheduler в worker
 | `leads`, `domru-contract`, `lead-delivery`, `notifications`, `lead-access` | Сохранение лида, дедупликация, проверка договора, API/email delivery и одноразовый доступ из fallback-письма. |
 | `pii-retention` | Worker-only bounded hard-delete просроченных лидов и связанных payloads; fail-safe без явно заданного срока. |
 | `crm-leads` | Список, карточка, смена статуса, повторная постановка доставки и отзыв fallback-доступа. |
-| `rebuild-queue` | Persistent rebuild/outbox, дедупликация по сайту, BullMQ producer, start/result API и фиксация финального результата deployment. |
+| `rebuild-queue` | Persistent rebuild/outbox, дедупликация по сайту, BullMQ producer, start/progress/result API, сохранение provider deployment UUID и фиксация только финального результата deployment. |
 | `redirects` | Admin CRUD с архивированием, проверкой конфликтов/петель/цепочек, public resolver HTTP 301 и атомарным `hitCount`/`lastHitAt`; каждое изменение ставит rebuild сайта. |
 
 ## Границы модулей

@@ -27,7 +27,7 @@ export class ReleaseReadinessService {
       contract: this.required(['DOMRU_CONTRACT_API_URL', 'DOMRU_CONTRACT_API_KEY']),
       tarifnik: this.required(['TARIFNIK_API_URL', 'TARIFNIK_API_KEY']),
       fallbackEmail: this.emailFallback(),
-      rebuild: this.required(['REBUILD_WEBHOOK_URL']),
+      rebuild: this.rebuildProvider(),
       piiRetention: this.positiveInteger('PII_RETENTION_DAYS', 3_650),
     };
     return {
@@ -48,6 +48,15 @@ export class ReleaseReadinessService {
       missing.push('RESEND_API_KEY|LEADS_EMAIL_WEBHOOK_URL');
     }
     return { status: missing.length === 0 ? 'configured' : 'missing', missing };
+  }
+
+  private rebuildProvider(): ConfigurationCheck {
+    const provider = process.env.REBUILD_PROVIDER?.trim().toLowerCase() || 'webhook';
+    if (provider === 'webhook') return this.required(['REBUILD_WEBHOOK_URL']);
+    if (provider === 'coolify') {
+      return this.required(['COOLIFY_API_URL', 'COOLIFY_API_TOKEN', 'COOLIFY_RESOURCE_UUID']);
+    }
+    return { status: 'missing', missing: ['REBUILD_PROVIDER(webhook|coolify)'] };
   }
 
   private positiveInteger(name: string, maximum: number): ConfigurationCheck {

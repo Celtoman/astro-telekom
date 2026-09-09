@@ -37,7 +37,13 @@ const rebuildWorker = new Worker(
   (job) => runRebuildJob(job, {
     apiUrl,
     adminToken,
+    provider: process.env.REBUILD_PROVIDER,
     rebuildUrl: process.env.REBUILD_WEBHOOK_URL,
+    coolifyApiUrl: process.env.COOLIFY_API_URL,
+    coolifyApiToken: process.env.COOLIFY_API_TOKEN,
+    coolifyResourceUuid: process.env.COOLIFY_RESOURCE_UUID,
+    coolifyPollIntervalMs: process.env.COOLIFY_POLL_INTERVAL_MS,
+    coolifyDeployTimeoutMs: process.env.COOLIFY_DEPLOY_TIMEOUT_MS,
     jsonRequest,
   }),
   { connection, concurrency: 1 },

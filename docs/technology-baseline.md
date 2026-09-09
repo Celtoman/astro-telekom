@@ -49,6 +49,8 @@ Datasource URL описан в `prisma.config.ts`, клиент генериру
 
 API создает `lead-deliveries` и `site-rebuilds` при наличии `REDIS_URL`. Worker также владеет очередью `maintenance`: при валидном `PII_RETENTION_DAYS` BullMQ Job Scheduler ежедневно ставит worker-only PII purge, который через API удаляет bounded batches. Без Redis lead delivery использует process-local fallback, а rebuild остается в PostgreSQL как `PENDING` и восстанавливается при следующем запуске API с Redis; retention scheduler без worker/Redis не выполняется. Production требует Redis и отдельный worker.
 
+Rebuild provider выбирается через `REBUILD_PROVIDER`. Режим `webhook` сохраняет прежний синхронный контракт; `coolify` использует HTTPS API token/resource UUID, сохраняет полученный deployment UUID в PostgreSQL и выполняет bounded polling статусов. Повтор BullMQ продолжает уже сохраненный `queued`/`in_progress` deployment, а не запускает второй. Live Coolify API пока не проверен (#57).
+
 ### Docker и Caddy
 
 `docker-compose.yml` поднимает только PostgreSQL и Redis для разработки. Прямой `docker-compose.prod.yml` описывает PostgreSQL, Redis, one-shot Prisma migrate, API, worker, web, admin и внешний Caddy. Целевой `docker-compose.coolify.yml` отдает edge routing/TLS Coolify, не публикует host ports и оставляет API внутри stack network; web/admin Caddy проксируют same-origin `/api/*`. Coolify runtime-цепочка `migrate → api → bootstrap-seed → web-publish → web` собирает static output после готовности каталога, а Basic Auth middleware навешивается на оба публичных сервиса. Все Compose-файлы монтируют PostgreSQL 18 volume в `/var/lib/postgresql` — корневой layout, обязательный для major-specific data directory PG18.

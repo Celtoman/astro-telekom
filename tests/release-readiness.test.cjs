@@ -15,7 +15,11 @@ const integrationVariables = [
   'LEADS_EMAIL',
   'RESEND_API_KEY',
   'LEADS_EMAIL_WEBHOOK_URL',
+  'REBUILD_PROVIDER',
   'REBUILD_WEBHOOK_URL',
+  'COOLIFY_API_URL',
+  'COOLIFY_API_TOKEN',
+  'COOLIFY_RESOURCE_UUID',
   'PII_RETENTION_DAYS',
 ];
 
@@ -79,6 +83,29 @@ test('release readiness becomes configured only when every required integration 
     const result = new ReleaseReadinessService().configuration();
     assert.equal(result.status, 'configured');
     assert.ok(Object.values(result.checks).every((check) => check.status === 'configured'));
+  });
+});
+
+test('release readiness accepts a complete Coolify provider without a legacy webhook', async () => {
+  await withEnvironment({
+    DOMRU_COVERAGE_API_URL: 'https://coverage.example.test',
+    DOMRU_COVERAGE_API_KEY: 'coverage-key',
+    DOMRU_CONTRACT_API_URL: 'https://contract.example.test',
+    DOMRU_CONTRACT_API_KEY: 'contract-key',
+    TARIFNIK_API_URL: 'https://tarifnik.example.test',
+    TARIFNIK_API_KEY: 'tarifnik-key',
+    LEADS_EMAIL: 'operator@example.test',
+    RESEND_API_KEY: 'resend-key',
+    REBUILD_PROVIDER: 'coolify',
+    COOLIFY_API_URL: 'https://coolify.example.test/api/v1',
+    COOLIFY_API_TOKEN: 'coolify-secret',
+    COOLIFY_RESOURCE_UUID: 'resource-uuid',
+    PII_RETENTION_DAYS: '30',
+  }, async () => {
+    const result = new ReleaseReadinessService().configuration();
+    assert.equal(result.status, 'configured');
+    assert.deepEqual(result.checks.rebuild, { status: 'configured', missing: [] });
+    assert.doesNotMatch(JSON.stringify(result), /coolify-secret|resource-uuid|coolify\.example\.test/);
   });
 });
 

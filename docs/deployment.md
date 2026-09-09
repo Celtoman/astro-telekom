@@ -34,9 +34,10 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 2. Выбрать build pack `Docker Compose`, base directory `/`, Compose location `/docker-compose.coolify.yml`; Raw Compose не включать.
 3. В карточке сервиса `web` назначить домен `https://tv-internet-dom.ru:80`, в `admin` — `https://admin.tv-internet-dom.ru:80`. Суффикс `:80` указывает Coolify внутренний container port, внешний HTTPS остается стандартным.
 4. Заполнить обязательные environment values. `TEST_BASIC_AUTH_USERS` хранить как runtime literal; пароль не является build variable. Для первого deploy включить `RUN_BOOTSTRAP_SEED=true`.
-5. Запустить выбранный commit вручную. GitHub Auto Deploy включать только после первого успешного rehearsal. Не указывать Coolify deploy webhook напрямую в `REBUILD_WEBHOOK_URL`: текущий worker не умеет ждать асинхронный финал; адаптер отслеживается в [#57](https://github.com/Celtoman/astro-telekom/issues/57).
-6. Проверить TLS и Basic Auth на `/`, `/robots.txt`, `/sitemap.xml`, `/kazan/`, `/api/v1/health/live`, а также на всех admin routes. Без credentials каждый внешний URL должен возвращать `401`; после входа формы и admin API должны обращаться к same-origin `/api/v1` без второго HTTP-auth prompt. Ответы `admin.tv-internet-dom.ru` дополнительно должны содержать `X-Robots-Tag: noindex, nofollow, noarchive`.
-7. После успеха установить `RUN_BOOTSTRAP_SEED=false` и выполнить повторный deploy: seed должен быть пропущен, а web publisher обязан снова собрать каталог из текущей БД.
+5. Для пересборок задать `REBUILD_PROVIDER=coolify`, `COOLIFY_API_URL=https://<coolify-host>/api/v1`, отдельный `COOLIFY_API_TOKEN` и UUID созданного Compose resource в `COOLIFY_RESOURCE_UUID`. Token оставить только runtime secret: отключить `Build Variable`, не выводить и не коммитить. Интервал/таймаут по умолчанию — 5 секунд/15 минут.
+6. Запустить выбранный commit вручную. GitHub Auto Deploy включать только после первого успешного rehearsal. `REBUILD_WEBHOOK_URL` в Coolify-режиме оставить пустым: worker использует API start/status, а не webhook.
+7. Проверить TLS и Basic Auth на `/`, `/robots.txt`, `/sitemap.xml`, `/kazan/`, `/api/v1/health/live`, а также на всех admin routes. Без credentials каждый внешний URL должен возвращать `401`; после входа формы и admin API должны обращаться к same-origin `/api/v1` без второго HTTP-auth prompt. Ответы `admin.tv-internet-dom.ru` дополнительно должны содержать `X-Robots-Tag: noindex, nofollow, noarchive`.
+8. После успеха установить `RUN_BOOTSTRAP_SEED=false` и выполнить повторный deploy: seed должен быть пропущен, а web publisher обязан снова собрать каталог из текущей БД. Затем изменить тестовую сущность и проверить `deployment_uuid`, переход к `SUCCEEDED` только после Coolify `finished` и соответствие опубликованной ревизии.
 
 ## Порядок первого запуска
 
@@ -83,7 +84,7 @@ Seed не становится автоматической операцией �
 | PII retention | `PII_RETENTION_DAYS` (обязательное legal decision), `PII_RETENTION_BATCH_SIZE` (default 500), `PII_RETENTION_CRON` (default `0 3 * * *`, UTC) |
 | Coverage/contract | `DOMRU_COVERAGE_API_URL`, `DOMRU_COVERAGE_API_KEY`, `DOMRU_CONTRACT_API_URL`, `DOMRU_CONTRACT_API_KEY` |
 | Lead delivery | `TARIFNIK_API_URL`, `TARIFNIK_API_KEY`, `LEADS_EMAIL`, `RESEND_API_KEY` or `LEADS_EMAIL_WEBHOOK_URL`, `LEADS_EMAIL_FROM` |
-| Publishing | `REBUILD_WEBHOOK_URL`, `ENV_FILE`; Coolify API resource UUID/token/status polling будут добавлены в [#57](https://github.com/Celtoman/astro-telekom/issues/57) |
+| Publishing | `REBUILD_PROVIDER`; для `webhook` — `REBUILD_WEBHOOK_URL`; для `coolify` — `COOLIFY_API_URL`, `COOLIFY_API_TOKEN`, `COOLIFY_RESOURCE_UUID`, необязательные `COOLIFY_POLL_INTERVAL_MS`/`COOLIFY_DEPLOY_TIMEOUT_MS`; `ENV_FILE` |
 
 Проверка configuration gate из операторского PowerShell (значение токена не выводить в лог):
 
@@ -101,8 +102,8 @@ docker compose -f docker-compose.coolify.yml exec api node -e "fetch('http://loc
 - Static web не получает изменения из БД без внешней пересборки. Это относится и к набору redirect source paths; уже включенный matcher при каждом обращении проверяет актуальный published-статус записи через API.
 - Direct `docker-compose.prod.yml` по-прежнему требует заранее доступный `SITE_DATA_API_URL`; воспроизводимый первый bootstrap реализован только в целевом Coolify Compose.
 - Coolify Compose и password middleware пока проверены локально только как конфигурация. До живой проверки DNS/TLS, persistent volume, 401-boundary и повторного deploy [#55](https://github.com/Celtoman/astro-telekom/issues/55)/[#56](https://github.com/Celtoman/astro-telekom/issues/56) не закрываются.
-- Текущий rebuild provider contract синхронный и несовместим с асинхронным Coolify deploy API; не подключать прямой webhook до реализации [#57](https://github.com/Celtoman/astro-telekom/issues/57).
-- Rebuild требует одновременно PostgreSQL, Redis, worker, API и provider, который возвращает финальный `{ "status": "SUCCEEDED" }`; наличие одной лишь webhook-точки не доказывает публикацию.
+- Coolify adapter реализован и локально покрыт UUID/polling/retry/timeout tests, но еще не вызван против реального control plane; до этого [#57](https://github.com/Celtoman/astro-telekom/issues/57) и автоматическая публикация остаются неподтвержденными.
+- Rebuild требует одновременно PostgreSQL, Redis, worker, API и доступный выбранный provider; наличие URL/token без успешного финального rehearsal не доказывает публикацию.
 - Для применения persistent rebuild-job нужна миграция `0010_site_rebuild_jobs`.
 - Fallback email link требует примененной миграции `0009_lead_access_tokens`; ссылка одноразовая, действует 24 часа и проверяется API. Raw token передается во fragment и не попадает в HTTP request к static admin.
 - Retention query требует миграцию `0012_pii_retention_indexes`; она добавляет индексы `Lead.createdAt` и `AddressCheck.createdAt`, не выбирая срок хранения.
