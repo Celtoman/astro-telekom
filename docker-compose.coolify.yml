@@ -89,7 +89,7 @@ services:
       - -c
       - |
         case "$$RUN_BOOTSTRAP_SEED" in
-          true) node /app/dist/seed.js ;;
+          true) node /workspace/apps/api/dist/seed.js ;;
           false) echo "Initial seed explicitly skipped" ;;
           *) echo "RUN_BOOTSTRAP_SEED must be true or false" >&2; exit 1 ;;
         esac

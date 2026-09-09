@@ -65,7 +65,7 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.match(siteDataSource, /import\.meta\.env\.SITE_DATA_API_URL\s*\|\|\s*import\.meta\.env\.PUBLIC_API_URL/);
 
   assert.doesNotMatch(coolifyCompose, /(?:^|\n)\s+ports:\s*\n\s+- ["']?(?:80|443):/);
-  assert.match(coolifyCompose, /bootstrap-seed:[\s\S]*RUN_BOOTSTRAP_SEED:\s*\$\{RUN_BOOTSTRAP_SEED:\?[^}]+\}[\s\S]*node \/app\/dist\/seed\.js/);
+  assert.match(coolifyCompose, /bootstrap-seed:[\s\S]*RUN_BOOTSTRAP_SEED:\s*\$\{RUN_BOOTSTRAP_SEED:\?[^}]+\}[\s\S]*node \/workspace\/apps\/api\/dist\/seed\.js/);
   assert.match(coolifyCompose, /bootstrap-seed:\s+condition:\s*service_completed_successfully/);
   assert.match(coolifyCompose, /web-publish:[\s\S]*target:\s*publisher[\s\S]*SITE_DATA_API_URL:\s*http:\/\/api:3000\/api\/v1/);
   assert.match(coolifyCompose, /web-publish:\s+condition:\s*service_completed_successfully/);
@@ -111,4 +111,18 @@ test('Docker dependency layers are reusable when only sources change', () => {
       assert.ok(dockerfile.indexOf(manifest) < installAt, `${path} must copy ${manifest} before install`);
     }
   }
+});
+
+test('API runtime image preserves pnpm workspace dependency resolution', () => {
+  const dockerfile = readFileSync(join(repositoryRoot, 'apps', 'api', 'Dockerfile'), 'utf8');
+  const coolifyCompose = readFileSync(join(repositoryRoot, 'docker-compose.coolify.yml'), 'utf8');
+
+  assert.match(dockerfile, /WORKDIR \/workspace\s/);
+  assert.match(
+    dockerfile,
+    /COPY --from=build \/workspace\/apps\/api\/node_modules \.\/apps\/api\/node_modules/,
+  );
+  assert.match(dockerfile, /COPY --from=build \/workspace\/apps\/api\/dist \.\/apps\/api\/dist/);
+  assert.match(dockerfile, /CMD \["node", "apps\/api\/dist\/main\.js"\]/);
+  assert.match(coolifyCompose, /true\) node \/workspace\/apps\/api\/dist\/seed\.js ;;/);
 });

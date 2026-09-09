@@ -36,6 +36,7 @@
 | TD-31 | [#46](https://github.com/Celtoman/astro-telekom/issues/46) ✅ | Preview блокирует city+slug коллизии, генератор разводит допустимые пары типов |
 | TD-33 | [#48](https://github.com/Celtoman/astro-telekom/issues/48) ✅ | Browser CORS явно разрешает `PATCH` и `DELETE` для admin mutation routes |
 | TD-37 | [#55](https://github.com/Celtoman/astro-telekom/issues/55) 🟢 | Первый web image build требует уже доступный build-time API и пока не имеет воспроизводимого bootstrap-порядка |
+| TD-41 | [#61](https://github.com/Celtoman/astro-telekom/issues/61) ✅ | API runtime image сохраняет workspace `apps/api/node_modules`; bootstrap seed использует тот же runtime layout |
 
 ## P2
 
