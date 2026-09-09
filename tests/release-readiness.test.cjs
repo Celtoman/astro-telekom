@@ -16,6 +16,7 @@ const integrationVariables = [
   'RESEND_API_KEY',
   'LEADS_EMAIL_WEBHOOK_URL',
   'REBUILD_WEBHOOK_URL',
+  'PII_RETENTION_DAYS',
 ];
 
 async function withEnvironment(values, callback) {
@@ -53,6 +54,10 @@ test('release readiness reports missing integration configuration without exposi
       status: 'missing',
       missing: ['RESEND_API_KEY|LEADS_EMAIL_WEBHOOK_URL'],
     });
+    assert.deepEqual(result.checks.piiRetention, {
+      status: 'missing',
+      missing: ['PII_RETENTION_DAYS'],
+    });
     const serialized = JSON.stringify(result);
     assert.doesNotMatch(serialized, /coverage-secret|tarifnik-secret|operator@secret\.test|secret\.test/);
   });
@@ -69,6 +74,7 @@ test('release readiness becomes configured only when every required integration 
     LEADS_EMAIL: 'operator@example.test',
     LEADS_EMAIL_WEBHOOK_URL: 'https://mail.example.test',
     REBUILD_WEBHOOK_URL: 'https://deploy.example.test',
+    PII_RETENTION_DAYS: '30',
   }, async () => {
     const result = new ReleaseReadinessService().configuration();
     assert.equal(result.status, 'configured');

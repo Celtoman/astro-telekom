@@ -4,7 +4,7 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [CLAUDE.md](../CLAUDE.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 102/102 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита.
+**Baseline: 105/105 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита.
 
 | Файл | Что проверяет |
 | --- | --- |
@@ -23,9 +23,10 @@
 | `tests/coverage.test.cjs` | `CoverageService`/`AddressChecksController`: пустой или невалидный адрес никогда не вызывает внешний coverage API; неопубликованный сайт не вызывает внешний API; результат различает negative/unknown/malformed-ответ и сетевой сбой. |
 | `tests/crm-status.test.cjs` | `CrmLeadsController`, смена статуса лида: авторизованный оператор фиксируется в истории; конкурентное изменение возвращает конфликт без искажения истории; повторная установка того же статуса не создаёт дублирующий переход; неподдерживаемый статус отклоняется. |
 | `tests/health-readiness.test.cjs` | Process-only liveness отделен от DB/Redis-aware readiness; сбой возвращает HTTP 503 без внутренних адресов/ошибок; production Compose применяет migrations до API и опрашивает `/health/ready`. |
-| `tests/release-readiness.test.cjs` | Защищенный admin configuration gate перечисляет missing coverage/contract/Tarifnik/email/rebuild variables без значений; статус становится `configured` только при полном наборе и допустимом fallback transport. |
+| `tests/release-readiness.test.cjs` | Защищенный admin configuration gate перечисляет missing coverage/contract/Tarifnik/email/rebuild/PII policy variables без значений; статус становится `configured` только при полном наборе, допустимом fallback transport и валидном сроке хранения. |
 | `tests/lead-check.test.cjs` | `PublicLeadsController`: лид отклоняется для неопубликованного сайта; отклоняется недоступная (не найденная/архивная) страница или тариф; используется persisted-статус и ответ проверки адреса, а не подделанный клиентом; ручной лид не может подделать положительный coverage-результат; неизвестный `addressCheckId` отклоняется перед сохранением; проверка адреса не может быть привязана к другому адресу; повторные заявки за 24 часа подавляются отдельно по нормализованному телефону и нормализованному адресу, сохраняют причину/ссылку на исходный лид и не запускают проверку договора или доставку. 8/8 тестов файла проходят. |
 | `tests/lead-access.test.cjs` | Одноразовый fallback-доступ: raw token не хранится в БД, валидная ссылка используется ровно один раз; истекший, измененный, отозванный и относящийся к другой заявке token отклоняется; email содержит admin URL с token во fragment и без HMAC query-подписи. |
+| `tests/pii-retention.test.cjs` | Retention fail-safe: без явного валидного срока purge возвращает 503; bounded serializable transaction отвязывает свежие duplicates, каскадно удаляет просроченные лиды, истекшие tokens и осиротевшие проверки; endpoint worker-only, scheduler ежедневный, policy входит в release readiness. |
 | `tests/public-data.test.mjs` | Публичный API-срез данных: приватные provider/site настройки никогда не попадают в public-контент; тарифы API распределяются по тем же категориям услуг, что использует публичный сайт; нулевая промо-цена сохраняется как есть, отсутствие промо-цены — fallback на стандартную цену. |
 | `tests/public-city-catalog.test.cjs` | Public catalog API принимает только опубликованный сайт, запрашивает только опубликованные города/страницы/тарифы и возвращает build-time структуру с site context. |
 | `tests/rebuild-queue.test.cjs` | Persistent rebuild-flow: дедупликация изменений сайта, BullMQ attempts/backoff, RETRYING/FAILED без ложной публикации, success только по финальному provider status, следующая ревизия при изменении во время сборки и защита от stale job/result. |

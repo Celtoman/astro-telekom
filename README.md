@@ -24,7 +24,7 @@
 apps/web        Статический Astro-сайт из опубликованных городов; сейчас опубликована только Казань
 apps/admin      Static Astro + React/Tailwind/shadcn: login-shell, тарифы, города, заявки и fallback-доступ
 apps/api        NestJS + Fastify API и бизнес-правила
-services/worker BullMQ workers для импорта, пересборки и доставки заявок
+services/worker BullMQ workers для импорта, пересборки, доставки заявок и PII retention
 packages/database Prisma package и сгенерированный клиент
 prisma/         Схема, миграции и seed
 data/imports/    Канонические исходные файлы для штатного импорта
@@ -85,11 +85,11 @@ pnpm test
 
 В production Compose отдельный one-shot сервис `migrate` применяет Prisma migrations после готовности PostgreSQL и до старта API. `/api/v1/health/live` проверяет процесс, а `/api/v1/health/ready` и совместимый `/api/v1/health` требуют доступных PostgreSQL и Redis. Seed остается явным одноразовым шагом: его нельзя безопасно выполнять при каждом деплое.
 
-Защищенный `GET /api/v1/admin/readiness` показывает, какие coverage/contract/Tarifnik/email/rebuild integrations сконфигурированы, и остается `blocked`, пока обязательные переменные пусты. Endpoint никогда не возвращает их значения и не заменяет проверку реальных договоров или sandbox-вызовы.
+Защищенный `GET /api/v1/admin/readiness` показывает, какие coverage/contract/Tarifnik/email/rebuild integrations и PII retention policy сконфигурированы, и остается `blocked`, пока обязательные переменные пусты. Endpoint никогда не возвращает их значения и не заменяет проверку реальных договоров, legal decision или sandbox-вызовы.
 
-Публичные write-routes и login проходят строгую DTO-валидацию; лишние поля и заполненный скрытый honeypot отклоняются. Redis-backed rate limiting разделяет login, публичные формы и остальные маршруты; в production Compose доверие proxy headers включено только у API за Caddy. Политика срока хранения и удаления PII еще не утверждена и остается блокером production.
+Публичные write-routes и login проходят строгую DTO-валидацию; лишние поля и заполненный скрытый honeypot отклоняются. Redis-backed rate limiting разделяет login, публичные формы и остальные маршруты; в production Compose доверие proxy headers включено только у API за Caddy. Worker ежедневно запускает bounded hard-delete просроченных лидов и связанных payloads через worker-only API, но только при явно заданном валидном `PII_RETENTION_DAYS`. Сам срок код не выбирает: legal decision остается блокером production.
 
-На дату документации release gate зеленый: `pnpm test` выполняет 102 теста без падений. Актуальный состав сценариев, включая API input security, infrastructure/release readiness, migration dependency, экраны тарифов, городов и заявок в админке, browser CORS, отсутствие выведенного из эксплуатации CRM-workspace, канонический справочник, full-snapshot импорт и реальные multi-city сборки public web, перечислен в [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md).
+На дату документации release gate зеленый: `pnpm test` выполняет 105 тестов без падений. Актуальный состав сценариев, включая API input security, PII retention, infrastructure/release readiness, migration dependency, экраны тарифов, городов и заявок в админке, browser CORS, отсутствие выведенного из эксплуатации CRM-workspace, канонический справочник, full-snapshot импорт и реальные multi-city сборки public web, перечислен в [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md).
 
 ## Версионирование
 

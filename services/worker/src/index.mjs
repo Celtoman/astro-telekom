@@ -1,11 +1,14 @@
-import { Worker } from 'bullmq';
+import { Queue, Worker } from 'bullmq';
 import IORedis from 'ioredis';
 import { runRebuildJob } from './rebuild-job.mjs';
 
 const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
 const apiUrl = process.env.API_URL || 'http://localhost:3000/api/v1';
 const adminToken = process.env.ADMIN_API_TOKEN;
+const piiRetentionDays = Number(process.env.PII_RETENTION_DAYS);
+const hasValidPiiRetention = Number.isSafeInteger(piiRetentionDays) && piiRetentionDays > 0 && piiRetentionDays <= 3_650;
 const connection = new IORedis(redisUrl, { maxRetriesPerRequest: null });
+const maintenanceQueue = new Queue('maintenance', { connection });
 
 const jsonRequest = async (url, options = {}) => {
   const response = await fetch(url, {
@@ -53,7 +56,41 @@ const leadDeliveryWorker = new Worker(
   { connection, concurrency: 4 },
 );
 
-for (const worker of [importWorker, rebuildWorker, leadDeliveryWorker]) {
+const piiRetentionWorker = new Worker(
+  'maintenance',
+  async (job) => {
+    if (job.name !== 'pii-retention') throw new Error(`Unsupported maintenance job: ${job.name}`);
+    if (!adminToken) throw new Error('ADMIN_API_TOKEN is not configured');
+    const totals = { leads: 0, addressChecks: 0, accessTokens: 0, detachedDuplicates: 0, batches: 0 };
+    for (let batch = 0; batch < 100; batch += 1) {
+      const result = await jsonRequest(`${apiUrl}/internal/pii-retention`, {
+        method: 'POST',
+        headers: { 'x-admin-token': adminToken },
+        body: '{}',
+      });
+      totals.leads += result.deleted.leads;
+      totals.addressChecks += result.deleted.addressChecks;
+      totals.accessTokens += result.deleted.accessTokens;
+      totals.detachedDuplicates += result.detachedDuplicates;
+      totals.batches += 1;
+      if (result.complete) return { ...totals, cutoff: result.cutoff };
+    }
+    throw new Error('PII retention exceeded 100 batches; retrying the remaining backlog');
+  },
+  { connection, concurrency: 1 },
+);
+
+if (hasValidPiiRetention) {
+  await maintenanceQueue.upsertJobScheduler(
+    'pii-retention-daily',
+    { pattern: process.env.PII_RETENTION_CRON || '0 3 * * *', tz: 'UTC' },
+    { name: 'pii-retention', data: {}, opts: { attempts: 3, backoff: { type: 'exponential', delay: 60_000 }, removeOnComplete: 30, removeOnFail: 100 } },
+  );
+} else {
+  console.warn('[worker] PII_RETENTION_DAYS is missing or invalid; retention scheduler is disabled');
+}
+
+for (const worker of [importWorker, rebuildWorker, leadDeliveryWorker, piiRetentionWorker]) {
   worker.on('completed', (job) => console.log(`[worker] ${job.queueName}/${job.id} completed`));
   worker.on('failed', (job, error) => console.error(`[worker] ${job?.queueName}/${job?.id} failed`, error));
 }
@@ -63,7 +100,7 @@ async function shutdown(signal) {
   if (shuttingDown) return;
   shuttingDown = true;
   console.log(`[worker] received ${signal}, closing workers`);
-  await Promise.all([importWorker.close(), rebuildWorker.close(), leadDeliveryWorker.close()]);
+  await Promise.all([importWorker.close(), rebuildWorker.close(), leadDeliveryWorker.close(), piiRetentionWorker.close(), maintenanceQueue.close()]);
   await connection.quit();
   console.log('[worker] shutdown complete');
   process.exit(0);
@@ -72,4 +109,4 @@ async function shutdown(signal) {
 process.on('SIGINT', () => void shutdown('SIGINT'));
 process.on('SIGTERM', () => void shutdown('SIGTERM'));
 
-console.log('[worker] tariff-imports, site-rebuilds and lead-deliveries are listening');
+console.log('[worker] tariff-imports, site-rebuilds, lead-deliveries and maintenance are listening');

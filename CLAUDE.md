@@ -34,7 +34,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 `apps/crm` удален после переноса заявок в `/leads`; `admin` входит в общий Astro check.
 
-**Baseline тестов: 102/102.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют строгие public DTO/rate limit/honeypot, cookie-сессию и CORS admin, infrastructure/release readiness и migration dependency Compose, экраны тарифов, городов и заявок, отсутствие выведенного из эксплуатации CRM-workspace, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, public catalog и multi-city static routes, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+**Baseline тестов: 105/105.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют строгие public DTO/rate limit/honeypot, policy-driven PII purge, cookie-сессию и CORS admin, infrastructure/release readiness и migration dependency Compose, экраны тарифов, городов и заявок, отсутствие выведенного из эксплуатации CRM-workspace, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, public catalog и multi-city static routes, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 

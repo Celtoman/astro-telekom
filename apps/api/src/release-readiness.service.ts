@@ -15,6 +15,7 @@ export interface ReleaseConfigurationStatus {
     tarifnik: ConfigurationCheck;
     fallbackEmail: ConfigurationCheck;
     rebuild: ConfigurationCheck;
+    piiRetention: ConfigurationCheck;
   };
 }
 
@@ -27,6 +28,7 @@ export class ReleaseReadinessService {
       tarifnik: this.required(['TARIFNIK_API_URL', 'TARIFNIK_API_KEY']),
       fallbackEmail: this.emailFallback(),
       rebuild: this.required(['REBUILD_WEBHOOK_URL']),
+      piiRetention: this.positiveInteger('PII_RETENTION_DAYS', 3_650),
     };
     return {
       status: Object.values(checks).every((check) => check.status === 'configured') ? 'configured' : 'blocked',
@@ -46,6 +48,12 @@ export class ReleaseReadinessService {
       missing.push('RESEND_API_KEY|LEADS_EMAIL_WEBHOOK_URL');
     }
     return { status: missing.length === 0 ? 'configured' : 'missing', missing };
+  }
+
+  private positiveInteger(name: string, maximum: number): ConfigurationCheck {
+    const value = Number(process.env[name]);
+    const valid = Number.isSafeInteger(value) && value > 0 && value <= maximum;
+    return { status: valid ? 'configured' : 'missing', missing: valid ? [] : [name] };
   }
 
   private hasValue(name: string) {

@@ -1,12 +1,13 @@
 # Фоновые задачи
 
-Worker запускается из `services/worker/src/index.mjs`. Он требует `REDIS_URL`, подключается через `ioredis` и создает три BullMQ consumers.
+Worker запускается из `services/worker/src/index.mjs`. Он требует `REDIS_URL`, подключается через `ioredis` и создает четыре BullMQ consumers и одну scheduler queue.
 
 | Queue | Consumer | Текущий producer | Фактический статус |
 | --- | --- | --- | --- |
 | `lead-deliveries` | POST `/api/v1/internal/lead-deliveries/:id` с `ADMIN_API_TOKEN` | `LeadDeliveryService` в API | Работает при настроенном Redis и отдельном worker. |
 | `tariff-imports` | POST `/api/v1/admin/tariffs/import` | В коде не найден | Listener есть, producer нет. Админка вызывает validate/apply напрямую. |
 | `site-rebuilds` | POST deployment provider, затем `/api/v1/internal/site-rebuilds/:id/result` | `RebuildQueueService` в API | Persistent job в PostgreSQL, три попытки BullMQ с exponential backoff 30 секунд. |
+| `maintenance` | POST `/api/v1/internal/pii-retention` с `ADMIN_API_TOKEN` | BullMQ Job Scheduler `pii-retention-daily` | Регистрируется только при валидном `PII_RETENTION_DAYS`; UTC cron по умолчанию `0 3 * * *`, три попытки. |
 
 ## Доставка заявок
 
@@ -18,6 +19,18 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 6. После третьей неудачи API пытается email/webhook fallback и пишет `DELIVERY_ERROR_EMAIL_SENT` или `DELIVERY_ERROR_EMAIL_FAILED`.
 
 Один `deliveryKey` используется для всех API attempts конкретного лида и передается в header/payload как idempotency key. Реальный контракт Tarifnik и гарантии идемпотентности пока не подтверждены.
+
+## Удаление просроченных PII
+
+1. Worker проверяет, что `PII_RETENTION_DAYS` — целое число от 1 до 3650. При отсутствии или ошибке scheduler не создается, а `/admin/readiness` остается `blocked`.
+2. Scheduler ежедневно создает `pii-retention` job. Cron можно изменить через `PII_RETENTION_CRON`; timezone фиксирован UTC.
+3. Worker вызывает worker-only endpoint и повторяет до 100 batches по `PII_RETENTION_BATCH_SIZE` (default 500, максимум 5000). Непогашенный backlog приводит к retry job, а не к ложному success.
+4. API в serializable transaction выбирает старые лиды по `createdAt`, отвязывает более свежие duplicates и физически удаляет старые лиды. FK cascade удаляет status history, activity, delivery payloads и access tokens.
+5. Истекшие fallback tokens удаляются независимо, а старые `AddressCheck` — только если на них больше не ссылается ни один лид. Ответ содержит только cutoff и счетчики, без удаленных данных.
+
+Hard-delete выбран, чтобы PII не осталось в JSON payloads. Срок хранения намеренно не зашит в код и должен быть утвержден юридически до production.
+
+Локальная runtime-проверка подтвердила scheduler metadata `key=pii-retention-daily`, `name=pii-retention`, pattern `0 3 * * *`, timezone UTC в отдельной Redis DB; test DB после проверки очищена.
 
 ## Поведение без Redis
 
@@ -36,7 +49,7 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 
 ## Остановка процесса
 
-Worker перехватывает `SIGINT`/`SIGTERM`: закрывает все три `Worker` (дожидаясь текущих задач через `close()`) и завершает Redis-соединение перед выходом. Live-проверка под реальной нагрузкой (`docker compose stop worker` с активной задачей) не выполнена — см. [workaround-audit.md](research/2026-09-07-workaround-audit.md), W-08.
+Worker перехватывает `SIGINT`/`SIGTERM`: закрывает все четыре `Worker` и maintenance queue (дожидаясь текущих задач через `close()`), затем завершает Redis-соединение. Live-проверка под реальной нагрузкой (`docker compose stop worker` с активной задачей) не выполнена — см. [workaround-audit.md](research/2026-09-07-workaround-audit.md), W-08.
 
 ## Оставшийся неиспользуемый listener
 

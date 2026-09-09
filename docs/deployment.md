@@ -21,8 +21,9 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 3. Задать `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN`. Во время image build из них формируются public API и canonical URLs.
 4. Задать случайные непустые `ADMIN_API_TOKEN`, `SUBSCRIBER_COOKIE_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`.
 5. Проверить rate-limit policy: `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX`. Production Compose принудительно задает API `TRUST_PROXY=true`, потому что API не публикует порт и получает внешний трафик только от Caddy; при прямой публикации API доверие proxy headers нужно пересмотреть.
-6. До включения заявок подтвердить договоры и задать coverage, contract, Tarifnik, email и rebuild variables. Проверить защищенный `/api/v1/admin/readiness`: `status` должен быть `configured`. Это подтверждает только наличие конфигурации — затем обязательны sandbox-вызовы и согласованные legal/SLA decisions.
-7. Убедиться, что DNS всех трех доменов указывает на сервер и порты 80/443 доступны Caddy.
+6. Юридически утвердить срок хранения сырых заявок и задать его целым числом дней в `PII_RETENTION_DAYS` (1–3650). Код не содержит придуманного default; без policy scheduler отключен и readiness заблокирован. При необходимости настроить размер batch и UTC cron отдельно.
+7. До включения заявок подтвердить договоры и задать coverage, contract, Tarifnik, email и rebuild variables. Проверить защищенный `/api/v1/admin/readiness`: `status` должен быть `configured`. Это подтверждает только наличие конфигурации — затем обязательны sandbox-вызовы и согласованные legal/SLA decisions.
+8. Убедиться, что DNS всех трех доменов указывает на сервер и порты 80/443 доступны Caddy.
 
 ## Порядок первого запуска
 
@@ -43,6 +44,7 @@ Compose запускает `migrate` после готовности PostgreSQL;
 | Схема | `pnpm db:validate`, затем `prisma migrate deploy` в целевой БД. |
 | Health | `/api/v1/health/live` возвращает process liveness; `/api/v1/health/ready` и совместимый `/api/v1/health` возвращают 200 только при доступных PostgreSQL и Redis, иначе 503. |
 | Input security | Неизвестное поле public DTO и заполненный honeypot возвращают 400; превышение login/public write limit возвращает 429. Проверить, что разные внешние IP за Caddy получают независимые лимиты. |
+| PII retention | На изолированной копии БД создать старый и свежий test lead, вызвать `/internal/pii-retention` service token, проверить cascade удаления старого, сохранность свежего и счетчики job; затем проверить ежедневный scheduler и failed/completed logs worker. |
 | Публичный HTML | Открыть raw HTML `/`, текущий опубликованный `/{city-slug}/`, service page, tariff page, robots и sitemap; проверить canonical без localhost и отсутствие draft-городов. |
 | Интеграции | Sandbox или согласованный test contract coverage, contract check, Tarifnik и fallback email. |
 | Rebuild | Изменить тестовую сущность, проверить переход `PENDING/QUEUED -> RUNNING -> SUCCEEDED` через `/admin/rebuilds`, затем проверить HTML и совпадение `publishedRevision === requestedRevision`. |
@@ -57,6 +59,7 @@ Compose запускает `migrate` после готовности PostgreSQL;
 | Domains/CORS | `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN`, `CORS_ORIGINS`, `ADMIN_URL` |
 | Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
 | Input security | `TRUST_PROXY`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX` |
+| PII retention | `PII_RETENTION_DAYS` (обязательное legal decision), `PII_RETENTION_BATCH_SIZE` (default 500), `PII_RETENTION_CRON` (default `0 3 * * *`, UTC) |
 | Coverage/contract | `DOMRU_COVERAGE_API_URL`, `DOMRU_COVERAGE_API_KEY`, `DOMRU_CONTRACT_API_URL`, `DOMRU_CONTRACT_API_KEY` |
 | Lead delivery | `TARIFNIK_API_URL`, `TARIFNIK_API_KEY`, `LEADS_EMAIL`, `RESEND_API_KEY` or `LEADS_EMAIL_WEBHOOK_URL`, `LEADS_EMAIL_FROM` |
 | Publishing | `REBUILD_WEBHOOK_URL`, `ENV_FILE` |
@@ -73,10 +76,11 @@ Invoke-RestMethod -Uri "https://<API_DOMAIN>/api/v1/admin/readiness" -Headers @{
 
 - Caddy reverse proxy не добавляет security headers из `static.Caddyfile`; он используется только внутри static image.
 - Нет мониторинга, alerting, лог-агрегации или автоматической backup policy.
-- Срок хранения и автоматическое удаление PII не утверждены и не реализованы; реальный прием заявок до legal decision запрещен.
+- Автоматическое hard-delete PII реализовано, но срок хранения не утвержден и `.env.example` намеренно оставляет `PII_RETENTION_DAYS` пустым; реальный прием заявок до legal decision и isolated rehearsal запрещен.
 - Static web не получает изменения из БД без внешней пересборки.
 - Rebuild требует одновременно PostgreSQL, Redis, worker, API и provider, который возвращает финальный `{ "status": "SUCCEEDED" }`; наличие одной лишь webhook-точки не доказывает публикацию.
 - Для применения persistent rebuild-job нужна миграция `0010_site_rebuild_jobs`.
 - Fallback email link требует примененной миграции `0009_lead_access_tokens`; ссылка одноразовая, действует 24 часа и проверяется API. Raw token передается во fragment и не попадает в HTTP request к static admin.
+- Retention query требует миграцию `0012_pii_retention_indexes`; она добавляет индексы `Lead.createdAt` и `AddressCheck.createdAt`, не выбирая срок хранения.
 
 Полный список рисков и работа по закрытию — в [technical-debt.md](technical-debt.md).

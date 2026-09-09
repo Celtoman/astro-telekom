@@ -308,6 +308,7 @@ model AddressCheck {
   leads       Lead[]
 
   @@index([cityId, createdAt])
+  @@index([createdAt])
 }
 
 model Lead {
@@ -358,6 +359,7 @@ model Lead {
   @@index([processingStatus, createdAt])
   @@index([siteId, phone, createdAt])
   @@index([siteId, duplicateOfId])
+  @@index([createdAt])
 }
 
 model LeadAccessToken {

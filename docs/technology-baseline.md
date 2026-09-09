@@ -43,11 +43,11 @@ API имеет глобальный prefix `/api/v1`, включенный CORS 
 
 ### Prisma и PostgreSQL
 
-Datasource URL описан в `prisma.config.ts`, клиент генерируется в `apps/api/generated`. `PrismaService` использует `PrismaPg` поверх `pg.Pool`. Seed также принадлежит API (`apps/api/src/seed.ts`), а database package сохраняет совместимую команду-делегат. В runtime image seed запускается как `/app/dist/seed.js`, поэтому использует тот же generated client и зависимости, что API. В репозитории 11 последовательных миграций; последняя (`0011_single_admin_access`) удаляет ролевую модель админки.
+Datasource URL описан в `prisma.config.ts`, клиент генерируется в `apps/api/generated`. `PrismaService` использует `PrismaPg` поверх `pg.Pool`. Seed также принадлежит API (`apps/api/src/seed.ts`), а database package сохраняет совместимую команду-делегат. В runtime image seed запускается как `/app/dist/seed.js`, поэтому использует тот же generated client и зависимости, что API. В репозитории 12 последовательных миграций; `0011_single_admin_access` удаляет ролевую модель админки, а `0012_pii_retention_indexes` добавляет индексы для bounded retention queries.
 
 ### Redis и BullMQ
 
-API создает `lead-deliveries` и `site-rebuilds` при наличии `REDIS_URL`. Без Redis lead delivery использует process-local fallback, а rebuild остается в PostgreSQL как `PENDING` и восстанавливается при следующем запуске API с Redis. Worker всегда подключается к Redis; production требует Redis и отдельный worker.
+API создает `lead-deliveries` и `site-rebuilds` при наличии `REDIS_URL`. Worker также владеет очередью `maintenance`: при валидном `PII_RETENTION_DAYS` BullMQ Job Scheduler ежедневно ставит worker-only PII purge, который через API удаляет bounded batches. Без Redis lead delivery использует process-local fallback, а rebuild остается в PostgreSQL как `PENDING` и восстанавливается при следующем запуске API с Redis; retention scheduler без worker/Redis не выполняется. Production требует Redis и отдельный worker.
 
 ### Docker и Caddy
 

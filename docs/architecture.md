@@ -11,7 +11,7 @@
 | `apps/web` | Astro 7, static output | SEO HTML и sitemap из опубликованных городов, страниц и тарифов; форма проверки адреса получает site/city/page context из static route. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
 | `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, рабочие `/tariffs`, `/cities`, `/leads` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; заявки доступны как реальный master-detail журнал со сменой статуса. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
-| `services/worker` | Node.js + BullMQ | Обработка доставок лидов и пересборок сайта; также слушает пока не используемую import-очередь. |
+| `services/worker` | Node.js + BullMQ | Обработка доставок лидов, пересборок сайта и ежедневной PII retention; также слушает пока не используемую import-очередь. |
 | `prisma` / `packages/database` | Prisma 7 + PostgreSQL | Схема, миграции, seed и сгенерированный клиент. |
 | `deploy` | Caddy + Docker Compose | Образы, reverse proxy, TLS и persistent volumes. |
 
@@ -19,7 +19,7 @@
 
 Production Compose запускает one-shot `migrate` из API image после PostgreSQL healthcheck. `api` стартует только после успешного `prisma migrate deploy` и готового Redis; его `/health/ready` проверяет обе зависимости, а `/health/live` — только процесс. Seed остается отдельной операторской операцией, поскольку создает или обновляет продуктовые данные и администратора.
 
-Готовность инфраструктуры не смешивается с готовностью бизнеса: защищенный `/admin/readiness` отдельно проверяет наличие конфигурации coverage, contract, Tarifnik, fallback email и deployment provider. Он возвращает только статусы и имена пропущенных переменных; реальная доступность и договорный статус интеграций подтверждаются sandbox/rehearsal, а не наличием строки в environment.
+Готовность инфраструктуры не смешивается с готовностью бизнеса: защищенный `/admin/readiness` отдельно проверяет наличие конфигурации coverage, contract, Tarifnik, fallback email, deployment provider и валидного PII retention period. Он возвращает только статусы и имена пропущенных переменных; реальная доступность, договорный статус интеграций и legal basis подтверждаются sandbox/rehearsal, а не наличием строки в environment.
 
 ```text
 Браузер публичного сайта
@@ -34,6 +34,10 @@ Production Compose запускает one-shot `migrate` из API image посл
 Изменение контента в API
   -> PostgreSQL SiteRebuild -> Redis/BullMQ -> worker
   -> internal start/result API + REBUILD_WEBHOOK_URL -> финальный результат deployment
+
+PII retention scheduler в worker
+  -> worker-only API -> serializable bounded delete в PostgreSQL
+  -> cascade history/activity/delivery/tokens + orphan AddressCheck cleanup
 ```
 
 В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities`, валидирует уникальность каждого публичного пути и генерирует HTML только для опубликованного каталога. `PUBLIC_SITE_SLUG` выбирает сайт, по умолчанию `domru-kazan`. В runtime публичная статическая витрина не читает PostgreSQL и не может сама увидеть изменения в API.
@@ -43,10 +47,11 @@ Production Compose запускает one-shot `migrate` из API image посл
 | Модуль | Реальная ответственность |
 | --- | --- |
 | `auth` и `AdminTokenGuard` | Создание 12-часовой сессии, browser login/me/logout через HttpOnly cookie и совместимый Bearer для технических клиентов. `x-admin-token` — машинный credential; `/internal/*` принимает только его. |
-| `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; строгая валидация есть только у блоков. |
+| `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; блоки имеют отдельную строгую валидацию, остальные admin bodies частично проверяются вручную. |
 | `tariff-import`, `city-import` | Валидация XLS/XLSX, сохранение отчета, transactional apply. |
 | `address-checks`, `coverage` | Сохранение проверки адреса и адаптер внешнего coverage API. |
 | `leads`, `domru-contract`, `lead-delivery`, `notifications`, `lead-access` | Сохранение лида, дедупликация, проверка договора, API/email delivery и одноразовый доступ из fallback-письма. |
+| `pii-retention` | Worker-only bounded hard-delete просроченных лидов и связанных payloads; fail-safe без явно заданного срока. |
 | `crm-leads` | Список, карточка, смена статуса, повторная постановка доставки и отзыв fallback-доступа. |
 | `rebuild-queue` | Persistent rebuild/outbox, дедупликация по сайту, BullMQ producer, start/result API и фиксация финального результата deployment. |
 
@@ -54,7 +59,7 @@ Production Compose запускает one-shot `migrate` из API image посл
 
 `apps/api` — единственный слой, который пишет доменные данные. Admin, worker и web не обращаются к PostgreSQL напрямую. `CoverageService`, `DomruContractService`, `LeadDeliveryService` и `NotificationsService` выступают адаптерами внешних интеграций; их URLs и ключи задаются окружением. Префикс `/crm/leads` сохранен только в HTTP-контракте API; отдельного CRM-приложения или домена больше нет.
 
-`LeadDeliveryService` и `RebuildQueueService` создают очереди в API, а worker вызывает защищенные внутренние endpoints. Только API пишет в PostgreSQL. Для rebuild worker отдельно вызывает deployment provider и возвращает его success/error в API; `tariff-imports` остается listener без producer и не участвует в текущем import-flow.
+`LeadDeliveryService` и `RebuildQueueService` создают доменные очереди в API; worker владеет maintenance scheduler и вызывает защищенные внутренние endpoints. Только API пишет в PostgreSQL. Для rebuild worker отдельно вызывает deployment provider и возвращает его success/error в API; для retention повторяет bounded batches до полного результата. `tariff-imports` остается listener без producer и не участвует в текущем import-flow.
 
 ## Модель публикации
 

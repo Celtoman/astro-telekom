@@ -51,7 +51,7 @@
 | GET/POST/PATCH | `/admin/providers` | Provider records. |
 | GET/POST/PATCH | `/admin/sites` | Site records. |
 | GET/POST/PATCH | `/admin/users` | Учетные записи администраторов, deactivate/password reset. Поле `role` не поддерживается. |
-| GET | `/admin/readiness` | Защищенный configuration gate: `configured`/`blocked` для coverage, contract, Tarifnik, fallback email и rebuild; возвращает только имена отсутствующих переменных, никогда не значения. |
+| GET | `/admin/readiness` | Защищенный configuration gate: `configured`/`blocked` для coverage, contract, Tarifnik, fallback email, rebuild и валидного `PII_RETENTION_DAYS`; возвращает только имена отсутствующих переменных, никогда не значения. |
 | GET/POST/PATCH | `/admin/regions` | Region records. |
 | GET/POST/PATCH | `/admin/cities` | City records. |
 | GET/POST/PATCH | `/admin/pages` | Page records. |
@@ -93,8 +93,11 @@ Apply трактует файл как полный snapshot провайдер�
 | POST | `/crm/leads/:id/retry-delivery` | Возвращает eligible lead в `PENDING` и ставит первую delivery attempt. |
 | POST | `/crm/leads/:id/revoke-fallback-access` | Отзывает все еще активные одноразовые fallback tokens заявки. Защищен общим admin guard. |
 | POST | `/internal/lead-deliveries/:id` | Worker-only handler очереди. Защищен тем же guard. |
+| POST | `/internal/pii-retention` | Worker-only bounded purge: требует service `x-admin-token` и валидный `PII_RETENTION_DAYS`, удаляет один batch просроченных лидов с cascade-данными, истекшие fallback tokens и осиротевшие старые AddressCheck; возвращает только cutoff и счетчики. |
 
 `/crm/leads` сейчас возвращает PII без серверной пагинации и фильтрации. Admin `/leads` использует endpoint только после проверки HttpOnly-cookie сессии и фильтрует полученный список в браузере; для большого объема нужна отдельная серверная пагинация.
+
+Retention endpoint физически удаляет весь `Lead`, чтобы PII не осталось в `contractResult`, `apiResult`, UTM или delivery JSON. Cascade удаляет `LeadDeliveryAttempt`, `LeadActivityEvent`, `LeadStatusHistory` и `LeadAccessToken`; старые `AddressCheck` удаляются только после исчезновения всех ссылок. Свежий duplicate, ссылающийся на удаляемый лид, предварительно отвязывается. Один вызов ограничен `PII_RETENTION_BATCH_SIZE` (default 500, максимум 5000); worker повторяет batches и запускает scheduler ежедневно. Без явно утвержденного срока endpoint возвращает 503, scheduler отключен, а release readiness остается `blocked`.
 
 ## Отсутствующие routes
 

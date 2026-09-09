@@ -30,6 +30,8 @@ import { RebuildQueueController } from './rebuild-queue.controller';
 import { HealthService } from './health.service';
 import { AdminReadinessController } from './admin-readiness.controller';
 import { ReleaseReadinessService } from './release-readiness.service';
+import { PiiRetentionController } from './pii-retention.controller';
+import { PiiRetentionService } from './pii-retention.service';
 
 @Module({
   controllers: [
@@ -51,7 +53,8 @@ import { ReleaseReadinessService } from './release-readiness.service';
     LeadAccessController,
     RebuildQueueController,
     AdminReadinessController,
+    PiiRetentionController,
   ],
-  providers: [PrismaService, HealthService, ReleaseReadinessService, NotificationsService, AuthService, AdminTokenGuard, CoverageService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService],
+  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, AuthService, AdminTokenGuard, CoverageService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService],
 })
 export class AppModule {}

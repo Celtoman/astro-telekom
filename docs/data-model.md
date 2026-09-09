@@ -1,6 +1,6 @@
 # Модель данных текущего прототипа
 
-Источник правды: `prisma/schema.prisma` и одиннадцать применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
+Источник правды: `prisma/schema.prisma` и двенадцать применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
 
 ## Сущности контента и географии
 
@@ -34,6 +34,8 @@
 
 `LeadProcessingStatus` отделяет delivery flow от операторского `LeadStatus`. Это реализованная и важная граница: delivery не должна заменять CRM-статус.
 
+Для retention не добавлена отдельная policy-таблица: юридически утвержденный срок приходит только из обязательной production-переменной `PII_RETENTION_DAYS`. Миграция `0012_pii_retention_indexes` индексирует `Lead.createdAt` и `AddressCheck.createdAt`. Bounded hard-delete старого `Lead` каскадно удаляет history, delivery attempts, activity и access tokens; свежие duplicates предварительно отвязываются, старый `AddressCheck` удаляется только без оставшихся ссылок. Это исключает частичную «анонимизацию», при которой PII мог бы остаться в JSON.
+
 ## Доступ и технические записи
 
 `User` содержит email, `passwordHash`, name, active и timestamps. Ролевой модели нет: любая активная учетная запись имеет единый уровень доступа администратора. `Session` хранит не raw token, а его SHA-256 hash и expiry. При reset password или deactivate API удаляет sessions пользователя. `LeadAccessToken` также хранит только hash: raw token существует лишь в одноразовой email-ссылке и не возвращается административными CRM routes.
@@ -54,4 +56,4 @@ Provider.settings.content -> Site.settings.content -> Region.content -> City.con
 
 ## Чего в модели нет
 
-Нет сущностей для media library, page template/version, scheduled publication, audit action, notification delivery, analytics aggregates, SEO validation, variable registry, category/collection, equipment, channel package, review, legal retention policy и provider integration profile. Перед добавлением этих сущностей нужно утвердить их interface и ownership, а не использовать неструктурированный JSON как постоянную замену.
+Нет сущностей для media library, page template/version, scheduled publication, audit action, notification delivery, analytics aggregates, SEO validation, variable registry, category/collection, equipment, channel package, review, persisted legal retention policy и provider integration profile. Retention mechanism существует, но конкретный срок остается внешним legal decision. Перед добавлением новых сущностей нужно утвердить их interface и ownership, а не использовать неструктурированный JSON как постоянную замену.
