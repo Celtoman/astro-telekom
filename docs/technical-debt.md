@@ -65,6 +65,7 @@
 | TD-37 | [#56](https://github.com/Celtoman/astro-telekom/issues/56) 🟢 | Production Compose не адаптирован к Coolify proxy и не закрывает тестовые web/admin страницы паролем |
 | TD-38 | [#57](https://github.com/Celtoman/astro-telekom/issues/57) 🟢 | Coolify adapter реализован локально; остаются реальные token/resource и live polling rehearsal |
 | TD-39 | [#58](https://github.com/Celtoman/astro-telekom/issues/58) ✅ | Все Dockerfile кешируют `pnpm install` по root/workspace manifests и lockfile; source-only rebuild подтвержден 9 сентября 2026 года |
+| TD-40 | [#60](https://github.com/Celtoman/astro-telekom/issues/60) ✅ | Coolify API token удален из build-time Compose interpolation и передается worker только через runtime `.env` |
 
 ## Невыполненные, но согласованные возможности
 

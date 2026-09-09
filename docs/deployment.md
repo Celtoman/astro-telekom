@@ -2,6 +2,8 @@
 
 Этот документ описывает текущую Compose-конфигурацию и согласованный целевой контур Coolify. Production deployment не выполнялся и не верифицировался; инструкция не является подтверждением готового боевого контура. Первый внешний rehearsal будет запускаться из GitHub через Coolify на купленном тестовом домене `tv-internet-dom.ru`, без дополнительного `stage`-контура.
 
+Подробная пошаговая настройка интерфейса, DNS, GitHub App, переменных, Basic Auth, smoke tests и отката сверена с актуальным Coolify v4.3.18 и вынесена в [исследование первого развертывания](research/2026-09-09-coolify-deployment.md).
+
 Отдельный CRM-frontend удален 9 сентября 2026 года после переноса журнала заявок в `/leads` `apps/admin`. API routes пока сохраняют префикс `/crm/leads` как внутреннее имя контракта; отдельного домена или сервиса для них нет.
 
 ## Контуры
@@ -25,16 +27,16 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 6. Юридически утвердить срок хранения сырых заявок и задать его целым числом дней в `PII_RETENTION_DAYS` (1–3650). Код не содержит придуманного default; без policy scheduler отключен и readiness заблокирован. При необходимости настроить размер batch и UTC cron отдельно.
 7. До включения заявок подтвердить договоры и задать coverage, contract, Tarifnik, email и rebuild variables. Проверить защищенный `/api/v1/admin/readiness`: `status` должен быть `configured`. Это подтверждает только наличие конфигурации — затем обязательны sandbox-вызовы и согласованные legal/SLA decisions.
 8. Направить DNS A/AAAA для `tv-internet-dom.ru` и `admin.tv-internet-dom.ru` на Coolify-сервер; 80/443 должны быть доступны Coolify edge proxy.
-9. Сгенерировать bcrypt credential строкой `htpasswd -nbB <username> <password>` и сохранить результат только в Coolify как `TEST_BASIC_AUTH_USERS`. Поле отметить `Literal` или включить escaping labels, чтобы символы `$` хэша не интерполировались. Открытый пароль и готовый credential не коммитить.
+9. Сгенерировать bcrypt credential строкой `htpasswd -nbB <username> <password>` и сохранить результат только в Coolify как `TEST_BASIC_AUTH_USERS`. Поле отметить `Literal` **и** включить `Escape special characters in labels`, чтобы символы `$` хэша не интерполировались. Открытый пароль и готовый credential не коммитить.
 10. Явно задать `RUN_BOOTSTRAP_SEED=true` для первого запуска; после успешного seed и публикации изменить на `false` до следующего deploy.
 
 ## Настройка Coolify
 
 1. Создать Git-based application из приватного GitHub-репозитория через GitHub App или Deploy Key.
 2. Выбрать build pack `Docker Compose`, base directory `/`, Compose location `/docker-compose.coolify.yml`; Raw Compose не включать.
-3. В карточке сервиса `web` назначить домен `https://tv-internet-dom.ru:80`, в `admin` — `https://admin.tv-internet-dom.ru:80`. Суффикс `:80` указывает Coolify внутренний container port, внешний HTTPS остается стандартным.
+3. В карточке сервиса `web` назначить домен `https://tv-internet-dom.ru`, в `admin` — `https://admin.tv-internet-dom.ru`. Оба контейнера слушают внутренний порт 80, поэтому в актуальном Coolify суффикс порта не нужен.
 4. Заполнить обязательные environment values. `TEST_BASIC_AUTH_USERS` хранить как runtime literal; пароль не является build variable. Для первого deploy включить `RUN_BOOTSTRAP_SEED=true`.
-5. Для пересборок задать `REBUILD_PROVIDER=coolify`, `COOLIFY_API_URL=https://<coolify-host>/api/v1`, отдельный `COOLIFY_API_TOKEN` и UUID созданного Compose resource в `COOLIFY_RESOURCE_UUID`. Token оставить только runtime secret: отключить `Build Variable`, не выводить и не коммитить. Интервал/таймаут по умолчанию — 5 секунд/15 минут.
+5. Для пересборок задать `REBUILD_PROVIDER=coolify` и `COOLIFY_API_URL=https://<coolify-host>/api/v1`. `COOLIFY_API_TOKEN` добавить вручную в Normal view как runtime-only secret: Runtime и Literal включить, Build и Multiline выключить; worker получает его из создаваемого Coolify runtime `.env`, а Compose не интерполирует token на build/parse. `COOLIFY_RESOURCE_UUID` не генерировать вручную: это предопределенная application variable Coolify, значение нужно только сверить с UUID созданного Compose resource. Интервал/таймаут по умолчанию — 5 секунд/15 минут.
 6. Запустить выбранный commit вручную. GitHub Auto Deploy включать только после первого успешного rehearsal. `REBUILD_WEBHOOK_URL` в Coolify-режиме оставить пустым: worker использует API start/status, а не webhook.
 7. Проверить TLS и Basic Auth на `/`, `/robots.txt`, `/sitemap.xml`, `/kazan/`, `/api/v1/health/live`, а также на всех admin routes. Без credentials каждый внешний URL должен возвращать `401`; после входа формы и admin API должны обращаться к same-origin `/api/v1` без второго HTTP-auth prompt. Ответы `admin.tv-internet-dom.ru` дополнительно должны содержать `X-Robots-Tag: noindex, nofollow, noarchive`.
 8. После успеха установить `RUN_BOOTSTRAP_SEED=false` и выполнить повторный deploy: seed должен быть пропущен, а web publisher обязан снова собрать каталог из текущей БД. Затем изменить тестовую сущность и проверить `deployment_uuid`, переход к `SUCCEEDED` только после Coolify `finished` и соответствие опубликованной ревизии.
@@ -48,7 +50,7 @@ docker compose -f docker-compose.prod.yml up -d --build
 docker compose -f docker-compose.prod.yml exec api node /app/dist/seed.js
 ```
 
-Coolify Compose не вызывает API во время image build. После готовности PostgreSQL/Redis он последовательно применяет migrations, запускает API, выполняет `bootstrap-seed` согласно явному `RUN_BOOTSTRAP_SEED`, затем запускает one-shot `web-publish`. Publisher обращается к `http://api:3000/api/v1`, выполняет Astro build вместе с post-build SEO gate, копирует только успешный `dist` в новый release-каталог persistent volume и атомарно переключает symlink `current`. Caddy `web` стартует лишь после успешного publisher. Таким образом первый deploy не требует ранее опубликованного API, а повторный deploy собирается из текущей БД.
+Coolify Compose не вызывает API во время image build. После готовности PostgreSQL/Redis он последовательно применяет migrations, запускает API, выполняет `bootstrap-seed` согласно явному `RUN_BOOTSTRAP_SEED`, затем запускает one-shot `web-publish`. Publisher обращается к `http://api:3000/api/v1`, выполняет Astro build вместе с post-build SEO gate, копирует только успешный `dist` в новый release-каталог persistent volume и атомарно переключает symlink `current`. Caddy `web` стартует лишь после успешного publisher. Таким образом первый deploy не требует ранее опубликованного API, а повторный deploy собирается из текущей БД. Все one-shot services имеют `restart: "no"`; Coolify v4.3.18 автоматически исключает такие завершенные контейнеры из общей health-оценки.
 
 Во всех четырех Dockerfile dependency layer строится до копирования исходников: сначала root/workspace manifests и `pnpm-lock.yaml`, затем `pnpm install --frozen-lockfile`, затем `COPY . .`. Поэтому обычная правка кода или документации повторно использует install layer; изменение manifest/lockfile намеренно заставляет пересобрать зависимости.
 
@@ -70,7 +72,7 @@ Seed не становится автоматической операцией �
 | Password boundary | Без Basic Auth credentials `tv-internet-dom.ru/*` и `admin.tv-internet-dom.ru/*`, включая `/api/*`, возвращают 401; после одного входа same-origin forms/API работают. API не имеет отдельного публичного Coolify domain; admin responses содержат `X-Robots-Tag: noindex, nofollow, noarchive`. |
 | Интеграции | Sandbox или согласованный test contract coverage, contract check, Tarifnik и fallback email. |
 | Rebuild | Изменить тестовую сущность, проверить переход `PENDING/QUEUED -> RUNNING -> SUCCEEDED` через `/admin/rebuilds`, затем проверить HTML и совпадение `publishedRevision === requestedRevision`. |
-| Backup/restore | Проверить резервную копию PostgreSQL и восстановление на отдельной БД. |
+| Backup/restore | Для текущего Git-based Compose Application настроить `pg_dump` во внешнее/S3-хранилище и проверить восстановление на отдельной БД. Встроенный database-aware backup Coolify доступен Database/Service resources, но пока не Git-based Compose Application. |
 
 ## Переменные окружения по назначению
 
@@ -99,7 +101,7 @@ docker compose -f docker-compose.coolify.yml exec api node -e "fetch('http://loc
 ## Известные эксплуатационные ограничения
 
 - Caddy reverse proxy не добавляет security headers из `static.Caddyfile`; он используется только внутри static image.
-- Нет мониторинга, alerting, лог-агрегации или автоматической backup policy.
+- Нет мониторинга, alerting, лог-агрегации или настроенной backup policy. Встроенный database-aware backup Coolify пока не доступен PostgreSQL внутри Git-based Docker Compose Application; до реальных лидов нужен внешний `pg_dump`, S3/off-server storage и restore rehearsal.
 - Автоматическое hard-delete PII реализовано, но срок хранения не утвержден и `.env.example` намеренно оставляет `PII_RETENTION_DAYS` пустым; реальный прием заявок до legal decision и isolated rehearsal запрещен.
 - Static web не получает изменения из БД без внешней пересборки. Это относится и к набору redirect source paths; уже включенный matcher при каждом обращении проверяет актуальный published-статус записи через API.
 - Direct `docker-compose.prod.yml` по-прежнему требует заранее доступный `SITE_DATA_API_URL`; воспроизводимый первый bootstrap реализован только в целевом Coolify Compose.

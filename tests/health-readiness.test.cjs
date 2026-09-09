@@ -70,7 +70,8 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.match(coolifyCompose, /web-publish:[\s\S]*target:\s*publisher[\s\S]*SITE_DATA_API_URL:\s*http:\/\/api:3000\/api\/v1/);
   assert.match(coolifyCompose, /web-publish:\s+condition:\s*service_completed_successfully/);
   assert.match(coolifyCompose, /REBUILD_PROVIDER:\s*\$\{REBUILD_PROVIDER:-coolify\}/);
-  assert.match(coolifyCompose, /COOLIFY_API_TOKEN:\s*\$\{COOLIFY_API_TOKEN:\?[^}]+\}/);
+  assert.match(coolifyCompose, /worker:[\s\S]*?env_file:\s*\$\{ENV_FILE:-\.env\}/);
+  assert.doesNotMatch(coolifyCompose, /COOLIFY_API_TOKEN:\s*\$\{COOLIFY_API_TOKEN/);
   assert.match(coolifyCompose, /PUBLIC_API_URL:\s*https:\/\/\$\{PUBLIC_DOMAIN[^}]*\}\/api\/v1/);
   assert.match(coolifyCompose, /PUBLIC_API_URL:\s*https:\/\/\$\{ADMIN_DOMAIN[^}]*\}\/api\/v1/);
   assert.equal((coolifyCompose.match(/coolify\.traefik\.middlewares=test-basic-auth/g) || []).length, 2);

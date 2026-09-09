@@ -55,7 +55,7 @@ Rebuild provider выбирается через `REBUILD_PROVIDER`. Режим 
 
 `docker-compose.yml` поднимает только PostgreSQL и Redis для разработки. Прямой `docker-compose.prod.yml` описывает PostgreSQL, Redis, one-shot Prisma migrate, API, worker, web, admin и внешний Caddy. Целевой `docker-compose.coolify.yml` отдает edge routing/TLS Coolify, не публикует host ports и оставляет API внутри stack network; web/admin Caddy проксируют same-origin `/api/*`. Coolify runtime-цепочка `migrate → api → bootstrap-seed → web-publish → web` собирает static output после готовности каталога, а Basic Auth middleware навешивается на оба публичных сервиса. Все Compose-файлы монтируют PostgreSQL 18 volume в `/var/lib/postgresql` — корневой layout, обязательный для major-specific data directory PG18.
 
-Обе контейнерные схемы конфигурационно валидны через `docker compose ... config --no-interpolate`; Caddy-конфигурации проходят `caddy validate`. Coolify-вариант локально покрыт тестом порядка, same-origin API и отсутствия открытого Basic Auth credential, но еще не поднят с реальными DNS, TLS, volume и secrets. Поэтому #55/#56 остаются открытыми до живого rehearsal; это не production certification.
+Обе контейнерные схемы конфигурационно валидны через `docker compose ... config --no-interpolate`; Caddy-конфигурации проходят `caddy validate`. Coolify-вариант локально покрыт тестом порядка, same-origin API, runtime-only API token и отсутствия открытого Basic Auth credential; инструкция сверена с Coolify v4.3.18, но контур еще не поднят с реальными DNS, TLS, volume и secrets. Поэтому #55/#56 остаются открытыми до живого rehearsal; это не production certification.
 
 ## Неподключенные или ограниченные возможности
 
