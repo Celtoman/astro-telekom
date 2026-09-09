@@ -85,6 +85,8 @@ pnpm test
 
 Production Compose принимает `SITE_DATA_API_URL` отдельно от browser API, но первый web image build пока требует уже доступный источник каталога: runtime `depends_on` не действует на стадии Docker build. Воспроизводимый bootstrap отслеживается в [#55](https://github.com/Celtoman/astro-telekom/issues/55); до его закрытия one-shot первый deploy не считается поддержанным.
 
+Целевой внешний test-контур будет развертываться из GitHub через Coolify на `tv-internet-dom.ru`, без дополнительного `stage`-контура. Все web/admin страницы до публичного запуска должны быть закрыты паролем на edge proxy. Текущий Compose еще не адаптирован к Coolify routing и password middleware — [#56](https://github.com/Celtoman/astro-telekom/issues/56).
+
 В production Compose отдельный one-shot сервис `migrate` применяет Prisma migrations после готовности PostgreSQL и до старта API. `/api/v1/health/live` проверяет процесс, а `/api/v1/health/ready` и совместимый `/api/v1/health` требуют доступных PostgreSQL и Redis. Seed остается явным одноразовым шагом: его нельзя безопасно выполнять при каждом деплое.
 
 Защищенный `GET /api/v1/admin/readiness` показывает, какие coverage/contract/Tarifnik/email/rebuild integrations и PII retention policy сконфигурированы, и остается `blocked`, пока обязательные переменные пусты. Endpoint никогда не возвращает их значения и не заменяет проверку реальных договоров, legal decision или sandbox-вызовы.

@@ -10,7 +10,7 @@
 
 | Направление | Статус | Что есть сейчас | Граница или условие |
 | --- | --- | --- | --- |
-| Monorepo и локальная инфраструктура | Реализовано | pnpm workspace, Docker Compose, PostgreSQL 18, Redis 8 | Production-развертывание не выполнялось и не подтверждалось. |
+| Monorepo и локальная инфраструктура | Реализовано | pnpm workspace, Docker Compose, PostgreSQL 18, Redis 8 | Production-развертывание не выполнялось и не подтверждалось; целевой Coolify-контур из GitHub согласован, но routing/password protection еще не реализованы — [#56](https://github.com/Celtoman/astro-telekom/issues/56). |
 | Данные и миграции | Реализовано | Prisma-схема, 12 миграций, production Compose one-shot `migrate` до старта API, проверенный идемпотентный seed; локально загружены 207 городов и канонический snapshot из 3 859 тарифов | Seed остается явной одноразовой операторской операцией; нет истории изменений тарифа, корзины, версий контента и журнала действий. |
 | API и доступ | Частично реализовано | NestJS/Fastify, DB/Redis-aware readiness, process-only liveness и защищенный configuration gate внешних интеграций, строгая глобальная DTO-валидация для login и публичных write-routes, Redis-backed rate limit, 12-часовая HttpOnly-cookie сессия для browser login/me/logout, совместимый Bearer, единый уровень доступа администратора; `/internal/*` изолирован сервисным `x-admin-token` | Admin CRUD еще частично валидирует тела вручную; нет session renewal и аудита действий; configuration gate не доказывает внешний SLA/договор. |
 | Города и страницы | Частично реализовано | CRUD API, admin `/cities` со списком 207 городов, поиском, XLSX-preview/apply, историей и rebuild status; warnings требуют подтверждения, новый город и шесть его страниц создаются в `DRAFT` | В опубликованном состоянии остается только Казань; нет публикационного workflow, расписания, шаблонов и массовых операций. Импорт пока разрешен только для односайтовой конфигурации. |
@@ -55,6 +55,8 @@
 `loadSiteData()` обращается к public catalog API в build-time с таймаутом 5 секунд, отбрасывает draft/archive и проверяет slug/коллизии URL до генерации. Если API недоступен, сборка по умолчанию падает с ненулевым кодом и явной причиной. До prerender production build требует `PUBLIC_SITE_URL` как чистый HTTPS origin и `PUBLIC_API_URL` как внешний HTTPS URL с path `/api/v1`; нормализованное значение browser API встраивается в форму. После prerender verifier сравнивает весь indexable `*/index.html` с sitemap, отклоняет неизвестные плоские HTML-файлы и проверяет canonical, title, description, единственный H1, robots без глобального `Disallow`, отсутствие loopback-ссылок и `noindex` без canonical у 404. Демо-Казань и loopback URL возвращаются только при явном `ALLOW_DEMO_DATA=true` — это осознанный локальный UX-режим, а не fallback для production-публикации.
 
 Production Compose принимает отдельный `SITE_DATA_API_URL`, но пока не оркестрирует первый bootstrap: API нужен уже на стадии Docker build, раньше runtime `depends_on`. Ограничение и требование воспроизводимого двухфазного сценария зафиксированы в [#55](https://github.com/Celtoman/astro-telekom/issues/55).
+
+Первый внешний rehearsal будет выполняться в Coolify из GitHub на `tv-internet-dom.ru` без дополнительного stage-контура. До закрытия [#56](https://github.com/Celtoman/astro-telekom/issues/56) текущий Compose нельзя считать пригодным для этого запуска: внешний Caddy владеет 80/443, а парольная защита web/admin страниц не настроена.
 
 ## Зависимости от окружения
 

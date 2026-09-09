@@ -19,6 +19,8 @@
 
 Production Compose запускает one-shot `migrate` из API image после PostgreSQL healthcheck. `api` стартует только после успешного `prisma migrate deploy` и готового Redis; его `/health/ready` проверяет обе зависимости, а `/health/live` — только процесс. Seed остается отдельной операторской операцией, поскольку создает или обновляет продуктовые данные и администратора.
 
+Целевой внешний deployment provider — Coolify с Git-based Docker Compose из GitHub. Первый rehearsal использует `tv-internet-dom.ru` без дополнительного stage-контура; human-facing web/admin routes должны быть закрыты password middleware на Coolify edge. Текущая схема внешнего Caddy и портов 80/443 пока является локальной production-like конфигурацией, а не готовой Coolify-топологией ([#56](https://github.com/Celtoman/astro-telekom/issues/56)).
+
 Готовность инфраструктуры не смешивается с готовностью бизнеса: защищенный `/admin/readiness` отдельно проверяет наличие конфигурации coverage, contract, Tarifnik, fallback email, deployment provider и валидного PII retention period. Он возвращает только статусы и имена пропущенных переменных; реальная доступность, договорный статус интеграций и legal basis подтверждаются sandbox/rehearsal, а не наличием строки в environment.
 
 ```text
