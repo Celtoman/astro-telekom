@@ -1,6 +1,13 @@
-FROM node:22.23.2-alpine AS build
+FROM node:22.23.2-alpine AS source
 WORKDIR /workspace
 RUN corepack enable
+COPY . .
+RUN pnpm install --frozen-lockfile
+
+FROM source AS publisher
+CMD ["sh", "apps/web/scripts/publish-static.sh"]
+
+FROM source AS build
 ARG PUBLIC_API_URL
 ARG SITE_DATA_API_URL
 ARG PUBLIC_SITE_URL
@@ -13,9 +20,10 @@ ENV PUBLIC_SITE_URL=$PUBLIC_SITE_URL
 ENV PUBLIC_SITE_SLUG=$PUBLIC_SITE_SLUG
 ENV PUBLIC_YANDEX_METRIKA_ID=$PUBLIC_YANDEX_METRIKA_ID
 ENV PUBLIC_SUPPORT_PHONE=$PUBLIC_SUPPORT_PHONE
-COPY . .
-RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @provider/web run build
+
+FROM caddy:2.11.4-alpine AS coolify-server
+COPY deploy/coolify-web.Caddyfile /etc/caddy/Caddyfile
 
 FROM caddy:2.11.4-alpine
 COPY --from=build /workspace/apps/web/dist /srv

@@ -63,6 +63,8 @@
 | TD-35 | [#53](https://github.com/Celtoman/astro-telekom/issues/53) ✅ | Build-time catalog API отделен в server-only `SITE_DATA_API_URL` от публичного browser `PUBLIC_API_URL` |
 | TD-36 | [#54](https://github.com/Celtoman/astro-telekom/issues/54) ✅ | Production build требует внешний HTTPS `PUBLIC_API_URL` с нормализованным path `/api/v1` |
 | TD-37 | [#56](https://github.com/Celtoman/astro-telekom/issues/56) 🟢 | Production Compose не адаптирован к Coolify proxy и не закрывает тестовые web/admin страницы паролем |
+| TD-38 | [#57](https://github.com/Celtoman/astro-telekom/issues/57) 🟢 | Worker ожидает синхронный финал deployment, а Coolify возвращает асинхронный `deployment_uuid` |
+| TD-39 | [#58](https://github.com/Celtoman/astro-telekom/issues/58) 🟢 | Dockerfile инвалидируют тяжелый `pnpm install` layer при любом изменении репозитория |
 
 ## Невыполненные, но согласованные возможности
 

@@ -1,0 +1,153 @@
+services:
+  postgres:
+    image: postgres:18.6-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in Coolify}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in Coolify}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in Coolify}
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:8.10.1-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: "no"
+    env_file: ${ENV_FILE:-.env}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["node", "node_modules/prisma/build/index.js", "migrate", "deploy", "--config", "prisma.config.ts"]
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    env_file: ${ENV_FILE:-.env}
+    environment:
+      TRUST_PROXY: "true"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/v1/health/ready').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+  worker:
+    build:
+      context: .
+      dockerfile: services/worker/Dockerfile
+    restart: unless-stopped
+    env_file: ${ENV_FILE:-.env}
+    depends_on:
+      api:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  bootstrap-seed:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: "no"
+    env_file: ${ENV_FILE:-.env}
+    environment:
+      RUN_BOOTSTRAP_SEED: ${RUN_BOOTSTRAP_SEED:?Set true for the first deploy and false afterwards}
+    depends_on:
+      api:
+        condition: service_healthy
+    command:
+      - sh
+      - -c
+      - |
+        case "$$RUN_BOOTSTRAP_SEED" in
+          true) node /app/dist/seed.js ;;
+          false) echo "Initial seed explicitly skipped" ;;
+          *) echo "RUN_BOOTSTRAP_SEED must be true or false" >&2; exit 1 ;;
+        esac
+
+  web-publish:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: publisher
+    restart: "no"
+    environment:
+      ALLOW_DEMO_DATA: "false"
+      SITE_DATA_API_URL: http://api:3000/api/v1
+      PUBLIC_API_URL: https://${PUBLIC_DOMAIN:?Set PUBLIC_DOMAIN in Coolify}/api/v1
+      PUBLIC_SITE_URL: https://${PUBLIC_DOMAIN:?Set PUBLIC_DOMAIN in Coolify}
+      PUBLIC_SITE_SLUG: ${PUBLIC_SITE_SLUG:-domru-kazan}
+      PUBLIC_YANDEX_METRIKA_ID: ${PUBLIC_YANDEX_METRIKA_ID:-}
+      PUBLIC_SUPPORT_PHONE: ${PUBLIC_SUPPORT_PHONE:-}
+    volumes:
+      - web_publication:/publication
+    depends_on:
+      bootstrap-seed:
+        condition: service_completed_successfully
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: coolify-server
+    restart: unless-stopped
+    environment:
+      API_UPSTREAM: api:3000
+    expose:
+      - "80"
+    volumes:
+      - web_publication:/publication:ro
+    depends_on:
+      web-publish:
+        condition: service_completed_successfully
+    labels:
+      - "traefik.http.middlewares.test-basic-auth.basicauth.users=${TEST_BASIC_AUTH_USERS:?Set TEST_BASIC_AUTH_USERS in Coolify}"
+      - "coolify.traefik.middlewares=test-basic-auth"
+
+  admin:
+    build:
+      context: .
+      dockerfile: apps/admin/Dockerfile
+      args:
+        PUBLIC_API_URL: https://${ADMIN_DOMAIN:?Set ADMIN_DOMAIN in Coolify}/api/v1
+        PUBLIC_PROVIDER_ID: ${PUBLIC_PROVIDER_ID:-}
+        PUBLIC_SITE_ID: ${PUBLIC_SITE_ID:-}
+    restart: unless-stopped
+    environment:
+      API_UPSTREAM: api:3000
+    expose:
+      - "80"
+    depends_on:
+      api:
+        condition: service_healthy
+    labels:
+      - "traefik.http.middlewares.test-basic-auth.basicauth.users=${TEST_BASIC_AUTH_USERS:?Set TEST_BASIC_AUTH_USERS in Coolify}"
+      - "coolify.traefik.middlewares=test-basic-auth"
+
+volumes:
+  postgres_data:
+  redis_data:
+  web_publication:
