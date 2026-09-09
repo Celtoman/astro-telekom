@@ -193,6 +193,15 @@ test('web production build is blocked without a clean HTTPS origin', { timeout: 
       assert.notEqual(build.code, 0, build.output);
       assert.match(build.output, /PUBLIC_SITE_URL.*HTTPS origin/i);
     }
+
+    const insecureBrowserApiBuild = await runWebBuild({
+      SITE_DATA_API_URL: apiUrl,
+      PUBLIC_API_URL: 'http://api.partner.example.test/api/v1',
+      PUBLIC_SITE_URL: productionSite,
+      ALLOW_DEMO_DATA: '',
+    });
+    assert.notEqual(insecureBrowserApiBuild.code, 0, insecureBrowserApiBuild.output);
+    assert.match(insecureBrowserApiBuild.output, /PUBLIC_API_URL.*HTTPS.*\/api\/v1/i);
   });
 });
 

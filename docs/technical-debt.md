@@ -61,7 +61,7 @@
 | TD-32 | [#47](https://github.com/Celtoman/astro-telekom/issues/47) ✅ | Карта admin routes синхронизирована с рабочими `/tariffs`, `/cities` и `/leads` |
 | TD-34 | [#52](https://github.com/Celtoman/astro-telekom/issues/52) 🟢 | Точное число тестов продублировано в пяти документах и требует ручной синхронизации |
 | TD-35 | [#53](https://github.com/Celtoman/astro-telekom/issues/53) ✅ | Build-time catalog API отделен в server-only `SITE_DATA_API_URL` от публичного browser `PUBLIC_API_URL` |
-| TD-36 | [#54](https://github.com/Celtoman/astro-telekom/issues/54) 🟢 | Публичный browser API URL не требует HTTPS и может сломать формы mixed-content блокировкой |
+| TD-36 | [#54](https://github.com/Celtoman/astro-telekom/issues/54) ✅ | Production build требует внешний HTTPS `PUBLIC_API_URL` с нормализованным path `/api/v1` |
 
 ## Невыполненные, но согласованные возможности
 

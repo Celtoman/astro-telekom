@@ -18,7 +18,7 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 
 1. Скопировать `.env.example` в `.env` и заменить все placeholders секретов и доменов.
 2. Задать `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` с host `postgres` для контейнерного API.
-3. Задать `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN` и отдельно `SITE_DATA_API_URL`, доступный из Docker builder. Browser API и canonical URL формируются из доменов; web build принимает `PUBLIC_SITE_URL` только как чистый HTTPS origin и блокируется при пустом, HTTP или локальном значении.
+3. Задать `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN` и отдельно `SITE_DATA_API_URL`, доступный из Docker builder. Browser API и canonical URL формируются из доменов; web build требует чистый HTTPS `PUBLIC_SITE_URL` и внешний HTTPS `PUBLIC_API_URL` с точным path `/api/v1`, без credentials/query/hash.
 4. Задать случайные непустые `ADMIN_API_TOKEN`, `SUBSCRIBER_COOKIE_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`.
 5. Проверить rate-limit policy: `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX`. Production Compose принудительно задает API `TRUST_PROXY=true`, потому что API не публикует порт и получает внешний трафик только от Caddy; при прямой публикации API доверие proxy headers нужно пересмотреть.
 6. Юридически утвердить срок хранения сырых заявок и задать его целым числом дней в `PII_RETENTION_DAYS` (1–3650). Код не содержит придуманного default; без policy scheduler отключен и readiness заблокирован. При необходимости настроить размер batch и UTC cron отдельно.
@@ -59,7 +59,7 @@ Compose запускает `migrate` после готовности PostgreSQL;
 | --- | --- |
 | База и Redis | `DATABASE_URL`, `POSTGRES_*`, `REDIS_URL` |
 | Public build | `PUBLIC_SITE_URL`, `PUBLIC_SITE_SLUG`, server-only `SITE_DATA_API_URL`; последний определяет источник каталога во время Astro build и совместимо откатывается к `PUBLIC_API_URL`, если не задан |
-| Public browser/runtime | `PUBLIC_API_URL`, `PUBLIC_SUPPORT_PHONE`, `PUBLIC_YANDEX_METRIKA_ID`; внутренний `API_UPSTREAM` для Caddy web-контейнера задается Compose как `api:3000` |
+| Public browser/runtime | `PUBLIC_API_URL` — нормализуемый HTTPS base URL с path `/api/v1`; `PUBLIC_SUPPORT_PHONE`, `PUBLIC_YANDEX_METRIKA_ID`; внутренний `API_UPSTREAM` для Caddy web-контейнера задается Compose как `api:3000` |
 | Domains/CORS | `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN`, `CORS_ORIGINS`, `ADMIN_URL` |
 | Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
 | Input security | `TRUST_PROXY`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX` |
