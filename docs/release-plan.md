@@ -40,7 +40,7 @@ Dynamic маршруты City/Page/Tariff, published-only sitemap, городс�
 
 Цель: дать редактору управляемые версии, шаблоны/блоки, аудит, историю импортов и эксплуатационные панели без demo UI.
 
-Нужны: versioning, audit log, media, SEO validation, analytics, управление учетными записями администраторов без ролевой модели, юридически утвержденный PII retention period для уже реализованного purge, monitoring, backup/restore и CI/CD.
+Нужны: versioning, audit log, media, SEO validation, analytics, раздел «Переменные» с согласованными уровнями наследования, управление учетными записями администраторов без ролевой модели, юридически утвержденный PII retention period для уже реализованного purge, monitoring, backup/restore и CI/CD.
 
 ## Внешние зависимости
 
