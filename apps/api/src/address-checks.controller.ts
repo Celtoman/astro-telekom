@@ -1,21 +1,15 @@
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { CoverageService } from './coverage.service';
 import { PrismaService } from './prisma.service';
-
-interface AddressCheckBody {
-  address?: string;
-  citySlug?: string;
-  objectType?: string;
-  siteSlug?: string;
-  pageSlug?: string;
-}
+import { AddressCheckDto } from './public.dto';
 
 @Controller('address-checks')
 export class AddressChecksController {
   constructor(private readonly coverage: CoverageService, private readonly prisma: PrismaService) {}
 
   @Post()
-  async check(@Body() body: AddressCheckBody) {
+  async check(@Body() body: AddressCheckDto) {
+    if (body.website) throw new BadRequestException('Некорректный запрос');
     if (typeof body.address !== 'string' || !body.address.trim()) {
       throw new BadRequestException('Адрес обязателен');
     }

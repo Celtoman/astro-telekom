@@ -5,30 +5,7 @@ import { NotificationsService } from './notifications.service';
 import { DomruContractService } from './domru-contract.service';
 import { LeadDeliveryService } from './lead-delivery.service';
 import { normalizeAddress, normalizePhone } from './lead-utils';
-
-interface LeadBody {
-  siteSlug?: string;
-  citySlug?: string;
-  pageSlug?: string;
-  tariffSlug?: string;
-  name?: string;
-  phone?: string;
-  email?: string;
-  address?: string;
-  objectType?: string;
-  checkStatus?: string;
-  addressCheckId?: string;
-  serviceType?: 'INTERNET' | 'INTERNET_TV' | 'TV' | 'OTHER';
-  source?: string;
-  utm?: Record<string, string>;
-  referrer?: string;
-  pageUrl?: string;
-  formName?: string;
-  timeOnSiteSeconds?: number;
-  deviceType?: string;
-  viewedPages?: string[];
-  activity?: Array<{ type: string; data?: Record<string, unknown> }>;
-}
+import { CreateLeadDto } from './public.dto';
 
 @Controller('leads')
 export class PublicLeadsController {
@@ -47,7 +24,8 @@ export class PublicLeadsController {
   }
 
   @Post()
-  async create(@Body() body: LeadBody, @Req() request: { headers?: Record<string, string | undefined>; url?: string }) {
+  async create(@Body() body: CreateLeadDto, @Req() request: { headers?: Record<string, string | undefined>; url?: string }) {
+    if (body.website) throw new BadRequestException('Некорректный запрос');
     if (typeof body.phone !== 'string' || !body.phone.trim() || typeof body.citySlug !== 'string' || !body.citySlug.trim()) {
       throw new BadRequestException('Телефон и город обязательны');
     }

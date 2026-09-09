@@ -15,6 +15,8 @@
 | Vite | 8 через Astro | Сборка Astro-приложений. |
 | NestJS | 12.0.1 | HTTP API. |
 | Fastify | 5.12.3 через adapter NestJS 12 и корневой `overrides` в `pnpm-workspace.yaml` | HTTP transport API, body limit 35 MB. |
+| @fastify/rate-limit | 11.2.0 | Redis-backed IP rate limiting login, public writes и остальных routes. |
+| class-validator / class-transformer | 0.15.1 / 0.5.1 | Runtime DTO validation и transform в NestJS. |
 | PostgreSQL | 18.6-alpine | Основное persistent store. |
 | Prisma | 7.10.0 | Схема, миграции и `@prisma/adapter-pg`. |
 | pg | 8.23.0 | Pool для Prisma PostgreSQL driver adapter. |
@@ -37,7 +39,7 @@ Static mode означает, что API-данные читаются толь�
 
 ### NestJS и Fastify
 
-API имеет глобальный prefix `/api/v1`, включенный CORS из `CORS_ORIGINS` или `PUBLIC_SITE_URL`, и Fastify body limit 35 MB для импорта. Он не использует глобальный `ValidationPipe`; body-интерфейсы TypeScript не становятся runtime-валидацией. Для production DTO validation и rate limiting обязательны.
+API имеет глобальный prefix `/api/v1`, включенный CORS из `CORS_ORIGINS` или `PUBLIC_SITE_URL`, Fastify body limit 35 MB для импорта, глобальный строгий `ValidationPipe` и `@fastify/rate-limit`. Class-based DTO сейчас покрывают наиболее атакуемые login/public write endpoints; admin CRUD с interface-body продолжает собственную ручную валидацию и должен мигрировать отдельно. При `REDIS_URL` лимиты разделяются между экземплярами API через Redis и fail closed при ошибке backend; без Redis локальная разработка использует in-memory store. Production Compose включает доверие proxy headers только для API за Caddy.
 
 ### Prisma и PostgreSQL
 

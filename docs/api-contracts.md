@@ -9,7 +9,8 @@
 - `POST /auth/login` создает 12-часовую сессию и возвращает только expiry и пользователя; raw token передается браузеру исключительно в `HttpOnly`, `SameSite=Strict` cookie `admin_session`. В PostgreSQL хранится SHA-256 hash.
 - Защищенные административные маршруты принимают cookie-сессию или совместимый `Authorization: Bearer <token>`. `x-admin-token`, совпадающий с `ADMIN_API_TOKEN`, предназначен для машинного сценария; `/internal/*` принимает только его и отклоняет пользовательские сессии.
 - У пользовательского доступа один уровень — администратор. Любой активный пользователь с действующей сессией имеет одинаковый полный доступ ко всем административным routes, включая `/crm/leads`; ролевой модели нет.
-- Общий `ValidationPipe` не включен. Контроллеры проверяют часть полей вручную; нельзя считать TypeScript body-interface полноценной runtime-валидацией.
+- Глобальный `ValidationPipe` преобразует DTO, не допускает лишние поля (`forbidNonWhitelisted`) и не возвращает значения в validation errors. Строгими class-based DTO покрыты login, `address-checks`, `leads` и `lead-access`; часть admin CRUD пока сохраняет ручную валидацию.
+- Глобальный Redis-backed rate limiter по IP возвращает `429`: по умолчанию 5 login-запросов, 10 публичных write-запросов одного route и 300 остальных запросов за 60 секунд. Значения настраиваются `RATE_LIMIT_*`; при ошибке Redis limiter не пропускает запрос. Production Compose включает `TRUST_PROXY=true`, поскольку API доступен только через Caddy.
 
 ## Public routes
 
@@ -28,13 +29,13 @@
 
 ### `POST /address-checks`
 
-Тело: `address` обязателен; опциональны `siteSlug`, `citySlug`, `pageSlug`, `objectType`. Возможные статусы: `AVAILABLE`, `UNAVAILABLE`, `AMBIGUOUS`, `MANUAL_CHECK`, `ERROR`.
+Тело: `address` обязателен; опциональны `siteSlug`, `citySlug`, `pageSlug`, `objectType`. Поля ограничены по типу и длине, неизвестные поля возвращают 400. Публичная форма также отправляет пустое honeypot-поле `website`; непустое значение отклоняется до БД и внешних интеграций. Возможные статусы: `AVAILABLE`, `UNAVAILABLE`, `AMBIGUOUS`, `MANUAL_CHECK`, `ERROR`.
 
 Если не заданы обе переменные coverage-интеграции, ответ будет `MANUAL_CHECK`. API не интерпретирует это как `available: false`.
 
 ### `POST /leads`
 
-Обязательны `phone` и `citySlug`. Также допускаются slug страницы/тарифа, ссылка на `addressCheckId`, контакты, адрес, service type, UTM, referrer, URL, form name, time on site, device, viewed pages и activity. Браузерные numeric IDs не принимаются: API разрешает только slug.
+Обязательны `phone` и `citySlug`. Также допускаются slug страницы/тарифа, ссылка на `addressCheckId`, контакты, адрес, service type, UTM, referrer, URL, form name, time on site, device, до 50 viewed pages и до 100 activity events. Браузерные numeric IDs и неизвестные поля не принимаются: API разрешает только slug. Непустое honeypot-поле `website` отклоняется до сохранения.
 
 Контроллер сравнивает телефон или нормализованный адрес с лидами того же сайта за последние 24 часа. Статусы обработки: `PENDING`, `DELIVERED`, `DUPLICATE_SUPPRESSED`, `ACTIVE_SUBSCRIBER_NOT_SENT`, `MANUAL_CHECK`, `ADDRESS_CLARIFICATION`, `MANUAL_CHECK_API`, `DELIVERY_ERROR_EMAIL_SENT`, `DELIVERY_ERROR_EMAIL_FAILED`.
 

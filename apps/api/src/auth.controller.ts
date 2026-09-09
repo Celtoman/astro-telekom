@@ -1,6 +1,7 @@
 import { BadRequestException, Body, Controller, Get, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AdminTokenGuard } from './admin-token.guard';
 import { ADMIN_SESSION_COOKIE, AuthService, AuthUser } from './auth.service';
+import { LoginDto } from './public.dto';
 
 interface AuthRequest {
   headers: Record<string, string | undefined>;
@@ -19,7 +20,7 @@ export class AuthController {
 
   @Post('login')
   async login(
-    @Body() body: { email?: string; password?: string },
+    @Body() body: LoginDto,
     @Res({ passthrough: true }) response: AuthReply,
   ) {
     if (!body.email || !body.password) throw new BadRequestException('Email и пароль обязательны');

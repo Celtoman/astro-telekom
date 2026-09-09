@@ -43,7 +43,7 @@
 | TD-11 | [#13](https://github.com/Celtoman/astro-telekom/issues/13) 🟢 | Нет аудита, версий, schedule публикации, корзины, rollback |
 | TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) 🟢 | Наследование `content` — только shallow merge верхнего уровня |
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) 🟢 | `PageBlock` поддерживает только 3 типа блоков из библиотеки |
-| TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) 🟢 | Нет `ValidationPipe`, rate limiting, anti-abuse, PII retention |
+| TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) 🟢 | Public DTO validation, Redis rate limit и honeypot реализованы; остается policy-driven PII retention/deletion |
 | TD-15 | [#17](https://github.com/Celtoman/astro-telekom/issues/17) 🟢 | Email-уведомление о лиде — fire-and-forget без журнала |
 | TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) 🟢 | Root URL, published-only sitemap и multi-city HTML smoke добавлены; остаются обязательный production origin и pre-publication SEO gate |
 | TD-17 | [#19](https://github.com/Celtoman/astro-telekom/issues/19) ✅ | One-shot migration job до API; readiness проверяет PostgreSQL/Redis, liveness отделен; seed остается явной безопасной операцией |

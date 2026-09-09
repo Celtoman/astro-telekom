@@ -20,8 +20,9 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 2. Задать `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` с host `postgres` для контейнерного API.
 3. Задать `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN`. Во время image build из них формируются public API и canonical URLs.
 4. Задать случайные непустые `ADMIN_API_TOKEN`, `SUBSCRIBER_COOKIE_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`.
-5. До включения заявок подтвердить договоры и задать coverage, contract, Tarifnik, email и rebuild variables. Проверить защищенный `/api/v1/admin/readiness`: `status` должен быть `configured`. Это подтверждает только наличие конфигурации — затем обязательны sandbox-вызовы и согласованные legal/SLA decisions.
-6. Убедиться, что DNS всех трех доменов указывает на сервер и порты 80/443 доступны Caddy.
+5. Проверить rate-limit policy: `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX`. Production Compose принудительно задает API `TRUST_PROXY=true`, потому что API не публикует порт и получает внешний трафик только от Caddy; при прямой публикации API доверие proxy headers нужно пересмотреть.
+6. До включения заявок подтвердить договоры и задать coverage, contract, Tarifnik, email и rebuild variables. Проверить защищенный `/api/v1/admin/readiness`: `status` должен быть `configured`. Это подтверждает только наличие конфигурации — затем обязательны sandbox-вызовы и согласованные legal/SLA decisions.
+7. Убедиться, что DNS всех трех доменов указывает на сервер и порты 80/443 доступны Caddy.
 
 ## Порядок первого запуска
 
@@ -41,6 +42,7 @@ Compose запускает `migrate` после готовности PostgreSQL;
 | Сборка | `pnpm build` в чистом окружении или успешный docker build. |
 | Схема | `pnpm db:validate`, затем `prisma migrate deploy` в целевой БД. |
 | Health | `/api/v1/health/live` возвращает process liveness; `/api/v1/health/ready` и совместимый `/api/v1/health` возвращают 200 только при доступных PostgreSQL и Redis, иначе 503. |
+| Input security | Неизвестное поле public DTO и заполненный honeypot возвращают 400; превышение login/public write limit возвращает 429. Проверить, что разные внешние IP за Caddy получают независимые лимиты. |
 | Публичный HTML | Открыть raw HTML `/`, текущий опубликованный `/{city-slug}/`, service page, tariff page, robots и sitemap; проверить canonical без localhost и отсутствие draft-городов. |
 | Интеграции | Sandbox или согласованный test contract coverage, contract check, Tarifnik и fallback email. |
 | Rebuild | Изменить тестовую сущность, проверить переход `PENDING/QUEUED -> RUNNING -> SUCCEEDED` через `/admin/rebuilds`, затем проверить HTML и совпадение `publishedRevision === requestedRevision`. |
@@ -54,6 +56,7 @@ Compose запускает `migrate` после готовности PostgreSQL;
 | Public build | `PUBLIC_SITE_URL`, `PUBLIC_SITE_SLUG`, `PUBLIC_API_URL`, `PUBLIC_SUPPORT_PHONE`, `PUBLIC_YANDEX_METRIKA_ID` |
 | Domains/CORS | `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN`, `CORS_ORIGINS`, `ADMIN_URL` |
 | Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
+| Input security | `TRUST_PROXY`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX` |
 | Coverage/contract | `DOMRU_COVERAGE_API_URL`, `DOMRU_COVERAGE_API_KEY`, `DOMRU_CONTRACT_API_URL`, `DOMRU_CONTRACT_API_KEY` |
 | Lead delivery | `TARIFNIK_API_URL`, `TARIFNIK_API_KEY`, `LEADS_EMAIL`, `RESEND_API_KEY` or `LEADS_EMAIL_WEBHOOK_URL`, `LEADS_EMAIL_FROM` |
 | Publishing | `REBUILD_WEBHOOK_URL`, `ENV_FILE` |
@@ -70,6 +73,7 @@ Invoke-RestMethod -Uri "https://<API_DOMAIN>/api/v1/admin/readiness" -Headers @{
 
 - Caddy reverse proxy не добавляет security headers из `static.Caddyfile`; он используется только внутри static image.
 - Нет мониторинга, alerting, лог-агрегации или автоматической backup policy.
+- Срок хранения и автоматическое удаление PII не утверждены и не реализованы; реальный прием заявок до legal decision запрещен.
 - Static web не получает изменения из БД без внешней пересборки.
 - Rebuild требует одновременно PostgreSQL, Redis, worker, API и provider, который возвращает финальный `{ "status": "SUCCEEDED" }`; наличие одной лишь webhook-точки не доказывает публикацию.
 - Для применения persistent rebuild-job нужна миграция `0010_site_rebuild_jobs`.

@@ -42,6 +42,8 @@ services:
       dockerfile: apps/api/Dockerfile
     restart: unless-stopped
     env_file: ${ENV_FILE:-.env}
+    environment:
+      TRUST_PROXY: "true"
     depends_on:
       migrate:
         condition: service_completed_successfully

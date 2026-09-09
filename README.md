@@ -87,7 +87,9 @@ pnpm test
 
 Защищенный `GET /api/v1/admin/readiness` показывает, какие coverage/contract/Tarifnik/email/rebuild integrations сконфигурированы, и остается `blocked`, пока обязательные переменные пусты. Endpoint никогда не возвращает их значения и не заменяет проверку реальных договоров или sandbox-вызовы.
 
-На дату документации release gate зеленый: `pnpm test` выполняет 99 тестов без падений. Актуальный состав сценариев, включая infrastructure/release readiness, migration dependency, экраны тарифов, городов и заявок в админке, browser CORS, отсутствие выведенного из эксплуатации CRM-workspace, канонический справочник, full-snapshot импорт и реальные multi-city сборки public web, перечислен в [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md).
+Публичные write-routes и login проходят строгую DTO-валидацию; лишние поля и заполненный скрытый honeypot отклоняются. Redis-backed rate limiting разделяет login, публичные формы и остальные маршруты; в production Compose доверие proxy headers включено только у API за Caddy. Политика срока хранения и удаления PII еще не утверждена и остается блокером production.
+
+На дату документации release gate зеленый: `pnpm test` выполняет 102 теста без падений. Актуальный состав сценариев, включая API input security, infrastructure/release readiness, migration dependency, экраны тарифов, городов и заявок в админке, browser CORS, отсутствие выведенного из эксплуатации CRM-workspace, канонический справочник, full-snapshot импорт и реальные multi-city сборки public web, перечислен в [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md).
 
 ## Версионирование
 

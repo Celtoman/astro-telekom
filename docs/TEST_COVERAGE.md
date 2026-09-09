@@ -4,7 +4,7 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [CLAUDE.md](../CLAUDE.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 99/99 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита.
+**Baseline: 102/102 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита.
 
 | Файл | Что проверяет |
 | --- | --- |
@@ -14,6 +14,7 @@
 | `tests/admin-leads-ui.test.mjs` | Admin `/leads` монтирует защищенный React-root и доступен из общего shell; экран использует реальные list/detail/status endpoints, поддерживает все пять операторских статусов, комментарий к history, delivery/activity данные и не рендерит API-данные через `innerHTML`. |
 | `tests/admin-tariffs-ui.test.mjs` | Admin `/tariffs` монтирует React-root и доступен из общего shell; экран подключает реальные list/import preview/atomic apply/import history/rebuild endpoints, не использует service token или browser storage; общий API client всегда отправляет HttpOnly cookie и сохраняет status/message ошибок API. |
 | `tests/admin-users.test.cjs` | Управление администраторами: последнюю активную учетную запись нельзя деактивировать; сброс пароля отзывает сессии и не возвращает данные пароля; создание требует валидный email и достаточно длинный пароль, не сохраняет роль и явно отклоняет устаревшее поле `role`. |
+| `tests/api-input-security.test.cjs` | Строгие DTO отклоняют лишние поля, переполненные массивы и honeypot до обращения к БД/интеграциям; rate-limit policy разделяет login/public write/admin; bootstrap регистрирует fail-closed Fastify limiter, глобальный ValidationPipe и trusted proxy только у production API за Caddy. |
 | `tests/auth-session.test.cjs` | Browser auth: login не возвращает raw token и ставит hardened HttpOnly cookie; cookie проходит guard, logout удаляет hash-сессию и очищает cookie, `/auth/me` возвращает только идентичность администратора. |
 | `tests/block-validation.test.cjs` | Валидация `PageBlock`: валидные блоки и частичное изменение видимости принимаются; невалидная форма блока и попытка сменить `parent` отклоняются; исполняемые (`javascript:`) и protocol-relative CTA-ссылки отклоняются. |
 | `tests/city-import.test.cjs` | Импорт городов: принимает реальные русские заголовки канонического XLSX; все 207 строк проходят без ошибок/warnings, формы Казани сохраняются; дубли и обязательные значения валидируются; warnings нельзя применить без явного подтверждения; новый город получает шесть `DRAFT` страниц bulk-операцией в транзакции с timeout; регион seed переиспользуется по нормализованному slug. |
