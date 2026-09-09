@@ -6,6 +6,30 @@ import { mergeContent, publicContent } from './content-resolution';
 export class CitiesController {
   constructor(private readonly prisma: PrismaService) {}
 
+  @Get()
+  async list(@Param('siteSlug') siteSlug: string) {
+    const site = await this.prisma.site.findFirst({
+      where: { slug: siteSlug, status: 'PUBLISHED' },
+      include: { provider: { select: { settings: true } } },
+    });
+    if (!site) throw new NotFoundException('Site not found');
+
+    const cities = await this.prisma.city.findMany({
+      where: { siteId: site.id, status: 'PUBLISHED' },
+      orderBy: { name: 'asc' },
+      include: {
+        region: { select: { content: true } },
+        pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true }, orderBy: { position: 'asc' } } } },
+        tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
+      },
+    });
+
+    return {
+      site: { name: site.name, slug: site.slug, domain: site.domain },
+      cities: cities.map((city: any) => this.cityResponse(city, site)),
+    };
+  }
+
   @Get(':citySlug')
   async getCity(
     @Param('siteSlug') siteSlug: string,
@@ -25,7 +49,11 @@ export class CitiesController {
       throw new NotFoundException('City not found');
     }
 
-    const inheritedContent = mergeContent(publicContent(city.site.provider.settings), publicContent(city.site.settings), city.region.content, city.content);
+    return this.cityResponse(city, city.site);
+  }
+
+  private cityResponse(city: any, site: any) {
+    const inheritedContent = mergeContent(publicContent(site.provider.settings), publicContent(site.settings), city.region.content, city.content);
     const inheritedSeo = mergeContent(city.seo);
     const { site: _site, region: _region, pages, tariffs, ...cityData } = city;
     return {

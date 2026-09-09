@@ -34,13 +34,13 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 `apps/crm` удален после переноса заявок в `/leads`; `admin` входит в общий Astro check.
 
-**Baseline тестов: 90/90.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют cookie-сессию и CORS admin, экраны тарифов, городов и заявок, отсутствие выведенного из эксплуатации CRM-workspace, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+**Baseline тестов: 93/93.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют cookie-сессию и CORS admin, экраны тарифов, городов и заявок, отсутствие выведенного из эксплуатации CRM-workspace, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, public catalog и multi-city static routes, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 
 Монорепозиторий pnpm (`pnpm-workspace.yaml`): `apps/web` / `apps/admin` — Astro 7, static output; `apps/api` — NestJS 12 + Fastify 5; `services/worker` — Node.js + BullMQ; `prisma/` + `packages/database` — Prisma 7 + PostgreSQL 18; `deploy/` — Caddy + Docker Compose.
 
-Только `apps/api` пишет в PostgreSQL — admin, web и worker обращаются к данным исключительно через HTTP API. `apps/web` собирается в **static output**: город и тарифы читаются из API один раз во время `astro build`, рантайм-изменения в БД не видны опубликованному сайту без внешней пересборки. `site-rebuilds` хранится в PostgreSQL, выполняется worker с retry и считается завершенной только после финального ответа deployment provider.
+Только `apps/api` пишет в PostgreSQL — admin, web и worker обращаются к данным исключительно через HTTP API. `apps/web` собирается в **static output**: каталог опубликованных городов, страниц и тарифов читается из API во время `astro build`, а dynamic static paths создаются по `City.slug`, `Page.slug` и `Tariff.slug`. Сейчас опубликована только Казань. Рантайм-изменения в БД не видны опубликованному сайту без внешней пересборки. `site-rebuilds` хранится в PostgreSQL, выполняется worker с retry и считается завершенной только после финального ответа deployment provider.
 
 Полная карта модулей — [docs/architecture.md](docs/architecture.md). Точный статус по каждому направлению (реализовано / частично / demo) — [docs/current-state.md](docs/current-state.md). Переменные окружения по назначению и обязательная подготовка к деплою — [docs/deployment.md](docs/deployment.md).
 
@@ -57,7 +57,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 ## Известные особенности этого проекта
 
-- **`ALLOW_DEMO_DATA=true`** — единственный официальный способ собрать `apps/web` без живого API. Без флага и без API `astro build` падает намеренно с объяснением причины (`apps/web/src/data/kazan.ts`, `loadKazanData()`). Это осознанное поведение (TD-03 закрыт 2026-09-07) — не возвращать тихий fallback на демо-данные.
+- **`ALLOW_DEMO_DATA=true`** — единственный официальный способ собрать `apps/web` без живого API. Без флага и без API `astro build` падает намеренно с объяснением причины (`apps/web/src/data/site.ts`, `loadSiteData()`). Это осознанное поведение (TD-03 закрыт 2026-09-07) — не возвращать тихий fallback на демо-данные.
 - **Тесты зависят от собранного API**: `tests/*.test.cjs` импортируют `apps/api/dist/*.js`, а не `src/*.ts`. После любой правки в `apps/api/src` — обязательно `pnpm --filter @provider/api run build` перед `node --test`, иначе тесты либо не увидят изменений, либо массово упадут на устаревшем `dist`.
 - **Один генератор Prisma-клиента** — `prisma/schema.prisma` → `apps/api/generated`, это единственный source of truth. Дублирующий `packages/database/generated` уже был найден и удален как stale-артефакт (2026-09-07, см. `docs/research/2026-09-07-workaround-audit.md`, W-04) — если он появится снова, это ошибка конфигурации, а не второй валидный клиент.
 - **Docker всегда `--frozen-lockfile`** — все четыре `Dockerfile` используют его намеренно вместе с root `.dockerignore`. Не откатывать на `--no-frozen-lockfile` ради удобства локальной отладки; при расхождении manifest/lockfile чинить lockfile через `pnpm install`, а не ослаблять флаг.

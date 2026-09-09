@@ -8,7 +8,7 @@
 
 - Monorepo, Docker Compose, Prisma migrations и seed.
 - NestJS API, Bearer-сессии с единым уровнем доступа администратора и CRUD базовых сущностей.
-- Статический Astro-сайт для Казани с четырьмя типами контентных страниц, FAQ, тарифными карточками и формой проверки адреса.
+- Статический Astro-сайт с dynamic paths для опубликованных городов, страниц и тарифов; в текущей базе опубликована только Казань.
 - XLS-import городов/тарифов с validate/apply reports.
 - Прием лида, deduplication, contract check, delivery attempts, CRM API.
 - Static admin с рабочими экранами тарифов, городов и заявок, а также worker listeners.
@@ -34,7 +34,7 @@ Release 0 не является production release: тестовый gate зел
 
 Цель: генерировать опубликованные города, сервисные страницы и карточки тарифов из CMS-модели без hardcoded Казани.
 
-Нужны: маршруты Site/City/Page/Tariff, sitemap из published data, 301 redirects, полноценная модель публикации, статусы preview/rebuild, городская навигация и QA generated HTML.
+Dynamic маршруты City/Page/Tariff, published-only sitemap, городская навигация и multi-city build smoke реализованы. Остаются 301 redirects, полноценная модель публикации, статусы preview/rebuild и эксплуатационный QA при фактическом включении новых городов.
 
 ## Release 3 — управляемая CMS и эксплуатация
 

@@ -42,7 +42,7 @@ docker compose -f docker-compose.prod.yml exec api node /app/dist/seed.js
 | Сборка | `pnpm build` в чистом окружении или успешный docker build. |
 | Схема | `pnpm db:validate`, затем `prisma migrate deploy` в целевой БД. |
 | Health | HTTP `GET https://<API_DOMAIN>/api/v1/health`; дополнительно ручной DB-read endpoint после его реализации. |
-| Публичный HTML | Открыть raw HTML `/`, `/kazan/`, service page, tariff page, robots и sitemap; проверить canonical без localhost. |
+| Публичный HTML | Открыть raw HTML `/`, текущий опубликованный `/{city-slug}/`, service page, tariff page, robots и sitemap; проверить canonical без localhost и отсутствие draft-городов. |
 | Интеграции | Sandbox или согласованный test contract coverage, contract check, Tarifnik и fallback email. |
 | Rebuild | Изменить тестовую сущность, проверить переход `PENDING/QUEUED -> RUNNING -> SUCCEEDED` через `/admin/rebuilds`, затем проверить HTML и совпадение `publishedRevision === requestedRevision`. |
 | Backup/restore | Проверить резервную копию PostgreSQL и восстановление на отдельной БД. |
@@ -52,7 +52,7 @@ docker compose -f docker-compose.prod.yml exec api node /app/dist/seed.js
 | Группа | Переменные |
 | --- | --- |
 | База и Redis | `DATABASE_URL`, `POSTGRES_*`, `REDIS_URL` |
-| Public build | `PUBLIC_SITE_URL`, `PUBLIC_API_URL`, `PUBLIC_SUPPORT_PHONE`, `PUBLIC_YANDEX_METRIKA_ID` |
+| Public build | `PUBLIC_SITE_URL`, `PUBLIC_SITE_SLUG`, `PUBLIC_API_URL`, `PUBLIC_SUPPORT_PHONE`, `PUBLIC_YANDEX_METRIKA_ID` |
 | Domains/CORS | `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN`, `CORS_ORIGINS`, `ADMIN_URL` |
 | Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
 | Coverage/contract | `DOMRU_COVERAGE_API_URL`, `DOMRU_COVERAGE_API_KEY`, `DOMRU_CONTRACT_API_URL`, `DOMRU_CONTRACT_API_KEY` |

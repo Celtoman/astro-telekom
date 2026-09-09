@@ -7,9 +7,10 @@ interface Block {
 interface Props {
   blocks: Block[];
   tariffs: Array<{ slug: string; name: string; service: string; speed: string; price: string }>;
+  citySlug: string;
 }
 
-const { blocks, tariffs } = Astro.props;
+const { blocks, tariffs, citySlug } = Astro.props;
 ---
 
 {blocks.map((block: Block) => {
@@ -20,7 +21,7 @@ const { blocks, tariffs } = Astro.props;
     return <section class="section container"><h2>{block.data.title}</h2><p class="lead">{block.data.text}</p></section>;
   }
   if (block.blockType === 'tariff_grid') {
-    return <section class="section container"><h2>{block.data.title || 'Тарифы'}</h2><div class="grid">{tariffs.map((tariff: Props['tariffs'][number]) => <article class="card"><h3>{tariff.name}</h3><p>{tariff.service}. {tariff.speed}</p><div class="tariff-price">{tariff.price}</div><a class="card-link" href={`/kazan/${tariff.slug}/`}>О тарифе →</a></article>)}</div></section>;
+    return <section class="section container"><h2>{block.data.title || 'Тарифы'}</h2><div class="grid">{tariffs.map((tariff: Props['tariffs'][number]) => <article class="card"><h3>{tariff.name}</h3><p>{tariff.service}. {tariff.speed}</p><div class="tariff-price">{tariff.price}</div><a class="card-link" href={`/${citySlug}/${tariff.slug}/`}>О тарифе →</a></article>)}</div></section>;
   }
   return null;
 })}

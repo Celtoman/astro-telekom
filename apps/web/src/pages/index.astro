@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-const title = 'Домашний интернет и телевидение Дом.ру';
+import { loadSiteData } from '../data/site';
+const { site, cities } = await loadSiteData();
+const title = `Домашний интернет и телевидение ${site.name}`;
 const description = 'Выберите город, чтобы посмотреть тарифы домашнего интернета и телевидения.';
 ---
 
 <BaseLayout title={title} description={description}>
-  <section class="hero"><div class="container"><span class="eyebrow">Дом.ру</span><h1>{title}</h1><p class="lead">Тарифы, проверка адреса и консультация по подключению в Казани.</p><a class="button" href="/kazan/">Перейти в Казань</a></div></section>
-  <section class="section container"><h2>Города</h2><div class="grid"><article class="card"><h3>Казань</h3><p>Домашний интернет, телевидение и актуальные предложения.</p><a class="card-link" href="/kazan/">Открыть страницу города →</a></article></div></section>
+  <section class="hero"><div class="container"><span class="eyebrow">{site.name}</span><h1>{title}</h1><p class="lead">Выберите город, чтобы посмотреть доступные услуги, тарифы и проверку подключения по адресу.</p>{cities[0] && <a class="button" href={`/${cities[0].slug}/`}>Выбрать город</a>}</div></section>
+  <section class="section container" id="cities"><h2>Города</h2>{cities.length > 0 ? <div class="grid">{cities.map((city) => <article class="card"><h3>{city.name}</h3><p>Домашний интернет, телевидение и актуальные предложения.</p><a class="card-link" href={`/${city.slug}/`}>Открыть страницу города →</a></article>)}</div> : <p class="lead">Опубликованных городов пока нет.</p>}</section>
 </BaseLayout>

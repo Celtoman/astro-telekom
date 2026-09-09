@@ -1,0 +1,67 @@
+---
+import type { CityView } from '../data/site';
+
+interface Props {
+  apiUrl: string;
+  siteSlug: string;
+  pageSlug: string;
+  city: CityView;
+}
+
+const { apiUrl, siteSlug, pageSlug, city } = Astro.props;
+---
+
+<section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>Проверьте возможность подключения</h1><p class="lead">Укажите адрес объекта. Если автоматическая проверка будет недоступна, мы передадим заявку оператору.</p></div></section>
+<section class="section container"><form class="card" id={`addressForm-${city.slug}`} data-address-form><label for={`name-${city.slug}`}>Имя</label><input id={`name-${city.slug}`} name="name" placeholder="Как к вам обращаться" /><label for={`serviceType-${city.slug}`}>Что подключить</label><select id={`serviceType-${city.slug}`} name="serviceType"><option value="INTERNET">Домашний интернет</option><option value="INTERNET_TV">Интернет + ТВ</option><option value="TV">Телевидение</option></select><label for={`address-${city.slug}`}>Адрес</label><input id={`address-${city.slug}`} name="address" required placeholder="Улица, дом, квартира" /><label for={`phone-${city.slug}`}>Телефон</label><input id={`phone-${city.slug}`} name="phone" required placeholder="+7 ___ ___-__-__" /><button class="button" type="submit">Проверить адрес</button><p>Нажимая кнопку, вы соглашаетесь на обработку заявки оператором.</p><p data-form-result role="status"></p><div data-alternatives class="alternatives" aria-live="polite"></div></form></section>
+
+<script is:inline define:vars={{ apiUrl, siteSlug, citySlug: city.slug, pageSlug }}>
+  const form = document.querySelector(`[data-address-form][id="addressForm-${citySlug}"]`);
+  const result = form?.querySelector('[data-form-result]');
+  const alternatives = form?.querySelector('[data-alternatives]');
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+    result.textContent = 'Проверяем адрес…';
+    try {
+      const checkResponse = await fetch(`${apiUrl}/address-checks`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ siteSlug, citySlug, pageSlug, address: data.address, objectType: 'apartment' }) });
+      const check = await checkResponse.json();
+      alternatives.replaceChildren();
+      if (check.status === 'UNAVAILABLE' && Array.isArray(check.alternatives) && check.alternatives.length) {
+        const heading = document.createElement('strong');
+        heading.textContent = 'По адресу доступны другие варианты:';
+        alternatives.append(heading);
+        for (const alternative of check.alternatives) {
+          const url = typeof alternative.url === 'string' && /^https?:\/\//i.test(alternative.url) ? alternative.url : null;
+          const item = document.createElement(url ? 'a' : 'span');
+          item.textContent = String(alternative.name || alternative.provider || 'Альтернативный провайдер');
+          if (url) { item.href = url; item.target = '_blank'; item.rel = 'noopener noreferrer sponsored'; }
+          alternatives.append(item);
+        }
+      }
+      let viewedPages = [];
+      try { viewedPages = JSON.parse(sessionStorage.getItem('provider_visited_pages') || '[]'); } catch { /* ignore unavailable storage */ }
+      const leadResponse = await fetch(`${apiUrl}/leads`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ siteSlug, citySlug, pageSlug, formName: 'address-check', name: data.name, phone: data.phone, address: data.address, serviceType: data.serviceType, addressCheckId: check.id, referrer: document.referrer, pageUrl: location.href, timeOnSiteSeconds: Math.max(0, Math.round((Date.now() - performance.timeOrigin) / 1000)), deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop', viewedPages }) });
+      if (!leadResponse.ok) throw new Error('Не удалось сохранить заявку');
+      const lead = await leadResponse.json();
+      if (lead.subscriberMode && lead.subscriberCookie) document.cookie = `domru_subscriber=${encodeURIComponent(lead.subscriberCookie)}; Max-Age=2592000; Path=/; SameSite=Lax${location.protocol === 'https:' ? '; Secure' : ''}`;
+      const checkMessage = check.status === 'AVAILABLE'
+        ? 'По предварительной проверке сеть доступна.'
+        : check.status === 'UNAVAILABLE'
+          ? 'Автоматическая проверка не нашла сеть по адресу.'
+          : 'Автоматическая проверка сейчас недоступна.';
+      result.textContent = `${checkMessage} Заявка принята, оператор уточнит возможность подключения.`;
+      form.reset();
+    } catch (error) {
+      result.textContent = error instanceof Error ? error.message : 'Произошла ошибка. Попробуйте еще раз.';
+    }
+  });
+</script>
+
+<style>
+  form { max-width: 560px; display: grid; gap: 12px; }
+  label { font-weight: 700; }
+  input, select { border: 1px solid #d6dde6; border-radius: 10px; padding: 14px; font: inherit; margin-bottom: 8px; }
+  button { border: 0; cursor: pointer; font: inherit; width: fit-content; }
+  .alternatives { display: grid; gap: 8px; color: #526071; }
+  .alternatives a { color: #1769aa; font-weight: 700; }
+</style>

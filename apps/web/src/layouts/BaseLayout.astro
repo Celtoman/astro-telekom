@@ -1,12 +1,29 @@
 ---
+import type { CityView, PageView } from '../data/site';
+
 interface Props {
   title: string;
   description: string;
+  city?: CityView;
+  pages?: PageView[];
 }
 
-const { title, description } = Astro.props;
+const { title, description, city, pages } = Astro.props as Props;
+const resolvedPages: PageView[] = pages || city?.pages || [];
 const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
-const supportPhone = import.meta.env.PUBLIC_SUPPORT_PHONE || '8 (800) 000-00-00';
+const supportPhone = city?.phone || import.meta.env.PUBLIC_SUPPORT_PHONE || '8 (800) 000-00-00';
+const cityRoot = city ? `/${city.slug}/` : '/';
+const pageByType = new Map<string, PageView>(resolvedPages.map((page) => [page.type, page]));
+const navItems = [
+  ['INTERNET', 'Интернет'],
+  ['INTERNET_TV', 'Интернет + ТВ'],
+  ['TV', 'Телевидение'],
+  ['ADDRESS_CHECK', 'Проверка адреса'],
+].flatMap(([type, label]) => {
+  const page = pageByType.get(type);
+  return city && page?.slug ? [{ href: `/${city.slug}/${page.slug}/`, label }] : [];
+});
+const faqPage = pageByType.get('FAQ');
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -31,13 +48,10 @@ const jsonLd = JSON.stringify({
   <body>
     <header class="site-header">
       <div class="container header-inner">
-        <a class="brand" href="/kazan/">Домашний интернет</a>
-        <nav aria-label="Основная навигация">
-          <a href="/kazan/internet/">Интернет</a>
-          <a href="/kazan/internet-tv/">Интернет + ТВ</a>
-          <a href="/kazan/tv/">Телевидение</a>
-          <a href="/kazan/proverka-adresa/">Проверка адреса</a>
-        </nav>
+        <a class="brand" href={cityRoot}>Домашний интернет</a>
+        {navItems.length > 0 && <nav aria-label="Основная навигация">
+          {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+        </nav>}
         <a class="phone subscriber-phone" href="tel:+78000000000" data-support-phone={supportPhone}>{supportPhone}</a>
       </div>
     </header>
@@ -46,8 +60,8 @@ const jsonLd = JSON.stringify({
     </main>
     <footer class="site-footer">
       <div class="container footer-inner">
-        <span>Подключение домашнего интернета в Казани</span>
-        <a href="/kazan/faq/">Вопросы и ответы</a>
+        <span>{city ? `Подключение домашнего интернета в ${city.nameIn}` : 'Подключение домашнего интернета'}</span>
+        {city && faqPage?.slug && <a href={`/${city.slug}/${faqPage.slug}/`}>Вопросы и ответы</a>}
       </div>
     </footer>
   </body>

@@ -31,7 +31,7 @@
 
 ### Astro
 
-Все три Astro-приложения имеют `output: 'static'`. Public web использует `PUBLIC_SITE_URL` как `site`, выводит title, description, canonical и базовый JSON-LD `WebPage` в исходный HTML. JavaScript оставлен для формы адреса, хранения списка просмотренных страниц, подавления номера для действующего абонента и событий Метрики.
+Оба Astro-приложения имеют `output: 'static'`. Public web использует `PUBLIC_SITE_URL` как `site`, а `PUBLIC_SITE_SLUG` — для выбора build-time каталога; dynamic static paths строятся только для опубликованных городов, страниц и тарифов. Title, description, canonical и базовый JSON-LD `WebPage` выводятся в исходный HTML. JavaScript оставлен для формы адреса, хранения списка просмотренных страниц, подавления номера для действующего абонента и событий Метрики.
 
 Static mode означает, что API-данные читаются только при `astro build`. Для этого прототипа допустима локальная витрина с fallback, но production не должен собираться из fallback-данных.
 

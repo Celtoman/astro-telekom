@@ -18,7 +18,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| TD-04 | [#5](https://github.com/Celtoman/astro-telekom/issues/5) 🟢 | Публичные маршруты жёстко привязаны к `domru-kazan`/`/kazan/` |
+| TD-04 | [#5](https://github.com/Celtoman/astro-telekom/issues/5) ✅ | Public catalog и dynamic static paths из опубликованных City/Page/Tariff; сейчас опубликована только Казань |
 | TD-05 | [#6](https://github.com/Celtoman/astro-telekom/issues/6) ✅ | Persistent rebuild-job: dedupe, BullMQ retry/backoff, API-статус и финальный результат provider |
 | TD-06 | [#7](https://github.com/Celtoman/astro-telekom/issues/7) ✅ | Full-snapshot import атомарно удаляет отсутствующие тарифы, требует подтверждения warnings и создает redirects при ручной смене URL |
 | TD-07 | [#8](https://github.com/Celtoman/astro-telekom/issues/8) 🟢 | Модель `Redirect` без controller/routing/управления |
@@ -45,7 +45,7 @@
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) 🟢 | `PageBlock` поддерживает только 3 типа блоков из библиотеки |
 | TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) 🟢 | Нет `ValidationPipe`, rate limiting, anti-abuse, PII retention |
 | TD-15 | [#17](https://github.com/Celtoman/astro-telekom/issues/17) 🟢 | Email-уведомление о лиде — fire-and-forget без журнала |
-| TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) 🟢 | Root URL и базовый HTML smoke добавлены; остаются обязательный production origin и sitemap из опубликованных сущностей |
+| TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) 🟢 | Root URL, published-only sitemap и multi-city HTML smoke добавлены; остаются обязательный production origin и pre-publication SEO gate |
 | TD-17 | [#19](https://github.com/Celtoman/astro-telekom/issues/19) 🟢 | Миграции/seed вручную, health не проверяет БД |
 
 ## P3

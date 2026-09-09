@@ -2,13 +2,13 @@
 
 ## Статус архитектуры
 
-В репозитории реализован локальный прототип статической витрины Дом.ру для Казани. Архитектура уже разделяет public web, admin, backoffice API и worker, но публичная маршрутизация не использует универсальную модель `Site` и `City`. Поэтому схема ниже отражает реальный код и одновременно обозначает границу будущего расширения.
+В репозитории реализован локальный прототип статической витрины Дом.ру. Архитектура разделяет public web, admin, backoffice API и worker. Публичная маршрутизация строит static paths из опубликованных `City`, `Page` и `Tariff`; в текущей базе опубликована только Казань, поэтому реальный output пока остается одногородским.
 
 ## Стек и приложения
 
 | Зона | Реализация | Назначение |
 | --- | --- | --- |
-| `apps/web` | Astro 7, static output | SEO HTML, фиксированные маршруты Казани, форма проверки адреса. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
+| `apps/web` | Astro 7, static output | SEO HTML и sitemap из опубликованных городов, страниц и тарифов; форма проверки адреса получает site/city/page context из static route. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
 | `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, рабочие `/tariffs`, `/cities`, `/leads` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; заявки доступны как реальный master-detail журнал со сменой статуса. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов и пересборок сайта; также слушает пока не используемую import-очередь. |
@@ -32,7 +32,7 @@
   -> internal start/result API + REBUILD_WEBHOOK_URL -> финальный результат deployment
 ```
 
-В build-time `apps/web` вызывает `GET /public/sites/domru-kazan/cities/kazan` и генерирует HTML. В runtime публичная статическая витрина не читает PostgreSQL и не может сама увидеть изменения в API.
+В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities`, валидирует уникальность каждого публичного пути и генерирует HTML только для опубликованного каталога. `PUBLIC_SITE_SLUG` выбирает сайт, по умолчанию `domru-kazan`. В runtime публичная статическая витрина не читает PostgreSQL и не может сама увидеть изменения в API.
 
 ## API-модули и их ответственность
 
