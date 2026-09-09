@@ -101,7 +101,8 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.match(webDockerfile, /FROM web-deps AS publisher/);
   assert.match(workerDockerfile, /sh scripts\/pnpm-install-retry\.sh --filter @provider\/worker --prod --frozen-lockfile --trust-lockfile/);
   assert.doesNotMatch(workerDockerfile, /pnpm install --frozen-lockfile/);
-  assert.match(publishScript, /pnpm --filter @provider\/web run build[\s\S]*ln -s[\s\S]*mv -f/);
+  assert.match(publishScript, /pnpm --filter @provider\/web run build[\s\S]*ln -s[\s\S]*mv -fT/);
+  assert.doesNotMatch(publishScript, /mv -f "\$publication_root\/current\.next"/);
   assert.match(coolifyWebCaddy, /handle \/api\/\*[\s\S]*reverse_proxy \{\$API_UPSTREAM:api:3000\}/);
   assert.match(adminCaddy, /handle \/api\/\*[\s\S]*reverse_proxy \{\$API_UPSTREAM:api:3000\}/);
   assert.match(adminCaddy, /X-Robots-Tag "noindex, nofollow, noarchive"/);

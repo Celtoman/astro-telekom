@@ -287,6 +287,8 @@ curl -I -u '<user>:<password>' https://admin.tv-internet-dom.ru/api/v1/health/re
 
 После сборки полный Compose stack успешно применил 12 migrations, выполнил seed (`Дом.ру`, Казань, 2 тарифа), собрал 10 HTML-файлов, прошел pre-publication SEO gate и атомарно переключил publication symlink. API, worker, web, admin, PostgreSQL и Redis оставались healthy с restart count 0; `migrate`, `bootstrap-seed` и `web-publish` завершились с exit code 0. Same-origin `/api/v1/health/ready` через web/admin вернул 200. После контрольной выдержки тестовые containers/network/volumes, builder и локальный env-файл были удалены без затрагивания других Docker-ресурсов.
 
+Повторная live-проверка обнаружила отдельный дефект [#66](https://github.com/Celtoman/astro-telekom/issues/66), который однократный локальный запуск не покрывал. На первом publisher-run `current` отсутствовал, поэтому `mv -f current.next current` работал. На следующем run `current` уже был symlink на каталог: обычный `mv` следовал ему, переносил временную ссылку внутрь старого release, а cleanup удалял этот release. Coolify завершал deployment как `finished`, после чего web и same-origin API отвечали 503, resource переходил в `restarting:unknown`. В exact `node:22.23.2-alpine` подтверждена поддержка `mv -fT`; `-T` заставляет атомарно заменить сам symlink, не следуя каталогу назначения.
+
 ## Итоговая готовность
 
 | Направление | Статус после аудита |

@@ -16,7 +16,7 @@ cp -a apps/web/dist/. "$release_dir/"
 
 rm -f "$publication_root/current.next"
 ln -s "releases/$release_id" "$publication_root/current.next"
-mv -f "$publication_root/current.next" "$publication_root/current"
+mv -fT "$publication_root/current.next" "$publication_root/current"
 
 for previous_release in "$publication_root"/releases/*; do
   if [ "$previous_release" != "$release_dir" ]; then

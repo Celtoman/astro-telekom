@@ -40,6 +40,7 @@
 | TD-42 | [#62](https://github.com/Celtoman/astro-telekom/issues/62) 🟢 | Coolify учитывает завершенные one-shot containers и после успешного старта переводит resource в `exited:unhealthy` |
 | TD-44 | [#64](https://github.com/Celtoman/astro-telekom/issues/64) 🟢 | Coolify label escaping или runtime-only scope ломает интерполяцию bcrypt middleware Compose-приложения |
 | TD-45 | [#65](https://github.com/Celtoman/astro-telekom/issues/65) 🟢 | pnpm 11 повторно проверяет весь frozen lockfile в каждом Docker target и срывает холодную сборку по сетевому timeout |
+| TD-46 | [#66](https://github.com/Celtoman/astro-telekom/issues/66) 🟢 | Повторный publisher следует symlink-каталогу, удаляет активный release и оставляет web с HTTP 503 |
 
 ## P2
 
