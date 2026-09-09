@@ -1,6 +1,6 @@
 # Технологическая база
 
-Последняя сверка с `package.json`, `pnpm-lock.yaml`, Dockerfiles, Compose и GitHub Actions: 8 сентября 2026 года.
+Последняя сверка с `package.json`, `pnpm-lock.yaml`, Dockerfiles, Compose и GitHub Actions: 9 сентября 2026 года.
 
 ## Зафиксированные версии
 
@@ -41,7 +41,7 @@ API имеет глобальный prefix `/api/v1`, включенный CORS 
 
 ### Prisma и PostgreSQL
 
-Datasource URL описан в `prisma.config.ts`, клиент генерируется в `apps/api/generated`. `PrismaService` использует `PrismaPg` поверх `pg.Pool`. Seed также принадлежит API (`apps/api/src/seed.ts`), а database package сохраняет совместимую команду-делегат. В runtime image seed запускается как `/app/dist/seed.js`, поэтому использует тот же generated client и зависимости, что API. В репозитории десять последовательных миграций; последняя добавляет persistent rebuild-job со статусом, ревизиями, попытками и результатом deployment provider.
+Datasource URL описан в `prisma.config.ts`, клиент генерируется в `apps/api/generated`. `PrismaService` использует `PrismaPg` поверх `pg.Pool`. Seed также принадлежит API (`apps/api/src/seed.ts`), а database package сохраняет совместимую команду-делегат. В runtime image seed запускается как `/app/dist/seed.js`, поэтому использует тот же generated client и зависимости, что API. В репозитории 11 последовательных миграций; последняя (`0011_single_admin_access`) удаляет ролевую модель админки.
 
 ### Redis и BullMQ
 
@@ -49,7 +49,7 @@ API создает `lead-deliveries` и `site-rebuilds` при наличии `R
 
 ### Docker и Caddy
 
-`docker-compose.yml` поднимает только PostgreSQL и Redis для разработки. `docker-compose.prod.yml` описывает PostgreSQL, Redis, API, worker, web, admin и Caddy. Оба файла монтируют PostgreSQL 18 volume в `/var/lib/postgresql` — корневой layout, обязательный для major-specific data directory PG18. Caddy направляет три домена на соответствующие контейнеры; отдельный `static.Caddyfile` обслуживает собранные Astro файлы и кэширует assets.
+`docker-compose.yml` поднимает только PostgreSQL и Redis для разработки. `docker-compose.prod.yml` описывает PostgreSQL, Redis, one-shot Prisma migrate, API, worker, web, admin и Caddy. `api` зависит от успешного завершения migrate и healthy Redis; Compose healthcheck использует DB/Redis-aware `/health/ready`. Оба файла монтируют PostgreSQL 18 volume в `/var/lib/postgresql` — корневой layout, обязательный для major-specific data directory PG18. Caddy направляет три домена на соответствующие контейнеры; отдельный `static.Caddyfile` обслуживает собранные Astro файлы и кэширует assets.
 
 Контейнерная схема конфигурационно валидна (`docker compose -f docker-compose.prod.yml config --no-interpolate`), но не была поднята с реальными доменами, секретами и интеграциями. Это не production certification.
 

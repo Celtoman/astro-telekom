@@ -17,6 +17,8 @@
 
 ## Контуры и потоки
 
+Production Compose запускает one-shot `migrate` из API image после PostgreSQL healthcheck. `api` стартует только после успешного `prisma migrate deploy` и готового Redis; его `/health/ready` проверяет обе зависимости, а `/health/live` — только процесс. Seed остается отдельной операторской операцией, поскольку создает или обновляет продуктовые данные и администратора.
+
 ```text
 Браузер публичного сайта
   -> Caddy -> static web

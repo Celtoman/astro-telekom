@@ -15,7 +15,9 @@
 
 | Method | Route | Реальное поведение |
 | --- | --- | --- |
-| GET | `/health` | Возвращает `{ status: "ok", service: "api" }`; не проверяет подключение к БД или внешние интеграции. |
+| GET | `/health/live` | Liveness процесса: возвращает `{ status: "ok", service: "api" }` без обращения к зависимостям. |
+| GET | `/health/ready` | Readiness PostgreSQL и Redis: HTTP 200 при обеих доступных зависимостях, HTTP 503 при сбое; ответ содержит только `up`/`down`, без адресов и внутренних ошибок. |
+| GET | `/health` | Совместимый alias readiness с тем же 200/503-контрактом; Compose использует явный `/health/ready`. |
 | GET | `/public/sites/:siteSlug/cities` | Возвращает опубликованный сайт и отсортированный каталог только опубликованных городов с опубликованными страницами/тарифами и visible blocks; используется `apps/web` во время static build. |
 | GET | `/public/sites/:siteSlug/cities/:citySlug` | Возвращает опубликованный город, опубликованные страницы/тарифы, visible blocks и shallow inheritance content. |
 | POST | `/address-checks` | Проверяет адрес через `CoverageService`, сохраняет `AddressCheck`, возвращает публичный результат без raw provider response. |

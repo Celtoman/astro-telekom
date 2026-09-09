@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | Локальная инфраструктура | `docker compose up -d postgres redis` | Только PostgreSQL и Redis с опубликованными портами 5432/6379. |
 | Локальные приложения | pnpm-команды из README | API, web, admin, worker в процессах хоста. |
-| Production-like | `docker compose -f docker-compose.prod.yml up -d --build` | PostgreSQL, Redis, API, worker, web, admin, Caddy. |
+| Production-like | `docker compose -f docker-compose.prod.yml up -d --build` | PostgreSQL, Redis, one-shot Prisma migrate, API, worker, web, admin, Caddy. |
 
 PostgreSQL 18 хранит major-specific data directory внутри volume, смонтированного в `/var/lib/postgresql`. Не возвращать старый mount `/var/lib/postgresql/data`: официальный PG18 image отказывается запускаться с таким layout.
 
@@ -27,11 +27,10 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 
 ```powershell
 docker compose -f docker-compose.prod.yml up -d --build
-docker compose -f docker-compose.prod.yml exec api npx prisma migrate deploy --config /app/prisma.config.ts
 docker compose -f docker-compose.prod.yml exec api node /app/dist/seed.js
 ```
 
-После seed проверить пользовательский login и public city data. Browser login использует credentialed CORS и HttpOnly cookie: `ADMIN_URL` должен входить в `CORS_ORIGINS`; API явно разрешает browser-методы `GET`, `HEAD`, `POST`, `PATCH`, `DELETE`, `OPTIONS`; в `NODE_ENV=production` cookie имеет `Secure` и требует HTTPS. В текущем Compose миграции и seed не запускаются автоматически. API health endpoint проверяет только HTTP process, а не доступность PostgreSQL или актуальность schema; нельзя считать `healthy` доказательством готовности данных.
+Compose запускает `migrate` после готовности PostgreSQL; `api` не стартует, пока `prisma migrate deploy` не завершится успешно. Seed выполняется отдельно и только при первоначальной подготовке или осознанном обновлении базовых данных — автоматический seed на каждом деплое недопустим. После seed проверить пользовательский login и public city data. Browser login использует credentialed CORS и HttpOnly cookie: `ADMIN_URL` должен входить в `CORS_ORIGINS`; API явно разрешает browser-методы `GET`, `HEAD`, `POST`, `PATCH`, `DELETE`, `OPTIONS`; в `NODE_ENV=production` cookie имеет `Secure` и требует HTTPS.
 
 Для первоначальной загрузки географии после запуска API выполнить `pnpm cities:import`, проверить счетчики validation report и затем `pnpm cities:import -- --apply`. Команда пишет только через административный API и приводит статусы к инварианту: Казань `PUBLISHED`, остальные города `DRAFT`. Исходник и детали находятся в [data/imports/README.md](../data/imports/README.md).
 
@@ -41,7 +40,7 @@ docker compose -f docker-compose.prod.yml exec api node /app/dist/seed.js
 | --- | --- |
 | Сборка | `pnpm build` в чистом окружении или успешный docker build. |
 | Схема | `pnpm db:validate`, затем `prisma migrate deploy` в целевой БД. |
-| Health | HTTP `GET https://<API_DOMAIN>/api/v1/health`; дополнительно ручной DB-read endpoint после его реализации. |
+| Health | `/api/v1/health/live` возвращает process liveness; `/api/v1/health/ready` и совместимый `/api/v1/health` возвращают 200 только при доступных PostgreSQL и Redis, иначе 503. |
 | Публичный HTML | Открыть raw HTML `/`, текущий опубликованный `/{city-slug}/`, service page, tariff page, robots и sitemap; проверить canonical без localhost и отсутствие draft-городов. |
 | Интеграции | Sandbox или согласованный test contract coverage, contract check, Tarifnik и fallback email. |
 | Rebuild | Изменить тестовую сущность, проверить переход `PENDING/QUEUED -> RUNNING -> SUCCEEDED` через `/admin/rebuilds`, затем проверить HTML и совпадение `publishedRevision === requestedRevision`. |
