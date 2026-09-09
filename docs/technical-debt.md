@@ -35,12 +35,12 @@
 | TD-30 | [#45](https://github.com/Celtoman/astro-telekom/issues/45) ✅ | Full-snapshot из 3 859 тарифов атомарно применяется с явным transaction timeout |
 | TD-31 | [#46](https://github.com/Celtoman/astro-telekom/issues/46) ✅ | Preview блокирует city+slug коллизии, генератор разводит допустимые пары типов |
 | TD-33 | [#48](https://github.com/Celtoman/astro-telekom/issues/48) ✅ | Browser CORS явно разрешает `PATCH` и `DELETE` для admin mutation routes |
-| TD-37 | [#55](https://github.com/Celtoman/astro-telekom/issues/55) 🟢 | Первый web image build требует уже доступный build-time API и пока не имеет воспроизводимого bootstrap-порядка |
+| TD-37 | [#55](https://github.com/Celtoman/astro-telekom/issues/55) ✅ | Coolify runtime publisher устранил build-time цикл; первый и повторный live deployment подтверждены |
 | TD-41 | [#61](https://github.com/Celtoman/astro-telekom/issues/61) ✅ | API runtime image сохраняет workspace `apps/api/node_modules`; bootstrap seed использует тот же runtime layout |
-| TD-42 | [#62](https://github.com/Celtoman/astro-telekom/issues/62) 🟢 | Coolify учитывает завершенные one-shot containers и после успешного старта переводит resource в `exited:unhealthy` |
-| TD-44 | [#64](https://github.com/Celtoman/astro-telekom/issues/64) 🟢 | Coolify label escaping или runtime-only scope ломает интерполяцию bcrypt middleware Compose-приложения |
-| TD-45 | [#65](https://github.com/Celtoman/astro-telekom/issues/65) 🟢 | pnpm 11 повторно проверяет весь frozen lockfile в каждом Docker target и срывает холодную сборку по сетевому timeout |
-| TD-46 | [#66](https://github.com/Celtoman/astro-telekom/issues/66) 🟢 | Повторный publisher следует symlink-каталогу, удаляет активный release и оставляет web с HTTP 503 |
+| TD-42 | [#62](https://github.com/Celtoman/astro-telekom/issues/62) ✅ | One-shot containers исключены из health; два последовательных live deployment остались `running:healthy` |
+| TD-44 | [#64](https://github.com/Celtoman/astro-telekom/issues/64) ✅ | Label escaping выключен, runtime Basic Auth подтвержден ответами 401/200 на обоих доменах |
+| TD-45 | [#65](https://github.com/Celtoman/astro-telekom/issues/65) ✅ | Trusted frozen lockfile, общий pnpm cache и bounded retry подтвердили cold/warm и live deployment без timeout |
+| TD-46 | [#66](https://github.com/Celtoman/astro-telekom/issues/66) ✅ | `mv -fT` сохраняет валидный publication symlink; два последовательных live deployment прошли без 503 |
 
 ## P2
 
@@ -67,11 +67,11 @@
 | TD-34 | [#52](https://github.com/Celtoman/astro-telekom/issues/52) 🟢 | Точное число тестов продублировано в пяти документах и требует ручной синхронизации |
 | TD-35 | [#53](https://github.com/Celtoman/astro-telekom/issues/53) ✅ | Build-time catalog API отделен в server-only `SITE_DATA_API_URL` от публичного browser `PUBLIC_API_URL` |
 | TD-36 | [#54](https://github.com/Celtoman/astro-telekom/issues/54) ✅ | Production build требует внешний HTTPS `PUBLIC_API_URL` с нормализованным path `/api/v1` |
-| TD-37 | [#56](https://github.com/Celtoman/astro-telekom/issues/56) 🟢 | Production Compose не адаптирован к Coolify proxy и не закрывает тестовые web/admin страницы паролем |
+| TD-37 | [#56](https://github.com/Celtoman/astro-telekom/issues/56) ✅ | Coolify-native routing, TLS, Basic Auth, same-origin API и `www` redirect подтверждены live smoke-тестом |
 | TD-38 | [#57](https://github.com/Celtoman/astro-telekom/issues/57) 🟢 | Coolify adapter реализован локально; остаются реальные token/resource и live polling rehearsal |
 | TD-39 | [#58](https://github.com/Celtoman/astro-telekom/issues/58) ✅ | Все Dockerfile кешируют `pnpm install` по root/workspace manifests и lockfile; source-only rebuild подтвержден 9 сентября 2026 года |
 | TD-40 | [#60](https://github.com/Celtoman/astro-telekom/issues/60) ✅ | Coolify API token удален из build-time Compose interpolation и передается worker только через runtime `.env` |
-| TD-43 | [#63](https://github.com/Celtoman/astro-telekom/issues/63) 🟢 | API/seed/migrate повторно экспортируют тяжелый monorepo image и замедляют source-only deployment |
+| TD-43 | [#63](https://github.com/Celtoman/astro-telekom/issues/63) ✅ | Filtered runtime, общий API/seed image и кешированный migration path сократили повторный live deployment до 85 секунд |
 
 ## Невыполненные, но согласованные возможности
 

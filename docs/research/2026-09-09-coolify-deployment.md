@@ -289,6 +289,8 @@ curl -I -u '<user>:<password>' https://admin.tv-internet-dom.ru/api/v1/health/re
 
 Повторная live-проверка обнаружила отдельный дефект [#66](https://github.com/Celtoman/astro-telekom/issues/66), который однократный локальный запуск не покрывал. На первом publisher-run `current` отсутствовал, поэтому `mv -f current.next current` работал. На следующем run `current` уже был symlink на каталог: обычный `mv` следовал ему, переносил временную ссылку внутрь старого release, а cleanup удалял этот release. Coolify завершал deployment как `finished`, после чего web и same-origin API отвечали 503, resource переходил в `restarting:unknown`. В exact `node:22.23.2-alpine` подтверждена поддержка `mv -fT`; `-T` заставляет атомарно заменить сам symlink, не следуя каталогу назначения.
 
+Исправленный commit `1eeb609` прошел два последовательных live deployment: `ydlnqpkahkz3wtyydzjigfff` завершился за 146 секунд, `0ayyy0zsqkzzxyr2unemysww` — за 85 секунд. После второго deployment ресурс остался `running:healthy`; десять последовательных проверок web, same-origin API readiness и admin readiness дали 30/30 HTTP 200, полный smoke дополнительно подтвердил 401 без credentials, 200 с credentials и `www → non-www`. В deployment log второго прогона было 54 `CACHED`, 0 install retry, 0 network timeout и 0 build error.
+
 ## Итоговая готовность
 
 | Направление | Статус после аудита |
@@ -303,7 +305,7 @@ curl -I -u '<user>:<password>' https://admin.tv-internet-dom.ru/api/v1/health/re
 | Persistent volumes | Compose настроен корректно; не является backup |
 | Backup | Не готово; нужен `pg_dump` + off-server storage + restore test |
 | Rollback | Только code/image path; БД и публикационный volume требуют отдельного плана |
-| Production readiness | Не подтверждена до двух ручных deploy, smoke tests, rebuild test и backup restore |
+| Production readiness | Стабильный ручной deployment и повторная публикация подтверждены; до приема реальных заявок остаются rebuild rehearsal и backup restore |
 
 ## Основные официальные источники
 
