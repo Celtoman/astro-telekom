@@ -30,7 +30,7 @@ test('city workspace implements list, validation report, guarded apply and rebui
     '/admin/rebuilds',
   ]) assert.ok(source.includes(endpoint), `missing ${endpoint} integration`);
 
-  assert.match(source, /accept=["'][^"']*\.xls[^"']*\.xlsx[^"']*["']/);
+  assert.match(source, /accept=["']\.xlsx["']/);
   assert.match(source, /confirmWarnings/);
   assert.match(source, /report\?\.candidates/);
   assert.match(source, /report\.issues/);

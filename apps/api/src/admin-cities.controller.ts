@@ -45,14 +45,16 @@ export class AdminCitiesController {
   @Post('import/validate')
   async validateImport(@Body() body: { siteId?: string; fileName?: string; fileBase64?: string; rows?: Record<string, unknown>[] }) {
     if (!body.siteId) throw new BadRequestException('siteId обязателен');
-    const rows = body.rows || (body.fileBase64 ? (() => {
+    const fileName = body.fileName?.trim() || 'cities-import.xlsx';
+    let rows = body.rows;
+    if (!rows && body.fileBase64) {
       const encoded = body.fileBase64!.includes(',') ? body.fileBase64!.split(',', 2)[1] : body.fileBase64!;
       const buffer = Buffer.from(encoded, 'base64');
       if (buffer.length > 25 * 1024 * 1024) throw new BadRequestException('Файл слишком большой');
-      return parseWorkbook(buffer);
-    })() : null);
+      rows = await parseWorkbook(buffer, fileName);
+    }
     if (!rows) throw new BadRequestException('Передайте rows или fileBase64');
-    const report = await this.imports.validateRows(body.siteId, body.fileName || 'cities-import.xlsx', rows);
+    const report = await this.imports.validateRows(body.siteId, fileName, rows);
     const run = await this.prisma.cityImportRun.create({ data: { siteId: body.siteId, fileName: report.fileName, totalRows: report.totalRows, validRows: report.validRows, errorRows: report.errorRows, warningRows: report.warningRows, report: report as any } });
     return { runId: run.id, report };
   }

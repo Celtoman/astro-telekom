@@ -34,7 +34,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 `apps/crm` удален после переноса заявок в `/leads`; `admin` входит в общий Astro check.
 
-**Baseline тестов: 105/105.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют строгие public DTO/rate limit/honeypot, policy-driven PII purge, cookie-сессию и CORS admin, infrastructure/release readiness и migration dependency Compose, экраны тарифов, городов и заявок, отсутствие выведенного из эксплуатации CRM-workspace, границу worker-only routes, канонический справочник 207 городов и сопоставление регионов, public catalog и multi-city static routes, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+**Baseline тестов: 107/107.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют строгие public DTO/rate limit/honeypot, policy-driven PII purge, cookie-сессию и CORS admin, infrastructure/release readiness и migration dependency Compose, экраны тарифов, городов и заявок, отсутствие выведенного из эксплуатации CRM-workspace, границу worker-only routes, безопасный XLSX-парсер и канонический справочник 207 городов, public catalog и multi-city static routes, full-snapshot импорт тарифов, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 
@@ -155,7 +155,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 - При установке/обновлении/удалении pnpm-пакетов всегда коммитить `pnpm-lock.yaml` вместе с `package.json` соответствующего workspace в одном коммите.
 - Все Dockerfile используют `pnpm install --frozen-lockfile` — расхождение manifest/lockfile ломает Docker-билд.
 - Перед коммитом проверять, что `pnpm-lock.yaml` и изменённые `package.json` добавлены в `git add`.
-- После любого изменения зависимостей — запускать `pnpm audit --audit-level=high`. Baseline на 2026-09-07: 8 известных уязвимостей (3 moderate, 5 high), из них 7 — транзитивные через сам Prisma CLI/Studio (`lodash`, `deepmerge-ts`, `mysql2` — последний вообще не используется, проект работает только с PostgreSQL через `@prisma/adapter-pg`) и не блокируют коммит. Одна — прямая зависимость `apps/api`: `xlsx@0.18.5` (Prototype Pollution + ReDoS, парсит загружаемые пользователем файлы), см. TD-21. Новую уязвимость сверх этого baseline, особенно в прямых (не транзитивных через Prisma) зависимостях — не игнорировать, разобраться перед коммитом.
+- После любого изменения зависимостей — запускать `pnpm audit --audit-level=high`. Baseline на 2026-09-09: 6 известных уязвимостей (3 moderate, 3 high), все транзитивные через Prisma CLI/Studio (`lodash`, `deepmerge-ts`, `mysql2` — последний вообще не используется, проект работает только с PostgreSQL через `@prisma/adapter-pg`) и не блокируют коммит. Прямая уязвимая зависимость `xlsx@0.18.5` удалена в TD-21. Новую уязвимость сверх этого baseline, особенно в прямых зависимостях — не игнорировать, разобраться перед коммитом.
 
 ### Тестирование и проверки перед коммитом
 

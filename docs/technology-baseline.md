@@ -23,7 +23,7 @@
 | Redis | 8.10.1-alpine | Backend очередей. |
 | BullMQ | 6.3.4 | Очереди доставки лидов и пересборки сайта; import listener пока без producer. |
 | ioredis | 6.0.0 | Redis connections для API и worker. |
-| xlsx | 0.18.5 | Разбор первого листа XLS/XLSX в API. |
+| read-excel-file | 9.3.4 | Безопасный разбор первого листа XLSX в API; лимиты 25 МБ, 10 000 строк и 256 столбцов. |
 | Tabler Icons Webfont | 3.46.0 | Пиктограммы admin. |
 | Caddy | 2.11.4-alpine | Reverse proxy и static file server. |
 

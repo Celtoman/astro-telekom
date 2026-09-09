@@ -9,7 +9,7 @@
 - Monorepo, Docker Compose, Prisma migrations и seed.
 - NestJS API, Bearer-сессии с единым уровнем доступа администратора и CRUD базовых сущностей.
 - Статический Astro-сайт с dynamic paths для опубликованных городов, страниц и тарифов; в текущей базе опубликована только Казань.
-- XLS-import городов/тарифов с validate/apply reports.
+- XLSX-import городов/тарифов с validate/apply reports.
 - Прием лида, deduplication, contract check, delivery attempts, CRM API.
 - Static admin с рабочими экранами тарифов, городов и заявок, а также worker listeners.
 

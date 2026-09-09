@@ -86,14 +86,14 @@ export class AdminTariffsController {
   @Post('import/validate')
   async validateImport(@Body() body: { providerId?: string; fileName?: string; fileBase64?: string; rows?: Record<string, unknown>[] }) {
     if (!body.providerId) throw new BadRequestException('providerId обязателен');
+    const fileName = body.fileName?.trim() || 'tariffs-import.xlsx';
     let rows = body.rows;
     if (!rows && body.fileBase64) {
       const encoded = body.fileBase64.replace(/^data:.*?;base64,/, '');
       if (encoded.length > 35_000_000) throw new BadRequestException('Файл слишком большой; максимум 25 МБ');
-      rows = parseWorkbook(Buffer.from(encoded, 'base64'));
+      rows = await parseWorkbook(Buffer.from(encoded, 'base64'), fileName);
     }
     if (!rows) throw new BadRequestException('Передайте rows или fileBase64');
-    const fileName = body.fileName?.trim() || 'tariffs-import.xlsx';
     const report = await this.imports.validateRows(body.providerId, fileName, rows);
     const run = await this.prisma.tariffImportRun.create({
       data: {

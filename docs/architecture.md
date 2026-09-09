@@ -48,7 +48,7 @@ PII retention scheduler в worker
 | --- | --- |
 | `auth` и `AdminTokenGuard` | Создание 12-часовой сессии, browser login/me/logout через HttpOnly cookie и совместимый Bearer для технических клиентов. `x-admin-token` — машинный credential; `/internal/*` принимает только его. |
 | `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; блоки имеют отдельную строгую валидацию, остальные admin bodies частично проверяются вручную. |
-| `tariff-import`, `city-import` | Валидация XLS/XLSX, сохранение отчета, transactional apply. |
+| `tariff-import`, `city-import` | Валидация XLSX, сохранение отчета, transactional apply. |
 | `address-checks`, `coverage` | Сохранение проверки адреса и адаптер внешнего coverage API. |
 | `leads`, `domru-contract`, `lead-delivery`, `notifications`, `lead-access` | Сохранение лида, дедупликация, проверка договора, API/email delivery и одноразовый доступ из fallback-письма. |
 | `pii-retention` | Worker-only bounded hard-delete просроченных лидов и связанных payloads; fail-safe без явно заданного срока. |

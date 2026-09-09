@@ -1,6 +1,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const XLSX = require('../apps/api/node_modules/xlsx');
+const fs = require('node:fs');
+const path = require('node:path');
 const { TariffImportService, parseWorkbook } = require('../apps/api/dist/tariff-import.service.js');
 const { AdminTariffsController } = require('../apps/api/dist/admin-tariffs.controller.js');
 
@@ -18,12 +19,27 @@ function service() {
   });
 }
 
-test('XLSX parser reads the first sheet and preserves empty cells', () => {
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet([row()]), 'Tarify');
-  const parsed = parseWorkbook(XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' }));
-  assert.equal(parsed.length, 1);
-  assert.equal(parsed[0].post_title_lat, 'giga-500');
+test('XLSX parser reads the canonical first sheet into records', async () => {
+  const workbookPath = path.join(__dirname, '..', 'data', 'imports', 'cities.xlsx');
+  const parsed = await parseWorkbook(fs.readFileSync(workbookPath), 'cities.xlsx');
+
+  assert.equal(parsed.length, 207);
+  assert.equal(parsed[0].Slug, 'aleysk');
+  assert.equal(parsed[0]['Город имен. падеж'], 'Алейск');
+});
+
+test('XLSX parser rejects the legacy binary XLS format explicitly', async () => {
+  await assert.rejects(
+    parseWorkbook(Buffer.from('legacy-binary-spreadsheet'), 'tariffs.xls'),
+    /только файлы \.xlsx/i,
+  );
+});
+
+test('XLSX parser rejects files larger than 25 MB before parsing', async () => {
+  await assert.rejects(
+    parseWorkbook(Buffer.alloc(25 * 1024 * 1024 + 1), 'oversized.xlsx'),
+    /максимум 25 МБ/i,
+  );
 });
 
 test('validation creates the agreed identity key and separates promo price', async () => {

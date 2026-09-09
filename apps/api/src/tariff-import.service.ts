@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma, ServiceType } from '../generated';
-import * as XLSX from 'xlsx';
+import { readSheet, type SheetData } from 'read-excel-file/node';
 import { PrismaService } from './prisma.service';
 
 export const REQUIRED_IMPORT_COLUMNS = [
@@ -14,6 +14,9 @@ const SERVICE_STATUS_COLUMNS = [
 ];
 const BOOLEAN_COLUMNS = ['is_sticky', 'is_gaming_tarif'];
 const IMPORT_TRANSACTION_TIMEOUT_MS = 120_000;
+const MAX_IMPORT_FILE_SIZE_BYTES = 25 * 1024 * 1024;
+const MAX_IMPORT_ROWS = 10_000;
+const MAX_IMPORT_COLUMNS = 256;
 const IGNORED_ATTRIBUTE_COLUMNS = new Set([
   ...REQUIRED_IMPORT_COLUMNS,
   'staraia_stoimost', 'connection_cost', 'opisanie_aktsii', 'opisanie_tarifa', 'promo_feature',
@@ -93,17 +96,41 @@ const jsonValue = (value: unknown): Prisma.InputJsonValue | null => {
   return String(value);
 };
 
-export function parseWorkbook(buffer: Buffer): Record<string, unknown>[] {
-  let workbook: XLSX.WorkBook;
-  try {
-    workbook = XLSX.read(buffer, { type: 'buffer', cellDates: true, cellNF: false, cellText: false });
-  } catch {
-    throw new BadRequestException('Не удалось прочитать XLS/XLSX-файл');
+export async function parseWorkbook(buffer: Buffer, fileName = 'import.xlsx'): Promise<Record<string, unknown>[]> {
+  if (!/\.xlsx$/i.test(fileName.trim())) {
+    throw new BadRequestException('Поддерживаются только файлы .xlsx');
   }
-  const firstSheet = workbook.SheetNames[0];
-  if (!firstSheet) throw new BadRequestException('В файле нет листов');
-  const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(workbook.Sheets[firstSheet], { defval: null, raw: true });
-  if (!rows.length) throw new BadRequestException('В файле нет строк с тарифами');
+  if (buffer.length > MAX_IMPORT_FILE_SIZE_BYTES) {
+    throw new BadRequestException('Файл слишком большой; максимум 25 МБ');
+  }
+
+  let sheet: SheetData;
+  try {
+    sheet = await readSheet(buffer);
+  } catch {
+    throw new BadRequestException('Не удалось прочитать XLSX-файл');
+  }
+
+  const headerRow = sheet[0];
+  if (!headerRow?.length) throw new BadRequestException('В файле нет заголовков');
+  if (headerRow.length > MAX_IMPORT_COLUMNS) {
+    throw new BadRequestException(`В файле больше ${MAX_IMPORT_COLUMNS} столбцов`);
+  }
+  if (sheet.length - 1 > MAX_IMPORT_ROWS) {
+    throw new BadRequestException(`В файле больше ${MAX_IMPORT_ROWS} строк`);
+  }
+
+  const columns = headerRow
+    .map((value, index) => ({ index, name: String(value ?? '').replace(/^\uFEFF/, '').trim() }))
+    .filter((column) => column.name);
+  if (!columns.length) throw new BadRequestException('В файле нет заголовков');
+  const duplicate = columns.find((column, index) => columns.findIndex((candidate) => candidate.name === column.name) !== index);
+  if (duplicate) throw new BadRequestException(`В файле повторяется колонка «${duplicate.name}»`);
+
+  const rows = sheet.slice(1)
+    .filter((row) => row.some((value) => value !== null && value !== undefined && value !== ''))
+    .map((row) => Object.fromEntries(columns.map((column) => [column.name, row[column.index] ?? null])));
+  if (!rows.length) throw new BadRequestException('В файле нет строк данных');
   return rows;
 }
 

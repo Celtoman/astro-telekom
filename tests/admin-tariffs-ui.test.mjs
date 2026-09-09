@@ -29,7 +29,7 @@ test('tariff workspace implements list, validation report, atomic apply and rebu
     '/admin/rebuilds',
   ]) assert.ok(source.includes(endpoint), `missing ${endpoint} integration`);
 
-  assert.match(source, /accept=["'][^"']*\.xls[^"']*\.xlsx[^"']*["']/);
+  assert.match(source, /accept=["']\.xlsx["']/);
   assert.match(source, /confirmWarnings/);
   assert.match(source, /report\.diff/);
   assert.match(source, /report\.issues/);

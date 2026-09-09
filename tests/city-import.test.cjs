@@ -24,7 +24,7 @@ function validationPrisma() {
   };
 }
 
-test('city import accepts the agreed Russian XLS aliases', async () => {
+test('city import accepts the agreed Russian XLSX aliases', async () => {
   const report = await new CityImportService(validationPrisma()).validateRows('site-1', 'cities.xlsx', [row()]);
   assert.equal(report.errorRows, 0);
   assert.equal(report.validRows, 1);
@@ -35,7 +35,7 @@ test('city import accepts the agreed Russian XLS aliases', async () => {
 
 test('canonical city workbook validates all 207 rows and preserves Kazan cases', async () => {
   const workbookPath = path.join(__dirname, '..', 'data', 'imports', 'cities.xlsx');
-  const rows = parseWorkbook(fs.readFileSync(workbookPath));
+  const rows = await parseWorkbook(fs.readFileSync(workbookPath), 'cities.xlsx');
   const report = await new CityImportService(validationPrisma()).validateRows('site-1', 'cities.xlsx', rows);
   const kazan = report.candidates.find((candidate) => candidate.slug === 'kazan');
 

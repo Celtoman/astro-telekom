@@ -59,10 +59,10 @@
 | PATCH/DELETE | `/admin/blocks/:id` | Изменение и удаление blocks. |
 | GET/POST/PATCH | `/admin/tariffs` | Tariff records. |
 | POST | `/admin/tariffs/import` | Старый программный import массива items. |
-| POST | `/admin/tariffs/import/validate` | XLS/XLSX или rows -> сохраненный validation report. |
+| POST | `/admin/tariffs/import/validate` | XLSX или rows -> сохраненный validation report. Для файла действуют лимиты 25 МБ, 10 000 строк и 256 столбцов; legacy `.xls` отклоняется. |
 | POST | `/admin/tariffs/import/apply` | Атомарно применяет полный snapshot по `runId`; при warnings требует `confirmWarnings: true`. |
 | GET | `/admin/tariffs/imports`, `/admin/tariffs/imports/:id` | История и полный report import. |
-| POST | `/admin/cities/import/validate` | XLS/XLSX или rows -> city import report. |
+| POST | `/admin/cities/import/validate` | XLSX или rows -> city import report. Для файла действуют лимиты 25 МБ, 10 000 строк и 256 столбцов; legacy `.xls` отклоняется. |
 | POST | `/admin/cities/import/apply` | Применяет run с optional per-row `create`/`update`/`skip`; при warnings требует `confirmWarnings: true`. |
 | GET | `/admin/cities/imports`, `/admin/cities/imports/:id` | История и полный report city import. |
 | GET | `/admin/rebuilds`, `/admin/rebuilds/:id` | Persistent статус пересборки; список можно фильтровать по `siteId`. |

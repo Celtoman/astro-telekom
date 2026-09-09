@@ -173,8 +173,8 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
           <CardContent>
             <FieldGroup>
               <Field data-disabled={sites.length !== 1 || busy !== null}>
-                <FieldLabel htmlFor="cities-file">Файл XLS/XLSX</FieldLabel>
-                <Input id="cities-file" type="file" accept=".xls,.xlsx" disabled={sites.length !== 1 || busy !== null} onChange={(event) => { setFile(event.target.files?.[0] || null); setReport(null); setRunId(null) }} />
+                <FieldLabel htmlFor="cities-file">Файл XLSX</FieldLabel>
+                <Input id="cities-file" type="file" accept=".xlsx" disabled={sites.length !== 1 || busy !== null} onChange={(event) => { setFile(event.target.files?.[0] || null); setReport(null); setRunId(null) }} />
                 <FieldDescription>{sites.length === 1 ? `Сайт: ${sites[0].name}` : "Импорт заблокирован до однозначной настройки сайта."}</FieldDescription>
               </Field>
               <Button disabled={!file || sites.length !== 1 || busy !== null} onClick={() => void validateImport()}><FileUp data-icon="inline-start" />{busy === "validate" ? "Проверяем…" : "Проверить файл"}</Button>
