@@ -37,6 +37,7 @@
 | TD-33 | [#48](https://github.com/Celtoman/astro-telekom/issues/48) ✅ | Browser CORS явно разрешает `PATCH` и `DELETE` для admin mutation routes |
 | TD-37 | [#55](https://github.com/Celtoman/astro-telekom/issues/55) 🟢 | Первый web image build требует уже доступный build-time API и пока не имеет воспроизводимого bootstrap-порядка |
 | TD-41 | [#61](https://github.com/Celtoman/astro-telekom/issues/61) ✅ | API runtime image сохраняет workspace `apps/api/node_modules`; bootstrap seed использует тот же runtime layout |
+| TD-42 | [#62](https://github.com/Celtoman/astro-telekom/issues/62) 🟢 | Coolify учитывает завершенные one-shot containers и после успешного старта переводит resource в `exited:unhealthy` |
 
 ## P2
 
@@ -67,6 +68,7 @@
 | TD-38 | [#57](https://github.com/Celtoman/astro-telekom/issues/57) 🟢 | Coolify adapter реализован локально; остаются реальные token/resource и live polling rehearsal |
 | TD-39 | [#58](https://github.com/Celtoman/astro-telekom/issues/58) ✅ | Все Dockerfile кешируют `pnpm install` по root/workspace manifests и lockfile; source-only rebuild подтвержден 9 сентября 2026 года |
 | TD-40 | [#60](https://github.com/Celtoman/astro-telekom/issues/60) ✅ | Coolify API token удален из build-time Compose interpolation и передается worker только через runtime `.env` |
+| TD-43 | [#63](https://github.com/Celtoman/astro-telekom/issues/63) 🟢 | API/seed/migrate повторно экспортируют тяжелый monorepo image и замедляют source-only deployment |
 
 ## Невыполненные, но согласованные возможности
 

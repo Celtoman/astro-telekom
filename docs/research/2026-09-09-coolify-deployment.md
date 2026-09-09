@@ -11,7 +11,7 @@
 1. инструкция ошибочно предлагает домены с `:80`; для контейнера, который слушает порт 80, актуальная форма — `https://tv-internet-dom.ru` и `https://admin.tv-internet-dom.ru` без суффикса;
 2. для bcrypt недостаточно формулировки «Literal или label escaping»: `TEST_BASIC_AUTH_USERS` нужно сохранить как Literal **и** включить `Escape special characters in labels`, затем проверить фактические labels после deploy;
 3. `COOLIFY_API_TOKEN` должен быть отдельной runtime-only переменной Normal view. Compose больше не интерполирует его при разборе, а worker получает token через runtime `.env`;
-4. `migrate`, `bootstrap-seed` и `web-publish` уже имеют `restart: "no"`. Текущий Coolify исключает такие контейнеры из общей health-оценки автоматически, поэтому нестандартный `exclude_from_hc` добавлять не нужно.
+4. Source-код v4.3.18 должен исключать `restart: "no"`, но реальный resource после двух успешных запусков сервисов становился `exited:unhealthy`. Поэтому `migrate`, `bootstrap-seed` и `web-publish` дополнительно получили официальный Coolify marker `exclude_from_hc: true`; у worker, web и admin добавлены явные healthchecks.
 
 Кроме того, резервное копирование пока не настроено. Новая версия Coolify умеет архивировать application volumes и делает database-aware backup PostgreSQL внутри **Service**, но Git-based Docker Compose создается как **Application** и пока не получает этот интерфейс — официальный feature issue [#7528](https://github.com/coollabsio/coolify/issues/7528) открыт. До приема реальных заявок нужен проверенный `pg_dump` во внешнее хранилище и тест восстановления.
 
@@ -34,7 +34,7 @@
 | Persistence | `postgres_data`, `redis_data`, `web_publication` — named volumes | Compose file остается source of truth; Coolify показывает такие mounts read-only и сохраняет их при обычном redeploy. [Persistent Storage](https://next.coolify.io/docs/applications/configuration/persistent-storage) |
 | PostgreSQL 18 path | `/var/lib/postgresql` | Актуальная документация отдельно указывает этот путь для PostgreSQL 18+, а старый `/var/lib/postgresql/data` — для версий до 18. [Database persistent storage](https://next.coolify.io/docs/databases/configuration/persistent-storage) |
 | Порядок запуска | Миграция и публикация связаны через `depends_on` + health/complete conditions | Compose definition управляет health checks и dependencies; межсервисная адресация поддерживается сетью ресурса. [Docker Compose](https://next.coolify.io/docs/applications/builds/docker-compose) |
-| One-shot status | `migrate`, `bootstrap-seed` и `web-publish` имеют `restart: "no"` | В source релиза v4.3.18 сервис автоматически исключается из общего status, если `restart === "no"` или задан `exclude_from_hc`. Значит, текущая конфигурация уже корректна. [`CalculatesExcludedStatus.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/app/Traits/CalculatesExcludedStatus.php#L97-L143), [`parsers.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/bootstrap/helpers/parsers.php#L2678-L2691) |
+| One-shot status | `migrate`, `bootstrap-seed` и `web-publish` имеют `restart: "no"` и `exclude_from_hc: true` | Source релиза v4.3.18 предусматривает оба способа исключения. Live resource не применил ожидаемое исключение только по restart policy, поэтому конфигурация фиксирует intent явно. [`CalculatesExcludedStatus.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/app/Traits/CalculatesExcludedStatus.php#L97-L143), [`parsers.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/bootstrap/helpers/parsers.php#L2678-L2691) |
 | Required variables | Критичные значения используют `${VAR:?}` | Актуальный Coolify отмечает такие значения required и блокирует deploy, пока поле пустое. [Docker Compose variables](https://next.coolify.io/docs/applications/builds/docker-compose#defaults-and-required-values) |
 | Rebuild API | POST `/api/v1/deploy` с JSON `{uuid}` и polling `/api/v1/deployments/{uuid}` | POST официально поддерживается; ответ содержит `resource_uuid` и `deployment_uuid`. Status endpoint возвращает поле `status`. [Deploy API](https://coolify.io/docs/api-reference/api/deployments/deploy-by-tag-or-uuid), [Deployment API](https://coolify.io/docs/api-reference/api/deployments/get-deployment-by-uuid) |
 | Status mapping | Worker ожидает `queued`, `in_progress`, `finished`, `failed`, `cancelled-by-user` | Это точные значения enum в source проверенного релиза. [ApplicationDeploymentStatus.php](https://github.com/coollabsio/coolify/blob/v4.3.18/app/Enums/ApplicationDeploymentStatus.php) |
@@ -42,13 +42,15 @@
 
 ## Расхождения и риски
 
-### 1. One-shot lifecycle уже корректен в v4.3.18
+### 1. One-shot lifecycle требует явного marker в live v4.3.18
 
-`migrate`, `bootstrap-seed` и `web-publish` завершаются с exit code 0 и имеют `restart: "no"`. Исходник v4.3.18 прямо включает сервис в excluded containers, если `restartPolicy === "no"`; parser для сохраненных service records делает то же самое. [`CalculatesExcludedStatus.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/app/Traits/CalculatesExcludedStatus.php#L97-L143), [`parsers.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/bootstrap/helpers/parsers.php#L2678-L2691)
+`migrate`, `bootstrap-seed` и `web-publish` завершились с exit code 0, API стал healthy, остальные долгоживущие контейнеры запустились. Несмотря на `restart: "no"`, после двух deployment attempts приложение получило `exited:unhealthy`, а все домены начали отвечать 503. Это live-наблюдение противоречит ожидаемому пути source-кода v4.3.18, который исключает сервис при `restartPolicy === "no"`. [`CalculatesExcludedStatus.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/app/Traits/CalculatesExcludedStatus.php#L97-L143), [`parsers.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/bootstrap/helpers/parsers.php#L2678-L2691)
 
-`exclude_from_hc` — альтернативное custom field Coolify, а не обязательное поле Docker Compose. Coolify удаляет его перед передачей definition в Docker Compose. [`parsers.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/bootstrap/helpers/parsers.php#L1428-L1436), [`StripCoolifyCustomFieldsTest.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/tests/Unit/StripCoolifyCustomFieldsTest.php)
+`exclude_from_hc` — поддерживаемое custom field Coolify, а не поле Docker Compose. Coolify использует его в своей health-агрегации и удаляет перед передачей definition в Docker Compose. [`parsers.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/bootstrap/helpers/parsers.php#L1428-L1436), [`StripCoolifyCustomFieldsTest.php`](https://github.com/coollabsio/coolify/blob/v4.3.18/tests/Unit/StripCoolifyCustomFieldsTest.php)
 
-Вывод: ничего добавлять не нужно. `restart: "no"` и `depends_on: condition: service_completed_successfully` сохранить.
+Следствие для локальной проверки: обычный `docker compose config` на исходном Coolify-файле закономерно отвергает custom field. Проверять нужно deployable definition из Coolify либо локальный поток с удаленными строками `exclude_from_hc`; после такого удаления Compose schema проходит.
+
+Вывод: сохранить `restart: "no"` и `depends_on: condition: service_completed_successfully`, а intent дополнительно закрепить `exclude_from_hc: true`. Для долгоживущих сервисов health должен проверять фактическую функцию: readiness API, Redis PING worker и локальный HTTP Caddy web/admin. Исправление отслеживается в [#62](https://github.com/Celtoman/astro-telekom/issues/62).
 
 ### 2. Домены на внутреннем порту 80 записаны по старому шаблону
 
@@ -209,7 +211,7 @@ Deploy Key — запасной вариант: отдельный read-only key
 10. `COOLIFY_API_URL=https://<coolify-domain>/api/v1`; не использовать domain самого сайта.
 11. Не создавать `COOLIFY_RESOURCE_UUID` вручную; сверить автоматически predefined value с Application `Details`.
 
-Перед Deploy убедиться, что `COOLIFY_API_TOKEN` отсутствует в build scope. `exclude_from_hc` добавлять не нужно: у one-shot services уже есть поддерживаемый v4.3.18 признак `restart: "no"`.
+Перед Deploy убедиться, что `COOLIFY_API_TOKEN` отсутствует в build scope. У всех one-shot services сохранить одновременно `restart: "no"` и `exclude_from_hc: true`, чтобы успешное завершение не ухудшало application health.
 
 ### Этап 6. Первый deploy
 
@@ -284,7 +286,7 @@ curl -I -u '<user>:<password>' https://admin.tv-internet-dom.ru/api/v1/health/re
 | Compose build pack/path | Готово |
 | Domains | Готово в инструкции: без `:80`; требуется live DNS/TLS проверка |
 | Basic Auth | Labels корректны; усилить настройку Literal + label escaping и проверить live |
-| One-shot lifecycle | Готово: `restart: "no"` автоматически исключает сервисы из status в v4.3.18; custom `exclude_from_hc` не нужен |
+| One-shot lifecycle | Исправление подготовлено: `restart: "no"` дополнен явным `exclude_from_hc: true`; требуется live-подтверждение #62 |
 | Environment values | Нужна отдельная Coolify-матрица; `.env.example` напрямую не вставлять |
 | Coolify API rebuild | Runtime-only token исправлен; нужны token scopes и live rehearsal |
 | Persistent volumes | Compose настроен корректно; не является backup |

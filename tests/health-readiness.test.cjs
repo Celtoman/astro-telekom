@@ -55,6 +55,7 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   const publishScript = readFileSync(join(repositoryRoot, 'apps', 'web', 'scripts', 'publish-static.sh'), 'utf8');
   const coolifyWebCaddy = readFileSync(join(repositoryRoot, 'deploy', 'coolify-web.Caddyfile'), 'utf8');
   const adminCaddy = readFileSync(join(repositoryRoot, 'deploy', 'static.Caddyfile'), 'utf8');
+  const workerHealthcheck = readFileSync(join(repositoryRoot, 'services', 'worker', 'src', 'healthcheck.mjs'), 'utf8');
   const siteDataSource = readFileSync(join(repositoryRoot, 'apps', 'web', 'src', 'data', 'site.ts'), 'utf8');
   assert.match(compose, /^  migrate:\r?$/m);
   assert.match(compose, /migrate:\s+condition: service_completed_successfully/);
@@ -69,6 +70,24 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.match(coolifyCompose, /bootstrap-seed:\s+condition:\s*service_completed_successfully/);
   assert.match(coolifyCompose, /web-publish:[\s\S]*target:\s*publisher[\s\S]*SITE_DATA_API_URL:\s*http:\/\/api:3000\/api\/v1/);
   assert.match(coolifyCompose, /web-publish:\s+condition:\s*service_completed_successfully/);
+  for (const service of ['migrate', 'bootstrap-seed', 'web-publish']) {
+    assert.match(
+      coolifyCompose,
+      new RegExp(`${service}:[\\s\\S]*?exclude_from_hc:\\s*true[\\s\\S]*?restart:\\s*["']no["']`),
+      `${service} must be explicitly excluded from Coolify application health`,
+    );
+  }
+  assert.equal((coolifyCompose.match(/exclude_from_hc:\s*true/g) || []).length, 3);
+  for (const service of ['web', 'admin']) {
+    assert.match(
+      coolifyCompose,
+      new RegExp(`${service}:[\\s\\S]*?healthcheck:[\\s\\S]*?wget[\\s\\S]*?http://127\\.0\\.0\\.1/`),
+      `${service} must verify its local Caddy response`,
+    );
+  }
+  assert.match(coolifyCompose, /worker:[\s\S]*?healthcheck:[\s\S]*?node[\s\S]*?services\/worker\/src\/healthcheck\.mjs/);
+  assert.match(workerHealthcheck, /new IORedis\(redisUrl/);
+  assert.match(workerHealthcheck, /await redis\.ping\(\)/);
   assert.match(coolifyCompose, /REBUILD_PROVIDER:\s*\$\{REBUILD_PROVIDER:-coolify\}/);
   assert.match(coolifyCompose, /worker:[\s\S]*?env_file:\s*\$\{ENV_FILE:-\.env\}/);
   assert.doesNotMatch(coolifyCompose, /COOLIFY_API_TOKEN:\s*\$\{COOLIFY_API_TOKEN/);
@@ -113,16 +132,25 @@ test('Docker dependency layers are reusable when only sources change', () => {
   }
 });
 
-test('API runtime image preserves pnpm workspace dependency resolution', () => {
+test('API runtime image uses filtered production dependencies and a dedicated migration target', () => {
   const dockerfile = readFileSync(join(repositoryRoot, 'apps', 'api', 'Dockerfile'), 'utf8');
   const coolifyCompose = readFileSync(join(repositoryRoot, 'docker-compose.coolify.yml'), 'utf8');
 
-  assert.match(dockerfile, /WORKDIR \/workspace\s/);
-  assert.match(
-    dockerfile,
-    /COPY --from=build \/workspace\/apps\/api\/node_modules \.\/apps\/api\/node_modules/,
-  );
-  assert.match(dockerfile, /COPY --from=build \/workspace\/apps\/api\/dist \.\/apps\/api\/dist/);
+  assert.match(dockerfile, /pnpm install --filter @provider\/api --prod --frozen-lockfile/);
+  assert.match(dockerfile, /pnpm install --filter @provider\/api --frozen-lockfile/);
+  assert.match(dockerfile, /FROM node:22\.23\.2-alpine AS migration/);
+  assert.match(dockerfile, /FROM node:22\.23\.2-alpine AS runtime/);
+  assert.match(dockerfile, /COPY --from=runtime-deps \/workspace\/node_modules \.\/node_modules/);
+  assert.match(dockerfile, /COPY --from=runtime-deps \/workspace\/apps\/api\/node_modules \.\/apps\/api\/node_modules/);
+  assert.doesNotMatch(dockerfile, /COPY --from=build \/workspace\/node_modules/);
   assert.match(dockerfile, /CMD \["node", "apps\/api\/dist\/main\.js"\]/);
+  assert.match(coolifyCompose, /migrate:[\s\S]*?target:\s*migration/);
+  assert.match(coolifyCompose, /api:[\s\S]*?target:\s*runtime/);
+  assert.match(coolifyCompose, /bootstrap-seed:[\s\S]*?target:\s*runtime/);
+  assert.equal(
+    (coolifyCompose.match(/image:\s*"\$\{COOLIFY_RESOURCE_UUID:-astro-telekom\}-api:runtime"/g) || []).length,
+    2,
+  );
+  assert.match(coolifyCompose, /migrate:[\s\S]*?image:\s*"\$\{COOLIFY_RESOURCE_UUID:-astro-telekom\}-api:migration"/);
   assert.match(coolifyCompose, /true\) node \/workspace\/apps\/api\/dist\/seed\.js ;;/);
 });
