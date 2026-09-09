@@ -1,4 +1,4 @@
-FROM node:22.23.2-alpine AS source
+FROM node:22.23.2-alpine AS web-deps
 WORKDIR /workspace
 RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -7,13 +7,15 @@ COPY apps/web/package.json ./apps/web/package.json
 COPY apps/admin/package.json ./apps/admin/package.json
 COPY services/worker/package.json ./services/worker/package.json
 COPY packages/database/package.json ./packages/database/package.json
-RUN pnpm install --frozen-lockfile
+COPY scripts/pnpm-install-retry.sh ./scripts/pnpm-install-retry.sh
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
+    sh scripts/pnpm-install-retry.sh --filter @provider/web --frozen-lockfile --trust-lockfile
 COPY . .
 
-FROM source AS publisher
+FROM web-deps AS publisher
 CMD ["sh", "apps/web/scripts/publish-static.sh"]
 
-FROM source AS build
+FROM web-deps AS build
 ARG PUBLIC_API_URL
 ARG SITE_DATA_API_URL
 ARG PUBLIC_SITE_URL

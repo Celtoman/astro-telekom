@@ -87,10 +87,6 @@ services:
   bootstrap-seed:
     exclude_from_hc: true
     image: "${COOLIFY_RESOURCE_UUID:-astro-telekom}-api:runtime"
-    build:
-      context: .
-      dockerfile: apps/api/Dockerfile
-      target: runtime
     restart: "no"
     env_file: ${ENV_FILE:-.env}
     environment:

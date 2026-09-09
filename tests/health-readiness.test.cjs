@@ -55,6 +55,7 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   const publishScript = readFileSync(join(repositoryRoot, 'apps', 'web', 'scripts', 'publish-static.sh'), 'utf8');
   const coolifyWebCaddy = readFileSync(join(repositoryRoot, 'deploy', 'coolify-web.Caddyfile'), 'utf8');
   const adminCaddy = readFileSync(join(repositoryRoot, 'deploy', 'static.Caddyfile'), 'utf8');
+  const workerDockerfile = readFileSync(join(repositoryRoot, 'services', 'worker', 'Dockerfile'), 'utf8');
   const workerHealthcheck = readFileSync(join(repositoryRoot, 'services', 'worker', 'src', 'healthcheck.mjs'), 'utf8');
   const siteDataSource = readFileSync(join(repositoryRoot, 'apps', 'web', 'src', 'data', 'site.ts'), 'utf8');
   assert.match(compose, /^  migrate:\r?$/m);
@@ -96,7 +97,10 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.equal((coolifyCompose.match(/coolify\.traefik\.middlewares=test-basic-auth/g) || []).length, 2);
   assert.equal((coolifyCompose.match(/basicauth\.users=\$\{TEST_BASIC_AUTH_USERS:\?[^}]+\}/g) || []).length, 2);
   assert.doesNotMatch(coolifyCompose, /basicauth\.users=(?!\$\{TEST_BASIC_AUTH_USERS)/);
-  assert.match(webDockerfile, /FROM source AS publisher/);
+  assert.match(webDockerfile, /sh scripts\/pnpm-install-retry\.sh --filter @provider\/web --frozen-lockfile --trust-lockfile/);
+  assert.match(webDockerfile, /FROM web-deps AS publisher/);
+  assert.match(workerDockerfile, /sh scripts\/pnpm-install-retry\.sh --filter @provider\/worker --prod --frozen-lockfile --trust-lockfile/);
+  assert.doesNotMatch(workerDockerfile, /pnpm install --frozen-lockfile/);
   assert.match(publishScript, /pnpm --filter @provider\/web run build[\s\S]*ln -s[\s\S]*mv -f/);
   assert.match(coolifyWebCaddy, /handle \/api\/\*[\s\S]*reverse_proxy \{\$API_UPSTREAM:api:3000\}/);
   assert.match(adminCaddy, /handle \/api\/\*[\s\S]*reverse_proxy \{\$API_UPSTREAM:api:3000\}/);
@@ -113,10 +117,14 @@ test('Docker dependency layers are reusable when only sources change', () => {
 
   for (const path of dockerfiles) {
     const dockerfile = readFileSync(path, 'utf8');
-    const installAt = dockerfile.indexOf('RUN pnpm install --frozen-lockfile');
-    const sourcesAt = dockerfile.indexOf('COPY . .');
+    const installAt = dockerfile.search(/RUN --mount=[^\r\n]+\r?\n\s+sh scripts\/pnpm-install-retry\.sh(?: [^\r\n]+)? --frozen-lockfile/);
+    const sourcesAt = path.endsWith(join('services', 'worker', 'Dockerfile'))
+      ? dockerfile.indexOf('COPY services/worker ./services/worker')
+      : dockerfile.indexOf('COPY . .');
     assert.ok(installAt >= 0, `${path} must install with a frozen lockfile`);
     assert.ok(sourcesAt > installAt, `${path} must copy sources after the dependency layer`);
+    assert.match(dockerfile, /--mount=type=cache,id=pnpm-store,target=\/root\/\.local\/share\/pnpm\/store/);
+    assert.match(dockerfile, /sh scripts\/pnpm-install-retry\.sh[^\r\n]+--trust-lockfile/);
     for (const manifest of [
       'package.json',
       'pnpm-lock.yaml',
@@ -132,13 +140,25 @@ test('Docker dependency layers are reusable when only sources change', () => {
   }
 });
 
-test('API runtime image uses filtered production dependencies and a dedicated migration target', () => {
+test('Docker pnpm installs retry transient failures with the populated shared store', () => {
+  const pnpmInstallRetry = readFileSync(join(repositoryRoot, 'scripts', 'pnpm-install-retry.sh'), 'utf8');
+
+  assert.match(pnpmInstallRetry, /PNPM_INSTALL_MAX_ATTEMPTS:-3/);
+  assert.match(pnpmInstallRetry, /pnpm install "\$@"/);
+  assert.match(pnpmInstallRetry, /attempt=\$\(\(attempt \+ 1\)\)/);
+  assert.match(pnpmInstallRetry, /retrying with the populated store/);
+  assert.match(pnpmInstallRetry, /sleep 5/);
+});
+
+test('API images share filtered build dependencies and keep a dedicated production runtime', () => {
   const dockerfile = readFileSync(join(repositoryRoot, 'apps', 'api', 'Dockerfile'), 'utf8');
   const coolifyCompose = readFileSync(join(repositoryRoot, 'docker-compose.coolify.yml'), 'utf8');
 
-  assert.match(dockerfile, /pnpm install --filter @provider\/api --prod --frozen-lockfile/);
-  assert.match(dockerfile, /pnpm install --filter @provider\/api --frozen-lockfile/);
+  assert.match(dockerfile, /sh scripts\/pnpm-install-retry\.sh --filter @provider\/api --prod --frozen-lockfile/);
+  assert.match(dockerfile, /sh scripts\/pnpm-install-retry\.sh --filter @provider\/api --filter @provider\/database --frozen-lockfile/);
   assert.match(dockerfile, /FROM node:22\.23\.2-alpine AS migration/);
+  assert.doesNotMatch(dockerfile, /AS migration-deps/);
+  assert.match(dockerfile, /COPY --from=build-deps \/workspace\/node_modules \.\/node_modules/);
   assert.match(dockerfile, /FROM node:22\.23\.2-alpine AS runtime/);
   assert.match(dockerfile, /COPY --from=runtime-deps \/workspace\/node_modules \.\/node_modules/);
   assert.match(dockerfile, /COPY --from=runtime-deps \/workspace\/apps\/api\/node_modules \.\/apps\/api\/node_modules/);
@@ -146,7 +166,8 @@ test('API runtime image uses filtered production dependencies and a dedicated mi
   assert.match(dockerfile, /CMD \["node", "apps\/api\/dist\/main\.js"\]/);
   assert.match(coolifyCompose, /migrate:[\s\S]*?target:\s*migration/);
   assert.match(coolifyCompose, /api:[\s\S]*?target:\s*runtime/);
-  assert.match(coolifyCompose, /bootstrap-seed:[\s\S]*?target:\s*runtime/);
+  const bootstrapService = coolifyCompose.match(/\n  bootstrap-seed:[\s\S]*?(?=\n  [a-z][a-z-]+:|\nvolumes:)/)?.[0] || '';
+  assert.doesNotMatch(bootstrapService, /\n    build:/);
   assert.equal(
     (coolifyCompose.match(/image:\s*"\$\{COOLIFY_RESOURCE_UUID:-astro-telekom\}-api:runtime"/g) || []).length,
     2,

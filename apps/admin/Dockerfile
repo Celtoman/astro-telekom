@@ -7,7 +7,9 @@ COPY apps/web/package.json ./apps/web/package.json
 COPY apps/admin/package.json ./apps/admin/package.json
 COPY services/worker/package.json ./services/worker/package.json
 COPY packages/database/package.json ./packages/database/package.json
-RUN pnpm install --frozen-lockfile
+COPY scripts/pnpm-install-retry.sh ./scripts/pnpm-install-retry.sh
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
+    sh scripts/pnpm-install-retry.sh --filter @provider/admin --frozen-lockfile --trust-lockfile
 COPY . .
 ARG PUBLIC_API_URL
 ARG PUBLIC_PROVIDER_ID

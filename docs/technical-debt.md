@@ -38,6 +38,8 @@
 | TD-37 | [#55](https://github.com/Celtoman/astro-telekom/issues/55) 🟢 | Первый web image build требует уже доступный build-time API и пока не имеет воспроизводимого bootstrap-порядка |
 | TD-41 | [#61](https://github.com/Celtoman/astro-telekom/issues/61) ✅ | API runtime image сохраняет workspace `apps/api/node_modules`; bootstrap seed использует тот же runtime layout |
 | TD-42 | [#62](https://github.com/Celtoman/astro-telekom/issues/62) 🟢 | Coolify учитывает завершенные one-shot containers и после успешного старта переводит resource в `exited:unhealthy` |
+| TD-44 | [#64](https://github.com/Celtoman/astro-telekom/issues/64) 🟢 | Coolify label escaping или runtime-only scope ломает интерполяцию bcrypt middleware Compose-приложения |
+| TD-45 | [#65](https://github.com/Celtoman/astro-telekom/issues/65) 🟢 | pnpm 11 повторно проверяет весь frozen lockfile в каждом Docker target и срывает холодную сборку по сетевому timeout |
 
 ## P2
 

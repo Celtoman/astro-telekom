@@ -9,7 +9,7 @@
 Перед первым внешним deploy нужно учесть четыре уточнения актуального Coolify:
 
 1. инструкция ошибочно предлагает домены с `:80`; для контейнера, который слушает порт 80, актуальная форма — `https://tv-internet-dom.ru` и `https://admin.tv-internet-dom.ru` без суффикса;
-2. для bcrypt недостаточно формулировки «Literal или label escaping»: `TEST_BASIC_AUTH_USERS` нужно сохранить как Literal **и** включить `Escape special characters in labels`, затем проверить фактические labels после deploy;
+2. live-проверка уточнила bcrypt contract: `TEST_BASIC_AUTH_USERS` нужно сохранить как Literal с Buildtime и Runtime, а `Escape special characters in labels` выключить; иначе переменная отсутствует при `docker compose build` либо `${...}` превращается в неинтерполируемый `$${...}`;
 3. `COOLIFY_API_TOKEN` должен быть отдельной runtime-only переменной Normal view. Compose больше не интерполирует его при разборе, а worker получает token через runtime `.env`;
 4. Source-код v4.3.18 должен исключать `restart: "no"`, но реальный resource после двух успешных запусков сервисов становился `exited:unhealthy`. Поэтому `migrate`, `bootstrap-seed` и `web-publish` дополнительно получили официальный Coolify marker `exclude_from_hc: true`; у worker, web и admin добавлены явные healthchecks.
 
@@ -63,18 +63,19 @@
 - у остальных сервисов Domains оставить пустым;
 - в браузере также не указывать port.
 
-### 3. Basic Auth: нужны два разных механизма защиты `$`
+### 3. Basic Auth: Compose должен получить bcrypt verifier на build-фазе
 
-`TEST_BASIC_AUTH_USERS` содержит bcrypt (`username:$2y$...`). `Literal` защищает значение environment variable от внутренней подстановки `$OTHER_VAR`. Отдельный checkbox `Escape special characters in labels` переводит `$` в `$$` для Docker/Compose labels. Актуальная документация описывает эти механизмы отдельно. [Environment Variables](https://next.coolify.io/docs/applications/configuration/environment-variables), [Custom Middlewares: Label Escaping](https://coolify.io/docs/knowledge-base/proxy/traefik/custom-middlewares#label-escaping)
+`TEST_BASIC_AUTH_USERS` содержит bcrypt (`username:$2y$...`). `Literal` защищает значение environment variable от внутренней подстановки `$OTHER_VAR`. Coolify запускает `docker compose build --env-file /artifacts/build-time.env`, а Compose интерполирует service labels уже на этом шаге. Поэтому runtime-only variable дает `required variable TEST_BASIC_AUTH_USERS is missing`. Если включить `Escape special characters in labels`, Coolify заранее превращает `${TEST_BASIC_AUTH_USERS...}` в `$${TEST_BASIC_AUTH_USERS...}` и Traefik получает литерал вместо credential. [Environment Variables](https://next.coolify.io/docs/applications/configuration/environment-variables), [Custom Middlewares: Label Escaping](https://coolify.io/docs/knowledge-base/proxy/traefik/custom-middlewares#label-escaping)
 
-Исходная инструкция предлагала «Literal или escaping labels»; это исправлено. Следует использовать оба механизма:
+Live rehearsal исправил исходную инструкцию. Рабочая конфигурация:
 
 1. создать `TEST_BASIC_AUTH_USERS` в Normal view;
 2. включить `Literal`;
 3. не включать `Multiline`;
-4. включить `Escape special characters in labels` в Compose Application settings;
-5. после deploy проверить `401` без credentials и вход с правильным паролем на обоих доменах;
-6. в deployable/final labels проверить, что bcrypt не поврежден и middleware реально включен в HTTPS-router.
+4. включить `Buildtime` и `Runtime`;
+5. выключить `Escape special characters in labels` в Compose Application settings;
+6. после deploy проверить `401` без credentials и вход с правильным паролем на обоих доменах;
+7. в deployable/final labels проверить, что middleware реально включен в HTTPS-router, не публикуя verifier в логах.
 
 `HTTP Basic Authentication` checkbox для standard application здесь не применяется: новая документация прямо говорит, что Docker Compose applications не используют этот single-container control, middleware должен оставаться в Compose. [General settings](https://next.coolify.io/docs/applications/configuration/general)
 
@@ -193,8 +194,8 @@ Deploy Key — запасной вариант: отдельный read-only key
 2. Domains for `admin`: `https://admin.tv-internet-dom.ru`.
 3. Domains для `api`, worker, PostgreSQL, Redis и one-shot services: пусто.
 4. Сгенерировать credential локально: `htpasswd -nbB <username> <password>`.
-5. В Normal view создать `TEST_BASIC_AUTH_USERS=<username>:<bcrypt>`; включить Literal, выключить Multiline.
-6. Включить `Escape special characters in labels`.
+5. В Normal view создать `TEST_BASIC_AUTH_USERS=<username>:<bcrypt>`; включить Literal, Buildtime и Runtime, выключить Multiline.
+6. В Advanced выключить `Escape special characters in labels`.
 7. Не использовать single-container `HTTP Basic Authentication` switch: для Compose применяется repository-owned middleware label.
 
 ### Этап 5. Environment Variables
@@ -278,15 +279,23 @@ curl -I -u '<user>:<password>' https://admin.tv-internet-dom.ru/api/v1/health/re
 6. Выполнить test rollback к предыдущему commit через Redeploy и проверить web/admin/API.
 7. Отдельно проверить forward migration/restore; Coolify image rollback не откатывает БД или volumes. [Storage mount backups](https://next.coolify.io/docs/core/persistent-storage/storage-mounts/backups), [Rollbacks](https://next.coolify.io/docs/applications/deployments/rollbacks)
 
+## Локальная production-подобная проверка текущего Docker-контура
+
+Проверка 9 сентября 2026 года выполнялась в отдельном пустом BuildKit builder с локальным вариантом `docker-compose.coolify.yml`, из которого удалялись только Coolify-specific поля `exclude_from_hc`. Первый вариант уже пропускал сетевую проверку 1112 lockfile-записей через production-only `--trust-lockfile`, но один холодный прогон всё еще завершился transient network timeout через 375,52 с. Причиной оказался недокачанный пакет, а не resolution или проверка lockfile.
+
+Финальный вариант использует общий cache mount `pnpm-store`, workspace filters, один API build dependency tree для build/migration и `scripts/pnpm-install-retry.sh`, который максимум трижды повторяет failed install в уже заполненном store. Полный холодный build завершился за 343,15 с; повторный build того же дерева — за 81,85 с. Во втором прогоне все install/build stages были `CACHED`, сетевой установки не было; основное время занял экспорт готовых образов из изолированного `docker-container` builder.
+
+После сборки полный Compose stack успешно применил 12 migrations, выполнил seed (`Дом.ру`, Казань, 2 тарифа), собрал 10 HTML-файлов, прошел pre-publication SEO gate и атомарно переключил publication symlink. API, worker, web, admin, PostgreSQL и Redis оставались healthy с restart count 0; `migrate`, `bootstrap-seed` и `web-publish` завершились с exit code 0. Same-origin `/api/v1/health/ready` через web/admin вернул 200. После контрольной выдержки тестовые containers/network/volumes, builder и локальный env-файл были удалены без затрагивания других Docker-ресурсов.
+
 ## Итоговая готовность
 
 | Направление | Статус после аудита |
 |---|---|
 | GitHub private source | Готово по архитектуре; использовать GitHub App |
 | Compose build pack/path | Готово |
-| Domains | Готово в инструкции: без `:80`; требуется live DNS/TLS проверка |
-| Basic Auth | Labels корректны; усилить настройку Literal + label escaping и проверить live |
-| One-shot lifecycle | Исправление подготовлено: `restart: "no"` дополнен явным `exclude_from_hc: true`; требуется live-подтверждение #62 |
+| Domains | Live DNS/TLS подтверждены: без `:80` |
+| Basic Auth | Live подтвержден: `401` без credentials, `200` с credentials; Literal + Buildtime + Runtime, label escaping выключен |
+| One-shot lifecycle | Live подтвержден: `restart: "no"` + `exclude_from_hc: true`, resource остается `running:healthy` без рестартов |
 | Environment values | Нужна отдельная Coolify-матрица; `.env.example` напрямую не вставлять |
 | Coolify API rebuild | Runtime-only token исправлен; нужны token scopes и live rehearsal |
 | Persistent volumes | Compose настроен корректно; не является backup |

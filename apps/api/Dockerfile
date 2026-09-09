@@ -7,16 +7,16 @@ COPY apps/web/package.json ./apps/web/package.json
 COPY apps/admin/package.json ./apps/admin/package.json
 COPY services/worker/package.json ./services/worker/package.json
 COPY packages/database/package.json ./packages/database/package.json
+COPY scripts/pnpm-install-retry.sh ./scripts/pnpm-install-retry.sh
 
 FROM manifests AS build-deps
-RUN pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
+    sh scripts/pnpm-install-retry.sh --filter @provider/api --filter @provider/database --frozen-lockfile --trust-lockfile
 
 FROM manifests AS runtime-deps
 ENV NODE_ENV=production
-RUN pnpm install --filter @provider/api --prod --frozen-lockfile
-
-FROM manifests AS migration-deps
-RUN pnpm install --filter @provider/api --frozen-lockfile
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
+    sh scripts/pnpm-install-retry.sh --filter @provider/api --prod --frozen-lockfile --trust-lockfile
 
 FROM build-deps AS build
 ENV DATABASE_URL=postgresql://provider:provider@localhost:5432/provider_platform
@@ -27,8 +27,8 @@ RUN pnpm --filter @provider/api run build
 FROM node:22.23.2-alpine AS migration
 WORKDIR /workspace
 ENV NODE_ENV=production
-COPY --from=migration-deps /workspace/node_modules ./node_modules
-COPY --from=migration-deps /workspace/apps/api/node_modules ./apps/api/node_modules
+COPY --from=build-deps /workspace/node_modules ./node_modules
+COPY --from=build-deps /workspace/apps/api/node_modules ./apps/api/node_modules
 COPY --from=build /workspace/apps/api/dist ./apps/api/dist
 COPY --from=build /workspace/apps/api/generated ./apps/api/generated
 COPY --from=build /workspace/prisma ./prisma
