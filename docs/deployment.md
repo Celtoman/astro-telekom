@@ -20,7 +20,7 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 2. Задать `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` с host `postgres` для контейнерного API.
 3. Задать `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN`. Во время image build из них формируются public API и canonical URLs.
 4. Задать случайные непустые `ADMIN_API_TOKEN`, `SUBSCRIBER_COOKIE_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`.
-5. До включения заявок подтвердить и задать coverage, contract, Tarifnik и email variables. Пустое значение не означает безопасно работающую интеграцию.
+5. До включения заявок подтвердить договоры и задать coverage, contract, Tarifnik, email и rebuild variables. Проверить защищенный `/api/v1/admin/readiness`: `status` должен быть `configured`. Это подтверждает только наличие конфигурации — затем обязательны sandbox-вызовы и согласованные legal/SLA decisions.
 6. Убедиться, что DNS всех трех доменов указывает на сервер и порты 80/443 доступны Caddy.
 
 ## Порядок первого запуска
@@ -57,6 +57,14 @@ Compose запускает `migrate` после готовности PostgreSQL;
 | Coverage/contract | `DOMRU_COVERAGE_API_URL`, `DOMRU_COVERAGE_API_KEY`, `DOMRU_CONTRACT_API_URL`, `DOMRU_CONTRACT_API_KEY` |
 | Lead delivery | `TARIFNIK_API_URL`, `TARIFNIK_API_KEY`, `LEADS_EMAIL`, `RESEND_API_KEY` or `LEADS_EMAIL_WEBHOOK_URL`, `LEADS_EMAIL_FROM` |
 | Publishing | `REBUILD_WEBHOOK_URL`, `ENV_FILE` |
+
+Проверка configuration gate из операторского PowerShell (значение токена не выводить в лог):
+
+```powershell
+Invoke-RestMethod -Uri "https://<API_DOMAIN>/api/v1/admin/readiness" -Headers @{ "x-admin-token" = $env:ADMIN_API_TOKEN }
+```
+
+`configured` означает только, что обязательные переменные заданы. Endpoint не выполняет внешние запросы, не возвращает значения и не подтверждает корректность ключей, договоров, лимитов или SLA. До sandbox/rehearsal реальный прием лидов не включать.
 
 ## Известные эксплуатационные ограничения
 

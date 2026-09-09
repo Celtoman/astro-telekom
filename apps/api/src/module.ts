@@ -28,6 +28,8 @@ import { LeadAccessController } from './lead-access.controller';
 import { LeadAccessService } from './lead-access.service';
 import { RebuildQueueController } from './rebuild-queue.controller';
 import { HealthService } from './health.service';
+import { AdminReadinessController } from './admin-readiness.controller';
+import { ReleaseReadinessService } from './release-readiness.service';
 
 @Module({
   controllers: [
@@ -48,7 +50,8 @@ import { HealthService } from './health.service';
     LeadDeliveryController,
     LeadAccessController,
     RebuildQueueController,
+    AdminReadinessController,
   ],
-  providers: [PrismaService, HealthService, NotificationsService, AuthService, AdminTokenGuard, CoverageService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService],
+  providers: [PrismaService, HealthService, ReleaseReadinessService, NotificationsService, AuthService, AdminTokenGuard, CoverageService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService],
 })
 export class AppModule {}

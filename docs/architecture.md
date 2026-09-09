@@ -19,6 +19,8 @@
 
 Production Compose запускает one-shot `migrate` из API image после PostgreSQL healthcheck. `api` стартует только после успешного `prisma migrate deploy` и готового Redis; его `/health/ready` проверяет обе зависимости, а `/health/live` — только процесс. Seed остается отдельной операторской операцией, поскольку создает или обновляет продуктовые данные и администратора.
 
+Готовность инфраструктуры не смешивается с готовностью бизнеса: защищенный `/admin/readiness` отдельно проверяет наличие конфигурации coverage, contract, Tarifnik, fallback email и deployment provider. Он возвращает только статусы и имена пропущенных переменных; реальная доступность и договорный статус интеграций подтверждаются sandbox/rehearsal, а не наличием строки в environment.
+
 ```text
 Браузер публичного сайта
   -> Caddy -> static web

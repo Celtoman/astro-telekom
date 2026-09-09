@@ -12,7 +12,7 @@
 
 ## Порядок и критерии остановки
 
-Не переходить к публикации лидов, тарифов или городов, пока не закрыты issues [#1](https://github.com/Celtoman/astro-telekom/issues/1) (TD-01), [#2](https://github.com/Celtoman/astro-telekom/issues/2) (TD-02), [#6](https://github.com/Celtoman/astro-telekom/issues/6) (TD-05), [#7](https://github.com/Celtoman/astro-telekom/issues/7) (TD-06) и [#11](https://github.com/Celtoman/astro-telekom/issues/11) (TD-10). TD-03 закрыт 7 сентября 2026. Каждая задача завершается тестом, документацией и проверкой реального результата, а не только компиляцией — это правило действует независимо от конкретного issue-трекера.
+Не переходить к публикации лидов, тарифов или городов, пока не завершена [Task #31](https://github.com/Celtoman/astro-telekom/issues/31), включая подтвержденные external API/legal decisions и production rehearsal. Атомарные блокеры TD-01, TD-02, TD-03, TD-05, TD-06 и TD-10 уже закрыты, но configuration gate TD-10 подтверждает только наличие переменных и не заменяет договоры, sandbox или SLA. Каждая задача завершается тестом, документацией и проверкой реального результата, а не только компиляцией — это правило действует независимо от конкретного issue-трекера.
 
 ## Задачи и почему в этом порядке
 

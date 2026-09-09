@@ -50,6 +50,7 @@
 | GET/POST/PATCH | `/admin/providers` | Provider records. |
 | GET/POST/PATCH | `/admin/sites` | Site records. |
 | GET/POST/PATCH | `/admin/users` | Учетные записи администраторов, deactivate/password reset. Поле `role` не поддерживается. |
+| GET | `/admin/readiness` | Защищенный configuration gate: `configured`/`blocked` для coverage, contract, Tarifnik, fallback email и rebuild; возвращает только имена отсутствующих переменных, никогда не значения. |
 | GET/POST/PATCH | `/admin/regions` | Region records. |
 | GET/POST/PATCH | `/admin/cities` | City records. |
 | GET/POST/PATCH | `/admin/pages` | Page records. |
