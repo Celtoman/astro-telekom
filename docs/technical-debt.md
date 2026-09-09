@@ -64,7 +64,7 @@
 | TD-36 | [#54](https://github.com/Celtoman/astro-telekom/issues/54) ✅ | Production build требует внешний HTTPS `PUBLIC_API_URL` с нормализованным path `/api/v1` |
 | TD-37 | [#56](https://github.com/Celtoman/astro-telekom/issues/56) 🟢 | Production Compose не адаптирован к Coolify proxy и не закрывает тестовые web/admin страницы паролем |
 | TD-38 | [#57](https://github.com/Celtoman/astro-telekom/issues/57) 🟢 | Coolify adapter реализован локально; остаются реальные token/resource и live polling rehearsal |
-| TD-39 | [#58](https://github.com/Celtoman/astro-telekom/issues/58) 🟢 | Dockerfile инвалидируют тяжелый `pnpm install` layer при любом изменении репозитория |
+| TD-39 | [#58](https://github.com/Celtoman/astro-telekom/issues/58) ✅ | Все Dockerfile кешируют `pnpm install` по root/workspace manifests и lockfile; source-only rebuild подтвержден 9 сентября 2026 года |
 
 ## Невыполненные, но согласованные возможности
 

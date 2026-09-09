@@ -27,7 +27,7 @@
 | Tabler Icons Webfont | 3.46.0 | Пиктограммы admin. |
 | Caddy | 2.11.4-alpine | Reverse proxy и static file server. |
 
-Диапазоны с `^` в manifests разрешаются lockfile при локальной установке. Production Dockerfiles применяют `pnpm install --frozen-lockfile` вместе с root `.dockerignore`, исключающим `node_modules`, `.git` и build-артефакты из build context.
+Диапазоны с `^` в manifests разрешаются lockfile при локальной установке. Production Dockerfiles применяют `pnpm install --frozen-lockfile` вместе с root `.dockerignore`, исключающим `node_modules`, `.git` и build-артефакты из build context. Root/workspace manifests и lockfile копируются до install отдельным кешируемым слоем, а `COPY . .` выполняется после него: изменение исходника, Caddy или документации не переустанавливает весь pnpm workspace; изменение любого manifest/lockfile корректно инвалидирует слой.
 
 ## Принципы использования стека
 

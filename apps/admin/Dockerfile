@@ -1,14 +1,20 @@
 FROM node:22.23.2-alpine AS build
 WORKDIR /workspace
 RUN corepack enable
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/api/package.json ./apps/api/package.json
+COPY apps/web/package.json ./apps/web/package.json
+COPY apps/admin/package.json ./apps/admin/package.json
+COPY services/worker/package.json ./services/worker/package.json
+COPY packages/database/package.json ./packages/database/package.json
+RUN pnpm install --frozen-lockfile
+COPY . .
 ARG PUBLIC_API_URL
 ARG PUBLIC_PROVIDER_ID
 ARG PUBLIC_SITE_ID
 ENV PUBLIC_API_URL=$PUBLIC_API_URL
 ENV PUBLIC_PROVIDER_ID=$PUBLIC_PROVIDER_ID
 ENV PUBLIC_SITE_ID=$PUBLIC_SITE_ID
-COPY . .
-RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @provider/admin run build
 
 FROM caddy:2.11.4-alpine

@@ -95,7 +95,7 @@ pnpm test
 
 Публичные write-routes и login проходят строгую DTO-валидацию; лишние поля и заполненный скрытый honeypot отклоняются. Redis-backed rate limiting разделяет login, публичные формы и остальные маршруты; в production Compose доверие proxy headers включено только у API за Caddy. Worker ежедневно запускает bounded hard-delete просроченных лидов и связанных payloads через worker-only API, но только при явно заданном валидном `PII_RETENTION_DAYS`. Сам срок код не выбирает: legal decision остается блокером production.
 
-На дату документации release gate зеленый: `pnpm test` выполняет 131 тест без падений. Актуальный состав сценариев, включая API input security, PII retention, infrastructure/release readiness, migration dependency, Node 24 runtime GitHub Actions, экраны тарифов, городов, заявок и редиректов в админке, browser CORS, отсутствие выведенного из эксплуатации CRM-workspace, канонический справочник, full-snapshot импорт, одношаговые 301, Coolify polling/retry, production origin и pre-publication SEO gate public web, перечислен в [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md).
+На дату документации release gate зеленый: `pnpm test` выполняет 132 теста без падений. Актуальный состав сценариев, включая API input security, PII retention, infrastructure/release readiness, migration dependency, Docker dependency-layer caching, Node 24 runtime GitHub Actions, экраны тарифов, городов, заявок и редиректов в админке, browser CORS, отсутствие выведенного из эксплуатации CRM-workspace, канонический справочник, full-snapshot импорт, одношаговые 301, Coolify polling/retry, production origin и pre-publication SEO gate public web, перечислен в [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md).
 
 ## Версионирование
 

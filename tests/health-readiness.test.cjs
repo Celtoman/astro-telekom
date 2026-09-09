@@ -82,3 +82,32 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.match(adminCaddy, /handle \/api\/\*[\s\S]*reverse_proxy \{\$API_UPSTREAM:api:3000\}/);
   assert.match(adminCaddy, /X-Robots-Tag "noindex, nofollow, noarchive"/);
 });
+
+test('Docker dependency layers are reusable when only sources change', () => {
+  const dockerfiles = [
+    join(repositoryRoot, 'apps', 'api', 'Dockerfile'),
+    join(repositoryRoot, 'apps', 'web', 'Dockerfile'),
+    join(repositoryRoot, 'apps', 'admin', 'Dockerfile'),
+    join(repositoryRoot, 'services', 'worker', 'Dockerfile'),
+  ];
+
+  for (const path of dockerfiles) {
+    const dockerfile = readFileSync(path, 'utf8');
+    const installAt = dockerfile.indexOf('RUN pnpm install --frozen-lockfile');
+    const sourcesAt = dockerfile.indexOf('COPY . .');
+    assert.ok(installAt >= 0, `${path} must install with a frozen lockfile`);
+    assert.ok(sourcesAt > installAt, `${path} must copy sources after the dependency layer`);
+    for (const manifest of [
+      'package.json',
+      'pnpm-lock.yaml',
+      'pnpm-workspace.yaml',
+      'apps/api/package.json',
+      'apps/web/package.json',
+      'apps/admin/package.json',
+      'services/worker/package.json',
+      'packages/database/package.json',
+    ]) {
+      assert.ok(dockerfile.indexOf(manifest) < installAt, `${path} must copy ${manifest} before install`);
+    }
+  }
+});
