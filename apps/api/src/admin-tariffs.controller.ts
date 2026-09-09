@@ -161,19 +161,38 @@ export class AdminTariffsController {
         const sourcePath = `/${oldCity.slug}/${existing.slug}/`;
         const targetPath = `/${newCity.slug}/${nextSlug}/`;
         const occupiedPage = await transaction.page.findFirst({
-          where: { cityId: oldCity.id, slug: existing.slug, status: 'PUBLISHED' },
+          where: {
+            status: 'PUBLISHED',
+            OR: [
+              { cityId: oldCity.id, slug: existing.slug },
+              { cityId: newCity.id, slug: nextSlug },
+            ],
+          },
           select: { id: true },
         });
-        if (occupiedPage) throw new ConflictException(`URL ${sourcePath} занят опубликованной страницей`);
+        if (occupiedPage) throw new ConflictException(`Исходный или целевой URL занят опубликованной страницей`);
+        const occupiedTariff = await transaction.tariff.findFirst({
+          where: { id: { not: id }, cityId: newCity.id, slug: nextSlug, status: 'PUBLISHED' },
+          select: { id: true },
+        });
+        if (occupiedTariff) throw new ConflictException(`Целевой URL ${targetPath} занят опубликованным тарифом`);
         const redirect = await transaction.redirect.findUnique({
           where: { siteId_sourcePath: { siteId: oldCity.siteId, sourcePath } },
         });
         if (redirect && redirect.targetPath !== targetPath) {
           throw new ConflictException(`Для URL ${sourcePath} уже существует несовместимый редирект`);
         }
+        const targetRedirect = await transaction.redirect.findUnique({
+          where: { siteId_sourcePath: { siteId: oldCity.siteId, sourcePath: targetPath } },
+        });
+        if (targetRedirect) throw new ConflictException(`Целевой URL ${targetPath} уже используется как источник редиректа`);
 
         const tariff = await transaction.tariff.update({ where: { id }, data: { ...body, identityKey } });
         const redirectStatus = tariff.status === 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT';
+        await transaction.redirect.updateMany({
+          where: { siteId: oldCity.siteId, targetPath: sourcePath },
+          data: { targetPath },
+        });
         if (redirect) {
           await transaction.redirect.update({ where: { id: redirect.id }, data: { targetPath, status: redirectStatus } });
         } else {

@@ -34,7 +34,7 @@ Release 0 не является production release: тестовый gate зел
 
 Цель: генерировать опубликованные города, сервисные страницы и карточки тарифов из CMS-модели без hardcoded Казани.
 
-Dynamic маршруты City/Page/Tariff, published-only sitemap, городская навигация и multi-city build smoke реализованы. Остаются 301 redirects, полноценная модель публикации, статусы preview/rebuild и эксплуатационный QA при фактическом включении новых городов.
+Dynamic маршруты City/Page/Tariff, published-only sitemap, городская навигация, одношаговые HTTP 301 с CRUD/hit tracking и multi-city build smoke реализованы. Остаются полноценная модель публикации, статусы preview/rebuild и эксплуатационный QA при фактическом включении новых городов.
 
 ## Release 3 — управляемая CMS и эксплуатация
 

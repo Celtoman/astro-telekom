@@ -17,7 +17,7 @@
 
 Целевая архитектура — Astro как static-оболочка и маршрутизация, React-root для каждой интерактивной страницы или крупного раздела, Tailwind и shadcn/ui внутри React. Данные админка получает и изменяет во время работы через HTTP API; она не зависит от данных, зафиксированных во время `astro build`.
 
-`apps/admin` остается Astro 7 static output. React, Tailwind CSS и shadcn/ui используются в `/login`, защищенном shell `/`, `/tariffs`, `/cities`, `/leads` и `/lead-access/`. Legacy plain HTML/CSS/vanilla JS страница удалена; shell больше не показывает вымышленные KPI или service-token prompt.
+`apps/admin` остается Astro 7 static output. React, Tailwind CSS и shadcn/ui используются в `/login`, защищенном shell `/`, `/tariffs`, `/cities`, `/leads`, `/redirects` и `/lead-access/`. Legacy plain HTML/CSS/vanilla JS страница удалена; shell больше не показывает вымышленные KPI или service-token prompt.
 
 1. Рендерить интерактивную страницу одним React-root через `@astrojs/react` внутри static Astro route.
 2. Использовать Tailwind CSS и локальные shadcn/ui-компоненты из `apps/admin/src/components/ui`.
@@ -36,6 +36,10 @@
 ### Реализованный паттерн `/leads`
 
 Экран собран как dashboard master-detail из `Card`, `Table`, `Badge`, `Alert`, `Field`, `Input` и `Button`: реальная сводка, поиск и фильтр списка, подробная карточка контекста, проверок, delivery attempts, activity и истории статусов. Смена одного из пяти операторских статусов отправляет комментарий в существующий `PATCH /crm/leads/:id/status`; конфликт параллельного редактирования остается видимым сообщением API. Данные выводятся React-текстом без `innerHTML`, raw service token и browser storage. Нативные `select` используются внутри shadcn `Field`, потому что опубликованный `shadcn@4.21.0` CLI не запускается из-за отсутствующей runtime-зависимости `fs-extra`; новая зависимость или параллельный компонент ради обхода не добавлялись.
+
+### Реализованный паттерн `/redirects`
+
+В dashboard-референсе нет отдельного специализированного редактора HTTP redirects, поэтому экран собран из уже установленных совместимых примитивов `Card`, `Table`, `Badge`, `Alert`, `Field`, `Input`, `Skeleton` и `Button`. Он использует общий cookie-auth shell, реальные `/admin/sites` и `/admin/redirects`, поддерживает создание, редактирование, архивирование/восстановление, поиск и статистику `hitCount`/`lastHitAt`. Интерфейс намеренно не дублирует серверные правила: API остается источником проверки опубликованной цели, конфликтов URL, петель и цепочек. В текущем односайтовом UI операция блокируется, если сайт нельзя выбрать однозначно.
 
 ### Реализованный паттерн `/lead-access/`
 

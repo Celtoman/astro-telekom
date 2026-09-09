@@ -1,0 +1,15 @@
+:80 {
+	root * /srv
+	encode gzip zstd
+	header {
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+	@assets path *.css *.js *.woff2 *.webp *.avif *.svg
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+	route {
+		import /etc/caddy/redirects.caddy
+		try_files {path} {path}/index.html /404.html
+		file_server
+	}
+}

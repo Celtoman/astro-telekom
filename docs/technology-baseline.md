@@ -35,7 +35,7 @@
 
 Оба Astro-приложения имеют `output: 'static'`. Public web использует `PUBLIC_SITE_URL` как `site`, а `PUBLIC_SITE_SLUG` — для выбора build-time каталога; dynamic static paths строятся только для опубликованных городов, страниц и тарифов. Title, description, canonical и базовый JSON-LD `WebPage` выводятся в исходный HTML. JavaScript оставлен для формы адреса, хранения списка просмотренных страниц, подавления номера для действующего абонента и событий Метрики.
 
-Static mode означает, что API-данные читаются только при `astro build`. Для этого прототипа допустима локальная витрина с fallback, но production не должен собираться из fallback-данных.
+Static mode означает, что контентные API-данные и список опубликованных redirect source paths читаются при `astro build`. Контент становится HTML, а redirects — валидируемым `redirects.caddy`, который container image переносит из публичного `/srv` в `/etc/caddy`; совпавший runtime-запрос обращается к API только для проверки правила, учета перехода и HTTP 301. Для этого прототипа допустима локальная витрина с fallback, но production не должен собираться из fallback-данных.
 
 ### NestJS и Fastify
 
@@ -51,7 +51,7 @@ API создает `lead-deliveries` и `site-rebuilds` при наличии `R
 
 ### Docker и Caddy
 
-`docker-compose.yml` поднимает только PostgreSQL и Redis для разработки. `docker-compose.prod.yml` описывает PostgreSQL, Redis, one-shot Prisma migrate, API, worker, web, admin и Caddy. `api` зависит от успешного завершения migrate и healthy Redis; Compose healthcheck использует DB/Redis-aware `/health/ready`. Оба файла монтируют PostgreSQL 18 volume в `/var/lib/postgresql` — корневой layout, обязательный для major-specific data directory PG18. Caddy направляет три домена на соответствующие контейнеры; отдельный `static.Caddyfile` обслуживает собранные Astro файлы и кэширует assets.
+`docker-compose.yml` поднимает только PostgreSQL и Redis для разработки. `docker-compose.prod.yml` описывает PostgreSQL, Redis, one-shot Prisma migrate, API, worker, web, admin и Caddy. `api` зависит от успешного завершения migrate и healthy Redis; Compose healthcheck использует DB/Redis-aware `/health/ready`. `web` зависит от healthy API, потому что его отдельный `web.Caddyfile` обслуживает static output и проксирует build-generated redirect matchers в API; admin продолжает использовать общий `static.Caddyfile`. Оба Compose-файла монтируют PostgreSQL 18 volume в `/var/lib/postgresql` — корневой layout, обязательный для major-specific data directory PG18. Внешний Caddy направляет три домена на соответствующие контейнеры.
 
 Контейнерная схема конфигурационно валидна (`docker compose -f docker-compose.prod.yml config --no-interpolate`), но не была поднята с реальными доменами, секретами и интеграциями. Это не production certification.
 
@@ -60,7 +60,7 @@ API создает `lead-deliveries` и `site-rebuilds` при наличии `R
 | Возможность | Текущее решение |
 | --- | --- |
 | Astro SSR, route caching, CDN adapter | Не используются. |
-| React UI layer | Используется в admin login, защищенном shell, тарифах, городах, заявках и fallback route; public web остается Astro pages с точечной клиентской интерактивностью. |
+| React UI layer | Используется в admin login, защищенном shell, тарифах, городах, заявках, редиректах и fallback route; public web остается Astro pages с точечной клиентской интерактивностью. |
 | Schema.org-спецификация Product/FAQ/Organization | Не реализована; выводится только `WebPage`. |
 | Queue для import | Worker слушает `tariff-imports`, но API не публикует jobs: validate/apply выполняются напрямую. |
 | Monitoring, tracing, error tracker | Не подключены. |

@@ -40,7 +40,7 @@
 
 `User` содержит email, `passwordHash`, name, active и timestamps. Ролевой модели нет: любая активная учетная запись имеет единый уровень доступа администратора. `Session` хранит не raw token, а его SHA-256 hash и expiry. При reset password или deactivate API удаляет sessions пользователя. `LeadAccessToken` также хранит только hash: raw token существует лишь в одноразовой email-ссылке и не возвращается административными CRM routes.
 
-`Redirect` уже есть в схеме: site/city, source/target path, status, hits и timestamps. В текущем коде нет controller, routing или hit tracking, поэтому наличие таблицы не означает работу 301.
+`Redirect` хранит site/city, source/target path, status, `hitCount`, `lastHitAt` и timestamps. Admin API создает, изменяет и архивирует записи; published-правило проходит проверку конфликтов, существования цели и запрета цепочек. Во время Astro build опубликованные записи превращаются в точные Caddy matchers, а runtime resolver повторно проверяет published site/redirect, атомарно учитывает переход и отдает HTTP 301. Удаление реализовано как `ARCHIVED`, общей корзины/версий и предложений из 404 пока нет.
 
 `SiteRebuild` — одна актуальная outbox/status-запись на `dedupeKey` сайта. Она хранит affected paths, последнюю причину, `requestedRevision`, `processingRevision`, `publishedRevision`, число попыток, ошибку и финальный ответ deployment provider. Ревизия считается опубликованной только при статусе `SUCCEEDED`; новая мутация во время активной сборки увеличивает requested revision и создает следующий job после завершения текущего.
 

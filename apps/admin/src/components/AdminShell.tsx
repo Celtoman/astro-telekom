@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import { Building2, Home, Inbox, LogOut, PackageOpen } from "lucide-react"
+import { Building2, Home, Inbox, LogOut, PackageOpen, Route } from "lucide-react"
 import { requestJson } from "../lib/admin-api.mjs"
 import { Button } from "./ui/button"
 
@@ -11,7 +11,7 @@ interface Administrator {
 export function AdminShell({ apiUrl, user, active, children }: {
   apiUrl: string
   user: Administrator
-  active: "overview" | "tariffs" | "cities" | "leads"
+  active: "overview" | "tariffs" | "cities" | "leads" | "redirects"
   children: ReactNode
 }) {
   async function logout() {
@@ -33,6 +33,7 @@ export function AdminShell({ apiUrl, user, active, children }: {
           <Button className="justify-start" variant={navVariant("tariffs")} asChild><a href="/tariffs"><PackageOpen data-icon="inline-start" />Тарифы</a></Button>
           <Button className="justify-start" variant={navVariant("cities")} asChild><a href="/cities"><Building2 data-icon="inline-start" />Города</a></Button>
           <Button className="justify-start" variant={navVariant("leads")} asChild><a href="/leads"><Inbox data-icon="inline-start" />Заявки</a></Button>
+          <Button className="justify-start" variant={navVariant("redirects")} asChild><a href="/redirects"><Route data-icon="inline-start" />Редиректы</a></Button>
         </nav>
       </aside>
       <main className="min-w-0">

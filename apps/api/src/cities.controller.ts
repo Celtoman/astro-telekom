@@ -14,18 +14,26 @@ export class CitiesController {
     });
     if (!site) throw new NotFoundException('Site not found');
 
-    const cities = await this.prisma.city.findMany({
-      where: { siteId: site.id, status: 'PUBLISHED' },
-      orderBy: { name: 'asc' },
-      include: {
-        region: { select: { content: true } },
-        pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true }, orderBy: { position: 'asc' } } } },
-        tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
-      },
-    });
+    const [cities, redirects] = await Promise.all([
+      this.prisma.city.findMany({
+        where: { siteId: site.id, status: 'PUBLISHED' },
+        orderBy: { name: 'asc' },
+        include: {
+          region: { select: { content: true } },
+          pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true }, orderBy: { position: 'asc' } } } },
+          tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
+        },
+      }),
+      this.prisma.redirect.findMany({
+        where: { siteId: site.id, status: 'PUBLISHED' },
+        orderBy: { sourcePath: 'asc' },
+        select: { id: true, sourcePath: true, targetPath: true, status: true },
+      }),
+    ]);
 
     return {
       site: { name: site.name, slug: site.slug, domain: site.domain },
+      redirects,
       cities: cities.map((city: any) => this.cityResponse(city, site)),
     };
   }

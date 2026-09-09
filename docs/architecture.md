@@ -8,8 +8,8 @@
 
 | Зона | Реализация | Назначение |
 | --- | --- | --- |
-| `apps/web` | Astro 7, static output | SEO HTML и sitemap из опубликованных городов, страниц и тарифов; форма проверки адреса получает site/city/page context из static route. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
-| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, рабочие `/tariffs`, `/cities`, `/leads` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; заявки доступны как реальный master-detail журнал со сменой статуса. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
+| `apps/web` | Astro 7, static output | SEO HTML и sitemap из опубликованных городов, страниц и тарифов; build генерирует Caddy routes опубликованных редиректов. Форма проверки адреса получает site/city/page context из static route. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
+| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, рабочие `/tariffs`, `/cities`, `/leads`, `/redirects` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; заявки доступны как реальный master-detail журнал, редиректы — как CRUD со статистикой переходов. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов, пересборок сайта и ежедневной PII retention; также слушает пока не используемую import-очередь. |
 | `prisma` / `packages/database` | Prisma 7 + PostgreSQL | Схема, миграции, seed и сгенерированный клиент. |
@@ -27,6 +27,10 @@ Production Compose запускает one-shot `migrate` из API image посл
   -> api.domain/api/v1/address-checks, /leads -> API -> PostgreSQL
                                               -> Redis/BullMQ -> worker -> Tarifnik/email
 
+Старый публичный URL
+  -> build-generated Caddy matcher -> public redirect resolver API
+  -> atomic hitCount/lastHitAt -> HTTP 301 на опубликованный target
+
 Браузер admin
   -> Caddy -> static admin
   -> HttpOnly admin cookie -> API -> PostgreSQL
@@ -40,7 +44,7 @@ PII retention scheduler в worker
   -> cascade history/activity/delivery/tokens + orphan AddressCheck cleanup
 ```
 
-В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities`, валидирует уникальность каждого публичного пути и генерирует HTML только для опубликованного каталога. `PUBLIC_SITE_SLUG` выбирает сайт, по умолчанию `domru-kazan`. В runtime публичная статическая витрина не читает PostgreSQL и не может сама увидеть изменения в API.
+В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities`, валидирует уникальность каждого публичного пути, отсутствие redirect-цепочек и существование каждой цели. Он генерирует HTML только для опубликованного каталога и `redirects.caddy` только для опубликованных редиректов; при сборке container image этот файл переносится из document root в `/etc/caddy`. `PUBLIC_SITE_SLUG` выбирает сайт, по умолчанию `domru-kazan`. В runtime статические страницы не читают PostgreSQL; только совпавший старый URL проксируется внутренним Caddy в API для актуальной проверки статуса, HTTP 301 и атомарного учета перехода. Изменение каталога или правила требует успешной пересборки.
 
 ## API-модули и их ответственность
 
@@ -54,6 +58,7 @@ PII retention scheduler в worker
 | `pii-retention` | Worker-only bounded hard-delete просроченных лидов и связанных payloads; fail-safe без явно заданного срока. |
 | `crm-leads` | Список, карточка, смена статуса, повторная постановка доставки и отзыв fallback-доступа. |
 | `rebuild-queue` | Persistent rebuild/outbox, дедупликация по сайту, BullMQ producer, start/result API и фиксация финального результата deployment. |
+| `redirects` | Admin CRUD с архивированием, проверкой конфликтов/петель/цепочек, public resolver HTTP 301 и атомарным `hitCount`/`lastHitAt`; каждое изменение ставит rebuild сайта. |
 
 ## Границы модулей
 
@@ -76,7 +81,7 @@ PII retention scheduler в worker
 - Мультигородской и многосайтовый public routing.
 - SSR и runtime data fetching на публичных SEO-страницах.
 - Полная CMS с наследованием блоков, версиями и preview.
-- Аудит действий, корзина, редиректы и аналитический контур.
+- Аудит действий, общая корзина и аналитический контур; для редиректов отдельно реализовано мягкое архивирование и счетчики переходов.
 - Подтвержденный production deployment и реальные внешние API-контракты.
 
 Детальный статус находится в [current-state.md](current-state.md), а шаги развития — в [плане реализации](plans/2026-09-07-platform-stabilization-and-mvp.md).

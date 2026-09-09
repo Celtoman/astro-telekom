@@ -19,8 +19,9 @@
 | GET | `/health/live` | Liveness процесса: возвращает `{ status: "ok", service: "api" }` без обращения к зависимостям. |
 | GET | `/health/ready` | Readiness PostgreSQL и Redis: HTTP 200 при обеих доступных зависимостях, HTTP 503 при сбое; ответ содержит только `up`/`down`, без адресов и внутренних ошибок. |
 | GET | `/health` | Совместимый alias readiness с тем же 200/503-контрактом; Compose использует явный `/health/ready`. |
-| GET | `/public/sites/:siteSlug/cities` | Возвращает опубликованный сайт и отсортированный каталог только опубликованных городов с опубликованными страницами/тарифами и visible blocks; используется `apps/web` во время static build. |
+| GET | `/public/sites/:siteSlug/cities` | Возвращает опубликованный сайт, отсортированный каталог опубликованных городов/страниц/тарифов/visible blocks и опубликованные redirects; используется `apps/web` во время static build. |
 | GET | `/public/sites/:siteSlug/cities/:citySlug` | Возвращает опубликованный город, опубликованные страницы/тарифы, visible blocks и shallow inheritance content. |
+| GET | `/public/sites/:siteSlug/redirects/:id` | Для опубликованного сайта и redirect возвращает HTTP 301 с относительным `Location`; атомарно увеличивает `hitCount` и записывает `lastHitAt`. Неопубликованная или исчезнувшая запись возвращает 404. |
 | POST | `/address-checks` | Проверяет адрес через `CoverageService`, сохраняет `AddressCheck`, возвращает публичный результат без raw provider response. |
 | POST | `/leads` | Сохраняет заявку, пытается выявить дубликат, при допустимом адресе проверяет договор и ставит delivery. |
 | POST | `/lead-access/:leadId/consume` | Однократно обменивает 43-символьный fallback token на минимальную карточку одной заявки; истекший, измененный, отозванный, повторный или относящийся к другой заявке token возвращает 401. |
@@ -58,6 +59,7 @@
 | GET/POST | `/admin/pages/:pageId/blocks` | Просмотр и создание blocks. |
 | PATCH/DELETE | `/admin/blocks/:id` | Изменение и удаление blocks. |
 | GET/POST/PATCH | `/admin/tariffs` | Tariff records. |
+| GET/POST/PATCH/DELETE | `/admin/redirects` | Список, создание, изменение и архивирование redirects. Published-правило допускает только свободный source и существующий published target того же сайта; петли и цепочки блокируются. `DELETE` сохраняет запись как `ARCHIVED`, каждое изменение ставит rebuild. |
 | POST | `/admin/tariffs/import` | Старый программный import массива items. |
 | POST | `/admin/tariffs/import/validate` | XLSX или rows -> сохраненный validation report. Для файла действуют лимиты 25 МБ, 10 000 строк и 256 столбцов; legacy `.xls` отклоняется. |
 | POST | `/admin/tariffs/import/apply` | Атомарно применяет полный snapshot по `runId`; при warnings требует `confirmWarnings: true`. |
@@ -81,7 +83,7 @@
 
 Городской import принимает русские и латинские aliases для субъекта, грамматических форм, slug, legacy URL и офиса, включая фактические комбинированные заголовки канонического `data/imports/cities.xlsx`. Apply блокируется при errors, а при warnings требует явного `confirmWarnings: true`. Регионы и города предварительно загружаются в transaction-local maps, одинаковый нормализованный slug объединяет «Республика Татарстан» из seed и «Татарстан» из XLSX. Новый город получает через bulk insert шесть `DRAFT` страниц: home, internet, internet-tv, tv, address-check и faq; полный пакет выполняется с transaction timeout 30 секунд.
 
-Apply трактует файл как полный snapshot провайдера: partial apply через `acceptedKeys` отклоняется, все строки применяются в одной транзакции с timeout 120 секунд для канонического объема, отсутствующие в новом файле тарифы удаляются, а статус import run меняется вместе с данными. После commit пересборка ставится для всех сайтов провайдера, включая сайты только с удалениями. Ручная смена city/slug тарифа атомарно создает redirect со старого URL; занятый опубликованной страницей URL или несовместимый существующий redirect возвращает conflict. Публичное обслуживание записей `Redirect` остается отдельной задачей TD-07.
+Apply трактует файл как полный snapshot провайдера: partial apply через `acceptedKeys` отклоняется, все строки применяются в одной транзакции с timeout 120 секунд для канонического объема, отсутствующие в новом файле тарифы удаляются, а статус import run меняется вместе с данными. После commit пересборка ставится для всех сайтов провайдера, включая сайты только с удалениями. Ручная смена city/slug тарифа атомарно создает redirect со старого URL; конфликт с опубликованной страницей/тарифом или несовместимым существующим redirect блокирует изменение. Если прежний redirect вел на старый URL, его target в той же транзакции переносится сразу на новый URL, чтобы не образовать второй hop.
 
 ## Заявки администратора и internal routes
 
@@ -101,4 +103,4 @@ Retention endpoint физически удаляет весь `Lead`, чтобы
 
 ## Отсутствующие routes
 
-В коде нет endpoints для redirects, action log, media, analytics, variables, publication schedule, preview, rollback, SEO validation, page templates, tariff history и callback statuses from Tarifnik. Их нельзя считать частью текущего API.
+В коде нет endpoints для action log, media, analytics, variables, publication schedule, preview, rollback, SEO validation, page templates, tariff history, предложений редиректов из 404 и callback statuses from Tarifnik. Их нельзя считать частью текущего API.

@@ -16,6 +16,7 @@ const tariff = (slug, name, speed, standardPrice) => ({
 });
 const apiFixture = {
   site: { name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test' },
+  redirects: [{ id: 'redirect-old-kazan', sourcePath: '/old-kazan/', targetPath: '/kazan/', status: 'PUBLISHED' }],
   cities: [
     {
       name: 'Казань', namePrepositional: 'Казани', slug: 'kazan', phone: '8 (800) 555-35-35', status: 'PUBLISHED',
@@ -117,6 +118,7 @@ test('web build uses API data and final HTML passes the publication smoke contra
   const almetyevskTariff = await readBuilt(join('almetyevsk', 'almet-internet-300', 'index.html'));
   const robots = await readBuilt('robots.txt');
   const sitemap = await readBuilt('sitemap.xml');
+  const redirectRoutes = await readBuilt('redirects.caddy');
 
   assert.match(root, /<link rel="canonical" href="https:\/\/partner\.example\.test\/">/);
   assert.match(root, /<h1>Домашний интернет и телевидение Дом\.ру<\/h1>/);
@@ -142,6 +144,9 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/internet\/<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/almet-internet-300\/<\/loc>/);
   assert.doesNotMatch(sitemap, /draft-city|draft-page|draft-tariff/);
+  assert.match(redirectRoutes, /@redirect_0 path \/old-kazan\//);
+  assert.match(redirectRoutes, /rewrite \* \/api\/v1\/public\/sites\/domru-kazan\/redirects\/redirect-old-kazan/);
+  assert.match(redirectRoutes, /reverse_proxy \{\$API_UPSTREAM:api:3000\}/);
   await assert.rejects(readBuilt(join('draft-city', 'index.html')), (error) => error?.code === 'ENOENT');
   await assert.rejects(readBuilt(join('kazan', 'draft-page', 'index.html')), (error) => error?.code === 'ENOENT');
   await assert.rejects(readBuilt(join('kazan', 'draft-tariff-in-published-city', 'index.html')), (error) => error?.code === 'ENOENT');
@@ -190,5 +195,23 @@ test('web build rejects a published page and tariff with the same city URL', { t
     });
     assert.notEqual(build.code, 0, build.output);
     assert.match(build.output, /Конфликт опубликованного URL \/kazan\/internet\//);
+  }, fixture);
+});
+
+test('web build rejects redirect chains instead of publishing multiple hops', { timeout: 120_000 }, async () => {
+  const fixture = structuredClone(apiFixture);
+  fixture.redirects = [
+    { id: 'redirect-a', sourcePath: '/old-a/', targetPath: '/old-b/', status: 'PUBLISHED' },
+    { id: 'redirect-b', sourcePath: '/old-b/', targetPath: '/kazan/', status: 'PUBLISHED' },
+  ];
+
+  await withApiFixture(async (apiUrl) => {
+    const build = await runWebBuild({
+      PUBLIC_API_URL: apiUrl,
+      PUBLIC_SITE_URL: productionSite,
+      ALLOW_DEMO_DATA: '',
+    });
+    assert.notEqual(build.code, 0, build.output);
+    assert.match(build.output, /цепочк/i);
   }, fixture);
 });

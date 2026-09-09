@@ -25,14 +25,24 @@ export interface SiteView {
   domain?: string | null;
 }
 
+export interface RedirectView {
+  id: string;
+  sourcePath: string;
+  targetPath: string;
+  status: string;
+}
+
 export interface SiteCatalog {
   site: SiteView;
   cities: CityView[];
+  redirects: RedirectView[];
 }
 
 export const publicSiteSlug = import.meta.env.PUBLIC_SITE_SLUG || 'domru-kazan';
 const fallbackPhone = import.meta.env.PUBLIC_SUPPORT_PHONE || '8 (800) 000-00-00';
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const redirectIdPattern = /^[a-zA-Z0-9_-]+$/;
+const redirectPathPattern = /^\/[a-z0-9._~/-]*$/;
 
 function assertUniquePublishedPaths(cities: CityView[]) {
   const citySlugs = new Set<string>();
@@ -53,6 +63,42 @@ function assertUniquePublishedPaths(cities: CityView[]) {
   }
 }
 
+function normalizeRedirects(value: unknown, cities: CityView[]): RedirectView[] {
+  const redirects = (Array.isArray(value) ? value : [])
+    .filter((item: Record<string, unknown>) => item?.status === 'PUBLISHED')
+    .map((item: Record<string, unknown>) => ({
+      id: String(item.id || ''),
+      sourcePath: String(item.sourcePath || ''),
+      targetPath: String(item.targetPath || ''),
+      status: 'PUBLISHED',
+    }));
+  const routePaths = new Set(['/']);
+  for (const city of cities) {
+    const cityPath = `/${city.slug}/`;
+    routePaths.add(cityPath);
+    for (const page of city.pages) if (page.type !== 'HOME' && page.type !== 'TARIFF') routePaths.add(`${cityPath}${page.slug}/`);
+    for (const tariff of city.tariffs) routePaths.add(`${cityPath}${tariff.slug}/`);
+  }
+  const sourcePaths = new Set<string>();
+  for (const redirect of redirects) {
+    if (!redirectIdPattern.test(redirect.id)) throw new Error('Некорректный id опубликованного redirect');
+    for (const [field, path] of [['sourcePath', redirect.sourcePath], ['targetPath', redirect.targetPath]] as const) {
+      if (!redirectPathPattern.test(path) || path.includes('//') || path.includes('..')) {
+        throw new Error(`Некорректный ${field} опубликованного redirect: ${path || '(пусто)'}`);
+      }
+    }
+    if (redirect.sourcePath === '/' || redirect.sourcePath === redirect.targetPath) throw new Error('Некорректная петля опубликованного redirect');
+    if (sourcePaths.has(redirect.sourcePath)) throw new Error(`Дублируется sourcePath redirect: ${redirect.sourcePath}`);
+    if (routePaths.has(redirect.sourcePath)) throw new Error(`sourcePath redirect занят опубликованным URL: ${redirect.sourcePath}`);
+    sourcePaths.add(redirect.sourcePath);
+  }
+  for (const redirect of redirects) {
+    if (sourcePaths.has(redirect.targetPath)) throw new Error(`Цепочка redirects запрещена: ${redirect.sourcePath} -> ${redirect.targetPath}`);
+    if (!routePaths.has(redirect.targetPath)) throw new Error(`targetPath redirect не опубликован: ${redirect.targetPath}`);
+  }
+  return redirects;
+}
+
 const demoPages: PageView[] = [
   { type: 'HOME', slug: '', title: 'Домашний интернет в Казани', status: 'PUBLISHED', seo: {}, blocks: [] },
   { type: 'INTERNET', slug: 'internet', title: 'Домашний интернет в Казани', status: 'PUBLISHED', seo: {}, blocks: [] },
@@ -64,6 +110,7 @@ const demoPages: PageView[] = [
 
 const demoCatalog: SiteCatalog = {
   site: { name: 'Дом.ру', slug: publicSiteSlug },
+  redirects: [],
   cities: [{
     name: 'Казань',
     nameIn: 'Казани',
@@ -102,15 +149,17 @@ function normalizedCatalog(value: unknown): SiteCatalog {
       } satisfies CityView;
     });
 
-  const catalog = {
+  assertUniquePublishedPaths(cities);
+  const redirects = normalizeRedirects(payload.redirects, cities);
+  const catalog: SiteCatalog = {
     site: {
       name: String(payload.site.name || 'Дом.ру'),
       slug: String(payload.site.slug || publicSiteSlug),
       domain: typeof payload.site.domain === 'string' ? payload.site.domain : null,
     },
     cities,
+    redirects,
   };
-  assertUniquePublishedPaths(cities);
   return catalog;
 }
 

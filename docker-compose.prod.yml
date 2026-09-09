@@ -80,6 +80,11 @@ services:
         PUBLIC_YANDEX_METRIKA_ID: ${PUBLIC_YANDEX_METRIKA_ID:-}
         PUBLIC_SUPPORT_PHONE: ${PUBLIC_SUPPORT_PHONE:-}
     restart: unless-stopped
+    environment:
+      API_UPSTREAM: api:3000
+    depends_on:
+      api:
+        condition: service_healthy
 
   admin:
     build:

@@ -32,7 +32,7 @@ docker compose -f docker-compose.prod.yml up -d --build
 docker compose -f docker-compose.prod.yml exec api node /app/dist/seed.js
 ```
 
-Compose запускает `migrate` после готовности PostgreSQL; `api` не стартует, пока `prisma migrate deploy` не завершится успешно. Seed выполняется отдельно и только при первоначальной подготовке или осознанном обновлении базовых данных — автоматический seed на каждом деплое недопустим. После seed проверить пользовательский login и public city data. Browser login использует credentialed CORS и HttpOnly cookie: `ADMIN_URL` должен входить в `CORS_ORIGINS`; API явно разрешает browser-методы `GET`, `HEAD`, `POST`, `PATCH`, `DELETE`, `OPTIONS`; в `NODE_ENV=production` cookie имеет `Secure` и требует HTTPS.
+Compose запускает `migrate` после готовности PostgreSQL; `api` не стартует, пока `prisma migrate deploy` не завершится успешно. `web` в свою очередь ожидает healthy API: его внутренний Caddy обслуживает static files и проксирует только build-generated redirect matchers в `API_UPSTREAM=api:3000`. Seed выполняется отдельно и только при первоначальной подготовке или осознанном обновлении базовых данных — автоматический seed на каждом деплое недопустим. После seed проверить пользовательский login и public city data. Browser login использует credentialed CORS и HttpOnly cookie: `ADMIN_URL` должен входить в `CORS_ORIGINS`; API явно разрешает browser-методы `GET`, `HEAD`, `POST`, `PATCH`, `DELETE`, `OPTIONS`; в `NODE_ENV=production` cookie имеет `Secure` и требует HTTPS.
 
 Для первоначальной загрузки географии после запуска API выполнить `pnpm cities:import`, проверить счетчики validation report и затем `pnpm cities:import -- --apply`. Команда пишет только через административный API и приводит статусы к инварианту: Казань `PUBLISHED`, остальные города `DRAFT`. Исходник и детали находятся в [data/imports/README.md](../data/imports/README.md).
 
@@ -46,6 +46,7 @@ Compose запускает `migrate` после готовности PostgreSQL;
 | Input security | Неизвестное поле public DTO и заполненный honeypot возвращают 400; превышение login/public write limit возвращает 429. Проверить, что разные внешние IP за Caddy получают независимые лимиты. |
 | PII retention | На изолированной копии БД создать старый и свежий test lead, вызвать `/internal/pii-retention` service token, проверить cascade удаления старого, сохранность свежего и счетчики job; затем проверить ежедневный scheduler и failed/completed logs worker. |
 | Публичный HTML | Открыть raw HTML `/`, текущий опубликованный `/{city-slug}/`, service page, tariff page, robots и sitemap; проверить canonical без localhost и отсутствие draft-городов. |
+| Redirect runtime | Создать опубликованный redirect на существующий target, дождаться успешного rebuild, проверить точный старый URL: один HTTP 301, относительный `Location`, отсутствие второго hop и рост `hitCount`/`lastHitAt`; архивированный redirect после rebuild должен вернуть обычный static 404. |
 | Интеграции | Sandbox или согласованный test contract coverage, contract check, Tarifnik и fallback email. |
 | Rebuild | Изменить тестовую сущность, проверить переход `PENDING/QUEUED -> RUNNING -> SUCCEEDED` через `/admin/rebuilds`, затем проверить HTML и совпадение `publishedRevision === requestedRevision`. |
 | Backup/restore | Проверить резервную копию PostgreSQL и восстановление на отдельной БД. |
@@ -55,7 +56,7 @@ Compose запускает `migrate` после готовности PostgreSQL;
 | Группа | Переменные |
 | --- | --- |
 | База и Redis | `DATABASE_URL`, `POSTGRES_*`, `REDIS_URL` |
-| Public build | `PUBLIC_SITE_URL`, `PUBLIC_SITE_SLUG`, `PUBLIC_API_URL`, `PUBLIC_SUPPORT_PHONE`, `PUBLIC_YANDEX_METRIKA_ID` |
+| Public build/runtime | `PUBLIC_SITE_URL`, `PUBLIC_SITE_SLUG`, `PUBLIC_API_URL`, `PUBLIC_SUPPORT_PHONE`, `PUBLIC_YANDEX_METRIKA_ID`; внутренний `API_UPSTREAM` для Caddy web-контейнера задается Compose как `api:3000` |
 | Domains/CORS | `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN`, `CORS_ORIGINS`, `ADMIN_URL` |
 | Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
 | Input security | `TRUST_PROXY`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX` |
@@ -77,7 +78,7 @@ Invoke-RestMethod -Uri "https://<API_DOMAIN>/api/v1/admin/readiness" -Headers @{
 - Caddy reverse proxy не добавляет security headers из `static.Caddyfile`; он используется только внутри static image.
 - Нет мониторинга, alerting, лог-агрегации или автоматической backup policy.
 - Автоматическое hard-delete PII реализовано, но срок хранения не утвержден и `.env.example` намеренно оставляет `PII_RETENTION_DAYS` пустым; реальный прием заявок до legal decision и isolated rehearsal запрещен.
-- Static web не получает изменения из БД без внешней пересборки.
+- Static web не получает изменения из БД без внешней пересборки. Это относится и к набору redirect source paths; уже включенный matcher при каждом обращении проверяет актуальный published-статус записи через API.
 - Rebuild требует одновременно PostgreSQL, Redis, worker, API и provider, который возвращает финальный `{ "status": "SUCCEEDED" }`; наличие одной лишь webhook-точки не доказывает публикацию.
 - Для применения persistent rebuild-job нужна миграция `0010_site_rebuild_jobs`.
 - Fallback email link требует примененной миграции `0009_lead_access_tokens`; ссылка одноразовая, действует 24 часа и проверяется API. Raw token передается во fragment и не попадает в HTTP request к static admin.

@@ -17,4 +17,5 @@ RUN pnpm --filter @provider/web run build
 
 FROM caddy:2.11.4-alpine
 COPY --from=build /workspace/apps/web/dist /srv
-COPY deploy/static.Caddyfile /etc/caddy/Caddyfile
+RUN mv /srv/redirects.caddy /etc/caddy/redirects.caddy
+COPY deploy/web.Caddyfile /etc/caddy/Caddyfile
