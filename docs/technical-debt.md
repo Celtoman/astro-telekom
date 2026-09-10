@@ -46,8 +46,9 @@
 | TD-59 | [#79](https://github.com/Celtoman/astro-telekom/issues/79) ✅ | Городской профиль рабочего бота перенесен; HTML, malformed JSON и неверный `contacts` блокируют delivery |
 | TD-61 | [#81](https://github.com/Celtoman/astro-telekom/issues/81) ✅ | Payload `Tarifnik appeal/create` не соответствует официальному контракту v3.0 |
 | TD-64 | [#84](https://github.com/Celtoman/astro-telekom/issues/84) ✅ | Повторная доставка различает временные, постоянные и неоднозначные ошибки Tarifnik |
-| TD-65 | [#85](https://github.com/Celtoman/astro-telekom/issues/85) ✅ | Нормализованный город адреса сверяется с городом формы перед routing |
+| TD-65 | [#85](https://github.com/Celtoman/astro-telekom/issues/85) ✅ | Временное ограничение адреса городом формы было реализовано, затем отменено решением [#87](https://github.com/Celtoman/astro-telekom/issues/87) |
 | TD-66 | [#86](https://github.com/Celtoman/astro-telekom/issues/86) 🟢 | Обычное Resend-уведомление не проверяет HTTP-ошибку ответа |
+| TD-67 | [#87](https://github.com/Celtoman/astro-telekom/issues/87) ✅ | Ограничение адреса городом страницы снято; source-контекст отделен от адреса подключения |
 
 ## P2
 

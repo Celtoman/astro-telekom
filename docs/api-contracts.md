@@ -31,19 +31,21 @@
 
 ### `POST /address-suggestions`
 
-Тело: обязательный `query`; опциональны `siteSlug`, `citySlug` и пустой honeypot `website`. API принимает только published site/city, ограничивает query 500 символами и передает в DaData `count: 10` вместе с выбранным городом. При ошибке или отсутствии конфигурации возвращается пустой список; readiness при этом остается заблокированным.
+Тело: обязательный `query`; опциональны `siteSlug`, `citySlug` и пустой honeypot `website`. API принимает только published site/city как проверенный контекст страницы, ограничивает query 500 символами и передает в DaData глобальный запрос с `count: 10` без `locations`. Пользователь может выбрать адрес любого города. При ошибке или отсутствии конфигурации возвращается пустой список; readiness при этом остается заблокированным.
 
 ### `POST /address-checks`
 
 Тело: `address` обязателен; структурированная `suggestion` содержит `value`, `unrestricted_value`, `data`; опциональны `siteSlug`, `citySlug`, `pageSlug`, `objectType`. Поля ограничены по типу и длине, неизвестные поля возвращают 400. Публичная форма также отправляет пустое honeypot-поле `website`; непустое значение отклоняется до БД и внешних интеграций. Возможные статусы: `AVAILABLE`, `UNAVAILABLE`, `AMBIGUOUS`, `MANUAL_CHECK`, `ERROR`.
 
-Перед Tarifnik API выбранная подсказка проходит серверный DaData `clean/address`; результат преобразуется в тот же envelope, что в рабочем боте: `value=source`, `unrestricted_value=source`, `data=<clean result>`. Нормализованные город и регион обязаны совпасть с опубликованным городом формы; несовпадение возвращает 400 до вызова Tarifnik и до записи `AddressCheck`. `POST /address/check` получает ровно `{ suggestion }` с Bearer token. HTTP 200 обязан содержать непустой словарь `providerId: providerName`; HTTP 404 — однозначный пустой список провайдеров; 403/422, сеть, невалидный JSON или неверная структура дают `ERROR`. Без полного DaData/Tarifnik набора переменных либо без валидной подсказки ответ будет `MANUAL_CHECK`; ни один из этих исходов не интерпретируется как разрешение delivery.
+Перед Tarifnik API выбранная подсказка проходит серверный DaData `clean/address`; результат преобразуется в тот же envelope, что в рабочем боте: `value=source`, `unrestricted_value=source`, `data=<clean result>`. География нормализованного адреса не сравнивается с городом страницы: `citySlug` определяет опубликованный контекст и источник обращения, а Tarifnik получает фактический адрес пользователя. `POST /address/check` получает ровно `{ suggestion }` с Bearer token. HTTP 200 обязан содержать непустой словарь `providerId: providerName`; HTTP 404 — однозначный пустой список провайдеров; 403/422, сеть, невалидный JSON или неверная структура дают `ERROR`. Без полного DaData/Tarifnik набора переменных либо без валидной подсказки ответ будет `MANUAL_CHECK`; ни один из этих исходов не интерпретируется как разрешение delivery.
 
 В persisted snapshot раздельно сохраняются `providers`, `targetProviderId`, `hasAnyProvider` и `hasTargetProvider`. Наличие хотя бы одного провайдера запускает проверку действующего абонента независимо от наличия Дом.ру, но delivery дополнительно требует присутствия Дом.ру. Для видимой проверки только наличие Дом.ру открывает второй шаг с телефоном, после чего применяется тот же фильтр абонента.
 
 ### `POST /leads`
 
 Обязательны `phone` и `citySlug`. Также допускаются slug страницы/тарифа, ссылка на `addressCheckId`, контакты, адрес, service type, UTM, referrer, URL, form name, time on site, device, до 50 viewed pages и до 100 activity events. Браузерные numeric IDs и неизвестные поля не принимаются: API разрешает только slug. Непустое honeypot-поле `website` отклоняется до сохранения.
+
+`citySlug` и сохраняемый `Lead.cityId` обозначают город страницы-источника, а не обязаны совпадать с географией адреса подключения. При наличии `addressCheckId` фактический нормализованный адрес и DaData city/settlement/region берутся только из связанного persisted snapshot; проверка принадлежности check тому же сайту и контексту страницы сохраняется как защита от подмены.
 
 Контроллер сравнивает телефон или нормализованный адрес с лидами того же сайта за последние 24 часа. Статусы обработки: `PENDING`, `DELIVERED`, `DUPLICATE_SUPPRESSED`, `ACTIVE_SUBSCRIBER_NOT_SENT`, `PROVIDER_NOT_AVAILABLE_NOT_SENT`, `NO_PROVIDERS_NOT_SENT`, `MANUAL_CHECK`, `ADDRESS_CLARIFICATION`, `MANUAL_CHECK_API`, `DELIVERY_ERROR_EMAIL_SENT`, `DELIVERY_ERROR_EMAIL_FAILED`.
 

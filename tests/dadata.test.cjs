@@ -28,7 +28,7 @@ async function withEnvironment(callback) {
   }
 }
 
-test('DaData suggestions stay server-side and are restricted to the selected city', async () => {
+test('DaData suggestions stay server-side and allow addresses from any city', async () => {
   await withEnvironment(async () => {
     global.fetch = async (url, options) => {
       assert.equal(String(url), process.env.DADATA_SUGGEST_API_URL);
@@ -37,13 +37,12 @@ test('DaData suggestions stay server-side and are restricted to the selected cit
       assert.deepEqual(JSON.parse(options.body), {
         query: 'Бондаренко 28',
         count: 10,
-        locations: [{ city: 'Казань' }],
       });
       return new Response(JSON.stringify({ suggestions: [rawSuggestion, { value: '', data: {} }] }), { status: 200 });
     };
     const service = new DadataService();
     service.logger = { error() {} };
-    assert.deepEqual(await service.suggest('Бондаренко 28', 'Казань'), [rawSuggestion]);
+    assert.deepEqual(await service.suggest('Бондаренко 28'), [rawSuggestion]);
   });
 });
 
@@ -67,9 +66,13 @@ test('DaData clean converts the normalized response to the exact Tarifnik sugges
   });
 });
 
-test('address suggestions validate published site and city before calling DaData', async () => {
+test('address suggestions validate page context but do not pass its city as a DaData restriction', async () => {
   let calls = 0;
-  const dadata = { suggest: async () => { calls += 1; return [rawSuggestion]; } };
+  const dadata = { suggest: async (...args) => {
+    calls += 1;
+    assert.deepEqual(args, ['Бондаренко']);
+    return [rawSuggestion];
+  } };
   const unpublished = new AddressSuggestionsController(dadata, {
     site: { findUnique: async () => ({ id: 'site', status: 'DRAFT' }) },
   });

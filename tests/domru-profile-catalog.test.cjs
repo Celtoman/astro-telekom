@@ -3,7 +3,6 @@ const assert = require('node:assert/strict');
 const {
   defaultDomruProfileCatalog,
   extractDomruLocation,
-  normalizedAddressMatchesCity,
 } = require('../apps/api/dist/domru-profile-catalog.js');
 
 test('Dom.ru profile catalog loads every source row and validated fallback', () => {
@@ -38,14 +37,4 @@ test('Dom.ru location extraction follows city, federal region, settlement priori
   assert.deepEqual(extractDomruLocation({ city: null, settlement: null, region: 'Москва' }), {
     locality: 'Москва', region: 'Москва', source: 'region',
   });
-  assert.equal(normalizedAddressMatchesCity(
-    { city: 'Казань', settlement: 'поселок Дербышки', region: 'Республика Татарстан' },
-    'Казань',
-    'Татарстан',
-  ), true);
-  assert.equal(normalizedAddressMatchesCity(
-    { city: null, settlement: 'Иннополис', region: 'Республика Татарстан' },
-    'Иннополис',
-    'Татарстан',
-  ), true);
 });

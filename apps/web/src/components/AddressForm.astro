@@ -34,10 +34,10 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
     <div class="bot-field" aria-hidden="true"><label for={`website-${formId}`}>Ваш сайт</label><input id={`website-${formId}`} name="website" tabindex="-1" autocomplete="off" /></div>
     <label for={`address-${formId}`}>Адрес</label>
     <div class="address-field">
-      <input id={`address-${formId}`} name="address" required autocomplete="street-address" aria-autocomplete="list" aria-controls={`address-suggestions-${formId}`} placeholder="Улица, дом, квартира" />
+      <input id={`address-${formId}`} name="address" required autocomplete="street-address" aria-autocomplete="list" aria-controls={`address-suggestions-${formId}`} placeholder="Город, улица, дом, квартира" />
       <div id={`address-suggestions-${formId}`} data-address-suggestions class="address-suggestions" role="listbox" hidden></div>
     </div>
-    <p class="address-hint" data-address-hint aria-live="polite">Начните вводить адрес и выберите подходящий вариант.</p>
+    <p class="address-hint" data-address-hint aria-live="polite">Начните вводить город и адрес, затем выберите подходящий вариант.</p>
     <div class="phone-step" data-phone-step hidden={mode === 'visible'}>
       <label for={`phone-${formId}`}>Телефон</label>
       <input id={`phone-${formId}`} name="phone" required={mode === 'lead'} autocomplete="tel" placeholder="+7 ___ ___-__-__" />
@@ -81,7 +81,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
       if (phoneInput) phoneInput.required = false;
       if (submitButton) submitButton.textContent = 'Проверить адрес';
     }
-    if (addressHint) addressHint.textContent = 'Начните вводить адрес и выберите подходящий вариант.';
+    if (addressHint) addressHint.textContent = 'Начните вводить город и адрес, затем выберите подходящий вариант.';
   };
 
   const appendSupport = () => {
@@ -121,7 +121,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
   const renderSuggestions = (items) => {
     clearSuggestions();
     if (!suggestionList || !Array.isArray(items) || items.length === 0) {
-      if (addressHint) addressHint.textContent = 'Подходящий адрес не найден. Уточните улицу и дом.';
+      if (addressHint) addressHint.textContent = 'Подходящий адрес не найден. Уточните город, улицу и дом.';
       return;
     }
     for (const suggestion of items) {

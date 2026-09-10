@@ -4,6 +4,7 @@ const { PublicLeadsController } = require('../apps/api/dist/public-leads.control
 
 function fixture(check, recentLeads = []) {
   let saved;
+  let contractLocation;
   let contractChecks = 0;
   let deliveryEnqueues = 0;
   const transaction = {
@@ -29,7 +30,7 @@ function fixture(check, recentLeads = []) {
     check: async (phone, location) => {
       contractChecks += 1;
       assert.equal(typeof phone, 'string');
-      assert.equal(location.city, 'Казань');
+      contractLocation = location;
       return { status: 'NOT_FOUND', active: false };
     },
   };
@@ -45,6 +46,7 @@ function fixture(check, recentLeads = []) {
     create: (body) => controller.create(body, { headers: {}, url: '/leads' }),
     saved: () => saved,
     contractChecks: () => contractChecks,
+    contractLocation: () => contractLocation,
     deliveryEnqueues: () => deliveryEnqueues,
   };
 }
@@ -142,8 +144,41 @@ test('lead checks the subscriber for alternative providers but never queues targ
   await f.create({ ...base, addressCheckId: 'check' });
 
   assert.equal(f.contractChecks(), 1);
+  assert.equal(f.contractLocation().city, 'Казань');
   assert.equal(f.saved().processingStatus, 'PROVIDER_NOT_AVAILABLE_NOT_SENT');
   assert.equal(f.deliveryEnqueues(), 0);
+});
+
+test('lead from a Kazan page checks the subscriber using the normalized city of the submitted address', async () => {
+  const f = fixture({
+    id: 'check',
+    status: 'AVAILABLE',
+    address: 'г Набережные Челны, пр-кт Тестовый, д 1',
+    objectType: 'apartment',
+    response: {
+      integration: 'tarifnik',
+      suggestion: {
+        value: 'г Набережные Челны, пр-кт Тестовый, д 1',
+        unrestricted_value: 'Республика Татарстан, г Набережные Челны, пр-кт Тестовый, д 1',
+        data: { city: 'Набережные Челны', region: 'Республика Татарстан', house: '1' },
+      },
+      providers: { 8: 'Дом.ру' },
+      targetProviderId: '8',
+      hasAnyProvider: true,
+      hasTargetProvider: true,
+    },
+  });
+
+  await f.create({ ...base, addressCheckId: 'check' });
+
+  assert.equal(f.saved().cityId, 'city');
+  assert.equal(f.saved().address, 'г Набережные Челны, пр-кт Тестовый, д 1');
+  assert.deepEqual(f.contractLocation(), {
+    city: 'Набережные Челны',
+    region: 'Республика Татарстан',
+    house: '1',
+  });
+  assert.equal(f.deliveryEnqueues(), 1);
 });
 
 test('lead with no providers skips subscriber check and delivery without pretending manual review is needed', async () => {

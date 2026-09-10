@@ -144,6 +144,7 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(almetyevskTariff, /650 ₽\/мес\./);
   assert.match(kazanAddressCheck, /const apiUrl = "https:\/\/api\.partner\.example\.test\/api\/v1"/);
   assert.match(kazanAddressCheck, /\/address-suggestions/);
+  assert.match(kazanAddressCheck, /placeholder="Город, улица, дом, квартира"/);
   assert.match(kazanAddressCheck, /suggestion:\s*selectedSuggestion/);
   assert.doesNotMatch(kazanAddressCheck, /DADATA_TOKEN|DADATA_SECRET/);
   assert.match(kazanAddressCheck, /data-form-mode="visible"/);

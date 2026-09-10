@@ -25,8 +25,8 @@
 
 | Сущность | Назначение |
 | --- | --- |
-| `AddressCheck` | Адрес, object type, status, raw provider response, site/city/page context. |
-| `Lead` | Контакты, адрес, UTM, URL/form/device/visited pages, address/contract results, processing status, external lead data, operator status. |
+| `AddressCheck` | Фактический нормализованный адрес, object type, status, raw provider response и site/city/page source-контекст. `cityId` обозначает город страницы и не ограничивает географию адреса. |
+| `Lead` | Контакты, фактический адрес, UTM, URL/form/device/visited pages, address/contract results, processing status, external lead data, operator status. `cityId` обозначает город страницы-источника. |
 | `LeadDeliveryAttempt` | Каждый API/email attempt, idempotency key, payload/response/error, next retry time. |
 | `LeadActivityEvent` | События браузера до формы. |
 | `LeadStatusHistory` | Операторские переходы NEW/IN_PROGRESS/CALL_LATER/CONNECTED/REJECTED. |

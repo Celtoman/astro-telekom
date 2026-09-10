@@ -39,3 +39,12 @@ test('lead workspace exposes every supported operator status and an optional his
   assert.match(source, /deliveryAttempts/);
   assert.match(source, /activityEvents/);
 });
+
+test('lead workspace distinguishes the page source city from the submitted address', () => {
+  const leadsSource = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
+  const accessSource = readFileSync(join(adminRoot, 'components', 'LeadAccessCard.tsx'), 'utf8');
+
+  assert.match(leadsSource, /Город страницы/);
+  assert.doesNotMatch(leadsSource, /Город и адрес/);
+  assert.match(accessSource, /Город страницы/);
+});

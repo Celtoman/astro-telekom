@@ -6,7 +6,7 @@ import { readDadataSuggestion } from './coverage.service';
 export class DadataService {
   private readonly logger = new Logger(DadataService.name);
 
-  async suggest(query: string, city: string): Promise<DadataSuggestion[]> {
+  async suggest(query: string): Promise<DadataSuggestion[]> {
     const endpoint = process.env.DADATA_SUGGEST_API_URL?.trim();
     const token = process.env.DADATA_TOKEN?.trim();
     if (!endpoint || !token) return [];
@@ -15,7 +15,7 @@ export class DadataService {
         method: 'POST',
         signal: AbortSignal.timeout(8000),
         headers: { authorization: `Token ${token}`, 'content-type': 'application/json' },
-        body: JSON.stringify({ query: query.trim(), count: 10, locations: [{ city }] }),
+        body: JSON.stringify({ query: query.trim(), count: 10 }),
       });
       if (!response.ok) throw new Error(`DaData suggest responded ${response.status}`);
       const raw = await response.text();

@@ -113,7 +113,11 @@ export function LeadAccessCard({ apiUrl }: { apiUrl: string }) {
           </div>
           <div className="flex gap-3">
             <MapPin className="mt-0.5 text-muted-foreground" />
-            <div><dt className="text-xs text-muted-foreground">Адрес</dt><dd className="font-medium">{lead.city.name}<br />{lead.address || "Адрес не указан"}</dd></div>
+            <div><dt className="text-xs text-muted-foreground">Адрес подключения</dt><dd className="font-medium">{lead.address || "Адрес не указан"}</dd></div>
+          </div>
+          <div className="flex gap-3">
+            <MapPin className="mt-0.5 text-muted-foreground" />
+            <div><dt className="text-xs text-muted-foreground">Город страницы</dt><dd className="font-medium">{lead.city.name}</dd></div>
           </div>
           <div className="flex gap-3 sm:col-span-2">
             <Clock3 className="mt-0.5 text-muted-foreground" />

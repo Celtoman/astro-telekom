@@ -17,29 +17,59 @@ test('unpublished site never invokes the external API', async () => {
   await assert.rejects(controller.check({ address: 'Улица, 1' }), /Сайт недоступен/);
 });
 
-test('normalized address from another city is rejected before coverage and persistence', async () => {
+test('normalized address from another city is checked and persisted with the page source context', async () => {
+  const normalizedSuggestion = {
+    value: 'г Набережные Челны, пр-кт Тестовый, д 1',
+    unrestricted_value: 'Республика Татарстан, г Набережные Челны, пр-кт Тестовый, д 1',
+    data: { city: 'Набережные Челны', region: 'Татарстан', house: '1', result: 'г Набережные Челны, пр-кт Тестовый, д 1' },
+  };
+  let persisted;
   const controller = new AddressChecksController(
-    { check: () => assert.fail('coverage must not be called') },
+    { check: async (input) => {
+      assert.equal(input.address, normalizedSuggestion.data.result);
+      assert.equal(input.citySlug, 'kazan');
+      assert.deepEqual(input.suggestion, normalizedSuggestion);
+      return {
+        status: 'UNAVAILABLE',
+        available: false,
+        providers: [],
+        alternatives: [{ id: '17', name: 'Альтернативный провайдер', url: 'https://tarifnik.ru/' }],
+        providerResponse: {
+          integration: 'tarifnik',
+          suggestion: normalizedSuggestion,
+          providers: { 17: 'Альтернативный провайдер' },
+          targetProviderId: '8',
+          hasAnyProvider: true,
+          hasTargetProvider: false,
+        },
+      };
+    } },
     {
       site: { findUnique: async () => ({ id: 'site', status: 'PUBLISHED' }) },
       city: { findFirst: async () => ({ id: 'city', name: 'Казань', region: { name: 'Республика Татарстан' } }) },
-      addressCheck: { create: async () => assert.fail('address check must not be persisted') },
+      addressCheck: { create: async ({ data }) => {
+        persisted = data;
+        return { id: 'check' };
+      } },
     },
     {
-      clean: async () => ({
-        value: 'г Набережные Челны, пр-кт Тестовый, д 1',
-        unrestricted_value: 'Республика Татарстан, г Набережные Челны, пр-кт Тестовый, д 1',
-        data: { city: 'Набережные Челны', region: 'Татарстан', house: '1' },
-      }),
+      clean: async () => normalizedSuggestion,
     },
   );
 
-  await assert.rejects(controller.check({
+  const result = await controller.check({
     siteSlug: 'domru-kazan',
     citySlug: 'kazan',
     address: 'Набережные Челны, Тестовый, 1',
     suggestion: { value: 'Набережные Челны, Тестовый, 1', unrestricted_value: 'Набережные Челны, Тестовый, 1', data: {} },
-  }), /другому городу/i);
+  });
+
+  assert.equal(result.id, 'check');
+  assert.equal(result.address, normalizedSuggestion.data.result);
+  assert.equal(result.citySlug, 'kazan');
+  assert.equal(persisted.cityId, 'city');
+  assert.equal(persisted.address, normalizedSuggestion.data.result);
+  assert.deepEqual(persisted.response.suggestion.data, normalizedSuggestion.data);
 });
 
 test('Tarifnik coverage sends the selected DaData suggestion and maps the provider dictionary', async (t) => {

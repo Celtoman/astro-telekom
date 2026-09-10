@@ -64,14 +64,6 @@ export function extractDomruLocation(data: DomruAddressLocation): ExtractedDomru
   return null;
 }
 
-export function normalizedAddressMatchesCity(data: DomruAddressLocation, city: string, region: string): boolean {
-  const location = extractDomruLocation(data);
-  if (!location || normalizeDomruLocality(location.locality) !== normalizeDomruLocality(city)) return false;
-  const actualRegion = normalizeDomruRegion(location.region);
-  const expectedRegion = normalizeDomruRegion(region);
-  return !actualRegion || !expectedRegion || actualRegion === expectedRegion;
-}
-
 function profileSignature(profile: ParsedProfile): string {
   return `${profile.origin}|${profile.providerId}|${profile.referer}`;
 }

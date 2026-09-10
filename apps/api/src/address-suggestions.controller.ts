@@ -14,7 +14,7 @@ export class AddressSuggestionsController {
     if (!site || site.status !== 'PUBLISHED') throw new BadRequestException('Сайт недоступен');
     const city = await this.prisma.city.findFirst({ where: { siteId: site.id, slug: body.citySlug ?? 'kazan', status: 'PUBLISHED' } });
     if (!city) throw new BadRequestException('Город недоступен');
-    const suggestions = await this.dadata.suggest(body.query.trim(), city.name);
+    const suggestions = await this.dadata.suggest(body.query.trim());
     return { suggestions };
   }
 }

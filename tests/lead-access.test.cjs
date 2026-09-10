@@ -143,6 +143,8 @@ test('fallback email contains the one-time admin URL without an HMAC query signa
     });
 
     assert.match(payload.text, /https:\/\/admin\.example\.test\/lead-access\/\?lead=lead-1#token=raw-token/);
+    assert.match(payload.text, /Город страницы: Казань/);
+    assert.doesNotMatch(payload.text, /\nГород: Казань/);
     assert.doesNotMatch(payload.text, /signature=/);
   } finally {
     global.fetch = previous.fetch;
