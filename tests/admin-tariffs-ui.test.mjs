@@ -33,6 +33,10 @@ test('tariff workspace implements list, validation report, atomic apply and rebu
   assert.match(source, /confirmWarnings/);
   assert.match(source, /report\.diff/);
   assert.match(source, /report\.issues/);
+  assert.match(source, /URLSearchParams/);
+  assert.match(source, /nextCursor/);
+  assert.match(source, /ServerPagination/);
+  assert.doesNotMatch(source, /state\.data\.tariffs\.filter|visibleTariffs/);
   assert.doesNotMatch(source, /x-admin-token|Authorization|sessionStorage|localStorage/);
 });
 

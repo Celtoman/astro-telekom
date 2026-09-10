@@ -1,5 +1,6 @@
-import { BadRequestException, Body, ConflictException, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { Prisma } from '../generated';
+import { CursorPageQueryDto, decodeCursor, encodeCursor, pageSize, searchQuery } from './admin-pagination';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
 import { RebuildQueueService } from './rebuild-queue.service';
@@ -49,8 +50,57 @@ export class AdminTariffsController {
   }
 
   @Get()
-  list() {
-    return this.prisma.tariff.findMany({ orderBy: { updatedAt: 'desc' }, include: { city: true, provider: { select: { id: true, name: true, slug: true } } } });
+  async list(@Query() query: CursorPageQueryDto = {}) {
+    const limit = pageSize(query.limit);
+    const q = searchQuery(query.q);
+    const cursor = decodeCursor(query.cursor);
+    const searchWhere: Prisma.TariffWhereInput | undefined = q ? {
+      OR: [
+        { name: { contains: q, mode: 'insensitive' } },
+        { slug: { contains: q, mode: 'insensitive' } },
+        { city: { name: { contains: q, mode: 'insensitive' } } },
+      ],
+    } : undefined;
+    const cursorWhere: Prisma.TariffWhereInput | undefined = cursor ? {
+      OR: [
+        { updatedAt: { lt: cursor.sortValue } },
+        { updatedAt: cursor.sortValue, id: { lt: cursor.id } },
+      ],
+    } : undefined;
+    const where: Prisma.TariffWhereInput = searchWhere && cursorWhere
+      ? { AND: [searchWhere, cursorWhere] }
+      : searchWhere || cursorWhere || {};
+    const filterWhere: Prisma.TariffWhereInput = searchWhere || {};
+    const [rows, total] = await this.prisma.$transaction([
+      this.prisma.tariff.findMany({
+        where,
+        orderBy: [{ updatedAt: 'desc' }, { id: 'desc' }],
+        take: limit + 1,
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          serviceType: true,
+          standardPrice: true,
+          promoPrice: true,
+          updatedAt: true,
+          city: { select: { id: true, name: true, slug: true } },
+        },
+      }),
+      this.prisma.tariff.count({ where: filterWhere }),
+    ]);
+    const hasNextPage = rows.length > limit;
+    const items = rows.slice(0, limit);
+    const last = items.at(-1);
+    return {
+      items,
+      pageInfo: {
+        limit,
+        total,
+        hasNextPage,
+        nextCursor: hasNextPage && last ? encodeCursor(last.updatedAt, last.id) : null,
+      },
+    };
   }
 
   @Post()

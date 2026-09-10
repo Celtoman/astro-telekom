@@ -73,7 +73,8 @@ Worker повторно проверяет persisted coverage snapshot и одн
 | GET/POST/PATCH | `/admin/pages` | Page records. |
 | GET/POST | `/admin/pages/:pageId/blocks` | Просмотр и создание blocks. |
 | PATCH/DELETE | `/admin/blocks/:id` | Изменение и удаление blocks. |
-| GET/POST/PATCH | `/admin/tariffs` | Tariff records. |
+| GET | `/admin/tariffs` | Cursor-страница каталога тарифов с минимальным list DTO; поддерживает `limit`, `cursor` и поиск `q` по названию, slug или городу. |
+| POST/PATCH | `/admin/tariffs`, `/admin/tariffs/:id` | Создание и изменение тарифа. |
 | GET/POST/PATCH/DELETE | `/admin/redirects` | Список, создание, изменение и архивирование redirects. Published-правило допускает только свободный source и существующий published target того же сайта; петли и цепочки блокируются. `DELETE` сохраняет запись как `ARCHIVED`, каждое изменение ставит rebuild. |
 | POST | `/admin/tariffs/import` | Старый программный import массива items. |
 | POST | `/admin/tariffs/import/validate` | XLSX или rows -> сохраненный validation report. Для файла действуют лимиты 25 МБ, 10 000 строк и 256 столбцов; legacy `.xls` отклоняется. |
@@ -105,7 +106,7 @@ Apply трактует файл как полный snapshot провайдер�
 
 | Method | Route | Поведение |
 | --- | --- | --- |
-| GET | `/crm/leads` | Возвращает полный список заявок с relations и статусом обычного оповещения, без пагинации. |
+| GET | `/crm/leads` | Cursor-страница минимального list DTO заявок; поддерживает `limit`, `cursor`, поиск `q` и фильтр `status`. Тяжелые relations доступны только в detail endpoint. |
 | GET | `/crm/leads/:id` | Детальная карточка с адресной проверкой, delivery attempts, notification evidence и activity. |
 | PATCH | `/crm/leads/:id/status` | Изменяет операторский status и добавляет history с optimistic concurrency. |
 | POST | `/crm/leads/:id/retry-delivery` | Безопасно повторно ставит eligible lead в очередь после `DELIVERY_QUEUE_ERROR`, исчерпанной доставки либо orphan `PENDING` без API-attempts. Возвращает фактический `PENDING` или `DELIVERY_QUEUE_ERROR`; не обходит coverage/subscriber routing. |
@@ -115,7 +116,7 @@ Apply трактует файл как полный snapshot провайдер�
 | POST | `/internal/lead-notifications/:id` | Worker-only обработчик persistent outbox; принимает attempt/maxAttempts/revision и сохраняет безопасный outcome. Защищен service token guard. |
 | POST | `/internal/pii-retention` | Worker-only bounded purge: требует service `x-admin-token` и валидный `PII_RETENTION_DAYS`, удаляет один batch просроченных лидов с cascade-данными, истекшие fallback tokens и осиротевшие старые AddressCheck; возвращает только cutoff и счетчики. |
 
-`/crm/leads` сейчас возвращает PII без серверной пагинации и фильтрации. Admin `/leads` использует endpoint только после проверки HttpOnly-cookie сессии и фильтрует полученный список в браузере; для большого объема нужна отдельная серверная пагинация.
+Оба list endpoint используют стабильную сортировку по timestamp и `id`, `limit=25` по умолчанию и жесткий максимум 100. `cursor` — непрозрачная base64url-позиция; неверное значение дает HTTP 400. Ответ имеет вид `{ items, pageInfo: { limit, total, hasNextPage, nextCursor } }`, где `total` относится ко всему текущему фильтру, а не только к остатку после cursor. `/crm/leads` дополнительно возвращает глобальную `summary` для карточек `total/new/pending/attention`. List DTO заявки содержит только поля журнала, город и безопасный статус notification; история, delivery attempts, activity, результаты проверок и остальные PII загружаются через `/crm/leads/:id` после явного открытия карточки.
 
 Retention endpoint физически удаляет весь `Lead`, чтобы PII не осталось в `contractResult`, `apiResult`, UTM или delivery JSON. Cascade удаляет `LeadDeliveryAttempt`, `LeadNotification`, `LeadActivityEvent`, `LeadStatusHistory` и `LeadAccessToken`; старые `AddressCheck` удаляются только после исчезновения всех ссылок. Свежий duplicate, ссылающийся на удаляемый лид, предварительно отвязывается. Один вызов ограничен `PII_RETENTION_BATCH_SIZE` (default 500, максимум 5000); worker повторяет batches и запускает scheduler ежедневно. Согласованный срок для сырых заявок — 180 дней. Без валидного `PII_RETENTION_DAYS` endpoint возвращает 503, scheduler отключен, а release readiness остается `blocked`.
 

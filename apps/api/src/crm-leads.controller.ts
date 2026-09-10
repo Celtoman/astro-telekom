@@ -1,5 +1,7 @@
-import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { IsIn, IsOptional } from 'class-validator';
 import { Prisma } from '../generated';
+import { CursorPageQueryDto, decodeCursor, encodeCursor, pageSize, searchQuery } from './admin-pagination';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
 import { LeadDeliveryService } from './lead-delivery.service';
@@ -13,6 +15,12 @@ interface StatusBody {
   comment?: string;
 }
 
+export class LeadListQueryDto extends CursorPageQueryDto {
+  @IsOptional()
+  @IsIn(['NEW', 'IN_PROGRESS', 'CALL_LATER', 'CONNECTED', 'REJECTED'])
+  status?: LeadStatus;
+}
+
 @Controller('crm/leads')
 @UseGuards(AdminTokenGuard)
 export class CrmLeadsController {
@@ -24,11 +32,76 @@ export class CrmLeadsController {
   ) {}
 
   @Get()
-  list() {
-    return this.prisma.lead.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: { city: true, page: true, tariff: true, history: true, deliveryAttempts: true, notification: true, activityEvents: true, duplicateOf: { select: { id: true, phone: true, createdAt: true } } },
-    });
+  async list(@Query() query: LeadListQueryDto = {}) {
+    const limit = pageSize(query.limit);
+    const q = searchQuery(query.q);
+    const cursor = decodeCursor(query.cursor);
+    const filters: Prisma.LeadWhereInput[] = [];
+    if (query.status) filters.push({ status: query.status });
+    if (q) {
+      filters.push({
+        OR: [
+          { id: { contains: q, mode: 'insensitive' } },
+          { phone: { contains: q, mode: 'insensitive' } },
+          { name: { contains: q, mode: 'insensitive' } },
+          { address: { contains: q, mode: 'insensitive' } },
+          { city: { name: { contains: q, mode: 'insensitive' } } },
+        ],
+      });
+    }
+    const filterWhere: Prisma.LeadWhereInput = filters.length ? { AND: [...filters] } : {};
+    if (cursor) {
+      filters.push({
+        OR: [
+          { createdAt: { lt: cursor.sortValue } },
+          { createdAt: cursor.sortValue, id: { lt: cursor.id } },
+        ],
+      });
+    }
+    const where: Prisma.LeadWhereInput = filters.length ? { AND: filters } : {};
+    const attentionWhere: Prisma.LeadWhereInput = {
+      OR: [
+        { processingStatus: { in: ['MANUAL_CHECK', 'ADDRESS_CLARIFICATION', 'MANUAL_CHECK_API', 'DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED'] } },
+        { notification: { is: { OR: [{ status: 'FAILED' }, { errorCode: { not: null } }] } } },
+      ],
+    };
+    const [rows, total, allTotal, newTotal, pendingTotal, attentionTotal] = await this.prisma.$transaction([
+      this.prisma.lead.findMany({
+        where,
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        take: limit + 1,
+        select: {
+          id: true,
+          name: true,
+          phone: true,
+          address: true,
+          source: true,
+          status: true,
+          processingStatus: true,
+          createdAt: true,
+          city: { select: { id: true, name: true, slug: true } },
+          notification: { select: { status: true, errorCode: true } },
+        },
+      }),
+      this.prisma.lead.count({ where: filterWhere }),
+      this.prisma.lead.count(),
+      this.prisma.lead.count({ where: { status: 'NEW' } }),
+      this.prisma.lead.count({ where: { processingStatus: 'PENDING' } }),
+      this.prisma.lead.count({ where: attentionWhere }),
+    ]);
+    const hasNextPage = rows.length > limit;
+    const items = rows.slice(0, limit);
+    const last = items.at(-1);
+    return {
+      items,
+      pageInfo: {
+        limit,
+        total,
+        hasNextPage,
+        nextCursor: hasNextPage && last ? encodeCursor(last.createdAt, last.id) : null,
+      },
+      summary: { total: allTotal, new: newTotal, pending: pendingTotal, attention: attentionTotal },
+    };
   }
 
   @Get(':id')

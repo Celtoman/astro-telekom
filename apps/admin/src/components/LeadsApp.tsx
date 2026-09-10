@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { CircleAlert, Inbox, RefreshCw, Save, Search } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
+import { ServerPagination } from "./ServerPagination"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
@@ -55,10 +56,16 @@ interface LeadDetail extends LeadSummary {
   apiResult?: Record<string, unknown>
 }
 
+interface LeadPage {
+  items: LeadSummary[]
+  pageInfo: { limit: number; total: number; hasNextPage: boolean; nextCursor: string | null }
+  summary: { total: number; new: number; pending: number; attention: number }
+}
+
 type ScreenState =
   | { status: "loading" }
   | { status: "error"; message: string }
-  | { status: "ready"; user: Administrator; leads: LeadSummary[] }
+  | { status: "ready"; user: Administrator }
 
 type DetailState =
   | { status: "idle" }
@@ -156,15 +163,6 @@ const duplicateReasonLabels: Record<string, string> = {
   address_24h: "Совпадает адрес другой заявки за последние 24 часа",
 }
 
-const attentionProcessingStatuses = new Set([
-  "MANUAL_CHECK",
-  "ADDRESS_CLARIFICATION",
-  "MANUAL_CHECK_API",
-  "DELIVERY_QUEUE_ERROR",
-  "DELIVERY_ERROR_EMAIL_SENT",
-  "DELIVERY_ERROR_EMAIL_FAILED",
-])
-
 const dateFormatter = new Intl.DateTimeFormat("ru-RU", { dateStyle: "short", timeStyle: "short" })
 
 function statusVariant(status: string) {
@@ -189,10 +187,17 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
   const [detail, setDetail] = useState<DetailState>({ status: "idle" })
   const [selectedLeadId, setSelectedLeadId] = useState("")
   const [search, setSearch] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState<"ALL" | LeadStatus>("ALL")
+  const [leadPage, setLeadPage] = useState<LeadPage | null>(null)
+  const [cursorStack, setCursorStack] = useState([""])
+  const [pageSize, setPageSize] = useState(25)
+  const [listRevision, setListRevision] = useState(0)
+  const [listBusy, setListBusy] = useState(true)
+  const [listError, setListError] = useState<string | null>(null)
   const [nextStatus, setNextStatus] = useState<LeadStatus>("NEW")
   const [comment, setComment] = useState("")
-  const [busy, setBusy] = useState<"refresh" | "status" | "retryDelivery" | "retryNotification" | null>(null)
+  const [busy, setBusy] = useState<"status" | "retryDelivery" | "retryNotification" | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
 
   const handleError = useCallback((caught: unknown, fallback: string) => {
@@ -203,34 +208,46 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
     return caught instanceof Error ? caught.message : fallback
   }, [])
 
-  const loadWorkspace = useCallback(async (mode: "initial" | "refresh" = "initial") => {
-    if (mode === "refresh") setBusy("refresh")
-    else setState({ status: "loading" })
+  const loadWorkspace = useCallback(async () => {
+    setState({ status: "loading" })
     try {
-      const [session, leads] = await Promise.all([
-        requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
-        requestJson<LeadSummary[]>(apiUrl, "/crm/leads"),
-      ])
-      setState({ status: "ready", user: session.user, leads })
+      const session = await requestJson<{ user: Administrator }>(apiUrl, "/auth/me")
+      setState({ status: "ready", user: session.user })
     } catch (caught: unknown) {
       const message = handleError(caught, "API недоступен")
       if (message) setState({ status: "error", message })
-    } finally {
-      setBusy(null)
     }
   }, [apiUrl, handleError])
 
   useEffect(() => { void loadWorkspace() }, [loadWorkspace])
 
-  const visibleLeads = useMemo(() => {
-    if (state.status !== "ready") return []
-    const query = search.trim().toLocaleLowerCase("ru-RU")
-    return state.leads.filter((lead) => {
-      if (statusFilter !== "ALL" && lead.status !== statusFilter) return false
-      if (!query) return true
-      return `${lead.id} ${lead.phone} ${lead.name || ""} ${lead.address || ""} ${lead.city.name}`.toLocaleLowerCase("ru-RU").includes(query)
-    })
-  }, [search, state, statusFilter])
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setSearchQuery(search.trim())
+      setCursorStack([""])
+    }, 300)
+    return () => window.clearTimeout(timer)
+  }, [search])
+
+  const currentCursor = cursorStack[cursorStack.length - 1]
+  useEffect(() => {
+    let active = true
+    const params = new URLSearchParams({ limit: String(pageSize) })
+    if (searchQuery) params.set("q", searchQuery)
+    if (statusFilter !== "ALL") params.set("status", statusFilter)
+    if (currentCursor) params.set("cursor", currentCursor)
+    setListBusy(true)
+    setListError(null)
+    void requestJson<LeadPage>(apiUrl, `/crm/leads?${params.toString()}`)
+      .then((page) => { if (active) setLeadPage(page) })
+      .catch((caught: unknown) => {
+        if (!active) return
+        const message = handleError(caught, "Журнал заявок не загружен")
+        if (message) setListError(message)
+      })
+      .finally(() => { if (active) setListBusy(false) })
+    return () => { active = false }
+  }, [apiUrl, currentCursor, handleError, listRevision, pageSize, searchQuery, statusFilter])
 
   async function loadDetail(id: string) {
     setSelectedLeadId(id)
@@ -256,11 +273,8 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
         method: "PATCH",
         body: { status: nextStatus, comment: comment.trim() || undefined },
       })
-      const [leads, lead] = await Promise.all([
-        requestJson<LeadSummary[]>(apiUrl, "/crm/leads"),
-        requestJson<LeadDetail>(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}`),
-      ])
-      setState((current) => current.status === "ready" ? { ...current, leads } : current)
+      const lead = await requestJson<LeadDetail>(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}`)
+      setListRevision((value) => value + 1)
       setDetail({ status: "ready", lead })
       setNextStatus(lead.status)
       setComment("")
@@ -278,11 +292,8 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
     setActionError(null)
     try {
       await requestJson(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}/retry-delivery`, { method: "POST" })
-      const [leads, lead] = await Promise.all([
-        requestJson<LeadSummary[]>(apiUrl, "/crm/leads"),
-        requestJson<LeadDetail>(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}`),
-      ])
-      setState((current) => current.status === "ready" ? { ...current, leads } : current)
+      const lead = await requestJson<LeadDetail>(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}`)
+      setListRevision((value) => value + 1)
       setDetail({ status: "ready", lead })
     } catch (caught: unknown) {
       const message = handleError(caught, "Повторная передача не запущена")
@@ -298,11 +309,8 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
     setActionError(null)
     try {
       await requestJson(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}/retry-notification`, { method: "POST" })
-      const [leads, lead] = await Promise.all([
-        requestJson<LeadSummary[]>(apiUrl, "/crm/leads"),
-        requestJson<LeadDetail>(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}`),
-      ])
-      setState((current) => current.status === "ready" ? { ...current, leads } : current)
+      const lead = await requestJson<LeadDetail>(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}`)
+      setListRevision((value) => value + 1)
       setDetail({ status: "ready", lead })
     } catch (caught: unknown) {
       const message = handleError(caught, "Повторное оповещение не запущено")
@@ -312,29 +320,30 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
     }
   }
 
-  if (state.status === "loading") {
+  if (state.status === "loading" || (!leadPage && listBusy)) {
     return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></main>
   }
-  if (state.status === "error") {
-    return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Заявки недоступны</CardTitle><CardDescription>Не удалось загрузить рабочий журнал.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void loadWorkspace()}>Повторить</Button></CardContent></Card></main>
+  if (state.status === "error" || !leadPage) {
+    const message = state.status === "error" ? state.message : listError || "Журнал заявок не загружен"
+    return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Заявки недоступны</CardTitle><CardDescription>Не удалось загрузить рабочий журнал.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{message}</AlertDescription></Alert><Button onClick={() => { void loadWorkspace(); setListRevision((value) => value + 1) }}>Повторить</Button></CardContent></Card></main>
   }
 
-  const newCount = state.leads.filter((lead) => lead.status === "NEW").length
-  const pendingCount = state.leads.filter((lead) => lead.processingStatus === "PENDING").length
-  const attentionCount = state.leads.filter((lead) => attentionProcessingStatuses.has(lead.processingStatus) || lead.notification?.status === "FAILED" || Boolean(lead.notification?.errorCode)).length
+  const newCount = leadPage.summary.new
+  const pendingCount = leadPage.summary.pending
+  const attentionCount = leadPage.summary.attention
 
   return (
     <AdminShell apiUrl={apiUrl} user={state.user} active="leads">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-6 lg:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div><h1 className="font-heading text-2xl font-semibold">Заявки</h1><p className="mt-1 text-sm text-muted-foreground">Рабочий журнал обращений и доставки в кол-центр.</p></div>
-          <Button variant="outline" disabled={busy !== null} onClick={() => void loadWorkspace("refresh")}><RefreshCw data-icon="inline-start" />Обновить</Button>
+          <Button variant="outline" disabled={busy !== null || listBusy} onClick={() => setListRevision((value) => value + 1)}><RefreshCw data-icon="inline-start" />Обновить</Button>
         </div>
 
         {actionError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Операция не выполнена</AlertTitle><AlertDescription>{actionError}</AlertDescription></Alert> : null}
 
         <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Состояние журнала заявок">
-          <Card size="sm"><CardHeader><CardDescription>Всего заявок</CardDescription><CardTitle>{state.leads.length.toLocaleString("ru-RU")}</CardTitle></CardHeader></Card>
+          <Card size="sm"><CardHeader><CardDescription>Всего заявок</CardDescription><CardTitle>{leadPage.summary.total.toLocaleString("ru-RU")}</CardTitle></CardHeader></Card>
           <Card size="sm"><CardHeader><CardDescription>Новые</CardDescription><CardTitle>{newCount.toLocaleString("ru-RU")}</CardTitle></CardHeader></Card>
           <Card size="sm"><CardHeader><CardDescription>Ожидают передачи</CardDescription><CardTitle>{pendingCount.toLocaleString("ru-RU")}</CardTitle></CardHeader></Card>
           <Card size="sm"><CardHeader><CardDescription>Требуют внимания</CardDescription><CardTitle>{attentionCount.toLocaleString("ru-RU")}</CardTitle></CardHeader></Card>
@@ -342,17 +351,31 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
 
         <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(22rem,1fr)]">
           <Card className="min-w-0">
-            <CardHeader><CardTitle>Журнал</CardTitle><CardDescription>{visibleLeads.length.toLocaleString("ru-RU")} из {state.leads.length.toLocaleString("ru-RU")} заявок.</CardDescription></CardHeader>
+            <CardHeader><CardTitle>Журнал</CardTitle><CardDescription>{leadPage.pageInfo.total.toLocaleString("ru-RU")} заявок соответствует фильтру.</CardDescription></CardHeader>
             <CardContent className="flex min-w-0 flex-col gap-4">
               <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_13rem]">
                 <Field><FieldLabel htmlFor="lead-search" className="sr-only">Поиск заявки</FieldLabel><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" /><Input id="lead-search" className="pl-9" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Телефон, адрес, имя или ID" /></div></Field>
-                <Field><FieldLabel htmlFor="lead-status-filter" className="sr-only">Фильтр по статусу</FieldLabel><select id="lead-status-filter" className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as "ALL" | LeadStatus)}><option value="ALL">Все статусы</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
+                <Field><FieldLabel htmlFor="lead-status-filter" className="sr-only">Фильтр по статусу</FieldLabel><select id="lead-status-filter" className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value as "ALL" | LeadStatus); setCursorStack([""]) }}><option value="ALL">Все статусы</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
               </div>
-              {visibleLeads.length ? <Table><TableHeader><TableRow><TableHead>Создана</TableHead><TableHead>Контакт</TableHead><TableHead>Адрес подключения</TableHead><TableHead>Статус</TableHead><TableHead>Обработка</TableHead><TableHead>Оповещение</TableHead><TableHead><span className="sr-only">Действие</span></TableHead></TableRow></TableHeader><TableBody>{visibleLeads.map((lead) => <TableRow key={lead.id} data-state={selectedLeadId === lead.id ? "selected" : undefined}><TableCell className="whitespace-nowrap">{dateFormatter.format(new Date(lead.createdAt))}</TableCell><TableCell><div className="font-medium">{lead.phone}</div><div className="text-xs text-muted-foreground">{lead.name || lead.source || "Имя не указано"}</div></TableCell><TableCell><div className="max-w-64 truncate font-medium">{lead.address || "Адрес не указан"}</div><div className="text-xs text-muted-foreground">Город страницы: {lead.city.name}</div></TableCell><TableCell><Badge variant={statusVariant(lead.status)}>{statusLabels[lead.status]}</Badge></TableCell><TableCell><Badge variant={statusVariant(lead.processingStatus)}>{statusText(processingLabels, lead.processingStatus, "Неизвестное состояние")}</Badge></TableCell><TableCell><Badge variant={statusVariant(lead.notification?.status || "PENDING")}>{statusText(notificationStatusLabels, lead.notification?.status, "Нет записи")}</Badge></TableCell><TableCell><Button variant="ghost" size="sm" onClick={() => void loadDetail(lead.id)}>Открыть</Button></TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><Inbox className="text-muted-foreground" aria-hidden="true" /><p className="font-medium">Заявки не найдены</p><p className="text-sm text-muted-foreground">Измените поиск или фильтр либо дождитесь первого обращения.</p></div>}
+              {listError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Журнал не обновлен</AlertTitle><AlertDescription>{listError}</AlertDescription></Alert> : null}
+              <div aria-busy={listBusy} className="min-w-0 overflow-x-auto">
+                {leadPage.items.length ? <Table><TableHeader><TableRow><TableHead>Создана</TableHead><TableHead>Контакт</TableHead><TableHead>Адрес подключения</TableHead><TableHead>Статус</TableHead><TableHead>Обработка</TableHead><TableHead>Оповещение</TableHead><TableHead><span className="sr-only">Действие</span></TableHead></TableRow></TableHeader><TableBody>{leadPage.items.map((lead) => <TableRow key={lead.id} data-state={selectedLeadId === lead.id ? "selected" : undefined}><TableCell className="whitespace-nowrap">{dateFormatter.format(new Date(lead.createdAt))}</TableCell><TableCell><div className="font-medium">{lead.phone}</div><div className="text-xs text-muted-foreground">{lead.name || lead.source || "Имя не указано"}</div></TableCell><TableCell><div className="max-w-64 truncate font-medium">{lead.address || "Адрес не указан"}</div><div className="text-xs text-muted-foreground">Город страницы: {lead.city.name}</div></TableCell><TableCell><Badge variant={statusVariant(lead.status)}>{statusLabels[lead.status]}</Badge></TableCell><TableCell><Badge variant={statusVariant(lead.processingStatus)}>{statusText(processingLabels, lead.processingStatus, "Неизвестное состояние")}</Badge></TableCell><TableCell><Badge variant={statusVariant(lead.notification?.status || "PENDING")}>{statusText(notificationStatusLabels, lead.notification?.status, "Нет записи")}</Badge></TableCell><TableCell><Button variant="ghost" size="sm" onClick={() => void loadDetail(lead.id)}>Открыть</Button></TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><Inbox className="text-muted-foreground" aria-hidden="true" /><p className="font-medium">Заявки не найдены</p><p className="text-sm text-muted-foreground">Измените поиск или фильтр либо дождитесь первого обращения.</p></div>}
+              </div>
+              <ServerPagination
+                page={cursorStack.length}
+                pageSize={pageSize}
+                itemCount={leadPage.items.length}
+                total={leadPage.pageInfo.total}
+                hasNextPage={leadPage.pageInfo.hasNextPage}
+                busy={listBusy}
+                onPageSizeChange={(value) => { setPageSize(value); setCursorStack([""]) }}
+                onPrevious={() => setCursorStack((current) => current.length > 1 ? current.slice(0, -1) : current)}
+                onNext={() => setCursorStack((current) => leadPage.pageInfo.nextCursor ? [...current, leadPage.pageInfo.nextCursor] : current)}
+              />
             </CardContent>
           </Card>
 
-          <LeadDetailCard detail={detail} nextStatus={nextStatus} setNextStatus={setNextStatus} comment={comment} setComment={setComment} busy={busy !== null && busy !== "refresh"} deliveryRetryBusy={busy === "retryDelivery"} notificationRetryBusy={busy === "retryNotification"} onSave={updateStatus} onRetryDelivery={retryDelivery} onRetryNotification={retryNotification} />
+          <LeadDetailCard detail={detail} nextStatus={nextStatus} setNextStatus={setNextStatus} comment={comment} setComment={setComment} busy={busy !== null} deliveryRetryBusy={busy === "retryDelivery"} notificationRetryBusy={busy === "retryNotification"} onSave={updateStatus} onRetryDelivery={retryDelivery} onRetryNotification={retryNotification} />
         </div>
       </div>
     </AdminShell>

@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { CircleAlert, FileCheck2, FileUp, RefreshCw } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
+import { ServerPagination } from "./ServerPagination"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
@@ -18,7 +19,11 @@ interface ImportIssue { row: number; level: "error" | "warning"; message: string
 interface ImportReport { totalRows: number; validRows: number; errorRows: number; warningRows: number; diff: { created: number; updated: number; deleted: number }; issues: ImportIssue[] }
 interface ImportRun { id: string; fileName: string; status: string; totalRows: number; validRows: number; errorRows: number; warningRows: number; createdAt: string }
 interface Rebuild { id: string; status: string; triggerEntity: string; requestedRevision: number; publishedRevision: number; updatedAt: string }
-interface WorkspaceData { providers: Provider[]; tariffs: Tariff[]; imports: ImportRun[]; rebuilds: Rebuild[] }
+interface WorkspaceData { providers: Provider[]; imports: ImportRun[]; rebuilds: Rebuild[] }
+interface TariffPage {
+  items: Tariff[]
+  pageInfo: { limit: number; total: number; hasNextPage: boolean; nextCursor: string | null }
+}
 
 type ScreenState = { status: "loading" } | { status: "error"; message: string } | { status: "ready"; user: Administrator; data: WorkspaceData }
 
@@ -28,6 +33,13 @@ const statusVariant = (status: string) => status === "APPLIED" || status === "SU
 export function TariffsApp({ apiUrl }: { apiUrl: string }) {
   const [state, setState] = useState<ScreenState>({ status: "loading" })
   const [search, setSearch] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [tariffPage, setTariffPage] = useState<TariffPage | null>(null)
+  const [cursorStack, setCursorStack] = useState([""])
+  const [pageSize, setPageSize] = useState(25)
+  const [listRevision, setListRevision] = useState(0)
+  const [listBusy, setListBusy] = useState(true)
+  const [listError, setListError] = useState<string | null>(null)
   const [file, setFile] = useState<File | null>(null)
   const [report, setReport] = useState<ImportReport | null>(null)
   const [runId, setRunId] = useState<string | null>(null)
@@ -40,13 +52,12 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
     else setState({ status: "loading" })
     try {
       const session = await requestJson<{ user: Administrator }>(apiUrl, "/auth/me")
-      const [providers, tariffs, imports, rebuilds] = await Promise.all([
+      const [providers, imports, rebuilds] = await Promise.all([
         requestJson<Provider[]>(apiUrl, "/admin/providers"),
-        requestJson<Tariff[]>(apiUrl, "/admin/tariffs"),
         requestJson<ImportRun[]>(apiUrl, "/admin/tariffs/imports"),
         requestJson<Rebuild[]>(apiUrl, "/admin/rebuilds"),
       ])
-      setState({ status: "ready", user: session.user, data: { providers, tariffs, imports, rebuilds } })
+      setState({ status: "ready", user: session.user, data: { providers, imports, rebuilds } })
     } catch (caught: unknown) {
       if (caught instanceof AdminApiError && caught.status === 401) {
         window.location.replace("/login")
@@ -60,11 +71,35 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
 
   useEffect(() => { void loadWorkspace() }, [loadWorkspace])
 
-  const visibleTariffs = useMemo(() => {
-    if (state.status !== "ready") return []
-    const query = search.trim().toLocaleLowerCase("ru-RU")
-    return state.data.tariffs.filter((tariff) => !query || `${tariff.name} ${tariff.slug} ${tariff.city.name}`.toLocaleLowerCase("ru-RU").includes(query)).slice(0, 100)
-  }, [search, state])
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setSearchQuery(search.trim())
+      setCursorStack([""])
+    }, 300)
+    return () => window.clearTimeout(timer)
+  }, [search])
+
+  const currentCursor = cursorStack[cursorStack.length - 1]
+  useEffect(() => {
+    let active = true
+    const params = new URLSearchParams({ limit: String(pageSize) })
+    if (searchQuery) params.set("q", searchQuery)
+    if (currentCursor) params.set("cursor", currentCursor)
+    setListBusy(true)
+    setListError(null)
+    void requestJson<TariffPage>(apiUrl, `/admin/tariffs?${params.toString()}`)
+      .then((page) => { if (active) setTariffPage(page) })
+      .catch((caught: unknown) => {
+        if (!active) return
+        if (caught instanceof AdminApiError && caught.status === 401) {
+          window.location.replace("/login")
+          return
+        }
+        setListError(caught instanceof Error ? caught.message : "Каталог тарифов не загружен")
+      })
+      .finally(() => { if (active) setListBusy(false) })
+    return () => { active = false }
+  }, [apiUrl, currentCursor, listRevision, pageSize, searchQuery])
 
   async function validateImport() {
     if (!file || state.status !== "ready") return
@@ -100,18 +135,22 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
       setRunId(null)
       setFile(null)
       await loadWorkspace("refresh")
+      setListRevision((value) => value + 1)
     } catch (caught: unknown) {
       setActionError(caught instanceof Error ? caught.message : "Импорт не применен")
     } finally { setBusy(null) }
   }
 
-  if (state.status === "loading") return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></main>
-  if (state.status === "error") return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Тарифы недоступны</CardTitle><CardDescription>Не удалось загрузить рабочий экран.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void loadWorkspace()}>Повторить</Button></CardContent></Card></main>
+  if (state.status === "loading" || (!tariffPage && listBusy)) return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></main>
+  if (state.status === "error" || !tariffPage) {
+    const message = state.status === "error" ? state.message : listError || "Каталог тарифов не загружен"
+    return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Тарифы недоступны</CardTitle><CardDescription>Не удалось загрузить рабочий экран.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{message}</AlertDescription></Alert><Button onClick={() => { void loadWorkspace(); setListRevision((value) => value + 1) }}>Повторить</Button></CardContent></Card></main>
+  }
 
   return (
     <AdminShell apiUrl={apiUrl} user={state.user} active="tariffs">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-6 lg:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Тарифы</h1><p className="mt-1 text-sm text-muted-foreground">Каталог, проверка полного XLSX snapshot и состояние пересборки.</p></div><Button variant="outline" disabled={busy !== null} onClick={() => void loadWorkspace("refresh")}><RefreshCw data-icon="inline-start" />Обновить</Button></div>
+        <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Тарифы</h1><p className="mt-1 text-sm text-muted-foreground">Каталог, проверка полного XLSX snapshot и состояние пересборки.</p></div><Button variant="outline" disabled={busy !== null || listBusy} onClick={() => { void loadWorkspace("refresh"); setListRevision((value) => value + 1) }}><RefreshCw data-icon="inline-start" />Обновить</Button></div>
         {actionError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Операция не выполнена</AlertTitle><AlertDescription>{actionError}</AlertDescription></Alert> : null}
 
         <Card>
@@ -128,7 +167,27 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
           </CardContent>
         </Card>
 
-        <Card><CardHeader><CardTitle>Каталог</CardTitle><CardDescription>{state.data.tariffs.length.toLocaleString("ru-RU")} тарифов. В таблице показываются первые 100 совпадений.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Название, slug или город" aria-label="Поиск тарифа" /><Table><TableHeader><TableRow><TableHead>Тариф</TableHead><TableHead>Город</TableHead><TableHead>Тип</TableHead><TableHead>Цена</TableHead></TableRow></TableHeader><TableBody>{visibleTariffs.map((tariff) => <TableRow key={tariff.id}><TableCell><div className="font-medium">{tariff.name}</div><div className="text-xs text-muted-foreground">{tariff.slug}</div></TableCell><TableCell>{tariff.city.name}</TableCell><TableCell><Badge variant="outline">{tariff.serviceType}</Badge></TableCell><TableCell>{money(tariff.promoPrice ?? tariff.standardPrice)}</TableCell></TableRow>)}</TableBody></Table></CardContent></Card>
+        <Card>
+          <CardHeader><CardTitle>Каталог</CardTitle><CardDescription>{tariffPage.pageInfo.total.toLocaleString("ru-RU")} тарифов соответствует фильтру.</CardDescription></CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Название, slug или город" aria-label="Поиск тарифа" />
+            {listError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Каталог не обновлен</AlertTitle><AlertDescription>{listError}</AlertDescription></Alert> : null}
+            <div aria-busy={listBusy} className="min-w-0 overflow-x-auto">
+              {tariffPage.items.length ? <Table><TableHeader><TableRow><TableHead>Тариф</TableHead><TableHead>Город</TableHead><TableHead>Тип</TableHead><TableHead>Цена</TableHead></TableRow></TableHeader><TableBody>{tariffPage.items.map((tariff) => <TableRow key={tariff.id}><TableCell><div className="font-medium">{tariff.name}</div><div className="text-xs text-muted-foreground">{tariff.slug}</div></TableCell><TableCell>{tariff.city.name}</TableCell><TableCell><Badge variant="outline">{tariff.serviceType}</Badge></TableCell><TableCell>{money(tariff.promoPrice ?? tariff.standardPrice)}</TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><p className="font-medium">Тарифы не найдены</p><p className="text-sm text-muted-foreground">Измените поисковый запрос или обновите каталог.</p></div>}
+            </div>
+            <ServerPagination
+              page={cursorStack.length}
+              pageSize={pageSize}
+              itemCount={tariffPage.items.length}
+              total={tariffPage.pageInfo.total}
+              hasNextPage={tariffPage.pageInfo.hasNextPage}
+              busy={listBusy}
+              onPageSizeChange={(value) => { setPageSize(value); setCursorStack([""]) }}
+              onPrevious={() => setCursorStack((current) => current.length > 1 ? current.slice(0, -1) : current)}
+              onNext={() => setCursorStack((current) => tariffPage.pageInfo.nextCursor ? [...current, tariffPage.pageInfo.nextCursor] : current)}
+            />
+          </CardContent>
+        </Card>
 
         <div className="grid gap-6 xl:grid-cols-2"><Card><CardHeader><CardTitle>Последние импорты</CardTitle><CardDescription>Сохраненные validation reports.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{state.data.imports.slice(0, 8).map((item) => <div className="flex items-center justify-between gap-3" key={item.id}><div className="min-w-0"><p className="truncate font-medium">{item.fileName}</p><p className="text-xs text-muted-foreground">{item.validRows}/{item.totalRows} строк</p></div><Badge variant={statusVariant(item.status)}>{item.status}</Badge></div>)}</CardContent></Card><Card><CardHeader><CardTitle>Пересборка сайта</CardTitle><CardDescription>Изменения попадут в static web только после SUCCEEDED.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{state.data.rebuilds.slice(0, 8).map((item) => <div className="flex items-center justify-between gap-3" key={item.id}><div><p className="font-medium">Ревизия {item.requestedRevision}</p><p className="text-xs text-muted-foreground">Опубликована {item.publishedRevision}</p></div><Badge variant={statusVariant(item.status)}>{item.status}</Badge></div>)}</CardContent></Card></div>
       </div>

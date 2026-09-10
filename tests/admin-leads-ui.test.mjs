@@ -27,6 +27,10 @@ test('lead workspace uses real list, detail and status endpoints without unsafe 
   assert.match(source, /\/status/);
   assert.match(source, /method:\s*["']PATCH["']/);
   assert.doesNotMatch(source, /x-admin-token|Authorization|sessionStorage|localStorage|dangerouslySetInnerHTML|\.innerHTML/);
+  assert.match(source, /URLSearchParams/);
+  assert.match(source, /nextCursor/);
+  assert.match(source, /ServerPagination/);
+  assert.doesNotMatch(source, /state\.leads\.filter/);
 });
 
 test('lead workspace exposes every supported operator status and an optional history comment', () => {

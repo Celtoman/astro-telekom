@@ -263,6 +263,7 @@ model Tariff {
   @@unique([cityId, identityKey])
   @@index([cityId, serviceType, status])
   @@index([providerId, externalId])
+  @@index([updatedAt, id])
 }
 
 model TariffImportRun {
@@ -364,7 +365,7 @@ model Lead {
   @@index([processingStatus, createdAt])
   @@index([siteId, phone, createdAt])
   @@index([siteId, duplicateOfId])
-  @@index([createdAt])
+  @@index([createdAt, id])
 }
 
 model LeadNotification {
