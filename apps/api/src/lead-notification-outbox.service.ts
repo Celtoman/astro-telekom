@@ -176,6 +176,7 @@ export class LeadNotificationOutboxService implements OnModuleInit, OnModuleDest
     try {
       const result = await this.notifications.notifyLead({
         id: notification.lead.id,
+        notificationRevision: notification.revision,
         phone: notification.lead.phone,
         name: notification.lead.name,
         city: notification.lead.city.name,

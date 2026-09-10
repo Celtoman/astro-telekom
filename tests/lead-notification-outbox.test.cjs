@@ -75,13 +75,18 @@ test('notification queue uses a deterministic revisioned job and restores PENDIN
 });
 
 test('notification processing records provider evidence and skips an already successful record', async () => {
-  const f = fixture(notification({ status: 'QUEUED' }));
+  let sent;
+  const f = fixture(notification({ status: 'QUEUED' }), async (lead) => {
+    sent = lead;
+    return { transport: 'resend', providerMessageId: 'email-1' };
+  });
 
   const result = await f.service.process('notification-1', 1, 3, 1);
 
   assert.deepEqual(result, { notified: true, transport: 'resend', providerMessageId: 'email-1' });
   assert.equal(f.updates.at(-1).data.status, 'SUCCEEDED');
   assert.equal(f.updates.at(-1).data.providerMessageId, 'email-1');
+  assert.equal(sent.notificationRevision, 1);
 
   const done = fixture(notification({ status: 'SUCCEEDED' }), async () => assert.fail('must not resend'));
   assert.deepEqual(await done.service.process('notification-1', 2, 3, 1), { skipped: true, reason: 'already_succeeded' });

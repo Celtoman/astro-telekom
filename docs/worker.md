@@ -34,7 +34,7 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 5. Типизированные ошибки сети/чтения ответа и HTTP 408/425/429/5xx повторяются не более трех раз с exponential backoff. Постоянные 4xx, неверный response contract, отсутствие transport и неизвестный implementation exception завершаются `FAILED` без бессмысленных повторов; последний сохраняется только как безопасный `internal_error`.
 6. Admin показывает статус в журнале и карточке. `POST /crm/leads/:id/retry-notification` разрешен только для `FAILED`, через compare-and-swap увеличивает revision и ставит новый job, поэтому два параллельных оператора не запускают две отправки.
 
-Доставка имеет at-least-once семантику: если внешний transport принял сообщение, а API завершился до записи `SUCCEEDED`, возможен повтор. Один idempotency header `lead-notification-<leadId>` передается Resend и webhook, чтобы transport мог подавить такой дубль.
+Доставка имеет at-least-once семантику: если внешний transport принял сообщение, а API завершился до записи `SUCCEEDED`, возможен повтор. Все автоматические попытки одного revision передают Resend/webhook общий idempotency header `lead-notification-<leadId>-revision-<revision>`, чтобы transport подавил дубль; manual retry увеличивает revision и получает новый ключ для нового цикла.
 
 ## Удаление просроченных PII
 

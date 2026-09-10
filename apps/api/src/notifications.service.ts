@@ -43,7 +43,8 @@ export class LeadNotificationError extends Error {
 export class NotificationsService {
   constructor(private readonly leadAccess: LeadAccessService) {}
 
-  async notifyLead(lead: LeadNotification): Promise<LeadNotificationResult> {
+  async notifyLead(lead: LeadNotification & { notificationRevision: number }): Promise<LeadNotificationResult> {
+    const idempotencyKey = `lead-notification-${lead.id}-revision-${lead.notificationRevision}`;
     const resendKey = process.env.RESEND_API_KEY;
     const recipient = process.env.LEADS_EMAIL;
     if (resendKey && recipient) {
@@ -52,7 +53,7 @@ export class NotificationsService {
         headers: {
           authorization: `Bearer ${resendKey}`,
           'content-type': 'application/json',
-          'idempotency-key': `lead-notification-${lead.id}`,
+          'idempotency-key': idempotencyKey,
         },
         body: JSON.stringify({
           from: process.env.LEADS_EMAIL_FROM || 'leads@example.com',
@@ -116,7 +117,7 @@ export class NotificationsService {
 
     const response = await this.send(webhookUrl, 'webhook', {
       method: 'POST',
-      headers: { 'content-type': 'application/json', 'idempotency-key': `lead-notification-${lead.id}` },
+      headers: { 'content-type': 'application/json', 'idempotency-key': idempotencyKey },
       body: JSON.stringify({
         subject: `Новая заявка ${lead.phone}`,
         recipient,

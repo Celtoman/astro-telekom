@@ -32,7 +32,7 @@ test('ordinary Resend notification rejects an unsuccessful HTTP response', async
   for (const status of [422, 503]) {
     global.fetch = async () => new Response('{"message":"transport rejected the request"}', { status });
     await assert.rejects(
-      notifications.notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' }),
+      notifications.notifyLead({ id: 'lead-1', notificationRevision: 7, phone: '+79000000000', city: 'Казань' }),
       (error) => {
         assert.match(error.message, new RegExp(`Lead notification via Resend responded ${status}`));
         assert.doesNotMatch(error.message, /transport rejected the request/);
@@ -52,7 +52,7 @@ test('ordinary Resend notification rejects malformed success payloads and blank 
   for (const body of ['{}', '{not-json', '{"id":"   "}']) {
     global.fetch = async () => new Response(body, { status: 200 });
     await assert.rejects(
-      notifications.notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' }),
+      notifications.notifyLead({ id: 'lead-1', notificationRevision: 7, phone: '+79000000000', city: 'Казань' }),
       /Lead notification via Resend returned an invalid response/,
     );
   }
@@ -68,7 +68,7 @@ test('ordinary webhook notification rejects an unsuccessful HTTP response', asyn
   for (const status of [422, 503]) {
     global.fetch = async () => new Response(null, { status });
     await assert.rejects(
-      notifications.notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' }),
+      notifications.notifyLead({ id: 'lead-1', notificationRevision: 7, phone: '+79000000000', city: 'Казань' }),
       new RegExp(`Lead notification webhook responded ${status}`),
     );
   }
@@ -87,10 +87,10 @@ test('ordinary Resend notification accepts a successful response with an email i
 
   const notifications = new NotificationsService({});
 
-  const result = await notifications.notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' });
+  const result = await notifications.notifyLead({ id: 'lead-1', notificationRevision: 7, phone: '+79000000000', city: 'Казань' });
 
   assert.deepEqual(result, { transport: 'resend', providerMessageId: 'email-123' });
-  assert.equal(request.options.headers['idempotency-key'], 'lead-notification-lead-1');
+  assert.equal(request.options.headers['idempotency-key'], 'lead-notification-lead-1-revision-7');
   assert.ok(request.options.signal instanceof AbortSignal);
 });
 
@@ -99,13 +99,18 @@ test('ordinary webhook notification accepts a successful empty response', async 
   process.env.LEADS_EMAIL = 'operator@example.test';
   delete process.env.RESEND_API_KEY;
   process.env.LEADS_EMAIL_WEBHOOK_URL = 'https://mail.example.test/new-lead';
-  global.fetch = async () => new Response(null, { status: 204 });
+  let request;
+  global.fetch = async (url, options) => {
+    request = { url, options };
+    return new Response(null, { status: 204 });
+  };
 
   const notifications = new NotificationsService({});
 
-  const result = await notifications.notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' });
+  const result = await notifications.notifyLead({ id: 'lead-1', notificationRevision: 7, phone: '+79000000000', city: 'Казань' });
 
   assert.deepEqual(result, { transport: 'webhook' });
+  assert.equal(request.options.headers['idempotency-key'], 'lead-notification-lead-1-revision-7');
 });
 
 test('ordinary notification classifies transient and permanent failures for bounded retry', async (t) => {
@@ -124,7 +129,7 @@ test('ordinary notification classifies transient and permanent failures for boun
   ]) {
     global.fetch = async () => response();
     await assert.rejects(
-      notifications.notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' }),
+      notifications.notifyLead({ id: 'lead-1', notificationRevision: 7, phone: '+79000000000', city: 'Казань' }),
       (error) => error.retryable === expectedRetryable,
     );
   }
@@ -137,7 +142,7 @@ test('ordinary notification fails permanently when no transport is configured', 
   delete process.env.LEADS_EMAIL_WEBHOOK_URL;
 
   await assert.rejects(
-    new NotificationsService({}).notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' }),
+    new NotificationsService({}).notifyLead({ id: 'lead-1', notificationRevision: 7, phone: '+79000000000', city: 'Казань' }),
     (error) => error.code === 'not_configured' && error.transport === 'none' && error.retryable === false,
   );
 });
