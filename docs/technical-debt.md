@@ -62,7 +62,7 @@
 | TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) 🟢 | Наследование `content` — только shallow merge верхнего уровня |
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) 🟢 | `PageBlock` поддерживает только 3 типа блоков из библиотеки |
 | TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) 🟢 | Public DTO/rate limit/honeypot и 180-дневный policy-driven purge реализованы; остаются legal basis, согласие и правила передачи PII |
-| TD-15 | [#17](https://github.com/Celtoman/astro-telekom/issues/17) 🟢 | Email-уведомление о лиде — fire-and-forget без журнала |
+| TD-15 | [#17](https://github.com/Celtoman/astro-telekom/issues/17) ✅ | Обычное оповещение лида переведено в persistent outbox с recovery, bounded retry, admin-статусом и ручным повтором |
 | TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) ✅ | Production требует чистый HTTPS origin; post-build gate сверяет sitemap, robots, raw HTML и `noindex` 404 |
 | TD-17 | [#19](https://github.com/Celtoman/astro-telekom/issues/19) ✅ | One-shot migration job до API; readiness проверяет PostgreSQL/Redis, liveness отделен; seed остается явной безопасной операцией |
 | TD-48 | [#68](https://github.com/Celtoman/astro-telekom/issues/68) 🟢 | Размер и структура публичной lead telemetry ограничены не полностью |
@@ -99,6 +99,7 @@
 | TD-52 | [#72](https://github.com/Celtoman/astro-telekom/issues/72) 🟢 | Browser security headers для web/admin не закреплены проверками |
 | TD-53 | [#73](https://github.com/Celtoman/astro-telekom/issues/73) ✅ | `decisions.md` синхронизирован с финальными ответами Q89 и Q118 |
 | TD-75 | [#97](https://github.com/Celtoman/astro-telekom/issues/97) 🟢 | Текущие Radix-примитивы admin расходятся с новым обязательным React Aria-референсом |
+| TD-76 | [#98](https://github.com/Celtoman/astro-telekom/issues/98) 🟢 | Astro выдает ложные `formId` hints для inline-скрипта `AddressForm` |
 | TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) ✅ | `docs/worker.md` синхронизирован с фактическим routing и retry-поведением |
 | TD-70 | [#90](https://github.com/Celtoman/astro-telekom/issues/90) ✅ | DTO ограничивает query официальным максимумом DaData 300 символов |
 

@@ -315,6 +315,24 @@ exports.Prisma.LeadScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LeadNotificationScalarFieldEnum = {
+  id: 'id',
+  leadId: 'leadId',
+  status: 'status',
+  revision: 'revision',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  transport: 'transport',
+  errorCode: 'errorCode',
+  httpStatus: 'httpStatus',
+  providerMessageId: 'providerMessageId',
+  queuedAt: 'queuedAt',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.LeadAccessTokenScalarFieldEnum = {
   id: 'id',
   leadId: 'leadId',
@@ -492,6 +510,15 @@ exports.LeadStatus = exports.$Enums.LeadStatus = {
   REJECTED: 'REJECTED'
 };
 
+exports.LeadNotificationStatus = exports.$Enums.LeadNotificationStatus = {
+  PENDING: 'PENDING',
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  RETRYING: 'RETRYING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED'
+};
+
 exports.DeliveryChannel = exports.$Enums.DeliveryChannel = {
   QUEUE: 'QUEUE',
   API: 'API',
@@ -517,6 +544,7 @@ exports.Prisma.ModelName = {
   CityImportRun: 'CityImportRun',
   AddressCheck: 'AddressCheck',
   Lead: 'Lead',
+  LeadNotification: 'LeadNotification',
   LeadAccessToken: 'LeadAccessToken',
   LeadDeliveryAttempt: 'LeadDeliveryAttempt',
   LeadActivityEvent: 'LeadActivityEvent',

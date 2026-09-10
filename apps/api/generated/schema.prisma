@@ -94,6 +94,15 @@ enum SiteRebuildStatus {
   FAILED
 }
 
+enum LeadNotificationStatus {
+  PENDING
+  QUEUED
+  RUNNING
+  RETRYING
+  SUCCEEDED
+  FAILED
+}
+
 model Provider {
   id            String            @id @default(cuid())
   name          String
@@ -354,6 +363,7 @@ model Lead {
   addressCheck      AddressCheck?         @relation(fields: [addressCheckId], references: [id])
   history           LeadStatusHistory[]
   deliveryAttempts  LeadDeliveryAttempt[]
+  notification      LeadNotification?
   activityEvents    LeadActivityEvent[]
   accessTokens      LeadAccessToken[]
   duplicateOf       Lead?                 @relation("LeadDuplicates", fields: [duplicateOfId], references: [id])
@@ -364,6 +374,27 @@ model Lead {
   @@index([siteId, phone, createdAt])
   @@index([siteId, duplicateOfId])
   @@index([createdAt])
+}
+
+model LeadNotification {
+  id                String                 @id @default(cuid())
+  leadId            String                 @unique
+  status            LeadNotificationStatus @default(PENDING)
+  revision          Int                    @default(1)
+  attempts          Int                    @default(0)
+  maxAttempts       Int                    @default(3)
+  transport         String?
+  errorCode         String?
+  httpStatus        Int?
+  providerMessageId String?
+  queuedAt          DateTime?
+  startedAt         DateTime?
+  completedAt       DateTime?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  lead              Lead                   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([status, updatedAt])
 }
 
 model LeadAccessToken {

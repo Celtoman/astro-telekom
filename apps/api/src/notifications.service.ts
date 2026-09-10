@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { LeadAccessService } from './lead-access.service';
 
 interface LeadNotification {
@@ -12,8 +12,19 @@ interface LeadNotification {
   addressCheck?: unknown;
 }
 
-export type LeadNotificationTransport = 'resend' | 'webhook';
-export type LeadNotificationFailureCode = 'http_error' | 'invalid_response';
+const LEAD_NOTIFICATION_TIMEOUT_MS = 15_000;
+
+export type LeadNotificationTransport = 'resend' | 'webhook' | 'none';
+export type LeadNotificationFailureCode = 'http_error' | 'invalid_response' | 'network_error' | 'not_configured' | 'internal_error';
+
+export interface LeadNotificationResult {
+  transport: Exclude<LeadNotificationTransport, 'none'>;
+  providerMessageId?: string;
+}
+
+function isRetryableNotificationStatus(status: number): boolean {
+  return status === 408 || status === 425 || status === 429 || status >= 500;
+}
 
 export class LeadNotificationError extends Error {
   constructor(
@@ -21,6 +32,7 @@ export class LeadNotificationError extends Error {
     readonly transport: LeadNotificationTransport,
     readonly code: LeadNotificationFailureCode,
     readonly status?: number,
+    readonly retryable = status === undefined ? code === 'network_error' : isRetryableNotificationStatus(status),
   ) {
     super(message);
     this.name = 'LeadNotificationError';
@@ -29,19 +41,18 @@ export class LeadNotificationError extends Error {
 
 @Injectable()
 export class NotificationsService {
-  private readonly logger = new Logger(NotificationsService.name);
-
   constructor(private readonly leadAccess: LeadAccessService) {}
 
-  async notifyLead(lead: LeadNotification) {
+  async notifyLead(lead: LeadNotification): Promise<LeadNotificationResult> {
     const resendKey = process.env.RESEND_API_KEY;
     const recipient = process.env.LEADS_EMAIL;
     if (resendKey && recipient) {
-      const response = await fetch('https://api.resend.com/emails', {
+      const response = await this.send('https://api.resend.com/emails', 'resend', {
         method: 'POST',
         headers: {
           authorization: `Bearer ${resendKey}`,
           'content-type': 'application/json',
+          'idempotency-key': `lead-notification-${lead.id}`,
         },
         body: JSON.stringify({
           from: process.env.LEADS_EMAIL_FROM || 'leads@example.com',
@@ -65,7 +76,7 @@ export class NotificationsService {
           response.status,
         );
       }
-      const raw = await response.text();
+      const raw = await this.readText(response, 'resend');
       let payload: unknown;
       try {
         payload = raw ? JSON.parse(raw) : null;
@@ -89,18 +100,23 @@ export class NotificationsService {
           'invalid_response',
         );
       }
-      return;
+      return { transport: 'resend', providerMessageId: (payload as Record<string, string>).id.trim() };
     }
 
     const webhookUrl = process.env.LEADS_EMAIL_WEBHOOK_URL;
     if (!webhookUrl) {
-      this.logger.warn(`LEADS_EMAIL_WEBHOOK_URL is not configured; lead ${lead.id} was saved without notification`);
-      return;
+      throw new LeadNotificationError(
+        'Lead notification transport is not configured',
+        'none',
+        'not_configured',
+        undefined,
+        false,
+      );
     }
 
-    const response = await fetch(webhookUrl, {
+    const response = await this.send(webhookUrl, 'webhook', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'idempotency-key': `lead-notification-${lead.id}` },
       body: JSON.stringify({
         subject: `Новая заявка ${lead.phone}`,
         recipient,
@@ -113,6 +129,36 @@ export class NotificationsService {
         'webhook',
         'http_error',
         response.status,
+      );
+    }
+    return { transport: 'webhook' };
+  }
+
+  private async send(url: string, transport: Exclude<LeadNotificationTransport, 'none'>, init: RequestInit) {
+    try {
+      return await fetch(url, { ...init, signal: AbortSignal.timeout(LEAD_NOTIFICATION_TIMEOUT_MS) });
+    } catch (error) {
+      if (error instanceof LeadNotificationError) throw error;
+      throw new LeadNotificationError(
+        `Lead notification via ${transport} failed before receiving a response`,
+        transport,
+        'network_error',
+        undefined,
+        true,
+      );
+    }
+  }
+
+  private async readText(response: Response, transport: Exclude<LeadNotificationTransport, 'none'>) {
+    try {
+      return await response.text();
+    } catch {
+      throw new LeadNotificationError(
+        `Lead notification via ${transport} failed while reading the response`,
+        transport,
+        'network_error',
+        undefined,
+        true,
       );
     }
   }

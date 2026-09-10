@@ -80,3 +80,11 @@ test('PII retention is worker-only, scheduled daily and part of release readines
   assert.match(worker, /\/internal\/pii-retention/);
   assert.match(readiness, /PII_RETENTION_DAYS/);
 });
+
+test('lead notification evidence is deleted with the retained lead and stores no copied PII', () => {
+  const schema = readFileSync(join(__dirname, '..', 'prisma', 'schema.prisma'), 'utf8');
+  const model = schema.match(/model LeadNotification \{[\s\S]*?\n\}/)?.[0] || '';
+
+  assert.match(model, /lead\s+Lead\s+@relation\([^\n]+onDelete:\s*Cascade/);
+  assert.doesNotMatch(model, /\b(phone|email|address|name|message|payload)\b/i);
+});

@@ -62,6 +62,24 @@ const leadDeliveryWorker = new Worker(
   { connection, concurrency: 4 },
 );
 
+const leadNotificationWorker = new Worker(
+  'lead-notifications',
+  async (job) => {
+    if (!adminToken) throw new Error('ADMIN_API_TOKEN is not configured');
+    return jsonRequest(`${apiUrl}/internal/lead-notifications/${encodeURIComponent(job.data.notificationId)}`, {
+      method: 'POST',
+      headers: { 'x-admin-token': adminToken },
+      signal: AbortSignal.timeout(30_000),
+      body: JSON.stringify({
+        attemptNumber: job.data.attemptNumber,
+        maxAttempts: job.data.maxAttempts,
+        revision: job.data.revision,
+      }),
+    });
+  },
+  { connection, concurrency: 4 },
+);
+
 const piiRetentionWorker = new Worker(
   'maintenance',
   async (job) => {
@@ -96,7 +114,7 @@ if (hasValidPiiRetention) {
   console.warn('[worker] PII_RETENTION_DAYS is missing or invalid; retention scheduler is disabled');
 }
 
-for (const worker of [importWorker, rebuildWorker, leadDeliveryWorker, piiRetentionWorker]) {
+for (const worker of [importWorker, rebuildWorker, leadDeliveryWorker, leadNotificationWorker, piiRetentionWorker]) {
   worker.on('completed', (job) => console.log(`[worker] ${job.queueName}/${job.id} completed`));
   worker.on('failed', (job, error) => console.error(`[worker] ${job?.queueName}/${job?.id} failed`, error));
 }
@@ -106,7 +124,7 @@ async function shutdown(signal) {
   if (shuttingDown) return;
   shuttingDown = true;
   console.log(`[worker] received ${signal}, closing workers`);
-  await Promise.all([importWorker.close(), rebuildWorker.close(), leadDeliveryWorker.close(), piiRetentionWorker.close(), maintenanceQueue.close()]);
+  await Promise.all([importWorker.close(), rebuildWorker.close(), leadDeliveryWorker.close(), leadNotificationWorker.close(), piiRetentionWorker.close(), maintenanceQueue.close()]);
   await connection.quit();
   console.log('[worker] shutdown complete');
   process.exit(0);
@@ -115,4 +133,4 @@ async function shutdown(signal) {
 process.on('SIGINT', () => void shutdown('SIGINT'));
 process.on('SIGTERM', () => void shutdown('SIGTERM'));
 
-console.log('[worker] tariff-imports, site-rebuilds, lead-deliveries and maintenance are listening');
+console.log('[worker] tariff-imports, site-rebuilds, lead-deliveries, lead-notifications and maintenance are listening');

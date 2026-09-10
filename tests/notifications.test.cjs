@@ -79,11 +79,19 @@ test('ordinary Resend notification accepts a successful response with an email i
   process.env.LEADS_EMAIL = 'operator@example.test';
   process.env.RESEND_API_KEY = 'resend-test-key';
   delete process.env.LEADS_EMAIL_WEBHOOK_URL;
-  global.fetch = async () => new Response('{"id":"email-123"}', { status: 200 });
+  let request;
+  global.fetch = async (url, options) => {
+    request = { url, options };
+    return new Response('{"id":"email-123"}', { status: 200 });
+  };
 
   const notifications = new NotificationsService({});
 
-  await notifications.notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' });
+  const result = await notifications.notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' });
+
+  assert.deepEqual(result, { transport: 'resend', providerMessageId: 'email-123' });
+  assert.equal(request.options.headers['idempotency-key'], 'lead-notification-lead-1');
+  assert.ok(request.options.signal instanceof AbortSignal);
 });
 
 test('ordinary webhook notification accepts a successful empty response', async (t) => {
@@ -95,5 +103,41 @@ test('ordinary webhook notification accepts a successful empty response', async 
 
   const notifications = new NotificationsService({});
 
-  await notifications.notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' });
+  const result = await notifications.notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' });
+
+  assert.deepEqual(result, { transport: 'webhook' });
+});
+
+test('ordinary notification classifies transient and permanent failures for bounded retry', async (t) => {
+  preserveNotificationEnvironment(t);
+  process.env.LEADS_EMAIL = 'operator@example.test';
+  process.env.RESEND_API_KEY = 'resend-test-key';
+  delete process.env.LEADS_EMAIL_WEBHOOK_URL;
+  const notifications = new NotificationsService({});
+
+  for (const [response, expectedRetryable] of [
+    [() => new Response('{}', { status: 422 }), false],
+    [() => new Response('{}', { status: 429 }), true],
+    [() => new Response('{}', { status: 503 }), true],
+    [() => { throw new TypeError('network down'); }, true],
+    [() => ({ ok: true, status: 200, text: async () => { throw new TypeError('body stream reset'); } }), true],
+  ]) {
+    global.fetch = async () => response();
+    await assert.rejects(
+      notifications.notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' }),
+      (error) => error.retryable === expectedRetryable,
+    );
+  }
+});
+
+test('ordinary notification fails permanently when no transport is configured', async (t) => {
+  preserveNotificationEnvironment(t);
+  delete process.env.LEADS_EMAIL;
+  delete process.env.RESEND_API_KEY;
+  delete process.env.LEADS_EMAIL_WEBHOOK_URL;
+
+  await assert.rejects(
+    new NotificationsService({}).notifyLead({ id: 'lead-1', phone: '+79000000000', city: 'Казань' }),
+    (error) => error.code === 'not_configured' && error.transport === 'none' && error.retryable === false,
+  );
 });

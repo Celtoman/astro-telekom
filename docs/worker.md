@@ -1,12 +1,13 @@
 # Фоновые задачи
 
-Worker запускается из `services/worker/src/index.mjs`. Он требует `REDIS_URL`, подключается через `ioredis` и создает четыре BullMQ consumers и одну scheduler queue.
+Worker запускается из `services/worker/src/index.mjs`. Он требует `REDIS_URL`, подключается через `ioredis` и создает пять BullMQ consumers и одну scheduler queue.
 
 В Coolify worker имеет отдельный container healthcheck `services/worker/src/healthcheck.mjs`. Проверка создает короткоживущее Redis-соединение с отключенными бесконечными retry и требует ответ `PONG`; она не выполняет business job и не зависит от очереди, но не позволяет считать worker здоровым при потере Redis.
 
 | Queue | Consumer | Текущий producer | Фактический статус |
 | --- | --- | --- | --- |
 | `lead-deliveries` | POST `/api/v1/internal/lead-deliveries/:id` с `ADMIN_API_TOKEN` | `LeadDeliveryService` в API | Работает при настроенном Redis и отдельном worker. |
+| `lead-notifications` | POST `/api/v1/internal/lead-notifications/:id` с `ADMIN_API_TOKEN` | `LeadNotificationOutboxService` в API | Persistent outbox: три DB-accounted попытки с exponential backoff 30 секунд, periodic recovery и revision/attempt job ID. |
 | `tariff-imports` | POST `/api/v1/admin/tariffs/import` | В коде не найден | Listener есть, producer нет. Админка вызывает validate/apply напрямую. |
 | `site-rebuilds` | POST deployment provider, затем `/api/v1/internal/site-rebuilds/:id/result` | `RebuildQueueService` в API | Persistent job в PostgreSQL, три попытки BullMQ с exponential backoff 30 секунд. |
 | `maintenance` | POST `/api/v1/internal/pii-retention` с `ADMIN_API_TOKEN` | BullMQ Job Scheduler `pii-retention-daily` | Регистрируется только при валидном `PII_RETENTION_DAYS`; UTC cron по умолчанию `0 3 * * *`, три попытки. |
@@ -24,12 +25,23 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 
 Административный `POST /crm/leads/:id/retry-delivery` разрешен для `DELIVERY_QUEUE_ERROR`, двух финальных delivery-error статусов и старого orphan `PENDING` без API-attempts. Для завершенной, заблокированной coverage/subscriber или уже начавшей API-доставку заявки повтор отклоняется. Это позволяет восстановить незапущенную очередь без обхода продуктовой маршрутизации и без конфликта уникального `(leadId, attemptNumber, channel)`.
 
+## Оповещение оператора о новой заявке
+
+1. `POST /leads` в одной транзакции создает `Lead` и связанную `LeadNotification`; outbox не копирует телефон, адрес, email или текст письма.
+2. После commit API ставит отдельный job `lead-notification-<notificationId>-revision-<revision>-attempt-<attempt>`. Сбой producer возвращает запись в `PENDING` с безопасным `queue_error`; startup и минутный reconciler повторно ставят незавершенные записи. Счетчик попыток хранится в PostgreSQL и не сбрасывается при потере Redis.
+3. Worker вызывает защищенный `/internal/lead-notifications/:id` с 30-секундным timeout. API атомарно переводит запись в `RUNNING`, поэтому второй worker не может одновременно отправить то же оповещение. Свежий `RUNNING` не отбирается при rolling restart; только запись старше двухминутного lease возвращается в очередь.
+4. Resend success требует HTTP 2xx и непустой message ID; webhook success требует HTTP 2xx. Внешний запрос ограничен 15 секундами. В outbox сохраняются transport, provider ID, число попыток, безопасный error code и HTTP status, но не response body.
+5. Типизированные ошибки сети/чтения ответа и HTTP 408/425/429/5xx повторяются не более трех раз с exponential backoff. Постоянные 4xx, неверный response contract, отсутствие transport и неизвестный implementation exception завершаются `FAILED` без бессмысленных повторов; последний сохраняется только как безопасный `internal_error`.
+6. Admin показывает статус в журнале и карточке. `POST /crm/leads/:id/retry-notification` разрешен только для `FAILED`, через compare-and-swap увеличивает revision и ставит новый job, поэтому два параллельных оператора не запускают две отправки.
+
+Доставка имеет at-least-once семантику: если внешний transport принял сообщение, а API завершился до записи `SUCCEEDED`, возможен повтор. Один idempotency header `lead-notification-<leadId>` передается Resend и webhook, чтобы transport мог подавить такой дубль.
+
 ## Удаление просроченных PII
 
 1. Worker проверяет, что `PII_RETENTION_DAYS` — целое число от 1 до 3650. При отсутствии или ошибке scheduler не создается, а `/admin/readiness` остается `blocked`.
 2. Scheduler ежедневно создает `pii-retention` job. Cron можно изменить через `PII_RETENTION_CRON`; timezone фиксирован UTC.
 3. Worker вызывает worker-only endpoint и повторяет до 100 batches по `PII_RETENTION_BATCH_SIZE` (default 500, максимум 5000). Непогашенный backlog приводит к retry job, а не к ложному success.
-4. API в serializable transaction выбирает старые лиды по `createdAt`, отвязывает более свежие duplicates и физически удаляет старые лиды. FK cascade удаляет status history, activity, delivery payloads и access tokens.
+4. API в serializable transaction выбирает старые лиды по `createdAt`, отвязывает более свежие duplicates и физически удаляет старые лиды. FK cascade удаляет status history, activity, delivery payloads, notification evidence и access tokens.
 5. Истекшие fallback tokens удаляются независимо, а старые `AddressCheck` — только если на них больше не ссылается ни один лид. Ответ содержит только cutoff и счетчики, без удаленных данных.
 
 Hard-delete выбран, чтобы PII не осталось в JSON payloads. Согласованный срок хранения сырых заявок — 180 дней; юридическое основание обработки и текст согласия остаются отдельным release-блокером.
@@ -38,7 +50,7 @@ Hard-delete выбран, чтобы PII не осталось в JSON payloads.
 
 ## Поведение без Redis
 
-Если API запущен без `REDIS_URL`, delivery выполняется в памяти процесса через `queueMicrotask` или `setTimeout`. Это удобно для локального прототипа, но restart API теряет запланированную попытку. Rebuild при этом не вызывает deployment напрямую: запись остается в PostgreSQL со статусом `PENDING`. После запуска API с Redis незавершенные rebuild-записи повторно публикуются в BullMQ. Worker без `REDIS_URL` не стартует корректно как полноценный async consumer, поэтому production обязательно должен использовать Redis.
+Если API запущен без `REDIS_URL`, delivery и lead notification выполняются в памяти процесса через `queueMicrotask` или `setTimeout`. Это удобно для локального прототипа; delivery restart API может потерять, а notification остается в PostgreSQL и восстанавливается при следующем старте API. Rebuild без Redis не вызывает deployment напрямую: запись остается в PostgreSQL со статусом `PENDING`. После запуска API с Redis незавершенные notification/rebuild записи повторно публикуются в BullMQ. Worker без `REDIS_URL` не стартует корректно как полноценный async consumer, поэтому production обязательно должен использовать Redis.
 
 ## Пересборка статического сайта
 
@@ -53,7 +65,7 @@ Hard-delete выбран, чтобы PII не осталось в JSON payloads.
 
 ## Остановка процесса
 
-Worker перехватывает `SIGINT`/`SIGTERM`: закрывает все четыре `Worker` и maintenance queue (дожидаясь текущих задач через `close()`), затем завершает Redis-соединение. Live-проверка под реальной нагрузкой (`docker compose stop worker` с активной задачей) не выполнена — см. [workaround-audit.md](research/2026-09-07-workaround-audit.md), W-08.
+Worker перехватывает `SIGINT`/`SIGTERM`: закрывает все пять `Worker` и maintenance queue (дожидаясь текущих задач через `close()`), затем завершает Redis-соединение. Live-проверка под реальной нагрузкой (`docker compose stop worker` с активной задачей) не выполнена — см. [workaround-audit.md](research/2026-09-07-workaround-audit.md), W-08.
 
 ## Оставшийся неиспользуемый listener
 

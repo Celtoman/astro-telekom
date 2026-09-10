@@ -105,17 +105,19 @@ Apply трактует файл как полный snapshot провайдер�
 
 | Method | Route | Поведение |
 | --- | --- | --- |
-| GET | `/crm/leads` | Возвращает полный список заявок с relations, без пагинации. |
-| GET | `/crm/leads/:id` | Детальная карточка с адресной проверкой, попытками и activity. |
+| GET | `/crm/leads` | Возвращает полный список заявок с relations и статусом обычного оповещения, без пагинации. |
+| GET | `/crm/leads/:id` | Детальная карточка с адресной проверкой, delivery attempts, notification evidence и activity. |
 | PATCH | `/crm/leads/:id/status` | Изменяет операторский status и добавляет history с optimistic concurrency. |
 | POST | `/crm/leads/:id/retry-delivery` | Безопасно повторно ставит eligible lead в очередь после `DELIVERY_QUEUE_ERROR`, исчерпанной доставки либо orphan `PENDING` без API-attempts. Возвращает фактический `PENDING` или `DELIVERY_QUEUE_ERROR`; не обходит coverage/subscriber routing. |
+| POST | `/crm/leads/:id/retry-notification` | Повторно ставит обычное оповещение только после финального `FAILED`; увеличивает revision и возвращает `QUEUED` либо сохраненный `PENDING`. |
 | POST | `/crm/leads/:id/revoke-fallback-access` | Отзывает все еще активные одноразовые fallback tokens заявки. Защищен общим admin guard. |
 | POST | `/internal/lead-deliveries/:id` | Worker-only handler очереди. Защищен тем же guard. |
+| POST | `/internal/lead-notifications/:id` | Worker-only обработчик persistent outbox; принимает attempt/maxAttempts/revision и сохраняет безопасный outcome. Защищен service token guard. |
 | POST | `/internal/pii-retention` | Worker-only bounded purge: требует service `x-admin-token` и валидный `PII_RETENTION_DAYS`, удаляет один batch просроченных лидов с cascade-данными, истекшие fallback tokens и осиротевшие старые AddressCheck; возвращает только cutoff и счетчики. |
 
 `/crm/leads` сейчас возвращает PII без серверной пагинации и фильтрации. Admin `/leads` использует endpoint только после проверки HttpOnly-cookie сессии и фильтрует полученный список в браузере; для большого объема нужна отдельная серверная пагинация.
 
-Retention endpoint физически удаляет весь `Lead`, чтобы PII не осталось в `contractResult`, `apiResult`, UTM или delivery JSON. Cascade удаляет `LeadDeliveryAttempt`, `LeadActivityEvent`, `LeadStatusHistory` и `LeadAccessToken`; старые `AddressCheck` удаляются только после исчезновения всех ссылок. Свежий duplicate, ссылающийся на удаляемый лид, предварительно отвязывается. Один вызов ограничен `PII_RETENTION_BATCH_SIZE` (default 500, максимум 5000); worker повторяет batches и запускает scheduler ежедневно. Согласованный срок для сырых заявок — 180 дней. Без валидного `PII_RETENTION_DAYS` endpoint возвращает 503, scheduler отключен, а release readiness остается `blocked`.
+Retention endpoint физически удаляет весь `Lead`, чтобы PII не осталось в `contractResult`, `apiResult`, UTM или delivery JSON. Cascade удаляет `LeadDeliveryAttempt`, `LeadNotification`, `LeadActivityEvent`, `LeadStatusHistory` и `LeadAccessToken`; старые `AddressCheck` удаляются только после исчезновения всех ссылок. Свежий duplicate, ссылающийся на удаляемый лид, предварительно отвязывается. Один вызов ограничен `PII_RETENTION_BATCH_SIZE` (default 500, максимум 5000); worker повторяет batches и запускает scheduler ежедневно. Согласованный срок для сырых заявок — 180 дней. Без валидного `PII_RETENTION_DAYS` endpoint возвращает 503, scheduler отключен, а release readiness остается `blocked`.
 
 ## Отсутствующие routes
 

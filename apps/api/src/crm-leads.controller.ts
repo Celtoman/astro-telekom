@@ -4,6 +4,7 @@ import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
 import { LeadDeliveryService } from './lead-delivery.service';
 import { LeadAccessService } from './lead-access.service';
+import { LeadNotificationOutboxService } from './lead-notification-outbox.service';
 
 type LeadStatus = 'NEW' | 'IN_PROGRESS' | 'CALL_LATER' | 'CONNECTED' | 'REJECTED';
 
@@ -19,13 +20,14 @@ export class CrmLeadsController {
     private readonly prisma: PrismaService,
     private readonly delivery: LeadDeliveryService,
     private readonly leadAccess: LeadAccessService,
+    private readonly notifications: LeadNotificationOutboxService,
   ) {}
 
   @Get()
   list() {
     return this.prisma.lead.findMany({
       orderBy: { createdAt: 'desc' },
-      include: { city: true, page: true, tariff: true, history: true, deliveryAttempts: true, activityEvents: true, duplicateOf: { select: { id: true, phone: true, createdAt: true } } },
+      include: { city: true, page: true, tariff: true, history: true, deliveryAttempts: true, notification: true, activityEvents: true, duplicateOf: { select: { id: true, phone: true, createdAt: true } } },
     });
   }
 
@@ -33,7 +35,7 @@ export class CrmLeadsController {
   detail(@Param('id') id: string) {
     return this.prisma.lead.findUniqueOrThrow({
       where: { id },
-      include: { site: true, city: true, page: true, tariff: true, addressCheck: true, history: true, deliveryAttempts: true, activityEvents: true, duplicateOf: true },
+      include: { site: true, city: true, page: true, tariff: true, addressCheck: true, history: true, deliveryAttempts: true, notification: true, activityEvents: true, duplicateOf: true },
     });
   }
 
@@ -60,6 +62,11 @@ export class CrmLeadsController {
       processingStatus: result.processingStatus,
       message: result.queued ? 'Повторная передача поставлена в очередь' : 'Не удалось поставить повторную передачу в очередь',
     };
+  }
+
+  @Post(':id/retry-notification')
+  retryNotification(@Param('id') id: string) {
+    return this.notifications.retryForLead(id);
   }
 
   @Post(':id/revoke-fallback-access')

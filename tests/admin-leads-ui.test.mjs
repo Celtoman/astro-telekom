@@ -83,3 +83,13 @@ test('lead journal makes processing problems visible before opening a card', () 
   assert.match(source, /<TableHead>Обработка<\/TableHead>/);
   assert.match(source, /statusText\(processingLabels, lead\.processingStatus/);
 });
+
+test('lead workspace exposes notification status, safe technical details and manual retry', () => {
+  const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
+
+  assert.match(source, /notification/);
+  assert.match(source, /Оповещение оператора/);
+  assert.match(source, /Повторить оповещение/);
+  assert.match(source, /\/retry-notification/);
+  assert.match(source, /Техническая информация/);
+});

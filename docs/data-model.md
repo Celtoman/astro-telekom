@@ -1,6 +1,6 @@
 # Модель данных текущего прототипа
 
-Источник правды: `prisma/schema.prisma` и четырнадцать применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
+Источник правды: `prisma/schema.prisma` и пятнадцать применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
 
 ## Сущности контента и географии
 
@@ -28,15 +28,18 @@
 | `AddressCheck` | Фактический нормализованный адрес, object type, status, raw provider response и site/city/page source-контекст. `cityId` обозначает город страницы и не ограничивает географию адреса. |
 | `Lead` | Контакты, фактический адрес, UTM, URL/form/device/visited pages, address/contract results, processing status, external lead data, operator status. `cityId` обозначает город страницы-источника. |
 | `LeadDeliveryAttempt` | Каждый queue/API/email attempt, idempotency key, payload/response/error, next retry time. |
+| `LeadNotification` | Одна persistent outbox/status-запись обычного оповещения на лид: revision, attempts, transport, безопасный error code/HTTP status и provider message ID без копии телефона, адреса или текста письма. |
 | `LeadActivityEvent` | События браузера до формы. |
 | `LeadStatusHistory` | Операторские переходы NEW/IN_PROGRESS/CALL_LATER/CONNECTED/REJECTED. |
 | `LeadAccessToken` | SHA-256 hash одноразовой fallback-ссылки, срок действия, отметки использования и отзыва; связан ровно с одной заявкой и удаляется каскадно. |
 
 `LeadProcessingStatus` отделяет delivery flow от операторского `LeadStatus`. Помимо технических/доставочных исходов, миграция `0013_lead_provider_outcomes` добавляет две однозначные причины непередачи: `PROVIDER_NOT_AVAILABLE_NOT_SENT` (провайдеры есть, Дом.ру среди них нет) и `NO_PROVIDERS_NOT_SENT` (Tarifnik вернул пустой список). Они не подменяются ручной проверкой, потому что отрицательный ответ уже однозначен. Миграция `0014_delivery_queue_status` добавляет `DELIVERY_QUEUE_ERROR` и канал `QUEUE`, чтобы сбой producer не оставался ложным `PENDING` и был виден отдельно от ответа Tarifnik/email.
 
+Миграция `0015_lead_notification_outbox` добавляет `LeadNotification` и статусы `PENDING/QUEUED/RUNNING/RETRYING/SUCCEEDED/FAILED`. Запись создается в одной транзакции с `Lead`; revision отделяет ручные циклы, а persisted attempts сохраняют общий лимит после потери Redis. Каждый queue job имеет revision+attempt в ID и удаляется после terminal BullMQ outcome. Свежий `RUNNING` защищен lease, ручной retry — compare-and-swap. Доставка имеет at-least-once семантику, а idempotency header `lead-notification-<leadId>` снижает риск дубля между подтверждением провайдера и фиксацией success в БД.
+
 Согласованная маршрутизация требует хранить отдельно исходные ответы проверок, нормализованное решение и реальные delivery attempts. Отсутствие Дом.ру, подтвержденный действующий абонент и неоднозначный ответ API — разные причины непередачи. API Dom.ru вызывается после обнаружения хотя бы одного провайдера; только успешный ответ ожидаемой структуры с явным `contacts: []` означает `NOT_FOUND`, но delivery дополнительно требует наличия Дом.ру. Отсутствие или неверный тип `contacts` является ошибкой контракта и должно приводить к `MANUAL_CHECK_API`. Для видимой проверки подключения `AddressCheck` может существовать без `Lead`; лид появляется только после найденного Дом.ру и ввода телефона.
 
-Для retention не добавлена отдельная policy-таблица: юридически утвержденный срок приходит только из обязательной production-переменной `PII_RETENTION_DAYS`. Миграция `0012_pii_retention_indexes` индексирует `Lead.createdAt` и `AddressCheck.createdAt`. Bounded hard-delete старого `Lead` каскадно удаляет history, delivery attempts, activity и access tokens; свежие duplicates предварительно отвязываются, старый `AddressCheck` удаляется только без оставшихся ссылок. Это исключает частичную «анонимизацию», при которой PII мог бы остаться в JSON.
+Для retention не добавлена отдельная policy-таблица: юридически утвержденный срок приходит только из обязательной production-переменной `PII_RETENTION_DAYS`. Миграция `0012_pii_retention_indexes` индексирует `Lead.createdAt` и `AddressCheck.createdAt`. Bounded hard-delete старого `Lead` каскадно удаляет history, delivery attempts, notification evidence, activity и access tokens; свежие duplicates предварительно отвязываются, старый `AddressCheck` удаляется только без оставшихся ссылок. Это исключает частичную «анонимизацию», при которой PII мог бы остаться в JSON.
 
 ## Доступ и технические записи
 
@@ -58,4 +61,4 @@ Provider.settings.content -> Site.settings.content -> Region.content -> City.con
 
 ## Чего в модели нет
 
-Нет сущностей для media library, page template/version, scheduled publication, audit action, notification delivery, analytics aggregates, SEO validation, variable registry, category/collection, equipment, channel package, review, persisted legal retention policy и provider integration profile. Retention mechanism существует, но конкретный срок остается внешним legal decision. Перед добавлением новых сущностей нужно утвердить их interface и ownership, а не использовать неструктурированный JSON как постоянную замену.
+Нет сущностей для media library, page template/version, scheduled publication, audit action, analytics aggregates, SEO validation, variable registry, category/collection, equipment, channel package, review, persisted legal retention policy и provider integration profile. Retention mechanism существует, но конкретный срок остается внешним legal decision. Перед добавлением новых сущностей нужно утвердить их interface и ownership, а не использовать неструктурированный JSON как постоянную замену.

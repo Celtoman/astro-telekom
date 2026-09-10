@@ -1,15 +1,19 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { PublicLeadsController } = require('../apps/api/dist/public-leads.controller.js');
-const { LeadNotificationError } = require('../apps/api/dist/notifications.service.js');
-
-function fixture(check, recentLeads = [], notifyLead = async () => {}) {
+function fixture(check, recentLeads = [], enqueueNotification = async () => true) {
   let saved;
+  let notificationCreated;
+  let notificationEnqueues = 0;
   let contractLocation;
   let contractChecks = 0;
   let deliveryEnqueues = 0;
   const transaction = {
     lead: { create: async ({ data }) => { saved = data; return { ...data, id: 'lead', status: 'NEW' }; } },
+    leadNotification: { create: async ({ data }) => {
+      notificationCreated = data;
+      return { id: 'notification', ...data, status: 'PENDING', revision: 1, maxAttempts: 3 };
+    } },
     leadActivityEvent: { createMany: async () => ({ count: 0 }) },
   };
   const prisma = {
@@ -42,7 +46,15 @@ function fixture(check, recentLeads = [], notifyLead = async () => {}) {
       return { queued: true, processingStatus: 'PENDING' };
     },
   };
-  const controller = new PublicLeadsController(prisma, { notifyLead }, contract, delivery);
+  const notifications = {
+    create: (tx, leadId) => tx.leadNotification.create({ data: { leadId } }),
+    enqueueTracked: async (notificationId) => {
+      notificationEnqueues += 1;
+      assert.equal(notificationId, 'notification');
+      return enqueueNotification(notificationId);
+    },
+  };
+  const controller = new PublicLeadsController(prisma, contract, delivery, notifications);
   return {
     controller,
     create: (body) => controller.create(body, { headers: {}, url: '/leads' }),
@@ -50,6 +62,8 @@ function fixture(check, recentLeads = [], notifyLead = async () => {}) {
     contractChecks: () => contractChecks,
     contractLocation: () => contractLocation,
     deliveryEnqueues: () => deliveryEnqueues,
+    notificationCreated: () => notificationCreated,
+    notificationEnqueues: () => notificationEnqueues,
   };
 }
 const base = { citySlug: 'kazan', phone: '+79000000000' };
@@ -58,7 +72,7 @@ test('lead rejects a site that is not publicly published', async () => {
   const prisma = {
     site: { findFirst: async ({ where }) => { assert.equal(where.status, 'PUBLISHED'); return null; } },
   };
-  const controller = new PublicLeadsController(prisma, { notifyLead: async () => {} });
+  const controller = new PublicLeadsController(prisma);
   await assert.rejects(controller.create(base), /Сайт не найден/);
 });
 
@@ -93,26 +107,32 @@ test('manual lead cannot manufacture a coverage result', async () => {
   assert.equal(f.deliveryEnqueues(), 0);
 });
 
-test('lead remains saved and logs a notification transport failure without PII', async () => {
-  const f = fixture(null, [], async () => {
-    throw new LeadNotificationError('Lead notification via Resend responded 422', 'resend', 'http_error', 422);
-  });
+test('lead and its notification outbox record are created atomically before enqueue', async () => {
+  const f = fixture(null);
+  const created = await f.create(base);
+
+  assert.equal(created.id, 'lead');
+  assert.deepEqual(f.notificationCreated(), { leadId: 'lead' });
+  assert.equal(f.notificationEnqueues(), 1);
+});
+
+test('lead remains accepted when notification queueing fails after the transaction', async () => {
+  const f = fixture(null, [], async () => { throw new Error('database error containing +79000000000'); });
   const logged = [];
   f.controller.logger = { error: (message) => logged.push(message) };
 
   const created = await f.create(base);
-  await new Promise((resolve) => setImmediate(resolve));
 
   assert.equal(created.id, 'lead');
-  assert.equal(f.saved().phone, '+79000000000');
+  assert.deepEqual(f.notificationCreated(), { leadId: 'lead' });
+  assert.equal(f.notificationEnqueues(), 1);
   assert.deepEqual(logged, [{
-    message: 'Lead notification failed',
+    message: 'Lead notification outbox could not be queued',
     leadId: 'lead',
-    transport: 'resend',
-    code: 'http_error',
-    status: 422,
+    notificationId: 'notification',
+    code: 'outbox_error',
   }]);
-  assert.doesNotMatch(JSON.stringify(logged[0]), /\+79000000000/);
+  assert.doesNotMatch(JSON.stringify(logged), /\+79000000000/);
 });
 test('unknown check is rejected before saving', async () => {
   const f = fixture(null);

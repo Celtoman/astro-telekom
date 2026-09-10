@@ -1,9 +1,9 @@
 import { BadRequestException, Body, Controller, Logger, Post, Req } from '@nestjs/common';
 import { createHmac, randomUUID } from 'node:crypto';
 import { PrismaService } from './prisma.service';
-import { LeadNotificationError, NotificationsService } from './notifications.service';
 import { DomruContractService } from './domru-contract.service';
 import { LeadDeliveryService } from './lead-delivery.service';
+import { LeadNotificationOutboxService } from './lead-notification-outbox.service';
 import { normalizeAddress, normalizePhone } from './lead-utils';
 import { CreateLeadDto } from './public.dto';
 import { readTarifnikCoverageSnapshot } from './coverage.service';
@@ -14,9 +14,9 @@ export class PublicLeadsController {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly notifications: NotificationsService,
     private readonly contract: DomruContractService,
     private readonly delivery: LeadDeliveryService,
+    private readonly notifications: LeadNotificationOutboxService,
   ) {}
 
   private subscriberCookie() {
@@ -105,7 +105,7 @@ export class PublicLeadsController {
       else if (!coverage.hasTargetProvider) processingStatus = 'PROVIDER_NOT_AVAILABLE_NOT_SENT';
     }
 
-    const lead = await this.prisma.$transaction(async (tx) => {
+    const { lead, notification } = await this.prisma.$transaction(async (tx) => {
       const created = await tx.lead.create({
         data: {
           siteId: site.id,
@@ -144,29 +144,20 @@ export class PublicLeadsController {
         const events = body.activity.filter((event) => event && typeof event.type === 'string').slice(-100);
         if (events.length) await tx.leadActivityEvent.createMany({ data: events.map((event) => ({ leadId: created.id, type: event.type.slice(0, 120), data: event.data as any })) });
       }
-      return created;
+      const createdNotification = await this.notifications.create(tx, created.id);
+      return { lead: created, notification: createdNotification };
     });
 
-    void this.notifications.notifyLead({
-      id: lead.id,
-      phone: lead.phone,
-      name: lead.name,
-      city: city.name,
-      address: lead.address,
-      tariff: tariff?.name,
-    }).catch((error: unknown) => {
+    try {
+      await this.notifications.enqueueTracked(notification.id);
+    } catch {
       this.logger.error({
-        message: 'Lead notification failed',
+        message: 'Lead notification outbox could not be queued',
         leadId: lead.id,
-        ...(error instanceof LeadNotificationError
-          ? {
-              transport: error.transport,
-              code: error.code,
-              ...(error.status === undefined ? {} : { status: error.status }),
-            }
-          : { code: 'transport_error' }),
+        notificationId: notification.id,
+        code: 'outbox_error',
       });
-    });
+    }
 
     if (processingStatus === 'PENDING') await this.delivery.enqueueTracked(lead.id, 1, 0, 1);
 

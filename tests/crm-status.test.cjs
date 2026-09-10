@@ -120,3 +120,18 @@ test('delivery retry starts after the last persisted API attempt without losing 
   assert.deepEqual(requested, ['lead', 4, 0, 1]);
   assert.equal(result.processingStatus, 'PENDING');
 });
+
+test('notification retry is delegated to the durable outbox service', async () => {
+  let requested;
+  const controller = new CrmLeadsController({}, {}, {}, {
+    retryForLead: async (leadId) => {
+      requested = leadId;
+      return { id: 'notification', status: 'QUEUED' };
+    },
+  });
+
+  const result = await controller.retryNotification('lead');
+
+  assert.equal(requested, 'lead');
+  assert.deepEqual(result, { id: 'notification', status: 'QUEUED' });
+});

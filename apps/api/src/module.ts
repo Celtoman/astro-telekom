@@ -37,6 +37,8 @@ import { PublicRedirectsController } from './public-redirects.controller';
 import { RedirectService } from './redirect.service';
 import { DadataService } from './dadata.service';
 import { AddressSuggestionsController } from './address-suggestions.controller';
+import { LeadNotificationController } from './lead-notification.controller';
+import { LeadNotificationOutboxService } from './lead-notification-outbox.service';
 
 @Module({
   controllers: [
@@ -62,7 +64,8 @@ import { AddressSuggestionsController } from './address-suggestions.controller';
     PiiRetentionController,
     AdminRedirectsController,
     PublicRedirectsController,
+    LeadNotificationController,
   ],
-  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, AuthService, AdminTokenGuard, CoverageService, DadataService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

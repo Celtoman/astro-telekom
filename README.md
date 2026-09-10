@@ -25,7 +25,7 @@
 apps/web        Статический Astro-сайт из опубликованных городов; сейчас опубликована только Казань
 apps/admin      Static Astro + React/Tailwind/shadcn: login-shell, тарифы, города, заявки, редиректы и fallback-доступ
 apps/api        NestJS + Fastify API и бизнес-правила
-services/worker BullMQ workers для импорта, пересборки, доставки заявок и PII retention
+services/worker BullMQ workers для импорта, пересборки, доставки заявок, оповещений и PII retention
 packages/database Prisma package и сгенерированный клиент
 prisma/         Схема, миграции и seed
 data/imports/    Канонические исходные файлы для штатного импорта

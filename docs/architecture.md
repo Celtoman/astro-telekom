@@ -11,7 +11,7 @@
 | `apps/web` | Astro 7, static output | SEO HTML и sitemap из опубликованных городов, страниц и тарифов; build генерирует Caddy routes опубликованных редиректов. Переиспользуемая адресная форма имеет два режима: обычная заявка на страницах услуг/тарифов и отдельная видимая проверка подключения. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
 | `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, рабочие `/tariffs`, `/cities`, `/leads`, `/redirects` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; заявки доступны как реальный master-detail журнал, редиректы — как CRUD со статистикой переходов. Целевой референс паттернов — next-shadcn-admin-dashboard-aria; текущие Radix-примитивы еще требуют миграции [#97](https://github.com/Celtoman/astro-telekom/issues/97), см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
-| `services/worker` | Node.js + BullMQ | Обработка доставок лидов, пересборок сайта и ежедневной PII retention; также слушает пока не используемую import-очередь. |
+| `services/worker` | Node.js + BullMQ | Обработка доставок лидов, обычных оповещений, пересборок сайта и ежедневной PII retention; также слушает пока не используемую import-очередь. |
 | `prisma` / `packages/database` | Prisma 7 + PostgreSQL | Схема, миграции, seed и сгенерированный клиент. |
 | `deploy` | Caddy + Docker Compose | Образы, reverse proxy, TLS и persistent volumes. |
 
@@ -33,6 +33,7 @@ Production Compose запускает one-shot `migrate` из API image посл
   -> /api/v1/address-suggestions -> API -> DaData IPLocate (один раз/24 ч) -> DaData suggest с locations_boost
   -> /api/v1/address-checks -> API -> DaData clean -> Tarifnik address/check -> PostgreSQL
   -> /api/v1/leads -> API -> routing/контракт Дом.ру -> PostgreSQL
+                    -> persistent LeadNotification -> Redis/BullMQ -> worker -> Resend/webhook
                     -> только разрешенный лид -> Redis/BullMQ -> worker -> Tarifnik/email
                     -> ошибка producer -> QUEUE attempt + DELIVERY_QUEUE_ERROR -> безопасный admin retry
 
@@ -65,7 +66,7 @@ PII retention scheduler в worker
 | `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; блоки имеют отдельную строгую валидацию, остальные admin bodies частично проверяются вручную. |
 | `tariff-import`, `city-import` | Валидация XLSX, сохранение отчета, transactional apply. |
 | `address-suggestions`, `dadata`, `address-checks`, `coverage` | Серверные глобальные DaData IPLocate/suggest/clean: IP используется один раз для мягкого boost и не сохраняется, жесткого ограничения городом формы нет; официальный Tarifnik `address/check` получает фактический адрес пользователя, словарь провайдеров нормализуется, проверенный snapshot сохраняется без публикации raw response. |
-| `leads`, `domru-contract`, `domru-profile-catalog`, `lead-delivery`, `notifications`, `lead-access` | Сохранение лида, дедупликация, выбор регионально однозначного профиля Дом.ру, fail-closed routing, строгая проверка действующего договора и только затем официальный `appeal/create`, retry только временных ошибок, queue failure tracking, email fallback и одноразовый доступ из fallback-письма. Worker повторно проверяет наличие целевого провайдера и persisted `NOT_FOUND`; delivery retry доступен только для recoverable delivery/queue states или старого orphan `PENDING`, но не для ручных/отрицательных routing-исходов. |
+| `leads`, `domru-contract`, `domru-profile-catalog`, `lead-delivery`, `lead-notification-outbox`, `notifications`, `lead-access` | Сохранение лида, дедупликация, выбор регионально однозначного профиля Дом.ру, fail-closed routing, строгая проверка действующего договора и только затем официальный `appeal/create`, retry только временных ошибок, queue failure tracking, email fallback и одноразовый доступ из fallback-письма. Обычное оповещение атомарно получает persistent outbox, startup recovery, bounded retry, idempotency header и отдельный admin retry. Worker повторно проверяет наличие целевого провайдера и persisted `NOT_FOUND`; delivery retry доступен только для recoverable delivery/queue states или старого orphan `PENDING`, но не для ручных/отрицательных routing-исходов. |
 | `pii-retention` | Worker-only bounded hard-delete лидов и связанных payloads старше согласованных 180 дней; fail-safe без валидной настройки. |
 | `crm-leads` | Список, карточка, смена статуса, повторная постановка доставки и отзыв fallback-доступа. |
 | `rebuild-queue` | Persistent rebuild/outbox, дедупликация по сайту, BullMQ producer, start/progress/result API, сохранение provider deployment UUID и фиксация только финального результата deployment. |
@@ -75,7 +76,7 @@ PII retention scheduler в worker
 
 `apps/api` — единственный слой, который пишет доменные данные. Admin, worker и web не обращаются к PostgreSQL напрямую. `CoverageService`, `DomruContractService`, `LeadDeliveryService` и `NotificationsService` выступают адаптерами внешних интеграций; их URLs и ключи задаются окружением. Префикс `/crm/leads` сохранен только в HTTP-контракте API; отдельного CRM-приложения или домена больше нет.
 
-`LeadDeliveryService` и `RebuildQueueService` создают доменные очереди в API; worker владеет maintenance scheduler и вызывает защищенные внутренние endpoints. Только API пишет в PostgreSQL. Для rebuild worker отдельно вызывает deployment provider и возвращает его success/error в API; для retention повторяет bounded batches до полного результата. `tariff-imports` остается listener без producer и не участвует в текущем import-flow.
+`LeadDeliveryService`, `LeadNotificationOutboxService` и `RebuildQueueService` создают доменные очереди в API; worker владеет maintenance scheduler и вызывает защищенные внутренние endpoints. Только API пишет в PostgreSQL. Для обычного оповещения worker передает номер попытки и revision, а API отправляет сообщение и сохраняет outcome; для rebuild worker отдельно вызывает deployment provider и возвращает его success/error в API; для retention повторяет bounded batches до полного результата. `tariff-imports` остается listener без producer и не участвует в текущем import-flow.
 
 ## Модель публикации
 

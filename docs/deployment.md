@@ -78,6 +78,7 @@ Seed не становится автоматической операцией �
 | Password boundary | Без Basic Auth credentials `tv-internet-dom.ru/*` и `admin.tv-internet-dom.ru/*`, включая `/api/*`, возвращают 401; после одного входа same-origin forms/API работают. API не имеет отдельного публичного Coolify domain; admin responses содержат `X-Robots-Tag: noindex, nofollow, noarchive`. |
 | Интеграции | Sandbox или согласованный test contract coverage, contract check, Tarifnik и fallback email. |
 | Rebuild | Изменить тестовую сущность, проверить переход `PENDING/QUEUED -> RUNNING -> SUCCEEDED` через `/admin/rebuilds`, затем проверить HTML и совпадение `publishedRevision === requestedRevision`. |
+| Lead notification | Создать синтетическую заявку в защищенном контуре, проверить связанную `LeadNotification` и переход `QUEUED/RUNNING -> SUCCEEDED` с provider ID либо безопасный `FAILED`; для controlled временной ошибки проверить bounded retry и startup recovery без копии PII. |
 | Backup/restore | Для текущего Git-based Compose Application настроить `pg_dump` во внешнее/S3-хранилище и проверить восстановление на отдельной БД. Встроенный database-aware backup Coolify доступен Database/Service resources, но пока не Git-based Compose Application. |
 
 ## Переменные окружения по назначению
@@ -110,7 +111,7 @@ docker compose -f docker-compose.coolify.yml exec api node -e "fetch('http://loc
 - Caddy reverse proxy не добавляет security headers из `static.Caddyfile`; он используется только внутри static image.
 - Нет мониторинга, alerting, лог-агрегации или настроенной backup policy. Встроенный database-aware backup Coolify пока не доступен PostgreSQL внутри Git-based Docker Compose Application; до реальных лидов нужен внешний `pg_dump`, S3/off-server storage и restore rehearsal.
 - Автоматическое hard-delete PII реализовано, срок 180 дней согласован и указан в `.env.example`; реальный прием заявок остается запрещен до юридического основания/согласия и isolated rehearsal production retention.
-- Текущее дерево содержит 14 миграций до `0014_delivery_queue_status`; внешний Coolify deployment `z9xixuvd8mglld3e5oemw4sv` для commit `54feb7b` успешно завершил one-shot `migrate`.
+- Текущее дерево содержит 15 миграций до `0015_lead_notification_outbox`; внешний Coolify deployment `z9xixuvd8mglld3e5oemw4sv` для commit `54feb7b` подтвердил первые 14, а `0015` должна быть подтверждена ближайшим deployment.
 - Static web не получает изменения из БД без внешней пересборки. Это относится и к набору redirect source paths; уже включенный matcher при каждом обращении проверяет актуальный published-статус записи через API.
 - Direct `docker-compose.prod.yml` по-прежнему требует заранее доступный `SITE_DATA_API_URL`; воспроизводимый первый bootstrap реализован только в целевом Coolify Compose.
 - Исторические live rehearsals 9–10 сентября 2026 года подтвердили DNS/TLS, persistent volumes, 401/200 password boundary, same-origin API, `www → non-www`, повторную web-публикацию и устойчивый `running:healthy`; последний зафиксированный deployment `z9xixuvd8mglld3e5oemw4sv` опубликовал commit `54feb7b`.
@@ -119,5 +120,6 @@ docker compose -f docker-compose.coolify.yml exec api node -e "fetch('http://loc
 - Для применения persistent rebuild-job нужна миграция `0010_site_rebuild_jobs`.
 - Fallback email link требует примененной миграции `0009_lead_access_tokens`; ссылка одноразовая, действует 24 часа и проверяется API. Raw token передается во fragment и не попадает в HTTP request к static admin.
 - Retention query требует миграцию `0012_pii_retention_indexes`; она добавляет индексы `Lead.createdAt` и `AddressCheck.createdAt`, не выбирая срок хранения.
+- Persistent обычное оповещение требует миграцию `0015_lead_notification_outbox`, Redis и работающий `lead-notifications` consumer; ручной повтор создает новый revision, а не новую PII-запись.
 
 Полный список рисков и работа по закрытию — в [technical-debt.md](technical-debt.md).

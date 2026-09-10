@@ -19,6 +19,7 @@ interface RelatedPage { id: string; slug: string }
 interface RelatedTariff { id: string; name: string; slug: string }
 interface LeadHistory { id: string; fromStatus?: LeadStatus; toStatus: LeadStatus; comment?: string; actorId?: string; createdAt: string }
 interface DeliveryAttempt { id: string; attemptNumber: number; channel: string; status: string; error?: string; nextAttemptAt?: string; createdAt: string }
+interface LeadNotification { id: string; status: string; attempts: number; maxAttempts: number; transport?: string; errorCode?: string; httpStatus?: number; providerMessageId?: string; updatedAt: string }
 interface ActivityEvent { id: string; type: string; createdAt: string }
 interface LeadSummary {
   id: string
@@ -42,6 +43,7 @@ interface LeadSummary {
   tariff?: RelatedTariff
   history: LeadHistory[]
   deliveryAttempts: DeliveryAttempt[]
+  notification?: LeadNotification
   activityEvents: ActivityEvent[]
   duplicateOf?: { id: string; phone: string; createdAt: string }
   duplicateReason?: string
@@ -129,6 +131,21 @@ const deliveryAttemptLabels: Record<string, string> = {
   SKIPPED: "Пропущено",
 }
 
+const notificationStatusLabels: Record<string, string> = {
+  PENDING: "Ожидает постановки в очередь",
+  QUEUED: "Поставлено в очередь",
+  RUNNING: "Отправляется",
+  RETRYING: "Будет повторено",
+  SUCCEEDED: "Отправлено",
+  FAILED: "Не отправлено",
+}
+
+const notificationTransportLabels: Record<string, string> = {
+  resend: "Email через Resend",
+  webhook: "Email через webhook",
+  none: "Канал не настроен",
+}
+
 const externalStatusLabels: Record<string, string> = {
   created: "Создана в Tarifnik",
   created_duplicate: "Принята Tarifnik как повторная",
@@ -175,7 +192,7 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
   const [statusFilter, setStatusFilter] = useState<"ALL" | LeadStatus>("ALL")
   const [nextStatus, setNextStatus] = useState<LeadStatus>("NEW")
   const [comment, setComment] = useState("")
-  const [busy, setBusy] = useState<"refresh" | "status" | "retry" | null>(null)
+  const [busy, setBusy] = useState<"refresh" | "status" | "retryDelivery" | "retryNotification" | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
 
   const handleError = useCallback((caught: unknown, fallback: string) => {
@@ -257,7 +274,7 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
 
   async function retryDelivery() {
     if (detail.status !== "ready") return
-    setBusy("retry")
+    setBusy("retryDelivery")
     setActionError(null)
     try {
       await requestJson(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}/retry-delivery`, { method: "POST" })
@@ -275,6 +292,26 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
     }
   }
 
+  async function retryNotification() {
+    if (detail.status !== "ready") return
+    setBusy("retryNotification")
+    setActionError(null)
+    try {
+      await requestJson(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}/retry-notification`, { method: "POST" })
+      const [leads, lead] = await Promise.all([
+        requestJson<LeadSummary[]>(apiUrl, "/crm/leads"),
+        requestJson<LeadDetail>(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}`),
+      ])
+      setState((current) => current.status === "ready" ? { ...current, leads } : current)
+      setDetail({ status: "ready", lead })
+    } catch (caught: unknown) {
+      const message = handleError(caught, "Повторное оповещение не запущено")
+      if (message) setActionError(message)
+    } finally {
+      setBusy(null)
+    }
+  }
+
   if (state.status === "loading") {
     return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></main>
   }
@@ -284,7 +321,7 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
 
   const newCount = state.leads.filter((lead) => lead.status === "NEW").length
   const pendingCount = state.leads.filter((lead) => lead.processingStatus === "PENDING").length
-  const attentionCount = state.leads.filter((lead) => attentionProcessingStatuses.has(lead.processingStatus)).length
+  const attentionCount = state.leads.filter((lead) => attentionProcessingStatuses.has(lead.processingStatus) || lead.notification?.status === "FAILED" || Boolean(lead.notification?.errorCode)).length
 
   return (
     <AdminShell apiUrl={apiUrl} user={state.user} active="leads">
@@ -311,27 +348,29 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
                 <Field><FieldLabel htmlFor="lead-search" className="sr-only">Поиск заявки</FieldLabel><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" /><Input id="lead-search" className="pl-9" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Телефон, адрес, имя или ID" /></div></Field>
                 <Field><FieldLabel htmlFor="lead-status-filter" className="sr-only">Фильтр по статусу</FieldLabel><select id="lead-status-filter" className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as "ALL" | LeadStatus)}><option value="ALL">Все статусы</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
               </div>
-              {visibleLeads.length ? <Table><TableHeader><TableRow><TableHead>Создана</TableHead><TableHead>Контакт</TableHead><TableHead>Адрес подключения</TableHead><TableHead>Статус</TableHead><TableHead>Обработка</TableHead><TableHead><span className="sr-only">Действие</span></TableHead></TableRow></TableHeader><TableBody>{visibleLeads.map((lead) => <TableRow key={lead.id} data-state={selectedLeadId === lead.id ? "selected" : undefined}><TableCell className="whitespace-nowrap">{dateFormatter.format(new Date(lead.createdAt))}</TableCell><TableCell><div className="font-medium">{lead.phone}</div><div className="text-xs text-muted-foreground">{lead.name || lead.source || "Имя не указано"}</div></TableCell><TableCell><div className="max-w-64 truncate font-medium">{lead.address || "Адрес не указан"}</div><div className="text-xs text-muted-foreground">Город страницы: {lead.city.name}</div></TableCell><TableCell><Badge variant={statusVariant(lead.status)}>{statusLabels[lead.status]}</Badge></TableCell><TableCell><Badge variant={statusVariant(lead.processingStatus)}>{statusText(processingLabels, lead.processingStatus, "Неизвестное состояние")}</Badge></TableCell><TableCell><Button variant="ghost" size="sm" onClick={() => void loadDetail(lead.id)}>Открыть</Button></TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><Inbox className="text-muted-foreground" aria-hidden="true" /><p className="font-medium">Заявки не найдены</p><p className="text-sm text-muted-foreground">Измените поиск или фильтр либо дождитесь первого обращения.</p></div>}
+              {visibleLeads.length ? <Table><TableHeader><TableRow><TableHead>Создана</TableHead><TableHead>Контакт</TableHead><TableHead>Адрес подключения</TableHead><TableHead>Статус</TableHead><TableHead>Обработка</TableHead><TableHead>Оповещение</TableHead><TableHead><span className="sr-only">Действие</span></TableHead></TableRow></TableHeader><TableBody>{visibleLeads.map((lead) => <TableRow key={lead.id} data-state={selectedLeadId === lead.id ? "selected" : undefined}><TableCell className="whitespace-nowrap">{dateFormatter.format(new Date(lead.createdAt))}</TableCell><TableCell><div className="font-medium">{lead.phone}</div><div className="text-xs text-muted-foreground">{lead.name || lead.source || "Имя не указано"}</div></TableCell><TableCell><div className="max-w-64 truncate font-medium">{lead.address || "Адрес не указан"}</div><div className="text-xs text-muted-foreground">Город страницы: {lead.city.name}</div></TableCell><TableCell><Badge variant={statusVariant(lead.status)}>{statusLabels[lead.status]}</Badge></TableCell><TableCell><Badge variant={statusVariant(lead.processingStatus)}>{statusText(processingLabels, lead.processingStatus, "Неизвестное состояние")}</Badge></TableCell><TableCell><Badge variant={statusVariant(lead.notification?.status || "PENDING")}>{statusText(notificationStatusLabels, lead.notification?.status, "Нет записи")}</Badge></TableCell><TableCell><Button variant="ghost" size="sm" onClick={() => void loadDetail(lead.id)}>Открыть</Button></TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><Inbox className="text-muted-foreground" aria-hidden="true" /><p className="font-medium">Заявки не найдены</p><p className="text-sm text-muted-foreground">Измените поиск или фильтр либо дождитесь первого обращения.</p></div>}
             </CardContent>
           </Card>
 
-          <LeadDetailCard detail={detail} nextStatus={nextStatus} setNextStatus={setNextStatus} comment={comment} setComment={setComment} busy={busy === "status" || busy === "retry"} retryBusy={busy === "retry"} onSave={updateStatus} onRetry={retryDelivery} />
+          <LeadDetailCard detail={detail} nextStatus={nextStatus} setNextStatus={setNextStatus} comment={comment} setComment={setComment} busy={busy !== null && busy !== "refresh"} deliveryRetryBusy={busy === "retryDelivery"} notificationRetryBusy={busy === "retryNotification"} onSave={updateStatus} onRetryDelivery={retryDelivery} onRetryNotification={retryNotification} />
         </div>
       </div>
     </AdminShell>
   )
 }
 
-function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment, busy, retryBusy, onSave, onRetry }: {
+function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment, busy, deliveryRetryBusy, notificationRetryBusy, onSave, onRetryDelivery, onRetryNotification }: {
   detail: DetailState
   nextStatus: LeadStatus
   setNextStatus: (status: LeadStatus) => void
   comment: string
   setComment: (comment: string) => void
   busy: boolean
-  retryBusy: boolean
+  deliveryRetryBusy: boolean
+  notificationRetryBusy: boolean
   onSave: () => Promise<void>
-  onRetry: () => Promise<void>
+  onRetryDelivery: () => Promise<void>
+  onRetryNotification: () => Promise<void>
 }) {
   if (detail.status === "idle") return <Card><CardHeader><CardTitle>Карточка заявки</CardTitle><CardDescription>Выберите заявку в журнале.</CardDescription></CardHeader><CardContent className="flex min-h-40 items-center justify-center text-sm text-muted-foreground">Детали появятся здесь.</CardContent></Card>
   if (detail.status === "loading") return <Card aria-busy="true"><CardHeader><Skeleton className="h-6 w-48" /><Skeleton className="h-4 w-36" /></CardHeader><CardContent className="flex flex-col gap-3"><Skeleton className="h-24 w-full" /><Skeleton className="h-32 w-full" /></CardContent></Card>
@@ -342,6 +381,7 @@ function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment
   const contractStatus = recordText(lead.contractResult, "status")
   const canRetryDelivery = ["DELIVERY_QUEUE_ERROR", "DELIVERY_ERROR_EMAIL_SENT", "DELIVERY_ERROR_EMAIL_FAILED"].includes(lead.processingStatus)
     || (lead.processingStatus === "PENDING" && lead.deliveryAttempts.length === 0)
+  const canRetryNotification = lead.notification?.status === "FAILED"
   const externalLead = lead.externalLeadId
     ? `${lead.externalLeadId} · ${statusText(externalStatusLabels, lead.externalStatus, "Статус Tarifnik не распознан")}`
     : "Не создана"
@@ -349,7 +389,8 @@ function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment
     <CardHeader><div className="flex flex-wrap items-start justify-between gap-3"><div><CardTitle>{lead.name || lead.phone}</CardTitle><CardDescription>{lead.phone} · {dateFormatter.format(new Date(lead.createdAt))}</CardDescription></div><Badge variant={statusVariant(lead.status)}>{statusLabels[lead.status]}</Badge></div></CardHeader>
     <CardContent className="flex flex-col gap-6">
       <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Контакт и контекст</h2><dl className="grid gap-2 text-sm"><DetailRow label="Email" value={lead.email} /><DetailRow label="Город страницы" value={lead.city.name} /><DetailRow label="Адрес подключения" value={lead.address} /><DetailRow label="Страница" value={lead.pageUrl || lead.page?.slug} /><DetailRow label="Тариф" value={lead.tariff?.name} /><DetailRow label="Источник" value={lead.source} /><DetailRow label="Форма" value={lead.formName} /></dl></section>
-      <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Проверки и доставка</h2><dl className="grid gap-2 text-sm"><DetailRow label="Обработка" value={statusText(processingLabels, lead.processingStatus, "Неизвестное состояние обработки")} description={processingDescriptions[lead.processingStatus] || "Состояние не распознано. Обновите страницу или проверьте журнал."} /><DetailRow label="Проверка адреса" value={statusText(addressCheckLabels, addressStatus, "Результат проверки адреса отсутствует")} /><DetailRow label="Статус договора" value={statusText(contractLabels, contractStatus, "Результат проверки договора отсутствует")} /><DetailRow label="Внешняя заявка" value={externalLead} /></dl>{canRetryDelivery ? <Button variant="outline" disabled={busy} onClick={() => void onRetry()}><RefreshCw data-icon="inline-start" />{retryBusy ? "Ставим в очередь…" : "Повторить передачу"}</Button> : null}{lead.duplicateOf ? <Alert><CircleAlert /><AlertTitle>Повторная заявка {lead.duplicateOf.id}</AlertTitle><AlertDescription>{statusText(duplicateReasonLabels, lead.duplicateReason, "Причина совпадения не распознана")}</AlertDescription></Alert> : null}</section>
+      <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Проверки и доставка</h2><dl className="grid gap-2 text-sm"><DetailRow label="Обработка" value={statusText(processingLabels, lead.processingStatus, "Неизвестное состояние обработки")} description={processingDescriptions[lead.processingStatus] || "Состояние не распознано. Обновите страницу или проверьте журнал."} /><DetailRow label="Проверка адреса" value={statusText(addressCheckLabels, addressStatus, "Результат проверки адреса отсутствует")} /><DetailRow label="Статус договора" value={statusText(contractLabels, contractStatus, "Результат проверки договора отсутствует")} /><DetailRow label="Внешняя заявка" value={externalLead} /></dl>{canRetryDelivery ? <Button variant="outline" disabled={busy} onClick={() => void onRetryDelivery()}><RefreshCw data-icon="inline-start" />{deliveryRetryBusy ? "Ставим в очередь…" : "Повторить передачу"}</Button> : null}{lead.duplicateOf ? <Alert><CircleAlert /><AlertTitle>Повторная заявка {lead.duplicateOf.id}</AlertTitle><AlertDescription>{statusText(duplicateReasonLabels, lead.duplicateReason, "Причина совпадения не распознана")}</AlertDescription></Alert> : null}</section>
+      <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Оповещение оператора</h2><dl className="grid gap-2 text-sm"><DetailRow label="Статус" value={statusText(notificationStatusLabels, lead.notification?.status, "Нет записи")} /><DetailRow label="Канал" value={statusText(notificationTransportLabels, lead.notification?.transport, "Еще не выбран")} /><DetailRow label="Попытки" value={lead.notification ? `${lead.notification.attempts} из ${lead.notification.maxAttempts}` : "—"} /></dl>{canRetryNotification ? <Button variant="outline" disabled={busy} onClick={() => void onRetryNotification()}><RefreshCw data-icon="inline-start" />{notificationRetryBusy ? "Ставим в очередь…" : "Повторить оповещение"}</Button> : null}{lead.notification?.errorCode ? <details className="text-sm"><summary className="cursor-pointer text-muted-foreground">Техническая информация</summary><p className="mt-1 break-words text-destructive">Код: {lead.notification.errorCode}{lead.notification.httpStatus ? ` · HTTP ${lead.notification.httpStatus}` : ""}</p></details> : null}</section>
       <FieldGroup>
         <Field><FieldLabel htmlFor="lead-next-status">Новый статус</FieldLabel><select id="lead-next-status" className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" value={nextStatus} disabled={busy} onChange={(event) => setNextStatus(event.target.value as LeadStatus)}>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
         <Field><FieldLabel htmlFor="lead-status-comment">Комментарий к истории</FieldLabel><Input id="lead-status-comment" value={comment} maxLength={5000} disabled={busy} onChange={(event) => setComment(event.target.value)} placeholder="Необязательно" /><FieldDescription>Комментарий сохранится вместе с переходом статуса.</FieldDescription></Field>
