@@ -34,7 +34,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
     <div class="bot-field" aria-hidden="true"><label for={`website-${formId}`}>Ваш сайт</label><input id={`website-${formId}`} name="website" tabindex="-1" autocomplete="off" /></div>
     <label for={`address-${formId}`}>Адрес</label>
     <div class="address-field">
-      <input id={`address-${formId}`} name="address" required autocomplete="street-address" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls={`address-suggestions-${formId}`} placeholder="Город, улица, дом, квартира" />
+      <input id={`address-${formId}`} name="address" required maxlength="300" autocomplete="street-address" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls={`address-suggestions-${formId}`} placeholder="Город, улица, дом, квартира" />
       <div id={`address-suggestions-${formId}`} data-address-suggestions class="address-suggestions" role="listbox" aria-label="Подсказки адреса" hidden></div>
     </div>
     <p class="address-hint" data-address-hint aria-live="polite">Начните вводить город и адрес, затем выберите подходящий вариант.</p>
@@ -157,6 +157,30 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
     };
   };
 
+  const appendHighlightedText = (element, text, query) => {
+    const tokens = [...new Set(String(query).toLocaleLowerCase('ru-RU').match(/[\p{L}\p{N}]+/gu) || [])]
+      .filter((token) => token.length >= 2)
+      .sort((left, right) => right.length - left.length)
+      .map((token) => token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    if (tokens.length === 0) {
+      element.textContent = text;
+      return;
+    }
+    const matcher = new RegExp(`(${tokens.join('|')})`, 'giu');
+    for (const part of String(text).split(matcher)) {
+      if (!part) continue;
+      if (matcher.test(part)) {
+        matcher.lastIndex = 0;
+        const mark = document.createElement('mark');
+        mark.textContent = part;
+        element.append(mark);
+      } else {
+        matcher.lastIndex = 0;
+        element.append(document.createTextNode(part));
+      }
+    }
+  };
+
   const selectSuggestion = (suggestion) => {
     selectedSuggestion = suggestion;
     addressInput.value = suggestion.value;
@@ -175,13 +199,18 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
     activeOption.scrollIntoView({ block: 'nearest' });
   };
 
-  const renderSuggestions = (items) => {
+  const renderSuggestions = (items, query = addressInput?.value || '') => {
     clearSuggestions();
     if (!suggestionList || !Array.isArray(items) || items.length === 0) {
       setAddressHint('Подходящий адрес не найден. Уточните город, улицу и дом.');
       return;
     }
-    for (const [index, suggestion] of items.entries()) {
+    const title = document.createElement('div');
+    title.className = 'address-suggestions-title';
+    title.textContent = 'Выберите адрес';
+    title.setAttribute('role', 'presentation');
+    suggestionList.append(title);
+    for (const [index, suggestion] of items.slice(0, 5).entries()) {
       if (!suggestion || typeof suggestion.value !== 'string') continue;
       const option = document.createElement('button');
       option.type = 'button';
@@ -194,19 +223,19 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
       const parts = formatSuggestion(suggestion);
       const primary = document.createElement('span');
       primary.className = 'address-option-primary';
-      primary.textContent = parts.primary;
+      appendHighlightedText(primary, parts.primary, query);
       option.append(primary);
       if (parts.secondary) {
         const secondary = document.createElement('span');
         secondary.className = 'address-option-secondary';
-        secondary.textContent = parts.secondary;
+        appendHighlightedText(secondary, parts.secondary, query);
         option.append(secondary);
       }
       option.addEventListener('pointerenter', () => setActiveSuggestion(index));
       option.addEventListener('click', () => selectSuggestion(suggestion));
       suggestionList.append(option);
     }
-    suggestionList.hidden = suggestionList.childElementCount === 0;
+    suggestionList.hidden = suggestionList.querySelectorAll('[role="option"]').length === 0;
     addressInput?.setAttribute('aria-expanded', String(!suggestionList.hidden));
     if (!suggestionList.hidden) setAddressHint('Выберите подходящий адрес из списка.');
   };
@@ -250,7 +279,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
     }
     const cacheKey = query.replace(/\s+/g, ' ').toLocaleLowerCase('ru-RU');
     if (suggestionCache.has(cacheKey)) {
-      renderSuggestions(suggestionCache.get(cacheKey));
+      renderSuggestions(suggestionCache.get(cacheKey), query);
       return;
     }
     setAddressHint('Ищем адрес…', 'loading');
@@ -260,6 +289,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
       try {
         const response = await fetch(`${apiUrl}/address-suggestions`, {
           method: 'POST',
+          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           signal: controller.signal,
           body: JSON.stringify({ siteSlug, citySlug, query, website: '' }),
@@ -272,7 +302,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
         const payload = await response.json();
         const suggestions = Array.isArray(payload.suggestions) ? payload.suggestions : [];
         cacheSuggestions(cacheKey, suggestions);
-        if (addressInput.value.trim() === query) renderSuggestions(suggestions);
+        if (addressInput.value.trim() === query) renderSuggestions(suggestions, query);
       } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') return;
         clearSuggestions();
@@ -427,12 +457,14 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
   .address-hint { color: #526071; font-size: 14px; line-height: 1.4; }
   .address-hint[data-state='error'] { color: #b42318; }
   .address-hint[data-state='success'] { color: #176b45; }
-  .address-suggestions { position: absolute; z-index: 20; inset: calc(100% + 6px) 0 auto; display: grid; gap: 2px; max-height: 280px; padding: 4px; overflow-y: auto; overscroll-behavior: contain; border: 1px solid #c9d6e5; border-radius: 12px; background: #fff; box-shadow: 0 16px 36px rgb(21 40 66 / 20%); }
+  .address-suggestions { position: absolute; z-index: 20; inset: calc(100% + 6px) 0 auto; display: grid; gap: 2px; max-height: 300px; padding: 8px; overflow-y: auto; overscroll-behavior: contain; border: 1px solid #e2e5eb; border-radius: 16px; background: #fff; box-shadow: 0 12px 28px rgb(21 40 66 / 14%); }
   .address-suggestions[hidden] { display: none; }
-  .address-suggestions :global(.address-option) { display: grid; gap: 2px; width: 100%; min-height: 44px; padding: 9px 11px; border: 0; border-radius: 8px; background: #fff; color: #18202a; font: inherit; cursor: pointer; text-align: left; }
-  .address-suggestions :global(.address-option:hover), .address-suggestions :global(.address-option:focus-visible), .address-suggestions :global(.address-option[aria-selected='true']) { background: #eaf4ff; box-shadow: inset 3px 0 #1769aa; outline: none; }
+  .address-suggestions :global(.address-suggestions-title) { padding: 2px 12px 6px; color: #526071; font-size: 12px; font-weight: 650; line-height: 1.35; }
+  .address-suggestions :global(.address-option) { display: grid; gap: 2px; width: 100%; min-height: 44px; padding: 8px 12px; border: 0; border-radius: 12px; background: #fff; color: #18202a; font: inherit; cursor: pointer; text-align: left; }
+  .address-suggestions :global(.address-option:hover), .address-suggestions :global(.address-option:focus-visible), .address-suggestions :global(.address-option[aria-selected='true']) { background: #eef4ff; outline: none; }
   .address-suggestions :global(.address-option-primary) { font-size: 15px; font-weight: 650; line-height: 1.35; }
   .address-suggestions :global(.address-option-secondary) { color: #526071; font-size: 13px; line-height: 1.35; }
+  .address-suggestions :global(mark) { padding: 0; background: transparent; color: inherit; font-weight: 800; }
   button { border: 0; cursor: pointer; font: inherit; width: fit-content; }
   button:disabled { cursor: wait; opacity: 0.7; }
   .alternatives { display: grid; gap: 8px; color: #526071; }

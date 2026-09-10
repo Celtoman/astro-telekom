@@ -10,7 +10,7 @@ const {
   rateLimitForPath,
   rateLimitKeyForRequest,
 } = require('../apps/api/dist/security-options.js');
-const { LoginDto, AddressCheckDto, CreateLeadDto, ConsumeLeadAccessDto } = require('../apps/api/dist/public.dto.js');
+const { LoginDto, AddressCheckDto, AddressSuggestionsDto, CreateLeadDto, ConsumeLeadAccessDto } = require('../apps/api/dist/public.dto.js');
 
 const metadata = (metatype) => ({ type: 'body', metatype, data: undefined });
 
@@ -35,6 +35,10 @@ test('global security options enforce strict DTOs and tighter public write limit
   );
   await assert.rejects(
     pipe.transform({ address: 'Казань, Баумана, 1', citySlug: 'kazan', website: 'spam.example' }, metadata(AddressCheckDto)),
+    (error) => error.getStatus() === 400,
+  );
+  await assert.rejects(
+    pipe.transform({ query: 'а'.repeat(301), citySlug: 'kazan' }, metadata(AddressSuggestionsDto)),
     (error) => error.getStatus() === 400,
   );
   await assert.rejects(

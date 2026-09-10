@@ -87,7 +87,7 @@ export class AddressCheckDto {
 export class AddressSuggestionsDto {
   @IsString()
   @MinLength(3)
-  @MaxLength(500)
+  @MaxLength(300)
   query!: string;
 
   @IsOptional()

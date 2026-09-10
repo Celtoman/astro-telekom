@@ -145,6 +145,7 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(kazanAddressCheck, /const apiUrl = "https:\/\/api\.partner\.example\.test\/api\/v1"/);
   assert.match(kazanAddressCheck, /\/address-suggestions/);
   assert.match(kazanAddressCheck, /placeholder="Город, улица, дом, квартира"/);
+  assert.match(kazanAddressCheck, /maxlength="300"/);
   assert.match(kazanAddressCheck, /aria-expanded="false"/);
   assert.match(kazanAddressCheck, /suggestion:\s*selectedSuggestion/);
   assert.match(kazanAddressCheck, /SUGGESTION_DEBOUNCE_MS\s*=\s*500/);
@@ -158,6 +159,11 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(kazanAddressCheck, /aria-selected/);
   assert.match(kazanAddressCheck, /address-option-primary/);
   assert.match(kazanAddressCheck, /address-option-secondary/);
+  assert.match(kazanAddressCheck, /Выберите адрес/);
+  assert.match(kazanAddressCheck, /createElement\('mark'\)/);
+  assert.match(kazanAddressCheck, /items\.slice\(0,\s*5\)/);
+  assert.match(kazanAddressCheck, /credentials:\s*'include'/);
+  assert.doesNotMatch(kazanAddressCheck, /innerHTML/);
   assert.match(kazanAddressCheck, /\.address-suggestions\[data-astro-cid-[^\]]+\] \.address-option\{/);
   assert.doesNotMatch(kazanAddressCheck, /\.address-option\[data-astro-cid-[^\]]+\]\{/);
   assert.doesNotMatch(kazanAddressCheck, /DADATA_TOKEN|DADATA_SECRET/);
