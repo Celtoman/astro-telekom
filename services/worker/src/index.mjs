@@ -56,7 +56,7 @@ const leadDeliveryWorker = new Worker(
     return jsonRequest(`${apiUrl}/internal/lead-deliveries/${encodeURIComponent(job.data.leadId)}`, {
       method: 'POST',
       headers: { 'x-admin-token': adminToken },
-      body: JSON.stringify({ attemptNumber: job.data.attemptNumber }),
+      body: JSON.stringify({ attemptNumber: job.data.attemptNumber, retryNumber: job.data.retryNumber }),
     });
   },
   { connection, concurrency: 4 },

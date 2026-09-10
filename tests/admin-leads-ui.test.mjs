@@ -48,3 +48,38 @@ test('lead workspace distinguishes the page source city from the submitted addre
   assert.doesNotMatch(leadsSource, /Город и адрес/);
   assert.match(accessSource, /Город страницы/);
 });
+
+test('lead workspace translates technical statuses and reads the real external lead fields', () => {
+  const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
+
+  for (const label of [
+    'Дом.ру доступен по адресу',
+    'Действующий договор не найден',
+    'Очередь отправки',
+    'Успешно',
+    'Не удалось поставить в очередь',
+    'Создана в Tarifnik',
+  ]) {
+    assert.ok(source.includes(label), `missing understandable label: ${label}`);
+  }
+  assert.match(source, /externalLeadId/);
+  assert.match(source, /externalStatus/);
+  assert.doesNotMatch(source, /recordText\(lead\.apiResult,\s*["']id["']\)/);
+  assert.doesNotMatch(source, /processingLabels\[lead\.processingStatus\]\s*\|\|\s*lead\.processingStatus/);
+});
+
+test('lead workspace offers a safe delivery retry for recoverable processing states', () => {
+  const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
+
+  assert.match(source, /\/retry-delivery/);
+  assert.match(source, /DELIVERY_QUEUE_ERROR/);
+  assert.match(source, /Повторить передачу/);
+});
+
+test('lead journal makes processing problems visible before opening a card', () => {
+  const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
+
+  assert.match(source, /Требуют внимания/);
+  assert.match(source, /<TableHead>Обработка<\/TableHead>/);
+  assert.match(source, /statusText\(processingLabels, lead\.processingStatus/);
+});

@@ -35,9 +35,10 @@ function fixture(check, recentLeads = []) {
     },
   };
   const delivery = {
-    enqueue: async (leadId) => {
+    enqueueTracked: async (leadId) => {
       deliveryEnqueues += 1;
       assert.equal(leadId, 'lead');
+      return { queued: true, processingStatus: 'PENDING' };
     },
   };
   const controller = new PublicLeadsController(prisma, { notifyLead: async () => {} }, contract, delivery);

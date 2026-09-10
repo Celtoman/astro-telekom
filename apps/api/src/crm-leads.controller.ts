@@ -39,14 +39,27 @@ export class CrmLeadsController {
 
   @Post(':id/retry-delivery')
   async retryDelivery(@Param('id') id: string) {
-    const lead = await this.prisma.lead.findUnique({ where: { id } });
+    const lead = await this.prisma.lead.findUnique({
+      where: { id },
+      include: { deliveryAttempts: { where: { channel: 'API' }, orderBy: { attemptNumber: 'desc' }, take: 1 } },
+    });
     if (!lead) throw new NotFoundException('Заявка не найдена');
-    if (!['DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED'].includes(lead.processingStatus)) {
+    const apiAttempts = lead.deliveryAttempts || [];
+    const isOrphanPending = lead.processingStatus === 'PENDING' && apiAttempts.length === 0;
+    const isRecoverableFailure = ['DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED'].includes(lead.processingStatus);
+    if (!isOrphanPending && !isRecoverableFailure) {
       throw new BadRequestException('Для этой заявки повторная передача не требуется');
     }
-    await this.prisma.lead.update({ where: { id }, data: { processingStatus: 'PENDING' } });
-    await this.delivery.enqueue(id, 1, 0);
-    return { id, processingStatus: 'PENDING', message: 'Повторная передача поставлена в очередь' };
+    if (lead.processingStatus !== 'PENDING') {
+      await this.prisma.lead.update({ where: { id }, data: { processingStatus: 'PENDING' } });
+    }
+    const attemptNumber = (apiAttempts[0]?.attemptNumber || 0) + 1;
+    const result = await this.delivery.enqueueTracked(id, attemptNumber, 0, 1);
+    return {
+      id,
+      processingStatus: result.processingStatus,
+      message: result.queued ? 'Повторная передача поставлена в очередь' : 'Не удалось поставить повторную передачу в очередь',
+    };
   }
 
   @Post(':id/revoke-fallback-access')

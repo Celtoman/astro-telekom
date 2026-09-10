@@ -57,7 +57,7 @@ test('delivery retry cannot bypass provider or subscriber routing decisions', as
         findUnique: async () => ({ id: 'lead', processingStatus }),
         update: async () => assert.fail(`updated blocked ${processingStatus}`),
       },
-    }, { enqueue: async () => { enqueued += 1; } });
+    }, { enqueueTracked: async () => { enqueued += 1; return { queued: true, processingStatus: 'PENDING' }; } });
     await assert.rejects(controller.retryDelivery('lead'), error => error.getStatus() === 400);
     assert.equal(enqueued, 0);
   }
@@ -69,8 +69,54 @@ test('delivery retry cannot bypass provider or subscriber routing decisions', as
       findUnique: async () => ({ id: 'lead', processingStatus: 'DELIVERY_ERROR_EMAIL_FAILED' }),
       update: async ({ data }) => { saved = data; },
     },
-  }, { enqueue: async () => { enqueued += 1; } });
+  }, { enqueueTracked: async () => { enqueued += 1; return { queued: true, processingStatus: 'PENDING' }; } });
   assert.equal((await retryable.retryDelivery('lead')).processingStatus, 'PENDING');
   assert.deepEqual(saved, { processingStatus: 'PENDING' });
   assert.equal(enqueued, 1);
+});
+
+test('delivery retry recovers an orphan pending lead with no attempts', async () => {
+  let requested;
+  const controller = new CrmLeadsController({
+    lead: {
+      findUnique: async () => ({ id: 'lead', processingStatus: 'PENDING', deliveryAttempts: [] }),
+      update: async () => assert.fail('orphan PENDING does not need a status reset'),
+    },
+  }, {
+    enqueueTracked: async (...args) => {
+      requested = args;
+      return { queued: true, processingStatus: 'PENDING' };
+    },
+  });
+
+  const result = await controller.retryDelivery('lead');
+
+  assert.deepEqual(requested, ['lead', 1, 0, 1]);
+  assert.equal(result.processingStatus, 'PENDING');
+});
+
+test('delivery retry starts after the last persisted API attempt without losing a fresh retry budget', async () => {
+  let saved;
+  let requested;
+  const controller = new CrmLeadsController({
+    lead: {
+      findUnique: async () => ({
+        id: 'lead',
+        processingStatus: 'DELIVERY_ERROR_EMAIL_FAILED',
+        deliveryAttempts: [{ attemptNumber: 3, channel: 'API' }],
+      }),
+      update: async ({ data }) => { saved = data; },
+    },
+  }, {
+    enqueueTracked: async (...args) => {
+      requested = args;
+      return { queued: true, processingStatus: 'PENDING' };
+    },
+  });
+
+  const result = await controller.retryDelivery('lead');
+
+  assert.deepEqual(saved, { processingStatus: 'PENDING' });
+  assert.deepEqual(requested, ['lead', 4, 0, 1]);
+  assert.equal(result.processingStatus, 'PENDING');
 });

@@ -27,12 +27,12 @@
 | --- | --- |
 | `AddressCheck` | Фактический нормализованный адрес, object type, status, raw provider response и site/city/page source-контекст. `cityId` обозначает город страницы и не ограничивает географию адреса. |
 | `Lead` | Контакты, фактический адрес, UTM, URL/form/device/visited pages, address/contract results, processing status, external lead data, operator status. `cityId` обозначает город страницы-источника. |
-| `LeadDeliveryAttempt` | Каждый API/email attempt, idempotency key, payload/response/error, next retry time. |
+| `LeadDeliveryAttempt` | Каждый queue/API/email attempt, idempotency key, payload/response/error, next retry time. |
 | `LeadActivityEvent` | События браузера до формы. |
 | `LeadStatusHistory` | Операторские переходы NEW/IN_PROGRESS/CALL_LATER/CONNECTED/REJECTED. |
 | `LeadAccessToken` | SHA-256 hash одноразовой fallback-ссылки, срок действия, отметки использования и отзыва; связан ровно с одной заявкой и удаляется каскадно. |
 
-`LeadProcessingStatus` отделяет delivery flow от операторского `LeadStatus`. Помимо технических/доставочных исходов, миграция `0013_lead_provider_outcomes` добавляет две однозначные причины непередачи: `PROVIDER_NOT_AVAILABLE_NOT_SENT` (провайдеры есть, Дом.ру среди них нет) и `NO_PROVIDERS_NOT_SENT` (Tarifnik вернул пустой список). Они не подменяются ручной проверкой, потому что отрицательный ответ уже однозначен.
+`LeadProcessingStatus` отделяет delivery flow от операторского `LeadStatus`. Помимо технических/доставочных исходов, миграция `0013_lead_provider_outcomes` добавляет две однозначные причины непередачи: `PROVIDER_NOT_AVAILABLE_NOT_SENT` (провайдеры есть, Дом.ру среди них нет) и `NO_PROVIDERS_NOT_SENT` (Tarifnik вернул пустой список). Они не подменяются ручной проверкой, потому что отрицательный ответ уже однозначен. Миграция `0014_delivery_queue_status` добавляет `DELIVERY_QUEUE_ERROR` и канал `QUEUE`, чтобы сбой producer не оставался ложным `PENDING` и был виден отдельно от ответа Tarifnik/email.
 
 Согласованная маршрутизация требует хранить отдельно исходные ответы проверок, нормализованное решение и реальные delivery attempts. Отсутствие Дом.ру, подтвержденный действующий абонент и неоднозначный ответ API — разные причины непередачи. API Dom.ru вызывается после обнаружения хотя бы одного провайдера; только успешный ответ ожидаемой структуры с явным `contacts: []` означает `NOT_FOUND`, но delivery дополнительно требует наличия Дом.ру. Отсутствие или неверный тип `contacts` является ошибкой контракта и должно приводить к `MANUAL_CHECK_API`. Для видимой проверки подключения `AddressCheck` может существовать без `Lead`; лид появляется только после найденного Дом.ру и ввода телефона.
 

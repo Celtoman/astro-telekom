@@ -18,7 +18,7 @@ interface RelatedCity { id: string; name: string; slug: string }
 interface RelatedPage { id: string; slug: string }
 interface RelatedTariff { id: string; name: string; slug: string }
 interface LeadHistory { id: string; fromStatus?: LeadStatus; toStatus: LeadStatus; comment?: string; actorId?: string; createdAt: string }
-interface DeliveryAttempt { id: string; attemptNumber: number; channel: string; status: string; error?: string; createdAt: string }
+interface DeliveryAttempt { id: string; attemptNumber: number; channel: string; status: string; error?: string; nextAttemptAt?: string; createdAt: string }
 interface ActivityEvent { id: string; type: string; createdAt: string }
 interface LeadSummary {
   id: string
@@ -33,6 +33,8 @@ interface LeadSummary {
   timeOnSiteSeconds?: number
   status: LeadStatus
   processingStatus: string
+  externalLeadId?: string
+  externalStatus?: string
   createdAt: string
   updatedAt: string
   city: RelatedCity
@@ -71,24 +73,86 @@ const statusLabels: Record<LeadStatus, string> = {
 }
 
 const processingLabels: Record<string, string> = {
-  PENDING: "Ожидает передачи",
-  DELIVERED: "Передана",
-  DUPLICATE_SUPPRESSED: "Дубликат подавлен",
-  ACTIVE_SUBSCRIBER_NOT_SENT: "Действующий абонент",
+  PENDING: "Ожидает отправки в Tarifnik",
+  DELIVERED: "Передана в Tarifnik",
+  DUPLICATE_SUPPRESSED: "Не отправлена: найдена повторная заявка",
+  ACTIVE_SUBSCRIBER_NOT_SENT: "Не отправлена: найден действующий абонент",
   PROVIDER_NOT_AVAILABLE_NOT_SENT: "Дом.ру по адресу недоступен",
-  NO_PROVIDERS_NOT_SENT: "Провайдеры не найдены",
-  MANUAL_CHECK: "Ручная проверка",
-  ADDRESS_CLARIFICATION: "Уточнение адреса",
-  MANUAL_CHECK_API: "Проверка API вручную",
-  DELIVERY_ERROR_EMAIL_SENT: "Ошибка API, email отправлен",
-  DELIVERY_ERROR_EMAIL_FAILED: "Ошибка API и email",
+  NO_PROVIDERS_NOT_SENT: "Не отправлена: провайдеры не найдены",
+  MANUAL_CHECK: "Нужна ручная проверка",
+  ADDRESS_CLARIFICATION: "Нужно уточнить адрес",
+  MANUAL_CHECK_API: "Нужна ручная проверка: проверка не завершена",
+  DELIVERY_QUEUE_ERROR: "Не удалось поставить в очередь",
+  DELIVERY_ERROR_EMAIL_SENT: "Tarifnik недоступен: уведомление отправлено по email",
+  DELIVERY_ERROR_EMAIL_FAILED: "Не доставлена: ошибки Tarifnik и email",
 }
+
+const processingDescriptions: Record<string, string> = {
+  PENDING: "Проверки пройдены, внешний ответ еще не получен.",
+  DELIVERED: "Tarifnik принял заявку и вернул внешний идентификатор.",
+  DUPLICATE_SUPPRESSED: "Автоматическая отправка остановлена защитой от повторных заявок.",
+  ACTIVE_SUBSCRIBER_NOT_SENT: "Заявка оставлена в нашей базе и не передана как новое подключение.",
+  PROVIDER_NOT_AVAILABLE_NOT_SENT: "Заявка сохранена, но не передается как подключение Дом.ру.",
+  NO_PROVIDERS_NOT_SENT: "По адресу не найдено провайдеров для автоматической передачи.",
+  MANUAL_CHECK: "Недостаточно проверенных данных для автоматического решения.",
+  ADDRESS_CLARIFICATION: "Пользователю или оператору нужно подтвердить точный адрес.",
+  MANUAL_CHECK_API: "Внешняя проверка завершилась ошибкой или неоднозначным ответом.",
+  DELIVERY_QUEUE_ERROR: "Задание доставки не создано. Повторите передачу из карточки.",
+  DELIVERY_ERROR_EMAIL_SENT: "API Tarifnik не принял заявку, поэтому сработал резервный канал.",
+  DELIVERY_ERROR_EMAIL_FAILED: "Ни основной, ни резервный канал не подтвердили доставку.",
+}
+
+const addressCheckLabels: Record<string, string> = {
+  AVAILABLE: "Дом.ру доступен по адресу",
+  UNAVAILABLE: "Дом.ру недоступен по адресу",
+  AMBIGUOUS: "Адрес определен неоднозначно",
+  MANUAL_CHECK: "Адрес нужно проверить вручную",
+  ERROR: "Не удалось проверить адрес",
+}
+
+const contractLabels: Record<string, string> = {
+  ACTIVE: "Найден действующий абонент",
+  NOT_FOUND: "Действующий договор не найден",
+  ERROR: "Не удалось проверить действующий договор",
+  NOT_CONFIGURED: "Проверка договора для этого города не настроена",
+}
+
+const deliveryChannelLabels: Record<string, string> = {
+  QUEUE: "Очередь отправки",
+  API: "API Tarifnik",
+  EMAIL: "Резервная отправка по email",
+}
+
+const deliveryAttemptLabels: Record<string, string> = {
+  SUCCEEDED: "Успешно",
+  FAILED: "Ошибка",
+  SKIPPED: "Пропущено",
+}
+
+const externalStatusLabels: Record<string, string> = {
+  created: "Создана в Tarifnik",
+  created_duplicate: "Принята Tarifnik как повторная",
+}
+
+const duplicateReasonLabels: Record<string, string> = {
+  phone_24h: "Совпадает телефон другой заявки за последние 24 часа",
+  address_24h: "Совпадает адрес другой заявки за последние 24 часа",
+}
+
+const attentionProcessingStatuses = new Set([
+  "MANUAL_CHECK",
+  "ADDRESS_CLARIFICATION",
+  "MANUAL_CHECK_API",
+  "DELIVERY_QUEUE_ERROR",
+  "DELIVERY_ERROR_EMAIL_SENT",
+  "DELIVERY_ERROR_EMAIL_FAILED",
+])
 
 const dateFormatter = new Intl.DateTimeFormat("ru-RU", { dateStyle: "short", timeStyle: "short" })
 
 function statusVariant(status: string) {
   if (["CONNECTED", "DELIVERED", "SUCCEEDED"].includes(status)) return "default" as const
-  if (["REJECTED", "FAILED", "DELIVERY_ERROR_EMAIL_FAILED"].includes(status)) return "destructive" as const
+  if (["REJECTED", "FAILED", "DELIVERY_QUEUE_ERROR", "DELIVERY_ERROR_EMAIL_FAILED"].includes(status)) return "destructive" as const
   return "secondary" as const
 }
 
@@ -99,6 +163,10 @@ function recordText(record: Record<string, unknown> | undefined, key: string) {
   return "—"
 }
 
+function statusText(labels: Record<string, string>, status: unknown, fallback: string) {
+  return typeof status === "string" ? labels[status] || fallback : fallback
+}
+
 export function LeadsApp({ apiUrl }: { apiUrl: string }) {
   const [state, setState] = useState<ScreenState>({ status: "loading" })
   const [detail, setDetail] = useState<DetailState>({ status: "idle" })
@@ -107,7 +175,7 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
   const [statusFilter, setStatusFilter] = useState<"ALL" | LeadStatus>("ALL")
   const [nextStatus, setNextStatus] = useState<LeadStatus>("NEW")
   const [comment, setComment] = useState("")
-  const [busy, setBusy] = useState<"refresh" | "status" | null>(null)
+  const [busy, setBusy] = useState<"refresh" | "status" | "retry" | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
 
   const handleError = useCallback((caught: unknown, fallback: string) => {
@@ -187,6 +255,26 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
     }
   }
 
+  async function retryDelivery() {
+    if (detail.status !== "ready") return
+    setBusy("retry")
+    setActionError(null)
+    try {
+      await requestJson(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}/retry-delivery`, { method: "POST" })
+      const [leads, lead] = await Promise.all([
+        requestJson<LeadSummary[]>(apiUrl, "/crm/leads"),
+        requestJson<LeadDetail>(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}`),
+      ])
+      setState((current) => current.status === "ready" ? { ...current, leads } : current)
+      setDetail({ status: "ready", lead })
+    } catch (caught: unknown) {
+      const message = handleError(caught, "Повторная передача не запущена")
+      if (message) setActionError(message)
+    } finally {
+      setBusy(null)
+    }
+  }
+
   if (state.status === "loading") {
     return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></main>
   }
@@ -196,6 +284,7 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
 
   const newCount = state.leads.filter((lead) => lead.status === "NEW").length
   const pendingCount = state.leads.filter((lead) => lead.processingStatus === "PENDING").length
+  const attentionCount = state.leads.filter((lead) => attentionProcessingStatuses.has(lead.processingStatus)).length
 
   return (
     <AdminShell apiUrl={apiUrl} user={state.user} active="leads">
@@ -207,10 +296,11 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
 
         {actionError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Операция не выполнена</AlertTitle><AlertDescription>{actionError}</AlertDescription></Alert> : null}
 
-        <section className="grid gap-4 sm:grid-cols-3" aria-label="Состояние журнала заявок">
+        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Состояние журнала заявок">
           <Card size="sm"><CardHeader><CardDescription>Всего заявок</CardDescription><CardTitle>{state.leads.length.toLocaleString("ru-RU")}</CardTitle></CardHeader></Card>
           <Card size="sm"><CardHeader><CardDescription>Новые</CardDescription><CardTitle>{newCount.toLocaleString("ru-RU")}</CardTitle></CardHeader></Card>
           <Card size="sm"><CardHeader><CardDescription>Ожидают передачи</CardDescription><CardTitle>{pendingCount.toLocaleString("ru-RU")}</CardTitle></CardHeader></Card>
+          <Card size="sm"><CardHeader><CardDescription>Требуют внимания</CardDescription><CardTitle>{attentionCount.toLocaleString("ru-RU")}</CardTitle></CardHeader></Card>
         </section>
 
         <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(22rem,1fr)]">
@@ -221,50 +311,59 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
                 <Field><FieldLabel htmlFor="lead-search" className="sr-only">Поиск заявки</FieldLabel><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" /><Input id="lead-search" className="pl-9" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Телефон, адрес, имя или ID" /></div></Field>
                 <Field><FieldLabel htmlFor="lead-status-filter" className="sr-only">Фильтр по статусу</FieldLabel><select id="lead-status-filter" className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as "ALL" | LeadStatus)}><option value="ALL">Все статусы</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
               </div>
-              {visibleLeads.length ? <Table><TableHeader><TableRow><TableHead>Создана</TableHead><TableHead>Контакт</TableHead><TableHead>Адрес подключения</TableHead><TableHead>Статус</TableHead><TableHead><span className="sr-only">Действие</span></TableHead></TableRow></TableHeader><TableBody>{visibleLeads.map((lead) => <TableRow key={lead.id} data-state={selectedLeadId === lead.id ? "selected" : undefined}><TableCell className="whitespace-nowrap">{dateFormatter.format(new Date(lead.createdAt))}</TableCell><TableCell><div className="font-medium">{lead.phone}</div><div className="text-xs text-muted-foreground">{lead.name || lead.source || "Имя не указано"}</div></TableCell><TableCell><div className="max-w-64 truncate font-medium">{lead.address || "Адрес не указан"}</div><div className="text-xs text-muted-foreground">Город страницы: {lead.city.name}</div></TableCell><TableCell><Badge variant={statusVariant(lead.status)}>{statusLabels[lead.status]}</Badge></TableCell><TableCell><Button variant="ghost" size="sm" onClick={() => void loadDetail(lead.id)}>Открыть</Button></TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><Inbox className="text-muted-foreground" aria-hidden="true" /><p className="font-medium">Заявки не найдены</p><p className="text-sm text-muted-foreground">Измените поиск или фильтр либо дождитесь первого обращения.</p></div>}
+              {visibleLeads.length ? <Table><TableHeader><TableRow><TableHead>Создана</TableHead><TableHead>Контакт</TableHead><TableHead>Адрес подключения</TableHead><TableHead>Статус</TableHead><TableHead>Обработка</TableHead><TableHead><span className="sr-only">Действие</span></TableHead></TableRow></TableHeader><TableBody>{visibleLeads.map((lead) => <TableRow key={lead.id} data-state={selectedLeadId === lead.id ? "selected" : undefined}><TableCell className="whitespace-nowrap">{dateFormatter.format(new Date(lead.createdAt))}</TableCell><TableCell><div className="font-medium">{lead.phone}</div><div className="text-xs text-muted-foreground">{lead.name || lead.source || "Имя не указано"}</div></TableCell><TableCell><div className="max-w-64 truncate font-medium">{lead.address || "Адрес не указан"}</div><div className="text-xs text-muted-foreground">Город страницы: {lead.city.name}</div></TableCell><TableCell><Badge variant={statusVariant(lead.status)}>{statusLabels[lead.status]}</Badge></TableCell><TableCell><Badge variant={statusVariant(lead.processingStatus)}>{statusText(processingLabels, lead.processingStatus, "Неизвестное состояние")}</Badge></TableCell><TableCell><Button variant="ghost" size="sm" onClick={() => void loadDetail(lead.id)}>Открыть</Button></TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><Inbox className="text-muted-foreground" aria-hidden="true" /><p className="font-medium">Заявки не найдены</p><p className="text-sm text-muted-foreground">Измените поиск или фильтр либо дождитесь первого обращения.</p></div>}
             </CardContent>
           </Card>
 
-          <LeadDetailCard detail={detail} nextStatus={nextStatus} setNextStatus={setNextStatus} comment={comment} setComment={setComment} busy={busy === "status"} onSave={updateStatus} />
+          <LeadDetailCard detail={detail} nextStatus={nextStatus} setNextStatus={setNextStatus} comment={comment} setComment={setComment} busy={busy === "status" || busy === "retry"} retryBusy={busy === "retry"} onSave={updateStatus} onRetry={retryDelivery} />
         </div>
       </div>
     </AdminShell>
   )
 }
 
-function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment, busy, onSave }: {
+function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment, busy, retryBusy, onSave, onRetry }: {
   detail: DetailState
   nextStatus: LeadStatus
   setNextStatus: (status: LeadStatus) => void
   comment: string
   setComment: (comment: string) => void
   busy: boolean
+  retryBusy: boolean
   onSave: () => Promise<void>
+  onRetry: () => Promise<void>
 }) {
   if (detail.status === "idle") return <Card><CardHeader><CardTitle>Карточка заявки</CardTitle><CardDescription>Выберите заявку в журнале.</CardDescription></CardHeader><CardContent className="flex min-h-40 items-center justify-center text-sm text-muted-foreground">Детали появятся здесь.</CardContent></Card>
   if (detail.status === "loading") return <Card aria-busy="true"><CardHeader><Skeleton className="h-6 w-48" /><Skeleton className="h-4 w-36" /></CardHeader><CardContent className="flex flex-col gap-3"><Skeleton className="h-24 w-full" /><Skeleton className="h-32 w-full" /></CardContent></Card>
   if (detail.status === "error") return <Card><CardHeader><CardTitle>Карточка не загружена</CardTitle></CardHeader><CardContent><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{detail.message}</AlertDescription></Alert></CardContent></Card>
 
   const lead = detail.lead
+  const addressStatus = lead.addressCheck?.status || recordText(lead.apiResult, "status")
+  const contractStatus = recordText(lead.contractResult, "status")
+  const canRetryDelivery = ["DELIVERY_QUEUE_ERROR", "DELIVERY_ERROR_EMAIL_SENT", "DELIVERY_ERROR_EMAIL_FAILED"].includes(lead.processingStatus)
+    || (lead.processingStatus === "PENDING" && lead.deliveryAttempts.length === 0)
+  const externalLead = lead.externalLeadId
+    ? `${lead.externalLeadId} · ${statusText(externalStatusLabels, lead.externalStatus, "Статус Tarifnik не распознан")}`
+    : "Не создана"
   return <Card>
     <CardHeader><div className="flex flex-wrap items-start justify-between gap-3"><div><CardTitle>{lead.name || lead.phone}</CardTitle><CardDescription>{lead.phone} · {dateFormatter.format(new Date(lead.createdAt))}</CardDescription></div><Badge variant={statusVariant(lead.status)}>{statusLabels[lead.status]}</Badge></div></CardHeader>
     <CardContent className="flex flex-col gap-6">
       <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Контакт и контекст</h2><dl className="grid gap-2 text-sm"><DetailRow label="Email" value={lead.email} /><DetailRow label="Город страницы" value={lead.city.name} /><DetailRow label="Адрес подключения" value={lead.address} /><DetailRow label="Страница" value={lead.pageUrl || lead.page?.slug} /><DetailRow label="Тариф" value={lead.tariff?.name} /><DetailRow label="Источник" value={lead.source} /><DetailRow label="Форма" value={lead.formName} /></dl></section>
-      <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Проверки и доставка</h2><dl className="grid gap-2 text-sm"><DetailRow label="Обработка" value={processingLabels[lead.processingStatus] || lead.processingStatus} /><DetailRow label="Проверка адреса" value={lead.addressCheck?.status || recordText(lead.apiResult, "status")} /><DetailRow label="Статус договора" value={recordText(lead.contractResult, "status")} /><DetailRow label="Внешняя заявка" value={recordText(lead.apiResult, "id")} /></dl>{lead.duplicateOf ? <Alert><CircleAlert /><AlertTitle>Дубликат заявки {lead.duplicateOf.id}</AlertTitle><AlertDescription>{lead.duplicateReason || "Причина не указана"}</AlertDescription></Alert> : null}</section>
+      <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Проверки и доставка</h2><dl className="grid gap-2 text-sm"><DetailRow label="Обработка" value={statusText(processingLabels, lead.processingStatus, "Неизвестное состояние обработки")} description={processingDescriptions[lead.processingStatus] || "Состояние не распознано. Обновите страницу или проверьте журнал."} /><DetailRow label="Проверка адреса" value={statusText(addressCheckLabels, addressStatus, "Результат проверки адреса отсутствует")} /><DetailRow label="Статус договора" value={statusText(contractLabels, contractStatus, "Результат проверки договора отсутствует")} /><DetailRow label="Внешняя заявка" value={externalLead} /></dl>{canRetryDelivery ? <Button variant="outline" disabled={busy} onClick={() => void onRetry()}><RefreshCw data-icon="inline-start" />{retryBusy ? "Ставим в очередь…" : "Повторить передачу"}</Button> : null}{lead.duplicateOf ? <Alert><CircleAlert /><AlertTitle>Повторная заявка {lead.duplicateOf.id}</AlertTitle><AlertDescription>{statusText(duplicateReasonLabels, lead.duplicateReason, "Причина совпадения не распознана")}</AlertDescription></Alert> : null}</section>
       <FieldGroup>
         <Field><FieldLabel htmlFor="lead-next-status">Новый статус</FieldLabel><select id="lead-next-status" className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" value={nextStatus} disabled={busy} onChange={(event) => setNextStatus(event.target.value as LeadStatus)}>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
         <Field><FieldLabel htmlFor="lead-status-comment">Комментарий к истории</FieldLabel><Input id="lead-status-comment" value={comment} maxLength={5000} disabled={busy} onChange={(event) => setComment(event.target.value)} placeholder="Необязательно" /><FieldDescription>Комментарий сохранится вместе с переходом статуса.</FieldDescription></Field>
         <Button disabled={busy || nextStatus === lead.status} onClick={() => void onSave()}><Save data-icon="inline-start" />{busy ? "Сохраняем…" : "Сохранить статус"}</Button>
       </FieldGroup>
       <Timeline title="История статусов" empty="Переходов статуса еще не было.">{lead.history.toSorted((a, b) => b.createdAt.localeCompare(a.createdAt)).map((item) => <li className="rounded-md border p-3" key={item.id}><div className="flex flex-wrap items-center justify-between gap-2"><span className="text-sm font-medium">{item.fromStatus ? `${statusLabels[item.fromStatus]} → ` : ""}{statusLabels[item.toStatus]}</span><time className="text-xs text-muted-foreground">{dateFormatter.format(new Date(item.createdAt))}</time></div>{item.comment ? <p className="mt-1 text-sm text-muted-foreground">{item.comment}</p> : null}</li>)}</Timeline>
-      <Timeline title="Попытки передачи" empty="Попыток передачи еще не было.">{lead.deliveryAttempts.toSorted((a, b) => b.createdAt.localeCompare(a.createdAt)).map((item) => <li className="rounded-md border p-3" key={item.id}><div className="flex items-center justify-between gap-2"><span className="text-sm font-medium">{item.channel} · попытка {item.attemptNumber}</span><Badge variant={statusVariant(item.status)}>{item.status}</Badge></div>{item.error ? <p className="mt-1 text-sm text-destructive">{item.error}</p> : null}</li>)}</Timeline>
+      <Timeline title="Попытки передачи" empty="Попыток передачи еще не было.">{lead.deliveryAttempts.toSorted((a, b) => b.createdAt.localeCompare(a.createdAt)).map((item) => <li className="rounded-md border p-3" key={item.id}><div className="flex items-center justify-between gap-2"><span className="text-sm font-medium">{statusText(deliveryChannelLabels, item.channel, "Неизвестный канал")} · попытка {item.attemptNumber}</span><Badge variant={statusVariant(item.status)}>{statusText(deliveryAttemptLabels, item.status, "Неизвестный результат")}</Badge></div>{item.nextAttemptAt ? <p className="mt-1 text-sm text-muted-foreground">Следующая попытка: {dateFormatter.format(new Date(item.nextAttemptAt))}</p> : null}{item.error ? <details className="mt-2 text-sm"><summary className="cursor-pointer text-muted-foreground">Техническая информация</summary><p className="mt-1 break-words text-destructive">{item.error}</p></details> : null}</li>)}</Timeline>
       <Timeline title="Активность до формы" empty="События не передавались.">{lead.activityEvents.toSorted((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 12).map((item) => <li className="flex items-center justify-between gap-3 rounded-md border p-3" key={item.id}><span className="text-sm font-medium">{item.type}</span><time className="text-xs text-muted-foreground">{dateFormatter.format(new Date(item.createdAt))}</time></li>)}</Timeline>
     </CardContent>
   </Card>
 }
 
-function DetailRow({ label, value }: { label: string; value?: string }) {
-  return <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-3"><dt className="text-muted-foreground">{label}</dt><dd className="min-w-0 break-words font-medium">{value || "—"}</dd></div>
+function DetailRow({ label, value, description }: { label: string; value?: string; description?: string }) {
+  return <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-3"><dt className="text-muted-foreground">{label}</dt><dd className="min-w-0 break-words"><span className="font-medium">{value || "—"}</span>{description ? <span className="mt-0.5 block text-xs text-muted-foreground">{description}</span> : null}</dd></div>
 }
 
 function Timeline({ title, empty, children }: { title: string; empty: string; children: React.ReactNode[] }) {

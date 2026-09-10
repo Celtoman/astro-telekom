@@ -1,5 +1,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const { readFileSync } = require('node:fs');
+const { join } = require('node:path');
 const { LeadDeliveryService } = require('../apps/api/dist/lead-delivery.service.js');
 
 const suggestion = {
@@ -42,6 +44,7 @@ function lead(overrides = {}) {
 
 function fixture(record) {
   const attempts = [];
+  const attemptUpdates = [];
   const updates = [];
   const prisma = {
     lead: {
@@ -50,14 +53,62 @@ function fixture(record) {
     },
     leadDeliveryAttempt: {
       create: async ({ data }) => { attempts.push(data); return data; },
+      count: async ({ where }) => attempts.filter((attempt) => attempt.leadId === where.leadId && attempt.channel === where.channel).length,
+      update: async ({ where, data }) => { attemptUpdates.push({ where, data }); return data; },
     },
     $transaction: async (operations) => Promise.all(operations),
   };
   const notifications = { notifyDeliveryFallback: async () => {} };
   const service = new LeadDeliveryService(prisma, notifications);
   service.logger = { warn() {}, error() {} };
-  return { service, attempts, updates };
+  return { service, attempts, attemptUpdates, updates };
 }
+
+test('BullMQ delivery job uses a deterministic custom id without forbidden colons', async () => {
+  const f = fixture(lead());
+  let queued;
+  f.service.queue = {
+    add: async (name, data, options) => { queued = { name, data, options }; },
+  };
+
+  await f.service.enqueue('lead-1', 1, 0, 1);
+
+  assert.equal(queued.name, 'deliver');
+  assert.deepEqual(queued.data, { leadId: 'lead-1', attemptNumber: 1, retryNumber: 1 });
+  assert.equal(queued.options.jobId, 'lead-delivery-lead-1-attempt-1');
+  assert.doesNotMatch(queued.options.jobId, /:/);
+});
+
+test('lead delivery worker forwards both the global attempt and retry-cycle numbers', () => {
+  const workerSource = readFileSync(join(__dirname, '..', 'services', 'worker', 'src', 'index.mjs'), 'utf8');
+
+  assert.match(workerSource, /JSON\.stringify\(\{\s*attemptNumber:\s*job\.data\.attemptNumber,\s*retryNumber:\s*job\.data\.retryNumber\s*\}\)/);
+});
+
+test('queue enqueue failure is persisted and changes the lead to an actionable status', async () => {
+  const f = fixture(lead());
+  assert.equal(typeof f.service.enqueueTracked, 'function', 'LeadDeliveryService.enqueueTracked must exist');
+  f.service.enqueue = async () => { throw new Error('Redis unavailable'); };
+
+  const result = await f.service.enqueueTracked('lead-1', 1, 0, 1);
+
+  assert.deepEqual(result, { queued: false, processingStatus: 'DELIVERY_QUEUE_ERROR' });
+  assert.equal(f.attempts[0].channel, 'QUEUE');
+  assert.equal(f.attempts[0].status, 'FAILED');
+  assert.match(f.attempts[0].error, /Redis unavailable/);
+  assert.equal(f.updates.at(-1).processingStatus, 'DELIVERY_QUEUE_ERROR');
+});
+
+test('in-process fallback preserves the retry number', async () => {
+  const f = fixture(lead());
+  const processed = [];
+  f.service.process = async (...args) => { processed.push(args); };
+
+  await f.service.enqueue('lead-1', 4, 0, 2);
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.deepEqual(processed, [['lead-1', 4, 2]]);
+});
 
 async function withDeliveryEnvironment(callback) {
   const names = ['REDIS_URL', 'TARIFNIK_API_URL', 'TARIFNIK_API_KEY', 'TARIFNIK_UTM_CAMPAIGN', 'TARIFNIK_TARGET_PROVIDER_ID'];
@@ -161,7 +212,7 @@ test('Tarifnik delivery sends permanent and ambiguous failures straight to manua
     for (const response of failures) {
       const f = fixture(lead());
       const enqueued = [];
-      f.service.enqueue = async (...args) => { enqueued.push(args); };
+      f.service.enqueueTracked = async (...args) => { enqueued.push(args); return { queued: true, processingStatus: 'PENDING' }; };
       global.fetch = async () => response();
 
       const result = await f.service.process('lead-1', 1);
@@ -195,7 +246,7 @@ test('Tarifnik delivery retries only transient HTTP and network failures with bo
       assert.equal(result.delivered, false);
       assert.equal(typeof result.retryAt, 'string');
       assert.equal(f.attempts[0].status, 'FAILED');
-      assert.deepEqual(enqueued, [['lead-1', 2, 300_000]]);
+      assert.deepEqual(enqueued, [['lead-1', 2, 300_000, 2]]);
       assert.notEqual(f.updates.at(-1)?.processingStatus, 'DELIVERED');
     }
   });
@@ -205,12 +256,43 @@ test('Tarifnik delivery respects a bounded Retry-After delay for rate limiting',
   await withDeliveryEnvironment(async () => {
     const f = fixture(lead());
     const enqueued = [];
-    f.service.enqueue = async (...args) => { enqueued.push(args); };
+    f.service.enqueueTracked = async (...args) => { enqueued.push(args); return { queued: true, processingStatus: 'PENDING' }; };
     global.fetch = async () => new Response('{}', { status: 429, headers: { 'retry-after': '120' } });
 
     const result = await f.service.process('lead-1', 1);
 
     assert.equal(typeof result.retryAt, 'string');
-    assert.deepEqual(enqueued, [['lead-1', 2, 120_000]]);
+    assert.deepEqual(enqueued, [['lead-1', 2, 120_000, 2]]);
+  });
+});
+
+test('a manual delivery cycle uses a fresh global attempt number and receives its own retry budget', async () => {
+  await withDeliveryEnvironment(async () => {
+    const f = fixture(lead());
+    const enqueued = [];
+    f.service.enqueueTracked = async (...args) => { enqueued.push(args); return { queued: true, processingStatus: 'PENDING' }; };
+    global.fetch = async () => new Response('{}', { status: 500 });
+
+    const result = await f.service.process('lead-1', 4, 1);
+
+    assert.equal(typeof result.retryAt, 'string');
+    assert.deepEqual(enqueued, [['lead-1', 5, 300_000, 2]]);
+    assert.equal(f.attempts[0].attemptNumber, 4);
+  });
+});
+
+test('failed retry scheduling clears the misleading next-at timestamp', async () => {
+  await withDeliveryEnvironment(async () => {
+    const f = fixture(lead());
+    f.service.enqueueTracked = async () => ({ queued: false, processingStatus: 'DELIVERY_QUEUE_ERROR' });
+    global.fetch = async () => new Response('{}', { status: 500 });
+
+    const result = await f.service.process('lead-1', 1, 1);
+
+    assert.deepEqual(result, { delivered: false, queueError: true });
+    assert.deepEqual(f.attemptUpdates, [{
+      where: { leadId_attemptNumber_channel: { leadId: 'lead-1', attemptNumber: 1, channel: 'API' } },
+      data: { nextAttemptAt: null },
+    }]);
   });
 });

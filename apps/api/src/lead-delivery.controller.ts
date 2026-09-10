@@ -8,7 +8,7 @@ export class LeadDeliveryController {
   constructor(private readonly delivery: LeadDeliveryService) {}
 
   @Post(':id')
-  process(@Param('id') id: string, @Body() body: { attemptNumber?: number }) {
-    return this.delivery.process(id, Number(body?.attemptNumber || 1));
+  process(@Param('id') id: string, @Body() body: { attemptNumber?: number; retryNumber?: number }) {
+    return this.delivery.process(id, Number(body?.attemptNumber || 1), Number(body?.retryNumber || 1));
   }
 }

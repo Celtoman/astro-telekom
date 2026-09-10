@@ -154,7 +154,7 @@ export class PublicLeadsController {
       tariff: tariff?.name,
     }).catch(() => undefined);
 
-    if (processingStatus === 'PENDING') void this.delivery.enqueue(lead.id).catch(() => undefined);
+    if (processingStatus === 'PENDING') await this.delivery.enqueueTracked(lead.id, 1, 0, 1);
 
     const subscriberMode = processingStatus === 'ACTIVE_SUBSCRIBER_NOT_SENT';
     return { id: lead.id, status: lead.status, message: 'Заявка принята', subscriberMode, subscriberCookie: subscriberMode ? this.subscriberCookie() : undefined };

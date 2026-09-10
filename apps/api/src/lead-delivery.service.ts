@@ -45,7 +45,7 @@ export class LeadDeliveryService implements OnModuleDestroy {
   constructor(private readonly prisma: PrismaService, private readonly notifications: NotificationsService) {
     const redisUrl = process.env.REDIS_URL;
     if (redisUrl) {
-      this.redis = new IORedis(redisUrl, { maxRetriesPerRequest: null });
+      this.redis = new IORedis(redisUrl, { maxRetriesPerRequest: 1, enableOfflineQueue: false });
       this.queue = new Queue('lead-deliveries', { connection: this.redis });
     } else {
       this.redis = null;
@@ -58,22 +58,49 @@ export class LeadDeliveryService implements OnModuleDestroy {
     await this.redis?.quit();
   }
 
-  async enqueue(leadId: string, attemptNumber = 1, delay = 0) {
+  async enqueue(leadId: string, attemptNumber = 1, delay = 0, retryNumber = 1) {
     if (this.queue) {
-      await this.queue.add('deliver', { leadId, attemptNumber }, {
+      await this.queue.add('deliver', { leadId, attemptNumber, retryNumber }, {
         delay,
-        jobId: `${leadId}:${attemptNumber}`,
+        jobId: `lead-delivery-${leadId}-attempt-${attemptNumber}`,
         removeOnComplete: 100,
         removeOnFail: 100,
       });
       return;
     }
-    const run = () => this.process(leadId, attemptNumber).catch((error) => this.logger.error(error));
+    const run = () => this.process(leadId, attemptNumber, retryNumber).catch((error) => this.logger.error(error));
     if (delay > 0) setTimeout(run, delay);
     else queueMicrotask(run);
   }
 
-  async process(leadId: string, attemptNumber: number) {
+  async enqueueTracked(leadId: string, attemptNumber = 1, delay = 0, retryNumber = 1) {
+    try {
+      await this.enqueue(leadId, attemptNumber, delay, retryNumber);
+      return { queued: true as const, processingStatus: 'PENDING' as const };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.error(`Lead ${leadId} could not be queued: ${message}`);
+      const lead = await this.prisma.lead.findUnique({ where: { id: leadId }, select: { deliveryKey: true } });
+      if (!lead) return { queued: false as const, processingStatus: 'DELIVERY_QUEUE_ERROR' as const };
+      const queueAttemptNumber = await this.prisma.leadDeliveryAttempt.count({ where: { leadId, channel: 'QUEUE' } }) + 1;
+      await this.prisma.$transaction([
+        this.prisma.leadDeliveryAttempt.create({
+          data: {
+            leadId,
+            attemptNumber: queueAttemptNumber,
+            channel: 'QUEUE',
+            status: 'FAILED',
+            idempotencyKey: lead.deliveryKey || makeDeliveryKey(leadId),
+            error: message,
+          },
+        }),
+        this.prisma.lead.update({ where: { id: leadId }, data: { processingStatus: 'DELIVERY_QUEUE_ERROR' } }),
+      ]);
+      return { queued: false as const, processingStatus: 'DELIVERY_QUEUE_ERROR' as const };
+    }
+  }
+
+  async process(leadId: string, attemptNumber: number, retryNumber = 1) {
     const lead = await this.prisma.lead.findUnique({
       where: { id: leadId },
       include: { city: true, page: true, tariff: true, site: true, addressCheck: true },
@@ -157,15 +184,22 @@ export class LeadDeliveryService implements OnModuleDestroy {
       const retryable = error instanceof TarifnikDeliveryError && error.retryable;
       const retryDelay = error instanceof TarifnikDeliveryError && error.retryAfterMs !== undefined
         ? error.retryAfterMs
-        : RETRY_DELAYS[attemptNumber];
-      const nextAttemptAt = retryable && attemptNumber < RETRY_DELAYS.length
+        : RETRY_DELAYS[retryNumber];
+      const nextAttemptAt = retryable && retryNumber < RETRY_DELAYS.length
         ? new Date(Date.now() + retryDelay)
         : null;
       await this.prisma.leadDeliveryAttempt.create({
         data: { leadId, attemptNumber, channel: 'API', status: 'FAILED', idempotencyKey: deliveryKey, requestPayload: payload as unknown as Prisma.InputJsonValue, error: message, nextAttemptAt },
       });
       if (nextAttemptAt) {
-        await this.enqueue(leadId, attemptNumber + 1, retryDelay);
+        const queued = await this.enqueueTracked(leadId, attemptNumber + 1, retryDelay, retryNumber + 1);
+        if (!queued.queued) {
+          await this.prisma.leadDeliveryAttempt.update({
+            where: { leadId_attemptNumber_channel: { leadId, attemptNumber, channel: 'API' } },
+            data: { nextAttemptAt: null },
+          });
+          return { delivered: false, queueError: true };
+        }
         return { delivered: false, retryAt: nextAttemptAt.toISOString() };
       }
       let emailSent = false;

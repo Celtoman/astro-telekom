@@ -479,6 +479,7 @@ exports.LeadProcessingStatus = exports.$Enums.LeadProcessingStatus = {
   MANUAL_CHECK: 'MANUAL_CHECK',
   ADDRESS_CLARIFICATION: 'ADDRESS_CLARIFICATION',
   MANUAL_CHECK_API: 'MANUAL_CHECK_API',
+  DELIVERY_QUEUE_ERROR: 'DELIVERY_QUEUE_ERROR',
   DELIVERY_ERROR_EMAIL_SENT: 'DELIVERY_ERROR_EMAIL_SENT',
   DELIVERY_ERROR_EMAIL_FAILED: 'DELIVERY_ERROR_EMAIL_FAILED'
 };
@@ -492,6 +493,7 @@ exports.LeadStatus = exports.$Enums.LeadStatus = {
 };
 
 exports.DeliveryChannel = exports.$Enums.DeliveryChannel = {
+  QUEUE: 'QUEUE',
   API: 'API',
   EMAIL: 'EMAIL'
 };

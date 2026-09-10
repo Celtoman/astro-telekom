@@ -34,6 +34,7 @@ Production Compose запускает one-shot `migrate` из API image посл
   -> /api/v1/address-checks -> API -> DaData clean -> Tarifnik address/check -> PostgreSQL
   -> /api/v1/leads -> API -> routing/контракт Дом.ру -> PostgreSQL
                     -> только разрешенный лид -> Redis/BullMQ -> worker -> Tarifnik/email
+                    -> ошибка producer -> QUEUE attempt + DELIVERY_QUEUE_ERROR -> безопасный admin retry
 
 Старый публичный URL
   -> build-generated Caddy matcher -> public redirect resolver API
@@ -64,7 +65,7 @@ PII retention scheduler в worker
 | `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; блоки имеют отдельную строгую валидацию, остальные admin bodies частично проверяются вручную. |
 | `tariff-import`, `city-import` | Валидация XLSX, сохранение отчета, transactional apply. |
 | `address-suggestions`, `dadata`, `address-checks`, `coverage` | Серверные глобальные DaData IPLocate/suggest/clean: IP используется один раз для мягкого boost и не сохраняется, жесткого ограничения городом формы нет; официальный Tarifnik `address/check` получает фактический адрес пользователя, словарь провайдеров нормализуется, проверенный snapshot сохраняется без публикации raw response. |
-| `leads`, `domru-contract`, `domru-profile-catalog`, `lead-delivery`, `notifications`, `lead-access` | Сохранение лида, дедупликация, выбор регионально однозначного профиля Дом.ру, fail-closed routing, строгая проверка действующего договора и только затем официальный `appeal/create`, retry только временных ошибок, email fallback и одноразовый доступ из fallback-письма. Worker повторно проверяет наличие целевого провайдера и persisted `NOT_FOUND`; delivery retry не доступен для ручных/отрицательных routing-исходов. |
+| `leads`, `domru-contract`, `domru-profile-catalog`, `lead-delivery`, `notifications`, `lead-access` | Сохранение лида, дедупликация, выбор регионально однозначного профиля Дом.ру, fail-closed routing, строгая проверка действующего договора и только затем официальный `appeal/create`, retry только временных ошибок, queue failure tracking, email fallback и одноразовый доступ из fallback-письма. Worker повторно проверяет наличие целевого провайдера и persisted `NOT_FOUND`; delivery retry доступен только для recoverable delivery/queue states или старого orphan `PENDING`, но не для ручных/отрицательных routing-исходов. |
 | `pii-retention` | Worker-only bounded hard-delete лидов и связанных payloads старше согласованных 180 дней; fail-safe без валидной настройки. |
 | `crm-leads` | Список, карточка, смена статуса, повторная постановка доставки и отзыв fallback-доступа. |
 | `rebuild-queue` | Persistent rebuild/outbox, дедупликация по сайту, BullMQ producer, start/progress/result API, сохранение provider deployment UUID и фиксация только финального результата deployment. |

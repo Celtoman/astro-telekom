@@ -1,0 +1,2 @@
+ALTER TYPE "LeadProcessingStatus" ADD VALUE 'DELIVERY_QUEUE_ERROR';
+ALTER TYPE "DeliveryChannel" ADD VALUE 'QUEUE';
