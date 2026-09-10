@@ -15,9 +15,26 @@ import {
   MaxLength,
   Min,
   MinLength,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 const slug = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export class DadataSuggestionDto {
+  @IsString()
+  @MinLength(3)
+  @MaxLength(500)
+  value!: string;
+
+  @IsString()
+  @MinLength(3)
+  @MaxLength(1_000)
+  unrestricted_value!: string;
+
+  @IsObject()
+  data!: Record<string, unknown>;
+}
 
 export class LoginDto {
   @IsEmail()
@@ -35,6 +52,11 @@ export class AddressCheckDto {
   @MinLength(3)
   @MaxLength(500)
   address!: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => DadataSuggestionDto)
+  suggestion?: DadataSuggestionDto;
 
   @IsOptional()
   @IsString()
@@ -57,6 +79,28 @@ export class AddressCheckDto {
   @IsOptional()
   @IsIn(['apartment', 'house'])
   objectType?: string;
+
+  @IsEmpty({ message: 'Некорректный запрос' })
+  website?: string;
+}
+
+export class AddressSuggestionsDto {
+  @IsString()
+  @MinLength(3)
+  @MaxLength(500)
+  query!: string;
+
+  @IsOptional()
+  @IsString()
+  @Matches(slug)
+  @MaxLength(120)
+  citySlug?: string;
+
+  @IsOptional()
+  @IsString()
+  @Matches(slug)
+  @MaxLength(120)
+  siteSlug?: string;
 
   @IsEmpty({ message: 'Некорректный запрос' })
   website?: string;

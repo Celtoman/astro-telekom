@@ -41,10 +41,10 @@
 | TD-44 | [#64](https://github.com/Celtoman/astro-telekom/issues/64) ✅ | Label escaping выключен, runtime Basic Auth подтвержден ответами 401/200 на обоих доменах |
 | TD-45 | [#65](https://github.com/Celtoman/astro-telekom/issues/65) ✅ | Trusted frozen lockfile, общий pnpm cache и bounded retry подтвердили cold/warm и live deployment без timeout |
 | TD-46 | [#66](https://github.com/Celtoman/astro-telekom/issues/66) ✅ | `mv -fT` сохраняет валидный publication symlink; два последовательных live deployment прошли без 503 |
-| TD-47 | [#67](https://github.com/Celtoman/astro-telekom/issues/67) 🟢 | Delivery возможен без однозначно завершенной проверки провайдеров |
-| TD-54 | [#74](https://github.com/Celtoman/astro-telekom/issues/74) 🟢 | Обычная заявка и видимая проверка подключения смешаны в одной форме без DaData |
+| TD-47 | [#67](https://github.com/Celtoman/astro-telekom/issues/67) ✅ | Delivery возможен без однозначно завершенной проверки провайдеров |
+| TD-54 | [#74](https://github.com/Celtoman/astro-telekom/issues/74) ✅ | Обычная заявка и видимая проверка подключения смешаны в одной форме без DaData |
 | TD-59 | [#79](https://github.com/Celtoman/astro-telekom/issues/79) ✅ | Городской профиль рабочего бота перенесен; HTML, malformed JSON и неверный `contacts` блокируют delivery |
-| TD-61 | [#81](https://github.com/Celtoman/astro-telekom/issues/81) 🟢 | Payload `Tarifnik appeal/create` не соответствует официальному контракту v3.0 |
+| TD-61 | [#81](https://github.com/Celtoman/astro-telekom/issues/81) ✅ | Payload `Tarifnik appeal/create` не соответствует официальному контракту v3.0 |
 
 ## P2
 

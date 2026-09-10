@@ -41,7 +41,7 @@ export class CrmLeadsController {
   async retryDelivery(@Param('id') id: string) {
     const lead = await this.prisma.lead.findUnique({ where: { id } });
     if (!lead) throw new NotFoundException('Заявка не найдена');
-    if (['DELIVERED', 'DUPLICATE_SUPPRESSED', 'ACTIVE_SUBSCRIBER_NOT_SENT'].includes(lead.processingStatus)) {
+    if (!['DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED'].includes(lead.processingStatus)) {
       throw new BadRequestException('Для этой заявки повторная передача не требуется');
     }
     await this.prisma.lead.update({ where: { id }, data: { processingStatus: 'PENDING' } });

@@ -1,67 +1,302 @@
 ---
 import type { CityView } from '../data/site';
 
+type FormMode = 'visible' | 'lead';
+type ServiceType = 'INTERNET' | 'INTERNET_TV' | 'TV' | 'OTHER';
+
 interface Props {
   apiUrl: string;
   siteSlug: string;
   pageSlug: string;
   city: CityView;
+  mode?: FormMode;
+  serviceType?: ServiceType;
+  tariffSlug?: string;
 }
 
-const { apiUrl, siteSlug, pageSlug, city } = Astro.props;
+const {
+  apiUrl,
+  siteSlug,
+  pageSlug,
+  city,
+  mode = 'visible',
+  serviceType = 'INTERNET',
+  tariffSlug,
+} = Astro.props;
+const formId = `addressForm-${city.slug}-${mode}-${tariffSlug || pageSlug}`;
+const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
 ---
 
-<section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>Проверьте возможность подключения</h1><p class="lead">Укажите адрес объекта. Если автоматическая проверка будет недоступна, мы передадим заявку оператору.</p></div></section>
-<section class="section container"><form class="card" id={`addressForm-${city.slug}`} data-address-form><div class="bot-field" aria-hidden="true"><label for={`website-${city.slug}`}>Ваш сайт</label><input id={`website-${city.slug}`} name="website" tabindex="-1" autocomplete="off" /></div><label for={`name-${city.slug}`}>Имя</label><input id={`name-${city.slug}`} name="name" placeholder="Как к вам обращаться" /><label for={`serviceType-${city.slug}`}>Что подключить</label><select id={`serviceType-${city.slug}`} name="serviceType"><option value="INTERNET">Домашний интернет</option><option value="INTERNET_TV">Интернет + ТВ</option><option value="TV">Телевидение</option></select><label for={`address-${city.slug}`}>Адрес</label><input id={`address-${city.slug}`} name="address" required placeholder="Улица, дом, квартира" /><label for={`phone-${city.slug}`}>Телефон</label><input id={`phone-${city.slug}`} name="phone" required placeholder="+7 ___ ___-__-__" /><button class="button" type="submit">Проверить адрес</button><p>Нажимая кнопку, вы соглашаетесь на обработку заявки оператором.</p><p data-form-result role="status"></p><div data-alternatives class="alternatives" aria-live="polite"></div></form></section>
+{mode === 'visible' && <section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>Проверьте возможность подключения</h1><p class="lead">Укажите адрес — мы сразу покажем результат проверки.</p></div></section>}
+<section class="section container">
+  <form class="card" id={formId} data-address-form data-form-mode={mode}>
+    {mode === 'lead' && <><h2>Оставить заявку</h2><p>Укажите адрес и телефон. Возможность подключения мы проверим автоматически.</p></>}
+    <div class="bot-field" aria-hidden="true"><label for={`website-${formId}`}>Ваш сайт</label><input id={`website-${formId}`} name="website" tabindex="-1" autocomplete="off" /></div>
+    <label for={`address-${formId}`}>Адрес</label>
+    <div class="address-field">
+      <input id={`address-${formId}`} name="address" required autocomplete="street-address" aria-autocomplete="list" aria-controls={`address-suggestions-${formId}`} placeholder="Улица, дом, квартира" />
+      <div id={`address-suggestions-${formId}`} data-address-suggestions class="address-suggestions" role="listbox" hidden></div>
+    </div>
+    <p class="address-hint" data-address-hint aria-live="polite">Начните вводить адрес и выберите подходящий вариант.</p>
+    <div class="phone-step" data-phone-step hidden={mode === 'visible'}>
+      <label for={`phone-${formId}`}>Телефон</label>
+      <input id={`phone-${formId}`} name="phone" required={mode === 'lead'} autocomplete="tel" placeholder="+7 ___ ___-__-__" />
+      <p>Нажимая кнопку, вы соглашаетесь на обработку заявки оператором.</p>
+    </div>
+    <button class="button" type="submit" data-submit>{mode === 'visible' ? 'Проверить адрес' : 'Отправить заявку'}</button>
+    <p data-form-result role="status"></p>
+    <div data-alternatives class="alternatives" aria-live="polite"></div>
+  </form>
+</section>
 
-<script is:inline define:vars={{ apiUrl, siteSlug, citySlug: city.slug, pageSlug }}>
-  const form = document.querySelector(`[data-address-form][id="addressForm-${citySlug}"]`);
+<script is:inline define:vars={{ apiUrl, siteSlug, citySlug: city.slug, pageSlug, mode, serviceType, tariffSlug, supportPhone: city.phone, supportPhoneHref, formId }}>
+  const form = document.getElementById(formId);
   const result = form?.querySelector('[data-form-result]');
   const alternatives = form?.querySelector('[data-alternatives]');
+  const addressInput = form?.querySelector('input[name="address"]');
+  const phoneInput = form?.querySelector('input[name="phone"]');
+  const phoneStep = form?.querySelector('[data-phone-step]');
+  const submitButton = form?.querySelector('[data-submit]');
+  const suggestionList = form?.querySelector('[data-address-suggestions]');
+  const addressHint = form?.querySelector('[data-address-hint]');
+  let selectedSuggestion = null;
+  let verifiedCheck = null;
+  let suggestionTimer;
+  let suggestionController;
+
+  const clearSuggestions = () => {
+    suggestionList?.replaceChildren();
+    if (suggestionList) suggestionList.hidden = true;
+  };
+
+  const resetForm = () => {
+    form?.reset();
+    selectedSuggestion = null;
+    verifiedCheck = null;
+    clearSuggestions();
+    alternatives?.replaceChildren();
+    if (addressInput) addressInput.disabled = false;
+    if (mode === 'visible') {
+      if (phoneStep) phoneStep.hidden = true;
+      if (phoneInput) phoneInput.required = false;
+      if (submitButton) submitButton.textContent = 'Проверить адрес';
+    }
+    if (addressHint) addressHint.textContent = 'Начните вводить адрес и выберите подходящий вариант.';
+  };
+
+  const appendSupport = () => {
+    if (!alternatives) return;
+    const text = document.createElement('p');
+    text.textContent = 'Свяжитесь с технической поддержкой, чтобы уточнить возможность подключения дома: ';
+    const link = document.createElement('a');
+    link.href = supportPhoneHref;
+    link.textContent = supportPhone;
+    text.append(link);
+    alternatives.append(text);
+  };
+
+  const renderUnavailable = (check) => {
+    alternatives?.replaceChildren();
+    if (Array.isArray(check.alternatives) && check.alternatives.length > 0) {
+      result.textContent = 'Дом.ру по этому адресу не найден. Доступны другие провайдеры:';
+      for (const alternative of check.alternatives) {
+        const url = typeof alternative.url === 'string' && /^https?:\/\//i.test(alternative.url) ? alternative.url : null;
+        const item = document.createElement(url ? 'a' : 'span');
+        item.textContent = String(alternative.name || 'Альтернативный провайдер');
+        if (url) {
+          item.href = url;
+          item.target = '_blank';
+          item.rel = 'noopener noreferrer sponsored';
+        }
+        alternatives?.append(item);
+      }
+      return;
+    }
+    result.textContent = check.status === 'UNAVAILABLE'
+      ? 'По этому адресу доступные провайдеры не найдены.'
+      : 'Не удалось однозначно проверить адрес.';
+    appendSupport();
+  };
+
+  const renderSuggestions = (items) => {
+    clearSuggestions();
+    if (!suggestionList || !Array.isArray(items) || items.length === 0) {
+      if (addressHint) addressHint.textContent = 'Подходящий адрес не найден. Уточните улицу и дом.';
+      return;
+    }
+    for (const suggestion of items) {
+      if (!suggestion || typeof suggestion.value !== 'string') continue;
+      const option = document.createElement('button');
+      option.type = 'button';
+      option.className = 'address-option';
+      option.setAttribute('role', 'option');
+      option.textContent = suggestion.value;
+      option.addEventListener('click', () => {
+        selectedSuggestion = suggestion;
+        addressInput.value = suggestion.value;
+        if (addressHint) addressHint.textContent = 'Адрес выбран и будет проверен.';
+        clearSuggestions();
+        addressInput.focus();
+      });
+      suggestionList.append(option);
+    }
+    suggestionList.hidden = suggestionList.childElementCount === 0;
+  };
+
+  addressInput?.addEventListener('input', () => {
+    selectedSuggestion = null;
+    verifiedCheck = null;
+    clearTimeout(suggestionTimer);
+    suggestionController?.abort();
+    const query = addressInput.value.trim();
+    if (query.length < 3) {
+      clearSuggestions();
+      if (addressHint) addressHint.textContent = 'Введите не менее трех символов.';
+      return;
+    }
+    if (addressHint) addressHint.textContent = 'Ищем адрес…';
+    suggestionTimer = setTimeout(async () => {
+      suggestionController = new AbortController();
+      try {
+        const response = await fetch(`${apiUrl}/address-suggestions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: suggestionController.signal,
+          body: JSON.stringify({ siteSlug, citySlug, query, website: '' }),
+        });
+        if (!response.ok) throw new Error('Подсказки адреса временно недоступны.');
+        const payload = await response.json();
+        if (addressInput.value.trim() === query) renderSuggestions(payload.suggestions);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+        clearSuggestions();
+        if (addressHint) addressHint.textContent = error instanceof Error ? error.message : 'Не удалось получить подсказки адреса.';
+      }
+    }, 350);
+  });
+
+  const createLead = async (data, check) => {
+    let viewedPages = [];
+    try { viewedPages = JSON.parse(sessionStorage.getItem('provider_visited_pages') || '[]'); } catch { /* storage may be unavailable */ }
+    const response = await fetch(`${apiUrl}/leads`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        siteSlug,
+        citySlug,
+        pageSlug,
+        tariffSlug: tariffSlug || undefined,
+        formName: mode === 'visible' ? 'visible-address-check' : 'lead-form',
+        phone: data.phone,
+        address: check?.address || selectedSuggestion?.value || data.address,
+        serviceType,
+        addressCheckId: check?.id,
+        referrer: document.referrer,
+        pageUrl: location.href,
+        timeOnSiteSeconds: Math.max(0, Math.round((Date.now() - performance.timeOrigin) / 1000)),
+        deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+        viewedPages,
+        website: data.website,
+      }),
+    });
+    if (!response.ok) throw new Error('Не удалось сохранить заявку');
+    return response.json();
+  };
+
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
-    result.textContent = 'Проверяем адрес…';
-    try {
-      const checkResponse = await fetch(`${apiUrl}/address-checks`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ siteSlug, citySlug, pageSlug, address: data.address, objectType: 'apartment', website: data.website }) });
-      const check = await checkResponse.json();
-      alternatives.replaceChildren();
-      if (check.status === 'UNAVAILABLE' && Array.isArray(check.alternatives) && check.alternatives.length) {
-        const heading = document.createElement('strong');
-        heading.textContent = 'По адресу доступны другие варианты:';
-        alternatives.append(heading);
-        for (const alternative of check.alternatives) {
-          const url = typeof alternative.url === 'string' && /^https?:\/\//i.test(alternative.url) ? alternative.url : null;
-          const item = document.createElement(url ? 'a' : 'span');
-          item.textContent = String(alternative.name || alternative.provider || 'Альтернативный провайдер');
-          if (url) { item.href = url; item.target = '_blank'; item.rel = 'noopener noreferrer sponsored'; }
-          alternatives.append(item);
-        }
+    if (mode === 'visible' && verifiedCheck) {
+      if (!form.reportValidity()) return;
+      if (submitButton) submitButton.disabled = true;
+      result.textContent = 'Отправляем заявку…';
+      try {
+        const lead = await createLead(data, verifiedCheck);
+        if (lead.subscriberMode && lead.subscriberCookie) document.cookie = `domru_subscriber=${encodeURIComponent(lead.subscriberCookie)}; Max-Age=2592000; Path=/; SameSite=Lax${location.protocol === 'https:' ? '; Secure' : ''}`;
+        resetForm();
+        result.textContent = 'Спасибо! Заявка отправлена.';
+      } catch (error) {
+        result.textContent = error instanceof Error ? error.message : 'Произошла ошибка. Попробуйте еще раз.';
+      } finally {
+        if (submitButton) submitButton.disabled = false;
       }
-      let viewedPages = [];
-      try { viewedPages = JSON.parse(sessionStorage.getItem('provider_visited_pages') || '[]'); } catch { /* ignore unavailable storage */ }
-      const leadResponse = await fetch(`${apiUrl}/leads`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ siteSlug, citySlug, pageSlug, formName: 'address-check', name: data.name, phone: data.phone, address: data.address, serviceType: data.serviceType, addressCheckId: check.id, referrer: document.referrer, pageUrl: location.href, timeOnSiteSeconds: Math.max(0, Math.round((Date.now() - performance.timeOrigin) / 1000)), deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop', viewedPages, website: data.website }) });
-      if (!leadResponse.ok) throw new Error('Не удалось сохранить заявку');
-      const lead = await leadResponse.json();
-      if (lead.subscriberMode && lead.subscriberCookie) document.cookie = `domru_subscriber=${encodeURIComponent(lead.subscriberCookie)}; Max-Age=2592000; Path=/; SameSite=Lax${location.protocol === 'https:' ? '; Secure' : ''}`;
-      const checkMessage = check.status === 'AVAILABLE'
-        ? 'По предварительной проверке сеть доступна.'
-        : check.status === 'UNAVAILABLE'
-          ? 'Автоматическая проверка не нашла сеть по адресу.'
-          : 'Автоматическая проверка сейчас недоступна.';
-      result.textContent = `${checkMessage} Заявка принята, оператор уточнит возможность подключения.`;
-      form.reset();
+      return;
+    }
+
+    if (!selectedSuggestion || selectedSuggestion.value !== String(data.address).trim()) {
+      result.textContent = 'Выберите адрес из подсказок.';
+      addressInput?.focus();
+      return;
+    }
+
+    if (submitButton) submitButton.disabled = true;
+    result.textContent = 'Проверяем адрес…';
+    alternatives?.replaceChildren();
+    let check = null;
+    try {
+      const checkResponse = await fetch(`${apiUrl}/address-checks`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ siteSlug, citySlug, pageSlug, address: data.address, suggestion: selectedSuggestion, objectType: 'apartment', website: data.website }),
+      });
+      if (!checkResponse.ok) throw new Error('Не удалось проверить адрес');
+      check = await checkResponse.json();
+
+      if (mode === 'visible') {
+        if (check.status !== 'AVAILABLE') {
+          renderUnavailable(check);
+          return;
+        }
+        verifiedCheck = check;
+        if (addressInput) addressInput.disabled = true;
+        if (phoneStep) phoneStep.hidden = false;
+        if (phoneInput) phoneInput.required = true;
+        if (submitButton) submitButton.textContent = 'Оставить заявку';
+        result.textContent = 'Дом.ру доступен по этому адресу. Оставьте телефон для подключения.';
+        phoneInput?.focus();
+        return;
+      }
+    } catch (error) {
+      if (mode === 'visible') {
+        result.textContent = error instanceof Error ? error.message : 'Не удалось проверить адрес.';
+        appendSupport();
+        return;
+      }
+      check = null;
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+
+    try {
+      if (submitButton) submitButton.disabled = true;
+      await createLead(data, check);
+      resetForm();
+      result.textContent = 'Спасибо! Заявка отправлена.';
     } catch (error) {
       result.textContent = error instanceof Error ? error.message : 'Произошла ошибка. Попробуйте еще раз.';
+    } finally {
+      if (submitButton) submitButton.disabled = false;
     }
   });
 </script>
 
 <style>
   form { max-width: 560px; display: grid; gap: 12px; }
+  form h2, form p { margin: 0; }
   label { font-weight: 700; }
-  input, select { border: 1px solid #d6dde6; border-radius: 10px; padding: 14px; font: inherit; margin-bottom: 8px; }
+  input { border: 1px solid #d6dde6; border-radius: 10px; padding: 14px; font: inherit; margin-bottom: 8px; }
+  input:disabled { background: #f3f5f7; color: #526071; }
+  .phone-step { display: grid; gap: 12px; }
+  .phone-step[hidden] { display: none; }
+  .address-field { position: relative; display: grid; }
+  .address-field input { margin-bottom: 0; }
+  .address-hint { color: #526071; font-size: 14px; }
+  .address-suggestions { position: absolute; z-index: 10; inset: calc(100% + 4px) 0 auto; display: grid; max-height: 260px; overflow-y: auto; border: 1px solid #d6dde6; border-radius: 10px; background: #fff; box-shadow: 0 12px 30px rgb(21 40 66 / 14%); }
+  .address-suggestions[hidden] { display: none; }
+  .address-option { width: 100%; padding: 12px 14px; border: 0; border-bottom: 1px solid #eef1f5; background: #fff; color: #18202a; text-align: left; }
+  .address-option:hover, .address-option:focus-visible { background: #eef7ff; outline: 2px solid #1769aa; outline-offset: -2px; }
   button { border: 0; cursor: pointer; font: inherit; width: fit-content; }
+  button:disabled { cursor: wait; opacity: 0.7; }
   .alternatives { display: grid; gap: 8px; color: #526071; }
   .alternatives a { color: #1769aa; font-weight: 700; }
   .bot-field { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

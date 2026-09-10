@@ -84,6 +84,9 @@ test('manual lead cannot manufacture a coverage result', async () => {
   const f = fixture(null);
   await f.create({ ...base, checkStatus: 'AVAILABLE' });
   assert.equal(f.saved().apiResult, undefined);
+  assert.equal(f.saved().processingStatus, 'MANUAL_CHECK');
+  assert.equal(f.contractChecks(), 0);
+  assert.equal(f.deliveryEnqueues(), 0);
 });
 test('unknown check is rejected before saving', async () => {
   const f = fixture(null);
@@ -117,5 +120,51 @@ test('lead with the same normalized address within 24 hours is suppressed as dup
   assert.equal(f.saved().duplicateOfId, 'existing-address');
   assert.equal(f.saved().duplicateReason, 'address_24h');
   assert.equal(f.contractChecks(), 0);
+  assert.equal(f.deliveryEnqueues(), 0);
+});
+
+test('lead checks the subscriber for alternative providers but never queues target-provider delivery', async () => {
+  const f = fixture({
+    id: 'check',
+    status: 'UNAVAILABLE',
+    address: 'Улица, 1',
+    objectType: 'apartment',
+    response: {
+      integration: 'tarifnik',
+      suggestion: { value: 'Улица, 1', unrestricted_value: 'Улица, 1', data: { city: 'Казань' } },
+      providers: { 17: 'Альтернативный провайдер' },
+      targetProviderId: '8',
+      hasAnyProvider: true,
+      hasTargetProvider: false,
+    },
+  });
+
+  await f.create({ ...base, addressCheckId: 'check' });
+
+  assert.equal(f.contractChecks(), 1);
+  assert.equal(f.saved().processingStatus, 'PROVIDER_NOT_AVAILABLE_NOT_SENT');
+  assert.equal(f.deliveryEnqueues(), 0);
+});
+
+test('lead with no providers skips subscriber check and delivery without pretending manual review is needed', async () => {
+  const f = fixture({
+    id: 'check',
+    status: 'UNAVAILABLE',
+    address: 'Улица, 1',
+    objectType: 'apartment',
+    response: {
+      integration: 'tarifnik',
+      suggestion: { value: 'Улица, 1', unrestricted_value: 'Улица, 1', data: { city: 'Казань' } },
+      providers: {},
+      targetProviderId: '8',
+      hasAnyProvider: false,
+      hasTargetProvider: false,
+    },
+  });
+
+  await f.create({ ...base, addressCheckId: 'check' });
+
+  assert.equal(f.contractChecks(), 0);
+  assert.equal(f.saved().processingStatus, 'NO_PROVIDERS_NOT_SENT');
   assert.equal(f.deliveryEnqueues(), 0);
 });

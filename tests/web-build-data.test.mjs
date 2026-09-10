@@ -120,6 +120,7 @@ test('web build uses API data and final HTML passes the publication smoke contra
   const almetyevskInternet = await readBuilt(join('almetyevsk', 'internet', 'index.html'));
   const almetyevskTariff = await readBuilt(join('almetyevsk', 'almet-internet-300', 'index.html'));
   const kazanAddressCheck = await readBuilt(join('kazan', 'proverka-adresa', 'index.html'));
+  const kazanInternet = await readBuilt(join('kazan', 'internet', 'index.html'));
   const robots = await readBuilt('robots.txt');
   const sitemap = await readBuilt('sitemap.xml');
   const notFound = await readBuilt('404.html');
@@ -142,6 +143,19 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(almetyevskTariff, /<h1>Альмет Интернет 300<\/h1>/);
   assert.match(almetyevskTariff, /650 ₽\/мес\./);
   assert.match(kazanAddressCheck, /const apiUrl = "https:\/\/api\.partner\.example\.test\/api\/v1"/);
+  assert.match(kazanAddressCheck, /\/address-suggestions/);
+  assert.match(kazanAddressCheck, /suggestion:\s*selectedSuggestion/);
+  assert.doesNotMatch(kazanAddressCheck, /DADATA_TOKEN|DADATA_SECRET/);
+  assert.match(kazanAddressCheck, /data-form-mode="visible"/);
+  assert.match(kazanAddressCheck, /data-phone-step[^>]*hidden/);
+  assert.match(kazanAddressCheck, /check\.status\s*!==\s*'AVAILABLE'/);
+  assert.match(kazanAddressCheck, /Дом\.ру по этому адресу не найден\. Доступны другие провайдеры/);
+  assert.match(kazanAddressCheck, /По этому адресу доступные провайдеры не найдены/);
+  assert.match(kazanAddressCheck, /Свяжитесь с технической поддержкой/);
+  assert.match(kazanAddressCheck, /mode === 'visible' \? 'visible-address-check' : 'lead-form'/);
+  assert.match(kazanInternet, /data-form-mode="lead"/);
+  assert.match(kazanInternet, /Спасибо! Заявка отправлена/);
+  assert.match(tariff, /data-form-mode="lead"/);
   assert.doesNotMatch(kazanAddressCheck, /127\.0\.0\.1/);
   assert.match(robots, /Sitemap: https:\/\/partner\.example\.test\/sitemap\.xml/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/<\/loc>/);

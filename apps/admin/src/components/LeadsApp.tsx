@@ -75,6 +75,8 @@ const processingLabels: Record<string, string> = {
   DELIVERED: "Передана",
   DUPLICATE_SUPPRESSED: "Дубликат подавлен",
   ACTIVE_SUBSCRIBER_NOT_SENT: "Действующий абонент",
+  PROVIDER_NOT_AVAILABLE_NOT_SENT: "Дом.ру по адресу недоступен",
+  NO_PROVIDERS_NOT_SENT: "Провайдеры не найдены",
   MANUAL_CHECK: "Ручная проверка",
   ADDRESS_CLARIFICATION: "Уточнение адреса",
   MANUAL_CHECK_API: "Проверка API вручную",

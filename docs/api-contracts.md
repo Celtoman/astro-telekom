@@ -22,31 +22,38 @@
 | GET | `/public/sites/:siteSlug/cities` | Возвращает опубликованный сайт, отсортированный каталог опубликованных городов/страниц/тарифов/visible blocks и опубликованные redirects; используется `apps/web` во время static build. |
 | GET | `/public/sites/:siteSlug/cities/:citySlug` | Возвращает опубликованный город, опубликованные страницы/тарифы, visible blocks и shallow inheritance content. |
 | GET | `/public/sites/:siteSlug/redirects/:id` | Для опубликованного сайта и redirect возвращает HTTP 301 с относительным `Location`; атомарно увеличивает `hitCount` и записывает `lastHitAt`. Неопубликованная или исчезнувшая запись возвращает 404. |
-| POST | `/address-checks` | Проверяет адрес через `CoverageService`, сохраняет `AddressCheck`, возвращает публичный результат без raw provider response. Текущий generic-контракт еще не приведен к фактическому словарю провайдеров Tarifnik. |
-| POST | `/leads` | Сохраняет заявку, пытается выявить дубликат, при допустимом адресе проверяет договор и ставит delivery. Текущий `addressCheckId` необязателен, поэтому обязательная для обычной формы серверная проверка провайдеров пока не гарантирована. |
+| POST | `/address-suggestions` | Проверяет опубликованные site/city и серверно вызывает DaData `suggest/address`; возвращает до 10 структурированных подсказок, не раскрывая DaData credentials браузеру. |
+| POST | `/address-checks` | Серверно нормализует выбранную DaData-подсказку через `clean/address`, вызывает официальный Tarifnik `address/check`, сохраняет полный проверенный snapshot и возвращает публичный результат без raw provider response. |
+| POST | `/leads` | Сохраняет заявку, выявляет дубликат и принимает routing-решение только по persisted `AddressCheck`. Отсутствующая/ошибочная проверка не разрешает contract check или delivery; очередь ставится только для найденного Дом.ру после однозначного `NOT_FOUND`. |
 | POST | `/lead-access/:leadId/consume` | Однократно обменивает 43-символьный fallback token на минимальную карточку одной заявки; истекший, измененный, отозванный, повторный или относящийся к другой заявке token возвращает 401. |
 
 Для `address-checks` и `leads` по умолчанию подставляется `siteSlug=domru-kazan`; endpoint публично принимает только published site/city/page/tariff. Этот default — свойство прототипа, не универсальный контракт платформы.
 
+### `POST /address-suggestions`
+
+Тело: обязательный `query`; опциональны `siteSlug`, `citySlug` и пустой honeypot `website`. API принимает только published site/city, ограничивает query 500 символами и передает в DaData `count: 10` вместе с выбранным городом. При ошибке или отсутствии конфигурации возвращается пустой список; readiness при этом остается заблокированным.
+
 ### `POST /address-checks`
 
-Тело: `address` обязателен; опциональны `siteSlug`, `citySlug`, `pageSlug`, `objectType`. Поля ограничены по типу и длине, неизвестные поля возвращают 400. Публичная форма также отправляет пустое honeypot-поле `website`; непустое значение отклоняется до БД и внешних интеграций. Возможные статусы: `AVAILABLE`, `UNAVAILABLE`, `AMBIGUOUS`, `MANUAL_CHECK`, `ERROR`.
+Тело: `address` обязателен; структурированная `suggestion` содержит `value`, `unrestricted_value`, `data`; опциональны `siteSlug`, `citySlug`, `pageSlug`, `objectType`. Поля ограничены по типу и длине, неизвестные поля возвращают 400. Публичная форма также отправляет пустое honeypot-поле `website`; непустое значение отклоняется до БД и внешних интеграций. Возможные статусы: `AVAILABLE`, `UNAVAILABLE`, `AMBIGUOUS`, `MANUAL_CHECK`, `ERROR`.
 
-Если не заданы обе переменные coverage-интеграции, ответ будет `MANUAL_CHECK`. API не интерпретирует это как `available: false`.
+Перед Tarifnik API выбранная подсказка проходит серверный DaData `clean/address`; результат преобразуется в тот же envelope, что в рабочем боте: `value=source`, `unrestricted_value=source`, `data=<clean result>`. `POST /address/check` получает ровно `{ suggestion }` с Bearer token. HTTP 200 обязан содержать непустой словарь `providerId: providerName`; HTTP 404 — однозначный пустой список провайдеров; 403/422, сеть, невалидный JSON или неверная структура дают `ERROR`. Без полного DaData/Tarifnik набора переменных либо без валидной подсказки ответ будет `MANUAL_CHECK`; ни один из этих исходов не интерпретируется как разрешение delivery.
 
-Согласованный целевой контракт использует подсказанный и нормализованный DaData адрес и реальный ответ Tarifnik `address/check` со списком провайдеров. Для обычной формы наличие хотя бы одного провайдера запускает проверку действующего абонента независимо от наличия Дом.ру, но delivery дополнительно требует присутствия Дом.ру. Для видимой проверки наличие именно Дом.ру открывает второй шаг с телефоном, после чего применяется тот же фильтр абонента. Текущий `CoverageService` это разделение еще не реализует.
+В persisted snapshot раздельно сохраняются `providers`, `targetProviderId`, `hasAnyProvider` и `hasTargetProvider`. Наличие хотя бы одного провайдера запускает проверку действующего абонента независимо от наличия Дом.ру, но delivery дополнительно требует присутствия Дом.ру. Для видимой проверки только наличие Дом.ру открывает второй шаг с телефоном, после чего применяется тот же фильтр абонента.
 
 ### `POST /leads`
 
 Обязательны `phone` и `citySlug`. Также допускаются slug страницы/тарифа, ссылка на `addressCheckId`, контакты, адрес, service type, UTM, referrer, URL, form name, time on site, device, до 50 viewed pages и до 100 activity events. Браузерные numeric IDs и неизвестные поля не принимаются: API разрешает только slug. Непустое honeypot-поле `website` отклоняется до сохранения.
 
-Контроллер сравнивает телефон или нормализованный адрес с лидами того же сайта за последние 24 часа. Статусы обработки: `PENDING`, `DELIVERED`, `DUPLICATE_SUPPRESSED`, `ACTIVE_SUBSCRIBER_NOT_SENT`, `MANUAL_CHECK`, `ADDRESS_CLARIFICATION`, `MANUAL_CHECK_API`, `DELIVERY_ERROR_EMAIL_SENT`, `DELIVERY_ERROR_EMAIL_FAILED`.
+Контроллер сравнивает телефон или нормализованный адрес с лидами того же сайта за последние 24 часа. Статусы обработки: `PENDING`, `DELIVERED`, `DUPLICATE_SUPPRESSED`, `ACTIVE_SUBSCRIBER_NOT_SENT`, `PROVIDER_NOT_AVAILABLE_NOT_SENT`, `NO_PROVIDERS_NOT_SENT`, `MANUAL_CHECK`, `ADDRESS_CLARIFICATION`, `MANUAL_CHECK_API`, `DELIVERY_ERROR_EMAIL_SENT`, `DELIVERY_ERROR_EMAIL_FAILED`.
 
 Проверка действующего абонента использует фактическую схему рабочего бота: публичный endpoint Дом.ру `contract-asterisked`, телефон `7XXXXXXXXXX` в query-параметре `contact`, `isActive=1` и городской профиль из `DOMRU_CONTRACT_CITY`, `DOMRU_CONTRACT_ORIGIN`, `DOMRU_CONTRACT_PROVIDER_ID`, `DOMRU_CONTRACT_REFERER`. Для Казани профиль использует `providerid=5`; отдельного `DOMRU_CONTRACT_API_KEY` у этого контракта нет. Неполный или не совпадающий с `citySlug` профиль дает `NOT_CONFIGURED`.
 
 Только валидный JSON с явно присутствующим `contacts: []` означает `NOT_FOUND` и разрешает дальнейшее решение о delivery. Непустой массив означает `ACTIVE`. HTML, пустое тело, невалидный JSON, отсутствие массива `contacts`, неверный телефон, HTTP- или сетевая ошибка дают `ERROR`; лид остается на ручной проверке через `MANUAL_CHECK_API`, и автоматическая передача в Tarifnik не запускается.
 
-Для обычной формы согласованный публичный ответ всегда короткий и не раскрывает внутренний исход: «Спасибо! Заявка отправлена». Видимая проверка подключения сначала возвращает результат адреса без создания лида с телефоном; только ветка с найденным Дом.ру открывает второй шаг заявки. Эти два отдельных browser flow в текущем web еще не реализованы.
+Worker повторно проверяет persisted coverage snapshot и однозначный `contractResult.status=NOT_FOUND`/`active=false` перед внешним вызовом. Административный retry разрешен только после исчерпанной доставки, а не после ручного/ошибочного решения coverage или проверки абонента. Официальный `appeal/create` payload содержит только `utm_campaign` из runtime-конфигурации, нормализованный `phone`, допустимый `belong_type`, исходный нормализованный `suggestion` и опциональное имя. HTTP 200 считается успехом только при `result: created | created_duplicate` и непустом `appeal_id`; любой иной ответ записывается как неудачная попытка и проходит bounded retry/fallback.
+
+Обычная browser-форма принимает адрес и телефон, но после сохранения показывает только «Спасибо! Заявка отправлена», не раскрывая внутренний исход. Видимая проверка сначала создает `AddressCheck` без телефона: Дом.ру открывает второй шаг заявки, альтернативы ведут на `tarifnik.ru`, пустой список показывает телефон поддержки, а ошибочный/неоднозначный результат не создает лид.
 
 ## Auth и административные routes
 

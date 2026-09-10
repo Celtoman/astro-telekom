@@ -8,7 +8,7 @@
 
 | Зона | Реализация | Назначение |
 | --- | --- | --- |
-| `apps/web` | Astro 7, static output | SEO HTML и sitemap из опубликованных городов, страниц и тарифов; build генерирует Caddy routes опубликованных редиректов. Форма проверки адреса получает site/city/page context из static route. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
+| `apps/web` | Astro 7, static output | SEO HTML и sitemap из опубликованных городов, страниц и тарифов; build генерирует Caddy routes опубликованных редиректов. Переиспользуемая адресная форма имеет два режима: обычная заявка на страницах услуг/тарифов и отдельная видимая проверка подключения. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
 | `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, рабочие `/tariffs`, `/cities`, `/leads`, `/redirects` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; заявки доступны как реальный master-detail журнал, редиректы — как CRUD со статистикой переходов. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов, пересборок сайта и ежедневной PII retention; также слушает пока не используемую import-очередь. |
@@ -30,8 +30,10 @@ Production Compose запускает one-shot `migrate` из API image посл
 ```text
 Браузер публичного сайта
   -> Caddy -> static web
-  -> api.domain/api/v1/address-checks, /leads -> API -> PostgreSQL
-                                              -> Redis/BullMQ -> worker -> Tarifnik/email
+  -> /api/v1/address-suggestions -> API -> DaData suggest
+  -> /api/v1/address-checks -> API -> DaData clean -> Tarifnik address/check -> PostgreSQL
+  -> /api/v1/leads -> API -> routing/контракт Дом.ру -> PostgreSQL
+                    -> только разрешенный лид -> Redis/BullMQ -> worker -> Tarifnik/email
 
 Старый публичный URL
   -> build-generated Caddy matcher -> public redirect resolver API
@@ -50,7 +52,7 @@ PII retention scheduler в worker
   -> cascade history/activity/delivery/tokens + orphan AddressCheck cleanup
 ```
 
-Публичные формы имеют два согласованных flow. Обычная заявка принимает адрес и телефон сразу, сохраняет лид и отвечает только коротким подтверждением; затем сервер обязан проверить провайдеров через Tarifnik `address/check`. Если найден хотя бы один провайдер, выполняется проверка действующего абонента через API Дом.ру независимо от наличия Дом.ру в списке. `lead-deliveries` разрешается только при одновременном выполнении двух условий: Tarifnik подтвердил Дом.ру, а Dom.ru вернул валидный ответ с явным `contacts: []`. Действующий абонент, отсутствие Дом.ру, отсутствие провайдеров и любой неоднозначный или ошибочный ответ доставку блокируют. Видимая проверка подключения сначала создает только `AddressCheck`: телефон запрашивается лишь при найденном Дом.ру, альтернативы ведут на `tarifnik.ru`, а пустой список показывает телефон технической поддержки. Текущий web и generic coverage adapter этот целевой flow реализуют не полностью — точный статус приведен в [current-state.md](current-state.md).
+Публичные формы имеют два реализованных flow. Обычная заявка принимает адрес и телефон сразу, под капотом получает и сохраняет результат Tarifnik `address/check`, а посетителю отвечает только коротким подтверждением. Если найден хотя бы один провайдер, выполняется проверка действующего абонента через API Дом.ру независимо от наличия Дом.ру в списке. `lead-deliveries` разрешается только при одновременном выполнении двух условий: Tarifnik подтвердил Дом.ру, а Dom.ru вернул валидный ответ с явным `contacts: []`. Действующий абонент, отсутствие Дом.ру, отсутствие провайдеров и любой неоднозначный или ошибочный ответ доставку блокируют. Видимая проверка сначала создает только `AddressCheck`: телефон запрашивается лишь при найденном Дом.ру, альтернативы ведут на `tarifnik.ru`, а пустой список показывает телефон технической поддержки. Все адресные поля выбирают подсказку DaData, а credentials остаются в API.
 
 В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities` через server-only `SITE_DATA_API_URL` (с совместимым fallback на `PUBLIC_API_URL`), валидирует уникальность каждого публичного пути, отсутствие redirect-цепочек и существование каждой цели. Отдельный `PUBLIC_API_URL` встраивается в browser-формы и не обязан совпадать с внутренним источником каталога. Web генерирует HTML только для опубликованного каталога и `redirects.caddy` только для опубликованных редиректов; при сборке container image этот файл переносится из document root в `/etc/caddy`. `PUBLIC_SITE_SLUG` выбирает сайт, по умолчанию `domru-kazan`. В runtime статические страницы не читают PostgreSQL; только совпавший старый URL проксируется внутренним Caddy в API для актуальной проверки статуса, HTTP 301 и атомарного учета перехода. Изменение каталога или правила требует успешной пересборки.
 
@@ -61,8 +63,8 @@ PII retention scheduler в worker
 | `auth` и `AdminTokenGuard` | Создание 12-часовой сессии, browser login/me/logout через HttpOnly cookie и совместимый Bearer для технических клиентов. `x-admin-token` — машинный credential; `/internal/*` принимает только его. |
 | `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; блоки имеют отдельную строгую валидацию, остальные admin bodies частично проверяются вручную. |
 | `tariff-import`, `city-import` | Валидация XLSX, сохранение отчета, transactional apply. |
-| `address-checks`, `coverage` | Сохранение проверки адреса; целевой адаптер использует структурированный адрес DaData и Tarifnik `address/check` со списком провайдеров. Текущий generic response contract пока отличается. |
-| `leads`, `domru-contract`, `lead-delivery`, `notifications`, `lead-access` | Сохранение лида, дедупликация, строгая проверка действующего договора и только затем delivery в CRM Tarifnik через `appeal/create`, email fallback и одноразовый доступ из fallback-письма. |
+| `address-suggestions`, `dadata`, `address-checks`, `coverage` | Серверные DaData suggest/clean, официальный Tarifnik `address/check`, нормализация словаря провайдеров и сохранение проверенного snapshot без публикации raw response. |
+| `leads`, `domru-contract`, `lead-delivery`, `notifications`, `lead-access` | Сохранение лида, дедупликация, fail-closed routing, строгая проверка действующего договора и только затем официальный `appeal/create`, bounded retry, email fallback и одноразовый доступ из fallback-письма. Worker повторно проверяет наличие целевого провайдера и persisted `NOT_FOUND`; delivery retry не доступен для ручных/отрицательных routing-исходов. |
 | `pii-retention` | Worker-only bounded hard-delete просроченных лидов и связанных payloads; fail-safe без явно заданного срока. |
 | `crm-leads` | Список, карточка, смена статуса, повторная постановка доставки и отзыв fallback-доступа. |
 | `rebuild-queue` | Persistent rebuild/outbox, дедупликация по сайту, BullMQ producer, start/progress/result API, сохранение provider deployment UUID и фиксация только финального результата deployment. |

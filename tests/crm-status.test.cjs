@@ -38,3 +38,39 @@ test('unsupported status is rejected', async () => {
   const f = setup();
   await assert.rejects(f.controller.updateStatus('lead', { status: 'BOGUS' }, {}), error => error.getStatus() === 400);
 });
+
+test('delivery retry cannot bypass provider or subscriber routing decisions', async () => {
+  const blockedStatuses = [
+    'MANUAL_CHECK',
+    'MANUAL_CHECK_API',
+    'ADDRESS_CLARIFICATION',
+    'PROVIDER_NOT_AVAILABLE_NOT_SENT',
+    'NO_PROVIDERS_NOT_SENT',
+    'ACTIVE_SUBSCRIBER_NOT_SENT',
+    'DUPLICATE_SUPPRESSED',
+    'DELIVERED',
+  ];
+  for (const processingStatus of blockedStatuses) {
+    let enqueued = 0;
+    const controller = new CrmLeadsController({
+      lead: {
+        findUnique: async () => ({ id: 'lead', processingStatus }),
+        update: async () => assert.fail(`updated blocked ${processingStatus}`),
+      },
+    }, { enqueue: async () => { enqueued += 1; } });
+    await assert.rejects(controller.retryDelivery('lead'), error => error.getStatus() === 400);
+    assert.equal(enqueued, 0);
+  }
+
+  let saved;
+  let enqueued = 0;
+  const retryable = new CrmLeadsController({
+    lead: {
+      findUnique: async () => ({ id: 'lead', processingStatus: 'DELIVERY_ERROR_EMAIL_FAILED' }),
+      update: async ({ data }) => { saved = data; },
+    },
+  }, { enqueue: async () => { enqueued += 1; } });
+  assert.equal((await retryable.retryDelivery('lead')).processingStatus, 'PENDING');
+  assert.deepEqual(saved, { processingStatus: 'PENDING' });
+  assert.equal(enqueued, 1);
+});

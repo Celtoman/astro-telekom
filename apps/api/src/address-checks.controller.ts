@@ -2,10 +2,16 @@ import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { CoverageService } from './coverage.service';
 import { PrismaService } from './prisma.service';
 import { AddressCheckDto } from './public.dto';
+import { DadataService } from './dadata.service';
+import { readDadataSuggestion } from './coverage.service';
 
 @Controller('address-checks')
 export class AddressChecksController {
-  constructor(private readonly coverage: CoverageService, private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly coverage: CoverageService,
+    private readonly prisma: PrismaService,
+    private readonly dadata: DadataService,
+  ) {}
 
   @Post()
   async check(@Body() body: AddressCheckDto) {
@@ -20,8 +26,15 @@ export class AddressChecksController {
     if (!city) throw new BadRequestException('Город недоступен');
     const page = body.pageSlug ? await this.prisma.page.findFirst({ where: { cityId: city.id, slug: body.pageSlug, status: 'PUBLISHED' } }) : null;
     if (body.pageSlug && !page) throw new BadRequestException('Страница недоступна');
+    const selectedSuggestion = readDadataSuggestion(body.suggestion);
+    const normalizedSuggestion = selectedSuggestion ? await this.dadata.clean(selectedSuggestion) : null;
+    const cleanedResult = normalizedSuggestion && typeof normalizedSuggestion.data.result === 'string'
+      ? normalizedSuggestion.data.result.trim()
+      : '';
+    const normalizedAddress = cleanedResult || normalizedSuggestion?.value || body.address.trim();
     const result = await this.coverage.check({
-      address: body.address.trim(),
+      address: normalizedAddress,
+      suggestion: normalizedSuggestion,
       citySlug: body.citySlug ?? 'kazan',
       objectType: body.objectType ?? 'apartment',
     });
@@ -30,13 +43,13 @@ export class AddressChecksController {
         siteId: site.id,
         cityId: city.id,
         pageId: page?.id,
-        address: body.address.trim(),
+        address: normalizedAddress,
         objectType: body.objectType ?? 'apartment',
         status: result.status,
         response: result.providerResponse as object | undefined,
       },
     });
     const { providerResponse: _providerResponse, ...publicResult } = result;
-    return { ...publicResult, id: check?.id, address: body.address.trim(), citySlug: body.citySlug ?? 'kazan' };
+    return { ...publicResult, id: check?.id, address: normalizedAddress, citySlug: body.citySlug ?? 'kazan' };
   }
 }

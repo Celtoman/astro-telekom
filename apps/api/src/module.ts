@@ -35,12 +35,15 @@ import { PiiRetentionService } from './pii-retention.service';
 import { AdminRedirectsController } from './admin-redirects.controller';
 import { PublicRedirectsController } from './public-redirects.controller';
 import { RedirectService } from './redirect.service';
+import { DadataService } from './dadata.service';
+import { AddressSuggestionsController } from './address-suggestions.controller';
 
 @Module({
   controllers: [
     HealthController,
     CitiesController,
     AddressChecksController,
+    AddressSuggestionsController,
     AdminCitiesController,
     AdminPagesController,
     AdminTariffsController,
@@ -60,6 +63,6 @@ import { RedirectService } from './redirect.service';
     AdminRedirectsController,
     PublicRedirectsController,
   ],
-  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, AuthService, AdminTokenGuard, CoverageService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, AuthService, AdminTokenGuard, CoverageService, DadataService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

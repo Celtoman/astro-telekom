@@ -12,7 +12,7 @@ export function rateLimitWindow() {
 export function rateLimitForPath(url: string) {
   const path = url.split('?')[0];
   if (path === '/api/v1/auth/login') return positiveInteger(process.env.RATE_LIMIT_LOGIN_MAX, 5);
-  if (path === '/api/v1/leads' || path === '/api/v1/address-checks' || path.startsWith('/api/v1/lead-access/')) {
+  if (path === '/api/v1/leads' || path === '/api/v1/address-checks' || path === '/api/v1/address-suggestions' || path.startsWith('/api/v1/lead-access/')) {
     return positiveInteger(process.env.RATE_LIMIT_PUBLIC_WRITE_MAX, 10);
   }
   return positiveInteger(process.env.RATE_LIMIT_DEFAULT_MAX, 300);

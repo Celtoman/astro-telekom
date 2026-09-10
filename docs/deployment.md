@@ -30,6 +30,8 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 9. Сгенерировать bcrypt credential строкой `htpasswd -nbB <username> <password>` и сохранить результат только в Coolify как `TEST_BASIC_AUTH_USERS`. Включить `Literal`, `Buildtime` и `Runtime`, выключить `Multiline`; в Advanced обязательно выключить `Escape special characters in labels`. Compose интерполирует label уже во время `docker compose build`: runtime-only значение отсутствует в `build-time.env`, а label escaping превращает `${TEST_BASIC_AUTH_USERS...}` в неинтерполируемый `$${TEST_BASIC_AUTH_USERS...}`. Открытый пароль и готовый credential не коммитить.
 10. Явно задать `RUN_BOOTSTRAP_SEED=true` для первого запуска; после успешного seed и публикации изменить на `false` до следующего deploy.
 
+Секретные значения не дублируются в документации или отдельных временных файлах. Для локальной разработки их единый источник — исключенный из Git корневой `.env`; для production — Coolify Environment Variables. `.env.example` остается только реестром имен, безопасных URL и пустых placeholders.
+
 ## Настройка Coolify
 
 1. Создать Git-based application из приватного GitHub-репозитория через GitHub App или Deploy Key.
@@ -88,9 +90,9 @@ Seed не становится автоматической операцией �
 | Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
 | Input security | `TRUST_PROXY`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX` |
 | PII retention | `PII_RETENTION_DAYS` (обязательное legal decision), `PII_RETENTION_BATCH_SIZE` (default 500), `PII_RETENTION_CRON` (default `0 3 * * *`, UTC) |
-| Address/coverage | Для будущего согласованного адаптера: `DADATA_TOKEN`, `DADATA_SECRET`, `DADATA_SUGGEST_API_URL`, `DADATA_CLEAN_API_URL`, `TARIFNIK_ADDRESS_CHECK_API_URL`; текущий generic-адаптер пока использует `DOMRU_COVERAGE_API_URL`, `DOMRU_COVERAGE_API_KEY`. |
+| Address/coverage | `DADATA_TOKEN`, `DADATA_SECRET`, `DADATA_SUGGEST_API_URL`, `DADATA_CLEAN_API_URL`, `TARIFNIK_ADDRESS_CHECK_API_URL`, `TARIFNIK_API_KEY`, `TARIFNIK_TARGET_PROVIDER_ID`. DaData credentials используются только сервером; target ID для Дом.ру сейчас `8`. |
 | Contract check | `DOMRU_CONTRACT_API_URL`, `DOMRU_CONTRACT_CITY`, `DOMRU_CONTRACT_ORIGIN`, `DOMRU_CONTRACT_PROVIDER_ID`, `DOMRU_CONTRACT_REFERER`. Публичный городской контракт Дом.ру не использует API key. |
-| Lead delivery | `TARIFNIK_API_URL`, `TARIFNIK_API_KEY`, `TARIFNIK_UTM_CAMPAIGN`, `LEADS_EMAIL`, `RESEND_API_KEY` or `LEADS_EMAIL_WEBHOOK_URL`, `LEADS_EMAIL_FROM` |
+| Lead delivery | `TARIFNIK_API_URL`, общий `TARIFNIK_API_KEY`, `TARIFNIK_UTM_CAMPAIGN`, `LEADS_EMAIL`, `RESEND_API_KEY` or `LEADS_EMAIL_WEBHOOK_URL`, `LEADS_EMAIL_FROM`. До production используется только согласованная метка `test`; рабочее значение должен предоставить владелец. |
 | Publishing | `REBUILD_PROVIDER`; для `webhook` — `REBUILD_WEBHOOK_URL`; для `coolify` — `COOLIFY_API_URL`, `COOLIFY_API_TOKEN`, `COOLIFY_RESOURCE_UUID`, необязательные `COOLIFY_POLL_INTERVAL_MS`/`COOLIFY_DEPLOY_TIMEOUT_MS`; `ENV_FILE` |
 
 Проверка configuration gate из операторского PowerShell (значение токена не выводить в лог):
@@ -106,6 +108,7 @@ docker compose -f docker-compose.coolify.yml exec api node -e "fetch('http://loc
 - Caddy reverse proxy не добавляет security headers из `static.Caddyfile`; он используется только внутри static image.
 - Нет мониторинга, alerting, лог-агрегации или настроенной backup policy. Встроенный database-aware backup Coolify пока не доступен PostgreSQL внутри Git-based Docker Compose Application; до реальных лидов нужен внешний `pg_dump`, S3/off-server storage и restore rehearsal.
 - Автоматическое hard-delete PII реализовано, но срок хранения не утвержден и `.env.example` намеренно оставляет `PII_RETENTION_DAYS` пустым; реальный прием заявок до legal decision и isolated rehearsal запрещен.
+- Миграция `0013_lead_provider_outcomes` добавляет явные причины непередачи `PROVIDER_NOT_AVAILABLE_NOT_SENT` и `NO_PROVIDERS_NOT_SENT`; она должна быть применена до запуска новой версии API.
 - Static web не получает изменения из БД без внешней пересборки. Это относится и к набору redirect source paths; уже включенный matcher при каждом обращении проверяет актуальный published-статус записи через API.
 - Direct `docker-compose.prod.yml` по-прежнему требует заранее доступный `SITE_DATA_API_URL`; воспроизводимый первый bootstrap реализован только в целевом Coolify Compose.
 - Локальный production-подобный Compose и два последовательных live deployment текущего commit полностью проверены: DNS/TLS, persistent volumes, 401/200 password boundary, same-origin API, `www → non-www`, повторная web-публикация и устойчивый `running:healthy` подтверждены.

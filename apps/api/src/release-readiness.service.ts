@@ -23,7 +23,15 @@ export interface ReleaseConfigurationStatus {
 export class ReleaseReadinessService {
   configuration(): ReleaseConfigurationStatus {
     const checks = {
-      coverage: this.required(['DOMRU_COVERAGE_API_URL', 'DOMRU_COVERAGE_API_KEY']),
+      coverage: this.required([
+        'DADATA_TOKEN',
+        'DADATA_SECRET',
+        'DADATA_SUGGEST_API_URL',
+        'DADATA_CLEAN_API_URL',
+        'TARIFNIK_ADDRESS_CHECK_API_URL',
+        'TARIFNIK_API_KEY',
+        'TARIFNIK_TARGET_PROVIDER_ID',
+      ]),
       contract: this.required([
         'DOMRU_CONTRACT_API_URL',
         'DOMRU_CONTRACT_CITY',
@@ -31,7 +39,7 @@ export class ReleaseReadinessService {
         'DOMRU_CONTRACT_PROVIDER_ID',
         'DOMRU_CONTRACT_REFERER',
       ]),
-      tarifnik: this.required(['TARIFNIK_API_URL', 'TARIFNIK_API_KEY']),
+      tarifnik: this.required(['TARIFNIK_API_URL', 'TARIFNIK_API_KEY', 'TARIFNIK_UTM_CAMPAIGN']),
       fallbackEmail: this.emailFallback(),
       rebuild: this.rebuildProvider(),
       piiRetention: this.positiveInteger('PII_RETENTION_DAYS', 3_650),

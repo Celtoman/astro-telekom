@@ -6,6 +6,7 @@ import { DomruContractService } from './domru-contract.service';
 import { LeadDeliveryService } from './lead-delivery.service';
 import { normalizeAddress, normalizePhone } from './lead-utils';
 import { CreateLeadDto } from './public.dto';
+import { readTarifnikCoverageSnapshot } from './coverage.service';
 
 @Controller('leads')
 export class PublicLeadsController {
@@ -81,17 +82,25 @@ export class PublicLeadsController {
       || (normalizedInputAddress && normalizeAddress(candidate.address) === normalizedInputAddress),
     );
 
-    let processingStatus: 'PENDING' | 'DUPLICATE_SUPPRESSED' | 'ACTIVE_SUBSCRIBER_NOT_SENT' | 'MANUAL_CHECK' | 'ADDRESS_CLARIFICATION' | 'MANUAL_CHECK_API' = 'PENDING';
+    const coverage = addressCheck ? readTarifnikCoverageSnapshot(addressCheck.response) : null;
+    const coverageStatusMatches = Boolean(coverage && (
+      (coverage.hasTargetProvider && addressCheck?.status === 'AVAILABLE')
+      || (!coverage.hasTargetProvider && addressCheck?.status === 'UNAVAILABLE')
+    ));
+    let processingStatus: 'PENDING' | 'DUPLICATE_SUPPRESSED' | 'ACTIVE_SUBSCRIBER_NOT_SENT' | 'PROVIDER_NOT_AVAILABLE_NOT_SENT' | 'NO_PROVIDERS_NOT_SENT' | 'MANUAL_CHECK' | 'ADDRESS_CLARIFICATION' | 'MANUAL_CHECK_API' = 'PENDING';
     if (duplicate) processingStatus = 'DUPLICATE_SUPPRESSED';
-    else if (addressCheck?.status === 'UNAVAILABLE' || addressCheck?.status === 'MANUAL_CHECK') processingStatus = 'MANUAL_CHECK';
+    else if (!addressCheck || addressCheck.status === 'MANUAL_CHECK') processingStatus = 'MANUAL_CHECK';
     else if (addressCheck?.status === 'AMBIGUOUS') processingStatus = 'ADDRESS_CLARIFICATION';
     else if (addressCheck?.status === 'ERROR') processingStatus = 'MANUAL_CHECK_API';
+    else if (!coverage || !coverageStatusMatches) processingStatus = 'MANUAL_CHECK_API';
+    else if (!coverage.hasAnyProvider) processingStatus = 'NO_PROVIDERS_NOT_SENT';
 
     let contractResult: Awaited<ReturnType<DomruContractService['check']>> | undefined;
-    if (!duplicate && processingStatus === 'PENDING') {
+    if (!duplicate && processingStatus === 'PENDING' && coverage?.hasAnyProvider) {
       contractResult = await this.contract.check(phone, city.slug);
       if (contractResult.status === 'ACTIVE') processingStatus = 'ACTIVE_SUBSCRIBER_NOT_SENT';
       else if (contractResult.status === 'ERROR' || contractResult.status === 'NOT_CONFIGURED') processingStatus = 'MANUAL_CHECK_API';
+      else if (!coverage.hasTargetProvider) processingStatus = 'PROVIDER_NOT_AVAILABLE_NOT_SENT';
     }
 
     const lead = await this.prisma.$transaction(async (tx) => {

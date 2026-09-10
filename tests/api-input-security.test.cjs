@@ -12,6 +12,7 @@ const metadata = (metatype) => ({ type: 'body', metatype, data: undefined });
 test('global security options enforce strict DTOs and tighter public write limits', async () => {
   assert.equal(rateLimitForPath('/api/v1/auth/login'), 5);
   assert.equal(rateLimitForPath('/api/v1/address-checks'), 10);
+  assert.equal(rateLimitForPath('/api/v1/address-suggestions'), 10);
   assert.equal(rateLimitForPath('/api/v1/leads'), 10);
   assert.equal(rateLimitForPath('/api/v1/admin/tariffs'), 300);
 

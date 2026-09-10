@@ -6,8 +6,12 @@ const { AdminReadinessController } = require('../apps/api/dist/admin-readiness.c
 const { ReleaseReadinessService } = require('../apps/api/dist/release-readiness.service.js');
 
 const integrationVariables = [
-  'DOMRU_COVERAGE_API_URL',
-  'DOMRU_COVERAGE_API_KEY',
+  'DADATA_TOKEN',
+  'DADATA_SECRET',
+  'DADATA_SUGGEST_API_URL',
+  'DADATA_CLEAN_API_URL',
+  'TARIFNIK_ADDRESS_CHECK_API_URL',
+  'TARIFNIK_TARGET_PROVIDER_ID',
   'DOMRU_CONTRACT_API_URL',
   'DOMRU_CONTRACT_CITY',
   'DOMRU_CONTRACT_ORIGIN',
@@ -15,6 +19,7 @@ const integrationVariables = [
   'DOMRU_CONTRACT_REFERER',
   'TARIFNIK_API_URL',
   'TARIFNIK_API_KEY',
+  'TARIFNIK_UTM_CAMPAIGN',
   'LEADS_EMAIL',
   'RESEND_API_KEY',
   'LEADS_EMAIL_WEBHOOK_URL',
@@ -44,10 +49,15 @@ async function withEnvironment(values, callback) {
 
 test('release readiness reports missing integration configuration without exposing values', async () => {
   await withEnvironment({
-    DOMRU_COVERAGE_API_URL: 'https://coverage.secret.test',
-    DOMRU_COVERAGE_API_KEY: 'coverage-secret',
+    DADATA_TOKEN: 'dadata-token',
+    DADATA_SECRET: 'dadata-secret',
+    DADATA_SUGGEST_API_URL: 'https://suggestions.example.test',
+    DADATA_CLEAN_API_URL: 'https://cleaner.example.test',
+    TARIFNIK_ADDRESS_CHECK_API_URL: 'https://coverage.secret.test',
+    TARIFNIK_TARGET_PROVIDER_ID: '8',
     TARIFNIK_API_URL: 'https://tarifnik.secret.test',
     TARIFNIK_API_KEY: 'tarifnik-secret',
+    TARIFNIK_UTM_CAMPAIGN: 'test',
     LEADS_EMAIL: 'operator@secret.test',
   }, async () => {
     const result = new ReleaseReadinessService().configuration();
@@ -78,8 +88,12 @@ test('release readiness reports missing integration configuration without exposi
 
 test('release readiness becomes configured only when every required integration has a transport', async () => {
   await withEnvironment({
-    DOMRU_COVERAGE_API_URL: 'https://coverage.example.test',
-    DOMRU_COVERAGE_API_KEY: 'coverage-key',
+    DADATA_TOKEN: 'dadata-token',
+    DADATA_SECRET: 'dadata-secret',
+    DADATA_SUGGEST_API_URL: 'https://suggestions.example.test',
+    DADATA_CLEAN_API_URL: 'https://cleaner.example.test',
+    TARIFNIK_ADDRESS_CHECK_API_URL: 'https://coverage.example.test',
+    TARIFNIK_TARGET_PROVIDER_ID: '8',
     DOMRU_CONTRACT_API_URL: 'https://contract.example.test',
     DOMRU_CONTRACT_CITY: 'kazan',
     DOMRU_CONTRACT_ORIGIN: 'https://kazan.dom.ru',
@@ -87,6 +101,7 @@ test('release readiness becomes configured only when every required integration 
     DOMRU_CONTRACT_REFERER: 'https://kazan.dom.ru/',
     TARIFNIK_API_URL: 'https://tarifnik.example.test',
     TARIFNIK_API_KEY: 'tarifnik-key',
+    TARIFNIK_UTM_CAMPAIGN: 'test',
     LEADS_EMAIL: 'operator@example.test',
     LEADS_EMAIL_WEBHOOK_URL: 'https://mail.example.test',
     REBUILD_WEBHOOK_URL: 'https://deploy.example.test',
@@ -98,10 +113,40 @@ test('release readiness becomes configured only when every required integration 
   });
 });
 
+test('release readiness requires both DaData endpoints and credentials for address normalization', async () => {
+  await withEnvironment({
+    DADATA_TOKEN: 'dadata-token',
+    DADATA_SUGGEST_API_URL: 'https://suggestions.example.test',
+    DADATA_CLEAN_API_URL: 'https://cleaner.example.test',
+    TARIFNIK_ADDRESS_CHECK_API_URL: 'https://coverage.example.test',
+    TARIFNIK_TARGET_PROVIDER_ID: '8',
+    TARIFNIK_API_URL: 'https://tarifnik.example.test',
+    TARIFNIK_API_KEY: 'tarifnik-key',
+    TARIFNIK_UTM_CAMPAIGN: 'test',
+    DOMRU_CONTRACT_API_URL: 'https://contract.example.test',
+    DOMRU_CONTRACT_CITY: 'kazan',
+    DOMRU_CONTRACT_ORIGIN: 'https://kazan.dom.ru',
+    DOMRU_CONTRACT_PROVIDER_ID: '5',
+    DOMRU_CONTRACT_REFERER: 'https://kazan.dom.ru/',
+    LEADS_EMAIL: 'operator@example.test',
+    LEADS_EMAIL_WEBHOOK_URL: 'https://mail.example.test',
+    REBUILD_WEBHOOK_URL: 'https://deploy.example.test',
+    PII_RETENTION_DAYS: '30',
+  }, async () => {
+    const result = new ReleaseReadinessService().configuration();
+    assert.deepEqual(result.checks.coverage, { status: 'missing', missing: ['DADATA_SECRET'] });
+    assert.equal(result.status, 'blocked');
+  });
+});
+
 test('release readiness accepts a complete Coolify provider without a legacy webhook', async () => {
   await withEnvironment({
-    DOMRU_COVERAGE_API_URL: 'https://coverage.example.test',
-    DOMRU_COVERAGE_API_KEY: 'coverage-key',
+    DADATA_TOKEN: 'dadata-token',
+    DADATA_SECRET: 'dadata-secret',
+    DADATA_SUGGEST_API_URL: 'https://suggestions.example.test',
+    DADATA_CLEAN_API_URL: 'https://cleaner.example.test',
+    TARIFNIK_ADDRESS_CHECK_API_URL: 'https://coverage.example.test',
+    TARIFNIK_TARGET_PROVIDER_ID: '8',
     DOMRU_CONTRACT_API_URL: 'https://contract.example.test',
     DOMRU_CONTRACT_CITY: 'kazan',
     DOMRU_CONTRACT_ORIGIN: 'https://kazan.dom.ru',
@@ -109,6 +154,7 @@ test('release readiness accepts a complete Coolify provider without a legacy web
     DOMRU_CONTRACT_REFERER: 'https://kazan.dom.ru/',
     TARIFNIK_API_URL: 'https://tarifnik.example.test',
     TARIFNIK_API_KEY: 'tarifnik-key',
+    TARIFNIK_UTM_CAMPAIGN: 'test',
     LEADS_EMAIL: 'operator@example.test',
     RESEND_API_KEY: 'resend-key',
     REBUILD_PROVIDER: 'coolify',
