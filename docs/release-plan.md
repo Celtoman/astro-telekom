@@ -13,7 +13,7 @@
 - Прием лида, deduplication, contract check, delivery attempts, CRM API.
 - Static admin с рабочими экранами тарифов, городов и заявок, а также worker listeners.
 
-Release 0 не является production release: тестовый gate зеленый, но статический сайт не мультигородской, а часть запланированных admin-разделов еще не реализована. Demo fallback в public build с 7 сентября 2026 требует явного `ALLOW_DEMO_DATA=true` и больше не срабатывает молча при недоступном API.
+Release 0 не является production release: тестовый gate зеленый и multi-city static routing реализован, но в текущих данных опубликована только Казань, а часть запланированных admin-разделов еще не реализована. Защищенный внешний test-контур подтверждает deployment-механику, но не означает готовность к реальному трафику. Demo fallback в public build с 7 сентября 2026 требует явного `ALLOW_DEMO_DATA=true` и больше не срабатывает молча при недоступном API.
 
 ## Release 1 — безопасный MVP Казани
 

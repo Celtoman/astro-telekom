@@ -2,14 +2,14 @@
 
 ## Статус архитектуры
 
-В репозитории реализован локальный прототип статической витрины Дом.ру. Архитектура разделяет public web, admin, backoffice API и worker. Публичная маршрутизация строит static paths из опубликованных `City`, `Page` и `Tariff`; в текущей базе опубликована только Казань, поэтому реальный output пока остается одногородским.
+В репозитории реализован прототип статической витрины Дом.ру с защищенным внешним test-контуром в Coolify. Архитектура разделяет public web, admin, backoffice API и worker. Публичная маршрутизация строит static paths из опубликованных `City`, `Page` и `Tariff`; в текущей базе опубликована только Казань, поэтому реальный output пока остается одногородским.
 
 ## Стек и приложения
 
 | Зона | Реализация | Назначение |
 | --- | --- | --- |
 | `apps/web` | Astro 7, static output | SEO HTML и sitemap из опубликованных городов, страниц и тарифов; build генерирует Caddy routes опубликованных редиректов. Переиспользуемая адресная форма имеет два режима: обычная заявка на страницах услуг/тарифов и отдельная видимая проверка подключения. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
-| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, рабочие `/tariffs`, `/cities`, `/leads`, `/redirects` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; заявки доступны как реальный master-detail журнал, редиректы — как CRUD со статистикой переходов. Референс паттернов — next-shadcn-admin-dashboard, см. [docs/admin-design-system.md](admin-design-system.md). |
+| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, рабочие `/tariffs`, `/cities`, `/leads`, `/redirects` и `/lead-access/` реализованы как React-root с runtime API-запросами. Legacy demo удален; заявки доступны как реальный master-detail журнал, редиректы — как CRUD со статистикой переходов. Целевой референс паттернов — next-shadcn-admin-dashboard-aria; текущие Radix-примитивы еще требуют миграции [#97](https://github.com/Celtoman/astro-telekom/issues/97), см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов, пересборок сайта и ежедневной PII retention; также слушает пока не используемую import-очередь. |
 | `prisma` / `packages/database` | Prisma 7 + PostgreSQL | Схема, миграции, seed и сгенерированный клиент. |
@@ -85,14 +85,14 @@ PII retention scheduler в worker
 4. CRUD API сохраняет/обновляет `SiteRebuild` и ставит BullMQ job; изменения одного сайта дедуплицируются, но счетчик ревизий не дает потерять изменение во время активной сборки.
 5. Worker получает попытку через internal API, вызывает deployment provider и сохраняет результат через API; только явный `{ status: "SUCCEEDED" }` обновляет `publishedRevision`.
 
-Статус доступен через admin API, но UI статуса появится в вертикальном admin-flow отдельной задачей. Нет preview, schedule, content-version snapshot или rollback. Конкретный deployment provider и production rebuild еще требуют live-интеграционной проверки.
+Статус доступен через admin API и показан в рабочих потоках импорта тарифов и городов. Coolify provider и production rebuild подтверждены live polling rehearsal до финального `finished`. Нет полноценного content preview, schedule, content-version snapshot или rollback.
 
 ## Что не является частью текущей реализации
 
-- Мультигородской и многосайтовый public routing.
+- Одновременная эксплуатационная публикация нескольких городов и сайтов: код строит multi-city static routes, но в текущих данных опубликована только Казань, а импорт пока односайтовый.
 - SSR и runtime data fetching на публичных SEO-страницах.
 - Полная CMS с наследованием блоков, версиями и preview.
 - Аудит действий, общая корзина и аналитический контур; для редиректов отдельно реализовано мягкое архивирование и счетчики переходов.
-- Подтвержденный production deployment и реальные внешние API-контракты.
+- Сертифицированный production-контур с реальным трафиком: внешний защищенный test deployment и sandbox/test-контракты уже подтверждены, но legal и эксплуатационные блокеры Release 1 остаются.
 
 Детальный статус находится в [current-state.md](current-state.md), а шаги развития — в [плане реализации](plans/2026-09-07-platform-stabilization-and-mvp.md).

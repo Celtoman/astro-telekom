@@ -1,9 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const root = join(import.meta.dirname, '..', '.github', 'workflows');
+const repositoryRoot = join(import.meta.dirname, '..');
+const root = join(repositoryRoot, '.github', 'workflows');
 
 test('GitHub workflows use Node 24 actions without weakening the release gate', () => {
   const ci = readFileSync(join(root, 'ci.yml'), 'utf8');
@@ -17,4 +18,26 @@ test('GitHub workflows use Node 24 actions without weakening the release gate', 
   assert.match(ci, /pnpm install --frozen-lockfile/);
   assert.match(ci, /pnpm check/);
   assert.doesNotMatch(`${ci}\n${release}`, /(?:actions\/(?:checkout|setup-node)|pnpm\/action-setup)@v4/);
+});
+
+test('the exact test baseline has docs/TEST_COVERAGE.md as its only source of truth', () => {
+  const canonicalPath = join('docs', 'TEST_COVERAGE.md');
+  const canonical = readFileSync(join(repositoryRoot, canonicalPath), 'utf8');
+  const markdownPaths = [
+    ...readdirSync(repositoryRoot).filter((path) => path.endsWith('.md')),
+    ...readdirSync(join(repositoryRoot, 'docs'), { recursive: true })
+      .filter((path) => path.endsWith('.md'))
+      .map((path) => join('docs', path)),
+  ].filter((path) => path !== canonicalPath);
+
+  assert.match(canonical, /Baseline:\s*\d+\/\d+ passing/);
+
+  for (const path of markdownPaths) {
+    const mirror = readFileSync(join(repositoryRoot, path), 'utf8');
+    assert.doesNotMatch(
+      mirror,
+      /(?:baseline(?: тестов)?|pnpm test)[^\r\n]{0,100}\b(?:\d+\/\d+|\d+\s+тест(?:ов|а)?)\b/i,
+      `${path} must not duplicate the exact test baseline`,
+    );
+  }
 });

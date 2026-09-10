@@ -4,7 +4,7 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [CLAUDE.md](../CLAUDE.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 186/186 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита.
+**Baseline: 187/187 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита. Это единственный документ, где хранится точное количество тестов.
 
 | Файл | Что проверяет |
 | --- | --- |
@@ -19,7 +19,7 @@
 | `tests/auth-session.test.cjs` | Browser auth: login не возвращает raw token и ставит hardened HttpOnly cookie; cookie проходит guard, logout удаляет hash-сессию и очищает cookie, `/auth/me` возвращает только идентичность администратора. |
 | `tests/block-validation.test.cjs` | Валидация `PageBlock`: валидные блоки и частичное изменение видимости принимаются; невалидная форма блока и попытка сменить `parent` отклоняются; исполняемые (`javascript:`) и protocol-relative CTA-ссылки отклоняются. |
 | `tests/city-import.test.cjs` | Импорт городов: принимает реальные русские заголовки канонического XLSX; все 207 строк проходят без ошибок/warnings, формы Казани сохраняются; дубли и обязательные значения валидируются; warnings нельзя применить без явного подтверждения; новый город получает шесть `DRAFT` страниц bulk-операцией в транзакции с timeout; регион seed переиспользуется по нормализованному slug. |
-| `tests/ci-runtime.test.mjs` | CI и release workflows используют Node 24 majors checkout/setup-node v7 и pnpm/action-setup v6, сохраняя Node 22.23.2, frozen lockfile install и полный `pnpm check`. |
+| `tests/ci-runtime.test.mjs` | CI и release workflows используют Node 24 majors checkout/setup-node v7 и pnpm/action-setup v6, сохраняя Node 22.23.2, frozen lockfile install и полный `pnpm check`; все корневые Markdown-документы и дерево `docs/` проверяются на отсутствие второго точного тестового baseline. |
 | `tests/cors-options.test.cjs` | Browser CORS явно разрешает полный набор HTTP-методов, используемых admin API: `GET`, `HEAD`, `POST`, `PATCH`, `DELETE`, `OPTIONS`. |
 | `tests/crm-retirement.test.mjs` | Выведенный из эксплуатации `apps/crm` отсутствует как workspace и lockfile importer; production Compose, Caddy и `.env.example` больше не содержат CRM service/domain. |
 | `tests/coverage.test.cjs` | `CoverageService`/`AddressChecksController`: пустой/невалидный адрес и неопубликованный сайт не вызывают внешний API; нормализованный адрес другого города проверяется Tarifnik и сохраняется с source-контекстом страницы; официальный request получает выбранный DaData envelope; provider dictionary разделяется на target/alternatives; 404 означает пустой список, а 403, malformed JSON и неверный словарь дают безопасный `ERROR`. |

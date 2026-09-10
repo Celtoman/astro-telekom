@@ -2,7 +2,7 @@
 
 Это репозиторий-README для агентов (Codex CLI и совместимые инструменты), работающих в этом коде.
 
-Платформа партнерских сайтов провайдеров — монорепозиторий локального прототипа (Дом.ру / Казань): статическая витрина, API, PostgreSQL-модель, импорт городов и тарифов, прием заявок. Текущий статус — **локальный прототип, не готовый к production**, см. [docs/current-state.md](docs/current-state.md).
+Платформа партнерских сайтов провайдеров — монорепозиторий прототипа (Дом.ру / Казань): статическая витрина, API, PostgreSQL-модель, импорт городов и тарифов, прием заявок. Текущий статус — **прототип с защищенным внешним test-контуром, не готовый к реальному production-трафику**, см. [docs/current-state.md](docs/current-state.md).
 
 ---
 
@@ -34,7 +34,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 `apps/crm` удален после переноса заявок в `/leads`; `admin` входит в общий Astro check.
 
-**Baseline тестов: 186/186.** `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют глобальные DaData suggest/clean, мягкое IPLocate-ранжирование и межгородскую проверку адреса с source-контекстом страницы, официальный Tarifnik address/delivery contract, BullMQ-safe постановку и восстановление delivery, обычные lead notifications, полный регионально однозначный справочник профилей Дом.ру, безопасную retry-политику, public DTO/rate limit/honeypot, policy-driven PII purge, cookie-сессию и CORS admin, infrastructure/release readiness и migration dependency Compose, Docker dependency-layer caching, filtered runtime images и Compose health policy, Node 24 runtime GitHub Actions, русские статусы и безопасный retry заявок в админке, экраны тарифов, городов и редиректов, отсутствие выведенного из эксплуатации CRM-workspace, границу worker-only routes, безопасный XLSX-парсер и канонический справочник 207 городов, public catalog и multi-city static routes, production origin и post-build SEO gate, full-snapshot импорт тарифов, одношаговый runtime 301 и hit tracking, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker, Coolify polling/retry и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
+Актуальный baseline тестов ведется только в [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md). `pnpm check` и `pnpm test` должны завершаться без падений; известного допустимого красного baseline больше нет. Отдельные suites проверяют глобальные DaData suggest/clean, мягкое IPLocate-ранжирование и межгородскую проверку адреса с source-контекстом страницы, официальный Tarifnik address/delivery contract, BullMQ-safe постановку и восстановление delivery, обычные lead notifications, полный регионально однозначный справочник профилей Дом.ру, безопасную retry-политику, public DTO/rate limit/honeypot, policy-driven PII purge, cookie-сессию и CORS admin, infrastructure/release readiness и migration dependency Compose, Docker dependency-layer caching, filtered runtime images и Compose health policy, Node 24 runtime GitHub Actions, русские статусы и безопасный retry заявок в админке, экраны тарифов, городов и редиректов, отсутствие выведенного из эксплуатации CRM-workspace, границу worker-only routes, безопасный XLSX-парсер и канонический справочник 207 городов, public catalog и multi-city static routes, production origin и post-build SEO gate, full-snapshot импорт тарифов, одношаговый runtime 301 и hit tracking, slug redirects/conflicts, одноразовый fallback-доступ, persistent rebuild-flow/worker, Coolify polling/retry и реальные Astro build-policy/final HTML. CI (`.github/workflows/ci.yml`) запускает `pnpm check` на каждый push/PR в `master`.
 
 ## Архитектура
 
@@ -68,7 +68,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 ### `apps/admin`
 
-Референс дизайна и готовых UI-паттернов — [github.com/arhamkhnz/next-shadcn-admin-dashboard](https://github.com/arhamkhnz/next-shadcn-admin-dashboard) (живой пример — [next-shadcn-admin-dashboard.vercel.app/dashboard/default](https://next-shadcn-admin-dashboard.vercel.app/dashboard/default)). Целевой стек: Astro как static-оболочка и маршрутизация, React-root для интерактивной страницы или крупного раздела, Tailwind и shadcn/ui. Данные читаются и изменяются через HTTP API во время работы; Next.js-специфичный код не переносится как есть.
+Референс дизайна и готовых UI-паттернов — [github.com/arhamkhnz/next-shadcn-admin-dashboard-aria](https://github.com/arhamkhnz/next-shadcn-admin-dashboard-aria) (живой пример — [studio-admin.arhamkhnz.com](https://studio-admin.arhamkhnz.com)). Целевой стек: Astro как static-оболочка и маршрутизация, React-root для интерактивной страницы или крупного раздела, Tailwind и shadcn/ui с React Aria-семантикой. Данные читаются и изменяются через HTTP API во время работы; Next.js-специфичный код не переносится как есть. Текущая Radix-реализация требует отдельной поэтапной миграции, зафиксированной в issue [#97](https://github.com/Celtoman/astro-telekom/issues/97).
 
 Если в референсе есть подходящий блок, его переносят и адаптируют. Если блока нет, экран собирают из совместимых shadcn/ui-примитивов в стиле референса. Новый компонент допустим только при документированном отсутствии подходящего паттерна и не должен создавать параллельную дизайн-систему на ad-hoc CSS. Legacy demo `index.astro` удален: текущие `/`, `/login`, `/tariffs`, `/cities`, `/leads` и `/lead-access/` — React-root на Tailwind/shadcn с HttpOnly-cookie аутентификацией и честными состояниями. Полный DoD-чек и детали — [docs/admin-design-system.md](docs/admin-design-system.md).
 
@@ -84,7 +84,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 | --- | --- |
 | [README.md](README.md) | Обзор проекта, локальный запуск, состав репозитория — первое, что видит новый читатель |
 | [docs/current-state.md](docs/current-state.md) | Что реально работает, что demo, что не реализовано |
-| [docs/admin-design-system.md](docs/admin-design-system.md) | Обязательный источник дизайна/компонентов для `apps/admin` — next-shadcn-admin-dashboard |
+| [docs/admin-design-system.md](docs/admin-design-system.md) | Обязательный источник дизайна/компонентов для `apps/admin` — next-shadcn-admin-dashboard-aria |
 | [docs/web-design-system.md](docs/web-design-system.md) | Обязательный визуальный/UX-референс для `apps/web` — официальный dom.ru |
 | [docs/architecture.md](docs/architecture.md) | Приложения, потоки данных, границы модулей |
 | [docs/technology-baseline.md](docs/technology-baseline.md) | Версии, инфраструктура, правила сборки |
