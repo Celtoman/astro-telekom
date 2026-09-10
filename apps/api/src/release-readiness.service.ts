@@ -24,7 +24,13 @@ export class ReleaseReadinessService {
   configuration(): ReleaseConfigurationStatus {
     const checks = {
       coverage: this.required(['DOMRU_COVERAGE_API_URL', 'DOMRU_COVERAGE_API_KEY']),
-      contract: this.required(['DOMRU_CONTRACT_API_URL', 'DOMRU_CONTRACT_API_KEY']),
+      contract: this.required([
+        'DOMRU_CONTRACT_API_URL',
+        'DOMRU_CONTRACT_CITY',
+        'DOMRU_CONTRACT_ORIGIN',
+        'DOMRU_CONTRACT_PROVIDER_ID',
+        'DOMRU_CONTRACT_REFERER',
+      ]),
       tarifnik: this.required(['TARIFNIK_API_URL', 'TARIFNIK_API_KEY']),
       fallbackEmail: this.emailFallback(),
       rebuild: this.rebuildProvider(),

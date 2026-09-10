@@ -88,8 +88,9 @@ Seed не становится автоматической операцией �
 | Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
 | Input security | `TRUST_PROXY`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX` |
 | PII retention | `PII_RETENTION_DAYS` (обязательное legal decision), `PII_RETENTION_BATCH_SIZE` (default 500), `PII_RETENTION_CRON` (default `0 3 * * *`, UTC) |
-| Coverage/contract | `DOMRU_COVERAGE_API_URL`, `DOMRU_COVERAGE_API_KEY`, `DOMRU_CONTRACT_API_URL`, `DOMRU_CONTRACT_API_KEY` |
-| Lead delivery | `TARIFNIK_API_URL`, `TARIFNIK_API_KEY`, `LEADS_EMAIL`, `RESEND_API_KEY` or `LEADS_EMAIL_WEBHOOK_URL`, `LEADS_EMAIL_FROM` |
+| Address/coverage | Для будущего согласованного адаптера: `DADATA_TOKEN`, `DADATA_SECRET`, `DADATA_SUGGEST_API_URL`, `DADATA_CLEAN_API_URL`, `TARIFNIK_ADDRESS_CHECK_API_URL`; текущий generic-адаптер пока использует `DOMRU_COVERAGE_API_URL`, `DOMRU_COVERAGE_API_KEY`. |
+| Contract check | `DOMRU_CONTRACT_API_URL`, `DOMRU_CONTRACT_CITY`, `DOMRU_CONTRACT_ORIGIN`, `DOMRU_CONTRACT_PROVIDER_ID`, `DOMRU_CONTRACT_REFERER`. Публичный городской контракт Дом.ру не использует API key. |
+| Lead delivery | `TARIFNIK_API_URL`, `TARIFNIK_API_KEY`, `TARIFNIK_UTM_CAMPAIGN`, `LEADS_EMAIL`, `RESEND_API_KEY` or `LEADS_EMAIL_WEBHOOK_URL`, `LEADS_EMAIL_FROM` |
 | Publishing | `REBUILD_PROVIDER`; для `webhook` — `REBUILD_WEBHOOK_URL`; для `coolify` — `COOLIFY_API_URL`, `COOLIFY_API_TOKEN`, `COOLIFY_RESOURCE_UUID`, необязательные `COOLIFY_POLL_INTERVAL_MS`/`COOLIFY_DEPLOY_TIMEOUT_MS`; `ENV_FILE` |
 
 Проверка configuration gate из операторского PowerShell (значение токена не выводить в лог):
