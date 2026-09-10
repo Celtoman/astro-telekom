@@ -45,6 +45,8 @@
 | TD-54 | [#74](https://github.com/Celtoman/astro-telekom/issues/74) ✅ | Обычная заявка и видимая проверка подключения смешаны в одной форме без DaData |
 | TD-59 | [#79](https://github.com/Celtoman/astro-telekom/issues/79) ✅ | Городской профиль рабочего бота перенесен; HTML, malformed JSON и неверный `contacts` блокируют delivery |
 | TD-61 | [#81](https://github.com/Celtoman/astro-telekom/issues/81) ✅ | Payload `Tarifnik appeal/create` не соответствует официальному контракту v3.0 |
+| TD-64 | [#84](https://github.com/Celtoman/astro-telekom/issues/84) 🟢 | Повторная доставка не различает временные, постоянные и неоднозначные ошибки Tarifnik |
+| TD-65 | [#85](https://github.com/Celtoman/astro-telekom/issues/85) 🟢 | Нормализованный город адреса не сверяется с городом формы перед routing |
 
 ## P2
 
@@ -65,6 +67,7 @@
 | TD-57 | [#77](https://github.com/Celtoman/astro-telekom/issues/77) 🟢 | `connection_cost` не выводится, а `show_on_site` не сохраняется по согласованной семантике |
 | TD-58 | [#78](https://github.com/Celtoman/astro-telekom/issues/78) 🟢 | Автоматический редирект не синхронизирует статус с публикацией тарифа |
 | TD-60 | [#80](https://github.com/Celtoman/astro-telekom/issues/80) 🟢 | Нет единого сброса временных фильтров во всех разделах |
+| TD-62 | [#82](https://github.com/Celtoman/astro-telekom/issues/82) 🟢 | Проверка договора Дом.ру использует один глобальный городской профиль вместо справочника городов |
 
 ## P3
 
@@ -80,13 +83,14 @@
 | TD-35 | [#53](https://github.com/Celtoman/astro-telekom/issues/53) ✅ | Build-time catalog API отделен в server-only `SITE_DATA_API_URL` от публичного browser `PUBLIC_API_URL` |
 | TD-36 | [#54](https://github.com/Celtoman/astro-telekom/issues/54) ✅ | Production build требует внешний HTTPS `PUBLIC_API_URL` с нормализованным path `/api/v1` |
 | TD-37 | [#56](https://github.com/Celtoman/astro-telekom/issues/56) ✅ | Coolify-native routing, TLS, Basic Auth, same-origin API и `www` redirect подтверждены live smoke-тестом |
-| TD-38 | [#57](https://github.com/Celtoman/astro-telekom/issues/57) 🟢 | Coolify adapter реализован локально; остаются реальные token/resource и live polling rehearsal |
+| TD-38 | [#57](https://github.com/Celtoman/astro-telekom/issues/57) ✅ | Coolify adapter подтвержден реальным polling rehearsal до `finished` на точном deployment commit |
 | TD-39 | [#58](https://github.com/Celtoman/astro-telekom/issues/58) ✅ | Все Dockerfile кешируют `pnpm install` по root/workspace manifests и lockfile; source-only rebuild подтвержден 9 сентября 2026 года |
 | TD-40 | [#60](https://github.com/Celtoman/astro-telekom/issues/60) ✅ | Coolify API token удален из build-time Compose interpolation и передается worker только через runtime `.env` |
 | TD-43 | [#63](https://github.com/Celtoman/astro-telekom/issues/63) ✅ | Filtered runtime, общий API/seed image и кешированный migration path сократили повторный live deployment до 85 секунд |
 | TD-50 | [#70](https://github.com/Celtoman/astro-telekom/issues/70) 🟢 | Release readiness документы и Task #31 требуют синхронизации |
 | TD-52 | [#72](https://github.com/Celtoman/astro-telekom/issues/72) 🟢 | Browser security headers для web/admin не закреплены проверками |
 | TD-53 | [#73](https://github.com/Celtoman/astro-telekom/issues/73) 🟢 | `decisions.md` противоречил финальным ответам Q89 и Q118; локальная синхронизация подготовлена |
+| TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) 🟢 | `docs/worker.md` содержит устаревшее описание уже закрытых routing-ограничений |
 
 ## Невыполненные, но согласованные возможности
 
