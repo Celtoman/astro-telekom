@@ -35,7 +35,7 @@
 - партнерский URL альтернатив, email recipient/from;
 - технически валидные PII retention days, batch size и cron.
 
-Первоначально была создана 21 production-переменная. 10 сентября владелец добавил `RESEND_API_KEY` в локальный `.env`, после чего ключ отдельной runtime/literal/shown-once переменной перенесен в основной, не-preview контур Coolify без вывода значения. Read-only список доменов оказался недоступен ключу (HTTP 401), но отдельное синтетическое письмо без PII с настроенными `LEADS_EMAIL_FROM`/`LEADS_EMAIL` принято Resend с HTTP 200 и получено владельцем; email transport фактически подтвержден.
+Первоначально была создана 21 production-переменная. 10 сентября владелец добавил `RESEND_API_KEY` в локальный `.env`, после чего ключ отдельной runtime/literal/shown-once переменной перенесен в основной, не-preview контур Coolify без вывода значения. Read-only список доменов оказался недоступен ключу (HTTP 401), но отдельное синтетическое письмо без PII с настроенными `LEADS_EMAIL_FROM`/`LEADS_EMAIL` принято Resend с HTTP 200 и получено владельцем; email transport фактически подтвержден. Следующий deployment `m4snp1hseauvpzi0lbemmlw3` завершился `finished` на commit `844496c`, а production readiness вернул `configured` без пропусков.
 
 ## Официальный контракт Tarifnik v3.0
 
