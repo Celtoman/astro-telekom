@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "nest start --watch",
     "generate": "prisma generate --config ../../prisma.config.ts",
-    "seed": "node --experimental-strip-types src/seed.ts",
+    "seed": "node --env-file=../../.env --experimental-strip-types src/seed.ts",
     "build": "pnpm run generate && nest build",
     "lint": "tsc --noEmit"
   },

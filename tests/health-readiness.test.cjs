@@ -176,3 +176,12 @@ test('API images share filtered build dependencies and keep a dedicated producti
   assert.match(coolifyCompose, /migrate:[\s\S]*?image:\s*"\$\{COOLIFY_RESOURCE_UUID:-astro-telekom\}-api:migration"/);
   assert.match(coolifyCompose, /true\) node \/workspace\/apps\/api\/dist\/seed\.js ;;/);
 });
+
+test('documented local database seed loads the repository environment file', () => {
+  const apiPackage = JSON.parse(readFileSync(join(repositoryRoot, 'apps', 'api', 'package.json'), 'utf8'));
+  const databasePackage = JSON.parse(readFileSync(join(repositoryRoot, 'packages', 'database', 'package.json'), 'utf8'));
+
+  assert.equal(databasePackage.scripts.seed, 'pnpm --filter @provider/api seed');
+  assert.match(apiPackage.scripts.seed, /^node --env-file=\.\.\/\.\.\/\.env /);
+  assert.match(apiPackage.scripts.seed, /--experimental-strip-types src\/seed\.ts$/);
+});

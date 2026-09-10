@@ -75,7 +75,7 @@
 | TD-60 | [#80](https://github.com/Celtoman/astro-telekom/issues/80) 🟢 | Нет единого сброса временных фильтров во всех разделах |
 | TD-62 | [#82](https://github.com/Celtoman/astro-telekom/issues/82) ✅ | Проверка договора Дом.ру использует полный регионально однозначный справочник городов |
 | TD-72 | [#93](https://github.com/Celtoman/astro-telekom/issues/93) ✅ | Русские статусы объясняют состояние заявки, а внешний ID читается из канонического поля модели |
-| TD-74 | [#96](https://github.com/Celtoman/astro-telekom/issues/96) 🟢 | Документированная команда локального seed не загружает переменные из корневого `.env` |
+| TD-74 | [#96](https://github.com/Celtoman/astro-telekom/issues/96) ✅ | Документированная команда локального seed загружает переменные из корневого `.env` |
 | TD-77 | [#99](https://github.com/Celtoman/astro-telekom/issues/99) ✅ | Production Resend использует проверенный sender; live HTTP 403 устранен |
 | TD-78 | [#100](https://github.com/Celtoman/astro-telekom/issues/100) ✅ | `RESEND_API_KEY` ограничен Coolify runtime scope и исключен из build arguments |
 | TD-79 | [#101](https://github.com/Celtoman/astro-telekom/issues/101) ✅ | Resend/webhook idempotency key разделен по manual retry revision |
@@ -103,6 +103,7 @@
 | TD-53 | [#73](https://github.com/Celtoman/astro-telekom/issues/73) ✅ | `decisions.md` синхронизирован с финальными ответами Q89 и Q118 |
 | TD-75 | [#97](https://github.com/Celtoman/astro-telekom/issues/97) 🟢 | Текущие Radix-примитивы admin расходятся с новым обязательным React Aria-референсом |
 | TD-76 | [#98](https://github.com/Celtoman/astro-telekom/issues/98) 🟢 | Astro выдает ложные `formId` hints для inline-скрипта `AddressForm` |
+| TD-80 | [#102](https://github.com/Celtoman/astro-telekom/issues/102) 🟢 | Локальный TypeScript seed вызывает `MODULE_TYPELESS_PACKAGE_JSON` и повторный ESM parse |
 | TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) ✅ | `docs/worker.md` синхронизирован с фактическим routing и retry-поведением |
 | TD-70 | [#90](https://github.com/Celtoman/astro-telekom/issues/90) ✅ | DTO ограничивает query официальным максимумом DaData 300 символов |
 
