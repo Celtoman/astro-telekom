@@ -44,6 +44,7 @@
 | TD-47 | [#67](https://github.com/Celtoman/astro-telekom/issues/67) 🟢 | Delivery возможен без однозначно завершенной проверки провайдеров |
 | TD-54 | [#74](https://github.com/Celtoman/astro-telekom/issues/74) 🟢 | Обычная заявка и видимая проверка подключения смешаны в одной форме без DaData |
 | TD-59 | [#79](https://github.com/Celtoman/astro-telekom/issues/79) 🟢 | Невалидный ответ Dom.ru может ошибочно считаться отсутствием действующего абонента |
+| TD-61 | [#81](https://github.com/Celtoman/astro-telekom/issues/81) 🟢 | Payload `Tarifnik appeal/create` не соответствует официальному контракту v3.0 |
 
 ## P2
 

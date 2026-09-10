@@ -13,14 +13,14 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 
 ## Доставка заявок
 
-1. `POST /leads` создает `Lead` и при `PENDING` вызывает `LeadDeliveryService.enqueue`. По согласованной границе `PENDING` допустим только после обязательной проверки провайдеров и однозначного ответа Dom.ru `contacts: []`; текущая реализация еще допускает отсутствие `addressCheckId` и нестрого трактует форму ответа `contacts`.
+1. `POST /leads` создает `Lead` и при `PENDING` вызывает `LeadDeliveryService.enqueue`. По согласованной границе проверка Dom.ru выполняется при наличии хотя бы одного провайдера, но `PENDING` допустим только при одновременном наличии Дом.ру и однозначном ответе `contacts: []`; текущая реализация еще допускает отсутствие `addressCheckId` и нестрого трактует форму ответа `contacts`.
 2. Если определен `REDIS_URL`, API ставит BullMQ job с `jobId=<leadId>:<attemptNumber>`.
 3. Worker вызывает внутренний endpoint; тот запускает `LeadDeliveryService.process`.
 4. При успешном HTTP response Tarifnik создается успешный `LeadDeliveryAttempt`, лид получает `DELIVERED`.
 5. При ошибке создается failed attempt и следующая задача с задержкой 5, затем 30 минут.
 6. После третьей неудачи API пытается email/webhook fallback и пишет `DELIVERY_ERROR_EMAIL_SENT` или `DELIVERY_ERROR_EMAIL_FAILED`.
 
-Один `deliveryKey` используется для всех API attempts конкретного лида и передается в header/payload как idempotency key. Реальный контракт Tarifnik и гарантии идемпотентности пока не подтверждены.
+Один `deliveryKey` используется для всех API attempts конкретного лида и передается в header/payload как idempotency key. Базовый официальный и живой test-контракт Tarifnik подтвержден, но это расширение header/payload и гарантии идемпотентности в публичной спецификации не описаны.
 
 ## Удаление просроченных PII
 
