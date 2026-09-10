@@ -13,14 +13,14 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 
 ## Доставка заявок
 
-1. `POST /leads` создает `Lead` и при `PENDING` вызывает `LeadDeliveryService.enqueue`. По согласованной границе проверка Dom.ru выполняется при наличии хотя бы одного провайдера, но `PENDING` допустим только при одновременном наличии Дом.ру и однозначном ответе `contacts: []`; текущая реализация еще допускает отсутствие `addressCheckId` и нестрого трактует форму ответа `contacts`.
+1. `POST /leads` создает `Lead` и при `PENDING` вызывает `LeadDeliveryService.enqueue`. Проверка Dom.ru выполняется при наличии хотя бы одного провайдера, но `PENDING` допустим только при одновременном наличии Дом.ру, проверенном `AddressCheck` и однозначном ответе `contacts: []`. Профиль Дом.ру выбирается по нормализованным DaData городу и региону из полного встроенного справочника.
 2. Если определен `REDIS_URL`, API ставит BullMQ job с `jobId=<leadId>:<attemptNumber>`.
 3. Worker вызывает внутренний endpoint; тот запускает `LeadDeliveryService.process`.
-4. При успешном HTTP response Tarifnik создается успешный `LeadDeliveryAttempt`, лид получает `DELIVERED`.
-5. При ошибке создается failed attempt и следующая задача с задержкой 5, затем 30 минут.
-6. После третьей неудачи API пытается email/webhook fallback и пишет `DELIVERY_ERROR_EMAIL_SENT` или `DELIVERY_ERROR_EMAIL_FAILED`.
+4. Успехом считаются только `created` или `created_duplicate` с непустым `appeal_id`; тогда создается успешный `LeadDeliveryAttempt`, а лид получает `DELIVERED`.
+5. Сетевая ошибка/таймаут и HTTP 408, 425, 429 или 5xx создают failed attempt и следующую задачу с задержкой 5, затем 30 минут. Для 429 валидный `Retry-After` заменяет стандартную задержку, но ограничивается 24 часами.
+6. Постоянные 4xx и неоднозначные успешные ответы не повторяются. Они сразу направляются в email/webhook fallback; временная ошибка приходит туда после третьей неудачи. Итог — `DELIVERY_ERROR_EMAIL_SENT` или `DELIVERY_ERROR_EMAIL_FAILED`.
 
-Один `deliveryKey` используется для всех API attempts конкретного лида и передается в header/payload как idempotency key. Базовый официальный и живой test-контракт Tarifnik подтвержден, но это расширение header/payload и гарантии идемпотентности в публичной спецификации не описаны.
+Один `deliveryKey` используется для связи всех локальных попыток конкретного лида, но не передается в недокументированных header/payload. Официальный API Tarifnik не предоставляет idempotency key; сохраненный партнером дубль возвращается как успешный `created_duplicate`. Поэтому автоматический retry ограничен только ошибками, которые с высокой вероятностью являются временными.
 
 ## Удаление просроченных PII
 
@@ -30,7 +30,7 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 4. API в serializable transaction выбирает старые лиды по `createdAt`, отвязывает более свежие duplicates и физически удаляет старые лиды. FK cascade удаляет status history, activity, delivery payloads и access tokens.
 5. Истекшие fallback tokens удаляются независимо, а старые `AddressCheck` — только если на них больше не ссылается ни один лид. Ответ содержит только cutoff и счетчики, без удаленных данных.
 
-Hard-delete выбран, чтобы PII не осталось в JSON payloads. Срок хранения намеренно не зашит в код и должен быть утвержден юридически до production.
+Hard-delete выбран, чтобы PII не осталось в JSON payloads. Согласованный срок хранения сырых заявок — 180 дней; юридическое основание обработки и текст согласия остаются отдельным release-блокером.
 
 Локальная runtime-проверка подтвердила scheduler metadata `key=pii-retention-daily`, `name=pii-retention`, pattern `0 3 * * *`, timezone UTC в отдельной Redis DB; test DB после проверки очищена.
 
@@ -47,7 +47,7 @@ Hard-delete выбран, чтобы PII не осталось в JSON payloads.
 5. Статусы `PENDING`, `QUEUED`, `RUNNING`, `RETRYING`, `SUCCEEDED`, `FAILED`, счетчик попыток, ошибка и ответ провайдера сохраняются в PostgreSQL и читаются через `/admin/rebuilds`.
 6. Если новая мутация приходит во время сборки, растет `requestedRevision`; после успеха текущей ревизии API ставит следующую, поэтому более новое изменение не считается опубликованным преждевременно.
 
-В Coolify-режиме `queued` и `in_progress` — промежуточные состояния, `finished` преобразуется в `SUCCEEDED`, а `failed`/cancelled/неизвестный статус и timeout приводят к ошибке попытки без продвижения `publishedRevision`. UUID и последний provider status сохраняются, поэтому retry продолжает незавершенный deployment; новый запуск создается только после финального failure или при отсутствии UUID. В БД сохраняется сокращенный provider payload без logs и API token. Реализация [#57](https://github.com/Celtoman/astro-telekom/issues/57) покрыта локальными тестами, но не закрывается до вызова реального Coolify resource.
+В Coolify-режиме `queued` и `in_progress` — промежуточные состояния, `finished` преобразуется в `SUCCEEDED`, а `failed`/cancelled/неизвестный статус и timeout приводят к ошибке попытки без продвижения `publishedRevision`. UUID и последний provider status сохраняются, поэтому retry продолжает незавершенный deployment; новый запуск создается только после финального failure или при отсутствии UUID. В БД сохраняется сокращенный provider payload без logs и API token. Реализация [#57](https://github.com/Celtoman/astro-telekom/issues/57) подтверждена реальным Coolify polling rehearsal до `finished` на точном deployment commit.
 
 ## Остановка процесса
 

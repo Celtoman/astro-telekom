@@ -4,6 +4,7 @@ import { PrismaService } from './prisma.service';
 import { AddressCheckDto } from './public.dto';
 import { DadataService } from './dadata.service';
 import { readDadataSuggestion } from './coverage.service';
+import { normalizedAddressMatchesCity } from './domru-profile-catalog';
 
 @Controller('address-checks')
 export class AddressChecksController {
@@ -22,12 +23,18 @@ export class AddressChecksController {
 
     const site = await this.prisma.site.findUnique({ where: { slug: body.siteSlug || 'domru-kazan' } });
     if (!site || site.status !== 'PUBLISHED') throw new BadRequestException('Сайт недоступен');
-    const city = await this.prisma.city.findFirst({ where: { siteId: site.id, slug: body.citySlug ?? 'kazan', status: 'PUBLISHED' } });
+    const city = await this.prisma.city.findFirst({
+      where: { siteId: site.id, slug: body.citySlug ?? 'kazan', status: 'PUBLISHED' },
+      include: { region: true },
+    });
     if (!city) throw new BadRequestException('Город недоступен');
     const page = body.pageSlug ? await this.prisma.page.findFirst({ where: { cityId: city.id, slug: body.pageSlug, status: 'PUBLISHED' } }) : null;
     if (body.pageSlug && !page) throw new BadRequestException('Страница недоступна');
     const selectedSuggestion = readDadataSuggestion(body.suggestion);
     const normalizedSuggestion = selectedSuggestion ? await this.dadata.clean(selectedSuggestion) : null;
+    if (normalizedSuggestion && !normalizedAddressMatchesCity(normalizedSuggestion.data, city.name, city.region.name)) {
+      throw new BadRequestException('Выбранный адрес относится к другому городу');
+    }
     const cleanedResult = normalizedSuggestion && typeof normalizedSuggestion.data.result === 'string'
       ? normalizedSuggestion.data.result.trim()
       : '';

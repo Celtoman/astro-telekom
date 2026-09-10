@@ -149,12 +149,38 @@ test('Tarifnik delivery rejects an ambiguous HTTP 200 response instead of markin
   });
 });
 
-test('Tarifnik delivery records 403, 422, malformed JSON and timeout failures for bounded retry', async () => {
+test('Tarifnik delivery sends permanent and ambiguous failures straight to manual fallback', async () => {
   await withDeliveryEnvironment(async () => {
     const failures = [
       () => new Response(JSON.stringify({ message: 'Forbidden' }), { status: 403 }),
       () => new Response(JSON.stringify({ message: 'Validation failed', errors: { phone: ['invalid'] } }), { status: 422 }),
       () => new Response('<html>unexpected</html>', { status: 200 }),
+      () => new Response(JSON.stringify({ result: 'unknown', appeal_id: 'ambiguous' }), { status: 200 }),
+    ];
+
+    for (const response of failures) {
+      const f = fixture(lead());
+      const enqueued = [];
+      f.service.enqueue = async (...args) => { enqueued.push(args); };
+      global.fetch = async () => response();
+
+      const result = await f.service.process('lead-1', 1);
+
+      assert.deepEqual(result, { delivered: false, fallback: true });
+      assert.equal(f.attempts[0].status, 'FAILED');
+      assert.equal(f.attempts[0].nextAttemptAt, null);
+      assert.deepEqual(enqueued, []);
+      assert.notEqual(f.updates.at(-1)?.processingStatus, 'DELIVERED');
+    }
+  });
+});
+
+test('Tarifnik delivery retries only transient HTTP and network failures with bounded delay', async () => {
+  await withDeliveryEnvironment(async () => {
+    const failures = [
+      () => new Response('{}', { status: 408 }),
+      () => new Response('{}', { status: 425 }),
+      () => new Response('{}', { status: 500 }),
       () => { throw new DOMException('Timed out', 'TimeoutError'); },
     ];
 
@@ -172,5 +198,19 @@ test('Tarifnik delivery records 403, 422, malformed JSON and timeout failures fo
       assert.deepEqual(enqueued, [['lead-1', 2, 300_000]]);
       assert.notEqual(f.updates.at(-1)?.processingStatus, 'DELIVERED');
     }
+  });
+});
+
+test('Tarifnik delivery respects a bounded Retry-After delay for rate limiting', async () => {
+  await withDeliveryEnvironment(async () => {
+    const f = fixture(lead());
+    const enqueued = [];
+    f.service.enqueue = async (...args) => { enqueued.push(args); };
+    global.fetch = async () => new Response('{}', { status: 429, headers: { 'retry-after': '120' } });
+
+    const result = await f.service.process('lead-1', 1);
+
+    assert.equal(typeof result.retryAt, 'string');
+    assert.deepEqual(enqueued, [['lead-1', 2, 120_000]]);
   });
 });

@@ -28,7 +28,7 @@ Release 0 не является production release: тестовый gate зел
 5. Fallback link безопасно открывает нужную заявку либо удалена из письма.
 6. Админский вертикальный поток import -> apply -> rebuild status показывает реальные данные.
 7. Real/sandbox contracts DaData, Tarifnik `address/check`, Dom.ru `contract-asterisked`, Tarifnik `appeal/create` и email согласованы и проверены. Обычная форма и видимая проверка подключения разделены; delivery невозможен без обязательной проверки провайдеров и однозначного `contacts: []`.
-8. Утверждены меры PII, anti-abuse и retention.
+8. Срок хранения сырых заявок 180 дней согласован; до реального трафика утверждены остальные меры PII, legal basis, согласие и anti-abuse.
 
 ## Release 2 — мультигородской контентный контур
 
@@ -40,8 +40,8 @@ Dynamic маршруты City/Page/Tariff, published-only sitemap, городс�
 
 Цель: дать редактору управляемые версии, шаблоны/блоки, аудит, историю импортов и эксплуатационные панели без demo UI.
 
-Нужны: versioning, audit log, media, SEO validation, analytics, раздел «Переменные» с согласованными уровнями наследования, управление учетными записями администраторов без ролевой модели, юридически утвержденный PII retention period для уже реализованного purge, monitoring, backup/restore и CI/CD.
+Нужны: versioning, audit log, media, SEO validation, analytics, раздел «Переменные» с согласованными уровнями наследования, управление учетными записями администраторов без ролевой модели, monitoring, backup/restore и CI/CD. Для PII purge срок 180 дней уже согласован; юридическая основа и согласие остаются в Release 1.
 
 ## Внешние зависимости
 
-До Release 1 требуется подтвердить реальные контракты DaData, обоих используемых API Tarifnik (`address/check` и `appeal/create`) и проверки действующего абонента Dom.ru, включая разрешенные поля/обратные статусы и однозначную семантику `contacts`. Также остаются правомерность передачи PII, сроки хранения, домены/бренд, production deployment provider и rules for full tariff snapshot. Эти решения нельзя заменить предположениями в коде.
+Живые test-контракты DaData, обоих API Tarifnik, положительная/отрицательная семантика `contacts` Дом.ру и фактическая доставка синтетического письма Resend подтверждены; полный городской справочник и безопасная retry-политика реализованы. До Release 1 остаются правомерность передачи PII, оператор/политика/согласие, исправление наблюдаемости обычного email-уведомления, production campaign Tarifnik и backup/restore rehearsal. Дополнительных правил Tarifnik по rate limit и SLA владелец не получал; callback отсутствует.

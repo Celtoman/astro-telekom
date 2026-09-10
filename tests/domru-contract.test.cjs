@@ -30,11 +30,10 @@ async function withEnvironment(values, callback) {
 
 const kazanProfile = {
   DOMRU_CONTRACT_API_URL: 'https://web-api.dom.ru/api-profile/v1/unauth/contract-asterisked',
-  DOMRU_CONTRACT_CITY: 'kazan',
-  DOMRU_CONTRACT_ORIGIN: 'https://kazan.dom.ru',
-  DOMRU_CONTRACT_PROVIDER_ID: '5',
-  DOMRU_CONTRACT_REFERER: 'https://kazan.dom.ru/',
 };
+
+const kazanLocation = { city: 'Казань', region: 'Татарстан' };
+const chelnyLocation = { city: 'Набережные Челны', region: 'Татарстан' };
 
 test('Dom.ru contract check uses the city profile from the working bot without an API key', async () => {
   await withEnvironment(kazanProfile, async () => {
@@ -48,7 +47,7 @@ test('Dom.ru contract check uses the city profile from the working bot without a
     };
     const service = new DomruContractService();
     service.logger = { error() {} };
-    const result = await service.check('8 (927) 000-00-00', 'kazan');
+    const result = await service.check('8 (927) 000-00-00', kazanLocation);
 
     assert.equal(result.status, 'NOT_FOUND');
     assert.equal(result.active, false);
@@ -65,6 +64,25 @@ test('Dom.ru contract check uses the city profile from the working bot without a
   });
 });
 
+test('Dom.ru contract check selects the Naberezhnye Chelny profile from normalized address data', async () => {
+  await withEnvironment(kazanProfile, async () => {
+    let request;
+    global.fetch = async (input, options) => {
+      request = { input: String(input), options };
+      return new Response(JSON.stringify({ contacts: [{ contact: 'masked' }] }), { status: 200 });
+    };
+    const service = new DomruContractService();
+    service.logger = { error() {} };
+
+    const result = await service.check('79274985704', chelnyLocation);
+
+    assert.equal(result.status, 'ACTIVE');
+    assert.equal(request.options.headers.origin, 'https://chelny.dom.ru');
+    assert.equal(request.options.headers.providerid, '35');
+    assert.equal(request.options.headers.referer, 'https://chelny.dom.ru/');
+  });
+});
+
 test('Dom.ru contract check classifies a non-empty contacts array as an active subscriber', async () => {
   await withEnvironment(kazanProfile, async () => {
     global.fetch = async () => new Response(JSON.stringify({ contacts: [{ contact: 'masked' }] }), {
@@ -73,7 +91,7 @@ test('Dom.ru contract check classifies a non-empty contacts array as an active s
     });
     const service = new DomruContractService();
     service.logger = { error() {} };
-    const result = await service.check('79270000000', 'kazan');
+    const result = await service.check('79270000000', kazanLocation);
     assert.equal(result.status, 'ACTIVE');
     assert.equal(result.active, true);
   });
@@ -88,21 +106,21 @@ test('Dom.ru contract check rejects HTML and ambiguous JSON instead of reporting
         status: 200,
         headers: { 'content-type': 'application/json' },
       });
-      const result = await service.check('79270000000', 'kazan');
+      const result = await service.check('79270000000', kazanLocation);
       assert.equal(result.status, 'ERROR');
       assert.equal(result.active, null);
     }
   });
 });
 
-test('Dom.ru contract check refuses an incomplete or mismatched city profile without calling fetch', async () => {
-  for (const [configuration, city] of [
-    [{ DOMRU_CONTRACT_API_URL: kazanProfile.DOMRU_CONTRACT_API_URL }, 'kazan'],
-    [kazanProfile, 'moskva'],
+test('Dom.ru contract check refuses a missing endpoint or unknown location without calling fetch', async () => {
+  for (const [configuration, location] of [
+    [{}, kazanLocation],
+    [kazanProfile, { city: 'Неизвестный город', region: 'Неизвестный регион' }],
   ]) {
     await withEnvironment(configuration, async () => {
       global.fetch = async () => assert.fail('fetch must not be called');
-      const result = await new DomruContractService().check('79270000000', city);
+      const result = await new DomruContractService().check('79270000000', location);
       assert.equal(result.status, 'NOT_CONFIGURED');
       assert.equal(result.active, null);
     });
@@ -118,7 +136,7 @@ test('Dom.ru contract check rejects an invalid phone without calling the externa
     };
     const service = new DomruContractService();
     service.logger = { error() {} };
-    const result = await service.check('123', 'kazan');
+    const result = await service.check('123', kazanLocation);
     assert.equal(result.status, 'ERROR');
     assert.equal(result.active, null);
     assert.equal(fetchCalls, 0);
@@ -130,8 +148,8 @@ test('Dom.ru contract check converts HTTP and network failures to an explicit er
     const service = new DomruContractService();
     service.logger = { error() {} };
     global.fetch = async () => new Response('blocked', { status: 403 });
-    assert.equal((await service.check('79270000000', 'kazan')).status, 'ERROR');
+    assert.equal((await service.check('79270000000', kazanLocation)).status, 'ERROR');
     global.fetch = async () => { throw new Error('network failure'); };
-    assert.equal((await service.check('79270000000', 'kazan')).status, 'ERROR');
+    assert.equal((await service.check('79270000000', kazanLocation)).status, 'ERROR');
   });
 });

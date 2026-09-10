@@ -1,19 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { normalizePhone } from './lead-utils';
+import { defaultDomruProfileCatalog, type DomruAddressLocation } from './domru-profile-catalog';
 
 export interface ContractCheckResult {
   status: 'ACTIVE' | 'NOT_FOUND' | 'ERROR' | 'NOT_CONFIGURED';
   active: boolean | null;
   response?: unknown;
   message?: string;
-}
-
-interface DomruContractProfile {
-  endpoint: string;
-  city: string;
-  origin: string;
-  providerId: string;
-  referer: string;
 }
 
 const BROWSER_HEADERS = {
@@ -34,31 +27,26 @@ const BROWSER_HEADERS = {
   'x-requested-with': 'XMLHttpRequest',
 } as const;
 
-function readProfile(): DomruContractProfile | null {
+function readEndpoint(): string | null {
   const endpoint = process.env.DOMRU_CONTRACT_API_URL?.trim();
-  const city = process.env.DOMRU_CONTRACT_CITY?.trim().toLowerCase();
-  const origin = process.env.DOMRU_CONTRACT_ORIGIN?.trim();
-  const providerId = process.env.DOMRU_CONTRACT_PROVIDER_ID?.trim();
-  const referer = process.env.DOMRU_CONTRACT_REFERER?.trim();
-  if (!endpoint || !city || !origin || !providerId || !referer) return null;
+  if (!endpoint) return null;
   try {
     const endpointUrl = new URL(endpoint);
-    const originUrl = new URL(origin);
-    const refererUrl = new URL(referer);
-    if (endpointUrl.protocol !== 'https:' || originUrl.protocol !== 'https:' || refererUrl.protocol !== 'https:') return null;
+    if (endpointUrl.protocol !== 'https:') return null;
   } catch {
     return null;
   }
-  return { endpoint, city, origin, providerId, referer };
+  return endpoint;
 }
 
 @Injectable()
 export class DomruContractService {
   private readonly logger = new Logger(DomruContractService.name);
 
-  async check(phone: string, citySlug: string): Promise<ContractCheckResult> {
-    const profile = readProfile();
-    if (!profile || profile.city !== citySlug.trim().toLowerCase()) {
+  async check(phone: string, location: DomruAddressLocation): Promise<ContractCheckResult> {
+    const endpoint = readEndpoint();
+    const profile = defaultDomruProfileCatalog.resolve(location);
+    if (!endpoint || !profile) {
       return { status: 'NOT_CONFIGURED', active: null, message: 'Профиль API проверки договора для города не настроен' };
     }
     const normalizedPhone = normalizePhone(phone);
@@ -67,7 +55,7 @@ export class DomruContractService {
     }
 
     try {
-      const url = new URL(profile.endpoint);
+      const url = new URL(endpoint);
       url.searchParams.set('contact', normalizedPhone);
       url.searchParams.set('isActive', '1');
       const response = await fetch(url, {

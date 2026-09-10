@@ -8,6 +8,27 @@ import { makeDeliveryKey, normalizePhone } from './lead-utils';
 import { readTarifnikCoverageSnapshot } from './coverage.service';
 
 const RETRY_DELAYS = [0, 5 * 60 * 1000, 30 * 60 * 1000];
+const MAX_RETRY_AFTER_MS = 24 * 60 * 60 * 1000;
+
+class TarifnikDeliveryError extends Error {
+  constructor(message: string, readonly retryable: boolean, readonly retryAfterMs?: number) {
+    super(message);
+  }
+}
+
+function isRetryableStatus(status: number): boolean {
+  return status === 408 || status === 425 || status === 429 || status >= 500;
+}
+
+function retryAfterMilliseconds(value: string | null): number | undefined {
+  if (!value?.trim()) return undefined;
+  const seconds = Number(value);
+  const delay = Number.isFinite(seconds) && seconds >= 0
+    ? seconds * 1000
+    : Date.parse(value) - Date.now();
+  if (!Number.isFinite(delay) || delay <= 0) return undefined;
+  return Math.min(Math.round(delay), MAX_RETRY_AFTER_MS);
+}
 
 function hasVerifiedNegativeSubscriberResult(value: unknown): boolean {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
@@ -90,24 +111,39 @@ export class LeadDeliveryService implements OnModuleDestroy {
     };
     const attemptUrl = endpoint;
     try {
-      const response = await fetch(attemptUrl, {
-        method: 'POST',
-        signal: AbortSignal.timeout(30_000),
-        headers: {
-          authorization: `Bearer ${apiKey}`,
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-      const raw = await response.text();
+      let response: Response;
+      let raw: string;
+      try {
+        response = await fetch(attemptUrl, {
+          method: 'POST',
+          signal: AbortSignal.timeout(30_000),
+          headers: {
+            authorization: `Bearer ${apiKey}`,
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+        raw = await response.text();
+      } catch (error) {
+        const reason = error instanceof Error ? error.message : 'network failure';
+        throw new TarifnikDeliveryError(`Tarifnik request failed: ${reason}`, true);
+      }
+      if (!response.ok) {
+        throw new TarifnikDeliveryError(
+          `Tarifnik responded ${response.status}`,
+          isRetryableStatus(response.status),
+          response.status === 429 ? retryAfterMilliseconds(response.headers.get('retry-after')) : undefined,
+        );
+      }
       let parsed: unknown = raw;
-      try { parsed = raw ? JSON.parse(raw) : null; } catch { /* keep text response */ }
-      if (!response.ok) throw new Error(`Tarifnik responded ${response.status}`);
+      try { parsed = raw ? JSON.parse(raw) : null; } catch {
+        throw new TarifnikDeliveryError('Tarifnik returned invalid JSON after a successful request', false);
+      }
       const record = parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed as Record<string, unknown> : {};
       const result = record.result;
       const externalId = typeof record.appeal_id === 'string' && record.appeal_id.trim() ? record.appeal_id.trim() : undefined;
       if ((result !== 'created' && result !== 'created_duplicate') || !externalId) {
-        throw new Error('Tarifnik returned an unexpected response');
+        throw new TarifnikDeliveryError('Tarifnik returned an unexpected response', false);
       }
       await this.prisma.$transaction([
         this.prisma.leadDeliveryAttempt.create({
@@ -118,12 +154,18 @@ export class LeadDeliveryService implements OnModuleDestroy {
       return { delivered: true, externalId };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown Tarifnik delivery error';
-      const nextAttemptAt = attemptNumber < RETRY_DELAYS.length ? new Date(Date.now() + RETRY_DELAYS[attemptNumber]) : null;
+      const retryable = error instanceof TarifnikDeliveryError && error.retryable;
+      const retryDelay = error instanceof TarifnikDeliveryError && error.retryAfterMs !== undefined
+        ? error.retryAfterMs
+        : RETRY_DELAYS[attemptNumber];
+      const nextAttemptAt = retryable && attemptNumber < RETRY_DELAYS.length
+        ? new Date(Date.now() + retryDelay)
+        : null;
       await this.prisma.leadDeliveryAttempt.create({
         data: { leadId, attemptNumber, channel: 'API', status: 'FAILED', idempotencyKey: deliveryKey, requestPayload: payload as unknown as Prisma.InputJsonValue, error: message, nextAttemptAt },
       });
       if (nextAttemptAt) {
-        await this.enqueue(leadId, attemptNumber + 1, RETRY_DELAYS[attemptNumber]);
+        await this.enqueue(leadId, attemptNumber + 1, retryDelay);
         return { delivered: false, retryAt: nextAttemptAt.toISOString() };
       }
       let emailSent = false;

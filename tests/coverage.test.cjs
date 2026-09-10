@@ -17,6 +17,31 @@ test('unpublished site never invokes the external API', async () => {
   await assert.rejects(controller.check({ address: 'Улица, 1' }), /Сайт недоступен/);
 });
 
+test('normalized address from another city is rejected before coverage and persistence', async () => {
+  const controller = new AddressChecksController(
+    { check: () => assert.fail('coverage must not be called') },
+    {
+      site: { findUnique: async () => ({ id: 'site', status: 'PUBLISHED' }) },
+      city: { findFirst: async () => ({ id: 'city', name: 'Казань', region: { name: 'Республика Татарстан' } }) },
+      addressCheck: { create: async () => assert.fail('address check must not be persisted') },
+    },
+    {
+      clean: async () => ({
+        value: 'г Набережные Челны, пр-кт Тестовый, д 1',
+        unrestricted_value: 'Республика Татарстан, г Набережные Челны, пр-кт Тестовый, д 1',
+        data: { city: 'Набережные Челны', region: 'Татарстан', house: '1' },
+      }),
+    },
+  );
+
+  await assert.rejects(controller.check({
+    siteSlug: 'domru-kazan',
+    citySlug: 'kazan',
+    address: 'Набережные Челны, Тестовый, 1',
+    suggestion: { value: 'Набережные Челны, Тестовый, 1', unrestricted_value: 'Набережные Челны, Тестовый, 1', data: {} },
+  }), /другому городу/i);
+});
+
 test('Tarifnik coverage sends the selected DaData suggestion and maps the provider dictionary', async (t) => {
   const names = ['TARIFNIK_ADDRESS_CHECK_API_URL', 'TARIFNIK_API_KEY', 'TARIFNIK_TARGET_PROVIDER_ID'];
   const previous = Object.fromEntries(names.map((name) => [name, process.env[name]]));

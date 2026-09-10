@@ -97,7 +97,7 @@ export class PublicLeadsController {
 
     let contractResult: Awaited<ReturnType<DomruContractService['check']>> | undefined;
     if (!duplicate && processingStatus === 'PENDING' && coverage?.hasAnyProvider) {
-      contractResult = await this.contract.check(phone, city.slug);
+      contractResult = await this.contract.check(phone, coverage.suggestion.data);
       if (contractResult.status === 'ACTIVE') processingStatus = 'ACTIVE_SUBSCRIBER_NOT_SENT';
       else if (contractResult.status === 'ERROR' || contractResult.status === 'NOT_CONFIGURED') processingStatus = 'MANUAL_CHECK_API';
       else if (!coverage.hasTargetProvider) processingStatus = 'PROVIDER_NOT_AVAILABLE_NOT_SENT';

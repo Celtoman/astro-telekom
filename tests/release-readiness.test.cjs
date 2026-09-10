@@ -65,13 +65,7 @@ test('release readiness reports missing integration configuration without exposi
     assert.deepEqual(result.checks.coverage, { status: 'configured', missing: [] });
     assert.deepEqual(result.checks.contract, {
       status: 'missing',
-      missing: [
-        'DOMRU_CONTRACT_API_URL',
-        'DOMRU_CONTRACT_CITY',
-        'DOMRU_CONTRACT_ORIGIN',
-        'DOMRU_CONTRACT_PROVIDER_ID',
-        'DOMRU_CONTRACT_REFERER',
-      ],
+      missing: ['DOMRU_CONTRACT_API_URL'],
     });
     assert.deepEqual(result.checks.fallbackEmail, {
       status: 'missing',
@@ -95,10 +89,6 @@ test('release readiness becomes configured only when every required integration 
     TARIFNIK_ADDRESS_CHECK_API_URL: 'https://coverage.example.test',
     TARIFNIK_TARGET_PROVIDER_ID: '8',
     DOMRU_CONTRACT_API_URL: 'https://contract.example.test',
-    DOMRU_CONTRACT_CITY: 'kazan',
-    DOMRU_CONTRACT_ORIGIN: 'https://kazan.dom.ru',
-    DOMRU_CONTRACT_PROVIDER_ID: '5',
-    DOMRU_CONTRACT_REFERER: 'https://kazan.dom.ru/',
     TARIFNIK_API_URL: 'https://tarifnik.example.test',
     TARIFNIK_API_KEY: 'tarifnik-key',
     TARIFNIK_UTM_CAMPAIGN: 'test',
@@ -124,10 +114,6 @@ test('release readiness requires both DaData endpoints and credentials for addre
     TARIFNIK_API_KEY: 'tarifnik-key',
     TARIFNIK_UTM_CAMPAIGN: 'test',
     DOMRU_CONTRACT_API_URL: 'https://contract.example.test',
-    DOMRU_CONTRACT_CITY: 'kazan',
-    DOMRU_CONTRACT_ORIGIN: 'https://kazan.dom.ru',
-    DOMRU_CONTRACT_PROVIDER_ID: '5',
-    DOMRU_CONTRACT_REFERER: 'https://kazan.dom.ru/',
     LEADS_EMAIL: 'operator@example.test',
     LEADS_EMAIL_WEBHOOK_URL: 'https://mail.example.test',
     REBUILD_WEBHOOK_URL: 'https://deploy.example.test',
@@ -148,10 +134,6 @@ test('release readiness accepts a complete Coolify provider without a legacy web
     TARIFNIK_ADDRESS_CHECK_API_URL: 'https://coverage.example.test',
     TARIFNIK_TARGET_PROVIDER_ID: '8',
     DOMRU_CONTRACT_API_URL: 'https://contract.example.test',
-    DOMRU_CONTRACT_CITY: 'kazan',
-    DOMRU_CONTRACT_ORIGIN: 'https://kazan.dom.ru',
-    DOMRU_CONTRACT_PROVIDER_ID: '5',
-    DOMRU_CONTRACT_REFERER: 'https://kazan.dom.ru/',
     TARIFNIK_API_URL: 'https://tarifnik.example.test',
     TARIFNIK_API_KEY: 'tarifnik-key',
     TARIFNIK_UTM_CAMPAIGN: 'test',

@@ -45,8 +45,9 @@
 | TD-54 | [#74](https://github.com/Celtoman/astro-telekom/issues/74) ✅ | Обычная заявка и видимая проверка подключения смешаны в одной форме без DaData |
 | TD-59 | [#79](https://github.com/Celtoman/astro-telekom/issues/79) ✅ | Городской профиль рабочего бота перенесен; HTML, malformed JSON и неверный `contacts` блокируют delivery |
 | TD-61 | [#81](https://github.com/Celtoman/astro-telekom/issues/81) ✅ | Payload `Tarifnik appeal/create` не соответствует официальному контракту v3.0 |
-| TD-64 | [#84](https://github.com/Celtoman/astro-telekom/issues/84) 🟢 | Повторная доставка не различает временные, постоянные и неоднозначные ошибки Tarifnik |
-| TD-65 | [#85](https://github.com/Celtoman/astro-telekom/issues/85) 🟢 | Нормализованный город адреса не сверяется с городом формы перед routing |
+| TD-64 | [#84](https://github.com/Celtoman/astro-telekom/issues/84) ✅ | Повторная доставка различает временные, постоянные и неоднозначные ошибки Tarifnik |
+| TD-65 | [#85](https://github.com/Celtoman/astro-telekom/issues/85) ✅ | Нормализованный город адреса сверяется с городом формы перед routing |
+| TD-66 | [#86](https://github.com/Celtoman/astro-telekom/issues/86) 🟢 | Обычное Resend-уведомление не проверяет HTTP-ошибку ответа |
 
 ## P2
 
@@ -55,7 +56,7 @@
 | TD-11 | [#13](https://github.com/Celtoman/astro-telekom/issues/13) 🟢 | Нет аудита, версий, schedule публикации, корзины, rollback |
 | TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) 🟢 | Наследование `content` — только shallow merge верхнего уровня |
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) 🟢 | `PageBlock` поддерживает только 3 типа блоков из библиотеки |
-| TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) 🟢 | Public DTO/rate limit/honeypot и policy-driven purge реализованы; остается юридически утвердить и задать retention period |
+| TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) 🟢 | Public DTO/rate limit/honeypot и 180-дневный policy-driven purge реализованы; остаются legal basis, согласие и правила передачи PII |
 | TD-15 | [#17](https://github.com/Celtoman/astro-telekom/issues/17) 🟢 | Email-уведомление о лиде — fire-and-forget без журнала |
 | TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) ✅ | Production требует чистый HTTPS origin; post-build gate сверяет sitemap, robots, raw HTML и `noindex` 404 |
 | TD-17 | [#19](https://github.com/Celtoman/astro-telekom/issues/19) ✅ | One-shot migration job до API; readiness проверяет PostgreSQL/Redis, liveness отделен; seed остается явной безопасной операцией |
@@ -67,7 +68,7 @@
 | TD-57 | [#77](https://github.com/Celtoman/astro-telekom/issues/77) 🟢 | `connection_cost` не выводится, а `show_on_site` не сохраняется по согласованной семантике |
 | TD-58 | [#78](https://github.com/Celtoman/astro-telekom/issues/78) 🟢 | Автоматический редирект не синхронизирует статус с публикацией тарифа |
 | TD-60 | [#80](https://github.com/Celtoman/astro-telekom/issues/80) 🟢 | Нет единого сброса временных фильтров во всех разделах |
-| TD-62 | [#82](https://github.com/Celtoman/astro-telekom/issues/82) 🟢 | Проверка договора Дом.ру использует один глобальный городской профиль вместо справочника городов |
+| TD-62 | [#82](https://github.com/Celtoman/astro-telekom/issues/82) ✅ | Проверка договора Дом.ру использует полный регионально однозначный справочник городов |
 
 ## P3
 
@@ -90,7 +91,7 @@
 | TD-50 | [#70](https://github.com/Celtoman/astro-telekom/issues/70) 🟢 | Release readiness документы и Task #31 требуют синхронизации |
 | TD-52 | [#72](https://github.com/Celtoman/astro-telekom/issues/72) 🟢 | Browser security headers для web/admin не закреплены проверками |
 | TD-53 | [#73](https://github.com/Celtoman/astro-telekom/issues/73) 🟢 | `decisions.md` противоречил финальным ответам Q89 и Q118; локальная синхронизация подготовлена |
-| TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) 🟢 | `docs/worker.md` содержит устаревшее описание уже закрытых routing-ограничений |
+| TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) ✅ | `docs/worker.md` синхронизирован с фактическим routing и retry-поведением |
 
 ## Невыполненные, но согласованные возможности
 

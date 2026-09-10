@@ -1,6 +1,6 @@
 # Развертывание и эксплуатационный контур
 
-Этот документ описывает текущую Compose-конфигурацию и согласованный целевой контур Coolify. Два последовательных внешних deployment коммита `1eeb609` подтвердили стабильный image build, persistent PostgreSQL, migrations, повторную web-публикацию, healthchecks и защищенные домены. Это подтверждает работоспособный тестовый deployment, но не заменяет отдельные backup/restore и rebuild rehearsal перед приемом реальных заявок. Контур работает из GitHub через Coolify на купленном тестовом домене `tv-internet-dom.ru`, без дополнительного `stage`-контура.
+Этот документ описывает текущую Compose-конфигурацию и согласованный целевой контур Coolify. Два последовательных внешних deployment коммита `1eeb609` подтвердили стабильный image build, persistent PostgreSQL, migrations, повторную web-публикацию, healthchecks и защищенные домены; отдельный реальный polling rehearsal подтвердил автоматический rebuild через Coolify API до `finished`. Это подтверждает работоспособный тестовый deployment, но не заменяет backup/restore, email fallback и legal-подготовку перед приемом реальных заявок. Контур работает из GitHub через Coolify на купленном тестовом домене `tv-internet-dom.ru`, без дополнительного `stage`-контура.
 
 Подробная пошаговая настройка интерфейса, DNS, GitHub App, переменных, Basic Auth, smoke tests и отката сверена с актуальным Coolify v4.3.18 и вынесена в [исследование первого развертывания](research/2026-09-09-coolify-deployment.md).
 
@@ -24,7 +24,7 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 3. Для direct Compose задать `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN` и `SITE_DATA_API_URL`, доступный из Docker builder. Для Coolify задать `PUBLIC_DOMAIN=tv-internet-dom.ru`, `ADMIN_DOMAIN=admin.tv-internet-dom.ru`; `SITE_DATA_API_URL=http://api:3000/api/v1` и browser API URLs формируются самим Compose. API не получает внешний домен.
 4. Задать случайные непустые `ADMIN_API_TOKEN`, `SUBSCRIBER_COOKIE_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`.
 5. Проверить rate-limit policy: `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX`. Production Compose принудительно задает API `TRUST_PROXY=true`, потому что API не публикует порт и получает внешний трафик только от Caddy; при прямой публикации API доверие proxy headers нужно пересмотреть.
-6. Юридически утвердить срок хранения сырых заявок и задать его целым числом дней в `PII_RETENTION_DAYS` (1–3650). Код не содержит придуманного default; без policy scheduler отключен и readiness заблокирован. При необходимости настроить размер batch и UTC cron отдельно.
+6. Задать согласованный срок хранения сырых заявок `PII_RETENTION_DAYS=180`. Без валидного значения scheduler отключен и readiness заблокирован. Размер batch и UTC cron настраиваются отдельно. Юридическое основание обработки и текст согласия остаются обязательными до реального трафика.
 7. До включения заявок подтвердить договоры и задать coverage, contract, Tarifnik, email и rebuild variables. Проверить защищенный `/api/v1/admin/readiness`: `status` должен быть `configured`. Это подтверждает только наличие конфигурации — затем обязательны sandbox-вызовы и согласованные legal/SLA decisions.
 8. Направить DNS A/AAAA для `tv-internet-dom.ru` и `admin.tv-internet-dom.ru` на Coolify-сервер; 80/443 должны быть доступны Coolify edge proxy.
 9. Сгенерировать bcrypt credential строкой `htpasswd -nbB <username> <password>` и сохранить результат только в Coolify как `TEST_BASIC_AUTH_USERS`. Включить `Literal`, `Buildtime` и `Runtime`, выключить `Multiline`; в Advanced обязательно выключить `Escape special characters in labels`. Compose интерполирует label уже во время `docker compose build`: runtime-only значение отсутствует в `build-time.env`, а label escaping превращает `${TEST_BASIC_AUTH_USERS...}` в неинтерполируемый `$${TEST_BASIC_AUTH_USERS...}`. Открытый пароль и готовый credential не коммитить.
@@ -32,7 +32,7 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 
 Секретные значения не дублируются в документации или отдельных временных файлах. Для локальной разработки их единый источник — исключенный из Git корневой `.env`; для production — Coolify Environment Variables. `.env.example` остается только реестром имен, безопасных URL и пустых placeholders.
 
-10 сентября 2026 года 21 заполненная P0-переменная интеграций, rebuild и retention перенесена из локального `.env` в основной production-контур Coolify через официальный API. Перенос создавал только отсутствующие имена, не перезаписывал существующие значения, не затрагивал preview и не запускал deployment. До полного `configured` по-прежнему отсутствует один из двух вариантов email transport: `RESEND_API_KEY` или `LEADS_EMAIL_WEBHOOK_URL`.
+10 сентября 2026 года заполненные P0-переменные интеграций, rebuild и retention перенесены из локального `.env` в основной production-контур Coolify через официальный API. Перенос создавал только отсутствующие имена, не перезаписывал существующие значения и не затрагивал preview. Городские `origin/providerid/referer` теперь поставляются вместе с API в проверяемом справочнике, поэтому прежние одногородские environment values больше не используются. Позднее в тот же день владелец добавил `RESEND_API_KEY`; он перенесен отдельной production runtime/literal/shown-once переменной. Синтетическое письмо без PII с настроенными `LEADS_EMAIL_FROM`/`LEADS_EMAIL` принято Resend с HTTP 200 и получено владельцем.
 
 ## Настройка Coolify
 
@@ -91,9 +91,9 @@ Seed не становится автоматической операцией �
 | Coolify bootstrap/access | `RUN_BOOTSTRAP_SEED` (обязательный явный `true`/`false`), `TEST_BASIC_AUTH_USERS` (bcrypt verifier, Literal + Buildtime + Runtime; label escaping выключен) |
 | Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
 | Input security | `TRUST_PROXY`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_LOGIN_MAX`, `RATE_LIMIT_PUBLIC_WRITE_MAX`, `RATE_LIMIT_DEFAULT_MAX` |
-| PII retention | `PII_RETENTION_DAYS` (обязательное legal decision), `PII_RETENTION_BATCH_SIZE` (default 500), `PII_RETENTION_CRON` (default `0 3 * * *`, UTC) |
+| PII retention | `PII_RETENTION_DAYS=180` (согласованный срок сырых заявок), `PII_RETENTION_BATCH_SIZE` (default 500), `PII_RETENTION_CRON` (default `0 3 * * *`, UTC) |
 | Address/coverage | `DADATA_TOKEN`, `DADATA_SECRET`, `DADATA_SUGGEST_API_URL`, `DADATA_CLEAN_API_URL`, `TARIFNIK_ADDRESS_CHECK_API_URL`, `TARIFNIK_API_KEY`, `TARIFNIK_TARGET_PROVIDER_ID`. DaData credentials используются только сервером; target ID для Дом.ру сейчас `8`. |
-| Contract check | `DOMRU_CONTRACT_API_URL`, `DOMRU_CONTRACT_CITY`, `DOMRU_CONTRACT_ORIGIN`, `DOMRU_CONTRACT_PROVIDER_ID`, `DOMRU_CONTRACT_REFERER`. Публичный городской контракт Дом.ру не использует API key. |
+| Contract check | Только общий `DOMRU_CONTRACT_API_URL`. Несекретные городские `origin/providerid/referer` находятся в `apps/api/src/assets/domru-city-profiles.csv` и выбираются по DaData городу+региону; публичный контракт Дом.ру не использует API key. |
 | Lead delivery | `TARIFNIK_API_URL`, общий `TARIFNIK_API_KEY`, `TARIFNIK_UTM_CAMPAIGN`, `LEADS_EMAIL`, `RESEND_API_KEY` or `LEADS_EMAIL_WEBHOOK_URL`, `LEADS_EMAIL_FROM`. До production используется только согласованная метка `test`; рабочее значение должен предоставить владелец. |
 | Publishing | `REBUILD_PROVIDER`; для `webhook` — `REBUILD_WEBHOOK_URL`; для `coolify` — `COOLIFY_API_URL`, `COOLIFY_API_TOKEN`, `COOLIFY_RESOURCE_UUID`, необязательные `COOLIFY_POLL_INTERVAL_MS`/`COOLIFY_DEPLOY_TIMEOUT_MS`; `ENV_FILE` |
 
@@ -109,12 +109,12 @@ docker compose -f docker-compose.coolify.yml exec api node -e "fetch('http://loc
 
 - Caddy reverse proxy не добавляет security headers из `static.Caddyfile`; он используется только внутри static image.
 - Нет мониторинга, alerting, лог-агрегации или настроенной backup policy. Встроенный database-aware backup Coolify пока не доступен PostgreSQL внутри Git-based Docker Compose Application; до реальных лидов нужен внешний `pg_dump`, S3/off-server storage и restore rehearsal.
-- Автоматическое hard-delete PII реализовано, но срок хранения не утвержден и `.env.example` намеренно оставляет `PII_RETENTION_DAYS` пустым; реальный прием заявок до legal decision и isolated rehearsal запрещен.
+- Автоматическое hard-delete PII реализовано, срок 180 дней согласован и указан в `.env.example`; реальный прием заявок остается запрещен до юридического основания/согласия и isolated rehearsal production retention.
 - Миграция `0013_lead_provider_outcomes` добавляет явные причины непередачи `PROVIDER_NOT_AVAILABLE_NOT_SENT` и `NO_PROVIDERS_NOT_SENT`; она должна быть применена до запуска новой версии API.
 - Static web не получает изменения из БД без внешней пересборки. Это относится и к набору redirect source paths; уже включенный matcher при каждом обращении проверяет актуальный published-статус записи через API.
 - Direct `docker-compose.prod.yml` по-прежнему требует заранее доступный `SITE_DATA_API_URL`; воспроизводимый первый bootstrap реализован только в целевом Coolify Compose.
 - Локальный production-подобный Compose и два последовательных live deployment текущего commit полностью проверены: DNS/TLS, persistent volumes, 401/200 password boundary, same-origin API, `www → non-www`, повторная web-публикация и устойчивый `running:healthy` подтверждены.
-- Coolify adapter реализован и локально покрыт UUID/polling/retry/timeout tests, но еще не вызван против реального control plane; до этого [#57](https://github.com/Celtoman/astro-telekom/issues/57) и автоматическая публикация остаются неподтвержденными.
+- Coolify adapter покрыт UUID/polling/retry/timeout tests и подтвержден против реального control plane: [#57](https://github.com/Celtoman/astro-telekom/issues/57) закрыта после polling rehearsal до `finished` на точном deployment commit.
 - Rebuild требует одновременно PostgreSQL, Redis, worker, API и доступный выбранный provider; наличие URL/token без успешного финального rehearsal не доказывает публикацию.
 - Для применения persistent rebuild-job нужна миграция `0010_site_rebuild_jobs`.
 - Fallback email link требует примененной миграции `0009_lead_access_tokens`; ссылка одноразовая, действует 24 часа и проверяется API. Raw token передается во fragment и не попадает в HTTP request к static admin.

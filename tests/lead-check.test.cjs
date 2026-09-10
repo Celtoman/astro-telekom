@@ -26,10 +26,10 @@ function fixture(check, recentLeads = []) {
     $transaction: async (callback) => callback(transaction),
   };
   const contract = {
-    check: async (phone, citySlug) => {
+    check: async (phone, location) => {
       contractChecks += 1;
       assert.equal(typeof phone, 'string');
-      assert.equal(citySlug, 'kazan');
+      assert.equal(location.city, 'Казань');
       return { status: 'NOT_FOUND', active: false };
     },
   };
