@@ -32,6 +32,8 @@ PostgreSQL 18 хранит major-specific data directory внутри volume, с
 
 Секретные значения не дублируются в документации или отдельных временных файлах. Для локальной разработки их единый источник — исключенный из Git корневой `.env`; для production — Coolify Environment Variables. `.env.example` остается только реестром имен, безопасных URL и пустых placeholders.
 
+10 сентября 2026 года 21 заполненная P0-переменная интеграций, rebuild и retention перенесена из локального `.env` в основной production-контур Coolify через официальный API. Перенос создавал только отсутствующие имена, не перезаписывал существующие значения, не затрагивал preview и не запускал deployment. До полного `configured` по-прежнему отсутствует один из двух вариантов email transport: `RESEND_API_KEY` или `LEADS_EMAIL_WEBHOOK_URL`.
+
 ## Настройка Coolify
 
 1. Создать Git-based application из приватного GitHub-репозитория через GitHub App или Deploy Key.

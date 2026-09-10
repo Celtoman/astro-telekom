@@ -24,6 +24,19 @@
 
 Исходные файлы пока сохранены: старый бот продолжает использовать собственный `.env`, а локальные Coolify-файлы можно удалить только после подтверждения нового runtime-контура.
 
+## Перенос в production Coolify
+
+Через официальный Coolify API выполнена отдельная проверка production Environment Variables без вывода значений. Существующие переменные приложения представлены production/preview-парами; это два контура, а не случайные дубли. В основной, не-preview контур добавлены только отсутствовавшие заполненные значения из корневого `.env`:
+
+- Coolify API token для worker rebuild;
+- DaData suggest/clean credentials и endpoints;
+- Tarifnik address check/delivery token, endpoints, target provider ID и тестовая campaign;
+- городской контракт Дом.ру без несуществующего API key;
+- партнерский URL альтернатив, email recipient/from;
+- технически валидные PII retention days, batch size и cron.
+
+Всего создана 21 production-переменная. Существующие значения не обновлялись, preview-контур не изменялся, deployment не запускался. Повторный read-only запрос подтвердил наличие всех 21 имен. Единственный отсутствующий configuration gate — transport для резервного уведомления: нужен `RESEND_API_KEY` либо `LEADS_EMAIL_WEBHOOK_URL`.
+
 ## Официальный контракт Tarifnik v3.0
 
 Источник: [«Открытое API для дилеров»](https://dealers-api.tarifnik.ru/open_api.html#/), предоставленный владельцем проекта.
@@ -85,4 +98,4 @@
 
 ## Критерий завершения Priority 0
 
-Priority 0 завершен только когда для каждой интеграции сохранен обезличенный контракт success/error, test credentials находятся в защищенном источнике, read-only проверки воспроизводимы, `appeal/create` проверен в sandbox без попадания теста в рабочий кол-центр, legal/retention решения записаны в `docs/decisions.md`, а production secrets перенесены в Coolify без Git и логов.
+Production secrets перенесены в Coolify без Git и логов. Остальная часть Priority 0 завершена только когда для каждой интеграции сохранен обезличенный контракт success/error, read-only проверки воспроизводимы, `appeal/create` проверен в sandbox без попадания теста в рабочий кол-центр, настроен email fallback, подтверждена положительная ветка действующего абонента, legal/retention решения записаны в `docs/decisions.md`, а backup/restore и rebuild прошли отдельный production rehearsal.
