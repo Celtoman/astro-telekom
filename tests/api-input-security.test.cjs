@@ -4,7 +4,12 @@ const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 const { AddressChecksController } = require('../apps/api/dist/address-checks.controller.js');
 const { PublicLeadsController } = require('../apps/api/dist/public-leads.controller.js');
-const { createGlobalValidationPipe, rateLimitForPath } = require('../apps/api/dist/security-options.js');
+const {
+  createGlobalValidationPipe,
+  rateLimitBucketForPath,
+  rateLimitForPath,
+  rateLimitKeyForRequest,
+} = require('../apps/api/dist/security-options.js');
 const { LoginDto, AddressCheckDto, CreateLeadDto, ConsumeLeadAccessDto } = require('../apps/api/dist/public.dto.js');
 
 const metadata = (metatype) => ({ type: 'body', metatype, data: undefined });
@@ -12,7 +17,7 @@ const metadata = (metatype) => ({ type: 'body', metatype, data: undefined });
 test('global security options enforce strict DTOs and tighter public write limits', async () => {
   assert.equal(rateLimitForPath('/api/v1/auth/login'), 5);
   assert.equal(rateLimitForPath('/api/v1/address-checks'), 10);
-  assert.equal(rateLimitForPath('/api/v1/address-suggestions'), 10);
+  assert.equal(rateLimitForPath('/api/v1/address-suggestions'), 60);
   assert.equal(rateLimitForPath('/api/v1/leads'), 10);
   assert.equal(rateLimitForPath('/api/v1/admin/tariffs'), 300);
 
@@ -38,6 +43,22 @@ test('global security options enforce strict DTOs and tighter public write limit
   );
 });
 
+test('rate-limit counters are isolated by route purpose while query strings share a bucket', () => {
+  assert.equal(rateLimitBucketForPath('/api/v1/address-suggestions?query=test'), 'address-suggestions');
+  assert.equal(rateLimitBucketForPath('/api/v1/address-checks'), 'address-checks');
+  assert.equal(rateLimitBucketForPath('/api/v1/leads'), 'leads');
+  assert.equal(rateLimitBucketForPath('/api/v1/lead-access/token'), 'lead-access');
+  assert.equal(rateLimitBucketForPath('/api/v1/admin/tariffs'), 'default');
+
+  const suggestionKey = rateLimitKeyForRequest('/api/v1/address-suggestions', '::ffff:192.0.2.10');
+  assert.equal(suggestionKey, '192.0.2.10:address-suggestions');
+  assert.equal(
+    rateLimitKeyForRequest('/api/v1/address-suggestions?query=next', '::ffff:192.0.2.10'),
+    suggestionKey,
+  );
+  assert.notEqual(rateLimitKeyForRequest('/api/v1/leads', '::ffff:192.0.2.10'), suggestionKey);
+});
+
 test('honeypot is rejected before public controllers query data or call integrations', async () => {
   const never = async () => assert.fail('dependency called for honeypot request');
   const address = new AddressChecksController({ check: never }, { site: { findUnique: never } });
@@ -57,6 +78,7 @@ test('API bootstrap registers the global validation pipe and patched Fastify rat
   const productionCompose = readFileSync(join(__dirname, '..', 'docker-compose.prod.yml'), 'utf8');
   assert.match(source, /useGlobalPipes\(createGlobalValidationPipe\(\)\)/);
   assert.match(source, /register\(fastifyRateLimit/);
+  assert.match(source, /keyGenerator:\s*\(request\)\s*=>\s*rateLimitKeyForRequest\(request\.url, request\.ip\)/);
   assert.match(source, /skipOnError:\s*false/);
   assert.match(source, /trustProxy:/);
   assert.match(productionCompose, /api:[\s\S]*?TRUST_PROXY:\s*["']true["']/);

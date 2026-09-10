@@ -5,7 +5,7 @@ import fastifyRateLimit from '@fastify/rate-limit';
 import IORedis from 'ioredis';
 import { AppModule } from './module';
 import { ADMIN_CORS_METHODS } from './cors-options';
-import { createGlobalValidationPipe, rateLimitForPath, rateLimitWindow } from './security-options';
+import { createGlobalValidationPipe, rateLimitForPath, rateLimitKeyForRequest, rateLimitWindow } from './security-options';
 
 async function bootstrap() {
   const trustProxy = process.env.TRUST_PROXY === 'true';
@@ -23,6 +23,7 @@ async function bootstrap() {
     global: true,
     redis: rateLimitRedis,
     max: (request) => rateLimitForPath(request.url),
+    keyGenerator: (request) => rateLimitKeyForRequest(request.url, request.ip),
     timeWindow: rateLimitWindow(),
     skipOnError: false,
     enableDraftSpec: true,

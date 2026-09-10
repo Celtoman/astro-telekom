@@ -49,6 +49,7 @@
 | TD-65 | [#85](https://github.com/Celtoman/astro-telekom/issues/85) ✅ | Временное ограничение адреса городом формы было реализовано, затем отменено решением [#87](https://github.com/Celtoman/astro-telekom/issues/87) |
 | TD-66 | [#86](https://github.com/Celtoman/astro-telekom/issues/86) 🟢 | Обычное Resend-уведомление не проверяет HTTP-ошибку ответа |
 | TD-67 | [#87](https://github.com/Celtoman/astro-telekom/issues/87) ✅ | Ограничение адреса городом страницы снято; source-контекст отделен от адреса подключения |
+| TD-68 | [#88](https://github.com/Celtoman/astro-telekom/issues/88) ✅ | Подсказки получили отдельный rate-limit bucket, честные ошибки и читаемый клавиатурный dropdown |
 
 ## P2
 

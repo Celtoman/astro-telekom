@@ -46,6 +46,21 @@ test('DaData suggestions stay server-side and allow addresses from any city', as
   });
 });
 
+test('DaData suggestion failure is not disguised as an empty successful result', async () => {
+  await withEnvironment(async () => {
+    global.fetch = async () => new Response('rate limited', {
+      status: 429,
+      headers: { 'retry-after': '3' },
+    });
+    const service = new DadataService();
+    service.logger = { error() {} };
+    await assert.rejects(
+      service.suggest('Казань Бондаренко'),
+      (error) => error?.getStatus?.() === 503 && /временно недоступны/i.test(error.message),
+    );
+  });
+});
+
 test('DaData clean converts the normalized response to the exact Tarifnik suggestion envelope', async () => {
   await withEnvironment(async () => {
     const cleaned = { source: rawSuggestion.value, result: rawSuggestion.value, city: 'Казань', house: '1', qc: 0 };

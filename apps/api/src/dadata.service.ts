@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
 import { DadataSuggestion } from './coverage.service';
 import { readDadataSuggestion } from './coverage.service';
 
@@ -9,7 +9,7 @@ export class DadataService {
   async suggest(query: string): Promise<DadataSuggestion[]> {
     const endpoint = process.env.DADATA_SUGGEST_API_URL?.trim();
     const token = process.env.DADATA_TOKEN?.trim();
-    if (!endpoint || !token) return [];
+    if (!endpoint || !token) throw new ServiceUnavailableException('Подсказки адреса временно недоступны');
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -28,7 +28,7 @@ export class DadataService {
     } catch (error) {
       const reason = error instanceof Error ? error.message : 'unknown error';
       this.logger.error(`DaData suggest failed: ${reason}`);
-      return [];
+      throw new ServiceUnavailableException('Подсказки адреса временно недоступны');
     }
   }
 

@@ -34,8 +34,8 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
     <div class="bot-field" aria-hidden="true"><label for={`website-${formId}`}>Ваш сайт</label><input id={`website-${formId}`} name="website" tabindex="-1" autocomplete="off" /></div>
     <label for={`address-${formId}`}>Адрес</label>
     <div class="address-field">
-      <input id={`address-${formId}`} name="address" required autocomplete="street-address" aria-autocomplete="list" aria-controls={`address-suggestions-${formId}`} placeholder="Город, улица, дом, квартира" />
-      <div id={`address-suggestions-${formId}`} data-address-suggestions class="address-suggestions" role="listbox" hidden></div>
+      <input id={`address-${formId}`} name="address" required autocomplete="street-address" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls={`address-suggestions-${formId}`} placeholder="Город, улица, дом, квартира" />
+      <div id={`address-suggestions-${formId}`} data-address-suggestions class="address-suggestions" role="listbox" aria-label="Подсказки адреса" hidden></div>
     </div>
     <p class="address-hint" data-address-hint aria-live="polite">Начните вводить город и адрес, затем выберите подходящий вариант.</p>
     <div class="phone-step" data-phone-step hidden={mode === 'visible'}>
@@ -63,10 +63,24 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
   let verifiedCheck = null;
   let suggestionTimer;
   let suggestionController;
+  let activeSuggestionIndex = -1;
+  const SUGGESTION_DEBOUNCE_MS = 500;
+  const SUGGESTION_CACHE_LIMIT = 20;
+  const suggestionCache = new Map();
+
+  const setAddressHint = (message, state = '') => {
+    if (!addressHint) return;
+    addressHint.textContent = message;
+    if (state) addressHint.dataset.state = state;
+    else delete addressHint.dataset.state;
+  };
 
   const clearSuggestions = () => {
     suggestionList?.replaceChildren();
     if (suggestionList) suggestionList.hidden = true;
+    activeSuggestionIndex = -1;
+    addressInput?.setAttribute('aria-expanded', 'false');
+    addressInput?.removeAttribute('aria-activedescendant');
   };
 
   const resetForm = () => {
@@ -81,7 +95,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
       if (phoneInput) phoneInput.required = false;
       if (submitButton) submitButton.textContent = 'Проверить адрес';
     }
-    if (addressHint) addressHint.textContent = 'Начните вводить город и адрес, затем выберите подходящий вариант.';
+    setAddressHint('Начните вводить город и адрес, затем выберите подходящий вариант.');
   };
 
   const appendSupport = () => {
@@ -118,29 +132,109 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
     appendSupport();
   };
 
+  const formatSuggestion = (suggestion) => {
+    const data = suggestion?.data && typeof suggestion.data === 'object' ? suggestion.data : {};
+    const typedPart = (type, value) => typeof value === 'string' && value.trim()
+      ? `${typeof type === 'string' ? type : ''} ${value}`.trim()
+      : '';
+    const primaryParts = [
+      data.street_with_type,
+      typedPart(data.stead_type, data.stead),
+      typedPart(data.house_type, data.house),
+      typedPart(data.block_type, data.block),
+      typedPart(data.flat_type, data.flat),
+    ].filter((part) => typeof part === 'string' && part.trim());
+    const secondaryParts = [
+      data.city_with_type,
+      data.city_district_with_type,
+      data.settlement_with_type,
+      data.area_with_type,
+      data.region_with_type,
+    ].filter((part, index, parts) => typeof part === 'string' && part.trim() && parts.indexOf(part) === index);
+    return {
+      primary: primaryParts.length > 0 ? primaryParts.join(', ') : suggestion.value,
+      secondary: primaryParts.length > 0 ? secondaryParts.join(', ') : '',
+    };
+  };
+
+  const selectSuggestion = (suggestion) => {
+    selectedSuggestion = suggestion;
+    addressInput.value = suggestion.value;
+    setAddressHint('Адрес выбран и будет проверен.', 'success');
+    clearSuggestions();
+    addressInput.focus();
+  };
+
+  const setActiveSuggestion = (nextIndex) => {
+    const options = Array.from(suggestionList?.querySelectorAll('[role="option"]') || []);
+    if (options.length === 0) return;
+    activeSuggestionIndex = (nextIndex + options.length) % options.length;
+    options.forEach((option, index) => option.setAttribute('aria-selected', String(index === activeSuggestionIndex)));
+    const activeOption = options[activeSuggestionIndex];
+    addressInput?.setAttribute('aria-activedescendant', activeOption.id);
+    activeOption.scrollIntoView({ block: 'nearest' });
+  };
+
   const renderSuggestions = (items) => {
     clearSuggestions();
     if (!suggestionList || !Array.isArray(items) || items.length === 0) {
-      if (addressHint) addressHint.textContent = 'Подходящий адрес не найден. Уточните город, улицу и дом.';
+      setAddressHint('Подходящий адрес не найден. Уточните город, улицу и дом.');
       return;
     }
-    for (const suggestion of items) {
+    for (const [index, suggestion] of items.entries()) {
       if (!suggestion || typeof suggestion.value !== 'string') continue;
       const option = document.createElement('button');
       option.type = 'button';
       option.className = 'address-option';
+      option.id = `${formId}-address-option-${index}`;
       option.setAttribute('role', 'option');
-      option.textContent = suggestion.value;
-      option.addEventListener('click', () => {
-        selectedSuggestion = suggestion;
-        addressInput.value = suggestion.value;
-        if (addressHint) addressHint.textContent = 'Адрес выбран и будет проверен.';
-        clearSuggestions();
-        addressInput.focus();
-      });
+      option.setAttribute('aria-selected', 'false');
+      option.setAttribute('aria-label', suggestion.value);
+      option.tabIndex = -1;
+      const parts = formatSuggestion(suggestion);
+      const primary = document.createElement('span');
+      primary.className = 'address-option-primary';
+      primary.textContent = parts.primary;
+      option.append(primary);
+      if (parts.secondary) {
+        const secondary = document.createElement('span');
+        secondary.className = 'address-option-secondary';
+        secondary.textContent = parts.secondary;
+        option.append(secondary);
+      }
+      option.addEventListener('pointerenter', () => setActiveSuggestion(index));
+      option.addEventListener('click', () => selectSuggestion(suggestion));
       suggestionList.append(option);
     }
     suggestionList.hidden = suggestionList.childElementCount === 0;
+    addressInput?.setAttribute('aria-expanded', String(!suggestionList.hidden));
+    if (!suggestionList.hidden) setAddressHint('Выберите подходящий адрес из списка.');
+  };
+
+  const cacheSuggestions = (key, items) => {
+    if (suggestionCache.size >= SUGGESTION_CACHE_LIMIT && !suggestionCache.has(key)) {
+      suggestionCache.delete(suggestionCache.keys().next().value);
+    }
+    suggestionCache.set(key, items);
+  };
+
+  const retryAfterSeconds = (response) => {
+    const value = response.headers.get('retry-after');
+    if (!value) return null;
+    if (/^\d+$/.test(value)) return Number(value);
+    const retryAt = Date.parse(value);
+    return Number.isFinite(retryAt) ? Math.max(1, Math.ceil((retryAt - Date.now()) / 1000)) : null;
+  };
+
+  const suggestionErrorMessage = (response) => {
+    if (response.status === 429) {
+      const seconds = retryAfterSeconds(response);
+      return seconds
+        ? `Слишком много запросов. Повторите через ${seconds} сек.`
+        : 'Слишком много запросов. Подождите немного и продолжите ввод.';
+    }
+    if (response.status === 400) return 'Уточните город, улицу и дом.';
+    return 'Подсказки адреса временно недоступны. Введите адрес немного позже.';
   };
 
   addressInput?.addEventListener('input', () => {
@@ -151,28 +245,68 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
     const query = addressInput.value.trim();
     if (query.length < 3) {
       clearSuggestions();
-      if (addressHint) addressHint.textContent = 'Введите не менее трех символов.';
+      setAddressHint('Введите не менее трех символов.');
       return;
     }
-    if (addressHint) addressHint.textContent = 'Ищем адрес…';
+    const cacheKey = query.replace(/\s+/g, ' ').toLocaleLowerCase('ru-RU');
+    if (suggestionCache.has(cacheKey)) {
+      renderSuggestions(suggestionCache.get(cacheKey));
+      return;
+    }
+    setAddressHint('Ищем адрес…', 'loading');
     suggestionTimer = setTimeout(async () => {
-      suggestionController = new AbortController();
+      const controller = new AbortController();
+      suggestionController = controller;
       try {
         const response = await fetch(`${apiUrl}/address-suggestions`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          signal: suggestionController.signal,
+          signal: controller.signal,
           body: JSON.stringify({ siteSlug, citySlug, query, website: '' }),
         });
-        if (!response.ok) throw new Error('Подсказки адреса временно недоступны.');
+        if (!response.ok) {
+          const responseError = new Error(suggestionErrorMessage(response));
+          responseError.name = 'AddressSuggestionResponseError';
+          throw responseError;
+        }
         const payload = await response.json();
-        if (addressInput.value.trim() === query) renderSuggestions(payload.suggestions);
+        const suggestions = Array.isArray(payload.suggestions) ? payload.suggestions : [];
+        cacheSuggestions(cacheKey, suggestions);
+        if (addressInput.value.trim() === query) renderSuggestions(suggestions);
       } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') return;
         clearSuggestions();
-        if (addressHint) addressHint.textContent = error instanceof Error ? error.message : 'Не удалось получить подсказки адреса.';
+        const message = error instanceof Error && error.name === 'AddressSuggestionResponseError'
+          ? error.message
+          : 'Подсказки адреса временно недоступны. Проверьте соединение и попробуйте еще раз.';
+        setAddressHint(message, 'error');
+      } finally {
+        if (suggestionController === controller) suggestionController = null;
       }
-    }, 350);
+    }, SUGGESTION_DEBOUNCE_MS);
+  });
+
+  addressInput?.addEventListener('keydown', (event) => {
+    if (!suggestionList || suggestionList.hidden) return;
+    const options = suggestionList.querySelectorAll('[role="option"]');
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      setActiveSuggestion(activeSuggestionIndex + 1);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      setActiveSuggestion(activeSuggestionIndex - 1);
+    } else if (event.key === 'Enter' && activeSuggestionIndex >= 0) {
+      event.preventDefault();
+      options[activeSuggestionIndex]?.click();
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      clearSuggestions();
+      setAddressHint('Продолжите ввод или выберите адрес из подсказок.');
+    }
+  });
+
+  document.addEventListener('pointerdown', (event) => {
+    if (event.target instanceof Node && !form?.contains(event.target)) clearSuggestions();
   });
 
   const createLead = async (data, check) => {
@@ -290,11 +424,15 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
   .phone-step[hidden] { display: none; }
   .address-field { position: relative; display: grid; }
   .address-field input { margin-bottom: 0; }
-  .address-hint { color: #526071; font-size: 14px; }
-  .address-suggestions { position: absolute; z-index: 10; inset: calc(100% + 4px) 0 auto; display: grid; max-height: 260px; overflow-y: auto; border: 1px solid #d6dde6; border-radius: 10px; background: #fff; box-shadow: 0 12px 30px rgb(21 40 66 / 14%); }
+  .address-hint { color: #526071; font-size: 14px; line-height: 1.4; }
+  .address-hint[data-state='error'] { color: #b42318; }
+  .address-hint[data-state='success'] { color: #176b45; }
+  .address-suggestions { position: absolute; z-index: 20; inset: calc(100% + 6px) 0 auto; display: grid; gap: 2px; max-height: 280px; padding: 4px; overflow-y: auto; overscroll-behavior: contain; border: 1px solid #c9d6e5; border-radius: 12px; background: #fff; box-shadow: 0 16px 36px rgb(21 40 66 / 20%); }
   .address-suggestions[hidden] { display: none; }
-  .address-option { width: 100%; padding: 12px 14px; border: 0; border-bottom: 1px solid #eef1f5; background: #fff; color: #18202a; text-align: left; }
-  .address-option:hover, .address-option:focus-visible { background: #eef7ff; outline: 2px solid #1769aa; outline-offset: -2px; }
+  .address-suggestions :global(.address-option) { display: grid; gap: 2px; width: 100%; min-height: 44px; padding: 9px 11px; border: 0; border-radius: 8px; background: #fff; color: #18202a; font: inherit; cursor: pointer; text-align: left; }
+  .address-suggestions :global(.address-option:hover), .address-suggestions :global(.address-option:focus-visible), .address-suggestions :global(.address-option[aria-selected='true']) { background: #eaf4ff; box-shadow: inset 3px 0 #1769aa; outline: none; }
+  .address-suggestions :global(.address-option-primary) { font-size: 15px; font-weight: 650; line-height: 1.35; }
+  .address-suggestions :global(.address-option-secondary) { color: #526071; font-size: 13px; line-height: 1.35; }
   button { border: 0; cursor: pointer; font: inherit; width: fit-content; }
   button:disabled { cursor: wait; opacity: 0.7; }
   .alternatives { display: grid; gap: 8px; color: #526071; }
