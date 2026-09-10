@@ -47,7 +47,7 @@
 | TD-61 | [#81](https://github.com/Celtoman/astro-telekom/issues/81) ✅ | Payload `Tarifnik appeal/create` не соответствует официальному контракту v3.0 |
 | TD-64 | [#84](https://github.com/Celtoman/astro-telekom/issues/84) ✅ | Повторная доставка различает временные, постоянные и неоднозначные ошибки Tarifnik |
 | TD-65 | [#85](https://github.com/Celtoman/astro-telekom/issues/85) ✅ | Временное ограничение адреса городом формы было реализовано, затем отменено решением [#87](https://github.com/Celtoman/astro-telekom/issues/87) |
-| TD-66 | [#86](https://github.com/Celtoman/astro-telekom/issues/86) 🟢 | Обычное Resend-уведомление не проверяет HTTP-ошибку ответа |
+| TD-66 | [#86](https://github.com/Celtoman/astro-telekom/issues/86) ✅ | Обычные Resend/webhook-уведомления проверяют HTTP-ответ; Resend success дополнительно требует непустой `id` |
 | TD-67 | [#87](https://github.com/Celtoman/astro-telekom/issues/87) ✅ | Ограничение адреса городом страницы снято; source-контекст отделен от адреса подключения |
 | TD-68 | [#88](https://github.com/Celtoman/astro-telekom/issues/88) ✅ | Подсказки получили отдельный rate-limit bucket, честные ошибки и читаемый клавиатурный dropdown |
 | TD-69 | [#89](https://github.com/Celtoman/astro-telekom/issues/89) ✅ | DaData использует мягкий IPLocate/page-context boost без ограничения адресов других городов |

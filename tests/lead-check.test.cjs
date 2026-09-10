@@ -1,8 +1,9 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { PublicLeadsController } = require('../apps/api/dist/public-leads.controller.js');
+const { LeadNotificationError } = require('../apps/api/dist/notifications.service.js');
 
-function fixture(check, recentLeads = []) {
+function fixture(check, recentLeads = [], notifyLead = async () => {}) {
   let saved;
   let contractLocation;
   let contractChecks = 0;
@@ -41,7 +42,7 @@ function fixture(check, recentLeads = []) {
       return { queued: true, processingStatus: 'PENDING' };
     },
   };
-  const controller = new PublicLeadsController(prisma, { notifyLead: async () => {} }, contract, delivery);
+  const controller = new PublicLeadsController(prisma, { notifyLead }, contract, delivery);
   return {
     controller,
     create: (body) => controller.create(body, { headers: {}, url: '/leads' }),
@@ -90,6 +91,28 @@ test('manual lead cannot manufacture a coverage result', async () => {
   assert.equal(f.saved().processingStatus, 'MANUAL_CHECK');
   assert.equal(f.contractChecks(), 0);
   assert.equal(f.deliveryEnqueues(), 0);
+});
+
+test('lead remains saved and logs a notification transport failure without PII', async () => {
+  const f = fixture(null, [], async () => {
+    throw new LeadNotificationError('Lead notification via Resend responded 422', 'resend', 'http_error', 422);
+  });
+  const logged = [];
+  f.controller.logger = { error: (message) => logged.push(message) };
+
+  const created = await f.create(base);
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.equal(created.id, 'lead');
+  assert.equal(f.saved().phone, '+79000000000');
+  assert.deepEqual(logged, [{
+    message: 'Lead notification failed',
+    leadId: 'lead',
+    transport: 'resend',
+    code: 'http_error',
+    status: 422,
+  }]);
+  assert.doesNotMatch(JSON.stringify(logged[0]), /\+79000000000/);
 });
 test('unknown check is rejected before saving', async () => {
   const f = fixture(null);

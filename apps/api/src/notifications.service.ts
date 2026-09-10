@@ -12,6 +12,21 @@ interface LeadNotification {
   addressCheck?: unknown;
 }
 
+export type LeadNotificationTransport = 'resend' | 'webhook';
+export type LeadNotificationFailureCode = 'http_error' | 'invalid_response';
+
+export class LeadNotificationError extends Error {
+  constructor(
+    message: string,
+    readonly transport: LeadNotificationTransport,
+    readonly code: LeadNotificationFailureCode,
+    readonly status?: number,
+  ) {
+    super(message);
+    this.name = 'LeadNotificationError';
+  }
+}
+
 @Injectable()
 export class NotificationsService {
   private readonly logger = new Logger(NotificationsService.name);
@@ -22,7 +37,7 @@ export class NotificationsService {
     const resendKey = process.env.RESEND_API_KEY;
     const recipient = process.env.LEADS_EMAIL;
     if (resendKey && recipient) {
-      await fetch('https://api.resend.com/emails', {
+      const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
           authorization: `Bearer ${resendKey}`,
@@ -42,6 +57,38 @@ export class NotificationsService {
           ].join('\n'),
         }),
       });
+      if (!response.ok) {
+        throw new LeadNotificationError(
+          `Lead notification via Resend responded ${response.status}`,
+          'resend',
+          'http_error',
+          response.status,
+        );
+      }
+      const raw = await response.text();
+      let payload: unknown;
+      try {
+        payload = raw ? JSON.parse(raw) : null;
+      } catch {
+        throw new LeadNotificationError(
+          'Lead notification via Resend returned an invalid response',
+          'resend',
+          'invalid_response',
+        );
+      }
+      if (
+        !payload
+        || typeof payload !== 'object'
+        || Array.isArray(payload)
+        || typeof (payload as Record<string, unknown>).id !== 'string'
+        || !(payload as Record<string, string>).id.trim()
+      ) {
+        throw new LeadNotificationError(
+          'Lead notification via Resend returned an invalid response',
+          'resend',
+          'invalid_response',
+        );
+      }
       return;
     }
 
@@ -51,7 +98,7 @@ export class NotificationsService {
       return;
     }
 
-    await fetch(webhookUrl, {
+    const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
@@ -60,6 +107,14 @@ export class NotificationsService {
         lead,
       }),
     });
+    if (!response.ok) {
+      throw new LeadNotificationError(
+        `Lead notification webhook responded ${response.status}`,
+        'webhook',
+        'http_error',
+        response.status,
+      );
+    }
   }
 
   async notifyDeliveryFallback(lead: LeadNotification) {

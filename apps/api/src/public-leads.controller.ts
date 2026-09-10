@@ -1,7 +1,7 @@
-import { BadRequestException, Body, Controller, Post, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Logger, Post, Req } from '@nestjs/common';
 import { createHmac, randomUUID } from 'node:crypto';
 import { PrismaService } from './prisma.service';
-import { NotificationsService } from './notifications.service';
+import { LeadNotificationError, NotificationsService } from './notifications.service';
 import { DomruContractService } from './domru-contract.service';
 import { LeadDeliveryService } from './lead-delivery.service';
 import { normalizeAddress, normalizePhone } from './lead-utils';
@@ -10,6 +10,8 @@ import { readTarifnikCoverageSnapshot } from './coverage.service';
 
 @Controller('leads')
 export class PublicLeadsController {
+  private readonly logger = new Logger(PublicLeadsController.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
@@ -152,7 +154,19 @@ export class PublicLeadsController {
       city: city.name,
       address: lead.address,
       tariff: tariff?.name,
-    }).catch(() => undefined);
+    }).catch((error: unknown) => {
+      this.logger.error({
+        message: 'Lead notification failed',
+        leadId: lead.id,
+        ...(error instanceof LeadNotificationError
+          ? {
+              transport: error.transport,
+              code: error.code,
+              ...(error.status === undefined ? {} : { status: error.status }),
+            }
+          : { code: 'transport_error' }),
+      });
+    });
 
     if (processingStatus === 'PENDING') await this.delivery.enqueueTracked(lead.id, 1, 0, 1);
 
