@@ -43,7 +43,7 @@
 
 ### `POST /leads`
 
-Обязательны `phone` и `citySlug`. Также допускаются slug страницы/тарифа, ссылка на `addressCheckId`, контакты, адрес, service type, UTM, referrer, URL, form name, time on site, device, до 50 viewed pages и до 100 activity events. Браузерные numeric IDs и неизвестные поля не принимаются: API разрешает только slug. Непустое honeypot-поле `website` отклоняется до сохранения.
+Обязательны `phone` и `citySlug`. Также допускаются slug страницы/тарифа, ссылка на `addressCheckId`, контакты, адрес, service type, UTM, referrer, URL, form name, time on site, device, до 50 viewed pages и до 100 activity events. Браузерные numeric IDs и неизвестные поля не принимаются: API разрешает только slug. UTM допускает только стандартные `utm_id`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, `utm_content`, `utm_source_platform`, `utm_creative_format` и `utm_marketing_tactic` со строками до 256 символов. `viewedPages` ограничен 16 KB JSON, весь `activity` — 64 KB, а `activity[].data` — 4 KB, 20 ключами, короткими безопасными именами, строками до 500 символов и не более одним уровнем вложенных containers. Непустое honeypot-поле `website` отклоняется до сохранения.
 
 `citySlug` и сохраняемый `Lead.cityId` обозначают город страницы-источника, а не обязаны совпадать с географией адреса подключения. При наличии `addressCheckId` фактический нормализованный адрес и DaData city/settlement/region берутся только из связанного persisted snapshot; проверка принадлежности check тому же сайту и контексту страницы сохраняется как защита от подмены.
 

@@ -26,10 +26,10 @@
 | Сущность | Назначение |
 | --- | --- |
 | `AddressCheck` | Фактический нормализованный адрес, object type, status, raw provider response и site/city/page source-контекст. `cityId` обозначает город страницы и не ограничивает географию адреса. |
-| `Lead` | Контакты, фактический адрес, UTM, URL/form/device/visited pages, address/contract results, processing status, external lead data, operator status. `cityId` обозначает город страницы-источника. |
+| `Lead` | Контакты, фактический адрес, allowlisted и bounded UTM, URL/form/device/visited pages с лимитом 16 KB JSON, address/contract results, processing status, external lead data, operator status. `cityId` обозначает город страницы-источника. |
 | `LeadDeliveryAttempt` | Каждый queue/API/email attempt, idempotency key, payload/response/error, next retry time. |
 | `LeadNotification` | Одна persistent outbox/status-запись обычного оповещения на лид: revision, attempts, transport, безопасный error code/HTTP status и provider message ID без копии телефона, адреса или текста письма. |
-| `LeadActivityEvent` | События браузера до формы. |
+| `LeadActivityEvent` | События браузера до формы: allowlisted оболочка `type/data`, до 100 событий и 64 KB JSON суммарно; `data` ограничен 4 KB, 20 ключами и глубиной. |
 | `LeadStatusHistory` | Операторские переходы NEW/IN_PROGRESS/CALL_LATER/CONNECTED/REJECTED. |
 | `LeadAccessToken` | SHA-256 hash одноразовой fallback-ссылки, срок действия, отметки использования и отзыва; связан ровно с одной заявкой и удаляется каскадно. |
 

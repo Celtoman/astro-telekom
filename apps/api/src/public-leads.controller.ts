@@ -1,5 +1,6 @@
 import { BadRequestException, Body, Controller, Logger, Post, Req } from '@nestjs/common';
 import { createHmac, randomUUID } from 'node:crypto';
+import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { DomruContractService } from './domru-contract.service';
 import { LeadDeliveryService } from './lead-delivery.service';
@@ -120,7 +121,7 @@ export class PublicLeadsController {
           serviceType: body.serviceType || tariff?.serviceType,
           addressCheckId: addressCheck?.id,
           source: body.source || 'website',
-          utm: body.utm,
+          utm: body.utm ? { ...body.utm } as Prisma.InputJsonValue : undefined,
           referrer: body.referrer || request.headers?.referer,
           pageUrl: body.pageUrl || request.url,
           formName: body.formName || 'lead',
@@ -142,7 +143,13 @@ export class PublicLeadsController {
       });
       if (Array.isArray(body.activity)) {
         const events = body.activity.filter((event) => event && typeof event.type === 'string').slice(-100);
-        if (events.length) await tx.leadActivityEvent.createMany({ data: events.map((event) => ({ leadId: created.id, type: event.type.slice(0, 120), data: event.data as any })) });
+        if (events.length) await tx.leadActivityEvent.createMany({
+          data: events.map((event) => ({
+            leadId: created.id,
+            type: event.type,
+            data: event.data ? event.data as Prisma.InputJsonValue : undefined,
+          })),
+        });
       }
       const createdNotification = await this.notifications.create(tx, created.id);
       return { lead: created, notification: createdNotification };

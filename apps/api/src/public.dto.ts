@@ -15,11 +15,143 @@ import {
   MaxLength,
   Min,
   MinLength,
+  Validate,
   ValidateNested,
+  ValidationArguments,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
 const slug = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const telemetryKey = /^[a-zA-Z][a-zA-Z0-9_.-]{0,63}$/;
+
+@ValidatorConstraint({ name: 'maxJsonBytes', async: false })
+class MaxJsonBytesConstraint implements ValidatorConstraintInterface {
+  validate(value: unknown, args: ValidationArguments) {
+    if (value === undefined || value === null) return true;
+    try {
+      return Buffer.byteLength(JSON.stringify(value), 'utf8') <= Number(args.constraints[0]);
+    } catch {
+      return false;
+    }
+  }
+
+  defaultMessage(args: ValidationArguments) {
+    return `${args.property} превышает допустимый размер`;
+  }
+}
+
+@ValidatorConstraint({ name: 'boundedTelemetryData', async: false })
+class BoundedTelemetryDataConstraint implements ValidatorConstraintInterface {
+  validate(value: unknown) {
+    if (value === undefined || value === null) return true;
+    if (!this.isPlainObject(value)) return false;
+    try {
+      if (Buffer.byteLength(JSON.stringify(value), 'utf8') > 4_096) return false;
+    } catch {
+      return false;
+    }
+
+    let keyCount = 0;
+    const pending: Array<{ value: unknown; depth: number }> = [{ value, depth: 0 }];
+    while (pending.length) {
+      const current = pending.pop()!;
+      if (typeof current.value === 'string') {
+        if (current.value.length > 500) return false;
+        continue;
+      }
+      if (typeof current.value === 'number') {
+        if (!Number.isFinite(current.value)) return false;
+        continue;
+      }
+      if (current.value === null || typeof current.value === 'boolean') continue;
+      if (Array.isArray(current.value)) {
+        if (current.depth > 1 || current.value.length > 20) return false;
+        for (const item of current.value) pending.push({ value: item, depth: current.depth + 1 });
+        continue;
+      }
+      if (!this.isPlainObject(current.value) || current.depth > 1) return false;
+      const entries = Object.entries(current.value);
+      keyCount += entries.length;
+      if (keyCount > 20) return false;
+      for (const [key, entry] of entries) {
+        if (!telemetryKey.test(key)) return false;
+        pending.push({ value: entry, depth: current.depth + 1 });
+      }
+    }
+    return true;
+  }
+
+  defaultMessage() {
+    return 'Данные события имеют недопустимую структуру или размер';
+  }
+
+  private isPlainObject(value: unknown): value is Record<string, unknown> {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+    const prototype = Object.getPrototypeOf(value);
+    return prototype === Object.prototype || prototype === null;
+  }
+}
+
+export class LeadUtmDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(256)
+  utm_id?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(256)
+  utm_source?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(256)
+  utm_medium?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(256)
+  utm_campaign?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(256)
+  utm_term?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(256)
+  utm_content?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(256)
+  utm_source_platform?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(256)
+  utm_creative_format?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(256)
+  utm_marketing_tactic?: string;
+}
+
+export class LeadActivityEventDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(120)
+  type!: string;
+
+  @IsOptional()
+  @IsObject()
+  @Validate(BoundedTelemetryDataConstraint)
+  data?: Record<string, unknown>;
+}
 
 export class DadataSuggestionDto {
   @IsString()
@@ -169,8 +301,9 @@ export class CreateLeadDto {
   source?: string;
 
   @IsOptional()
-  @IsObject()
-  utm?: Record<string, string>;
+  @ValidateNested()
+  @Type(() => LeadUtmDto)
+  utm?: LeadUtmDto;
 
   @IsOptional()
   @IsString()
@@ -203,13 +336,16 @@ export class CreateLeadDto {
   @ArrayMaxSize(50)
   @IsString({ each: true })
   @MaxLength(2_048, { each: true })
+  @Validate(MaxJsonBytesConstraint, [16_384])
   viewedPages?: string[];
 
   @IsOptional()
   @IsArray()
   @ArrayMaxSize(100)
-  @IsObject({ each: true })
-  activity?: Array<{ type: string; data?: Record<string, unknown> }>;
+  @ValidateNested({ each: true })
+  @Type(() => LeadActivityEventDto)
+  @Validate(MaxJsonBytesConstraint, [65_536])
+  activity?: LeadActivityEventDto[];
 
   @IsEmpty({ message: 'Некорректный запрос' })
   website?: string;

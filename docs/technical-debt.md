@@ -65,7 +65,7 @@
 | TD-15 | [#17](https://github.com/Celtoman/astro-telekom/issues/17) ✅ | Обычное оповещение лида переведено в persistent outbox с recovery, bounded retry, admin-статусом и ручным повтором |
 | TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) ✅ | Production требует чистый HTTPS origin; post-build gate сверяет sitemap, robots, raw HTML и `noindex` 404 |
 | TD-17 | [#19](https://github.com/Celtoman/astro-telekom/issues/19) ✅ | One-shot migration job до API; readiness проверяет PostgreSQL/Redis, liveness отделен; seed остается явной безопасной операцией |
-| TD-48 | [#68](https://github.com/Celtoman/astro-telekom/issues/68) 🟢 | Размер и структура публичной lead telemetry ограничены не полностью |
+| TD-48 | [#68](https://github.com/Celtoman/astro-telekom/issues/68) ✅ | Публичная lead telemetry имеет allowlist, depth/key/string и суммарные JSON-лимиты |
 | TD-49 | [#69](https://github.com/Celtoman/astro-telekom/issues/69) 🟢 | У журналов заявок и тарифов нет серверной пагинации |
 | TD-51 | [#71](https://github.com/Celtoman/astro-telekom/issues/71) 🟢 | Admin overview показывает недостоверные hardcoded статусы |
 | TD-55 | [#75](https://github.com/Celtoman/astro-telekom/issues/75) 🟢 | Subscriber mode не соответствует полному согласованному поведению |

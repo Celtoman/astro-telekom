@@ -47,6 +47,34 @@ test('global security options enforce strict DTOs and tighter public write limit
   );
 });
 
+test('lead telemetry is allowlisted and bounded before the controller runs', async () => {
+  const pipe = createGlobalValidationPipe();
+  const base = { citySlug: 'kazan', phone: '+7 900 000-00-00' };
+
+  const valid = await pipe.transform({
+    ...base,
+    utm: { utm_source: 'search', utm_campaign: 'kazan' },
+    activity: [{ type: 'tariff_view', data: { tariff: 'internet-300', position: 2 } }],
+  }, metadata(CreateLeadDto));
+  assert.equal(valid.utm.utm_source, 'search');
+  assert.equal(valid.activity[0].type, 'tariff_view');
+
+  for (const telemetry of [
+    { utm: { arbitrary_tracking_id: 'not-allowlisted' } },
+    { activity: [{ type: 'tariff_view', extra: 'not-allowlisted' }] },
+    { activity: [{ type: 'x'.repeat(121) }] },
+    { activity: [{ type: 'tariff_view', data: { nested: { too: { deep: true } } } }] },
+    { activity: [{ type: 'tariff_view', data: { value: 'x'.repeat(4_100) } }] },
+    { viewedPages: Array.from({ length: 10 }, (_, index) => `/${index}/${'x'.repeat(2_000)}`) },
+    { activity: Array.from({ length: 100 }, (_, index) => ({ type: `event_${index}`, data: { value: 'x'.repeat(700) } })) },
+  ]) {
+    await assert.rejects(
+      pipe.transform({ ...base, ...telemetry }, metadata(CreateLeadDto)),
+      (error) => error.getStatus() === 400,
+    );
+  }
+});
+
 test('rate-limit counters are isolated by route purpose while query strings share a bucket', () => {
   assert.equal(rateLimitBucketForPath('/api/v1/address-suggestions?query=test'), 'address-suggestions');
   assert.equal(rateLimitBucketForPath('/api/v1/address-checks'), 'address-checks');
