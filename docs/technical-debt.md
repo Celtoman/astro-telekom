@@ -53,6 +53,7 @@
 | TD-69 | [#89](https://github.com/Celtoman/astro-telekom/issues/89) ✅ | DaData использует мягкий IPLocate/page-context boost без ограничения адресов других городов |
 | TD-71 | [#92](https://github.com/Celtoman/astro-telekom/issues/92) ✅ | BullMQ-safe `jobId` и явный `DELIVERY_QUEUE_ERROR` не позволяют потерять заявку при сбое постановки в очередь |
 | TD-73 | [#95](https://github.com/Celtoman/astro-telekom/issues/95) ✅ | Ручной retry использует следующий свободный глобальный номер попытки и отдельный безопасный retry budget |
+| TD-81 | [#103](https://github.com/Celtoman/astro-telekom/issues/103) 🟢 | Production содержит только 2 seed-тарифа вместо подтвержденного полного snapshot из 3 859 строк |
 
 ## P2
 
