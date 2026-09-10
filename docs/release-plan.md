@@ -22,12 +22,12 @@ Release 0 не является production release: тестовый gate зел
 Условия завершения:
 
 1. Все automated checks green в чистом окружении.
-2. Production build блокируется, если API-данные отсутствуют, origin не является чистым HTTPS origin или final SEO output не проходит проверку. — API/origin fail-fast и post-build sitemap/raw HTML gate покрыты реальными build-тестами; осталось запрещать demo mode во внешних production CI/CD настройках и закрыть воспроизводимый первый bootstrap [#55](https://github.com/Celtoman/astro-telekom/issues/55).
+2. Production build блокируется, если API-данные отсутствуют, origin не является чистым HTTPS origin или final SEO output не проходит проверку. API/origin fail-fast, post-build sitemap/raw HTML gate и воспроизводимый первый Coolify bootstrap [#55](https://github.com/Celtoman/astro-telekom/issues/55) подтверждены; внешний production CI/CD не должен разрешать demo mode.
 3. Импорт тарифов имеет утвержденную полную семантику и не оставляет устаревшие публичные предложения.
 4. Rebuild job имеет status/retry и подтвержденный результат HTML.
 5. Fallback link безопасно открывает нужную заявку либо удалена из письма.
 6. Админский вертикальный поток import -> apply -> rebuild status показывает реальные данные.
-7. Real/sandbox contracts coverage, contract API, Tarifnik и email согласованы и проверены.
+7. Real/sandbox contracts DaData, Tarifnik `address/check`, Dom.ru `contract-asterisked`, Tarifnik `appeal/create` и email согласованы и проверены. Обычная форма и видимая проверка подключения разделены; delivery невозможен без обязательной проверки провайдеров и однозначного `contacts: []`.
 8. Утверждены меры PII, anti-abuse и retention.
 
 ## Release 2 — мультигородской контентный контур
@@ -44,4 +44,4 @@ Dynamic маршруты City/Page/Tariff, published-only sitemap, городс�
 
 ## Внешние зависимости
 
-До Release 1 требуется решение владельца продукта и внешних сторон по: contract Tarifnik, разрешенным полям/обратным статусам, правомерности передачи PII, срокам хранения, доменам/бренду, production deployment provider и rules for full tariff snapshot. Эти решения нельзя заменить предположениями в коде.
+До Release 1 требуется подтвердить реальные контракты DaData, обоих используемых API Tarifnik (`address/check` и `appeal/create`) и проверки действующего абонента Dom.ru, включая разрешенные поля/обратные статусы и однозначную семантику `contacts`. Также остаются правомерность передачи PII, сроки хранения, домены/бренд, production deployment provider и rules for full tariff snapshot. Эти решения нельзя заменить предположениями в коде.

@@ -50,6 +50,8 @@ PII retention scheduler в worker
   -> cascade history/activity/delivery/tokens + orphan AddressCheck cleanup
 ```
 
+Публичные формы имеют два согласованных flow. Обычная заявка принимает адрес и телефон сразу, сохраняет лид и отвечает только коротким подтверждением; затем сервер обязан проверить провайдеров через Tarifnik `address/check`. При наличии хотя бы одного провайдера выполняется проверка действующего абонента через API Дом.ру независимо от наличия Дом.ру в списке. Только валидный ответ с явным `contacts: []` разрешает `lead-deliveries`; действующий абонент, отсутствие провайдеров и любой неоднозначный или ошибочный ответ доставку блокируют. Видимая проверка подключения сначала создает только `AddressCheck`: телефон запрашивается лишь при найденном Дом.ру, альтернативы ведут на `tarifnik.ru`, а пустой список показывает телефон технической поддержки. Текущий web и generic coverage adapter этот целевой flow реализуют не полностью — точный статус приведен в [current-state.md](current-state.md).
+
 В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities` через server-only `SITE_DATA_API_URL` (с совместимым fallback на `PUBLIC_API_URL`), валидирует уникальность каждого публичного пути, отсутствие redirect-цепочек и существование каждой цели. Отдельный `PUBLIC_API_URL` встраивается в browser-формы и не обязан совпадать с внутренним источником каталога. Web генерирует HTML только для опубликованного каталога и `redirects.caddy` только для опубликованных редиректов; при сборке container image этот файл переносится из document root в `/etc/caddy`. `PUBLIC_SITE_SLUG` выбирает сайт, по умолчанию `domru-kazan`. В runtime статические страницы не читают PostgreSQL; только совпавший старый URL проксируется внутренним Caddy в API для актуальной проверки статуса, HTTP 301 и атомарного учета перехода. Изменение каталога или правила требует успешной пересборки.
 
 ## API-модули и их ответственность
@@ -59,8 +61,8 @@ PII retention scheduler в worker
 | `auth` и `AdminTokenGuard` | Создание 12-часовой сессии, browser login/me/logout через HttpOnly cookie и совместимый Bearer для технических клиентов. `x-admin-token` — машинный credential; `/internal/*` принимает только его. |
 | `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; блоки имеют отдельную строгую валидацию, остальные admin bodies частично проверяются вручную. |
 | `tariff-import`, `city-import` | Валидация XLSX, сохранение отчета, transactional apply. |
-| `address-checks`, `coverage` | Сохранение проверки адреса и адаптер внешнего coverage API. |
-| `leads`, `domru-contract`, `lead-delivery`, `notifications`, `lead-access` | Сохранение лида, дедупликация, проверка договора, API/email delivery и одноразовый доступ из fallback-письма. |
+| `address-checks`, `coverage` | Сохранение проверки адреса; целевой адаптер использует структурированный адрес DaData и Tarifnik `address/check` со списком провайдеров. Текущий generic response contract пока отличается. |
+| `leads`, `domru-contract`, `lead-delivery`, `notifications`, `lead-access` | Сохранение лида, дедупликация, строгая проверка действующего договора и только затем delivery в CRM Tarifnik через `appeal/create`, email fallback и одноразовый доступ из fallback-письма. |
 | `pii-retention` | Worker-only bounded hard-delete просроченных лидов и связанных payloads; fail-safe без явно заданного срока. |
 | `crm-leads` | Список, карточка, смена статуса, повторная постановка доставки и отзыв fallback-доступа. |
 | `rebuild-queue` | Persistent rebuild/outbox, дедупликация по сайту, BullMQ producer, start/progress/result API, сохранение provider deployment UUID и фиксация только финального результата deployment. |

@@ -1,6 +1,6 @@
 # Технический долг — индекс
 
-Дата фиксации реестра: 9 сентября 2026 года. **Полное описание каждой проблемы (доказательство, влияние, следующее действие) живёт в GitHub Issue, не здесь** — эта таблица дублировала текст до 8 сентября 2026, что и было источником рассинхронизации; теперь она только индекс. Как устроена вся система — [docs/task-management.md](task-management.md).
+Дата фиксации реестра: 10 сентября 2026 года. **Полное описание каждой проблемы (доказательство, влияние, следующее действие) живёт в GitHub Issue, не здесь** — эта таблица дублировала текст до 8 сентября 2026, что и было источником рассинхронизации; теперь она только индекс. Как устроена вся система — [docs/task-management.md](task-management.md).
 
 Приоритеты: P0 — блокирует безопасный запуск или ведет к недостоверным данным; P1 — нарушает ключевой путь первого релиза; P2 — существенно ограничивает эксплуатацию; P3 — улучшение качества и поддерживаемости.
 
@@ -41,6 +41,9 @@
 | TD-44 | [#64](https://github.com/Celtoman/astro-telekom/issues/64) ✅ | Label escaping выключен, runtime Basic Auth подтвержден ответами 401/200 на обоих доменах |
 | TD-45 | [#65](https://github.com/Celtoman/astro-telekom/issues/65) ✅ | Trusted frozen lockfile, общий pnpm cache и bounded retry подтвердили cold/warm и live deployment без timeout |
 | TD-46 | [#66](https://github.com/Celtoman/astro-telekom/issues/66) ✅ | `mv -fT` сохраняет валидный publication symlink; два последовательных live deployment прошли без 503 |
+| TD-47 | [#67](https://github.com/Celtoman/astro-telekom/issues/67) 🟢 | Delivery возможен без однозначно завершенной проверки провайдеров |
+| TD-54 | [#74](https://github.com/Celtoman/astro-telekom/issues/74) 🟢 | Обычная заявка и видимая проверка подключения смешаны в одной форме без DaData |
+| TD-59 | [#79](https://github.com/Celtoman/astro-telekom/issues/79) 🟢 | Невалидный ответ Dom.ru может ошибочно считаться отсутствием действующего абонента |
 
 ## P2
 
@@ -53,6 +56,14 @@
 | TD-15 | [#17](https://github.com/Celtoman/astro-telekom/issues/17) 🟢 | Email-уведомление о лиде — fire-and-forget без журнала |
 | TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) ✅ | Production требует чистый HTTPS origin; post-build gate сверяет sitemap, robots, raw HTML и `noindex` 404 |
 | TD-17 | [#19](https://github.com/Celtoman/astro-telekom/issues/19) ✅ | One-shot migration job до API; readiness проверяет PostgreSQL/Redis, liveness отделен; seed остается явной безопасной операцией |
+| TD-48 | [#68](https://github.com/Celtoman/astro-telekom/issues/68) 🟢 | Размер и структура публичной lead telemetry ограничены не полностью |
+| TD-49 | [#69](https://github.com/Celtoman/astro-telekom/issues/69) 🟢 | У журналов заявок и тарифов нет серверной пагинации |
+| TD-51 | [#71](https://github.com/Celtoman/astro-telekom/issues/71) 🟢 | Admin overview показывает недостоверные hardcoded статусы |
+| TD-55 | [#75](https://github.com/Celtoman/astro-telekom/issues/75) 🟢 | Subscriber mode не соответствует полному согласованному поведению |
+| TD-56 | [#76](https://github.com/Celtoman/astro-telekom/issues/76) 🟢 | UI импорта городов не дает выбрать create/update/skip по строкам |
+| TD-57 | [#77](https://github.com/Celtoman/astro-telekom/issues/77) 🟢 | `connection_cost` не выводится, а `show_on_site` не сохраняется по согласованной семантике |
+| TD-58 | [#78](https://github.com/Celtoman/astro-telekom/issues/78) 🟢 | Автоматический редирект не синхронизирует статус с публикацией тарифа |
+| TD-60 | [#80](https://github.com/Celtoman/astro-telekom/issues/80) 🟢 | Нет единого сброса временных фильтров во всех разделах |
 
 ## P3
 
@@ -72,6 +83,9 @@
 | TD-39 | [#58](https://github.com/Celtoman/astro-telekom/issues/58) ✅ | Все Dockerfile кешируют `pnpm install` по root/workspace manifests и lockfile; source-only rebuild подтвержден 9 сентября 2026 года |
 | TD-40 | [#60](https://github.com/Celtoman/astro-telekom/issues/60) ✅ | Coolify API token удален из build-time Compose interpolation и передается worker только через runtime `.env` |
 | TD-43 | [#63](https://github.com/Celtoman/astro-telekom/issues/63) ✅ | Filtered runtime, общий API/seed image и кешированный migration path сократили повторный live deployment до 85 секунд |
+| TD-50 | [#70](https://github.com/Celtoman/astro-telekom/issues/70) 🟢 | Release readiness документы и Task #31 требуют синхронизации |
+| TD-52 | [#72](https://github.com/Celtoman/astro-telekom/issues/72) 🟢 | Browser security headers для web/admin не закреплены проверками |
+| TD-53 | [#73](https://github.com/Celtoman/astro-telekom/issues/73) 🟢 | `decisions.md` противоречил финальным ответам Q89 и Q118; локальная синхронизация подготовлена |
 
 ## Невыполненные, но согласованные возможности
 

@@ -13,7 +13,7 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 
 ## Доставка заявок
 
-1. `POST /leads` создает `Lead` и при `PENDING` вызывает `LeadDeliveryService.enqueue`.
+1. `POST /leads` создает `Lead` и при `PENDING` вызывает `LeadDeliveryService.enqueue`. По согласованной границе `PENDING` допустим только после обязательной проверки провайдеров и однозначного ответа Dom.ru `contacts: []`; текущая реализация еще допускает отсутствие `addressCheckId` и нестрого трактует форму ответа `contacts`.
 2. Если определен `REDIS_URL`, API ставит BullMQ job с `jobId=<leadId>:<attemptNumber>`.
 3. Worker вызывает внутренний endpoint; тот запускает `LeadDeliveryService.process`.
 4. При успешном HTTP response Tarifnik создается успешный `LeadDeliveryAttempt`, лид получает `DELIVERED`.
