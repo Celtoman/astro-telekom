@@ -14,6 +14,7 @@
 | TD-02 | [#2](https://github.com/Celtoman/astro-telekom/issues/2) ✅ | HMAC-ссылка заменена серверным одноразовым token с TTL, отзывом и admin UI |
 | TD-03 | [#3](https://github.com/Celtoman/astro-telekom/issues/3) ✅ | Demo-data требуют явного флага; policy и final HTML защищены тестами [#4](https://github.com/Celtoman/astro-telekom/issues/4) |
 | TD-96 | [#121](https://github.com/Celtoman/astro-telekom/issues/121) ✅ | Публичные формы восстановлены после CSP-регресса; исполняемый код собирается first-party bundle, а final HTML проверяет каждый оставшийся inline hash |
+| TD-100 | [#129](https://github.com/Celtoman/astro-telekom/issues/129) 🟢 | Legacy hero CTA с конечным слэшем блокирует строгую runtime-публикацию и требует идемпотентной data migration |
 
 ## P1
 

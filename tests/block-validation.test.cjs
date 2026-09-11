@@ -1,7 +1,11 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const { readFileSync } = require('node:fs');
+const { join } = require('node:path');
 const { validateBlock } = require('../apps/api/dist/block-validation.js');
 const { AdminBlocksController } = require('../apps/api/dist/admin-blocks.controller.js');
+
+const repositoryRoot = join(__dirname, '..');
 
 const block = (blockType, data) => ({ blockType, position: 10, data });
 const validBlocks = [
@@ -166,4 +170,17 @@ test('a concurrent discriminator change rejects a stale data write', async () =>
     error => error.getStatus() === 409,
   );
   assert.equal(rebuildCalls, 0);
+});
+
+test('page-block migration normalizes only legacy internal hero CTA paths', () => {
+  const migration = readFileSync(
+    join(repositoryRoot, 'prisma', 'migrations', '0018_page_block_cta_paths', 'migration.sql'),
+    'utf8',
+  );
+
+  assert.match(migration, /UPDATE "PageBlock"/);
+  assert.match(migration, /"blockType" = 'hero'/);
+  assert.match(migration, /"data"->>'ctaHref' ~ '\^\/\[\^\/\]\.\*\/\+\$'/);
+  assert.match(migration, /regexp_replace\("data"->>'ctaHref', '\/\+\$', ''\)/);
+  assert.doesNotMatch(migration, /DELETE FROM "PageBlock"/);
 });
