@@ -184,3 +184,24 @@ test('page-block migration normalizes only legacy internal hero CTA paths', () =
   assert.match(migration, /regexp_replace\("data"->>'ctaHref', '\/\+\$', ''\)/);
   assert.doesNotMatch(migration, /DELETE FROM "PageBlock"/);
 });
+
+test('Kazan page snapshot migration is scoped, additive and idempotent', () => {
+  const migration = readFileSync(
+    join(repositoryRoot, 'prisma', 'migrations', '0019_kazan_page_block_snapshots', 'migration.sql'),
+    'utf8',
+  );
+
+  assert.match(migration, /site\."slug" = 'domru-kazan'/);
+  assert.match(migration, /city\."slug" = 'kazan'/);
+  assert.match(migration, /page\."slug" = ''/);
+  assert.match(migration, /page\."slug" = 'internet'/);
+  assert.match(migration, /migration:0019:kazan-home:service-grid/);
+  assert.match(migration, /migration:0019:kazan-home:equipment/);
+  assert.match(migration, /migration:0019:kazan-home:benefits/);
+  assert.match(migration, /migration:0019:kazan-home:faq/);
+  assert.match(migration, /migration:0019:kazan-internet:features/);
+  assert.match(migration, /existing\."position" = canonical_blocks\."position"/);
+  assert.match(migration, /ON CONFLICT \("id"\) DO NOTHING/);
+  assert.doesNotMatch(migration, /DELETE FROM/);
+  assert.doesNotMatch(migration, /UPDATE "(?:Tariff|Lead)"/);
+});
