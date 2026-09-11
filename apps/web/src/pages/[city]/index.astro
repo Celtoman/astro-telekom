@@ -43,7 +43,7 @@ const servicePages = [
   {city.tariffs.length > 0 && <section class="section container">
     <h2>Популярные тарифы</h2>
     <div class="grid">
-      {city.tariffs.map((tariff) => <article class="card"><h3>{tariff.name}</h3><p>{tariff.service}. {tariff.speed}</p><div class="tariff-price">{tariff.price}</div><a class="card-link" href={publicHtmlPath(city.slug, tariff.slug)}>О тарифе →</a></article>)}
+      {city.tariffs.map((tariff) => <article class="card"><h3>{tariff.name}</h3><p>{tariff.service}. {tariff.speed}</p><div class="tariff-price">{tariff.price}</div>{tariff.connection && <p class="tariff-connection">{tariff.connection}</p>}<a class="card-link" href={publicHtmlPath(city.slug, tariff.slug)}>О тарифе →</a></article>)}
     </div>
   </section>}
 </BaseLayout>

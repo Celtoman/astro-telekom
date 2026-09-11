@@ -61,6 +61,7 @@ test('tariff workspace provides quick detail and a separate guarded long editor'
   assert.match(readFileSync(editorRoute, 'utf8'), /<TariffEditorApp[^>]+client:load/);
   assert.match(listSource, /\/admin\/tariffs\/\$\{id\}/);
   assert.match(listSource, /Быстрый просмотр/);
+  assert.match(listSource, /Рекомендация источника/);
   assert.match(listSource, /\/tariffs\/edit\?id=/);
 
   const editor = readFileSync(editorPath, 'utf8');
@@ -70,6 +71,8 @@ test('tariff workspace provides quick detail and a separate guarded long editor'
   assert.match(editor, /\/admin\/rebuilds\/\$\{/);
   assert.match(editor, /setRebuildPollAttempt/);
   assert.match(editor, /attributeSchema/);
+  assert.match(editor, /не изменяет статус публикации/);
+  assert.match(editor, /form\.attributes\[field\.key\] \?\? ""/);
   for (const field of ['name', 'serviceType', 'standardPrice', 'promoPrice', 'speed', 'promoText', 'connectionFee', 'availability', 'externalId', 'dataSource', 'attributes', 'seo']) {
     assert.ok(editor.includes(field), `editor is missing ${field}`);
   }

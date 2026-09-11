@@ -38,8 +38,8 @@ const yandexWssOrigins = yandexMetrikaHosts.map((host) => `wss://${host}`);
 const yandexFrameOrigins = yandexHttpsOrigins.filter((origin) => origin !== 'https://yastatic.net');
 
 const page = (type, slug, title) => ({ type, slug, title, status: 'PUBLISHED', seo: {}, blocks: [] });
-const tariff = (slug, name, speed, standardPrice) => ({
-  name, slug, serviceType: 'INTERNET', speed, standardPrice, promoPrice: null, status: 'PUBLISHED', seo: {},
+const tariff = (slug, name, speed, standardPrice, connectionFee = null) => ({
+  name, slug, serviceType: 'INTERNET', speed, standardPrice, promoPrice: null, connectionFee, status: 'PUBLISHED', seo: {},
 });
 const apiFixture = {
   site: { name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test' },
@@ -58,7 +58,7 @@ const apiFixture = {
         { ...page('FAQ', 'draft-page', 'Черновая страница'), status: 'DRAFT' },
       ],
       tariffs: [
-        tariff('api-internet-500', 'API Интернет 500', 500, 777),
+        tariff('api-internet-500', 'API Интернет 500', 500, 777, 0),
         { ...tariff('draft-tariff-in-published-city', 'Черновой тариф', 100, 100), status: 'DRAFT' },
       ],
     },
@@ -69,7 +69,7 @@ const apiFixture = {
         page('INTERNET', 'internet', 'Домашний интернет в Альметьевске'),
         page('ADDRESS_CHECK', 'proverka-adresa', 'Проверка адреса в Альметьевске'),
       ],
-      tariffs: [tariff('almet-internet-300', 'Альмет Интернет 300', 300, 650)],
+      tariffs: [tariff('almet-internet-300', 'Альмет Интернет 300', 300, 650, 1500)],
     },
     {
       name: 'Черновик', namePrepositional: 'Черновике', slug: 'draft-city', status: 'DRAFT',
@@ -240,15 +240,19 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(kazan, /<h1>Домашний интернет и телевидение в Казани<\/h1>/);
   assert.match(kazan, /API Интернет 500/);
   assert.match(kazan, /777 ₽\/мес\./);
+  assert.match(kazan, /Бесплатное подключение/);
   assert.doesNotMatch(kazan, /Цена уточняется/);
   assert.match(tariff, /<h1>API Интернет 500<\/h1>/);
   assert.match(tariff, /777 ₽\/мес\./);
+  assert.match(tariff, /Бесплатное подключение/);
   assert.match(almetyevsk, /<link rel="canonical" href="https:\/\/partner\.example\.test\/almetyevsk">/);
   assert.match(almetyevsk, /<h1>Домашний интернет и телевидение в Альметьевске<\/h1>/);
   assert.doesNotMatch(almetyevsk, /Казан/);
   assert.match(almetyevskInternet, /<h1>Домашний интернет<\/h1>/);
   assert.match(almetyevskTariff, /<h1>Альмет Интернет 300<\/h1>/);
   assert.match(almetyevskTariff, /650 ₽\/мес\./);
+  assert.match(almetyevsk, /Подключение — 1 500 ₽/);
+  assert.match(almetyevskTariff, /Подключение — 1 500 ₽/);
   assert.match(kazanAddressCheck, /data-api-url="https:\/\/api\.partner\.example\.test\/api\/v1"/);
   assert.match(kazanAddressCheck, /<script type="module" src="\/_astro\/AddressForm[^"?]*\.js"><\/script>/);
   assert.match(addressFormSource, /\/address-suggestions/);

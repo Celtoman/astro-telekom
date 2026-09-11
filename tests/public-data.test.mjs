@@ -26,3 +26,10 @@ test('zero promo price is preserved, missing promo falls back to standard price'
   assert.equal(tariffView({ promoPrice: null, standardPrice: '900' }).price, '900 ₽/мес.');
   assert.equal(tariffView({}).price, 'Цена уточняется');
 });
+
+test('connection fee keeps zero, value and missing semantics for public tariffs', () => {
+  assert.equal(tariffView({ connectionFee: 0 }).connection, 'Бесплатное подключение');
+  assert.equal(tariffView({ connectionFee: '1500.5' }).connection, 'Подключение — 1 500,5 ₽');
+  assert.equal(tariffView({ connectionFee: null }).connection, null);
+  assert.equal(tariffView({}).connection, null);
+});
