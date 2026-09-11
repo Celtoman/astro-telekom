@@ -94,7 +94,7 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.doesNotMatch(coolifyCompose, /COOLIFY_API_TOKEN:\s*\$\{COOLIFY_API_TOKEN/);
   assert.match(coolifyCompose, /PUBLIC_API_URL:\s*https:\/\/\$\{PUBLIC_DOMAIN[^}]*\}\/api\/v1/);
   assert.match(coolifyCompose, /PUBLIC_API_URL:\s*https:\/\/\$\{ADMIN_DOMAIN[^}]*\}\/api\/v1/);
-  assert.equal((coolifyCompose.match(/coolify\.traefik\.middlewares=test-basic-auth/g) || []).length, 2);
+  assert.equal((coolifyCompose.match(/coolify\.traefik\.middlewares=(?:public|admin)-security-headers,test-basic-auth/g) || []).length, 2);
   assert.equal((coolifyCompose.match(/basicauth\.users=\$\{TEST_BASIC_AUTH_USERS:\?[^}]+\}/g) || []).length, 2);
   assert.doesNotMatch(coolifyCompose, /basicauth\.users=(?!\$\{TEST_BASIC_AUTH_USERS)/);
   assert.match(webDockerfile, /sh scripts\/pnpm-install-retry\.sh --filter @provider\/web --frozen-lockfile --trust-lockfile/);

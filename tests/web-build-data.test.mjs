@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { readFile, readdir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,6 +11,31 @@ const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
 const webDist = join(repositoryRoot, 'apps', 'web', 'dist');
 const productionSite = 'https://partner.example.test';
 const browserApiUrl = 'https://api.partner.example.test/api/v1';
+const yandexMetrikaHosts = [
+  'mc.yandex.ru',
+  'mc.yandex.az',
+  'mc.yandex.by',
+  'mc.yandex.co.il',
+  'mc.yandex.com',
+  'mc.yandex.com.am',
+  'mc.yandex.com.ge',
+  'mc.yandex.com.tr',
+  'mc.yandex.ee',
+  'mc.yandex.fr',
+  'mc.yandex.kg',
+  'mc.yandex.kz',
+  'mc.yandex.lt',
+  'mc.yandex.lv',
+  'mc.yandex.md',
+  'mc.yandex.tj',
+  'mc.yandex.tm',
+  'mc.yandex.uz',
+  'mc.webvisor.com',
+  'mc.webvisor.org',
+];
+const yandexHttpsOrigins = [...yandexMetrikaHosts.map((host) => `https://${host}`), 'https://yastatic.net'];
+const yandexWssOrigins = yandexMetrikaHosts.map((host) => `wss://${host}`);
+const yandexFrameOrigins = yandexHttpsOrigins.filter((origin) => origin !== 'https://yastatic.net');
 
 const page = (type, slug, title) => ({ type, slug, title, status: 'PUBLISHED', seo: {}, blocks: [] });
 const tariff = (slug, name, speed, standardPrice) => ({
@@ -101,12 +127,36 @@ async function collectTextFiles(directory) {
   return result;
 }
 
+function extractCsp(html, label) {
+  const tag = (html.match(/<meta\b[^>]*>/gi) || [])
+    .find((candidate) => /http-equiv=(?:"content-security-policy"|'content-security-policy'|content-security-policy)/i.test(candidate));
+  assert.ok(tag, `${label} must contain a content-security-policy meta element`);
+  const content = tag.match(/\bcontent=(?:"([^"]*)"|'([^']*)')/i);
+  assert.ok(content, `${label} CSP meta element must contain a content value`);
+  return (content[1] ?? content[2])
+    .replaceAll('&amp;', '&')
+    .replaceAll('&quot;', '"')
+    .replace(/&#(?:39|x27);/gi, "'");
+}
+
+function getDirective(csp, name, label) {
+  const directive = csp.split(';').map((item) => item.trim())
+    .find((item) => item === name || item.startsWith(`${name} `));
+  assert.ok(directive, `${label} CSP must contain ${name}`);
+  return directive;
+}
+
+function getDirectiveSources(csp, name, label) {
+  return getDirective(csp, name, label).split(/\s+/).slice(1);
+}
+
 test('web build uses API data and final HTML passes the publication smoke contract', { timeout: 120_000 }, async () => {
   await withApiFixture(async (apiUrl) => {
     const build = await runWebBuild({
       SITE_DATA_API_URL: apiUrl,
       PUBLIC_API_URL: browserApiUrl,
       PUBLIC_SITE_URL: productionSite,
+      PUBLIC_YANDEX_METRIKA_ID: '12345678',
       ALLOW_DEMO_DATA: '',
     });
     assert.equal(build.code, 0, build.output);
@@ -125,6 +175,44 @@ test('web build uses API data and final HTML passes the publication smoke contra
   const sitemap = await readBuilt('sitemap.xml');
   const notFound = await readBuilt('404.html');
   const redirectRoutes = await readBuilt('redirects.caddy');
+  const csp = extractCsp(root, 'public root');
+
+  assert.equal(getDirective(csp, 'default-src', 'public root'), "default-src 'self'");
+  assert.equal(getDirective(csp, 'base-uri', 'public root'), "base-uri 'none'");
+  assert.equal(getDirective(csp, 'object-src', 'public root'), "object-src 'none'");
+  assert.equal(getDirective(csp, 'form-action', 'public root'), "form-action 'self'");
+  const scripts = getDirective(csp, 'script-src', 'public root');
+  assert.match(scripts, /'sha256-[A-Za-z0-9+/=]+'/);
+  assert.match(scripts, /'strict-dynamic'/);
+  assert.match(scripts, /https:\/\/mc\.yandex\.ru/);
+  assert.match(scripts, /https:\/\/yastatic\.net/);
+  assert.doesNotMatch(scripts, /'unsafe-inline'/);
+  assert.deepEqual(
+    getDirectiveSources(csp, 'script-src', 'public root').filter((source) => source.startsWith('https://')),
+    yandexHttpsOrigins,
+  );
+  assert.deepEqual(
+    getDirectiveSources(csp, 'connect-src', 'public root'),
+    ["'self'", 'https://api.partner.example.test', ...yandexHttpsOrigins, ...yandexWssOrigins],
+  );
+  assert.deepEqual(
+    getDirectiveSources(csp, 'img-src', 'public root'),
+    ["'self'", 'data:', ...yandexHttpsOrigins],
+  );
+  assert.deepEqual(
+    getDirectiveSources(csp, 'child-src', 'public root'),
+    ['blob:', ...yandexFrameOrigins],
+  );
+  assert.deepEqual(
+    getDirectiveSources(csp, 'frame-src', 'public root'),
+    ['blob:', ...yandexFrameOrigins],
+  );
+  assert.doesNotMatch(csp, /script-src(?:-elem)?[^;]*'unsafe-inline'/);
+  assert.match(root, /https:\/\/mc\.yandex\.ru\/metrika\/tag\.js/);
+  const metrikaBootstrap = root.match(/<script>([^<]*__YANDEX_METRIKA_ID__[^<]*)<\/script>/)?.[1];
+  assert.ok(metrikaBootstrap, 'public root must contain the inline Metrika bootstrap');
+  const metrikaHash = createHash('sha256').update(metrikaBootstrap).digest('base64');
+  assert.ok(scripts.includes(`'sha256-${metrikaHash}'`), 'CSP must authorize the exact Metrika bootstrap by hash');
 
   assert.match(root, /<link rel="canonical" href="https:\/\/partner\.example\.test\/">/);
   assert.match(root, /<h1>Домашний интернет и телевидение Дом\.ру<\/h1>/);

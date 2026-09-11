@@ -70,6 +70,7 @@
 | TD-48 | [#68](https://github.com/Celtoman/astro-telekom/issues/68) ✅ | Публичная lead telemetry имеет allowlist, depth/key/string и суммарные JSON-лимиты |
 | TD-49 | [#69](https://github.com/Celtoman/astro-telekom/issues/69) ✅ | Журналы заявок и тарифов используют bounded cursor-пагинацию и серверные фильтры; list DTO заявки исключает тяжелые relations |
 | TD-51 | [#71](https://github.com/Celtoman/astro-telekom/issues/71) ✅ | Admin overview оставляет реальные счетчики разделам и не показывает hardcoded catalog/publication или удаленную CRM |
+| TD-52 | [#72](https://github.com/Celtoman/astro-telekom/issues/72) ✅ | Browser security headers и hash-based CSP для web/admin закреплены edge/build-проверками |
 | TD-55 | [#75](https://github.com/Celtoman/astro-telekom/issues/75) 🟢 | Subscriber mode не соответствует полному согласованному поведению |
 | TD-56 | [#76](https://github.com/Celtoman/astro-telekom/issues/76) 🟢 | UI импорта городов не дает выбрать create/update/skip по строкам |
 | TD-57 | [#77](https://github.com/Celtoman/astro-telekom/issues/77) 🟢 | `connection_cost` не выводится, а `show_on_site` не сохраняется по согласованной семантике |
@@ -102,7 +103,6 @@
 | TD-40 | [#60](https://github.com/Celtoman/astro-telekom/issues/60) ✅ | Coolify API token удален из build-time Compose interpolation и передается worker только через runtime `.env` |
 | TD-43 | [#63](https://github.com/Celtoman/astro-telekom/issues/63) ✅ | Filtered runtime, общий API/seed image и кешированный migration path сократили повторный live deployment до 85 секунд |
 | TD-50 | [#70](https://github.com/Celtoman/astro-telekom/issues/70) ✅ | Release readiness документы и Task #31 синхронизированы с live test-контуром и актуальными блокерами |
-| TD-52 | [#72](https://github.com/Celtoman/astro-telekom/issues/72) 🟢 | Browser security headers для web/admin не закреплены проверками |
 | TD-53 | [#73](https://github.com/Celtoman/astro-telekom/issues/73) ✅ | `decisions.md` синхронизирован с финальными ответами Q89 и Q118 |
 | TD-75 | [#97](https://github.com/Celtoman/astro-telekom/issues/97) 🟢 | Текущие Radix-примитивы admin расходятся с новым обязательным React Aria-референсом |
 | TD-76 | [#98](https://github.com/Celtoman/astro-telekom/issues/98) 🟢 | Astro выдает ложные `formId` hints для inline-скрипта `AddressForm` |

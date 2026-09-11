@@ -147,8 +147,14 @@ services:
       retries: 5
       start_period: 10s
     labels:
+      - "traefik.http.middlewares.public-security-headers.headers.stsseconds=31536000"
+      - "traefik.http.middlewares.public-security-headers.headers.contenttypenosniff=true"
+      - "traefik.http.middlewares.public-security-headers.headers.referrerpolicy=strict-origin-when-cross-origin"
+      - "traefik.http.middlewares.public-security-headers.headers.permissionspolicy=camera=(), geolocation=(), microphone=(), payment=(), usb=()"
+      - "traefik.http.middlewares.public-security-headers.headers.contentsecuritypolicy=frame-ancestors 'self' https://metrika.yandex.ru https://analytics.yandex.by https://analytics.yandex.com https://analytics.yandex.com.tr https://analytics.yandex.kz https://analytics.yandex.ru https://metr.yandex.by https://metr.yandex.com https://metr.yandex.com.tr https://metr.yandex.kz https://metr.yandex.ru https://metrica.ya.ru https://metrica.yandex https://metrica.yandex.by https://metrica.yandex.com https://metrica.yandex.com.tr https://metrica.yandex.kz https://metrica.yandex.ru https://metrika.ya.ru https://metrika.yandex https://metrika.yandex.by https://metrika.yandex.com https://metrika.yandex.com.tr https://metrika.yandex.kz https://metrika.yandex.uz;"
+      - "traefik.http.middlewares.public-security-headers.headers.customresponseheaders.X-Robots-Tag=noindex, nofollow"
       - "traefik.http.middlewares.test-basic-auth.basicauth.users=${TEST_BASIC_AUTH_USERS:?Set TEST_BASIC_AUTH_USERS in Coolify}"
-      - "coolify.traefik.middlewares=test-basic-auth"
+      - "coolify.traefik.middlewares=public-security-headers,test-basic-auth"
 
   admin:
     build:
@@ -173,8 +179,15 @@ services:
       retries: 5
       start_period: 10s
     labels:
+      - "traefik.http.middlewares.admin-security-headers.headers.stsseconds=31536000"
+      - "traefik.http.middlewares.admin-security-headers.headers.contenttypenosniff=true"
+      - "traefik.http.middlewares.admin-security-headers.headers.referrerpolicy=strict-origin-when-cross-origin"
+      - "traefik.http.middlewares.admin-security-headers.headers.permissionspolicy=camera=(), geolocation=(), microphone=(), payment=(), usb=()"
+      - "traefik.http.middlewares.admin-security-headers.headers.contentsecuritypolicy=frame-ancestors 'none';"
+      - "traefik.http.middlewares.admin-security-headers.headers.framedeny=true"
+      - "traefik.http.middlewares.admin-security-headers.headers.customresponseheaders.X-Robots-Tag=noindex, nofollow, noarchive"
       - "traefik.http.middlewares.test-basic-auth.basicauth.users=${TEST_BASIC_AUTH_USERS:?Set TEST_BASIC_AUTH_USERS in Coolify}"
-      - "coolify.traefik.middlewares=test-basic-auth"
+      - "coolify.traefik.middlewares=admin-security-headers,test-basic-auth"
 
 volumes:
   postgres_data:

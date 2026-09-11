@@ -1,11 +1,39 @@
+(common_security_headers) {
+	header {
+		>Strict-Transport-Security "max-age=31536000"
+		>X-Content-Type-Options "nosniff"
+		>Referrer-Policy "strict-origin-when-cross-origin"
+		>Permissions-Policy "camera=(), geolocation=(), microphone=(), payment=(), usb=()"
+	}
+}
+
+(public_security_headers) {
+	import common_security_headers
+	header {
+		>Content-Security-Policy "frame-ancestors 'self' https://metrika.yandex.ru https://analytics.yandex.by https://analytics.yandex.com https://analytics.yandex.com.tr https://analytics.yandex.kz https://analytics.yandex.ru https://metr.yandex.by https://metr.yandex.com https://metr.yandex.com.tr https://metr.yandex.kz https://metr.yandex.ru https://metrica.ya.ru https://metrica.yandex https://metrica.yandex.by https://metrica.yandex.com https://metrica.yandex.com.tr https://metrica.yandex.kz https://metrica.yandex.ru https://metrika.ya.ru https://metrika.yandex https://metrika.yandex.by https://metrika.yandex.com https://metrika.yandex.com.tr https://metrika.yandex.kz https://metrika.yandex.uz;"
+	}
+}
+
+(strict_security_headers) {
+	import common_security_headers
+	header {
+		>Content-Security-Policy "frame-ancestors 'none';"
+		>X-Frame-Options "DENY"
+		>X-Robots-Tag "noindex, nofollow, noarchive"
+	}
+}
+
 {$PUBLIC_DOMAIN} {
-  reverse_proxy web:80
+	import public_security_headers
+	reverse_proxy web:80
 }
 
 {$ADMIN_DOMAIN} {
-  reverse_proxy admin:80
+	import strict_security_headers
+	reverse_proxy admin:80
 }
 
 {$API_DOMAIN} {
-  reverse_proxy api:3000
+	import strict_security_headers
+	reverse_proxy api:3000
 }
