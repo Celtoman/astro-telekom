@@ -54,7 +54,7 @@
 | TD-71 | [#92](https://github.com/Celtoman/astro-telekom/issues/92) ✅ | BullMQ-safe `jobId` и явный `DELIVERY_QUEUE_ERROR` не позволяют потерять заявку при сбое постановки в очередь |
 | TD-73 | [#95](https://github.com/Celtoman/astro-telekom/issues/95) ✅ | Ручной retry использует следующий свободный глобальный номер попытки и отдельный безопасный retry budget |
 | TD-81 | [#103](https://github.com/Celtoman/astro-telekom/issues/103) ✅ | Production восстановлен до 207 городов и полного snapshot из 3 859 тарифов; runtime rebuild опубликован |
-| TD-82 | [#104](https://github.com/Celtoman/astro-telekom/issues/104) 🟢 | Канонический генератор сохраняет пустые `inlineStr`, которые не принимает безопасный XLSX-parser платформы |
+| TD-82 | [#104](https://github.com/Celtoman/astro-telekom/issues/104) ✅ | Генератор исключает пустые `inlineStr`; parser fixture и production preview подтверждают 3 859/3 859 строк без ручной нормализации |
 
 ## P2
 

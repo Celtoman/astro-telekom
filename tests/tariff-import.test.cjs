@@ -28,6 +28,15 @@ test('XLSX parser reads the canonical first sheet into records', async () => {
   assert.equal(parsed[0]['Город имен. падеж'], 'Алейск');
 });
 
+test('XLSX parser reads a real canonical generator workbook with empty optional values', async () => {
+  const workbookPath = path.join(__dirname, 'fixtures', 'tariff-generator-empty-values.xlsx');
+  const parsed = await parseWorkbook(fs.readFileSync(workbookPath), workbookPath);
+
+  assert.equal(parsed.length, 1);
+  assert.equal(parsed[0].post_title, 'Гига+ 500');
+  assert.equal(parsed[0].card_subtitle, null);
+});
+
 test('XLSX parser rejects the legacy binary XLS format explicitly', async () => {
   await assert.rejects(
     parseWorkbook(Buffer.from('legacy-binary-spreadsheet'), 'tariffs.xls'),
