@@ -15,6 +15,7 @@ export interface CityView {
   nameIn: string;
   slug: string;
   phone: string;
+  supportPhone: string;
   status: string;
   pages: PageView[];
   tariffs: TariffView[];
@@ -40,7 +41,8 @@ export interface SiteCatalog {
 }
 
 export const publicSiteSlug = import.meta.env.PUBLIC_SITE_SLUG || 'domru-kazan';
-const fallbackPhone = import.meta.env.PUBLIC_SUPPORT_PHONE || '8 (800) 000-00-00';
+const fallbackConnectionPhone = import.meta.env.PUBLIC_CONNECTION_PHONE || '8 (800) 000-00-00';
+const fallbackSupportPhone = import.meta.env.PUBLIC_SUPPORT_PHONE || fallbackConnectionPhone;
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const redirectIdPattern = /^[a-zA-Z0-9_-]+$/;
 const redirectPathPattern = /^\/[a-z0-9._~/-]*$/;
@@ -116,7 +118,8 @@ const demoCatalog: SiteCatalog = {
     name: 'Казань',
     nameIn: 'Казани',
     slug: 'kazan',
-    phone: fallbackPhone,
+    phone: fallbackConnectionPhone,
+    supportPhone: fallbackSupportPhone,
     status: 'PUBLISHED',
     pages: demoPages,
     tariffs: [
@@ -139,7 +142,8 @@ function normalizedCatalog(value: unknown): SiteCatalog {
         name: String(item.name || slug),
         nameIn: String(item.namePrepositional || item.name || slug),
         slug,
-        phone: String(item.phone || fallbackPhone),
+        phone: String(item.phone || fallbackConnectionPhone),
+        supportPhone: String(item.supportPhone || fallbackSupportPhone),
         status: 'PUBLISHED',
         pages: (Array.isArray(item.pages) ? item.pages : [])
           .filter((page: Record<string, unknown>) => page?.status === 'PUBLISHED')

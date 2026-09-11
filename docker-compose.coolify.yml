@@ -118,6 +118,7 @@ services:
       PUBLIC_SITE_URL: https://${PUBLIC_DOMAIN:?Set PUBLIC_DOMAIN in Coolify}
       PUBLIC_SITE_SLUG: ${PUBLIC_SITE_SLUG:-domru-kazan}
       PUBLIC_YANDEX_METRIKA_ID: ${PUBLIC_YANDEX_METRIKA_ID:-}
+      PUBLIC_CONNECTION_PHONE: ${PUBLIC_CONNECTION_PHONE:-}
       PUBLIC_SUPPORT_PHONE: ${PUBLIC_SUPPORT_PHONE:-}
     volumes:
       - web_publication:/publication

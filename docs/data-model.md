@@ -9,7 +9,7 @@
 | `Provider` | `name`, unique `slug`, `legalData`, `settings` | Имеет sites и tariffs. |
 | `Site` | `providerId`, `name`, unique `slug`, `domain`, `settings`, `status` | Имеет regions, cities, pages, leads, checks, redirects, city imports и rebuild status. |
 | `Region` | `siteId`, `name`, `slug`, `phone`, `content` | Unique `(siteId, slug)`, содержит cities. |
-| `City` | site/region, names in three cases, legacy/office fields, `status`, `phone`, `seo`, `content` | Unique `(siteId, slug)`, имеет pages, tariffs, leads, checks, redirects. |
+| `City` | site/region, names in three cases, legacy/office fields, `status`, раздельные `phone` для подключения и `supportPhone` для техподдержки, `seo`, `content` | Unique `(siteId, slug)`, имеет pages, tariffs, leads, checks, redirects. |
 | `Page` | site/city, `type`, `title`, `slug`, `status`, `seo`, `content` | Unique `(cityId, slug)`, имеет ordered blocks. |
 | `PageBlock` | `blockType`, `position`, `visible`, JSON `data`, optional `source` | Cascade delete с page. API разрешает `hero`, `rich_text`, `tariff_grid`, `service_grid`, `feature_grid`, `steps` и `faq`; `position` задает порядок visible-блоков. |
 

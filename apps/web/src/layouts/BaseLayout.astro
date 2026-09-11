@@ -15,7 +15,9 @@ interface Props {
 const { title, description, city, pages, indexable = true } = Astro.props as Props;
 const resolvedPages: PageView[] = pages || city?.pages || [];
 const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
-const supportPhone = city?.phone || import.meta.env.PUBLIC_SUPPORT_PHONE || '8 (800) 000-00-00';
+const connectionPhone = city?.phone || import.meta.env.PUBLIC_CONNECTION_PHONE || '8 (800) 000-00-00';
+const connectionPhoneHref = `tel:${connectionPhone.replace(/[^+\d]/g, '')}`;
+const supportPhone = city?.supportPhone || import.meta.env.PUBLIC_SUPPORT_PHONE || connectionPhone;
 const supportPhoneHref = `tel:${supportPhone.replace(/[^+\d]/g, '')}`;
 const cityRoot = city ? publicHtmlPath(city.slug) : '/';
 const pageByType = new Map<string, PageView>(resolvedPages.map((page) => [page.type, page]));
@@ -64,7 +66,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
         {navItems.length > 0 && <nav aria-label="Основная навигация">
           {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
         </nav>}
-        <a class="phone subscriber-phone" href={supportPhoneHref} data-support-phone={supportPhone}>{supportPhone}</a>
+        <a class="phone subscriber-phone" href={connectionPhoneHref} data-support-phone={supportPhone} data-support-phone-href={supportPhoneHref}>{connectionPhone}</a>
       </div>
     </header>
     <main>
@@ -77,6 +79,12 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
       </div>
     </footer>
     <script>
+      import {
+        SUBSCRIBER_MODE_EVENT,
+        SUBSCRIBER_MODE_STORAGE_KEY,
+        isSubscriberModeActive,
+      } from '../lib/subscriber-mode.mjs';
+
       type MetrikaWindow = Window & {
         __YANDEX_METRIKA_ID__?: number;
         ym?: (...args: unknown[]) => void;
@@ -88,13 +96,21 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
         if (!pages.includes(location.pathname)) pages.push(location.pathname);
         sessionStorage.setItem(visitorPagesKey, JSON.stringify(pages.slice(-50)));
       } catch { /* private browsing can disable sessionStorage */ }
-      const subscriberCookie = document.cookie.split(';').some((part) => part.trim().startsWith('domru_subscriber='));
-      if (subscriberCookie) {
+      const applySubscriberMode = () => {
         document.querySelectorAll('.subscriber-phone').forEach((node) => {
           const support = node.getAttribute('data-support-phone') || 'Официальная поддержка';
+          const supportHref = node.getAttribute('data-support-phone-href');
           node.textContent = support;
+          if (supportHref && node instanceof HTMLAnchorElement) node.href = supportHref;
+          node.setAttribute('aria-label', `Техническая поддержка: ${support}`);
         });
-      }
+      };
+      window.addEventListener(SUBSCRIBER_MODE_EVENT, applySubscriberMode);
+      try {
+        const expiresAt = localStorage.getItem(SUBSCRIBER_MODE_STORAGE_KEY);
+        if (isSubscriberModeActive(expiresAt)) applySubscriberMode();
+        else if (expiresAt !== null) localStorage.removeItem(SUBSCRIBER_MODE_STORAGE_KEY);
+      } catch { /* private browsing can disable localStorage */ }
       document.addEventListener('click', (event) => {
         const target = event.target instanceof Element ? event.target.closest('a[href^="tel:"]') : null;
         if (target && typeof metrikaWindow.ym === 'function') metrikaWindow.ym(metrikaWindow.__YANDEX_METRIKA_ID__, 'reachGoal', 'phone_click');

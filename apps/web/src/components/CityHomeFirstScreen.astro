@@ -32,6 +32,7 @@ const priceLabel = minimumPrice === null
   ? 'Условия уточнит оператор'
   : `от ${new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(minimumPrice).replace(/[\u00a0\u202f]/g, ' ')} ₽/мес.`;
 const phoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
+const supportPhoneHref = `tel:${city.supportPhone.replace(/[^+\d]/g, '')}`;
 ---
 
 <section class="city-first-screen" data-block-type="hero" data-city-first-screen>
@@ -64,7 +65,7 @@ const phoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
         <h2 id="consultation-title">Получить консультацию</h2>
         <p>Оператор уточнит условия опубликованных тарифов и ответит на вопросы о подключении.</p>
         <div class="phone-label">Отдел подключений</div>
-        <a class="consultation-phone subscriber-phone" href={phoneHref} data-support-phone={city.phone}>{city.phone}</a>
+        <a class="consultation-phone subscriber-phone" href={phoneHref} data-support-phone={city.supportPhone} data-support-phone-href={supportPhoneHref}>{city.phone}</a>
       </aside>
     </div>
   </div>

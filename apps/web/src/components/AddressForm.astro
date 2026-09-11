@@ -26,7 +26,7 @@ const {
   embedded = false,
 } = Astro.props;
 const formId = `addressForm-${city.slug}-${mode}-${tariffSlug || pageSlug}`;
-const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
+const supportPhoneHref = `tel:${city.supportPhone.replace(/[^+\d]/g, '')}`;
 ---
 
 {mode === 'visible' && !embedded && <section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>Проверьте возможность подключения</h1><p class="lead">Укажите адрес, и мы сразу покажем результат проверки.</p></div></section>}
@@ -42,7 +42,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
     data-page-slug={pageSlug}
     data-service-type={serviceType}
     data-tariff-slug={tariffSlug || ''}
-    data-support-phone={city.phone}
+    data-support-phone={city.supportPhone}
     data-support-phone-href={supportPhoneHref}
   >
     {mode === 'lead' && <><h2>Оставить заявку</h2><p>Укажите адрес и телефон. Возможность подключения мы проверим автоматически.</p></>}
@@ -66,6 +66,11 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
 
 <script>
   // @ts-nocheck -- DOM values are validated at the API boundary; this script is browser-only.
+  import {
+    SUBSCRIBER_MODE_EVENT,
+    SUBSCRIBER_MODE_STORAGE_KEY,
+    subscriberModeExpiresAt,
+  } from '../lib/subscriber-mode.mjs';
   for (const form of document.querySelectorAll('[data-address-form]')) {
   if (form.dataset.addressFormReady === 'true') continue;
   form.dataset.addressFormReady = 'true';
@@ -397,6 +402,14 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
     return response.json();
   };
 
+  const applyLeadSubscriberMode = (lead) => {
+    if (!lead?.subscriberMode) return;
+    try {
+      localStorage.setItem(SUBSCRIBER_MODE_STORAGE_KEY, String(subscriberModeExpiresAt()));
+    } catch { /* private browsing can disable localStorage */ }
+    window.dispatchEvent(new Event(SUBSCRIBER_MODE_EVENT));
+  };
+
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
@@ -406,7 +419,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
       result.textContent = 'Отправляем заявку…';
       try {
         const lead = await createLead(data, verifiedCheck);
-        if (lead.subscriberMode && lead.subscriberCookie) document.cookie = `domru_subscriber=${encodeURIComponent(lead.subscriberCookie)}; Max-Age=2592000; Path=/; SameSite=Lax${location.protocol === 'https:' ? '; Secure' : ''}`;
+        applyLeadSubscriberMode(lead);
         resetForm();
         result.textContent = 'Спасибо! Заявка отправлена.';
       } catch (error) {
@@ -463,7 +476,8 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
 
     try {
       if (submitButton) submitButton.disabled = true;
-      await createLead(data, check);
+      const lead = await createLead(data, check);
+      applyLeadSubscriberMode(lead);
       resetForm();
       result.textContent = 'Спасибо! Заявка отправлена.';
     } catch (error) {

@@ -55,7 +55,7 @@ async function main() {
 
   const city = await prisma.city.upsert({
     where: { siteId_slug: { siteId: site.id, slug: 'kazan' } },
-    update: { name: 'Казань', regionId: region.id, status: PUBLISHED, phone: '8 (800) 555-72-44' },
+    update: { name: 'Казань', regionId: region.id, status: PUBLISHED, phone: '8 (800) 555-72-44', supportPhone: '8 (800) 250-77-77' },
     create: {
       siteId: site.id,
       regionId: region.id,
@@ -63,6 +63,7 @@ async function main() {
       slug: 'kazan',
       status: PUBLISHED,
       phone: '8 (800) 555-72-44',
+      supportPhone: '8 (800) 250-77-77',
     },
   });
 

@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Logger, Post, Req } from '@nestjs/common';
-import { createHmac, randomUUID } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { DomruContractService } from './domru-contract.service';
@@ -19,13 +19,6 @@ export class PublicLeadsController {
     private readonly delivery: LeadDeliveryService,
     private readonly notifications: LeadNotificationOutboxService,
   ) {}
-
-  private subscriberCookie() {
-    const expires = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60;
-    const secret = process.env.SUBSCRIBER_COOKIE_SECRET || process.env.ADMIN_API_TOKEN || 'development-only-secret';
-    const signature = createHmac('sha256', secret).update(String(expires)).digest('hex');
-    return `${expires}.${signature}`;
-  }
 
   @Post()
   async create(@Body() body: CreateLeadDto, @Req() request: { headers?: Record<string, string | undefined>; url?: string }) {
@@ -169,6 +162,6 @@ export class PublicLeadsController {
     if (processingStatus === 'PENDING') await this.delivery.enqueueTracked(lead.id, 1, 0, 1);
 
     const subscriberMode = processingStatus === 'ACTIVE_SUBSCRIBER_NOT_SENT';
-    return { id: lead.id, status: lead.status, message: 'Заявка принята', subscriberMode, subscriberCookie: subscriberMode ? this.subscriberCookie() : undefined };
+    return { id: lead.id, status: lead.status, message: 'Заявка принята', subscriberMode };
   }
 }

@@ -30,6 +30,7 @@ test('public city catalog returns only published entities for one published site
           namePrepositional: 'Казани',
           status: 'PUBLISHED',
           phone: null,
+          supportPhone: '8 (800) 250-77-77',
           seo: {},
           content: {},
           region: { content: {} },
@@ -65,6 +66,7 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test' });
   assert.equal(result.cities.length, 1);
   assert.equal(result.cities[0].namePrepositional, 'Казани');
+  assert.equal(result.cities[0].supportPhone, '8 (800) 250-77-77');
   assert.equal(result.cities[0].pages[0].slug, 'internet');
   assert.equal(result.cities[0].pages[0].blocks[0].blockType, 'hero');
   assert.equal(result.cities[0].tariffs[0].slug, 'giga-500');

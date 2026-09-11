@@ -46,7 +46,7 @@ const apiFixture = {
   redirects: [{ id: 'redirect-old-kazan', sourcePath: '/old-kazan/', targetPath: '/kazan/', status: 'PUBLISHED' }],
   cities: [
     {
-      name: 'Казань', namePrepositional: 'Казани', slug: 'kazan', phone: '8 (800) 555-35-35', status: 'PUBLISHED',
+      name: 'Казань', namePrepositional: 'Казани', slug: 'kazan', phone: '8 (800) 555-35-35', supportPhone: '8 (800) 250-77-77', status: 'PUBLISHED',
       pages: [
         {
           ...page('HOME', '', 'Домашний интернет в Казани'),
@@ -351,6 +351,12 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(kazanInternet, /aria-label="Подробнее о тарифе API Интернет 500"/);
   assert.match(kazan, /aria-label="Подробнее об услуге Домашний интернет"/);
   assert.match(kazan, /href="tel:88005553535"[^>]*>8 \(800\) 555-35-35<\/a>/);
+  assert.match(kazan, /data-support-phone="8 \(800\) 250-77-77"/);
+  assert.match(kazan, /data-support-phone-href="tel:88002507777"/);
+  assert.match(addressFormSource, /SUBSCRIBER_MODE_STORAGE_KEY/);
+  assert.match(addressFormSource, /SUBSCRIBER_MODE_EVENT/);
+  assert.equal((addressFormSource.match(/applyLeadSubscriberMode\(lead\)/g) || []).length, 2);
+  assert.doesNotMatch(addressFormSource, /subscriberCookie|document\.cookie/);
   const homeBlockOrder = ['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'faq']
     .map((blockType) => kazan.indexOf(`data-block-type="${blockType}"`));
   assert.ok(homeBlockOrder.every((index) => index >= 0), 'all city home blocks must be rendered');

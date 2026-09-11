@@ -247,3 +247,28 @@ test('lead with no providers skips subscriber check and delivery without pretend
   assert.equal(f.saved().processingStatus, 'NO_PROVIDERS_NOT_SENT');
   assert.equal(f.deliveryEnqueues(), 0);
 });
+
+test('active subscriber response exposes only a non-authoritative UI mode flag', async () => {
+  const f = fixture({
+    id: 'check',
+    status: 'AVAILABLE',
+    address: 'Улица, 1',
+    objectType: 'apartment',
+    response: {
+      integration: 'tarifnik',
+      suggestion: { value: 'Улица, 1', unrestricted_value: 'Улица, 1', data: { city: 'Казань' } },
+      providers: { 8: 'Дом.ру' },
+      targetProviderId: '8',
+      hasAnyProvider: true,
+      hasTargetProvider: true,
+    },
+  });
+  f.controller.contract.check = async () => ({ status: 'ACTIVE', active: true, contacts: [{}] });
+
+  const created = await f.create({ ...base, addressCheckId: 'check' });
+
+  assert.equal(f.saved().processingStatus, 'ACTIVE_SUBSCRIBER_NOT_SENT');
+  assert.equal(created.subscriberMode, true);
+  assert.equal(Object.hasOwn(created, 'subscriberCookie'), false);
+  assert.equal(f.deliveryEnqueues(), 0);
+});

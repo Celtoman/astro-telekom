@@ -191,6 +191,7 @@ model City {
   officeHours String?
   status      PublishStatus @default(DRAFT)
   phone       String?
+  supportPhone String?
   seo         Json?
   content     Json?
   site        Site     @relation(fields: [siteId], references: [id])

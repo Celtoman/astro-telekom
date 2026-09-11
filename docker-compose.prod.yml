@@ -79,6 +79,7 @@ services:
         PUBLIC_SITE_URL: https://${PUBLIC_DOMAIN}
         PUBLIC_SITE_SLUG: ${PUBLIC_SITE_SLUG:-domru-kazan}
         PUBLIC_YANDEX_METRIKA_ID: ${PUBLIC_YANDEX_METRIKA_ID:-}
+        PUBLIC_CONNECTION_PHONE: ${PUBLIC_CONNECTION_PHONE:-}
         PUBLIC_SUPPORT_PHONE: ${PUBLIC_SUPPORT_PHONE:-}
     restart: unless-stopped
     environment:

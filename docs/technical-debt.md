@@ -15,7 +15,7 @@
 | TD-03 | [#3](https://github.com/Celtoman/astro-telekom/issues/3) ✅ | Demo-data требуют явного флага; policy и final HTML защищены тестами [#4](https://github.com/Celtoman/astro-telekom/issues/4) |
 | TD-96 | [#121](https://github.com/Celtoman/astro-telekom/issues/121) ✅ | Публичные формы восстановлены после CSP-регресса; исполняемый код собирается first-party bundle, а final HTML проверяет каждый оставшийся inline hash |
 | TD-100 | [#129](https://github.com/Celtoman/astro-telekom/issues/129) ✅ | Legacy hero CTA с конечным слэшем нормализован идемпотентной data migration до строгой runtime-публикации |
-| TD-101 | [#130](https://github.com/Celtoman/astro-telekom/issues/130) 🟢 | Production HOME/INTERNET Казани сохраняют неполный legacy PageBlock snapshot вместо нового прототипа |
+| TD-101 | [#130](https://github.com/Celtoman/astro-telekom/issues/130) ✅ | Production HOME/INTERNET Казани сохраняют неполный legacy PageBlock snapshot вместо нового прототипа |
 
 ## P1
 
@@ -85,7 +85,7 @@
 | TD-49 | [#69](https://github.com/Celtoman/astro-telekom/issues/69) ✅ | Журналы заявок и тарифов используют bounded cursor-пагинацию и серверные фильтры; list DTO заявки исключает тяжелые relations |
 | TD-51 | [#71](https://github.com/Celtoman/astro-telekom/issues/71) ✅ | Admin overview оставляет реальные счетчики разделам и не показывает hardcoded catalog/publication или удаленную CRM |
 | TD-52 | [#72](https://github.com/Celtoman/astro-telekom/issues/72) ✅ | Browser security headers и hash-based CSP для web/admin закреплены edge/build-проверками |
-| TD-55 | [#75](https://github.com/Celtoman/astro-telekom/issues/75) 🟢 | Subscriber mode не соответствует полному согласованному поведению |
+| TD-55 | [#75](https://github.com/Celtoman/astro-telekom/issues/75) ✅ | Subscriber mode сразу переводит публичные контакты на отдельный номер техподдержки и сохраняет некритичный browser-флаг на 30 дней |
 | TD-56 | [#76](https://github.com/Celtoman/astro-telekom/issues/76) ✅ | UI и API требуют безопасный построчный create/update/skip с защитой от stale preview |
 | TD-57 | [#77](https://github.com/Celtoman/astro-telekom/issues/77) ✅ | Публичный сайт выводит nullable стоимость подключения; сохраненная рекомендация `show_on_site` явно отделена от статуса публикации |
 | TD-58 | [#78](https://github.com/Celtoman/astro-telekom/issues/78) ✅ | Автоматический редирект не синхронизирует статус с публикацией тарифа |

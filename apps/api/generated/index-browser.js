@@ -189,6 +189,7 @@ exports.Prisma.CityScalarFieldEnum = {
   officeHours: 'officeHours',
   status: 'status',
   phone: 'phone',
+  supportPhone: 'supportPhone',
   seo: 'seo',
   content: 'content'
 };

@@ -88,7 +88,7 @@ Seed не становится автоматической операцией �
 | --- | --- |
 | База и Redis | `DATABASE_URL`, `POSTGRES_*`, `REDIS_URL` |
 | Public build | `PUBLIC_SITE_URL`, `PUBLIC_SITE_SLUG`, server-only `SITE_DATA_API_URL`; последний определяет источник каталога во время Astro build и совместимо откатывается к `PUBLIC_API_URL`, если не задан |
-| Public browser/runtime | `PUBLIC_API_URL` — нормализуемый HTTPS base URL с path `/api/v1`; `PUBLIC_SUPPORT_PHONE`, `PUBLIC_YANDEX_METRIKA_ID`; внутренний `API_UPSTREAM` для Caddy web-контейнера задается Compose как `api:3000` |
+| Public browser/runtime | `PUBLIC_API_URL` — нормализуемый HTTPS base URL с path `/api/v1`; fallback-номера `PUBLIC_CONNECTION_PHONE` и `PUBLIC_SUPPORT_PHONE` (городские `phone`/`supportPhone` имеют приоритет), `PUBLIC_YANDEX_METRIKA_ID`; внутренний `API_UPSTREAM` для Caddy web-контейнера задается Compose как `api:3000` |
 | Domains/CORS | `PUBLIC_DOMAIN`, `ADMIN_DOMAIN`, `API_DOMAIN` только для direct Compose; `CORS_ORIGINS`, `ADMIN_URL` |
 | Coolify bootstrap/access | `RUN_BOOTSTRAP_SEED` (обязательный явный `true`/`false`), `TEST_BASIC_AUTH_USERS` (bcrypt verifier, Literal + Buildtime + Runtime; label escaping выключен) |
 | Auth/secrets | `ADMIN_API_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SUBSCRIBER_COOKIE_SECRET` |
