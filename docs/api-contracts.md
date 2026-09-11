@@ -80,8 +80,8 @@ Worker повторно проверяет persisted coverage snapshot и одн
 | POST | `/admin/tariffs/import/validate` | XLSX или rows -> сохраненный validation report. Для файла действуют лимиты 25 МБ, 10 000 строк и 256 столбцов; legacy `.xls` отклоняется. Совместимость с актуальным canonical tariff generator закреплена реальным generated fixture с пустыми optional-ячейками. |
 | POST | `/admin/tariffs/import/apply` | Атомарно применяет полный snapshot по `runId`; при warnings требует `confirmWarnings: true`. |
 | GET | `/admin/tariffs/imports`, `/admin/tariffs/imports/:id` | История и полный report import. |
-| POST | `/admin/cities/import/validate` | XLSX или rows -> city import report. Для файла действуют лимиты 25 МБ, 10 000 строк и 256 столбцов; legacy `.xls` отклоняется. |
-| POST | `/admin/cities/import/apply` | Применяет run с optional per-row `create`/`update`/`skip`; при warnings требует `confirmWarnings: true`. |
+| POST | `/admin/cities/import/validate` | XLSX или rows -> versioned city import report с номером строки, normalized candidate, существующим snapshot и field-level diff, включая смену региона. Для файла действуют лимиты 25 МБ, 10 000 строк и 256 столбцов; legacy `.xls` отклоняется. Сохраненный report прежней версии требует повторной проверки файла перед apply. |
+| POST | `/admin/cities/import/apply` | В serializable-транзакции атомарно применяет run и переводит его в `APPLIED` только с полным `actions` map: существующий slug допускает `update`/`skip`, новый — `create`/`skip`. Пропущенные, лишние, неизвестные и несовместимые действия, а также изменившийся после validate city snapshot отклоняются; при warnings дополнительно требуется `confirmWarnings: true`. |
 | GET | `/admin/cities/imports`, `/admin/cities/imports/:id` | История и полный report city import. |
 | GET | `/admin/rebuilds`, `/admin/rebuilds/:id` | Persistent статус пересборки; список можно фильтровать по `siteId`. |
 | POST | `/internal/site-rebuilds/:id/start` | Worker фиксирует начало попытки и получает payload/revision; только сервисный `x-admin-token`. |

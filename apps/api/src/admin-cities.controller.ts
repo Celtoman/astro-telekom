@@ -60,21 +60,24 @@ export class AdminCitiesController {
   }
 
   @Post('import/apply')
-  async applyImport(@Body() body: { runId?: string; actions?: Record<string, 'create' | 'update' | 'skip'>; confirmWarnings?: boolean }) {
+  async applyImport(@Body() body: { runId?: string; actions?: unknown; confirmWarnings?: boolean }) {
     if (!body.runId) throw new BadRequestException('runId обязателен');
     const run = await this.prisma.cityImportRun.findUnique({ where: { id: body.runId } });
     if (!run) throw new BadRequestException('Отчет импорта не найден');
     if (run.status === 'APPLIED') throw new BadRequestException('Импорт уже применен');
     const report = run.report as unknown as CityImportReport;
+    let result;
     try {
-      const result = await this.imports.applyReport(report, body.actions, body.confirmWarnings === true);
-      await this.prisma.cityImportRun.update({ where: { id: run.id }, data: { status: 'APPLIED', appliedAt: new Date() } });
-      await this.rebuild.enqueue({ entity: 'city-import', id: run.id, siteId: run.siteId });
-      return { runId: run.id, ...result };
+      result = await this.imports.applyReport(report, body.actions, body.confirmWarnings === true, run.id);
     } catch (error) {
-      await this.prisma.cityImportRun.update({ where: { id: run.id }, data: { status: 'FAILED' } });
+      await this.prisma.cityImportRun.updateMany({
+        where: { id: run.id, status: { not: 'APPLIED' } },
+        data: { status: 'FAILED' },
+      });
       throw error;
     }
+    await this.rebuild.enqueue({ entity: 'city-import', id: run.id, siteId: run.siteId });
+    return { runId: run.id, ...result };
   }
 
   @Get('imports')

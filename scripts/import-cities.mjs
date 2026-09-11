@@ -4,7 +4,9 @@ import process from 'node:process';
 
 const apply = process.argv.includes('--apply');
 const sourceArg = process.argv.find((argument) => argument.startsWith('--file='));
+const actionsArg = process.argv.find((argument) => argument.startsWith('--actions='));
 const sourcePath = path.resolve(sourceArg?.slice('--file='.length) || 'data/imports/cities.xlsx');
+const actionsPath = actionsArg ? path.resolve(actionsArg.slice('--actions='.length)) : null;
 const configuredApiUrl = (process.env.PUBLIC_API_URL || process.env.API_URL || 'http://localhost:3000').replace(/\/$/, '');
 const apiUrl = configuredApiUrl.endsWith('/api/v1') ? configuredApiUrl : `${configuredApiUrl}/api/v1`;
 const adminToken = process.env.ADMIN_API_TOKEN;
@@ -12,6 +14,7 @@ const siteSlug = process.env.CITY_IMPORT_SITE_SLUG || 'domru-kazan';
 const publishedCitySlug = process.env.CITY_IMPORT_PUBLISHED_SLUG || 'kazan';
 
 if (!adminToken) throw new Error('ADMIN_API_TOKEN обязателен для импорта городов');
+if (apply && !actionsPath) throw new Error('--apply требует --actions=<путь к JSON-файлу с решением для каждой строки>');
 
 async function request(route, options = {}) {
   const response = await fetch(`${apiUrl}${route}`, {
@@ -47,13 +50,17 @@ const summary = {
 console.log(JSON.stringify(summary, null, 2));
 if (validation.report.errorRows > 0) throw new Error('Импорт содержит ошибки; apply отменен');
 if (!apply) {
-  console.log('Выполнена только валидация. Для записи в БД повторите команду с --apply.');
+  console.log('Выполнена только валидация. Для записи в БД подготовьте полный JSON action map и повторите команду с --apply --actions=<путь>.');
   process.exit(0);
 }
 
+const actions = JSON.parse(await readFile(actionsPath, 'utf8'));
 const result = await request('/admin/cities/import/apply', {
   method: 'POST',
-  body: JSON.stringify({ runId: validation.runId }),
+  body: JSON.stringify({
+    runId: validation.runId,
+    actions,
+  }),
 });
 const cities = await request('/admin/cities');
 const siteCities = cities.filter((city) => city.siteId === site.id);

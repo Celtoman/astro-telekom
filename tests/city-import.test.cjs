@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { CityImportService } = require('../apps/api/dist/city-import.service.js');
+const { AdminCitiesController } = require('../apps/api/dist/admin-cities.controller.js');
 const { parseWorkbook } = require('../apps/api/dist/tariff-import.service.js');
 
 const row = (overrides = {}) => ({
@@ -23,6 +24,12 @@ function validationPrisma() {
     city: { findMany: async () => [] },
   };
 }
+
+const candidate = (overrides = {}) => ({
+  key: 'kazan', row: 2, siteId: 'site-1', subject: 'Республика Татарстан', name: 'Казань',
+  nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани', slug: 'kazan',
+  legacyUrl: null, officeAddress: null, officeHours: null, ...overrides,
+});
 
 test('city import accepts the agreed Russian XLSX aliases', async () => {
   const report = await new CityImportService(validationPrisma()).validateRows('site-1', 'cities.xlsx', [row()]);
@@ -55,6 +62,36 @@ test('city import blocks duplicate slugs and missing required values', async () 
   assert.ok(report.issues.some((issue) => issue.message.includes('Не указан slug')));
 });
 
+test('validation exposes row, region diff and an existing snapshot for safe review', async () => {
+  const prisma = {
+    site: { findUnique: async () => ({ id: 'site-1' }) },
+    city: { findMany: async () => [{
+      id: 'city-1', regionId: 'region-old', slug: 'kazan', name: 'Казань',
+      nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани',
+      legacyUrl: null, officeAddress: null, officeHours: null,
+      region: { name: 'Старый регион' },
+    }] },
+  };
+
+  const report = await new CityImportService(prisma).validateRows('site-1', 'cities.xlsx', [row({
+    'Субъект РФ': 'Республика Татарстан',
+    'Город имен. падеж': 'Казань',
+    'Город предлож. падеж - dom_ru_v': 'Казани',
+    'Город родит. падеж': 'Казани',
+    slug: 'kazan',
+    adres_ofisa: '',
+    rezhim_raboty_ofisa: '',
+  })]);
+
+  assert.equal(report.candidates[0].row, 2);
+  assert.deepEqual(report.candidates[0].changes.subject, { from: 'Старый регион', to: 'Республика Татарстан' });
+  assert.deepEqual(report.candidates[0].existingSnapshot, {
+    id: 'city-1', regionId: 'region-old', subject: 'Старый регион', name: 'Казань',
+    nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани',
+    legacyUrl: null, officeAddress: null, officeHours: null,
+  });
+});
+
 test('new city creates the standard draft page set', async () => {
   const pages = [];
   const calls = [];
@@ -62,7 +99,7 @@ test('new city creates the standard draft page set', async () => {
     site: { findUnique: async () => ({ id: 'site-1' }) },
     city: { findMany: async () => [] },
     $transaction: async (callback, options) => {
-      assert.deepEqual(options, { timeout: 30_000 });
+      assert.deepEqual(options, { timeout: 30_000, isolationLevel: 'Serializable' });
       return callback({
         region: { findMany: async () => [], create: async ({ data }) => ({ id: 'region-1', ...data }) },
         city: { findMany: async () => [], create: async ({ data }) => ({ id: 'city-1', ...data }), update: async () => ({}) },
@@ -72,7 +109,7 @@ test('new city creates the standard draft page set', async () => {
   };
   const service = new CityImportService(prisma);
   const report = await service.validateRows('site-1', 'cities.xlsx', [row()]);
-  const result = await service.applyReport(report);
+  const result = await service.applyReport(report, { aleysk: 'create' });
   calls.push(result);
   assert.equal(result.created, 1);
   assert.equal(result.pagesCreated, 6);
@@ -103,7 +140,7 @@ test('city import reuses a seed region with the same normalized slug', async () 
     slug: 'zelenodolsk',
   })]);
 
-  const result = await new CityImportService(prisma).applyReport(report);
+  const result = await new CityImportService(prisma).applyReport(report, { zelenodolsk: 'create' });
 
   assert.equal(result.created, 1);
   assert.equal(regionCreated, false);
@@ -120,6 +157,220 @@ test('city import warnings require explicit confirmation before apply', async ()
   })]);
   const service = new CityImportService(prisma);
 
-  await assert.rejects(service.applyReport(report), /подтвердить предупреждения/i);
+  await assert.rejects(service.applyReport(report, { aleysk: 'create' }), /подтвердить предупреждения/i);
   assert.equal(transactionCalled, false);
+});
+
+test('city import applies an explicit create, update and skip action map atomically', async () => {
+  const updated = [];
+  const created = [];
+  const pages = [];
+  let transactionOptions;
+  const currentUpdate = {
+    id: 'city-update', siteId: 'site-1', regionId: 'region-1', slug: 'kazan', name: 'Старое имя',
+    nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани',
+    legacyUrl: null, officeAddress: null, officeHours: null, region: { name: 'Республика Татарстан' },
+  };
+  const currentSkip = {
+    id: 'city-skip', siteId: 'site-1', regionId: 'region-1', slug: 'innopolis', name: 'Иннополис',
+    nameInstrumental: null, namePrepositional: 'Иннополисе', nameGenitive: 'Иннополиса',
+    legacyUrl: null, officeAddress: null, officeHours: null, region: { name: 'Республика Татарстан' },
+  };
+  const report = {
+    reportVersion: 2, siteId: 'site-1', errorRows: 0, warningRows: 0,
+    candidates: [
+      candidate({ existingId: 'city-update', existingSnapshot: {
+        name: 'Старое имя', officeHours: null, id: 'city-update', subject: 'Республика Татарстан',
+        legacyUrl: null, regionId: 'region-1', namePrepositional: 'Казани', officeAddress: null,
+        nameGenitive: 'Казани', nameInstrumental: null,
+      } }),
+      candidate({ key: 'innopolis', slug: 'innopolis', name: 'Иннополис', existingId: 'city-skip', existingSnapshot: {
+        id: 'city-skip', regionId: 'region-1', subject: 'Республика Татарстан', name: 'Иннополис',
+        nameInstrumental: null, namePrepositional: 'Иннополисе', nameGenitive: 'Иннополиса',
+        legacyUrl: null, officeAddress: null, officeHours: null,
+      } }),
+      candidate({ key: 'zelenodolsk', slug: 'zelenodolsk', name: 'Зеленодольск' }),
+    ],
+  };
+  const prisma = {
+    $transaction: async (callback, options) => {
+      transactionOptions = options;
+      return callback({
+        region: { findMany: async () => [{ id: 'region-1', siteId: 'site-1', name: 'Республика Татарстан', slug: 'respublika-tatarstan' }] },
+        city: {
+          findMany: async () => [currentUpdate, currentSkip],
+          update: async ({ where, data }) => { updated.push({ where, data }); return { ...currentUpdate, ...data }; },
+          create: async ({ data }) => { created.push(data); return { id: 'city-new', ...data }; },
+        },
+        page: { createMany: async ({ data }) => { pages.push(...data); return { count: data.length }; } },
+      });
+    },
+  };
+
+  const result = await new CityImportService(prisma).applyReport(report, {
+    kazan: 'update', innopolis: 'skip', zelenodolsk: 'create',
+  });
+
+  assert.deepEqual(result, { created: 1, updated: 1, skipped: 1, pagesCreated: 6 });
+  assert.deepEqual(updated.map((item) => item.where.id), ['city-update']);
+  assert.equal(created.length, 1);
+  assert.equal(pages.length, 6);
+  assert.equal(transactionOptions.isolationLevel, 'Serializable');
+});
+
+test('city import rejects missing, unknown, invalid and state-incompatible actions before writes', async () => {
+  let transactionCalled = false;
+  const service = new CityImportService({
+    $transaction: async () => { transactionCalled = true; },
+  });
+  const report = {
+    reportVersion: 2, siteId: 'site-1', errorRows: 0, warningRows: 0,
+    candidates: [candidate({ existingId: 'city-1', existingSnapshot: { id: 'city-1' } })],
+  };
+
+  await assert.rejects(service.applyReport(report, {}), /не выбрано действие/i);
+  await assert.rejects(service.applyReport(report, { kazan: 'skip', other: 'skip' }), /не относится к .*отчету/i);
+  await assert.rejects(service.applyReport(report, { kazan: 'delete' }), /недопустимое действие/i);
+  await assert.rejects(service.applyReport(report, { kazan: 'create' }), /уже существует/i);
+  await assert.rejects(service.applyReport({ ...report, candidates: [candidate()] }, { kazan: 'update' }), /не найден для обновления/i);
+  assert.equal(transactionCalled, false);
+});
+
+test('city import rejects a stale changed-city snapshot instead of overwriting newer data', async () => {
+  let updated = false;
+  const report = {
+    reportVersion: 2, siteId: 'site-1', errorRows: 0, warningRows: 0,
+    candidates: [candidate({ existingId: 'city-1', existingSnapshot: {
+      id: 'city-1', regionId: 'region-1', subject: 'Республика Татарстан', name: 'Старое имя',
+      nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани',
+      legacyUrl: null, officeAddress: null, officeHours: null,
+    } })],
+  };
+  const prisma = {
+    $transaction: async (callback) => callback({
+      region: { findMany: async () => [{ id: 'region-1', name: 'Республика Татарстан', slug: 'respublika-tatarstan' }] },
+      city: { findMany: async () => [{
+        id: 'city-1', regionId: 'region-1', slug: 'kazan', name: 'Новое имя из другой сессии',
+        nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани',
+        legacyUrl: null, officeAddress: null, officeHours: null, region: { name: 'Республика Татарстан' },
+      }], update: async () => { updated = true; } },
+    }),
+  };
+
+  await assert.rejects(
+    new CityImportService(prisma).applyReport(report, { kazan: 'update' }),
+    /изменился после проверки/i,
+  );
+  assert.equal(updated, false);
+});
+
+test('city import controller forwards the complete action map and queues one rebuild after success', async () => {
+  const actions = { kazan: 'update', innopolis: 'skip' };
+  const report = { reportVersion: 2, siteId: 'site-1', errorRows: 0, warningRows: 0, candidates: [] };
+  const calls = [];
+  const prisma = {
+    cityImportRun: {
+      findUnique: async () => ({ id: 'run-1', siteId: 'site-1', status: 'VALIDATED', report }),
+      update: async ({ data }) => { calls.push(['run', data.status]); },
+    },
+  };
+  const imports = { applyReport: async (received, receivedActions, confirmWarnings, runId) => {
+    assert.equal(received, report);
+    assert.deepEqual(receivedActions, actions);
+    assert.equal(confirmWarnings, true);
+    assert.equal(runId, 'run-1');
+    return { created: 0, updated: 1, skipped: 1, pagesCreated: 0 };
+  } };
+  const rebuild = { enqueue: async (job) => { calls.push(['rebuild', job]); } };
+
+  const result = await new AdminCitiesController(prisma, rebuild, imports).applyImport({
+    runId: 'run-1', actions, confirmWarnings: true,
+  });
+
+  assert.equal(result.updated, 1);
+  assert.deepEqual(calls, [
+    ['rebuild', { entity: 'city-import', id: 'run-1', siteId: 'site-1' }],
+  ]);
+});
+
+test('city import controller never downgrades an applied run when rebuild enqueue fails', async () => {
+  const runUpdates = [];
+  const report = { reportVersion: 2, siteId: 'site-1', errorRows: 0, warningRows: 0, candidates: [] };
+  const prisma = {
+    cityImportRun: {
+      findUnique: async () => ({ id: 'run-1', siteId: 'site-1', status: 'VALIDATED', report }),
+      update: async ({ data }) => { runUpdates.push(data.status); },
+    },
+  };
+  const imports = { applyReport: async (_report, _actions, _confirmWarnings, runId) => {
+    assert.equal(runId, 'run-1');
+    return { created: 0, updated: 0, skipped: 0, pagesCreated: 0 };
+  } };
+  const rebuild = { enqueue: async () => { throw new Error('queue unavailable'); } };
+
+  await assert.rejects(
+    new AdminCitiesController(prisma, rebuild, imports).applyImport({ runId: 'run-1', actions: {} }),
+    /queue unavailable/,
+  );
+  assert.deepEqual(runUpdates, []);
+});
+
+test('city import run can be applied only once and a losing request cannot downgrade APPLIED', async () => {
+  let runStatus = 'VALIDATED';
+  const report = {
+    reportVersion: 2, siteId: 'site-1', errorRows: 0, warningRows: 0,
+    candidates: [candidate({ existingId: 'city-1', existingSnapshot: {
+      id: 'city-1', regionId: 'region-1', subject: 'Республика Татарстан', name: 'Казань',
+      nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани',
+      legacyUrl: null, officeAddress: null, officeHours: null,
+    } })],
+  };
+  const prisma = {
+    $transaction: async (callback) => callback({
+      region: { findMany: async () => [] },
+      city: { findMany: async () => [] },
+      cityImportRun: { updateMany: async ({ where, data }) => {
+        assert.deepEqual(where, { id: 'run-1', status: { not: 'APPLIED' } });
+        if (runStatus === 'APPLIED') return { count: 0 };
+        runStatus = data.status;
+        return { count: 1 };
+      } },
+    }),
+  };
+  const service = new CityImportService(prisma);
+
+  await service.applyReport(report, { kazan: 'skip' }, false, 'run-1');
+  await assert.rejects(service.applyReport(report, { kazan: 'skip' }, false, 'run-1'), /уже применен/i);
+  assert.equal(runStatus, 'APPLIED');
+
+  const failureUpdates = [];
+  const controller = new AdminCitiesController({
+    cityImportRun: {
+      findUnique: async () => ({ id: 'run-1', siteId: 'site-1', status: 'VALIDATED', report }),
+      updateMany: async (request) => { failureUpdates.push(request); return { count: 0 }; },
+    },
+  }, { enqueue: async () => {} }, { applyReport: async () => { throw new Error('serialization conflict'); } });
+  await assert.rejects(controller.applyImport({ runId: 'run-1', actions: { kazan: 'skip' } }), /serialization conflict/);
+  assert.deepEqual(failureUpdates[0].where, { id: 'run-1', status: { not: 'APPLIED' } });
+});
+
+test('city import rejects legacy validation reports with an explicit revalidation message', async () => {
+  let transactionCalled = false;
+  const service = new CityImportService({
+    $transaction: async () => { transactionCalled = true; },
+  });
+
+  await assert.rejects(
+    service.applyReport({ siteId: 'site-1', errorRows: 0, warningRows: 0, candidates: [candidate()] }, { kazan: 'create' }),
+    /старом формате.*проверьте файл заново/i,
+  );
+  assert.equal(transactionCalled, false);
+});
+
+test('city import CLI requires an operator-provided action map instead of inventing row decisions', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'import-cities.mjs'), 'utf8');
+  assert.match(source, /apply\s*&&\s*!actionsPath/);
+  assert.match(source, /JSON\.parse\(await readFile\(actionsPath/);
+  assert.match(source, /runId:\s*validation\.runId,\s*actions/);
+  assert.doesNotMatch(source, /candidate\.existingId\s*\?\s*'update'\s*:\s*'create'/);
 });

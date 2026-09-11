@@ -62,10 +62,11 @@ Seed создаст опубликованные `domru-kazan` и `kazan`, ше�
 
 ```powershell
 pnpm cities:import
-pnpm cities:import -- --apply
+pnpm cities:import -- --apply --actions=data/imports/city-actions.json
 ```
 
 Команда использует [data/imports/cities.xlsx](data/imports/cities.xlsx), оставляет опубликованной только Казань, а остальные города и их страницы — черновиками. Нужен тот же `ADMIN_API_TOKEN`, с которым запущен API; подробности — в [описании источника](data/imports/README.md).
+Перед применением admin `/cities` показывает каждую валидную строку, старые и новые значения и требует выбрать `update`/`skip` для существующего slug либо `create`/`skip` для нового. API принимает только полный action map текущего validation report и отклоняет устаревший preview. CLI не подставляет решения автоматически: с `--apply` обязателен `--actions=<path>` к JSON-объекту вида `{ "kazan": "update", "innopolis": "skip" }`, содержащему действие для каждого кандидата.
 
 ## Проверка рабочего дерева
 

@@ -34,6 +34,11 @@ test('city workspace implements list, validation report, guarded apply and rebui
   assert.match(source, /confirmWarnings/);
   assert.match(source, /report\?\.candidates/);
   assert.match(source, /report\.issues/);
+  assert.match(source, /candidate\.changes/);
+  assert.match(source, /<select/);
+  assert.match(source, /unresolvedActionCount/);
+  assert.match(source, /candidate\.key,\s*""/);
+  assert.match(source, /body:\s*\{\s*runId,\s*actions,\s*confirmWarnings\s*\}/);
   assert.match(source, /sites\.length\s*!==\s*1/);
   assert.doesNotMatch(source, /x-admin-token|Authorization|sessionStorage|localStorage/);
 });

@@ -73,7 +73,7 @@
 | TD-51 | [#71](https://github.com/Celtoman/astro-telekom/issues/71) ✅ | Admin overview оставляет реальные счетчики разделам и не показывает hardcoded catalog/publication или удаленную CRM |
 | TD-52 | [#72](https://github.com/Celtoman/astro-telekom/issues/72) ✅ | Browser security headers и hash-based CSP для web/admin закреплены edge/build-проверками |
 | TD-55 | [#75](https://github.com/Celtoman/astro-telekom/issues/75) 🟢 | Subscriber mode не соответствует полному согласованному поведению |
-| TD-56 | [#76](https://github.com/Celtoman/astro-telekom/issues/76) 🟢 | UI импорта городов не дает выбрать create/update/skip по строкам |
+| TD-56 | [#76](https://github.com/Celtoman/astro-telekom/issues/76) ✅ | UI и API требуют безопасный построчный create/update/skip с защитой от stale preview |
 | TD-57 | [#77](https://github.com/Celtoman/astro-telekom/issues/77) 🟢 | `connection_cost` не выводится, а `show_on_site` не сохраняется по согласованной семантике |
 | TD-58 | [#78](https://github.com/Celtoman/astro-telekom/issues/78) 🟢 | Автоматический редирект не синхронизирует статус с публикацией тарифа |
 | TD-60 | [#80](https://github.com/Celtoman/astro-telekom/issues/80) 🟢 | Нет единого сброса временных фильтров во всех разделах |

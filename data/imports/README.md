@@ -7,9 +7,9 @@
 ```bash
 # API должен быть запущен, ADMIN_API_TOKEN — совпадать с его окружением
 pnpm cities:import
-pnpm cities:import -- --apply
+pnpm cities:import -- --apply --actions=data/imports/city-actions.json
 ```
 
-Первая команда только сохраняет validation run и выводит счетчики. Вторая применяет импорт, затем оставляет `kazan` единственным городом со статусом `PUBLISHED`; остальные города переводит в `DRAFT`. Другой сайт или единственный опубликованный город можно явно задать через `CITY_IMPORT_SITE_SLUG` и `CITY_IMPORT_PUBLISHED_SLUG`.
+Первая команда только сохраняет validation run и выводит счетчики. Вторая требует JSON action map с явным `create`, `update` или `skip` для каждого кандидата, применяет импорт, затем оставляет `kazan` единственным городом со статусом `PUBLISHED`; остальные города переводит в `DRAFT`. Решения автоматически не подставляются. Другой сайт или единственный опубликованный город можно явно задать через `CITY_IMPORT_SITE_SLUG` и `CITY_IMPORT_PUBLISHED_SLUG`.
 
 XLSX является входным источником, а не runtime-базой. После apply источник правды для приложений — PostgreSQL; web по-прежнему читает только опубликованную Казань во время `astro build`.
