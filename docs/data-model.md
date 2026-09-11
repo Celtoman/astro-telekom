@@ -11,9 +11,13 @@
 | `Region` | `siteId`, `name`, `slug`, `phone`, `content` | Unique `(siteId, slug)`, содержит cities. |
 | `City` | site/region, names in three cases, legacy/office fields, `status`, `phone`, `seo`, `content` | Unique `(siteId, slug)`, имеет pages, tariffs, leads, checks, redirects. |
 | `Page` | site/city, `type`, `title`, `slug`, `status`, `seo`, `content` | Unique `(cityId, slug)`, имеет ordered blocks. |
-| `PageBlock` | `blockType`, `position`, `visible`, JSON `data`, optional `source` | Cascade delete с page. API разрешает hero, rich_text и tariff_grid. |
+| `PageBlock` | `blockType`, `position`, `visible`, JSON `data`, optional `source` | Cascade delete с page. API разрешает `hero`, `rich_text`, `tariff_grid`, `service_grid`, `feature_grid`, `steps` и `faq`; `position` задает порядок visible-блоков. |
 
 `PublishStatus` принимает `DRAFT`, `PUBLISHED`, `ARCHIVED`. В модели нет даты публикации, расписания, версии, preview token, автора изменения или корзины.
+
+JSON `data` не является произвольным хранилищем. API применяет закрытый discriminated contract по `blockType`: hero содержит заголовок, текст и опциональные eyebrow/CTA; rich text — заголовок и текст; tariff grid — заголовок и опциональные фильтр услуги, лимит 1–12 и тип страницы для ссылки на полный каталог; service grid — заголовок и ссылки по допустимому типу опубликованной страницы; feature grid и steps — заголовок и массив пар «заголовок + текст»; FAQ — заголовок и массив пар «вопрос + ответ». Неизвестные ключи, raw HTML, пустые обязательные строки, превышение лимитов и небезопасные CTA отклоняются. Массивы ограничены по числу элементов. При PATCH новое `data` валидируется как полная замена контракта вместе с сохраненным `blockType`, а не как свободный частичный JSON; условная запись блокирует конкурентную смену discriminator. Public catalog повторно валидирует сохраненный JSON и требует ровно один видимый hero у непустой блочной страницы.
+
+Форма заявки остается отдельным системным компонентом публичной страницы и в `PageBlock` не моделируется. Для страниц с блоками именно их упорядоченный набор определяет контентную структуру; fallback-шаблон применяется только при отсутствии блоков. Это не добавляет версии, audit trail, schedule, rollback или глубокое наследование: соответствующие направления [#13](https://github.com/Celtoman/astro-telekom/issues/13) и [#14](https://github.com/Celtoman/astro-telekom/issues/14) отложены.
 
 ## Тарифы и импорты
 

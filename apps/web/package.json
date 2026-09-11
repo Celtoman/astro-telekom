@@ -9,6 +9,7 @@
     "lint": "cross-env ALLOW_DEMO_DATA=true astro check"
   },
   "dependencies": {
+    "@fontsource-variable/geist": "5.3.0",
     "astro": "^7.3.1"
   },
   "devDependencies": {

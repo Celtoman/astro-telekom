@@ -60,7 +60,7 @@ const pageServiceType = page && leadPageTypes.includes(page.type as typeof leadP
     <section class="section container"><h2>Подключение тарифа</h2><div class="grid"><article class="card"><h3>Проверка доступности</h3><p>Система проверит, доступна ли сеть по вашему адресу.</p></article><article class="card"><h3>Консультация</h3><p>Оператор уточнит условия и ответит на вопросы.</p></article><article class="card"><h3>Заявка</h3><p>Оставьте номер телефона, чтобы согласовать подключение.</p></article></div></section>
     <AddressForm apiUrl={apiUrl} siteSlug={publicSiteSlug} pageSlug={tariff.slug} city={city} mode="lead" serviceType={tariff.serviceType} tariffSlug={tariff.slug} />
   </> : page?.type === 'ADDRESS_CHECK' ? <AddressForm apiUrl={apiUrl} siteSlug={publicSiteSlug} pageSlug={page.slug} city={city} mode="visible" /> : page?.blocks?.length ? <>
-    <BlockRenderer blocks={page.blocks} tariffs={pageTariffs} citySlug={city.slug} />
+    <BlockRenderer blocks={page.blocks} tariffs={pageTariffs} citySlug={city.slug} pages={city.pages} />
     {pageServiceType && <AddressForm apiUrl={apiUrl} siteSlug={publicSiteSlug} pageSlug={page.slug} city={city} mode="lead" serviceType={pageServiceType} />}
   </> : page?.type === 'FAQ' ? <>
     <section class="hero"><div class="container"><span class="eyebrow">Поддержка · {city.name}</span><h1>{defaults!.heading}</h1><p class="lead">{defaults!.lead}</p></div></section>

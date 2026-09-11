@@ -11,7 +11,9 @@ export interface TariffView {
   serviceType: 'INTERNET' | 'INTERNET_TV' | 'TV' | 'OTHER';
   service: string;
   speed: string;
+  speedMbps: number | null;
   price: string;
+  priceAmount: number | null;
   connection: string | null;
   seo: Record<string, unknown> | null;
 }
@@ -29,6 +31,8 @@ function connectionLabel(value: unknown): string | null {
 
 export function tariffView(tariff: Record<string, unknown>): TariffView {
   const price = tariff.promoPrice ?? tariff.standardPrice;
+  const priceAmount = price === null || price === undefined || String(price).trim() === '' ? null : Number(price);
+  const speedAmount = tariff.speed === null || tariff.speed === undefined || String(tariff.speed).trim() === '' ? null : Number(tariff.speed);
   const serviceType = ['INTERNET', 'INTERNET_TV', 'TV'].includes(String(tariff.serviceType))
     ? String(tariff.serviceType) as TariffView['serviceType']
     : 'OTHER';
@@ -37,8 +41,10 @@ export function tariffView(tariff: Record<string, unknown>): TariffView {
     name: String(tariff.name),
     serviceType,
     service: serviceLabels[serviceType] || 'Услуга',
-    speed: tariff.speed ? `до ${tariff.speed} Мбит/с` : 'Условия уточняются',
-    price: price == null ? 'Цена уточняется' : `${price} ₽/мес.`,
+    speed: Number.isFinite(speedAmount) && speedAmount !== null ? `до ${speedAmount} Мбит/с` : 'Условия уточняются',
+    speedMbps: Number.isFinite(speedAmount) && speedAmount !== null ? speedAmount : null,
+    price: Number.isFinite(priceAmount) && priceAmount !== null ? `${price} ₽/мес.` : 'Цена уточняется',
+    priceAmount: Number.isFinite(priceAmount) && priceAmount !== null ? priceAmount : null,
     connection: connectionLabel(tariff.connectionFee),
     seo: tariff.seo,
   };

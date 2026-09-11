@@ -38,8 +38,8 @@ const yandexWssOrigins = yandexMetrikaHosts.map((host) => `wss://${host}`);
 const yandexFrameOrigins = yandexHttpsOrigins.filter((origin) => origin !== 'https://yastatic.net');
 
 const page = (type, slug, title) => ({ type, slug, title, status: 'PUBLISHED', seo: {}, blocks: [] });
-const tariff = (slug, name, speed, standardPrice, connectionFee = null) => ({
-  name, slug, serviceType: 'INTERNET', speed, standardPrice, promoPrice: null, connectionFee, status: 'PUBLISHED', seo: {},
+const tariff = (slug, name, speed, standardPrice, connectionFee = null, serviceType = 'INTERNET') => ({
+  name, slug, serviceType, speed, standardPrice, promoPrice: null, connectionFee, status: 'PUBLISHED', seo: {},
 });
 const apiFixture = {
   site: { name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test' },
@@ -48,17 +48,47 @@ const apiFixture = {
     {
       name: 'Казань', namePrepositional: 'Казани', slug: 'kazan', phone: '8 (800) 555-35-35', status: 'PUBLISHED',
       pages: [
-        page('HOME', '', 'Домашний интернет в Казани'),
+        {
+          ...page('HOME', '', 'Домашний интернет в Казани'),
+          blocks: [
+            { blockType: 'hero', data: { eyebrow: 'Дом.ру в Казани', title: 'Домашний интернет и телевидение в Казани', text: 'Выберите услугу и проверьте подключение.' } },
+            { blockType: 'service_grid', data: { title: 'Услуги для дома', items: [{ pageType: 'INTERNET', title: 'Домашний интернет', text: 'Тарифы для квартиры и дома.' }] } },
+            { blockType: 'tariff_grid', data: { title: 'Популярные тарифы', serviceType: 'INTERNET_TV', limit: 6, morePageType: 'INTERNET_TV' } },
+            { blockType: 'steps', data: { title: 'Как проходит подключение', items: [
+              { title: 'Проверка адреса', text: 'Уточняем техническую возможность.' },
+              { title: 'Заявка оператору', text: 'Передаем контакт после проверки.' },
+              { title: 'Согласование', text: 'Подтверждаем тариф и время.' },
+              { title: 'Подключение', text: 'Специалист выполняет работы.' },
+            ] } },
+            { blockType: 'feature_grid', data: { title: 'Оборудование для интернета и ТВ', items: [{ title: 'Wi-Fi-роутер', text: 'Условия предоставления уточнит оператор.' }] } },
+            { blockType: 'feature_grid', data: { title: 'Что важно при выборе', items: [{ title: 'Скорость', text: 'Сравните опубликованные тарифы.' }] } },
+            { blockType: 'faq', data: { title: 'Популярные вопросы', items: [{ question: 'Как проверить адрес?', answer: 'Введите адрес и выберите подсказку.' }] } },
+          ],
+        },
         {
           ...page('INTERNET', 'internet', 'Домашний интернет в Казани'),
-          blocks: [{ blockType: 'hero', data: { title: 'Домашний интернет', text: 'Описание', ctaHref: '/kazan/proverka-adresa/?utm_source=hero' } }],
+          blocks: [
+            { blockType: 'hero', data: { eyebrow: 'Дом.ру в Казани', title: 'Домашний интернет', text: 'Тарифы для дома с проверкой подключения по адресу.', ctaText: 'Оставить заявку', ctaHref: '#request' } },
+            { blockType: 'tariff_grid', data: { title: 'Тарифы домашнего интернета' } },
+            { blockType: 'feature_grid', data: { title: 'Подключение без лишних шагов', items: [{ title: 'Проверка по адресу', text: 'Сначала уточняем техническую возможность подключения.' }] } },
+            { blockType: 'steps', data: { title: 'Как подключиться', items: [{ title: 'Укажите адрес', text: 'Выберите адрес из подсказок.' }, { title: 'Дождитесь звонка', text: 'Оператор уточнит доступные условия.' }] } },
+            { blockType: 'faq', data: { title: 'Вопросы и ответы', items: [{ question: 'Как узнать, доступно ли подключение?', answer: 'Укажите адрес в форме заявки. <script>alert(1)</script>' }] } },
+          ],
         },
+        page('INTERNET_TV', 'internet-tv', 'Интернет и ТВ в Казани'),
         page('ADDRESS_CHECK', 'proverka-adresa', 'Проверка адреса в Казани'),
-        page('FAQ', 'faq', 'Вопросы и ответы — Казань'),
+        {
+          ...page('FAQ', 'faq', 'Вопросы и ответы — Казань'),
+          blocks: [
+            { blockType: 'hero', data: { eyebrow: 'Помощь', title: 'Вопросы и ответы', text: 'Коротко о подключении.' } },
+            { blockType: 'rich_text', data: { title: 'Как узнать доступность?', text: 'Введите адрес в форме заявки.' } },
+          ],
+        },
         { ...page('FAQ', 'draft-page', 'Черновая страница'), status: 'DRAFT' },
       ],
       tariffs: [
         tariff('api-internet-500', 'API Интернет 500', 500, 777, 0),
+        tariff('api-internet-tv-500', 'API Интернет и ТВ 500', 500, 999, 0, 'INTERNET_TV'),
         { ...tariff('draft-tariff-in-published-city', 'Черновой тариф', 100, 100), status: 'DRAFT' },
       ],
     },
@@ -177,7 +207,7 @@ test('web build uses API data and final HTML passes the publication smoke contra
       ALLOW_DEMO_DATA: '',
     });
     assert.equal(build.code, 0, build.output);
-    assert.match(build.output, /Pre-publication SEO gate passed: 10 indexable URL\(s\), 11 HTML file\(s\)\./);
+    assert.match(build.output, /Pre-publication SEO gate passed: 12 indexable URL\(s\), 13 HTML file\(s\)\./);
   });
 
   const root = await readBuilt('index.html');
@@ -188,6 +218,7 @@ test('web build uses API data and final HTML passes the publication smoke contra
   const almetyevskTariff = await readBuilt(join('almetyevsk', 'almet-internet-300', 'index.html'));
   const kazanAddressCheck = await readBuilt(join('kazan', 'proverka-adresa', 'index.html'));
   const kazanInternet = await readBuilt(join('kazan', 'internet', 'index.html'));
+  const kazanFaq = await readBuilt(join('kazan', 'faq', 'index.html'));
   const robots = await readBuilt('robots.txt');
   const sitemap = await readBuilt('sitemap.xml');
   const notFound = await readBuilt('404.html');
@@ -237,9 +268,20 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(root, /href="\/kazan"/);
   assert.match(root, /href="\/almetyevsk"/);
   assert.doesNotMatch(root, /href="\/(?:kazan|almetyevsk)\/"/);
-  assert.match(kazan, /<h1>Домашний интернет и телевидение в Казани<\/h1>/);
-  assert.match(kazan, /API Интернет 500/);
-  assert.match(kazan, /777 ₽\/мес\./);
+  assert.match(kazan, /<h1[^>]*>Домашний интернет и телевидение в Казани<\/h1>/);
+  assert.match(kazan, /data-city-first-screen/);
+  assert.match(kazan, /src="\/images\/home-connection-equipment\.webp"/);
+  assert.match(kazan, /data-form-mode="visible"/);
+  assert.match(kazan, /2 тарифа/);
+  assert.match(kazan, /500 Мбит\/с/);
+  assert.match(kazan, /от 777 ₽\/мес\./);
+  assert.match(kazan, /API Интернет и ТВ 500/);
+  assert.doesNotMatch(kazan, /<h3[^>]*>API Интернет 500<\/h3>/);
+  assert.match(kazan, /href="\/kazan\/internet-tv"[^>]*>Все тарифы услуги/);
+  assert.equal((kazan.match(/<h2[^>]*>Популярные тарифы<\/h2>/g) || []).length, 1);
+  assert.equal((kazan.match(/data-block-type="tariff_grid"/g) || []).length, 1);
+  assert.match(kazan, /data-block-type="service_grid"/);
+  assert.match(kazan, /999 ₽\/мес\./);
   assert.match(kazan, /Бесплатное подключение/);
   assert.doesNotMatch(kazan, /Цена уточняется/);
   assert.match(tariff, /<h1>API Интернет 500<\/h1>/);
@@ -260,6 +302,11 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(kazanAddressCheck, /maxlength="300"/);
   assert.match(kazanAddressCheck, /aria-expanded="false"/);
   assert.match(addressFormSource, /suggestion:\s*selectedSuggestion/);
+  assert.equal(
+    (addressFormSource.match(/pageSlug:\s*pageSlug\s*\|\|\s*undefined/g) || []).length,
+    2,
+    'home forms must omit the optional pageSlug instead of sending an empty string',
+  );
   assert.match(addressFormSource, /SUGGESTION_DEBOUNCE_MS\s*=\s*500/);
   assert.match(addressFormSource, /suggestionCache/);
   assert.match(addressFormSource, /response\.status\s*===\s*429/);
@@ -268,16 +315,16 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.doesNotMatch(addressFormSource, /setAddressHint\(error instanceof Error \? error\.message/);
   assert.match(addressFormSource, /ArrowDown/);
   assert.match(addressFormSource, /ArrowUp/);
-  assert.match(kazanAddressCheck, /aria-selected/);
-  assert.match(kazanAddressCheck, /address-option-primary/);
-  assert.match(kazanAddressCheck, /address-option-secondary/);
+  assert.match(addressFormSource, /aria-selected/);
+  assert.match(addressFormSource, /address-option-primary/);
+  assert.match(addressFormSource, /address-option-secondary/);
   assert.match(addressFormSource, /Выберите адрес/);
   assert.match(addressFormSource, /createElement\('mark'\)/);
   assert.match(addressFormSource, /items\.slice\(0,\s*5\)/);
   assert.match(addressFormSource, /credentials:\s*'include'/);
   assert.doesNotMatch(addressFormSource, /innerHTML/);
-  assert.match(kazanAddressCheck, /\.address-suggestions\[data-astro-cid-[^\]]+\] \.address-option\{/);
-  assert.doesNotMatch(kazanAddressCheck, /\.address-option\[data-astro-cid-[^\]]+\]\{/);
+  assert.match(addressFormSource, /\.address-suggestions :global\(\.address-option\)/);
+  assert.doesNotMatch(addressFormSource, /\.address-option\[data-astro-cid-/);
   assert.doesNotMatch(kazanAddressCheck, /DADATA_TOKEN|DADATA_SECRET/);
   assert.match(kazanAddressCheck, /data-form-mode="visible"/);
   assert.match(kazanAddressCheck, /data-phone-step[^>]*hidden/);
@@ -287,8 +334,32 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(addressFormSource, /Свяжитесь с технической поддержкой/);
   assert.match(addressFormSource, /mode === 'visible' \? 'visible-address-check' : 'lead-form'/);
   assert.match(kazanInternet, /data-form-mode="lead"/);
+  assert.match(kazanInternet, /<section[^>]+data-block-type="feature_grid"/);
+  assert.match(kazanInternet, /<ol[^>]+class="steps-grid steps-grid-count-2"/);
+  assert.match(kazanInternet, /<details[^>]*><summary[^>]*>Как узнать, доступно ли подключение\?<\/summary>/);
+  assert.doesNotMatch(kazanInternet, /<script>alert\(1\)<\/script>/);
+  assert.match(kazanInternet, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
+  assert.equal((kazanInternet.match(/<h1\b/g) || []).length, 1);
+  const internetBlockOrder = ['hero', 'tariff_grid', 'feature_grid', 'steps', 'faq']
+    .map((blockType) => kazanInternet.indexOf(`data-block-type="${blockType}"`));
+  assert.ok(internetBlockOrder.every((index) => index >= 0), 'all service landing blocks must be rendered');
+  assert.deepEqual(internetBlockOrder, [...internetBlockOrder].sort((left, right) => left - right));
+  assert.match(kazanInternet, /id="request"/);
+  assert.match(kazanInternet, /href="#request"/);
+  assert.match(kazanInternet, /API Интернет 500/);
+  assert.doesNotMatch(kazanInternet, /API Интернет и ТВ 500/);
+  assert.match(kazanInternet, /aria-label="Подробнее о тарифе API Интернет 500"/);
+  assert.match(kazan, /aria-label="Подробнее об услуге Домашний интернет"/);
+  assert.match(kazan, /href="tel:88005553535"[^>]*>8 \(800\) 555-35-35<\/a>/);
+  const homeBlockOrder = ['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'faq']
+    .map((blockType) => kazan.indexOf(`data-block-type="${blockType}"`));
+  assert.ok(homeBlockOrder.every((index) => index >= 0), 'all city home blocks must be rendered');
+  assert.deepEqual(homeBlockOrder, [...homeBlockOrder].sort((left, right) => left - right));
+  assert.match(kazan, /<ol[^>]+class="steps-grid steps-grid-count-4"/);
+  assert.equal((kazan.match(/<h1\b/g) || []).length, 1);
+  assert.match(kazanFaq, /data-block-type="rich_text"/);
+  assert.equal((kazanFaq.match(/<h1\b/g) || []).length, 1);
   assert.match(addressFormSource, /Спасибо! Заявка отправлена/);
-  assert.match(kazanInternet, /href="\/kazan\/proverka-adresa\?utm_source=hero"/);
   assert.match(tariff, /data-form-mode="lead"/);
   assertInlineScriptsAuthorized(root, 'public root');
   assertInlineScriptsAuthorized(kazanAddressCheck, 'address-check page');
@@ -299,6 +370,7 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/kazan<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/kazan\/api-internet-500<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/kazan\/api-internet-tv-500<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/internet<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/almet-internet-300<\/loc>/);

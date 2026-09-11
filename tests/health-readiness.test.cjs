@@ -185,3 +185,13 @@ test('documented local database seed loads the repository environment file', () 
   assert.match(apiPackage.scripts.seed, /^node --env-file=\.\.\/\.\.\/\.env /);
   assert.match(apiPackage.scripts.seed, /--experimental-strip-types src\/seed\.ts$/);
 });
+
+test('bootstrap seed does not republish demo tariffs over an imported city catalog', () => {
+  const seedSource = readFileSync(join(repositoryRoot, 'apps', 'api', 'src', 'seed.ts'), 'utf8');
+  const countAt = seedSource.indexOf('const existingTariffCount = await prisma.tariff.count');
+  const demoLoopAt = seedSource.indexOf('for (const tariff of tariffs)');
+
+  assert.ok(countAt >= 0, 'seed must inspect the existing city tariff catalog');
+  assert.ok(demoLoopAt > countAt, 'catalog guard must run before demo tariff upserts');
+  assert.match(seedSource.slice(countAt, demoLoopAt + 2000), /if \(existingTariffCount === 0\)/);
+});

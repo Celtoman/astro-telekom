@@ -1,5 +1,6 @@
 ---
 import { createHash } from 'node:crypto';
+import '@fontsource-variable/geist';
 import type { CityView, PageView } from '../data/site';
 import { normalizePublicHtmlPath, publicHtmlPath } from '../data/public-url';
 
@@ -15,6 +16,7 @@ const { title, description, city, pages, indexable = true } = Astro.props as Pro
 const resolvedPages: PageView[] = pages || city?.pages || [];
 const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
 const supportPhone = city?.phone || import.meta.env.PUBLIC_SUPPORT_PHONE || '8 (800) 000-00-00';
+const supportPhoneHref = `tel:${supportPhone.replace(/[^+\d]/g, '')}`;
 const cityRoot = city ? publicHtmlPath(city.slug) : '/';
 const pageByType = new Map<string, PageView>(resolvedPages.map((page) => [page.type, page]));
 const navItems = [
@@ -58,11 +60,11 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
   <body>
     <header class="site-header">
       <div class="container header-inner">
-        <a class="brand" href={cityRoot}>Домашний интернет</a>
+        <a class="brand" href={cityRoot}><strong>Дом.ру</strong><span>{city ? `подключение в ${city.nameIn}` : 'домашние услуги'}</span></a>
         {navItems.length > 0 && <nav aria-label="Основная навигация">
           {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
         </nav>}
-        <a class="phone subscriber-phone" href="tel:+78000000000" data-support-phone={supportPhone}>{supportPhone}</a>
+        <a class="phone subscriber-phone" href={supportPhoneHref} data-support-phone={supportPhone}>{supportPhone}</a>
       </div>
     </header>
     <main>
@@ -105,14 +107,16 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
 </html>
 
 <style is:global>
-  :root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #18202a; background: #f6f7f9; }
+  :root { font-family: 'Geist Variable', ui-sans-serif, system-ui, sans-serif; color: #18202a; background: #f6f7f9; font-synthesis: none; }
   * { box-sizing: border-box; }
   body { margin: 0; }
   a { color: inherit; }
-  .container { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
-  .site-header { background: #fff; border-bottom: 1px solid #e7eaf0; }
+  .container { width: min(1200px, calc(100% - 32px)); margin: 0 auto; }
+  .site-header { position: relative; z-index: 30; background: #fff; border-bottom: 1px solid #e7eaf0; }
   .header-inner, .footer-inner { min-height: 72px; display: flex; align-items: center; gap: 24px; }
-  .brand { font-weight: 800; text-decoration: none; margin-right: auto; }
+  .brand { display: grid; margin-right: auto; text-decoration: none; line-height: 1; }
+  .brand strong { font-size: 20px; font-weight: 850; letter-spacing: -.04em; }
+  .brand span { margin-top: 5px; color: #697789; font-size: 11px; font-weight: 650; }
   nav { display: flex; gap: 18px; font-size: 14px; }
   nav a, .footer-inner a { text-decoration: none; }
   nav a:hover, .footer-inner a:hover { text-decoration: underline; }
@@ -130,7 +134,9 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
   .card-link { display: inline-block; margin-top: 12px; color: #1769aa; font-weight: 700; text-decoration: none; }
   .tariff-price { font-size: 24px; font-weight: 800; margin-top: 20px; }
   .tariff-connection { margin: 8px 0 0; color: #334155; font-weight: 650; }
-  .button { display: inline-block; background: #1268a5; color: #fff; border-radius: 10px; padding: 14px 20px; text-decoration: none; font-weight: 700; }
+  .button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; background: #c91f5c; color: #fff; border-radius: 14px; padding: 12px 22px; text-decoration: none; font-weight: 800; }
+  .button:hover { background: #ad174d; }
+  a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid #1769aa; outline-offset: 3px; }
   .site-footer { background: #18202a; color: #fff; }
   @media (max-width: 800px) { .header-inner { flex-wrap: wrap; padding: 14px 0; } nav { order: 3; width: 100%; overflow-x: auto; } .grid { grid-template-columns: 1fr; } .hero { padding: 48px 0; } }
 </style>

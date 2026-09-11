@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Controller, Delete, Get, NotFoundException, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
@@ -10,7 +10,7 @@ interface BlockBody {
   position: number;
   visible?: boolean;
   data: Prisma.InputJsonObject;
-  source?: string;
+  source?: string | null;
 }
 
 @Controller('admin')
@@ -20,7 +20,7 @@ export class AdminBlocksController {
 
   @Get('pages/:pageId/blocks')
   list(@Param('pageId') pageId: string) {
-    return this.prisma.pageBlock.findMany({ where: { pageId }, orderBy: { position: 'asc' } });
+    return this.prisma.pageBlock.findMany({ where: { pageId }, orderBy: [{ position: 'asc' }, { id: 'asc' }] });
   }
 
   @Post('pages/:pageId/blocks')
@@ -35,7 +35,33 @@ export class AdminBlocksController {
   @Patch('blocks/:id')
   async update(@Param('id') id: string, @Body() body: Partial<BlockBody>) {
     validateBlock(body, true);
-    const block = await this.prisma.pageBlock.update({ where: { id }, data: body });
+    let block;
+    if ('blockType' in body || 'data' in body) {
+      const stored = await this.prisma.pageBlock.findUnique({
+        where: { id },
+        select: { blockType: true, position: true, visible: true, data: true, source: true },
+      });
+      if (!stored) throw new NotFoundException('Блок не найден');
+      if (body.blockType && body.blockType !== stored.blockType && !('data' in body)) {
+        throw new BadRequestException('При смене типа блока нужно передать полные data нового типа');
+      }
+      validateBlock({
+        blockType: body.blockType ?? stored.blockType,
+        position: body.position ?? stored.position,
+        visible: body.visible ?? stored.visible,
+        data: body.data ?? stored.data,
+        source: 'source' in body ? body.source : stored.source,
+      });
+      const result = await this.prisma.pageBlock.updateMany({
+        where: { id, blockType: stored.blockType },
+        data: body,
+      });
+      if (result.count !== 1) throw new ConflictException('Блок уже был изменен. Обновите данные и повторите действие');
+      block = await this.prisma.pageBlock.findUnique({ where: { id } });
+      if (!block) throw new NotFoundException('Блок не найден');
+    } else {
+      block = await this.prisma.pageBlock.update({ where: { id }, data: body });
+    }
     const page = await this.prisma.page.findUnique({ where: { id: block.pageId }, select: { siteId: true } });
     await this.rebuild.enqueue({ entity: 'page-block', id: block.id, siteId: page?.siteId });
     return block;

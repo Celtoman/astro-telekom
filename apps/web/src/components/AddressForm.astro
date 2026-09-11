@@ -12,6 +12,7 @@ interface Props {
   mode?: FormMode;
   serviceType?: ServiceType;
   tariffSlug?: string;
+  embedded?: boolean;
 }
 
 const {
@@ -22,13 +23,14 @@ const {
   mode = 'visible',
   serviceType = 'INTERNET',
   tariffSlug,
+  embedded = false,
 } = Astro.props;
 const formId = `addressForm-${city.slug}-${mode}-${tariffSlug || pageSlug}`;
 const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
 ---
 
-{mode === 'visible' && <section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>Проверьте возможность подключения</h1><p class="lead">Укажите адрес — мы сразу покажем результат проверки.</p></div></section>}
-<section class="section container">
+{mode === 'visible' && !embedded && <section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>Проверьте возможность подключения</h1><p class="lead">Укажите адрес, и мы сразу покажем результат проверки.</p></div></section>}
+<section class:list={['section', 'container', { embedded }]} id={mode === 'lead' ? 'request' : embedded ? 'address-check' : undefined}>
   <form
     class="card"
     id={formId}
@@ -376,7 +378,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
       body: JSON.stringify({
         siteSlug,
         citySlug,
-        pageSlug,
+        pageSlug: pageSlug || undefined,
         tariffSlug: tariffSlug || undefined,
         formName: mode === 'visible' ? 'visible-address-check' : 'lead-form',
         phone: data.phone,
@@ -429,7 +431,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
       const checkResponse = await fetch(`${apiUrl}/address-checks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ siteSlug, citySlug, pageSlug, address: data.address, suggestion: selectedSuggestion, objectType: 'apartment', website: data.website }),
+        body: JSON.stringify({ siteSlug, citySlug, pageSlug: pageSlug || undefined, address: data.address, suggestion: selectedSuggestion, objectType: 'apartment', website: data.website }),
       });
       if (!checkResponse.ok) throw new Error('Не удалось проверить адрес');
       check = await checkResponse.json();
@@ -474,6 +476,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
 </script>
 
 <style>
+  section { scroll-margin-top: 24px; }
   form { max-width: 560px; display: grid; gap: 12px; }
   form h2, form p { margin: 0; }
   label { font-weight: 700; }
@@ -499,4 +502,15 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
   .alternatives { display: grid; gap: 8px; color: #526071; }
   .alternatives a { color: #1769aa; font-weight: 700; }
   .bot-field { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .embedded { width: 100%; margin: 20px 0 0; padding: 0; }
+  .embedded form { grid-template-columns: minmax(0, 1fr) auto; max-width: none; border: 0; padding: 0; background: transparent; box-shadow: none; }
+  .embedded form > label { grid-column: 1 / -1; }
+  .embedded .address-field { grid-column: 1; }
+  .embedded .address-hint, .embedded .phone-step, .embedded [data-form-result], .embedded .alternatives { grid-column: 1 / -1; }
+  .embedded [data-submit] { grid-column: 2; grid-row: 2; min-width: 178px; }
+  @media (max-width: 620px) {
+    .embedded form { grid-template-columns: 1fr; }
+    .embedded .address-field, .embedded [data-submit] { grid-column: 1; grid-row: auto; }
+    .embedded [data-submit] { width: 100%; }
+  }
 </style>

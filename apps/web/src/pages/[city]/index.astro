@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlockRenderer from '../../components/BlockRenderer.astro';
-import { loadSiteData, pageMeta, type CityView } from '../../data/site';
+import CityHomeFirstScreen from '../../components/CityHomeFirstScreen.astro';
+import { loadSiteData, pageMeta, publicSiteSlug, type CityView } from '../../data/site';
 import { publicHtmlPath } from '../../data/public-url';
 
 interface Props { city: CityView }
@@ -15,6 +16,9 @@ const { city } = Astro.props as Props;
 const homePage = city.pages.find((page) => page.type === 'HOME');
 const meta = pageMeta(city.pages, homePage?.slug || '', `Домашний интернет в ${city.nameIn}`, `Тарифы домашнего интернета, телевидения и подключения в ${city.nameIn}.`);
 const addressPage = city.pages.find((page) => page.type === 'ADDRESS_CHECK');
+const heroBlock = homePage?.blocks?.find((block) => block.blockType === 'hero');
+const contentBlocks = homePage?.blocks?.filter((block) => block.blockType !== 'hero') || [];
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 const servicePages = [
   ['INTERNET', 'Домашний интернет', 'Тарифы с разной скоростью подключения для квартиры или дома.'],
   ['INTERNET_TV', 'Интернет + ТВ', 'Домашний интернет и телевидение в одном подключении.'],
@@ -26,24 +30,29 @@ const servicePages = [
 ---
 
 <BaseLayout title={meta.title} description={meta.description} city={city} pages={city.pages}>
-  {homePage?.blocks?.length ? <BlockRenderer blocks={homePage.blocks} tariffs={city.tariffs} citySlug={city.slug} /> : <section class="hero">
-    <div class="container">
-      <span class="eyebrow">Дом.ру в {city.nameIn}</span>
-      <h1>Домашний интернет и телевидение в {city.nameIn}</h1>
-      <p class="lead">Подберите подходящую услугу, проверьте возможность подключения по адресу и оставьте заявку на консультацию.</p>
-      {addressPage?.slug && <a class="button" href={publicHtmlPath(city.slug, addressPage.slug)}>Проверить адрес</a>}
-    </div>
-  </section>}
-  {servicePages.length > 0 && <section class="section container">
-    <h2>Услуги для дома</h2>
-    <div class="grid">
-      {servicePages.map(({ page, title, text }) => <article class="card"><h3>{title}</h3><p>{text}</p><a class="card-link" href={publicHtmlPath(city.slug, page.slug)}>Подробнее →</a></article>)}
-    </div>
-  </section>}
-  {city.tariffs.length > 0 && <section class="section container">
-    <h2>Популярные тарифы</h2>
-    <div class="grid">
-      {city.tariffs.map((tariff) => <article class="card"><h3>{tariff.name}</h3><p>{tariff.service}. {tariff.speed}</p><div class="tariff-price">{tariff.price}</div>{tariff.connection && <p class="tariff-connection">{tariff.connection}</p>}<a class="card-link" href={publicHtmlPath(city.slug, tariff.slug)}>О тарифе →</a></article>)}
-    </div>
-  </section>}
+  {homePage?.blocks?.length && heroBlock ? <>
+    <CityHomeFirstScreen block={heroBlock} {city} tariffs={city.tariffs} {apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage.slug} />
+    <BlockRenderer blocks={contentBlocks} tariffs={city.tariffs} citySlug={city.slug} pages={city.pages} />
+  </> : <>
+    <section class="hero">
+      <div class="container">
+        <span class="eyebrow">Дом.ру в {city.nameIn}</span>
+        <h1>Домашний интернет и телевидение в {city.nameIn}</h1>
+        <p class="lead">Подберите подходящую услугу, проверьте возможность подключения по адресу и оставьте заявку на консультацию.</p>
+        {addressPage?.slug && <a class="button" href={publicHtmlPath(city.slug, addressPage.slug)}>Проверить адрес</a>}
+      </div>
+    </section>
+    {servicePages.length > 0 && <section class="section container">
+      <h2>Услуги для дома</h2>
+      <div class="grid">
+        {servicePages.map(({ page, title, text }) => <article class="card"><h3>{title}</h3><p>{text}</p><a class="card-link" href={publicHtmlPath(city.slug, page.slug)}>Подробнее →</a></article>)}
+      </div>
+    </section>}
+    {city.tariffs.length > 0 && <section class="section container">
+      <h2>Популярные тарифы</h2>
+      <div class="grid">
+        {city.tariffs.map((tariff) => <article class="card"><h3>{tariff.name}</h3><p>{tariff.service}. {tariff.speed}</p><div class="tariff-price">{tariff.price}</div>{tariff.connection && <p class="tariff-connection">{tariff.connection}</p>}<a class="card-link" href={publicHtmlPath(city.slug, tariff.slug)}>О тарифе →</a></article>)}
+      </div>
+    </section>}
+  </>}
 </BaseLayout>

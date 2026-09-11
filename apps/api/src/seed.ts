@@ -1,4 +1,4 @@
-import { PrismaClient } from '../generated/index.js';
+import { Prisma, PrismaClient } from '../generated/index.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { randomBytes, scryptSync } from 'node:crypto';
@@ -44,25 +44,25 @@ async function main() {
 
   const region = await prisma.region.upsert({
     where: { siteId_slug: { siteId: site.id, slug: 'tatarstan' } },
-    update: { name: 'Республика Татарстан', phone: '8 (800) 000-00-00' },
+    update: { name: 'Республика Татарстан', phone: '8 (800) 555-72-44' },
     create: {
       siteId: site.id,
       name: 'Республика Татарстан',
       slug: 'tatarstan',
-      phone: '8 (800) 000-00-00',
+      phone: '8 (800) 555-72-44',
     },
   });
 
   const city = await prisma.city.upsert({
     where: { siteId_slug: { siteId: site.id, slug: 'kazan' } },
-    update: { name: 'Казань', regionId: region.id, status: PUBLISHED },
+    update: { name: 'Казань', regionId: region.id, status: PUBLISHED, phone: '8 (800) 555-72-44' },
     create: {
       siteId: site.id,
       regionId: region.id,
       name: 'Казань',
       slug: 'kazan',
       status: PUBLISHED,
-      phone: '8 (800) 000-00-00',
+      phone: '8 (800) 555-72-44',
     },
   });
 
@@ -103,28 +103,129 @@ async function main() {
             data: {
               eyebrow: 'Дом.ру в Казани',
               title: 'Домашний интернет и телевидение в Казани',
-              text: 'Подберите услугу, проверьте адрес и оставьте заявку на подключение.',
-              ctaText: 'Проверить адрес',
-              ctaHref: '/kazan/proverka-adresa/',
+              text: 'Сравните опубликованные тарифы, проверьте возможность подключения по адресу и оставьте заявку на консультацию.',
             },
           },
-          { pageId: homePage.id, blockType: 'tariff_grid', position: 20, data: { title: 'Популярные тарифы' } },
+          {
+            pageId: homePage.id,
+            blockType: 'service_grid',
+            position: 20,
+            data: {
+              title: 'Выберите подходящую услугу',
+              items: [
+                { pageType: 'INTERNET', title: 'Домашний интернет', text: 'Тарифы для квартиры или дома с проверкой подключения по адресу.' },
+                { pageType: 'INTERNET_TV', title: 'Интернет и ТВ', text: 'Домашний интернет и телевидение в одной заявке.' },
+                { pageType: 'TV', title: 'Телевидение', text: 'Доступные варианты телевидения для дома.' },
+              ],
+            },
+          },
+          { pageId: homePage.id, blockType: 'tariff_grid', position: 30, data: { title: 'Популярные тарифы с интернетом и ТВ', serviceType: INTERNET_TV, limit: 6, morePageType: INTERNET_TV } },
+          {
+            pageId: homePage.id,
+            blockType: 'steps',
+            position: 40,
+            data: {
+              title: 'Как проходит подключение',
+              items: [
+                { title: 'Проверка адреса', text: 'Введите город, улицу и дом, затем выберите точный вариант из подсказок.' },
+                { title: 'Заявка оператору', text: 'Оставьте телефон после успешной проверки технической доступности.' },
+                { title: 'Согласование условий', text: 'Оператор подтвердит тариф, оборудование, стоимость и удобное время.' },
+                { title: 'Подключение', text: 'Специалист выполнит работы и проверит доступ к выбранным услугам.' },
+              ],
+            },
+          },
+          {
+            pageId: homePage.id,
+            blockType: 'feature_grid',
+            position: 50,
+            data: {
+              title: 'Оборудование для интернета и ТВ',
+              items: [
+                { title: 'Wi-Fi-роутер', text: 'Модель, стоимость и условия предоставления зависят от выбранного тарифа и подтверждаются оператором.' },
+                { title: 'ТВ-приставка', text: 'Для тарифов с телевидением оператор уточнит совместимое оборудование и доступные функции.' },
+              ],
+            },
+          },
+          {
+            pageId: homePage.id,
+            blockType: 'feature_grid',
+            position: 60,
+            data: {
+              title: 'Что важно при выборе',
+              items: [
+                { title: 'Скорость под ваши задачи', text: 'Сравните скорость для работы, учебы, видео и домашних устройств в карточках тарифов.' },
+                { title: 'Интернет или интернет с ТВ', text: 'Перейдите в нужный раздел и сравните только предложения выбранного типа.' },
+                { title: 'Проверка до заявки', text: 'Система сначала уточняет техническую доступность услуги по точному адресу.' },
+                { title: 'Условия без догадок', text: 'Цена, скорость и стоимость подключения берутся из опубликованных данных платформы.' },
+              ],
+            },
+          },
+          {
+            pageId: homePage.id,
+            blockType: 'faq',
+            position: 70,
+            data: {
+              title: 'Популярные вопросы',
+              items: [
+                { question: 'Как проверить возможность подключения Дом.ру?', answer: 'Введите адрес в форме на первом экране и выберите точную подсказку. Система проверит техническую доступность автоматически.' },
+                { question: 'Как выбрать тариф для дома?', answer: 'Сравните тип услуги, скорость, ежемесячную цену и стоимость подключения в карточках опубликованных тарифов.' },
+                { question: 'Когда подтвердят оборудование и дату подключения?', answer: 'Оператор уточнит оборудование, итоговые условия и доступное время после проверки адреса и получения заявки.' },
+                { question: 'Можно ли оставить заявку на этой странице?', answer: 'Да. После успешной проверки адреса форма предложит указать телефон и отправит заявку оператору.' },
+              ],
+            },
+          },
         ],
       });
     }
   }
 
-  const contentBlocks: Record<string, Array<{ blockType: string; position: number; data: Record<string, string> }>> = {
+  const contentBlocks: Record<string, Array<{ blockType: string; position: number; data: Prisma.InputJsonObject }>> = {
     internet: [
-      { blockType: 'hero', position: 10, data: { eyebrow: 'Казань', title: 'Домашний интернет', text: 'Выберите скорость подключения и проверьте доступность по адресу.', ctaText: 'Проверить адрес', ctaHref: '/kazan/proverka-adresa/' } },
-      { blockType: 'tariff_grid', position: 20, data: { title: 'Тарифы интернета' } },
+      { blockType: 'hero', position: 10, data: { eyebrow: 'Дом.ру в Казани', title: 'Домашний интернет', text: 'Выберите подходящую скорость и проверьте возможность подключения по вашему адресу.', ctaText: 'Оставить заявку', ctaHref: '#request' } },
+      { blockType: 'tariff_grid', position: 20, data: { title: 'Тарифы домашнего интернета' } },
+      {
+        blockType: 'feature_grid',
+        position: 30,
+        data: {
+          title: 'Все необходимое для выбора',
+          items: [
+            { title: 'Проверка по адресу', text: 'До оформления заявки система уточняет техническую возможность подключения.' },
+            { title: 'Понятные условия', text: 'На карточке видны скорость, ежемесячная цена и стоимость подключения.' },
+            { title: 'Реальные тарифы', text: 'Страница показывает только опубликованные предложения домашнего интернета для города.' },
+          ],
+        },
+      },
+      {
+        blockType: 'steps',
+        position: 40,
+        data: {
+          title: 'Как подключиться',
+          items: [
+            { title: 'Укажите адрес', text: 'Начните вводить адрес и выберите точный вариант из подсказок.' },
+            { title: 'Оставьте телефон', text: 'Мы сохраним заявку только после заполнения контактного номера.' },
+            { title: 'Уточните условия', text: 'Оператор свяжется с вами и подтвердит доступные условия подключения.' },
+          ],
+        },
+      },
+      {
+        blockType: 'faq',
+        position: 50,
+        data: {
+          title: 'Вопросы о подключении',
+          items: [
+            { question: 'Как узнать, доступен ли интернет по моему адресу?', answer: 'Введите адрес в форме заявки и выберите точную подсказку. Система проверит доступность автоматически.' },
+            { question: 'Какие тарифы показаны на странице?', answer: 'Здесь отображаются опубликованные тарифы домашнего интернета, доступные для выбранного города.' },
+            { question: 'Когда будут известны точные условия подключения?', answer: 'Оператор подтвердит возможность, стоимость и дату подключения после проверки вашего адреса.' },
+          ],
+        },
+      },
     ],
     'internet-tv': [
-      { blockType: 'hero', position: 10, data: { eyebrow: 'Казань', title: 'Интернет и телевидение', text: 'Комплексные тарифы для дома с одной заявкой.', ctaText: 'Проверить адрес', ctaHref: '/kazan/proverka-adresa/' } },
+      { blockType: 'hero', position: 10, data: { eyebrow: 'Казань', title: 'Интернет и телевидение', text: 'Комплексные тарифы для дома с одной заявкой.', ctaText: 'Проверить адрес', ctaHref: '/kazan/proverka-adresa' } },
       { blockType: 'tariff_grid', position: 20, data: { title: 'Тарифы интернет + ТВ' } },
     ],
     tv: [
-      { blockType: 'hero', position: 10, data: { eyebrow: 'Казань', title: 'Телевидение для дома', text: 'Оператор уточнит доступные варианты телевидения по вашему адресу.', ctaText: 'Оставить заявку', ctaHref: '/kazan/proverka-adresa/' } },
+      { blockType: 'hero', position: 10, data: { eyebrow: 'Казань', title: 'Телевидение для дома', text: 'Оператор уточнит доступные варианты телевидения по вашему адресу.', ctaText: 'Оставить заявку', ctaHref: '/kazan/proverka-adresa' } },
       { blockType: 'rich_text', position: 20, data: { title: 'Как подключиться', text: 'Проверьте адрес, выберите услугу и согласуйте дату подключения с оператором.' } },
     ],
     faq: [
@@ -145,23 +246,26 @@ async function main() {
     { slug: 'internet-tv-500', name: 'Интернет + ТВ 500 Мбит/с', type: INTERNET_TV, speed: 500 },
   ];
 
-  for (const tariff of tariffs) {
-    const identityKey = tariffIdentityKey(city.id, tariff.name, tariff.type);
-    await prisma.tariff.upsert({
-      where: { cityId_slug: { cityId: city.id, slug: tariff.slug } },
-      update: { name: tariff.name, serviceType: tariff.type, speed: tariff.speed, identityKey, status: PUBLISHED },
-      create: {
-        providerId: provider.id,
-        cityId: city.id,
-        name: tariff.name,
-        slug: tariff.slug,
-        serviceType: tariff.type,
-        speed: tariff.speed,
-        identityKey,
-        dataSource: 'seed',
-        status: PUBLISHED,
-      },
-    });
+  const existingTariffCount = await prisma.tariff.count({ where: { cityId: city.id } });
+  if (existingTariffCount === 0) {
+    for (const tariff of tariffs) {
+      const identityKey = tariffIdentityKey(city.id, tariff.name, tariff.type);
+      await prisma.tariff.upsert({
+        where: { cityId_slug: { cityId: city.id, slug: tariff.slug } },
+        update: { name: tariff.name, serviceType: tariff.type, speed: tariff.speed, identityKey, status: PUBLISHED },
+        create: {
+          providerId: provider.id,
+          cityId: city.id,
+          name: tariff.name,
+          slug: tariff.slug,
+          serviceType: tariff.type,
+          speed: tariff.speed,
+          identityKey,
+          dataSource: 'seed',
+          status: PUBLISHED,
+        },
+      });
+    }
   }
 
   if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {

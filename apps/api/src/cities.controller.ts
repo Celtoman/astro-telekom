@@ -2,6 +2,7 @@ import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { mergeContent, publicContent } from './content-resolution';
 import { normalizeRedirectPath } from './redirect.service';
+import { validatePublishedBlocks } from './block-validation';
 
 @Controller('public/sites/:siteSlug/cities')
 export class CitiesController {
@@ -21,7 +22,7 @@ export class CitiesController {
         orderBy: { name: 'asc' },
         include: {
           region: { select: { content: true } },
-          pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true }, orderBy: { position: 'asc' } } } },
+          pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
           tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
         },
       }),
@@ -49,7 +50,7 @@ export class CitiesController {
       include: {
         site: { select: { settings: true, provider: { select: { settings: true } } } },
         region: { select: { content: true } },
-        pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true }, orderBy: { position: 'asc' } } } },
+        pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
         tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
       },
     });
@@ -69,11 +70,14 @@ export class CitiesController {
       ...cityData,
       content: inheritedContent,
       seo: inheritedSeo,
-      pages: pages.map((page: any) => ({
-        ...page,
-        content: mergeContent(inheritedContent, page.content),
-        seo: mergeContent(inheritedSeo, page.seo),
-      })),
+      pages: pages.map((page: any) => {
+        validatePublishedBlocks(page.blocks);
+        return {
+          ...page,
+          content: mergeContent(inheritedContent, page.content),
+          seo: mergeContent(inheritedSeo, page.seo),
+        };
+      }),
       tariffs: tariffs.map((tariff: any) => ({
         ...tariff,
         seo: mergeContent(inheritedSeo, tariff.seo),

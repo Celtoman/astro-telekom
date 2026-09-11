@@ -1,6 +1,6 @@
 # API-контракты текущего прототипа
 
-Базовый prefix: `/api/v1`. Документ описывает маршруты, зарегистрированные в `apps/api/src/module.ts` на 9 сентября 2026 года. Он не обещает endpoints из продукта, если их нет в коде.
+Базовый prefix: `/api/v1`. Документ описывает маршруты, зарегистрированные в `apps/api/src/module.ts` на 11 сентября 2026 года. Он не обещает endpoints из продукта, если их нет в коде.
 
 ## Общие правила
 
@@ -35,7 +35,7 @@
 
 ### `POST /address-checks`
 
-Тело: `address` обязателен; структурированная `suggestion` содержит `value`, `unrestricted_value`, `data`; опциональны `siteSlug`, `citySlug`, `pageSlug`, `objectType`. Поля ограничены по типу и длине, неизвестные поля возвращают 400. Публичная форма также отправляет пустое honeypot-поле `website`; непустое значение отклоняется до БД и внешних интеграций. Возможные статусы: `AVAILABLE`, `UNAVAILABLE`, `AMBIGUOUS`, `MANUAL_CHECK`, `ERROR`.
+Тело: `address` обязателен; структурированная `suggestion` содержит `value`, `unrestricted_value`, `data`; опциональны `siteSlug`, `citySlug`, `pageSlug`, `objectType`. Отсутствующий `pageSlug` не отправляется: пустая строка не является slug и строго отклоняется. Поля ограничены по типу и длине, неизвестные поля возвращают 400. Публичная форма также отправляет пустое honeypot-поле `website`; непустое значение отклоняется до БД и внешних интеграций. Возможные статусы: `AVAILABLE`, `UNAVAILABLE`, `AMBIGUOUS`, `MANUAL_CHECK`, `ERROR`.
 
 Перед Tarifnik API выбранная подсказка проходит серверный DaData `clean/address`; результат преобразуется в тот же envelope, что в рабочем боте: `value=source`, `unrestricted_value=source`, `data=<clean result>`. География нормализованного адреса не сравнивается с городом страницы: `citySlug` определяет опубликованный контекст и источник обращения, а Tarifnik получает фактический адрес пользователя. `POST /address/check` получает ровно `{ suggestion }` с Bearer token. HTTP 200 обязан содержать непустой словарь `providerId: providerName`; HTTP 404 — однозначный пустой список провайдеров; 403/422, сеть, невалидный JSON или неверная структура дают `ERROR`. Без полного DaData/Tarifnik набора переменных либо без валидной подсказки ответ будет `MANUAL_CHECK`; ни один из этих исходов не интерпретируется как разрешение delivery.
 
@@ -71,8 +71,8 @@ Worker повторно проверяет persisted coverage snapshot и одн
 | GET/POST/PATCH | `/admin/regions` | Region records. |
 | GET/POST/PATCH | `/admin/cities` | City records. |
 | GET/POST/PATCH | `/admin/pages` | Page records. |
-| GET/POST | `/admin/pages/:pageId/blocks` | Просмотр и создание blocks. |
-| PATCH/DELETE | `/admin/blocks/:id` | Изменение и удаление blocks. |
+| GET/POST | `/admin/pages/:pageId/blocks` | Просмотр упорядоченных blocks и создание блока по строгому type-specific контракту ниже. |
+| PATCH/DELETE | `/admin/blocks/:id` | Изменение и удаление blocks. Изменение `blockType` или `data` объединяется с сохраненными корневыми полями и повторно валидирует полный блок; переданное `data` должно быть полным объектом нового типа. |
 | GET | `/admin/tariffs` | Cursor-страница каталога тарифов с минимальным list DTO; поддерживает `limit`, `cursor` и поиск `q` по названию, slug или городу. |
 | GET | `/admin/tariffs/:id` | Полная карточка тарифа, provider/city context, no-slash `publicPath` и серверный allowlisted `attributeSchema` для длинной формы. |
 | POST | `/admin/tariffs` | Создание тарифа с единым identity key `cityId:slug:serviceType`. |
@@ -91,6 +91,22 @@ Worker повторно проверяет persisted coverage snapshot и одн
 | POST | `/internal/site-rebuilds/:id/result` | Worker сохраняет финальный provider result или ошибку попытки; только сервисный `x-admin-token`. |
 
 После успешной мутации content/city/tariff CRUD routes дожидаются сохранения `SiteRebuild` и постановки job, если доступен Redis. Ответ CRUD не означает, что static web уже пересобран: публикация подтверждена только когда `publishedRevision === requestedRevision` и статус равен `SUCCEEDED`.
+
+### Контракт `PageBlock`
+
+Корневой объект допускает только `blockType`, `position`, `visible`, `data`, `source`. При создании обязательны `blockType`, неотрицательный целый `position` до `2147483647` и объект `data`; `visible`, если передан, должен быть boolean, а `source` — `null` либо непустая строка до 200 символов без HTML-разметки. Неизвестные корневые поля отклоняются. Строки внутри `data` должны быть непустыми после trim и не могут содержать `<` или `>`.
+
+| `blockType` | Точный объект `data` |
+| --- | --- |
+| `hero` | Обязательные `title` (до 120) и `text` (до 1000); опциональный CTA задается парой `ctaText` (до 80) + `ctaHref` (до 2048), отдельно они не принимаются; `eyebrow` (до 80) также опционален. CTA принимает локальный path без завершающего слэша, простой `#fragment` или внешний HTTPS URL без credentials; whitespace, backslash, protocol-relative и executable schemes отклоняются. |
+| `rich_text` | Обязательные `title` до 120 и `text` до 4000 символов. |
+| `tariff_grid` | Обязательный `title` до 120 символов; опциональные `serviceType` (`INTERNET`, `INTERNET_TV`, `TV`), целый `limit` 1–12 и `morePageType` из тех же трех типов. Тарифы не хранятся в блоке: renderer фильтрует и ограничивает опубликованные тарифы текущего города, а ссылку «Все тарифы» строит только на существующую опубликованную страницу указанного типа. |
+| `service_grid` | `title` до 120 и `items` из 1–8 объектов с точными полями `pageType`, `title`, `text`; разрешены page types `INTERNET`, `INTERNET_TV`, `TV`, `ADDRESS_CHECK`, `FAQ`, строки ограничены 120/1000 символами. Ссылка строится только на существующую опубликованную страницу города. |
+| `feature_grid` | `title` до 120 и `items` из 1–8 объектов `{ title, text }` с лимитами 120/1000. |
+| `steps` | `title` до 120 и `items` из 2–8 объектов `{ title, text }` с лимитами 120/1000. |
+| `faq` | `title` до 120 и `items` из 1–12 объектов `{ question, answer }` с лимитами 240/4000. |
+
+Во всех `data` и элементах массивов действует exact allowlist ключей. Admin list и public catalog стабильно сортируют блоки по `position`, затем по `id`. PATCH, меняющий discriminator или `data`, валидирует полный объединенный блок и условно записывает его только при неизменном сохраненном `blockType`; конкурентная смена типа дает 409. Public catalog возвращает только `visible` blocks, повторно валидирует каждый сохраненный блок и fail-closed требует ровно один видимый `hero` у любой непустой блочной страницы. Если у страницы есть хотя бы один управляемый блок, Astro использует блоки как единственный источник контентной структуры; hardcoded fallback разрешен только при их отсутствии. Обычная lead-форма добавляется отдельным компонентом после блоков service page и не входит в контракт `PageBlock`.
 
 `SiteRebuild` дедуплицируется по сайту; `affectedPaths` сейчас всегда `["/*"]`, потому что пересобирается весь static artifact. BullMQ делает до трех попыток с exponential backoff 30 секунд. Legacy webhook получает `rebuildId`, `siteId`, `dedupeKey`, `affectedPaths`, `revision` и idempotency header `<rebuildId>:<revision>` и обязан вернуть финальный `SUCCEEDED`. Coolify adapter запускает resource, сохраняет `deployment_uuid`, опрашивает deployment и преобразует только `finished` в `SUCCEEDED`; pending/failure/timeout опубликованную ревизию не меняют.
 
