@@ -81,6 +81,7 @@
 | TD-77 | [#99](https://github.com/Celtoman/astro-telekom/issues/99) ✅ | Production Resend использует проверенный sender; live HTTP 403 устранен |
 | TD-78 | [#100](https://github.com/Celtoman/astro-telekom/issues/100) ✅ | `RESEND_API_KEY` ограничен Coolify runtime scope и исключен из build arguments |
 | TD-79 | [#101](https://github.com/Celtoman/astro-telekom/issues/101) ✅ | Resend/webhook idempotency key разделен по manual retry revision |
+| TD-83 | [#105](https://github.com/Celtoman/astro-telekom/issues/105) 🟢 | Публичные HTML-URL должны публиковаться без завершающего слэша с единым canonical/sitemap/redirect contract |
 
 ## P3
 
