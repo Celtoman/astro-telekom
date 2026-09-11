@@ -2,8 +2,9 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { TariffImportService, parseWorkbook } = require('../apps/api/dist/tariff-import.service.js');
+const { TariffImportService, TARIFF_ATTRIBUTE_FIELDS, parseWorkbook } = require('../apps/api/dist/tariff-import.service.js');
 const { AdminTariffsController } = require('../apps/api/dist/admin-tariffs.controller.js');
+const SNAPSHOT_TIME = new Date('2026-09-11T00:00:00.000Z');
 
 const row = (overrides = {}) => ({
   subekt_rf: 'Республика Татарстан', gorod_name: 'Казань', gorod_slug: 'kazan', tarif_type: 'Интернет',
@@ -14,10 +15,22 @@ const row = (overrides = {}) => ({
 
 function service() {
   return new TariffImportService({
-    city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', siteId: 'site-1' }] },
+    city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', siteId: 'site-1', pages: [] }] },
     tariff: { findMany: async () => [] },
   });
 }
+
+test('the tariff attribute registry preserves every observed source field', () => {
+  assert.deepEqual(TARIFF_ATTRIBUTE_FIELDS.map(({ key }) => key), [
+    'nazvanie_tarifa', 'card_subtitle', 'badge_text', 'promo_feature', 'opisanie_tarifa',
+    'show_on_site', 'is_sticky', 'is_gaming_tarif', 'tv_channels_total', 'tv_channels_hd',
+    'online_cinemas', 'equip_router', 'router_buyout_price', 'router_installment_months',
+    'router_installment_price', 'equip_tv_box', 'tvbox_buyout_price', 'tvbox_installment_months',
+    'tvbox_installment_price', 'ont_buyout_price', 'cctv_buyout_price', 'cctv_connection_price',
+    'srv_video_status', 'srv_video_price', 'srv_gaming_status', 'srv_gaming_name',
+    'srv_vkplaycloud_status', 'srv_litres_status', 'srv_ont_status', 'srv_staticip_status',
+  ]);
+});
 
 test('XLSX parser reads the canonical first sheet into records', async () => {
   const workbookPath = path.join(__dirname, '..', 'data', 'imports', 'cities.xlsx');
@@ -59,6 +72,8 @@ test('validation creates the agreed identity key and separates promo price', asy
   assert.equal(report.candidates[0].standardPrice, 990);
   assert.equal(report.candidates[0].promoPrice, 890);
   assert.equal(report.candidates[0].connectionFee, 0);
+  assert.equal(report.reportVersion, 2);
+  assert.deepEqual(report.existingSnapshot, []);
   assert.deepEqual(report.diff, { created: 1, updated: 0, deleted: 0, deletedTariffs: [] });
 });
 
@@ -73,6 +88,28 @@ test('validation preserves tariff description and normalized TV channel counters
   assert.equal(report.candidates[0].attributes.opisanie_tarifa, 'Полное описание тарифа');
   assert.equal(report.candidates[0].attributes.tv_channels_total, 215);
   assert.equal(report.candidates[0].attributes.tv_channels_hd, 87);
+});
+
+test('validation preserves the complete allowlisted editor contract with normalized types', async () => {
+  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row({
+    nazvanie_tarifa: 'Название в карточке', card_subtitle: 'Подзаголовок', show_on_site: 1,
+    is_sticky: 0, srv_video_status: 1, router_installment_months: 12, badge_text: 'Хит',
+  })]);
+
+  assert.equal(report.errorRows, 0);
+  assert.equal(report.candidates[0].attributes.nazvanie_tarifa, 'Название в карточке');
+  assert.equal(report.candidates[0].attributes.card_subtitle, 'Подзаголовок');
+  assert.equal(report.candidates[0].attributes.show_on_site, true);
+  assert.equal(report.candidates[0].attributes.is_sticky, false);
+  assert.equal(report.candidates[0].attributes.srv_video_status, 1);
+  assert.equal(report.candidates[0].attributes.router_installment_months, 12);
+});
+
+test('validation rejects a non-empty column outside the current tariff field registry', async () => {
+  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row({ surprise_column: 'unexpected' })]);
+
+  assert.equal(report.errorRows, 1);
+  assert.match(report.issues[0].message, /surprise_column.*не входит.*контракт/i);
 });
 
 test('validation omits empty optional tariff details from attributes', async () => {
@@ -112,6 +149,13 @@ test('validation blocks duplicate keys, invalid service states and missing citie
   assert.ok(report.issues.some((issue) => issue.message.includes('не найден')));
 });
 
+test('validation accepts service status minus one from a string XLSX cell', async () => {
+  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row({ srv_video_status: '-1' })]);
+
+  assert.equal(report.errorRows, 0);
+  assert.equal(report.candidates[0].attributes.srv_video_status, -1);
+});
+
 test('validation reports duplicate business keys before apply', async () => {
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row(), row()]);
   assert.equal(report.validRows, 0);
@@ -130,14 +174,28 @@ test('validation rejects a city slug collision across different service types', 
   assert.ok(report.issues.some((issue) => issue.message.includes('городе «kazan»')));
 });
 
+test('validation rejects a tariff URL already occupied by a published page', async () => {
+  const instance = new TariffImportService({
+    city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', pages: [{ slug: 'internet' }] }] },
+    tariff: { findMany: async () => [] },
+  });
+
+  const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row({ post_title_lat: 'internet' })]);
+
+  assert.equal(report.errorRows, 1);
+  assert.equal(report.validRows, 0);
+  assert.match(report.issues[0].message, /URL \/kazan\/internet.*занят опубликованной страницей/i);
+});
+
 test('apply creates every validated row as one full package', async () => {
   const calls = [];
   const prisma = {
     city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', siteId: 'site-1' }] },
     tariff: { findMany: async () => [] },
     $transaction: async (callback, options) => {
-      assert.deepEqual(options, { timeout: 120_000 });
+      assert.deepEqual(options, { isolationLevel: 'Serializable', timeout: 120_000 });
       return callback({
+        page: { findMany: async () => [] },
         tariff: {
           findMany: async () => [],
           findFirst: async () => null,
@@ -157,13 +215,14 @@ test('apply creates every validated row as one full package', async () => {
 
 test('full snapshot deletes provider tariffs that disappeared from the file', async () => {
   const records = [
-    { id: 'keep', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500', identityKey: 'city-1:giga-500:internet' },
-    { id: 'stale', providerId: 'provider-1', cityId: 'city-1', name: 'Старый 100', slug: 'old-100', identityKey: 'city-1:old-100:internet' },
+    { id: 'keep', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500', identityKey: 'city-1:giga-500:internet', updatedAt: SNAPSHOT_TIME },
+    { id: 'stale', providerId: 'provider-1', cityId: 'city-1', name: 'Старый 100', slug: 'old-100', identityKey: 'city-1:old-100:internet', updatedAt: SNAPSHOT_TIME },
   ];
   const prisma = {
     city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', siteId: 'site-1' }] },
     tariff: { findMany: async () => records },
     $transaction: async (callback) => callback({
+      page: { findMany: async () => [] },
       tariff: {
         findMany: async () => records,
         findFirst: async ({ where }) => records.find((item) => item.cityId === where.cityId && (item.identityKey === where.OR[0].identityKey || item.slug === where.OR[1].slug)) || null,
@@ -200,22 +259,25 @@ test('warnings block apply until they are explicitly confirmed', async () => {
 });
 
 test('full snapshot transaction rolls back all changes when one write fails', async () => {
-  const original = [{ id: 'stale', providerId: 'provider-1', cityId: 'city-1', slug: 'stale', identityKey: 'city-1:stale:internet' }];
+  const original = [{ id: 'stale', providerId: 'provider-1', cityId: 'city-1', slug: 'stale', identityKey: 'city-1:stale:internet', updatedAt: SNAPSHOT_TIME }];
   let records = structuredClone(original);
   const prisma = {
     city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', siteId: 'site-1' }] },
     tariff: { findMany: async () => records },
     $transaction: async (callback) => {
       const draft = structuredClone(records);
-      const tx = { tariff: {
-        findMany: async () => draft,
-        findFirst: async () => null,
-        create: async () => { throw new Error('database write failed'); },
-        update: async () => {},
-        deleteMany: async ({ where }) => {
-          for (let index = draft.length - 1; index >= 0; index -= 1) if (where.id.in.includes(draft[index].id)) draft.splice(index, 1);
+      const tx = {
+        page: { findMany: async () => [] },
+        tariff: {
+          findMany: async () => draft,
+          findFirst: async () => null,
+          create: async () => { throw new Error('database write failed'); },
+          update: async () => {},
+          deleteMany: async ({ where }) => {
+            for (let index = draft.length - 1; index >= 0; index -= 1) if (where.id.in.includes(draft[index].id)) draft.splice(index, 1);
+          },
         },
-      } };
+      };
       const result = await callback(tx);
       records = draft;
       return result;
@@ -229,7 +291,7 @@ test('full snapshot transaction rolls back all changes when one write fails', as
 });
 
 test('apply queues rebuilds for every provider site, including deletion-only sites', async () => {
-  const report = { providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [] };
+  const report = { reportVersion: 2, providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [], existingSnapshot: [] };
   const queued = [];
   const prisma = {
     tariffImportRun: {
@@ -252,6 +314,72 @@ test('apply queues rebuilds for every provider site, including deletion-only sit
 
   assert.equal(result.deleted, 2);
   assert.deepEqual(queued.map((job) => job.siteId), ['site-1', 'site-2']);
+});
+
+test('full snapshot rejects a catalog changed after validation before writing', async () => {
+  let updated = false;
+  const validatedTariff = {
+    id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500',
+    identityKey: 'city-1:giga-500:internet', updatedAt: SNAPSHOT_TIME,
+  };
+  const prisma = {
+    city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', siteId: 'site-1' }] },
+    tariff: { findMany: async () => [validatedTariff] },
+    $transaction: async (callback) => callback({
+      tariff: {
+        findMany: async () => [{ ...validatedTariff, updatedAt: new Date('2026-09-11T00:01:00.000Z') }],
+        update: async () => { updated = true; },
+      },
+    }),
+  };
+  const instance = new TariffImportService(prisma);
+  const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row()]);
+
+  await assert.rejects(instance.applyReport(report, { confirmWarnings: true }), /изменился после проверки/i);
+  assert.equal(updated, false);
+});
+
+test('full snapshot rechecks published page URL collisions inside apply transaction', async () => {
+  let writes = 0;
+  const instance = service();
+  const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row()]);
+  const applying = new TariffImportService({
+    $transaction: async (callback) => callback({
+      tariff: { findMany: async () => [], create: async () => { writes += 1; } },
+      page: { findMany: async () => [{ cityId: 'city-1', slug: 'giga-500' }] },
+    }),
+  });
+
+  await assert.rejects(applying.applyReport(report, { confirmWarnings: true }), /URL тарифа занят опубликованной страницей/i);
+  assert.equal(writes, 0);
+});
+
+test('legacy tariff reports without a catalog snapshot require revalidation', async () => {
+  let transactionCalled = false;
+  const instance = new TariffImportService({ $transaction: async () => { transactionCalled = true; } });
+
+  await assert.rejects(
+    instance.applyReport({ providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [] }),
+    /старом формате.*проверьте файл заново/i,
+  );
+  assert.equal(transactionCalled, false);
+});
+
+test('concurrent full snapshot apply cannot claim the same validated run twice', async () => {
+  let writes = 0;
+  const report = { reportVersion: 2, providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [], existingSnapshot: [] };
+  const prisma = {
+    $transaction: async (callback) => callback({
+      tariff: { findMany: async () => [], create: async () => { writes += 1; } },
+      tariffImportRun: { updateMany: async () => ({ count: 0 }) },
+    }),
+  };
+
+  await assert.rejects(
+    new TariffImportService(prisma).applyReport(report, { confirmWarnings: true }, 'run-1'),
+    /уже применен или его статус изменился/i,
+  );
+  assert.equal(writes, 0);
 });
 
 test('legacy acceptedKeys partial apply is rejected before reading the import run', async () => {

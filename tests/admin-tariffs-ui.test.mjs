@@ -18,26 +18,67 @@ test('tariffs route mounts the authenticated React workspace and is linked from 
   assert.doesNotMatch(tariffNavigation, /disabled/);
 });
 
-test('tariff workspace implements list, validation report, atomic apply and rebuild status', () => {
-  const source = readFileSync(join(adminRoot, 'components', 'TariffsApp.tsx'), 'utf8');
-  for (const endpoint of [
-    '/admin/providers',
-    '/admin/tariffs',
-    '/admin/tariffs/imports',
-    '/admin/tariffs/import/validate',
-    '/admin/tariffs/import/apply',
-    '/admin/rebuilds',
-  ]) assert.ok(source.includes(endpoint), `missing ${endpoint} integration`);
+test('tariff catalog and full-snapshot import are separate nested workspaces', () => {
+  const catalog = readFileSync(join(adminRoot, 'components', 'TariffsApp.tsx'), 'utf8');
+  const importPath = join(adminRoot, 'components', 'TariffImportApp.tsx');
+  const importRoute = join(adminRoot, 'pages', 'tariffs', 'import.astro');
+  assert.equal(existsSync(importPath), true);
+  assert.equal(existsSync(importRoute), true);
+  assert.match(readFileSync(importRoute, 'utf8'), /<TariffImportApp[^>]+client:load/);
+  assert.match(catalog, /URLSearchParams/);
+  assert.match(catalog, /nextCursor/);
+  assert.match(catalog, /ServerPagination/);
+  assert.doesNotMatch(catalog, /import\/validate|accept=["']\.xlsx["']|confirmWarnings|report\.diff/);
 
-  assert.match(source, /accept=["']\.xlsx["']/);
-  assert.match(source, /confirmWarnings/);
-  assert.match(source, /report\.diff/);
-  assert.match(source, /report\.issues/);
-  assert.match(source, /URLSearchParams/);
-  assert.match(source, /nextCursor/);
-  assert.match(source, /ServerPagination/);
-  assert.doesNotMatch(source, /state\.data\.tariffs\.filter|visibleTariffs/);
-  assert.doesNotMatch(source, /x-admin-token|Authorization|sessionStorage|localStorage/);
+  const importer = readFileSync(importPath, 'utf8');
+  for (const endpoint of ['/admin/providers', '/admin/tariffs/imports', '/admin/tariffs/import/validate', '/admin/tariffs/import/apply', '/admin/rebuilds']) {
+    assert.ok(importer.includes(endpoint), `missing ${endpoint} integration`);
+  }
+  assert.match(importer, /accept=["']\.xlsx["']/);
+  assert.match(importer, /confirmWarnings/);
+  assert.match(importer, /report\.diff/);
+  assert.match(importer, /report\.issues/);
+  assert.match(importer, /selectedProviderId/);
+  assert.match(importer, /Выберите провайдера/);
+  assert.match(importer, /const selectionGeneration = useRef\(0\)/);
+  assert.match(importer, /const generation = selectionGeneration\.current/);
+  assert.match(importer, /selectionGeneration\.current !== generation/);
+  assert.match(importer, /const fileInput = useRef<HTMLInputElement>\(null\)/);
+  assert.match(importer, /fileInput\.current\.value = ""/);
+  assert.match(importer, /<Input ref=\{fileInput\} type="file"/);
+  assert.match(importer, /value=\{selectedProviderId\} disabled=\{busy !== null\}/);
+  assert.match(importer, /type="file" accept="\.xlsx" disabled=\{!selectedProviderId \|\| busy !== null\}/);
+  assert.doesNotMatch(importer, /const provider\s*=\s*state\.data\.providers\[0\]/);
+  assert.doesNotMatch(`${catalog}\n${importer}`, /x-admin-token|Authorization|sessionStorage|localStorage/);
+});
+
+test('tariff workspace provides quick detail and a separate guarded long editor', () => {
+  const listSource = readFileSync(join(adminRoot, 'components', 'TariffsApp.tsx'), 'utf8');
+  const editorRoute = join(adminRoot, 'pages', 'tariffs', 'edit.astro');
+  const editorPath = join(adminRoot, 'components', 'TariffEditorApp.tsx');
+  assert.equal(existsSync(editorRoute), true, 'tariff editor route must exist');
+  assert.equal(existsSync(editorPath), true, 'tariff editor component must exist');
+  assert.match(readFileSync(editorRoute, 'utf8'), /<TariffEditorApp[^>]+client:load/);
+  assert.match(listSource, /\/admin\/tariffs\/\$\{id\}/);
+  assert.match(listSource, /Быстрый просмотр/);
+  assert.match(listSource, /\/tariffs\/edit\?id=/);
+
+  const editor = readFileSync(editorPath, 'utf8');
+  assert.match(editor, /method:\s*"PATCH"/);
+  assert.match(editor, /confirmSensitiveChanges/);
+  assert.match(editor, /hasUnsavedChanges/);
+  assert.match(editor, /\/admin\/rebuilds\/\$\{/);
+  assert.match(editor, /setRebuildPollAttempt/);
+  assert.match(editor, /attributeSchema/);
+  for (const field of ['name', 'serviceType', 'standardPrice', 'promoPrice', 'speed', 'promoText', 'connectionFee', 'availability', 'externalId', 'dataSource', 'attributes', 'seo']) {
+    assert.ok(editor.includes(field), `editor is missing ${field}`);
+  }
+  assert.doesNotMatch(editor, /x-admin-token|Authorization|sessionStorage|localStorage/);
+
+  assert.match(listSource, /const detailGeneration = useRef\(0\)/);
+  assert.match(listSource, /const generation = \+\+detailGeneration\.current/);
+  assert.match(listSource, /detailGeneration\.current === generation/);
+  assert.match(listSource, /detailGeneration\.current \+= 1/);
 });
 
 test('shared admin API client always sends the cookie and preserves API errors', async () => {

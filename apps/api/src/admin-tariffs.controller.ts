@@ -1,10 +1,12 @@
-import { BadRequestException, Body, ConflictException, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { isDeepStrictEqual } from 'node:util';
 import { Prisma } from '../generated';
 import { CursorPageQueryDto, decodeCursor, encodeCursor, pageSize, searchQuery } from './admin-pagination';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
 import { RebuildQueueService } from './rebuild-queue.service';
-import { ImportReport, parseWorkbook, TariffImportService } from './tariff-import.service';
+import { ImportReport, normalizeTariffAttributes, parseWorkbook, TARIFF_ATTRIBUTE_FIELDS, TariffImportService } from './tariff-import.service';
+import { UpdateTariffDto } from './tariff.dto';
 
 type ServiceType = 'INTERNET' | 'INTERNET_TV' | 'TV' | 'OTHER';
 type PublishStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
@@ -22,7 +24,6 @@ interface TariffBody {
   connectionFee?: number;
   availability?: boolean;
   externalId?: string;
-  identityKey?: string;
   dataSource?: string;
   attributes?: object;
   seo?: object;
@@ -40,9 +41,8 @@ interface ImportBody {
 export class AdminTariffsController {
   constructor(private readonly prisma: PrismaService, private readonly rebuild: RebuildQueueService, private readonly imports: TariffImportService) {}
 
-  private identityKey(cityId: string, name: string, serviceType: ServiceType) {
-    const normalizedName = name.trim().toLocaleLowerCase('ru-RU').normalize('NFKC').replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '');
-    return `${cityId}:${normalizedName}:${serviceType.toLowerCase()}`;
+  private identityKey(cityId: string, slug: string, serviceType: ServiceType) {
+    return `${cityId}:${slug}:${serviceType.toLowerCase()}`;
   }
 
   private async siteIdForCity(cityId: string) {
@@ -83,6 +83,9 @@ export class AdminTariffsController {
           serviceType: true,
           standardPrice: true,
           promoPrice: true,
+          speed: true,
+          status: true,
+          availability: true,
           updatedAt: true,
           city: { select: { id: true, name: true, slug: true } },
         },
@@ -105,7 +108,7 @@ export class AdminTariffsController {
 
   @Post()
   async create(@Body() body: TariffBody) {
-    const data = { ...body, identityKey: body.identityKey || this.identityKey(body.cityId, body.name, body.serviceType) };
+    const data = { ...body, identityKey: this.identityKey(body.cityId, body.slug, body.serviceType) };
     const tariff = await this.prisma.tariff.create({ data });
     await this.rebuild.enqueue({ entity: 'tariff', id: tariff.id, siteId: await this.siteIdForCity(tariff.cityId) });
     return tariff;
@@ -116,7 +119,7 @@ export class AdminTariffsController {
     const tariffs = await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const imported = [];
       for (const item of body.items) {
-        const identityKey = item.identityKey || this.identityKey(body.cityId, item.name, item.serviceType);
+        const identityKey = this.identityKey(body.cityId, item.slug, item.serviceType);
         // `slug` is a one-time compatibility lookup for records created before identityKey existed.
         const existing = await transaction.tariff.findFirst({
           where: { cityId: body.cityId, OR: [{ identityKey }, { slug: item.slug }] },
@@ -168,7 +171,10 @@ export class AdminTariffsController {
     try {
       result = await this.imports.applyReport(report, { confirmWarnings: body.confirmWarnings === true }, run.id);
     } catch (error) {
-      await this.prisma.tariffImportRun.update({ where: { id: run.id }, data: { status: 'FAILED' } });
+      await this.prisma.tariffImportRun.updateMany({
+        where: { id: run.id, status: { not: 'APPLIED' } },
+        data: { status: 'FAILED' },
+      });
       throw error;
     }
     const sites = await this.prisma.site.findMany({ where: { providerId: report.providerId }, select: { id: true } });
@@ -188,75 +194,151 @@ export class AdminTariffsController {
     return run;
   }
 
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() body: Partial<TariffBody>) {
-    const existing = await this.prisma.tariff.findUnique({ where: { id } });
-    if (!existing) return this.prisma.tariff.update({ where: { id }, data: body });
-    const identityKey = body.identityKey || this.identityKey(
-      body.cityId || existing.cityId,
-      body.name || existing.name,
-      body.serviceType || existing.serviceType as ServiceType,
-    );
-    const nextCityId = body.cityId || existing.cityId;
-    const nextSlug = body.slug || existing.slug;
-    if (nextCityId !== existing.cityId || nextSlug !== existing.slug) {
-      const result = await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
-        const oldCity = await transaction.city.findUnique({ where: { id: existing.cityId }, select: { id: true, slug: true, siteId: true } });
-        const newCity = nextCityId === existing.cityId
-          ? oldCity
-          : await transaction.city.findUnique({ where: { id: nextCityId }, select: { id: true, slug: true, siteId: true } });
-        if (!oldCity || !newCity) throw new BadRequestException('Город тарифа не найден');
-        if (oldCity.siteId !== newCity.siteId) throw new BadRequestException('Нельзя перенести тариф между сайтами через изменение URL');
+  @Get(':id')
+  async detail(@Param('id') id: string) {
+    const tariff = await this.prisma.tariff.findUnique({
+      where: { id },
+      include: {
+        provider: { select: { id: true, name: true } },
+        city: { select: { id: true, name: true, slug: true, siteId: true } },
+      },
+    });
+    if (!tariff) throw new NotFoundException('Тариф не найден');
+    return { ...tariff, publicPath: `/${tariff.city.slug}/${tariff.slug}`, attributeSchema: TARIFF_ATTRIBUTE_FIELDS };
+  }
 
-        const sourcePath = `/${oldCity.slug}/${existing.slug}/`;
-        const targetPath = `/${newCity.slug}/${nextSlug}/`;
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() body: UpdateTariffDto) {
+    const result = await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const existing = await transaction.tariff.findUnique({ where: { id } });
+      if (!existing) throw new NotFoundException('Тариф не найден');
+      if (!body.expectedUpdatedAt || existing.updatedAt.toISOString() !== body.expectedUpdatedAt) {
+        throw new ConflictException('Тариф изменился после открытия формы; обновите данные');
+      }
+
+      for (const [field, value] of [['attributes', body.attributes], ['seo', body.seo]] as const) {
+        if (value !== undefined && JSON.stringify(value).length > 262_144) {
+          throw new BadRequestException(`${field} превышает допустимый размер`);
+        }
+      }
+      const normalizedAttributes = body.attributes === undefined || body.attributes === null
+        ? body.attributes
+        : normalizeTariffAttributes(body.attributes);
+      const sensitive = new Set<string>();
+      if (body.cityId !== undefined && body.cityId !== existing.cityId) sensitive.add('URL');
+      if (body.slug !== undefined && body.slug !== existing.slug) sensitive.add('URL');
+      if (body.status !== undefined && body.status !== existing.status) sensitive.add('статус публикации');
+      if (body.seo !== undefined && !isDeepStrictEqual(body.seo, existing.seo)) sensitive.add('SEO');
+      if (normalizedAttributes !== undefined && normalizedAttributes !== null) {
+        const currentAttributes = existing.attributes && typeof existing.attributes === 'object' && !Array.isArray(existing.attributes)
+          ? existing.attributes as Record<string, unknown>
+          : {};
+        for (const field of TARIFF_ATTRIBUTE_FIELDS) {
+          if (field.kind === 'number' && field.key.includes('price') && String(normalizedAttributes[field.key]) !== String(currentAttributes[field.key])) {
+            sensitive.add('цена');
+          }
+        }
+      }
+      for (const field of ['standardPrice', 'promoPrice', 'connectionFee'] as const) {
+        if (body[field] !== undefined && String(body[field]) !== String(existing[field])) sensitive.add('цена');
+      }
+      if (sensitive.size && body.confirmSensitiveChanges !== true) {
+        throw new BadRequestException(`Требуется подтверждение изменений: ${[...sensitive].join(', ')}`);
+      }
+
+      const nextCityId = body.cityId ?? existing.cityId;
+      const nextSlug = body.slug ?? existing.slug;
+      const nextServiceType = body.serviceType ?? existing.serviceType as ServiceType;
+      const nextStatus = body.status ?? existing.status;
+      const oldCity = await transaction.city.findUnique({
+        where: { id: existing.cityId },
+        select: { id: true, slug: true, siteId: true, status: true, site: { select: { providerId: true } } },
+      });
+      const newCity = nextCityId === existing.cityId ? oldCity : await transaction.city.findUnique({
+        where: { id: nextCityId },
+        select: { id: true, slug: true, siteId: true, status: true, site: { select: { providerId: true } } },
+      });
+      if (!oldCity || !newCity) throw new BadRequestException('Город тарифа не найден');
+      if (newCity.site.providerId !== existing.providerId) throw new BadRequestException('Город относится к другому провайдеру');
+      if (oldCity.siteId !== newCity.siteId) throw new BadRequestException('Нельзя перенести тариф между сайтами через изменение URL');
+
+      const sourcePath = `/${oldCity.slug}/${existing.slug}`;
+      const targetPath = `/${newCity.slug}/${nextSlug}`;
+      const urlChanged = sourcePath !== targetPath;
+      if (urlChanged || nextStatus === 'PUBLISHED') {
+        const pagePaths = urlChanged
+          ? [{ cityId: oldCity.id, slug: existing.slug }, { cityId: newCity.id, slug: nextSlug }]
+          : [{ cityId: newCity.id, slug: nextSlug }];
         const occupiedPage = await transaction.page.findFirst({
-          where: {
-            status: 'PUBLISHED',
-            OR: [
-              { cityId: oldCity.id, slug: existing.slug },
-              { cityId: newCity.id, slug: nextSlug },
-            ],
-          },
+          where: { status: 'PUBLISHED', OR: pagePaths },
           select: { id: true },
         });
-        if (occupiedPage) throw new ConflictException(`Исходный или целевой URL занят опубликованной страницей`);
+        if (occupiedPage) throw new ConflictException('Целевой URL занят опубликованной страницей');
         const occupiedTariff = await transaction.tariff.findFirst({
-          where: { id: { not: id }, cityId: newCity.id, slug: nextSlug, status: 'PUBLISHED' },
+          where: { id: { not: id }, cityId: newCity.id, slug: nextSlug },
           select: { id: true },
         });
         if (occupiedTariff) throw new ConflictException(`Целевой URL ${targetPath} занят опубликованным тарифом`);
-        const redirect = await transaction.redirect.findUnique({
-          where: { siteId_sourcePath: { siteId: oldCity.siteId, sourcePath } },
-        });
-        if (redirect && redirect.targetPath !== targetPath) {
-          throw new ConflictException(`Для URL ${sourcePath} уже существует несовместимый редирект`);
-        }
-        const targetRedirect = await transaction.redirect.findUnique({
-          where: { siteId_sourcePath: { siteId: oldCity.siteId, sourcePath: targetPath } },
-        });
-        if (targetRedirect) throw new ConflictException(`Целевой URL ${targetPath} уже используется как источник редиректа`);
+      }
 
-        const tariff = await transaction.tariff.update({ where: { id }, data: { ...body, identityKey } });
-        const redirectStatus = tariff.status === 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT';
-        await transaction.redirect.updateMany({
-          where: { siteId: oldCity.siteId, targetPath: sourcePath },
-          data: { targetPath },
-        });
-        if (redirect) {
+      let redirectOutcome: 'unchanged' | 'created' | 'updated' = 'unchanged';
+      const redirectStatus = nextStatus === 'PUBLISHED' && newCity.status === 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT';
+      if (urlChanged) {
+        const redirect = await transaction.redirect.findUnique({ where: { siteId_sourcePath: { siteId: oldCity.siteId, sourcePath } } });
+        if (redirect && redirect.targetPath !== targetPath) throw new ConflictException(`Для URL ${sourcePath} уже существует несовместимый редирект`);
+        if (redirect?.managedTariffId && redirect.managedTariffId !== id) throw new ConflictException(`Для URL ${sourcePath} уже существует редирект другого тарифа`);
+        const targetRedirect = await transaction.redirect.findUnique({ where: { siteId_sourcePath: { siteId: oldCity.siteId, sourcePath: targetPath } } });
+        if (targetRedirect) throw new ConflictException(`Целевой URL ${targetPath} уже используется как источник редиректа`);
+        await transaction.redirect.updateMany({ where: { siteId: oldCity.siteId, targetPath: sourcePath }, data: { targetPath } });
+        if (redirect?.managedTariffId === id) {
           await transaction.redirect.update({ where: { id: redirect.id }, data: { targetPath, status: redirectStatus } });
-        } else {
-          await transaction.redirect.create({
-            data: { siteId: oldCity.siteId, cityId: oldCity.id, sourcePath, targetPath, status: redirectStatus },
-          });
+          redirectOutcome = 'updated';
+        } else if (!redirect) {
+          await transaction.redirect.create({ data: { siteId: oldCity.siteId, cityId: oldCity.id, sourcePath, targetPath, status: redirectStatus, managedTariffId: id } });
+          redirectOutcome = 'created';
         }
-        return { tariff, siteId: newCity.siteId };
+      } else if (body.status !== undefined && body.status !== existing.status) {
+        await transaction.redirect.updateMany({
+          where: { siteId: oldCity.siteId, managedTariffId: id },
+          data: { status: redirectStatus },
+        });
+      }
+
+      const { confirmSensitiveChanges: _confirmed, expectedUpdatedAt: _expected, ...editable } = body;
+      if (!Object.keys(editable).length) throw new BadRequestException('Нет изменений для сохранения');
+      const identityKey = this.identityKey(nextCityId, nextSlug, nextServiceType);
+      const data: Prisma.TariffUncheckedUpdateInput = { identityKey };
+      for (const field of ['cityId', 'name', 'slug', 'serviceType', 'standardPrice', 'promoPrice', 'speed', 'promoText', 'connectionFee', 'availability', 'status'] as const) {
+        if (body[field] !== undefined) Object.assign(data, { [field]: body[field] });
+      }
+      if (normalizedAttributes !== undefined) data.attributes = normalizedAttributes === null ? Prisma.JsonNull : normalizedAttributes;
+      if (body.seo !== undefined) data.seo = body.seo === null ? Prisma.JsonNull : body.seo as Prisma.InputJsonValue;
+      const tariff = await transaction.tariff.update({
+        where: { id },
+        data,
+        include: {
+          provider: { select: { id: true, name: true } },
+          city: { select: { id: true, name: true, slug: true, siteId: true } },
+        },
       });
-      await this.rebuild.enqueue({ entity: 'tariff', id: result.tariff.id, siteId: result.siteId });
-      return result.tariff;
+      return {
+        tariff: { ...tariff, publicPath: `/${tariff.city.slug}/${tariff.slug}`, attributeSchema: TARIFF_ATTRIBUTE_FIELDS },
+        siteId: newCity.siteId,
+        redirectOutcome,
+      };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    let rebuild;
+    try {
+      rebuild = await this.rebuild.enqueue({ entity: 'tariff', id: result.tariff.id, siteId: result.siteId });
+    } catch (error) {
+      rebuild = {
+        id: null,
+        status: 'ENQUEUE_FAILED' as const,
+        requestedRevision: 0,
+        publishedRevision: 0,
+        lastError: error instanceof Error ? error.message : 'Не удалось поставить пересборку в очередь',
+      };
     }
-    const tariff = await this.prisma.tariff.update({ where: { id }, data: { ...body, identityKey } });
-    await this.rebuild.enqueue({ entity: 'tariff', id: tariff.id, siteId: await this.siteIdForCity(tariff.cityId) });
-    return tariff;
+    return { tariff: result.tariff, redirectOutcome: result.redirectOutcome, rebuild };
   }
 }

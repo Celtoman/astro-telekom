@@ -1,4 +1,6 @@
 ---
+import { normalizePublicHref, publicHtmlPath } from '../data/public-url';
+
 interface Block {
   blockType: string;
   data: Record<string, any>;
@@ -15,13 +17,13 @@ const { blocks, tariffs, citySlug } = Astro.props;
 
 {blocks.map((block: Block) => {
   if (block.blockType === 'hero') {
-    return <section class="hero"><div class="container"><span class="eyebrow">{block.data.eyebrow}</span><h1>{block.data.title}</h1><p class="lead">{block.data.text}</p>{block.data.ctaHref && <a class="button" href={block.data.ctaHref}>{block.data.ctaText || 'Подробнее'}</a>}</div></section>;
+    return <section class="hero"><div class="container"><span class="eyebrow">{block.data.eyebrow}</span><h1>{block.data.title}</h1><p class="lead">{block.data.text}</p>{block.data.ctaHref && <a class="button" href={normalizePublicHref(block.data.ctaHref)}>{block.data.ctaText || 'Подробнее'}</a>}</div></section>;
   }
   if (block.blockType === 'rich_text') {
     return <section class="section container"><h2>{block.data.title}</h2><p class="lead">{block.data.text}</p></section>;
   }
   if (block.blockType === 'tariff_grid') {
-    return <section class="section container"><h2>{block.data.title || 'Тарифы'}</h2><div class="grid">{tariffs.map((tariff: Props['tariffs'][number]) => <article class="card"><h3>{tariff.name}</h3><p>{tariff.service}. {tariff.speed}</p><div class="tariff-price">{tariff.price}</div><a class="card-link" href={`/${citySlug}/${tariff.slug}/`}>О тарифе →</a></article>)}</div></section>;
+    return <section class="section container"><h2>{block.data.title || 'Тарифы'}</h2><div class="grid">{tariffs.map((tariff: Props['tariffs'][number]) => <article class="card"><h3>{tariff.name}</h3><p>{tariff.service}. {tariff.speed}</p><div class="tariff-price">{tariff.price}</div><a class="card-link" href={publicHtmlPath(citySlug, tariff.slug)}>О тарифе →</a></article>)}</div></section>;
   }
   return null;
 })}

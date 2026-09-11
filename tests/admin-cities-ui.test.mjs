@@ -5,10 +5,14 @@ import { join } from 'node:path';
 
 const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 
-test('cities route mounts the authenticated React workspace and is linked from the shell', () => {
+test('city catalog and import have separate static routes', () => {
   const routePath = join(adminRoot, 'pages', 'cities.astro');
   assert.equal(existsSync(routePath), true, 'cities route must exist');
   assert.match(readFileSync(routePath, 'utf8'), /<CitiesApp[^>]+client:load/);
+
+  const importRoutePath = join(adminRoot, 'pages', 'cities', 'import.astro');
+  assert.equal(existsSync(importRoutePath), true, 'city import route must exist');
+  assert.match(readFileSync(importRoutePath, 'utf8'), /<CityImportApp[^>]+client:load/);
 
   const shell = readFileSync(join(adminRoot, 'components', 'AdminShell.tsx'), 'utf8');
   assert.match(shell, /href=["']\/cities["']/);
@@ -17,13 +21,22 @@ test('cities route mounts the authenticated React workspace and is linked from t
   assert.doesNotMatch(cityNavigation, /disabled/);
 });
 
-test('city workspace implements list, validation report, guarded apply and rebuild status', () => {
-  const componentPath = join(adminRoot, 'components', 'CitiesApp.tsx');
-  assert.equal(existsSync(componentPath), true, 'city workspace must exist');
+test('city catalog loads management controls and links to its separate import workflow', () => {
+  const source = readFileSync(join(adminRoot, 'components', 'CitiesApp.tsx'), 'utf8');
+  assert.ok(source.includes('/admin/cities'));
+  assert.match(source, /href=["']\/cities\/import["']/);
+  assert.match(source, /method:\s*["']PATCH["']/);
+  assert.match(source, /Управление городом/);
+  assert.match(source, /\{selectedCity\s*\?\s*<aside aria-label="Редактирование города"/);
+  assert.doesNotMatch(source, /\/admin\/cities\/imports|\/admin\/cities\/import\/validate|\/admin\/cities\/import\/apply|accept=["']\.xlsx["']/);
+});
+
+test('city import workspace implements validation report, guarded apply, history and rebuild status', () => {
+  const componentPath = join(adminRoot, 'components', 'CityImportApp.tsx');
+  assert.equal(existsSync(componentPath), true, 'city import workspace must exist');
   const source = readFileSync(componentPath, 'utf8');
   for (const endpoint of [
     '/admin/sites',
-    '/admin/cities',
     '/admin/cities/imports',
     '/admin/cities/import/validate',
     '/admin/cities/import/apply',

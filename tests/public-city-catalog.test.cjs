@@ -41,7 +41,11 @@ test('public city catalog returns only published entities for one published site
     redirect: {
       findMany: async (query) => {
         calls.redirects = query;
-        return [{ id: 'redirect-1', sourcePath: '/old/', targetPath: '/kazan/', status: 'PUBLISHED' }];
+        return [
+          { id: 'redirect-1', sourcePath: '/old/', targetPath: '/kazan/', status: 'PUBLISHED' },
+          { id: 'redirect-stale', sourcePath: '/stale', targetPath: '/draft-city', status: 'PUBLISHED' },
+          { id: 'redirect-occupied', sourcePath: '/kazan', targetPath: '/', status: 'PUBLISHED' },
+        ];
       },
     },
   });
@@ -58,7 +62,7 @@ test('public city catalog returns only published entities for one published site
   assert.equal(result.cities[0].namePrepositional, 'Казани');
   assert.equal(result.cities[0].pages[0].slug, 'internet');
   assert.equal(result.cities[0].tariffs[0].slug, 'giga-500');
-  assert.deepEqual(result.redirects, [{ id: 'redirect-1', sourcePath: '/old/', targetPath: '/kazan/', status: 'PUBLISHED' }]);
+  assert.deepEqual(result.redirects, [{ id: 'redirect-1', sourcePath: '/old', targetPath: '/kazan', status: 'PUBLISHED' }]);
 });
 
 test('public city catalog rejects an unpublished or unknown site', async () => {

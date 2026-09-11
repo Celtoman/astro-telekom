@@ -4,6 +4,7 @@ import AddressForm from '../../components/AddressForm.astro';
 import BlockRenderer from '../../components/BlockRenderer.astro';
 import { loadSiteData, pageMeta, publicSiteSlug, type CityView, type PageView } from '../../data/site';
 import type { TariffView } from '../../data/tariff-view';
+import { publicHtmlPath } from '../../data/public-url';
 
 type Resource = { kind: 'page'; page: PageView } | { kind: 'tariff'; tariff: TariffView };
 interface Props { city: CityView; resource: Resource }
@@ -22,7 +23,7 @@ const { city, resource } = Astro.props as Props;
 const page = resource.kind === 'page' ? resource.page : undefined;
 const tariff = resource.kind === 'tariff' ? resource.tariff : undefined;
 const addressPage = city.pages.find((item) => item.type === 'ADDRESS_CHECK');
-const addressHref = addressPage?.slug ? `/${city.slug}/${addressPage.slug}/` : `/${city.slug}/`;
+const addressHref = addressPage?.slug ? publicHtmlPath(city.slug, addressPage.slug) : publicHtmlPath(city.slug);
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 const pageDefaults: Record<string, { title: string; description: string; heading: string; lead: string; service?: string }> = {
   INTERNET: { title: `Домашний интернет в ${city.nameIn}`, description: `Тарифы домашнего интернета в ${city.nameIn}.`, heading: 'Домашний интернет', lead: 'Выберите скорость подключения и проверьте доступность по вашему адресу.', service: 'Домашний интернет' },
@@ -66,7 +67,7 @@ const pageServiceType = page && leadPageTypes.includes(page.type as typeof leadP
     <section class="section container"><div class="grid">{questions.map(([question, answer]) => <article class="card"><h2>{question}</h2><p>{answer}</p></article>)}</div></section>
   </> : <>
     <section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>{defaults!.heading}</h1><p class="lead">{defaults!.lead}</p><a class="button" href={addressHref}>{page?.type === 'TV' ? 'Оставить заявку' : 'Проверить адрес'}</a></div></section>
-    {pageTariffs.length > 0 && <section class="section container"><h2>Тарифы</h2><div class="grid">{pageTariffs.map((item) => <article class="card"><h3>{item.name}</h3><p>{item.speed}</p><div class="tariff-price">{item.price}</div><a class="card-link" href={`/${city.slug}/${item.slug}/`}>Подробнее →</a></article>)}</div></section>}
+    {pageTariffs.length > 0 && <section class="section container"><h2>Тарифы</h2><div class="grid">{pageTariffs.map((item) => <article class="card"><h3>{item.name}</h3><p>{item.speed}</p><div class="tariff-price">{item.price}</div><a class="card-link" href={publicHtmlPath(city.slug, item.slug)}>Подробнее →</a></article>)}</div></section>}
     {pageServiceType && <AddressForm apiUrl={apiUrl} siteSlug={publicSiteSlug} pageSlug={page!.slug} city={city} mode="lead" serviceType={pageServiceType} />}
   </>}
 </BaseLayout>

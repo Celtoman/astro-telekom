@@ -37,7 +37,31 @@ export class AdminCitiesController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() body: Partial<CityBody>) {
-    const city = await this.prisma.city.update({ where: { id }, data: body });
+    const city = await this.prisma.$transaction(async (transaction) => {
+      const current = await transaction.city.findUnique({ where: { id }, select: { status: true } });
+      if (!current) throw new BadRequestException('Город не найден');
+      const updated = await transaction.city.update({ where: { id }, data: body });
+      if (body.status !== undefined && body.status !== current.status) {
+        const tariffs = await transaction.tariff.findMany({ where: { cityId: id }, select: { id: true, status: true } });
+        const publishedTariffIds = updated.status === 'PUBLISHED'
+          ? tariffs.filter((tariff) => tariff.status === 'PUBLISHED').map((tariff) => tariff.id)
+          : [];
+        const draftTariffIds = tariffs.filter((tariff) => !publishedTariffIds.includes(tariff.id)).map((tariff) => tariff.id);
+        if (publishedTariffIds.length) {
+          await transaction.redirect.updateMany({
+            where: { siteId: updated.siteId, managedTariffId: { in: publishedTariffIds } },
+            data: { status: 'PUBLISHED' },
+          });
+        }
+        if (draftTariffIds.length) {
+          await transaction.redirect.updateMany({
+            where: { siteId: updated.siteId, managedTariffId: { in: draftTariffIds } },
+            data: { status: 'DRAFT' },
+          });
+        }
+      }
+      return updated;
+    });
     await this.rebuild.enqueue({ entity: 'city', id: city.id, siteId: city.siteId });
     return city;
   }

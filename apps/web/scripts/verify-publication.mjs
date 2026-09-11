@@ -39,7 +39,7 @@ function textContent(tag) {
 function routeForHtml(distDirectory, path) {
   const name = displayPath(distDirectory, path);
   if (name === 'index.html') return '/';
-  if (name.endsWith('/index.html')) return `/${name.slice(0, -'/index.html'.length)}/`;
+  if (name.endsWith('/index.html')) return `/${name.slice(0, -'/index.html'.length)}`;
   return null;
 }
 
@@ -127,6 +127,24 @@ function validateIndexableHtml(html, route, expectedUrl, errors) {
   if (robots.some((tag) => getAttribute(tag, 'content')?.toLowerCase().split(/[\s,]+/).includes('noindex'))) {
     errors.push(`${route}: URL из sitemap.xml не может содержать noindex`);
   }
+
+  for (const anchor of tags(html, 'a')) {
+    const href = getAttribute(anchor, 'href');
+    if (!href) continue;
+    let url;
+    try {
+      url = new URL(href, expectedUrl);
+    } catch {
+      continue;
+    }
+    const leaf = url.pathname.replace(/\/+$/, '').split('/').at(-1) || '';
+    const isPublicHtml = url.origin === new URL(expectedUrl).origin
+      && !url.pathname.startsWith('/api/')
+      && !leaf.includes('.');
+    if (isPublicHtml && url.pathname !== '/' && url.pathname.endsWith('/')) {
+      errors.push(`${route}: внутренняя HTML-ссылка содержит завершающий /: ${href}`);
+    }
+  }
 }
 
 function validateNotFoundHtml(html, errors) {
@@ -180,8 +198,8 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
       errors.push(`sitemap.xml: некорректный абсолютный URL ${location}`);
       continue;
     }
-    if (url.origin !== origin || url.search || url.hash || !url.pathname.endsWith('/')) {
-      errors.push(`sitemap.xml: URL должен принадлежать ${origin}, не иметь query/hash и заканчиваться /: ${location}`);
+    if (url.origin !== origin || url.search || url.hash || (url.pathname !== '/' && url.pathname.endsWith('/'))) {
+      errors.push(`sitemap.xml: URL должен принадлежать ${origin}, не иметь query/hash и завершающего /: ${location}`);
     }
     if (seenLocations.has(url.href)) errors.push(`sitemap.xml: дублируется ${url.href}`);
     seenLocations.add(url.href);

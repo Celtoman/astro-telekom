@@ -1,4 +1,5 @@
 import { tariffView, type TariffView } from './tariff-view';
+import { normalizePublicHtmlPath, publicHtmlPath } from './public-url';
 
 export interface PageView {
   type: string;
@@ -47,13 +48,13 @@ const redirectPathPattern = /^\/[a-z0-9._~/-]*$/;
 function assertUniquePublishedPaths(cities: CityView[]) {
   const citySlugs = new Set<string>();
   for (const city of cities) {
-    if (citySlugs.has(city.slug)) throw new Error(`Конфликт опубликованного URL /${city.slug}/: дублируется slug города`);
+    if (citySlugs.has(city.slug)) throw new Error(`Конфликт опубликованного URL /${city.slug}: дублируется slug города`);
     citySlugs.add(city.slug);
     const resources = new Map<string, string>();
     const register = (slug: string, owner: string) => {
       if (!slugPattern.test(slug)) throw new Error(`Некорректный slug опубликованного ресурса в городе ${city.slug}: ${slug || '(пусто)'}`);
       const current = resources.get(slug);
-      if (current) throw new Error(`Конфликт опубликованного URL /${city.slug}/${slug}/: ${current} и ${owner}`);
+      if (current) throw new Error(`Конфликт опубликованного URL /${city.slug}/${slug}: ${current} и ${owner}`);
       resources.set(slug, owner);
     };
     for (const page of city.pages) {
@@ -68,16 +69,16 @@ function normalizeRedirects(value: unknown, cities: CityView[]): RedirectView[] 
     .filter((item: Record<string, unknown>) => item?.status === 'PUBLISHED')
     .map((item: Record<string, unknown>) => ({
       id: String(item.id || ''),
-      sourcePath: String(item.sourcePath || ''),
-      targetPath: String(item.targetPath || ''),
+      sourcePath: normalizePublicHtmlPath(String(item.sourcePath || '')),
+      targetPath: normalizePublicHtmlPath(String(item.targetPath || '')),
       status: 'PUBLISHED',
     }));
   const routePaths = new Set(['/']);
   for (const city of cities) {
-    const cityPath = `/${city.slug}/`;
+    const cityPath = publicHtmlPath(city.slug);
     routePaths.add(cityPath);
-    for (const page of city.pages) if (page.type !== 'HOME' && page.type !== 'TARIFF') routePaths.add(`${cityPath}${page.slug}/`);
-    for (const tariff of city.tariffs) routePaths.add(`${cityPath}${tariff.slug}/`);
+    for (const page of city.pages) if (page.type !== 'HOME' && page.type !== 'TARIFF') routePaths.add(publicHtmlPath(city.slug, page.slug));
+    for (const tariff of city.tariffs) routePaths.add(publicHtmlPath(city.slug, tariff.slug));
   }
   const sourcePaths = new Set<string>();
   for (const redirect of redirects) {

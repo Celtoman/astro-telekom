@@ -367,6 +367,38 @@ test('city import rejects legacy validation reports with an explicit revalidatio
   assert.equal(transactionCalled, false);
 });
 
+test('unpublishing a city disables every managed tariff redirect in the same transaction', async () => {
+  const redirectUpdates = [];
+  const tx = {
+    city: {
+      findUnique: async () => ({ status: 'PUBLISHED' }),
+      update: async ({ data }) => ({ id: 'city-1', siteId: 'site-1', status: data.status }),
+    },
+    tariff: {
+      findMany: async () => [
+        { id: 'tariff-published', status: 'PUBLISHED' },
+        { id: 'tariff-draft', status: 'DRAFT' },
+      ],
+    },
+    redirect: { updateMany: async (query) => { redirectUpdates.push(query); return { count: 2 }; } },
+  };
+  const rebuilds = [];
+  const controller = new AdminCitiesController(
+    { $transaction: async (callback) => callback(tx) },
+    { enqueue: async (job) => { rebuilds.push(job); } },
+    {},
+  );
+
+  const result = await controller.update('city-1', { status: 'DRAFT' });
+
+  assert.equal(result.status, 'DRAFT');
+  assert.deepEqual(redirectUpdates, [{
+    where: { siteId: 'site-1', managedTariffId: { in: ['tariff-published', 'tariff-draft'] } },
+    data: { status: 'DRAFT' },
+  }]);
+  assert.equal(rebuilds[0].siteId, 'site-1');
+});
+
 test('city import CLI requires an operator-provided action map instead of inventing row decisions', () => {
   const source = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'import-cities.mjs'), 'utf8');
   assert.match(source, /apply\s*&&\s*!actionsPath/);

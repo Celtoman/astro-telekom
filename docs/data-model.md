@@ -1,6 +1,6 @@
 # Модель данных текущего прототипа
 
-Источник правды: `prisma/schema.prisma` и шестнадцать применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
+Источник правды: `prisma/schema.prisma` и семнадцать применимых миграций. Этот документ различает существующие таблицы от объектов, которые фигурируют только в продуктовом плане.
 
 ## Сущности контента и географии
 
@@ -17,7 +17,7 @@
 
 ## Тарифы и импорты
 
-`Tariff` хранит provider/city, name, slug, service type, standard/promo price, speed, promo text, connection fee, availability, external/identity keys, source, attributes, seo и publication status. Source-specific поля полного описания и количества TV-каналов не дублируются в верхнем уровне: importer сохраняет их в JSON `attributes` под стабильными ключами `opisanie_tarifa` (string), `tv_channels_total` и `tv_channels_hd` (number); пустые значения не сохраняются. Ограничения: unique `(cityId, slug)` и `(cityId, identityKey)` — следовательно, один `post_title_lat` не может повторяться в городе даже у разных service type.
+`Tariff` хранит provider/city, name, slug, service type, standard/promo price, speed, promo text, connection fee, availability, external/identity keys, source, attributes, seo и publication status. Source-specific поля не дублируются в верхнем уровне: единый реестр `TARIFF_ATTRIBUTE_FIELDS` нормализует строки, числа, integers, booleans и статусы услуг для import и ручного PATCH; пустые значения не сохраняются, неизвестные непустые ключи отклоняются. Ограничения: unique `(cityId, slug)` и `(cityId, identityKey)`; identity key для ручной правки и импорта одинаков — `cityId:slug:serviceType`, а публичный slug остается уникальным в городе независимо от типа услуги.
 
 Миграция `0016_admin_list_pagination_indexes` добавляет составные индексы `Tariff(updatedAt, id)` и `Lead(createdAt, id)` для стабильного keyset/cursor обхода административных журналов. Фильтр статуса заявок использует существующий `Lead(status, createdAt)`, а тарифные city/service/status-фильтры — `Tariff(cityId, serviceType, status)`. Подстроковый `q` остается bounded-поиском по текущему каталогу и не подменяется неутвержденным полнотекстовым индексом.
 
@@ -47,7 +47,7 @@
 
 `User` содержит email, `passwordHash`, name, active и timestamps. Ролевой модели нет: любая активная учетная запись имеет единый уровень доступа администратора. `Session` хранит не raw token, а его SHA-256 hash и expiry. При reset password или deactivate API удаляет sessions пользователя. `LeadAccessToken` также хранит только hash: raw token существует лишь в одноразовой email-ссылке и не возвращается административными CRM routes.
 
-`Redirect` хранит site/city, source/target path, status, `hitCount`, `lastHitAt` и timestamps. Admin API создает, изменяет и архивирует записи; published-правило проходит проверку конфликтов, существования цели и запрета цепочек. Во время Astro build опубликованные записи превращаются в точные Caddy matchers, а runtime resolver повторно проверяет published site/redirect, атомарно учитывает переход и отдает HTTP 301. Удаление реализовано как `ARCHIVED`, общей корзины/версий и предложений из 404 пока нет.
+`Redirect` хранит site/city, no-slash source/target path, status, `hitCount`, `lastHitAt`, опциональный `managedTariffId` и timestamps. `managedTariffId` — provenance автоматического правила без foreign key: это позволяет сохранить redirect history после удаления тарифа. Только управляемое тарифом правило синхронизирует status с его публикацией; совместимое ручное правило не захватывается. Admin API создает, изменяет и архивирует записи; published-правило проходит проверку конфликтов, существования цели и запрета цепочек. Во время Astro build опубликованные записи превращаются в точные Caddy matchers, а runtime resolver повторно проверяет published site/redirect, атомарно учитывает переход и отдает HTTP 301. Удаление реализовано как `ARCHIVED`, общей корзины/версий и предложений из 404 пока нет.
 
 `SiteRebuild` — одна актуальная outbox/status-запись на `dedupeKey` сайта. Она хранит affected paths, последнюю причину, `requestedRevision`, `processingRevision`, `publishedRevision`, число попыток, ошибку и финальный ответ deployment provider. Ревизия считается опубликованной только при статусе `SUCCEEDED`; новая мутация во время активной сборки увеличивает requested revision и создает следующий job после завершения текущего.
 

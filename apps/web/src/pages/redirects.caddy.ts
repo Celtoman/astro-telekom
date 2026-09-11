@@ -4,7 +4,7 @@ import { loadSiteData, publicSiteSlug } from '../data/site';
 export const GET: APIRoute = async () => {
   const catalog = await loadSiteData();
   const lines = catalog.redirects.flatMap((redirect, index) => [
-    `@redirect_${index} path ${redirect.sourcePath}`,
+    `@redirect_${index} path ${redirect.sourcePath} ${redirect.sourcePath}/`,
     `handle @redirect_${index} {`,
     `  rewrite * /api/v1/public/sites/${publicSiteSlug}/redirects/${redirect.id}`,
     '  reverse_proxy {$API_UPSTREAM:api:3000}',

@@ -435,6 +435,7 @@ model Redirect {
   cityId      String?
   sourcePath  String
   targetPath  String
+  managedTariffId String?
   status      PublishStatus @default(PUBLISHED)
   hitCount    Int      @default(0)
   lastHitAt   DateTime?
@@ -444,6 +445,7 @@ model Redirect {
   city        City?    @relation(fields: [cityId], references: [id], onDelete: SetNull)
   @@unique([siteId, sourcePath])
   @@index([siteId, status])
+  @@index([managedTariffId])
 }
 
 model LeadStatusHistory {

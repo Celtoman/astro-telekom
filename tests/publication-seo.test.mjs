@@ -20,7 +20,7 @@ async function createFixture(overrides = {}) {
   const directory = await mkdtemp(join(tmpdir(), 'publication-seo-'));
   await mkdir(join(directory, 'kazan'), { recursive: true });
   await writeFile(join(directory, 'index.html'), overrides.root ?? indexableHtml(`${publicSiteUrl}/`));
-  await writeFile(join(directory, 'kazan', 'index.html'), overrides.kazan ?? indexableHtml(`${publicSiteUrl}/kazan/`));
+  await writeFile(join(directory, 'kazan', 'index.html'), overrides.kazan ?? indexableHtml(`${publicSiteUrl}/kazan`));
   if (overrides.extra !== undefined) {
     await mkdir(join(directory, 'extra'), { recursive: true });
     await writeFile(join(directory, 'extra', 'index.html'), overrides.extra);
@@ -31,7 +31,7 @@ async function createFixture(overrides = {}) {
   await writeFile(join(directory, '404.html'), overrides.notFound ?? notFoundHtml());
   await writeFile(
     join(directory, 'sitemap.xml'),
-    overrides.sitemap ?? `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${publicSiteUrl}/</loc></url><url><loc>${publicSiteUrl}/kazan/</loc></url></urlset>`,
+    overrides.sitemap ?? `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${publicSiteUrl}/</loc></url><url><loc>${publicSiteUrl}/kazan</loc></url></urlset>`,
   );
   await writeFile(
     join(directory, 'robots.txt'),
@@ -50,7 +50,9 @@ async function withFixture(overrides, callback) {
 }
 
 test('publication SEO verifier accepts a complete sitemap and valid raw HTML', async () => {
-  await withFixture({}, async (distDirectory) => {
+  await withFixture({
+    root: indexableHtml(`${publicSiteUrl}/`, { body: '<h1>Заголовок страницы</h1><a href="/assets/styles.css/">Asset path</a><a href="/api/status/">API path</a>' }),
+  }, async (distDirectory) => {
     assert.deepEqual(
       await verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
       { indexablePages: 2, htmlPages: 3 },
@@ -71,7 +73,7 @@ test('publication SEO verifier rejects sitemap and HTML inventory drift', async 
   await withFixture({ extra: indexableHtml(`${publicSiteUrl}/extra/`) }, async (distDirectory) => {
     await assert.rejects(
       verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
-      /\/extra\/.*нет в sitemap\.xml/i,
+      /\/extra.*нет в sitemap\.xml/i,
     );
   });
 
@@ -85,11 +87,11 @@ test('publication SEO verifier rejects sitemap and HTML inventory drift', async 
 
 test('publication SEO verifier rejects invalid canonical and raw HTML metadata', async () => {
   await withFixture({
-    kazan: indexableHtml(`${publicSiteUrl}/kazan/`, { canonical: `${publicSiteUrl}/wrong/` }),
+    kazan: indexableHtml(`${publicSiteUrl}/kazan`, { canonical: `${publicSiteUrl}/wrong` }),
   }, async (distDirectory) => {
     await assert.rejects(
       verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
-      /canonical.*\/kazan\//i,
+      /canonical.*\/kazan/i,
     );
   });
 
@@ -126,6 +128,17 @@ test('publication SEO verifier rejects invalid canonical and raw HTML metadata',
     await assert.rejects(
       verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
       /sitemap\.xml.*noindex/i,
+    );
+  });
+});
+
+test('publication SEO verifier rejects a trailing slash in an internal HTML link', async () => {
+  await withFixture({
+    root: indexableHtml(`${publicSiteUrl}/`, { body: '<h1>Главная</h1><a href="/kazan/">Казань</a>' }),
+  }, async (distDirectory) => {
+    await assert.rejects(
+      verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
+      /внутренняя HTML-ссылка.*\/kazan\//i,
     );
   });
 });

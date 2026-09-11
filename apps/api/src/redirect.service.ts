@@ -23,7 +23,7 @@ export function normalizeRedirectPath(value: unknown, field: 'sourcePath' | 'tar
   if (!safePathPattern.test(path) || path.includes('//') || path.includes('..')) {
     throw new BadRequestException(`${field} содержит недопустимые символы`);
   }
-  if (path !== '/' && !path.endsWith('/') && !path.split('/').at(-1)?.includes('.')) path += '/';
+  if (path !== '/') path = path.replace(/\/+$/, '');
   if (field === 'sourcePath' && path === '/') throw new BadRequestException('Корневой URL нельзя использовать как sourcePath');
   return path;
 }
@@ -75,9 +75,20 @@ export class RedirectService {
 
   async resolvePublished(siteSlug: string, id: string) {
     const where = { id, status: PublishStatus.PUBLISHED, site: { slug: siteSlug, status: PublishStatus.PUBLISHED } };
-    const redirect = await this.prisma.redirect.findFirst({ where, select: { targetPath: true } });
+    const redirect = await this.prisma.redirect.findFirst({ where, select: { siteId: true, sourcePath: true, targetPath: true } });
     if (!redirect) throw new NotFoundException('Redirect not found');
+    const sourcePath = normalizeRedirectPath(redirect.sourcePath, 'sourcePath');
     const targetPath = normalizeRedirectPath(redirect.targetPath, 'targetPath');
+    const cities = await this.prisma.city.findMany({
+      where: { siteId: redirect.siteId, status: PublishStatus.PUBLISHED },
+      select: {
+        slug: true,
+        pages: { where: { status: PublishStatus.PUBLISHED }, select: { type: true, slug: true } },
+        tariffs: { where: { status: PublishStatus.PUBLISHED }, select: { slug: true } },
+      },
+    });
+    const publishedPaths = this.publishedPaths(cities);
+    if (publishedPaths.has(sourcePath) || !publishedPaths.has(targetPath)) throw new NotFoundException('Redirect not found');
     const updated = await this.prisma.redirect.updateMany({
       where,
       data: { hitCount: { increment: 1 }, lastHitAt: new Date() },
@@ -103,11 +114,12 @@ export class RedirectService {
       if (!city || city.siteId !== body.siteId) throw new BadRequestException('Город не принадлежит выбранному сайту');
     }
 
-    const occupied = await this.prisma.redirect.findUnique({
-      where: { siteId_sourcePath: { siteId: body.siteId, sourcePath } },
+    const occupiedCandidates = [...new Set([sourcePath, `${sourcePath}/`])];
+    const occupied = (await Promise.all(occupiedCandidates.map((candidatePath) => this.prisma.redirect.findUnique({
+      where: { siteId_sourcePath: { siteId: body.siteId, sourcePath: candidatePath } },
       select: { id: true },
-    });
-    if (occupied && occupied.id !== currentId) throw new ConflictException(`Redirect для ${sourcePath} уже существует`);
+    })))).find((candidate) => candidate && candidate.id !== currentId);
+    if (occupied) throw new ConflictException(`Redirect для ${sourcePath} уже существует`);
 
     if (status === PublishStatus.PUBLISHED) {
       await this.assertPublishedPolicy(body.siteId, sourcePath, targetPath, currentId);
@@ -130,17 +142,25 @@ export class RedirectService {
         select: { id: true, sourcePath: true, targetPath: true },
       }),
     ]);
-    const publishedPaths = new Set(['/']);
-    for (const city of cities) {
-      const cityPath = `/${city.slug}/`;
-      publishedPaths.add(cityPath);
-      for (const page of city.pages) if (page.type !== 'HOME' && page.type !== 'TARIFF') publishedPaths.add(`${cityPath}${page.slug}/`);
-      for (const tariff of city.tariffs) publishedPaths.add(`${cityPath}${tariff.slug}/`);
-    }
+    const publishedPaths = this.publishedPaths(cities);
     if (publishedPaths.has(sourcePath)) throw new ConflictException(`sourcePath ${sourcePath} занят опубликованным ресурсом`);
-    if (redirects.some((redirect) => redirect.sourcePath === targetPath || redirect.targetPath === sourcePath)) {
+    if (redirects.some((redirect) => (
+      normalizeRedirectPath(redirect.sourcePath, 'sourcePath') === targetPath
+      || normalizeRedirectPath(redirect.targetPath, 'targetPath') === sourcePath
+    ))) {
       throw new ConflictException('Цепочки redirects запрещены: переход должен вести сразу на опубликованный ресурс');
     }
     if (!publishedPaths.has(targetPath)) throw new ConflictException(`targetPath ${targetPath} не является опубликованным ресурсом`);
+  }
+
+  private publishedPaths(cities: Array<{ slug: string; pages: Array<{ type: string; slug: string }>; tariffs: Array<{ slug: string }> }>) {
+    const publishedPaths = new Set(['/']);
+    for (const city of cities) {
+      const cityPath = `/${city.slug}`;
+      publishedPaths.add(cityPath);
+      for (const page of city.pages) if (page.type !== 'HOME' && page.type !== 'TARIFF') publishedPaths.add(`${cityPath}/${page.slug}`);
+      for (const tariff of city.tariffs) publishedPaths.add(`${cityPath}/${tariff.slug}`);
+    }
+    return publishedPaths;
   }
 }

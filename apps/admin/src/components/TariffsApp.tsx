@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react"
-import { CircleAlert, FileCheck2, FileUp, RefreshCw } from "lucide-react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { CircleAlert, Eye, FileUp, Pencil, RefreshCw, X } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { ServerPagination } from "./ServerPagination"
@@ -7,28 +7,21 @@ import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
-import { Checkbox } from "./ui/checkbox"
 import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 
 interface Administrator { id: string; email: string }
-interface Provider { id: string; name: string; slug: string }
-interface Tariff { id: string; name: string; slug: string; serviceType: string; standardPrice: string | number | null; promoPrice: string | number | null; city: { name: string; slug: string } }
-interface ImportIssue { row: number; level: "error" | "warning"; message: string; key?: string }
-interface ImportReport { totalRows: number; validRows: number; errorRows: number; warningRows: number; diff: { created: number; updated: number; deleted: number }; issues: ImportIssue[] }
-interface ImportRun { id: string; fileName: string; status: string; totalRows: number; validRows: number; errorRows: number; warningRows: number; createdAt: string }
-interface Rebuild { id: string; status: string; triggerEntity: string; requestedRevision: number; publishedRevision: number; updatedAt: string }
-interface WorkspaceData { providers: Provider[]; imports: ImportRun[]; rebuilds: Rebuild[] }
+interface Tariff { id: string; name: string; slug: string; serviceType: string; standardPrice: string | number | null; promoPrice: string | number | null; speed: number | null; status: string; availability: boolean; city: { name: string; slug: string } }
+interface TariffDetail extends Tariff { promoText: string | null; connectionFee: string | number | null; externalId: string | null; identityKey: string | null; dataSource: string | null; attributes: Record<string, unknown> | null; seo: Record<string, unknown> | null; publicPath: string; provider: { id: string; name: string }; city: { id: string; name: string; slug: string; siteId: string }; createdAt: string; updatedAt: string }
 interface TariffPage {
   items: Tariff[]
   pageInfo: { limit: number; total: number; hasNextPage: boolean; nextCursor: string | null }
 }
 
-type ScreenState = { status: "loading" } | { status: "error"; message: string } | { status: "ready"; user: Administrator; data: WorkspaceData }
+type ScreenState = { status: "loading" } | { status: "error"; message: string } | { status: "ready"; user: Administrator }
 
 const money = (value: Tariff["standardPrice"]) => value === null ? "—" : `${Number(value).toLocaleString("ru-RU")} ₽`
-const statusVariant = (status: string) => status === "APPLIED" || status === "SUCCEEDED" ? "default" as const : status === "FAILED" ? "destructive" as const : "secondary" as const
 
 export function TariffsApp({ apiUrl }: { apiUrl: string }) {
   const [state, setState] = useState<ScreenState>({ status: "loading" })
@@ -40,24 +33,18 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
   const [listRevision, setListRevision] = useState(0)
   const [listBusy, setListBusy] = useState(true)
   const [listError, setListError] = useState<string | null>(null)
-  const [file, setFile] = useState<File | null>(null)
-  const [report, setReport] = useState<ImportReport | null>(null)
-  const [runId, setRunId] = useState<string | null>(null)
-  const [confirmWarnings, setConfirmWarnings] = useState(false)
-  const [busy, setBusy] = useState<"validate" | "apply" | "refresh" | null>(null)
-  const [actionError, setActionError] = useState<string | null>(null)
+  const [selectedTariff, setSelectedTariff] = useState<TariffDetail | null>(null)
+  const [detailBusy, setDetailBusy] = useState(false)
+  const [detailError, setDetailError] = useState<string | null>(null)
+  const [refreshing, setRefreshing] = useState(false)
+  const detailGeneration = useRef(0)
 
   const loadWorkspace = useCallback(async (mode: "initial" | "refresh" = "initial") => {
-    if (mode === "refresh") setBusy("refresh")
+    if (mode === "refresh") setRefreshing(true)
     else setState({ status: "loading" })
     try {
       const session = await requestJson<{ user: Administrator }>(apiUrl, "/auth/me")
-      const [providers, imports, rebuilds] = await Promise.all([
-        requestJson<Provider[]>(apiUrl, "/admin/providers"),
-        requestJson<ImportRun[]>(apiUrl, "/admin/tariffs/imports"),
-        requestJson<Rebuild[]>(apiUrl, "/admin/rebuilds"),
-      ])
-      setState({ status: "ready", user: session.user, data: { providers, imports, rebuilds } })
+      setState({ status: "ready", user: session.user })
     } catch (caught: unknown) {
       if (caught instanceof AdminApiError && caught.status === 401) {
         window.location.replace("/login")
@@ -65,7 +52,7 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
       }
       setState({ status: "error", message: caught instanceof Error ? caught.message : "API недоступен" })
     } finally {
-      setBusy(null)
+      setRefreshing(false)
     }
   }, [apiUrl])
 
@@ -101,44 +88,18 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
     return () => { active = false }
   }, [apiUrl, currentCursor, listRevision, pageSize, searchQuery])
 
-  async function validateImport() {
-    if (!file || state.status !== "ready") return
-    const provider = state.data.providers[0]
-    if (!provider) { setActionError("Провайдер не найден"); return }
-    setBusy("validate")
-    setActionError(null)
+  async function showDetail(id: string) {
+    const generation = ++detailGeneration.current
+    setDetailBusy(true)
+    setDetailError(null)
     try {
-      const fileBase64 = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = () => resolve(String(reader.result))
-        reader.onerror = () => reject(new Error("Не удалось прочитать файл"))
-        reader.readAsDataURL(file)
-      })
-      const result = await requestJson<{ run: { id: string }; report: ImportReport }>(apiUrl, "/admin/tariffs/import/validate", {
-        method: "POST", body: { providerId: provider.id, fileName: file.name, fileBase64 },
-      })
-      setReport(result.report)
-      setRunId(result.run.id)
-      setConfirmWarnings(false)
+      const tariff = await requestJson<TariffDetail>(apiUrl, `/admin/tariffs/${id}`)
+      if (detailGeneration.current === generation) setSelectedTariff(tariff)
     } catch (caught: unknown) {
-      setActionError(caught instanceof Error ? caught.message : "Валидация не выполнена")
-    } finally { setBusy(null) }
-  }
-
-  async function applyImport() {
-    if (!runId || !report) return
-    setBusy("apply")
-    setActionError(null)
-    try {
-      await requestJson(apiUrl, "/admin/tariffs/import/apply", { method: "POST", body: { runId, confirmWarnings } })
-      setReport(null)
-      setRunId(null)
-      setFile(null)
-      await loadWorkspace("refresh")
-      setListRevision((value) => value + 1)
-    } catch (caught: unknown) {
-      setActionError(caught instanceof Error ? caught.message : "Импорт не применен")
-    } finally { setBusy(null) }
+      if (detailGeneration.current === generation) setDetailError(caught instanceof Error ? caught.message : "Тариф не загружен")
+    } finally {
+      if (detailGeneration.current === generation) setDetailBusy(false)
+    }
   }
 
   if (state.status === "loading" || (!tariffPage && listBusy)) return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></main>
@@ -150,30 +111,18 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
   return (
     <AdminShell apiUrl={apiUrl} user={state.user} active="tariffs">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-6 lg:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Тарифы</h1><p className="mt-1 text-sm text-muted-foreground">Каталог, проверка полного XLSX snapshot и состояние пересборки.</p></div><Button variant="outline" disabled={busy !== null || listBusy} onClick={() => { void loadWorkspace("refresh"); setListRevision((value) => value + 1) }}><RefreshCw data-icon="inline-start" />Обновить</Button></div>
-        {actionError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Операция не выполнена</AlertTitle><AlertDescription>{actionError}</AlertDescription></Alert> : null}
-
-        <Card>
-          <CardHeader><CardTitle>Импорт полного snapshot</CardTitle><CardDescription>Файл сначала проходит preview. Применение атомарно обновляет весь каталог провайдера.</CardDescription></CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center"><Input type="file" accept=".xlsx" onChange={(event) => { setFile(event.target.files?.[0] || null); setReport(null); setRunId(null) }} /><Button disabled={!file || busy !== null} onClick={() => void validateImport()}><FileUp data-icon="inline-start" />{busy === "validate" ? "Проверяем…" : "Проверить файл"}</Button></div>
-            {report ? <div className="flex flex-col gap-4">
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><Card size="sm"><CardHeader><CardDescription>Строк</CardDescription><CardTitle>{report.totalRows}</CardTitle></CardHeader></Card><Card size="sm"><CardHeader><CardDescription>Валидно</CardDescription><CardTitle>{report.validRows}</CardTitle></CardHeader></Card><Card size="sm"><CardHeader><CardDescription>Ошибок</CardDescription><CardTitle>{report.errorRows}</CardTitle></CardHeader></Card><Card size="sm"><CardHeader><CardDescription>Предупреждений</CardDescription><CardTitle>{report.warningRows}</CardTitle></CardHeader></Card></div>
-              <Alert><FileCheck2 /><AlertTitle>Изменения полного snapshot</AlertTitle><AlertDescription>Создать: {report.diff.created}; обновить: {report.diff.updated}; удалить: {report.diff.deleted}.</AlertDescription></Alert>
-              {report.issues.length ? <Table><TableHeader><TableRow><TableHead>Строка</TableHead><TableHead>Уровень</TableHead><TableHead>Сообщение</TableHead></TableRow></TableHeader><TableBody>{report.issues.slice(0, 100).map((issue, index) => <TableRow key={`${issue.row}-${index}`}><TableCell>{issue.row}</TableCell><TableCell><Badge variant={issue.level === "error" ? "destructive" : "secondary"}>{issue.level}</Badge></TableCell><TableCell className="whitespace-normal">{issue.message}</TableCell></TableRow>)}</TableBody></Table> : null}
-              {report.warningRows > 0 ? <label className="flex items-center gap-2 text-sm"><Checkbox checked={confirmWarnings} onCheckedChange={(checked) => setConfirmWarnings(checked === true)} />Подтверждаю предупреждения</label> : null}
-              <Button disabled={busy !== null || report.errorRows > 0 || (report.warningRows > 0 && !confirmWarnings)} onClick={() => void applyImport()}>{busy === "apply" ? "Применяем…" : "Применить целиком"}</Button>
-            </div> : null}
-          </CardContent>
-        </Card>
+        <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Тарифы</h1><p className="mt-1 text-sm text-muted-foreground">Каталог, быстрый просмотр и ручное управление тарифами.</p></div><div className="flex flex-wrap gap-2"><Button variant="outline" asChild><a href="/tariffs/import"><FileUp data-icon="inline-start" />Импорт тарифов</a></Button><Button variant="outline" disabled={refreshing || listBusy} onClick={() => { void loadWorkspace("refresh"); setListRevision((value) => value + 1) }}><RefreshCw data-icon="inline-start" />Обновить</Button></div></div>
 
         <Card>
           <CardHeader><CardTitle>Каталог</CardTitle><CardDescription>{tariffPage.pageInfo.total.toLocaleString("ru-RU")} тарифов соответствует фильтру.</CardDescription></CardHeader>
           <CardContent className="flex flex-col gap-4">
             <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Название, slug или город" aria-label="Поиск тарифа" />
             {listError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Каталог не обновлен</AlertTitle><AlertDescription>{listError}</AlertDescription></Alert> : null}
-            <div aria-busy={listBusy} className="min-w-0 overflow-x-auto">
-              {tariffPage.items.length ? <Table><TableHeader><TableRow><TableHead>Тариф</TableHead><TableHead>Город</TableHead><TableHead>Тип</TableHead><TableHead>Цена</TableHead></TableRow></TableHeader><TableBody>{tariffPage.items.map((tariff) => <TableRow key={tariff.id}><TableCell><div className="font-medium">{tariff.name}</div><div className="text-xs text-muted-foreground">{tariff.slug}</div></TableCell><TableCell>{tariff.city.name}</TableCell><TableCell><Badge variant="outline">{tariff.serviceType}</Badge></TableCell><TableCell>{money(tariff.promoPrice ?? tariff.standardPrice)}</TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><p className="font-medium">Тарифы не найдены</p><p className="text-sm text-muted-foreground">Измените поисковый запрос или обновите каталог.</p></div>}
+            <div className={selectedTariff || detailBusy || detailError ? "grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]" : "min-w-0"}>
+              <div aria-busy={listBusy} className="min-w-0 overflow-x-auto">
+                {tariffPage.items.length ? <Table><TableHeader><TableRow><TableHead>Тариф</TableHead><TableHead>Город</TableHead><TableHead>Тип</TableHead><TableHead>Цена</TableHead><TableHead className="text-right">Действия</TableHead></TableRow></TableHeader><TableBody>{tariffPage.items.map((tariff) => <TableRow key={tariff.id}><TableCell><button type="button" className="text-left hover:underline" onClick={() => void showDetail(tariff.id)}><div className="font-medium">{tariff.name}</div><div className="text-xs text-muted-foreground">{tariff.slug}</div></button></TableCell><TableCell>{tariff.city.name}</TableCell><TableCell><Badge variant="outline">{tariff.serviceType}</Badge></TableCell><TableCell>{money(tariff.promoPrice ?? tariff.standardPrice)}</TableCell><TableCell><div className="flex justify-end gap-1"><Button variant="ghost" size="icon-sm" aria-label={`Быстрый просмотр: ${tariff.name}`} onClick={() => void showDetail(tariff.id)}><Eye /></Button><Button variant="ghost" size="icon-sm" aria-label={`Редактировать: ${tariff.name}`} asChild><a href={`/tariffs/edit?id=${encodeURIComponent(tariff.id)}`}><Pencil /></a></Button></div></TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><p className="font-medium">Тарифы не найдены</p><p className="text-sm text-muted-foreground">Измените поисковый запрос или обновите каталог.</p></div>}
+              </div>
+              {selectedTariff || detailBusy || detailError ? <aside aria-label="Быстрый просмотр"><Card size="sm"><CardHeader><div className="flex items-start justify-between gap-3"><div><CardTitle>Быстрый просмотр</CardTitle><CardDescription>Основные данные без ухода из каталога.</CardDescription></div><Button variant="ghost" size="icon-sm" aria-label="Закрыть быстрый просмотр" onClick={() => { detailGeneration.current += 1; setSelectedTariff(null); setDetailBusy(false); setDetailError(null) }}><X /></Button></div></CardHeader><CardContent className="flex flex-col gap-4">{detailBusy ? <Skeleton className="h-52 w-full" /> : detailError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Тариф не загружен</AlertTitle><AlertDescription>{detailError}</AlertDescription></Alert> : selectedTariff ? <><div><p className="font-medium">{selectedTariff.name}</p><p className="break-all text-xs text-muted-foreground">{selectedTariff.publicPath}</p></div><dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-sm"><dt className="text-muted-foreground">Город</dt><dd>{selectedTariff.city.name}</dd><dt className="text-muted-foreground">Тип</dt><dd>{selectedTariff.serviceType}</dd><dt className="text-muted-foreground">Скорость</dt><dd>{selectedTariff.speed ? `${selectedTariff.speed} Мбит/с` : "—"}</dd><dt className="text-muted-foreground">Цена</dt><dd>{money(selectedTariff.promoPrice ?? selectedTariff.standardPrice)}</dd><dt className="text-muted-foreground">Статус</dt><dd><Badge variant="outline">{selectedTariff.status}</Badge></dd><dt className="text-muted-foreground">Источник</dt><dd className="break-all">{selectedTariff.dataSource || "manual"}</dd></dl><Button asChild><a href={`/tariffs/edit?id=${encodeURIComponent(selectedTariff.id)}`}><Pencil data-icon="inline-start" />Редактировать тариф</a></Button></> : null}</CardContent></Card></aside> : null}
             </div>
             <ServerPagination
               page={cursorStack.length}
@@ -188,8 +137,6 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
             />
           </CardContent>
         </Card>
-
-        <div className="grid gap-6 xl:grid-cols-2"><Card><CardHeader><CardTitle>Последние импорты</CardTitle><CardDescription>Сохраненные validation reports.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{state.data.imports.slice(0, 8).map((item) => <div className="flex items-center justify-between gap-3" key={item.id}><div className="min-w-0"><p className="truncate font-medium">{item.fileName}</p><p className="text-xs text-muted-foreground">{item.validRows}/{item.totalRows} строк</p></div><Badge variant={statusVariant(item.status)}>{item.status}</Badge></div>)}</CardContent></Card><Card><CardHeader><CardTitle>Пересборка сайта</CardTitle><CardDescription>Изменения попадут в static web только после SUCCEEDED.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{state.data.rebuilds.slice(0, 8).map((item) => <div className="flex items-center justify-between gap-3" key={item.id}><div><p className="font-medium">Ревизия {item.requestedRevision}</p><p className="text-xs text-muted-foreground">Опубликована {item.publishedRevision}</p></div><Badge variant={statusVariant(item.status)}>{item.status}</Badge></div>)}</CardContent></Card></div>
       </div>
     </AdminShell>
   )

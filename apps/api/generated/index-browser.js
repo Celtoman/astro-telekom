@@ -371,6 +371,7 @@ exports.Prisma.RedirectScalarFieldEnum = {
   cityId: 'cityId',
   sourcePath: 'sourcePath',
   targetPath: 'targetPath',
+  managedTariffId: 'managedTariffId',
   status: 'status',
   hitCount: 'hitCount',
   lastHitAt: 'lastHitAt',

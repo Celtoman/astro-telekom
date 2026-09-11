@@ -49,7 +49,10 @@ const apiFixture = {
       name: 'Казань', namePrepositional: 'Казани', slug: 'kazan', phone: '8 (800) 555-35-35', status: 'PUBLISHED',
       pages: [
         page('HOME', '', 'Домашний интернет в Казани'),
-        page('INTERNET', 'internet', 'Домашний интернет в Казани'),
+        {
+          ...page('INTERNET', 'internet', 'Домашний интернет в Казани'),
+          blocks: [{ blockType: 'hero', data: { title: 'Домашний интернет', text: 'Описание', ctaHref: '/kazan/proverka-adresa/?utm_source=hero' } }],
+        },
         page('ADDRESS_CHECK', 'proverka-adresa', 'Проверка адреса в Казани'),
         page('FAQ', 'faq', 'Вопросы и ответы — Казань'),
         { ...page('FAQ', 'draft-page', 'Черновая страница'), status: 'DRAFT' },
@@ -216,15 +219,16 @@ test('web build uses API data and final HTML passes the publication smoke contra
 
   assert.match(root, /<link rel="canonical" href="https:\/\/partner\.example\.test\/">/);
   assert.match(root, /<h1>Домашний интернет и телевидение Дом\.ру<\/h1>/);
-  assert.match(root, /href="\/kazan\/"/);
-  assert.match(root, /href="\/almetyevsk\/"/);
+  assert.match(root, /href="\/kazan"/);
+  assert.match(root, /href="\/almetyevsk"/);
+  assert.doesNotMatch(root, /href="\/(?:kazan|almetyevsk)\/"/);
   assert.match(kazan, /<h1>Домашний интернет и телевидение в Казани<\/h1>/);
   assert.match(kazan, /API Интернет 500/);
   assert.match(kazan, /777 ₽\/мес\./);
   assert.doesNotMatch(kazan, /Цена уточняется/);
   assert.match(tariff, /<h1>API Интернет 500<\/h1>/);
   assert.match(tariff, /777 ₽\/мес\./);
-  assert.match(almetyevsk, /<link rel="canonical" href="https:\/\/partner\.example\.test\/almetyevsk\/">/);
+  assert.match(almetyevsk, /<link rel="canonical" href="https:\/\/partner\.example\.test\/almetyevsk">/);
   assert.match(almetyevsk, /<h1>Домашний интернет и телевидение в Альметьевске<\/h1>/);
   assert.doesNotMatch(almetyevsk, /Казан/);
   assert.match(almetyevskInternet, /<h1>Домашний интернет<\/h1>/);
@@ -264,19 +268,22 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(kazanAddressCheck, /mode === 'visible' \? 'visible-address-check' : 'lead-form'/);
   assert.match(kazanInternet, /data-form-mode="lead"/);
   assert.match(kazanInternet, /Спасибо! Заявка отправлена/);
+  assert.match(kazanInternet, /href="\/kazan\/proverka-adresa\?utm_source=hero"/);
   assert.match(tariff, /data-form-mode="lead"/);
   assert.doesNotMatch(kazanAddressCheck, /127\.0\.0\.1/);
   assert.match(robots, /Sitemap: https:\/\/partner\.example\.test\/sitemap\.xml/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/kazan\/<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/kazan\/api-internet-500\/<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/internet\/<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/almet-internet-300\/<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/kazan<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/kazan\/api-internet-500<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/internet<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/almet-internet-300<\/loc>/);
+  const sitemapLocations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  assert.deepEqual(sitemapLocations.filter((location) => location.endsWith('/')), [`${productionSite}/`]);
   assert.doesNotMatch(sitemap, /draft-city|draft-page|draft-tariff/);
   assert.match(notFound, /<meta name="robots" content="noindex, follow">/);
   assert.doesNotMatch(notFound, /rel="canonical"/);
-  assert.match(redirectRoutes, /@redirect_0 path \/old-kazan\//);
+  assert.match(redirectRoutes, /@redirect_0 path \/old-kazan \/old-kazan\//);
   assert.match(redirectRoutes, /rewrite \* \/api\/v1\/public\/sites\/domru-kazan\/redirects\/redirect-old-kazan/);
   assert.match(redirectRoutes, /reverse_proxy \{\$API_UPSTREAM:api:3000\}/);
   await assert.rejects(readBuilt(join('draft-city', 'index.html')), (error) => error?.code === 'ENOENT');
@@ -353,7 +360,7 @@ test('web build rejects a published page and tariff with the same city URL', { t
       ALLOW_DEMO_DATA: '',
     });
     assert.notEqual(build.code, 0, build.output);
-    assert.match(build.output, /Конфликт опубликованного URL \/kazan\/internet\//);
+    assert.match(build.output, /Конфликт опубликованного URL \/kazan\/internet:/);
   }, fixture);
 });
 

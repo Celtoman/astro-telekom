@@ -27,7 +27,11 @@ export async function requestJson(baseUrl, route, options = {}, fetchImpl = fetc
   const response = await fetchImpl(url, { ...options, credentials: "include", headers, body })
   const payload = await response.json().catch(() => null)
   if (!response.ok) {
-    const message = typeof payload?.message === "string" ? payload.message : `API вернул ${response.status}`
+    const message = typeof payload?.message === "string"
+      ? payload.message
+      : Array.isArray(payload?.message)
+        ? payload.message.join("; ")
+        : `API вернул ${response.status}`
     throw new AdminApiError(response.status, message, payload)
   }
   return /** @type {T} */ (payload)

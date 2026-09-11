@@ -1,6 +1,7 @@
 import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { mergeContent, publicContent } from './content-resolution';
+import { normalizeRedirectPath } from './redirect.service';
 
 @Controller('public/sites/:siteSlug/cities')
 export class CitiesController {
@@ -33,7 +34,7 @@ export class CitiesController {
 
     return {
       site: { name: site.name, slug: site.slug, domain: site.domain },
-      redirects,
+      redirects: this.effectiveRedirects(cities, redirects),
       cities: cities.map((city: any) => this.cityResponse(city, site)),
     };
   }
@@ -78,5 +79,25 @@ export class CitiesController {
         seo: mergeContent(inheritedSeo, tariff.seo),
       })),
     };
+  }
+
+  private effectiveRedirects(cities: any[], redirects: Array<{ id: string; sourcePath: string; targetPath: string; status: string }>) {
+    const publishedPaths = new Set(['/']);
+    for (const city of cities) {
+      const cityPath = `/${city.slug}`;
+      publishedPaths.add(cityPath);
+      for (const page of city.pages) if (page.type !== 'HOME' && page.type !== 'TARIFF') publishedPaths.add(`${cityPath}/${page.slug}`);
+      for (const tariff of city.tariffs) publishedPaths.add(`${cityPath}/${tariff.slug}`);
+    }
+    return redirects.flatMap((redirect) => {
+      try {
+        const sourcePath = normalizeRedirectPath(redirect.sourcePath, 'sourcePath');
+        const targetPath = normalizeRedirectPath(redirect.targetPath, 'targetPath');
+        if (publishedPaths.has(sourcePath) || !publishedPaths.has(targetPath)) return [];
+        return [{ ...redirect, sourcePath, targetPath }];
+      } catch {
+        return [];
+      }
+    });
   }
 }

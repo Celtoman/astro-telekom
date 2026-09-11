@@ -17,8 +17,15 @@
 
 	handle {
 		root * /publication/current
-		import /publication/current/redirects.caddy
-		try_files {path} {path}/index.html /404.html
-		file_server
+		route {
+			import /publication/current/redirects.caddy
+			@html_trailing_slash {
+				path_regexp html_trailing_slash ^(/[^.]+)/$
+				not path /api/* /_astro/* /assets/*
+			}
+			redir @html_trailing_slash {re.html_trailing_slash.1}{?query} 301
+			try_files {path}/index.html {path} /404.html
+			file_server
+		}
 	}
 }

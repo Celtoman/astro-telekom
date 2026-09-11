@@ -8,6 +8,7 @@ const publicSiteUrl = resolvePublicSiteUrl(process.env);
 export default defineConfig({
   output: 'static',
   site: publicSiteUrl,
+  trailingSlash: 'never',
   security: {
     csp: createPublicCsp({
       publicApiUrl,

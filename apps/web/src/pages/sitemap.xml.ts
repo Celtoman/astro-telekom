@@ -1,4 +1,5 @@
 import { loadSiteData } from '../data/site';
+import { publicHtmlPath } from '../data/public-url';
 
 export async function GET({ site }: { site?: URL }) {
   const { cities } = await loadSiteData();
@@ -6,9 +7,9 @@ export async function GET({ site }: { site?: URL }) {
   const paths = [
     '/',
     ...cities.flatMap((city) => [
-      `/${city.slug}/`,
-      ...city.pages.filter((page) => page.type !== 'HOME' && page.type !== 'TARIFF' && page.slug).map((page) => `/${city.slug}/${page.slug}/`),
-      ...city.tariffs.map((tariff) => `/${city.slug}/${tariff.slug}/`),
+      publicHtmlPath(city.slug),
+      ...city.pages.filter((page) => page.type !== 'HOME' && page.type !== 'TARIFF' && page.slug).map((page) => publicHtmlPath(city.slug, page.slug)),
+      ...city.tariffs.map((tariff) => publicHtmlPath(city.slug, tariff.slug)),
     ]),
   ];
   const urls = paths.map((path) => `<url><loc>${baseUrl}${path}</loc></url>`).join('');

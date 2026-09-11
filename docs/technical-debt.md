@@ -55,7 +55,14 @@
 | TD-73 | [#95](https://github.com/Celtoman/astro-telekom/issues/95) ✅ | Ручной retry использует следующий свободный глобальный номер попытки и отдельный безопасный retry budget |
 | TD-81 | [#103](https://github.com/Celtoman/astro-telekom/issues/103) ✅ | Production восстановлен до 207 городов и полного snapshot из 3 859 тарифов; runtime rebuild опубликован |
 | TD-82 | [#104](https://github.com/Celtoman/astro-telekom/issues/104) ✅ | Генератор исключает пустые `inlineStr`; parser fixture и production preview подтверждают 3 859/3 859 строк без ручной нормализации |
-| TD-85 | [#108](https://github.com/Celtoman/astro-telekom/issues/108) 🟢 | Admin `/tariffs` не дает открыть и вручную отредактировать отдельный тариф без полного повторного импорта |
+| TD-85 | [#108](https://github.com/Celtoman/astro-telekom/issues/108) ✅ | Admin `/tariffs` не дает открыть и вручную отредактировать отдельный тариф без полного повторного импорта |
+| TD-86 | [#110](https://github.com/Celtoman/astro-telekom/issues/110) ✅ | Импорт и ручной редактор не имеют единого типизированного контракта всех полей тарифа |
+| TD-87 | [#111](https://github.com/Celtoman/astro-telekom/issues/111) ✅ | Ручные изменения и импорт рассчитывают `identityKey` тарифа по разным business key |
+| TD-88 | [#113](https://github.com/Celtoman/astro-telekom/issues/113) ✅ | Каталог `/cities` падает до выбора строки из-за безусловного рендера редактора с `selectedCity = null` |
+| TD-89 | [#114](https://github.com/Celtoman/astro-telekom/issues/114) ✅ | Старый preview полного импорта может молча перезаписать свежую ручную правку тарифа |
+| TD-90 | [#115](https://github.com/Celtoman/astro-telekom/issues/115) ✅ | Устаревший ответ проверки XLSX может примениться после смены файла или провайдера в форме импорта тарифов |
+| TD-91 | [#116](https://github.com/Celtoman/astro-telekom/issues/116) ✅ | Опубликованный redirect может остаться в public catalog после снятия с публикации города или целевого тарифа |
+| TD-93 | [#118](https://github.com/Celtoman/astro-telekom/issues/118) ✅ | Full-snapshot импорт может применить тариф с URL опубликованной страницы и оставить сайт несобираемым |
 
 ## P2
 
@@ -65,6 +72,9 @@
 | TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) 🟢 | Наследование `content` — только shallow merge верхнего уровня |
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) 🟢 | `PageBlock` поддерживает только 3 типа блоков из библиотеки |
 | TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) 🟢 | Public DTO/rate limit/honeypot и 180-дневный policy-driven purge реализованы; остаются legal basis, согласие и правила передачи PII |
+| TD-92 | [#117](https://github.com/Celtoman/astro-telekom/issues/117) ✅ | Tariff PATCH принимает `null` для обязательных полей и может передать ошибку целостности в Prisma |
+| TD-94 | [#119](https://github.com/Celtoman/astro-telekom/issues/119) ✅ | Запоздалый ответ быстрого просмотра может открыть не последний выбранный тариф |
+| TD-95 | [#120](https://github.com/Celtoman/astro-telekom/issues/120) ✅ | После apply импорт тарифов не очищает DOM file input и мешает повторно выбрать тот же XLSX |
 | TD-15 | [#17](https://github.com/Celtoman/astro-telekom/issues/17) ✅ | Обычное оповещение лида переведено в persistent outbox с recovery, bounded retry, admin-статусом и ручным повтором |
 | TD-16 | [#18](https://github.com/Celtoman/astro-telekom/issues/18) ✅ | Production требует чистый HTTPS origin; post-build gate сверяет sitemap, robots, raw HTML и `noindex` 404 |
 | TD-17 | [#19](https://github.com/Celtoman/astro-telekom/issues/19) ✅ | One-shot migration job до API; readiness проверяет PostgreSQL/Redis, liveness отделен; seed остается явной безопасной операцией |
@@ -75,7 +85,7 @@
 | TD-55 | [#75](https://github.com/Celtoman/astro-telekom/issues/75) 🟢 | Subscriber mode не соответствует полному согласованному поведению |
 | TD-56 | [#76](https://github.com/Celtoman/astro-telekom/issues/76) ✅ | UI и API требуют безопасный построчный create/update/skip с защитой от stale preview |
 | TD-57 | [#77](https://github.com/Celtoman/astro-telekom/issues/77) 🟢 | `connection_cost` не выводится, а `show_on_site` не сохраняется по согласованной семантике |
-| TD-58 | [#78](https://github.com/Celtoman/astro-telekom/issues/78) 🟢 | Автоматический редирект не синхронизирует статус с публикацией тарифа |
+| TD-58 | [#78](https://github.com/Celtoman/astro-telekom/issues/78) ✅ | Автоматический редирект не синхронизирует статус с публикацией тарифа |
 | TD-60 | [#80](https://github.com/Celtoman/astro-telekom/issues/80) 🟢 | Нет единого сброса временных фильтров во всех разделах |
 | TD-62 | [#82](https://github.com/Celtoman/astro-telekom/issues/82) ✅ | Проверка договора Дом.ру использует полный регионально однозначный справочник городов |
 | TD-72 | [#93](https://github.com/Celtoman/astro-telekom/issues/93) ✅ | Русские статусы объясняют состояние заявки, а внешний ID читается из канонического поля модели |
@@ -83,7 +93,7 @@
 | TD-77 | [#99](https://github.com/Celtoman/astro-telekom/issues/99) ✅ | Production Resend использует проверенный sender; live HTTP 403 устранен |
 | TD-78 | [#100](https://github.com/Celtoman/astro-telekom/issues/100) ✅ | `RESEND_API_KEY` ограничен Coolify runtime scope и исключен из build arguments |
 | TD-79 | [#101](https://github.com/Celtoman/astro-telekom/issues/101) ✅ | Resend/webhook idempotency key разделен по manual retry revision |
-| TD-83 | [#106](https://github.com/Celtoman/astro-telekom/issues/106) 🟢 | Публичные HTML-URL должны публиковаться без завершающего слэша с единым canonical/sitemap/redirect contract |
+| TD-83 | [#106](https://github.com/Celtoman/astro-telekom/issues/106) ✅ | Публичные HTML-URL должны публиковаться без завершающего слэша с единым canonical/sitemap/redirect contract |
 
 ## P3
 

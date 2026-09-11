@@ -1,6 +1,7 @@
 ---
 import { createHash } from 'node:crypto';
 import type { CityView, PageView } from '../data/site';
+import { normalizePublicHtmlPath, publicHtmlPath } from '../data/public-url';
 
 interface Props {
   title: string;
@@ -14,7 +15,7 @@ const { title, description, city, pages, indexable = true } = Astro.props as Pro
 const resolvedPages: PageView[] = pages || city?.pages || [];
 const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
 const supportPhone = city?.phone || import.meta.env.PUBLIC_SUPPORT_PHONE || '8 (800) 000-00-00';
-const cityRoot = city ? `/${city.slug}/` : '/';
+const cityRoot = city ? publicHtmlPath(city.slug) : '/';
 const pageByType = new Map<string, PageView>(resolvedPages.map((page) => [page.type, page]));
 const navItems = [
   ['INTERNET', 'Интернет'],
@@ -23,10 +24,10 @@ const navItems = [
   ['ADDRESS_CHECK', 'Проверка адреса'],
 ].flatMap(([type, label]) => {
   const page = pageByType.get(type);
-  return city && page?.slug ? [{ href: `/${city.slug}/${page.slug}/`, label }] : [];
+  return city && page?.slug ? [{ href: publicHtmlPath(city.slug, page.slug), label }] : [];
 });
 const faqPage = pageByType.get('FAQ');
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const canonicalUrl = new URL(normalizePublicHtmlPath(Astro.url.pathname), Astro.site);
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -70,7 +71,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     <footer class="site-footer">
       <div class="container footer-inner">
         <span>{city ? `Подключение домашнего интернета в ${city.nameIn}` : 'Подключение домашнего интернета'}</span>
-        {city && faqPage?.slug && <a href={`/${city.slug}/${faqPage.slug}/`}>Вопросы и ответы</a>}
+        {city && faqPage?.slug && <a href={publicHtmlPath(city.slug, faqPage.slug)}>Вопросы и ответы</a>}
       </div>
     </footer>
   </body>
