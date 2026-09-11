@@ -69,7 +69,7 @@
 | TD-17 | [#19](https://github.com/Celtoman/astro-telekom/issues/19) ✅ | One-shot migration job до API; readiness проверяет PostgreSQL/Redis, liveness отделен; seed остается явной безопасной операцией |
 | TD-48 | [#68](https://github.com/Celtoman/astro-telekom/issues/68) ✅ | Публичная lead telemetry имеет allowlist, depth/key/string и суммарные JSON-лимиты |
 | TD-49 | [#69](https://github.com/Celtoman/astro-telekom/issues/69) ✅ | Журналы заявок и тарифов используют bounded cursor-пагинацию и серверные фильтры; list DTO заявки исключает тяжелые relations |
-| TD-51 | [#71](https://github.com/Celtoman/astro-telekom/issues/71) 🟢 | Admin overview показывает недостоверные hardcoded статусы |
+| TD-51 | [#71](https://github.com/Celtoman/astro-telekom/issues/71) ✅ | Admin overview оставляет реальные счетчики разделам и не показывает hardcoded catalog/publication или удаленную CRM |
 | TD-55 | [#75](https://github.com/Celtoman/astro-telekom/issues/75) 🟢 | Subscriber mode не соответствует полному согласованному поведению |
 | TD-56 | [#76](https://github.com/Celtoman/astro-telekom/issues/76) 🟢 | UI импорта городов не дает выбрать create/update/skip по строкам |
 | TD-57 | [#77](https://github.com/Celtoman/astro-telekom/issues/77) 🟢 | `connection_cost` не выводится, а `show_on_site` не сохраняется по согласованной семантике |

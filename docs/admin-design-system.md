@@ -19,7 +19,7 @@
 
 Целевая архитектура — Astro как static-оболочка и маршрутизация, React-root для каждой интерактивной страницы или крупного раздела, Tailwind и shadcn/ui внутри React. Данные админка получает и изменяет во время работы через HTTP API; она не зависит от данных, зафиксированных во время `astro build`.
 
-`apps/admin` остается Astro 7 static output. React, Tailwind CSS и shadcn/ui используются в `/login`, защищенном shell `/`, `/tariffs`, `/cities`, `/leads`, `/redirects` и `/lead-access/`. Legacy plain HTML/CSS/vanilla JS страница удалена; shell больше не показывает вымышленные KPI или service-token prompt.
+`apps/admin` остается Astro 7 static output. React, Tailwind CSS и shadcn/ui используются в `/login`, защищенном shell `/`, `/tariffs`, `/cities`, `/leads`, `/redirects` и `/lead-access/`. Legacy plain HTML/CSS/vanilla JS страница удалена; shell больше не показывает вымышленные KPI или service-token prompt. Overview служит нейтральной навигацией: он не фиксирует catalog count, опубликованный город или миграционный статус удаленной CRM, а направляет за актуальными счетчиками и состояниями в рабочие разделы.
 
 1. Рендерить интерактивную страницу одним React-root через `@astrojs/react` внутри static Astro route.
 2. Использовать Tailwind CSS и локальные shadcn/ui-компоненты из `apps/admin/src/components/ui`.

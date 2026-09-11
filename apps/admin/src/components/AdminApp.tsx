@@ -18,7 +18,7 @@ type AppState =
 
 const sections = [
   { title: "Тарифы", description: "Каталог, импорт и состояние пересборки", icon: PackageOpen, href: "/tariffs" },
-  { title: "Города", description: "Справочник из 207 городов; опубликована только Казань", icon: Building2, href: "/cities" },
+  { title: "Города", description: "Справочник, импорт и состояние пересборки", icon: Building2, href: "/cities" },
   { title: "Заявки", description: "Рабочий журнал обращений, статусов и доставки", icon: Inbox, href: "/leads" },
 ]
 
@@ -70,8 +70,8 @@ export function AdminApp({ apiUrl }: { apiUrl: string }) {
   return (
     <AdminShell apiUrl={apiUrl} user={state.user} active="overview">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-6 lg:p-8">
-          <div><h1 className="font-heading text-2xl font-semibold">Администрирование платформы</h1><p className="mt-1 text-sm text-muted-foreground">Показываются только реализованные возможности и подтвержденные данные.</p></div>
-          <Alert><FileUp /><AlertTitle>Основные разделы подключены</AlertTitle><AlertDescription>Тарифы, города и заявки работают с реальным API. Временное CRM-приложение можно выводить из эксплуатации после проверки замены.</AlertDescription></Alert>
+          <div><h1 className="font-heading text-2xl font-semibold">Администрирование платформы</h1><p className="mt-1 text-sm text-muted-foreground">Обзор доступных административных разделов.</p></div>
+          <Alert><FileUp /><AlertTitle>Данные загружаются в разделах</AlertTitle><AlertDescription>Тарифы, города и заявки используют административный API. Актуальные счетчики и состояния загружаются внутри каждого раздела.</AlertDescription></Alert>
           <section className="grid gap-4 md:grid-cols-3" aria-label="Разделы админки">
             {sections.map(({ title, description, icon: Icon, href }) => (
               <Card key={title}>

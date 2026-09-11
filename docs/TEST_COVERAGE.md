@@ -4,12 +4,12 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [CLAUDE.md](../CLAUDE.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 213/213 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита. Это единственный документ, где хранится точное количество тестов.
+**Baseline: 214/214 passing.** Допустимого красного baseline нет: любое падение требует исправления до коммита. Это единственный документ, где хранится точное количество тестов.
 
 | Файл | Что проверяет |
 | --- | --- |
 | `tests/access.test.cjs` | `AdminTokenGuard`: одна авторизованная учетная запись администратора получает доступ ко всем admin routes, включая `/crm/leads`; отсутствие credentials дает 401; корректный `x-admin-token` остается независимой машинной аутентификацией; пользовательская сессия не проходит на worker-only `/internal/*`. |
-| `tests/admin-auth-ui.test.mjs` | Admin `/` и `/login` используют React-roots; браузерные запросы отправляют HttpOnly cookie через `credentials: include`, проверяют session и logout, а raw Bearer/service token не читается и не хранится в UI. |
+| `tests/admin-auth-ui.test.mjs` | Admin `/` и `/login` используют React-roots; браузерные запросы отправляют HttpOnly cookie через `credentials: include`, проверяют session и logout, а raw Bearer/service token не читается и не хранится в UI; overview не выдает hardcoded catalog count/publication и удаленную CRM за текущее состояние. |
 | `tests/admin-cities-ui.test.mjs` | Admin `/cities` монтирует защищенный React-root и доступен из общего shell; экран подключает реальные sites/cities/import preview/apply/history/rebuild endpoints, блокирует неоднозначный выбор сайта и не использует service token или browser storage. |
 | `tests/admin-leads-ui.test.mjs` | Admin `/leads` монтирует защищенный React-root и доступен из общего shell; экран использует cursor/limit/search/status list contract и общий server-pagination control, реальные detail/status/retry endpoints, поддерживает все пять операторских статусов, комментарий к history, delivery/activity данные, раздельно показывает город страницы и адрес подключения, переводит processing/address/contract/channel/attempt/external/notification статусы, читает реальный `externalLeadId`, выводит проблемы и статус оповещения в журнале, дает безопасные delivery/notification retry без `innerHTML`. |
 | `tests/admin-pagination.test.cjs` | List-контракты заявок и тарифов: bounded `limit`, стабильный timestamp+id cursor, серверный поиск/фильтр, непрерывный `total` вне cursor boundary, отклонение malformed cursor, минимальный lead DTO без тяжелых relations и Prisma-индексы под keyset pagination. |
