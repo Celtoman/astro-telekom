@@ -61,7 +61,7 @@ export function createPublicCsp({ publicApiUrl, metrikaId }) {
     ],
     scriptDirective: {
       resources: unique(["'self'", ...httpsOrigins]),
-      strictDynamic: metrikaEnabled,
+      strictDynamic: false,
     },
   };
 }

@@ -153,6 +153,20 @@ function getDirectiveSources(csp, name, label) {
   return getDirective(csp, name, label).split(/\s+/).slice(1);
 }
 
+function assertInlineScriptsAuthorized(html, label) {
+  const scripts = getDirective(extractCsp(html, label), 'script-src', label);
+  const inlineScripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
+    .filter((match) => !/\bsrc\s*=/.test(match[1]));
+  assert.ok(inlineScripts.length > 0, `${label} must contain inline scripts for this regression check`);
+  for (const [, attributes, source] of inlineScripts) {
+    const hash = createHash('sha256').update(source).digest('base64');
+    assert.ok(
+      scripts.includes(`'sha256-${hash}'`),
+      `${label} CSP must authorize inline script ${attributes.trim() || '(no attributes)'}`,
+    );
+  }
+}
+
 test('web build uses API data and final HTML passes the publication smoke contract', { timeout: 120_000 }, async () => {
   await withApiFixture(async (apiUrl) => {
     const build = await runWebBuild({
@@ -178,6 +192,7 @@ test('web build uses API data and final HTML passes the publication smoke contra
   const sitemap = await readBuilt('sitemap.xml');
   const notFound = await readBuilt('404.html');
   const redirectRoutes = await readBuilt('redirects.caddy');
+  const addressFormSource = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'components', 'AddressForm.astro'), 'utf8');
   const csp = extractCsp(root, 'public root');
 
   assert.equal(getDirective(csp, 'default-src', 'public root'), "default-src 'self'");
@@ -186,7 +201,7 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.equal(getDirective(csp, 'form-action', 'public root'), "form-action 'self'");
   const scripts = getDirective(csp, 'script-src', 'public root');
   assert.match(scripts, /'sha256-[A-Za-z0-9+/=]+'/);
-  assert.match(scripts, /'strict-dynamic'/);
+  assert.doesNotMatch(scripts, /'strict-dynamic'/);
   assert.match(scripts, /https:\/\/mc\.yandex\.ru/);
   assert.match(scripts, /https:\/\/yastatic\.net/);
   assert.doesNotMatch(scripts, /'unsafe-inline'/);
@@ -234,42 +249,47 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.match(almetyevskInternet, /<h1>Домашний интернет<\/h1>/);
   assert.match(almetyevskTariff, /<h1>Альмет Интернет 300<\/h1>/);
   assert.match(almetyevskTariff, /650 ₽\/мес\./);
-  assert.match(kazanAddressCheck, /const apiUrl = "https:\/\/api\.partner\.example\.test\/api\/v1"/);
-  assert.match(kazanAddressCheck, /\/address-suggestions/);
+  assert.match(kazanAddressCheck, /data-api-url="https:\/\/api\.partner\.example\.test\/api\/v1"/);
+  assert.match(kazanAddressCheck, /<script type="module" src="\/_astro\/AddressForm[^"?]*\.js"><\/script>/);
+  assert.match(addressFormSource, /\/address-suggestions/);
   assert.match(kazanAddressCheck, /placeholder="Город, улица, дом, квартира"/);
   assert.match(kazanAddressCheck, /maxlength="300"/);
   assert.match(kazanAddressCheck, /aria-expanded="false"/);
-  assert.match(kazanAddressCheck, /suggestion:\s*selectedSuggestion/);
-  assert.match(kazanAddressCheck, /SUGGESTION_DEBOUNCE_MS\s*=\s*500/);
-  assert.match(kazanAddressCheck, /suggestionCache/);
-  assert.match(kazanAddressCheck, /response\.status\s*===\s*429/);
-  assert.match(kazanAddressCheck, /retry-after/i);
-  assert.match(kazanAddressCheck, /AddressSuggestionResponseError/);
-  assert.doesNotMatch(kazanAddressCheck, /setAddressHint\(error instanceof Error \? error\.message/);
-  assert.match(kazanAddressCheck, /ArrowDown/);
-  assert.match(kazanAddressCheck, /ArrowUp/);
+  assert.match(addressFormSource, /suggestion:\s*selectedSuggestion/);
+  assert.match(addressFormSource, /SUGGESTION_DEBOUNCE_MS\s*=\s*500/);
+  assert.match(addressFormSource, /suggestionCache/);
+  assert.match(addressFormSource, /response\.status\s*===\s*429/);
+  assert.match(addressFormSource, /retry-after/i);
+  assert.match(addressFormSource, /AddressSuggestionResponseError/);
+  assert.doesNotMatch(addressFormSource, /setAddressHint\(error instanceof Error \? error\.message/);
+  assert.match(addressFormSource, /ArrowDown/);
+  assert.match(addressFormSource, /ArrowUp/);
   assert.match(kazanAddressCheck, /aria-selected/);
   assert.match(kazanAddressCheck, /address-option-primary/);
   assert.match(kazanAddressCheck, /address-option-secondary/);
-  assert.match(kazanAddressCheck, /Выберите адрес/);
-  assert.match(kazanAddressCheck, /createElement\('mark'\)/);
-  assert.match(kazanAddressCheck, /items\.slice\(0,\s*5\)/);
-  assert.match(kazanAddressCheck, /credentials:\s*'include'/);
-  assert.doesNotMatch(kazanAddressCheck, /innerHTML/);
+  assert.match(addressFormSource, /Выберите адрес/);
+  assert.match(addressFormSource, /createElement\('mark'\)/);
+  assert.match(addressFormSource, /items\.slice\(0,\s*5\)/);
+  assert.match(addressFormSource, /credentials:\s*'include'/);
+  assert.doesNotMatch(addressFormSource, /innerHTML/);
   assert.match(kazanAddressCheck, /\.address-suggestions\[data-astro-cid-[^\]]+\] \.address-option\{/);
   assert.doesNotMatch(kazanAddressCheck, /\.address-option\[data-astro-cid-[^\]]+\]\{/);
   assert.doesNotMatch(kazanAddressCheck, /DADATA_TOKEN|DADATA_SECRET/);
   assert.match(kazanAddressCheck, /data-form-mode="visible"/);
   assert.match(kazanAddressCheck, /data-phone-step[^>]*hidden/);
-  assert.match(kazanAddressCheck, /check\.status\s*!==\s*'AVAILABLE'/);
-  assert.match(kazanAddressCheck, /Дом\.ру по этому адресу не найден\. Доступны другие провайдеры/);
-  assert.match(kazanAddressCheck, /По этому адресу доступные провайдеры не найдены/);
-  assert.match(kazanAddressCheck, /Свяжитесь с технической поддержкой/);
-  assert.match(kazanAddressCheck, /mode === 'visible' \? 'visible-address-check' : 'lead-form'/);
+  assert.match(addressFormSource, /check\.status\s*!==\s*'AVAILABLE'/);
+  assert.match(addressFormSource, /Дом\.ру по этому адресу не найден\. Доступны другие провайдеры/);
+  assert.match(addressFormSource, /По этому адресу доступные провайдеры не найдены/);
+  assert.match(addressFormSource, /Свяжитесь с технической поддержкой/);
+  assert.match(addressFormSource, /mode === 'visible' \? 'visible-address-check' : 'lead-form'/);
   assert.match(kazanInternet, /data-form-mode="lead"/);
-  assert.match(kazanInternet, /Спасибо! Заявка отправлена/);
+  assert.match(addressFormSource, /Спасибо! Заявка отправлена/);
   assert.match(kazanInternet, /href="\/kazan\/proverka-adresa\?utm_source=hero"/);
   assert.match(tariff, /data-form-mode="lead"/);
+  assertInlineScriptsAuthorized(root, 'public root');
+  assertInlineScriptsAuthorized(kazanAddressCheck, 'address-check page');
+  assertInlineScriptsAuthorized(kazanInternet, 'service lead form');
+  assertInlineScriptsAuthorized(tariff, 'tariff lead form');
   assert.doesNotMatch(kazanAddressCheck, /127\.0\.0\.1/);
   assert.match(robots, /Sitemap: https:\/\/partner\.example\.test\/sitemap\.xml/);
   assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/<\/loc>/);

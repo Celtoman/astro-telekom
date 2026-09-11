@@ -29,7 +29,20 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
 
 {mode === 'visible' && <section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>Проверьте возможность подключения</h1><p class="lead">Укажите адрес — мы сразу покажем результат проверки.</p></div></section>}
 <section class="section container">
-  <form class="card" id={formId} data-address-form data-form-mode={mode}>
+  <form
+    class="card"
+    id={formId}
+    data-address-form
+    data-form-mode={mode}
+    data-api-url={apiUrl}
+    data-site-slug={siteSlug}
+    data-city-slug={city.slug}
+    data-page-slug={pageSlug}
+    data-service-type={serviceType}
+    data-tariff-slug={tariffSlug || ''}
+    data-support-phone={city.phone}
+    data-support-phone-href={supportPhoneHref}
+  >
     {mode === 'lead' && <><h2>Оставить заявку</h2><p>Укажите адрес и телефон. Возможность подключения мы проверим автоматически.</p></>}
     <div class="bot-field" aria-hidden="true"><label for={`website-${formId}`}>Ваш сайт</label><input id={`website-${formId}`} name="website" tabindex="-1" autocomplete="off" /></div>
     <label for={`address-${formId}`}>Адрес</label>
@@ -49,8 +62,23 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
   </form>
 </section>
 
-<script is:inline define:vars={{ apiUrl, siteSlug, citySlug: city.slug, pageSlug, mode, serviceType, tariffSlug, supportPhone: city.phone, supportPhoneHref, formId }}>
-  const form = document.getElementById(formId);
+<script>
+  // @ts-nocheck -- DOM values are validated at the API boundary; this script is browser-only.
+  for (const form of document.querySelectorAll('[data-address-form]')) {
+  if (form.dataset.addressFormReady === 'true') continue;
+  form.dataset.addressFormReady = 'true';
+  const {
+    apiUrl,
+    siteSlug,
+    citySlug,
+    pageSlug,
+    formMode: mode,
+    serviceType,
+    tariffSlug,
+    supportPhone,
+    supportPhoneHref,
+  } = form.dataset;
+  const formId = form.id;
   const result = form?.querySelector('[data-form-result]');
   const alternatives = form?.querySelector('[data-alternatives]');
   const addressInput = form?.querySelector('input[name="address"]');
@@ -442,6 +470,7 @@ const supportPhoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
       if (submitButton) submitButton.disabled = false;
     }
   });
+  }
 </script>
 
 <style>

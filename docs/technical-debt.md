@@ -13,6 +13,7 @@
 | TD-01 | [#1](https://github.com/Celtoman/astro-telekom/issues/1) ✅ | Test-double синхронизирован с контроллером, добавлены сценарии дубликатов; release gate зеленый |
 | TD-02 | [#2](https://github.com/Celtoman/astro-telekom/issues/2) ✅ | HMAC-ссылка заменена серверным одноразовым token с TTL, отзывом и admin UI |
 | TD-03 | [#3](https://github.com/Celtoman/astro-telekom/issues/3) ✅ | Demo-data требуют явного флага; policy и final HTML защищены тестами [#4](https://github.com/Celtoman/astro-telekom/issues/4) |
+| TD-96 | [#121](https://github.com/Celtoman/astro-telekom/issues/121) ✅ | Публичные формы восстановлены после CSP-регресса; исполняемый код собирается first-party bundle, а final HTML проверяет каждый оставшийся inline hash |
 
 ## P1
 

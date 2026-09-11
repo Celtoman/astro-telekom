@@ -74,31 +74,35 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
         {city && faqPage?.slug && <a href={publicHtmlPath(city.slug, faqPage.slug)}>Вопросы и ответы</a>}
       </div>
     </footer>
+    <script>
+      type MetrikaWindow = Window & {
+        __YANDEX_METRIKA_ID__?: number;
+        ym?: (...args: unknown[]) => void;
+      };
+      const metrikaWindow = window as MetrikaWindow;
+      const visitorPagesKey = 'provider_visited_pages';
+      try {
+        const pages = JSON.parse(sessionStorage.getItem(visitorPagesKey) || '[]');
+        if (!pages.includes(location.pathname)) pages.push(location.pathname);
+        sessionStorage.setItem(visitorPagesKey, JSON.stringify(pages.slice(-50)));
+      } catch { /* private browsing can disable sessionStorage */ }
+      const subscriberCookie = document.cookie.split(';').some((part) => part.trim().startsWith('domru_subscriber='));
+      if (subscriberCookie) {
+        document.querySelectorAll('.subscriber-phone').forEach((node) => {
+          const support = node.getAttribute('data-support-phone') || 'Официальная поддержка';
+          node.textContent = support;
+        });
+      }
+      document.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target.closest('a[href^="tel:"]') : null;
+        if (target && typeof metrikaWindow.ym === 'function') metrikaWindow.ym(metrikaWindow.__YANDEX_METRIKA_ID__, 'reachGoal', 'phone_click');
+      });
+      document.addEventListener('submit', () => {
+        if (typeof metrikaWindow.ym === 'function') metrikaWindow.ym(metrikaWindow.__YANDEX_METRIKA_ID__, 'reachGoal', 'lead_form_submit');
+      });
+    </script>
   </body>
 </html>
-
-<script is:inline>
-  const visitorPagesKey = 'provider_visited_pages';
-  try {
-    const pages = JSON.parse(sessionStorage.getItem(visitorPagesKey) || '[]');
-    if (!pages.includes(location.pathname)) pages.push(location.pathname);
-    sessionStorage.setItem(visitorPagesKey, JSON.stringify(pages.slice(-50)));
-  } catch { /* private browsing can disable sessionStorage */ }
-  const subscriberCookie = document.cookie.split(';').some((part) => part.trim().startsWith('domru_subscriber='));
-  if (subscriberCookie) {
-    document.querySelectorAll('.subscriber-phone').forEach((node) => {
-      const support = node.getAttribute('data-support-phone') || 'Официальная поддержка';
-      node.textContent = support;
-    });
-  }
-  document.addEventListener('click', (event) => {
-    const target = event.target.closest('a[href^="tel:"]');
-    if (target && typeof window.ym === 'function') window.ym(window.__YANDEX_METRIKA_ID__, 'reachGoal', 'phone_click');
-  });
-  document.addEventListener('submit', () => {
-    if (typeof window.ym === 'function') window.ym(window.__YANDEX_METRIKA_ID__, 'reachGoal', 'lead_form_submit');
-  });
-</script>
 
 <style is:global>
   :root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #18202a; background: #f6f7f9; }
