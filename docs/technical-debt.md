@@ -87,7 +87,7 @@
 | TD-56 | [#76](https://github.com/Celtoman/astro-telekom/issues/76) ✅ | UI и API требуют безопасный построчный create/update/skip с защитой от stale preview |
 | TD-57 | [#77](https://github.com/Celtoman/astro-telekom/issues/77) ✅ | Публичный сайт выводит nullable стоимость подключения; сохраненная рекомендация `show_on_site` явно отделена от статуса публикации |
 | TD-58 | [#78](https://github.com/Celtoman/astro-telekom/issues/78) ✅ | Автоматический редирект не синхронизирует статус с публикацией тарифа |
-| TD-60 | [#80](https://github.com/Celtoman/astro-telekom/issues/80) 🟢 | Нет единого сброса временных фильтров во всех разделах |
+| TD-60 | [#80](https://github.com/Celtoman/astro-telekom/issues/80) ✅ | Все фильтруемые каталоги используют единый явный сброс временных фильтров без URL/browser persistence |
 | TD-62 | [#82](https://github.com/Celtoman/astro-telekom/issues/82) ✅ | Проверка договора Дом.ру использует полный регионально однозначный справочник городов |
 | TD-72 | [#93](https://github.com/Celtoman/astro-telekom/issues/93) ✅ | Русские статусы объясняют состояние заявки, а внешний ID читается из канонического поля модели |
 | TD-74 | [#96](https://github.com/Celtoman/astro-telekom/issues/96) ✅ | Документированная команда локального seed загружает переменные из корневого `.env` |

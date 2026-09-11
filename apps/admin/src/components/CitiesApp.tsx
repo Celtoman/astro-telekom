@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { CircleAlert, FileUp, Pencil, RefreshCw, Save, X } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
+import { FilterResetButton } from "./FilterResetButton"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
@@ -70,6 +71,10 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
     return state.cities.filter((city) => !query || `${city.name} ${city.slug} ${city.region.name}`.toLocaleLowerCase("ru-RU").includes(query))
   }, [search, state])
 
+  function resetFilters() {
+    setSearch("")
+  }
+
   function editCity(city: City) {
     setSelectedCity(city)
     setCityForm({ name: city.name, phone: city.phone || "", status: city.status })
@@ -124,7 +129,10 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
         <Card>
           <CardHeader><CardTitle>Справочник</CardTitle><CardDescription>{visibleCities.length.toLocaleString("ru-RU")} из {state.cities.length.toLocaleString("ru-RU")} городов.</CardDescription></CardHeader>
           <CardContent className="flex flex-col gap-4">
-            <Field><FieldLabel htmlFor="city-search" className="sr-only">Поиск города</FieldLabel><Input id="city-search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Город, slug или регион" /></Field>
+            <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto]">
+              <Field><FieldLabel htmlFor="city-search" className="sr-only">Поиск города</FieldLabel><Input id="city-search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Город, slug или регион" /></Field>
+              <FilterResetButton active={Boolean(search)} onReset={resetFilters} />
+            </div>
             <div className={selectedCity ? "grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]" : "min-w-0"}>
               <div className="min-w-0 overflow-x-auto"><Table><TableHeader><TableRow><TableHead>Город</TableHead><TableHead>Регион</TableHead><TableHead>Сайт</TableHead><TableHead>Статус</TableHead><TableHead className="text-right">Действия</TableHead></TableRow></TableHeader><TableBody>{visibleCities.map((city) => <TableRow key={city.id}><TableCell><div className="font-medium">{city.name}</div><div className="text-xs text-muted-foreground">{city.slug}</div></TableCell><TableCell>{city.region.name}</TableCell><TableCell>{city.site.name}</TableCell><TableCell><Badge variant={statusVariant(city.status)}>{city.status}</Badge></TableCell><TableCell className="text-right"><Button size="icon-sm" variant="ghost" aria-label={`Редактировать: ${city.name}`} onClick={() => editCity(city)}><Pencil /></Button></TableCell></TableRow>)}</TableBody></Table></div>
               {selectedCity ? <aside aria-label="Редактирование города"><Card size="sm"><CardHeader><div className="flex items-start justify-between gap-3"><div><CardTitle>Управление городом</CardTitle><CardDescription>Основные данные и публикационный статус.</CardDescription></div><Button size="icon-sm" variant="ghost" aria-label="Закрыть редактор" onClick={() => setSelectedCity(null)}><X /></Button></div></CardHeader><CardContent className="flex flex-col gap-4"><Field><FieldLabel htmlFor="city-name">Название</FieldLabel><Input id="city-name" value={cityForm.name} onChange={(event) => setCityForm((current) => ({ ...current, name: event.target.value }))} /></Field><Field><FieldLabel htmlFor="city-phone">Телефон</FieldLabel><Input id="city-phone" value={cityForm.phone} onChange={(event) => setCityForm((current) => ({ ...current, phone: event.target.value }))} placeholder="Не задан" /></Field><Field><FieldLabel htmlFor="city-status">Статус</FieldLabel><select id="city-status" className="h-9 rounded-lg border border-input bg-background px-3 text-sm" value={cityForm.status} onChange={(event) => setCityForm((current) => ({ ...current, status: event.target.value }))}><option value="DRAFT">Черновик</option><option value="PUBLISHED">Опубликован</option><option value="ARCHIVED">В архиве</option></select></Field><dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 border-t pt-4 text-sm"><dt className="text-muted-foreground">Slug</dt><dd>{selectedCity.slug}</dd><dt className="text-muted-foreground">Регион</dt><dd>{selectedCity.region.name}</dd><dt className="text-muted-foreground">Сайт</dt><dd>{selectedCity.site.name}</dd></dl><Button disabled={saving || !cityForm.name.trim()} onClick={() => void saveCity()}><Save data-icon="inline-start" />{saving ? "Сохраняем…" : "Сохранить"}</Button></CardContent></Card></aside> : null}

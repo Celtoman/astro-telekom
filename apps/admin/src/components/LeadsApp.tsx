@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 import { CircleAlert, Inbox, RefreshCw, Save, Search } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
+import { FilterResetButton } from "./FilterResetButton"
 import { ServerPagination } from "./ServerPagination"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
@@ -229,6 +230,13 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
     return () => window.clearTimeout(timer)
   }, [search])
 
+  function resetFilters() {
+    setSearch("")
+    setSearchQuery("")
+    setStatusFilter("ALL")
+    setCursorStack([""])
+  }
+
   const currentCursor = cursorStack[cursorStack.length - 1]
   useEffect(() => {
     let active = true
@@ -353,9 +361,10 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
           <Card className="min-w-0">
             <CardHeader><CardTitle>Журнал</CardTitle><CardDescription>{leadPage.pageInfo.total.toLocaleString("ru-RU")} заявок соответствует фильтру.</CardDescription></CardHeader>
             <CardContent className="flex min-w-0 flex-col gap-4">
-              <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_13rem]">
+              <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_13rem_auto]">
                 <Field><FieldLabel htmlFor="lead-search" className="sr-only">Поиск заявки</FieldLabel><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" /><Input id="lead-search" className="pl-9" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Телефон, адрес, имя или ID" /></div></Field>
                 <Field><FieldLabel htmlFor="lead-status-filter" className="sr-only">Фильтр по статусу</FieldLabel><select id="lead-status-filter" className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value as "ALL" | LeadStatus); setCursorStack([""]) }}><option value="ALL">Все статусы</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
+                <FilterResetButton active={Boolean(search || searchQuery || statusFilter !== "ALL")} onReset={resetFilters} />
               </div>
               {listError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Журнал не обновлен</AlertTitle><AlertDescription>{listError}</AlertDescription></Alert> : null}
               <div aria-busy={listBusy} className="min-w-0 overflow-x-auto">

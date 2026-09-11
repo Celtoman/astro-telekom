@@ -3,6 +3,7 @@ import { CircleAlert, Eye, FileUp, Pencil, RefreshCw, X } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { sourcePublicationRecommendation, tariffConnectionLabel } from "../lib/tariff-display"
 import { AdminShell } from "./AdminShell"
+import { FilterResetButton } from "./FilterResetButton"
 import { ServerPagination } from "./ServerPagination"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
@@ -67,6 +68,12 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
     return () => window.clearTimeout(timer)
   }, [search])
 
+  function resetFilters() {
+    setSearch("")
+    setSearchQuery("")
+    setCursorStack([""])
+  }
+
   const currentCursor = cursorStack[cursorStack.length - 1]
   useEffect(() => {
     let active = true
@@ -119,7 +126,10 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
         <Card>
           <CardHeader><CardTitle>Каталог</CardTitle><CardDescription>{tariffPage.pageInfo.total.toLocaleString("ru-RU")} тарифов соответствует фильтру.</CardDescription></CardHeader>
           <CardContent className="flex flex-col gap-4">
-            <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Название, slug или город" aria-label="Поиск тарифа" />
+            <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto]">
+              <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Название, slug или город" aria-label="Поиск тарифа" />
+              <FilterResetButton active={Boolean(search || searchQuery)} onReset={resetFilters} />
+            </div>
             {listError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Каталог не обновлен</AlertTitle><AlertDescription>{listError}</AlertDescription></Alert> : null}
             <div className={selectedTariff || detailBusy || detailError ? "grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]" : "min-w-0"}>
               <div aria-busy={listBusy} className="min-w-0 overflow-x-auto">

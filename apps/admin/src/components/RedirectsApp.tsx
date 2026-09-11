@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { Archive, CircleAlert, Pencil, Plus, RefreshCw, RotateCcw, Route } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
+import { FilterResetButton } from "./FilterResetButton"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
@@ -71,6 +72,10 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
     const query = search.trim().toLocaleLowerCase("ru-RU")
     return state.data.redirects.filter((item) => !query || `${item.sourcePath} ${item.targetPath} ${item.status}`.toLocaleLowerCase("ru-RU").includes(query))
   }, [search, state])
+
+  function resetFilters() {
+    setSearch("")
+  }
 
   function resetForm() {
     setSourcePath("")
@@ -146,7 +151,10 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
         <Card>
           <CardHeader><CardTitle>Правила</CardTitle><CardDescription>{visibleRedirects.length} из {redirects.length} записей.</CardDescription></CardHeader>
           <CardContent className="flex flex-col gap-4">
-            <Field><FieldLabel htmlFor="redirect-search" className="sr-only">Поиск редиректа</FieldLabel><Input id="redirect-search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Старый URL, новый URL или статус" /></Field>
+            <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto]">
+              <Field><FieldLabel htmlFor="redirect-search" className="sr-only">Поиск редиректа</FieldLabel><Input id="redirect-search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Старый URL, новый URL или статус" /></Field>
+              <FilterResetButton active={Boolean(search)} onReset={resetFilters} />
+            </div>
             {visibleRedirects.length ? <Table><TableHeader><TableRow><TableHead>Источник</TableHead><TableHead>Цель</TableHead><TableHead>Статус</TableHead><TableHead>Переходы</TableHead><TableHead>Последний переход</TableHead><TableHead>Действия</TableHead></TableRow></TableHeader><TableBody>{visibleRedirects.map((item) => <TableRow key={item.id}><TableCell className="font-medium">{item.sourcePath}</TableCell><TableCell>{item.targetPath}</TableCell><TableCell><Badge variant={statusVariant(item.status)}>{item.status}</Badge></TableCell><TableCell>{item.hitCount.toLocaleString("ru-RU")}</TableCell><TableCell>{item.lastHitAt ? new Date(item.lastHitAt).toLocaleString("ru-RU") : "—"}</TableCell><TableCell><div className="flex gap-2"><Button variant="outline" size="sm" disabled={busy !== null} onClick={() => { setEditingId(item.id); setEditingStatus(item.status); setSourcePath(item.sourcePath); setTargetPath(item.targetPath) }}><Pencil data-icon="inline-start" />Изменить</Button><Button variant="outline" size="sm" disabled={busy !== null} onClick={() => void changeStatus(item)}>{item.status === "ARCHIVED" ? <RotateCcw data-icon="inline-start" /> : <Archive data-icon="inline-start" />}{item.status === "ARCHIVED" ? "Вернуть" : "Архив"}</Button></div></TableCell></TableRow>)}</TableBody></Table> : <Alert><Route /><AlertTitle>Редиректов пока нет</AlertTitle><AlertDescription>Создайте первое правило после изменения публичного URL.</AlertDescription></Alert>}
           </CardContent>
         </Card>
