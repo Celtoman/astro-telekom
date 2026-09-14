@@ -650,7 +650,7 @@ test('safe undo blocks removal of an imported tariff referenced by a newer lead'
 
 test('tariff import undo requires explicit confirmation and attributes the operator', async () => {
   const calls = [];
-  const controller = new AdminTariffsController({}, {}, {
+  const controller = new AdminTariffsController({}, {
     undoImport: async (runId, actorId) => { calls.push({ runId, actorId }); return { workingRevisions: [] }; },
   }, {});
 
@@ -678,7 +678,7 @@ test('tariff import history exposes undo only for applied runs with a complete s
         ];
       },
     },
-  }, {}, {}, {});
+  }, {}, {});
 
   const rows = await controller.listImports();
 
@@ -695,7 +695,6 @@ test('tariff import history exposes undo only for applied runs with a complete s
 
 test('tariff import controller preserves the working version and does not publish it', async () => {
   const report = { reportVersion: 2, providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [], existingSnapshot: [] };
-  const queued = [];
   const prisma = {
     tariffImportRun: {
       findUnique: async () => ({ id: 'run-1', status: 'VALIDATED', report }),
@@ -712,13 +711,12 @@ test('tariff import controller preserves the working version and does not publis
       return { created: 0, updated: 0, deleted: 2, applied: 0, workingRevisions: [{ siteId: 'site-1', workingRevision: 7 }] };
     },
   };
-  const controller = new AdminTariffsController(prisma, { enqueue: async (job) => queued.push(job) }, imports);
+  const controller = new AdminTariffsController(prisma, imports);
 
   const result = await controller.applyImport({ runId: 'run-1' }, { user: { id: 'user-1' } });
 
   assert.equal(result.deleted, 2);
   assert.deepEqual(result.workingRevisions, [{ siteId: 'site-1', workingRevision: 7 }]);
-  assert.deepEqual(queued, []);
 });
 
 test('full snapshot rejects a catalog changed after validation before writing', async () => {
@@ -790,7 +788,7 @@ test('concurrent full snapshot apply cannot claim the same validated run twice',
 test('legacy acceptedKeys partial apply is rejected before reading the import run', async () => {
   const controller = new AdminTariffsController({
     tariffImportRun: { findUnique: async () => { throw new Error('must not read the run'); } },
-  }, { enqueue: async () => {} }, {});
+  }, {});
 
   await assert.rejects(
     controller.applyImport({ runId: 'run-1', acceptedKeys: ['kazan-giga-500-Интернет'] }),

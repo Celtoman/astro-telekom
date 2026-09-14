@@ -33,9 +33,8 @@ function fixture({ pageConflict = false, tariffConflict = false, redirectConflic
     ...tx,
     $transaction: async (callback) => callback(tx),
   };
-  const rebuilds = [];
-  const controller = new AdminTariffsController(prisma, { enqueue: async (data) => { rebuilds.push(data); } }, undefined, publicationStub);
-  return { controller, createdRedirects, flattenedRedirects, rebuilds, getUpdatedTariff: () => updatedTariff };
+  const controller = new AdminTariffsController(prisma, undefined, publicationStub);
+  return { controller, createdRedirects, flattenedRedirects, getUpdatedTariff: () => updatedTariff };
 }
 
 test('manual published tariff slug change creates a managed redirect record atomically', async () => {
@@ -52,7 +51,6 @@ test('manual published tariff slug change creates a managed redirect record atom
     data: { targetPath: '/kazan/new-slug' },
   }]);
   assert.equal(result.workingRevision, 1);
-  assert.deepEqual(f.rebuilds, []);
 });
 
 test('slug change is blocked when the old URL belongs to a published page', async () => {

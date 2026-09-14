@@ -26,7 +26,7 @@ const withRelations = (tariff) => ({
 test('tariff detail exposes the full stored model with provider and city context', async () => {
   let query;
   const prisma = { tariff: { findUnique: async (request) => { query = request; return { ...existingTariff, provider: { id: 'provider-1', name: 'Дом.ру' }, city: { id: 'city-1', name: 'Казань', slug: 'kazan', siteId: 'site-1' } }; } } };
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => {} });
+  const controller = new AdminTariffsController(prisma);
 
   const detail = await controller.detail('tariff-1');
 
@@ -46,7 +46,7 @@ test('sensitive tariff changes require explicit confirmation before any write', 
     },
   };
   const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => {} });
+  const controller = new AdminTariffsController(prisma);
   const expectedUpdatedAt = existingTariff.updatedAt.toISOString();
 
   await assert.rejects(controller.update('tariff-1', { expectedUpdatedAt, standardPrice: 950 }), /подтверждение.*цен/i);
@@ -71,7 +71,6 @@ test('confirmed manual edit returns the persisted tariff and working revision wi
   const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
   const controller = new AdminTariffsController(
     prisma,
-    { enqueue: async () => { calls.push('enqueue'); } },
     undefined,
     {
       recordWorkingRevision: async () => { calls.push('revision'); return { siteRevision: 4 }; },
@@ -124,7 +123,7 @@ test('stale tariff editor cannot overwrite a newer import or manual update', asy
   let updated = false;
   const tx = { tariff: { findUnique: async () => existingTariff, update: async () => { updated = true; } } };
   const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => {} });
+  const controller = new AdminTariffsController(prisma);
 
   await assert.rejects(controller.update('tariff-1', {
     expectedUpdatedAt: '2026-09-09T00:00:00.000Z', name: 'Устаревшая правка',
@@ -135,7 +134,7 @@ test('stale tariff editor cannot overwrite a newer import or manual update', asy
 test('manual editor rejects attributes outside the shared tariff field registry', async () => {
   const tx = { tariff: { findUnique: async () => existingTariff } };
   const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => {} });
+  const controller = new AdminTariffsController(prisma);
 
   await assert.rejects(controller.update('tariff-1', {
     expectedUpdatedAt: existingTariff.updatedAt.toISOString(), attributes: { surprise: true },
@@ -153,8 +152,7 @@ test('persisted tariff edit does not touch the rebuild queue during save', async
     },
   };
   const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
-  let enqueueCalls = 0;
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => { enqueueCalls += 1; throw new Error('Redis unavailable'); } }, undefined, publicationStub);
+  const controller = new AdminTariffsController(prisma, undefined, publicationStub);
 
   const result = await controller.update('tariff-1', {
     expectedUpdatedAt: existingTariff.updatedAt.toISOString(), name: 'Сохраненный тариф',
@@ -162,7 +160,6 @@ test('persisted tariff edit does not touch the rebuild queue during save', async
 
   assert.equal(result.tariff.name, 'Сохраненный тариф');
   assert.equal(result.workingRevision, 1);
-  assert.equal(enqueueCalls, 0);
 });
 
 test('manual tariff edit records only a working revision until explicit publication', async () => {
@@ -188,13 +185,7 @@ test('manual tariff edit records only a working revision until explicit publicat
       return { id: 'publication-7', siteRevision: input.siteRevision, status: 'PENDING' };
     },
   };
-  const rebuild = {
-    enqueue: async (input) => {
-      calls.push(['enqueue', input]);
-      return { id: 'rebuild-1', status: 'PENDING' };
-    },
-  };
-  const controller = new AdminTariffsController(prisma, rebuild, undefined, publications);
+  const controller = new AdminTariffsController(prisma, undefined, publications);
 
   const result = await controller.update('tariff-1', {
     expectedUpdatedAt: existingTariff.updatedAt.toISOString(),
@@ -249,7 +240,7 @@ test('an imported tariff round-trips through detail and the manual editor contra
   }]);
   await importer.applyReport(report, { confirmWarnings: true });
 
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => ({ id: 'rebuild-1', status: 'PENDING', requestedRevision: 2, publishedRevision: 1 }) }, importer, publicationStub);
+  const controller = new AdminTariffsController(prisma, importer, publicationStub);
   const detail = await controller.detail('tariff-1');
   assert.equal(detail.attributes.nazvanie_tarifa, 'Название карточки');
   assert.equal(detail.attributes.show_on_site, true);

@@ -4,7 +4,6 @@ import { Prisma } from '../generated';
 import { CursorPageQueryDto, decodeCursor, encodeCursor, pageSize, searchQuery } from './admin-pagination';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
-import { RebuildQueueService } from './rebuild-queue.service';
 import { ImportReport, normalizeTariffAttributes, parseWorkbook, TARIFF_ATTRIBUTE_FIELDS, TariffImportService } from './tariff-import.service';
 import { UpdateTariffDto } from './tariff.dto';
 import { PublicationWorkflowService } from './publication-workflow.service';
@@ -46,17 +45,12 @@ interface AdminRequest {
 export class AdminTariffsController {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly rebuild: RebuildQueueService,
     private readonly imports: TariffImportService,
     private readonly publications: PublicationWorkflowService,
   ) {}
 
   private identityKey(cityId: string, slug: string, serviceType: ServiceType) {
     return `${cityId}:${slug}:${serviceType.toLowerCase()}`;
-  }
-
-  private async siteIdForCity(cityId: string) {
-    return (await this.prisma.city.findUnique({ where: { id: cityId }, select: { siteId: true } }))?.siteId;
   }
 
   @Get()
@@ -138,8 +132,23 @@ export class AdminTariffsController {
   }
 
   @Post('import')
-  async import(@Body() body: ImportBody) {
-    const tariffs = await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+  import(@Body() body: ImportBody, @Req() request?: AdminRequest) {
+    if (!Array.isArray(body.items) || body.items.length === 0) {
+      throw new BadRequestException('Передайте хотя бы один тариф');
+    }
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const city = await transaction.city.findUnique({
+        where: { id: body.cityId },
+        select: { siteId: true, site: { select: { providerId: true } } },
+      });
+      if (!city) throw new BadRequestException('Город импорта не найден');
+      if (city.site.providerId !== body.providerId) {
+        throw new BadRequestException('Город относится к другому провайдеру');
+      }
+      const beforeTariffs = await transaction.tariff.findMany({
+        where: { cityId: body.cityId },
+        orderBy: { id: 'asc' },
+      });
       const imported = [];
       for (const item of body.items) {
         const identityKey = this.identityKey(body.cityId, item.slug, item.serviceType);
@@ -152,11 +161,23 @@ export class AdminTariffsController {
           ? await transaction.tariff.update({ where: { id: existing.id }, data })
           : await transaction.tariff.create({ data: { ...data, providerId: body.providerId, cityId: body.cityId } }));
       }
-      return imported;
-    });
-    const siteId = await this.siteIdForCity(body.cityId);
-    await this.rebuild.enqueue({ entity: 'tariff-import', id: body.cityId, siteId });
-    return { imported: tariffs.length, tariffs };
+      const afterTariffs = await transaction.tariff.findMany({
+        where: { cityId: body.cityId },
+        orderBy: { id: 'asc' },
+      });
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: city.siteId,
+        entityType: 'SITE',
+        entityId: city.siteId,
+        action: 'IMPORT',
+        previousSnapshot: { tariffs: beforeTariffs },
+        snapshot: { tariffs: afterTariffs },
+        changedFields: ['tariffs'],
+        actorId: request?.user?.id,
+        source: 'tariff-import:legacy-api',
+      });
+      return { imported: imported.length, tariffs: imported, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
   @Post('import/validate')
