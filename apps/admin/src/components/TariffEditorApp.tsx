@@ -40,7 +40,8 @@ interface TariffDetail {
   attributeSchema: AttributeField[]
 }
 interface Rebuild { id: string | null; status: string; requestedRevision: number; publishedRevision: number; lastError?: string | null }
-interface UpdateResult { tariff: TariffDetail; rebuild: Rebuild; redirectOutcome: string }
+interface Publication { id: string; siteRevision: number; status: "PENDING" | "RUNNING" | "SUCCEEDED" | "FAILED" }
+interface UpdateResult { tariff: TariffDetail; publication: Publication; rebuild: Rebuild; redirectOutcome: string }
 interface FormState {
   cityId: string
   name: string
@@ -112,6 +113,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [confirmed, setConfirmed] = useState(false)
   const [rebuild, setRebuild] = useState<Rebuild | null>(null)
+  const [publication, setPublication] = useState<Publication | null>(null)
   const [rebuildPollAttempt, setRebuildPollAttempt] = useState(0)
 
   const hasUnsavedChanges = useMemo(() => Boolean(form && initialForm && JSON.stringify(form) !== JSON.stringify(initialForm)), [form, initialForm])
@@ -240,6 +242,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
       setInitialForm(savedForm)
       setConfirmed(false)
       setRebuild(result.rebuild)
+      setPublication(result.publication)
       setRebuildPollAttempt(0)
     } catch (caught: unknown) {
       setError(caught instanceof Error ? caught.message : "Тариф не сохранен")
@@ -265,7 +268,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
     <form onSubmit={(event) => void save(event)} className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-6 lg:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4"><div><Button type="button" variant="ghost" className="-ml-2 mb-2" onClick={leaveEditor}><ArrowLeft data-icon="inline-start" />К тарифам</Button><h1 className="font-heading text-2xl font-semibold">Редактирование тарифа</h1><p className="mt-1 text-sm text-muted-foreground">{tariff.provider.name} · {tariff.city.name} · {tariff.publicPath}</p></div><div className="flex gap-2"><Button type="button" variant="outline" onClick={leaveEditor}>Отмена</Button>{renderSaveButton()}</div></div>
       {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Не удалось сохранить</AlertTitle><AlertDescription>{error}</AlertDescription></Alert> : null}
-      {rebuild ? <Alert variant={rebuild.status === "FAILED" || rebuild.status === "ENQUEUE_FAILED" ? "destructive" : "default"}>{rebuildPublished ? <CheckCircle2 /> : rebuild.status === "FAILED" || rebuild.status === "ENQUEUE_FAILED" ? <CircleAlert /> : <LoaderCircle className="animate-spin" />}<AlertTitle>{rebuildPublished ? "Изменения опубликованы" : rebuild.status === "ENQUEUE_FAILED" ? "Тариф сохранен, но пересборка не поставлена в очередь" : rebuild.status === "FAILED" ? "Пересборка завершилась ошибкой" : "Изменения сохранены, сайт пересобирается"}</AlertTitle><AlertDescription>{rebuild.id ? `Ревизия ${rebuild.requestedRevision}; опубликована ${rebuild.publishedRevision}.` : "Обновите экран пересборок после восстановления очереди."} {rebuild.lastError || ""}</AlertDescription></Alert> : null}
+      {rebuild ? <Alert variant={rebuild.status === "FAILED" || rebuild.status === "ENQUEUE_FAILED" ? "destructive" : "default"}>{rebuildPublished ? <CheckCircle2 /> : rebuild.status === "FAILED" || rebuild.status === "ENQUEUE_FAILED" ? <CircleAlert /> : <LoaderCircle className="animate-spin" />}<AlertTitle>{rebuildPublished ? "Изменения опубликованы" : rebuild.status === "ENQUEUE_FAILED" ? "Рабочая версия сохранена, но пересборка не поставлена в очередь" : rebuild.status === "FAILED" ? "Публикация завершилась ошибкой" : "Рабочая версия сохранена, сайт пересобирается"}</AlertTitle><AlertDescription>{publication ? `Рабочая версия ${publication.siteRevision}. ` : ""}{rebuildPublished ? "Эта версия опубликована на сайте." : "Сайт еще показывает предыдущую опубликованную версию."} {rebuild.id ? `Пересборка ${rebuild.requestedRevision}; завершенная ${rebuild.publishedRevision}.` : "Обновите экран пересборок после восстановления очереди."} {rebuild.lastError || ""}</AlertDescription></Alert> : null}
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="flex min-w-0 flex-col gap-6">

@@ -3,6 +3,10 @@ import { PublishStatus } from '../generated';
 import { PrismaService } from './prisma.service';
 import { RebuildQueueService } from './rebuild-queue.service';
 import { releaseOnePaths } from './public-route-policy';
+import { PublicationWorkflowService } from './publication-workflow.service';
+import { normalizeRedirectPath } from './redirect-path';
+
+export { normalizeRedirectPath } from './redirect-path';
 
 type RedirectInput = {
   siteId: string;
@@ -14,24 +18,13 @@ type RedirectInput = {
 
 type RedirectUpdate = Partial<Omit<RedirectInput, 'siteId'>>;
 
-const safePathPattern = /^\/[a-z0-9._~/-]*$/;
-
-export function normalizeRedirectPath(value: unknown, field: 'sourcePath' | 'targetPath') {
-  if (typeof value !== 'string' || !value.trim().startsWith('/')) {
-    throw new BadRequestException(`${field} должен быть внутренним путем от корня сайта`);
-  }
-  let path = value.trim();
-  if (!safePathPattern.test(path) || path.includes('//') || path.includes('..')) {
-    throw new BadRequestException(`${field} содержит недопустимые символы`);
-  }
-  if (path !== '/') path = path.replace(/\/+$/, '');
-  if (field === 'sourcePath' && path === '/') throw new BadRequestException('Корневой URL нельзя использовать как sourcePath');
-  return path;
-}
-
 @Injectable()
 export class RedirectService {
-  constructor(private readonly prisma: PrismaService, private readonly rebuild: RebuildQueueService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly rebuild: RebuildQueueService,
+    private readonly publications: PublicationWorkflowService,
+  ) {}
 
   list(siteId?: string) {
     return this.prisma.redirect.findMany({
@@ -75,33 +68,17 @@ export class RedirectService {
   }
 
   async resolvePublished(siteSlug: string, id: string) {
-    const where = { id, status: PublishStatus.PUBLISHED, site: { slug: siteSlug, status: PublishStatus.PUBLISHED } };
-    const redirect = await this.prisma.redirect.findFirst({ where, select: { siteId: true, sourcePath: true, targetPath: true } });
+    const catalog = await this.publications.getPublishedCatalog(siteSlug);
+    const redirects = Array.isArray(catalog.redirects) ? catalog.redirects as Array<Record<string, unknown>> : [];
+    const routes = Array.isArray(catalog.routes) ? catalog.routes as Array<Record<string, unknown>> : [];
+    const redirect = redirects.find((item) => item.id === id && item.status === PublishStatus.PUBLISHED);
     if (!redirect) throw new NotFoundException('Redirect not found');
     const sourcePath = normalizeRedirectPath(redirect.sourcePath, 'sourcePath');
     const targetPath = normalizeRedirectPath(redirect.targetPath, 'targetPath');
-    const [cities, globalPages] = await Promise.all([
-      this.prisma.city.findMany({
-        where: { siteId: redirect.siteId, status: PublishStatus.PUBLISHED },
-        select: {
-          slug: true,
-          tariffs: { where: { status: PublishStatus.PUBLISHED }, select: { slug: true } },
-        },
-      }),
-      this.prisma.page.findMany({
-        where: { siteId: redirect.siteId, cityId: null, status: PublishStatus.PUBLISHED },
-        select: { type: true, slug: true },
-      }),
-    ]);
-    let publishedPaths: Set<string>;
-    try {
-      publishedPaths = releaseOnePaths(cities, globalPages);
-    } catch {
-      throw new NotFoundException('Redirect not found');
-    }
+    const publishedPaths = new Set(routes.map((route) => String(route.path || '')));
     if (publishedPaths.has(sourcePath) || !publishedPaths.has(targetPath)) throw new NotFoundException('Redirect not found');
     const updated = await this.prisma.redirect.updateMany({
-      where,
+      where: { id },
       data: { hitCount: { increment: 1 }, lastHitAt: new Date() },
     });
     if (updated.count !== 1) throw new NotFoundException('Redirect not found');

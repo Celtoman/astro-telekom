@@ -70,6 +70,9 @@ test('tariff workspace provides quick detail and a separate guarded long editor'
   assert.match(editor, /hasUnsavedChanges/);
   assert.match(editor, /\/admin\/rebuilds\/\$\{/);
   assert.match(editor, /setRebuildPollAttempt/);
+  assert.match(editor, /result\.publication/);
+  assert.match(editor, /Рабочая версия/);
+  assert.match(editor, /сайт еще показывает предыдущую опубликованную версию/i);
   assert.match(editor, /attributeSchema/);
   assert.match(editor, /не изменяет статус публикации/);
   assert.match(editor, /form\.attributes\[field\.key\] \?\? ""/);

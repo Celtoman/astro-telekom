@@ -2,6 +2,11 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { AdminTariffsController } = require('../apps/api/dist/admin-tariffs.controller.js');
 
+const publicationStub = {
+  recordWorkingRevision: async () => ({ siteRevision: 1 }),
+  captureWorkingPublication: async (_transaction, input) => ({ id: `publication-${input.siteRevision}`, siteRevision: input.siteRevision, status: 'PENDING' }),
+};
+
 test('manual tariff edit keeps the deterministic identity key aligned with import business key', async () => {
   let saved;
   let rebuild;
@@ -14,7 +19,7 @@ test('manual tariff edit keeps the deterministic identity key aligned with impor
     },
   };
   const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
-  const controller = new AdminTariffsController(prisma, { enqueue: async (data) => { rebuild = data; } });
+  const controller = new AdminTariffsController(prisma, { enqueue: async (data) => { rebuild = data; } }, undefined, publicationStub);
   await controller.update('tariff', { expectedUpdatedAt: updatedAt.toISOString(), name: 'Новый тариф', serviceType: 'INTERNET_TV' });
   assert.equal(saved.identityKey, 'city:stable-slug:internet_tv');
   assert.equal(rebuild.siteId, 'site');

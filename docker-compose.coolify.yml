@@ -115,6 +115,8 @@ services:
     environment:
       ALLOW_DEMO_DATA: "false"
       SITE_DATA_API_URL: http://api:3000/api/v1
+      SITE_DATA_PUBLICATION_MODE: "processing"
+      SITE_DATA_API_TOKEN: ${ADMIN_API_TOKEN:?Set ADMIN_API_TOKEN in Coolify}
       PUBLIC_API_URL: https://${PUBLIC_DOMAIN:?Set PUBLIC_DOMAIN in Coolify}/api/v1
       PUBLIC_SITE_URL: https://${PUBLIC_DOMAIN:?Set PUBLIC_DOMAIN in Coolify}
       PUBLIC_SITE_SLUG: ${PUBLIC_SITE_SLUG:-domru-kazan}

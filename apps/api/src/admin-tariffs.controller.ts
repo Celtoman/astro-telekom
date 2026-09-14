@@ -1,4 +1,4 @@
-import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { isDeepStrictEqual } from 'node:util';
 import { Prisma } from '../generated';
 import { CursorPageQueryDto, decodeCursor, encodeCursor, pageSize, searchQuery } from './admin-pagination';
@@ -7,6 +7,7 @@ import { PrismaService } from './prisma.service';
 import { RebuildQueueService } from './rebuild-queue.service';
 import { ImportReport, normalizeTariffAttributes, parseWorkbook, TARIFF_ATTRIBUTE_FIELDS, TariffImportService } from './tariff-import.service';
 import { UpdateTariffDto } from './tariff.dto';
+import { PublicationWorkflowService } from './publication-workflow.service';
 
 type ServiceType = 'INTERNET' | 'INTERNET_TV' | 'TV' | 'OTHER';
 type PublishStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
@@ -36,10 +37,19 @@ interface ImportBody {
   items: Array<Omit<TariffBody, 'providerId' | 'cityId'>>;
 }
 
+interface AdminRequest {
+  user?: { id: string };
+}
+
 @Controller('admin/tariffs')
 @UseGuards(AdminTokenGuard)
 export class AdminTariffsController {
-  constructor(private readonly prisma: PrismaService, private readonly rebuild: RebuildQueueService, private readonly imports: TariffImportService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly rebuild: RebuildQueueService,
+    private readonly imports: TariffImportService,
+    private readonly publications: PublicationWorkflowService,
+  ) {}
 
   private identityKey(cityId: string, slug: string, serviceType: ServiceType) {
     return `${cityId}:${slug}:${serviceType.toLowerCase()}`;
@@ -208,7 +218,7 @@ export class AdminTariffsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() body: UpdateTariffDto) {
+  async update(@Param('id') id: string, @Body() body: UpdateTariffDto, @Req() request?: AdminRequest) {
     const result = await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const existing = await transaction.tariff.findUnique({ where: { id } });
       if (!existing) throw new NotFoundException('Тариф не найден');
@@ -321,15 +331,39 @@ export class AdminTariffsController {
           city: { select: { id: true, name: true, slug: true, siteId: true } },
         },
       });
+      const { provider: _provider, city: _city, attributeSchema: _schema, publicPath: _path, ...tariffSnapshot } = tariff as typeof tariff & { attributeSchema?: unknown; publicPath?: string };
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: newCity.siteId,
+        entityType: 'TARIFF',
+        entityId: tariff.id,
+        action: 'UPDATE',
+        snapshot: tariffSnapshot,
+        changedFields: Object.keys(editable),
+        actorId: request?.user?.id,
+        source: 'admin',
+      });
+      const publication = await this.publications.captureWorkingPublication(transaction, {
+        siteId: newCity.siteId,
+        siteRevision: revision.siteRevision,
+        triggerEntity: 'tariff',
+        triggerEntityId: tariff.id,
+        requestedById: request?.user?.id,
+      });
       return {
         tariff: { ...tariff, publicPath: `/${tariff.city.slug}/${tariff.slug}`, attributeSchema: TARIFF_ATTRIBUTE_FIELDS },
         siteId: newCity.siteId,
         redirectOutcome,
+        publication,
       };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
     let rebuild;
     try {
-      rebuild = await this.rebuild.enqueue({ entity: 'tariff', id: result.tariff.id, siteId: result.siteId });
+      rebuild = await this.rebuild.enqueue({
+        entity: 'tariff',
+        id: result.tariff.id,
+        siteId: result.siteId,
+        publicationId: result.publication.id,
+      });
     } catch (error) {
       rebuild = {
         id: null,
@@ -339,6 +373,6 @@ export class AdminTariffsController {
         lastError: error instanceof Error ? error.message : 'Не удалось поставить пересборку в очередь',
       };
     }
-    return { tariff: result.tariff, redirectOutcome: result.redirectOutcome, rebuild };
+    return { tariff: result.tariff, redirectOutcome: result.redirectOutcome, publication: result.publication, rebuild };
   }
 }

@@ -138,6 +138,8 @@ exports.Prisma.SiteScalarFieldEnum = {
   domain: 'domain',
   settings: 'settings',
   status: 'status',
+  workingRevision: 'workingRevision',
+  publishedRevision: 'publishedRevision',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -159,11 +161,59 @@ exports.Prisma.SiteRebuildScalarFieldEnum = {
   providerStatus: 'providerStatus',
   providerDeploymentId: 'providerDeploymentId',
   providerResponse: 'providerResponse',
+  requestedPublicationId: 'requestedPublicationId',
+  processingPublicationId: 'processingPublicationId',
+  publishedPublicationId: 'publishedPublicationId',
   queuedAt: 'queuedAt',
   startedAt: 'startedAt',
   completedAt: 'completedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ContentRevisionScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  entityRevision: 'entityRevision',
+  siteRevision: 'siteRevision',
+  action: 'action',
+  snapshot: 'snapshot',
+  changedFields: 'changedFields',
+  source: 'source',
+  actorId: 'actorId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SitePublicationScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  siteRevision: 'siteRevision',
+  status: 'status',
+  catalog: 'catalog',
+  triggerEntity: 'triggerEntity',
+  triggerEntityId: 'triggerEntityId',
+  requestedById: 'requestedById',
+  lastError: 'lastError',
+  providerDeploymentId: 'providerDeploymentId',
+  providerResponse: 'providerResponse',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  publishedAt: 'publishedAt'
+};
+
+exports.Prisma.AuditEventScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  siteRevision: 'siteRevision',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  action: 'action',
+  changedFields: 'changedFields',
+  source: 'source',
+  actorId: 'actorId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.RegionScalarFieldEnum = {
@@ -452,6 +502,31 @@ exports.SiteRebuildStatus = exports.$Enums.SiteRebuildStatus = {
   FAILED: 'FAILED'
 };
 
+exports.ContentEntityType = exports.$Enums.ContentEntityType = {
+  PROVIDER: 'PROVIDER',
+  SITE: 'SITE',
+  REGION: 'REGION',
+  CITY: 'CITY',
+  PAGE: 'PAGE',
+  TARIFF: 'TARIFF',
+  REDIRECT: 'REDIRECT'
+};
+
+exports.ContentRevisionAction = exports.$Enums.ContentRevisionAction = {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
+  IMPORT: 'IMPORT',
+  ARCHIVE: 'ARCHIVE',
+  RESTORE: 'RESTORE'
+};
+
+exports.SitePublicationStatus = exports.$Enums.SitePublicationStatus = {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED'
+};
+
 exports.PageType = exports.$Enums.PageType = {
   HOME: 'HOME',
   INTERNET: 'INTERNET',
@@ -542,6 +617,9 @@ exports.Prisma.ModelName = {
   Provider: 'Provider',
   Site: 'Site',
   SiteRebuild: 'SiteRebuild',
+  ContentRevision: 'ContentRevision',
+  SitePublication: 'SitePublication',
+  AuditEvent: 'AuditEvent',
   Region: 'Region',
   City: 'City',
   Page: 'Page',

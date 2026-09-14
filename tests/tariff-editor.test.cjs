@@ -5,6 +5,11 @@ const { TariffImportService } = require('../apps/api/dist/tariff-import.service.
 const { UpdateTariffDto } = require('../apps/api/dist/tariff.dto.js');
 const { createGlobalValidationPipe } = require('../apps/api/dist/security-options.js');
 
+const publicationStub = {
+  recordWorkingRevision: async () => ({ siteRevision: 1 }),
+  captureWorkingPublication: async (_transaction, input) => ({ id: `publication-${input.siteRevision}`, siteRevision: input.siteRevision, status: 'PENDING' }),
+};
+
 const existingTariff = {
   id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500',
   serviceType: 'INTERNET', standardPrice: 900, promoPrice: 700, speed: 500, promoText: 'Первые 3 месяца',
@@ -64,7 +69,7 @@ test('confirmed manual edit returns the persisted tariff and rebuild outcome', a
     },
   };
   const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => rebuild });
+  const controller = new AdminTariffsController(prisma, { enqueue: async () => rebuild }, undefined, publicationStub);
 
   const result = await controller.update('tariff-1', {
     expectedUpdatedAt: existingTariff.updatedAt.toISOString(), name: 'Гига 500 новый', standardPrice: 950, confirmSensitiveChanges: true,
@@ -137,7 +142,7 @@ test('persisted tariff edit reports a rebuild enqueue failure without pretending
     },
   };
   const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => { throw new Error('Redis unavailable'); } });
+  const controller = new AdminTariffsController(prisma, { enqueue: async () => { throw new Error('Redis unavailable'); } }, undefined, publicationStub);
 
   const result = await controller.update('tariff-1', {
     expectedUpdatedAt: existingTariff.updatedAt.toISOString(), name: 'Сохраненный тариф',
@@ -146,6 +151,51 @@ test('persisted tariff edit reports a rebuild enqueue failure without pretending
   assert.equal(result.tariff.name, 'Сохраненный тариф');
   assert.equal(result.rebuild.status, 'ENQUEUE_FAILED');
   assert.match(result.rebuild.lastError, /Redis unavailable/);
+});
+
+test('manual tariff edit snapshots its working revision before enqueueing publication', async () => {
+  const calls = [];
+  const tx = {
+    city: { findUnique: async () => ({ id: 'city-1', slug: 'kazan', siteId: 'site-1', status: 'PUBLISHED', site: { providerId: 'provider-1' } }) },
+    page: { findFirst: async () => null },
+    redirect: { findUnique: async () => null, updateMany: async () => ({ count: 0 }), create: async () => ({}) },
+    tariff: {
+      findUnique: async () => existingTariff,
+      findFirst: async () => null,
+      update: async ({ data }) => withRelations({ ...existingTariff, ...data, updatedAt: new Date('2026-09-12T00:00:00Z') }),
+    },
+  };
+  const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
+  const publications = {
+    recordWorkingRevision: async (_transaction, input) => {
+      calls.push(['revision', input]);
+      return { siteRevision: 7 };
+    },
+    captureWorkingPublication: async (_transaction, input) => {
+      calls.push(['snapshot', input]);
+      return { id: 'publication-7', siteRevision: input.siteRevision, status: 'PENDING' };
+    },
+  };
+  const rebuild = {
+    enqueue: async (input) => {
+      calls.push(['enqueue', input]);
+      return { id: 'rebuild-1', status: 'PENDING' };
+    },
+  };
+  const controller = new AdminTariffsController(prisma, rebuild, undefined, publications);
+
+  const result = await controller.update('tariff-1', {
+    expectedUpdatedAt: existingTariff.updatedAt.toISOString(),
+    name: 'Гига 500 — рабочая версия',
+  });
+
+  assert.deepEqual(calls.map(([type]) => type), ['revision', 'snapshot', 'enqueue']);
+  assert.equal(calls[0][1].entityType, 'TARIFF');
+  assert.equal(calls[0][1].siteId, 'site-1');
+  assert.deepEqual(calls[0][1].changedFields, ['name']);
+  assert.equal(calls[1][1].siteRevision, 7);
+  assert.equal(calls[2][1].publicationId, 'publication-7');
+  assert.equal(result.publication.id, 'publication-7');
 });
 
 test('an imported tariff round-trips through detail and the manual editor contract', async () => {
@@ -187,7 +237,7 @@ test('an imported tariff round-trips through detail and the manual editor contra
   }]);
   await importer.applyReport(report, { confirmWarnings: true });
 
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => ({ id: 'rebuild-1', status: 'PENDING', requestedRevision: 2, publishedRevision: 1 }) }, importer);
+  const controller = new AdminTariffsController(prisma, { enqueue: async () => ({ id: 'rebuild-1', status: 'PENDING', requestedRevision: 2, publishedRevision: 1 }) }, importer, publicationStub);
   const detail = await controller.detail('tariff-1');
   assert.equal(detail.attributes.nazvanie_tarifa, 'Название карточки');
   assert.equal(detail.attributes.show_on_site, true);

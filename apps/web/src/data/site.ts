@@ -275,8 +275,17 @@ export function loadSiteData(): Promise<SiteCatalog> {
     const apiUrl = import.meta.env.SITE_DATA_API_URL
       || import.meta.env.PUBLIC_API_URL
       || 'http://localhost:3000/api/v1';
+    const publicationMode = process.env.SITE_DATA_PUBLICATION_MODE === 'processing';
+    const publicationToken = process.env.SITE_DATA_API_TOKEN;
+    const catalogPath = publicationMode
+      ? `/internal/site-publications/${publicSiteSlug}/catalog`
+      : `/public/sites/${publicSiteSlug}/cities`;
     try {
-      const response = await fetch(`${apiUrl}/public/sites/${publicSiteSlug}/cities`, { signal: AbortSignal.timeout(5000) });
+      if (publicationMode && !publicationToken) throw new Error('SITE_DATA_API_TOKEN is required for processing publication mode');
+      const response = await fetch(`${apiUrl}${catalogPath}`, {
+        signal: AbortSignal.timeout(5000),
+        ...(publicationToken ? { headers: { 'x-admin-token': publicationToken } } : {}),
+      });
       if (!response.ok) throw new Error(`API responded ${response.status}`);
       return normalizedCatalog(await response.json());
     } catch (error) {

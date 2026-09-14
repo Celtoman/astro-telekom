@@ -39,6 +39,9 @@ import { DadataService } from './dadata.service';
 import { AddressSuggestionsController } from './address-suggestions.controller';
 import { LeadNotificationController } from './lead-notification.controller';
 import { LeadNotificationOutboxService } from './lead-notification-outbox.service';
+import { PublicationWorkflowService } from './publication-workflow.service';
+import { SiteCatalogService } from './site-catalog.service';
+import { PublicationWorkflowController } from './publication-workflow.controller';
 
 @Module({
   controllers: [
@@ -65,7 +68,8 @@ import { LeadNotificationOutboxService } from './lead-notification-outbox.servic
     AdminRedirectsController,
     PublicRedirectsController,
     LeadNotificationController,
+    PublicationWorkflowController,
   ],
-  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, PublicationWorkflowService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

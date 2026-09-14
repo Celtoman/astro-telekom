@@ -2,6 +2,11 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { AdminTariffsController } = require('../apps/api/dist/admin-tariffs.controller.js');
 
+const publicationStub = {
+  recordWorkingRevision: async () => ({ siteRevision: 1 }),
+  captureWorkingPublication: async (_transaction, input) => ({ id: `publication-${input.siteRevision}`, siteRevision: input.siteRevision, status: 'PENDING' }),
+};
+
 function fixture({ pageConflict = false, tariffConflict = false, redirectConflict = false, status = 'PUBLISHED', cityStatus = 'PUBLISHED' } = {}) {
   const createdRedirects = [];
   const flattenedRedirects = [];
@@ -30,7 +35,7 @@ function fixture({ pageConflict = false, tariffConflict = false, redirectConflic
     $transaction: async (callback) => callback(tx),
   };
   const rebuilds = [];
-  const controller = new AdminTariffsController(prisma, { enqueue: async (data) => { rebuilds.push(data); } });
+  const controller = new AdminTariffsController(prisma, { enqueue: async (data) => { rebuilds.push(data); } }, undefined, publicationStub);
   return { controller, createdRedirects, flattenedRedirects, rebuilds, getUpdatedTariff: () => updatedTariff };
 }
 

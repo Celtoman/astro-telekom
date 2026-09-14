@@ -29,6 +29,21 @@ export type Site = $Result.DefaultSelection<Prisma.$SitePayload>
  */
 export type SiteRebuild = $Result.DefaultSelection<Prisma.$SiteRebuildPayload>
 /**
+ * Model ContentRevision
+ * 
+ */
+export type ContentRevision = $Result.DefaultSelection<Prisma.$ContentRevisionPayload>
+/**
+ * Model SitePublication
+ * 
+ */
+export type SitePublication = $Result.DefaultSelection<Prisma.$SitePublicationPayload>
+/**
+ * Model AuditEvent
+ * 
+ */
+export type AuditEvent = $Result.DefaultSelection<Prisma.$AuditEventPayload>
+/**
  * Model Region
  * 
  */
@@ -243,6 +258,40 @@ export const SiteRebuildStatus: {
 export type SiteRebuildStatus = (typeof SiteRebuildStatus)[keyof typeof SiteRebuildStatus]
 
 
+export const ContentEntityType: {
+  PROVIDER: 'PROVIDER',
+  SITE: 'SITE',
+  REGION: 'REGION',
+  CITY: 'CITY',
+  PAGE: 'PAGE',
+  TARIFF: 'TARIFF',
+  REDIRECT: 'REDIRECT'
+};
+
+export type ContentEntityType = (typeof ContentEntityType)[keyof typeof ContentEntityType]
+
+
+export const ContentRevisionAction: {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
+  IMPORT: 'IMPORT',
+  ARCHIVE: 'ARCHIVE',
+  RESTORE: 'RESTORE'
+};
+
+export type ContentRevisionAction = (typeof ContentRevisionAction)[keyof typeof ContentRevisionAction]
+
+
+export const SitePublicationStatus: {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED'
+};
+
+export type SitePublicationStatus = (typeof SitePublicationStatus)[keyof typeof SitePublicationStatus]
+
+
 export const LeadNotificationStatus: {
   PENDING: 'PENDING',
   QUEUED: 'QUEUED',
@@ -299,6 +348,18 @@ export const CityImportStatus: typeof $Enums.CityImportStatus
 export type SiteRebuildStatus = $Enums.SiteRebuildStatus
 
 export const SiteRebuildStatus: typeof $Enums.SiteRebuildStatus
+
+export type ContentEntityType = $Enums.ContentEntityType
+
+export const ContentEntityType: typeof $Enums.ContentEntityType
+
+export type ContentRevisionAction = $Enums.ContentRevisionAction
+
+export const ContentRevisionAction: typeof $Enums.ContentRevisionAction
+
+export type SitePublicationStatus = $Enums.SitePublicationStatus
+
+export const SitePublicationStatus: typeof $Enums.SitePublicationStatus
 
 export type LeadNotificationStatus = $Enums.LeadNotificationStatus
 
@@ -454,6 +515,36 @@ export class PrismaClient<
     * ```
     */
   get siteRebuild(): Prisma.SiteRebuildDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.contentRevision`: Exposes CRUD operations for the **ContentRevision** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ContentRevisions
+    * const contentRevisions = await prisma.contentRevision.findMany()
+    * ```
+    */
+  get contentRevision(): Prisma.ContentRevisionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.sitePublication`: Exposes CRUD operations for the **SitePublication** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SitePublications
+    * const sitePublications = await prisma.sitePublication.findMany()
+    * ```
+    */
+  get sitePublication(): Prisma.SitePublicationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.auditEvent`: Exposes CRUD operations for the **AuditEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AuditEvents
+    * const auditEvents = await prisma.auditEvent.findMany()
+    * ```
+    */
+  get auditEvent(): Prisma.AuditEventDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.region`: Exposes CRUD operations for the **Region** model.
@@ -1074,6 +1165,9 @@ export namespace Prisma {
     Provider: 'Provider',
     Site: 'Site',
     SiteRebuild: 'SiteRebuild',
+    ContentRevision: 'ContentRevision',
+    SitePublication: 'SitePublication',
+    AuditEvent: 'AuditEvent',
     Region: 'Region',
     City: 'City',
     Page: 'Page',
@@ -1106,7 +1200,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "provider" | "site" | "siteRebuild" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
+      modelProps: "provider" | "site" | "siteRebuild" | "contentRevision" | "sitePublication" | "auditEvent" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1329,6 +1423,228 @@ export namespace Prisma {
           count: {
             args: Prisma.SiteRebuildCountArgs<ExtArgs>
             result: $Utils.Optional<SiteRebuildCountAggregateOutputType> | number
+          }
+        }
+      }
+      ContentRevision: {
+        payload: Prisma.$ContentRevisionPayload<ExtArgs>
+        fields: Prisma.ContentRevisionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ContentRevisionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentRevisionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ContentRevisionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentRevisionPayload>
+          }
+          findFirst: {
+            args: Prisma.ContentRevisionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentRevisionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ContentRevisionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentRevisionPayload>
+          }
+          findMany: {
+            args: Prisma.ContentRevisionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentRevisionPayload>[]
+          }
+          create: {
+            args: Prisma.ContentRevisionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentRevisionPayload>
+          }
+          createMany: {
+            args: Prisma.ContentRevisionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ContentRevisionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentRevisionPayload>[]
+          }
+          delete: {
+            args: Prisma.ContentRevisionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentRevisionPayload>
+          }
+          update: {
+            args: Prisma.ContentRevisionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentRevisionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ContentRevisionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ContentRevisionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ContentRevisionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentRevisionPayload>[]
+          }
+          upsert: {
+            args: Prisma.ContentRevisionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContentRevisionPayload>
+          }
+          aggregate: {
+            args: Prisma.ContentRevisionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateContentRevision>
+          }
+          groupBy: {
+            args: Prisma.ContentRevisionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ContentRevisionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ContentRevisionCountArgs<ExtArgs>
+            result: $Utils.Optional<ContentRevisionCountAggregateOutputType> | number
+          }
+        }
+      }
+      SitePublication: {
+        payload: Prisma.$SitePublicationPayload<ExtArgs>
+        fields: Prisma.SitePublicationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SitePublicationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SitePublicationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationPayload>
+          }
+          findFirst: {
+            args: Prisma.SitePublicationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SitePublicationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationPayload>
+          }
+          findMany: {
+            args: Prisma.SitePublicationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationPayload>[]
+          }
+          create: {
+            args: Prisma.SitePublicationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationPayload>
+          }
+          createMany: {
+            args: Prisma.SitePublicationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SitePublicationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationPayload>[]
+          }
+          delete: {
+            args: Prisma.SitePublicationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationPayload>
+          }
+          update: {
+            args: Prisma.SitePublicationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationPayload>
+          }
+          deleteMany: {
+            args: Prisma.SitePublicationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SitePublicationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SitePublicationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationPayload>[]
+          }
+          upsert: {
+            args: Prisma.SitePublicationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationPayload>
+          }
+          aggregate: {
+            args: Prisma.SitePublicationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSitePublication>
+          }
+          groupBy: {
+            args: Prisma.SitePublicationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SitePublicationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SitePublicationCountArgs<ExtArgs>
+            result: $Utils.Optional<SitePublicationCountAggregateOutputType> | number
+          }
+        }
+      }
+      AuditEvent: {
+        payload: Prisma.$AuditEventPayload<ExtArgs>
+        fields: Prisma.AuditEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AuditEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AuditEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditEventPayload>
+          }
+          findFirst: {
+            args: Prisma.AuditEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AuditEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditEventPayload>
+          }
+          findMany: {
+            args: Prisma.AuditEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditEventPayload>[]
+          }
+          create: {
+            args: Prisma.AuditEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditEventPayload>
+          }
+          createMany: {
+            args: Prisma.AuditEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AuditEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditEventPayload>[]
+          }
+          delete: {
+            args: Prisma.AuditEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditEventPayload>
+          }
+          update: {
+            args: Prisma.AuditEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.AuditEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AuditEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AuditEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.AuditEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditEventPayload>
+          }
+          aggregate: {
+            args: Prisma.AuditEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAuditEvent>
+          }
+          groupBy: {
+            args: Prisma.AuditEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AuditEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AuditEventCountArgs<ExtArgs>
+            result: $Utils.Optional<AuditEventCountAggregateOutputType> | number
           }
         }
       }
@@ -2716,6 +3032,9 @@ export namespace Prisma {
     provider?: ProviderOmit
     site?: SiteOmit
     siteRebuild?: SiteRebuildOmit
+    contentRevision?: ContentRevisionOmit
+    sitePublication?: SitePublicationOmit
+    auditEvent?: AuditEventOmit
     region?: RegionOmit
     city?: CityOmit
     page?: PageOmit
@@ -2870,6 +3189,9 @@ export namespace Prisma {
     redirects: number
     cityImports: number
     rebuilds: number
+    contentRevisions: number
+    publications: number
+    auditEvents: number
   }
 
   export type SiteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2881,6 +3203,9 @@ export namespace Prisma {
     redirects?: boolean | SiteCountOutputTypeCountRedirectsArgs
     cityImports?: boolean | SiteCountOutputTypeCountCityImportsArgs
     rebuilds?: boolean | SiteCountOutputTypeCountRebuildsArgs
+    contentRevisions?: boolean | SiteCountOutputTypeCountContentRevisionsArgs
+    publications?: boolean | SiteCountOutputTypeCountPublicationsArgs
+    auditEvents?: boolean | SiteCountOutputTypeCountAuditEventsArgs
   }
 
   // Custom InputTypes
@@ -2947,6 +3272,76 @@ export namespace Prisma {
    * SiteCountOutputType without action
    */
   export type SiteCountOutputTypeCountRebuildsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SiteRebuildWhereInput
+  }
+
+  /**
+   * SiteCountOutputType without action
+   */
+  export type SiteCountOutputTypeCountContentRevisionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContentRevisionWhereInput
+  }
+
+  /**
+   * SiteCountOutputType without action
+   */
+  export type SiteCountOutputTypeCountPublicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitePublicationWhereInput
+  }
+
+  /**
+   * SiteCountOutputType without action
+   */
+  export type SiteCountOutputTypeCountAuditEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AuditEventWhereInput
+  }
+
+
+  /**
+   * Count Type SitePublicationCountOutputType
+   */
+
+  export type SitePublicationCountOutputType = {
+    requestedRebuilds: number
+    processingRebuilds: number
+    publishedRebuilds: number
+  }
+
+  export type SitePublicationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    requestedRebuilds?: boolean | SitePublicationCountOutputTypeCountRequestedRebuildsArgs
+    processingRebuilds?: boolean | SitePublicationCountOutputTypeCountProcessingRebuildsArgs
+    publishedRebuilds?: boolean | SitePublicationCountOutputTypeCountPublishedRebuildsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SitePublicationCountOutputType without action
+   */
+  export type SitePublicationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationCountOutputType
+     */
+    select?: SitePublicationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SitePublicationCountOutputType without action
+   */
+  export type SitePublicationCountOutputTypeCountRequestedRebuildsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SiteRebuildWhereInput
+  }
+
+  /**
+   * SitePublicationCountOutputType without action
+   */
+  export type SitePublicationCountOutputTypeCountProcessingRebuildsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SiteRebuildWhereInput
+  }
+
+  /**
+   * SitePublicationCountOutputType without action
+   */
+  export type SitePublicationCountOutputTypeCountPublishedRebuildsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SiteRebuildWhereInput
   }
 
@@ -3233,10 +3628,16 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     sessions: number
+    contentRevisions: number
+    publications: number
+    auditEvents: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+    contentRevisions?: boolean | UserCountOutputTypeCountContentRevisionsArgs
+    publications?: boolean | UserCountOutputTypeCountPublicationsArgs
+    auditEvents?: boolean | UserCountOutputTypeCountAuditEventsArgs
   }
 
   // Custom InputTypes
@@ -3255,6 +3656,27 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SessionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountContentRevisionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContentRevisionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPublicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitePublicationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAuditEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AuditEventWhereInput
   }
 
 
@@ -4417,8 +4839,20 @@ export namespace Prisma {
 
   export type AggregateSite = {
     _count: SiteCountAggregateOutputType | null
+    _avg: SiteAvgAggregateOutputType | null
+    _sum: SiteSumAggregateOutputType | null
     _min: SiteMinAggregateOutputType | null
     _max: SiteMaxAggregateOutputType | null
+  }
+
+  export type SiteAvgAggregateOutputType = {
+    workingRevision: number | null
+    publishedRevision: number | null
+  }
+
+  export type SiteSumAggregateOutputType = {
+    workingRevision: number | null
+    publishedRevision: number | null
   }
 
   export type SiteMinAggregateOutputType = {
@@ -4428,6 +4862,8 @@ export namespace Prisma {
     slug: string | null
     domain: string | null
     status: $Enums.PublishStatus | null
+    workingRevision: number | null
+    publishedRevision: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4439,6 +4875,8 @@ export namespace Prisma {
     slug: string | null
     domain: string | null
     status: $Enums.PublishStatus | null
+    workingRevision: number | null
+    publishedRevision: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4451,11 +4889,23 @@ export namespace Prisma {
     domain: number
     settings: number
     status: number
+    workingRevision: number
+    publishedRevision: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type SiteAvgAggregateInputType = {
+    workingRevision?: true
+    publishedRevision?: true
+  }
+
+  export type SiteSumAggregateInputType = {
+    workingRevision?: true
+    publishedRevision?: true
+  }
 
   export type SiteMinAggregateInputType = {
     id?: true
@@ -4464,6 +4914,8 @@ export namespace Prisma {
     slug?: true
     domain?: true
     status?: true
+    workingRevision?: true
+    publishedRevision?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4475,6 +4927,8 @@ export namespace Prisma {
     slug?: true
     domain?: true
     status?: true
+    workingRevision?: true
+    publishedRevision?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4487,6 +4941,8 @@ export namespace Prisma {
     domain?: true
     settings?: true
     status?: true
+    workingRevision?: true
+    publishedRevision?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4530,6 +4986,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: SiteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SiteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: SiteMinAggregateInputType
@@ -4560,6 +5028,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: SiteCountAggregateInputType | true
+    _avg?: SiteAvgAggregateInputType
+    _sum?: SiteSumAggregateInputType
     _min?: SiteMinAggregateInputType
     _max?: SiteMaxAggregateInputType
   }
@@ -4572,9 +5042,13 @@ export namespace Prisma {
     domain: string | null
     settings: JsonValue | null
     status: $Enums.PublishStatus
+    workingRevision: number
+    publishedRevision: number
     createdAt: Date
     updatedAt: Date
     _count: SiteCountAggregateOutputType | null
+    _avg: SiteAvgAggregateOutputType | null
+    _sum: SiteSumAggregateOutputType | null
     _min: SiteMinAggregateOutputType | null
     _max: SiteMaxAggregateOutputType | null
   }
@@ -4601,6 +5075,8 @@ export namespace Prisma {
     domain?: boolean
     settings?: boolean
     status?: boolean
+    workingRevision?: boolean
+    publishedRevision?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
@@ -4612,6 +5088,9 @@ export namespace Prisma {
     redirects?: boolean | Site$redirectsArgs<ExtArgs>
     cityImports?: boolean | Site$cityImportsArgs<ExtArgs>
     rebuilds?: boolean | Site$rebuildsArgs<ExtArgs>
+    contentRevisions?: boolean | Site$contentRevisionsArgs<ExtArgs>
+    publications?: boolean | Site$publicationsArgs<ExtArgs>
+    auditEvents?: boolean | Site$auditEventsArgs<ExtArgs>
     _count?: boolean | SiteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["site"]>
 
@@ -4623,6 +5102,8 @@ export namespace Prisma {
     domain?: boolean
     settings?: boolean
     status?: boolean
+    workingRevision?: boolean
+    publishedRevision?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
@@ -4636,6 +5117,8 @@ export namespace Prisma {
     domain?: boolean
     settings?: boolean
     status?: boolean
+    workingRevision?: boolean
+    publishedRevision?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
@@ -4649,11 +5132,13 @@ export namespace Prisma {
     domain?: boolean
     settings?: boolean
     status?: boolean
+    workingRevision?: boolean
+    publishedRevision?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "providerId" | "name" | "slug" | "domain" | "settings" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["site"]>
+  export type SiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "providerId" | "name" | "slug" | "domain" | "settings" | "status" | "workingRevision" | "publishedRevision" | "createdAt" | "updatedAt", ExtArgs["result"]["site"]>
   export type SiteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
     regions?: boolean | Site$regionsArgs<ExtArgs>
@@ -4664,6 +5149,9 @@ export namespace Prisma {
     redirects?: boolean | Site$redirectsArgs<ExtArgs>
     cityImports?: boolean | Site$cityImportsArgs<ExtArgs>
     rebuilds?: boolean | Site$rebuildsArgs<ExtArgs>
+    contentRevisions?: boolean | Site$contentRevisionsArgs<ExtArgs>
+    publications?: boolean | Site$publicationsArgs<ExtArgs>
+    auditEvents?: boolean | Site$auditEventsArgs<ExtArgs>
     _count?: boolean | SiteCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SiteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4685,6 +5173,9 @@ export namespace Prisma {
       redirects: Prisma.$RedirectPayload<ExtArgs>[]
       cityImports: Prisma.$CityImportRunPayload<ExtArgs>[]
       rebuilds: Prisma.$SiteRebuildPayload<ExtArgs>[]
+      contentRevisions: Prisma.$ContentRevisionPayload<ExtArgs>[]
+      publications: Prisma.$SitePublicationPayload<ExtArgs>[]
+      auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4694,6 +5185,8 @@ export namespace Prisma {
       domain: string | null
       settings: Prisma.JsonValue | null
       status: $Enums.PublishStatus
+      workingRevision: number
+      publishedRevision: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["site"]>
@@ -5099,6 +5592,9 @@ export namespace Prisma {
     redirects<T extends Site$redirectsArgs<ExtArgs> = {}>(args?: Subset<T, Site$redirectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RedirectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cityImports<T extends Site$cityImportsArgs<ExtArgs> = {}>(args?: Subset<T, Site$cityImportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CityImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     rebuilds<T extends Site$rebuildsArgs<ExtArgs> = {}>(args?: Subset<T, Site$rebuildsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contentRevisions<T extends Site$contentRevisionsArgs<ExtArgs> = {}>(args?: Subset<T, Site$contentRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    publications<T extends Site$publicationsArgs<ExtArgs> = {}>(args?: Subset<T, Site$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    auditEvents<T extends Site$auditEventsArgs<ExtArgs> = {}>(args?: Subset<T, Site$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5135,6 +5631,8 @@ export namespace Prisma {
     readonly domain: FieldRef<"Site", 'String'>
     readonly settings: FieldRef<"Site", 'Json'>
     readonly status: FieldRef<"Site", 'PublishStatus'>
+    readonly workingRevision: FieldRef<"Site", 'Int'>
+    readonly publishedRevision: FieldRef<"Site", 'Int'>
     readonly createdAt: FieldRef<"Site", 'DateTime'>
     readonly updatedAt: FieldRef<"Site", 'DateTime'>
   }
@@ -5730,6 +6228,78 @@ export namespace Prisma {
   }
 
   /**
+   * Site.contentRevisions
+   */
+  export type Site$contentRevisionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+    where?: ContentRevisionWhereInput
+    orderBy?: ContentRevisionOrderByWithRelationInput | ContentRevisionOrderByWithRelationInput[]
+    cursor?: ContentRevisionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContentRevisionScalarFieldEnum | ContentRevisionScalarFieldEnum[]
+  }
+
+  /**
+   * Site.publications
+   */
+  export type Site$publicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    where?: SitePublicationWhereInput
+    orderBy?: SitePublicationOrderByWithRelationInput | SitePublicationOrderByWithRelationInput[]
+    cursor?: SitePublicationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SitePublicationScalarFieldEnum | SitePublicationScalarFieldEnum[]
+  }
+
+  /**
+   * Site.auditEvents
+   */
+  export type Site$auditEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
+    where?: AuditEventWhereInput
+    orderBy?: AuditEventOrderByWithRelationInput | AuditEventOrderByWithRelationInput[]
+    cursor?: AuditEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AuditEventScalarFieldEnum | AuditEventScalarFieldEnum[]
+  }
+
+  /**
    * Site without action
    */
   export type SiteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5791,6 +6361,9 @@ export namespace Prisma {
     lastError: string | null
     providerStatus: string | null
     providerDeploymentId: string | null
+    requestedPublicationId: string | null
+    processingPublicationId: string | null
+    publishedPublicationId: string | null
     queuedAt: Date | null
     startedAt: Date | null
     completedAt: Date | null
@@ -5813,6 +6386,9 @@ export namespace Prisma {
     lastError: string | null
     providerStatus: string | null
     providerDeploymentId: string | null
+    requestedPublicationId: string | null
+    processingPublicationId: string | null
+    publishedPublicationId: string | null
     queuedAt: Date | null
     startedAt: Date | null
     completedAt: Date | null
@@ -5837,6 +6413,9 @@ export namespace Prisma {
     providerStatus: number
     providerDeploymentId: number
     providerResponse: number
+    requestedPublicationId: number
+    processingPublicationId: number
+    publishedPublicationId: number
     queuedAt: number
     startedAt: number
     completedAt: number
@@ -5877,6 +6456,9 @@ export namespace Prisma {
     lastError?: true
     providerStatus?: true
     providerDeploymentId?: true
+    requestedPublicationId?: true
+    processingPublicationId?: true
+    publishedPublicationId?: true
     queuedAt?: true
     startedAt?: true
     completedAt?: true
@@ -5899,6 +6481,9 @@ export namespace Prisma {
     lastError?: true
     providerStatus?: true
     providerDeploymentId?: true
+    requestedPublicationId?: true
+    processingPublicationId?: true
+    publishedPublicationId?: true
     queuedAt?: true
     startedAt?: true
     completedAt?: true
@@ -5923,6 +6508,9 @@ export namespace Prisma {
     providerStatus?: true
     providerDeploymentId?: true
     providerResponse?: true
+    requestedPublicationId?: true
+    processingPublicationId?: true
+    publishedPublicationId?: true
     queuedAt?: true
     startedAt?: true
     completedAt?: true
@@ -6034,6 +6622,9 @@ export namespace Prisma {
     providerStatus: string | null
     providerDeploymentId: string | null
     providerResponse: JsonValue | null
+    requestedPublicationId: string | null
+    processingPublicationId: string | null
+    publishedPublicationId: string | null
     queuedAt: Date | null
     startedAt: Date | null
     completedAt: Date | null
@@ -6077,12 +6668,18 @@ export namespace Prisma {
     providerStatus?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
+    requestedPublicationId?: boolean
+    processingPublicationId?: boolean
+    publishedPublicationId?: boolean
     queuedAt?: boolean
     startedAt?: boolean
     completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+    requestedPublication?: boolean | SiteRebuild$requestedPublicationArgs<ExtArgs>
+    processingPublication?: boolean | SiteRebuild$processingPublicationArgs<ExtArgs>
+    publishedPublication?: boolean | SiteRebuild$publishedPublicationArgs<ExtArgs>
   }, ExtArgs["result"]["siteRebuild"]>
 
   export type SiteRebuildSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6102,12 +6699,18 @@ export namespace Prisma {
     providerStatus?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
+    requestedPublicationId?: boolean
+    processingPublicationId?: boolean
+    publishedPublicationId?: boolean
     queuedAt?: boolean
     startedAt?: boolean
     completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+    requestedPublication?: boolean | SiteRebuild$requestedPublicationArgs<ExtArgs>
+    processingPublication?: boolean | SiteRebuild$processingPublicationArgs<ExtArgs>
+    publishedPublication?: boolean | SiteRebuild$publishedPublicationArgs<ExtArgs>
   }, ExtArgs["result"]["siteRebuild"]>
 
   export type SiteRebuildSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6127,12 +6730,18 @@ export namespace Prisma {
     providerStatus?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
+    requestedPublicationId?: boolean
+    processingPublicationId?: boolean
+    publishedPublicationId?: boolean
     queuedAt?: boolean
     startedAt?: boolean
     completedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+    requestedPublication?: boolean | SiteRebuild$requestedPublicationArgs<ExtArgs>
+    processingPublication?: boolean | SiteRebuild$processingPublicationArgs<ExtArgs>
+    publishedPublication?: boolean | SiteRebuild$publishedPublicationArgs<ExtArgs>
   }, ExtArgs["result"]["siteRebuild"]>
 
   export type SiteRebuildSelectScalar = {
@@ -6152,6 +6761,9 @@ export namespace Prisma {
     providerStatus?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
+    requestedPublicationId?: boolean
+    processingPublicationId?: boolean
+    publishedPublicationId?: boolean
     queuedAt?: boolean
     startedAt?: boolean
     completedAt?: boolean
@@ -6159,21 +6771,33 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SiteRebuildOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "dedupeKey" | "status" | "triggerEntity" | "triggerEntityId" | "affectedPaths" | "requestedRevision" | "processingRevision" | "publishedRevision" | "attempts" | "maxAttempts" | "lastError" | "providerStatus" | "providerDeploymentId" | "providerResponse" | "queuedAt" | "startedAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["siteRebuild"]>
+  export type SiteRebuildOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "dedupeKey" | "status" | "triggerEntity" | "triggerEntityId" | "affectedPaths" | "requestedRevision" | "processingRevision" | "publishedRevision" | "attempts" | "maxAttempts" | "lastError" | "providerStatus" | "providerDeploymentId" | "providerResponse" | "requestedPublicationId" | "processingPublicationId" | "publishedPublicationId" | "queuedAt" | "startedAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["siteRebuild"]>
   export type SiteRebuildInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+    requestedPublication?: boolean | SiteRebuild$requestedPublicationArgs<ExtArgs>
+    processingPublication?: boolean | SiteRebuild$processingPublicationArgs<ExtArgs>
+    publishedPublication?: boolean | SiteRebuild$publishedPublicationArgs<ExtArgs>
   }
   export type SiteRebuildIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+    requestedPublication?: boolean | SiteRebuild$requestedPublicationArgs<ExtArgs>
+    processingPublication?: boolean | SiteRebuild$processingPublicationArgs<ExtArgs>
+    publishedPublication?: boolean | SiteRebuild$publishedPublicationArgs<ExtArgs>
   }
   export type SiteRebuildIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteRebuild$siteArgs<ExtArgs>
+    requestedPublication?: boolean | SiteRebuild$requestedPublicationArgs<ExtArgs>
+    processingPublication?: boolean | SiteRebuild$processingPublicationArgs<ExtArgs>
+    publishedPublication?: boolean | SiteRebuild$publishedPublicationArgs<ExtArgs>
   }
 
   export type $SiteRebuildPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SiteRebuild"
     objects: {
       site: Prisma.$SitePayload<ExtArgs> | null
+      requestedPublication: Prisma.$SitePublicationPayload<ExtArgs> | null
+      processingPublication: Prisma.$SitePublicationPayload<ExtArgs> | null
+      publishedPublication: Prisma.$SitePublicationPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6192,6 +6816,9 @@ export namespace Prisma {
       providerStatus: string | null
       providerDeploymentId: string | null
       providerResponse: Prisma.JsonValue | null
+      requestedPublicationId: string | null
+      processingPublicationId: string | null
+      publishedPublicationId: string | null
       queuedAt: Date | null
       startedAt: Date | null
       completedAt: Date | null
@@ -6592,6 +7219,9 @@ export namespace Prisma {
   export interface Prisma__SiteRebuildClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     site<T extends SiteRebuild$siteArgs<ExtArgs> = {}>(args?: Subset<T, SiteRebuild$siteArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    requestedPublication<T extends SiteRebuild$requestedPublicationArgs<ExtArgs> = {}>(args?: Subset<T, SiteRebuild$requestedPublicationArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    processingPublication<T extends SiteRebuild$processingPublicationArgs<ExtArgs> = {}>(args?: Subset<T, SiteRebuild$processingPublicationArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    publishedPublication<T extends SiteRebuild$publishedPublicationArgs<ExtArgs> = {}>(args?: Subset<T, SiteRebuild$publishedPublicationArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6637,6 +7267,9 @@ export namespace Prisma {
     readonly providerStatus: FieldRef<"SiteRebuild", 'String'>
     readonly providerDeploymentId: FieldRef<"SiteRebuild", 'String'>
     readonly providerResponse: FieldRef<"SiteRebuild", 'Json'>
+    readonly requestedPublicationId: FieldRef<"SiteRebuild", 'String'>
+    readonly processingPublicationId: FieldRef<"SiteRebuild", 'String'>
+    readonly publishedPublicationId: FieldRef<"SiteRebuild", 'String'>
     readonly queuedAt: FieldRef<"SiteRebuild", 'DateTime'>
     readonly startedAt: FieldRef<"SiteRebuild", 'DateTime'>
     readonly completedAt: FieldRef<"SiteRebuild", 'DateTime'>
@@ -7062,6 +7695,63 @@ export namespace Prisma {
   }
 
   /**
+   * SiteRebuild.requestedPublication
+   */
+  export type SiteRebuild$requestedPublicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    where?: SitePublicationWhereInput
+  }
+
+  /**
+   * SiteRebuild.processingPublication
+   */
+  export type SiteRebuild$processingPublicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    where?: SitePublicationWhereInput
+  }
+
+  /**
+   * SiteRebuild.publishedPublication
+   */
+  export type SiteRebuild$publishedPublicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    where?: SitePublicationWhereInput
+  }
+
+  /**
    * SiteRebuild without action
    */
   export type SiteRebuildDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7077,6 +7767,3721 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SiteRebuildInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ContentRevision
+   */
+
+  export type AggregateContentRevision = {
+    _count: ContentRevisionCountAggregateOutputType | null
+    _avg: ContentRevisionAvgAggregateOutputType | null
+    _sum: ContentRevisionSumAggregateOutputType | null
+    _min: ContentRevisionMinAggregateOutputType | null
+    _max: ContentRevisionMaxAggregateOutputType | null
+  }
+
+  export type ContentRevisionAvgAggregateOutputType = {
+    entityRevision: number | null
+    siteRevision: number | null
+  }
+
+  export type ContentRevisionSumAggregateOutputType = {
+    entityRevision: number | null
+    siteRevision: number | null
+  }
+
+  export type ContentRevisionMinAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    entityType: $Enums.ContentEntityType | null
+    entityId: string | null
+    entityRevision: number | null
+    siteRevision: number | null
+    action: $Enums.ContentRevisionAction | null
+    source: string | null
+    actorId: string | null
+    createdAt: Date | null
+  }
+
+  export type ContentRevisionMaxAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    entityType: $Enums.ContentEntityType | null
+    entityId: string | null
+    entityRevision: number | null
+    siteRevision: number | null
+    action: $Enums.ContentRevisionAction | null
+    source: string | null
+    actorId: string | null
+    createdAt: Date | null
+  }
+
+  export type ContentRevisionCountAggregateOutputType = {
+    id: number
+    siteId: number
+    entityType: number
+    entityId: number
+    entityRevision: number
+    siteRevision: number
+    action: number
+    snapshot: number
+    changedFields: number
+    source: number
+    actorId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ContentRevisionAvgAggregateInputType = {
+    entityRevision?: true
+    siteRevision?: true
+  }
+
+  export type ContentRevisionSumAggregateInputType = {
+    entityRevision?: true
+    siteRevision?: true
+  }
+
+  export type ContentRevisionMinAggregateInputType = {
+    id?: true
+    siteId?: true
+    entityType?: true
+    entityId?: true
+    entityRevision?: true
+    siteRevision?: true
+    action?: true
+    source?: true
+    actorId?: true
+    createdAt?: true
+  }
+
+  export type ContentRevisionMaxAggregateInputType = {
+    id?: true
+    siteId?: true
+    entityType?: true
+    entityId?: true
+    entityRevision?: true
+    siteRevision?: true
+    action?: true
+    source?: true
+    actorId?: true
+    createdAt?: true
+  }
+
+  export type ContentRevisionCountAggregateInputType = {
+    id?: true
+    siteId?: true
+    entityType?: true
+    entityId?: true
+    entityRevision?: true
+    siteRevision?: true
+    action?: true
+    snapshot?: true
+    changedFields?: true
+    source?: true
+    actorId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ContentRevisionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContentRevision to aggregate.
+     */
+    where?: ContentRevisionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentRevisions to fetch.
+     */
+    orderBy?: ContentRevisionOrderByWithRelationInput | ContentRevisionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ContentRevisionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentRevisions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentRevisions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ContentRevisions
+    **/
+    _count?: true | ContentRevisionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ContentRevisionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ContentRevisionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ContentRevisionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ContentRevisionMaxAggregateInputType
+  }
+
+  export type GetContentRevisionAggregateType<T extends ContentRevisionAggregateArgs> = {
+        [P in keyof T & keyof AggregateContentRevision]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateContentRevision[P]>
+      : GetScalarType<T[P], AggregateContentRevision[P]>
+  }
+
+
+
+
+  export type ContentRevisionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContentRevisionWhereInput
+    orderBy?: ContentRevisionOrderByWithAggregationInput | ContentRevisionOrderByWithAggregationInput[]
+    by: ContentRevisionScalarFieldEnum[] | ContentRevisionScalarFieldEnum
+    having?: ContentRevisionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ContentRevisionCountAggregateInputType | true
+    _avg?: ContentRevisionAvgAggregateInputType
+    _sum?: ContentRevisionSumAggregateInputType
+    _min?: ContentRevisionMinAggregateInputType
+    _max?: ContentRevisionMaxAggregateInputType
+  }
+
+  export type ContentRevisionGroupByOutputType = {
+    id: string
+    siteId: string
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    entityRevision: number
+    siteRevision: number
+    action: $Enums.ContentRevisionAction
+    snapshot: JsonValue
+    changedFields: JsonValue
+    source: string
+    actorId: string | null
+    createdAt: Date
+    _count: ContentRevisionCountAggregateOutputType | null
+    _avg: ContentRevisionAvgAggregateOutputType | null
+    _sum: ContentRevisionSumAggregateOutputType | null
+    _min: ContentRevisionMinAggregateOutputType | null
+    _max: ContentRevisionMaxAggregateOutputType | null
+  }
+
+  type GetContentRevisionGroupByPayload<T extends ContentRevisionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ContentRevisionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ContentRevisionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ContentRevisionGroupByOutputType[P]>
+            : GetScalarType<T[P], ContentRevisionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ContentRevisionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    entityRevision?: boolean
+    siteRevision?: boolean
+    action?: boolean
+    snapshot?: boolean
+    changedFields?: boolean
+    source?: boolean
+    actorId?: boolean
+    createdAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | ContentRevision$actorArgs<ExtArgs>
+  }, ExtArgs["result"]["contentRevision"]>
+
+  export type ContentRevisionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    entityRevision?: boolean
+    siteRevision?: boolean
+    action?: boolean
+    snapshot?: boolean
+    changedFields?: boolean
+    source?: boolean
+    actorId?: boolean
+    createdAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | ContentRevision$actorArgs<ExtArgs>
+  }, ExtArgs["result"]["contentRevision"]>
+
+  export type ContentRevisionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    entityRevision?: boolean
+    siteRevision?: boolean
+    action?: boolean
+    snapshot?: boolean
+    changedFields?: boolean
+    source?: boolean
+    actorId?: boolean
+    createdAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | ContentRevision$actorArgs<ExtArgs>
+  }, ExtArgs["result"]["contentRevision"]>
+
+  export type ContentRevisionSelectScalar = {
+    id?: boolean
+    siteId?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    entityRevision?: boolean
+    siteRevision?: boolean
+    action?: boolean
+    snapshot?: boolean
+    changedFields?: boolean
+    source?: boolean
+    actorId?: boolean
+    createdAt?: boolean
+  }
+
+  export type ContentRevisionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "entityType" | "entityId" | "entityRevision" | "siteRevision" | "action" | "snapshot" | "changedFields" | "source" | "actorId" | "createdAt", ExtArgs["result"]["contentRevision"]>
+  export type ContentRevisionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | ContentRevision$actorArgs<ExtArgs>
+  }
+  export type ContentRevisionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | ContentRevision$actorArgs<ExtArgs>
+  }
+  export type ContentRevisionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | ContentRevision$actorArgs<ExtArgs>
+  }
+
+  export type $ContentRevisionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ContentRevision"
+    objects: {
+      site: Prisma.$SitePayload<ExtArgs>
+      actor: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      siteId: string
+      entityType: $Enums.ContentEntityType
+      entityId: string
+      entityRevision: number
+      siteRevision: number
+      action: $Enums.ContentRevisionAction
+      snapshot: Prisma.JsonValue
+      changedFields: Prisma.JsonValue
+      source: string
+      actorId: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["contentRevision"]>
+    composites: {}
+  }
+
+  type ContentRevisionGetPayload<S extends boolean | null | undefined | ContentRevisionDefaultArgs> = $Result.GetResult<Prisma.$ContentRevisionPayload, S>
+
+  type ContentRevisionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ContentRevisionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ContentRevisionCountAggregateInputType | true
+    }
+
+  export interface ContentRevisionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContentRevision'], meta: { name: 'ContentRevision' } }
+    /**
+     * Find zero or one ContentRevision that matches the filter.
+     * @param {ContentRevisionFindUniqueArgs} args - Arguments to find a ContentRevision
+     * @example
+     * // Get one ContentRevision
+     * const contentRevision = await prisma.contentRevision.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ContentRevisionFindUniqueArgs>(args: SelectSubset<T, ContentRevisionFindUniqueArgs<ExtArgs>>): Prisma__ContentRevisionClient<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ContentRevision that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ContentRevisionFindUniqueOrThrowArgs} args - Arguments to find a ContentRevision
+     * @example
+     * // Get one ContentRevision
+     * const contentRevision = await prisma.contentRevision.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ContentRevisionFindUniqueOrThrowArgs>(args: SelectSubset<T, ContentRevisionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContentRevisionClient<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContentRevision that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentRevisionFindFirstArgs} args - Arguments to find a ContentRevision
+     * @example
+     * // Get one ContentRevision
+     * const contentRevision = await prisma.contentRevision.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ContentRevisionFindFirstArgs>(args?: SelectSubset<T, ContentRevisionFindFirstArgs<ExtArgs>>): Prisma__ContentRevisionClient<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContentRevision that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentRevisionFindFirstOrThrowArgs} args - Arguments to find a ContentRevision
+     * @example
+     * // Get one ContentRevision
+     * const contentRevision = await prisma.contentRevision.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ContentRevisionFindFirstOrThrowArgs>(args?: SelectSubset<T, ContentRevisionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContentRevisionClient<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ContentRevisions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentRevisionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ContentRevisions
+     * const contentRevisions = await prisma.contentRevision.findMany()
+     * 
+     * // Get first 10 ContentRevisions
+     * const contentRevisions = await prisma.contentRevision.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const contentRevisionWithIdOnly = await prisma.contentRevision.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ContentRevisionFindManyArgs>(args?: SelectSubset<T, ContentRevisionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ContentRevision.
+     * @param {ContentRevisionCreateArgs} args - Arguments to create a ContentRevision.
+     * @example
+     * // Create one ContentRevision
+     * const ContentRevision = await prisma.contentRevision.create({
+     *   data: {
+     *     // ... data to create a ContentRevision
+     *   }
+     * })
+     * 
+     */
+    create<T extends ContentRevisionCreateArgs>(args: SelectSubset<T, ContentRevisionCreateArgs<ExtArgs>>): Prisma__ContentRevisionClient<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ContentRevisions.
+     * @param {ContentRevisionCreateManyArgs} args - Arguments to create many ContentRevisions.
+     * @example
+     * // Create many ContentRevisions
+     * const contentRevision = await prisma.contentRevision.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ContentRevisionCreateManyArgs>(args?: SelectSubset<T, ContentRevisionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ContentRevisions and returns the data saved in the database.
+     * @param {ContentRevisionCreateManyAndReturnArgs} args - Arguments to create many ContentRevisions.
+     * @example
+     * // Create many ContentRevisions
+     * const contentRevision = await prisma.contentRevision.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ContentRevisions and only return the `id`
+     * const contentRevisionWithIdOnly = await prisma.contentRevision.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ContentRevisionCreateManyAndReturnArgs>(args?: SelectSubset<T, ContentRevisionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ContentRevision.
+     * @param {ContentRevisionDeleteArgs} args - Arguments to delete one ContentRevision.
+     * @example
+     * // Delete one ContentRevision
+     * const ContentRevision = await prisma.contentRevision.delete({
+     *   where: {
+     *     // ... filter to delete one ContentRevision
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ContentRevisionDeleteArgs>(args: SelectSubset<T, ContentRevisionDeleteArgs<ExtArgs>>): Prisma__ContentRevisionClient<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ContentRevision.
+     * @param {ContentRevisionUpdateArgs} args - Arguments to update one ContentRevision.
+     * @example
+     * // Update one ContentRevision
+     * const contentRevision = await prisma.contentRevision.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ContentRevisionUpdateArgs>(args: SelectSubset<T, ContentRevisionUpdateArgs<ExtArgs>>): Prisma__ContentRevisionClient<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ContentRevisions.
+     * @param {ContentRevisionDeleteManyArgs} args - Arguments to filter ContentRevisions to delete.
+     * @example
+     * // Delete a few ContentRevisions
+     * const { count } = await prisma.contentRevision.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ContentRevisionDeleteManyArgs>(args?: SelectSubset<T, ContentRevisionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContentRevisions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentRevisionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ContentRevisions
+     * const contentRevision = await prisma.contentRevision.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ContentRevisionUpdateManyArgs>(args: SelectSubset<T, ContentRevisionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContentRevisions and returns the data updated in the database.
+     * @param {ContentRevisionUpdateManyAndReturnArgs} args - Arguments to update many ContentRevisions.
+     * @example
+     * // Update many ContentRevisions
+     * const contentRevision = await prisma.contentRevision.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ContentRevisions and only return the `id`
+     * const contentRevisionWithIdOnly = await prisma.contentRevision.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ContentRevisionUpdateManyAndReturnArgs>(args: SelectSubset<T, ContentRevisionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ContentRevision.
+     * @param {ContentRevisionUpsertArgs} args - Arguments to update or create a ContentRevision.
+     * @example
+     * // Update or create a ContentRevision
+     * const contentRevision = await prisma.contentRevision.upsert({
+     *   create: {
+     *     // ... data to create a ContentRevision
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ContentRevision we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ContentRevisionUpsertArgs>(args: SelectSubset<T, ContentRevisionUpsertArgs<ExtArgs>>): Prisma__ContentRevisionClient<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ContentRevisions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentRevisionCountArgs} args - Arguments to filter ContentRevisions to count.
+     * @example
+     * // Count the number of ContentRevisions
+     * const count = await prisma.contentRevision.count({
+     *   where: {
+     *     // ... the filter for the ContentRevisions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ContentRevisionCountArgs>(
+      args?: Subset<T, ContentRevisionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ContentRevisionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ContentRevision.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentRevisionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ContentRevisionAggregateArgs>(args: Subset<T, ContentRevisionAggregateArgs>): Prisma.PrismaPromise<GetContentRevisionAggregateType<T>>
+
+    /**
+     * Group by ContentRevision.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContentRevisionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ContentRevisionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ContentRevisionGroupByArgs['orderBy'] }
+        : { orderBy?: ContentRevisionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ContentRevisionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContentRevisionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ContentRevision model
+   */
+  readonly fields: ContentRevisionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ContentRevision.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ContentRevisionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    site<T extends SiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SiteDefaultArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    actor<T extends ContentRevision$actorArgs<ExtArgs> = {}>(args?: Subset<T, ContentRevision$actorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ContentRevision model
+   */
+  interface ContentRevisionFieldRefs {
+    readonly id: FieldRef<"ContentRevision", 'String'>
+    readonly siteId: FieldRef<"ContentRevision", 'String'>
+    readonly entityType: FieldRef<"ContentRevision", 'ContentEntityType'>
+    readonly entityId: FieldRef<"ContentRevision", 'String'>
+    readonly entityRevision: FieldRef<"ContentRevision", 'Int'>
+    readonly siteRevision: FieldRef<"ContentRevision", 'Int'>
+    readonly action: FieldRef<"ContentRevision", 'ContentRevisionAction'>
+    readonly snapshot: FieldRef<"ContentRevision", 'Json'>
+    readonly changedFields: FieldRef<"ContentRevision", 'Json'>
+    readonly source: FieldRef<"ContentRevision", 'String'>
+    readonly actorId: FieldRef<"ContentRevision", 'String'>
+    readonly createdAt: FieldRef<"ContentRevision", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ContentRevision findUnique
+   */
+  export type ContentRevisionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentRevision to fetch.
+     */
+    where: ContentRevisionWhereUniqueInput
+  }
+
+  /**
+   * ContentRevision findUniqueOrThrow
+   */
+  export type ContentRevisionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentRevision to fetch.
+     */
+    where: ContentRevisionWhereUniqueInput
+  }
+
+  /**
+   * ContentRevision findFirst
+   */
+  export type ContentRevisionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentRevision to fetch.
+     */
+    where?: ContentRevisionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentRevisions to fetch.
+     */
+    orderBy?: ContentRevisionOrderByWithRelationInput | ContentRevisionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContentRevisions.
+     */
+    cursor?: ContentRevisionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentRevisions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentRevisions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContentRevisions.
+     */
+    distinct?: ContentRevisionScalarFieldEnum | ContentRevisionScalarFieldEnum[]
+  }
+
+  /**
+   * ContentRevision findFirstOrThrow
+   */
+  export type ContentRevisionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentRevision to fetch.
+     */
+    where?: ContentRevisionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentRevisions to fetch.
+     */
+    orderBy?: ContentRevisionOrderByWithRelationInput | ContentRevisionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContentRevisions.
+     */
+    cursor?: ContentRevisionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentRevisions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentRevisions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContentRevisions.
+     */
+    distinct?: ContentRevisionScalarFieldEnum | ContentRevisionScalarFieldEnum[]
+  }
+
+  /**
+   * ContentRevision findMany
+   */
+  export type ContentRevisionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+    /**
+     * Filter, which ContentRevisions to fetch.
+     */
+    where?: ContentRevisionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContentRevisions to fetch.
+     */
+    orderBy?: ContentRevisionOrderByWithRelationInput | ContentRevisionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ContentRevisions.
+     */
+    cursor?: ContentRevisionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContentRevisions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContentRevisions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContentRevisions.
+     */
+    distinct?: ContentRevisionScalarFieldEnum | ContentRevisionScalarFieldEnum[]
+  }
+
+  /**
+   * ContentRevision create
+   */
+  export type ContentRevisionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ContentRevision.
+     */
+    data: XOR<ContentRevisionCreateInput, ContentRevisionUncheckedCreateInput>
+  }
+
+  /**
+   * ContentRevision createMany
+   */
+  export type ContentRevisionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ContentRevisions.
+     */
+    data: ContentRevisionCreateManyInput | ContentRevisionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ContentRevision createManyAndReturn
+   */
+  export type ContentRevisionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * The data used to create many ContentRevisions.
+     */
+    data: ContentRevisionCreateManyInput | ContentRevisionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ContentRevision update
+   */
+  export type ContentRevisionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ContentRevision.
+     */
+    data: XOR<ContentRevisionUpdateInput, ContentRevisionUncheckedUpdateInput>
+    /**
+     * Choose, which ContentRevision to update.
+     */
+    where: ContentRevisionWhereUniqueInput
+  }
+
+  /**
+   * ContentRevision updateMany
+   */
+  export type ContentRevisionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ContentRevisions.
+     */
+    data: XOR<ContentRevisionUpdateManyMutationInput, ContentRevisionUncheckedUpdateManyInput>
+    /**
+     * Filter which ContentRevisions to update
+     */
+    where?: ContentRevisionWhereInput
+    /**
+     * Limit how many ContentRevisions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContentRevision updateManyAndReturn
+   */
+  export type ContentRevisionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * The data used to update ContentRevisions.
+     */
+    data: XOR<ContentRevisionUpdateManyMutationInput, ContentRevisionUncheckedUpdateManyInput>
+    /**
+     * Filter which ContentRevisions to update
+     */
+    where?: ContentRevisionWhereInput
+    /**
+     * Limit how many ContentRevisions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ContentRevision upsert
+   */
+  export type ContentRevisionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ContentRevision to update in case it exists.
+     */
+    where: ContentRevisionWhereUniqueInput
+    /**
+     * In case the ContentRevision found by the `where` argument doesn't exist, create a new ContentRevision with this data.
+     */
+    create: XOR<ContentRevisionCreateInput, ContentRevisionUncheckedCreateInput>
+    /**
+     * In case the ContentRevision was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ContentRevisionUpdateInput, ContentRevisionUncheckedUpdateInput>
+  }
+
+  /**
+   * ContentRevision delete
+   */
+  export type ContentRevisionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+    /**
+     * Filter which ContentRevision to delete.
+     */
+    where: ContentRevisionWhereUniqueInput
+  }
+
+  /**
+   * ContentRevision deleteMany
+   */
+  export type ContentRevisionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContentRevisions to delete
+     */
+    where?: ContentRevisionWhereInput
+    /**
+     * Limit how many ContentRevisions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContentRevision.actor
+   */
+  export type ContentRevision$actorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ContentRevision without action
+   */
+  export type ContentRevisionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SitePublication
+   */
+
+  export type AggregateSitePublication = {
+    _count: SitePublicationCountAggregateOutputType | null
+    _avg: SitePublicationAvgAggregateOutputType | null
+    _sum: SitePublicationSumAggregateOutputType | null
+    _min: SitePublicationMinAggregateOutputType | null
+    _max: SitePublicationMaxAggregateOutputType | null
+  }
+
+  export type SitePublicationAvgAggregateOutputType = {
+    siteRevision: number | null
+  }
+
+  export type SitePublicationSumAggregateOutputType = {
+    siteRevision: number | null
+  }
+
+  export type SitePublicationMinAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    siteRevision: number | null
+    status: $Enums.SitePublicationStatus | null
+    triggerEntity: string | null
+    triggerEntityId: string | null
+    requestedById: string | null
+    lastError: string | null
+    providerDeploymentId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    publishedAt: Date | null
+  }
+
+  export type SitePublicationMaxAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    siteRevision: number | null
+    status: $Enums.SitePublicationStatus | null
+    triggerEntity: string | null
+    triggerEntityId: string | null
+    requestedById: string | null
+    lastError: string | null
+    providerDeploymentId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    publishedAt: Date | null
+  }
+
+  export type SitePublicationCountAggregateOutputType = {
+    id: number
+    siteId: number
+    siteRevision: number
+    status: number
+    catalog: number
+    triggerEntity: number
+    triggerEntityId: number
+    requestedById: number
+    lastError: number
+    providerDeploymentId: number
+    providerResponse: number
+    createdAt: number
+    updatedAt: number
+    publishedAt: number
+    _all: number
+  }
+
+
+  export type SitePublicationAvgAggregateInputType = {
+    siteRevision?: true
+  }
+
+  export type SitePublicationSumAggregateInputType = {
+    siteRevision?: true
+  }
+
+  export type SitePublicationMinAggregateInputType = {
+    id?: true
+    siteId?: true
+    siteRevision?: true
+    status?: true
+    triggerEntity?: true
+    triggerEntityId?: true
+    requestedById?: true
+    lastError?: true
+    providerDeploymentId?: true
+    createdAt?: true
+    updatedAt?: true
+    publishedAt?: true
+  }
+
+  export type SitePublicationMaxAggregateInputType = {
+    id?: true
+    siteId?: true
+    siteRevision?: true
+    status?: true
+    triggerEntity?: true
+    triggerEntityId?: true
+    requestedById?: true
+    lastError?: true
+    providerDeploymentId?: true
+    createdAt?: true
+    updatedAt?: true
+    publishedAt?: true
+  }
+
+  export type SitePublicationCountAggregateInputType = {
+    id?: true
+    siteId?: true
+    siteRevision?: true
+    status?: true
+    catalog?: true
+    triggerEntity?: true
+    triggerEntityId?: true
+    requestedById?: true
+    lastError?: true
+    providerDeploymentId?: true
+    providerResponse?: true
+    createdAt?: true
+    updatedAt?: true
+    publishedAt?: true
+    _all?: true
+  }
+
+  export type SitePublicationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SitePublication to aggregate.
+     */
+    where?: SitePublicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublications to fetch.
+     */
+    orderBy?: SitePublicationOrderByWithRelationInput | SitePublicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SitePublicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SitePublications
+    **/
+    _count?: true | SitePublicationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SitePublicationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SitePublicationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SitePublicationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SitePublicationMaxAggregateInputType
+  }
+
+  export type GetSitePublicationAggregateType<T extends SitePublicationAggregateArgs> = {
+        [P in keyof T & keyof AggregateSitePublication]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSitePublication[P]>
+      : GetScalarType<T[P], AggregateSitePublication[P]>
+  }
+
+
+
+
+  export type SitePublicationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitePublicationWhereInput
+    orderBy?: SitePublicationOrderByWithAggregationInput | SitePublicationOrderByWithAggregationInput[]
+    by: SitePublicationScalarFieldEnum[] | SitePublicationScalarFieldEnum
+    having?: SitePublicationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SitePublicationCountAggregateInputType | true
+    _avg?: SitePublicationAvgAggregateInputType
+    _sum?: SitePublicationSumAggregateInputType
+    _min?: SitePublicationMinAggregateInputType
+    _max?: SitePublicationMaxAggregateInputType
+  }
+
+  export type SitePublicationGroupByOutputType = {
+    id: string
+    siteId: string
+    siteRevision: number
+    status: $Enums.SitePublicationStatus
+    catalog: JsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    requestedById: string | null
+    lastError: string | null
+    providerDeploymentId: string | null
+    providerResponse: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    publishedAt: Date | null
+    _count: SitePublicationCountAggregateOutputType | null
+    _avg: SitePublicationAvgAggregateOutputType | null
+    _sum: SitePublicationSumAggregateOutputType | null
+    _min: SitePublicationMinAggregateOutputType | null
+    _max: SitePublicationMaxAggregateOutputType | null
+  }
+
+  type GetSitePublicationGroupByPayload<T extends SitePublicationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SitePublicationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SitePublicationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SitePublicationGroupByOutputType[P]>
+            : GetScalarType<T[P], SitePublicationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SitePublicationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    status?: boolean
+    catalog?: boolean
+    triggerEntity?: boolean
+    triggerEntityId?: boolean
+    requestedById?: boolean
+    lastError?: boolean
+    providerDeploymentId?: boolean
+    providerResponse?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    publishedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+    requestedRebuilds?: boolean | SitePublication$requestedRebuildsArgs<ExtArgs>
+    processingRebuilds?: boolean | SitePublication$processingRebuildsArgs<ExtArgs>
+    publishedRebuilds?: boolean | SitePublication$publishedRebuildsArgs<ExtArgs>
+    _count?: boolean | SitePublicationCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublication"]>
+
+  export type SitePublicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    status?: boolean
+    catalog?: boolean
+    triggerEntity?: boolean
+    triggerEntityId?: boolean
+    requestedById?: boolean
+    lastError?: boolean
+    providerDeploymentId?: boolean
+    providerResponse?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    publishedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublication"]>
+
+  export type SitePublicationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    status?: boolean
+    catalog?: boolean
+    triggerEntity?: boolean
+    triggerEntityId?: boolean
+    requestedById?: boolean
+    lastError?: boolean
+    providerDeploymentId?: boolean
+    providerResponse?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    publishedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublication"]>
+
+  export type SitePublicationSelectScalar = {
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    status?: boolean
+    catalog?: boolean
+    triggerEntity?: boolean
+    triggerEntityId?: boolean
+    requestedById?: boolean
+    lastError?: boolean
+    providerDeploymentId?: boolean
+    providerResponse?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    publishedAt?: boolean
+  }
+
+  export type SitePublicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "siteRevision" | "status" | "catalog" | "triggerEntity" | "triggerEntityId" | "requestedById" | "lastError" | "providerDeploymentId" | "providerResponse" | "createdAt" | "updatedAt" | "publishedAt", ExtArgs["result"]["sitePublication"]>
+  export type SitePublicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+    requestedRebuilds?: boolean | SitePublication$requestedRebuildsArgs<ExtArgs>
+    processingRebuilds?: boolean | SitePublication$processingRebuildsArgs<ExtArgs>
+    publishedRebuilds?: boolean | SitePublication$publishedRebuildsArgs<ExtArgs>
+    _count?: boolean | SitePublicationCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SitePublicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+  }
+  export type SitePublicationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+  }
+
+  export type $SitePublicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SitePublication"
+    objects: {
+      site: Prisma.$SitePayload<ExtArgs>
+      requestedBy: Prisma.$UserPayload<ExtArgs> | null
+      requestedRebuilds: Prisma.$SiteRebuildPayload<ExtArgs>[]
+      processingRebuilds: Prisma.$SiteRebuildPayload<ExtArgs>[]
+      publishedRebuilds: Prisma.$SiteRebuildPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      siteId: string
+      siteRevision: number
+      status: $Enums.SitePublicationStatus
+      catalog: Prisma.JsonValue
+      triggerEntity: string
+      triggerEntityId: string
+      requestedById: string | null
+      lastError: string | null
+      providerDeploymentId: string | null
+      providerResponse: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+      publishedAt: Date | null
+    }, ExtArgs["result"]["sitePublication"]>
+    composites: {}
+  }
+
+  type SitePublicationGetPayload<S extends boolean | null | undefined | SitePublicationDefaultArgs> = $Result.GetResult<Prisma.$SitePublicationPayload, S>
+
+  type SitePublicationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SitePublicationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SitePublicationCountAggregateInputType | true
+    }
+
+  export interface SitePublicationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SitePublication'], meta: { name: 'SitePublication' } }
+    /**
+     * Find zero or one SitePublication that matches the filter.
+     * @param {SitePublicationFindUniqueArgs} args - Arguments to find a SitePublication
+     * @example
+     * // Get one SitePublication
+     * const sitePublication = await prisma.sitePublication.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SitePublicationFindUniqueArgs>(args: SelectSubset<T, SitePublicationFindUniqueArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SitePublication that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SitePublicationFindUniqueOrThrowArgs} args - Arguments to find a SitePublication
+     * @example
+     * // Get one SitePublication
+     * const sitePublication = await prisma.sitePublication.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SitePublicationFindUniqueOrThrowArgs>(args: SelectSubset<T, SitePublicationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SitePublication that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationFindFirstArgs} args - Arguments to find a SitePublication
+     * @example
+     * // Get one SitePublication
+     * const sitePublication = await prisma.sitePublication.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SitePublicationFindFirstArgs>(args?: SelectSubset<T, SitePublicationFindFirstArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SitePublication that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationFindFirstOrThrowArgs} args - Arguments to find a SitePublication
+     * @example
+     * // Get one SitePublication
+     * const sitePublication = await prisma.sitePublication.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SitePublicationFindFirstOrThrowArgs>(args?: SelectSubset<T, SitePublicationFindFirstOrThrowArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SitePublications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SitePublications
+     * const sitePublications = await prisma.sitePublication.findMany()
+     * 
+     * // Get first 10 SitePublications
+     * const sitePublications = await prisma.sitePublication.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sitePublicationWithIdOnly = await prisma.sitePublication.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SitePublicationFindManyArgs>(args?: SelectSubset<T, SitePublicationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SitePublication.
+     * @param {SitePublicationCreateArgs} args - Arguments to create a SitePublication.
+     * @example
+     * // Create one SitePublication
+     * const SitePublication = await prisma.sitePublication.create({
+     *   data: {
+     *     // ... data to create a SitePublication
+     *   }
+     * })
+     * 
+     */
+    create<T extends SitePublicationCreateArgs>(args: SelectSubset<T, SitePublicationCreateArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SitePublications.
+     * @param {SitePublicationCreateManyArgs} args - Arguments to create many SitePublications.
+     * @example
+     * // Create many SitePublications
+     * const sitePublication = await prisma.sitePublication.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SitePublicationCreateManyArgs>(args?: SelectSubset<T, SitePublicationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SitePublications and returns the data saved in the database.
+     * @param {SitePublicationCreateManyAndReturnArgs} args - Arguments to create many SitePublications.
+     * @example
+     * // Create many SitePublications
+     * const sitePublication = await prisma.sitePublication.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SitePublications and only return the `id`
+     * const sitePublicationWithIdOnly = await prisma.sitePublication.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SitePublicationCreateManyAndReturnArgs>(args?: SelectSubset<T, SitePublicationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SitePublication.
+     * @param {SitePublicationDeleteArgs} args - Arguments to delete one SitePublication.
+     * @example
+     * // Delete one SitePublication
+     * const SitePublication = await prisma.sitePublication.delete({
+     *   where: {
+     *     // ... filter to delete one SitePublication
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SitePublicationDeleteArgs>(args: SelectSubset<T, SitePublicationDeleteArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SitePublication.
+     * @param {SitePublicationUpdateArgs} args - Arguments to update one SitePublication.
+     * @example
+     * // Update one SitePublication
+     * const sitePublication = await prisma.sitePublication.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SitePublicationUpdateArgs>(args: SelectSubset<T, SitePublicationUpdateArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SitePublications.
+     * @param {SitePublicationDeleteManyArgs} args - Arguments to filter SitePublications to delete.
+     * @example
+     * // Delete a few SitePublications
+     * const { count } = await prisma.sitePublication.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SitePublicationDeleteManyArgs>(args?: SelectSubset<T, SitePublicationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SitePublications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SitePublications
+     * const sitePublication = await prisma.sitePublication.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SitePublicationUpdateManyArgs>(args: SelectSubset<T, SitePublicationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SitePublications and returns the data updated in the database.
+     * @param {SitePublicationUpdateManyAndReturnArgs} args - Arguments to update many SitePublications.
+     * @example
+     * // Update many SitePublications
+     * const sitePublication = await prisma.sitePublication.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SitePublications and only return the `id`
+     * const sitePublicationWithIdOnly = await prisma.sitePublication.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SitePublicationUpdateManyAndReturnArgs>(args: SelectSubset<T, SitePublicationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SitePublication.
+     * @param {SitePublicationUpsertArgs} args - Arguments to update or create a SitePublication.
+     * @example
+     * // Update or create a SitePublication
+     * const sitePublication = await prisma.sitePublication.upsert({
+     *   create: {
+     *     // ... data to create a SitePublication
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SitePublication we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SitePublicationUpsertArgs>(args: SelectSubset<T, SitePublicationUpsertArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SitePublications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationCountArgs} args - Arguments to filter SitePublications to count.
+     * @example
+     * // Count the number of SitePublications
+     * const count = await prisma.sitePublication.count({
+     *   where: {
+     *     // ... the filter for the SitePublications we want to count
+     *   }
+     * })
+    **/
+    count<T extends SitePublicationCountArgs>(
+      args?: Subset<T, SitePublicationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SitePublicationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SitePublication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SitePublicationAggregateArgs>(args: Subset<T, SitePublicationAggregateArgs>): Prisma.PrismaPromise<GetSitePublicationAggregateType<T>>
+
+    /**
+     * Group by SitePublication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SitePublicationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SitePublicationGroupByArgs['orderBy'] }
+        : { orderBy?: SitePublicationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SitePublicationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSitePublicationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SitePublication model
+   */
+  readonly fields: SitePublicationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SitePublication.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SitePublicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    site<T extends SiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SiteDefaultArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    requestedBy<T extends SitePublication$requestedByArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$requestedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    requestedRebuilds<T extends SitePublication$requestedRebuildsArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$requestedRebuildsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    processingRebuilds<T extends SitePublication$processingRebuildsArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$processingRebuildsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    publishedRebuilds<T extends SitePublication$publishedRebuildsArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$publishedRebuildsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SitePublication model
+   */
+  interface SitePublicationFieldRefs {
+    readonly id: FieldRef<"SitePublication", 'String'>
+    readonly siteId: FieldRef<"SitePublication", 'String'>
+    readonly siteRevision: FieldRef<"SitePublication", 'Int'>
+    readonly status: FieldRef<"SitePublication", 'SitePublicationStatus'>
+    readonly catalog: FieldRef<"SitePublication", 'Json'>
+    readonly triggerEntity: FieldRef<"SitePublication", 'String'>
+    readonly triggerEntityId: FieldRef<"SitePublication", 'String'>
+    readonly requestedById: FieldRef<"SitePublication", 'String'>
+    readonly lastError: FieldRef<"SitePublication", 'String'>
+    readonly providerDeploymentId: FieldRef<"SitePublication", 'String'>
+    readonly providerResponse: FieldRef<"SitePublication", 'Json'>
+    readonly createdAt: FieldRef<"SitePublication", 'DateTime'>
+    readonly updatedAt: FieldRef<"SitePublication", 'DateTime'>
+    readonly publishedAt: FieldRef<"SitePublication", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SitePublication findUnique
+   */
+  export type SitePublicationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublication to fetch.
+     */
+    where: SitePublicationWhereUniqueInput
+  }
+
+  /**
+   * SitePublication findUniqueOrThrow
+   */
+  export type SitePublicationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublication to fetch.
+     */
+    where: SitePublicationWhereUniqueInput
+  }
+
+  /**
+   * SitePublication findFirst
+   */
+  export type SitePublicationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublication to fetch.
+     */
+    where?: SitePublicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublications to fetch.
+     */
+    orderBy?: SitePublicationOrderByWithRelationInput | SitePublicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SitePublications.
+     */
+    cursor?: SitePublicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublications.
+     */
+    distinct?: SitePublicationScalarFieldEnum | SitePublicationScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublication findFirstOrThrow
+   */
+  export type SitePublicationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublication to fetch.
+     */
+    where?: SitePublicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublications to fetch.
+     */
+    orderBy?: SitePublicationOrderByWithRelationInput | SitePublicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SitePublications.
+     */
+    cursor?: SitePublicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublications.
+     */
+    distinct?: SitePublicationScalarFieldEnum | SitePublicationScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublication findMany
+   */
+  export type SitePublicationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublications to fetch.
+     */
+    where?: SitePublicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublications to fetch.
+     */
+    orderBy?: SitePublicationOrderByWithRelationInput | SitePublicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SitePublications.
+     */
+    cursor?: SitePublicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublications.
+     */
+    distinct?: SitePublicationScalarFieldEnum | SitePublicationScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublication create
+   */
+  export type SitePublicationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SitePublication.
+     */
+    data: XOR<SitePublicationCreateInput, SitePublicationUncheckedCreateInput>
+  }
+
+  /**
+   * SitePublication createMany
+   */
+  export type SitePublicationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SitePublications.
+     */
+    data: SitePublicationCreateManyInput | SitePublicationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SitePublication createManyAndReturn
+   */
+  export type SitePublicationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * The data used to create many SitePublications.
+     */
+    data: SitePublicationCreateManyInput | SitePublicationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SitePublication update
+   */
+  export type SitePublicationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SitePublication.
+     */
+    data: XOR<SitePublicationUpdateInput, SitePublicationUncheckedUpdateInput>
+    /**
+     * Choose, which SitePublication to update.
+     */
+    where: SitePublicationWhereUniqueInput
+  }
+
+  /**
+   * SitePublication updateMany
+   */
+  export type SitePublicationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SitePublications.
+     */
+    data: XOR<SitePublicationUpdateManyMutationInput, SitePublicationUncheckedUpdateManyInput>
+    /**
+     * Filter which SitePublications to update
+     */
+    where?: SitePublicationWhereInput
+    /**
+     * Limit how many SitePublications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SitePublication updateManyAndReturn
+   */
+  export type SitePublicationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * The data used to update SitePublications.
+     */
+    data: XOR<SitePublicationUpdateManyMutationInput, SitePublicationUncheckedUpdateManyInput>
+    /**
+     * Filter which SitePublications to update
+     */
+    where?: SitePublicationWhereInput
+    /**
+     * Limit how many SitePublications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SitePublication upsert
+   */
+  export type SitePublicationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SitePublication to update in case it exists.
+     */
+    where: SitePublicationWhereUniqueInput
+    /**
+     * In case the SitePublication found by the `where` argument doesn't exist, create a new SitePublication with this data.
+     */
+    create: XOR<SitePublicationCreateInput, SitePublicationUncheckedCreateInput>
+    /**
+     * In case the SitePublication was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SitePublicationUpdateInput, SitePublicationUncheckedUpdateInput>
+  }
+
+  /**
+   * SitePublication delete
+   */
+  export type SitePublicationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    /**
+     * Filter which SitePublication to delete.
+     */
+    where: SitePublicationWhereUniqueInput
+  }
+
+  /**
+   * SitePublication deleteMany
+   */
+  export type SitePublicationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SitePublications to delete
+     */
+    where?: SitePublicationWhereInput
+    /**
+     * Limit how many SitePublications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SitePublication.requestedBy
+   */
+  export type SitePublication$requestedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * SitePublication.requestedRebuilds
+   */
+  export type SitePublication$requestedRebuildsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    where?: SiteRebuildWhereInput
+    orderBy?: SiteRebuildOrderByWithRelationInput | SiteRebuildOrderByWithRelationInput[]
+    cursor?: SiteRebuildWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SiteRebuildScalarFieldEnum | SiteRebuildScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublication.processingRebuilds
+   */
+  export type SitePublication$processingRebuildsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    where?: SiteRebuildWhereInput
+    orderBy?: SiteRebuildOrderByWithRelationInput | SiteRebuildOrderByWithRelationInput[]
+    cursor?: SiteRebuildWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SiteRebuildScalarFieldEnum | SiteRebuildScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublication.publishedRebuilds
+   */
+  export type SitePublication$publishedRebuildsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SiteRebuild
+     */
+    select?: SiteRebuildSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SiteRebuild
+     */
+    omit?: SiteRebuildOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SiteRebuildInclude<ExtArgs> | null
+    where?: SiteRebuildWhereInput
+    orderBy?: SiteRebuildOrderByWithRelationInput | SiteRebuildOrderByWithRelationInput[]
+    cursor?: SiteRebuildWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SiteRebuildScalarFieldEnum | SiteRebuildScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublication without action
+   */
+  export type SitePublicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AuditEvent
+   */
+
+  export type AggregateAuditEvent = {
+    _count: AuditEventCountAggregateOutputType | null
+    _avg: AuditEventAvgAggregateOutputType | null
+    _sum: AuditEventSumAggregateOutputType | null
+    _min: AuditEventMinAggregateOutputType | null
+    _max: AuditEventMaxAggregateOutputType | null
+  }
+
+  export type AuditEventAvgAggregateOutputType = {
+    siteRevision: number | null
+  }
+
+  export type AuditEventSumAggregateOutputType = {
+    siteRevision: number | null
+  }
+
+  export type AuditEventMinAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    siteRevision: number | null
+    entityType: $Enums.ContentEntityType | null
+    entityId: string | null
+    action: $Enums.ContentRevisionAction | null
+    source: string | null
+    actorId: string | null
+    createdAt: Date | null
+  }
+
+  export type AuditEventMaxAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    siteRevision: number | null
+    entityType: $Enums.ContentEntityType | null
+    entityId: string | null
+    action: $Enums.ContentRevisionAction | null
+    source: string | null
+    actorId: string | null
+    createdAt: Date | null
+  }
+
+  export type AuditEventCountAggregateOutputType = {
+    id: number
+    siteId: number
+    siteRevision: number
+    entityType: number
+    entityId: number
+    action: number
+    changedFields: number
+    source: number
+    actorId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AuditEventAvgAggregateInputType = {
+    siteRevision?: true
+  }
+
+  export type AuditEventSumAggregateInputType = {
+    siteRevision?: true
+  }
+
+  export type AuditEventMinAggregateInputType = {
+    id?: true
+    siteId?: true
+    siteRevision?: true
+    entityType?: true
+    entityId?: true
+    action?: true
+    source?: true
+    actorId?: true
+    createdAt?: true
+  }
+
+  export type AuditEventMaxAggregateInputType = {
+    id?: true
+    siteId?: true
+    siteRevision?: true
+    entityType?: true
+    entityId?: true
+    action?: true
+    source?: true
+    actorId?: true
+    createdAt?: true
+  }
+
+  export type AuditEventCountAggregateInputType = {
+    id?: true
+    siteId?: true
+    siteRevision?: true
+    entityType?: true
+    entityId?: true
+    action?: true
+    changedFields?: true
+    source?: true
+    actorId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AuditEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AuditEvent to aggregate.
+     */
+    where?: AuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditEvents to fetch.
+     */
+    orderBy?: AuditEventOrderByWithRelationInput | AuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AuditEvents
+    **/
+    _count?: true | AuditEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AuditEventAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AuditEventSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AuditEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AuditEventMaxAggregateInputType
+  }
+
+  export type GetAuditEventAggregateType<T extends AuditEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateAuditEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAuditEvent[P]>
+      : GetScalarType<T[P], AggregateAuditEvent[P]>
+  }
+
+
+
+
+  export type AuditEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AuditEventWhereInput
+    orderBy?: AuditEventOrderByWithAggregationInput | AuditEventOrderByWithAggregationInput[]
+    by: AuditEventScalarFieldEnum[] | AuditEventScalarFieldEnum
+    having?: AuditEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AuditEventCountAggregateInputType | true
+    _avg?: AuditEventAvgAggregateInputType
+    _sum?: AuditEventSumAggregateInputType
+    _min?: AuditEventMinAggregateInputType
+    _max?: AuditEventMaxAggregateInputType
+  }
+
+  export type AuditEventGroupByOutputType = {
+    id: string
+    siteId: string
+    siteRevision: number
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    action: $Enums.ContentRevisionAction
+    changedFields: JsonValue
+    source: string
+    actorId: string | null
+    createdAt: Date
+    _count: AuditEventCountAggregateOutputType | null
+    _avg: AuditEventAvgAggregateOutputType | null
+    _sum: AuditEventSumAggregateOutputType | null
+    _min: AuditEventMinAggregateOutputType | null
+    _max: AuditEventMaxAggregateOutputType | null
+  }
+
+  type GetAuditEventGroupByPayload<T extends AuditEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AuditEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AuditEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AuditEventGroupByOutputType[P]>
+            : GetScalarType<T[P], AuditEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AuditEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    action?: boolean
+    changedFields?: boolean
+    source?: boolean
+    actorId?: boolean
+    createdAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | AuditEvent$actorArgs<ExtArgs>
+  }, ExtArgs["result"]["auditEvent"]>
+
+  export type AuditEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    action?: boolean
+    changedFields?: boolean
+    source?: boolean
+    actorId?: boolean
+    createdAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | AuditEvent$actorArgs<ExtArgs>
+  }, ExtArgs["result"]["auditEvent"]>
+
+  export type AuditEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    action?: boolean
+    changedFields?: boolean
+    source?: boolean
+    actorId?: boolean
+    createdAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | AuditEvent$actorArgs<ExtArgs>
+  }, ExtArgs["result"]["auditEvent"]>
+
+  export type AuditEventSelectScalar = {
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    action?: boolean
+    changedFields?: boolean
+    source?: boolean
+    actorId?: boolean
+    createdAt?: boolean
+  }
+
+  export type AuditEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "siteRevision" | "entityType" | "entityId" | "action" | "changedFields" | "source" | "actorId" | "createdAt", ExtArgs["result"]["auditEvent"]>
+  export type AuditEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | AuditEvent$actorArgs<ExtArgs>
+  }
+  export type AuditEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | AuditEvent$actorArgs<ExtArgs>
+  }
+  export type AuditEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    actor?: boolean | AuditEvent$actorArgs<ExtArgs>
+  }
+
+  export type $AuditEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AuditEvent"
+    objects: {
+      site: Prisma.$SitePayload<ExtArgs>
+      actor: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      siteId: string
+      siteRevision: number
+      entityType: $Enums.ContentEntityType
+      entityId: string
+      action: $Enums.ContentRevisionAction
+      changedFields: Prisma.JsonValue
+      source: string
+      actorId: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["auditEvent"]>
+    composites: {}
+  }
+
+  type AuditEventGetPayload<S extends boolean | null | undefined | AuditEventDefaultArgs> = $Result.GetResult<Prisma.$AuditEventPayload, S>
+
+  type AuditEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AuditEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AuditEventCountAggregateInputType | true
+    }
+
+  export interface AuditEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AuditEvent'], meta: { name: 'AuditEvent' } }
+    /**
+     * Find zero or one AuditEvent that matches the filter.
+     * @param {AuditEventFindUniqueArgs} args - Arguments to find a AuditEvent
+     * @example
+     * // Get one AuditEvent
+     * const auditEvent = await prisma.auditEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AuditEventFindUniqueArgs>(args: SelectSubset<T, AuditEventFindUniqueArgs<ExtArgs>>): Prisma__AuditEventClient<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AuditEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AuditEventFindUniqueOrThrowArgs} args - Arguments to find a AuditEvent
+     * @example
+     * // Get one AuditEvent
+     * const auditEvent = await prisma.auditEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AuditEventFindUniqueOrThrowArgs>(args: SelectSubset<T, AuditEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AuditEventClient<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AuditEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditEventFindFirstArgs} args - Arguments to find a AuditEvent
+     * @example
+     * // Get one AuditEvent
+     * const auditEvent = await prisma.auditEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AuditEventFindFirstArgs>(args?: SelectSubset<T, AuditEventFindFirstArgs<ExtArgs>>): Prisma__AuditEventClient<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AuditEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditEventFindFirstOrThrowArgs} args - Arguments to find a AuditEvent
+     * @example
+     * // Get one AuditEvent
+     * const auditEvent = await prisma.auditEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AuditEventFindFirstOrThrowArgs>(args?: SelectSubset<T, AuditEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__AuditEventClient<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AuditEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AuditEvents
+     * const auditEvents = await prisma.auditEvent.findMany()
+     * 
+     * // Get first 10 AuditEvents
+     * const auditEvents = await prisma.auditEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const auditEventWithIdOnly = await prisma.auditEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AuditEventFindManyArgs>(args?: SelectSubset<T, AuditEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AuditEvent.
+     * @param {AuditEventCreateArgs} args - Arguments to create a AuditEvent.
+     * @example
+     * // Create one AuditEvent
+     * const AuditEvent = await prisma.auditEvent.create({
+     *   data: {
+     *     // ... data to create a AuditEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends AuditEventCreateArgs>(args: SelectSubset<T, AuditEventCreateArgs<ExtArgs>>): Prisma__AuditEventClient<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AuditEvents.
+     * @param {AuditEventCreateManyArgs} args - Arguments to create many AuditEvents.
+     * @example
+     * // Create many AuditEvents
+     * const auditEvent = await prisma.auditEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AuditEventCreateManyArgs>(args?: SelectSubset<T, AuditEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AuditEvents and returns the data saved in the database.
+     * @param {AuditEventCreateManyAndReturnArgs} args - Arguments to create many AuditEvents.
+     * @example
+     * // Create many AuditEvents
+     * const auditEvent = await prisma.auditEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AuditEvents and only return the `id`
+     * const auditEventWithIdOnly = await prisma.auditEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AuditEventCreateManyAndReturnArgs>(args?: SelectSubset<T, AuditEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AuditEvent.
+     * @param {AuditEventDeleteArgs} args - Arguments to delete one AuditEvent.
+     * @example
+     * // Delete one AuditEvent
+     * const AuditEvent = await prisma.auditEvent.delete({
+     *   where: {
+     *     // ... filter to delete one AuditEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AuditEventDeleteArgs>(args: SelectSubset<T, AuditEventDeleteArgs<ExtArgs>>): Prisma__AuditEventClient<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AuditEvent.
+     * @param {AuditEventUpdateArgs} args - Arguments to update one AuditEvent.
+     * @example
+     * // Update one AuditEvent
+     * const auditEvent = await prisma.auditEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AuditEventUpdateArgs>(args: SelectSubset<T, AuditEventUpdateArgs<ExtArgs>>): Prisma__AuditEventClient<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AuditEvents.
+     * @param {AuditEventDeleteManyArgs} args - Arguments to filter AuditEvents to delete.
+     * @example
+     * // Delete a few AuditEvents
+     * const { count } = await prisma.auditEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AuditEventDeleteManyArgs>(args?: SelectSubset<T, AuditEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AuditEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AuditEvents
+     * const auditEvent = await prisma.auditEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AuditEventUpdateManyArgs>(args: SelectSubset<T, AuditEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AuditEvents and returns the data updated in the database.
+     * @param {AuditEventUpdateManyAndReturnArgs} args - Arguments to update many AuditEvents.
+     * @example
+     * // Update many AuditEvents
+     * const auditEvent = await prisma.auditEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AuditEvents and only return the `id`
+     * const auditEventWithIdOnly = await prisma.auditEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AuditEventUpdateManyAndReturnArgs>(args: SelectSubset<T, AuditEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AuditEvent.
+     * @param {AuditEventUpsertArgs} args - Arguments to update or create a AuditEvent.
+     * @example
+     * // Update or create a AuditEvent
+     * const auditEvent = await prisma.auditEvent.upsert({
+     *   create: {
+     *     // ... data to create a AuditEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AuditEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AuditEventUpsertArgs>(args: SelectSubset<T, AuditEventUpsertArgs<ExtArgs>>): Prisma__AuditEventClient<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AuditEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditEventCountArgs} args - Arguments to filter AuditEvents to count.
+     * @example
+     * // Count the number of AuditEvents
+     * const count = await prisma.auditEvent.count({
+     *   where: {
+     *     // ... the filter for the AuditEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends AuditEventCountArgs>(
+      args?: Subset<T, AuditEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AuditEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AuditEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AuditEventAggregateArgs>(args: Subset<T, AuditEventAggregateArgs>): Prisma.PrismaPromise<GetAuditEventAggregateType<T>>
+
+    /**
+     * Group by AuditEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AuditEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AuditEventGroupByArgs['orderBy'] }
+        : { orderBy?: AuditEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AuditEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAuditEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AuditEvent model
+   */
+  readonly fields: AuditEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AuditEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AuditEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    site<T extends SiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SiteDefaultArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    actor<T extends AuditEvent$actorArgs<ExtArgs> = {}>(args?: Subset<T, AuditEvent$actorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AuditEvent model
+   */
+  interface AuditEventFieldRefs {
+    readonly id: FieldRef<"AuditEvent", 'String'>
+    readonly siteId: FieldRef<"AuditEvent", 'String'>
+    readonly siteRevision: FieldRef<"AuditEvent", 'Int'>
+    readonly entityType: FieldRef<"AuditEvent", 'ContentEntityType'>
+    readonly entityId: FieldRef<"AuditEvent", 'String'>
+    readonly action: FieldRef<"AuditEvent", 'ContentRevisionAction'>
+    readonly changedFields: FieldRef<"AuditEvent", 'Json'>
+    readonly source: FieldRef<"AuditEvent", 'String'>
+    readonly actorId: FieldRef<"AuditEvent", 'String'>
+    readonly createdAt: FieldRef<"AuditEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AuditEvent findUnique
+   */
+  export type AuditEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditEvent to fetch.
+     */
+    where: AuditEventWhereUniqueInput
+  }
+
+  /**
+   * AuditEvent findUniqueOrThrow
+   */
+  export type AuditEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditEvent to fetch.
+     */
+    where: AuditEventWhereUniqueInput
+  }
+
+  /**
+   * AuditEvent findFirst
+   */
+  export type AuditEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditEvent to fetch.
+     */
+    where?: AuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditEvents to fetch.
+     */
+    orderBy?: AuditEventOrderByWithRelationInput | AuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AuditEvents.
+     */
+    cursor?: AuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AuditEvents.
+     */
+    distinct?: AuditEventScalarFieldEnum | AuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * AuditEvent findFirstOrThrow
+   */
+  export type AuditEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditEvent to fetch.
+     */
+    where?: AuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditEvents to fetch.
+     */
+    orderBy?: AuditEventOrderByWithRelationInput | AuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AuditEvents.
+     */
+    cursor?: AuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AuditEvents.
+     */
+    distinct?: AuditEventScalarFieldEnum | AuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * AuditEvent findMany
+   */
+  export type AuditEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditEvents to fetch.
+     */
+    where?: AuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditEvents to fetch.
+     */
+    orderBy?: AuditEventOrderByWithRelationInput | AuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AuditEvents.
+     */
+    cursor?: AuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AuditEvents.
+     */
+    distinct?: AuditEventScalarFieldEnum | AuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * AuditEvent create
+   */
+  export type AuditEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AuditEvent.
+     */
+    data: XOR<AuditEventCreateInput, AuditEventUncheckedCreateInput>
+  }
+
+  /**
+   * AuditEvent createMany
+   */
+  export type AuditEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AuditEvents.
+     */
+    data: AuditEventCreateManyInput | AuditEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AuditEvent createManyAndReturn
+   */
+  export type AuditEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many AuditEvents.
+     */
+    data: AuditEventCreateManyInput | AuditEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AuditEvent update
+   */
+  export type AuditEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AuditEvent.
+     */
+    data: XOR<AuditEventUpdateInput, AuditEventUncheckedUpdateInput>
+    /**
+     * Choose, which AuditEvent to update.
+     */
+    where: AuditEventWhereUniqueInput
+  }
+
+  /**
+   * AuditEvent updateMany
+   */
+  export type AuditEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AuditEvents.
+     */
+    data: XOR<AuditEventUpdateManyMutationInput, AuditEventUncheckedUpdateManyInput>
+    /**
+     * Filter which AuditEvents to update
+     */
+    where?: AuditEventWhereInput
+    /**
+     * Limit how many AuditEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AuditEvent updateManyAndReturn
+   */
+  export type AuditEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * The data used to update AuditEvents.
+     */
+    data: XOR<AuditEventUpdateManyMutationInput, AuditEventUncheckedUpdateManyInput>
+    /**
+     * Filter which AuditEvents to update
+     */
+    where?: AuditEventWhereInput
+    /**
+     * Limit how many AuditEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AuditEvent upsert
+   */
+  export type AuditEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AuditEvent to update in case it exists.
+     */
+    where: AuditEventWhereUniqueInput
+    /**
+     * In case the AuditEvent found by the `where` argument doesn't exist, create a new AuditEvent with this data.
+     */
+    create: XOR<AuditEventCreateInput, AuditEventUncheckedCreateInput>
+    /**
+     * In case the AuditEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AuditEventUpdateInput, AuditEventUncheckedUpdateInput>
+  }
+
+  /**
+   * AuditEvent delete
+   */
+  export type AuditEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
+    /**
+     * Filter which AuditEvent to delete.
+     */
+    where: AuditEventWhereUniqueInput
+  }
+
+  /**
+   * AuditEvent deleteMany
+   */
+  export type AuditEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AuditEvents to delete
+     */
+    where?: AuditEventWhereInput
+    /**
+     * Limit how many AuditEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AuditEvent.actor
+   */
+  export type AuditEvent$actorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * AuditEvent without action
+   */
+  export type AuditEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
   }
 
 
@@ -25510,6 +29915,9 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    contentRevisions?: boolean | User$contentRevisionsArgs<ExtArgs>
+    publications?: boolean | User$publicationsArgs<ExtArgs>
+    auditEvents?: boolean | User$auditEventsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -25546,6 +29954,9 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    contentRevisions?: boolean | User$contentRevisionsArgs<ExtArgs>
+    publications?: boolean | User$publicationsArgs<ExtArgs>
+    auditEvents?: boolean | User$auditEventsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -25555,6 +29966,9 @@ export namespace Prisma {
     name: "User"
     objects: {
       sessions: Prisma.$SessionPayload<ExtArgs>[]
+      contentRevisions: Prisma.$ContentRevisionPayload<ExtArgs>[]
+      publications: Prisma.$SitePublicationPayload<ExtArgs>[]
+      auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -25959,6 +30373,9 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contentRevisions<T extends User$contentRevisionsArgs<ExtArgs> = {}>(args?: Subset<T, User$contentRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    publications<T extends User$publicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    auditEvents<T extends User$auditEventsArgs<ExtArgs> = {}>(args?: Subset<T, User$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -26409,6 +30826,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
+   * User.contentRevisions
+   */
+  export type User$contentRevisionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContentRevision
+     */
+    select?: ContentRevisionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContentRevision
+     */
+    omit?: ContentRevisionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentRevisionInclude<ExtArgs> | null
+    where?: ContentRevisionWhereInput
+    orderBy?: ContentRevisionOrderByWithRelationInput | ContentRevisionOrderByWithRelationInput[]
+    cursor?: ContentRevisionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContentRevisionScalarFieldEnum | ContentRevisionScalarFieldEnum[]
+  }
+
+  /**
+   * User.publications
+   */
+  export type User$publicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    where?: SitePublicationWhereInput
+    orderBy?: SitePublicationOrderByWithRelationInput | SitePublicationOrderByWithRelationInput[]
+    cursor?: SitePublicationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SitePublicationScalarFieldEnum | SitePublicationScalarFieldEnum[]
+  }
+
+  /**
+   * User.auditEvents
+   */
+  export type User$auditEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditEvent
+     */
+    select?: AuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditEvent
+     */
+    omit?: AuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditEventInclude<ExtArgs> | null
+    where?: AuditEventWhereInput
+    orderBy?: AuditEventOrderByWithRelationInput | AuditEventOrderByWithRelationInput[]
+    cursor?: AuditEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AuditEventScalarFieldEnum | AuditEventScalarFieldEnum[]
   }
 
   /**
@@ -27528,6 +32017,8 @@ export namespace Prisma {
     domain: 'domain',
     settings: 'settings',
     status: 'status',
+    workingRevision: 'workingRevision',
+    publishedRevision: 'publishedRevision',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -27552,6 +32043,9 @@ export namespace Prisma {
     providerStatus: 'providerStatus',
     providerDeploymentId: 'providerDeploymentId',
     providerResponse: 'providerResponse',
+    requestedPublicationId: 'requestedPublicationId',
+    processingPublicationId: 'processingPublicationId',
+    publishedPublicationId: 'publishedPublicationId',
     queuedAt: 'queuedAt',
     startedAt: 'startedAt',
     completedAt: 'completedAt',
@@ -27560,6 +32054,60 @@ export namespace Prisma {
   };
 
   export type SiteRebuildScalarFieldEnum = (typeof SiteRebuildScalarFieldEnum)[keyof typeof SiteRebuildScalarFieldEnum]
+
+
+  export const ContentRevisionScalarFieldEnum: {
+    id: 'id',
+    siteId: 'siteId',
+    entityType: 'entityType',
+    entityId: 'entityId',
+    entityRevision: 'entityRevision',
+    siteRevision: 'siteRevision',
+    action: 'action',
+    snapshot: 'snapshot',
+    changedFields: 'changedFields',
+    source: 'source',
+    actorId: 'actorId',
+    createdAt: 'createdAt'
+  };
+
+  export type ContentRevisionScalarFieldEnum = (typeof ContentRevisionScalarFieldEnum)[keyof typeof ContentRevisionScalarFieldEnum]
+
+
+  export const SitePublicationScalarFieldEnum: {
+    id: 'id',
+    siteId: 'siteId',
+    siteRevision: 'siteRevision',
+    status: 'status',
+    catalog: 'catalog',
+    triggerEntity: 'triggerEntity',
+    triggerEntityId: 'triggerEntityId',
+    requestedById: 'requestedById',
+    lastError: 'lastError',
+    providerDeploymentId: 'providerDeploymentId',
+    providerResponse: 'providerResponse',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    publishedAt: 'publishedAt'
+  };
+
+  export type SitePublicationScalarFieldEnum = (typeof SitePublicationScalarFieldEnum)[keyof typeof SitePublicationScalarFieldEnum]
+
+
+  export const AuditEventScalarFieldEnum: {
+    id: 'id',
+    siteId: 'siteId',
+    siteRevision: 'siteRevision',
+    entityType: 'entityType',
+    entityId: 'entityId',
+    action: 'action',
+    changedFields: 'changedFields',
+    source: 'source',
+    actorId: 'actorId',
+    createdAt: 'createdAt'
+  };
+
+  export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
 
 
   export const RegionScalarFieldEnum: {
@@ -27965,6 +32513,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'SiteRebuildStatus'
    */
   export type EnumSiteRebuildStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SiteRebuildStatus'>
@@ -27979,16 +32541,44 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'ContentEntityType'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type EnumContentEntityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentEntityType'>
     
 
 
   /**
-   * Reference to a field of type 'Int[]'
+   * Reference to a field of type 'ContentEntityType[]'
    */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+  export type ListEnumContentEntityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentEntityType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ContentRevisionAction'
+   */
+  export type EnumContentRevisionActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentRevisionAction'>
+    
+
+
+  /**
+   * Reference to a field of type 'ContentRevisionAction[]'
+   */
+  export type ListEnumContentRevisionActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentRevisionAction[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SitePublicationStatus'
+   */
+  export type EnumSitePublicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SitePublicationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SitePublicationStatus[]'
+   */
+  export type ListEnumSitePublicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SitePublicationStatus[]'>
     
 
 
@@ -28252,6 +32842,8 @@ export namespace Prisma {
     domain?: StringNullableFilter<"Site"> | string | null
     settings?: JsonNullableFilter<"Site">
     status?: EnumPublishStatusFilter<"Site"> | $Enums.PublishStatus
+    workingRevision?: IntFilter<"Site"> | number
+    publishedRevision?: IntFilter<"Site"> | number
     createdAt?: DateTimeFilter<"Site"> | Date | string
     updatedAt?: DateTimeFilter<"Site"> | Date | string
     provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
@@ -28263,6 +32855,9 @@ export namespace Prisma {
     redirects?: RedirectListRelationFilter
     cityImports?: CityImportRunListRelationFilter
     rebuilds?: SiteRebuildListRelationFilter
+    contentRevisions?: ContentRevisionListRelationFilter
+    publications?: SitePublicationListRelationFilter
+    auditEvents?: AuditEventListRelationFilter
   }
 
   export type SiteOrderByWithRelationInput = {
@@ -28273,6 +32868,8 @@ export namespace Prisma {
     domain?: SortOrderInput | SortOrder
     settings?: SortOrderInput | SortOrder
     status?: SortOrder
+    workingRevision?: SortOrder
+    publishedRevision?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     provider?: ProviderOrderByWithRelationInput
@@ -28284,6 +32881,9 @@ export namespace Prisma {
     redirects?: RedirectOrderByRelationAggregateInput
     cityImports?: CityImportRunOrderByRelationAggregateInput
     rebuilds?: SiteRebuildOrderByRelationAggregateInput
+    contentRevisions?: ContentRevisionOrderByRelationAggregateInput
+    publications?: SitePublicationOrderByRelationAggregateInput
+    auditEvents?: AuditEventOrderByRelationAggregateInput
   }
 
   export type SiteWhereUniqueInput = Prisma.AtLeast<{
@@ -28297,6 +32897,8 @@ export namespace Prisma {
     domain?: StringNullableFilter<"Site"> | string | null
     settings?: JsonNullableFilter<"Site">
     status?: EnumPublishStatusFilter<"Site"> | $Enums.PublishStatus
+    workingRevision?: IntFilter<"Site"> | number
+    publishedRevision?: IntFilter<"Site"> | number
     createdAt?: DateTimeFilter<"Site"> | Date | string
     updatedAt?: DateTimeFilter<"Site"> | Date | string
     provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
@@ -28308,6 +32910,9 @@ export namespace Prisma {
     redirects?: RedirectListRelationFilter
     cityImports?: CityImportRunListRelationFilter
     rebuilds?: SiteRebuildListRelationFilter
+    contentRevisions?: ContentRevisionListRelationFilter
+    publications?: SitePublicationListRelationFilter
+    auditEvents?: AuditEventListRelationFilter
   }, "id" | "slug">
 
   export type SiteOrderByWithAggregationInput = {
@@ -28318,11 +32923,15 @@ export namespace Prisma {
     domain?: SortOrderInput | SortOrder
     settings?: SortOrderInput | SortOrder
     status?: SortOrder
+    workingRevision?: SortOrder
+    publishedRevision?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SiteCountOrderByAggregateInput
+    _avg?: SiteAvgOrderByAggregateInput
     _max?: SiteMaxOrderByAggregateInput
     _min?: SiteMinOrderByAggregateInput
+    _sum?: SiteSumOrderByAggregateInput
   }
 
   export type SiteScalarWhereWithAggregatesInput = {
@@ -28336,6 +32945,8 @@ export namespace Prisma {
     domain?: StringNullableWithAggregatesFilter<"Site"> | string | null
     settings?: JsonNullableWithAggregatesFilter<"Site">
     status?: EnumPublishStatusWithAggregatesFilter<"Site"> | $Enums.PublishStatus
+    workingRevision?: IntWithAggregatesFilter<"Site"> | number
+    publishedRevision?: IntWithAggregatesFilter<"Site"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Site"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Site"> | Date | string
   }
@@ -28360,12 +32971,18 @@ export namespace Prisma {
     providerStatus?: StringNullableFilter<"SiteRebuild"> | string | null
     providerDeploymentId?: StringNullableFilter<"SiteRebuild"> | string | null
     providerResponse?: JsonNullableFilter<"SiteRebuild">
+    requestedPublicationId?: StringNullableFilter<"SiteRebuild"> | string | null
+    processingPublicationId?: StringNullableFilter<"SiteRebuild"> | string | null
+    publishedPublicationId?: StringNullableFilter<"SiteRebuild"> | string | null
     queuedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
     startedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
     completedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
     createdAt?: DateTimeFilter<"SiteRebuild"> | Date | string
     updatedAt?: DateTimeFilter<"SiteRebuild"> | Date | string
     site?: XOR<SiteNullableScalarRelationFilter, SiteWhereInput> | null
+    requestedPublication?: XOR<SitePublicationNullableScalarRelationFilter, SitePublicationWhereInput> | null
+    processingPublication?: XOR<SitePublicationNullableScalarRelationFilter, SitePublicationWhereInput> | null
+    publishedPublication?: XOR<SitePublicationNullableScalarRelationFilter, SitePublicationWhereInput> | null
   }
 
   export type SiteRebuildOrderByWithRelationInput = {
@@ -28385,12 +33002,18 @@ export namespace Prisma {
     providerStatus?: SortOrderInput | SortOrder
     providerDeploymentId?: SortOrderInput | SortOrder
     providerResponse?: SortOrderInput | SortOrder
+    requestedPublicationId?: SortOrderInput | SortOrder
+    processingPublicationId?: SortOrderInput | SortOrder
+    publishedPublicationId?: SortOrderInput | SortOrder
     queuedAt?: SortOrderInput | SortOrder
     startedAt?: SortOrderInput | SortOrder
     completedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     site?: SiteOrderByWithRelationInput
+    requestedPublication?: SitePublicationOrderByWithRelationInput
+    processingPublication?: SitePublicationOrderByWithRelationInput
+    publishedPublication?: SitePublicationOrderByWithRelationInput
   }
 
   export type SiteRebuildWhereUniqueInput = Prisma.AtLeast<{
@@ -28413,12 +33036,18 @@ export namespace Prisma {
     providerStatus?: StringNullableFilter<"SiteRebuild"> | string | null
     providerDeploymentId?: StringNullableFilter<"SiteRebuild"> | string | null
     providerResponse?: JsonNullableFilter<"SiteRebuild">
+    requestedPublicationId?: StringNullableFilter<"SiteRebuild"> | string | null
+    processingPublicationId?: StringNullableFilter<"SiteRebuild"> | string | null
+    publishedPublicationId?: StringNullableFilter<"SiteRebuild"> | string | null
     queuedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
     startedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
     completedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
     createdAt?: DateTimeFilter<"SiteRebuild"> | Date | string
     updatedAt?: DateTimeFilter<"SiteRebuild"> | Date | string
     site?: XOR<SiteNullableScalarRelationFilter, SiteWhereInput> | null
+    requestedPublication?: XOR<SitePublicationNullableScalarRelationFilter, SitePublicationWhereInput> | null
+    processingPublication?: XOR<SitePublicationNullableScalarRelationFilter, SitePublicationWhereInput> | null
+    publishedPublication?: XOR<SitePublicationNullableScalarRelationFilter, SitePublicationWhereInput> | null
   }, "id" | "dedupeKey">
 
   export type SiteRebuildOrderByWithAggregationInput = {
@@ -28438,6 +33067,9 @@ export namespace Prisma {
     providerStatus?: SortOrderInput | SortOrder
     providerDeploymentId?: SortOrderInput | SortOrder
     providerResponse?: SortOrderInput | SortOrder
+    requestedPublicationId?: SortOrderInput | SortOrder
+    processingPublicationId?: SortOrderInput | SortOrder
+    publishedPublicationId?: SortOrderInput | SortOrder
     queuedAt?: SortOrderInput | SortOrder
     startedAt?: SortOrderInput | SortOrder
     completedAt?: SortOrderInput | SortOrder
@@ -28470,11 +33102,311 @@ export namespace Prisma {
     providerStatus?: StringNullableWithAggregatesFilter<"SiteRebuild"> | string | null
     providerDeploymentId?: StringNullableWithAggregatesFilter<"SiteRebuild"> | string | null
     providerResponse?: JsonNullableWithAggregatesFilter<"SiteRebuild">
+    requestedPublicationId?: StringNullableWithAggregatesFilter<"SiteRebuild"> | string | null
+    processingPublicationId?: StringNullableWithAggregatesFilter<"SiteRebuild"> | string | null
+    publishedPublicationId?: StringNullableWithAggregatesFilter<"SiteRebuild"> | string | null
     queuedAt?: DateTimeNullableWithAggregatesFilter<"SiteRebuild"> | Date | string | null
     startedAt?: DateTimeNullableWithAggregatesFilter<"SiteRebuild"> | Date | string | null
     completedAt?: DateTimeNullableWithAggregatesFilter<"SiteRebuild"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"SiteRebuild"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SiteRebuild"> | Date | string
+  }
+
+  export type ContentRevisionWhereInput = {
+    AND?: ContentRevisionWhereInput | ContentRevisionWhereInput[]
+    OR?: ContentRevisionWhereInput[]
+    NOT?: ContentRevisionWhereInput | ContentRevisionWhereInput[]
+    id?: StringFilter<"ContentRevision"> | string
+    siteId?: StringFilter<"ContentRevision"> | string
+    entityType?: EnumContentEntityTypeFilter<"ContentRevision"> | $Enums.ContentEntityType
+    entityId?: StringFilter<"ContentRevision"> | string
+    entityRevision?: IntFilter<"ContentRevision"> | number
+    siteRevision?: IntFilter<"ContentRevision"> | number
+    action?: EnumContentRevisionActionFilter<"ContentRevision"> | $Enums.ContentRevisionAction
+    snapshot?: JsonFilter<"ContentRevision">
+    changedFields?: JsonFilter<"ContentRevision">
+    source?: StringFilter<"ContentRevision"> | string
+    actorId?: StringNullableFilter<"ContentRevision"> | string | null
+    createdAt?: DateTimeFilter<"ContentRevision"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type ContentRevisionOrderByWithRelationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    entityRevision?: SortOrder
+    siteRevision?: SortOrder
+    action?: SortOrder
+    snapshot?: SortOrder
+    changedFields?: SortOrder
+    source?: SortOrder
+    actorId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    site?: SiteOrderByWithRelationInput
+    actor?: UserOrderByWithRelationInput
+  }
+
+  export type ContentRevisionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    entityType_entityId_entityRevision?: ContentRevisionEntityTypeEntityIdEntityRevisionCompoundUniqueInput
+    siteId_siteRevision_entityType_entityId?: ContentRevisionSiteIdSiteRevisionEntityTypeEntityIdCompoundUniqueInput
+    AND?: ContentRevisionWhereInput | ContentRevisionWhereInput[]
+    OR?: ContentRevisionWhereInput[]
+    NOT?: ContentRevisionWhereInput | ContentRevisionWhereInput[]
+    siteId?: StringFilter<"ContentRevision"> | string
+    entityType?: EnumContentEntityTypeFilter<"ContentRevision"> | $Enums.ContentEntityType
+    entityId?: StringFilter<"ContentRevision"> | string
+    entityRevision?: IntFilter<"ContentRevision"> | number
+    siteRevision?: IntFilter<"ContentRevision"> | number
+    action?: EnumContentRevisionActionFilter<"ContentRevision"> | $Enums.ContentRevisionAction
+    snapshot?: JsonFilter<"ContentRevision">
+    changedFields?: JsonFilter<"ContentRevision">
+    source?: StringFilter<"ContentRevision"> | string
+    actorId?: StringNullableFilter<"ContentRevision"> | string | null
+    createdAt?: DateTimeFilter<"ContentRevision"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "entityType_entityId_entityRevision" | "siteId_siteRevision_entityType_entityId">
+
+  export type ContentRevisionOrderByWithAggregationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    entityRevision?: SortOrder
+    siteRevision?: SortOrder
+    action?: SortOrder
+    snapshot?: SortOrder
+    changedFields?: SortOrder
+    source?: SortOrder
+    actorId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: ContentRevisionCountOrderByAggregateInput
+    _avg?: ContentRevisionAvgOrderByAggregateInput
+    _max?: ContentRevisionMaxOrderByAggregateInput
+    _min?: ContentRevisionMinOrderByAggregateInput
+    _sum?: ContentRevisionSumOrderByAggregateInput
+  }
+
+  export type ContentRevisionScalarWhereWithAggregatesInput = {
+    AND?: ContentRevisionScalarWhereWithAggregatesInput | ContentRevisionScalarWhereWithAggregatesInput[]
+    OR?: ContentRevisionScalarWhereWithAggregatesInput[]
+    NOT?: ContentRevisionScalarWhereWithAggregatesInput | ContentRevisionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ContentRevision"> | string
+    siteId?: StringWithAggregatesFilter<"ContentRevision"> | string
+    entityType?: EnumContentEntityTypeWithAggregatesFilter<"ContentRevision"> | $Enums.ContentEntityType
+    entityId?: StringWithAggregatesFilter<"ContentRevision"> | string
+    entityRevision?: IntWithAggregatesFilter<"ContentRevision"> | number
+    siteRevision?: IntWithAggregatesFilter<"ContentRevision"> | number
+    action?: EnumContentRevisionActionWithAggregatesFilter<"ContentRevision"> | $Enums.ContentRevisionAction
+    snapshot?: JsonWithAggregatesFilter<"ContentRevision">
+    changedFields?: JsonWithAggregatesFilter<"ContentRevision">
+    source?: StringWithAggregatesFilter<"ContentRevision"> | string
+    actorId?: StringNullableWithAggregatesFilter<"ContentRevision"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ContentRevision"> | Date | string
+  }
+
+  export type SitePublicationWhereInput = {
+    AND?: SitePublicationWhereInput | SitePublicationWhereInput[]
+    OR?: SitePublicationWhereInput[]
+    NOT?: SitePublicationWhereInput | SitePublicationWhereInput[]
+    id?: StringFilter<"SitePublication"> | string
+    siteId?: StringFilter<"SitePublication"> | string
+    siteRevision?: IntFilter<"SitePublication"> | number
+    status?: EnumSitePublicationStatusFilter<"SitePublication"> | $Enums.SitePublicationStatus
+    catalog?: JsonFilter<"SitePublication">
+    triggerEntity?: StringFilter<"SitePublication"> | string
+    triggerEntityId?: StringFilter<"SitePublication"> | string
+    requestedById?: StringNullableFilter<"SitePublication"> | string | null
+    lastError?: StringNullableFilter<"SitePublication"> | string | null
+    providerDeploymentId?: StringNullableFilter<"SitePublication"> | string | null
+    providerResponse?: JsonNullableFilter<"SitePublication">
+    createdAt?: DateTimeFilter<"SitePublication"> | Date | string
+    updatedAt?: DateTimeFilter<"SitePublication"> | Date | string
+    publishedAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    requestedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    requestedRebuilds?: SiteRebuildListRelationFilter
+    processingRebuilds?: SiteRebuildListRelationFilter
+    publishedRebuilds?: SiteRebuildListRelationFilter
+  }
+
+  export type SitePublicationOrderByWithRelationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    status?: SortOrder
+    catalog?: SortOrder
+    triggerEntity?: SortOrder
+    triggerEntityId?: SortOrder
+    requestedById?: SortOrderInput | SortOrder
+    lastError?: SortOrderInput | SortOrder
+    providerDeploymentId?: SortOrderInput | SortOrder
+    providerResponse?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    site?: SiteOrderByWithRelationInput
+    requestedBy?: UserOrderByWithRelationInput
+    requestedRebuilds?: SiteRebuildOrderByRelationAggregateInput
+    processingRebuilds?: SiteRebuildOrderByRelationAggregateInput
+    publishedRebuilds?: SiteRebuildOrderByRelationAggregateInput
+  }
+
+  export type SitePublicationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    siteId_siteRevision?: SitePublicationSiteIdSiteRevisionCompoundUniqueInput
+    AND?: SitePublicationWhereInput | SitePublicationWhereInput[]
+    OR?: SitePublicationWhereInput[]
+    NOT?: SitePublicationWhereInput | SitePublicationWhereInput[]
+    siteId?: StringFilter<"SitePublication"> | string
+    siteRevision?: IntFilter<"SitePublication"> | number
+    status?: EnumSitePublicationStatusFilter<"SitePublication"> | $Enums.SitePublicationStatus
+    catalog?: JsonFilter<"SitePublication">
+    triggerEntity?: StringFilter<"SitePublication"> | string
+    triggerEntityId?: StringFilter<"SitePublication"> | string
+    requestedById?: StringNullableFilter<"SitePublication"> | string | null
+    lastError?: StringNullableFilter<"SitePublication"> | string | null
+    providerDeploymentId?: StringNullableFilter<"SitePublication"> | string | null
+    providerResponse?: JsonNullableFilter<"SitePublication">
+    createdAt?: DateTimeFilter<"SitePublication"> | Date | string
+    updatedAt?: DateTimeFilter<"SitePublication"> | Date | string
+    publishedAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    requestedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    requestedRebuilds?: SiteRebuildListRelationFilter
+    processingRebuilds?: SiteRebuildListRelationFilter
+    publishedRebuilds?: SiteRebuildListRelationFilter
+  }, "id" | "siteId_siteRevision">
+
+  export type SitePublicationOrderByWithAggregationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    status?: SortOrder
+    catalog?: SortOrder
+    triggerEntity?: SortOrder
+    triggerEntityId?: SortOrder
+    requestedById?: SortOrderInput | SortOrder
+    lastError?: SortOrderInput | SortOrder
+    providerDeploymentId?: SortOrderInput | SortOrder
+    providerResponse?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    _count?: SitePublicationCountOrderByAggregateInput
+    _avg?: SitePublicationAvgOrderByAggregateInput
+    _max?: SitePublicationMaxOrderByAggregateInput
+    _min?: SitePublicationMinOrderByAggregateInput
+    _sum?: SitePublicationSumOrderByAggregateInput
+  }
+
+  export type SitePublicationScalarWhereWithAggregatesInput = {
+    AND?: SitePublicationScalarWhereWithAggregatesInput | SitePublicationScalarWhereWithAggregatesInput[]
+    OR?: SitePublicationScalarWhereWithAggregatesInput[]
+    NOT?: SitePublicationScalarWhereWithAggregatesInput | SitePublicationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SitePublication"> | string
+    siteId?: StringWithAggregatesFilter<"SitePublication"> | string
+    siteRevision?: IntWithAggregatesFilter<"SitePublication"> | number
+    status?: EnumSitePublicationStatusWithAggregatesFilter<"SitePublication"> | $Enums.SitePublicationStatus
+    catalog?: JsonWithAggregatesFilter<"SitePublication">
+    triggerEntity?: StringWithAggregatesFilter<"SitePublication"> | string
+    triggerEntityId?: StringWithAggregatesFilter<"SitePublication"> | string
+    requestedById?: StringNullableWithAggregatesFilter<"SitePublication"> | string | null
+    lastError?: StringNullableWithAggregatesFilter<"SitePublication"> | string | null
+    providerDeploymentId?: StringNullableWithAggregatesFilter<"SitePublication"> | string | null
+    providerResponse?: JsonNullableWithAggregatesFilter<"SitePublication">
+    createdAt?: DateTimeWithAggregatesFilter<"SitePublication"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SitePublication"> | Date | string
+    publishedAt?: DateTimeNullableWithAggregatesFilter<"SitePublication"> | Date | string | null
+  }
+
+  export type AuditEventWhereInput = {
+    AND?: AuditEventWhereInput | AuditEventWhereInput[]
+    OR?: AuditEventWhereInput[]
+    NOT?: AuditEventWhereInput | AuditEventWhereInput[]
+    id?: StringFilter<"AuditEvent"> | string
+    siteId?: StringFilter<"AuditEvent"> | string
+    siteRevision?: IntFilter<"AuditEvent"> | number
+    entityType?: EnumContentEntityTypeFilter<"AuditEvent"> | $Enums.ContentEntityType
+    entityId?: StringFilter<"AuditEvent"> | string
+    action?: EnumContentRevisionActionFilter<"AuditEvent"> | $Enums.ContentRevisionAction
+    changedFields?: JsonFilter<"AuditEvent">
+    source?: StringFilter<"AuditEvent"> | string
+    actorId?: StringNullableFilter<"AuditEvent"> | string | null
+    createdAt?: DateTimeFilter<"AuditEvent"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type AuditEventOrderByWithRelationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    action?: SortOrder
+    changedFields?: SortOrder
+    source?: SortOrder
+    actorId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    site?: SiteOrderByWithRelationInput
+    actor?: UserOrderByWithRelationInput
+  }
+
+  export type AuditEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AuditEventWhereInput | AuditEventWhereInput[]
+    OR?: AuditEventWhereInput[]
+    NOT?: AuditEventWhereInput | AuditEventWhereInput[]
+    siteId?: StringFilter<"AuditEvent"> | string
+    siteRevision?: IntFilter<"AuditEvent"> | number
+    entityType?: EnumContentEntityTypeFilter<"AuditEvent"> | $Enums.ContentEntityType
+    entityId?: StringFilter<"AuditEvent"> | string
+    action?: EnumContentRevisionActionFilter<"AuditEvent"> | $Enums.ContentRevisionAction
+    changedFields?: JsonFilter<"AuditEvent">
+    source?: StringFilter<"AuditEvent"> | string
+    actorId?: StringNullableFilter<"AuditEvent"> | string | null
+    createdAt?: DateTimeFilter<"AuditEvent"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type AuditEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    action?: SortOrder
+    changedFields?: SortOrder
+    source?: SortOrder
+    actorId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: AuditEventCountOrderByAggregateInput
+    _avg?: AuditEventAvgOrderByAggregateInput
+    _max?: AuditEventMaxOrderByAggregateInput
+    _min?: AuditEventMinOrderByAggregateInput
+    _sum?: AuditEventSumOrderByAggregateInput
+  }
+
+  export type AuditEventScalarWhereWithAggregatesInput = {
+    AND?: AuditEventScalarWhereWithAggregatesInput | AuditEventScalarWhereWithAggregatesInput[]
+    OR?: AuditEventScalarWhereWithAggregatesInput[]
+    NOT?: AuditEventScalarWhereWithAggregatesInput | AuditEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AuditEvent"> | string
+    siteId?: StringWithAggregatesFilter<"AuditEvent"> | string
+    siteRevision?: IntWithAggregatesFilter<"AuditEvent"> | number
+    entityType?: EnumContentEntityTypeWithAggregatesFilter<"AuditEvent"> | $Enums.ContentEntityType
+    entityId?: StringWithAggregatesFilter<"AuditEvent"> | string
+    action?: EnumContentRevisionActionWithAggregatesFilter<"AuditEvent"> | $Enums.ContentRevisionAction
+    changedFields?: JsonWithAggregatesFilter<"AuditEvent">
+    source?: StringWithAggregatesFilter<"AuditEvent"> | string
+    actorId?: StringNullableWithAggregatesFilter<"AuditEvent"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AuditEvent"> | Date | string
   }
 
   export type RegionWhereInput = {
@@ -29941,6 +34873,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     sessions?: SessionListRelationFilter
+    contentRevisions?: ContentRevisionListRelationFilter
+    publications?: SitePublicationListRelationFilter
+    auditEvents?: AuditEventListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -29952,6 +34887,9 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     sessions?: SessionOrderByRelationAggregateInput
+    contentRevisions?: ContentRevisionOrderByRelationAggregateInput
+    publications?: SitePublicationOrderByRelationAggregateInput
+    auditEvents?: AuditEventOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -29966,6 +34904,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     sessions?: SessionListRelationFilter
+    contentRevisions?: ContentRevisionListRelationFilter
+    publications?: SitePublicationListRelationFilter
+    auditEvents?: AuditEventListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -30138,6 +35079,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutSitesInput
@@ -30149,6 +35092,9 @@ export namespace Prisma {
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateInput = {
@@ -30159,6 +35105,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
@@ -30169,6 +35117,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUpdateInput = {
@@ -30178,6 +35129,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
@@ -30189,6 +35142,9 @@ export namespace Prisma {
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateInput = {
@@ -30199,6 +35155,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
@@ -30209,6 +35167,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteCreateManyInput = {
@@ -30219,6 +35180,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -30230,6 +35193,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -30242,6 +35207,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -30268,6 +35235,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     site?: SiteCreateNestedOneWithoutRebuildsInput
+    requestedPublication?: SitePublicationCreateNestedOneWithoutRequestedRebuildsInput
+    processingPublication?: SitePublicationCreateNestedOneWithoutProcessingRebuildsInput
+    publishedPublication?: SitePublicationCreateNestedOneWithoutPublishedRebuildsInput
   }
 
   export type SiteRebuildUncheckedCreateInput = {
@@ -30287,6 +35257,9 @@ export namespace Prisma {
     providerStatus?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: string | null
+    processingPublicationId?: string | null
+    publishedPublicationId?: string | null
     queuedAt?: Date | string | null
     startedAt?: Date | string | null
     completedAt?: Date | string | null
@@ -30316,6 +35289,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneWithoutRebuildsNestedInput
+    requestedPublication?: SitePublicationUpdateOneWithoutRequestedRebuildsNestedInput
+    processingPublication?: SitePublicationUpdateOneWithoutProcessingRebuildsNestedInput
+    publishedPublication?: SitePublicationUpdateOneWithoutPublishedRebuildsNestedInput
   }
 
   export type SiteRebuildUncheckedUpdateInput = {
@@ -30335,6 +35311,9 @@ export namespace Prisma {
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    processingPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
     queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -30359,6 +35338,9 @@ export namespace Prisma {
     providerStatus?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: string | null
+    processingPublicationId?: string | null
+    publishedPublicationId?: string | null
     queuedAt?: Date | string | null
     startedAt?: Date | string | null
     completedAt?: Date | string | null
@@ -30406,11 +35388,335 @@ export namespace Prisma {
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    processingPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
     queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentRevisionCreateInput = {
+    id?: string
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    entityRevision: number
+    siteRevision: number
+    action: $Enums.ContentRevisionAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    createdAt?: Date | string
+    site: SiteCreateNestedOneWithoutContentRevisionsInput
+    actor?: UserCreateNestedOneWithoutContentRevisionsInput
+  }
+
+  export type ContentRevisionUncheckedCreateInput = {
+    id?: string
+    siteId: string
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    entityRevision: number
+    siteRevision: number
+    action: $Enums.ContentRevisionAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    actorId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ContentRevisionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    entityRevision?: IntFieldUpdateOperationsInput | number
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutContentRevisionsNestedInput
+    actor?: UserUpdateOneWithoutContentRevisionsNestedInput
+  }
+
+  export type ContentRevisionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    entityRevision?: IntFieldUpdateOperationsInput | number
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentRevisionCreateManyInput = {
+    id?: string
+    siteId: string
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    entityRevision: number
+    siteRevision: number
+    action: $Enums.ContentRevisionAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    actorId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ContentRevisionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    entityRevision?: IntFieldUpdateOperationsInput | number
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentRevisionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    entityRevision?: IntFieldUpdateOperationsInput | number
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SitePublicationCreateInput = {
+    id?: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    site: SiteCreateNestedOneWithoutPublicationsInput
+    requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationUncheckedCreateInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    requestedById?: string | null
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
+    requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
+  export type SitePublicationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
+  export type SitePublicationCreateManyInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    requestedById?: string | null
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+  }
+
+  export type SitePublicationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SitePublicationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AuditEventCreateInput = {
+    id?: string
+    siteRevision: number
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    action: $Enums.ContentRevisionAction
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    createdAt?: Date | string
+    site: SiteCreateNestedOneWithoutAuditEventsInput
+    actor?: UserCreateNestedOneWithoutAuditEventsInput
+  }
+
+  export type AuditEventUncheckedCreateInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    action: $Enums.ContentRevisionAction
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    actorId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AuditEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutAuditEventsNestedInput
+    actor?: UserUpdateOneWithoutAuditEventsNestedInput
+  }
+
+  export type AuditEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditEventCreateManyInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    action: $Enums.ContentRevisionAction
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    actorId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AuditEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RegionCreateInput = {
@@ -32032,6 +37338,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     sessions?: SessionCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
+    publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -32043,6 +37352,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserUpdateInput = {
@@ -32054,6 +37366,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -32065,6 +37380,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -32342,6 +37660,17 @@ export namespace Prisma {
     not?: NestedEnumPublishStatusFilter<$PrismaModel> | $Enums.PublishStatus
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type ProviderScalarRelationFilter = {
     is?: ProviderWhereInput
     isNot?: ProviderWhereInput
@@ -32395,6 +37724,24 @@ export namespace Prisma {
     none?: SiteRebuildWhereInput
   }
 
+  export type ContentRevisionListRelationFilter = {
+    every?: ContentRevisionWhereInput
+    some?: ContentRevisionWhereInput
+    none?: ContentRevisionWhereInput
+  }
+
+  export type SitePublicationListRelationFilter = {
+    every?: SitePublicationWhereInput
+    some?: SitePublicationWhereInput
+    none?: SitePublicationWhereInput
+  }
+
+  export type AuditEventListRelationFilter = {
+    every?: AuditEventWhereInput
+    some?: AuditEventWhereInput
+    none?: AuditEventWhereInput
+  }
+
   export type RegionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -32427,6 +37774,18 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type ContentRevisionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SitePublicationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AuditEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type SiteCountOrderByAggregateInput = {
     id?: SortOrder
     providerId?: SortOrder
@@ -32435,8 +37794,15 @@ export namespace Prisma {
     domain?: SortOrder
     settings?: SortOrder
     status?: SortOrder
+    workingRevision?: SortOrder
+    publishedRevision?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SiteAvgOrderByAggregateInput = {
+    workingRevision?: SortOrder
+    publishedRevision?: SortOrder
   }
 
   export type SiteMaxOrderByAggregateInput = {
@@ -32446,6 +37812,8 @@ export namespace Prisma {
     slug?: SortOrder
     domain?: SortOrder
     status?: SortOrder
+    workingRevision?: SortOrder
+    publishedRevision?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -32457,8 +37825,15 @@ export namespace Prisma {
     slug?: SortOrder
     domain?: SortOrder
     status?: SortOrder
+    workingRevision?: SortOrder
+    publishedRevision?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SiteSumOrderByAggregateInput = {
+    workingRevision?: SortOrder
+    publishedRevision?: SortOrder
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -32487,6 +37862,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPublishStatusFilter<$PrismaModel>
     _max?: NestedEnumPublishStatusFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumSiteRebuildStatusFilter<$PrismaModel = never> = {
@@ -32519,17 +37910,6 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -32544,6 +37924,11 @@ export namespace Prisma {
   export type SiteNullableScalarRelationFilter = {
     is?: SiteWhereInput | null
     isNot?: SiteWhereInput | null
+  }
+
+  export type SitePublicationNullableScalarRelationFilter = {
+    is?: SitePublicationWhereInput | null
+    isNot?: SitePublicationWhereInput | null
   }
 
   export type SiteRebuildCountOrderByAggregateInput = {
@@ -32563,6 +37948,9 @@ export namespace Prisma {
     providerStatus?: SortOrder
     providerDeploymentId?: SortOrder
     providerResponse?: SortOrder
+    requestedPublicationId?: SortOrder
+    processingPublicationId?: SortOrder
+    publishedPublicationId?: SortOrder
     queuedAt?: SortOrder
     startedAt?: SortOrder
     completedAt?: SortOrder
@@ -32593,6 +37981,9 @@ export namespace Prisma {
     lastError?: SortOrder
     providerStatus?: SortOrder
     providerDeploymentId?: SortOrder
+    requestedPublicationId?: SortOrder
+    processingPublicationId?: SortOrder
+    publishedPublicationId?: SortOrder
     queuedAt?: SortOrder
     startedAt?: SortOrder
     completedAt?: SortOrder
@@ -32615,6 +38006,9 @@ export namespace Prisma {
     lastError?: SortOrder
     providerStatus?: SortOrder
     providerDeploymentId?: SortOrder
+    requestedPublicationId?: SortOrder
+    processingPublicationId?: SortOrder
+    publishedPublicationId?: SortOrder
     queuedAt?: SortOrder
     startedAt?: SortOrder
     completedAt?: SortOrder
@@ -32666,22 +38060,6 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -32696,9 +38074,234 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type EnumContentEntityTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentEntityType | EnumContentEntityTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentEntityType[] | ListEnumContentEntityTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentEntityType[] | ListEnumContentEntityTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentEntityTypeFilter<$PrismaModel> | $Enums.ContentEntityType
+  }
+
+  export type EnumContentRevisionActionFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentRevisionAction | EnumContentRevisionActionFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentRevisionAction[] | ListEnumContentRevisionActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentRevisionAction[] | ListEnumContentRevisionActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentRevisionActionFilter<$PrismaModel> | $Enums.ContentRevisionAction
+  }
+
   export type SiteScalarRelationFilter = {
     is?: SiteWhereInput
     isNot?: SiteWhereInput
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type ContentRevisionEntityTypeEntityIdEntityRevisionCompoundUniqueInput = {
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    entityRevision: number
+  }
+
+  export type ContentRevisionSiteIdSiteRevisionEntityTypeEntityIdCompoundUniqueInput = {
+    siteId: string
+    siteRevision: number
+    entityType: $Enums.ContentEntityType
+    entityId: string
+  }
+
+  export type ContentRevisionCountOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    entityRevision?: SortOrder
+    siteRevision?: SortOrder
+    action?: SortOrder
+    snapshot?: SortOrder
+    changedFields?: SortOrder
+    source?: SortOrder
+    actorId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ContentRevisionAvgOrderByAggregateInput = {
+    entityRevision?: SortOrder
+    siteRevision?: SortOrder
+  }
+
+  export type ContentRevisionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    entityRevision?: SortOrder
+    siteRevision?: SortOrder
+    action?: SortOrder
+    source?: SortOrder
+    actorId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ContentRevisionMinOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    entityRevision?: SortOrder
+    siteRevision?: SortOrder
+    action?: SortOrder
+    source?: SortOrder
+    actorId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ContentRevisionSumOrderByAggregateInput = {
+    entityRevision?: SortOrder
+    siteRevision?: SortOrder
+  }
+
+  export type EnumContentEntityTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentEntityType | EnumContentEntityTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentEntityType[] | ListEnumContentEntityTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentEntityType[] | ListEnumContentEntityTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentEntityTypeWithAggregatesFilter<$PrismaModel> | $Enums.ContentEntityType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumContentEntityTypeFilter<$PrismaModel>
+    _max?: NestedEnumContentEntityTypeFilter<$PrismaModel>
+  }
+
+  export type EnumContentRevisionActionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentRevisionAction | EnumContentRevisionActionFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentRevisionAction[] | ListEnumContentRevisionActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentRevisionAction[] | ListEnumContentRevisionActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentRevisionActionWithAggregatesFilter<$PrismaModel> | $Enums.ContentRevisionAction
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumContentRevisionActionFilter<$PrismaModel>
+    _max?: NestedEnumContentRevisionActionFilter<$PrismaModel>
+  }
+
+  export type EnumSitePublicationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SitePublicationStatus | EnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SitePublicationStatus[] | ListEnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SitePublicationStatus[] | ListEnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSitePublicationStatusFilter<$PrismaModel> | $Enums.SitePublicationStatus
+  }
+
+  export type SitePublicationSiteIdSiteRevisionCompoundUniqueInput = {
+    siteId: string
+    siteRevision: number
+  }
+
+  export type SitePublicationCountOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    status?: SortOrder
+    catalog?: SortOrder
+    triggerEntity?: SortOrder
+    triggerEntityId?: SortOrder
+    requestedById?: SortOrder
+    lastError?: SortOrder
+    providerDeploymentId?: SortOrder
+    providerResponse?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    publishedAt?: SortOrder
+  }
+
+  export type SitePublicationAvgOrderByAggregateInput = {
+    siteRevision?: SortOrder
+  }
+
+  export type SitePublicationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    status?: SortOrder
+    triggerEntity?: SortOrder
+    triggerEntityId?: SortOrder
+    requestedById?: SortOrder
+    lastError?: SortOrder
+    providerDeploymentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    publishedAt?: SortOrder
+  }
+
+  export type SitePublicationMinOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    status?: SortOrder
+    triggerEntity?: SortOrder
+    triggerEntityId?: SortOrder
+    requestedById?: SortOrder
+    lastError?: SortOrder
+    providerDeploymentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    publishedAt?: SortOrder
+  }
+
+  export type SitePublicationSumOrderByAggregateInput = {
+    siteRevision?: SortOrder
+  }
+
+  export type EnumSitePublicationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SitePublicationStatus | EnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SitePublicationStatus[] | ListEnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SitePublicationStatus[] | ListEnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSitePublicationStatusWithAggregatesFilter<$PrismaModel> | $Enums.SitePublicationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSitePublicationStatusFilter<$PrismaModel>
+    _max?: NestedEnumSitePublicationStatusFilter<$PrismaModel>
+  }
+
+  export type AuditEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    action?: SortOrder
+    changedFields?: SortOrder
+    source?: SortOrder
+    actorId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AuditEventAvgOrderByAggregateInput = {
+    siteRevision?: SortOrder
+  }
+
+  export type AuditEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    action?: SortOrder
+    source?: SortOrder
+    actorId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AuditEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    action?: SortOrder
+    source?: SortOrder
+    actorId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AuditEventSumOrderByAggregateInput = {
+    siteRevision?: SortOrder
   }
 
   export type RegionSiteIdSlugCompoundUniqueInput = {
@@ -34097,6 +39700,27 @@ export namespace Prisma {
     connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
   }
 
+  export type ContentRevisionCreateNestedManyWithoutSiteInput = {
+    create?: XOR<ContentRevisionCreateWithoutSiteInput, ContentRevisionUncheckedCreateWithoutSiteInput> | ContentRevisionCreateWithoutSiteInput[] | ContentRevisionUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: ContentRevisionCreateOrConnectWithoutSiteInput | ContentRevisionCreateOrConnectWithoutSiteInput[]
+    createMany?: ContentRevisionCreateManySiteInputEnvelope
+    connect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+  }
+
+  export type SitePublicationCreateNestedManyWithoutSiteInput = {
+    create?: XOR<SitePublicationCreateWithoutSiteInput, SitePublicationUncheckedCreateWithoutSiteInput> | SitePublicationCreateWithoutSiteInput[] | SitePublicationUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutSiteInput | SitePublicationCreateOrConnectWithoutSiteInput[]
+    createMany?: SitePublicationCreateManySiteInputEnvelope
+    connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+  }
+
+  export type AuditEventCreateNestedManyWithoutSiteInput = {
+    create?: XOR<AuditEventCreateWithoutSiteInput, AuditEventUncheckedCreateWithoutSiteInput> | AuditEventCreateWithoutSiteInput[] | AuditEventUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: AuditEventCreateOrConnectWithoutSiteInput | AuditEventCreateOrConnectWithoutSiteInput[]
+    createMany?: AuditEventCreateManySiteInputEnvelope
+    connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+  }
+
   export type RegionUncheckedCreateNestedManyWithoutSiteInput = {
     create?: XOR<RegionCreateWithoutSiteInput, RegionUncheckedCreateWithoutSiteInput> | RegionCreateWithoutSiteInput[] | RegionUncheckedCreateWithoutSiteInput[]
     connectOrCreate?: RegionCreateOrConnectWithoutSiteInput | RegionCreateOrConnectWithoutSiteInput[]
@@ -34153,12 +39777,41 @@ export namespace Prisma {
     connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
   }
 
+  export type ContentRevisionUncheckedCreateNestedManyWithoutSiteInput = {
+    create?: XOR<ContentRevisionCreateWithoutSiteInput, ContentRevisionUncheckedCreateWithoutSiteInput> | ContentRevisionCreateWithoutSiteInput[] | ContentRevisionUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: ContentRevisionCreateOrConnectWithoutSiteInput | ContentRevisionCreateOrConnectWithoutSiteInput[]
+    createMany?: ContentRevisionCreateManySiteInputEnvelope
+    connect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+  }
+
+  export type SitePublicationUncheckedCreateNestedManyWithoutSiteInput = {
+    create?: XOR<SitePublicationCreateWithoutSiteInput, SitePublicationUncheckedCreateWithoutSiteInput> | SitePublicationCreateWithoutSiteInput[] | SitePublicationUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutSiteInput | SitePublicationCreateOrConnectWithoutSiteInput[]
+    createMany?: SitePublicationCreateManySiteInputEnvelope
+    connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+  }
+
+  export type AuditEventUncheckedCreateNestedManyWithoutSiteInput = {
+    create?: XOR<AuditEventCreateWithoutSiteInput, AuditEventUncheckedCreateWithoutSiteInput> | AuditEventCreateWithoutSiteInput[] | AuditEventUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: AuditEventCreateOrConnectWithoutSiteInput | AuditEventCreateOrConnectWithoutSiteInput[]
+    createMany?: AuditEventCreateManySiteInputEnvelope
+    connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+  }
+
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
   }
 
   export type EnumPublishStatusFieldUpdateOperationsInput = {
     set?: $Enums.PublishStatus
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type ProviderUpdateOneRequiredWithoutSitesNestedInput = {
@@ -34281,6 +39934,48 @@ export namespace Prisma {
     deleteMany?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
   }
 
+  export type ContentRevisionUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<ContentRevisionCreateWithoutSiteInput, ContentRevisionUncheckedCreateWithoutSiteInput> | ContentRevisionCreateWithoutSiteInput[] | ContentRevisionUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: ContentRevisionCreateOrConnectWithoutSiteInput | ContentRevisionCreateOrConnectWithoutSiteInput[]
+    upsert?: ContentRevisionUpsertWithWhereUniqueWithoutSiteInput | ContentRevisionUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: ContentRevisionCreateManySiteInputEnvelope
+    set?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    disconnect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    delete?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    connect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    update?: ContentRevisionUpdateWithWhereUniqueWithoutSiteInput | ContentRevisionUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: ContentRevisionUpdateManyWithWhereWithoutSiteInput | ContentRevisionUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: ContentRevisionScalarWhereInput | ContentRevisionScalarWhereInput[]
+  }
+
+  export type SitePublicationUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<SitePublicationCreateWithoutSiteInput, SitePublicationUncheckedCreateWithoutSiteInput> | SitePublicationCreateWithoutSiteInput[] | SitePublicationUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutSiteInput | SitePublicationCreateOrConnectWithoutSiteInput[]
+    upsert?: SitePublicationUpsertWithWhereUniqueWithoutSiteInput | SitePublicationUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: SitePublicationCreateManySiteInputEnvelope
+    set?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    disconnect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    delete?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    update?: SitePublicationUpdateWithWhereUniqueWithoutSiteInput | SitePublicationUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: SitePublicationUpdateManyWithWhereWithoutSiteInput | SitePublicationUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: SitePublicationScalarWhereInput | SitePublicationScalarWhereInput[]
+  }
+
+  export type AuditEventUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<AuditEventCreateWithoutSiteInput, AuditEventUncheckedCreateWithoutSiteInput> | AuditEventCreateWithoutSiteInput[] | AuditEventUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: AuditEventCreateOrConnectWithoutSiteInput | AuditEventCreateOrConnectWithoutSiteInput[]
+    upsert?: AuditEventUpsertWithWhereUniqueWithoutSiteInput | AuditEventUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: AuditEventCreateManySiteInputEnvelope
+    set?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    disconnect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    delete?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    update?: AuditEventUpdateWithWhereUniqueWithoutSiteInput | AuditEventUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: AuditEventUpdateManyWithWhereWithoutSiteInput | AuditEventUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
+  }
+
   export type RegionUncheckedUpdateManyWithoutSiteNestedInput = {
     create?: XOR<RegionCreateWithoutSiteInput, RegionUncheckedCreateWithoutSiteInput> | RegionCreateWithoutSiteInput[] | RegionUncheckedCreateWithoutSiteInput[]
     connectOrCreate?: RegionCreateOrConnectWithoutSiteInput | RegionCreateOrConnectWithoutSiteInput[]
@@ -34393,22 +40088,74 @@ export namespace Prisma {
     deleteMany?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
   }
 
+  export type ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<ContentRevisionCreateWithoutSiteInput, ContentRevisionUncheckedCreateWithoutSiteInput> | ContentRevisionCreateWithoutSiteInput[] | ContentRevisionUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: ContentRevisionCreateOrConnectWithoutSiteInput | ContentRevisionCreateOrConnectWithoutSiteInput[]
+    upsert?: ContentRevisionUpsertWithWhereUniqueWithoutSiteInput | ContentRevisionUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: ContentRevisionCreateManySiteInputEnvelope
+    set?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    disconnect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    delete?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    connect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    update?: ContentRevisionUpdateWithWhereUniqueWithoutSiteInput | ContentRevisionUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: ContentRevisionUpdateManyWithWhereWithoutSiteInput | ContentRevisionUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: ContentRevisionScalarWhereInput | ContentRevisionScalarWhereInput[]
+  }
+
+  export type SitePublicationUncheckedUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<SitePublicationCreateWithoutSiteInput, SitePublicationUncheckedCreateWithoutSiteInput> | SitePublicationCreateWithoutSiteInput[] | SitePublicationUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutSiteInput | SitePublicationCreateOrConnectWithoutSiteInput[]
+    upsert?: SitePublicationUpsertWithWhereUniqueWithoutSiteInput | SitePublicationUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: SitePublicationCreateManySiteInputEnvelope
+    set?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    disconnect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    delete?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    update?: SitePublicationUpdateWithWhereUniqueWithoutSiteInput | SitePublicationUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: SitePublicationUpdateManyWithWhereWithoutSiteInput | SitePublicationUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: SitePublicationScalarWhereInput | SitePublicationScalarWhereInput[]
+  }
+
+  export type AuditEventUncheckedUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<AuditEventCreateWithoutSiteInput, AuditEventUncheckedCreateWithoutSiteInput> | AuditEventCreateWithoutSiteInput[] | AuditEventUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: AuditEventCreateOrConnectWithoutSiteInput | AuditEventCreateOrConnectWithoutSiteInput[]
+    upsert?: AuditEventUpsertWithWhereUniqueWithoutSiteInput | AuditEventUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: AuditEventCreateManySiteInputEnvelope
+    set?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    disconnect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    delete?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    update?: AuditEventUpdateWithWhereUniqueWithoutSiteInput | AuditEventUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: AuditEventUpdateManyWithWhereWithoutSiteInput | AuditEventUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
+  }
+
   export type SiteCreateNestedOneWithoutRebuildsInput = {
     create?: XOR<SiteCreateWithoutRebuildsInput, SiteUncheckedCreateWithoutRebuildsInput>
     connectOrCreate?: SiteCreateOrConnectWithoutRebuildsInput
     connect?: SiteWhereUniqueInput
   }
 
-  export type EnumSiteRebuildStatusFieldUpdateOperationsInput = {
-    set?: $Enums.SiteRebuildStatus
+  export type SitePublicationCreateNestedOneWithoutRequestedRebuildsInput = {
+    create?: XOR<SitePublicationCreateWithoutRequestedRebuildsInput, SitePublicationUncheckedCreateWithoutRequestedRebuildsInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutRequestedRebuildsInput
+    connect?: SitePublicationWhereUniqueInput
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type SitePublicationCreateNestedOneWithoutProcessingRebuildsInput = {
+    create?: XOR<SitePublicationCreateWithoutProcessingRebuildsInput, SitePublicationUncheckedCreateWithoutProcessingRebuildsInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutProcessingRebuildsInput
+    connect?: SitePublicationWhereUniqueInput
+  }
+
+  export type SitePublicationCreateNestedOneWithoutPublishedRebuildsInput = {
+    create?: XOR<SitePublicationCreateWithoutPublishedRebuildsInput, SitePublicationUncheckedCreateWithoutPublishedRebuildsInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutPublishedRebuildsInput
+    connect?: SitePublicationWhereUniqueInput
+  }
+
+  export type EnumSiteRebuildStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SiteRebuildStatus
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -34423,6 +40170,264 @@ export namespace Prisma {
     delete?: SiteWhereInput | boolean
     connect?: SiteWhereUniqueInput
     update?: XOR<XOR<SiteUpdateToOneWithWhereWithoutRebuildsInput, SiteUpdateWithoutRebuildsInput>, SiteUncheckedUpdateWithoutRebuildsInput>
+  }
+
+  export type SitePublicationUpdateOneWithoutRequestedRebuildsNestedInput = {
+    create?: XOR<SitePublicationCreateWithoutRequestedRebuildsInput, SitePublicationUncheckedCreateWithoutRequestedRebuildsInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutRequestedRebuildsInput
+    upsert?: SitePublicationUpsertWithoutRequestedRebuildsInput
+    disconnect?: SitePublicationWhereInput | boolean
+    delete?: SitePublicationWhereInput | boolean
+    connect?: SitePublicationWhereUniqueInput
+    update?: XOR<XOR<SitePublicationUpdateToOneWithWhereWithoutRequestedRebuildsInput, SitePublicationUpdateWithoutRequestedRebuildsInput>, SitePublicationUncheckedUpdateWithoutRequestedRebuildsInput>
+  }
+
+  export type SitePublicationUpdateOneWithoutProcessingRebuildsNestedInput = {
+    create?: XOR<SitePublicationCreateWithoutProcessingRebuildsInput, SitePublicationUncheckedCreateWithoutProcessingRebuildsInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutProcessingRebuildsInput
+    upsert?: SitePublicationUpsertWithoutProcessingRebuildsInput
+    disconnect?: SitePublicationWhereInput | boolean
+    delete?: SitePublicationWhereInput | boolean
+    connect?: SitePublicationWhereUniqueInput
+    update?: XOR<XOR<SitePublicationUpdateToOneWithWhereWithoutProcessingRebuildsInput, SitePublicationUpdateWithoutProcessingRebuildsInput>, SitePublicationUncheckedUpdateWithoutProcessingRebuildsInput>
+  }
+
+  export type SitePublicationUpdateOneWithoutPublishedRebuildsNestedInput = {
+    create?: XOR<SitePublicationCreateWithoutPublishedRebuildsInput, SitePublicationUncheckedCreateWithoutPublishedRebuildsInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutPublishedRebuildsInput
+    upsert?: SitePublicationUpsertWithoutPublishedRebuildsInput
+    disconnect?: SitePublicationWhereInput | boolean
+    delete?: SitePublicationWhereInput | boolean
+    connect?: SitePublicationWhereUniqueInput
+    update?: XOR<XOR<SitePublicationUpdateToOneWithWhereWithoutPublishedRebuildsInput, SitePublicationUpdateWithoutPublishedRebuildsInput>, SitePublicationUncheckedUpdateWithoutPublishedRebuildsInput>
+  }
+
+  export type SiteCreateNestedOneWithoutContentRevisionsInput = {
+    create?: XOR<SiteCreateWithoutContentRevisionsInput, SiteUncheckedCreateWithoutContentRevisionsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutContentRevisionsInput
+    connect?: SiteWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutContentRevisionsInput = {
+    create?: XOR<UserCreateWithoutContentRevisionsInput, UserUncheckedCreateWithoutContentRevisionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutContentRevisionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumContentEntityTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ContentEntityType
+  }
+
+  export type EnumContentRevisionActionFieldUpdateOperationsInput = {
+    set?: $Enums.ContentRevisionAction
+  }
+
+  export type SiteUpdateOneRequiredWithoutContentRevisionsNestedInput = {
+    create?: XOR<SiteCreateWithoutContentRevisionsInput, SiteUncheckedCreateWithoutContentRevisionsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutContentRevisionsInput
+    upsert?: SiteUpsertWithoutContentRevisionsInput
+    connect?: SiteWhereUniqueInput
+    update?: XOR<XOR<SiteUpdateToOneWithWhereWithoutContentRevisionsInput, SiteUpdateWithoutContentRevisionsInput>, SiteUncheckedUpdateWithoutContentRevisionsInput>
+  }
+
+  export type UserUpdateOneWithoutContentRevisionsNestedInput = {
+    create?: XOR<UserCreateWithoutContentRevisionsInput, UserUncheckedCreateWithoutContentRevisionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutContentRevisionsInput
+    upsert?: UserUpsertWithoutContentRevisionsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutContentRevisionsInput, UserUpdateWithoutContentRevisionsInput>, UserUncheckedUpdateWithoutContentRevisionsInput>
+  }
+
+  export type SiteCreateNestedOneWithoutPublicationsInput = {
+    create?: XOR<SiteCreateWithoutPublicationsInput, SiteUncheckedCreateWithoutPublicationsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutPublicationsInput
+    connect?: SiteWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutPublicationsInput = {
+    create?: XOR<UserCreateWithoutPublicationsInput, UserUncheckedCreateWithoutPublicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPublicationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SiteRebuildCreateNestedManyWithoutRequestedPublicationInput = {
+    create?: XOR<SiteRebuildCreateWithoutRequestedPublicationInput, SiteRebuildUncheckedCreateWithoutRequestedPublicationInput> | SiteRebuildCreateWithoutRequestedPublicationInput[] | SiteRebuildUncheckedCreateWithoutRequestedPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutRequestedPublicationInput | SiteRebuildCreateOrConnectWithoutRequestedPublicationInput[]
+    createMany?: SiteRebuildCreateManyRequestedPublicationInputEnvelope
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+  }
+
+  export type SiteRebuildCreateNestedManyWithoutProcessingPublicationInput = {
+    create?: XOR<SiteRebuildCreateWithoutProcessingPublicationInput, SiteRebuildUncheckedCreateWithoutProcessingPublicationInput> | SiteRebuildCreateWithoutProcessingPublicationInput[] | SiteRebuildUncheckedCreateWithoutProcessingPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutProcessingPublicationInput | SiteRebuildCreateOrConnectWithoutProcessingPublicationInput[]
+    createMany?: SiteRebuildCreateManyProcessingPublicationInputEnvelope
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+  }
+
+  export type SiteRebuildCreateNestedManyWithoutPublishedPublicationInput = {
+    create?: XOR<SiteRebuildCreateWithoutPublishedPublicationInput, SiteRebuildUncheckedCreateWithoutPublishedPublicationInput> | SiteRebuildCreateWithoutPublishedPublicationInput[] | SiteRebuildUncheckedCreateWithoutPublishedPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutPublishedPublicationInput | SiteRebuildCreateOrConnectWithoutPublishedPublicationInput[]
+    createMany?: SiteRebuildCreateManyPublishedPublicationInputEnvelope
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+  }
+
+  export type SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput = {
+    create?: XOR<SiteRebuildCreateWithoutRequestedPublicationInput, SiteRebuildUncheckedCreateWithoutRequestedPublicationInput> | SiteRebuildCreateWithoutRequestedPublicationInput[] | SiteRebuildUncheckedCreateWithoutRequestedPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutRequestedPublicationInput | SiteRebuildCreateOrConnectWithoutRequestedPublicationInput[]
+    createMany?: SiteRebuildCreateManyRequestedPublicationInputEnvelope
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+  }
+
+  export type SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput = {
+    create?: XOR<SiteRebuildCreateWithoutProcessingPublicationInput, SiteRebuildUncheckedCreateWithoutProcessingPublicationInput> | SiteRebuildCreateWithoutProcessingPublicationInput[] | SiteRebuildUncheckedCreateWithoutProcessingPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutProcessingPublicationInput | SiteRebuildCreateOrConnectWithoutProcessingPublicationInput[]
+    createMany?: SiteRebuildCreateManyProcessingPublicationInputEnvelope
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+  }
+
+  export type SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput = {
+    create?: XOR<SiteRebuildCreateWithoutPublishedPublicationInput, SiteRebuildUncheckedCreateWithoutPublishedPublicationInput> | SiteRebuildCreateWithoutPublishedPublicationInput[] | SiteRebuildUncheckedCreateWithoutPublishedPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutPublishedPublicationInput | SiteRebuildCreateOrConnectWithoutPublishedPublicationInput[]
+    createMany?: SiteRebuildCreateManyPublishedPublicationInputEnvelope
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+  }
+
+  export type EnumSitePublicationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SitePublicationStatus
+  }
+
+  export type SiteUpdateOneRequiredWithoutPublicationsNestedInput = {
+    create?: XOR<SiteCreateWithoutPublicationsInput, SiteUncheckedCreateWithoutPublicationsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutPublicationsInput
+    upsert?: SiteUpsertWithoutPublicationsInput
+    connect?: SiteWhereUniqueInput
+    update?: XOR<XOR<SiteUpdateToOneWithWhereWithoutPublicationsInput, SiteUpdateWithoutPublicationsInput>, SiteUncheckedUpdateWithoutPublicationsInput>
+  }
+
+  export type UserUpdateOneWithoutPublicationsNestedInput = {
+    create?: XOR<UserCreateWithoutPublicationsInput, UserUncheckedCreateWithoutPublicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPublicationsInput
+    upsert?: UserUpsertWithoutPublicationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPublicationsInput, UserUpdateWithoutPublicationsInput>, UserUncheckedUpdateWithoutPublicationsInput>
+  }
+
+  export type SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput = {
+    create?: XOR<SiteRebuildCreateWithoutRequestedPublicationInput, SiteRebuildUncheckedCreateWithoutRequestedPublicationInput> | SiteRebuildCreateWithoutRequestedPublicationInput[] | SiteRebuildUncheckedCreateWithoutRequestedPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutRequestedPublicationInput | SiteRebuildCreateOrConnectWithoutRequestedPublicationInput[]
+    upsert?: SiteRebuildUpsertWithWhereUniqueWithoutRequestedPublicationInput | SiteRebuildUpsertWithWhereUniqueWithoutRequestedPublicationInput[]
+    createMany?: SiteRebuildCreateManyRequestedPublicationInputEnvelope
+    set?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    disconnect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    delete?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    update?: SiteRebuildUpdateWithWhereUniqueWithoutRequestedPublicationInput | SiteRebuildUpdateWithWhereUniqueWithoutRequestedPublicationInput[]
+    updateMany?: SiteRebuildUpdateManyWithWhereWithoutRequestedPublicationInput | SiteRebuildUpdateManyWithWhereWithoutRequestedPublicationInput[]
+    deleteMany?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
+  }
+
+  export type SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput = {
+    create?: XOR<SiteRebuildCreateWithoutProcessingPublicationInput, SiteRebuildUncheckedCreateWithoutProcessingPublicationInput> | SiteRebuildCreateWithoutProcessingPublicationInput[] | SiteRebuildUncheckedCreateWithoutProcessingPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutProcessingPublicationInput | SiteRebuildCreateOrConnectWithoutProcessingPublicationInput[]
+    upsert?: SiteRebuildUpsertWithWhereUniqueWithoutProcessingPublicationInput | SiteRebuildUpsertWithWhereUniqueWithoutProcessingPublicationInput[]
+    createMany?: SiteRebuildCreateManyProcessingPublicationInputEnvelope
+    set?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    disconnect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    delete?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    update?: SiteRebuildUpdateWithWhereUniqueWithoutProcessingPublicationInput | SiteRebuildUpdateWithWhereUniqueWithoutProcessingPublicationInput[]
+    updateMany?: SiteRebuildUpdateManyWithWhereWithoutProcessingPublicationInput | SiteRebuildUpdateManyWithWhereWithoutProcessingPublicationInput[]
+    deleteMany?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
+  }
+
+  export type SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput = {
+    create?: XOR<SiteRebuildCreateWithoutPublishedPublicationInput, SiteRebuildUncheckedCreateWithoutPublishedPublicationInput> | SiteRebuildCreateWithoutPublishedPublicationInput[] | SiteRebuildUncheckedCreateWithoutPublishedPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutPublishedPublicationInput | SiteRebuildCreateOrConnectWithoutPublishedPublicationInput[]
+    upsert?: SiteRebuildUpsertWithWhereUniqueWithoutPublishedPublicationInput | SiteRebuildUpsertWithWhereUniqueWithoutPublishedPublicationInput[]
+    createMany?: SiteRebuildCreateManyPublishedPublicationInputEnvelope
+    set?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    disconnect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    delete?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    update?: SiteRebuildUpdateWithWhereUniqueWithoutPublishedPublicationInput | SiteRebuildUpdateWithWhereUniqueWithoutPublishedPublicationInput[]
+    updateMany?: SiteRebuildUpdateManyWithWhereWithoutPublishedPublicationInput | SiteRebuildUpdateManyWithWhereWithoutPublishedPublicationInput[]
+    deleteMany?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
+  }
+
+  export type SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput = {
+    create?: XOR<SiteRebuildCreateWithoutRequestedPublicationInput, SiteRebuildUncheckedCreateWithoutRequestedPublicationInput> | SiteRebuildCreateWithoutRequestedPublicationInput[] | SiteRebuildUncheckedCreateWithoutRequestedPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutRequestedPublicationInput | SiteRebuildCreateOrConnectWithoutRequestedPublicationInput[]
+    upsert?: SiteRebuildUpsertWithWhereUniqueWithoutRequestedPublicationInput | SiteRebuildUpsertWithWhereUniqueWithoutRequestedPublicationInput[]
+    createMany?: SiteRebuildCreateManyRequestedPublicationInputEnvelope
+    set?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    disconnect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    delete?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    update?: SiteRebuildUpdateWithWhereUniqueWithoutRequestedPublicationInput | SiteRebuildUpdateWithWhereUniqueWithoutRequestedPublicationInput[]
+    updateMany?: SiteRebuildUpdateManyWithWhereWithoutRequestedPublicationInput | SiteRebuildUpdateManyWithWhereWithoutRequestedPublicationInput[]
+    deleteMany?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
+  }
+
+  export type SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput = {
+    create?: XOR<SiteRebuildCreateWithoutProcessingPublicationInput, SiteRebuildUncheckedCreateWithoutProcessingPublicationInput> | SiteRebuildCreateWithoutProcessingPublicationInput[] | SiteRebuildUncheckedCreateWithoutProcessingPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutProcessingPublicationInput | SiteRebuildCreateOrConnectWithoutProcessingPublicationInput[]
+    upsert?: SiteRebuildUpsertWithWhereUniqueWithoutProcessingPublicationInput | SiteRebuildUpsertWithWhereUniqueWithoutProcessingPublicationInput[]
+    createMany?: SiteRebuildCreateManyProcessingPublicationInputEnvelope
+    set?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    disconnect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    delete?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    update?: SiteRebuildUpdateWithWhereUniqueWithoutProcessingPublicationInput | SiteRebuildUpdateWithWhereUniqueWithoutProcessingPublicationInput[]
+    updateMany?: SiteRebuildUpdateManyWithWhereWithoutProcessingPublicationInput | SiteRebuildUpdateManyWithWhereWithoutProcessingPublicationInput[]
+    deleteMany?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
+  }
+
+  export type SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput = {
+    create?: XOR<SiteRebuildCreateWithoutPublishedPublicationInput, SiteRebuildUncheckedCreateWithoutPublishedPublicationInput> | SiteRebuildCreateWithoutPublishedPublicationInput[] | SiteRebuildUncheckedCreateWithoutPublishedPublicationInput[]
+    connectOrCreate?: SiteRebuildCreateOrConnectWithoutPublishedPublicationInput | SiteRebuildCreateOrConnectWithoutPublishedPublicationInput[]
+    upsert?: SiteRebuildUpsertWithWhereUniqueWithoutPublishedPublicationInput | SiteRebuildUpsertWithWhereUniqueWithoutPublishedPublicationInput[]
+    createMany?: SiteRebuildCreateManyPublishedPublicationInputEnvelope
+    set?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    disconnect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    delete?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    connect?: SiteRebuildWhereUniqueInput | SiteRebuildWhereUniqueInput[]
+    update?: SiteRebuildUpdateWithWhereUniqueWithoutPublishedPublicationInput | SiteRebuildUpdateWithWhereUniqueWithoutPublishedPublicationInput[]
+    updateMany?: SiteRebuildUpdateManyWithWhereWithoutPublishedPublicationInput | SiteRebuildUpdateManyWithWhereWithoutPublishedPublicationInput[]
+    deleteMany?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
+  }
+
+  export type SiteCreateNestedOneWithoutAuditEventsInput = {
+    create?: XOR<SiteCreateWithoutAuditEventsInput, SiteUncheckedCreateWithoutAuditEventsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutAuditEventsInput
+    connect?: SiteWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAuditEventsInput = {
+    create?: XOR<UserCreateWithoutAuditEventsInput, UserUncheckedCreateWithoutAuditEventsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAuditEventsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SiteUpdateOneRequiredWithoutAuditEventsNestedInput = {
+    create?: XOR<SiteCreateWithoutAuditEventsInput, SiteUncheckedCreateWithoutAuditEventsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutAuditEventsInput
+    upsert?: SiteUpsertWithoutAuditEventsInput
+    connect?: SiteWhereUniqueInput
+    update?: XOR<XOR<SiteUpdateToOneWithWhereWithoutAuditEventsInput, SiteUpdateWithoutAuditEventsInput>, SiteUncheckedUpdateWithoutAuditEventsInput>
+  }
+
+  export type UserUpdateOneWithoutAuditEventsNestedInput = {
+    create?: XOR<UserCreateWithoutAuditEventsInput, UserUncheckedCreateWithoutAuditEventsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAuditEventsInput
+    upsert?: UserUpsertWithoutAuditEventsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAuditEventsInput, UserUpdateWithoutAuditEventsInput>, UserUncheckedUpdateWithoutAuditEventsInput>
   }
 
   export type SiteCreateNestedOneWithoutRegionsInput = {
@@ -35582,11 +41587,53 @@ export namespace Prisma {
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
   }
 
+  export type ContentRevisionCreateNestedManyWithoutActorInput = {
+    create?: XOR<ContentRevisionCreateWithoutActorInput, ContentRevisionUncheckedCreateWithoutActorInput> | ContentRevisionCreateWithoutActorInput[] | ContentRevisionUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ContentRevisionCreateOrConnectWithoutActorInput | ContentRevisionCreateOrConnectWithoutActorInput[]
+    createMany?: ContentRevisionCreateManyActorInputEnvelope
+    connect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+  }
+
+  export type SitePublicationCreateNestedManyWithoutRequestedByInput = {
+    create?: XOR<SitePublicationCreateWithoutRequestedByInput, SitePublicationUncheckedCreateWithoutRequestedByInput> | SitePublicationCreateWithoutRequestedByInput[] | SitePublicationUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutRequestedByInput | SitePublicationCreateOrConnectWithoutRequestedByInput[]
+    createMany?: SitePublicationCreateManyRequestedByInputEnvelope
+    connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+  }
+
+  export type AuditEventCreateNestedManyWithoutActorInput = {
+    create?: XOR<AuditEventCreateWithoutActorInput, AuditEventUncheckedCreateWithoutActorInput> | AuditEventCreateWithoutActorInput[] | AuditEventUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: AuditEventCreateOrConnectWithoutActorInput | AuditEventCreateOrConnectWithoutActorInput[]
+    createMany?: AuditEventCreateManyActorInputEnvelope
+    connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+  }
+
   export type SessionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
     createMany?: SessionCreateManyUserInputEnvelope
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  }
+
+  export type ContentRevisionUncheckedCreateNestedManyWithoutActorInput = {
+    create?: XOR<ContentRevisionCreateWithoutActorInput, ContentRevisionUncheckedCreateWithoutActorInput> | ContentRevisionCreateWithoutActorInput[] | ContentRevisionUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ContentRevisionCreateOrConnectWithoutActorInput | ContentRevisionCreateOrConnectWithoutActorInput[]
+    createMany?: ContentRevisionCreateManyActorInputEnvelope
+    connect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+  }
+
+  export type SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput = {
+    create?: XOR<SitePublicationCreateWithoutRequestedByInput, SitePublicationUncheckedCreateWithoutRequestedByInput> | SitePublicationCreateWithoutRequestedByInput[] | SitePublicationUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutRequestedByInput | SitePublicationCreateOrConnectWithoutRequestedByInput[]
+    createMany?: SitePublicationCreateManyRequestedByInputEnvelope
+    connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+  }
+
+  export type AuditEventUncheckedCreateNestedManyWithoutActorInput = {
+    create?: XOR<AuditEventCreateWithoutActorInput, AuditEventUncheckedCreateWithoutActorInput> | AuditEventCreateWithoutActorInput[] | AuditEventUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: AuditEventCreateOrConnectWithoutActorInput | AuditEventCreateOrConnectWithoutActorInput[]
+    createMany?: AuditEventCreateManyActorInputEnvelope
+    connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
   }
 
   export type SessionUpdateManyWithoutUserNestedInput = {
@@ -35603,6 +41650,48 @@ export namespace Prisma {
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
   }
 
+  export type ContentRevisionUpdateManyWithoutActorNestedInput = {
+    create?: XOR<ContentRevisionCreateWithoutActorInput, ContentRevisionUncheckedCreateWithoutActorInput> | ContentRevisionCreateWithoutActorInput[] | ContentRevisionUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ContentRevisionCreateOrConnectWithoutActorInput | ContentRevisionCreateOrConnectWithoutActorInput[]
+    upsert?: ContentRevisionUpsertWithWhereUniqueWithoutActorInput | ContentRevisionUpsertWithWhereUniqueWithoutActorInput[]
+    createMany?: ContentRevisionCreateManyActorInputEnvelope
+    set?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    disconnect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    delete?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    connect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    update?: ContentRevisionUpdateWithWhereUniqueWithoutActorInput | ContentRevisionUpdateWithWhereUniqueWithoutActorInput[]
+    updateMany?: ContentRevisionUpdateManyWithWhereWithoutActorInput | ContentRevisionUpdateManyWithWhereWithoutActorInput[]
+    deleteMany?: ContentRevisionScalarWhereInput | ContentRevisionScalarWhereInput[]
+  }
+
+  export type SitePublicationUpdateManyWithoutRequestedByNestedInput = {
+    create?: XOR<SitePublicationCreateWithoutRequestedByInput, SitePublicationUncheckedCreateWithoutRequestedByInput> | SitePublicationCreateWithoutRequestedByInput[] | SitePublicationUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutRequestedByInput | SitePublicationCreateOrConnectWithoutRequestedByInput[]
+    upsert?: SitePublicationUpsertWithWhereUniqueWithoutRequestedByInput | SitePublicationUpsertWithWhereUniqueWithoutRequestedByInput[]
+    createMany?: SitePublicationCreateManyRequestedByInputEnvelope
+    set?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    disconnect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    delete?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    update?: SitePublicationUpdateWithWhereUniqueWithoutRequestedByInput | SitePublicationUpdateWithWhereUniqueWithoutRequestedByInput[]
+    updateMany?: SitePublicationUpdateManyWithWhereWithoutRequestedByInput | SitePublicationUpdateManyWithWhereWithoutRequestedByInput[]
+    deleteMany?: SitePublicationScalarWhereInput | SitePublicationScalarWhereInput[]
+  }
+
+  export type AuditEventUpdateManyWithoutActorNestedInput = {
+    create?: XOR<AuditEventCreateWithoutActorInput, AuditEventUncheckedCreateWithoutActorInput> | AuditEventCreateWithoutActorInput[] | AuditEventUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: AuditEventCreateOrConnectWithoutActorInput | AuditEventCreateOrConnectWithoutActorInput[]
+    upsert?: AuditEventUpsertWithWhereUniqueWithoutActorInput | AuditEventUpsertWithWhereUniqueWithoutActorInput[]
+    createMany?: AuditEventCreateManyActorInputEnvelope
+    set?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    disconnect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    delete?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    update?: AuditEventUpdateWithWhereUniqueWithoutActorInput | AuditEventUpdateWithWhereUniqueWithoutActorInput[]
+    updateMany?: AuditEventUpdateManyWithWhereWithoutActorInput | AuditEventUpdateManyWithWhereWithoutActorInput[]
+    deleteMany?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
+  }
+
   export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -35615,6 +41704,48 @@ export namespace Prisma {
     update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  }
+
+  export type ContentRevisionUncheckedUpdateManyWithoutActorNestedInput = {
+    create?: XOR<ContentRevisionCreateWithoutActorInput, ContentRevisionUncheckedCreateWithoutActorInput> | ContentRevisionCreateWithoutActorInput[] | ContentRevisionUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: ContentRevisionCreateOrConnectWithoutActorInput | ContentRevisionCreateOrConnectWithoutActorInput[]
+    upsert?: ContentRevisionUpsertWithWhereUniqueWithoutActorInput | ContentRevisionUpsertWithWhereUniqueWithoutActorInput[]
+    createMany?: ContentRevisionCreateManyActorInputEnvelope
+    set?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    disconnect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    delete?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    connect?: ContentRevisionWhereUniqueInput | ContentRevisionWhereUniqueInput[]
+    update?: ContentRevisionUpdateWithWhereUniqueWithoutActorInput | ContentRevisionUpdateWithWhereUniqueWithoutActorInput[]
+    updateMany?: ContentRevisionUpdateManyWithWhereWithoutActorInput | ContentRevisionUpdateManyWithWhereWithoutActorInput[]
+    deleteMany?: ContentRevisionScalarWhereInput | ContentRevisionScalarWhereInput[]
+  }
+
+  export type SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput = {
+    create?: XOR<SitePublicationCreateWithoutRequestedByInput, SitePublicationUncheckedCreateWithoutRequestedByInput> | SitePublicationCreateWithoutRequestedByInput[] | SitePublicationUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutRequestedByInput | SitePublicationCreateOrConnectWithoutRequestedByInput[]
+    upsert?: SitePublicationUpsertWithWhereUniqueWithoutRequestedByInput | SitePublicationUpsertWithWhereUniqueWithoutRequestedByInput[]
+    createMany?: SitePublicationCreateManyRequestedByInputEnvelope
+    set?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    disconnect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    delete?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+    update?: SitePublicationUpdateWithWhereUniqueWithoutRequestedByInput | SitePublicationUpdateWithWhereUniqueWithoutRequestedByInput[]
+    updateMany?: SitePublicationUpdateManyWithWhereWithoutRequestedByInput | SitePublicationUpdateManyWithWhereWithoutRequestedByInput[]
+    deleteMany?: SitePublicationScalarWhereInput | SitePublicationScalarWhereInput[]
+  }
+
+  export type AuditEventUncheckedUpdateManyWithoutActorNestedInput = {
+    create?: XOR<AuditEventCreateWithoutActorInput, AuditEventUncheckedCreateWithoutActorInput> | AuditEventCreateWithoutActorInput[] | AuditEventUncheckedCreateWithoutActorInput[]
+    connectOrCreate?: AuditEventCreateOrConnectWithoutActorInput | AuditEventCreateOrConnectWithoutActorInput[]
+    upsert?: AuditEventUpsertWithWhereUniqueWithoutActorInput | AuditEventUpsertWithWhereUniqueWithoutActorInput[]
+    createMany?: AuditEventCreateManyActorInputEnvelope
+    set?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    disconnect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    delete?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+    update?: AuditEventUpdateWithWhereUniqueWithoutActorInput | AuditEventUpdateWithWhereUniqueWithoutActorInput[]
+    updateMany?: AuditEventUpdateManyWithWhereWithoutActorInput | AuditEventUpdateManyWithWhereWithoutActorInput[]
+    deleteMany?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutSessionsInput = {
@@ -35780,6 +41911,33 @@ export namespace Prisma {
     _max?: NestedEnumPublishStatusFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedEnumSiteRebuildStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.SiteRebuildStatus | EnumSiteRebuildStatusFieldRefInput<$PrismaModel>
     in?: $Enums.SiteRebuildStatus[] | ListEnumSiteRebuildStatusFieldRefInput<$PrismaModel>
@@ -35831,33 +41989,6 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -35870,6 +42001,57 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumContentEntityTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentEntityType | EnumContentEntityTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentEntityType[] | ListEnumContentEntityTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentEntityType[] | ListEnumContentEntityTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentEntityTypeFilter<$PrismaModel> | $Enums.ContentEntityType
+  }
+
+  export type NestedEnumContentRevisionActionFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentRevisionAction | EnumContentRevisionActionFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentRevisionAction[] | ListEnumContentRevisionActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentRevisionAction[] | ListEnumContentRevisionActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentRevisionActionFilter<$PrismaModel> | $Enums.ContentRevisionAction
+  }
+
+  export type NestedEnumContentEntityTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentEntityType | EnumContentEntityTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentEntityType[] | ListEnumContentEntityTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentEntityType[] | ListEnumContentEntityTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentEntityTypeWithAggregatesFilter<$PrismaModel> | $Enums.ContentEntityType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumContentEntityTypeFilter<$PrismaModel>
+    _max?: NestedEnumContentEntityTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumContentRevisionActionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentRevisionAction | EnumContentRevisionActionFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentRevisionAction[] | ListEnumContentRevisionActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentRevisionAction[] | ListEnumContentRevisionActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentRevisionActionWithAggregatesFilter<$PrismaModel> | $Enums.ContentRevisionAction
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumContentRevisionActionFilter<$PrismaModel>
+    _max?: NestedEnumContentRevisionActionFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSitePublicationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SitePublicationStatus | EnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SitePublicationStatus[] | ListEnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SitePublicationStatus[] | ListEnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSitePublicationStatusFilter<$PrismaModel> | $Enums.SitePublicationStatus
+  }
+
+  export type NestedEnumSitePublicationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SitePublicationStatus | EnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SitePublicationStatus[] | ListEnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SitePublicationStatus[] | ListEnumSitePublicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSitePublicationStatusWithAggregatesFilter<$PrismaModel> | $Enums.SitePublicationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSitePublicationStatusFilter<$PrismaModel>
+    _max?: NestedEnumSitePublicationStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumPageTypeFilter<$PrismaModel = never> = {
@@ -36150,6 +42332,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     regions?: RegionCreateNestedManyWithoutSiteInput
@@ -36160,6 +42344,9 @@ export namespace Prisma {
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutProviderInput = {
@@ -36169,6 +42356,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
@@ -36179,6 +42368,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutProviderInput = {
@@ -36310,6 +42502,8 @@ export namespace Prisma {
     domain?: StringNullableFilter<"Site"> | string | null
     settings?: JsonNullableFilter<"Site">
     status?: EnumPublishStatusFilter<"Site"> | $Enums.PublishStatus
+    workingRevision?: IntFilter<"Site"> | number
+    publishedRevision?: IntFilter<"Site"> | number
     createdAt?: DateTimeFilter<"Site"> | Date | string
     updatedAt?: DateTimeFilter<"Site"> | Date | string
   }
@@ -36761,6 +42955,9 @@ export namespace Prisma {
     completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    requestedPublication?: SitePublicationCreateNestedOneWithoutRequestedRebuildsInput
+    processingPublication?: SitePublicationCreateNestedOneWithoutProcessingRebuildsInput
+    publishedPublication?: SitePublicationCreateNestedOneWithoutPublishedRebuildsInput
   }
 
   export type SiteRebuildUncheckedCreateWithoutSiteInput = {
@@ -36779,6 +42976,9 @@ export namespace Prisma {
     providerStatus?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: string | null
+    processingPublicationId?: string | null
+    publishedPublicationId?: string | null
     queuedAt?: Date | string | null
     startedAt?: Date | string | null
     completedAt?: Date | string | null
@@ -36793,6 +42993,126 @@ export namespace Prisma {
 
   export type SiteRebuildCreateManySiteInputEnvelope = {
     data: SiteRebuildCreateManySiteInput | SiteRebuildCreateManySiteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ContentRevisionCreateWithoutSiteInput = {
+    id?: string
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    entityRevision: number
+    siteRevision: number
+    action: $Enums.ContentRevisionAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    createdAt?: Date | string
+    actor?: UserCreateNestedOneWithoutContentRevisionsInput
+  }
+
+  export type ContentRevisionUncheckedCreateWithoutSiteInput = {
+    id?: string
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    entityRevision: number
+    siteRevision: number
+    action: $Enums.ContentRevisionAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    actorId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ContentRevisionCreateOrConnectWithoutSiteInput = {
+    where: ContentRevisionWhereUniqueInput
+    create: XOR<ContentRevisionCreateWithoutSiteInput, ContentRevisionUncheckedCreateWithoutSiteInput>
+  }
+
+  export type ContentRevisionCreateManySiteInputEnvelope = {
+    data: ContentRevisionCreateManySiteInput | ContentRevisionCreateManySiteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SitePublicationCreateWithoutSiteInput = {
+    id?: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationUncheckedCreateWithoutSiteInput = {
+    id?: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    requestedById?: string | null
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationCreateOrConnectWithoutSiteInput = {
+    where: SitePublicationWhereUniqueInput
+    create: XOR<SitePublicationCreateWithoutSiteInput, SitePublicationUncheckedCreateWithoutSiteInput>
+  }
+
+  export type SitePublicationCreateManySiteInputEnvelope = {
+    data: SitePublicationCreateManySiteInput | SitePublicationCreateManySiteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AuditEventCreateWithoutSiteInput = {
+    id?: string
+    siteRevision: number
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    action: $Enums.ContentRevisionAction
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    createdAt?: Date | string
+    actor?: UserCreateNestedOneWithoutAuditEventsInput
+  }
+
+  export type AuditEventUncheckedCreateWithoutSiteInput = {
+    id?: string
+    siteRevision: number
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    action: $Enums.ContentRevisionAction
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    actorId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AuditEventCreateOrConnectWithoutSiteInput = {
+    where: AuditEventWhereUniqueInput
+    create: XOR<AuditEventCreateWithoutSiteInput, AuditEventUncheckedCreateWithoutSiteInput>
+  }
+
+  export type AuditEventCreateManySiteInputEnvelope = {
+    data: AuditEventCreateManySiteInput | AuditEventCreateManySiteInput[]
     skipDuplicates?: boolean
   }
 
@@ -37117,11 +43437,116 @@ export namespace Prisma {
     providerStatus?: StringNullableFilter<"SiteRebuild"> | string | null
     providerDeploymentId?: StringNullableFilter<"SiteRebuild"> | string | null
     providerResponse?: JsonNullableFilter<"SiteRebuild">
+    requestedPublicationId?: StringNullableFilter<"SiteRebuild"> | string | null
+    processingPublicationId?: StringNullableFilter<"SiteRebuild"> | string | null
+    publishedPublicationId?: StringNullableFilter<"SiteRebuild"> | string | null
     queuedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
     startedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
     completedAt?: DateTimeNullableFilter<"SiteRebuild"> | Date | string | null
     createdAt?: DateTimeFilter<"SiteRebuild"> | Date | string
     updatedAt?: DateTimeFilter<"SiteRebuild"> | Date | string
+  }
+
+  export type ContentRevisionUpsertWithWhereUniqueWithoutSiteInput = {
+    where: ContentRevisionWhereUniqueInput
+    update: XOR<ContentRevisionUpdateWithoutSiteInput, ContentRevisionUncheckedUpdateWithoutSiteInput>
+    create: XOR<ContentRevisionCreateWithoutSiteInput, ContentRevisionUncheckedCreateWithoutSiteInput>
+  }
+
+  export type ContentRevisionUpdateWithWhereUniqueWithoutSiteInput = {
+    where: ContentRevisionWhereUniqueInput
+    data: XOR<ContentRevisionUpdateWithoutSiteInput, ContentRevisionUncheckedUpdateWithoutSiteInput>
+  }
+
+  export type ContentRevisionUpdateManyWithWhereWithoutSiteInput = {
+    where: ContentRevisionScalarWhereInput
+    data: XOR<ContentRevisionUpdateManyMutationInput, ContentRevisionUncheckedUpdateManyWithoutSiteInput>
+  }
+
+  export type ContentRevisionScalarWhereInput = {
+    AND?: ContentRevisionScalarWhereInput | ContentRevisionScalarWhereInput[]
+    OR?: ContentRevisionScalarWhereInput[]
+    NOT?: ContentRevisionScalarWhereInput | ContentRevisionScalarWhereInput[]
+    id?: StringFilter<"ContentRevision"> | string
+    siteId?: StringFilter<"ContentRevision"> | string
+    entityType?: EnumContentEntityTypeFilter<"ContentRevision"> | $Enums.ContentEntityType
+    entityId?: StringFilter<"ContentRevision"> | string
+    entityRevision?: IntFilter<"ContentRevision"> | number
+    siteRevision?: IntFilter<"ContentRevision"> | number
+    action?: EnumContentRevisionActionFilter<"ContentRevision"> | $Enums.ContentRevisionAction
+    snapshot?: JsonFilter<"ContentRevision">
+    changedFields?: JsonFilter<"ContentRevision">
+    source?: StringFilter<"ContentRevision"> | string
+    actorId?: StringNullableFilter<"ContentRevision"> | string | null
+    createdAt?: DateTimeFilter<"ContentRevision"> | Date | string
+  }
+
+  export type SitePublicationUpsertWithWhereUniqueWithoutSiteInput = {
+    where: SitePublicationWhereUniqueInput
+    update: XOR<SitePublicationUpdateWithoutSiteInput, SitePublicationUncheckedUpdateWithoutSiteInput>
+    create: XOR<SitePublicationCreateWithoutSiteInput, SitePublicationUncheckedCreateWithoutSiteInput>
+  }
+
+  export type SitePublicationUpdateWithWhereUniqueWithoutSiteInput = {
+    where: SitePublicationWhereUniqueInput
+    data: XOR<SitePublicationUpdateWithoutSiteInput, SitePublicationUncheckedUpdateWithoutSiteInput>
+  }
+
+  export type SitePublicationUpdateManyWithWhereWithoutSiteInput = {
+    where: SitePublicationScalarWhereInput
+    data: XOR<SitePublicationUpdateManyMutationInput, SitePublicationUncheckedUpdateManyWithoutSiteInput>
+  }
+
+  export type SitePublicationScalarWhereInput = {
+    AND?: SitePublicationScalarWhereInput | SitePublicationScalarWhereInput[]
+    OR?: SitePublicationScalarWhereInput[]
+    NOT?: SitePublicationScalarWhereInput | SitePublicationScalarWhereInput[]
+    id?: StringFilter<"SitePublication"> | string
+    siteId?: StringFilter<"SitePublication"> | string
+    siteRevision?: IntFilter<"SitePublication"> | number
+    status?: EnumSitePublicationStatusFilter<"SitePublication"> | $Enums.SitePublicationStatus
+    catalog?: JsonFilter<"SitePublication">
+    triggerEntity?: StringFilter<"SitePublication"> | string
+    triggerEntityId?: StringFilter<"SitePublication"> | string
+    requestedById?: StringNullableFilter<"SitePublication"> | string | null
+    lastError?: StringNullableFilter<"SitePublication"> | string | null
+    providerDeploymentId?: StringNullableFilter<"SitePublication"> | string | null
+    providerResponse?: JsonNullableFilter<"SitePublication">
+    createdAt?: DateTimeFilter<"SitePublication"> | Date | string
+    updatedAt?: DateTimeFilter<"SitePublication"> | Date | string
+    publishedAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
+  }
+
+  export type AuditEventUpsertWithWhereUniqueWithoutSiteInput = {
+    where: AuditEventWhereUniqueInput
+    update: XOR<AuditEventUpdateWithoutSiteInput, AuditEventUncheckedUpdateWithoutSiteInput>
+    create: XOR<AuditEventCreateWithoutSiteInput, AuditEventUncheckedCreateWithoutSiteInput>
+  }
+
+  export type AuditEventUpdateWithWhereUniqueWithoutSiteInput = {
+    where: AuditEventWhereUniqueInput
+    data: XOR<AuditEventUpdateWithoutSiteInput, AuditEventUncheckedUpdateWithoutSiteInput>
+  }
+
+  export type AuditEventUpdateManyWithWhereWithoutSiteInput = {
+    where: AuditEventScalarWhereInput
+    data: XOR<AuditEventUpdateManyMutationInput, AuditEventUncheckedUpdateManyWithoutSiteInput>
+  }
+
+  export type AuditEventScalarWhereInput = {
+    AND?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
+    OR?: AuditEventScalarWhereInput[]
+    NOT?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
+    id?: StringFilter<"AuditEvent"> | string
+    siteId?: StringFilter<"AuditEvent"> | string
+    siteRevision?: IntFilter<"AuditEvent"> | number
+    entityType?: EnumContentEntityTypeFilter<"AuditEvent"> | $Enums.ContentEntityType
+    entityId?: StringFilter<"AuditEvent"> | string
+    action?: EnumContentRevisionActionFilter<"AuditEvent"> | $Enums.ContentRevisionAction
+    changedFields?: JsonFilter<"AuditEvent">
+    source?: StringFilter<"AuditEvent"> | string
+    actorId?: StringNullableFilter<"AuditEvent"> | string | null
+    createdAt?: DateTimeFilter<"AuditEvent"> | Date | string
   }
 
   export type SiteCreateWithoutRebuildsInput = {
@@ -37131,6 +43556,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutSitesInput
@@ -37141,6 +43568,9 @@ export namespace Prisma {
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutRebuildsInput = {
@@ -37151,6 +43581,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
@@ -37160,11 +43592,143 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutRebuildsInput = {
     where: SiteWhereUniqueInput
     create: XOR<SiteCreateWithoutRebuildsInput, SiteUncheckedCreateWithoutRebuildsInput>
+  }
+
+  export type SitePublicationCreateWithoutRequestedRebuildsInput = {
+    id?: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    site: SiteCreateNestedOneWithoutPublicationsInput
+    requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationUncheckedCreateWithoutRequestedRebuildsInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    requestedById?: string | null
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationCreateOrConnectWithoutRequestedRebuildsInput = {
+    where: SitePublicationWhereUniqueInput
+    create: XOR<SitePublicationCreateWithoutRequestedRebuildsInput, SitePublicationUncheckedCreateWithoutRequestedRebuildsInput>
+  }
+
+  export type SitePublicationCreateWithoutProcessingRebuildsInput = {
+    id?: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    site: SiteCreateNestedOneWithoutPublicationsInput
+    requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
+    publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationUncheckedCreateWithoutProcessingRebuildsInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    requestedById?: string | null
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput
+    publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationCreateOrConnectWithoutProcessingRebuildsInput = {
+    where: SitePublicationWhereUniqueInput
+    create: XOR<SitePublicationCreateWithoutProcessingRebuildsInput, SitePublicationUncheckedCreateWithoutProcessingRebuildsInput>
+  }
+
+  export type SitePublicationCreateWithoutPublishedRebuildsInput = {
+    id?: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    site: SiteCreateNestedOneWithoutPublicationsInput
+    requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
+  }
+
+  export type SitePublicationUncheckedCreateWithoutPublishedRebuildsInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    requestedById?: string | null
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
+  }
+
+  export type SitePublicationCreateOrConnectWithoutPublishedRebuildsInput = {
+    where: SitePublicationWhereUniqueInput
+    create: XOR<SitePublicationCreateWithoutPublishedRebuildsInput, SitePublicationUncheckedCreateWithoutPublishedRebuildsInput>
   }
 
   export type SiteUpsertWithoutRebuildsInput = {
@@ -37185,6 +43749,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
@@ -37195,6 +43761,9 @@ export namespace Prisma {
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutRebuildsInput = {
@@ -37205,6 +43774,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
@@ -37214,6 +43785,930 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+  }
+
+  export type SitePublicationUpsertWithoutRequestedRebuildsInput = {
+    update: XOR<SitePublicationUpdateWithoutRequestedRebuildsInput, SitePublicationUncheckedUpdateWithoutRequestedRebuildsInput>
+    create: XOR<SitePublicationCreateWithoutRequestedRebuildsInput, SitePublicationUncheckedCreateWithoutRequestedRebuildsInput>
+    where?: SitePublicationWhereInput
+  }
+
+  export type SitePublicationUpdateToOneWithWhereWithoutRequestedRebuildsInput = {
+    where?: SitePublicationWhereInput
+    data: XOR<SitePublicationUpdateWithoutRequestedRebuildsInput, SitePublicationUncheckedUpdateWithoutRequestedRebuildsInput>
+  }
+
+  export type SitePublicationUpdateWithoutRequestedRebuildsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
+    requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
+  export type SitePublicationUncheckedUpdateWithoutRequestedRebuildsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
+  export type SitePublicationUpsertWithoutProcessingRebuildsInput = {
+    update: XOR<SitePublicationUpdateWithoutProcessingRebuildsInput, SitePublicationUncheckedUpdateWithoutProcessingRebuildsInput>
+    create: XOR<SitePublicationCreateWithoutProcessingRebuildsInput, SitePublicationUncheckedCreateWithoutProcessingRebuildsInput>
+    where?: SitePublicationWhereInput
+  }
+
+  export type SitePublicationUpdateToOneWithWhereWithoutProcessingRebuildsInput = {
+    where?: SitePublicationWhereInput
+    data: XOR<SitePublicationUpdateWithoutProcessingRebuildsInput, SitePublicationUncheckedUpdateWithoutProcessingRebuildsInput>
+  }
+
+  export type SitePublicationUpdateWithoutProcessingRebuildsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
+    requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
+  export type SitePublicationUncheckedUpdateWithoutProcessingRebuildsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
+  export type SitePublicationUpsertWithoutPublishedRebuildsInput = {
+    update: XOR<SitePublicationUpdateWithoutPublishedRebuildsInput, SitePublicationUncheckedUpdateWithoutPublishedRebuildsInput>
+    create: XOR<SitePublicationCreateWithoutPublishedRebuildsInput, SitePublicationUncheckedCreateWithoutPublishedRebuildsInput>
+    where?: SitePublicationWhereInput
+  }
+
+  export type SitePublicationUpdateToOneWithWhereWithoutPublishedRebuildsInput = {
+    where?: SitePublicationWhereInput
+    data: XOR<SitePublicationUpdateWithoutPublishedRebuildsInput, SitePublicationUncheckedUpdateWithoutPublishedRebuildsInput>
+  }
+
+  export type SitePublicationUpdateWithoutPublishedRebuildsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
+    requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
+  }
+
+  export type SitePublicationUncheckedUpdateWithoutPublishedRebuildsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
+  }
+
+  export type SiteCreateWithoutContentRevisionsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    provider: ProviderCreateNestedOneWithoutSitesInput
+    regions?: RegionCreateNestedManyWithoutSiteInput
+    cities?: CityCreateNestedManyWithoutSiteInput
+    pages?: PageCreateNestedManyWithoutSiteInput
+    leads?: LeadCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckCreateNestedManyWithoutSiteInput
+    redirects?: RedirectCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteUncheckedCreateWithoutContentRevisionsInput = {
+    id?: string
+    providerId: string
+    name: string
+    slug: string
+    domain?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
+    cities?: CityUncheckedCreateNestedManyWithoutSiteInput
+    pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
+    redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteCreateOrConnectWithoutContentRevisionsInput = {
+    where: SiteWhereUniqueInput
+    create: XOR<SiteCreateWithoutContentRevisionsInput, SiteUncheckedCreateWithoutContentRevisionsInput>
+  }
+
+  export type UserCreateWithoutContentRevisionsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+  }
+
+  export type UserUncheckedCreateWithoutContentRevisionsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+  }
+
+  export type UserCreateOrConnectWithoutContentRevisionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutContentRevisionsInput, UserUncheckedCreateWithoutContentRevisionsInput>
+  }
+
+  export type SiteUpsertWithoutContentRevisionsInput = {
+    update: XOR<SiteUpdateWithoutContentRevisionsInput, SiteUncheckedUpdateWithoutContentRevisionsInput>
+    create: XOR<SiteCreateWithoutContentRevisionsInput, SiteUncheckedCreateWithoutContentRevisionsInput>
+    where?: SiteWhereInput
+  }
+
+  export type SiteUpdateToOneWithWhereWithoutContentRevisionsInput = {
+    where?: SiteWhereInput
+    data: XOR<SiteUpdateWithoutContentRevisionsInput, SiteUncheckedUpdateWithoutContentRevisionsInput>
+  }
+
+  export type SiteUpdateWithoutContentRevisionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
+    regions?: RegionUpdateManyWithoutSiteNestedInput
+    cities?: CityUpdateManyWithoutSiteNestedInput
+    pages?: PageUpdateManyWithoutSiteNestedInput
+    leads?: LeadUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+  }
+
+  export type SiteUncheckedUpdateWithoutContentRevisionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
+    cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
+    pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+  }
+
+  export type UserUpsertWithoutContentRevisionsInput = {
+    update: XOR<UserUpdateWithoutContentRevisionsInput, UserUncheckedUpdateWithoutContentRevisionsInput>
+    create: XOR<UserCreateWithoutContentRevisionsInput, UserUncheckedCreateWithoutContentRevisionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutContentRevisionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutContentRevisionsInput, UserUncheckedUpdateWithoutContentRevisionsInput>
+  }
+
+  export type UserUpdateWithoutContentRevisionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutContentRevisionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  }
+
+  export type SiteCreateWithoutPublicationsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    provider: ProviderCreateNestedOneWithoutSitesInput
+    regions?: RegionCreateNestedManyWithoutSiteInput
+    cities?: CityCreateNestedManyWithoutSiteInput
+    pages?: PageCreateNestedManyWithoutSiteInput
+    leads?: LeadCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckCreateNestedManyWithoutSiteInput
+    redirects?: RedirectCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteUncheckedCreateWithoutPublicationsInput = {
+    id?: string
+    providerId: string
+    name: string
+    slug: string
+    domain?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
+    cities?: CityUncheckedCreateNestedManyWithoutSiteInput
+    pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
+    redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteCreateOrConnectWithoutPublicationsInput = {
+    where: SiteWhereUniqueInput
+    create: XOR<SiteCreateWithoutPublicationsInput, SiteUncheckedCreateWithoutPublicationsInput>
+  }
+
+  export type UserCreateWithoutPublicationsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
+    auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+  }
+
+  export type UserUncheckedCreateWithoutPublicationsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+  }
+
+  export type UserCreateOrConnectWithoutPublicationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPublicationsInput, UserUncheckedCreateWithoutPublicationsInput>
+  }
+
+  export type SiteRebuildCreateWithoutRequestedPublicationInput = {
+    id?: string
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site?: SiteCreateNestedOneWithoutRebuildsInput
+    processingPublication?: SitePublicationCreateNestedOneWithoutProcessingRebuildsInput
+    publishedPublication?: SitePublicationCreateNestedOneWithoutPublishedRebuildsInput
+  }
+
+  export type SiteRebuildUncheckedCreateWithoutRequestedPublicationInput = {
+    id?: string
+    siteId?: string | null
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    processingPublicationId?: string | null
+    publishedPublicationId?: string | null
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SiteRebuildCreateOrConnectWithoutRequestedPublicationInput = {
+    where: SiteRebuildWhereUniqueInput
+    create: XOR<SiteRebuildCreateWithoutRequestedPublicationInput, SiteRebuildUncheckedCreateWithoutRequestedPublicationInput>
+  }
+
+  export type SiteRebuildCreateManyRequestedPublicationInputEnvelope = {
+    data: SiteRebuildCreateManyRequestedPublicationInput | SiteRebuildCreateManyRequestedPublicationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SiteRebuildCreateWithoutProcessingPublicationInput = {
+    id?: string
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site?: SiteCreateNestedOneWithoutRebuildsInput
+    requestedPublication?: SitePublicationCreateNestedOneWithoutRequestedRebuildsInput
+    publishedPublication?: SitePublicationCreateNestedOneWithoutPublishedRebuildsInput
+  }
+
+  export type SiteRebuildUncheckedCreateWithoutProcessingPublicationInput = {
+    id?: string
+    siteId?: string | null
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: string | null
+    publishedPublicationId?: string | null
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SiteRebuildCreateOrConnectWithoutProcessingPublicationInput = {
+    where: SiteRebuildWhereUniqueInput
+    create: XOR<SiteRebuildCreateWithoutProcessingPublicationInput, SiteRebuildUncheckedCreateWithoutProcessingPublicationInput>
+  }
+
+  export type SiteRebuildCreateManyProcessingPublicationInputEnvelope = {
+    data: SiteRebuildCreateManyProcessingPublicationInput | SiteRebuildCreateManyProcessingPublicationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SiteRebuildCreateWithoutPublishedPublicationInput = {
+    id?: string
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site?: SiteCreateNestedOneWithoutRebuildsInput
+    requestedPublication?: SitePublicationCreateNestedOneWithoutRequestedRebuildsInput
+    processingPublication?: SitePublicationCreateNestedOneWithoutProcessingRebuildsInput
+  }
+
+  export type SiteRebuildUncheckedCreateWithoutPublishedPublicationInput = {
+    id?: string
+    siteId?: string | null
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: string | null
+    processingPublicationId?: string | null
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SiteRebuildCreateOrConnectWithoutPublishedPublicationInput = {
+    where: SiteRebuildWhereUniqueInput
+    create: XOR<SiteRebuildCreateWithoutPublishedPublicationInput, SiteRebuildUncheckedCreateWithoutPublishedPublicationInput>
+  }
+
+  export type SiteRebuildCreateManyPublishedPublicationInputEnvelope = {
+    data: SiteRebuildCreateManyPublishedPublicationInput | SiteRebuildCreateManyPublishedPublicationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SiteUpsertWithoutPublicationsInput = {
+    update: XOR<SiteUpdateWithoutPublicationsInput, SiteUncheckedUpdateWithoutPublicationsInput>
+    create: XOR<SiteCreateWithoutPublicationsInput, SiteUncheckedCreateWithoutPublicationsInput>
+    where?: SiteWhereInput
+  }
+
+  export type SiteUpdateToOneWithWhereWithoutPublicationsInput = {
+    where?: SiteWhereInput
+    data: XOR<SiteUpdateWithoutPublicationsInput, SiteUncheckedUpdateWithoutPublicationsInput>
+  }
+
+  export type SiteUpdateWithoutPublicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
+    regions?: RegionUpdateManyWithoutSiteNestedInput
+    cities?: CityUpdateManyWithoutSiteNestedInput
+    pages?: PageUpdateManyWithoutSiteNestedInput
+    leads?: LeadUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+  }
+
+  export type SiteUncheckedUpdateWithoutPublicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
+    cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
+    pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+  }
+
+  export type UserUpsertWithoutPublicationsInput = {
+    update: XOR<UserUpdateWithoutPublicationsInput, UserUncheckedUpdateWithoutPublicationsInput>
+    create: XOR<UserCreateWithoutPublicationsInput, UserUncheckedCreateWithoutPublicationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPublicationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPublicationsInput, UserUncheckedUpdateWithoutPublicationsInput>
+  }
+
+  export type UserUpdateWithoutPublicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPublicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  }
+
+  export type SiteRebuildUpsertWithWhereUniqueWithoutRequestedPublicationInput = {
+    where: SiteRebuildWhereUniqueInput
+    update: XOR<SiteRebuildUpdateWithoutRequestedPublicationInput, SiteRebuildUncheckedUpdateWithoutRequestedPublicationInput>
+    create: XOR<SiteRebuildCreateWithoutRequestedPublicationInput, SiteRebuildUncheckedCreateWithoutRequestedPublicationInput>
+  }
+
+  export type SiteRebuildUpdateWithWhereUniqueWithoutRequestedPublicationInput = {
+    where: SiteRebuildWhereUniqueInput
+    data: XOR<SiteRebuildUpdateWithoutRequestedPublicationInput, SiteRebuildUncheckedUpdateWithoutRequestedPublicationInput>
+  }
+
+  export type SiteRebuildUpdateManyWithWhereWithoutRequestedPublicationInput = {
+    where: SiteRebuildScalarWhereInput
+    data: XOR<SiteRebuildUpdateManyMutationInput, SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationInput>
+  }
+
+  export type SiteRebuildUpsertWithWhereUniqueWithoutProcessingPublicationInput = {
+    where: SiteRebuildWhereUniqueInput
+    update: XOR<SiteRebuildUpdateWithoutProcessingPublicationInput, SiteRebuildUncheckedUpdateWithoutProcessingPublicationInput>
+    create: XOR<SiteRebuildCreateWithoutProcessingPublicationInput, SiteRebuildUncheckedCreateWithoutProcessingPublicationInput>
+  }
+
+  export type SiteRebuildUpdateWithWhereUniqueWithoutProcessingPublicationInput = {
+    where: SiteRebuildWhereUniqueInput
+    data: XOR<SiteRebuildUpdateWithoutProcessingPublicationInput, SiteRebuildUncheckedUpdateWithoutProcessingPublicationInput>
+  }
+
+  export type SiteRebuildUpdateManyWithWhereWithoutProcessingPublicationInput = {
+    where: SiteRebuildScalarWhereInput
+    data: XOR<SiteRebuildUpdateManyMutationInput, SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationInput>
+  }
+
+  export type SiteRebuildUpsertWithWhereUniqueWithoutPublishedPublicationInput = {
+    where: SiteRebuildWhereUniqueInput
+    update: XOR<SiteRebuildUpdateWithoutPublishedPublicationInput, SiteRebuildUncheckedUpdateWithoutPublishedPublicationInput>
+    create: XOR<SiteRebuildCreateWithoutPublishedPublicationInput, SiteRebuildUncheckedCreateWithoutPublishedPublicationInput>
+  }
+
+  export type SiteRebuildUpdateWithWhereUniqueWithoutPublishedPublicationInput = {
+    where: SiteRebuildWhereUniqueInput
+    data: XOR<SiteRebuildUpdateWithoutPublishedPublicationInput, SiteRebuildUncheckedUpdateWithoutPublishedPublicationInput>
+  }
+
+  export type SiteRebuildUpdateManyWithWhereWithoutPublishedPublicationInput = {
+    where: SiteRebuildScalarWhereInput
+    data: XOR<SiteRebuildUpdateManyMutationInput, SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationInput>
+  }
+
+  export type SiteCreateWithoutAuditEventsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    provider: ProviderCreateNestedOneWithoutSitesInput
+    regions?: RegionCreateNestedManyWithoutSiteInput
+    cities?: CityCreateNestedManyWithoutSiteInput
+    pages?: PageCreateNestedManyWithoutSiteInput
+    leads?: LeadCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckCreateNestedManyWithoutSiteInput
+    redirects?: RedirectCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteUncheckedCreateWithoutAuditEventsInput = {
+    id?: string
+    providerId: string
+    name: string
+    slug: string
+    domain?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
+    cities?: CityUncheckedCreateNestedManyWithoutSiteInput
+    pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
+    redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteCreateOrConnectWithoutAuditEventsInput = {
+    where: SiteWhereUniqueInput
+    create: XOR<SiteCreateWithoutAuditEventsInput, SiteUncheckedCreateWithoutAuditEventsInput>
+  }
+
+  export type UserCreateWithoutAuditEventsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
+    publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+  }
+
+  export type UserUncheckedCreateWithoutAuditEventsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+  }
+
+  export type UserCreateOrConnectWithoutAuditEventsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAuditEventsInput, UserUncheckedCreateWithoutAuditEventsInput>
+  }
+
+  export type SiteUpsertWithoutAuditEventsInput = {
+    update: XOR<SiteUpdateWithoutAuditEventsInput, SiteUncheckedUpdateWithoutAuditEventsInput>
+    create: XOR<SiteCreateWithoutAuditEventsInput, SiteUncheckedCreateWithoutAuditEventsInput>
+    where?: SiteWhereInput
+  }
+
+  export type SiteUpdateToOneWithWhereWithoutAuditEventsInput = {
+    where?: SiteWhereInput
+    data: XOR<SiteUpdateWithoutAuditEventsInput, SiteUncheckedUpdateWithoutAuditEventsInput>
+  }
+
+  export type SiteUpdateWithoutAuditEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
+    regions?: RegionUpdateManyWithoutSiteNestedInput
+    cities?: CityUpdateManyWithoutSiteNestedInput
+    pages?: PageUpdateManyWithoutSiteNestedInput
+    leads?: LeadUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+  }
+
+  export type SiteUncheckedUpdateWithoutAuditEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
+    cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
+    pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+  }
+
+  export type UserUpsertWithoutAuditEventsInput = {
+    update: XOR<UserUpdateWithoutAuditEventsInput, UserUncheckedUpdateWithoutAuditEventsInput>
+    create: XOR<UserCreateWithoutAuditEventsInput, UserUncheckedCreateWithoutAuditEventsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAuditEventsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAuditEventsInput, UserUncheckedUpdateWithoutAuditEventsInput>
+  }
+
+  export type UserUpdateWithoutAuditEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAuditEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
   }
 
   export type SiteCreateWithoutRegionsInput = {
@@ -37223,6 +44718,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutSitesInput
@@ -37233,6 +44730,9 @@ export namespace Prisma {
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutRegionsInput = {
@@ -37243,6 +44743,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
@@ -37252,6 +44754,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutRegionsInput = {
@@ -37333,6 +44838,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
@@ -37343,6 +44850,9 @@ export namespace Prisma {
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutRegionsInput = {
@@ -37353,6 +44863,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
@@ -37362,6 +44874,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithWhereUniqueWithoutRegionInput = {
@@ -37387,6 +44902,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutSitesInput
@@ -37397,6 +44914,9 @@ export namespace Prisma {
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutCitiesInput = {
@@ -37407,6 +44927,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
@@ -37416,6 +44938,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutCitiesInput = {
@@ -37722,6 +45247,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
@@ -37732,6 +45259,9 @@ export namespace Prisma {
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutCitiesInput = {
@@ -37742,6 +45272,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
@@ -37751,6 +45283,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type RegionUpsertWithoutCitiesInput = {
@@ -37869,6 +45404,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutSitesInput
@@ -37879,6 +45416,9 @@ export namespace Prisma {
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutPagesInput = {
@@ -37889,6 +45429,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
@@ -37898,6 +45440,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutPagesInput = {
@@ -38126,6 +45671,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
@@ -38136,6 +45683,9 @@ export namespace Prisma {
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutPagesInput = {
@@ -38146,6 +45696,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
@@ -38155,6 +45707,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutPagesInput = {
@@ -38702,6 +46257,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutSitesInput
@@ -38712,6 +46269,9 @@ export namespace Prisma {
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutCityImportsInput = {
@@ -38722,6 +46282,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
@@ -38731,6 +46293,9 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutCityImportsInput = {
@@ -38756,6 +46321,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
@@ -38766,6 +46333,9 @@ export namespace Prisma {
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutCityImportsInput = {
@@ -38776,6 +46346,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
@@ -38785,6 +46357,9 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteCreateWithoutChecksInput = {
@@ -38794,6 +46369,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutSitesInput
@@ -38804,6 +46381,9 @@ export namespace Prisma {
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutChecksInput = {
@@ -38814,6 +46394,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
@@ -38823,6 +46405,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutChecksInput = {
@@ -39024,6 +46609,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
@@ -39034,6 +46621,9 @@ export namespace Prisma {
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutChecksInput = {
@@ -39044,6 +46634,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
@@ -39053,6 +46645,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutChecksInput = {
@@ -39178,6 +46773,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutSitesInput
@@ -39188,6 +46785,9 @@ export namespace Prisma {
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutLeadsInput = {
@@ -39198,6 +46798,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
@@ -39207,6 +46809,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutLeadsInput = {
@@ -39728,6 +47333,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
@@ -39738,6 +47345,9 @@ export namespace Prisma {
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutLeadsInput = {
@@ -39748,6 +47358,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
@@ -39757,6 +47369,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutLeadsInput = {
@@ -40916,6 +48531,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutSitesInput
@@ -40926,6 +48543,9 @@ export namespace Prisma {
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutRedirectsInput = {
@@ -40936,6 +48556,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
@@ -40945,6 +48567,9 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutRedirectsInput = {
@@ -41021,6 +48646,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
@@ -41031,6 +48658,9 @@ export namespace Prisma {
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutRedirectsInput = {
@@ -41041,6 +48671,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
@@ -41050,6 +48682,9 @@ export namespace Prisma {
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutRedirectsInput = {
@@ -41305,6 +48940,126 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ContentRevisionCreateWithoutActorInput = {
+    id?: string
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    entityRevision: number
+    siteRevision: number
+    action: $Enums.ContentRevisionAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    createdAt?: Date | string
+    site: SiteCreateNestedOneWithoutContentRevisionsInput
+  }
+
+  export type ContentRevisionUncheckedCreateWithoutActorInput = {
+    id?: string
+    siteId: string
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    entityRevision: number
+    siteRevision: number
+    action: $Enums.ContentRevisionAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    createdAt?: Date | string
+  }
+
+  export type ContentRevisionCreateOrConnectWithoutActorInput = {
+    where: ContentRevisionWhereUniqueInput
+    create: XOR<ContentRevisionCreateWithoutActorInput, ContentRevisionUncheckedCreateWithoutActorInput>
+  }
+
+  export type ContentRevisionCreateManyActorInputEnvelope = {
+    data: ContentRevisionCreateManyActorInput | ContentRevisionCreateManyActorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SitePublicationCreateWithoutRequestedByInput = {
+    id?: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    site: SiteCreateNestedOneWithoutPublicationsInput
+    requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationUncheckedCreateWithoutRequestedByInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationCreateOrConnectWithoutRequestedByInput = {
+    where: SitePublicationWhereUniqueInput
+    create: XOR<SitePublicationCreateWithoutRequestedByInput, SitePublicationUncheckedCreateWithoutRequestedByInput>
+  }
+
+  export type SitePublicationCreateManyRequestedByInputEnvelope = {
+    data: SitePublicationCreateManyRequestedByInput | SitePublicationCreateManyRequestedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AuditEventCreateWithoutActorInput = {
+    id?: string
+    siteRevision: number
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    action: $Enums.ContentRevisionAction
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    createdAt?: Date | string
+    site: SiteCreateNestedOneWithoutAuditEventsInput
+  }
+
+  export type AuditEventUncheckedCreateWithoutActorInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    action: $Enums.ContentRevisionAction
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    createdAt?: Date | string
+  }
+
+  export type AuditEventCreateOrConnectWithoutActorInput = {
+    where: AuditEventWhereUniqueInput
+    create: XOR<AuditEventCreateWithoutActorInput, AuditEventUncheckedCreateWithoutActorInput>
+  }
+
+  export type AuditEventCreateManyActorInputEnvelope = {
+    data: AuditEventCreateManyActorInput | AuditEventCreateManyActorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
     where: SessionWhereUniqueInput
     update: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
@@ -41332,6 +49087,54 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Session"> | Date | string
   }
 
+  export type ContentRevisionUpsertWithWhereUniqueWithoutActorInput = {
+    where: ContentRevisionWhereUniqueInput
+    update: XOR<ContentRevisionUpdateWithoutActorInput, ContentRevisionUncheckedUpdateWithoutActorInput>
+    create: XOR<ContentRevisionCreateWithoutActorInput, ContentRevisionUncheckedCreateWithoutActorInput>
+  }
+
+  export type ContentRevisionUpdateWithWhereUniqueWithoutActorInput = {
+    where: ContentRevisionWhereUniqueInput
+    data: XOR<ContentRevisionUpdateWithoutActorInput, ContentRevisionUncheckedUpdateWithoutActorInput>
+  }
+
+  export type ContentRevisionUpdateManyWithWhereWithoutActorInput = {
+    where: ContentRevisionScalarWhereInput
+    data: XOR<ContentRevisionUpdateManyMutationInput, ContentRevisionUncheckedUpdateManyWithoutActorInput>
+  }
+
+  export type SitePublicationUpsertWithWhereUniqueWithoutRequestedByInput = {
+    where: SitePublicationWhereUniqueInput
+    update: XOR<SitePublicationUpdateWithoutRequestedByInput, SitePublicationUncheckedUpdateWithoutRequestedByInput>
+    create: XOR<SitePublicationCreateWithoutRequestedByInput, SitePublicationUncheckedCreateWithoutRequestedByInput>
+  }
+
+  export type SitePublicationUpdateWithWhereUniqueWithoutRequestedByInput = {
+    where: SitePublicationWhereUniqueInput
+    data: XOR<SitePublicationUpdateWithoutRequestedByInput, SitePublicationUncheckedUpdateWithoutRequestedByInput>
+  }
+
+  export type SitePublicationUpdateManyWithWhereWithoutRequestedByInput = {
+    where: SitePublicationScalarWhereInput
+    data: XOR<SitePublicationUpdateManyMutationInput, SitePublicationUncheckedUpdateManyWithoutRequestedByInput>
+  }
+
+  export type AuditEventUpsertWithWhereUniqueWithoutActorInput = {
+    where: AuditEventWhereUniqueInput
+    update: XOR<AuditEventUpdateWithoutActorInput, AuditEventUncheckedUpdateWithoutActorInput>
+    create: XOR<AuditEventCreateWithoutActorInput, AuditEventUncheckedCreateWithoutActorInput>
+  }
+
+  export type AuditEventUpdateWithWhereUniqueWithoutActorInput = {
+    where: AuditEventWhereUniqueInput
+    data: XOR<AuditEventUpdateWithoutActorInput, AuditEventUncheckedUpdateWithoutActorInput>
+  }
+
+  export type AuditEventUpdateManyWithWhereWithoutActorInput = {
+    where: AuditEventScalarWhereInput
+    data: XOR<AuditEventUpdateManyMutationInput, AuditEventUncheckedUpdateManyWithoutActorInput>
+  }
+
   export type UserCreateWithoutSessionsInput = {
     id?: string
     email: string
@@ -41340,6 +49143,9 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
+    publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -41350,6 +49156,9 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -41376,6 +49185,9 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -41386,6 +49198,9 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type SiteCreateManyProviderInput = {
@@ -41395,6 +49210,8 @@ export namespace Prisma {
     domain?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -41441,6 +49258,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUpdateManyWithoutSiteNestedInput
@@ -41451,6 +49270,9 @@ export namespace Prisma {
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutProviderInput = {
@@ -41460,6 +49282,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
@@ -41470,6 +49294,9 @@ export namespace Prisma {
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateManyWithoutProviderInput = {
@@ -41479,6 +49306,8 @@ export namespace Prisma {
     domain?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41716,11 +49545,56 @@ export namespace Prisma {
     providerStatus?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: string | null
+    processingPublicationId?: string | null
+    publishedPublicationId?: string | null
     queuedAt?: Date | string | null
     startedAt?: Date | string | null
     completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type ContentRevisionCreateManySiteInput = {
+    id?: string
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    entityRevision: number
+    siteRevision: number
+    action: $Enums.ContentRevisionAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    actorId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SitePublicationCreateManySiteInput = {
+    id?: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    requestedById?: string | null
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+  }
+
+  export type AuditEventCreateManySiteInput = {
+    id?: string
+    siteRevision: number
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    action: $Enums.ContentRevisionAction
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    actorId?: string | null
+    createdAt?: Date | string
   }
 
   export type RegionUpdateWithoutSiteInput = {
@@ -42106,6 +49980,9 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    requestedPublication?: SitePublicationUpdateOneWithoutRequestedRebuildsNestedInput
+    processingPublication?: SitePublicationUpdateOneWithoutProcessingRebuildsNestedInput
+    publishedPublication?: SitePublicationUpdateOneWithoutPublishedRebuildsNestedInput
   }
 
   export type SiteRebuildUncheckedUpdateWithoutSiteInput = {
@@ -42124,6 +50001,9 @@ export namespace Prisma {
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    processingPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
     queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -42147,6 +50027,453 @@ export namespace Prisma {
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    processingPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentRevisionUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    entityRevision?: IntFieldUpdateOperationsInput | number
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    actor?: UserUpdateOneWithoutContentRevisionsNestedInput
+  }
+
+  export type ContentRevisionUncheckedUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    entityRevision?: IntFieldUpdateOperationsInput | number
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentRevisionUncheckedUpdateManyWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    entityRevision?: IntFieldUpdateOperationsInput | number
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SitePublicationUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
+  export type SitePublicationUncheckedUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
+  export type SitePublicationUncheckedUpdateManyWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AuditEventUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    actor?: UserUpdateOneWithoutAuditEventsNestedInput
+  }
+
+  export type AuditEventUncheckedUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditEventUncheckedUpdateManyWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SiteRebuildCreateManyRequestedPublicationInput = {
+    id?: string
+    siteId?: string | null
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    processingPublicationId?: string | null
+    publishedPublicationId?: string | null
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SiteRebuildCreateManyProcessingPublicationInput = {
+    id?: string
+    siteId?: string | null
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: string | null
+    publishedPublicationId?: string | null
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SiteRebuildCreateManyPublishedPublicationInput = {
+    id?: string
+    siteId?: string | null
+    dedupeKey: string
+    status?: $Enums.SiteRebuildStatus
+    triggerEntity: string
+    triggerEntityId: string
+    affectedPaths: JsonNullValueInput | InputJsonValue
+    requestedRevision?: number
+    processingRevision?: number
+    publishedRevision?: number
+    attempts?: number
+    maxAttempts?: number
+    lastError?: string | null
+    providerStatus?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: string | null
+    processingPublicationId?: string | null
+    queuedAt?: Date | string | null
+    startedAt?: Date | string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SiteRebuildUpdateWithoutRequestedPublicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneWithoutRebuildsNestedInput
+    processingPublication?: SitePublicationUpdateOneWithoutProcessingRebuildsNestedInput
+    publishedPublication?: SitePublicationUpdateOneWithoutPublishedRebuildsNestedInput
+  }
+
+  export type SiteRebuildUncheckedUpdateWithoutRequestedPublicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    processingPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    processingPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SiteRebuildUpdateWithoutProcessingPublicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneWithoutRebuildsNestedInput
+    requestedPublication?: SitePublicationUpdateOneWithoutRequestedRebuildsNestedInput
+    publishedPublication?: SitePublicationUpdateOneWithoutPublishedRebuildsNestedInput
+  }
+
+  export type SiteRebuildUncheckedUpdateWithoutProcessingPublicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SiteRebuildUpdateWithoutPublishedPublicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneWithoutRebuildsNestedInput
+    requestedPublication?: SitePublicationUpdateOneWithoutRequestedRebuildsNestedInput
+    processingPublication?: SitePublicationUpdateOneWithoutProcessingRebuildsNestedInput
+  }
+
+  export type SiteRebuildUncheckedUpdateWithoutPublishedPublicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    processingPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: NullableStringFieldUpdateOperationsInput | string | null
+    dedupeKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumSiteRebuildStatusFieldUpdateOperationsInput | $Enums.SiteRebuildStatus
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    affectedPaths?: JsonNullValueInput | InputJsonValue
+    requestedRevision?: IntFieldUpdateOperationsInput | number
+    processingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    attempts?: IntFieldUpdateOperationsInput | number
+    maxAttempts?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    requestedPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
+    processingPublicationId?: NullableStringFieldUpdateOperationsInput | string | null
     queuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -43451,6 +51778,48 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type ContentRevisionCreateManyActorInput = {
+    id?: string
+    siteId: string
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    entityRevision: number
+    siteRevision: number
+    action: $Enums.ContentRevisionAction
+    snapshot: JsonNullValueInput | InputJsonValue
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    createdAt?: Date | string
+  }
+
+  export type SitePublicationCreateManyRequestedByInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+  }
+
+  export type AuditEventCreateManyActorInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    entityType: $Enums.ContentEntityType
+    entityId: string
+    action: $Enums.ContentRevisionAction
+    changedFields: JsonNullValueInput | InputJsonValue
+    source: string
+    createdAt?: Date | string
+  }
+
   export type SessionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     tokenHash?: StringFieldUpdateOperationsInput | string
@@ -43469,6 +51838,138 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     tokenHash?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentRevisionUpdateWithoutActorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    entityRevision?: IntFieldUpdateOperationsInput | number
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutContentRevisionsNestedInput
+  }
+
+  export type ContentRevisionUncheckedUpdateWithoutActorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    entityRevision?: IntFieldUpdateOperationsInput | number
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentRevisionUncheckedUpdateManyWithoutActorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    entityRevision?: IntFieldUpdateOperationsInput | number
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    snapshot?: JsonNullValueInput | InputJsonValue
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SitePublicationUpdateWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
+    requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
+  export type SitePublicationUncheckedUpdateWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
+  export type SitePublicationUncheckedUpdateManyWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AuditEventUpdateWithoutActorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutAuditEventsNestedInput
+  }
+
+  export type AuditEventUncheckedUpdateWithoutActorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditEventUncheckedUpdateManyWithoutActorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    entityType?: EnumContentEntityTypeFieldUpdateOperationsInput | $Enums.ContentEntityType
+    entityId?: StringFieldUpdateOperationsInput | string
+    action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    changedFields?: JsonNullValueInput | InputJsonValue
+    source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

@@ -6,6 +6,7 @@ function fixture(initial = {}) {
   let record = initial.record || null;
   const updates = [];
   const queueCalls = [];
+  const publicationCalls = [];
   const siteRebuild = {
     findUnique: async () => record,
     findMany: async () => record ? [record] : [],
@@ -43,7 +44,12 @@ function fixture(initial = {}) {
       return { count: 1 };
     },
   };
-  const service = new RebuildQueueService({ siteRebuild });
+  const publicationWorkflow = {
+    markRunning: async (publicationId) => publicationCalls.push(['running', publicationId]),
+    markSucceeded: async (publicationId, result) => publicationCalls.push(['succeeded', publicationId, result]),
+    markFailed: async (publicationId, error) => publicationCalls.push(['failed', publicationId, error]),
+  };
+  const service = new RebuildQueueService({ siteRebuild }, publicationWorkflow);
   service.queue = {
     add: async (...args) => {
       queueCalls.push(args);
@@ -52,8 +58,68 @@ function fixture(initial = {}) {
     close: async () => {},
   };
   service.redis = { quit: async () => {} };
-  return { service, queueCalls, updates, getRecord: () => record };
+  return { service, queueCalls, updates, publicationCalls, getRecord: () => record };
 }
+
+test('rebuild keeps requested and processing publication snapshots separate', async () => {
+  const f = fixture();
+
+  await f.service.enqueue({ entity: 'tariff', id: 'tariff-1', siteId: 'site-1', publicationId: 'publication-1' });
+  const started = await f.service.startAttempt('rebuild-1', 1, 3);
+  await f.service.enqueue({ entity: 'tariff', id: 'tariff-1', siteId: 'site-1', publicationId: 'publication-2' });
+
+  assert.equal(started.publicationId, 'publication-1');
+  assert.equal(f.getRecord().processingPublicationId, 'publication-1');
+  assert.equal(f.getRecord().requestedPublicationId, 'publication-2');
+  assert.deepEqual(f.publicationCalls, [['running', 'publication-1']]);
+});
+
+test('a legacy rebuild clears stale publication pointers from an earlier snapshot build', async () => {
+  const f = fixture({
+    record: {
+      id: 'rebuild-1', dedupeKey: 'site:site-1', siteId: 'site-1', status: 'SUCCEEDED', affectedPaths: ['/*'],
+      requestedRevision: 1, processingRevision: 1, publishedRevision: 1, attempts: 1, maxAttempts: 3,
+      requestedPublicationId: 'publication-old', processingPublicationId: 'publication-old', publishedPublicationId: 'publication-old',
+    },
+  });
+
+  await f.service.enqueue({ entity: 'page', id: 'page-1', siteId: 'site-1' });
+  const started = await f.service.startAttempt('rebuild-1', 1, 3);
+
+  assert.equal(f.getRecord().requestedPublicationId, null);
+  assert.equal(f.getRecord().processingPublicationId, null);
+  assert.equal(started.publicationId, null);
+  assert.deepEqual(f.publicationCalls, []);
+});
+
+test('successful rebuild publishes only its processing snapshot', async () => {
+  const f = fixture({
+    record: {
+      id: 'rebuild-1', dedupeKey: 'site:site-1', siteId: 'site-1', status: 'RUNNING', affectedPaths: ['/*'],
+      requestedRevision: 2, processingRevision: 1, publishedRevision: 0, attempts: 1, maxAttempts: 3,
+      requestedPublicationId: 'publication-2', processingPublicationId: 'publication-1', publishedPublicationId: null,
+    },
+  });
+
+  await f.service.finishSuccessfulRevision('rebuild-1', 1, { status: 'SUCCEEDED', deploymentId: 'deploy-1' });
+
+  assert.equal(f.getRecord().publishedPublicationId, 'publication-1');
+  assert.deepEqual(f.publicationCalls, [['succeeded', 'publication-1', { status: 'SUCCEEDED', deploymentId: 'deploy-1' }]]);
+});
+
+test('final rebuild failure marks only its processing publication failed', async () => {
+  const f = fixture({
+    record: {
+      id: 'rebuild-1', dedupeKey: 'site:site-1', siteId: 'site-1', status: 'RUNNING', affectedPaths: ['/*'],
+      requestedRevision: 1, processingRevision: 1, publishedRevision: 0, attempts: 2, maxAttempts: 3,
+      requestedPublicationId: 'publication-1', processingPublicationId: 'publication-1', publishedPublicationId: null,
+    },
+  });
+
+  await f.service.reportResult('rebuild-1', { attemptNumber: 3, maxAttempts: 3, revision: 1, error: 'Coolify failed' });
+
+  assert.deepEqual(f.publicationCalls, [['failed', 'publication-1', 'Coolify failed']]);
+});
 
 test('rebuild changes for one site are persisted and deduplicated while queued', async () => {
   const f = fixture();

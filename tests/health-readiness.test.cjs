@@ -71,6 +71,10 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.match(coolifyCompose, /bootstrap-seed:[\s\S]*RUN_BOOTSTRAP_SEED:\s*\$\{RUN_BOOTSTRAP_SEED:\?[^}]+\}[\s\S]*node \/workspace\/apps\/api\/dist\/seed\.js/);
   assert.match(coolifyCompose, /bootstrap-seed:\s+condition:\s*service_completed_successfully/);
   assert.match(coolifyCompose, /web-publish:[\s\S]*target:\s*publisher[\s\S]*SITE_DATA_API_URL:\s*http:\/\/api:3000\/api\/v1/);
+  assert.match(coolifyCompose, /web-publish:[\s\S]*SITE_DATA_PUBLICATION_MODE:\s*"processing"/);
+  assert.match(coolifyCompose, /web-publish:[\s\S]*SITE_DATA_API_TOKEN:\s*\$\{ADMIN_API_TOKEN:\?Set ADMIN_API_TOKEN in Coolify\}/);
+  assert.match(siteDataSource, /internal\/site-publications\/\$\{publicSiteSlug\}\/catalog/);
+  assert.match(siteDataSource, /'x-admin-token'/);
   assert.match(coolifyCompose, /web-publish:\s+condition:\s*service_completed_successfully/);
   for (const service of ['migrate', 'bootstrap-seed', 'web-publish']) {
     assert.match(

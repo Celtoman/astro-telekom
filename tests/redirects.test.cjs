@@ -49,6 +49,14 @@ function fixture({ redirects = [], current = null, publishedCities, publishedGlo
   return { prisma, rebuild, created, updated, rebuilds, hitUpdates };
 }
 
+const publicationFor = (current, routes = [{ path: '/kazan' }]) => ({
+  getPublishedCatalog: async () => ({
+    site: { slug: 'domru-kazan' },
+    routes,
+    redirects: current ? [{ id: current.id, sourcePath: current.sourcePath, targetPath: current.targetPath, status: current.status }] : [],
+  }),
+});
+
 test('redirect paths are normalized and unsafe values are rejected', () => {
   const { normalizeRedirectPath } = loadRedirectModules();
 
@@ -116,7 +124,7 @@ test('public redirect resolver returns 301 and atomically records the hit', asyn
   const { RedirectService, PublicRedirectsController } = loadRedirectModules();
   const current = { id: 'redirect-1', siteId: 'site-1', sourcePath: '/old/', targetPath: '/kazan/', status: 'PUBLISHED', site: { slug: 'domru-kazan', status: 'PUBLISHED' } };
   const f = fixture({ current });
-  const controller = new PublicRedirectsController(new RedirectService(f.prisma, f.rebuild));
+  const controller = new PublicRedirectsController(new RedirectService(f.prisma, f.rebuild, publicationFor(current)));
 
   const result = await controller.resolve('domru-kazan', 'redirect-1', { url: '/api/v1/public/sites/domru-kazan/redirects/redirect-1?utm_source=test' });
 
@@ -126,12 +134,29 @@ test('public redirect resolver returns 301 and atomically records the hit', asyn
   assert.ok(f.hitUpdates[0].data.lastHitAt instanceof Date);
 });
 
+test('public redirect resolver ignores a newer working target until its publication succeeds', async () => {
+  const { RedirectService } = loadRedirectModules();
+  const current = { id: 'redirect-1', siteId: 'site-1', sourcePath: '/old', targetPath: '/perm', status: 'PUBLISHED' };
+  const f = fixture({ current });
+  const publications = {
+    getPublishedCatalog: async () => ({
+      site: { slug: 'domru-kazan' },
+      routes: [{ path: '/kazan' }],
+      redirects: [{ id: 'redirect-1', sourcePath: '/old', targetPath: '/kazan', status: 'PUBLISHED' }],
+    }),
+  };
+  const service = new RedirectService(f.prisma, f.rebuild, publications);
+
+  assert.equal(await service.resolvePublished('domru-kazan', 'redirect-1'), '/kazan');
+  assert.equal(f.hitUpdates.length, 1);
+});
+
 test('public redirect resolver fails closed when its target is no longer published', async () => {
   const { RedirectService, PublicRedirectsController } = loadRedirectModules();
   const current = { id: 'redirect-1', siteId: 'site-1', sourcePath: '/old', targetPath: '/kazan', status: 'PUBLISHED' };
   const f = fixture({ current, publishedCities: [{ slug: 'kazan', pages: [], tariffs: [] }] });
   f.prisma.city.findMany = async () => [];
-  const controller = new PublicRedirectsController(new RedirectService(f.prisma, f.rebuild));
+  const controller = new PublicRedirectsController(new RedirectService(f.prisma, f.rebuild, publicationFor(current, [])));
 
   await assert.rejects(controller.resolve('domru-kazan', 'redirect-1', { url: '/api/v1/public/sites/domru-kazan/redirects/redirect-1' }), /Redirect not found/);
   assert.equal(f.hitUpdates.length, 0);
@@ -141,7 +166,7 @@ test('redirect policy fails safely while mandatory global pages are still drafts
   const { RedirectService } = loadRedirectModules();
   const current = { id: 'redirect-1', siteId: 'site-1', sourcePath: '/old', targetPath: '/kazan', status: 'PUBLISHED' };
   const f = fixture({ current, publishedGlobalPages: [] });
-  const service = new RedirectService(f.prisma, f.rebuild);
+  const service = new RedirectService(f.prisma, f.rebuild, publicationFor(null));
 
   await assert.rejects(service.resolvePublished('domru-kazan', 'redirect-1'), error => error.getStatus() === 404);
   await assert.rejects(

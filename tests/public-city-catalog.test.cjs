@@ -1,6 +1,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { CitiesController } = require('../apps/api/dist/cities.controller.js');
+const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
 const { buildReleaseOneRoutes } = require('../apps/api/dist/public-route-policy.js');
 
 const releaseOneGlobalPages = [
@@ -10,6 +11,30 @@ const releaseOneGlobalPages = [
   { type: 'PERSONAL_DATA_CONSENT', slug: 'soglasie-na-obrabotku-personalnyh-dannyh' },
   { type: 'COOKIE_POLICY', slug: 'politika-obrabotki-faylov-kuki' },
 ];
+
+const controllerFor = (prisma) => {
+  const catalog = new SiteCatalogService(prisma);
+  return new CitiesController(catalog, {
+    getPublishedCatalog: (siteSlug) => catalog.list(siteSlug),
+    getPublishedCity: (siteSlug, citySlug) => catalog.getCity(siteSlug, citySlug),
+  });
+};
+
+test('public catalog returns the successful publication snapshot instead of working rows', async () => {
+  const snapshot = {
+    site: { name: 'Дом.ру', slug: 'domru-kazan' },
+    globalPages: [], routes: [], redirects: [], cities: [{ id: 'city-published', slug: 'kazan' }],
+  };
+  const controller = new CitiesController(
+    { getCity: async () => assert.fail('working city queried'), cityResponse: () => {}, pageResponse: () => {}, effectiveRedirects: () => {} },
+    { getPublishedCatalog: async (siteSlug) => {
+      assert.equal(siteSlug, 'domru-kazan');
+      return snapshot;
+    } },
+  );
+
+  assert.equal(await controller.list('domru-kazan'), snapshot);
+});
 
 test('Release 1 route policy rejects missing, extra and colliding route sources', () => {
   assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], releaseOneGlobalPages.slice(0, 4)), /Не опубликована обязательная/);
@@ -38,7 +63,7 @@ test('Release 1 route policy includes a detail URL for every published tariff so
 
 test('public city catalog returns only published entities for one published site', async () => {
   const calls = {};
-  const controller = new CitiesController({
+  const controller = controllerFor({
     site: {
       findFirst: async (query) => {
         calls.site = query;
@@ -135,7 +160,7 @@ test('public city catalog returns only published entities for one published site
 });
 
 test('public city catalog fails closed when a stored visible block violates its type contract', () => {
-  const controller = new CitiesController({});
+  const controller = controllerFor({});
   const city = {
     id: 'city-1',
     siteId: 'site-1',
@@ -166,7 +191,7 @@ test('public city catalog fails closed when a stored visible block violates its 
 });
 
 test('public city catalog requires exactly one visible hero when a published page uses blocks', () => {
-  const controller = new CitiesController({});
+  const controller = controllerFor({});
   const baseCity = {
     id: 'city-1', siteId: 'site-1', regionId: 'region-1', name: 'Казань', slug: 'kazan', status: 'PUBLISHED',
     content: {}, seo: {}, region: { content: {} }, tariffs: [],
@@ -185,7 +210,7 @@ test('public city catalog requires exactly one visible hero when a published pag
 });
 
 test('public city catalog rejects a published city HOME without the canonical block sequence', () => {
-  const controller = new CitiesController({});
+  const controller = controllerFor({});
   const city = {
     id: 'city-1', siteId: 'site-1', regionId: 'region-1', name: 'Альметьевск', slug: 'almetyevsk', status: 'PUBLISHED',
     content: {}, seo: {}, region: { name: 'Татарстан', slug: 'tatarstan', content: {} }, tariffs: [],
@@ -200,7 +225,7 @@ test('public city catalog rejects a published city HOME without the canonical bl
 });
 
 test('public city catalog rejects an unpublished or unknown site', async () => {
-  const controller = new CitiesController({
+  const controller = controllerFor({
     site: { findFirst: async () => null },
     city: { findMany: async () => assert.fail('cities queried for missing site') },
     page: { findMany: async () => assert.fail('pages queried for missing site') },

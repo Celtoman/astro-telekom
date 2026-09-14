@@ -54,12 +54,13 @@ Hard-delete выбран, чтобы PII не осталось в JSON payloads.
 
 ## Пересборка статического сайта
 
-1. После успешной мутации content/city/tariff API синхронно создает или обновляет `SiteRebuild`; ответ CRUD означает, что outbox-запись сохранена, но не что сайт опубликован.
-2. Дедупликация идет по `site:<siteId>`. Поскольку текущий deployment выпускает весь static artifact, `affectedPaths` честно равен `["/*"]`.
-3. API ставит BullMQ job с тремя попытками и exponential backoff 30 секунд. Worker получает через внутренний `/start` endpoint номер ревизии и payload, затем сам вызывает deployment provider.
-4. При `REBUILD_PROVIDER=webhook` worker отправляет в `REBUILD_WEBHOOK_URL` поля `rebuildId`, `siteId`, `dedupeKey`, `affectedPaths`, `revision` и idempotency header `<rebuildId>:<revision>`; HTTP 2xx без финального `SUCCEEDED` считается ошибкой. При `REBUILD_PROVIDER=coolify` worker делает авторизованный `POST /api/v1/deploy` по resource UUID, сразу сохраняет полученный `deployment_uuid` через `/provider-progress`, затем ограниченно опрашивает `GET /api/v1/deployments/{uuid}`.
-5. Статусы `PENDING`, `QUEUED`, `RUNNING`, `RETRYING`, `SUCCEEDED`, `FAILED`, счетчик попыток, ошибка и ответ провайдера сохраняются в PostgreSQL и читаются через `/admin/rebuilds`.
-6. Если новая мутация приходит во время сборки, растет `requestedRevision`; после успеха текущей ревизии API ставит следующую, поэтому более новое изменение не считается опубликованным преждевременно.
+1. После ручного сохранения тарифа API в одной serializable-транзакции создает рабочую ревизию, audit event и неизменяемый `SitePublication`, затем передает его ID в `SiteRebuild`. Ответ CRUD означает, что рабочая версия сохранена, но не что сайт опубликован.
+2. Дедупликация идет по `site:<siteId>`. Поскольку текущий deployment выпускает весь static artifact, `affectedPaths` честно равен `["/*"]`; точечная пересборка не вводилась.
+3. `requestedPublicationId` может обновиться во время сборки, но `/start` фиксирует его как `processingPublicationId`. `web-publish` читает именно этот снимок; следующий job получает более новый requested snapshot. Старые mutators без snapshot явно очищают stale IDs и временно собирают текущий каталог.
+4. API ставит BullMQ job с тремя попытками и exponential backoff 30 секунд. Worker получает через внутренний `/start` endpoint номер ревизии и payload, затем сам вызывает deployment provider.
+5. При `REBUILD_PROVIDER=webhook` worker отправляет в `REBUILD_WEBHOOK_URL` поля `rebuildId`, `siteId`, `dedupeKey`, `affectedPaths`, `revision` и idempotency header `<rebuildId>:<revision>`; HTTP 2xx без финального `SUCCEEDED` считается ошибкой. При `REBUILD_PROVIDER=coolify` worker делает авторизованный `POST /api/v1/deploy` по resource UUID, сразу сохраняет полученный `deployment_uuid` через `/provider-progress`, затем ограниченно опрашивает `GET /api/v1/deployments/{uuid}`.
+6. Финальный успех помечает processing publication как `SUCCEEDED` и продвигает `Site.publishedRevision`; финальная ошибка помечает только этот snapshot как `FAILED`. Последняя успешная публикация остается источником public API.
+7. Статусы rebuild, счетчик попыток, ошибка и ответ провайдера сохраняются в PostgreSQL и читаются через `/admin/rebuilds`. Отдельного admin-журнала `SitePublication` пока нет.
 
 В Coolify-режиме `queued` и `in_progress` — промежуточные состояния, `finished` преобразуется в `SUCCEEDED`, а `failed`/cancelled/неизвестный статус и timeout приводят к ошибке попытки без продвижения `publishedRevision`. UUID и последний provider status сохраняются, поэтому retry продолжает незавершенный deployment; новый запуск создается только после финального failure или при отсутствии UUID. В БД сохраняется сокращенный provider payload без logs и API token. Реализация [#57](https://github.com/Celtoman/astro-telekom/issues/57) подтверждена реальным Coolify polling rehearsal до `finished` на точном deployment commit.
 

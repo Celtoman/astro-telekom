@@ -3,12 +3,13 @@ import { Queue } from 'bullmq';
 import IORedis from 'ioredis';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
+import { PublicationWorkflowService } from './publication-workflow.service';
 
 const QUEUE_NAME = 'site-rebuilds';
 const DEFAULT_MAX_ATTEMPTS = 3;
 const ACTIVE_STATUSES = ['PENDING', 'QUEUED', 'RUNNING', 'RETRYING'] as const;
 
-type RebuildTrigger = { entity: string; id: string; siteId?: string };
+type RebuildTrigger = { entity: string; id: string; siteId?: string; publicationId?: string };
 type ProviderResult = {
   status: 'SUCCEEDED';
   deploymentId?: string;
@@ -38,7 +39,10 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
   private readonly queue: Queue | null;
   private readonly redis: IORedis | null;
 
-  constructor(private readonly prisma: PrismaService) {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly publicationWorkflow: PublicationWorkflowService,
+  ) {
     const redisUrl = process.env.REDIS_URL;
     if (redisUrl) {
       this.redis = new IORedis(redisUrl, { maxRetriesPerRequest: null });
@@ -82,12 +86,14 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
         triggerEntityId: data.id,
         affectedPaths: ['/*'],
         maxAttempts: DEFAULT_MAX_ATTEMPTS,
+        requestedPublicationId: data.publicationId || null,
       },
       update: {
         triggerEntity: data.entity,
         triggerEntityId: data.id,
         affectedPaths: ['/*'],
         requestedRevision: { increment: 1 },
+        requestedPublicationId: data.publicationId || null,
         ...(terminal ? {
           status: 'PENDING' as const,
           attempts: 0,
@@ -131,12 +137,16 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
     const revision = rebuild.status === 'RETRYING' && rebuild.processingRevision > 0
       ? rebuild.processingRevision
       : rebuild.requestedRevision;
+    const publicationId = rebuild.status === 'RETRYING' && rebuild.processingPublicationId
+      ? rebuild.processingPublicationId
+      : rebuild.requestedPublicationId;
 
     const running = await this.prisma.siteRebuild.update({
       where: { id },
       data: {
         status: 'RUNNING',
         processingRevision: revision,
+        processingPublicationId: publicationId || null,
         attempts: attempt,
         maxAttempts: attemptLimit,
         startedAt: new Date(),
@@ -144,6 +154,8 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
         lastError: null,
       },
     });
+
+    if (publicationId) await this.publicationWorkflow.markRunning(publicationId);
 
     return {
       rebuildId: running.id,
@@ -153,6 +165,7 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
       revision,
       providerDeploymentId: running.providerDeploymentId,
       providerStatus: running.providerStatus,
+      publicationId,
     };
   }
 
@@ -205,12 +218,18 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
         completedAt: attempt < attemptLimit ? null : new Date(),
       },
     });
-    return failed.count === 1
-      ? { published: false, status: attempt < attemptLimit ? 'RETRYING' : 'FAILED' }
-      : { published: false, skipped: true, reason: 'stale_attempt' };
+    if (failed.count !== 1) return { published: false, skipped: true, reason: 'stale_attempt' };
+    if (attempt >= attemptLimit && rebuild.processingPublicationId) {
+      await this.publicationWorkflow.markFailed(rebuild.processingPublicationId, message);
+    }
+    return { published: false, status: attempt < attemptLimit ? 'RETRYING' : 'FAILED' };
   }
 
   async finishSuccessfulRevision(id: string, revision: number, result: ProviderResult) {
+    const current = await this.get(id);
+    const processingPublicationId = current.processingRevision === revision
+      ? current.processingPublicationId
+      : null;
     const providerData = {
       processingRevision: revision,
       publishedRevision: revision,
@@ -223,22 +242,30 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
       where: { id, requestedRevision: revision, processingRevision: revision, publishedRevision: { lt: revision } },
       data: {
         ...providerData,
+        ...(processingPublicationId ? { publishedPublicationId: processingPublicationId } : {}),
         status: 'SUCCEEDED',
         completedAt: new Date(),
       },
     });
     if (completed.count === 1) {
+      if (processingPublicationId) await this.publicationWorkflow.markSucceeded(processingPublicationId, result);
       const updated = await this.get(id);
       return { published: true, revision, pendingRevision: null, rebuild: updated };
     }
 
     const pending = await this.prisma.siteRebuild.updateMany({
       where: { id, requestedRevision: { gt: revision }, processingRevision: revision, publishedRevision: { lt: revision } },
-      data: { ...providerData, status: 'PENDING', completedAt: null },
+      data: {
+        ...providerData,
+        ...(processingPublicationId ? { publishedPublicationId: processingPublicationId } : {}),
+        status: 'PENDING',
+        completedAt: null,
+      },
     });
     if (pending.count === 0) {
       return { published: false, skipped: true, reason: 'stale_attempt', rebuild: await this.get(id) };
     }
+    if (processingPublicationId) await this.publicationWorkflow.markSucceeded(processingPublicationId, result);
     const latest = await this.get(id);
     await this.schedule(id, latest.requestedRevision, latest.maxAttempts);
     const updated = await this.get(id);
