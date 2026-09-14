@@ -17,7 +17,16 @@
 			not path /api/* /_astro/* /assets/*
 		}
 		redir @html_trailing_slash {re.html_trailing_slash.1}{?query} 301
-		try_files {path}/index.html {path} /404.html
+		try_files {path}/index.html {path} =404
 		file_server
+	}
+
+	handle_errors 404 {
+		@html_not_found not path /api/* /_astro/* /assets/*
+		handle @html_not_found {
+			rewrite * /404.html
+			file_server
+		}
+		respond "Not Found" 404
 	}
 }

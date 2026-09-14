@@ -16,6 +16,7 @@
 | TD-96 | [#121](https://github.com/Celtoman/astro-telekom/issues/121) ✅ | Публичные формы восстановлены после CSP-регресса; исполняемый код собирается first-party bundle, а final HTML проверяет каждый оставшийся inline hash |
 | TD-100 | [#129](https://github.com/Celtoman/astro-telekom/issues/129) ✅ | Legacy hero CTA с конечным слэшем нормализован идемпотентной data migration до строгой runtime-публикации |
 | TD-101 | [#130](https://github.com/Celtoman/astro-telekom/issues/130) ✅ | Production HOME/INTERNET Казани сохраняют неполный legacy PageBlock snapshot вместо нового прототипа |
+| TD-115 | [#145](https://github.com/Celtoman/astro-telekom/issues/145) 🟢 | Нет внешнего application-aware PostgreSQL backup и подтвержденного restore rehearsal |
 
 ## P1
 
@@ -39,6 +40,7 @@
 | TD-31 | [#46](https://github.com/Celtoman/astro-telekom/issues/46) ✅ | Preview блокирует city+slug коллизии, генератор разводит допустимые пары типов |
 | TD-33 | [#48](https://github.com/Celtoman/astro-telekom/issues/48) ✅ | Browser CORS явно разрешает `PATCH` и `DELETE` для admin mutation routes |
 | TD-37 | [#55](https://github.com/Celtoman/astro-telekom/issues/55) ✅ | Coolify runtime publisher устранил build-time цикл; первый и повторный live deployment подтверждены |
+| TD-116 | [#56](https://github.com/Celtoman/astro-telekom/issues/56) ✅ | Coolify-native routing, TLS, Basic Auth, same-origin API и `www` redirect подтверждены live smoke-тестом |
 | TD-41 | [#61](https://github.com/Celtoman/astro-telekom/issues/61) ✅ | API runtime image сохраняет workspace `apps/api/node_modules`; bootstrap seed использует тот же runtime layout |
 | TD-42 | [#62](https://github.com/Celtoman/astro-telekom/issues/62) ✅ | One-shot containers исключены из health; два последовательных live deployment остались `running:healthy` |
 | TD-44 | [#64](https://github.com/Celtoman/astro-telekom/issues/64) ✅ | Label escaping выключен, runtime Basic Auth подтвержден ответами 401/200 на обоих доменах |
@@ -66,9 +68,9 @@
 | TD-90 | [#115](https://github.com/Celtoman/astro-telekom/issues/115) ✅ | Устаревший ответ проверки XLSX может примениться после смены файла или провайдера в форме импорта тарифов |
 | TD-91 | [#116](https://github.com/Celtoman/astro-telekom/issues/116) ✅ | Опубликованный redirect может остаться в public catalog после снятия с публикации города или целевого тарифа |
 | TD-93 | [#118](https://github.com/Celtoman/astro-telekom/issues/118) ✅ | Full-snapshot импорт может применить тариф с URL опубликованной страницы и оставить сайт несобираемым |
-| TD-104 | [#133](https://github.com/Celtoman/astro-telekom/issues/133) 🟢 | Public build, sitemap, ссылки и redirects не ограничены каноническим составом Release 1 |
-| TD-105 | [#134](https://github.com/Celtoman/astro-telekom/issues/134) 🟢 | `Page` не поддерживает общие страницы сайта, обязательные для Release 1 |
-| TD-106 | [#135](https://github.com/Celtoman/astro-telekom/issues/135) 🟢 | Импорт городов закрепляет одну опубликованную Казань и старый комплект страниц |
+| TD-104 | [#133](https://github.com/Celtoman/astro-telekom/issues/133) ✅ | Public build, sitemap, ссылки и redirects ограничены каноническим составом Release 1 |
+| TD-105 | [#134](https://github.com/Celtoman/astro-telekom/issues/134) ✅ | `Page` поддерживает пять обязательных общих страниц сайта Release 1 |
+| TD-106 | [#135](https://github.com/Celtoman/astro-telekom/issues/135) ✅ | Импорт публикует полный каталог городов с одной канонической HOME на город |
 | TD-107 | [#137](https://github.com/Celtoman/astro-telekom/issues/137) ✅ | Seed заполняет предложный и родительный падежи Казани для корректных локальных заголовков |
 | TD-108 | [#138](https://github.com/Celtoman/astro-telekom/issues/138) 🟢 | Public site не задает favicon и получает лишний 404 |
 | TD-109 | [#139](https://github.com/Celtoman/astro-telekom/issues/139) ✅ | Городская HOME Release 1 выводит полный тарифный snapshot без legacy-фильтра и лимита |
@@ -84,7 +86,9 @@
 | TD-11 | [#13](https://github.com/Celtoman/astro-telekom/issues/13) 🟢 | Нет аудита, версий, schedule публикации, корзины, rollback |
 | TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) 🟢 | Наследование `content` — только shallow merge верхнего уровня |
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) ✅ | `PageBlock` поддерживает семь строго валидируемых типов, а Astro рендерит полный минимальный набор |
-| TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) 🟢 | Public DTO/rate limit/honeypot и 180-дневный policy-driven purge реализованы; остаются legal basis, согласие и правила передачи PII |
+| TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) ✅ | Public DTO/rate limit/honeypot и 180-дневный policy-driven purge реализованы; legal scope вынесен в [#144](https://github.com/Celtoman/astro-telekom/issues/144) |
+| TD-114 | [#147](https://github.com/Celtoman/astro-telekom/issues/147) 🟢 | Живые документы и technical-debt index синхронизируются с Release 1, 26 миграциями и текущими Issue states |
+| TD-80 | [#102](https://github.com/Celtoman/astro-telekom/issues/102) 🟢 | Локальный TypeScript seed падает до подключения к БД из-за неразрешимого ESM-импорта `city-home-template` |
 | TD-92 | [#117](https://github.com/Celtoman/astro-telekom/issues/117) ✅ | Tariff PATCH принимает `null` для обязательных полей и может передать ошибку целостности в Prisma |
 | TD-94 | [#119](https://github.com/Celtoman/astro-telekom/issues/119) ✅ | Запоздалый ответ быстрого просмотра может открыть не последний выбранный тариф |
 | TD-95 | [#120](https://github.com/Celtoman/astro-telekom/issues/120) ✅ | После apply импорт тарифов не очищает DOM file input и мешает повторно выбрать тот же XLSX |
@@ -124,7 +128,6 @@
 | TD-34 | [#52](https://github.com/Celtoman/astro-telekom/issues/52) ✅ | Точный baseline оставлен только в `TEST_COVERAGE.md`, а regression-тест запрещает новые дубли |
 | TD-35 | [#53](https://github.com/Celtoman/astro-telekom/issues/53) ✅ | Build-time catalog API отделен в server-only `SITE_DATA_API_URL` от публичного browser `PUBLIC_API_URL` |
 | TD-36 | [#54](https://github.com/Celtoman/astro-telekom/issues/54) ✅ | Production build требует внешний HTTPS `PUBLIC_API_URL` с нормализованным path `/api/v1` |
-| TD-37 | [#56](https://github.com/Celtoman/astro-telekom/issues/56) ✅ | Coolify-native routing, TLS, Basic Auth, same-origin API и `www` redirect подтверждены live smoke-тестом |
 | TD-38 | [#57](https://github.com/Celtoman/astro-telekom/issues/57) ✅ | Coolify adapter подтвержден реальным polling rehearsal до `finished` на точном deployment commit |
 | TD-39 | [#58](https://github.com/Celtoman/astro-telekom/issues/58) ✅ | Все Dockerfile кешируют `pnpm install` по root/workspace manifests и lockfile; source-only rebuild подтвержден 9 сентября 2026 года |
 | TD-40 | [#60](https://github.com/Celtoman/astro-telekom/issues/60) ✅ | Coolify API token удален из build-time Compose interpolation и передается worker только через runtime `.env` |
@@ -132,8 +135,7 @@
 | TD-50 | [#70](https://github.com/Celtoman/astro-telekom/issues/70) ✅ | Release readiness документы и Task #31 синхронизированы с live test-контуром и актуальными блокерами |
 | TD-53 | [#73](https://github.com/Celtoman/astro-telekom/issues/73) ✅ | `decisions.md` синхронизирован с финальными ответами Q89 и Q118 |
 | TD-75 | [#97](https://github.com/Celtoman/astro-telekom/issues/97) 🟢 | Текущие Radix-примитивы admin расходятся с новым обязательным React Aria-референсом |
-| TD-76 | [#98](https://github.com/Celtoman/astro-telekom/issues/98) 🟢 | Astro выдает ложные `formId` hints для inline-скрипта `AddressForm` |
-| TD-80 | [#102](https://github.com/Celtoman/astro-telekom/issues/102) 🟢 | Локальный TypeScript seed вызывает `MODULE_TYPELESS_PACKAGE_JSON` и повторный ESM parse |
+| TD-76 | [#98](https://github.com/Celtoman/astro-telekom/issues/98) ✅ | Актуальный Astro check обрабатывает inline `formId` без warnings и hints |
 | TD-84 | [#107](https://github.com/Celtoman/astro-telekom/issues/107) ✅ | Ручное число Task issues удалено; milestone читается из GitHub, возврат фиксированного baseline блокирует тест |
 | TD-102 | [#131](https://github.com/Celtoman/astro-telekom/issues/131) ✅ | Живые документы согласованы с 20 миграциями, а исторические production-проверки явно привязаны к exact SHA |
 | TD-103 | [#132](https://github.com/Celtoman/astro-telekom/issues/132) ✅ | `packages/database` описан как делегат Prisma CLI, единственный client output — `apps/api/generated` |

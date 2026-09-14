@@ -72,7 +72,7 @@ Worker повторно проверяет persisted coverage snapshot и одн
 | GET | `/admin/readiness` | Защищенный configuration gate: `configured`/`blocked` для coverage, contract, Tarifnik, fallback email, rebuild и валидного `PII_RETENTION_DAYS`; возвращает только имена отсутствующих переменных, никогда не значения. |
 | GET/POST/PATCH | `/admin/regions` | Region records. |
 | GET/POST/PATCH | `/admin/cities` | City records. |
-| GET/POST/PATCH | `/admin/pages` | Page records. `COVERAGE`, `CITIES`, `PRIVACY`, `PERSONAL_DATA_CONSENT` принимаются только с `cityId: null` и каноническим slug; все остальные типы требуют непустой `cityId`. Несовместимый scope отклоняется до записи. |
+| GET/POST/PATCH | `/admin/pages` | Page records. `COVERAGE`, `CITIES`, `PRIVACY`, `PERSONAL_DATA_CONSENT`, `COOKIE_POLICY` принимаются только с `cityId: null` и каноническим slug; все остальные типы требуют непустой `cityId`. Несовместимый scope отклоняется до записи. |
 | GET/POST | `/admin/pages/:pageId/blocks` | Просмотр упорядоченных blocks и создание блока по строгому type-specific контракту ниже. |
 | PATCH/DELETE | `/admin/blocks/:id` | Изменение и удаление blocks. Изменение `blockType` или `data` объединяется с сохраненными корневыми полями и повторно валидирует полный блок; переданное `data` должно быть полным объектом нового типа. |
 | GET | `/admin/tariffs` | Cursor-страница каталога тарифов с минимальным list DTO; поддерживает `limit`, `cursor` и поиск `q` по названию, slug или городу. |

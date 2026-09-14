@@ -176,7 +176,7 @@ test('public Caddy configs redirect only trailing-slash HTML paths and preserve 
     assert.match(caddyfile, /path_regexp html_trailing_slash \^\(\/\[\^\.\]\+\)\/\$/, name);
     assert.match(caddyfile, /not path \/api\/\* \/_astro\/\* \/assets\/\*/, `${name}: API and asset namespaces must not be canonicalized`);
     assert.match(caddyfile, /redir @html_trailing_slash \{re\.html_trailing_slash\.1\}\{\?query\} 301/, name);
-    assert.match(caddyfile, /try_files \{path\}\/index\.html \{path\} \/404\.html/, `${name}: extensionless HTML must resolve before directory canonicalization`);
+    assert.match(caddyfile, /try_files \{path\}\/index\.html \{path\} =404/, `${name}: extensionless HTML must resolve before directory canonicalization`);
   }
 
   for (const [name, caddyfile] of configs.slice(0, 2)) {
@@ -188,6 +188,29 @@ test('public Caddy configs redirect only trailing-slash HTML paths and preserve 
   assert.equal('/kazan/internet/'.replace(matcher, '$1'), '/kazan/internet');
   assert.equal(matcher.test('/'), false);
   assert.equal(matcher.test('/assets/app.css/'), false);
+});
+
+test('public Caddy configs serve the shared not-found page with an explicit 404 status', () => {
+  const configs = ['web.Caddyfile', 'coolify-web.Caddyfile', 'static.Caddyfile']
+    .map((name) => [name, readFileSync(join(repositoryRoot, 'deploy', name), 'utf8')]);
+
+  for (const [name, caddyfile] of configs) {
+    assert.match(
+      caddyfile,
+      /try_files \{path\}\/index\.html \{path\} =404/,
+      `${name}: a missing public path must enter Caddy's error flow with status 404`,
+    );
+    assert.doesNotMatch(
+      caddyfile,
+      /try_files[^\n]*\/404\.html/,
+      `${name}: the not-found file must not be served as a successful try_files fallback`,
+    );
+    assert.match(
+      caddyfile,
+      /handle_errors 404\s*\{[\s\S]*@html_not_found not path \/api\/\* \/_astro\/\* \/assets\/\*[\s\S]*handle @html_not_found\s*\{[\s\S]*rewrite \* \/404\.html[\s\S]*file_server[\s\S]*\}[\s\S]*respond "Not Found" 404[\s\S]*\}/,
+      `${name}: the shared not-found document must be rendered by the error handler`,
+    );
+  }
 });
 
 test('redirect provenance migration normalizes legacy slash paths before adding ownership', () => {

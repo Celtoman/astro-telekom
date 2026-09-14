@@ -87,6 +87,35 @@ LEFT JOIN "Page" AS page
   AND page."type"::text = required_pages.page_type
 ORDER BY site_slug, page_type;
 
+WITH published_city_homes AS (
+  SELECT
+    site."slug" AS site_slug,
+    city."slug" AS city_slug,
+    page."id" AS page_id,
+    COALESCE(
+      array_agg(page_block."blockType" ORDER BY page_block."position", page_block."id")
+        FILTER (WHERE page_block."visible"),
+      ARRAY[]::text[]
+    ) AS visible_block_types
+  FROM "Page" AS page
+  JOIN "City" AS city ON city."id" = page."cityId" AND city."siteId" = page."siteId"
+  JOIN "Site" AS site ON site."id" = page."siteId"
+  LEFT JOIN "PageBlock" AS page_block ON page_block."pageId" = page."id"
+  WHERE page."type"::text = 'HOME'
+    AND page."status"::text = 'PUBLISHED'
+    AND city."status"::text = 'PUBLISHED'
+  GROUP BY site."slug", city."slug", page."id"
+), invalid_homes AS (
+  SELECT *
+  FROM published_city_homes
+  WHERE visible_block_types <> ARRAY['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'feature_grid', 'faq']::text[]
+)
+SELECT
+  'invalid_published_city_home_templates' AS check_name,
+  COUNT(*) AS violation_count,
+  COALESCE(jsonb_agg(to_jsonb(invalid_homes) ORDER BY site_slug, city_slug), '[]'::jsonb) AS details
+FROM invalid_homes;
+
 WITH required_pages(expected_slug) AS (
   VALUES
     ('karta-pokrytiya-provaydera'),
