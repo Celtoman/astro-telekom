@@ -219,8 +219,11 @@ test('web build emits exactly the Release 1 inventory for every published city',
   assert.match(kazan, /<h1[^>]*>Домашний интернет и телевидение в Казани<\/h1>/);
   assert.match(kazan, /data-city-first-screen/);
   assert.match(kazan, /data-form-mode="visible"/);
+  assert.match(kazan, /API Интернет 500/);
   assert.match(kazan, /API Интернет и ТВ 500/);
+  assert.match(kazan, /777 ₽\/мес\./);
   assert.match(kazan, /999 ₽\/мес\./);
+  assert.match(kazan, /<h2[^>]*>Все тарифы Дом\.ру<\/h2>/);
   assert.match(kazan, /Бесплатное подключение/);
   assert.match(kazan, /href="#address-check"[^>]*>Проверить подключение/);
   assert.doesNotMatch(kazan, /href="\/kazan\/(?:internet|internet-tv|api-internet)/);

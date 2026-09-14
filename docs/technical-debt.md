@@ -71,6 +71,7 @@
 | TD-106 | [#135](https://github.com/Celtoman/astro-telekom/issues/135) 🟢 | Импорт городов закрепляет одну опубликованную Казань и старый комплект страниц |
 | TD-107 | [#137](https://github.com/Celtoman/astro-telekom/issues/137) ✅ | Seed заполняет предложный и родительный падежи Казани для корректных локальных заголовков |
 | TD-108 | [#138](https://github.com/Celtoman/astro-telekom/issues/138) 🟢 | Public site не задает favicon и получает лишний 404 |
+| TD-109 | [#139](https://github.com/Celtoman/astro-telekom/issues/139) ✅ | Городская HOME Release 1 выводит полный тарифный snapshot без legacy-фильтра и лимита |
 
 ## P2
 
