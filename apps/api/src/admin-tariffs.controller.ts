@@ -337,6 +337,7 @@ export class AdminTariffsController {
         entityType: 'TARIFF',
         entityId: tariff.id,
         action: 'UPDATE',
+        previousSnapshot: existing as unknown as Record<string, unknown>,
         snapshot: tariffSnapshot,
         changedFields: Object.keys(editable),
         actorId: request?.user?.id,

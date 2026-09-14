@@ -1,9 +1,9 @@
-import { BadRequestException, Body, ConflictException, Controller, Delete, Get, NotFoundException, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
-import { RebuildQueueService } from './rebuild-queue.service';
 import { validateBlock } from './block-validation';
+import { PublicationWorkflowService } from './publication-workflow.service';
 
 interface BlockBody {
   blockType: string;
@@ -13,10 +13,17 @@ interface BlockBody {
   source?: string | null;
 }
 
+interface AdminRequest {
+  user?: { id: string };
+}
+
 @Controller('admin')
 @UseGuards(AdminTokenGuard)
 export class AdminBlocksController {
-  constructor(private readonly prisma: PrismaService, private readonly rebuild: RebuildQueueService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly publications: PublicationWorkflowService,
+  ) {}
 
   @Get('pages/:pageId/blocks')
   list(@Param('pageId') pageId: string) {
@@ -24,54 +31,121 @@ export class AdminBlocksController {
   }
 
   @Post('pages/:pageId/blocks')
-  async create(@Param('pageId') pageId: string, @Body() body: BlockBody) {
+  async create(@Param('pageId') pageId: string, @Body() body: BlockBody, @Req() request?: AdminRequest) {
     validateBlock(body);
-    const block = await this.prisma.pageBlock.create({ data: { ...body, pageId } });
-    const page = await this.prisma.page.findUnique({ where: { id: pageId }, select: { siteId: true } });
-    await this.rebuild.enqueue({ entity: 'page-block', id: block.id, siteId: page?.siteId });
-    return block;
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const pageBefore = await transaction.page.findUnique({
+        where: { id: pageId },
+        include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+      });
+      if (!pageBefore) throw new NotFoundException('Страница не найдена');
+      const block = await transaction.pageBlock.create({ data: { ...body, pageId } });
+      const page = await transaction.page.findUnique({
+        where: { id: pageId },
+        include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+      });
+      if (!page) throw new NotFoundException('Страница не найдена');
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: page.siteId,
+        entityType: 'PAGE',
+        entityId: pageId,
+        action: 'UPDATE',
+        previousSnapshot: pageBefore as unknown as Record<string, unknown>,
+        snapshot: page as unknown as Record<string, unknown>,
+        changedFields: ['blocks'],
+        actorId: request?.user?.id,
+        source: 'admin',
+      });
+      return { ...block, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
   @Patch('blocks/:id')
-  async update(@Param('id') id: string, @Body() body: Partial<BlockBody>) {
+  async update(@Param('id') id: string, @Body() body: Partial<BlockBody>, @Req() request?: AdminRequest) {
     validateBlock(body, true);
-    let block;
-    if ('blockType' in body || 'data' in body) {
-      const stored = await this.prisma.pageBlock.findUnique({
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const initialBlock = await transaction.pageBlock.findUnique({ where: { id } });
+      if (!initialBlock) throw new NotFoundException('Блок не найден');
+      const pageBefore = await transaction.page.findUnique({
+        where: { id: initialBlock.pageId },
+        include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+      });
+      if (!pageBefore) throw new NotFoundException('Страница не найдена');
+      let block;
+      if ('blockType' in body || 'data' in body) {
+        const stored = await transaction.pageBlock.findUnique({
         where: { id },
         select: { blockType: true, position: true, visible: true, data: true, source: true },
-      });
-      if (!stored) throw new NotFoundException('Блок не найден');
-      if (body.blockType && body.blockType !== stored.blockType && !('data' in body)) {
-        throw new BadRequestException('При смене типа блока нужно передать полные data нового типа');
+        });
+        if (!stored) throw new NotFoundException('Блок не найден');
+        if (body.blockType && body.blockType !== stored.blockType && !('data' in body)) {
+          throw new BadRequestException('При смене типа блока нужно передать полные data нового типа');
+        }
+        validateBlock({
+          blockType: body.blockType ?? stored.blockType,
+          position: body.position ?? stored.position,
+          visible: body.visible ?? stored.visible,
+          data: body.data ?? stored.data,
+          source: 'source' in body ? body.source : stored.source,
+        });
+        const result = await transaction.pageBlock.updateMany({
+          where: { id, blockType: stored.blockType },
+          data: body,
+        });
+        if (result.count !== 1) throw new ConflictException('Блок уже был изменен. Обновите данные и повторите действие');
+        block = await transaction.pageBlock.findUnique({ where: { id } });
+        if (!block) throw new NotFoundException('Блок не найден');
+      } else {
+        block = await transaction.pageBlock.update({ where: { id }, data: body });
       }
-      validateBlock({
-        blockType: body.blockType ?? stored.blockType,
-        position: body.position ?? stored.position,
-        visible: body.visible ?? stored.visible,
-        data: body.data ?? stored.data,
-        source: 'source' in body ? body.source : stored.source,
+      const page = await transaction.page.findUnique({
+        where: { id: block.pageId },
+        include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
       });
-      const result = await this.prisma.pageBlock.updateMany({
-        where: { id, blockType: stored.blockType },
-        data: body,
+      if (!page) throw new NotFoundException('Страница не найдена');
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: page.siteId,
+        entityType: 'PAGE',
+        entityId: block.pageId,
+        action: 'UPDATE',
+        previousSnapshot: pageBefore as unknown as Record<string, unknown>,
+        snapshot: page as unknown as Record<string, unknown>,
+        changedFields: ['blocks'],
+        actorId: request?.user?.id,
+        source: 'admin',
       });
-      if (result.count !== 1) throw new ConflictException('Блок уже был изменен. Обновите данные и повторите действие');
-      block = await this.prisma.pageBlock.findUnique({ where: { id } });
-      if (!block) throw new NotFoundException('Блок не найден');
-    } else {
-      block = await this.prisma.pageBlock.update({ where: { id }, data: body });
-    }
-    const page = await this.prisma.page.findUnique({ where: { id: block.pageId }, select: { siteId: true } });
-    await this.rebuild.enqueue({ entity: 'page-block', id: block.id, siteId: page?.siteId });
-    return block;
+      return { ...block, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
   @Delete('blocks/:id')
-  async remove(@Param('id') id: string) {
-    const block = await this.prisma.pageBlock.delete({ where: { id } });
-    const page = await this.prisma.page.findUnique({ where: { id: block.pageId }, select: { siteId: true } });
-    await this.rebuild.enqueue({ entity: 'page-block', id: block.id, siteId: page?.siteId });
-    return block;
+  async remove(@Param('id') id: string, @Req() request?: AdminRequest) {
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const initialBlock = await transaction.pageBlock.findUnique({ where: { id } });
+      if (!initialBlock) throw new NotFoundException('Блок не найден');
+      const pageBefore = await transaction.page.findUnique({
+        where: { id: initialBlock.pageId },
+        include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+      });
+      if (!pageBefore) throw new NotFoundException('Страница не найдена');
+      const block = await transaction.pageBlock.delete({ where: { id } });
+      const page = await transaction.page.findUnique({
+        where: { id: block.pageId },
+        include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+      });
+      if (!page) throw new NotFoundException('Страница не найдена');
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: page.siteId,
+        entityType: 'PAGE',
+        entityId: block.pageId,
+        action: 'UPDATE',
+        previousSnapshot: pageBefore as unknown as Record<string, unknown>,
+        snapshot: page as unknown as Record<string, unknown>,
+        changedFields: ['blocks'],
+        actorId: request?.user?.id,
+        source: 'admin',
+      });
+      return { ...block, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 }

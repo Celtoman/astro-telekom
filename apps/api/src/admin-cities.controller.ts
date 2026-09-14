@@ -1,9 +1,11 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
 import { RebuildQueueService } from './rebuild-queue.service';
 import { CityImportReport, CityImportService } from './city-import.service';
 import { parseWorkbook } from './tariff-import.service';
+import { PublicationWorkflowService } from './publication-workflow.service';
 
 type PublishStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
@@ -19,10 +21,19 @@ interface CityBody {
   content?: object;
 }
 
+interface AdminRequest {
+  user?: { id: string };
+}
+
 @Controller('admin/cities')
 @UseGuards(AdminTokenGuard)
 export class AdminCitiesController {
-  constructor(private readonly prisma: PrismaService, private readonly rebuild: RebuildQueueService, private readonly imports: CityImportService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly rebuild: RebuildQueueService,
+    private readonly imports: CityImportService,
+    private readonly publications: PublicationWorkflowService,
+  ) {}
 
   @Get()
   list() {
@@ -30,16 +41,27 @@ export class AdminCitiesController {
   }
 
   @Post()
-  async create(@Body() body: CityBody) {
-    const city = await this.prisma.city.create({ data: body });
-    await this.rebuild.enqueue({ entity: 'city', id: city.id, siteId: city.siteId });
-    return city;
+  async create(@Body() body: CityBody, @Req() request?: AdminRequest) {
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const city = await transaction.city.create({ data: body });
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: city.siteId,
+        entityType: 'CITY',
+        entityId: city.id,
+        action: 'CREATE',
+        snapshot: city as unknown as Record<string, unknown>,
+        changedFields: Object.keys(body),
+        actorId: request?.user?.id,
+        source: 'admin',
+      });
+      return { ...city, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() body: Partial<CityBody>) {
-    const city = await this.prisma.$transaction(async (transaction) => {
-      const current = await transaction.city.findUnique({ where: { id }, select: { status: true } });
+  async update(@Param('id') id: string, @Body() body: Partial<CityBody>, @Req() request?: AdminRequest) {
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const current = await transaction.city.findUnique({ where: { id } });
       if (!current) throw new BadRequestException('Город не найден');
       const updated = await transaction.city.update({ where: { id }, data: body });
       if (body.status !== undefined && body.status !== current.status) {
@@ -61,10 +83,24 @@ export class AdminCitiesController {
           });
         }
       }
-      return updated;
-    });
-    await this.rebuild.enqueue({ entity: 'city', id: city.id, siteId: city.siteId });
-    return city;
+      const action = body.status === 'ARCHIVED' && current.status !== 'ARCHIVED'
+        ? 'ARCHIVE'
+        : current.status === 'ARCHIVED' && body.status && body.status !== 'ARCHIVED'
+          ? 'RESTORE'
+          : 'UPDATE';
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: updated.siteId,
+        entityType: 'CITY',
+        entityId: updated.id,
+        action,
+        previousSnapshot: current as unknown as Record<string, unknown>,
+        snapshot: updated as unknown as Record<string, unknown>,
+        changedFields: Object.keys(body),
+        actorId: request?.user?.id,
+        source: 'admin',
+      });
+      return { ...updated, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
   @Post('import/validate')

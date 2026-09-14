@@ -45,7 +45,7 @@ test('Page schema represents Release 1 site-global pages without a fake city', (
 
 test('admin pages reject incompatible global and city page scopes before writing', async () => {
   let writes = 0;
-  const controller = new AdminPagesController({
+  const prisma = {
     page: {
       create: async ({ data }) => { writes += 1; return { id: 'page-1', ...data }; },
       findUnique: async () => ({
@@ -54,7 +54,9 @@ test('admin pages reject incompatible global and city page scopes before writing
       }),
       update: async ({ data }) => { writes += 1; return { id: 'page-1', siteId: 'site-1', ...data }; },
     },
-  }, { enqueue: async () => {} });
+  };
+  prisma.$transaction = async (callback) => callback(prisma);
+  const controller = new AdminPagesController(prisma, { recordWorkingRevision: async () => ({ siteRevision: 1 }) });
 
   await assert.rejects(controller.create({
     siteId: 'site-1', cityId: null, type: 'INTERNET', title: 'Интернет', slug: 'internet', status: 'DRAFT',
@@ -70,14 +72,19 @@ test('admin pages reject incompatible global and city page scopes before writing
   assert.equal(writes, 0);
 });
 
-test('admin pages accept a canonical site-global page and enqueue its rebuild', async () => {
+test('admin pages save a canonical site-global page as a working revision without publishing it', async () => {
   const writes = [];
-  const rebuilds = [];
-  const controller = new AdminPagesController({
+  const revisions = [];
+  const prisma = {
     page: {
       create: async ({ data }) => { writes.push(data); return { id: 'coverage', ...data }; },
     },
-  }, { enqueue: async (job) => { rebuilds.push(job); } });
+  };
+  prisma.$transaction = async (callback) => callback(prisma);
+  const controller = new AdminPagesController(
+    prisma,
+    { recordWorkingRevision: async (_transaction, input) => { revisions.push(input); return { siteRevision: 4 }; } },
+  );
 
   const page = await controller.create({
     siteId: 'site-1', cityId: null, type: 'COVERAGE', title: 'Карта покрытия',
@@ -85,6 +92,8 @@ test('admin pages accept a canonical site-global page and enqueue its rebuild', 
   });
 
   assert.equal(page.cityId, null);
+  assert.equal(page.workingRevision, 4);
   assert.equal(writes.length, 1);
-  assert.deepEqual(rebuilds, [{ entity: 'page', id: 'coverage', siteId: 'site-1' }]);
+  assert.equal(revisions[0].entityType, 'PAGE');
+  assert.equal(revisions[0].action, 'CREATE');
 });

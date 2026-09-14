@@ -209,20 +209,21 @@ model SiteRebuild {
 }
 
 model ContentRevision {
-  id             String                @id @default(cuid())
-  siteId         String
-  entityType     ContentEntityType
-  entityId       String
-  entityRevision Int
-  siteRevision   Int
-  action         ContentRevisionAction
-  snapshot       Json
-  changedFields  Json
-  source         String
-  actorId        String?
-  createdAt      DateTime              @default(now()) @db.Timestamptz(3)
-  site           Site                  @relation(fields: [siteId], references: [id], onDelete: Cascade)
-  actor          User?                 @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  id               String                @id @default(cuid())
+  siteId           String
+  entityType       ContentEntityType
+  entityId         String
+  entityRevision   Int
+  siteRevision     Int
+  action           ContentRevisionAction
+  previousSnapshot Json?
+  snapshot         Json
+  changedFields    Json
+  source           String
+  actorId          String?
+  createdAt        DateTime              @default(now()) @db.Timestamptz(3)
+  site             Site                  @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  actor            User?                 @relation(fields: [actorId], references: [id], onDelete: SetNull)
 
   @@unique([entityType, entityId, entityRevision])
   @@unique([siteId, siteRevision, entityType, entityId])
@@ -265,6 +266,7 @@ model AuditEvent {
   entityId      String
   action        ContentRevisionAction
   changedFields Json
+  changes       Json
   source        String
   actorId       String?
   createdAt     DateTime              @default(now()) @db.Timestamptz(3)

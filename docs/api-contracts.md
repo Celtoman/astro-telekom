@@ -71,10 +71,10 @@ Worker повторно проверяет persisted coverage snapshot и одн
 | GET/POST/PATCH | `/admin/users` | Учетные записи администраторов, deactivate/password reset. Поле `role` не поддерживается. |
 | GET | `/admin/readiness` | Защищенный configuration gate: `configured`/`blocked` для coverage, contract, Tarifnik, fallback email, rebuild и валидного `PII_RETENTION_DAYS`; возвращает только имена отсутствующих переменных, никогда не значения. |
 | GET/POST/PATCH | `/admin/regions` | Region records. |
-| GET/POST/PATCH | `/admin/cities` | City records. |
-| GET/POST/PATCH | `/admin/pages` | Page records. `COVERAGE`, `CITIES`, `PRIVACY`, `PERSONAL_DATA_CONSENT`, `COOKIE_POLICY` принимаются только с `cityId: null` и каноническим slug; все остальные типы требуют непустой `cityId`. Несовместимый scope отклоняется до записи. |
-| GET/POST | `/admin/pages/:pageId/blocks` | Просмотр упорядоченных blocks и создание блока по строгому type-specific контракту ниже. |
-| PATCH/DELETE | `/admin/blocks/:id` | Изменение и удаление blocks. Изменение `blockType` или `data` объединяется с сохраненными корневыми полями и повторно валидирует полный блок; переданное `data` должно быть полным объектом нового типа. |
+| GET/POST/PATCH | `/admin/cities` | City records. Ручные create/update сохраняют `ContentRevision` и audit в той же serializable-транзакции, возвращают `workingRevision` и не запускают публикацию. Смена статуса по-прежнему синхронизирует управляемые тарифные redirects внутри этой транзакции. |
+| GET/POST/PATCH | `/admin/pages` | Page records. `COVERAGE`, `CITIES`, `PRIVACY`, `PERSONAL_DATA_CONSENT`, `COOKIE_POLICY` принимаются только с `cityId: null` и каноническим slug; все остальные типы требуют непустой `cityId`. Несовместимый scope отклоняется до записи. Ручная запись создает рабочую ревизию и не запускает публикацию. |
+| GET/POST | `/admin/pages/:pageId/blocks` | Просмотр упорядоченных blocks и создание блока по строгому type-specific контракту ниже. Изменение блоков версионирует полный снимок родительской Page и возвращает `workingRevision`. |
+| PATCH/DELETE | `/admin/blocks/:id` | Изменение и удаление blocks. Изменение `blockType` или `data` объединяется с сохраненными корневыми полями и повторно валидирует полный блок; переданное `data` должно быть полным объектом нового типа. Сохранение создает рабочую ревизию Page без публикации. |
 | GET | `/admin/tariffs` | Cursor-страница каталога тарифов с минимальным list DTO; поддерживает `limit`, `cursor` и поиск `q` по названию, slug или городу. |
 | GET | `/admin/tariffs/:id` | Полная карточка тарифа, provider/city context, no-slash `publicPath` и серверный allowlisted `attributeSchema` для длинной формы. |
 | POST | `/admin/tariffs` | Создание тарифа с единым identity key `cityId:slug:serviceType`. |
@@ -88,12 +88,14 @@ Worker повторно проверяет persisted coverage snapshot и одн
 | POST | `/admin/cities/import/apply` | В serializable-транзакции атомарно применяет run и переводит его в `APPLIED` только с полным `actions` map: существующий slug допускает `update`/`skip`, новый — `create`/`skip`. Пропущенные, лишние, неизвестные и несовместимые действия, а также изменившийся после validate city snapshot отклоняются; при warnings дополнительно требуется `confirmWarnings: true`. |
 | GET | `/admin/cities/imports`, `/admin/cities/imports/:id` | История и полный report city import. |
 | GET | `/admin/rebuilds`, `/admin/rebuilds/:id` | Persistent статус пересборки; список можно фильтровать по `siteId`. |
+| GET | `/admin/sites/:siteId/publication-state` | Возвращает компактное состояние рабочей и опубликованной ревизий, последнего снимка публикации и rebuild. Полный каталог и raw `providerResponse` не выдаются. |
+| POST | `/admin/sites/:siteId/publications` | Явно фиксирует неизменяемый снимок ровно `expectedWorkingRevision` и ставит его в rebuild. Устаревший номер и отсутствие неопубликованных изменений дают 409; повтор текущей pending/running/succeeded ревизии идемпотентен, failed-снимок переводится в `PENDING` без переснимания данных. |
 | POST | `/internal/site-rebuilds/:id/start` | Worker фиксирует начало попытки и получает payload/revision; только сервисный `x-admin-token`. |
 | POST | `/internal/site-rebuilds/:id/provider-progress` | Worker сохраняет deployment UUID/status только для текущей processing revision; stale progress игнорируется; только сервисный `x-admin-token`. |
 | POST | `/internal/site-rebuilds/:id/result` | Worker сохраняет финальный provider result или ошибку попытки; только сервисный `x-admin-token`. |
 | GET | `/internal/site-publications/:siteSlug/catalog` | Защищенный build-time каталог для `web-publish`. Во время snapshot-aware rebuild возвращает строго его `processingPublicationId`; при первом deploy создает baseline успешного каталога. Для старых mutators без snapshot во время `RUNNING` временно возвращает текущий рабочий каталог. |
 
-После успешной мутации content/city/tariff CRUD routes дожидаются сохранения `SiteRebuild` и постановки job, если доступен Redis. Для ручной правки тарифа дополнительно требуется `SitePublication.status === SUCCEEDED` и продвижение `Site.publishedRevision`; до этого public API сохраняет прежний снимок. Остальные mutators еще используют совместимый rebuild без snapshot и переводятся в #151.
+Ручные create/update города, страницы и ее блоков атомарно сохраняют рабочую ревизию и аудит, но не ставят rebuild: для них публикация запускается отдельным `POST /admin/sites/:siteId/publications`. Ручной `PATCH` тарифа пока сохраняет рабочую ревизию и сразу создает/ставит снимок публикации. Во всех случаях public API переключается только после `SitePublication.status === SUCCEEDED` и продвижения `Site.publishedRevision`; до этого посетители получают прежний снимок. Redirects, imports и остальные mutators еще используют совместимый rebuild без snapshot и переводятся в #151.
 
 ### Контракт `PageBlock`
 

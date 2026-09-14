@@ -216,6 +216,7 @@ model ContentRevision {
   entityRevision Int
   siteRevision   Int
   action         ContentRevisionAction
+  previousSnapshot Json?
   snapshot       Json
   changedFields  Json
   source         String
@@ -265,6 +266,7 @@ model AuditEvent {
   entityId     String
   action       ContentRevisionAction
   changedFields Json
+  changes      Json
   source       String
   actorId      String?
   createdAt    DateTime          @default(now()) @db.Timestamptz(3)

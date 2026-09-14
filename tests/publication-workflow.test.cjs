@@ -1,6 +1,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { PublicationWorkflowService } = require('../apps/api/dist/publication-workflow.service.js');
+const { PublicationWorkflowController } = require('../apps/api/dist/publication-workflow.controller.js');
 
 function fixture() {
   const sites = new Map([
@@ -66,15 +67,26 @@ function fixture() {
         publications.set(row.id, row);
         return row;
       },
-      findUnique: async ({ where }) => publications.get(where.id) || null,
-      findFirst: async ({ where, orderBy }) => {
+      findUnique: async ({ where }) => {
+        if (where.id) return publications.get(where.id) || null;
+        if (where.siteId_siteRevision) {
+          return [...publications.values()].find((row) => (
+            row.siteId === where.siteId_siteRevision.siteId
+            && row.siteRevision === where.siteId_siteRevision.siteRevision
+          )) || null;
+        }
+        return null;
+      },
+      findFirst: async ({ where, orderBy, select }) => {
         const rows = [...publications.values()].filter((row) => {
           if (where.siteId && row.siteId !== where.siteId) return false;
           if (where.status && row.status !== where.status) return false;
           return true;
         });
         if (orderBy?.siteRevision === 'desc') rows.sort((a, b) => b.siteRevision - a.siteRevision);
-        return rows[0] || null;
+        const row = rows[0] || null;
+        if (!row || !select) return row;
+        return Object.fromEntries(Object.keys(select).filter((key) => select[key]).map((key) => [key, row[key]]));
       },
       update: async ({ where, data }) => {
         const row = { ...publications.get(where.id), ...data };
@@ -120,6 +132,7 @@ test('saving an entity creates an immutable working revision and audit event', a
     entityType: 'TARIFF',
     entityId: 'tariff-1',
     action: 'UPDATE',
+    previousSnapshot: { name: 'Гига 300', standardPrice: '850' },
     snapshot: { name: 'Гига 300', standardPrice: '900' },
     changedFields: ['name', 'standardPrice'],
     actorId: 'user-1',
@@ -130,6 +143,7 @@ test('saving an entity creates an immutable working revision and audit event', a
     entityType: 'TARIFF',
     entityId: 'tariff-1',
     action: 'UPDATE',
+    previousSnapshot: { name: 'Гига 300', standardPrice: '900' },
     snapshot: { name: 'Гига 300', standardPrice: '950' },
     changedFields: ['standardPrice'],
     actorId: 'user-1',
@@ -141,7 +155,15 @@ test('saving an entity creates an immutable working revision and audit event', a
   assert.equal(second.siteRevision, 2);
   assert.equal(second.entityRevision, 2);
   assert.deepEqual(f.contentRevisions.map((row) => row.snapshot.standardPrice), ['900', '950']);
+  assert.deepEqual(f.contentRevisions.map((row) => row.previousSnapshot.standardPrice), ['850', '900']);
   assert.deepEqual(f.auditEvents.map((row) => row.siteRevision), [1, 2]);
+  assert.deepEqual(f.auditEvents[0].changes, {
+    name: { before: 'Гига 300', after: 'Гига 300' },
+    standardPrice: { before: '850', after: '900' },
+  });
+  assert.deepEqual(f.auditEvents[1].changes, {
+    standardPrice: { before: '900', after: '950' },
+  });
   assert.equal(f.sites.get('site-1').publishedRevision, 0);
 });
 
@@ -249,4 +271,81 @@ test('a failed publication preserves the last published revision', async () => {
   assert.equal(f.publications.get(candidate.id).status, 'FAILED');
   assert.equal(f.publications.get(candidate.id).lastError, 'Coolify failed');
   assert.equal((await f.service.getPublishedCatalog('domru-kazan')).marker, 'published');
+});
+
+test('explicit publication captures exactly the expected working revision and is idempotent while pending', async () => {
+  const f = fixture();
+  await f.service.recordWorkingRevision(f.prisma, {
+    siteId: 'site-1', entityType: 'PAGE', entityId: 'page-1', action: 'UPDATE',
+    snapshot: { title: 'Новая версия' }, changedFields: ['title'], source: 'admin',
+  });
+
+  const first = await f.service.preparePublication({
+    siteId: 'site-1', expectedWorkingRevision: 1, triggerEntity: 'site', triggerEntityId: 'site-1', requestedById: 'user-1',
+  });
+  const second = await f.service.preparePublication({
+    siteId: 'site-1', expectedWorkingRevision: 1, triggerEntity: 'site', triggerEntityId: 'site-1', requestedById: 'user-1',
+  });
+
+  assert.equal(first.id, second.id);
+  assert.equal(first.siteRevision, 1);
+  assert.equal(f.publications.size, 1);
+});
+
+test('explicit publication rejects a stale revision and a site without unpublished changes', async () => {
+  const f = fixture();
+  await f.service.recordWorkingRevision(f.prisma, {
+    siteId: 'site-1', entityType: 'PAGE', entityId: 'page-1', action: 'UPDATE',
+    snapshot: { title: 'Новая версия' }, changedFields: ['title'], source: 'admin',
+  });
+
+  await assert.rejects(() => f.service.preparePublication({
+    siteId: 'site-1', expectedWorkingRevision: 0, triggerEntity: 'site', triggerEntityId: 'site-1',
+  }), /рабочая ревизия/i);
+
+  f.sites.get('site-1').publishedRevision = 1;
+  await assert.rejects(() => f.service.preparePublication({
+    siteId: 'site-1', expectedWorkingRevision: 1, triggerEntity: 'site', triggerEntityId: 'site-1',
+  }), /нет неопубликованных изменений/i);
+});
+
+test('publication controller enqueues the exact snapshot and returns current publication state', async () => {
+  const publication = { id: 'publication-7', siteId: 'site-1', siteRevision: 7, status: 'PENDING' };
+  const calls = [];
+  const publications = {
+    preparePublication: async (input) => { calls.push(['prepare', input]); return publication; },
+    getState: async (siteId) => ({ siteId, workingRevision: 7, publishedRevision: 6, hasUnpublishedChanges: true }),
+  };
+  const rebuilds = {
+    enqueue: async (input) => { calls.push(['enqueue', input]); return { id: 'rebuild-1', status: 'QUEUED' }; },
+  };
+  const controller = new PublicationWorkflowController(publications, rebuilds);
+
+  const created = await controller.create('site-1', { expectedWorkingRevision: 7 }, { user: { id: 'user-1' } });
+  const state = await controller.state('site-1');
+
+  assert.equal(created.publication.id, 'publication-7');
+  assert.equal(created.rebuild.id, 'rebuild-1');
+  assert.equal(state.hasUnpublishedChanges, true);
+  assert.deepEqual(calls, [
+    ['prepare', { siteId: 'site-1', expectedWorkingRevision: 7, triggerEntity: 'site', triggerEntityId: 'site-1', requestedById: 'user-1' }],
+    ['enqueue', { entity: 'site-publication', id: 'publication-7', siteId: 'site-1', publicationId: 'publication-7' }],
+  ]);
+});
+
+test('publication state does not expose the full catalog or provider response', async () => {
+  const f = fixture();
+  await f.service.recordWorkingRevision(f.prisma, {
+    siteId: 'site-1', entityType: 'PAGE', entityId: 'page-1', action: 'UPDATE',
+    snapshot: { title: 'Новая версия' }, changedFields: ['title'], source: 'admin',
+  });
+  await f.service.preparePublication({
+    siteId: 'site-1', expectedWorkingRevision: 1, triggerEntity: 'site', triggerEntityId: 'site-1',
+  });
+
+  const state = await f.service.getState('site-1');
+
+  assert.equal(state.latestPublication.siteRevision, 1);
+  assert.equal('catalog' in state.latestPublication, false);
+  assert.equal('providerResponse' in state.latestPublication, false);
 });

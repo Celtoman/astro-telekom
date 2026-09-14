@@ -7826,6 +7826,7 @@ export namespace Prisma {
     entityRevision: number
     siteRevision: number
     action: number
+    previousSnapshot: number
     snapshot: number
     changedFields: number
     source: number
@@ -7879,6 +7880,7 @@ export namespace Prisma {
     entityRevision?: true
     siteRevision?: true
     action?: true
+    previousSnapshot?: true
     snapshot?: true
     changedFields?: true
     source?: true
@@ -7981,6 +7983,7 @@ export namespace Prisma {
     entityRevision: number
     siteRevision: number
     action: $Enums.ContentRevisionAction
+    previousSnapshot: JsonValue | null
     snapshot: JsonValue
     changedFields: JsonValue
     source: string
@@ -8015,6 +8018,7 @@ export namespace Prisma {
     entityRevision?: boolean
     siteRevision?: boolean
     action?: boolean
+    previousSnapshot?: boolean
     snapshot?: boolean
     changedFields?: boolean
     source?: boolean
@@ -8032,6 +8036,7 @@ export namespace Prisma {
     entityRevision?: boolean
     siteRevision?: boolean
     action?: boolean
+    previousSnapshot?: boolean
     snapshot?: boolean
     changedFields?: boolean
     source?: boolean
@@ -8049,6 +8054,7 @@ export namespace Prisma {
     entityRevision?: boolean
     siteRevision?: boolean
     action?: boolean
+    previousSnapshot?: boolean
     snapshot?: boolean
     changedFields?: boolean
     source?: boolean
@@ -8066,6 +8072,7 @@ export namespace Prisma {
     entityRevision?: boolean
     siteRevision?: boolean
     action?: boolean
+    previousSnapshot?: boolean
     snapshot?: boolean
     changedFields?: boolean
     source?: boolean
@@ -8073,7 +8080,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type ContentRevisionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "entityType" | "entityId" | "entityRevision" | "siteRevision" | "action" | "snapshot" | "changedFields" | "source" | "actorId" | "createdAt", ExtArgs["result"]["contentRevision"]>
+  export type ContentRevisionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "entityType" | "entityId" | "entityRevision" | "siteRevision" | "action" | "previousSnapshot" | "snapshot" | "changedFields" | "source" | "actorId" | "createdAt", ExtArgs["result"]["contentRevision"]>
   export type ContentRevisionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     actor?: boolean | ContentRevision$actorArgs<ExtArgs>
@@ -8101,6 +8108,7 @@ export namespace Prisma {
       entityRevision: number
       siteRevision: number
       action: $Enums.ContentRevisionAction
+      previousSnapshot: Prisma.JsonValue | null
       snapshot: Prisma.JsonValue
       changedFields: Prisma.JsonValue
       source: string
@@ -8538,6 +8546,7 @@ export namespace Prisma {
     readonly entityRevision: FieldRef<"ContentRevision", 'Int'>
     readonly siteRevision: FieldRef<"ContentRevision", 'Int'>
     readonly action: FieldRef<"ContentRevision", 'ContentRevisionAction'>
+    readonly previousSnapshot: FieldRef<"ContentRevision", 'Json'>
     readonly snapshot: FieldRef<"ContentRevision", 'Json'>
     readonly changedFields: FieldRef<"ContentRevision", 'Json'>
     readonly source: FieldRef<"ContentRevision", 'String'>
@@ -10352,6 +10361,7 @@ export namespace Prisma {
     entityId: number
     action: number
     changedFields: number
+    changes: number
     source: number
     actorId: number
     createdAt: number
@@ -10399,6 +10409,7 @@ export namespace Prisma {
     entityId?: true
     action?: true
     changedFields?: true
+    changes?: true
     source?: true
     actorId?: true
     createdAt?: true
@@ -10499,6 +10510,7 @@ export namespace Prisma {
     entityId: string
     action: $Enums.ContentRevisionAction
     changedFields: JsonValue
+    changes: JsonValue
     source: string
     actorId: string | null
     createdAt: Date
@@ -10531,6 +10543,7 @@ export namespace Prisma {
     entityId?: boolean
     action?: boolean
     changedFields?: boolean
+    changes?: boolean
     source?: boolean
     actorId?: boolean
     createdAt?: boolean
@@ -10546,6 +10559,7 @@ export namespace Prisma {
     entityId?: boolean
     action?: boolean
     changedFields?: boolean
+    changes?: boolean
     source?: boolean
     actorId?: boolean
     createdAt?: boolean
@@ -10561,6 +10575,7 @@ export namespace Prisma {
     entityId?: boolean
     action?: boolean
     changedFields?: boolean
+    changes?: boolean
     source?: boolean
     actorId?: boolean
     createdAt?: boolean
@@ -10576,12 +10591,13 @@ export namespace Prisma {
     entityId?: boolean
     action?: boolean
     changedFields?: boolean
+    changes?: boolean
     source?: boolean
     actorId?: boolean
     createdAt?: boolean
   }
 
-  export type AuditEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "siteRevision" | "entityType" | "entityId" | "action" | "changedFields" | "source" | "actorId" | "createdAt", ExtArgs["result"]["auditEvent"]>
+  export type AuditEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "siteRevision" | "entityType" | "entityId" | "action" | "changedFields" | "changes" | "source" | "actorId" | "createdAt", ExtArgs["result"]["auditEvent"]>
   export type AuditEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     actor?: boolean | AuditEvent$actorArgs<ExtArgs>
@@ -10609,6 +10625,7 @@ export namespace Prisma {
       entityId: string
       action: $Enums.ContentRevisionAction
       changedFields: Prisma.JsonValue
+      changes: Prisma.JsonValue
       source: string
       actorId: string | null
       createdAt: Date
@@ -11044,6 +11061,7 @@ export namespace Prisma {
     readonly entityId: FieldRef<"AuditEvent", 'String'>
     readonly action: FieldRef<"AuditEvent", 'ContentRevisionAction'>
     readonly changedFields: FieldRef<"AuditEvent", 'Json'>
+    readonly changes: FieldRef<"AuditEvent", 'Json'>
     readonly source: FieldRef<"AuditEvent", 'String'>
     readonly actorId: FieldRef<"AuditEvent", 'String'>
     readonly createdAt: FieldRef<"AuditEvent", 'DateTime'>
@@ -32064,6 +32082,7 @@ export namespace Prisma {
     entityRevision: 'entityRevision',
     siteRevision: 'siteRevision',
     action: 'action',
+    previousSnapshot: 'previousSnapshot',
     snapshot: 'snapshot',
     changedFields: 'changedFields',
     source: 'source',
@@ -32102,6 +32121,7 @@ export namespace Prisma {
     entityId: 'entityId',
     action: 'action',
     changedFields: 'changedFields',
+    changes: 'changes',
     source: 'source',
     actorId: 'actorId',
     createdAt: 'createdAt'
@@ -33123,6 +33143,7 @@ export namespace Prisma {
     entityRevision?: IntFilter<"ContentRevision"> | number
     siteRevision?: IntFilter<"ContentRevision"> | number
     action?: EnumContentRevisionActionFilter<"ContentRevision"> | $Enums.ContentRevisionAction
+    previousSnapshot?: JsonNullableFilter<"ContentRevision">
     snapshot?: JsonFilter<"ContentRevision">
     changedFields?: JsonFilter<"ContentRevision">
     source?: StringFilter<"ContentRevision"> | string
@@ -33140,6 +33161,7 @@ export namespace Prisma {
     entityRevision?: SortOrder
     siteRevision?: SortOrder
     action?: SortOrder
+    previousSnapshot?: SortOrderInput | SortOrder
     snapshot?: SortOrder
     changedFields?: SortOrder
     source?: SortOrder
@@ -33162,6 +33184,7 @@ export namespace Prisma {
     entityRevision?: IntFilter<"ContentRevision"> | number
     siteRevision?: IntFilter<"ContentRevision"> | number
     action?: EnumContentRevisionActionFilter<"ContentRevision"> | $Enums.ContentRevisionAction
+    previousSnapshot?: JsonNullableFilter<"ContentRevision">
     snapshot?: JsonFilter<"ContentRevision">
     changedFields?: JsonFilter<"ContentRevision">
     source?: StringFilter<"ContentRevision"> | string
@@ -33179,6 +33202,7 @@ export namespace Prisma {
     entityRevision?: SortOrder
     siteRevision?: SortOrder
     action?: SortOrder
+    previousSnapshot?: SortOrderInput | SortOrder
     snapshot?: SortOrder
     changedFields?: SortOrder
     source?: SortOrder
@@ -33202,6 +33226,7 @@ export namespace Prisma {
     entityRevision?: IntWithAggregatesFilter<"ContentRevision"> | number
     siteRevision?: IntWithAggregatesFilter<"ContentRevision"> | number
     action?: EnumContentRevisionActionWithAggregatesFilter<"ContentRevision"> | $Enums.ContentRevisionAction
+    previousSnapshot?: JsonNullableWithAggregatesFilter<"ContentRevision">
     snapshot?: JsonWithAggregatesFilter<"ContentRevision">
     changedFields?: JsonWithAggregatesFilter<"ContentRevision">
     source?: StringWithAggregatesFilter<"ContentRevision"> | string
@@ -33335,6 +33360,7 @@ export namespace Prisma {
     entityId?: StringFilter<"AuditEvent"> | string
     action?: EnumContentRevisionActionFilter<"AuditEvent"> | $Enums.ContentRevisionAction
     changedFields?: JsonFilter<"AuditEvent">
+    changes?: JsonFilter<"AuditEvent">
     source?: StringFilter<"AuditEvent"> | string
     actorId?: StringNullableFilter<"AuditEvent"> | string | null
     createdAt?: DateTimeFilter<"AuditEvent"> | Date | string
@@ -33350,6 +33376,7 @@ export namespace Prisma {
     entityId?: SortOrder
     action?: SortOrder
     changedFields?: SortOrder
+    changes?: SortOrder
     source?: SortOrder
     actorId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -33368,6 +33395,7 @@ export namespace Prisma {
     entityId?: StringFilter<"AuditEvent"> | string
     action?: EnumContentRevisionActionFilter<"AuditEvent"> | $Enums.ContentRevisionAction
     changedFields?: JsonFilter<"AuditEvent">
+    changes?: JsonFilter<"AuditEvent">
     source?: StringFilter<"AuditEvent"> | string
     actorId?: StringNullableFilter<"AuditEvent"> | string | null
     createdAt?: DateTimeFilter<"AuditEvent"> | Date | string
@@ -33383,6 +33411,7 @@ export namespace Prisma {
     entityId?: SortOrder
     action?: SortOrder
     changedFields?: SortOrder
+    changes?: SortOrder
     source?: SortOrder
     actorId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -33404,6 +33433,7 @@ export namespace Prisma {
     entityId?: StringWithAggregatesFilter<"AuditEvent"> | string
     action?: EnumContentRevisionActionWithAggregatesFilter<"AuditEvent"> | $Enums.ContentRevisionAction
     changedFields?: JsonWithAggregatesFilter<"AuditEvent">
+    changes?: JsonWithAggregatesFilter<"AuditEvent">
     source?: StringWithAggregatesFilter<"AuditEvent"> | string
     actorId?: StringNullableWithAggregatesFilter<"AuditEvent"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"AuditEvent"> | Date | string
@@ -35405,6 +35435,7 @@ export namespace Prisma {
     entityRevision: number
     siteRevision: number
     action: $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot: JsonNullValueInput | InputJsonValue
     changedFields: JsonNullValueInput | InputJsonValue
     source: string
@@ -35421,6 +35452,7 @@ export namespace Prisma {
     entityRevision: number
     siteRevision: number
     action: $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot: JsonNullValueInput | InputJsonValue
     changedFields: JsonNullValueInput | InputJsonValue
     source: string
@@ -35435,6 +35467,7 @@ export namespace Prisma {
     entityRevision?: IntFieldUpdateOperationsInput | number
     siteRevision?: IntFieldUpdateOperationsInput | number
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot?: JsonNullValueInput | InputJsonValue
     changedFields?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
@@ -35451,6 +35484,7 @@ export namespace Prisma {
     entityRevision?: IntFieldUpdateOperationsInput | number
     siteRevision?: IntFieldUpdateOperationsInput | number
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot?: JsonNullValueInput | InputJsonValue
     changedFields?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
@@ -35466,6 +35500,7 @@ export namespace Prisma {
     entityRevision: number
     siteRevision: number
     action: $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot: JsonNullValueInput | InputJsonValue
     changedFields: JsonNullValueInput | InputJsonValue
     source: string
@@ -35480,6 +35515,7 @@ export namespace Prisma {
     entityRevision?: IntFieldUpdateOperationsInput | number
     siteRevision?: IntFieldUpdateOperationsInput | number
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot?: JsonNullValueInput | InputJsonValue
     changedFields?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
@@ -35494,6 +35530,7 @@ export namespace Prisma {
     entityRevision?: IntFieldUpdateOperationsInput | number
     siteRevision?: IntFieldUpdateOperationsInput | number
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot?: JsonNullValueInput | InputJsonValue
     changedFields?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
@@ -35637,6 +35674,7 @@ export namespace Prisma {
     entityId: string
     action: $Enums.ContentRevisionAction
     changedFields: JsonNullValueInput | InputJsonValue
+    changes: JsonNullValueInput | InputJsonValue
     source: string
     createdAt?: Date | string
     site: SiteCreateNestedOneWithoutAuditEventsInput
@@ -35651,6 +35689,7 @@ export namespace Prisma {
     entityId: string
     action: $Enums.ContentRevisionAction
     changedFields: JsonNullValueInput | InputJsonValue
+    changes: JsonNullValueInput | InputJsonValue
     source: string
     actorId?: string | null
     createdAt?: Date | string
@@ -35663,6 +35702,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
     changedFields?: JsonNullValueInput | InputJsonValue
+    changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutAuditEventsNestedInput
@@ -35677,6 +35717,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
     changedFields?: JsonNullValueInput | InputJsonValue
+    changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35690,6 +35731,7 @@ export namespace Prisma {
     entityId: string
     action: $Enums.ContentRevisionAction
     changedFields: JsonNullValueInput | InputJsonValue
+    changes: JsonNullValueInput | InputJsonValue
     source: string
     actorId?: string | null
     createdAt?: Date | string
@@ -35702,6 +35744,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
     changedFields?: JsonNullValueInput | InputJsonValue
+    changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -35714,6 +35757,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
     changedFields?: JsonNullValueInput | InputJsonValue
+    changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38119,6 +38163,7 @@ export namespace Prisma {
     entityRevision?: SortOrder
     siteRevision?: SortOrder
     action?: SortOrder
+    previousSnapshot?: SortOrder
     snapshot?: SortOrder
     changedFields?: SortOrder
     source?: SortOrder
@@ -38267,6 +38312,7 @@ export namespace Prisma {
     entityId?: SortOrder
     action?: SortOrder
     changedFields?: SortOrder
+    changes?: SortOrder
     source?: SortOrder
     actorId?: SortOrder
     createdAt?: SortOrder
@@ -43003,6 +43049,7 @@ export namespace Prisma {
     entityRevision: number
     siteRevision: number
     action: $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot: JsonNullValueInput | InputJsonValue
     changedFields: JsonNullValueInput | InputJsonValue
     source: string
@@ -43017,6 +43064,7 @@ export namespace Prisma {
     entityRevision: number
     siteRevision: number
     action: $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot: JsonNullValueInput | InputJsonValue
     changedFields: JsonNullValueInput | InputJsonValue
     source: string
@@ -43089,6 +43137,7 @@ export namespace Prisma {
     entityId: string
     action: $Enums.ContentRevisionAction
     changedFields: JsonNullValueInput | InputJsonValue
+    changes: JsonNullValueInput | InputJsonValue
     source: string
     createdAt?: Date | string
     actor?: UserCreateNestedOneWithoutAuditEventsInput
@@ -43101,6 +43150,7 @@ export namespace Prisma {
     entityId: string
     action: $Enums.ContentRevisionAction
     changedFields: JsonNullValueInput | InputJsonValue
+    changes: JsonNullValueInput | InputJsonValue
     source: string
     actorId?: string | null
     createdAt?: Date | string
@@ -43474,6 +43524,7 @@ export namespace Prisma {
     entityRevision?: IntFilter<"ContentRevision"> | number
     siteRevision?: IntFilter<"ContentRevision"> | number
     action?: EnumContentRevisionActionFilter<"ContentRevision"> | $Enums.ContentRevisionAction
+    previousSnapshot?: JsonNullableFilter<"ContentRevision">
     snapshot?: JsonFilter<"ContentRevision">
     changedFields?: JsonFilter<"ContentRevision">
     source?: StringFilter<"ContentRevision"> | string
@@ -43544,6 +43595,7 @@ export namespace Prisma {
     entityId?: StringFilter<"AuditEvent"> | string
     action?: EnumContentRevisionActionFilter<"AuditEvent"> | $Enums.ContentRevisionAction
     changedFields?: JsonFilter<"AuditEvent">
+    changes?: JsonFilter<"AuditEvent">
     source?: StringFilter<"AuditEvent"> | string
     actorId?: StringNullableFilter<"AuditEvent"> | string | null
     createdAt?: DateTimeFilter<"AuditEvent"> | Date | string
@@ -48947,6 +48999,7 @@ export namespace Prisma {
     entityRevision: number
     siteRevision: number
     action: $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot: JsonNullValueInput | InputJsonValue
     changedFields: JsonNullValueInput | InputJsonValue
     source: string
@@ -48962,6 +49015,7 @@ export namespace Prisma {
     entityRevision: number
     siteRevision: number
     action: $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot: JsonNullValueInput | InputJsonValue
     changedFields: JsonNullValueInput | InputJsonValue
     source: string
@@ -49033,6 +49087,7 @@ export namespace Prisma {
     entityId: string
     action: $Enums.ContentRevisionAction
     changedFields: JsonNullValueInput | InputJsonValue
+    changes: JsonNullValueInput | InputJsonValue
     source: string
     createdAt?: Date | string
     site: SiteCreateNestedOneWithoutAuditEventsInput
@@ -49046,6 +49101,7 @@ export namespace Prisma {
     entityId: string
     action: $Enums.ContentRevisionAction
     changedFields: JsonNullValueInput | InputJsonValue
+    changes: JsonNullValueInput | InputJsonValue
     source: string
     createdAt?: Date | string
   }
@@ -49562,6 +49618,7 @@ export namespace Prisma {
     entityRevision: number
     siteRevision: number
     action: $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot: JsonNullValueInput | InputJsonValue
     changedFields: JsonNullValueInput | InputJsonValue
     source: string
@@ -49592,6 +49649,7 @@ export namespace Prisma {
     entityId: string
     action: $Enums.ContentRevisionAction
     changedFields: JsonNullValueInput | InputJsonValue
+    changes: JsonNullValueInput | InputJsonValue
     source: string
     actorId?: string | null
     createdAt?: Date | string
@@ -50044,6 +50102,7 @@ export namespace Prisma {
     entityRevision?: IntFieldUpdateOperationsInput | number
     siteRevision?: IntFieldUpdateOperationsInput | number
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot?: JsonNullValueInput | InputJsonValue
     changedFields?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
@@ -50058,6 +50117,7 @@ export namespace Prisma {
     entityRevision?: IntFieldUpdateOperationsInput | number
     siteRevision?: IntFieldUpdateOperationsInput | number
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot?: JsonNullValueInput | InputJsonValue
     changedFields?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
@@ -50072,6 +50132,7 @@ export namespace Prisma {
     entityRevision?: IntFieldUpdateOperationsInput | number
     siteRevision?: IntFieldUpdateOperationsInput | number
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot?: JsonNullValueInput | InputJsonValue
     changedFields?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
@@ -50140,6 +50201,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
     changedFields?: JsonNullValueInput | InputJsonValue
+    changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     actor?: UserUpdateOneWithoutAuditEventsNestedInput
@@ -50152,6 +50214,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
     changedFields?: JsonNullValueInput | InputJsonValue
+    changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50164,6 +50227,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
     changedFields?: JsonNullValueInput | InputJsonValue
+    changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51786,6 +51850,7 @@ export namespace Prisma {
     entityRevision: number
     siteRevision: number
     action: $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot: JsonNullValueInput | InputJsonValue
     changedFields: JsonNullValueInput | InputJsonValue
     source: string
@@ -51816,6 +51881,7 @@ export namespace Prisma {
     entityId: string
     action: $Enums.ContentRevisionAction
     changedFields: JsonNullValueInput | InputJsonValue
+    changes: JsonNullValueInput | InputJsonValue
     source: string
     createdAt?: Date | string
   }
@@ -51848,6 +51914,7 @@ export namespace Prisma {
     entityRevision?: IntFieldUpdateOperationsInput | number
     siteRevision?: IntFieldUpdateOperationsInput | number
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot?: JsonNullValueInput | InputJsonValue
     changedFields?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
@@ -51863,6 +51930,7 @@ export namespace Prisma {
     entityRevision?: IntFieldUpdateOperationsInput | number
     siteRevision?: IntFieldUpdateOperationsInput | number
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot?: JsonNullValueInput | InputJsonValue
     changedFields?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
@@ -51877,6 +51945,7 @@ export namespace Prisma {
     entityRevision?: IntFieldUpdateOperationsInput | number
     siteRevision?: IntFieldUpdateOperationsInput | number
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
+    previousSnapshot?: NullableJsonNullValueInput | InputJsonValue
     snapshot?: JsonNullValueInput | InputJsonValue
     changedFields?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
@@ -51944,6 +52013,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
     changedFields?: JsonNullValueInput | InputJsonValue
+    changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutAuditEventsNestedInput
@@ -51957,6 +52027,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
     changedFields?: JsonNullValueInput | InputJsonValue
+    changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51969,6 +52040,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     action?: EnumContentRevisionActionFieldUpdateOperationsInput | $Enums.ContentRevisionAction
     changedFields?: JsonNullValueInput | InputJsonValue
+    changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

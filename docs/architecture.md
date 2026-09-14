@@ -2,7 +2,7 @@
 
 ## Статус архитектуры
 
-В репозитории реализован прототип статической витрины Дом.ру с защищенным внешним test-контуром в Coolify. Архитектура разделяет public web, admin, backoffice API и worker. Публичная маршрутизация строит static paths из отдельного Release 1 route inventory: корень, пять site-global страниц и HOME каждого опубликованного города. Канонический импорт переводит весь входящий каталог городов в `PUBLISHED` и создает новым городам единую композицию HOME; тарифы остаются данными этой страницы.
+В репозитории реализован прототип статической витрины Дом.ру с защищенным внешним test-контуром в Coolify. Архитектура разделяет public web, admin, backoffice API и worker. Публичная маршрутизация строит static paths из отдельного Release 1 route inventory: корень, пять site-global страниц, HOME каждого опубликованного города и detail каждого опубликованного тарифа такого города. Канонический импорт переводит весь входящий каталог городов в `PUBLISHED` и создает новым городам единую композицию HOME.
 
 ## Стек и приложения
 
@@ -45,7 +45,9 @@ Production Compose запускает one-shot `migrate` из API image посл
   -> Caddy -> static admin
   -> HttpOnly admin cookie -> API -> PostgreSQL
 
-Изменение контента в API
+Ручное изменение города/страницы/блоков в API
+  -> рабочая ревизия + before/after audit в PostgreSQL
+  -> явная публикация ожидаемой ревизии -> неизменяемый SitePublication
   -> PostgreSQL SiteRebuild -> Redis/BullMQ -> worker
   -> internal start/progress/result API -> webhook или Coolify start/poll -> финальный результат deployment
 
@@ -56,14 +58,14 @@ PII retention scheduler в worker
 
 Публичные формы имеют два реализованных flow. Обычная заявка принимает адрес и телефон сразу, под капотом получает и сохраняет результат Tarifnik `address/check`, а посетителю отвечает только коротким подтверждением. DaData ищет адрес глобально: при первом вводе IPLocate дает только мягкий КЛАДР-приоритет, который на 24 часа кешируется в HttpOnly-cookie; ошибка геолокации использует пару «регион + город страницы», но ни один boost не ограничивает фактическую географию заявки. Город опубликованной страницы сохраняется как source-контекст. Если найден хотя бы один провайдер, выполняется проверка действующего абонента через API Дом.ру независимо от наличия Дом.ру в списке; городской профиль выбирается по фактическим данным DaData из встроенного справочника 551 уникального профиля и 37 региональных fallback. `lead-deliveries` разрешается только при одновременном выполнении двух условий: Tarifnik подтвердил Дом.ру, а Dom.ru вернул валидный ответ с явным `contacts: []`. Действующий абонент, отсутствие Дом.ру, отсутствие провайдеров и любой неоднозначный или ошибочный ответ доставку блокируют. Видимая проверка сначала создает только `AddressCheck`: телефон запрашивается лишь при найденном Дом.ру, альтернативы ведут на `tarifnik.ru`, а пустой список показывает телефон технической поддержки. Все адресные поля выбирают подсказку DaData, а credentials остаются в API. После подтверждения действующего абонента API возвращает только UI-флаг; browser на 30 дней заменяет номера подключения на отдельный номер техподдержки, а server-side routing не читает и не доверяет этой browser-отметке.
 
-В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities` через server-only `SITE_DATA_API_URL` (с совместимым fallback на `PUBLIC_API_URL`). API возвращает `globalPages`, регион каждого города, контент опубликованных городов и authoritative `routes`: `/`, пять точных global path и `/{city.slug}` каждого `PUBLISHED` города. Чистая policy-функция запрещает отсутствие/избыток общих страниц, неверный slug, дубли и коллизии; API и web дополнительно требуют каноническую последовательность из семи блоков у каждой опубликованной city HOME. Web повторно сверяет контракт и строит sitemap только из него. Опубликованные service pages и тарифы передаются как данные для HOME, но URL не получают. Отдельный `PUBLIC_API_URL` встраивается в `data-*` browser-форм. `redirects.caddy` получает только правила с target из inventory; runtime resolver строит ту же policy по живой БД перед HTTP 301 и hit tracking. Все HTML paths кроме `/` нормализуются без завершающего слэша. `PUBLIC_SITE_SLUG` по умолчанию `domru-kazan`; любое изменение данных требует успешной пересборки.
+В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities` через server-only `SITE_DATA_API_URL` (с совместимым fallback на `PUBLIC_API_URL`). API возвращает `globalPages`, регион каждого города, контент опубликованных городов, тарифы и authoritative `routes`: `/`, пять точных global path, `/{city.slug}` каждого `PUBLISHED` города и `/{city.slug}/{tariff.slug}` каждого опубликованного тарифа такого города. Чистая policy-функция запрещает отсутствие/избыток общих страниц, неверный slug, дубли и коллизии; API и web дополнительно требуют каноническую последовательность из семи блоков у каждой опубликованной city HOME. Web повторно сверяет контракт и строит sitemap только из него. Опубликованные service pages остаются данными без detail URL Release 1. Отдельный `PUBLIC_API_URL` встраивается в `data-*` browser-форм. `redirects.caddy` получает только правила с target из inventory; runtime resolver использует тот же последний успешный publication snapshot перед HTTP 301 и hit tracking. Все HTML paths кроме `/` нормализуются без завершающего слэша. `PUBLIC_SITE_SLUG` по умолчанию `domru-kazan`; любое изменение данных становится видимым только после успешной пересборки соответствующего снимка.
 
 ## API-модули и их ответственность
 
 | Модуль | Реальная ответственность |
 | --- | --- |
 | `auth` и `AdminTokenGuard` | Создание 12-часовой сессии, browser login/me/logout через HttpOnly cookie и совместимый Bearer для технических клиентов. `x-admin-token` — машинный credential; `/internal/*` принимает только его. |
-| `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; `Page` бывает city-scoped или одним из пяти site-global типов, scope и global slug защищены API и БД; блоки имеют отдельную строгую валидацию, а public city HOME — обязательную композицию. |
+| `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; `Page` бывает city-scoped или одним из пяти site-global типов, scope и global slug защищены API и БД; блоки имеют отдельную строгую валидацию, а public city HOME — обязательную композицию. Ручные изменения cities/pages/blocks создают рабочие ревизии и audit без автоматической публикации. |
 | `tariff-import`, `city-import` | Валидация XLSX, сохранение отчета, transactional apply; новый город атомарно получает опубликованную HOME с семью блоками из общего factory. |
 | `address-suggestions`, `dadata`, `address-checks`, `coverage` | Серверные глобальные DaData IPLocate/suggest/clean: IP используется один раз для мягкого boost и не сохраняется, жесткого ограничения городом формы нет; официальный Tarifnik `address/check` получает фактический адрес пользователя, словарь провайдеров нормализуется, проверенный snapshot сохраняется без публикации raw response. |
 | `leads`, `domru-contract`, `domru-profile-catalog`, `lead-delivery`, `lead-notification-outbox`, `notifications`, `lead-access` | Сохранение лида, дедупликация, выбор регионально однозначного профиля Дом.ру, fail-closed routing, строгая проверка действующего договора и только затем официальный `appeal/create`, retry только временных ошибок, queue failure tracking, email fallback и одноразовый доступ из fallback-письма. Обычное оповещение атомарно получает persistent outbox, startup recovery, bounded retry, idempotency header и отдельный admin retry. Worker повторно проверяет наличие целевого провайдера и persisted `NOT_FOUND`; delivery retry доступен только для recoverable delivery/queue states или старого orphan `PENDING`, но не для ручных/отрицательных routing-исходов. |
@@ -83,17 +85,18 @@ PII retention scheduler в worker
 1. Сущности `Site`, `City`, `Page`, `Tariff` имеют статус `DRAFT`, `PUBLISHED` или `ARCHIVED`.
 2. Public API возвращает опубликованные данные, но отдельно применяет release policy к URL.
 3. Astro получает authoritative inventory и выпускает `N + T + 6` indexable HTML для `N` опубликованных городов и `T` опубликованных тарифов этих городов плюс общую 404. Страница тарифа создаётся только из route с `kind = CITY_TARIFF_DETAIL`; service pages остаются вне Release 1.
-4. CRUD API сохраняет/обновляет `SiteRebuild` и ставит BullMQ job; изменения одного сайта дедуплицируются, но счетчик ревизий не дает потерять изменение во время активной сборки.
-5. Worker получает попытку через internal API, вызывает deployment provider и сохраняет результат через API; только явный `{ status: "SUCCEEDED" }` обновляет `publishedRevision`.
+4. Ручные изменения cities/pages/blocks сохраняют рабочую ревизию и before/after audit в одной транзакции; явный publication endpoint проверяет ожидаемый номер и фиксирует неизменяемый полный снимок.
+5. `SiteRebuild` получает ID именно этого снимка и ставит BullMQ job; изменения одного сайта дедуплицируются, но запрошенный и обрабатываемый snapshots не подменяют друг друга.
+6. Worker получает попытку через internal API, вызывает deployment provider и сохраняет результат через API; только явный `{ status: "SUCCEEDED" }` обновляет `publishedRevision`.
 
-Статус доступен через admin API и показан в рабочих потоках импорта тарифов и городов. Coolify provider и production rebuild подтверждены live polling rehearsal до финального `finished`. Нет полноценного content preview, schedule, content-version snapshot или rollback.
+Статус rebuild доступен через admin API и показан в рабочих потоках импорта тарифов и городов. Отдельный компактный publication state API уже возвращает рабочую/опубликованную ревизии, последний snapshot и rebuild, но UI центра публикаций еще не подключен. Coolify provider и production rebuild подтверждены live polling rehearsal до финального `finished`. Нет полноценного content preview, schedule, rollback или общей корзины.
 
 ## Что не является частью текущей реализации
 
 - Одновременная эксплуатационная публикация нескольких сайтов: route policy поддерживает любое число опубликованных городов одного выбранного сайта, но импорт пока односайтовый, а production-доказательство новых global pages еще не выполнено.
 - SSR и runtime data fetching на публичных SEO-страницах.
-- Полная CMS с наследованием блоков, версиями и preview.
-- Аудит действий, общая корзина и аналитический контур; для редиректов отдельно реализовано мягкое архивирование и счетчики переходов.
+- Полная CMS с наследованием блоков, preview, расписанием и UI истории версий; базовые immutable revisions и audit уже есть.
+- Общая корзина, безопасный undo массовых операций и аналитический контур; для редиректов отдельно реализовано мягкое архивирование и счетчики переходов.
 - Сертифицированный production-контур с реальным трафиком: внешний защищенный test deployment и sandbox/test-контракты уже подтверждены, но legal и эксплуатационные блокеры Release 1 остаются.
 
 Детальный статус находится в [current-state.md](current-state.md), а шаги развития — в [плане реализации](plans/2026-09-07-platform-stabilization-and-mvp.md).

@@ -408,20 +408,25 @@ test('unpublishing a city disables every managed tariff redirect in the same tra
     redirect: { updateMany: async (query) => { redirectUpdates.push(query); return { count: 2 }; } },
   };
   const rebuilds = [];
+  const revisions = [];
   const controller = new AdminCitiesController(
     { $transaction: async (callback) => callback(tx) },
     { enqueue: async (job) => { rebuilds.push(job); } },
     {},
+    { recordWorkingRevision: async (_transaction, input) => { revisions.push(input); return { siteRevision: 12 }; } },
   );
 
-  const result = await controller.update('city-1', { status: 'DRAFT' });
+  const result = await controller.update('city-1', { status: 'DRAFT' }, { user: { id: 'user-1' } });
 
   assert.equal(result.status, 'DRAFT');
+  assert.equal(result.workingRevision, 12);
   assert.deepEqual(redirectUpdates, [{
     where: { siteId: 'site-1', managedTariffId: { in: ['tariff-published', 'tariff-draft'] } },
     data: { status: 'DRAFT' },
   }]);
-  assert.equal(rebuilds[0].siteId, 'site-1');
+  assert.equal(revisions[0].entityType, 'CITY');
+  assert.equal(revisions[0].actorId, 'user-1');
+  assert.deepEqual(rebuilds, []);
 });
 
 test('city import CLI requires an operator-provided action map instead of inventing row decisions', () => {

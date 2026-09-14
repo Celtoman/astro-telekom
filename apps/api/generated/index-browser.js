@@ -179,6 +179,7 @@ exports.Prisma.ContentRevisionScalarFieldEnum = {
   entityRevision: 'entityRevision',
   siteRevision: 'siteRevision',
   action: 'action',
+  previousSnapshot: 'previousSnapshot',
   snapshot: 'snapshot',
   changedFields: 'changedFields',
   source: 'source',
@@ -211,6 +212,7 @@ exports.Prisma.AuditEventScalarFieldEnum = {
   entityId: 'entityId',
   action: 'action',
   changedFields: 'changedFields',
+  changes: 'changes',
   source: 'source',
   actorId: 'actorId',
   createdAt: 'createdAt'

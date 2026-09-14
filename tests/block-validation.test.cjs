@@ -105,9 +105,10 @@ test('partial data and block type updates are validated against the complete sto
         return { count: 1 };
       },
     },
-    page: { findUnique: async () => ({ siteId: 'site-1' }) },
+    page: { findUnique: async () => ({ id: 'page-1', siteId: 'site-1', blocks: [stored] }) },
   };
-  const controller = new AdminBlocksController(prisma, { enqueue: async () => {} });
+  prisma.$transaction = async (callback) => callback(prisma);
+  const controller = new AdminBlocksController(prisma, { recordWorkingRevision: async () => ({ siteRevision: 1 }) });
 
   await assert.rejects(
     controller.update('block-1', { data: { title: 'Текст без обязательного описания' } }),
@@ -120,14 +121,14 @@ test('partial data and block type updates are validated against the complete sto
   assert.equal(updateCalls, 0);
 });
 
-test('valid data and type replacements use a guarded write and enqueue one rebuild', async () => {
+test('valid data and type replacements use a guarded write and create a working revision', async () => {
   const stored = {
     id: 'block-1', pageId: 'page-1', blockType: 'rich_text', position: 10, visible: true,
     data: { title: 'Условия', text: 'Исходный текст.' }, source: null,
   };
   let current = stored;
   const writes = [];
-  const rebuilds = [];
+  const revisions = [];
   const prisma = {
     pageBlock: {
       findUnique: async () => current,
@@ -138,9 +139,13 @@ test('valid data and type replacements use a guarded write and enqueue one rebui
         return { count: 1 };
       },
     },
-    page: { findUnique: async () => ({ siteId: 'site-1' }) },
+    page: { findUnique: async () => ({ id: 'page-1', siteId: 'site-1', blocks: [{ ...current }] }) },
   };
-  const controller = new AdminBlocksController(prisma, { enqueue: async (payload) => rebuilds.push(payload) });
+  prisma.$transaction = async (callback) => callback(prisma);
+  const controller = new AdminBlocksController(
+    prisma,
+    { recordWorkingRevision: async (_transaction, input) => { revisions.push(input); return { siteRevision: 9 }; } },
+  );
 
   const updated = await controller.update('block-1', {
     blockType: 'hero',
@@ -148,8 +153,13 @@ test('valid data and type replacements use a guarded write and enqueue one rebui
   });
 
   assert.equal(updated.blockType, 'hero');
+  assert.equal(updated.workingRevision, 9);
   assert.deepEqual(writes[0].where, { id: 'block-1', blockType: 'rich_text' });
-  assert.deepEqual(rebuilds, [{ entity: 'page-block', id: 'block-1', siteId: 'site-1' }]);
+  assert.equal(revisions[0].entityType, 'PAGE');
+  assert.equal(revisions[0].entityId, 'page-1');
+  assert.equal(revisions[0].previousSnapshot.blocks[0].blockType, 'rich_text');
+  assert.equal(revisions[0].snapshot.blocks[0].blockType, 'hero');
+  assert.deepEqual(revisions[0].changedFields, ['blocks']);
 });
 
 test('a concurrent discriminator change rejects a stale data write', async () => {
@@ -157,19 +167,20 @@ test('a concurrent discriminator change rejects a stale data write', async () =>
     id: 'block-1', pageId: 'page-1', blockType: 'rich_text', position: 10, visible: true,
     data: { title: 'Условия', text: 'Исходный текст.' }, source: null,
   };
-  let rebuildCalls = 0;
-  const controller = new AdminBlocksController({
+  const prisma = {
     pageBlock: {
       findUnique: async () => stored,
       updateMany: async () => ({ count: 0 }),
     },
-  }, { enqueue: async () => { rebuildCalls += 1; } });
+    page: { findUnique: async () => ({ id: 'page-1', siteId: 'site-1', blocks: [stored] }) },
+  };
+  prisma.$transaction = async (callback) => callback(prisma);
+  const controller = new AdminBlocksController(prisma, { recordWorkingRevision: async () => ({ siteRevision: 1 }) });
 
   await assert.rejects(
     controller.update('block-1', { data: { title: 'Обновление', text: 'Новый текст.' } }),
     error => error.getStatus() === 409,
   );
-  assert.equal(rebuildCalls, 0);
 });
 
 test('page-block migration normalizes only legacy internal hero CTA paths', () => {
