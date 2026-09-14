@@ -9,7 +9,7 @@
 | Зона | Реализация | Назначение |
 | --- | --- | --- |
 | `apps/web` | Astro 7, static output | SEO HTML и sitemap строго из Release 1 inventory; build генерирует Caddy routes только для редиректов с target внутри того же inventory. Все city HOME используют один блочный renderer и встроенную адресную форму; отдельного fallback-шаблона нет. `/goroda-obsluzhivaniya` серверно выводит все ссылки, группирует города по региону и добавляет прогрессивный client-side поиск. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
-| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, каталоги `/tariffs` и `/cities`, отдельные `/tariffs/import` и `/cities/import`, длинная форма `/tariffs/edit`, `/leads`, `/redirects` и `/lead-access/` реализованы как React-root с runtime API-запросами. Sidebar поддерживает вложенные рабочие сценарии «Каталог»/«Импорт». Общий publication control на ручных экранах тарифов, городов и редиректов показывает рабочую/опубликованную ревизии и запускает точный снимок отдельно от сохранения. Legacy demo удален; заявки доступны как реальный master-detail журнал, редиректы — как CRUD со статистикой переходов. Целевой референс паттернов — next-shadcn-admin-dashboard-aria; текущие Radix-примитивы еще требуют миграции [#97](https://github.com/Celtoman/astro-telekom/issues/97), см. [docs/admin-design-system.md](admin-design-system.md). |
+| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, каталоги `/tariffs` и `/cities`, отдельные `/tariffs/import` и `/cities/import`, длинная форма `/tariffs/edit`, `/leads`, `/redirects`, `/audit` и `/lead-access/` реализованы как React-root с runtime API-запросами. Sidebar поддерживает вложенные рабочие сценарии «Каталог»/«Импорт». Общий publication control на ручных экранах тарифов, городов и редиректов показывает рабочую/опубликованную ревизии и запускает точный снимок отдельно от сохранения. Legacy demo удален; заявки доступны как реальный master-detail журнал, редиректы — как CRUD со статистикой переходов, история CMS — как read-only server-paginated master-detail. Целевой референс паттернов — next-shadcn-admin-dashboard-aria; текущие Radix-примитивы еще требуют миграции [#97](https://github.com/Celtoman/astro-telekom/issues/97), см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры и publication workflow: рабочие ревизии, снимки каталога и выбор последней успешной публикации. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов, обычных оповещений, пересборок сайта и ежедневной PII retention; также слушает пока не используемую import-очередь. |
 | `prisma` / `packages/database` | Prisma 7 + PostgreSQL | `prisma/` хранит единственные schema и migrations; `packages/database` только делегирует Prisma CLI-команды. Bootstrap seed принадлежит `apps/api/src/seed.ts`, а единственный client output генерируется в `apps/api/generated`. |
@@ -73,6 +73,7 @@ PII retention scheduler в worker
 | `crm-leads` | Список, карточка, смена статуса, повторная постановка доставки и отзыв fallback-доступа. |
 | `rebuild-queue` | Persistent rebuild/outbox, дедупликация по сайту, BullMQ producer, start/progress/result API, сохранение provider deployment UUID и фиксация только финального результата deployment. |
 | `redirects` | Admin CRUD с архивированием, проверкой конфликтов/петель/цепочек, рабочими ревизиями без автоматической публикации, public resolver HTTP 301 и атомарным `hitCount`/`lastHitAt`. |
+| `audit-events` | Read-only журнал одного сайта: bounded cursor-list с фильтрами и легким DTO, отдельная detail-загрузка field-level before/after, actor и site context. |
 
 ## Границы модулей
 
@@ -95,7 +96,7 @@ PII retention scheduler в worker
 
 - Одновременная эксплуатационная публикация нескольких сайтов: route policy поддерживает любое число опубликованных городов одного выбранного сайта, но импорт пока односайтовый, а production-доказательство новых global pages еще не выполнено.
 - SSR и runtime data fetching на публичных SEO-страницах.
-- Полная CMS с наследованием блоков, preview, расписанием и UI истории версий; базовые immutable revisions и audit уже есть.
+- Полная CMS с наследованием блоков, preview, расписанием, корзиной и восстановлением версии; immutable revisions, audit и общий read-only журнал уже есть.
 - Общая корзина, универсальный undo остальных массовых операций и аналитический контур; для двух XLSX-импортов реализован guarded undo, а для редиректов — мягкое архивирование и счетчики переходов.
 - Сертифицированный production-контур с реальным трафиком: внешний защищенный test deployment и sandbox/test-контракты уже подтверждены, но legal и эксплуатационные блокеры Release 1 остаются.
 

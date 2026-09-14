@@ -42,6 +42,7 @@ import { LeadNotificationOutboxService } from './lead-notification-outbox.servic
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { SiteCatalogService } from './site-catalog.service';
 import { PublicationWorkflowController } from './publication-workflow.controller';
+import { AdminAuditEventsController } from './admin-audit-events.controller';
 
 @Module({
   controllers: [
@@ -69,6 +70,7 @@ import { PublicationWorkflowController } from './publication-workflow.controller
     PublicRedirectsController,
     LeadNotificationController,
     PublicationWorkflowController,
+    AdminAuditEventsController,
   ],
   providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, PublicationWorkflowService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })

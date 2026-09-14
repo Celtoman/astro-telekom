@@ -15,7 +15,7 @@ test('every filtered admin catalog uses the shared always-visible reset action w
   assert.match(resetSource, /disabled=\{!active\}/);
   assert.match(resetSource, /aria-hidden="true"/);
 
-  for (const component of ['LeadsApp.tsx', 'TariffsApp.tsx', 'CitiesApp.tsx', 'RedirectsApp.tsx']) {
+  for (const component of ['LeadsApp.tsx', 'TariffsApp.tsx', 'CitiesApp.tsx', 'RedirectsApp.tsx', 'AuditApp.tsx']) {
     const source = readFileSync(join(componentsRoot, component), 'utf8');
     assert.match(source, /FilterResetButton/, `${component} must render the shared reset action`);
     assert.match(source, /resetFilters/, `${component} must own an explicit reset handler`);
@@ -29,6 +29,9 @@ test('server-filtered catalogs reset committed filters and cursor pagination', (
 
   const tariffs = readFileSync(join(componentsRoot, 'TariffsApp.tsx'), 'utf8');
   assert.match(tariffs, /function resetFilters\(\)\s*\{[^}]*setSearch\(""\)[^}]*setSearchQuery\(""\)[^}]*setCursorStack\(\[""\]\)[^}]*\}/);
+
+  const audit = readFileSync(join(componentsRoot, 'AuditApp.tsx'), 'utf8');
+  assert.match(audit, /function resetFilters\(\)\s*\{[^}]*setSearch\(""\)[^}]*setSearchQuery\(""\)[^}]*setEntityType\("ALL"\)[^}]*setAction\("ALL"\)[^}]*setCursorStack\(\[""\]\)/);
 });
 
 test('client-filtered catalogs reset search without clearing edit forms', () => {
