@@ -1,5 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { Prisma } from '../generated';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { isDeepStrictEqual } from 'node:util';
+import { Prisma, PublishStatus } from '../generated';
 import { cityHomeTemplateBlocks } from './city-home-template';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
@@ -77,6 +78,31 @@ type StoredRegion = {
   content: unknown;
 };
 
+type StoredPageBlock = {
+  id: string;
+  pageId: string;
+  blockType: string;
+  position: number;
+  visible: boolean;
+  data: unknown;
+  source: string | null;
+};
+
+type StoredPage = {
+  id: string;
+  siteId: string;
+  cityId: string | null;
+  type: string;
+  title: string;
+  slug: string;
+  status: string;
+  seo: unknown;
+  content: unknown;
+  createdAt: string;
+  updatedAt: string;
+  blocks: StoredPageBlock[];
+};
+
 type CityImportChangeSet = {
   version: 1;
   kind: 'CITY_IMPORT';
@@ -87,7 +113,7 @@ type CityImportChangeSet = {
   beforeCities: StoredCity[];
   afterCities: StoredCity[];
   createdRegions: StoredRegion[];
-  createdPages: unknown[];
+  createdPages: StoredPage[];
   workingRevision: number | null;
 };
 
@@ -124,6 +150,104 @@ const storedRegion = (region: {
   slug: region.slug,
   phone: region.phone,
   content: region.content === null ? null : jsonCopy(region.content),
+});
+const storedPage = (page: {
+  id: string; siteId: string; cityId: string | null; type: string; title: string; slug: string; status: string;
+  seo: unknown; content: unknown; createdAt: Date; updatedAt: Date; blocks: Array<{
+    id: string; pageId: string; blockType: string; position: number; visible: boolean; data: unknown; source: string | null;
+  }>;
+}): StoredPage => ({
+  id: page.id,
+  siteId: page.siteId,
+  cityId: page.cityId,
+  type: page.type,
+  title: page.title,
+  slug: page.slug,
+  status: page.status,
+  seo: page.seo === null ? null : jsonCopy(page.seo),
+  content: page.content === null ? null : jsonCopy(page.content),
+  createdAt: page.createdAt.toISOString(),
+  updatedAt: page.updatedAt.toISOString(),
+  blocks: page.blocks.map((block) => ({
+    id: block.id,
+    pageId: block.pageId,
+    blockType: block.blockType,
+    position: block.position,
+    visible: block.visible,
+    data: jsonCopy(block.data),
+    source: block.source,
+  })),
+});
+
+const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+const hasOwn = (value: Record<string, unknown>, key: string) => Object.prototype.hasOwnProperty.call(value, key);
+const nullableString = (value: unknown) => value === null || typeof value === 'string';
+const isStoredCity = (value: unknown): value is StoredCity => {
+  if (!isRecord(value)) return false;
+  return ['id', 'siteId', 'regionId', 'name', 'slug', 'status'].every((key) => typeof value[key] === 'string')
+    && ['nameInstrumental', 'namePrepositional', 'nameGenitive', 'legacyUrl', 'officeAddress', 'officeHours', 'phone', 'supportPhone']
+      .every((key) => nullableString(value[key]))
+    && hasOwn(value, 'seo')
+    && hasOwn(value, 'content');
+};
+const isStoredRegion = (value: unknown): value is StoredRegion => {
+  if (!isRecord(value)) return false;
+  return ['id', 'siteId', 'name', 'slug'].every((key) => typeof value[key] === 'string')
+    && nullableString(value.phone)
+    && hasOwn(value, 'content');
+};
+const isStoredPageBlock = (value: unknown): value is StoredPageBlock => {
+  if (!isRecord(value)) return false;
+  return ['id', 'pageId', 'blockType'].every((key) => typeof value[key] === 'string')
+    && Number.isInteger(value.position)
+    && typeof value.visible === 'boolean'
+    && nullableString(value.source)
+    && hasOwn(value, 'data');
+};
+const isStoredPage = (value: unknown): value is StoredPage => {
+  if (!isRecord(value)) return false;
+  return ['id', 'siteId', 'type', 'title', 'slug', 'status', 'createdAt', 'updatedAt'].every((key) => typeof value[key] === 'string')
+    && nullableString(value.cityId)
+    && hasOwn(value, 'seo')
+    && hasOwn(value, 'content')
+    && Array.isArray(value.blocks)
+    && value.blocks.every(isStoredPageBlock);
+};
+export const isCityImportChangeSet = (value: unknown): value is CityImportChangeSet => {
+  if (!isRecord(value) || !isRecord(value.actions)) return false;
+  return value.version === 1
+    && value.kind === 'CITY_IMPORT'
+    && typeof value.siteId === 'string'
+    && typeof value.runId === 'string'
+    && Object.values(value.actions).every((action) => importActions.has(action as CityImportAction))
+    && Array.isArray(value.createdCityIds)
+    && value.createdCityIds.every((id) => typeof id === 'string')
+    && Array.isArray(value.beforeCities)
+    && value.beforeCities.every(isStoredCity)
+    && Array.isArray(value.afterCities)
+    && value.afterCities.every(isStoredCity)
+    && Array.isArray(value.createdRegions)
+    && value.createdRegions.every(isStoredRegion)
+    && Array.isArray(value.createdPages)
+    && value.createdPages.every(isStoredPage)
+    && (value.workingRevision === null || (Number.isInteger(value.workingRevision) && Number(value.workingRevision) > 0));
+};
+
+const restoreCityData = (city: StoredCity) => ({
+  regionId: city.regionId,
+  name: city.name,
+  slug: city.slug,
+  nameInstrumental: city.nameInstrumental,
+  namePrepositional: city.namePrepositional,
+  nameGenitive: city.nameGenitive,
+  legacyUrl: city.legacyUrl,
+  officeAddress: city.officeAddress,
+  officeHours: city.officeHours,
+  status: city.status as PublishStatus,
+  phone: city.phone,
+  supportPhone: city.supportPhone,
+  seo: city.seo === null ? Prisma.JsonNull : city.seo as Prisma.InputJsonValue,
+  content: city.content === null ? Prisma.JsonNull : city.content as Prisma.InputJsonValue,
 });
 
 const text = (value: unknown) => value === null || value === undefined ? '' : String(value).trim();
@@ -355,11 +479,11 @@ export class CityImportService {
           ? (await tx.city.findMany({ where: { id: { in: affectedCityIds } }, orderBy: { id: 'asc' } })).map(storedCity)
           : [];
         const createdPages = createdPageIds.length
-          ? jsonCopy(await tx.page.findMany({
+          ? (await tx.page.findMany({
             where: { id: { in: createdPageIds } },
             include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
             orderBy: { id: 'asc' },
-          }))
+          })).map(storedPage)
           : [];
         const orderedBeforeCities = beforeCities.sort((left, right) => left.id.localeCompare(right.id));
         const orderedRegions = createdRegions.sort((left, right) => left.id.localeCompare(right.id));
@@ -408,5 +532,182 @@ export class CityImportService {
       }
       return { created, updated, skipped, pagesCreated, ...(workingRevision === null ? {} : { workingRevision }) };
     }, { timeout: 30_000, isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+  }
+
+  async undoImport(runId: string, actorId?: string) {
+    return this.prisma.$transaction(async (transaction) => {
+      const run = await transaction.cityImportRun.findUnique({ where: { id: runId } });
+      if (!run) throw new BadRequestException('Импорт городов не найден');
+      if (run.status !== 'APPLIED') throw new BadRequestException('Отменить можно только примененный импорт');
+      if (
+        !isCityImportChangeSet(run.changeSet)
+        || run.changeSet.runId !== run.id
+        || run.changeSet.siteId !== run.siteId
+        || !Number.isInteger(run.changeSet.workingRevision)
+      ) {
+        throw new BadRequestException('Для этого импорта нет полного безопасного снимка отмены');
+      }
+      const changeSet = run.changeSet;
+      const createdCityIds = [...changeSet.createdCityIds].sort();
+      const beforeCities = [...changeSet.beforeCities].sort((left, right) => left.id.localeCompare(right.id));
+      const afterCities = [...changeSet.afterCities].sort((left, right) => left.id.localeCompare(right.id));
+      const createdRegions = [...changeSet.createdRegions].sort((left, right) => left.id.localeCompare(right.id));
+      const createdPages = [...changeSet.createdPages].sort((left, right) => left.id.localeCompare(right.id));
+      const beforeIds = new Set(beforeCities.map((city) => city.id));
+      const afterIds = new Set(afterCities.map((city) => city.id));
+      const createdIds = new Set(createdCityIds);
+      const expectedAfterIds = new Set([...beforeIds, ...createdIds]);
+      const createdRegionIds = createdRegions.map((region) => region.id);
+      const createdPageIds = createdPages.map((page) => page.id);
+      const createdPageCityIds = new Set(createdPages.map((page) => page.cityId));
+      const referencedRegionIds = new Set(afterCities.map((city) => city.regionId));
+      const snapshotIsComplete = beforeIds.size === beforeCities.length
+        && afterIds.size === afterCities.length
+        && createdIds.size === createdCityIds.length
+        && createdRegionIds.length === new Set(createdRegionIds).size
+        && createdPageIds.length === new Set(createdPageIds).size
+        && afterIds.size === expectedAfterIds.size
+        && [...expectedAfterIds].every((id) => afterIds.has(id))
+        && createdCityIds.every((id) => !beforeIds.has(id))
+        && createdPages.length === createdCityIds.length
+        && createdPageCityIds.size === createdIds.size
+        && createdCityIds.every((id) => createdPageCityIds.has(id))
+        && createdRegionIds.every((id) => referencedRegionIds.has(id))
+        && [...beforeCities, ...afterCities].every((city) => city.siteId === run.siteId)
+        && createdRegions.every((region) => region.siteId === run.siteId)
+        && createdPages.every((page) => page.siteId === run.siteId
+          && typeof page.cityId === 'string'
+          && createdIds.has(page.cityId)
+          && page.type === 'HOME'
+          && page.slug === ''
+          && page.blocks.length === 7
+          && page.blocks.every((block) => block.pageId === page.id));
+      if (!snapshotIsComplete) throw new BadRequestException('Для этого импорта нет полного безопасного снимка отмены');
+
+      const currentCities = (await transaction.city.findMany({
+        where: { id: { in: [...afterIds] } },
+        orderBy: { id: 'asc' },
+      })).map(storedCity);
+      if (!isDeepStrictEqual(currentCities, afterCities)) {
+        throw new ConflictException('Города изменены после импорта; безопасная отмена заблокирована');
+      }
+      const currentPages = createdPageIds.length
+        ? (await transaction.page.findMany({
+          where: { id: { in: createdPageIds } },
+          include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+          orderBy: { id: 'asc' },
+        })).map(storedPage)
+        : [];
+      if (!isDeepStrictEqual(currentPages, createdPages)) {
+        throw new ConflictException('Созданные страницы изменены после импорта; безопасная отмена заблокирована');
+      }
+      const currentRegions = createdRegionIds.length
+        ? (await transaction.region.findMany({ where: { id: { in: createdRegionIds } }, orderBy: { id: 'asc' } })).map(storedRegion)
+        : [];
+      if (!isDeepStrictEqual(currentRegions, createdRegions)) {
+        throw new ConflictException('Созданные регионы изменены после импорта; безопасная отмена заблокирована');
+      }
+
+      const revisionTargets: Prisma.ContentRevisionWhereInput[] = [
+        { entityType: 'SITE', source: { startsWith: 'city-import' } },
+        { entityType: 'CITY', entityId: { in: [...afterIds] } },
+      ];
+      if (createdPageIds.length) revisionTargets.push({ entityType: 'PAGE', entityId: { in: createdPageIds } });
+      if (createdRegionIds.length) revisionTargets.push({ entityType: 'REGION', entityId: { in: createdRegionIds } });
+      const laterRevision = await transaction.contentRevision.findFirst({
+        where: {
+          siteId: run.siteId,
+          siteRevision: { gt: changeSet.workingRevision! },
+          OR: revisionTargets,
+        },
+        select: { id: true },
+      });
+      if (laterRevision) {
+        throw new ConflictException('Затронутые данные изменялись после импорта; безопасная отмена заблокирована');
+      }
+
+      if (createdCityIds.length) {
+        const [extraPage, tariff, lead, addressCheck, redirect] = await Promise.all([
+          transaction.page.findFirst({
+            where: { cityId: { in: createdCityIds }, id: { notIn: createdPageIds } },
+            select: { id: true },
+          }),
+          transaction.tariff.findFirst({ where: { cityId: { in: createdCityIds } }, select: { id: true } }),
+          transaction.lead.findFirst({ where: { cityId: { in: createdCityIds } }, select: { id: true } }),
+          transaction.addressCheck.findFirst({ where: { cityId: { in: createdCityIds } }, select: { id: true } }),
+          transaction.redirect.findFirst({ where: { cityId: { in: createdCityIds } }, select: { id: true } }),
+        ]);
+        if (extraPage || tariff || lead || addressCheck || redirect) {
+          throw new ConflictException('У созданного города появились зависимые данные; безопасная отмена заблокирована');
+        }
+      }
+      if (createdRegionIds.length) {
+        const extraRegionCity = await transaction.city.findFirst({
+          where: { regionId: { in: createdRegionIds }, id: { notIn: [...afterIds] } },
+          select: { id: true },
+        });
+        if (extraRegionCity) {
+          throw new ConflictException('В созданном регионе появились другие города; безопасная отмена заблокирована');
+        }
+      }
+
+      const deletedPages = createdPageIds.length
+        ? await transaction.page.deleteMany({ where: { id: { in: createdPageIds } } })
+        : { count: 0 };
+      if (deletedPages.count !== createdPageIds.length) {
+        throw new ConflictException('Созданные страницы изменились во время отмены; операция отменена');
+      }
+      const deletedCities = createdCityIds.length
+        ? await transaction.city.deleteMany({ where: { id: { in: createdCityIds } } })
+        : { count: 0 };
+      if (deletedCities.count !== createdCityIds.length) {
+        throw new ConflictException('Созданные города изменились во время отмены; операция отменена');
+      }
+      for (const city of beforeCities) {
+        await transaction.city.update({ where: { id: city.id }, data: restoreCityData(city) });
+      }
+      const deletedRegions = createdRegionIds.length
+        ? await transaction.region.deleteMany({ where: { id: { in: createdRegionIds } } })
+        : { count: 0 };
+      if (deletedRegions.count !== createdRegionIds.length) {
+        throw new ConflictException('Созданные регионы изменились во время отмены; операция отменена');
+      }
+
+      const changedFields = [
+        ...([...afterIds].length ? ['cities'] : []),
+        ...(createdRegionIds.length ? ['regions'] : []),
+        ...(createdPageIds.length ? ['pages'] : []),
+      ];
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: run.siteId,
+        entityType: 'SITE',
+        entityId: run.siteId,
+        action: 'UNDO',
+        previousSnapshot: { cities: afterCities, regions: createdRegions, pages: createdPages },
+        snapshot: { cities: beforeCities, regions: [], pages: [] },
+        changedFields,
+        actorId,
+        source: `city-import-undo:${runId}`,
+      });
+      const undoSiteRevisions = [{ siteId: run.siteId, workingRevision: revision.siteRevision }];
+      const claimed = await transaction.cityImportRun.updateMany({
+        where: { id: run.id, status: 'APPLIED' },
+        data: {
+          status: 'UNDONE',
+          undoneAt: new Date(),
+          undoneById: actorId || null,
+          undoSiteRevisions: undoSiteRevisions as unknown as Prisma.InputJsonValue,
+        },
+      });
+      if (claimed.count !== 1) throw new ConflictException('Статус импорта изменился во время отмены; операция отменена');
+      return {
+        runId: run.id,
+        restored: beforeCities.length,
+        removedCities: deletedCities.count,
+        removedPages: deletedPages.count,
+        removedRegions: deletedRegions.count,
+        workingRevision: revision.siteRevision,
+      };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: 30_000 });
   }
 }

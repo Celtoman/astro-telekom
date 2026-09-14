@@ -57,6 +57,9 @@ test('city import workspace implements validation report, guarded apply, history
   assert.match(source, /sites\.length\s*!==\s*1/);
   assert.match(source, /PublicationStatusCard/);
   assert.match(source, /publicationRefreshKey/);
+  assert.match(source, /canUndo/);
+  assert.match(source, /\/admin\/cities\/imports\/\$\{item\.id\}\/undo/);
+  assert.match(source, /Отменить импорт/);
   assert.doesNotMatch(source, /\/admin\/rebuilds/);
   assert.doesNotMatch(source, /x-admin-token|Authorization|sessionStorage|localStorage/);
 });

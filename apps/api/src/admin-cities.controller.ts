@@ -2,7 +2,7 @@ import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Req, Us
 import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
-import { CityImportReport, CityImportService } from './city-import.service';
+import { CityImportReport, CityImportService, isCityImportChangeSet } from './city-import.service';
 import { parseWorkbook } from './tariff-import.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
 
@@ -142,8 +142,60 @@ export class AdminCitiesController {
   }
 
   @Get('imports')
-  importsList() { return this.prisma.cityImportRun.findMany({ orderBy: { createdAt: 'desc' }, take: 50 }); }
+  async importsList() {
+    const rows = await this.prisma.cityImportRun.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+      select: {
+        id: true,
+        siteId: true,
+        fileName: true,
+        status: true,
+        totalRows: true,
+        validRows: true,
+        errorRows: true,
+        warningRows: true,
+        createdAt: true,
+        appliedAt: true,
+        undoneAt: true,
+      },
+    });
+    const appliedIds = rows.filter((row) => row.status === 'APPLIED').map((row) => row.id);
+    const candidates = appliedIds.length
+      ? await this.prisma.cityImportRun.findMany({
+        where: {
+          id: { in: appliedIds },
+          status: 'APPLIED',
+          AND: [
+            { changeSet: { path: ['version'], equals: 1 } },
+            { changeSet: { path: ['kind'], equals: 'CITY_IMPORT' } },
+          ],
+        },
+        select: { id: true, siteId: true, changeSet: true },
+      })
+      : [];
+    const undoableIds = new Set(candidates
+      .filter((run) => isCityImportChangeSet(run.changeSet)
+        && run.changeSet.runId === run.id
+        && run.changeSet.siteId === run.siteId
+        && Number.isInteger(run.changeSet.workingRevision))
+      .map((run) => run.id));
+    return rows.map((row) => ({
+      ...row,
+      canUndo: row.status === 'APPLIED' && undoableIds.has(row.id),
+    }));
+  }
 
   @Get('imports/:id')
   importDetail(@Param('id') id: string) { return this.prisma.cityImportRun.findUniqueOrThrow({ where: { id } }); }
+
+  @Post('imports/:id/undo')
+  undoImport(
+    @Param('id') id: string,
+    @Body() body: { confirm?: boolean },
+    @Req() request?: AdminRequest,
+  ) {
+    if (body.confirm !== true) throw new BadRequestException('Необходимо явно подтвердить отмену импорта');
+    return this.imports.undoImport(id, request?.user?.id);
+  }
 }

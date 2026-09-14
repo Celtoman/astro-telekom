@@ -2,7 +2,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { CityImportService } = require('../apps/api/dist/city-import.service.js');
+const { CityImportService, isCityImportChangeSet } = require('../apps/api/dist/city-import.service.js');
 const { AdminCitiesController } = require('../apps/api/dist/admin-cities.controller.js');
 const { parseWorkbook } = require('../apps/api/dist/tariff-import.service.js');
 
@@ -29,6 +29,25 @@ const candidate = (overrides = {}) => ({
   key: 'kazan', row: 2, siteId: 'site-1', subject: 'Республика Татарстан', name: 'Казань',
   nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани', slug: 'kazan',
   legacyUrl: null, officeAddress: null, officeHours: null, ...overrides,
+});
+
+const storedCity = (overrides = {}) => ({
+  id: 'city-1', siteId: 'site-1', regionId: 'region-1', name: 'Казань', slug: 'kazan',
+  nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани', legacyUrl: null,
+  officeAddress: null, officeHours: null, status: 'PUBLISHED', phone: null, supportPhone: null,
+  seo: {}, content: {}, ...overrides,
+});
+
+const storedPage = (overrides = {}) => ({
+  id: 'page-1', siteId: 'site-1', cityId: 'city-created', type: 'HOME', title: 'Домашний интернет',
+  slug: '', status: 'PUBLISHED', seo: {}, content: {}, createdAt: '2026-09-14T12:00:00.000Z',
+  updatedAt: '2026-09-14T12:00:00.000Z', blocks: [
+    'hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'feature_grid', 'faq',
+  ].map((blockType, index) => ({
+    id: `block-${index + 1}`, pageId: 'page-1', blockType, position: (index + 1) * 10, visible: true,
+    data: { title: `Блок ${index + 1}` }, source: 'template:city-home:v1',
+  })),
+  ...overrides,
 });
 
 test('city import accepts the agreed Russian XLSX aliases', async () => {
@@ -310,6 +329,232 @@ test('city import apply records an attributed working snapshot without publishin
   assert.deepEqual(revisions[0].changedFields, ['cities']);
 });
 
+test('city import apply captures a complete undo snapshot for a newly created city home', async () => {
+  let city;
+  let page;
+  let runUpdate;
+  const report = {
+    reportVersion: 2, siteId: 'site-1', errorRows: 0, warningRows: 0,
+    candidates: [candidate({ key: 'novyy-gorod', slug: 'novyy-gorod', name: 'Новый город', subject: 'Новый регион' })],
+  };
+  const prisma = {
+    $transaction: async (callback) => callback({
+      region: {
+        findMany: async () => [],
+        create: async ({ data }) => ({ id: 'region-created', ...data, phone: null, content: null }),
+      },
+      city: {
+        findMany: async (query) => query.where.slug ? [] : [city],
+        create: async ({ data }) => {
+          city = { id: 'city-created', ...data, phone: null, supportPhone: null };
+          return city;
+        },
+      },
+      page: {
+        create: async ({ data }) => {
+          const createdAt = new Date('2026-09-14T12:00:00.000Z');
+          page = {
+            id: 'page-created', siteId: data.siteId, cityId: data.cityId, type: data.type, title: data.title,
+            slug: data.slug, status: data.status, seo: data.seo, content: data.content, createdAt, updatedAt: createdAt,
+            blocks: data.blocks.create.map((block, index) => ({ id: `block-${index + 1}`, pageId: 'page-created', ...block })),
+          };
+          return { id: page.id };
+        },
+        findMany: async () => [page],
+      },
+      cityImportRun: {
+        updateMany: async ({ data }) => { runUpdate = data; return { count: 1 }; },
+      },
+    }),
+  };
+
+  const result = await new CityImportService(prisma, {
+    recordWorkingRevision: async () => ({ siteRevision: 18 }),
+  }).applyReport(report, { 'novyy-gorod': 'create' }, false, 'run-1', 'user-1');
+
+  assert.equal(result.workingRevision, 18);
+  assert.equal(isCityImportChangeSet(runUpdate.changeSet), true);
+  assert.deepEqual(runUpdate.changeSet.createdCityIds, ['city-created']);
+  assert.deepEqual(runUpdate.changeSet.createdRegions.map((region) => region.id), ['region-created']);
+  assert.equal(runUpdate.changeSet.createdPages[0].id, 'page-created');
+  assert.equal(runUpdate.changeSet.createdPages[0].blocks.length, 7);
+});
+
+test('safe city import undo restores updated cities and removes only captured new records', async () => {
+  const beforeCity = storedCity({ id: 'city-existing', name: 'Старое имя', status: 'DRAFT' });
+  const afterCity = storedCity({ id: 'city-existing', name: 'Новое имя' });
+  const createdCity = storedCity({ id: 'city-created', regionId: 'region-created', name: 'Новый город', slug: 'novyy-gorod' });
+  const createdRegion = { id: 'region-created', siteId: 'site-1', name: 'Новый регион', slug: 'novyy-region', phone: null, content: null };
+  const savedPage = storedPage();
+  const changeSet = {
+    version: 1,
+    kind: 'CITY_IMPORT',
+    siteId: 'site-1',
+    runId: 'run-1',
+    actions: { kazan: 'update', 'novyy-gorod': 'create' },
+    createdCityIds: ['city-created'],
+    beforeCities: [beforeCity],
+    afterCities: [afterCity, createdCity].sort((left, right) => left.id.localeCompare(right.id)),
+    createdRegions: [createdRegion],
+    createdPages: [savedPage],
+    workingRevision: 18,
+  };
+  let cities = structuredClone(changeSet.afterCities);
+  let regions = structuredClone(changeSet.createdRegions);
+  let pages = [{ ...structuredClone(savedPage), createdAt: new Date(savedPage.createdAt), updatedAt: new Date(savedPage.updatedAt) }];
+  let runUpdate;
+  const revisions = [];
+  const prisma = {
+    $transaction: async (callback, options) => {
+      assert.deepEqual(options, { isolationLevel: 'Serializable', timeout: 30_000 });
+      return callback({
+        cityImportRun: {
+          findUnique: async () => ({ id: 'run-1', siteId: 'site-1', status: 'APPLIED', changeSet }),
+          updateMany: async ({ where, data }) => {
+            assert.deepEqual(where, { id: 'run-1', status: 'APPLIED' });
+            runUpdate = data;
+            return { count: 1 };
+          },
+        },
+        city: {
+          findMany: async () => cities,
+          findFirst: async () => null,
+          update: async ({ where, data }) => {
+            cities = cities.map((city) => city.id === where.id ? { ...city, ...data } : city);
+            return cities.find((city) => city.id === where.id);
+          },
+          deleteMany: async ({ where }) => {
+            const removed = cities.filter((city) => where.id.in.includes(city.id)).length;
+            cities = cities.filter((city) => !where.id.in.includes(city.id));
+            return { count: removed };
+          },
+        },
+        page: {
+          findMany: async () => pages,
+          findFirst: async () => null,
+          deleteMany: async ({ where }) => {
+            const removed = pages.filter((page) => where.id.in.includes(page.id)).length;
+            pages = pages.filter((page) => !where.id.in.includes(page.id));
+            return { count: removed };
+          },
+        },
+        region: {
+          findMany: async () => regions,
+          deleteMany: async ({ where }) => {
+            const removed = regions.filter((region) => where.id.in.includes(region.id)).length;
+            regions = regions.filter((region) => !where.id.in.includes(region.id));
+            return { count: removed };
+          },
+        },
+        contentRevision: { findFirst: async () => null },
+        tariff: { findFirst: async () => null },
+        lead: { findFirst: async () => null },
+        addressCheck: { findFirst: async () => null },
+        redirect: { findFirst: async () => null },
+      });
+    },
+  };
+  const publications = {
+    recordWorkingRevision: async (_transaction, input) => {
+      revisions.push(input);
+      return { siteRevision: 19 };
+    },
+  };
+
+  const result = await new CityImportService(prisma, publications).undoImport('run-1', 'user-1');
+
+  assert.deepEqual(result, {
+    runId: 'run-1', restored: 1, removedCities: 1, removedPages: 1, removedRegions: 1, workingRevision: 19,
+  });
+  assert.deepEqual(cities, [beforeCity]);
+  assert.deepEqual(pages, []);
+  assert.deepEqual(regions, []);
+  assert.equal(revisions.length, 1);
+  assert.equal(revisions[0].action, 'UNDO');
+  assert.equal(revisions[0].actorId, 'user-1');
+  assert.equal(revisions[0].source, 'city-import-undo:run-1');
+  assert.deepEqual(revisions[0].changedFields, ['cities', 'regions', 'pages']);
+  assert.equal(runUpdate.status, 'UNDONE');
+  assert.equal(runUpdate.undoneById, 'user-1');
+  assert.deepEqual(runUpdate.undoSiteRevisions, [{ siteId: 'site-1', workingRevision: 19 }]);
+});
+
+test('safe city import undo rejects changed snapshots and later audited mutations', async (t) => {
+  const beforeCity = storedCity({ name: 'Старое имя', status: 'DRAFT' });
+  const afterCity = storedCity({ name: 'Новое имя' });
+  const changeSet = {
+    version: 1, kind: 'CITY_IMPORT', siteId: 'site-1', runId: 'run-1', actions: { kazan: 'update' },
+    createdCityIds: [], beforeCities: [beforeCity], afterCities: [afterCity], createdRegions: [], createdPages: [], workingRevision: 18,
+  };
+
+  await t.test('changed city blocks undo before any write', async () => {
+    let writes = 0;
+    const prisma = { $transaction: async (callback) => callback({
+      cityImportRun: { findUnique: async () => ({ id: 'run-1', siteId: 'site-1', status: 'APPLIED', changeSet }) },
+      city: { findMany: async () => [{ ...afterCity, name: 'Более новое имя' }] },
+      page: { findMany: async () => [] },
+      region: { findMany: async () => [] },
+      contentRevision: { findFirst: async () => { writes += 1; return null; } },
+    }) };
+
+    await assert.rejects(
+      new CityImportService(prisma, { recordWorkingRevision: async () => { writes += 1; } }).undoImport('run-1', 'user-1'),
+      /города изменены после импорта/i,
+    );
+    assert.equal(writes, 0);
+  });
+
+  await t.test('later city revision blocks undo even when values match again', async () => {
+    let writes = 0;
+    let revisionQuery;
+    const prisma = { $transaction: async (callback) => callback({
+      cityImportRun: { findUnique: async () => ({ id: 'run-1', siteId: 'site-1', status: 'APPLIED', changeSet }) },
+      city: { findMany: async () => [afterCity] },
+      page: { findMany: async () => [] },
+      region: { findMany: async () => [] },
+      contentRevision: { findFirst: async (query) => { revisionQuery = query; return { id: 'revision-later' }; } },
+    }) };
+
+    await assert.rejects(
+      new CityImportService(prisma, { recordWorkingRevision: async () => { writes += 1; } }).undoImport('run-1', 'user-1'),
+      /изменялись после импорта/i,
+    );
+    assert.equal(writes, 0);
+    assert.deepEqual(revisionQuery.where.OR[0], { entityType: 'SITE', source: { startsWith: 'city-import' } });
+  });
+});
+
+test('safe city import undo blocks deletion of a new city with runtime dependencies', async () => {
+  const createdCity = storedCity({ id: 'city-created' });
+  const savedPage = storedPage();
+  const changeSet = {
+    version: 1, kind: 'CITY_IMPORT', siteId: 'site-1', runId: 'run-1', actions: { kazan: 'create' },
+    createdCityIds: ['city-created'], beforeCities: [], afterCities: [createdCity], createdRegions: [],
+    createdPages: [savedPage], workingRevision: 18,
+  };
+  let writes = 0;
+  const prisma = { $transaction: async (callback) => callback({
+    cityImportRun: { findUnique: async () => ({ id: 'run-1', siteId: 'site-1', status: 'APPLIED', changeSet }) },
+    city: { findMany: async () => [createdCity], findFirst: async () => null },
+    page: {
+      findMany: async () => [{ ...savedPage, createdAt: new Date(savedPage.createdAt), updatedAt: new Date(savedPage.updatedAt) }],
+      findFirst: async () => null,
+    },
+    region: { findMany: async () => [] },
+    contentRevision: { findFirst: async () => null },
+    tariff: { findFirst: async () => null },
+    lead: { findFirst: async () => ({ id: 'lead-new' }) },
+    addressCheck: { findFirst: async () => null },
+    redirect: { findFirst: async () => null },
+  }) };
+
+  await assert.rejects(
+    new CityImportService(prisma, { recordWorkingRevision: async () => { writes += 1; } }).undoImport('run-1', 'user-1'),
+    /зависимые данные.*отмена заблокирована/i,
+  );
+  assert.equal(writes, 0);
+});
+
 test('city import rejects missing, unknown, invalid and state-incompatible actions before writes', async () => {
   let transactionCalled = false;
   const service = new CityImportService({
@@ -398,6 +643,58 @@ test('city import controller never touches the rebuild queue after apply', async
   const result = await new AdminCitiesController(prisma, imports).applyImport({ runId: 'run-1', actions: {} });
 
   assert.equal(result.runId, 'run-1');
+});
+
+test('city import undo requires explicit confirmation and attributes the operator', async () => {
+  const calls = [];
+  const controller = new AdminCitiesController({}, {
+    undoImport: async (runId, actorId) => {
+      calls.push({ runId, actorId });
+      return { runId, workingRevision: 19 };
+    },
+  });
+
+  assert.throws(
+    () => controller.undoImport('run-1', { confirm: false }, { user: { id: 'user-1' } }),
+    /явно подтвердить отмену/i,
+  );
+  const result = await controller.undoImport('run-1', { confirm: true }, { user: { id: 'user-1' } });
+
+  assert.equal(result.workingRevision, 19);
+  assert.deepEqual(calls, [{ runId: 'run-1', actorId: 'user-1' }]);
+});
+
+test('city import history exposes undo only for applied runs with a complete safe snapshot', async () => {
+  const safeChangeSet = {
+    version: 1, kind: 'CITY_IMPORT', siteId: 'site-1', runId: 'safe', actions: { kazan: 'update' },
+    createdCityIds: [], beforeCities: [storedCity({ name: 'До' })], afterCities: [storedCity({ name: 'После' })],
+    createdRegions: [], createdPages: [], workingRevision: 18,
+  };
+  const queries = [];
+  const controller = new AdminCitiesController({
+    cityImportRun: { findMany: async (query) => {
+      queries.push(query);
+      if (query.select?.changeSet) return [
+        { id: 'safe', siteId: 'site-1', changeSet: safeChangeSet },
+        { id: 'legacy', siteId: 'site-1', changeSet: { ...safeChangeSet, version: 0, runId: 'legacy' } },
+      ];
+      return [
+        { id: 'safe', status: 'APPLIED' },
+        { id: 'legacy', status: 'APPLIED' },
+        { id: 'undone', status: 'UNDONE' },
+      ];
+    } },
+  }, {});
+
+  const rows = await controller.importsList();
+
+  assert.deepEqual(rows.map(({ id, canUndo }) => ({ id, canUndo })), [
+    { id: 'safe', canUndo: true },
+    { id: 'legacy', canUndo: false },
+    { id: 'undone', canUndo: false },
+  ]);
+  assert.equal('changeSet' in rows[0], false);
+  assert.equal(queries[0].select.changeSet, undefined);
 });
 
 test('city import run can be applied only once and a losing request cannot downgrade APPLIED', async () => {
