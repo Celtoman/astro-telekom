@@ -26,12 +26,21 @@ test('Page schema represents Release 1 site-global pages without a fake city', (
   assert.match(scopeMigration, /Page_global_scope_check/);
   const cookieEnumMigration = readFileSync(join(repositoryRoot, 'prisma', 'migrations', '0024_cookie_policy_page_type', 'migration.sql'), 'utf8');
   const publicationMigration = readFileSync(join(repositoryRoot, 'prisma', 'migrations', '0025_publish_release_one_catalog', 'migration.sql'), 'utf8');
+  const cityTemplateMigrationPath = join(repositoryRoot, 'prisma', 'migrations', '0026_backfill_city_home_template', 'migration.sql');
   assert.match(schema, /\bCOOKIE_POLICY\b/);
   assert.match(cookieEnumMigration, /ADD VALUE 'COOKIE_POLICY'/);
   assert.match(publicationMigration, /'COOKIE_POLICY'/);
   assert.match(publicationMigration, /UPDATE "City"[\s\S]*"status" = 'PUBLISHED'/);
   assert.match(publicationMigration, /'HOME'::"PageType"[\s\S]*'PUBLISHED'::"PublishStatus"/);
   assert.match(publicationMigration, /WHERE "type" = 'HOME' AND "cityId" IS NOT NULL/);
+  assert.equal(existsSync(cityTemplateMigrationPath), true, 'city HOME template backfill migration must exist');
+  const cityTemplateMigration = readFileSync(cityTemplateMigrationPath, 'utf8');
+  assert.match(cityTemplateMigration, /template:city-home:v1/);
+  assert.match(cityTemplateMigration, /"namePrepositional"/);
+  assert.match(cityTemplateMigration, /NOT EXISTS[\s\S]*"PageBlock"/);
+  for (const blockType of ['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'faq']) {
+    assert.match(cityTemplateMigration, new RegExp(`'${blockType}'`));
+  }
 });
 
 test('admin pages reject incompatible global and city page scopes before writing', async () => {

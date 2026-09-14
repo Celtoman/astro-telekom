@@ -48,7 +48,7 @@ test('public city catalog returns only published entities for one published site
           supportPhone: '8 (800) 250-77-77',
           seo: {},
           content: {},
-          region: { content: {} },
+          region: { name: 'Республика Татарстан', slug: 'tatarstan', content: {} },
           pages: [{
             id: 'page-1', slug: 'internet', type: 'INTERNET', status: 'PUBLISHED', content: {}, seo: {},
             blocks: [{ id: 'block-1', blockType: 'hero', position: 10, visible: true, data: { title: 'Интернет', text: 'Проверьте подключение по адресу.' } }],
@@ -88,6 +88,7 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(calls.cities.include.pages.where, { status: 'PUBLISHED' });
   assert.deepEqual(calls.cities.include.pages.include.blocks.where, { visible: true });
   assert.deepEqual(calls.cities.include.pages.include.blocks.orderBy, [{ position: 'asc' }, { id: 'asc' }]);
+  assert.deepEqual(calls.cities.include.region.select, { name: true, slug: true, content: true });
   assert.deepEqual(calls.cities.include.tariffs.where, { status: 'PUBLISHED' });
   assert.deepEqual(calls.pages.where, { siteId: 'site-1', cityId: null, status: 'PUBLISHED' });
   assert.deepEqual(calls.pages.include.blocks.where, { visible: true });
@@ -96,6 +97,7 @@ test('public city catalog returns only published entities for one published site
   assert.equal(result.cities.length, 1);
   assert.equal(result.cities[0].namePrepositional, 'Казани');
   assert.equal(result.cities[0].supportPhone, '8 (800) 250-77-77');
+  assert.deepEqual(result.cities[0].region, { name: 'Республика Татарстан', slug: 'tatarstan' });
   assert.equal(result.cities[0].pages[0].slug, 'internet');
   assert.equal(result.cities[0].pages[0].blocks[0].blockType, 'hero');
   assert.equal(result.cities[0].tariffs[0].slug, 'giga-500');
@@ -160,6 +162,21 @@ test('public city catalog requires exactly one visible hero when a published pag
       error => error.getStatus() === 400 && /hero/.test(error.message),
     );
   }
+});
+
+test('public city catalog rejects a published city HOME without the canonical block sequence', () => {
+  const controller = new CitiesController({});
+  const city = {
+    id: 'city-1', siteId: 'site-1', regionId: 'region-1', name: 'Альметьевск', slug: 'almetyevsk', status: 'PUBLISHED',
+    content: {}, seo: {}, region: { name: 'Татарстан', slug: 'tatarstan', content: {} }, tariffs: [],
+    pages: [{ id: 'page-1', slug: '', type: 'HOME', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] }],
+  };
+  const site = { settings: {}, provider: { settings: {} } };
+
+  assert.throws(
+    () => controller.cityResponse(city, site),
+    error => error.getStatus() === 400 && /HOME.*каноническ/i.test(error.message),
+  );
 });
 
 test('public city catalog rejects an unpublished or unknown site', async () => {

@@ -2,7 +2,7 @@ import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { mergeContent, publicContent } from './content-resolution';
 import { normalizeRedirectPath } from './redirect.service';
-import { validatePublishedBlocks } from './block-validation';
+import { validateCityHomeBlocks, validatePublishedBlocks } from './block-validation';
 import { buildReleaseOneRoutes } from './public-route-policy';
 
 @Controller('public/sites/:siteSlug/cities')
@@ -22,7 +22,7 @@ export class CitiesController {
         where: { siteId: site.id, status: 'PUBLISHED' },
         orderBy: { name: 'asc' },
         include: {
-          region: { select: { content: true } },
+          region: { select: { name: true, slug: true, content: true } },
           pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
           tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
         },
@@ -59,7 +59,7 @@ export class CitiesController {
       where: { site: { slug: siteSlug, status: 'PUBLISHED' }, slug: citySlug, status: 'PUBLISHED' },
       include: {
         site: { select: { settings: true, provider: { select: { settings: true } } } },
-        region: { select: { content: true } },
+        region: { select: { name: true, slug: true, content: true } },
         pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
         tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
       },
@@ -75,12 +75,13 @@ export class CitiesController {
   private cityResponse(city: any, site: any) {
     const inheritedContent = mergeContent(publicContent(site.provider.settings), publicContent(site.settings), city.region.content, city.content);
     const inheritedSeo = mergeContent(city.seo);
-    const { site: _site, region: _region, pages, tariffs, ...cityData } = city;
+    const { site: _site, region, pages, tariffs, ...cityData } = city;
     return {
       ...cityData,
       content: inheritedContent,
       seo: inheritedSeo,
-      pages: pages.map((page: any) => this.pageResponse(page, inheritedContent, inheritedSeo)),
+      region: { name: region.name, slug: region.slug },
+      pages: pages.map((page: any) => this.pageResponse(page, inheritedContent, inheritedSeo, city.name)),
       tariffs: tariffs.map((tariff: any) => ({
         ...tariff,
         seo: mergeContent(inheritedSeo, tariff.seo),
@@ -88,8 +89,9 @@ export class CitiesController {
     };
   }
 
-  private pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>) {
-    validatePublishedBlocks(page.blocks);
+  private pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string) {
+    if (page.type === 'HOME' && cityName) validateCityHomeBlocks(page.blocks, cityName);
+    else validatePublishedBlocks(page.blocks);
     return {
       ...page,
       content: mergeContent(inheritedContent, page.content),

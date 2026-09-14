@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { loadSiteData, pageMeta } from '../data/site';
 import { publicHtmlPath } from '../data/public-url';
 import { legalSections } from '../data/legal-pages';
+import CitiesDirectory from './CitiesDirectory.astro';
 
 interface Props {
   type: 'COVERAGE' | 'CITIES' | 'PRIVACY' | 'PERSONAL_DATA_CONSENT' | 'COOKIE_POLICY';
@@ -38,29 +39,27 @@ const defaults = {
 const meta = pageMeta(globalPages, page.slug, page.title || defaults.title, defaults.description);
 const contentText = typeof page.content?.text === 'string' ? page.content.text : '';
 const richTextBlocks = (page.blocks || []).filter((block) => block.blockType === 'rich_text');
-const isCityCatalog = type === 'CITIES' || type === 'COVERAGE';
+const isCoverage = type === 'COVERAGE';
 const domain = Astro.site?.hostname || 'tv-internet-dom.ru';
 const versionedLegalSections = legalSections(type, domain);
 ---
 
 <BaseLayout title={meta.title} description={meta.description}>
-  <section class="hero">
+  {type === 'CITIES' ? <CitiesDirectory {cities} intro={contentText} /> : <section class="hero">
     <div class="container">
       <span class="eyebrow">Дом.ру</span>
       <h1>{page.title || defaults.title}</h1>
-      {isCityCatalog && contentText && <p class="lead">{contentText}</p>}
+      {isCoverage && contentText && <p class="lead">{contentText}</p>}
     </div>
-  </section>
-  {isCityCatalog ? <section class="section container">
-    <h2>{type === 'COVERAGE' ? 'Проверка подключения по городам' : 'Выберите город'}</h2>
+  </section>}
+  {isCoverage ? <section class="section container">
+    <h2>Проверка подключения по городам</h2>
     {cities.length > 0 ? <div class="grid">{cities.map((city) => <article class="card">
       <h3>{city.name}</h3>
-      <p>{type === 'COVERAGE' ? 'Откройте страницу города и укажите адрес для проверки технической возможности.' : 'Тарифы и проверка подключения по адресу.'}</p>
-      <a class="card-link" href={`${publicHtmlPath(city.slug)}${type === 'COVERAGE' ? '#address-check' : ''}`}>
-        {type === 'COVERAGE' ? 'Проверить адрес →' : 'Открыть город →'}
-      </a>
+      <p>Откройте страницу города и укажите адрес для проверки технической возможности.</p>
+      <a class="card-link" href={`${publicHtmlPath(city.slug)}#address-check`}>Проверить адрес →</a>
     </article>)}</div> : <p class="lead">Опубликованных городов пока нет.</p>}
-  </section> : <section class="section container legal-copy">
+  </section> : type !== 'CITIES' && <section class="section container legal-copy">
     {contentText && versionedLegalSections.length === 0 && <p>{contentText}</p>}
     {versionedLegalSections.map((section) => <section><h2>{section.title}</h2>{section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}</section>)}
     {richTextBlocks.map((block) => {

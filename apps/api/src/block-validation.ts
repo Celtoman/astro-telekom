@@ -189,3 +189,14 @@ export function validatePublishedBlocks(rawBlocks: unknown): void {
 
   if (heroCount !== 1) fail('Опубликованная страница с блоками должна содержать ровно один видимый hero');
 }
+
+const CITY_HOME_BLOCK_SEQUENCE = ['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'feature_grid', 'faq'];
+
+export function validateCityHomeBlocks(rawBlocks: unknown, cityName: string): void {
+  validatePublishedBlocks(rawBlocks);
+  const blocks = rawBlocks as Array<Record<string, unknown>>;
+  const actualSequence = blocks.map((block) => block.blockType);
+  if (JSON.stringify(actualSequence) !== JSON.stringify(CITY_HOME_BLOCK_SEQUENCE)) {
+    fail(`Городская HOME «${cityName}» должна содержать каноническую последовательность из 7 видимых блоков`);
+  }
+}

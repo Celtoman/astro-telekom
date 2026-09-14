@@ -15,6 +15,7 @@ export interface CityView {
   name: string;
   nameIn: string;
   slug: string;
+  region: { name: string; slug: string };
   phone: string;
   supportPhone: string;
   status: string;
@@ -57,6 +58,7 @@ const fallbackSupportPhone = import.meta.env.PUBLIC_SUPPORT_PHONE || fallbackCon
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const redirectIdPattern = /^[a-zA-Z0-9_-]+$/;
 const redirectPathPattern = /^\/[a-z0-9._~/-]*$/;
+const cityHomeBlockSequence = ['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'feature_grid', 'faq'];
 
 export const releaseOneGlobalPages = [
   { type: 'COVERAGE', slug: 'karta-pokrytiya-provaydera' },
@@ -76,6 +78,14 @@ function normalizePage(item: Record<string, any>): PageView {
     seo: item.seo && typeof item.seo === 'object' ? item.seo : {},
     blocks: Array.isArray(item.blocks) ? item.blocks : [],
   };
+}
+
+function assertCityHomeTemplate(city: CityView): void {
+  const homePages = city.pages.filter((page) => page.type === 'HOME' && page.slug === '');
+  const sequence = homePages[0]?.blocks?.map((block) => block.blockType) || [];
+  if (homePages.length !== 1 || JSON.stringify(sequence) !== JSON.stringify(cityHomeBlockSequence)) {
+    throw new Error(`Город «${city.name}»: опубликованная HOME не соответствует каноническому шаблону из 7 блоков`);
+  }
 }
 
 function expectedReleaseOneRoutes(cities: CityView[], globalPages: PageView[]): PublicRouteView[] {
@@ -163,10 +173,21 @@ const demoCities: CityView[] = [{
   name: 'Казань',
   nameIn: 'Казани',
   slug: 'kazan',
+  region: { name: 'Республика Татарстан', slug: 'respublika-tatarstan' },
   phone: fallbackConnectionPhone,
   supportPhone: fallbackSupportPhone,
   status: 'PUBLISHED',
-  pages: [{ type: 'HOME', slug: '', title: 'Домашний интернет в Казани', status: 'PUBLISHED', seo: {}, blocks: [] }],
+  pages: [{
+    type: 'HOME', slug: '', title: 'Домашний интернет в Казани', status: 'PUBLISHED', seo: {}, blocks: [
+      { blockType: 'hero', data: { eyebrow: 'Дом.ру в Казани', title: 'Домашний интернет и телевидение в Казани', text: 'Выберите услугу и проверьте подключение по адресу.' } },
+      { blockType: 'service_grid', data: { title: 'Услуги для дома', items: [{ pageType: 'INTERNET', title: 'Домашний интернет', text: 'Тарифы для квартиры и дома.' }] } },
+      { blockType: 'tariff_grid', data: { title: 'Популярные тарифы' } },
+      { blockType: 'steps', data: { title: 'Как проходит подключение', items: [{ title: 'Проверка адреса', text: 'Уточняем техническую возможность.' }, { title: 'Заявка', text: 'Оператор подтверждает условия.' }] } },
+      { blockType: 'feature_grid', data: { title: 'Оборудование', items: [{ title: 'Wi-Fi-роутер', text: 'Условия предоставления уточнит оператор.' }] } },
+      { blockType: 'feature_grid', data: { title: 'Что важно при выборе', items: [{ title: 'Скорость', text: 'Сравните опубликованные тарифы.' }] } },
+      { blockType: 'faq', data: { title: 'Популярные вопросы', items: [{ question: 'Как проверить адрес?', answer: 'Введите точный адрес в форме на первом экране.' }] } },
+    ],
+  }],
   tariffs: [
     tariffView({ slug: 'internet-300', name: 'Интернет 300 Мбит/с', serviceType: 'INTERNET', speed: 300 }),
     tariffView({ slug: 'internet-tv-500', name: 'Интернет + ТВ 500 Мбит/с', serviceType: 'INTERNET_TV', speed: 500 }),
@@ -192,10 +213,14 @@ function normalizedCatalog(value: unknown): SiteCatalog {
     .map((item: Record<string, any>) => {
       const slug = String(item.slug || '');
       if (!slugPattern.test(slug)) throw new Error(`Некорректный slug опубликованного города: ${slug || '(пусто)'}`);
-      return {
+      const regionName = String(item.region?.name || '').trim();
+      const regionSlug = String(item.region?.slug || '').trim();
+      if (!regionName || !slugPattern.test(regionSlug)) throw new Error(`Город «${item.name || slug}»: API не вернул корректный регион`);
+      const city = {
         name: String(item.name || slug),
         nameIn: String(item.namePrepositional || item.name || slug),
         slug,
+        region: { name: regionName, slug: regionSlug },
         phone: String(item.phone || fallbackConnectionPhone),
         supportPhone: String(item.supportPhone || fallbackSupportPhone),
         status: 'PUBLISHED',
@@ -206,6 +231,8 @@ function normalizedCatalog(value: unknown): SiteCatalog {
           .filter((tariff: Record<string, unknown>) => tariff?.status === 'PUBLISHED')
           .map((tariff: Record<string, unknown>) => tariffView(tariff)),
       } satisfies CityView;
+      assertCityHomeTemplate(city);
+      return city;
     });
   const globalPages = payload.globalPages
     .filter((item: Record<string, unknown>) => item?.status === 'PUBLISHED')

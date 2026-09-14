@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '../generated';
+import { cityHomeTemplateBlocks } from './city-home-template';
 import { PrismaService } from './prisma.service';
 import { parseWorkbook } from './tariff-import.service';
 
@@ -238,12 +239,21 @@ export class CityImportService {
           updated += 1;
         } else {
           const city = await tx.city.create({ data: { siteId: candidate.siteId, ...data, seo: {} as Prisma.InputJsonObject, content: {} as Prisma.InputJsonObject } });
-          const pages = [['HOME', '', 'Главная города']] as const;
-          const pageResult = await tx.page.createMany({
-            data: pages.map(([type, slug, title]) => ({ siteId: candidate.siteId, cityId: city.id, type, slug, title, status: 'PUBLISHED' as const, seo: {}, content: {} })),
+          await tx.page.create({
+            data: {
+              siteId: candidate.siteId,
+              cityId: city.id,
+              type: 'HOME',
+              slug: '',
+              title: `Домашний интернет в ${candidate.namePrepositional}`,
+              status: 'PUBLISHED',
+              seo: {},
+              content: {},
+              blocks: { create: cityHomeTemplateBlocks(candidate) },
+            },
           });
           citiesBySlug.set(city.slug, { ...city, region: { name: region.name } });
-          pagesCreated += pageResult.count;
+          pagesCreated += 1;
           created += 1;
         }
       }

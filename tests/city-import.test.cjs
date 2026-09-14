@@ -94,6 +94,7 @@ test('validation exposes row, region diff and an existing snapshot for safe revi
 
 test('new city creates one published city home for the full Release 1 catalog', async () => {
   const pages = [];
+  const pageCreates = [];
   const calls = [];
   const cities = [];
   const prisma = {
@@ -104,7 +105,10 @@ test('new city creates one published city home for the full Release 1 catalog', 
       return callback({
         region: { findMany: async () => [], create: async ({ data }) => ({ id: 'region-1', ...data }) },
         city: { findMany: async () => [], create: async ({ data }) => { cities.push(data); return { id: 'city-1', ...data }; }, update: async () => ({}) },
-        page: { createMany: async ({ data }) => { pages.push(...data); return { count: data.length }; } },
+        page: {
+          createMany: async ({ data }) => { pages.push(...data); return { count: data.length }; },
+          create: async ({ data }) => { pageCreates.push(data); return { id: 'page-1', ...data }; },
+        },
       });
     },
   };
@@ -114,9 +118,18 @@ test('new city creates one published city home for the full Release 1 catalog', 
   calls.push(result);
   assert.equal(result.created, 1);
   assert.equal(result.pagesCreated, 1);
-  assert.deepEqual(pages.map((page) => ({ type: page.type, slug: page.slug, status: page.status })), [
+  const createdPages = pageCreates.length > 0 ? pageCreates : pages;
+  assert.deepEqual(createdPages.map((page) => ({ type: page.type, slug: page.slug, status: page.status })), [
     { type: 'HOME', slug: '', status: 'PUBLISHED' },
   ]);
+  const blocks = pageCreates[0]?.blocks?.create || [];
+  assert.deepEqual(blocks.map((block) => block.blockType), [
+    'hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'feature_grid', 'faq',
+  ]);
+  assert.deepEqual(blocks.map((block) => block.position), [10, 20, 30, 40, 50, 60, 70]);
+  assert.ok(blocks.every((block) => block.source === 'template:city-home:v1'));
+  assert.match(blocks[0].data.title, /Алейске/);
+  assert.doesNotMatch(JSON.stringify(blocks), /Казан/);
   assert.equal(cities[0].status, 'PUBLISHED');
 });
 
@@ -133,7 +146,10 @@ test('city import reuses a seed region with the same normalized slug', async () 
         findMany: async () => [],
         create: async ({ data }) => ({ id: 'city-kazan-2', ...data }),
       },
-      page: { createMany: async ({ data }) => ({ count: data.length }) },
+      page: {
+        createMany: async ({ data }) => ({ count: data.length }),
+        create: async ({ data }) => ({ id: 'page-zelenodolsk', ...data }),
+      },
     }),
   };
   const report = await new CityImportService(prisma).validateRows('site-1', 'cities.xlsx', [row({
@@ -206,7 +222,10 @@ test('city import applies an explicit create, update and skip action map atomica
           update: async ({ where, data }) => { updated.push({ where, data }); return { ...currentUpdate, ...data }; },
           create: async ({ data }) => { created.push(data); return { id: 'city-new', ...data }; },
         },
-        page: { createMany: async ({ data }) => { pages.push(...data); return { count: data.length }; } },
+        page: {
+          createMany: async ({ data }) => { pages.push(...data); return { count: data.length }; },
+          create: async ({ data }) => { pages.push(data); return { id: 'page-new', ...data }; },
+        },
       });
     },
   };

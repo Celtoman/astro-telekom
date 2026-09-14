@@ -84,6 +84,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Pre-migration audit завершился ош�
 3. `0023_bootstrap_release_one_global_pages` идемпотентно создает недостающие global pages в `DRAFT`.
 4. `0024_cookie_policy_page_type` отдельной транзакцией добавляет `COOKIE_POLICY`.
 5. `0025_publish_release_one_catalog` обновляет scope constraint, создает cookie page, публикует пять global pages, все города и их единственную `HOME`.
+6. `0026_backfill_city_home_template` добавляет канонические семь блоков только тем опубликованным city HOME, у которых до миграции не было ни одного `PageBlock`; существующие композиции не перезаписываются.
 
 Не публиковать страницы и не запускать web publisher вручную до post-migration audit.
 

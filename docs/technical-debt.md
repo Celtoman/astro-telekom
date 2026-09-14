@@ -31,7 +31,7 @@
 | TD-21 | [#12](https://github.com/Celtoman/astro-telekom/issues/12) ✅ | Уязвимый `xlsx@0.18.5` заменен на `read-excel-file`; импорт принимает только ограниченный XLSX |
 | TD-22 | [#37](https://github.com/Celtoman/astro-telekom/issues/37) ✅ | Compose переведен на обязательный для PostgreSQL 18 volume mount `/var/lib/postgresql` |
 | TD-23 | [#38](https://github.com/Celtoman/astro-telekom/issues/38) ✅ | Seed использует явный ESM entrypoint сгенерированного Prisma client и снова запускается на Node 22 |
-| TD-24 | [#39](https://github.com/Celtoman/astro-telekom/issues/39) ✅ | City import использует transaction-local maps, bulk page insert и проходит полный пакет 207 строк |
+| TD-24 | [#39](https://github.com/Celtoman/astro-telekom/issues/39) ✅ | City import использует transaction-local maps, атомарное создание HOME с блоками и проходит полный пакет 207 строк |
 | TD-25 | [#40](https://github.com/Celtoman/astro-telekom/issues/40) ✅ | Пользовательские сессии отделены от worker-only `/internal/*`, доступных только по сервисному токену |
 | TD-27 | [#42](https://github.com/Celtoman/astro-telekom/issues/42) ✅ | Импорт тарифов сохраняет полное описание и нормализованные счетчики TV-каналов |
 | TD-28 | [#43](https://github.com/Celtoman/astro-telekom/issues/43) ✅ | Snapshot тарифов использует канонические slug из справочника 207 городов |
@@ -74,6 +74,8 @@
 | TD-109 | [#139](https://github.com/Celtoman/astro-telekom/issues/139) ✅ | Городская HOME Release 1 выводит полный тарифный snapshot без legacy-фильтра и лимита |
 | TD-110 | [#140](https://github.com/Celtoman/astro-telekom/issues/140) ✅ | `pull_policy: never` запрещает Coolify 4.3.19 скачивать локальный API image для `bootstrap-seed`; exact-SHA deployment подтвержден |
 | TD-111 | [#141](https://github.com/Celtoman/astro-telekom/issues/141) 🟢 | Public Caddy отдает noindex-404 для неизвестного URL, но с HTTP 200 |
+| TD-112 | [#142](https://github.com/Celtoman/astro-telekom/issues/142) ✅ | Все опубликованные city HOME используют каноническую композицию из семи блоков; импорт, API и web защищают единый контракт |
+| TD-113 | [#143](https://github.com/Celtoman/astro-telekom/issues/143) ✅ | `/goroda-obsluzhivaniya` выводит региональный каталог, поиск, переход к проверке покрытия и FAQ вместо плоской сетки |
 
 ## P2
 
@@ -105,7 +107,7 @@
 | TD-78 | [#100](https://github.com/Celtoman/astro-telekom/issues/100) ✅ | `RESEND_API_KEY` ограничен Coolify runtime scope и исключен из build arguments |
 | TD-79 | [#101](https://github.com/Celtoman/astro-telekom/issues/101) ✅ | Resend/webhook idempotency key разделен по manual retry revision |
 | TD-83 | [#106](https://github.com/Celtoman/astro-telekom/issues/106) ✅ | Публичные HTML-URL должны публиковаться без завершающего слэша с единым canonical/sitemap/redirect contract |
-| TD-97 | [#124](https://github.com/Celtoman/astro-telekom/issues/124) ✅ | При наличии `PageBlock` главная использует только управляемую структуру; hardcoded fallback остается лишь для страниц без блоков |
+| TD-97 | [#124](https://github.com/Celtoman/astro-telekom/issues/124) ✅ | Городская HOME использует только управляемую структуру; после унификации шаблона hardcoded fallback удален полностью |
 | TD-98 | [#127](https://github.com/Celtoman/astro-telekom/issues/127) ✅ | Seed создает demo-тарифы только в пустом каталоге и не возвращает их после полного snapshot-импорта |
 | TD-99 | [#128](https://github.com/Celtoman/astro-telekom/issues/128) ✅ | Ссылка звонка в публичной шапке нормализуется из показанного пользователю номера |
 

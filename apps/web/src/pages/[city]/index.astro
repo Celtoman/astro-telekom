@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import AddressForm from '../../components/AddressForm.astro';
 import BlockRenderer from '../../components/BlockRenderer.astro';
 import CityHomeFirstScreen from '../../components/CityHomeFirstScreen.astro';
 import { loadSiteData, pageMeta, publicSiteSlug, type CityView } from '../../data/site';
@@ -14,42 +13,15 @@ export async function getStaticPaths() {
 
 const { city } = Astro.props as Props;
 const homePage = city.pages.find((page) => page.type === 'HOME');
+if (!homePage) throw new Error(`Не опубликована HOME города «${city.name}»`);
 const meta = pageMeta(city.pages, homePage?.slug || '', `Домашний интернет в ${city.nameIn}`, `Тарифы домашнего интернета, телевидения и подключения в ${city.nameIn}.`);
 const heroBlock = homePage?.blocks?.find((block) => block.blockType === 'hero');
+if (!heroBlock) throw new Error(`HOME города «${city.name}» не содержит hero канонического шаблона`);
 const contentBlocks = homePage?.blocks?.filter((block) => block.blockType !== 'hero') || [];
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
-const servicePages = [
-  ['Домашний интернет', 'Тарифы с разной скоростью подключения для квартиры или дома.'],
-  ['Интернет + ТВ', 'Домашний интернет и телевидение в одном подключении.'],
-  ['Телевидение', 'Телевизионные услуги и дополнительные возможности для дома.'],
-];
 ---
 
 <BaseLayout title={meta.title} description={meta.description} city={city} pages={city.pages}>
-  {homePage?.blocks?.length && heroBlock ? <>
-    <CityHomeFirstScreen block={heroBlock} {city} tariffs={city.tariffs} {apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage.slug} />
-    <BlockRenderer blocks={contentBlocks} tariffs={city.tariffs} citySlug={city.slug} pages={city.pages} />
-  </> : <>
-    <section class="hero">
-      <div class="container">
-        <span class="eyebrow">Дом.ру в {city.nameIn}</span>
-        <h1>Домашний интернет и телевидение в {city.nameIn}</h1>
-        <p class="lead">Подберите подходящую услугу, проверьте возможность подключения по адресу и оставьте заявку на консультацию.</p>
-        <a class="button" href="#address-check">Проверить адрес</a>
-      </div>
-    </section>
-    {servicePages.length > 0 && <section class="section container">
-      <h2>Услуги для дома</h2>
-      <div class="grid">
-        {servicePages.map(([title, text]) => <article class="card"><h3>{title}</h3><p>{text}</p><a class="card-link" href="#address-check">Проверить подключение →</a></article>)}
-      </div>
-    </section>}
-    {city.tariffs.length > 0 && <section class="section container">
-      <h2>Популярные тарифы</h2>
-      <div class="grid">
-        {city.tariffs.map((tariff) => <article class="card"><h3>{tariff.name}</h3><p>{tariff.service}. {tariff.speed}</p><div class="tariff-price">{tariff.price}</div>{tariff.connection && <p class="tariff-connection">{tariff.connection}</p>}<a class="card-link" href="#address-check">Проверить подключение →</a></article>)}
-      </div>
-    </section>}
-    <AddressForm apiUrl={apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage?.slug || ''} city={city} mode="visible" embedded />
-  </>}
+  <CityHomeFirstScreen block={heroBlock} {city} tariffs={city.tariffs} {apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage.slug} />
+  <BlockRenderer blocks={contentBlocks} tariffs={city.tariffs} citySlug={city.slug} pages={city.pages} />
 </BaseLayout>

@@ -28,6 +28,15 @@ const globalPage = (type, slug, title, text) => ({
 const tariff = (slug, name, speed, standardPrice, connectionFee = null, serviceType = 'INTERNET') => ({
   name, slug, serviceType, speed, standardPrice, promoPrice: null, connectionFee, status: 'PUBLISHED', seo: {},
 });
+const cityHomeBlocks = (cityIn) => [
+  { blockType: 'hero', data: { eyebrow: `Дом.ру в ${cityIn}`, title: `Домашний интернет и телевидение в ${cityIn}`, text: 'Выберите услугу и проверьте подключение.' } },
+  { blockType: 'service_grid', data: { title: 'Услуги для дома', items: [{ pageType: 'INTERNET', title: 'Домашний интернет', text: 'Тарифы для квартиры и дома.' }] } },
+  { blockType: 'tariff_grid', data: { title: 'Популярные тарифы' } },
+  { blockType: 'steps', data: { title: 'Как проходит подключение', items: [{ title: 'Проверка', text: 'Уточняем адрес.' }, { title: 'Заявка', text: 'Связываемся с вами.' }] } },
+  { blockType: 'feature_grid', data: { title: 'Оборудование', items: [{ title: 'Wi-Fi', text: 'Условия уточнит оператор.' }] } },
+  { blockType: 'feature_grid', data: { title: 'Что важно', items: [{ title: 'Скорость', text: 'Сравните тарифы.' }] } },
+  { blockType: 'faq', data: { title: 'Популярные вопросы', items: [{ question: 'Как проверить адрес?', answer: 'Введите адрес в форме.' }] } },
+];
 
 const apiFixture = {
   site: { name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test' },
@@ -51,24 +60,11 @@ const apiFixture = {
   redirects: [{ id: 'redirect-old-kazan', sourcePath: '/old-kazan/', targetPath: '/kazan/', status: 'PUBLISHED' }],
   cities: [
     {
-      name: 'Казань', namePrepositional: 'Казани', slug: 'kazan', phone: '8 (800) 555-35-35', supportPhone: '8 (800) 250-77-77', status: 'PUBLISHED',
+      name: 'Казань', namePrepositional: 'Казани', slug: 'kazan', phone: '8 (800) 555-35-35', supportPhone: '8 (800) 250-77-77', status: 'PUBLISHED', region: { name: 'Татарстан', slug: 'tatarstan' },
       pages: [
         {
           ...page('HOME', '', 'Домашний интернет в Казани'),
-          blocks: [
-            { blockType: 'hero', data: { eyebrow: 'Дом.ру в Казани', title: 'Домашний интернет и телевидение в Казани', text: 'Выберите услугу и проверьте подключение.' } },
-            { blockType: 'service_grid', data: { title: 'Услуги для дома', items: [{ pageType: 'INTERNET', title: 'Домашний интернет', text: 'Тарифы для квартиры и дома.' }] } },
-            { blockType: 'tariff_grid', data: { title: 'Популярные тарифы', serviceType: 'INTERNET_TV', limit: 6, morePageType: 'INTERNET_TV' } },
-            { blockType: 'steps', data: { title: 'Как проходит подключение', items: [
-              { title: 'Проверка адреса', text: 'Уточняем техническую возможность.' },
-              { title: 'Заявка оператору', text: 'Передаем контакт после проверки.' },
-              { title: 'Согласование', text: 'Подтверждаем тариф и время.' },
-              { title: 'Подключение', text: 'Специалист выполняет работы.' },
-            ] } },
-            { blockType: 'feature_grid', data: { title: 'Оборудование для интернета и ТВ', items: [{ title: 'Wi-Fi-роутер', text: 'Условия предоставления уточнит оператор.' }] } },
-            { blockType: 'feature_grid', data: { title: 'Что важно при выборе', items: [{ title: 'Скорость', text: 'Сравните опубликованные тарифы.' }] } },
-            { blockType: 'faq', data: { title: 'Популярные вопросы', items: [{ question: 'Как проверить адрес?', answer: 'Введите адрес и выберите подсказку.' }] } },
-          ],
+          blocks: cityHomeBlocks('Казани'),
         },
         page('INTERNET', 'internet', 'Домашний интернет в Казани'),
         page('INTERNET_TV', 'internet-tv', 'Интернет и ТВ в Казани'),
@@ -83,8 +79,8 @@ const apiFixture = {
       ],
     },
     {
-      name: 'Альметьевск', namePrepositional: 'Альметьевске', slug: 'almetyevsk', phone: '8 (800) 555-35-35', supportPhone: '8 (800) 250-77-77', status: 'PUBLISHED',
-      pages: [page('HOME', '', 'Домашний интернет в Альметьевске'), page('INTERNET', 'internet', 'Домашний интернет в Альметьевске')],
+      name: 'Альметьевск', namePrepositional: 'Альметьевске', slug: 'almetyevsk', phone: '8 (800) 555-35-35', supportPhone: '8 (800) 250-77-77', status: 'PUBLISHED', region: { name: 'Татарстан', slug: 'tatarstan' },
+      pages: [{ ...page('HOME', '', 'Домашний интернет в Альметьевске'), blocks: cityHomeBlocks('Альметьевске') }, page('INTERNET', 'internet', 'Домашний интернет в Альметьевске')],
       tariffs: [tariff('almet-internet-300', 'Альмет Интернет 300', 300, 650, 1500)],
     },
     {
@@ -237,15 +233,24 @@ test('web build emits exactly the Release 1 inventory for every published city',
   assert.match(kazan, /href="tel:88005553535"[^>]*>8 \(800\) 555-35-35<\/a>/);
   assert.match(kazan, /data-support-phone="8 \(800\) 250-77-77"/);
   assert.match(almetyevsk, /<link rel="canonical" href="https:\/\/partner\.example\.test\/almetyevsk">/);
-  assert.match(almetyevsk, /<h1>Домашний интернет и телевидение в Альметьевске<\/h1>/);
+  assert.match(almetyevsk, /<h1[^>]*>Домашний интернет и телевидение в Альметьевске<\/h1>/);
   assert.match(almetyevsk, /data-form-mode="visible"/);
+  assert.match(almetyevsk, /data-city-first-screen/);
+  assert.match(almetyevsk, /data-block-type="service_grid"/);
+  assert.match(almetyevsk, /data-block-type="tariff_grid"/);
+  assert.match(almetyevsk, /data-block-type="faq"/);
   assert.doesNotMatch(almetyevsk, /Казан/);
 
   assert.match(coverage, /<h1>Карта покрытия<\/h1>/);
   assert.match(coverage, /href="\/kazan#address-check"/);
-  assert.match(cities, /<h1>Города обслуживания<\/h1>/);
+  assert.match(cities, /<h1[^>]*>Города подключения Дом\.\u0440у<\/h1>/);
   assert.match(cities, /Казань/);
   assert.match(cities, /Альметьевск/);
+  assert.match(cities, /type="search"/);
+  assert.match(cities, /data-city-directory/);
+  assert.match(cities, /data-region-name="Татарстан"/);
+  assert.match(cities, /href="\/karta-pokrytiya-provaydera"/);
+  assert.match(cities, /<details/);
   assert.match(privacy, /Основные принципы/);
   assert.match(consent, /Предоставление согласия/);
   assert.match(cookies, /Назначение cookie/);
@@ -290,6 +295,16 @@ test('web build is blocked when API is unavailable and demo mode is not explicit
   assert.notEqual(build.code, 0, build.output);
   assert.match(build.output, /Не удалось получить каталог опубликованных городов/);
   assert.match(build.output, /ALLOW_DEMO_DATA=true/);
+});
+
+test('web build rejects a published city HOME without the canonical block template', { timeout: 120_000 }, async () => {
+  const fixture = structuredClone(apiFixture);
+  fixture.cities[1].pages[0].blocks = [];
+  await withApiFixture(async (apiUrl) => {
+    const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: '' });
+    assert.notEqual(build.code, 0, build.output);
+    assert.match(build.output, /Альметьевск.*HOME.*каноническ/i);
+  }, fixture);
 });
 
 test('web production build is blocked without a clean HTTPS origin', { timeout: 120_000 }, async () => {
