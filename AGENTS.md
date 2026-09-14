@@ -76,6 +76,8 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 Публичная витрина `apps/web` визуально и по UX ориентируется на официальный сайт [dom.ru](https://dom.ru) — но это референс структуры/тона/визуального языка, **не код** (сайт не open-source) и **не источник контента для копирования** (`apps/web` — сайт партнёра/дилера, не сам Дом.ру; copyright-ограничения обязательны). При конфликте с [docs/decisions.md](docs/decisions.md) — приоритет у decisions.md. Полный DoD-чек — [docs/web-design-system.md](docs/web-design-system.md).
 
+Перед изменением публичных маршрутов, sitemap, генерации городских страниц или релизного состава обязательно прочитать [docs/site-structure.md](docs/site-structure.md). Этот документ — канон целевой структуры и границы Release 1; фактическая реализация по-прежнему фиксируется в [docs/current-state.md](docs/current-state.md).
+
 ## Документация проекта
 
 Живые документы — обновлять релевантный при любом значимом изменении кода/поведения, в том же коммите:
@@ -84,6 +86,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 | --- | --- |
 | [README.md](README.md) | Обзор проекта, локальный запуск, состав репозитория — первое, что видит новый читатель |
 | [docs/current-state.md](docs/current-state.md) | Что реально работает, что demo, что не реализовано |
+| [docs/site-structure.md](docs/site-structure.md) | Канонические URL, иерархия страниц и минимальный состав Release 1 |
 | [docs/admin-design-system.md](docs/admin-design-system.md) | Обязательный источник дизайна/компонентов для `apps/admin` — next-shadcn-admin-dashboard-aria |
 | [docs/web-design-system.md](docs/web-design-system.md) | Обязательный визуальный/UX-референс для `apps/web` — официальный dom.ru |
 | [docs/architecture.md](docs/architecture.md) | Приложения, потоки данных, границы модулей |
