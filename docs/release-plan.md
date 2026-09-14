@@ -23,7 +23,7 @@ Release 0 не является production release: тестовый gate и mul
 
 Условия завершения:
 
-1. Публичный output, sitemap, внутренние ссылки и redirects соответствуют exact составу `N + T + 6`; прежний переход на городскую структуру и live-приемка HTTP 404 завершены в [#136](https://github.com/Celtoman/astro-telekom/issues/136) и [#141](https://github.com/Celtoman/astro-telekom/issues/141), возврат тарифных страниц выполняется в [#149](https://github.com/Celtoman/astro-telekom/issues/149).
+1. Публичный output, sitemap, внутренние ссылки и redirects соответствуют exact составу `N + T + 6`; переход на городскую структуру, live-приемка HTTP 404 и возврат тарифных страниц завершены в [#136](https://github.com/Celtoman/astro-telekom/issues/136), [#141](https://github.com/Celtoman/astro-telekom/issues/141) и [#149](https://github.com/Celtoman/astro-telekom/issues/149). Последний live inventory — 207 городов, 3 859 тарифов и 4 072 уникальных URL. Дублированные записи `HOME`, не создающие дополнительных маршрутов, отдельно отслеживаются в [#150](https://github.com/Celtoman/astro-telekom/issues/150).
 2. Все automated checks green в чистом окружении.
 3. Production build блокируется, если API-данные отсутствуют, origin не является чистым HTTPS origin или final SEO output не проходит проверку. API/origin fail-fast, post-build sitemap/raw HTML gate и воспроизводимый первый Coolify bootstrap [#55](https://github.com/Celtoman/astro-telekom/issues/55) подтверждены; внешний production CI/CD не должен разрешать demo mode.
 4. Импорт тарифов имеет утвержденную полную семантику и не оставляет устаревшие публичные предложения.

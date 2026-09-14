@@ -29,7 +29,7 @@
 | TD-08 | [#9](https://github.com/Celtoman/astro-telekom/issues/9) ✅ | Demo UI заменен реальными экранами тарифов, городов и заявок по [docs/admin-design-system.md](admin-design-system.md) |
 | TD-09 | [#10](https://github.com/Celtoman/astro-telekom/issues/10) ✅ | Реализованы HttpOnly-cookie login/me/logout и auth-gated React shell; browser service-token удален |
 | TD-10 | [#11](https://github.com/Celtoman/astro-telekom/issues/11) ✅ | Защищенный release configuration gate блокирует готовность при пустых Contract/Tarifnik/coverage/email/rebuild variables без раскрытия значений |
-| TD-117 | [#148](https://github.com/Celtoman/astro-telekom/issues/148) 🟢 | Отдельные страницы опубликованных тарифов отсутствуют в Release 1 |
+| TD-117 | [#148](https://github.com/Celtoman/astro-telekom/issues/148) ✅ | Отдельные страницы 3 859 опубликованных тарифов возвращены в Release 1 и подтверждены exact-SHA live smoke |
 | TD-21 | [#12](https://github.com/Celtoman/astro-telekom/issues/12) ✅ | Уязвимый `xlsx@0.18.5` заменен на `read-excel-file`; импорт принимает только ограниченный XLSX |
 | TD-22 | [#37](https://github.com/Celtoman/astro-telekom/issues/37) ✅ | Compose переведен на обязательный для PostgreSQL 18 volume mount `/var/lib/postgresql` |
 | TD-23 | [#38](https://github.com/Celtoman/astro-telekom/issues/38) ✅ | Seed использует явный ESM entrypoint сгенерированного Prisma client и снова запускается на Node 22 |
@@ -86,6 +86,7 @@
 | --- | --- | --- |
 | TD-11 | [#13](https://github.com/Celtoman/astro-telekom/issues/13) 🟢 | Нет аудита, версий, schedule публикации, корзины, rollback |
 | TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) 🟢 | Наследование `content` — только shallow merge верхнего уровня |
+| TD-118 | [#150](https://github.com/Celtoman/astro-telekom/issues/150) 🟢 | У 206 городов одновременно опубликованы legacy `HOME` со slug `home` и каноническая `HOME` с пустым slug |
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) ✅ | `PageBlock` поддерживает семь строго валидируемых типов, а Astro рендерит полный минимальный набор |
 | TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) ✅ | Public DTO/rate limit/honeypot и 180-дневный policy-driven purge реализованы; legal scope вынесен в [#144](https://github.com/Celtoman/astro-telekom/issues/144) |
 | TD-114 | [#147](https://github.com/Celtoman/astro-telekom/issues/147) ✅ | Живые документы и technical-debt index синхронизированы с Release 1, 26 миграциями, post-deploy evidence и текущими Issue states |
