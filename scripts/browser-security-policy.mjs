@@ -76,7 +76,7 @@ export function createAdminCsp({ publicApiUrl, adminUrl }) {
       `connect-src ${unique(["'self'", apiOrigin(publicApiUrl, adminUrl)]).join(' ')}`,
       "img-src 'self' data:",
       "child-src 'none'",
-      "frame-src 'none'",
+      "frame-src 'self'",
       "font-src 'self' data:",
       "manifest-src 'self'",
     ],

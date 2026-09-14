@@ -404,6 +404,20 @@ export class PublicationWorkflowService {
     };
   }
 
+  async getWorkingPreview(siteId: string) {
+    return this.prisma.$transaction(async (transaction) => {
+      const site = await transaction.site.findUnique({ where: { id: siteId } });
+      if (!site) throw new NotFoundException('Site not found');
+      const catalog = await this.catalog.listBySiteId(site.id, transaction);
+      return {
+        siteId: site.id,
+        workingRevision: site.workingRevision,
+        publishedRevision: site.publishedRevision,
+        catalog: this.jsonSnapshot(catalog) as JsonObject,
+      };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+  }
+
   async getBuildCatalog(siteSlug: string): Promise<JsonObject> {
     const site = await this.prisma.site.findUnique({ where: { slug: siteSlug } });
     if (!site) throw new NotFoundException('Site not found');

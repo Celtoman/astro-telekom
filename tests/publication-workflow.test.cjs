@@ -333,6 +333,38 @@ test('publication controller enqueues the exact snapshot and returns current pub
   ]);
 });
 
+test('working preview returns the current catalog without creating a publication snapshot', async () => {
+  const f = fixture();
+  await f.service.recordWorkingRevision(f.prisma, {
+    siteId: 'site-1', entityType: 'PAGE', entityId: 'page-1', action: 'UPDATE',
+    snapshot: { title: 'Рабочий заголовок' }, changedFields: ['title'], source: 'admin',
+  });
+
+  const preview = await f.service.getWorkingPreview('site-1');
+
+  assert.equal(preview.siteId, 'site-1');
+  assert.equal(preview.workingRevision, 1);
+  assert.equal(preview.publishedRevision, 0);
+  assert.equal(preview.catalog.marker, 'working');
+  assert.equal(f.publications.size, 0);
+});
+
+test('publication controller exposes the protected working preview contract', async () => {
+  const calls = [];
+  const publications = {
+    getWorkingPreview: async (siteId) => {
+      calls.push(siteId);
+      return { siteId, workingRevision: 9, publishedRevision: 7, catalog: { routes: [] } };
+    },
+  };
+  const controller = new PublicationWorkflowController(publications, {});
+
+  const result = await controller.preview('site-1');
+
+  assert.equal(result.workingRevision, 9);
+  assert.deepEqual(calls, ['site-1']);
+});
+
 test('publication controller marks a snapshot failed when its rebuild cannot be enqueued', async () => {
   const publication = { id: 'publication-8', siteId: 'site-1', siteRevision: 8, status: 'PENDING' };
   const calls = [];

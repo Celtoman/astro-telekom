@@ -156,7 +156,7 @@ test('admin production build emits hash-based CSP while allowing only Radix styl
   const htmlFiles = await collectHtmlFiles(adminDist);
   assert.deepEqual(htmlFiles.map((path) => path.slice(adminDist.length + 1).replaceAll('\\', '/')).sort(), [
     'audit/index.html', 'cities/import/index.html', 'cities/index.html', 'index.html', 'lead-access/index.html', 'leads/index.html',
-    'login/index.html', 'redirects/index.html', 'tariffs/edit/index.html', 'tariffs/import/index.html', 'tariffs/index.html', 'trash/index.html',
+    'login/index.html', 'preview/index.html', 'redirects/index.html', 'tariffs/edit/index.html', 'tariffs/import/index.html', 'tariffs/index.html', 'trash/index.html',
   ]);
   for (const path of htmlFiles) {
     const html = await readFile(path, 'utf8');
@@ -165,6 +165,7 @@ test('admin production build emits hash-based CSP while allowing only Radix styl
     assert.equal(getDirective(csp, 'base-uri', path), "base-uri 'none'");
     assert.equal(getDirective(csp, 'object-src', path), "object-src 'none'");
     assert.equal(getDirective(csp, 'form-action', path), "form-action 'self'");
+    assert.equal(getDirective(csp, 'frame-src', path), "frame-src 'self'");
     const connections = getDirective(csp, 'connect-src', path);
     assert.match(connections, /'self'/);
     assert.match(connections, /https:\/\/api\.admin\.example\.test/);

@@ -102,6 +102,11 @@ export class PublicationWorkflowController {
     return this.publications.getState(siteId);
   }
 
+  @Get('admin/sites/:siteId/preview-catalog')
+  preview(@Param('siteId') siteId: string) {
+    return this.publications.getWorkingPreview(siteId);
+  }
+
   @Get('internal/site-publications/:siteSlug/catalog')
   buildCatalog(@Param('siteSlug') siteSlug: string) {
     return this.publications.getBuildCatalog(siteSlug);

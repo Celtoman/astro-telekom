@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import { Building2, FileClock, FileUp, Home, Inbox, List, LogOut, PackageOpen, Route, Trash2 } from "lucide-react"
+import { Building2, Eye, FileClock, FileUp, Home, Inbox, List, LogOut, PackageOpen, Route, Trash2 } from "lucide-react"
 import { requestJson } from "../lib/admin-api.mjs"
 import { Button } from "./ui/button"
 
@@ -11,7 +11,7 @@ interface Administrator {
 export function AdminShell({ apiUrl, user, active, children }: {
   apiUrl: string
   user: Administrator
-  active: "overview" | "tariffs" | "tariffs-import" | "cities" | "cities-import" | "leads" | "redirects" | "audit" | "trash"
+  active: "overview" | "preview" | "tariffs" | "tariffs-import" | "cities" | "cities-import" | "leads" | "redirects" | "audit" | "trash"
   children: ReactNode
 }) {
   async function logout() {
@@ -31,6 +31,7 @@ export function AdminShell({ apiUrl, user, active, children }: {
         </div>
         <nav className="mt-6 flex flex-col gap-1" aria-label="Разделы админки">
           <Button className="justify-start" variant={navVariant("overview")} asChild><a href="/"><Home data-icon="inline-start" />Обзор</a></Button>
+          <Button className="justify-start" variant={navVariant("preview")} asChild><a href="/preview"><Eye data-icon="inline-start" />Предпросмотр</a></Button>
           <Button className="justify-start" variant={sectionVariant("tariffs")} asChild><a href="/tariffs"><PackageOpen data-icon="inline-start" />Тарифы</a></Button>
           <div className="ml-4 flex flex-col gap-1 border-l pl-3">
             <Button size="sm" className="justify-start" variant={navVariant("tariffs")} asChild><a href="/tariffs"><List data-icon="inline-start" />Каталог</a></Button>
