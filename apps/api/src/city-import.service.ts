@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { cityHomeTemplateBlocks } from './city-home-template';
 import { PrismaService } from './prisma.service';
+import { PublicationWorkflowService } from './publication-workflow.service';
 import { parseWorkbook } from './tariff-import.service';
 
 export interface CityImportIssue { row: number; level: 'error' | 'warning'; message: string; key?: string }
@@ -47,6 +48,83 @@ export interface CityImportReport {
   issues: CityImportIssue[];
   candidates: CityImportCandidate[];
 }
+
+type StoredCity = {
+  id: string;
+  siteId: string;
+  regionId: string;
+  name: string;
+  slug: string;
+  nameInstrumental: string | null;
+  namePrepositional: string | null;
+  nameGenitive: string | null;
+  legacyUrl: string | null;
+  officeAddress: string | null;
+  officeHours: string | null;
+  status: string;
+  phone: string | null;
+  supportPhone: string | null;
+  seo: unknown;
+  content: unknown;
+};
+
+type StoredRegion = {
+  id: string;
+  siteId: string;
+  name: string;
+  slug: string;
+  phone: string | null;
+  content: unknown;
+};
+
+type CityImportChangeSet = {
+  version: 1;
+  kind: 'CITY_IMPORT';
+  siteId: string;
+  runId: string;
+  actions: Record<string, CityImportAction>;
+  createdCityIds: string[];
+  beforeCities: StoredCity[];
+  afterCities: StoredCity[];
+  createdRegions: StoredRegion[];
+  createdPages: unknown[];
+  workingRevision: number | null;
+};
+
+const jsonCopy = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+const storedCity = (city: {
+  id: string; siteId: string; regionId: string; name: string; slug: string;
+  nameInstrumental: string | null; namePrepositional: string | null; nameGenitive: string | null;
+  legacyUrl: string | null; officeAddress: string | null; officeHours: string | null; status: string;
+  phone: string | null; supportPhone: string | null; seo: unknown; content: unknown;
+}): StoredCity => ({
+  id: city.id,
+  siteId: city.siteId,
+  regionId: city.regionId,
+  name: city.name,
+  slug: city.slug,
+  nameInstrumental: city.nameInstrumental,
+  namePrepositional: city.namePrepositional,
+  nameGenitive: city.nameGenitive,
+  legacyUrl: city.legacyUrl,
+  officeAddress: city.officeAddress,
+  officeHours: city.officeHours,
+  status: city.status,
+  phone: city.phone,
+  supportPhone: city.supportPhone,
+  seo: city.seo === null ? null : jsonCopy(city.seo),
+  content: city.content === null ? null : jsonCopy(city.content),
+});
+const storedRegion = (region: {
+  id: string; siteId: string; name: string; slug: string; phone: string | null; content: unknown;
+}): StoredRegion => ({
+  id: region.id,
+  siteId: region.siteId,
+  name: region.name,
+  slug: region.slug,
+  phone: region.phone,
+  content: region.content === null ? null : jsonCopy(region.content),
+});
 
 const text = (value: unknown) => value === null || value === undefined ? '' : String(value).trim();
 const transliteration: Record<string, string> = { а:'a', б:'b', в:'v', г:'g', д:'d', е:'e', ё:'e', ж:'zh', з:'z', и:'i', й:'y', к:'k', л:'l', м:'m', н:'n', о:'o', п:'p', р:'r', с:'s', т:'t', у:'u', ф:'f', х:'h', ц:'c', ч:'ch', ш:'sh', щ:'sch', ъ:'', ы:'y', ь:'', э:'e', ю:'yu', я:'ya' };
@@ -131,7 +209,10 @@ function validatedActions(report: CityImportReport, value: unknown): Record<stri
 
 @Injectable()
 export class CityImportService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly publications: PublicationWorkflowService,
+  ) {}
 
   async validateRows(siteId: string, fileName: string, sourceRows: Record<string, unknown>[]): Promise<CityImportReport> {
     if (!siteId) throw new BadRequestException('siteId обязателен');
@@ -198,7 +279,7 @@ export class CityImportService {
     return { reportVersion: 2, fileName, siteId, createdAt: new Date().toISOString(), totalRows: rows.length, validRows: candidates.length, errorRows, warningRows, issues, candidates };
   }
 
-  async applyReport(report: CityImportReport, actionsValue: unknown, confirmWarnings = false, runId?: string) {
+  async applyReport(report: CityImportReport, actionsValue: unknown, confirmWarnings = false, runId?: string, actorId?: string) {
     if (report.reportVersion !== 2) throw new BadRequestException('Отчет импорта создан в старом формате; проверьте файл заново');
     if (report.errorRows > 0) throw new BadRequestException('Нельзя применить импорт с ошибками');
     if (report.warningRows > 0 && !confirmWarnings) throw new BadRequestException('Нужно явно подтвердить предупреждения импорта');
@@ -212,6 +293,11 @@ export class CityImportService {
         include: { region: { select: { name: true } } },
       });
       const citiesBySlug = new Map(existingCities.map((city) => [city.slug, city]));
+      const beforeCities: StoredCity[] = [];
+      const affectedCityIds: string[] = [];
+      const createdCityIds: string[] = [];
+      const createdRegions: StoredRegion[] = [];
+      const createdPageIds: string[] = [];
       let created = 0; let updated = 0; let skipped = 0; let pagesCreated = 0;
       for (const candidate of report.candidates) {
         const action = actions[candidate.key];
@@ -229,17 +315,20 @@ export class CityImportService {
         let region = regionsByName.get(candidate.subject) || regionsBySlug.get(regionSlug);
         if (!region) {
           region = await tx.region.create({ data: { siteId: candidate.siteId, name: candidate.subject, slug: regionSlug } });
+          if (runId) createdRegions.push(storedRegion(region));
           regionsByName.set(region.name, region);
           regionsBySlug.set(region.slug, region);
         }
         const data = { regionId: region.id, name: candidate.name, slug: candidate.slug, nameInstrumental: candidate.nameInstrumental, namePrepositional: candidate.namePrepositional, nameGenitive: candidate.nameGenitive, legacyUrl: candidate.legacyUrl, officeAddress: candidate.officeAddress, officeHours: candidate.officeHours, status: 'PUBLISHED' as const };
         if (current) {
+          if (runId) beforeCities.push(storedCity(current));
           const city = await tx.city.update({ where: { id: current.id }, data });
+          affectedCityIds.push(city.id);
           citiesBySlug.set(city.slug, { ...city, region: { name: region.name } });
           updated += 1;
         } else {
           const city = await tx.city.create({ data: { siteId: candidate.siteId, ...data, seo: {} as Prisma.InputJsonObject, content: {} as Prisma.InputJsonObject } });
-          await tx.page.create({
+          const page = await tx.page.create({
             data: {
               siteId: candidate.siteId,
               cityId: city.id,
@@ -252,19 +341,72 @@ export class CityImportService {
               blocks: { create: cityHomeTemplateBlocks(candidate) },
             },
           });
+          affectedCityIds.push(city.id);
+          createdCityIds.push(city.id);
+          createdPageIds.push(page.id);
           citiesBySlug.set(city.slug, { ...city, region: { name: region.name } });
           pagesCreated += 1;
           created += 1;
         }
       }
+      let workingRevision: number | null = null;
       if (runId) {
+        const afterCities = affectedCityIds.length
+          ? (await tx.city.findMany({ where: { id: { in: affectedCityIds } }, orderBy: { id: 'asc' } })).map(storedCity)
+          : [];
+        const createdPages = createdPageIds.length
+          ? jsonCopy(await tx.page.findMany({
+            where: { id: { in: createdPageIds } },
+            include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+            orderBy: { id: 'asc' },
+          }))
+          : [];
+        const orderedBeforeCities = beforeCities.sort((left, right) => left.id.localeCompare(right.id));
+        const orderedRegions = createdRegions.sort((left, right) => left.id.localeCompare(right.id));
+        const changedFields = [
+          ...(affectedCityIds.length ? ['cities'] : []),
+          ...(orderedRegions.length ? ['regions'] : []),
+          ...(createdPages.length ? ['pages'] : []),
+        ];
+        if (changedFields.length) {
+          const revision = await this.publications.recordWorkingRevision(tx, {
+            siteId: report.siteId,
+            entityType: 'SITE',
+            entityId: report.siteId,
+            action: 'IMPORT',
+            previousSnapshot: { cities: orderedBeforeCities, regions: [], pages: [] },
+            snapshot: { cities: afterCities, regions: orderedRegions, pages: createdPages },
+            changedFields,
+            actorId,
+            source: `city-import:${runId}`,
+          });
+          workingRevision = revision.siteRevision;
+        }
+        const changeSet: CityImportChangeSet = {
+          version: 1,
+          kind: 'CITY_IMPORT',
+          siteId: report.siteId,
+          runId,
+          actions,
+          createdCityIds: createdCityIds.sort(),
+          beforeCities: orderedBeforeCities,
+          afterCities,
+          createdRegions: orderedRegions,
+          createdPages,
+          workingRevision,
+        };
         const claimed = await tx.cityImportRun.updateMany({
-          where: { id: runId, status: { not: 'APPLIED' } },
-          data: { status: 'APPLIED', appliedAt: new Date() },
+          where: { id: runId, status: 'VALIDATED' },
+          data: {
+            status: 'APPLIED',
+            appliedAt: new Date(),
+            appliedById: actorId || null,
+            changeSet: changeSet as unknown as Prisma.InputJsonValue,
+          },
         });
         if (claimed.count !== 1) throw new BadRequestException('Этот импорт уже применен');
       }
-      return { created, updated, skipped, pagesCreated };
+      return { created, updated, skipped, pagesCreated, ...(workingRevision === null ? {} : { workingRevision }) };
     }, { timeout: 30_000, isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 }

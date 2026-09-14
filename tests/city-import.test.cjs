@@ -243,6 +243,73 @@ test('city import applies an explicit create, update and skip action map atomica
   assert.equal(transactionOptions.isolationLevel, 'Serializable');
 });
 
+test('city import apply records an attributed working snapshot without publishing it', async () => {
+  const current = {
+    id: 'city-1', siteId: 'site-1', regionId: 'region-1', slug: 'kazan', name: 'Старое имя',
+    nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани', legacyUrl: null,
+    officeAddress: null, officeHours: null, status: 'DRAFT', phone: '+70000000000', supportPhone: null,
+    seo: {}, content: {}, region: { name: 'Республика Татарстан' },
+  };
+  let city = structuredClone(current);
+  let runUpdate;
+  const revisions = [];
+  const report = {
+    reportVersion: 2, siteId: 'site-1', errorRows: 0, warningRows: 0,
+    candidates: [candidate({ existingId: 'city-1', existingSnapshot: {
+      id: 'city-1', regionId: 'region-1', subject: 'Республика Татарстан', name: 'Старое имя',
+      nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани',
+      legacyUrl: null, officeAddress: null, officeHours: null,
+    } })],
+  };
+  const prisma = {
+    $transaction: async (callback) => callback({
+      region: {
+        findMany: async () => [{ id: 'region-1', siteId: 'site-1', name: 'Республика Татарстан', slug: 'respublika-tatarstan', phone: null, content: null }],
+      },
+      city: {
+        findMany: async () => [city],
+        update: async ({ data }) => { city = { ...city, ...data }; return city; },
+      },
+      page: { findMany: async () => [] },
+      cityImportRun: {
+        updateMany: async ({ where, data }) => {
+          assert.deepEqual(where, { id: 'run-1', status: 'VALIDATED' });
+          runUpdate = data;
+          return { count: 1 };
+        },
+      },
+    }),
+  };
+  const publications = {
+    recordWorkingRevision: async (_transaction, input) => {
+      revisions.push(input);
+      return { siteRevision: 18 };
+    },
+  };
+
+  const result = await new CityImportService(prisma, publications).applyReport(
+    report,
+    { kazan: 'update' },
+    false,
+    'run-1',
+    'user-1',
+  );
+
+  assert.equal(result.workingRevision, 18);
+  assert.equal(runUpdate.status, 'APPLIED');
+  assert.equal(runUpdate.appliedById, 'user-1');
+  assert.equal(runUpdate.changeSet.version, 1);
+  assert.equal(runUpdate.changeSet.kind, 'CITY_IMPORT');
+  assert.equal(runUpdate.changeSet.beforeCities[0].status, 'DRAFT');
+  assert.equal(runUpdate.changeSet.afterCities[0].status, 'PUBLISHED');
+  assert.equal(runUpdate.changeSet.workingRevision, 18);
+  assert.equal(revisions.length, 1);
+  assert.equal(revisions[0].action, 'IMPORT');
+  assert.equal(revisions[0].actorId, 'user-1');
+  assert.equal(revisions[0].source, 'city-import:run-1');
+  assert.deepEqual(revisions[0].changedFields, ['cities']);
+});
+
 test('city import rejects missing, unknown, invalid and state-incompatible actions before writes', async () => {
   let transactionCalled = false;
   const service = new CityImportService({
@@ -289,7 +356,7 @@ test('city import rejects a stale changed-city snapshot instead of overwriting n
   assert.equal(updated, false);
 });
 
-test('city import controller forwards the complete action map and queues one rebuild after success', async () => {
+test('city import controller preserves the working version and does not publish it', async () => {
   const actions = { kazan: 'update', innopolis: 'skip' };
   const report = { reportVersion: 2, siteId: 'site-1', errorRows: 0, warningRows: 0, candidates: [] };
   const calls = [];
@@ -299,45 +366,38 @@ test('city import controller forwards the complete action map and queues one reb
       update: async ({ data }) => { calls.push(['run', data.status]); },
     },
   };
-  const imports = { applyReport: async (received, receivedActions, confirmWarnings, runId) => {
+  const imports = { applyReport: async (received, receivedActions, confirmWarnings, runId, actorId) => {
     assert.equal(received, report);
     assert.deepEqual(receivedActions, actions);
     assert.equal(confirmWarnings, true);
     assert.equal(runId, 'run-1');
-    return { created: 0, updated: 1, skipped: 1, pagesCreated: 0 };
+    assert.equal(actorId, 'user-1');
+    return { created: 0, updated: 1, skipped: 1, pagesCreated: 0, workingRevision: 18 };
   } };
-  const rebuild = { enqueue: async (job) => { calls.push(['rebuild', job]); } };
-
-  const result = await new AdminCitiesController(prisma, rebuild, imports).applyImport({
+  const result = await new AdminCitiesController(prisma, imports).applyImport({
     runId: 'run-1', actions, confirmWarnings: true,
-  });
+  }, { user: { id: 'user-1' } });
 
   assert.equal(result.updated, 1);
-  assert.deepEqual(calls, [
-    ['rebuild', { entity: 'city-import', id: 'run-1', siteId: 'site-1' }],
-  ]);
+  assert.equal(result.workingRevision, 18);
+  assert.deepEqual(calls, []);
 });
 
-test('city import controller never downgrades an applied run when rebuild enqueue fails', async () => {
-  const runUpdates = [];
+test('city import controller never touches the rebuild queue after apply', async () => {
   const report = { reportVersion: 2, siteId: 'site-1', errorRows: 0, warningRows: 0, candidates: [] };
   const prisma = {
     cityImportRun: {
       findUnique: async () => ({ id: 'run-1', siteId: 'site-1', status: 'VALIDATED', report }),
-      update: async ({ data }) => { runUpdates.push(data.status); },
+      updateMany: async () => ({ count: 1 }),
     },
   };
   const imports = { applyReport: async (_report, _actions, _confirmWarnings, runId) => {
     assert.equal(runId, 'run-1');
     return { created: 0, updated: 0, skipped: 0, pagesCreated: 0 };
   } };
-  const rebuild = { enqueue: async () => { throw new Error('queue unavailable'); } };
+  const result = await new AdminCitiesController(prisma, imports).applyImport({ runId: 'run-1', actions: {} });
 
-  await assert.rejects(
-    new AdminCitiesController(prisma, rebuild, imports).applyImport({ runId: 'run-1', actions: {} }),
-    /queue unavailable/,
-  );
-  assert.deepEqual(runUpdates, []);
+  assert.equal(result.runId, 'run-1');
 });
 
 test('city import run can be applied only once and a losing request cannot downgrade APPLIED', async () => {
@@ -355,7 +415,7 @@ test('city import run can be applied only once and a losing request cannot downg
       region: { findMany: async () => [] },
       city: { findMany: async () => [] },
       cityImportRun: { updateMany: async ({ where, data }) => {
-        assert.deepEqual(where, { id: 'run-1', status: { not: 'APPLIED' } });
+        assert.deepEqual(where, { id: 'run-1', status: 'VALIDATED' });
         if (runStatus === 'APPLIED') return { count: 0 };
         runStatus = data.status;
         return { count: 1 };
@@ -374,9 +434,9 @@ test('city import run can be applied only once and a losing request cannot downg
       findUnique: async () => ({ id: 'run-1', siteId: 'site-1', status: 'VALIDATED', report }),
       updateMany: async (request) => { failureUpdates.push(request); return { count: 0 }; },
     },
-  }, { enqueue: async () => {} }, { applyReport: async () => { throw new Error('serialization conflict'); } });
+  }, { applyReport: async () => { throw new Error('serialization conflict'); } });
   await assert.rejects(controller.applyImport({ runId: 'run-1', actions: { kazan: 'skip' } }), /serialization conflict/);
-  assert.deepEqual(failureUpdates[0].where, { id: 'run-1', status: { not: 'APPLIED' } });
+  assert.deepEqual(failureUpdates[0].where, { id: 'run-1', status: 'VALIDATED' });
 });
 
 test('city import rejects legacy validation reports with an explicit revalidation message', async () => {
@@ -411,7 +471,6 @@ test('unpublishing a city disables every managed tariff redirect in the same tra
   const revisions = [];
   const controller = new AdminCitiesController(
     { $transaction: async (callback) => callback(tx) },
-    { enqueue: async (job) => { rebuilds.push(job); } },
     {},
     { recordWorkingRevision: async (_transaction, input) => { revisions.push(input); return { siteRevision: 12 }; } },
   );

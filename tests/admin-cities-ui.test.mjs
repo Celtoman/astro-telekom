@@ -34,7 +34,7 @@ test('city catalog loads management controls and links to its separate import wo
   assert.doesNotMatch(source, /\/admin\/cities\/imports|\/admin\/cities\/import\/validate|\/admin\/cities\/import\/apply|accept=["']\.xlsx["']/);
 });
 
-test('city import workspace implements validation report, guarded apply, history and rebuild status', () => {
+test('city import workspace implements validation report, guarded apply, history and explicit publication', () => {
   const componentPath = join(adminRoot, 'components', 'CityImportApp.tsx');
   assert.equal(existsSync(componentPath), true, 'city import workspace must exist');
   const source = readFileSync(componentPath, 'utf8');
@@ -43,7 +43,6 @@ test('city import workspace implements validation report, guarded apply, history
     '/admin/cities/imports',
     '/admin/cities/import/validate',
     '/admin/cities/import/apply',
-    '/admin/rebuilds',
   ]) assert.ok(source.includes(endpoint), `missing ${endpoint} integration`);
 
   assert.match(source, /accept=["']\.xlsx["']/);
@@ -56,5 +55,8 @@ test('city import workspace implements validation report, guarded apply, history
   assert.match(source, /candidate\.key,\s*""/);
   assert.match(source, /body:\s*\{\s*runId,\s*actions,\s*confirmWarnings\s*\}/);
   assert.match(source, /sites\.length\s*!==\s*1/);
+  assert.match(source, /PublicationStatusCard/);
+  assert.match(source, /publicationRefreshKey/);
+  assert.doesNotMatch(source, /\/admin\/rebuilds/);
   assert.doesNotMatch(source, /x-admin-token|Authorization|sessionStorage|localStorage/);
 });

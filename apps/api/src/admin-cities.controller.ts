@@ -2,7 +2,6 @@ import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Req, Us
 import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
-import { RebuildQueueService } from './rebuild-queue.service';
 import { CityImportReport, CityImportService } from './city-import.service';
 import { parseWorkbook } from './tariff-import.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
@@ -30,7 +29,6 @@ interface AdminRequest {
 export class AdminCitiesController {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly rebuild: RebuildQueueService,
     private readonly imports: CityImportService,
     private readonly publications: PublicationWorkflowService,
   ) {}
@@ -121,23 +119,25 @@ export class AdminCitiesController {
   }
 
   @Post('import/apply')
-  async applyImport(@Body() body: { runId?: string; actions?: unknown; confirmWarnings?: boolean }) {
+  async applyImport(
+    @Body() body: { runId?: string; actions?: unknown; confirmWarnings?: boolean },
+    @Req() request?: AdminRequest,
+  ) {
     if (!body.runId) throw new BadRequestException('runId обязателен');
     const run = await this.prisma.cityImportRun.findUnique({ where: { id: body.runId } });
     if (!run) throw new BadRequestException('Отчет импорта не найден');
-    if (run.status === 'APPLIED') throw new BadRequestException('Импорт уже применен');
+    if (run.status !== 'VALIDATED') throw new BadRequestException('Применить можно только проверенный импорт');
     const report = run.report as unknown as CityImportReport;
     let result;
     try {
-      result = await this.imports.applyReport(report, body.actions, body.confirmWarnings === true, run.id);
+      result = await this.imports.applyReport(report, body.actions, body.confirmWarnings === true, run.id, request?.user?.id);
     } catch (error) {
       await this.prisma.cityImportRun.updateMany({
-        where: { id: run.id, status: { not: 'APPLIED' } },
+        where: { id: run.id, status: 'VALIDATED' },
         data: { status: 'FAILED' },
       });
       throw error;
     }
-    await this.rebuild.enqueue({ entity: 'city-import', id: run.id, siteId: run.siteId });
     return { runId: run.id, ...result };
   }
 

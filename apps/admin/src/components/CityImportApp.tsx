@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 import { ArrowLeft, Building2, CircleAlert, FileCheck2, FileUp, RefreshCw } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
+import { PublicationStatusCard } from "./PublicationStatusCard"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
@@ -34,8 +35,7 @@ interface ImportReport {
   candidates: ImportCandidate[]
 }
 interface ImportRun { id: string; fileName: string; status: string; totalRows: number; validRows: number; errorRows: number; warningRows: number; createdAt: string }
-interface Rebuild { id: string; status: string; requestedRevision: number; publishedRevision: number; triggerEntity: string; updatedAt: string }
-interface WorkspaceData { sites: Site[]; imports: ImportRun[]; rebuilds: Rebuild[] }
+interface WorkspaceData { sites: Site[]; imports: ImportRun[] }
 
 type ScreenState =
   | { status: "loading" }
@@ -68,20 +68,21 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
   const [runId, setRunId] = useState<string | null>(null)
   const [actions, setActions] = useState<Record<string, ImportAction | "">>({})
   const [confirmWarnings, setConfirmWarnings] = useState(false)
+  const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
   const [busy, setBusy] = useState<"validate" | "apply" | "refresh" | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
+  const [actionMessage, setActionMessage] = useState<string | null>(null)
 
   const loadWorkspace = useCallback(async (mode: "initial" | "refresh" = "initial") => {
     if (mode === "refresh") setBusy("refresh")
     else setState({ status: "loading" })
     try {
       const session = await requestJson<{ user: Administrator }>(apiUrl, "/auth/me")
-      const [sites, imports, rebuilds] = await Promise.all([
+      const [sites, imports] = await Promise.all([
         requestJson<Site[]>(apiUrl, "/admin/sites"),
         requestJson<ImportRun[]>(apiUrl, "/admin/cities/imports"),
-        requestJson<Rebuild[]>(apiUrl, "/admin/rebuilds"),
       ])
-      setState({ status: "ready", user: session.user, data: { sites, imports, rebuilds } })
+      setState({ status: "ready", user: session.user, data: { sites, imports } })
     } catch (caught: unknown) {
       if (caught instanceof AdminApiError && caught.status === 401) {
         window.location.replace("/login")
@@ -104,6 +105,7 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
     }
     setBusy("validate")
     setActionError(null)
+    setActionMessage(null)
     try {
       const fileBase64 = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader()
@@ -130,8 +132,9 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
     if (!runId || !report) return
     setBusy("apply")
     setActionError(null)
+    setActionMessage(null)
     try {
-      await requestJson(apiUrl, "/admin/cities/import/apply", {
+      const result = await requestJson<{ workingRevision?: number }>(apiUrl, "/admin/cities/import/apply", {
         method: "POST",
         body: { runId, actions, confirmWarnings },
       })
@@ -139,6 +142,10 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
       setRunId(null)
       setActions({})
       setFile(null)
+      setPublicationRefreshKey((current) => current + 1)
+      setActionMessage(result.workingRevision
+        ? `Рабочая версия ${result.workingRevision} сохранена. Опубликуйте ее отдельно.`
+        : "Импорт применен без изменений; публиковать нечего.")
       await loadWorkspace("refresh")
     } catch (caught: unknown) {
       setActionError(caught instanceof Error ? caught.message : "Импорт не применен")
@@ -154,7 +161,7 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
     return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Импорт городов недоступен</CardTitle><CardDescription>Не удалось загрузить рабочий экран.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void loadWorkspace()}>Повторить</Button></CardContent></Card></main>
   }
 
-  const { sites, imports, rebuilds } = state.data
+  const { sites, imports } = state.data
   const createdCount = report?.candidates.filter((candidate) => !candidate.existingId).length || 0
   const updatedCount = report?.candidates.filter((candidate) => candidate.existingId && candidate.changes).length || 0
   const unchangedCount = report?.candidates.filter((candidate) => candidate.existingId && !candidate.changes).length || 0
@@ -174,10 +181,11 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
         </div>
 
         {actionError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Операция не выполнена</AlertTitle><AlertDescription>{actionError}</AlertDescription></Alert> : null}
+        {actionMessage ? <Alert><FileCheck2 /><AlertTitle>Рабочая версия обновлена</AlertTitle><AlertDescription>{actionMessage}</AlertDescription></Alert> : null}
         {sites.length !== 1 ? <Alert variant="destructive"><Building2 /><AlertTitle>Нельзя выбрать сайт импорта однозначно</AlertTitle><AlertDescription>Для безопасного импорта должен быть настроен ровно один сайт. Сейчас найдено: {sites.length}.</AlertDescription></Alert> : null}
 
         <Card>
-          <CardHeader><CardTitle>Новый импорт</CardTitle><CardDescription>Файл сначала проходит preview. Примененные города и их единственная главная страница публикуются в Release 1.</CardDescription></CardHeader>
+          <CardHeader><CardTitle>Новый импорт</CardTitle><CardDescription>Файл сначала проходит preview. Применение сохраняет рабочую версию городов и их главных страниц; на сайте она появится только после отдельной успешной публикации.</CardDescription></CardHeader>
           <CardContent>
             <FieldGroup>
               <Field data-disabled={sites.length !== 1 || busy !== null}>
@@ -220,10 +228,8 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
           </CardContent>
         </Card>
 
-        <div className="grid gap-6 xl:grid-cols-2">
-          <Card><CardHeader><CardTitle>Последние импорты</CardTitle><CardDescription>Сохраненные validation reports.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{imports.length ? imports.slice(0, 8).map((item) => <div className="flex items-center justify-between gap-3" key={item.id}><div className="min-w-0"><p className="truncate font-medium">{item.fileName}</p><p className="text-xs text-muted-foreground">{item.validRows}/{item.totalRows} строк</p></div><Badge variant={statusVariant(item.status)}>{item.status}</Badge></div>) : <p className="text-sm text-muted-foreground">Импортов еще не было.</p>}</CardContent></Card>
-          <Card><CardHeader><CardTitle>Пересборка сайта</CardTitle><CardDescription>Изменения попадут в static web только после SUCCEEDED.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{rebuilds.length ? rebuilds.slice(0, 8).map((item) => <div className="flex items-center justify-between gap-3" key={item.id}><div><p className="font-medium">Ревизия {item.requestedRevision}</p><p className="text-xs text-muted-foreground">Опубликована {item.publishedRevision}</p></div><Badge variant={statusVariant(item.status)}>{item.status}</Badge></div>) : <p className="text-sm text-muted-foreground">Пересборок еще не было.</p>}</CardContent></Card>
-        </div>
+        <Card><CardHeader><CardTitle>Последние импорты</CardTitle><CardDescription>Сохраненные validation reports. Статус APPLIED означает рабочую версию, а не публикацию на сайте.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{imports.length ? imports.slice(0, 8).map((item) => <div className="flex items-center justify-between gap-3" key={item.id}><div className="min-w-0"><p className="truncate font-medium">{item.fileName}</p><p className="text-xs text-muted-foreground">{item.validRows}/{item.totalRows} строк</p></div><Badge variant={statusVariant(item.status)}>{item.status}</Badge></div>) : <p className="text-sm text-muted-foreground">Импортов еще не было.</p>}</CardContent></Card>
+        {sites.length === 1 ? <PublicationStatusCard apiUrl={apiUrl} siteId={sites[0].id} publicationRefreshKey={publicationRefreshKey} /> : null}
       </div>
     </AdminShell>
   )
