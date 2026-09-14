@@ -43,6 +43,7 @@ import { PublicationWorkflowService } from './publication-workflow.service';
 import { SiteCatalogService } from './site-catalog.service';
 import { PublicationWorkflowController } from './publication-workflow.controller';
 import { AdminAuditEventsController } from './admin-audit-events.controller';
+import { AdminTrashController } from './admin-trash.controller';
 
 @Module({
   controllers: [
@@ -71,6 +72,7 @@ import { AdminAuditEventsController } from './admin-audit-events.controller';
     LeadNotificationController,
     PublicationWorkflowController,
     AdminAuditEventsController,
+    AdminTrashController,
   ],
   providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, PublicationWorkflowService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })

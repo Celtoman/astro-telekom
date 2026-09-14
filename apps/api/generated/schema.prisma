@@ -344,16 +344,18 @@ model Page {
 }
 
 model PageBlock {
-  id        String  @id @default(cuid())
-  pageId    String
-  blockType String
-  position  Int
-  visible   Boolean @default(true)
-  data      Json
-  source    String?
-  page      Page    @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  id         String    @id @default(cuid())
+  pageId     String
+  blockType  String
+  position   Int
+  visible    Boolean   @default(true)
+  data       Json
+  source     String?
+  archivedAt DateTime? @db.Timestamptz(3)
+  page       Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
   @@index([pageId, position])
+  @@index([archivedAt])
 }
 
 model Tariff {

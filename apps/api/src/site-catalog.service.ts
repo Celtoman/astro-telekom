@@ -33,14 +33,14 @@ export class SiteCatalogService {
         orderBy: { name: 'asc' },
         include: {
           region: { select: { name: true, slug: true, content: true } },
-          pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
+          pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true, archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
           tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
         },
       }),
       client.page.findMany({
         where: { siteId: site.id, cityId: null, status: 'PUBLISHED' },
         orderBy: { createdAt: 'asc' },
-        include: { blocks: { where: { visible: true }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+        include: { blocks: { where: { visible: true, archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
       }),
       client.redirect.findMany({
         where: { siteId: site.id, status: 'PUBLISHED' },
@@ -66,7 +66,7 @@ export class SiteCatalogService {
       include: {
         site: { select: { settings: true, provider: { select: { settings: true } } } },
         region: { select: { name: true, slug: true, content: true } },
-        pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
+        pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true, archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
         tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
       },
     });

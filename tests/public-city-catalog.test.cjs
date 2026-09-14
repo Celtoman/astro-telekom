@@ -130,12 +130,12 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(calls.site.where, { slug: 'domru-kazan', status: 'PUBLISHED' });
   assert.deepEqual(calls.cities.where, { siteId: 'site-1', status: 'PUBLISHED' });
   assert.deepEqual(calls.cities.include.pages.where, { status: 'PUBLISHED' });
-  assert.deepEqual(calls.cities.include.pages.include.blocks.where, { visible: true });
+  assert.deepEqual(calls.cities.include.pages.include.blocks.where, { visible: true, archivedAt: null });
   assert.deepEqual(calls.cities.include.pages.include.blocks.orderBy, [{ position: 'asc' }, { id: 'asc' }]);
   assert.deepEqual(calls.cities.include.region.select, { name: true, slug: true, content: true });
   assert.deepEqual(calls.cities.include.tariffs.where, { status: 'PUBLISHED' });
   assert.deepEqual(calls.pages.where, { siteId: 'site-1', cityId: null, status: 'PUBLISHED' });
-  assert.deepEqual(calls.pages.include.blocks.where, { visible: true });
+  assert.deepEqual(calls.pages.include.blocks.where, { visible: true, archivedAt: null });
   assert.deepEqual(calls.redirects.where, { siteId: 'site-1', status: 'PUBLISHED' });
   assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test' });
   assert.equal(result.cities.length, 1);

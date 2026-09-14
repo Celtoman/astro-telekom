@@ -156,7 +156,7 @@ test('admin production build emits hash-based CSP while allowing only Radix styl
   const htmlFiles = await collectHtmlFiles(adminDist);
   assert.deepEqual(htmlFiles.map((path) => path.slice(adminDist.length + 1).replaceAll('\\', '/')).sort(), [
     'audit/index.html', 'cities/import/index.html', 'cities/index.html', 'index.html', 'lead-access/index.html', 'leads/index.html',
-    'login/index.html', 'redirects/index.html', 'tariffs/edit/index.html', 'tariffs/import/index.html', 'tariffs/index.html',
+    'login/index.html', 'redirects/index.html', 'tariffs/edit/index.html', 'tariffs/import/index.html', 'tariffs/index.html', 'trash/index.html',
   ]);
   for (const path of htmlFiles) {
     const html = await readFile(path, 'utf8');

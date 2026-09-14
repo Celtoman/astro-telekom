@@ -15265,6 +15265,7 @@ export namespace Prisma {
     position: number | null
     visible: boolean | null
     source: string | null
+    archivedAt: Date | null
   }
 
   export type PageBlockMaxAggregateOutputType = {
@@ -15274,6 +15275,7 @@ export namespace Prisma {
     position: number | null
     visible: boolean | null
     source: string | null
+    archivedAt: Date | null
   }
 
   export type PageBlockCountAggregateOutputType = {
@@ -15284,6 +15286,7 @@ export namespace Prisma {
     visible: number
     data: number
     source: number
+    archivedAt: number
     _all: number
   }
 
@@ -15303,6 +15306,7 @@ export namespace Prisma {
     position?: true
     visible?: true
     source?: true
+    archivedAt?: true
   }
 
   export type PageBlockMaxAggregateInputType = {
@@ -15312,6 +15316,7 @@ export namespace Prisma {
     position?: true
     visible?: true
     source?: true
+    archivedAt?: true
   }
 
   export type PageBlockCountAggregateInputType = {
@@ -15322,6 +15327,7 @@ export namespace Prisma {
     visible?: true
     data?: true
     source?: true
+    archivedAt?: true
     _all?: true
   }
 
@@ -15419,6 +15425,7 @@ export namespace Prisma {
     visible: boolean
     data: JsonValue
     source: string | null
+    archivedAt: Date | null
     _count: PageBlockCountAggregateOutputType | null
     _avg: PageBlockAvgAggregateOutputType | null
     _sum: PageBlockSumAggregateOutputType | null
@@ -15448,6 +15455,7 @@ export namespace Prisma {
     visible?: boolean
     data?: boolean
     source?: boolean
+    archivedAt?: boolean
     page?: boolean | PageDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pageBlock"]>
 
@@ -15459,6 +15467,7 @@ export namespace Prisma {
     visible?: boolean
     data?: boolean
     source?: boolean
+    archivedAt?: boolean
     page?: boolean | PageDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pageBlock"]>
 
@@ -15470,6 +15479,7 @@ export namespace Prisma {
     visible?: boolean
     data?: boolean
     source?: boolean
+    archivedAt?: boolean
     page?: boolean | PageDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pageBlock"]>
 
@@ -15481,9 +15491,10 @@ export namespace Prisma {
     visible?: boolean
     data?: boolean
     source?: boolean
+    archivedAt?: boolean
   }
 
-  export type PageBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pageId" | "blockType" | "position" | "visible" | "data" | "source", ExtArgs["result"]["pageBlock"]>
+  export type PageBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pageId" | "blockType" | "position" | "visible" | "data" | "source" | "archivedAt", ExtArgs["result"]["pageBlock"]>
   export type PageBlockInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     page?: boolean | PageDefaultArgs<ExtArgs>
   }
@@ -15507,6 +15518,7 @@ export namespace Prisma {
       visible: boolean
       data: Prisma.JsonValue
       source: string | null
+      archivedAt: Date | null
     }, ExtArgs["result"]["pageBlock"]>
     composites: {}
   }
@@ -15938,6 +15950,7 @@ export namespace Prisma {
     readonly visible: FieldRef<"PageBlock", 'Boolean'>
     readonly data: FieldRef<"PageBlock", 'Json'>
     readonly source: FieldRef<"PageBlock", 'String'>
+    readonly archivedAt: FieldRef<"PageBlock", 'DateTime'>
   }
     
 
@@ -32561,7 +32574,8 @@ export namespace Prisma {
     position: 'position',
     visible: 'visible',
     data: 'data',
-    source: 'source'
+    source: 'source',
+    archivedAt: 'archivedAt'
   };
 
   export type PageBlockScalarFieldEnum = (typeof PageBlockScalarFieldEnum)[keyof typeof PageBlockScalarFieldEnum]
@@ -34124,6 +34138,7 @@ export namespace Prisma {
     visible?: BoolFilter<"PageBlock"> | boolean
     data?: JsonFilter<"PageBlock">
     source?: StringNullableFilter<"PageBlock"> | string | null
+    archivedAt?: DateTimeNullableFilter<"PageBlock"> | Date | string | null
     page?: XOR<PageScalarRelationFilter, PageWhereInput>
   }
 
@@ -34135,6 +34150,7 @@ export namespace Prisma {
     visible?: SortOrder
     data?: SortOrder
     source?: SortOrderInput | SortOrder
+    archivedAt?: SortOrderInput | SortOrder
     page?: PageOrderByWithRelationInput
   }
 
@@ -34149,6 +34165,7 @@ export namespace Prisma {
     visible?: BoolFilter<"PageBlock"> | boolean
     data?: JsonFilter<"PageBlock">
     source?: StringNullableFilter<"PageBlock"> | string | null
+    archivedAt?: DateTimeNullableFilter<"PageBlock"> | Date | string | null
     page?: XOR<PageScalarRelationFilter, PageWhereInput>
   }, "id">
 
@@ -34160,6 +34177,7 @@ export namespace Prisma {
     visible?: SortOrder
     data?: SortOrder
     source?: SortOrderInput | SortOrder
+    archivedAt?: SortOrderInput | SortOrder
     _count?: PageBlockCountOrderByAggregateInput
     _avg?: PageBlockAvgOrderByAggregateInput
     _max?: PageBlockMaxOrderByAggregateInput
@@ -34178,6 +34196,7 @@ export namespace Prisma {
     visible?: BoolWithAggregatesFilter<"PageBlock"> | boolean
     data?: JsonWithAggregatesFilter<"PageBlock">
     source?: StringNullableWithAggregatesFilter<"PageBlock"> | string | null
+    archivedAt?: DateTimeNullableWithAggregatesFilter<"PageBlock"> | Date | string | null
   }
 
   export type TariffWhereInput = {
@@ -36552,6 +36571,7 @@ export namespace Prisma {
     visible?: boolean
     data: JsonNullValueInput | InputJsonValue
     source?: string | null
+    archivedAt?: Date | string | null
     page: PageCreateNestedOneWithoutBlocksInput
   }
 
@@ -36563,6 +36583,7 @@ export namespace Prisma {
     visible?: boolean
     data: JsonNullValueInput | InputJsonValue
     source?: string | null
+    archivedAt?: Date | string | null
   }
 
   export type PageBlockUpdateInput = {
@@ -36572,6 +36593,7 @@ export namespace Prisma {
     visible?: BoolFieldUpdateOperationsInput | boolean
     data?: JsonNullValueInput | InputJsonValue
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     page?: PageUpdateOneRequiredWithoutBlocksNestedInput
   }
 
@@ -36583,6 +36605,7 @@ export namespace Prisma {
     visible?: BoolFieldUpdateOperationsInput | boolean
     data?: JsonNullValueInput | InputJsonValue
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PageBlockCreateManyInput = {
@@ -36593,6 +36616,7 @@ export namespace Prisma {
     visible?: boolean
     data: JsonNullValueInput | InputJsonValue
     source?: string | null
+    archivedAt?: Date | string | null
   }
 
   export type PageBlockUpdateManyMutationInput = {
@@ -36602,6 +36626,7 @@ export namespace Prisma {
     visible?: BoolFieldUpdateOperationsInput | boolean
     data?: JsonNullValueInput | InputJsonValue
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PageBlockUncheckedUpdateManyInput = {
@@ -36612,6 +36637,7 @@ export namespace Prisma {
     visible?: BoolFieldUpdateOperationsInput | boolean
     data?: JsonNullValueInput | InputJsonValue
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type TariffCreateInput = {
@@ -39075,6 +39101,7 @@ export namespace Prisma {
     visible?: SortOrder
     data?: SortOrder
     source?: SortOrder
+    archivedAt?: SortOrder
   }
 
   export type PageBlockAvgOrderByAggregateInput = {
@@ -39088,6 +39115,7 @@ export namespace Prisma {
     position?: SortOrder
     visible?: SortOrder
     source?: SortOrder
+    archivedAt?: SortOrder
   }
 
   export type PageBlockMinOrderByAggregateInput = {
@@ -39097,6 +39125,7 @@ export namespace Prisma {
     position?: SortOrder
     visible?: SortOrder
     source?: SortOrder
+    archivedAt?: SortOrder
   }
 
   export type PageBlockSumOrderByAggregateInput = {
@@ -46431,6 +46460,7 @@ export namespace Prisma {
     visible?: boolean
     data: JsonNullValueInput | InputJsonValue
     source?: string | null
+    archivedAt?: Date | string | null
   }
 
   export type PageBlockUncheckedCreateWithoutPageInput = {
@@ -46440,6 +46470,7 @@ export namespace Prisma {
     visible?: boolean
     data: JsonNullValueInput | InputJsonValue
     source?: string | null
+    archivedAt?: Date | string | null
   }
 
   export type PageBlockCreateOrConnectWithoutPageInput = {
@@ -46719,6 +46750,7 @@ export namespace Prisma {
     visible?: BoolFilter<"PageBlock"> | boolean
     data?: JsonFilter<"PageBlock">
     source?: StringNullableFilter<"PageBlock"> | string | null
+    archivedAt?: DateTimeNullableFilter<"PageBlock"> | Date | string | null
   }
 
   export type LeadUpsertWithWhereUniqueWithoutPageInput = {
@@ -52539,6 +52571,7 @@ export namespace Prisma {
     visible?: boolean
     data: JsonNullValueInput | InputJsonValue
     source?: string | null
+    archivedAt?: Date | string | null
   }
 
   export type LeadCreateManyPageInput = {
@@ -52593,6 +52626,7 @@ export namespace Prisma {
     visible?: BoolFieldUpdateOperationsInput | boolean
     data?: JsonNullValueInput | InputJsonValue
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PageBlockUncheckedUpdateWithoutPageInput = {
@@ -52602,6 +52636,7 @@ export namespace Prisma {
     visible?: BoolFieldUpdateOperationsInput | boolean
     data?: JsonNullValueInput | InputJsonValue
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PageBlockUncheckedUpdateManyWithoutPageInput = {
@@ -52611,6 +52646,7 @@ export namespace Prisma {
     visible?: BoolFieldUpdateOperationsInput | boolean
     data?: JsonNullValueInput | InputJsonValue
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type LeadUpdateWithoutPageInput = {

@@ -267,7 +267,8 @@ exports.Prisma.PageBlockScalarFieldEnum = {
   position: 'position',
   visible: 'visible',
   data: 'data',
-  source: 'source'
+  source: 'source',
+  archivedAt: 'archivedAt'
 };
 
 exports.Prisma.TariffScalarFieldEnum = {

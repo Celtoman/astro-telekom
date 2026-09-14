@@ -27,7 +27,7 @@ export class AdminBlocksController {
 
   @Get('pages/:pageId/blocks')
   list(@Param('pageId') pageId: string) {
-    return this.prisma.pageBlock.findMany({ where: { pageId }, orderBy: [{ position: 'asc' }, { id: 'asc' }] });
+    return this.prisma.pageBlock.findMany({ where: { pageId, archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] });
   }
 
   @Post('pages/:pageId/blocks')
@@ -66,6 +66,7 @@ export class AdminBlocksController {
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const initialBlock = await transaction.pageBlock.findUnique({ where: { id } });
       if (!initialBlock) throw new NotFoundException('Блок не найден');
+      if (initialBlock.archivedAt) throw new ConflictException('Блок находится в корзине. Сначала восстановите его');
       const pageBefore = await transaction.page.findUnique({
         where: { id: initialBlock.pageId },
         include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
@@ -123,12 +124,20 @@ export class AdminBlocksController {
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const initialBlock = await transaction.pageBlock.findUnique({ where: { id } });
       if (!initialBlock) throw new NotFoundException('Блок не найден');
+      if (initialBlock.archivedAt) throw new ConflictException('Блок уже находится в корзине');
       const pageBefore = await transaction.page.findUnique({
         where: { id: initialBlock.pageId },
         include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
       });
       if (!pageBefore) throw new NotFoundException('Страница не найдена');
-      const block = await transaction.pageBlock.delete({ where: { id } });
+      const archivedAt = new Date();
+      const result = await transaction.pageBlock.updateMany({
+        where: { id, archivedAt: null },
+        data: { archivedAt },
+      });
+      if (result.count !== 1) throw new ConflictException('Блок уже был перемещен в корзину');
+      const block = await transaction.pageBlock.findUnique({ where: { id } });
+      if (!block) throw new NotFoundException('Блок не найден');
       const page = await transaction.page.findUnique({
         where: { id: block.pageId },
         include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
@@ -138,7 +147,45 @@ export class AdminBlocksController {
         siteId: page.siteId,
         entityType: 'PAGE',
         entityId: block.pageId,
-        action: 'UPDATE',
+        action: 'ARCHIVE',
+        previousSnapshot: pageBefore as unknown as Record<string, unknown>,
+        snapshot: page as unknown as Record<string, unknown>,
+        changedFields: ['blocks'],
+        actorId: request?.user?.id,
+        source: 'admin',
+      });
+      return { ...block, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+  }
+
+  @Post('blocks/:id/restore')
+  async restore(@Param('id') id: string, @Req() request?: AdminRequest) {
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const initialBlock = await transaction.pageBlock.findUnique({ where: { id } });
+      if (!initialBlock) throw new NotFoundException('Блок не найден');
+      if (!initialBlock.archivedAt) throw new ConflictException('Блок не находится в корзине');
+      const pageBefore = await transaction.page.findUnique({
+        where: { id: initialBlock.pageId },
+        include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+      });
+      if (!pageBefore) throw new NotFoundException('Страница не найдена');
+      const result = await transaction.pageBlock.updateMany({
+        where: { id, archivedAt: { not: null } },
+        data: { archivedAt: null },
+      });
+      if (result.count !== 1) throw new ConflictException('Блок уже был восстановлен');
+      const block = await transaction.pageBlock.findUnique({ where: { id } });
+      if (!block) throw new NotFoundException('Блок не найден');
+      const page = await transaction.page.findUnique({
+        where: { id: block.pageId },
+        include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+      });
+      if (!page) throw new NotFoundException('Страница не найдена');
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: page.siteId,
+        entityType: 'PAGE',
+        entityId: block.pageId,
+        action: 'RESTORE',
         previousSnapshot: pageBefore as unknown as Record<string, unknown>,
         snapshot: page as unknown as Record<string, unknown>,
         changedFields: ['blocks'],
