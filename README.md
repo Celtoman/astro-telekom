@@ -8,6 +8,7 @@
 
 - [Текущее состояние и границы](docs/current-state.md) — что доказано кодом, что зависит от окружения и что еще не реализовано.
 - [Каноническая структура сайта](docs/site-structure.md) — целевые URL, иерархия страниц и минимальный состав Release 1.
+- [Runbook миграции данных Release 1](docs/runbooks/release-one-data-migration.md) — backup, read-only pre/post audit и production-like приемка внешней БД.
 - [Архитектура](docs/architecture.md) — приложения, потоки данных и границы модулей.
 - [Технологическая база](docs/technology-baseline.md) — версии, инфраструктура и правила сборки.
 - [Дизайн-система admin](docs/admin-design-system.md) — обязательный React Aria-референс и текущая граница Radix-реализации.

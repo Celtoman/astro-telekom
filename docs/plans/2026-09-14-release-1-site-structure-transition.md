@@ -14,7 +14,7 @@
 
 **Проблемы:** [#133](https://github.com/Celtoman/astro-telekom/issues/133), [#134](https://github.com/Celtoman/astro-telekom/issues/134), [#135](https://github.com/Celtoman/astro-telekom/issues/135)
 
-**Статус 14 сентября 2026:** задачи 1–6 и синхронизация локальной документации реализованы; production-like fixture подтверждает exact output. Задача 7 и закрытие #136 остаются незавершенными до backup/read-only inventory внешней БД, публикации утвержденных legal-текстов и exact-SHA deployment smoke. Bootstrap намеренно оставляет четыре global pages в `DRAFT`, поэтому неподготовленный production publisher завершается до переключения активного release.
+**Статус 14 сентября 2026:** задачи 1–6 и синхронизация локальной документации реализованы; production-like fixture подтверждает exact output. Для задачи 7 добавлены канонический read-only SQL-аудит и runbook; их синтаксис, все 23 migration, custom dump и восстановление с совпадающими totals проверены на отдельной PostgreSQL 18. Внешнее применение и закрытие #136 остаются незавершенными до backup/pre-audit фактической БД, публикации утвержденных legal-текстов и exact-SHA deployment smoke. Bootstrap намеренно оставляет четыре global pages в `DRAFT`, поэтому неподготовленный production publisher завершается до переключения активного release.
 
 ---
 

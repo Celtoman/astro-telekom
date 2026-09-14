@@ -68,6 +68,8 @@ Seed не становится автоматической операцией �
 
 ## Требуемые проверки до публикации
 
+Первый переход внешней БД на Release 1 выполнять только по [runbook безопасной миграции данных](runbooks/release-one-data-migration.md): проверенный `pg_dump`, сопоставимые pre/post read-only audits, затем утвержденные global pages, production-like build и exact-SHA smoke. Канонический SQL-инвентаризатор — [`scripts/release-one-database-audit.sql`](../scripts/release-one-database-audit.sql); он не выполняет операций записи.
+
 | Проверка | Как подтвердить |
 | --- | --- |
 | Сборка | `pnpm build` в чистом окружении; production-like web build запускать без `ALLOW_DEMO_DATA` против мигрированной БД. Проверить формулу `HTML/sitemap = N + 5`, отсутствие service/tariff detail и redirect targets за пределами inventory. Для локальной Compose-schema проверки удалить из потока три Coolify-only строки `exclude_from_hc` и передать результат в `docker compose -f - config --no-interpolate --quiet`; затем выполнить успешный Coolify deploy. |
