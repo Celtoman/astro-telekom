@@ -38,9 +38,10 @@ export interface RedirectView {
 
 export interface PublicRouteView {
   id: string;
-  kind: 'HOME' | 'CITY_HOME' | 'GLOBAL_PAGE';
+  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'GLOBAL_PAGE';
   path: string;
   citySlug?: string;
+  tariffSlug?: string;
   pageType?: string;
 }
 
@@ -113,6 +114,19 @@ function expectedReleaseOneRoutes(cities: CityView[], globalPages: PageView[]): 
     if (occupiedPaths.has(path)) throw new Error(`Конфликт маршрута Release 1: ${path}`);
     occupiedPaths.add(path);
     routes.push({ id: 'CITY_HOME', kind: 'CITY_HOME', path, citySlug: city.slug });
+    for (const tariff of city.tariffs) {
+      if (!slugPattern.test(tariff.slug)) throw new Error(`Некорректный slug опубликованного тарифа: ${tariff.slug || '(пусто)'}`);
+      const tariffPath = publicHtmlPath(city.slug, tariff.slug);
+      if (occupiedPaths.has(tariffPath)) throw new Error(`Конфликт маршрута Release 1: ${tariffPath}`);
+      occupiedPaths.add(tariffPath);
+      routes.push({
+        id: 'CITY_TARIFF_DETAIL',
+        kind: 'CITY_TARIFF_DETAIL',
+        path: tariffPath,
+        citySlug: city.slug,
+        tariffSlug: tariff.slug,
+      });
+    }
   }
   return routes;
 }
@@ -124,6 +138,7 @@ function normalizeRoutes(value: unknown, expected: PublicRouteView[]) {
     kind: String(item.kind || '') as PublicRouteView['kind'],
     path: normalizePublicHtmlPath(String(item.path || '')),
     ...(item.citySlug ? { citySlug: String(item.citySlug) } : {}),
+    ...(item.tariffSlug ? { tariffSlug: String(item.tariffSlug) } : {}),
     ...(item.pageType ? { pageType: String(item.pageType) } : {}),
   }));
   if (JSON.stringify(routes) !== JSON.stringify(expected)) {

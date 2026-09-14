@@ -8,7 +8,7 @@
 
 - Monorepo, Docker Compose, Prisma migrations и seed.
 - NestJS API, HttpOnly-cookie/совместимые Bearer-сессии с единым уровнем доступа администратора и CRUD базовых сущностей.
-- Статический Astro-сайт с Release 1 route inventory и страницей каждого опубликованного города; service/tariff detail сохранены как будущие данные без URL.
+- Статический Astro-сайт с Release 1 route inventory, страницей каждого опубликованного города и detail каждого опубликованного тарифа этого города; service detail сохранены как будущие данные без URL.
 - XLSX-import городов/тарифов с validate/apply reports.
 - Прием лида, deduplication, contract check, delivery attempts и доставка в Tarifnik/email fallback.
 - Static admin с рабочими каталогами и импортами тарифов/городов, заявками и редиректами; отдельный BullMQ worker обрабатывает доставки, оповещения, пересборки и PII retention.
@@ -19,11 +19,11 @@ Release 0 не является production release: тестовый gate и mul
 
 Цель: один реальный партнерский сайт Дом.ру с достоверным статическим HTML для каждого опубликованного города, наблюдаемой публикацией, безопасной обработкой лида и проверенным delivery sandbox. Казань остается тестовым городом раннего этапа, но больше не определяет структуру релиза.
 
-Публичный состав фиксирует [каноническая структура сайта](site-structure.md): `/`, `/{location}` для каждого города канонического импорта, карта покрытия, города обслуживания, политика конфиденциальности, согласие на обработку персональных данных, политика cookie и общий шаблон 404. При `N` опубликованных городов это `N + 6` обычных HTML-маршрутов. Все остальные контентные страницы и tariff detail относятся к следующим релизам, даже если соответствующие записи уже есть в базе.
+Публичный состав фиксирует [каноническая структура сайта](site-structure.md): `/`, `/{location}` для каждого города канонического импорта, `/{location}/{tariffSlug}` для каждого опубликованного тарифа опубликованного города, карта покрытия, города обслуживания, три legal-страницы и общий шаблон 404. При `N` опубликованных городов и `T` их опубликованных тарифов это `N + T + 6` обычных HTML-маршрутов. Остальные контентные и service pages относятся к следующим релизам, даже если записи уже есть в базе.
 
 Условия завершения:
 
-1. Публичный output, sitemap, внутренние ссылки и redirects соответствуют exact составу `N + 6`; переход и live-приемка HTTP 404 завершены в [#136](https://github.com/Celtoman/astro-telekom/issues/136) и [#141](https://github.com/Celtoman/astro-telekom/issues/141).
+1. Публичный output, sitemap, внутренние ссылки и redirects соответствуют exact составу `N + T + 6`; прежний переход на городскую структуру и live-приемка HTTP 404 завершены в [#136](https://github.com/Celtoman/astro-telekom/issues/136) и [#141](https://github.com/Celtoman/astro-telekom/issues/141), возврат тарифных страниц выполняется в [#149](https://github.com/Celtoman/astro-telekom/issues/149).
 2. Все automated checks green в чистом окружении.
 3. Production build блокируется, если API-данные отсутствуют, origin не является чистым HTTPS origin или final SEO output не проходит проверку. API/origin fail-fast, post-build sitemap/raw HTML gate и воспроизводимый первый Coolify bootstrap [#55](https://github.com/Celtoman/astro-telekom/issues/55) подтверждены; внешний production CI/CD не должен разрешать demo mode.
 4. Импорт тарифов имеет утвержденную полную семантику и не оставляет устаревшие публичные предложения.

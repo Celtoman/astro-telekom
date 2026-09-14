@@ -26,7 +26,7 @@ const globalPage = (type, slug, title, text) => ({
   id: `global-${type.toLowerCase()}`, cityId: null, ...page(type, slug, title), content: { text },
 });
 const tariff = (slug, name, speed, standardPrice, connectionFee = null, serviceType = 'INTERNET') => ({
-  name, slug, serviceType, speed, standardPrice, promoPrice: null, connectionFee, status: 'PUBLISHED', seo: {},
+  name, slug, serviceType, speed, standardPrice, promoPrice: null, promoText: null, connectionFee, availability: true, attributes: {}, status: 'PUBLISHED', seo: {},
 });
 const cityHomeBlocks = (cityIn) => [
   { blockType: 'hero', data: { eyebrow: `Дом.ру в ${cityIn}`, title: `Домашний интернет и телевидение в ${cityIn}`, text: 'Выберите услугу и проверьте подключение.' } },
@@ -55,7 +55,10 @@ const apiFixture = {
     { id: 'PERSONAL_DATA_CONSENT', kind: 'GLOBAL_PAGE', path: '/soglasie-na-obrabotku-personalnyh-dannyh', pageType: 'PERSONAL_DATA_CONSENT' },
     { id: 'COOKIE_POLICY', kind: 'GLOBAL_PAGE', path: '/politika-obrabotki-faylov-kuki', pageType: 'COOKIE_POLICY' },
     { id: 'CITY_HOME', kind: 'CITY_HOME', path: '/kazan', citySlug: 'kazan' },
+    { id: 'CITY_TARIFF_DETAIL', kind: 'CITY_TARIFF_DETAIL', path: '/kazan/api-internet-500', citySlug: 'kazan', tariffSlug: 'api-internet-500' },
+    { id: 'CITY_TARIFF_DETAIL', kind: 'CITY_TARIFF_DETAIL', path: '/kazan/api-internet-tv-500', citySlug: 'kazan', tariffSlug: 'api-internet-tv-500' },
     { id: 'CITY_HOME', kind: 'CITY_HOME', path: '/almetyevsk', citySlug: 'almetyevsk' },
+    { id: 'CITY_TARIFF_DETAIL', kind: 'CITY_TARIFF_DETAIL', path: '/almetyevsk/almet-internet-300', citySlug: 'almetyevsk', tariffSlug: 'almet-internet-300' },
   ],
   redirects: [{ id: 'redirect-old-kazan', sourcePath: '/old-kazan/', targetPath: '/kazan/', status: 'PUBLISHED' }],
   cities: [
@@ -73,7 +76,19 @@ const apiFixture = {
         { ...page('FAQ', 'draft-page', 'Черновая страница'), status: 'DRAFT' },
       ],
       tariffs: [
-        tariff('api-internet-500', 'API Интернет 500', 500, 777, 0),
+        {
+          ...tariff('api-internet-500', 'API Интернет 500', 500, 777, 0),
+          promoText: 'Три месяца по специальной цене',
+          attributes: {
+            card_subtitle: 'Для большой квартиры',
+            promo_feature: 'Быстрый интернет для всей семьи',
+            opisanie_tarifa: 'Тариф для работы, учебы и развлечений дома.',
+            equip_router: 'Wi-Fi 6 роутер доступен в рассрочку',
+            router_installment_months: 12,
+            router_installment_price: 200,
+          },
+          seo: { title: 'API Интернет 500 в Казани', description: 'Условия тарифа API Интернет 500 и проверка подключения в Казани.' },
+        },
         tariff('api-internet-tv-500', 'API Интернет и ТВ 500', 500, 999, 0, 'INTERNET_TV'),
         { ...tariff('draft-tariff-in-published-city', 'Черновой тариф', 100, 100), status: 'DRAFT' },
       ],
@@ -164,18 +179,19 @@ function assertInlineScriptsAuthorized(html, label) {
   }
 }
 
-test('web build emits exactly the Release 1 inventory for every published city', { timeout: 120_000 }, async () => {
+test('web build emits city and tariff detail inventory for every published city', { timeout: 120_000 }, async () => {
   await withApiFixture(async (apiUrl) => {
     const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, PUBLIC_YANDEX_METRIKA_ID: '12345678', ALLOW_DEMO_DATA: '' });
     assert.equal(build.code, 0, build.output);
-    assert.match(build.output, /Pre-publication SEO gate passed: 8 indexable URL\(s\), 9 HTML file\(s\)\./);
+    assert.match(build.output, /Pre-publication SEO gate passed: 11 indexable URL\(s\), 12 HTML file\(s\)\./);
   });
 
   const htmlFiles = (await collectTextFiles(webDist)).filter((path) => path.endsWith('.html'))
     .map((path) => relative(webDist, path).replaceAll('\\', '/')).sort();
   assert.deepEqual(htmlFiles, [
-    '404.html', 'almetyevsk/index.html', 'goroda-obsluzhivaniya/index.html', 'index.html',
-    'karta-pokrytiya-provaydera/index.html', 'kazan/index.html', 'politika-konfidencialnosti/index.html',
+    '404.html', 'almetyevsk/almet-internet-300/index.html', 'almetyevsk/index.html', 'goroda-obsluzhivaniya/index.html', 'index.html',
+    'karta-pokrytiya-provaydera/index.html', 'kazan/api-internet-500/index.html', 'kazan/api-internet-tv-500/index.html',
+    'kazan/index.html', 'politika-konfidencialnosti/index.html',
     'politika-obrabotki-faylov-kuki/index.html',
     'soglasie-na-obrabotku-personalnyh-dannyh/index.html',
   ]);
@@ -183,6 +199,7 @@ test('web build emits exactly the Release 1 inventory for every published city',
   const root = await readBuilt('index.html');
   const kazan = await readBuilt(join('kazan', 'index.html'));
   const almetyevsk = await readBuilt(join('almetyevsk', 'index.html'));
+  const tariffDetail = await readBuilt(join('kazan', 'api-internet-500', 'index.html'));
   const coverage = await readBuilt(join('karta-pokrytiya-provaydera', 'index.html'));
   const cities = await readBuilt(join('goroda-obsluzhivaniya', 'index.html'));
   const privacy = await readBuilt(join('politika-konfidencialnosti', 'index.html'));
@@ -222,7 +239,8 @@ test('web build emits exactly the Release 1 inventory for every published city',
   assert.match(kazan, /<h2[^>]*>Все тарифы Дом\.ру<\/h2>/);
   assert.match(kazan, /Бесплатное подключение/);
   assert.match(kazan, /href="#address-check"[^>]*>Проверить подключение/);
-  assert.doesNotMatch(kazan, /href="\/kazan\/(?:internet|internet-tv|api-internet)/);
+  assert.match(kazan, /href="\/kazan\/api-internet-500"[^>]*>Подробнее о тарифе/);
+  assert.doesNotMatch(kazan, /href="\/kazan\/(?:internet|internet-tv)"/);
   assert.equal((kazan.match(/data-block-type="tariff_grid"/g) || []).length, 1);
   assert.match(kazan, /data-block-type="service_grid"/);
   const homeBlockOrder = ['service_grid', 'tariff_grid', 'steps', 'feature_grid', 'faq'].map((type) => kazan.indexOf(`data-block-type="${type}"`));
@@ -240,6 +258,19 @@ test('web build emits exactly the Release 1 inventory for every published city',
   assert.match(almetyevsk, /data-block-type="tariff_grid"/);
   assert.match(almetyevsk, /data-block-type="faq"/);
   assert.doesNotMatch(almetyevsk, /Казан/);
+
+  assert.match(tariffDetail, /<link rel="canonical" href="https:\/\/partner\.example\.test\/kazan\/api-internet-500">/);
+  assert.match(tariffDetail, /<h1[^>]*>API Интернет 500<\/h1>/);
+  assert.equal((tariffDetail.match(/<h1\b/g) || []).length, 1);
+  assert.match(tariffDetail, /Для большой квартиры/);
+  assert.match(tariffDetail, /до 500 Мбит\/с/);
+  assert.match(tariffDetail, /777 ₽\/мес\./);
+  assert.match(tariffDetail, /Wi-Fi 6 роутер доступен в рассрочку/);
+  assert.match(tariffDetail, /12 месяцев/);
+  assert.match(tariffDetail, /200 ₽\/мес\./);
+  assert.match(tariffDetail, /data-tariff-slug="api-internet-500"/);
+  assert.match(tariffDetail, /href="\/kazan\/api-internet-tv-500"/);
+  assert.doesNotMatch(tariffDetail, /private_token|secret/);
 
   assert.match(coverage, /<h1>Карта покрытия<\/h1>/);
   assert.match(coverage, /href="\/kazan#address-check"/);
@@ -272,10 +303,11 @@ test('web build emits exactly the Release 1 inventory for every published city',
     `${productionSite}/`, `${productionSite}/karta-pokrytiya-provaydera`, `${productionSite}/goroda-obsluzhivaniya`,
     `${productionSite}/politika-konfidencialnosti`, `${productionSite}/soglasie-na-obrabotku-personalnyh-dannyh`,
     `${productionSite}/politika-obrabotki-faylov-kuki`,
-    `${productionSite}/kazan`, `${productionSite}/almetyevsk`,
+    `${productionSite}/kazan`, `${productionSite}/kazan/api-internet-500`, `${productionSite}/kazan/api-internet-tv-500`,
+    `${productionSite}/almetyevsk`, `${productionSite}/almetyevsk/almet-internet-300`,
   ]);
   assert.match(robots, /Sitemap: https:\/\/partner\.example\.test\/sitemap\.xml/);
-  assert.doesNotMatch(sitemap, /internet|tariff|draft-city/);
+  assert.doesNotMatch(sitemap, /draft-tariff|draft-city|\/kazan\/internet<\/loc>/);
   assert.match(notFound, /<meta name="robots" content="noindex, follow">/);
   assert.doesNotMatch(notFound, /rel="canonical"/);
   assert.match(redirectRoutes, /@redirect_0 path \/old-kazan \/old-kazan\//);
@@ -324,7 +356,17 @@ test('web build uses Release 1 demo data only when ALLOW_DEMO_DATA=true is expli
   const build = await runWebBuild({ SITE_DATA_API_URL: '', PUBLIC_API_URL: 'http://127.0.0.1:1/api/v1', PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: 'true' });
   assert.equal(build.code, 0, build.output);
   assert.match(build.output, /ALLOW_DEMO_DATA=true: используются демонстрационные данные/);
-  assert.match(build.output, /Pre-publication SEO gate passed: 7 indexable URL\(s\), 8 HTML file\(s\)\./);
+  assert.match(build.output, /Pre-publication SEO gate passed: 9 indexable URL\(s\), 10 HTML file\(s\)\./);
+});
+
+test('web build rejects duplicate published tariff slugs inside one city', { timeout: 120_000 }, async () => {
+  const fixture = structuredClone(apiFixture);
+  fixture.cities[0].tariffs.push({ ...fixture.cities[0].tariffs[0], name: 'Дубликат URL' });
+  await withApiFixture(async (apiUrl) => {
+    const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: '' });
+    assert.notEqual(build.code, 0, build.output);
+    assert.match(build.output, /Конфликт маршрута Release 1.*kazan\/api-internet-500/i);
+  }, fixture);
 });
 
 test('web build rejects a city slug that collides with a global Release 1 route', { timeout: 120_000 }, async () => {

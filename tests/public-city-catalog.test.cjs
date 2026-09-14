@@ -15,6 +15,25 @@ test('Release 1 route policy rejects missing, extra and colliding route sources'
   assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], releaseOneGlobalPages.slice(0, 4)), /Не опубликована обязательная/);
   assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], [...releaseOneGlobalPages, { type: 'FAQ', slug: 'faq' }]), /ровно 5/);
   assert.throws(() => buildReleaseOneRoutes([{ slug: 'goroda-obsluzhivaniya' }], releaseOneGlobalPages), /Конфликт маршрута Release 1/);
+  assert.throws(
+    () => buildReleaseOneRoutes([{ slug: 'kazan', tariffs: [{ slug: 'giga-500' }, { slug: 'giga-500' }] }], releaseOneGlobalPages),
+    /Конфликт маршрута Release 1.*kazan\/giga-500/,
+  );
+});
+
+test('Release 1 route policy includes a detail URL for every published tariff source', () => {
+  const routes = buildReleaseOneRoutes([
+    { slug: 'kazan', tariffs: [{ slug: 'giga-500' }, { slug: 'giga-800-tv' }] },
+    { slug: 'perm', tariffs: [{ slug: 'giga-300' }] },
+  ], releaseOneGlobalPages);
+
+  assert.deepEqual(routes.slice(-5), [
+    { id: 'CITY_HOME', kind: 'CITY_HOME', path: '/kazan', citySlug: 'kazan' },
+    { id: 'CITY_TARIFF_DETAIL', kind: 'CITY_TARIFF_DETAIL', path: '/kazan/giga-500', citySlug: 'kazan', tariffSlug: 'giga-500' },
+    { id: 'CITY_TARIFF_DETAIL', kind: 'CITY_TARIFF_DETAIL', path: '/kazan/giga-800-tv', citySlug: 'kazan', tariffSlug: 'giga-800-tv' },
+    { id: 'CITY_HOME', kind: 'CITY_HOME', path: '/perm', citySlug: 'perm' },
+    { id: 'CITY_TARIFF_DETAIL', kind: 'CITY_TARIFF_DETAIL', path: '/perm/giga-300', citySlug: 'perm', tariffSlug: 'giga-300' },
+  ]);
 });
 
 test('public city catalog returns only published entities for one published site', async () => {
@@ -110,6 +129,7 @@ test('public city catalog returns only published entities for one published site
     '/soglasie-na-obrabotku-personalnyh-dannyh',
     '/politika-obrabotki-faylov-kuki',
     '/kazan',
+    '/kazan/giga-500',
   ]);
   assert.deepEqual(result.redirects, [{ id: 'redirect-1', sourcePath: '/old', targetPath: '/kazan', status: 'PUBLISHED' }]);
 });

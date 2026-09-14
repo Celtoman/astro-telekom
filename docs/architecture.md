@@ -82,7 +82,7 @@ PII retention scheduler в worker
 
 1. Сущности `Site`, `City`, `Page`, `Tariff` имеют статус `DRAFT`, `PUBLISHED` или `ARCHIVED`.
 2. Public API возвращает опубликованные данные, но отдельно применяет release policy к URL.
-3. Astro получает authoritative inventory и выпускает `N + 6` indexable HTML для `N` опубликованных городов плюс общую 404.
+3. Astro получает authoritative inventory и выпускает `N + T + 6` indexable HTML для `N` опубликованных городов и `T` опубликованных тарифов этих городов плюс общую 404. Страница тарифа создаётся только из route с `kind = CITY_TARIFF_DETAIL`; service pages остаются вне Release 1.
 4. CRUD API сохраняет/обновляет `SiteRebuild` и ставит BullMQ job; изменения одного сайта дедуплицируются, но счетчик ревизий не дает потерять изменение во время активной сборки.
 5. Worker получает попытку через internal API, вызывает deployment provider и сохраняет результат через API; только явный `{ status: "SUCCEEDED" }` обновляет `publishedRevision`.
 

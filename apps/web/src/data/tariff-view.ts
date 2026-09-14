@@ -15,7 +15,32 @@ export interface TariffView {
   price: string;
   priceAmount: number | null;
   connection: string | null;
+  promoText: string | null;
+  availability: boolean;
+  attributes: Record<string, string | number | boolean>;
   seo: Record<string, unknown> | null;
+}
+
+const publicAttributeKeys = [
+  'nazvanie_tarifa', 'card_subtitle', 'badge_text', 'promo_feature', 'opisanie_tarifa',
+  'show_on_site', 'is_sticky', 'is_gaming_tarif', 'tv_channels_total', 'tv_channels_hd',
+  'online_cinemas', 'equip_router', 'router_buyout_price', 'router_installment_months',
+  'router_installment_price', 'equip_tv_box', 'tvbox_buyout_price', 'tvbox_installment_months',
+  'tvbox_installment_price', 'ont_buyout_price', 'cctv_buyout_price', 'cctv_connection_price',
+  'srv_video_status', 'srv_video_price', 'srv_gaming_status', 'srv_gaming_name',
+  'srv_vkplaycloud_status', 'srv_litres_status', 'srv_ont_status', 'srv_staticip_status',
+] as const;
+
+function publicAttributes(value: unknown): Record<string, string | number | boolean> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  const source = value as Record<string, unknown>;
+  return Object.fromEntries(publicAttributeKeys.flatMap((key) => {
+    const item = source[key];
+    if (typeof item === 'string') return item.trim() ? [[key, item.trim()]] : [];
+    if (typeof item === 'number' && Number.isFinite(item)) return [[key, item]];
+    if (typeof item === 'boolean') return [[key, item]];
+    return [];
+  }));
 }
 
 function connectionLabel(value: unknown): string | null {
@@ -46,6 +71,11 @@ export function tariffView(tariff: Record<string, unknown>): TariffView {
     price: Number.isFinite(priceAmount) && priceAmount !== null ? `${price} ₽/мес.` : 'Цена уточняется',
     priceAmount: Number.isFinite(priceAmount) && priceAmount !== null ? priceAmount : null,
     connection: connectionLabel(tariff.connectionFee),
-    seo: tariff.seo,
+    promoText: typeof tariff.promoText === 'string' && tariff.promoText.trim() ? tariff.promoText.trim() : null,
+    availability: tariff.availability !== false,
+    attributes: publicAttributes(tariff.attributes),
+    seo: tariff.seo && typeof tariff.seo === 'object' && !Array.isArray(tariff.seo)
+      ? tariff.seo as Record<string, unknown>
+      : null,
   };
 }

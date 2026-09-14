@@ -39,6 +39,7 @@ test('Release 1 database audit reports counts, route blockers and relation integ
     'redirects_total',
     'redirects_by_status',
     'global_page_inventory',
+    'published_tariff_detail_routes',
     'invalid_published_city_home_templates',
     'city_global_slug_collisions',
     'redirect_source_route_collisions',
@@ -56,6 +57,7 @@ test('Release 1 database audit reports counts, route blockers and relation integ
   assert.match(sql, /ARRAY\['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'feature_grid', 'faq'\]::text\[\]/);
   assert.match(sql, /FILTER \(WHERE page_block\."visible"\)/);
   assert.match(sql, /ORDER BY page_block\."position", page_block\."id"/);
+  assert.match(sql, /'\/' \|\| city\."slug" \|\| '\/' \|\| tariff\."slug"/);
 });
 
 test('Release 1 migration runbook requires backup and comparable pre/post audit evidence', () => {
@@ -70,6 +72,6 @@ test('Release 1 migration runbook requires backup and comparable pre/post audit 
   assert.match(runbook, /invalid_published_city_home_templates/);
   assert.match(runbook, /page_blocks_total/);
   assert.match(runbook, /relation_integrity_violations/);
-  assert.match(runbook, /N \+ 6/);
+  assert.match(runbook, /N \+ T \+ 6/);
   assert.match(deployment, /runbooks\/release-one-data-migration\.md/);
 });

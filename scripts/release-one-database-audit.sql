@@ -41,6 +41,17 @@ FROM "Tariff"
 GROUP BY "status"
 ORDER BY key;
 
+SELECT
+  'published_tariff_detail_routes' AS check_name,
+  site."slug" AS site_slug,
+  COUNT(*) AS route_count
+FROM "Tariff" AS tariff
+JOIN "City" AS city ON city."id" = tariff."cityId" AND city."status"::text = 'PUBLISHED'
+JOIN "Site" AS site ON site."id" = city."siteId" AND site."status"::text = 'PUBLISHED'
+WHERE tariff."status"::text = 'PUBLISHED'
+GROUP BY site."slug"
+ORDER BY site_slug;
+
 SELECT 'address_checks_total' AS check_name, COUNT(*) AS row_count FROM "AddressCheck";
 
 SELECT 'leads_total' AS check_name, COUNT(*) AS row_count FROM "Lead";
@@ -152,6 +163,12 @@ WITH required_pages(page_type, expected_slug) AS (
   JOIN "Site" AS site ON site."id" = city."siteId" AND site."status"::text = 'PUBLISHED'
   WHERE city."status"::text = 'PUBLISHED'
   UNION ALL
+  SELECT city."siteId", '/' || city."slug" || '/' || tariff."slug"
+  FROM "Tariff" AS tariff
+  JOIN "City" AS city ON city."id" = tariff."cityId" AND city."status"::text = 'PUBLISHED'
+  JOIN "Site" AS site ON site."id" = city."siteId" AND site."status"::text = 'PUBLISHED'
+  WHERE tariff."status"::text = 'PUBLISHED'
+  UNION ALL
   SELECT page."siteId", '/' || page."slug"
   FROM "Page" AS page
   JOIN "Site" AS site ON site."id" = page."siteId" AND site."status"::text = 'PUBLISHED'
@@ -194,6 +211,12 @@ WITH required_pages(page_type, expected_slug) AS (
   FROM "City" AS city
   JOIN "Site" AS site ON site."id" = city."siteId" AND site."status"::text = 'PUBLISHED'
   WHERE city."status"::text = 'PUBLISHED'
+  UNION ALL
+  SELECT city."siteId", '/' || city."slug" || '/' || tariff."slug"
+  FROM "Tariff" AS tariff
+  JOIN "City" AS city ON city."id" = tariff."cityId" AND city."status"::text = 'PUBLISHED'
+  JOIN "Site" AS site ON site."id" = city."siteId" AND site."status"::text = 'PUBLISHED'
+  WHERE tariff."status"::text = 'PUBLISHED'
   UNION ALL
   SELECT page."siteId", '/' || page."slug"
   FROM "Page" AS page

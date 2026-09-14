@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TariffDetail from '../../components/TariffDetail.astro';
+import { loadSiteData, publicSiteSlug, type CityView } from '../../data/site';
+import type { TariffView } from '../../data/tariff-view';
+
+interface Props {
+  city: CityView;
+  tariff: TariffView;
+}
+
+export async function getStaticPaths() {
+  const { routes, cities } = await loadSiteData();
+  return routes
+    .filter((route) => route.kind === 'CITY_TARIFF_DETAIL')
+    .map((route) => {
+      const city = cities.find((item) => item.slug === route.citySlug);
+      const tariff = city?.tariffs.find((item) => item.slug === route.tariffSlug);
+      if (!city || !tariff || !route.citySlug || !route.tariffSlug) {
+        throw new Error(`Маршрут тарифа ${route.path} не соответствует опубликованному каталогу`);
+      }
+      return { params: { city: route.citySlug, slug: route.tariffSlug }, props: { city, tariff } };
+    });
+}
+
+const { city, tariff } = Astro.props as Props;
+const seo = tariff.seo || {};
+const title = typeof seo.title === 'string' && seo.title.trim()
+  ? seo.title.trim()
+  : `${tariff.name} в ${city.nameIn} — подключить Дом.ру`;
+const description = typeof seo.description === 'string' && seo.description.trim()
+  ? seo.description.trim()
+  : `${tariff.name}: ${tariff.speed}, ${tariff.price}. Проверьте возможность подключения по адресу в ${city.nameIn}.`;
+const relatedTariffs = city.tariffs.filter((item) => item.slug !== tariff.slug).slice(0, 3);
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+---
+
+<BaseLayout {title} {description} {city} pages={city.pages}>
+  <TariffDetail {city} {tariff} {relatedTariffs} {apiUrl} siteSlug={publicSiteSlug} />
+</BaseLayout>

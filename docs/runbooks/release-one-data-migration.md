@@ -1,6 +1,6 @@
 # Безопасная миграция данных на структуру Release 1
 
-Этот runbook применяется перед первым deployment ревизии, содержащей миграции `0021`–`0026`. Он не разрешает запуск production-трафика: задача — сохранить доказательства состояния данных, применить миграции без потери связей и подтвердить точный route inventory.
+Этот runbook впервые применялся перед deployment ревизии с миграциями `0021`–`0026`, но остается операционным аудитом текущего Release 1. После уточнения владельца 14 сентября 2026 года route inventory включает отдельный URL каждого опубликованного тарифа опубликованного города. Он не разрешает запуск production-трафика: задача — сохранить доказательства состояния данных, применить миграции без потери связей и подтвердить точный route inventory.
 
 ## Ограничения безопасности
 
@@ -71,7 +71,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Pre-migration audit завершился ош�
 - `redirect_source_route_collisions = 0`;
 - `relation_integrity_violations = 0`.
 
-`redirect_targets_outside_release_one` до перехода может быть ненулевым из-за legacy detail URL. Такие записи не удалять: после deployment они останутся provenance-данными, но runtime/build policy не включит их в публикацию.
+`redirect_targets_outside_release_one` до перехода может быть ненулевым из-за legacy service/detail URL. Такие записи не удалять без отдельного разбора. Managed redirect тарифа становится эффективным, только если сам тариф, его город и сайт опубликованы; остальные правила остаются provenance-данными вне публикации.
 
 ## 4. Применить migration на exact SHA
 
@@ -107,6 +107,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Post-migration audit завершился ош
 - `pages_total` увеличился только на действительно отсутствовавшие cookie/HOME pages;
 - `page_blocks_total` увеличился ровно на семь для каждой ранее пустой опубликованной городской `HOME`, заполненной `0026`; существующие композиции не изменились;
 - для каждого сайта `global_page_inventory` содержит ровно пять канонических пар type/slug в `PUBLISHED`;
+- `published_tariff_detail_routes` равен числу опубликованных тарифов, принадлежащих опубликованным городам опубликованного сайта;
 - все строки `City` и их `HOME` имеют `PUBLISHED`;
 - `invalid_published_city_home_templates` имеет `violation_count = 0`, то есть видимые блоки каждой опубликованной городской `HOME` идут в точной канонической последовательности;
 - collision-проверки и `relation_integrity_violations` равны нулю после применения policy; legacy redirects за пределы inventory могут храниться, но не должны стать эффективными.
@@ -131,9 +132,10 @@ if ($LASTEXITCODE -ne 0) { throw 'Post-migration audit завершился ош
 
 ```text
 published city routes = N
-indexable HTML routes = N + 6
-sitemap routes = N + 6
-future service/tariff detail routes = 0
+published tariff detail routes = T
+indexable HTML routes = N + T + 6
+sitemap routes = N + T + 6
+future service detail routes = 0
 effective redirect targets outside inventory = 0
 404 = HTTP 404 + noindex + no canonical
 ```

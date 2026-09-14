@@ -83,7 +83,10 @@ export class RedirectService {
     const [cities, globalPages] = await Promise.all([
       this.prisma.city.findMany({
         where: { siteId: redirect.siteId, status: PublishStatus.PUBLISHED },
-        select: { slug: true },
+        select: {
+          slug: true,
+          tariffs: { where: { status: PublishStatus.PUBLISHED }, select: { slug: true } },
+        },
       }),
       this.prisma.page.findMany({
         where: { siteId: redirect.siteId, cityId: null, status: PublishStatus.PUBLISHED },
@@ -139,7 +142,10 @@ export class RedirectService {
     const [cities, globalPages, redirects] = await Promise.all([
       this.prisma.city.findMany({
         where: { siteId, status: PublishStatus.PUBLISHED },
-        select: { slug: true },
+        select: {
+          slug: true,
+          tariffs: { where: { status: PublishStatus.PUBLISHED }, select: { slug: true } },
+        },
       }),
       this.prisma.page.findMany({
         where: { siteId, cityId: null, status: PublishStatus.PUBLISHED },

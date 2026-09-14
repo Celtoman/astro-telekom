@@ -33,3 +33,29 @@ test('connection fee keeps zero, value and missing semantics for public tariffs'
   assert.equal(tariffView({ connectionFee: null }).connection, null);
   assert.equal(tariffView({}).connection, null);
 });
+
+test('public tariff view preserves supported CMS detail fields and removes unknown or nested attributes', () => {
+  const result = tariffView({
+    slug: 'giga-500-tv',
+    name: 'Гига 500 + ТВ',
+    promoText: 'Скидка первые 3 месяца',
+    availability: false,
+    attributes: {
+      card_subtitle: 'Для фильмов и игр',
+      tv_channels_total: 190,
+      equip_router: 'Wi-Fi 6 роутер в рассрочку',
+      router_installment_price: 200,
+      private_token: 'secret',
+      nested: { unsafe: true },
+    },
+  });
+
+  assert.equal(result.promoText, 'Скидка первые 3 месяца');
+  assert.equal(result.availability, false);
+  assert.deepEqual(result.attributes, {
+    card_subtitle: 'Для фильмов и игр',
+    tv_channels_total: 190,
+    equip_router: 'Wi-Fi 6 роутер в рассрочку',
+    router_installment_price: 200,
+  });
+});

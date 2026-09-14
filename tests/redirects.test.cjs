@@ -70,14 +70,14 @@ test('published redirect is created only for a free source and a Release 1 targe
   assert.deepEqual(f.rebuilds, [{ entity: 'redirect', id: 'redirect-new', siteId: 'site-1' }]);
 });
 
-test('published redirect rejects a published tariff detail outside Release 1', async () => {
+test('published redirect accepts a published tariff detail in Release 1', async () => {
   const { RedirectService } = loadRedirectModules();
   const f = fixture();
 
-  await assert.rejects(
-    new RedirectService(f.prisma, f.rebuild).create({ siteId: 'site-1', sourcePath: '/old-tariff', targetPath: '/kazan/giga-500', status: 'PUBLISHED' }),
-    /не является опубликованным ресурсом/i,
-  );
+  const result = await new RedirectService(f.prisma, f.rebuild).create({ siteId: 'site-1', sourcePath: '/old-tariff', targetPath: '/kazan/giga-500', status: 'PUBLISHED' });
+
+  assert.equal(result.targetPath, '/kazan/giga-500');
+  assert.deepEqual(f.rebuilds, [{ entity: 'redirect', id: 'redirect-new', siteId: 'site-1' }]);
 });
 
 test('published redirect rejects an occupied source and a redirect chain', async () => {

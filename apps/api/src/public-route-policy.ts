@@ -9,14 +9,15 @@ export const RELEASE_ONE_GLOBAL_PAGES = [
 export type ReleaseOneGlobalPageType = typeof RELEASE_ONE_GLOBAL_PAGES[number]['type'];
 
 export type PublicRoute = {
-  id: 'HOME' | 'CITY_HOME' | ReleaseOneGlobalPageType;
-  kind: 'HOME' | 'CITY_HOME' | 'GLOBAL_PAGE';
+  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | ReleaseOneGlobalPageType;
+  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'GLOBAL_PAGE';
   path: string;
   citySlug?: string;
+  tariffSlug?: string;
   pageType?: ReleaseOneGlobalPageType;
 };
 
-type CityRouteSource = { slug: string };
+type CityRouteSource = { slug: string; tariffs?: Array<{ slug: string }> };
 type GlobalPageRouteSource = { type: string; slug: string };
 
 export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: GlobalPageRouteSource[]): PublicRoute[] {
@@ -47,6 +48,18 @@ export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: Gl
     if (occupiedPaths.has(path)) throw new Error(`Конфликт маршрута Release 1: ${path}`);
     occupiedPaths.add(path);
     routes.push({ id: 'CITY_HOME', kind: 'CITY_HOME', path, citySlug: city.slug });
+    for (const tariff of city.tariffs || []) {
+      const tariffPath = `/${city.slug}/${tariff.slug}`;
+      if (occupiedPaths.has(tariffPath)) throw new Error(`Конфликт маршрута Release 1: ${tariffPath}`);
+      occupiedPaths.add(tariffPath);
+      routes.push({
+        id: 'CITY_TARIFF_DETAIL',
+        kind: 'CITY_TARIFF_DETAIL',
+        path: tariffPath,
+        citySlug: city.slug,
+        tariffSlug: tariff.slug,
+      });
+    }
   }
   return routes;
 }
