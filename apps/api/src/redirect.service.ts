@@ -2,6 +2,7 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException }
 import { PublishStatus } from '../generated';
 import { PrismaService } from './prisma.service';
 import { RebuildQueueService } from './rebuild-queue.service';
+import { releaseOnePaths } from './public-route-policy';
 
 type RedirectInput = {
   siteId: string;
@@ -79,15 +80,22 @@ export class RedirectService {
     if (!redirect) throw new NotFoundException('Redirect not found');
     const sourcePath = normalizeRedirectPath(redirect.sourcePath, 'sourcePath');
     const targetPath = normalizeRedirectPath(redirect.targetPath, 'targetPath');
-    const cities = await this.prisma.city.findMany({
-      where: { siteId: redirect.siteId, status: PublishStatus.PUBLISHED },
-      select: {
-        slug: true,
-        pages: { where: { status: PublishStatus.PUBLISHED }, select: { type: true, slug: true } },
-        tariffs: { where: { status: PublishStatus.PUBLISHED }, select: { slug: true } },
-      },
-    });
-    const publishedPaths = this.publishedPaths(cities);
+    const [cities, globalPages] = await Promise.all([
+      this.prisma.city.findMany({
+        where: { siteId: redirect.siteId, status: PublishStatus.PUBLISHED },
+        select: { slug: true },
+      }),
+      this.prisma.page.findMany({
+        where: { siteId: redirect.siteId, cityId: null, status: PublishStatus.PUBLISHED },
+        select: { type: true, slug: true },
+      }),
+    ]);
+    let publishedPaths: Set<string>;
+    try {
+      publishedPaths = releaseOnePaths(cities, globalPages);
+    } catch {
+      throw new NotFoundException('Redirect not found');
+    }
     if (publishedPaths.has(sourcePath) || !publishedPaths.has(targetPath)) throw new NotFoundException('Redirect not found');
     const updated = await this.prisma.redirect.updateMany({
       where,
@@ -128,21 +136,26 @@ export class RedirectService {
   }
 
   private async assertPublishedPolicy(siteId: string, sourcePath: string, targetPath: string, currentId?: string) {
-    const [cities, redirects] = await Promise.all([
+    const [cities, globalPages, redirects] = await Promise.all([
       this.prisma.city.findMany({
         where: { siteId, status: PublishStatus.PUBLISHED },
-        select: {
-          slug: true,
-          pages: { where: { status: PublishStatus.PUBLISHED }, select: { type: true, slug: true } },
-          tariffs: { where: { status: PublishStatus.PUBLISHED }, select: { slug: true } },
-        },
+        select: { slug: true },
+      }),
+      this.prisma.page.findMany({
+        where: { siteId, cityId: null, status: PublishStatus.PUBLISHED },
+        select: { type: true, slug: true },
       }),
       this.prisma.redirect.findMany({
         where: { siteId, status: PublishStatus.PUBLISHED, ...(currentId ? { id: { not: currentId } } : {}) },
         select: { id: true, sourcePath: true, targetPath: true },
       }),
     ]);
-    const publishedPaths = this.publishedPaths(cities);
+    let publishedPaths: Set<string>;
+    try {
+      publishedPaths = releaseOnePaths(cities, globalPages);
+    } catch (error) {
+      throw new ConflictException(`Release 1 route inventory не готов: ${(error as Error).message}`);
+    }
     if (publishedPaths.has(sourcePath)) throw new ConflictException(`sourcePath ${sourcePath} занят опубликованным ресурсом`);
     if (redirects.some((redirect) => (
       normalizeRedirectPath(redirect.sourcePath, 'sourcePath') === targetPath
@@ -151,16 +164,5 @@ export class RedirectService {
       throw new ConflictException('Цепочки redirects запрещены: переход должен вести сразу на опубликованный ресурс');
     }
     if (!publishedPaths.has(targetPath)) throw new ConflictException(`targetPath ${targetPath} не является опубликованным ресурсом`);
-  }
-
-  private publishedPaths(cities: Array<{ slug: string; pages: Array<{ type: string; slug: string }>; tariffs: Array<{ slug: string }> }>) {
-    const publishedPaths = new Set(['/']);
-    for (const city of cities) {
-      const cityPath = `/${city.slug}`;
-      publishedPaths.add(cityPath);
-      for (const page of city.pages) if (page.type !== 'HOME' && page.type !== 'TARIFF') publishedPaths.add(`${cityPath}/${page.slug}`);
-      for (const tariff of city.tariffs) publishedPaths.add(`${cityPath}/${tariff.slug}`);
-    }
-    return publishedPaths;
   }
 }

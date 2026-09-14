@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { loadSiteData, pageMeta } from '../data/site';
+import { publicHtmlPath } from '../data/public-url';
+
+interface Props {
+  type: 'COVERAGE' | 'CITIES' | 'PRIVACY' | 'PERSONAL_DATA_CONSENT';
+}
+
+const { type } = Astro.props as Props;
+const { cities, globalPages } = await loadSiteData();
+const page = globalPages.find((candidate) => candidate.type === type);
+if (!page) throw new Error(`Не опубликована обязательная общая страница Release 1: ${type}`);
+
+const defaults = {
+  COVERAGE: {
+    title: 'Карта покрытия',
+    description: 'Выберите город и проверьте возможность подключения Дом.ру по адресу.',
+  },
+  CITIES: {
+    title: 'Города обслуживания',
+    description: 'Опубликованные города, в которых можно проверить подключение Дом.ру.',
+  },
+  PRIVACY: {
+    title: 'Политика конфиденциальности',
+    description: 'Политика конфиденциальности сайта партнера Дом.ру.',
+  },
+  PERSONAL_DATA_CONSENT: {
+    title: 'Согласие на обработку персональных данных',
+    description: 'Согласие на обработку персональных данных на сайте партнера Дом.ру.',
+  },
+}[type];
+const meta = pageMeta(globalPages, page.slug, page.title || defaults.title, defaults.description);
+const contentText = typeof page.content?.text === 'string' ? page.content.text : '';
+const richTextBlocks = (page.blocks || []).filter((block) => block.blockType === 'rich_text');
+const isCityCatalog = type === 'CITIES' || type === 'COVERAGE';
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow">Дом.ру</span>
+      <h1>{page.title || defaults.title}</h1>
+      {isCityCatalog && contentText && <p class="lead">{contentText}</p>}
+    </div>
+  </section>
+  {isCityCatalog ? <section class="section container">
+    <h2>{type === 'COVERAGE' ? 'Проверка подключения по городам' : 'Выберите город'}</h2>
+    {cities.length > 0 ? <div class="grid">{cities.map((city) => <article class="card">
+      <h3>{city.name}</h3>
+      <p>{type === 'COVERAGE' ? 'Откройте страницу города и укажите адрес для проверки технической возможности.' : 'Тарифы и проверка подключения по адресу.'}</p>
+      <a class="card-link" href={`${publicHtmlPath(city.slug)}${type === 'COVERAGE' ? '#address-check' : ''}`}>
+        {type === 'COVERAGE' ? 'Проверить адрес →' : 'Открыть город →'}
+      </a>
+    </article>)}</div> : <p class="lead">Опубликованных городов пока нет.</p>}
+  </section> : <section class="section container legal-copy">
+    {contentText && <p>{contentText}</p>}
+    {!contentText && <p class="lead">Содержание страницы пока не опубликовано.</p>}
+    {richTextBlocks.map((block) => {
+      const title = typeof block.data.title === 'string' ? block.data.title : '';
+      const text = typeof block.data.text === 'string' ? block.data.text : '';
+      return <section>{title && <h2>{title}</h2>}{text && <p>{text}</p>}</section>;
+    })}
+  </section>}
+</BaseLayout>
+
+<style is:global>
+  .legal-copy { max-width: 880px; }
+  .legal-copy section + section { margin-top: 32px; }
+  .legal-copy p { color: #526071; font-size: 18px; line-height: 1.7; white-space: pre-line; }
+</style>

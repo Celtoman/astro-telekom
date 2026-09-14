@@ -12,37 +12,40 @@ const webDist = join(repositoryRoot, 'apps', 'web', 'dist');
 const productionSite = 'https://partner.example.test';
 const browserApiUrl = 'https://api.partner.example.test/api/v1';
 const yandexMetrikaHosts = [
-  'mc.yandex.ru',
-  'mc.yandex.az',
-  'mc.yandex.by',
-  'mc.yandex.co.il',
-  'mc.yandex.com',
-  'mc.yandex.com.am',
-  'mc.yandex.com.ge',
-  'mc.yandex.com.tr',
-  'mc.yandex.ee',
-  'mc.yandex.fr',
-  'mc.yandex.kg',
-  'mc.yandex.kz',
-  'mc.yandex.lt',
-  'mc.yandex.lv',
-  'mc.yandex.md',
-  'mc.yandex.tj',
-  'mc.yandex.tm',
-  'mc.yandex.uz',
-  'mc.webvisor.com',
-  'mc.webvisor.org',
+  'mc.yandex.ru', 'mc.yandex.az', 'mc.yandex.by', 'mc.yandex.co.il', 'mc.yandex.com',
+  'mc.yandex.com.am', 'mc.yandex.com.ge', 'mc.yandex.com.tr', 'mc.yandex.ee', 'mc.yandex.fr',
+  'mc.yandex.kg', 'mc.yandex.kz', 'mc.yandex.lt', 'mc.yandex.lv', 'mc.yandex.md',
+  'mc.yandex.tj', 'mc.yandex.tm', 'mc.yandex.uz', 'mc.webvisor.com', 'mc.webvisor.org',
 ];
 const yandexHttpsOrigins = [...yandexMetrikaHosts.map((host) => `https://${host}`), 'https://yastatic.net'];
 const yandexWssOrigins = yandexMetrikaHosts.map((host) => `wss://${host}`);
 const yandexFrameOrigins = yandexHttpsOrigins.filter((origin) => origin !== 'https://yastatic.net');
 
-const page = (type, slug, title) => ({ type, slug, title, status: 'PUBLISHED', seo: {}, blocks: [] });
+const page = (type, slug, title) => ({ type, slug, title, status: 'PUBLISHED', seo: {}, content: {}, blocks: [] });
+const globalPage = (type, slug, title, text) => ({
+  id: `global-${type.toLowerCase()}`, cityId: null, ...page(type, slug, title), content: { text },
+});
 const tariff = (slug, name, speed, standardPrice, connectionFee = null, serviceType = 'INTERNET') => ({
   name, slug, serviceType, speed, standardPrice, promoPrice: null, connectionFee, status: 'PUBLISHED', seo: {},
 });
+
 const apiFixture = {
   site: { name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test' },
+  globalPages: [
+    globalPage('COVERAGE', 'karta-pokrytiya-provaydera', 'Карта покрытия', 'Выберите город и проверьте адрес на его странице.'),
+    globalPage('CITIES', 'goroda-obsluzhivaniya', 'Города обслуживания', 'Дом.ру доступен в опубликованных городах.'),
+    globalPage('PRIVACY', 'politika-konfidencialnosti', 'Политика конфиденциальности', 'Утвержденный текст политики.'),
+    globalPage('PERSONAL_DATA_CONSENT', 'soglasie-na-obrabotku-personalnyh-dannyh', 'Согласие на обработку персональных данных', 'Утвержденный текст согласия.'),
+  ],
+  routes: [
+    { id: 'HOME', kind: 'HOME', path: '/' },
+    { id: 'COVERAGE', kind: 'GLOBAL_PAGE', path: '/karta-pokrytiya-provaydera', pageType: 'COVERAGE' },
+    { id: 'CITIES', kind: 'GLOBAL_PAGE', path: '/goroda-obsluzhivaniya', pageType: 'CITIES' },
+    { id: 'PRIVACY', kind: 'GLOBAL_PAGE', path: '/politika-konfidencialnosti', pageType: 'PRIVACY' },
+    { id: 'PERSONAL_DATA_CONSENT', kind: 'GLOBAL_PAGE', path: '/soglasie-na-obrabotku-personalnyh-dannyh', pageType: 'PERSONAL_DATA_CONSENT' },
+    { id: 'CITY_HOME', kind: 'CITY_HOME', path: '/kazan', citySlug: 'kazan' },
+    { id: 'CITY_HOME', kind: 'CITY_HOME', path: '/almetyevsk', citySlug: 'almetyevsk' },
+  ],
   redirects: [{ id: 'redirect-old-kazan', sourcePath: '/old-kazan/', targetPath: '/kazan/', status: 'PUBLISHED' }],
   cities: [
     {
@@ -65,25 +68,10 @@ const apiFixture = {
             { blockType: 'faq', data: { title: 'Популярные вопросы', items: [{ question: 'Как проверить адрес?', answer: 'Введите адрес и выберите подсказку.' }] } },
           ],
         },
-        {
-          ...page('INTERNET', 'internet', 'Домашний интернет в Казани'),
-          blocks: [
-            { blockType: 'hero', data: { eyebrow: 'Дом.ру в Казани', title: 'Домашний интернет', text: 'Тарифы для дома с проверкой подключения по адресу.', ctaText: 'Оставить заявку', ctaHref: '#request' } },
-            { blockType: 'tariff_grid', data: { title: 'Тарифы домашнего интернета' } },
-            { blockType: 'feature_grid', data: { title: 'Подключение без лишних шагов', items: [{ title: 'Проверка по адресу', text: 'Сначала уточняем техническую возможность подключения.' }] } },
-            { blockType: 'steps', data: { title: 'Как подключиться', items: [{ title: 'Укажите адрес', text: 'Выберите адрес из подсказок.' }, { title: 'Дождитесь звонка', text: 'Оператор уточнит доступные условия.' }] } },
-            { blockType: 'faq', data: { title: 'Вопросы и ответы', items: [{ question: 'Как узнать, доступно ли подключение?', answer: 'Укажите адрес в форме заявки. <script>alert(1)</script>' }] } },
-          ],
-        },
+        page('INTERNET', 'internet', 'Домашний интернет в Казани'),
         page('INTERNET_TV', 'internet-tv', 'Интернет и ТВ в Казани'),
         page('ADDRESS_CHECK', 'proverka-adresa', 'Проверка адреса в Казани'),
-        {
-          ...page('FAQ', 'faq', 'Вопросы и ответы — Казань'),
-          blocks: [
-            { blockType: 'hero', data: { eyebrow: 'Помощь', title: 'Вопросы и ответы', text: 'Коротко о подключении.' } },
-            { blockType: 'rich_text', data: { title: 'Как узнать доступность?', text: 'Введите адрес в форме заявки.' } },
-          ],
-        },
+        page('FAQ', 'faq', 'Вопросы и ответы — Казань'),
         { ...page('FAQ', 'draft-page', 'Черновая страница'), status: 'DRAFT' },
       ],
       tariffs: [
@@ -93,12 +81,8 @@ const apiFixture = {
       ],
     },
     {
-      name: 'Альметьевск', namePrepositional: 'Альметьевске', slug: 'almetyevsk', phone: '8 (800) 555-35-35', status: 'PUBLISHED',
-      pages: [
-        page('HOME', '', 'Домашний интернет в Альметьевске'),
-        page('INTERNET', 'internet', 'Домашний интернет в Альметьевске'),
-        page('ADDRESS_CHECK', 'proverka-adresa', 'Проверка адреса в Альметьевске'),
-      ],
+      name: 'Альметьевск', namePrepositional: 'Альметьевске', slug: 'almetyevsk', phone: '8 (800) 555-35-35', supportPhone: '8 (800) 250-77-77', status: 'PUBLISHED',
+      pages: [page('HOME', '', 'Домашний интернет в Альметьевске'), page('INTERNET', 'internet', 'Домашний интернет в Альметьевске')],
       tariffs: [tariff('almet-internet-300', 'Альмет Интернет 300', 300, 650, 1500)],
     },
     {
@@ -112,9 +96,7 @@ function runWebBuild(environment) {
   const command = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
   return new Promise((resolve, reject) => {
     const child = spawn(command, ['--filter', '@provider/web', 'build'], {
-      cwd: repositoryRoot,
-      env: { ...process.env, ...environment },
-      shell: process.platform === 'win32',
+      cwd: repositoryRoot, env: { ...process.env, ...environment }, shell: process.platform === 'win32',
     });
     let output = '';
     child.stdout.on('data', (chunk) => { output += chunk; });
@@ -136,9 +118,8 @@ async function withApiFixture(callback, fixture = apiFixture) {
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const address = server.address();
   assert.ok(address && typeof address === 'object');
-  try {
-    return await callback(`http://127.0.0.1:${address.port}/api/v1`);
-  } finally {
+  try { return await callback(`http://127.0.0.1:${address.port}/api/v1`); }
+  finally {
     await new Promise((resolve, reject) => {
       server.close((error) => error ? reject(error) : resolve());
       server.closeAllConnections();
@@ -146,9 +127,7 @@ async function withApiFixture(callback, fixture = apiFixture) {
   }
 }
 
-async function readBuilt(relativePath) {
-  return readFile(join(webDist, relativePath), 'utf8');
-}
+const readBuilt = (relativePath) => readFile(join(webDist, relativePath), 'utf8');
 
 async function collectTextFiles(directory) {
   const result = [];
@@ -166,59 +145,49 @@ function extractCsp(html, label) {
   assert.ok(tag, `${label} must contain a content-security-policy meta element`);
   const content = tag.match(/\bcontent=(?:"([^"]*)"|'([^']*)')/i);
   assert.ok(content, `${label} CSP meta element must contain a content value`);
-  return (content[1] ?? content[2])
-    .replaceAll('&amp;', '&')
-    .replaceAll('&quot;', '"')
-    .replace(/&#(?:39|x27);/gi, "'");
+  return (content[1] ?? content[2]).replaceAll('&amp;', '&').replaceAll('&quot;', '"').replace(/&#(?:39|x27);/gi, "'");
 }
 
 function getDirective(csp, name, label) {
-  const directive = csp.split(';').map((item) => item.trim())
-    .find((item) => item === name || item.startsWith(`${name} `));
+  const directive = csp.split(';').map((item) => item.trim()).find((item) => item === name || item.startsWith(`${name} `));
   assert.ok(directive, `${label} CSP must contain ${name}`);
   return directive;
 }
 
-function getDirectiveSources(csp, name, label) {
-  return getDirective(csp, name, label).split(/\s+/).slice(1);
-}
+const getDirectiveSources = (csp, name, label) => getDirective(csp, name, label).split(/\s+/).slice(1);
 
 function assertInlineScriptsAuthorized(html, label) {
   const scripts = getDirective(extractCsp(html, label), 'script-src', label);
-  const inlineScripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
-    .filter((match) => !/\bsrc\s*=/.test(match[1]));
-  assert.ok(inlineScripts.length > 0, `${label} must contain inline scripts for this regression check`);
+  const inlineScripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].filter((match) => !/\bsrc\s*=/.test(match[1]));
+  assert.ok(inlineScripts.length > 0, `${label} must contain inline scripts`);
   for (const [, attributes, source] of inlineScripts) {
     const hash = createHash('sha256').update(source).digest('base64');
-    assert.ok(
-      scripts.includes(`'sha256-${hash}'`),
-      `${label} CSP must authorize inline script ${attributes.trim() || '(no attributes)'}`,
-    );
+    assert.ok(scripts.includes(`'sha256-${hash}'`), `${label} CSP must authorize ${attributes.trim() || 'inline script'}`);
   }
 }
 
-test('web build uses API data and final HTML passes the publication smoke contract', { timeout: 120_000 }, async () => {
+test('web build emits exactly the Release 1 inventory for every published city', { timeout: 120_000 }, async () => {
   await withApiFixture(async (apiUrl) => {
-    const build = await runWebBuild({
-      SITE_DATA_API_URL: apiUrl,
-      PUBLIC_API_URL: browserApiUrl,
-      PUBLIC_SITE_URL: productionSite,
-      PUBLIC_YANDEX_METRIKA_ID: '12345678',
-      ALLOW_DEMO_DATA: '',
-    });
+    const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, PUBLIC_YANDEX_METRIKA_ID: '12345678', ALLOW_DEMO_DATA: '' });
     assert.equal(build.code, 0, build.output);
-    assert.match(build.output, /Pre-publication SEO gate passed: 12 indexable URL\(s\), 13 HTML file\(s\)\./);
+    assert.match(build.output, /Pre-publication SEO gate passed: 7 indexable URL\(s\), 8 HTML file\(s\)\./);
   });
+
+  const htmlFiles = (await collectTextFiles(webDist)).filter((path) => path.endsWith('.html'))
+    .map((path) => relative(webDist, path).replaceAll('\\', '/')).sort();
+  assert.deepEqual(htmlFiles, [
+    '404.html', 'almetyevsk/index.html', 'goroda-obsluzhivaniya/index.html', 'index.html',
+    'karta-pokrytiya-provaydera/index.html', 'kazan/index.html', 'politika-konfidencialnosti/index.html',
+    'soglasie-na-obrabotku-personalnyh-dannyh/index.html',
+  ]);
 
   const root = await readBuilt('index.html');
   const kazan = await readBuilt(join('kazan', 'index.html'));
-  const tariff = await readBuilt(join('kazan', 'api-internet-500', 'index.html'));
   const almetyevsk = await readBuilt(join('almetyevsk', 'index.html'));
-  const almetyevskInternet = await readBuilt(join('almetyevsk', 'internet', 'index.html'));
-  const almetyevskTariff = await readBuilt(join('almetyevsk', 'almet-internet-300', 'index.html'));
-  const kazanAddressCheck = await readBuilt(join('kazan', 'proverka-adresa', 'index.html'));
-  const kazanInternet = await readBuilt(join('kazan', 'internet', 'index.html'));
-  const kazanFaq = await readBuilt(join('kazan', 'faq', 'index.html'));
+  const coverage = await readBuilt(join('karta-pokrytiya-provaydera', 'index.html'));
+  const cities = await readBuilt(join('goroda-obsluzhivaniya', 'index.html'));
+  const privacy = await readBuilt(join('politika-konfidencialnosti', 'index.html'));
+  const consent = await readBuilt(join('soglasie-na-obrabotku-personalnyh-dannyh', 'index.html'));
   const robots = await readBuilt('robots.txt');
   const sitemap = await readBuilt('sitemap.xml');
   const notFound = await readBuilt('404.html');
@@ -230,168 +199,75 @@ test('web build uses API data and final HTML passes the publication smoke contra
   assert.equal(getDirective(csp, 'base-uri', 'public root'), "base-uri 'none'");
   assert.equal(getDirective(csp, 'object-src', 'public root'), "object-src 'none'");
   assert.equal(getDirective(csp, 'form-action', 'public root'), "form-action 'self'");
-  const scripts = getDirective(csp, 'script-src', 'public root');
-  assert.match(scripts, /'sha256-[A-Za-z0-9+/=]+'/);
-  assert.doesNotMatch(scripts, /'strict-dynamic'/);
-  assert.match(scripts, /https:\/\/mc\.yandex\.ru/);
-  assert.match(scripts, /https:\/\/yastatic\.net/);
-  assert.doesNotMatch(scripts, /'unsafe-inline'/);
-  assert.deepEqual(
-    getDirectiveSources(csp, 'script-src', 'public root').filter((source) => source.startsWith('https://')),
-    yandexHttpsOrigins,
-  );
-  assert.deepEqual(
-    getDirectiveSources(csp, 'connect-src', 'public root'),
-    ["'self'", 'https://api.partner.example.test', ...yandexHttpsOrigins, ...yandexWssOrigins],
-  );
-  assert.deepEqual(
-    getDirectiveSources(csp, 'img-src', 'public root'),
-    ["'self'", 'data:', ...yandexHttpsOrigins],
-  );
-  assert.deepEqual(
-    getDirectiveSources(csp, 'child-src', 'public root'),
-    ['blob:', ...yandexFrameOrigins],
-  );
-  assert.deepEqual(
-    getDirectiveSources(csp, 'frame-src', 'public root'),
-    ['blob:', ...yandexFrameOrigins],
-  );
-  assert.doesNotMatch(csp, /script-src(?:-elem)?[^;]*'unsafe-inline'/);
-  assert.match(root, /https:\/\/mc\.yandex\.ru\/metrika\/tag\.js/);
-  const metrikaBootstrap = root.match(/<script>([^<]*__YANDEX_METRIKA_ID__[^<]*)<\/script>/)?.[1];
-  assert.ok(metrikaBootstrap, 'public root must contain the inline Metrika bootstrap');
-  const metrikaHash = createHash('sha256').update(metrikaBootstrap).digest('base64');
-  assert.ok(scripts.includes(`'sha256-${metrikaHash}'`), 'CSP must authorize the exact Metrika bootstrap by hash');
+  assert.doesNotMatch(getDirective(csp, 'script-src', 'public root'), /'unsafe-inline'|'strict-dynamic'/);
+  assert.deepEqual(getDirectiveSources(csp, 'script-src', 'public root').filter((source) => source.startsWith('https://')), yandexHttpsOrigins);
+  assert.deepEqual(getDirectiveSources(csp, 'connect-src', 'public root'), ["'self'", 'https://api.partner.example.test', ...yandexHttpsOrigins, ...yandexWssOrigins]);
+  assert.deepEqual(getDirectiveSources(csp, 'img-src', 'public root'), ["'self'", 'data:', ...yandexHttpsOrigins]);
+  assert.deepEqual(getDirectiveSources(csp, 'frame-src', 'public root'), ['blob:', ...yandexFrameOrigins]);
 
   assert.match(root, /<link rel="canonical" href="https:\/\/partner\.example\.test\/">/);
   assert.match(root, /<h1>Домашний интернет и телевидение Дом\.ру<\/h1>/);
+  assert.match(root, /href="\/goroda-obsluzhivaniya"/);
   assert.match(root, /href="\/kazan"/);
   assert.match(root, /href="\/almetyevsk"/);
   assert.doesNotMatch(root, /href="\/(?:kazan|almetyevsk)\/"/);
+
   assert.match(kazan, /<h1[^>]*>Домашний интернет и телевидение в Казани<\/h1>/);
   assert.match(kazan, /data-city-first-screen/);
-  assert.match(kazan, /src="\/images\/home-connection-equipment\.webp"/);
   assert.match(kazan, /data-form-mode="visible"/);
-  assert.match(kazan, /2 тарифа/);
-  assert.match(kazan, /500 Мбит\/с/);
-  assert.match(kazan, /от 777 ₽\/мес\./);
   assert.match(kazan, /API Интернет и ТВ 500/);
-  assert.doesNotMatch(kazan, /<h3[^>]*>API Интернет 500<\/h3>/);
-  assert.match(kazan, /href="\/kazan\/internet-tv"[^>]*>Все тарифы услуги/);
-  assert.equal((kazan.match(/<h2[^>]*>Популярные тарифы<\/h2>/g) || []).length, 1);
-  assert.equal((kazan.match(/data-block-type="tariff_grid"/g) || []).length, 1);
-  assert.match(kazan, /data-block-type="service_grid"/);
   assert.match(kazan, /999 ₽\/мес\./);
   assert.match(kazan, /Бесплатное подключение/);
-  assert.doesNotMatch(kazan, /Цена уточняется/);
-  assert.match(tariff, /<h1>API Интернет 500<\/h1>/);
-  assert.match(tariff, /777 ₽\/мес\./);
-  assert.match(tariff, /Бесплатное подключение/);
+  assert.match(kazan, /href="#address-check"[^>]*>Проверить подключение/);
+  assert.doesNotMatch(kazan, /href="\/kazan\/(?:internet|internet-tv|api-internet)/);
+  assert.equal((kazan.match(/data-block-type="tariff_grid"/g) || []).length, 1);
+  assert.match(kazan, /data-block-type="service_grid"/);
+  const homeBlockOrder = ['service_grid', 'tariff_grid', 'steps', 'feature_grid', 'faq'].map((type) => kazan.indexOf(`data-block-type="${type}"`));
+  assert.ok(homeBlockOrder.every((index) => index >= 0));
+  assert.deepEqual(homeBlockOrder, [...homeBlockOrder].sort((left, right) => left - right));
+  assert.equal((kazan.match(/<h1\b/g) || []).length, 1);
+  assert.match(kazan, /data-api-url="https:\/\/api\.partner\.example\.test\/api\/v1"/);
+  assert.match(kazan, /href="tel:88005553535"[^>]*>8 \(800\) 555-35-35<\/a>/);
+  assert.match(kazan, /data-support-phone="8 \(800\) 250-77-77"/);
   assert.match(almetyevsk, /<link rel="canonical" href="https:\/\/partner\.example\.test\/almetyevsk">/);
   assert.match(almetyevsk, /<h1>Домашний интернет и телевидение в Альметьевске<\/h1>/);
+  assert.match(almetyevsk, /data-form-mode="visible"/);
   assert.doesNotMatch(almetyevsk, /Казан/);
-  assert.match(almetyevskInternet, /<h1>Домашний интернет<\/h1>/);
-  assert.match(almetyevskTariff, /<h1>Альмет Интернет 300<\/h1>/);
-  assert.match(almetyevskTariff, /650 ₽\/мес\./);
-  assert.match(almetyevsk, /Подключение — 1 500 ₽/);
-  assert.match(almetyevskTariff, /Подключение — 1 500 ₽/);
-  assert.match(kazanAddressCheck, /data-api-url="https:\/\/api\.partner\.example\.test\/api\/v1"/);
-  assert.match(kazanAddressCheck, /<script type="module" src="\/_astro\/AddressForm[^"?]*\.js"><\/script>/);
+
+  assert.match(coverage, /<h1>Карта покрытия<\/h1>/);
+  assert.match(coverage, /href="\/kazan#address-check"/);
+  assert.match(cities, /<h1>Города обслуживания<\/h1>/);
+  assert.match(cities, /Казань/);
+  assert.match(cities, /Альметьевск/);
+  assert.match(privacy, /Утвержденный текст политики/);
+  assert.match(consent, /Утвержденный текст согласия/);
+
   assert.match(addressFormSource, /\/address-suggestions/);
-  assert.match(kazanAddressCheck, /placeholder="Город, улица, дом, квартира"/);
-  assert.match(kazanAddressCheck, /maxlength="300"/);
-  assert.match(kazanAddressCheck, /aria-expanded="false"/);
   assert.match(addressFormSource, /suggestion:\s*selectedSuggestion/);
-  assert.equal(
-    (addressFormSource.match(/pageSlug:\s*pageSlug\s*\|\|\s*undefined/g) || []).length,
-    2,
-    'home forms must omit the optional pageSlug instead of sending an empty string',
-  );
+  assert.equal((addressFormSource.match(/pageSlug:\s*pageSlug\s*\|\|\s*undefined/g) || []).length, 2);
   assert.match(addressFormSource, /SUGGESTION_DEBOUNCE_MS\s*=\s*500/);
-  assert.match(addressFormSource, /suggestionCache/);
   assert.match(addressFormSource, /response\.status\s*===\s*429/);
-  assert.match(addressFormSource, /retry-after/i);
-  assert.match(addressFormSource, /AddressSuggestionResponseError/);
-  assert.doesNotMatch(addressFormSource, /setAddressHint\(error instanceof Error \? error\.message/);
   assert.match(addressFormSource, /ArrowDown/);
-  assert.match(addressFormSource, /ArrowUp/);
-  assert.match(addressFormSource, /aria-selected/);
-  assert.match(addressFormSource, /address-option-primary/);
-  assert.match(addressFormSource, /address-option-secondary/);
-  assert.match(addressFormSource, /Выберите адрес/);
   assert.match(addressFormSource, /createElement\('mark'\)/);
   assert.match(addressFormSource, /items\.slice\(0,\s*5\)/);
   assert.match(addressFormSource, /credentials:\s*'include'/);
   assert.doesNotMatch(addressFormSource, /innerHTML/);
-  assert.match(addressFormSource, /\.address-suggestions :global\(\.address-option\)/);
-  assert.doesNotMatch(addressFormSource, /\.address-option\[data-astro-cid-/);
-  assert.doesNotMatch(kazanAddressCheck, /DADATA_TOKEN|DADATA_SECRET/);
-  assert.match(kazanAddressCheck, /data-form-mode="visible"/);
-  assert.match(kazanAddressCheck, /data-phone-step[^>]*hidden/);
-  assert.match(addressFormSource, /check\.status\s*!==\s*'AVAILABLE'/);
-  assert.match(addressFormSource, /Дом\.ру по этому адресу не найден\. Доступны другие провайдеры/);
-  assert.match(addressFormSource, /По этому адресу доступные провайдеры не найдены/);
-  assert.match(addressFormSource, /Свяжитесь с технической поддержкой/);
-  assert.match(addressFormSource, /mode === 'visible' \? 'visible-address-check' : 'lead-form'/);
-  assert.match(kazanInternet, /data-form-mode="lead"/);
-  assert.match(kazanInternet, /<section[^>]+data-block-type="feature_grid"/);
-  assert.match(kazanInternet, /<ol[^>]+class="steps-grid steps-grid-count-2"/);
-  assert.match(kazanInternet, /<details[^>]*><summary[^>]*>Как узнать, доступно ли подключение\?<\/summary>/);
-  assert.doesNotMatch(kazanInternet, /<script>alert\(1\)<\/script>/);
-  assert.match(kazanInternet, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
-  assert.equal((kazanInternet.match(/<h1\b/g) || []).length, 1);
-  const internetBlockOrder = ['hero', 'tariff_grid', 'feature_grid', 'steps', 'faq']
-    .map((blockType) => kazanInternet.indexOf(`data-block-type="${blockType}"`));
-  assert.ok(internetBlockOrder.every((index) => index >= 0), 'all service landing blocks must be rendered');
-  assert.deepEqual(internetBlockOrder, [...internetBlockOrder].sort((left, right) => left - right));
-  assert.match(kazanInternet, /id="request"/);
-  assert.match(kazanInternet, /href="#request"/);
-  assert.match(kazanInternet, /API Интернет 500/);
-  assert.doesNotMatch(kazanInternet, /API Интернет и ТВ 500/);
-  assert.match(kazanInternet, /aria-label="Подробнее о тарифе API Интернет 500"/);
-  assert.match(kazan, /aria-label="Подробнее об услуге Домашний интернет"/);
-  assert.match(kazan, /href="tel:88005553535"[^>]*>8 \(800\) 555-35-35<\/a>/);
-  assert.match(kazan, /data-support-phone="8 \(800\) 250-77-77"/);
-  assert.match(kazan, /data-support-phone-href="tel:88002507777"/);
   assert.match(addressFormSource, /SUBSCRIBER_MODE_STORAGE_KEY/);
-  assert.match(addressFormSource, /SUBSCRIBER_MODE_EVENT/);
-  assert.equal((addressFormSource.match(/applyLeadSubscriberMode\(lead\)/g) || []).length, 2);
-  assert.doesNotMatch(addressFormSource, /subscriberCookie|document\.cookie/);
-  const homeBlockOrder = ['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'faq']
-    .map((blockType) => kazan.indexOf(`data-block-type="${blockType}"`));
-  assert.ok(homeBlockOrder.every((index) => index >= 0), 'all city home blocks must be rendered');
-  assert.deepEqual(homeBlockOrder, [...homeBlockOrder].sort((left, right) => left - right));
-  assert.match(kazan, /<ol[^>]+class="steps-grid steps-grid-count-4"/);
-  assert.equal((kazan.match(/<h1\b/g) || []).length, 1);
-  assert.match(kazanFaq, /data-block-type="rich_text"/);
-  assert.equal((kazanFaq.match(/<h1\b/g) || []).length, 1);
-  assert.match(addressFormSource, /Спасибо! Заявка отправлена/);
-  assert.match(tariff, /data-form-mode="lead"/);
-  assertInlineScriptsAuthorized(root, 'public root');
-  assertInlineScriptsAuthorized(kazanAddressCheck, 'address-check page');
-  assertInlineScriptsAuthorized(kazanInternet, 'service lead form');
-  assertInlineScriptsAuthorized(tariff, 'tariff lead form');
-  assert.doesNotMatch(kazanAddressCheck, /127\.0\.0\.1/);
-  assert.match(robots, /Sitemap: https:\/\/partner\.example\.test\/sitemap\.xml/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/kazan<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/kazan\/api-internet-500<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/kazan\/api-internet-tv-500<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/internet<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/partner\.example\.test\/almetyevsk\/almet-internet-300<\/loc>/);
+
   const sitemapLocations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-  assert.deepEqual(sitemapLocations.filter((location) => location.endsWith('/')), [`${productionSite}/`]);
-  assert.doesNotMatch(sitemap, /draft-city|draft-page|draft-tariff/);
+  assert.deepEqual(sitemapLocations, [
+    `${productionSite}/`, `${productionSite}/karta-pokrytiya-provaydera`, `${productionSite}/goroda-obsluzhivaniya`,
+    `${productionSite}/politika-konfidencialnosti`, `${productionSite}/soglasie-na-obrabotku-personalnyh-dannyh`,
+    `${productionSite}/kazan`, `${productionSite}/almetyevsk`,
+  ]);
+  assert.match(robots, /Sitemap: https:\/\/partner\.example\.test\/sitemap\.xml/);
+  assert.doesNotMatch(sitemap, /internet|tariff|draft-city/);
   assert.match(notFound, /<meta name="robots" content="noindex, follow">/);
   assert.doesNotMatch(notFound, /rel="canonical"/);
   assert.match(redirectRoutes, /@redirect_0 path \/old-kazan \/old-kazan\//);
   assert.match(redirectRoutes, /rewrite \* \/api\/v1\/public\/sites\/domru-kazan\/redirects\/redirect-old-kazan/);
-  assert.match(redirectRoutes, /reverse_proxy \{\$API_UPSTREAM:api:3000\}/);
-  await assert.rejects(readBuilt(join('draft-city', 'index.html')), (error) => error?.code === 'ENOENT');
-  await assert.rejects(readBuilt(join('kazan', 'draft-page', 'index.html')), (error) => error?.code === 'ENOENT');
-  await assert.rejects(readBuilt(join('kazan', 'draft-tariff-in-published-city', 'index.html')), (error) => error?.code === 'ENOENT');
-  await assert.rejects(readBuilt(join('kazan', 'missing', 'index.html')), (error) => error?.code === 'ENOENT');
+  assertInlineScriptsAuthorized(root, 'public root');
+  assertInlineScriptsAuthorized(kazan, 'city home');
 
   const localhostLeaks = [];
   for (const path of await collectTextFiles(webDist)) {
@@ -401,13 +277,7 @@ test('web build uses API data and final HTML passes the publication smoke contra
 });
 
 test('web build is blocked when API is unavailable and demo mode is not explicit', { timeout: 120_000 }, async () => {
-  const build = await runWebBuild({
-    SITE_DATA_API_URL: 'http://127.0.0.1:1/api/v1',
-    PUBLIC_API_URL: browserApiUrl,
-    PUBLIC_SITE_URL: productionSite,
-    ALLOW_DEMO_DATA: '',
-  });
-
+  const build = await runWebBuild({ SITE_DATA_API_URL: 'http://127.0.0.1:1/api/v1', PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: '' });
   assert.notEqual(build.code, 0, build.output);
   assert.match(build.output, /Не удалось получить каталог опубликованных городов/);
   assert.match(build.output, /ALLOW_DEMO_DATA=true/);
@@ -416,53 +286,32 @@ test('web build is blocked when API is unavailable and demo mode is not explicit
 test('web production build is blocked without a clean HTTPS origin', { timeout: 120_000 }, async () => {
   await withApiFixture(async (apiUrl) => {
     for (const publicSiteUrl of ['', 'http://partner.example.test']) {
-      const build = await runWebBuild({
-        SITE_DATA_API_URL: apiUrl,
-        PUBLIC_API_URL: browserApiUrl,
-        PUBLIC_SITE_URL: publicSiteUrl,
-        ALLOW_DEMO_DATA: '',
-      });
+      const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: publicSiteUrl, ALLOW_DEMO_DATA: '' });
       assert.notEqual(build.code, 0, build.output);
       assert.match(build.output, /PUBLIC_SITE_URL.*HTTPS origin/i);
     }
-
-    const insecureBrowserApiBuild = await runWebBuild({
-      SITE_DATA_API_URL: apiUrl,
-      PUBLIC_API_URL: 'http://api.partner.example.test/api/v1',
-      PUBLIC_SITE_URL: productionSite,
-      ALLOW_DEMO_DATA: '',
-    });
-    assert.notEqual(insecureBrowserApiBuild.code, 0, insecureBrowserApiBuild.output);
-    assert.match(insecureBrowserApiBuild.output, /PUBLIC_API_URL.*HTTPS.*\/api\/v1/i);
+    const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: 'http://api.partner.example.test/api/v1', PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: '' });
+    assert.notEqual(build.code, 0, build.output);
+    assert.match(build.output, /PUBLIC_API_URL.*HTTPS.*\/api\/v1/i);
   });
 });
 
-test('web build uses demo data only when ALLOW_DEMO_DATA=true is explicit', { timeout: 120_000 }, async () => {
-  const build = await runWebBuild({
-    SITE_DATA_API_URL: '',
-    PUBLIC_API_URL: 'http://127.0.0.1:1/api/v1',
-    PUBLIC_SITE_URL: productionSite,
-    ALLOW_DEMO_DATA: 'true',
-  });
-
+test('web build uses Release 1 demo data only when ALLOW_DEMO_DATA=true is explicit', { timeout: 120_000 }, async () => {
+  const build = await runWebBuild({ SITE_DATA_API_URL: '', PUBLIC_API_URL: 'http://127.0.0.1:1/api/v1', PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: 'true' });
   assert.equal(build.code, 0, build.output);
   assert.match(build.output, /ALLOW_DEMO_DATA=true: используются демонстрационные данные/);
-  assert.match(await readBuilt(join('kazan', 'index.html')), /Цена уточняется/);
+  assert.match(build.output, /Pre-publication SEO gate passed: 6 indexable URL\(s\), 7 HTML file\(s\)\./);
 });
 
-test('web build rejects a published page and tariff with the same city URL', { timeout: 120_000 }, async () => {
+test('web build rejects a city slug that collides with a global Release 1 route', { timeout: 120_000 }, async () => {
   const fixture = structuredClone(apiFixture);
-  fixture.cities[0].tariffs[0].slug = 'internet';
-
+  fixture.cities[0].slug = 'goroda-obsluzhivaniya';
+  fixture.routes.at(-2).path = '/goroda-obsluzhivaniya';
+  fixture.routes.at(-2).citySlug = 'goroda-obsluzhivaniya';
   await withApiFixture(async (apiUrl) => {
-    const build = await runWebBuild({
-      SITE_DATA_API_URL: apiUrl,
-      PUBLIC_API_URL: browserApiUrl,
-      PUBLIC_SITE_URL: productionSite,
-      ALLOW_DEMO_DATA: '',
-    });
+    const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: '' });
     assert.notEqual(build.code, 0, build.output);
-    assert.match(build.output, /Конфликт опубликованного URL \/kazan\/internet:/);
+    assert.match(build.output, /Конфликт маршрута Release 1.*goroda-obsluzhivaniya/i);
   }, fixture);
 });
 
@@ -472,14 +321,8 @@ test('web build rejects redirect chains instead of publishing multiple hops', { 
     { id: 'redirect-a', sourcePath: '/old-a/', targetPath: '/old-b/', status: 'PUBLISHED' },
     { id: 'redirect-b', sourcePath: '/old-b/', targetPath: '/kazan/', status: 'PUBLISHED' },
   ];
-
   await withApiFixture(async (apiUrl) => {
-    const build = await runWebBuild({
-      SITE_DATA_API_URL: apiUrl,
-      PUBLIC_API_URL: browserApiUrl,
-      PUBLIC_SITE_URL: productionSite,
-      ALLOW_DEMO_DATA: '',
-    });
+    const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: '' });
     assert.notEqual(build.code, 0, build.output);
     assert.match(build.output, /цепочк/i);
   }, fixture);

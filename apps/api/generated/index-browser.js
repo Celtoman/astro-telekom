@@ -459,7 +459,11 @@ exports.PageType = exports.$Enums.PageType = {
   TV: 'TV',
   TARIFF: 'TARIFF',
   ADDRESS_CHECK: 'ADDRESS_CHECK',
-  FAQ: 'FAQ'
+  FAQ: 'FAQ',
+  COVERAGE: 'COVERAGE',
+  CITIES: 'CITIES',
+  PRIVACY: 'PRIVACY',
+  PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT'
 };
 
 exports.ServiceType = exports.$Enums.ServiceType = {

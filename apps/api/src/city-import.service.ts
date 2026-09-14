@@ -238,10 +238,7 @@ export class CityImportService {
           updated += 1;
         } else {
           const city = await tx.city.create({ data: { siteId: candidate.siteId, ...data, status: 'DRAFT', seo: {} as Prisma.InputJsonObject, content: {} as Prisma.InputJsonObject } });
-          const pages = [
-            ['HOME', 'home', 'Главная города'], ['INTERNET', 'internet', 'Домашний интернет'], ['INTERNET_TV', 'internet-tv', 'Интернет + ТВ'],
-            ['TV', 'tv', 'Телевидение'], ['ADDRESS_CHECK', 'proverka-adresa', 'Проверка адреса'], ['FAQ', 'faq', 'Вопросы и ответы'],
-          ] as const;
+          const pages = [['HOME', '', 'Главная города']] as const;
           const pageResult = await tx.page.createMany({
             data: pages.map(([type, slug, title]) => ({ siteId: candidate.siteId, cityId: city.id, type, slug, title, status: 'DRAFT' as const, seo: {}, content: {} })),
           });

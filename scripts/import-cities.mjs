@@ -11,7 +11,6 @@ const configuredApiUrl = (process.env.PUBLIC_API_URL || process.env.API_URL || '
 const apiUrl = configuredApiUrl.endsWith('/api/v1') ? configuredApiUrl : `${configuredApiUrl}/api/v1`;
 const adminToken = process.env.ADMIN_API_TOKEN;
 const siteSlug = process.env.CITY_IMPORT_SITE_SLUG || 'domru-kazan';
-const publishedCitySlug = process.env.CITY_IMPORT_PUBLISHED_SLUG || 'kazan';
 
 if (!adminToken) throw new Error('ADMIN_API_TOKEN обязателен для импорта городов');
 if (apply && !actionsPath) throw new Error('--apply требует --actions=<путь к JSON-файлу с решением для каждой строки>');
@@ -62,18 +61,7 @@ const result = await request('/admin/cities/import/apply', {
     actions,
   }),
 });
-const cities = await request('/admin/cities');
-const siteCities = cities.filter((city) => city.siteId === site.id);
-for (const city of siteCities) {
-  const expectedStatus = city.slug === publishedCitySlug ? 'PUBLISHED' : 'DRAFT';
-  if (city.status !== expectedStatus) {
-    await request(`/admin/cities/${city.id}`, { method: 'PATCH', body: JSON.stringify({ status: expectedStatus }) });
-  }
-}
 const verifiedCities = (await request('/admin/cities')).filter((city) => city.siteId === site.id);
 const published = verifiedCities.filter((city) => city.status === 'PUBLISHED').map((city) => city.slug);
-if (published.length !== 1 || published[0] !== publishedCitySlug) {
-  throw new Error(`Нарушен publication invariant: опубликованы ${published.join(', ') || 'нет городов'}`);
-}
 
 console.log(JSON.stringify({ ...result, cities: verifiedCities.length, published }, null, 2));

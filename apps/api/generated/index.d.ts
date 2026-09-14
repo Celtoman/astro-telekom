@@ -134,7 +134,11 @@ export const PageType: {
   TV: 'TV',
   TARIFF: 'TARIFF',
   ADDRESS_CHECK: 'ADDRESS_CHECK',
-  FAQ: 'FAQ'
+  FAQ: 'FAQ',
+  COVERAGE: 'COVERAGE',
+  CITIES: 'CITIES',
+  PRIVACY: 'PRIVACY',
+  PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT'
 };
 
 export type PageType = (typeof PageType)[keyof typeof PageType]
@@ -9689,7 +9693,7 @@ export namespace Prisma {
   export type PageGroupByOutputType = {
     id: string
     siteId: string
-    cityId: string
+    cityId: string | null
     type: $Enums.PageType
     title: string
     slug: string
@@ -9730,7 +9734,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
-    city?: boolean | CityDefaultArgs<ExtArgs>
+    city?: boolean | Page$cityArgs<ExtArgs>
     blocks?: boolean | Page$blocksArgs<ExtArgs>
     leads?: boolean | Page$leadsArgs<ExtArgs>
     checks?: boolean | Page$checksArgs<ExtArgs>
@@ -9750,7 +9754,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
-    city?: boolean | CityDefaultArgs<ExtArgs>
+    city?: boolean | Page$cityArgs<ExtArgs>
   }, ExtArgs["result"]["page"]>
 
   export type PageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9766,7 +9770,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
-    city?: boolean | CityDefaultArgs<ExtArgs>
+    city?: boolean | Page$cityArgs<ExtArgs>
   }, ExtArgs["result"]["page"]>
 
   export type PageSelectScalar = {
@@ -9786,7 +9790,7 @@ export namespace Prisma {
   export type PageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "type" | "title" | "slug" | "status" | "seo" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
   export type PageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
-    city?: boolean | CityDefaultArgs<ExtArgs>
+    city?: boolean | Page$cityArgs<ExtArgs>
     blocks?: boolean | Page$blocksArgs<ExtArgs>
     leads?: boolean | Page$leadsArgs<ExtArgs>
     checks?: boolean | Page$checksArgs<ExtArgs>
@@ -9794,18 +9798,18 @@ export namespace Prisma {
   }
   export type PageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
-    city?: boolean | CityDefaultArgs<ExtArgs>
+    city?: boolean | Page$cityArgs<ExtArgs>
   }
   export type PageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
-    city?: boolean | CityDefaultArgs<ExtArgs>
+    city?: boolean | Page$cityArgs<ExtArgs>
   }
 
   export type $PagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Page"
     objects: {
       site: Prisma.$SitePayload<ExtArgs>
-      city: Prisma.$CityPayload<ExtArgs>
+      city: Prisma.$CityPayload<ExtArgs> | null
       blocks: Prisma.$PageBlockPayload<ExtArgs>[]
       leads: Prisma.$LeadPayload<ExtArgs>[]
       checks: Prisma.$AddressCheckPayload<ExtArgs>[]
@@ -9813,7 +9817,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       siteId: string
-      cityId: string
+      cityId: string | null
       type: $Enums.PageType
       title: string
       slug: string
@@ -10217,7 +10221,7 @@ export namespace Prisma {
   export interface Prisma__PageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     site<T extends SiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SiteDefaultArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    city<T extends CityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CityDefaultArgs<ExtArgs>>): Prisma__CityClient<$Result.GetResult<Prisma.$CityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    city<T extends Page$cityArgs<ExtArgs> = {}>(args?: Subset<T, Page$cityArgs<ExtArgs>>): Prisma__CityClient<$Result.GetResult<Prisma.$CityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     blocks<T extends Page$blocksArgs<ExtArgs> = {}>(args?: Subset<T, Page$blocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     leads<T extends Page$leadsArgs<ExtArgs> = {}>(args?: Subset<T, Page$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     checks<T extends Page$checksArgs<ExtArgs> = {}>(args?: Subset<T, Page$checksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AddressCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -10659,6 +10663,25 @@ export namespace Prisma {
      * Limit how many Pages to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Page.city
+   */
+  export type Page$cityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the City
+     */
+    select?: CitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the City
+     */
+    omit?: CityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CityInclude<ExtArgs> | null
+    where?: CityWhereInput
   }
 
   /**
@@ -28652,7 +28675,7 @@ export namespace Prisma {
     NOT?: PageWhereInput | PageWhereInput[]
     id?: StringFilter<"Page"> | string
     siteId?: StringFilter<"Page"> | string
-    cityId?: StringFilter<"Page"> | string
+    cityId?: StringNullableFilter<"Page"> | string | null
     type?: EnumPageTypeFilter<"Page"> | $Enums.PageType
     title?: StringFilter<"Page"> | string
     slug?: StringFilter<"Page"> | string
@@ -28662,7 +28685,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Page"> | Date | string
     updatedAt?: DateTimeFilter<"Page"> | Date | string
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
-    city?: XOR<CityScalarRelationFilter, CityWhereInput>
+    city?: XOR<CityNullableScalarRelationFilter, CityWhereInput> | null
     blocks?: PageBlockListRelationFilter
     leads?: LeadListRelationFilter
     checks?: AddressCheckListRelationFilter
@@ -28671,7 +28694,7 @@ export namespace Prisma {
   export type PageOrderByWithRelationInput = {
     id?: SortOrder
     siteId?: SortOrder
-    cityId?: SortOrder
+    cityId?: SortOrderInput | SortOrder
     type?: SortOrder
     title?: SortOrder
     slug?: SortOrder
@@ -28694,7 +28717,7 @@ export namespace Prisma {
     OR?: PageWhereInput[]
     NOT?: PageWhereInput | PageWhereInput[]
     siteId?: StringFilter<"Page"> | string
-    cityId?: StringFilter<"Page"> | string
+    cityId?: StringNullableFilter<"Page"> | string | null
     type?: EnumPageTypeFilter<"Page"> | $Enums.PageType
     title?: StringFilter<"Page"> | string
     slug?: StringFilter<"Page"> | string
@@ -28704,7 +28727,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Page"> | Date | string
     updatedAt?: DateTimeFilter<"Page"> | Date | string
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
-    city?: XOR<CityScalarRelationFilter, CityWhereInput>
+    city?: XOR<CityNullableScalarRelationFilter, CityWhereInput> | null
     blocks?: PageBlockListRelationFilter
     leads?: LeadListRelationFilter
     checks?: AddressCheckListRelationFilter
@@ -28713,7 +28736,7 @@ export namespace Prisma {
   export type PageOrderByWithAggregationInput = {
     id?: SortOrder
     siteId?: SortOrder
-    cityId?: SortOrder
+    cityId?: SortOrderInput | SortOrder
     type?: SortOrder
     title?: SortOrder
     slug?: SortOrder
@@ -28733,7 +28756,7 @@ export namespace Prisma {
     NOT?: PageScalarWhereWithAggregatesInput | PageScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Page"> | string
     siteId?: StringWithAggregatesFilter<"Page"> | string
-    cityId?: StringWithAggregatesFilter<"Page"> | string
+    cityId?: StringNullableWithAggregatesFilter<"Page"> | string | null
     type?: EnumPageTypeWithAggregatesFilter<"Page"> | $Enums.PageType
     title?: StringWithAggregatesFilter<"Page"> | string
     slug?: StringWithAggregatesFilter<"Page"> | string
@@ -30617,7 +30640,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutPagesInput
-    city: CityCreateNestedOneWithoutPagesInput
+    city?: CityCreateNestedOneWithoutPagesInput
     blocks?: PageBlockCreateNestedManyWithoutPageInput
     leads?: LeadCreateNestedManyWithoutPageInput
     checks?: AddressCheckCreateNestedManyWithoutPageInput
@@ -30626,7 +30649,7 @@ export namespace Prisma {
   export type PageUncheckedCreateInput = {
     id?: string
     siteId: string
-    cityId: string
+    cityId?: string | null
     type: $Enums.PageType
     title: string
     slug: string
@@ -30651,7 +30674,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutPagesNestedInput
-    city?: CityUpdateOneRequiredWithoutPagesNestedInput
+    city?: CityUpdateOneWithoutPagesNestedInput
     blocks?: PageBlockUpdateManyWithoutPageNestedInput
     leads?: LeadUpdateManyWithoutPageNestedInput
     checks?: AddressCheckUpdateManyWithoutPageNestedInput
@@ -30660,7 +30683,7 @@ export namespace Prisma {
   export type PageUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     siteId?: StringFieldUpdateOperationsInput | string
-    cityId?: StringFieldUpdateOperationsInput | string
+    cityId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPageTypeFieldUpdateOperationsInput | $Enums.PageType
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
@@ -30677,7 +30700,7 @@ export namespace Prisma {
   export type PageCreateManyInput = {
     id?: string
     siteId: string
-    cityId: string
+    cityId?: string | null
     type: $Enums.PageType
     title: string
     slug: string
@@ -30703,7 +30726,7 @@ export namespace Prisma {
   export type PageUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     siteId?: StringFieldUpdateOperationsInput | string
-    cityId?: StringFieldUpdateOperationsInput | string
+    cityId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPageTypeFieldUpdateOperationsInput | $Enums.PageType
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
@@ -32777,9 +32800,9 @@ export namespace Prisma {
     not?: NestedEnumPageTypeFilter<$PrismaModel> | $Enums.PageType
   }
 
-  export type CityScalarRelationFilter = {
-    is?: CityWhereInput
-    isNot?: CityWhereInput
+  export type CityNullableScalarRelationFilter = {
+    is?: CityWhereInput | null
+    isNot?: CityWhereInput | null
   }
 
   export type PageBlockListRelationFilter = {
@@ -32926,6 +32949,11 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type CityScalarRelationFilter = {
+    is?: CityWhereInput
+    isNot?: CityWhereInput
   }
 
   export type TariffCityIdSlugCompoundUniqueInput = {
@@ -33699,11 +33727,6 @@ export namespace Prisma {
     leadId?: SortOrder
     type?: SortOrder
     createdAt?: SortOrder
-  }
-
-  export type CityNullableScalarRelationFilter = {
-    is?: CityWhereInput | null
-    isNot?: CityWhereInput | null
   }
 
   export type RedirectSiteIdSourcePathCompoundUniqueInput = {
@@ -34761,10 +34784,12 @@ export namespace Prisma {
     update?: XOR<XOR<SiteUpdateToOneWithWhereWithoutPagesInput, SiteUpdateWithoutPagesInput>, SiteUncheckedUpdateWithoutPagesInput>
   }
 
-  export type CityUpdateOneRequiredWithoutPagesNestedInput = {
+  export type CityUpdateOneWithoutPagesNestedInput = {
     create?: XOR<CityCreateWithoutPagesInput, CityUncheckedCreateWithoutPagesInput>
     connectOrCreate?: CityCreateOrConnectWithoutPagesInput
     upsert?: CityUpsertWithoutPagesInput
+    disconnect?: CityWhereInput | boolean
+    delete?: CityWhereInput | boolean
     connect?: CityWhereUniqueInput
     update?: XOR<XOR<CityUpdateToOneWithWhereWithoutPagesInput, CityUpdateWithoutPagesInput>, CityUncheckedUpdateWithoutPagesInput>
   }
@@ -36486,7 +36511,7 @@ export namespace Prisma {
     content?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    city: CityCreateNestedOneWithoutPagesInput
+    city?: CityCreateNestedOneWithoutPagesInput
     blocks?: PageBlockCreateNestedManyWithoutPageInput
     leads?: LeadCreateNestedManyWithoutPageInput
     checks?: AddressCheckCreateNestedManyWithoutPageInput
@@ -36494,7 +36519,7 @@ export namespace Prisma {
 
   export type PageUncheckedCreateWithoutSiteInput = {
     id?: string
-    cityId: string
+    cityId?: string | null
     type: $Enums.PageType
     title: string
     slug: string
@@ -36893,7 +36918,7 @@ export namespace Prisma {
     NOT?: PageScalarWhereInput | PageScalarWhereInput[]
     id?: StringFilter<"Page"> | string
     siteId?: StringFilter<"Page"> | string
-    cityId?: StringFilter<"Page"> | string
+    cityId?: StringNullableFilter<"Page"> | string | null
     type?: EnumPageTypeFilter<"Page"> | $Enums.PageType
     title?: StringFilter<"Page"> | string
     slug?: StringFilter<"Page"> | string
@@ -38260,7 +38285,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutPagesInput
-    city: CityCreateNestedOneWithoutPagesInput
+    city?: CityCreateNestedOneWithoutPagesInput
     leads?: LeadCreateNestedManyWithoutPageInput
     checks?: AddressCheckCreateNestedManyWithoutPageInput
   }
@@ -38268,7 +38293,7 @@ export namespace Prisma {
   export type PageUncheckedCreateWithoutBlocksInput = {
     id?: string
     siteId: string
-    cityId: string
+    cityId?: string | null
     type: $Enums.PageType
     title: string
     slug: string
@@ -38308,7 +38333,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutPagesNestedInput
-    city?: CityUpdateOneRequiredWithoutPagesNestedInput
+    city?: CityUpdateOneWithoutPagesNestedInput
     leads?: LeadUpdateManyWithoutPageNestedInput
     checks?: AddressCheckUpdateManyWithoutPageNestedInput
   }
@@ -38316,7 +38341,7 @@ export namespace Prisma {
   export type PageUncheckedUpdateWithoutBlocksInput = {
     id?: StringFieldUpdateOperationsInput | string
     siteId?: StringFieldUpdateOperationsInput | string
-    cityId?: StringFieldUpdateOperationsInput | string
+    cityId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPageTypeFieldUpdateOperationsInput | $Enums.PageType
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
@@ -38866,7 +38891,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutPagesInput
-    city: CityCreateNestedOneWithoutPagesInput
+    city?: CityCreateNestedOneWithoutPagesInput
     blocks?: PageBlockCreateNestedManyWithoutPageInput
     leads?: LeadCreateNestedManyWithoutPageInput
   }
@@ -38874,7 +38899,7 @@ export namespace Prisma {
   export type PageUncheckedCreateWithoutChecksInput = {
     id?: string
     siteId: string
-    cityId: string
+    cityId?: string | null
     type: $Enums.PageType
     title: string
     slug: string
@@ -39108,7 +39133,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutPagesNestedInput
-    city?: CityUpdateOneRequiredWithoutPagesNestedInput
+    city?: CityUpdateOneWithoutPagesNestedInput
     blocks?: PageBlockUpdateManyWithoutPageNestedInput
     leads?: LeadUpdateManyWithoutPageNestedInput
   }
@@ -39116,7 +39141,7 @@ export namespace Prisma {
   export type PageUncheckedUpdateWithoutChecksInput = {
     id?: StringFieldUpdateOperationsInput | string
     siteId?: StringFieldUpdateOperationsInput | string
-    cityId?: StringFieldUpdateOperationsInput | string
+    cityId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPageTypeFieldUpdateOperationsInput | $Enums.PageType
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
@@ -39250,7 +39275,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutPagesInput
-    city: CityCreateNestedOneWithoutPagesInput
+    city?: CityCreateNestedOneWithoutPagesInput
     blocks?: PageBlockCreateNestedManyWithoutPageInput
     checks?: AddressCheckCreateNestedManyWithoutPageInput
   }
@@ -39258,7 +39283,7 @@ export namespace Prisma {
   export type PageUncheckedCreateWithoutLeadsInput = {
     id?: string
     siteId: string
-    cityId: string
+    cityId?: string | null
     type: $Enums.PageType
     title: string
     slug: string
@@ -39812,7 +39837,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutPagesNestedInput
-    city?: CityUpdateOneRequiredWithoutPagesNestedInput
+    city?: CityUpdateOneWithoutPagesNestedInput
     blocks?: PageBlockUpdateManyWithoutPageNestedInput
     checks?: AddressCheckUpdateManyWithoutPageNestedInput
   }
@@ -39820,7 +39845,7 @@ export namespace Prisma {
   export type PageUncheckedUpdateWithoutLeadsInput = {
     id?: StringFieldUpdateOperationsInput | string
     siteId?: StringFieldUpdateOperationsInput | string
-    cityId?: StringFieldUpdateOperationsInput | string
+    cityId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPageTypeFieldUpdateOperationsInput | $Enums.PageType
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
@@ -41592,7 +41617,7 @@ export namespace Prisma {
 
   export type PageCreateManySiteInput = {
     id?: string
-    cityId: string
+    cityId?: string | null
     type: $Enums.PageType
     title: string
     slug: string
@@ -41797,7 +41822,7 @@ export namespace Prisma {
     content?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    city?: CityUpdateOneRequiredWithoutPagesNestedInput
+    city?: CityUpdateOneWithoutPagesNestedInput
     blocks?: PageBlockUpdateManyWithoutPageNestedInput
     leads?: LeadUpdateManyWithoutPageNestedInput
     checks?: AddressCheckUpdateManyWithoutPageNestedInput
@@ -41805,7 +41830,7 @@ export namespace Prisma {
 
   export type PageUncheckedUpdateWithoutSiteInput = {
     id?: StringFieldUpdateOperationsInput | string
-    cityId?: StringFieldUpdateOperationsInput | string
+    cityId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPageTypeFieldUpdateOperationsInput | $Enums.PageType
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
@@ -41821,7 +41846,7 @@ export namespace Prisma {
 
   export type PageUncheckedUpdateManyWithoutSiteInput = {
     id?: StringFieldUpdateOperationsInput | string
-    cityId?: StringFieldUpdateOperationsInput | string
+    cityId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPageTypeFieldUpdateOperationsInput | $Enums.PageType
     title?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string

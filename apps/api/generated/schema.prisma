@@ -21,6 +21,10 @@ enum PageType {
   TARIFF
   ADDRESS_CHECK
   FAQ
+  COVERAGE
+  CITIES
+  PRIVACY
+  PERSONAL_DATA_CONSENT
 }
 
 enum ServiceType {
@@ -209,7 +213,7 @@ model City {
 model Page {
   id        String         @id @default(cuid())
   siteId    String
-  cityId    String
+  cityId    String?
   type      PageType
   title     String
   slug      String
@@ -217,7 +221,7 @@ model Page {
   seo       Json?
   content   Json?
   site      Site           @relation(fields: [siteId], references: [id])
-  city      City           @relation(fields: [cityId], references: [id])
+  city      City?          @relation(fields: [cityId], references: [id])
   blocks    PageBlock[]
   leads     Lead[]
   checks    AddressCheck[]

@@ -1,15 +1,13 @@
-import { Prisma, PrismaClient } from '../generated/index.js';
+import { PrismaClient } from '../generated/index.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { randomBytes, scryptSync } from 'node:crypto';
 
 const PUBLISHED = 'PUBLISHED' as const;
+const DRAFT = 'DRAFT' as const;
 const HOME = 'HOME' as const;
 const INTERNET = 'INTERNET' as const;
 const INTERNET_TV = 'INTERNET_TV' as const;
-const TV = 'TV' as const;
-const ADDRESS_CHECK = 'ADDRESS_CHECK' as const;
-const FAQ = 'FAQ' as const;
 
 function hashPassword(password: string) {
   const salt = randomBytes(16).toString('hex');
@@ -42,6 +40,21 @@ async function main() {
     },
   });
 
+  const globalPages = [
+    { type: 'COVERAGE', title: 'Карта покрытия', slug: 'karta-pokrytiya-provaydera', content: { releaseBlocker: 'Проверить и опубликовать вводный текст.' } },
+    { type: 'CITIES', title: 'Города обслуживания', slug: 'goroda-obsluzhivaniya', content: { releaseBlocker: 'Проверить и опубликовать вводный текст.' } },
+    { type: 'PRIVACY', title: 'Политика конфиденциальности', slug: 'politika-konfidencialnosti', content: { releaseBlocker: 'Требуется утвержденный юридический текст.' } },
+    { type: 'PERSONAL_DATA_CONSENT', title: 'Согласие на обработку персональных данных', slug: 'soglasie-na-obrabotku-personalnyh-dannyh', content: { releaseBlocker: 'Требуется утвержденный юридический текст.' } },
+  ] as const;
+  for (const page of globalPages) {
+    const existingPage = await prisma.page.findFirst({ where: { siteId: site.id, cityId: null, type: page.type } });
+    if (!existingPage) {
+      await prisma.page.create({
+        data: { ...page, siteId: site.id, cityId: null, status: DRAFT },
+      });
+    }
+  }
+
   const region = await prisma.region.upsert({
     where: { siteId_slug: { siteId: site.id, slug: 'tatarstan' } },
     update: { name: 'Республика Татарстан', phone: '8 (800) 555-72-44' },
@@ -69,11 +82,6 @@ async function main() {
 
   const pages = [
     { type: HOME, title: 'Домашний интернет в Казани', slug: '' },
-    { type: INTERNET, title: 'Домашний интернет в Казани', slug: 'internet' },
-    { type: INTERNET_TV, title: 'Интернет и ТВ в Казани', slug: 'internet-tv' },
-    { type: TV, title: 'Телевидение в Казани', slug: 'tv' },
-    { type: ADDRESS_CHECK, title: 'Проверка адреса в Казани', slug: 'proverka-adresa' },
-    { type: FAQ, title: 'Вопросы и ответы — Казань', slug: 'faq' },
   ] as const;
 
   for (const page of pages) {
@@ -177,68 +185,6 @@ async function main() {
           },
         ],
       });
-    }
-  }
-
-  const contentBlocks: Record<string, Array<{ blockType: string; position: number; data: Prisma.InputJsonObject }>> = {
-    internet: [
-      { blockType: 'hero', position: 10, data: { eyebrow: 'Дом.ру в Казани', title: 'Домашний интернет', text: 'Выберите подходящую скорость и проверьте возможность подключения по вашему адресу.', ctaText: 'Оставить заявку', ctaHref: '#request' } },
-      { blockType: 'tariff_grid', position: 20, data: { title: 'Тарифы домашнего интернета' } },
-      {
-        blockType: 'feature_grid',
-        position: 30,
-        data: {
-          title: 'Все необходимое для выбора',
-          items: [
-            { title: 'Проверка по адресу', text: 'До оформления заявки система уточняет техническую возможность подключения.' },
-            { title: 'Понятные условия', text: 'На карточке видны скорость, ежемесячная цена и стоимость подключения.' },
-            { title: 'Реальные тарифы', text: 'Страница показывает только опубликованные предложения домашнего интернета для города.' },
-          ],
-        },
-      },
-      {
-        blockType: 'steps',
-        position: 40,
-        data: {
-          title: 'Как подключиться',
-          items: [
-            { title: 'Укажите адрес', text: 'Начните вводить адрес и выберите точный вариант из подсказок.' },
-            { title: 'Оставьте телефон', text: 'Мы сохраним заявку только после заполнения контактного номера.' },
-            { title: 'Уточните условия', text: 'Оператор свяжется с вами и подтвердит доступные условия подключения.' },
-          ],
-        },
-      },
-      {
-        blockType: 'faq',
-        position: 50,
-        data: {
-          title: 'Вопросы о подключении',
-          items: [
-            { question: 'Как узнать, доступен ли интернет по моему адресу?', answer: 'Введите адрес в форме заявки и выберите точную подсказку. Система проверит доступность автоматически.' },
-            { question: 'Какие тарифы показаны на странице?', answer: 'Здесь отображаются опубликованные тарифы домашнего интернета, доступные для выбранного города.' },
-            { question: 'Когда будут известны точные условия подключения?', answer: 'Оператор подтвердит возможность, стоимость и дату подключения после проверки вашего адреса.' },
-          ],
-        },
-      },
-    ],
-    'internet-tv': [
-      { blockType: 'hero', position: 10, data: { eyebrow: 'Казань', title: 'Интернет и телевидение', text: 'Комплексные тарифы для дома с одной заявкой.', ctaText: 'Проверить адрес', ctaHref: '/kazan/proverka-adresa' } },
-      { blockType: 'tariff_grid', position: 20, data: { title: 'Тарифы интернет + ТВ' } },
-    ],
-    tv: [
-      { blockType: 'hero', position: 10, data: { eyebrow: 'Казань', title: 'Телевидение для дома', text: 'Оператор уточнит доступные варианты телевидения по вашему адресу.', ctaText: 'Оставить заявку', ctaHref: '/kazan/proverka-adresa' } },
-      { blockType: 'rich_text', position: 20, data: { title: 'Как подключиться', text: 'Проверьте адрес, выберите услугу и согласуйте дату подключения с оператором.' } },
-    ],
-    faq: [
-      { blockType: 'hero', position: 10, data: { eyebrow: 'Поддержка · Казань', title: 'Вопросы и ответы', text: 'Ответы о проверке адреса, тарифах и подключении.' } },
-      { blockType: 'rich_text', position: 20, data: { title: 'Как узнать, доступно ли подключение?', text: 'Введите адрес на странице проверки. Если автоматический ответ недоступен, заявку проверит оператор.' } },
-      { blockType: 'rich_text', position: 30, data: { title: 'Сколько занимает подключение?', text: 'Срок и дата зависят от технической возможности и согласуются после проверки адреса.' } },
-    ],
-  };
-  for (const [slug, blocks] of Object.entries(contentBlocks)) {
-    const page = await prisma.page.findUnique({ where: { cityId_slug: { cityId: city.id, slug } } });
-    if (page && await prisma.pageBlock.count({ where: { pageId: page.id } }) === 0) {
-      await prisma.pageBlock.createMany({ data: blocks.map((block) => ({ ...block, pageId: page.id })) });
     }
   }
 

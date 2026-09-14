@@ -92,7 +92,7 @@ test('validation exposes row, region diff and an existing snapshot for safe revi
   });
 });
 
-test('new city creates the standard draft page set', async () => {
+test('new city creates only one canonical draft city home', async () => {
   const pages = [];
   const calls = [];
   const prisma = {
@@ -112,8 +112,10 @@ test('new city creates the standard draft page set', async () => {
   const result = await service.applyReport(report, { aleysk: 'create' });
   calls.push(result);
   assert.equal(result.created, 1);
-  assert.equal(result.pagesCreated, 6);
-  assert.deepEqual(pages.map((page) => page.slug), ['home', 'internet', 'internet-tv', 'tv', 'proverka-adresa', 'faq']);
+  assert.equal(result.pagesCreated, 1);
+  assert.deepEqual(pages.map((page) => ({ type: page.type, slug: page.slug, status: page.status })), [
+    { type: 'HOME', slug: '', status: 'DRAFT' },
+  ]);
 });
 
 test('city import reuses a seed region with the same normalized slug', async () => {
@@ -211,10 +213,10 @@ test('city import applies an explicit create, update and skip action map atomica
     kazan: 'update', innopolis: 'skip', zelenodolsk: 'create',
   });
 
-  assert.deepEqual(result, { created: 1, updated: 1, skipped: 1, pagesCreated: 6 });
+  assert.deepEqual(result, { created: 1, updated: 1, skipped: 1, pagesCreated: 1 });
   assert.deepEqual(updated.map((item) => item.where.id), ['city-update']);
   assert.equal(created.length, 1);
-  assert.equal(pages.length, 6);
+  assert.equal(pages.length, 1);
   assert.equal(transactionOptions.isolationLevel, 'Serializable');
 });
 
@@ -405,4 +407,6 @@ test('city import CLI requires an operator-provided action map instead of invent
   assert.match(source, /JSON\.parse\(await readFile\(actionsPath/);
   assert.match(source, /runId:\s*validation\.runId,\s*actions/);
   assert.doesNotMatch(source, /candidate\.existingId\s*\?\s*'update'\s*:\s*'create'/);
+  assert.doesNotMatch(source, /CITY_IMPORT_PUBLISHED_SLUG/);
+  assert.doesNotMatch(source, /expectedStatus/);
 });

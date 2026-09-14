@@ -21,7 +21,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| TD-04 | [#5](https://github.com/Celtoman/astro-telekom/issues/5) ✅ | Public catalog и dynamic static paths из опубликованных City/Page/Tariff; сейчас опубликована только Казань |
+| TD-04 | [#5](https://github.com/Celtoman/astro-telekom/issues/5) ✅ | Базовый public catalog и multi-city static paths; текущая Release 1 policy дополнительно ограничивает маршруты |
 | TD-05 | [#6](https://github.com/Celtoman/astro-telekom/issues/6) ✅ | Persistent rebuild-job: dedupe, BullMQ retry/backoff, API-статус и финальный результат provider |
 | TD-06 | [#7](https://github.com/Celtoman/astro-telekom/issues/7) ✅ | Full-snapshot import атомарно удаляет отсутствующие тарифы, требует подтверждения warnings и создает redirects при ручной смене URL |
 | TD-07 | [#8](https://github.com/Celtoman/astro-telekom/issues/8) ✅ | Redirect CRUD, conflict/one-hop validation, build-generated Caddy routing, runtime HTTP 301 и hit tracking |

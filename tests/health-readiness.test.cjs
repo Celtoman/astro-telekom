@@ -195,3 +195,17 @@ test('bootstrap seed does not republish demo tariffs over an imported city catal
   assert.ok(demoLoopAt > countAt, 'catalog guard must run before demo tariff upserts');
   assert.match(seedSource.slice(countAt, demoLoopAt + 2000), /if \(existingTariffCount === 0\)/);
 });
+
+test('bootstrap seed creates only the Release 1 page skeleton and keeps legal content in draft', () => {
+  const seedSource = readFileSync(join(repositoryRoot, 'apps', 'api', 'src', 'seed.ts'), 'utf8');
+
+  assert.match(seedSource, /type: 'COVERAGE'[\s\S]*slug: 'karta-pokrytiya-provaydera'/);
+  assert.match(seedSource, /type: 'CITIES'[\s\S]*slug: 'goroda-obsluzhivaniya'/);
+  assert.match(seedSource, /type: 'PRIVACY'[\s\S]*slug: 'politika-konfidencialnosti'/);
+  assert.match(seedSource, /type: 'PERSONAL_DATA_CONSENT'[\s\S]*slug: 'soglasie-na-obrabotku-personalnyh-dannyh'/);
+  assert.match(seedSource, /globalPages[\s\S]*status: DRAFT/);
+  assert.match(seedSource, /const pages = \[\s*\{ type: HOME,[\s\S]*?\] as const;/);
+  const cityPages = seedSource.match(/const pages = \[([\s\S]*?)\] as const;/)?.[1] || '';
+  assert.doesNotMatch(cityPages, /INTERNET|TV|ADDRESS_CHECK|FAQ/);
+  assert.doesNotMatch(seedSource, /const contentBlocks/);
+});

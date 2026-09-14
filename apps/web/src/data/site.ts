@@ -6,6 +6,7 @@ export interface PageView {
   slug: string;
   title?: string;
   status: string;
+  content?: Record<string, unknown> | null;
   seo?: Record<string, unknown> | null;
   blocks?: Array<{ blockType: string; data: Record<string, unknown> }>;
 }
@@ -34,8 +35,18 @@ export interface RedirectView {
   status: string;
 }
 
+export interface PublicRouteView {
+  id: string;
+  kind: 'HOME' | 'CITY_HOME' | 'GLOBAL_PAGE';
+  path: string;
+  citySlug?: string;
+  pageType?: string;
+}
+
 export interface SiteCatalog {
   site: SiteView;
+  globalPages: PageView[];
+  routes: PublicRouteView[];
   cities: CityView[];
   redirects: RedirectView[];
 }
@@ -47,26 +58,70 @@ const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const redirectIdPattern = /^[a-zA-Z0-9_-]+$/;
 const redirectPathPattern = /^\/[a-z0-9._~/-]*$/;
 
-function assertUniquePublishedPaths(cities: CityView[]) {
+export const releaseOneGlobalPages = [
+  { type: 'COVERAGE', slug: 'karta-pokrytiya-provaydera' },
+  { type: 'CITIES', slug: 'goroda-obsluzhivaniya' },
+  { type: 'PRIVACY', slug: 'politika-konfidencialnosti' },
+  { type: 'PERSONAL_DATA_CONSENT', slug: 'soglasie-na-obrabotku-personalnyh-dannyh' },
+] as const;
+
+function normalizePage(item: Record<string, any>): PageView {
+  return {
+    ...item,
+    type: String(item.type || ''),
+    slug: String(item.slug || ''),
+    status: 'PUBLISHED',
+    content: item.content && typeof item.content === 'object' ? item.content : {},
+    seo: item.seo && typeof item.seo === 'object' ? item.seo : {},
+    blocks: Array.isArray(item.blocks) ? item.blocks : [],
+  };
+}
+
+function expectedReleaseOneRoutes(cities: CityView[], globalPages: PageView[]): PublicRouteView[] {
+  const pagesByType = new Map(globalPages.map((page) => [page.type, page]));
+  if (pagesByType.size !== releaseOneGlobalPages.length || globalPages.length !== releaseOneGlobalPages.length) {
+    throw new Error(`Release 1 требует ровно ${releaseOneGlobalPages.length} опубликованные общие страницы`);
+  }
+
+  const routes: PublicRouteView[] = [{ id: 'HOME', kind: 'HOME', path: '/' }];
+  const occupiedPaths = new Set(['/']);
+  for (const expected of releaseOneGlobalPages) {
+    const page = pagesByType.get(expected.type);
+    if (!page) throw new Error(`Не опубликована обязательная общая страница Release 1: ${expected.type}`);
+    if (page.slug !== expected.slug) throw new Error(`Некорректный slug общей страницы ${expected.type}: ожидается ${expected.slug}`);
+    const path = publicHtmlPath(expected.slug);
+    occupiedPaths.add(path);
+    routes.push({ id: expected.type, kind: 'GLOBAL_PAGE', path, pageType: expected.type });
+  }
+
   const citySlugs = new Set<string>();
   for (const city of cities) {
     if (citySlugs.has(city.slug)) throw new Error(`Конфликт опубликованного URL /${city.slug}: дублируется slug города`);
     citySlugs.add(city.slug);
-    const resources = new Map<string, string>();
-    const register = (slug: string, owner: string) => {
-      if (!slugPattern.test(slug)) throw new Error(`Некорректный slug опубликованного ресурса в городе ${city.slug}: ${slug || '(пусто)'}`);
-      const current = resources.get(slug);
-      if (current) throw new Error(`Конфликт опубликованного URL /${city.slug}/${slug}: ${current} и ${owner}`);
-      resources.set(slug, owner);
-    };
-    for (const page of city.pages) {
-      if (page.type !== 'HOME' && page.type !== 'TARIFF') register(page.slug, `страница ${page.type}`);
-    }
-    for (const tariff of city.tariffs) register(tariff.slug, `тариф ${tariff.name}`);
+    const path = publicHtmlPath(city.slug);
+    if (occupiedPaths.has(path)) throw new Error(`Конфликт маршрута Release 1: ${path}`);
+    occupiedPaths.add(path);
+    routes.push({ id: 'CITY_HOME', kind: 'CITY_HOME', path, citySlug: city.slug });
   }
+  return routes;
 }
 
-function normalizeRedirects(value: unknown, cities: CityView[]): RedirectView[] {
+function normalizeRoutes(value: unknown, expected: PublicRouteView[]) {
+  if (!Array.isArray(value)) throw new Error('API не вернул реестр маршрутов Release 1');
+  const routes = value.map((item: Record<string, unknown>) => ({
+    id: String(item.id || ''),
+    kind: String(item.kind || '') as PublicRouteView['kind'],
+    path: normalizePublicHtmlPath(String(item.path || '')),
+    ...(item.citySlug ? { citySlug: String(item.citySlug) } : {}),
+    ...(item.pageType ? { pageType: String(item.pageType) } : {}),
+  }));
+  if (JSON.stringify(routes) !== JSON.stringify(expected)) {
+    throw new Error('API вернул реестр маршрутов, который не соответствует структуре Release 1');
+  }
+  return routes;
+}
+
+function normalizeRedirects(value: unknown, routes: PublicRouteView[]): RedirectView[] {
   const redirects = (Array.isArray(value) ? value : [])
     .filter((item: Record<string, unknown>) => item?.status === 'PUBLISHED')
     .map((item: Record<string, unknown>) => ({
@@ -75,13 +130,7 @@ function normalizeRedirects(value: unknown, cities: CityView[]): RedirectView[] 
       targetPath: normalizePublicHtmlPath(String(item.targetPath || '')),
       status: 'PUBLISHED',
     }));
-  const routePaths = new Set(['/']);
-  for (const city of cities) {
-    const cityPath = publicHtmlPath(city.slug);
-    routePaths.add(cityPath);
-    for (const page of city.pages) if (page.type !== 'HOME' && page.type !== 'TARIFF') routePaths.add(publicHtmlPath(city.slug, page.slug));
-    for (const tariff of city.tariffs) routePaths.add(publicHtmlPath(city.slug, tariff.slug));
-  }
+  const routePaths = new Set(routes.map((route) => route.path));
   const sourcePaths = new Set<string>();
   for (const redirect of redirects) {
     if (!redirectIdPattern.test(redirect.id)) throw new Error('Некорректный id опубликованного redirect');
@@ -102,37 +151,40 @@ function normalizeRedirects(value: unknown, cities: CityView[]): RedirectView[] 
   return redirects;
 }
 
-const demoPages: PageView[] = [
-  { type: 'HOME', slug: '', title: 'Домашний интернет в Казани', status: 'PUBLISHED', seo: {}, blocks: [] },
-  { type: 'INTERNET', slug: 'internet', title: 'Домашний интернет в Казани', status: 'PUBLISHED', seo: {}, blocks: [] },
-  { type: 'INTERNET_TV', slug: 'internet-tv', title: 'Интернет и ТВ в Казани', status: 'PUBLISHED', seo: {}, blocks: [] },
-  { type: 'TV', slug: 'tv', title: 'Телевидение в Казани', status: 'PUBLISHED', seo: {}, blocks: [] },
-  { type: 'ADDRESS_CHECK', slug: 'proverka-adresa', title: 'Проверка адреса в Казани', status: 'PUBLISHED', seo: {}, blocks: [] },
-  { type: 'FAQ', slug: 'faq', title: 'Вопросы и ответы — Казань', status: 'PUBLISHED', seo: {}, blocks: [] },
+const demoGlobalPages: PageView[] = [
+  { type: 'COVERAGE', slug: 'karta-pokrytiya-provaydera', title: 'Карта покрытия', status: 'PUBLISHED', content: { text: 'Выберите город и проверьте возможность подключения по адресу.' } },
+  { type: 'CITIES', slug: 'goroda-obsluzhivaniya', title: 'Города обслуживания', status: 'PUBLISHED', content: { text: 'Список опубликованных городов обслуживания.' } },
+  { type: 'PRIVACY', slug: 'politika-konfidencialnosti', title: 'Политика конфиденциальности', status: 'PUBLISHED', content: { text: 'Демонстрационный текст политики конфиденциальности.' } },
+  { type: 'PERSONAL_DATA_CONSENT', slug: 'soglasie-na-obrabotku-personalnyh-dannyh', title: 'Согласие на обработку персональных данных', status: 'PUBLISHED', content: { text: 'Демонстрационный текст согласия на обработку персональных данных.' } },
 ];
-
+const demoCities: CityView[] = [{
+  name: 'Казань',
+  nameIn: 'Казани',
+  slug: 'kazan',
+  phone: fallbackConnectionPhone,
+  supportPhone: fallbackSupportPhone,
+  status: 'PUBLISHED',
+  pages: [{ type: 'HOME', slug: '', title: 'Домашний интернет в Казани', status: 'PUBLISHED', seo: {}, blocks: [] }],
+  tariffs: [
+    tariffView({ slug: 'internet-300', name: 'Интернет 300 Мбит/с', serviceType: 'INTERNET', speed: 300 }),
+    tariffView({ slug: 'internet-tv-500', name: 'Интернет + ТВ 500 Мбит/с', serviceType: 'INTERNET_TV', speed: 500 }),
+  ],
+}];
+const demoRoutes = expectedReleaseOneRoutes(demoCities, demoGlobalPages);
 const demoCatalog: SiteCatalog = {
   site: { name: 'Дом.ру', slug: publicSiteSlug },
+  globalPages: demoGlobalPages,
+  routes: demoRoutes,
   redirects: [],
-  cities: [{
-    name: 'Казань',
-    nameIn: 'Казани',
-    slug: 'kazan',
-    phone: fallbackConnectionPhone,
-    supportPhone: fallbackSupportPhone,
-    status: 'PUBLISHED',
-    pages: demoPages,
-    tariffs: [
-      tariffView({ slug: 'internet-300', name: 'Интернет 300 Мбит/с', serviceType: 'INTERNET', speed: 300 }),
-      tariffView({ slug: 'internet-tv-500', name: 'Интернет + ТВ 500 Мбит/с', serviceType: 'INTERNET_TV', speed: 500 }),
-    ],
-  }],
+  cities: demoCities,
 };
 
 function normalizedCatalog(value: unknown): SiteCatalog {
   if (!value || typeof value !== 'object') throw new Error('API вернул некорректный каталог');
   const payload = value as Record<string, any>;
-  if (!payload.site || !Array.isArray(payload.cities)) throw new Error('API вернул неполный каталог');
+  if (!payload.site || !Array.isArray(payload.cities) || !Array.isArray(payload.globalPages)) {
+    throw new Error('API вернул неполный каталог Release 1');
+  }
   const cities = payload.cities
     .filter((item: Record<string, unknown>) => item?.status === 'PUBLISHED')
     .map((item: Record<string, any>) => {
@@ -147,25 +199,29 @@ function normalizedCatalog(value: unknown): SiteCatalog {
         status: 'PUBLISHED',
         pages: (Array.isArray(item.pages) ? item.pages : [])
           .filter((page: Record<string, unknown>) => page?.status === 'PUBLISHED')
-          .map((page: Record<string, any>) => ({ ...page, type: String(page.type), slug: String(page.slug || ''), status: 'PUBLISHED' })),
+          .map((page: Record<string, any>) => normalizePage(page)),
         tariffs: (Array.isArray(item.tariffs) ? item.tariffs : [])
           .filter((tariff: Record<string, unknown>) => tariff?.status === 'PUBLISHED')
           .map((tariff: Record<string, unknown>) => tariffView(tariff)),
       } satisfies CityView;
     });
-
-  assertUniquePublishedPaths(cities);
-  const redirects = normalizeRedirects(payload.redirects, cities);
-  const catalog: SiteCatalog = {
+  const globalPages = payload.globalPages
+    .filter((item: Record<string, unknown>) => item?.status === 'PUBLISHED')
+    .map((item: Record<string, any>) => normalizePage(item));
+  const expectedRoutes = expectedReleaseOneRoutes(cities, globalPages);
+  const routes = normalizeRoutes(payload.routes, expectedRoutes);
+  const redirects = normalizeRedirects(payload.redirects, routes);
+  return {
     site: {
       name: String(payload.site.name || 'Дом.ру'),
       slug: String(payload.site.slug || publicSiteSlug),
       domain: typeof payload.site.domain === 'string' ? payload.site.domain : null,
     },
+    globalPages,
+    routes,
     cities,
     redirects,
   };
-  return catalog;
 }
 
 let catalogPromise: Promise<SiteCatalog> | undefined;

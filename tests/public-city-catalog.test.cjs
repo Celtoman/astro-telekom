@@ -1,6 +1,20 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { CitiesController } = require('../apps/api/dist/cities.controller.js');
+const { buildReleaseOneRoutes } = require('../apps/api/dist/public-route-policy.js');
+
+const releaseOneGlobalPages = [
+  { type: 'COVERAGE', slug: 'karta-pokrytiya-provaydera' },
+  { type: 'CITIES', slug: 'goroda-obsluzhivaniya' },
+  { type: 'PRIVACY', slug: 'politika-konfidencialnosti' },
+  { type: 'PERSONAL_DATA_CONSENT', slug: 'soglasie-na-obrabotku-personalnyh-dannyh' },
+];
+
+test('Release 1 route policy rejects missing, extra and colliding route sources', () => {
+  assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], releaseOneGlobalPages.slice(0, 3)), /Не опубликована обязательная/);
+  assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], [...releaseOneGlobalPages, { type: 'FAQ', slug: 'faq' }]), /ровно 4/);
+  assert.throws(() => buildReleaseOneRoutes([{ slug: 'goroda-obsluzhivaniya' }], releaseOneGlobalPages), /Конфликт маршрута Release 1/);
+});
 
 test('public city catalog returns only published entities for one published site', async () => {
   const calls = {};
@@ -42,6 +56,17 @@ test('public city catalog returns only published entities for one published site
         }];
       },
     },
+    page: {
+      findMany: async (query) => {
+        calls.pages = query;
+        return [
+          { id: 'coverage', siteId: 'site-1', cityId: null, slug: 'karta-pokrytiya-provaydera', type: 'COVERAGE', title: 'Карта покрытия', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
+          { id: 'cities', siteId: 'site-1', cityId: null, slug: 'goroda-obsluzhivaniya', type: 'CITIES', title: 'Города обслуживания', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
+          { id: 'privacy', siteId: 'site-1', cityId: null, slug: 'politika-konfidencialnosti', type: 'PRIVACY', title: 'Политика конфиденциальности', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
+          { id: 'consent', siteId: 'site-1', cityId: null, slug: 'soglasie-na-obrabotku-personalnyh-dannyh', type: 'PERSONAL_DATA_CONSENT', title: 'Согласие', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
+        ];
+      },
+    },
     redirect: {
       findMany: async (query) => {
         calls.redirects = query;
@@ -62,6 +87,8 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(calls.cities.include.pages.include.blocks.where, { visible: true });
   assert.deepEqual(calls.cities.include.pages.include.blocks.orderBy, [{ position: 'asc' }, { id: 'asc' }]);
   assert.deepEqual(calls.cities.include.tariffs.where, { status: 'PUBLISHED' });
+  assert.deepEqual(calls.pages.where, { siteId: 'site-1', cityId: null, status: 'PUBLISHED' });
+  assert.deepEqual(calls.pages.include.blocks.where, { visible: true });
   assert.deepEqual(calls.redirects.where, { siteId: 'site-1', status: 'PUBLISHED' });
   assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test' });
   assert.equal(result.cities.length, 1);
@@ -70,6 +97,15 @@ test('public city catalog returns only published entities for one published site
   assert.equal(result.cities[0].pages[0].slug, 'internet');
   assert.equal(result.cities[0].pages[0].blocks[0].blockType, 'hero');
   assert.equal(result.cities[0].tariffs[0].slug, 'giga-500');
+  assert.deepEqual(result.globalPages.map((page) => page.type), ['COVERAGE', 'CITIES', 'PRIVACY', 'PERSONAL_DATA_CONSENT']);
+  assert.deepEqual(result.routes.map((route) => route.path), [
+    '/',
+    '/karta-pokrytiya-provaydera',
+    '/goroda-obsluzhivaniya',
+    '/politika-konfidencialnosti',
+    '/soglasie-na-obrabotku-personalnyh-dannyh',
+    '/kazan',
+  ]);
   assert.deepEqual(result.redirects, [{ id: 'redirect-1', sourcePath: '/old', targetPath: '/kazan', status: 'PUBLISHED' }]);
 });
 
@@ -127,6 +163,7 @@ test('public city catalog rejects an unpublished or unknown site', async () => {
   const controller = new CitiesController({
     site: { findFirst: async () => null },
     city: { findMany: async () => assert.fail('cities queried for missing site') },
+    page: { findMany: async () => assert.fail('pages queried for missing site') },
     redirect: { findMany: async () => assert.fail('redirects queried for missing site') },
   });
 

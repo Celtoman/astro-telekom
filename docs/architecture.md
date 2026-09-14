@@ -2,13 +2,13 @@
 
 ## Статус архитектуры
 
-В репозитории реализован прототип статической витрины Дом.ру с защищенным внешним test-контуром в Coolify. Архитектура разделяет public web, admin, backoffice API и worker. Публичная маршрутизация строит static paths из опубликованных `City`, `Page` и `Tariff`; в текущей базе опубликована только Казань, поэтому реальный output пока остается одногородским.
+В репозитории реализован прототип статической витрины Дом.ру с защищенным внешним test-контуром в Coolify. Архитектура разделяет public web, admin, backoffice API и worker. Публичная маршрутизация строит static paths из отдельного Release 1 route inventory: корень, четыре site-global страницы и HOME каждого опубликованного города. Статусы content records и принадлежность URL текущему релизу намеренно разделены.
 
 ## Стек и приложения
 
 | Зона | Реализация | Назначение |
 | --- | --- | --- |
-| `apps/web` | Astro 7, static output | SEO HTML и sitemap из опубликованных городов, страниц и тарифов; build генерирует Caddy routes опубликованных редиректов. Переиспользуемая адресная форма имеет два режима: обычная заявка на страницах услуг/тарифов и отдельная видимая проверка подключения. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
+| `apps/web` | Astro 7, static output | SEO HTML и sitemap строго из Release 1 inventory; build генерирует Caddy routes только для редиректов с target внутри того же inventory. Переиспользуемая адресная форма встроена в HOME каждого города, а карточки предложений ведут к ней без detail URL. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
 | `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, каталоги `/tariffs` и `/cities`, отдельные `/tariffs/import` и `/cities/import`, длинная форма `/tariffs/edit`, `/leads`, `/redirects` и `/lead-access/` реализованы как React-root с runtime API-запросами. Sidebar поддерживает вложенные рабочие сценарии «Каталог»/«Импорт». Legacy demo удален; заявки доступны как реальный master-detail журнал, редиректы — как CRUD со статистикой переходов. Целевой референс паттернов — next-shadcn-admin-dashboard-aria; текущие Radix-примитивы еще требуют миграции [#97](https://github.com/Celtoman/astro-telekom/issues/97), см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов, обычных оповещений, пересборок сайта и ежедневной PII retention; также слушает пока не используемую import-очередь. |
@@ -56,14 +56,14 @@ PII retention scheduler в worker
 
 Публичные формы имеют два реализованных flow. Обычная заявка принимает адрес и телефон сразу, под капотом получает и сохраняет результат Tarifnik `address/check`, а посетителю отвечает только коротким подтверждением. DaData ищет адрес глобально: при первом вводе IPLocate дает только мягкий КЛАДР-приоритет, который на 24 часа кешируется в HttpOnly-cookie; ошибка геолокации использует пару «регион + город страницы», но ни один boost не ограничивает фактическую географию заявки. Город опубликованной страницы сохраняется как source-контекст. Если найден хотя бы один провайдер, выполняется проверка действующего абонента через API Дом.ру независимо от наличия Дом.ру в списке; городской профиль выбирается по фактическим данным DaData из встроенного справочника 551 уникального профиля и 37 региональных fallback. `lead-deliveries` разрешается только при одновременном выполнении двух условий: Tarifnik подтвердил Дом.ру, а Dom.ru вернул валидный ответ с явным `contacts: []`. Действующий абонент, отсутствие Дом.ру, отсутствие провайдеров и любой неоднозначный или ошибочный ответ доставку блокируют. Видимая проверка сначала создает только `AddressCheck`: телефон запрашивается лишь при найденном Дом.ру, альтернативы ведут на `tarifnik.ru`, а пустой список показывает телефон технической поддержки. Все адресные поля выбирают подсказку DaData, а credentials остаются в API. После подтверждения действующего абонента API возвращает только UI-флаг; browser на 30 дней заменяет номера подключения на отдельный номер техподдержки, а server-side routing не читает и не доверяет этой browser-отметке.
 
-В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities` через server-only `SITE_DATA_API_URL` (с совместимым fallback на `PUBLIC_API_URL`), нормализует все HTML paths кроме `/` без завершающего слэша, валидирует уникальность каждого публичного пути, отсутствие redirect-цепочек и существование каждой цели. Отдельный `PUBLIC_API_URL` встраивается в `data-*` конфигурацию browser-форм и не обязан совпадать с внутренним источником каталога; обработчики формы собираются Astro/Vite как first-party module, чтобы CSP не зависела от динамического inline-кода. Web генерирует HTML только для опубликованного каталога и `redirects.caddy` только для опубликованных редиректов; при сборке container image этот файл переносится из document root в `/etc/caddy`. Сохраненные redirects имеют приоритет, затем Caddy одним 301 нормализует slash-варианты HTML с сохранением query string; API и assets исключены. `PUBLIC_SITE_SLUG` выбирает сайт, по умолчанию `domru-kazan`. В runtime статические страницы не читают PostgreSQL; только совпавший старый URL проксируется внутренним Caddy в API для актуальной проверки статуса, HTTP 301 и атомарного учета перехода. Изменение каталога или правила требует успешной пересборки.
+В build-time `apps/web` вызывает `GET /public/sites/:siteSlug/cities` через server-only `SITE_DATA_API_URL` (с совместимым fallback на `PUBLIC_API_URL`). API возвращает `globalPages`, контент опубликованных городов и authoritative `routes`: `/`, четыре точных global path и `/{city.slug}` каждого `PUBLISHED` города. Чистая policy-функция запрещает отсутствие/избыток общих страниц, неверный slug, дубли и коллизии; web повторно сверяет контракт и строит sitemap только из него. Опубликованные service pages и тарифы передаются как данные для HOME, но URL не получают. Отдельный `PUBLIC_API_URL` встраивается в `data-*` browser-форм. `redirects.caddy` получает только правила с target из inventory; runtime resolver строит ту же policy по живой БД перед HTTP 301 и hit tracking. Все HTML paths кроме `/` нормализуются без завершающего слэша. `PUBLIC_SITE_SLUG` по умолчанию `domru-kazan`; любое изменение данных требует успешной пересборки.
 
 ## API-модули и их ответственность
 
 | Модуль | Реальная ответственность |
 | --- | --- |
 | `auth` и `AdminTokenGuard` | Создание 12-часовой сессии, browser login/me/logout через HttpOnly cookie и совместимый Bearer для технических клиентов. `x-admin-token` — машинный credential; `/internal/*` принимает только его. |
-| `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; блоки имеют отдельную строгую валидацию, остальные admin bodies частично проверяются вручную. |
+| `cities`, `regions`, `providers`, `sites`, `pages`, `blocks` | CRUD главных CMS-сущностей; `Page` бывает city-scoped или одним из четырех site-global типов, scope и global slug защищены API и БД; блоки имеют отдельную строгую валидацию. |
 | `tariff-import`, `city-import` | Валидация XLSX, сохранение отчета, transactional apply. |
 | `address-suggestions`, `dadata`, `address-checks`, `coverage` | Серверные глобальные DaData IPLocate/suggest/clean: IP используется один раз для мягкого boost и не сохраняется, жесткого ограничения городом формы нет; официальный Tarifnik `address/check` получает фактический адрес пользователя, словарь провайдеров нормализуется, проверенный snapshot сохраняется без публикации raw response. |
 | `leads`, `domru-contract`, `domru-profile-catalog`, `lead-delivery`, `lead-notification-outbox`, `notifications`, `lead-access` | Сохранение лида, дедупликация, выбор регионально однозначного профиля Дом.ру, fail-closed routing, строгая проверка действующего договора и только затем официальный `appeal/create`, retry только временных ошибок, queue failure tracking, email fallback и одноразовый доступ из fallback-письма. Обычное оповещение атомарно получает persistent outbox, startup recovery, bounded retry, idempotency header и отдельный admin retry. Worker повторно проверяет наличие целевого провайдера и persisted `NOT_FOUND`; delivery retry доступен только для recoverable delivery/queue states или старого orphan `PENDING`, но не для ручных/отрицательных routing-исходов. |
@@ -81,8 +81,8 @@ PII retention scheduler в worker
 ## Модель публикации
 
 1. Сущности `Site`, `City`, `Page`, `Tariff` имеют статус `DRAFT`, `PUBLISHED` или `ARCHIVED`.
-2. Public API возвращает только опубликованные город, страницы и тарифы.
-3. Astro получает этот срез во время сборки и выпускает static HTML.
+2. Public API возвращает опубликованные данные, но отдельно применяет release policy к URL.
+3. Astro получает authoritative inventory и выпускает `N + 5` indexable HTML для `N` опубликованных городов плюс общую 404.
 4. CRUD API сохраняет/обновляет `SiteRebuild` и ставит BullMQ job; изменения одного сайта дедуплицируются, но счетчик ревизий не дает потерять изменение во время активной сборки.
 5. Worker получает попытку через internal API, вызывает deployment provider и сохраняет результат через API; только явный `{ status: "SUCCEEDED" }` обновляет `publishedRevision`.
 
@@ -90,7 +90,7 @@ PII retention scheduler в worker
 
 ## Что не является частью текущей реализации
 
-- Одновременная эксплуатационная публикация нескольких городов и сайтов: код строит multi-city static routes, но в текущих данных опубликована только Казань, а импорт пока односайтовый.
+- Одновременная эксплуатационная публикация нескольких сайтов: route policy поддерживает любое число опубликованных городов одного выбранного сайта, но импорт пока односайтовый, а production-доказательство новых global pages еще не выполнено.
 - SSR и runtime data fetching на публичных SEO-страницах.
 - Полная CMS с наследованием блоков, версиями и preview.
 - Аудит действий, общая корзина и аналитический контур; для редиректов отдельно реализовано мягкое архивирование и счетчики переходов.

@@ -34,7 +34,7 @@ function fixture({ pageConflict = false, tariffConflict = false, redirectConflic
   return { controller, createdRedirects, flattenedRedirects, rebuilds, getUpdatedTariff: () => updatedTariff };
 }
 
-test('manual published tariff slug change creates a 301 redirect atomically', async () => {
+test('manual published tariff slug change creates a managed redirect record atomically', async () => {
   const f = fixture();
 
   await f.controller.update('tariff-1', { expectedUpdatedAt: '2026-09-10T00:00:00.000Z', slug: 'new-slug', confirmSensitiveChanges: true });

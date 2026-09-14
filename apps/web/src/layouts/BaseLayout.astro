@@ -2,7 +2,7 @@
 import { createHash } from 'node:crypto';
 import '@fontsource-variable/geist';
 import type { CityView, PageView } from '../data/site';
-import { normalizePublicHtmlPath, publicHtmlPath } from '../data/public-url';
+import { normalizePublicHtmlPath } from '../data/public-url';
 
 interface Props {
   title: string;
@@ -12,25 +12,16 @@ interface Props {
   indexable?: boolean;
 }
 
-const { title, description, city, pages, indexable = true } = Astro.props as Props;
-const resolvedPages: PageView[] = pages || city?.pages || [];
+const { title, description, city, indexable = true } = Astro.props as Props;
 const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
 const connectionPhone = city?.phone || import.meta.env.PUBLIC_CONNECTION_PHONE || '8 (800) 000-00-00';
 const connectionPhoneHref = `tel:${connectionPhone.replace(/[^+\d]/g, '')}`;
 const supportPhone = city?.supportPhone || import.meta.env.PUBLIC_SUPPORT_PHONE || connectionPhone;
 const supportPhoneHref = `tel:${supportPhone.replace(/[^+\d]/g, '')}`;
-const cityRoot = city ? publicHtmlPath(city.slug) : '/';
-const pageByType = new Map<string, PageView>(resolvedPages.map((page) => [page.type, page]));
 const navItems = [
-  ['INTERNET', 'Интернет'],
-  ['INTERNET_TV', 'Интернет + ТВ'],
-  ['TV', 'Телевидение'],
-  ['ADDRESS_CHECK', 'Проверка адреса'],
-].flatMap(([type, label]) => {
-  const page = pageByType.get(type);
-  return city && page?.slug ? [{ href: publicHtmlPath(city.slug, page.slug), label }] : [];
-});
-const faqPage = pageByType.get('FAQ');
+  { href: '/goroda-obsluzhivaniya', label: 'Города' },
+  { href: '/karta-pokrytiya-provaydera', label: 'Карта покрытия' },
+];
 const canonicalUrl = new URL(normalizePublicHtmlPath(Astro.url.pathname), Astro.site);
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
@@ -62,10 +53,10 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
   <body>
     <header class="site-header">
       <div class="container header-inner">
-        <a class="brand" href={cityRoot}><strong>Дом.ру</strong><span>{city ? `подключение в ${city.nameIn}` : 'домашние услуги'}</span></a>
-        {navItems.length > 0 && <nav aria-label="Основная навигация">
+        <a class="brand" href="/"><strong>Дом.ру</strong><span>{city ? `подключение в ${city.nameIn}` : 'домашние услуги'}</span></a>
+        <nav aria-label="Основная навигация">
           {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
-        </nav>}
+        </nav>
         <a class="phone subscriber-phone" href={connectionPhoneHref} data-support-phone={supportPhone} data-support-phone-href={supportPhoneHref}>{connectionPhone}</a>
       </div>
     </header>
@@ -75,7 +66,9 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     <footer class="site-footer">
       <div class="container footer-inner">
         <span>{city ? `Подключение домашнего интернета в ${city.nameIn}` : 'Подключение домашнего интернета'}</span>
-        {city && faqPage?.slug && <a href={publicHtmlPath(city.slug, faqPage.slug)}>Вопросы и ответы</a>}
+        <a href="/goroda-obsluzhivaniya">Города обслуживания</a>
+        <a href="/politika-konfidencialnosti">Политика конфиденциальности</a>
+        <a href="/soglasie-na-obrabotku-personalnyh-dannyh">Согласие на обработку данных</a>
       </div>
     </footer>
     <script>
@@ -130,6 +123,8 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
   .container { width: min(1200px, calc(100% - 32px)); margin: 0 auto; }
   .site-header { position: relative; z-index: 30; background: #fff; border-bottom: 1px solid #e7eaf0; }
   .header-inner, .footer-inner { min-height: 72px; display: flex; align-items: center; gap: 24px; }
+  .footer-inner { flex-wrap: wrap; }
+  .footer-inner span { margin-right: auto; }
   .brand { display: grid; margin-right: auto; text-decoration: none; line-height: 1; }
   .brand strong { font-size: 20px; font-weight: 850; letter-spacing: -.04em; }
   .brand span { margin-top: 5px; color: #697789; font-size: 11px; font-weight: 650; }

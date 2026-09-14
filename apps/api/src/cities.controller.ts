@@ -3,6 +3,7 @@ import { PrismaService } from './prisma.service';
 import { mergeContent, publicContent } from './content-resolution';
 import { normalizeRedirectPath } from './redirect.service';
 import { validatePublishedBlocks } from './block-validation';
+import { buildReleaseOneRoutes } from './public-route-policy';
 
 @Controller('public/sites/:siteSlug/cities')
 export class CitiesController {
@@ -16,7 +17,7 @@ export class CitiesController {
     });
     if (!site) throw new NotFoundException('Site not found');
 
-    const [cities, redirects] = await Promise.all([
+    const [cities, globalPages, redirects] = await Promise.all([
       this.prisma.city.findMany({
         where: { siteId: site.id, status: 'PUBLISHED' },
         orderBy: { name: 'asc' },
@@ -26,6 +27,11 @@ export class CitiesController {
           tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
         },
       }),
+      this.prisma.page.findMany({
+        where: { siteId: site.id, cityId: null, status: 'PUBLISHED' },
+        orderBy: { createdAt: 'asc' },
+        include: { blocks: { where: { visible: true }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+      }),
       this.prisma.redirect.findMany({
         where: { siteId: site.id, status: 'PUBLISHED' },
         orderBy: { sourcePath: 'asc' },
@@ -33,9 +39,13 @@ export class CitiesController {
       }),
     ]);
 
+    const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
+    const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages);
     return {
       site: { name: site.name, slug: site.slug, domain: site.domain },
-      redirects: this.effectiveRedirects(cities, redirects),
+      globalPages: resolvedGlobalPages,
+      routes,
+      redirects: this.effectiveRedirects(routes, redirects),
       cities: cities.map((city: any) => this.cityResponse(city, site)),
     };
   }
@@ -70,14 +80,7 @@ export class CitiesController {
       ...cityData,
       content: inheritedContent,
       seo: inheritedSeo,
-      pages: pages.map((page: any) => {
-        validatePublishedBlocks(page.blocks);
-        return {
-          ...page,
-          content: mergeContent(inheritedContent, page.content),
-          seo: mergeContent(inheritedSeo, page.seo),
-        };
-      }),
+      pages: pages.map((page: any) => this.pageResponse(page, inheritedContent, inheritedSeo)),
       tariffs: tariffs.map((tariff: any) => ({
         ...tariff,
         seo: mergeContent(inheritedSeo, tariff.seo),
@@ -85,14 +88,17 @@ export class CitiesController {
     };
   }
 
-  private effectiveRedirects(cities: any[], redirects: Array<{ id: string; sourcePath: string; targetPath: string; status: string }>) {
-    const publishedPaths = new Set(['/']);
-    for (const city of cities) {
-      const cityPath = `/${city.slug}`;
-      publishedPaths.add(cityPath);
-      for (const page of city.pages) if (page.type !== 'HOME' && page.type !== 'TARIFF') publishedPaths.add(`${cityPath}/${page.slug}`);
-      for (const tariff of city.tariffs) publishedPaths.add(`${cityPath}/${tariff.slug}`);
-    }
+  private pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>) {
+    validatePublishedBlocks(page.blocks);
+    return {
+      ...page,
+      content: mergeContent(inheritedContent, page.content),
+      seo: mergeContent(inheritedSeo, page.seo),
+    };
+  }
+
+  private effectiveRedirects(routes: Array<{ path: string }>, redirects: Array<{ id: string; sourcePath: string; targetPath: string; status: string }>) {
+    const publishedPaths = new Set(routes.map((route) => route.path));
     return redirects.flatMap((redirect) => {
       try {
         const sourcePath = normalizeRedirectPath(redirect.sourcePath, 'sourcePath');

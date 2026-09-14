@@ -8,12 +8,12 @@
 
 - Monorepo, Docker Compose, Prisma migrations и seed.
 - NestJS API, HttpOnly-cookie/совместимые Bearer-сессии с единым уровнем доступа администратора и CRUD базовых сущностей.
-- Статический Astro-сайт с dynamic paths для опубликованных городов, страниц и тарифов; в текущей базе опубликована только Казань.
+- Статический Astro-сайт с Release 1 route inventory и страницей каждого опубликованного города; service/tariff detail сохранены как будущие данные без URL.
 - XLSX-import городов/тарифов с validate/apply reports.
 - Прием лида, deduplication, contract check, delivery attempts и доставка в Tarifnik/email fallback.
 - Static admin с рабочими каталогами и импортами тарифов/городов, заявками и редиректами; отдельный BullMQ worker обрабатывает доставки, оповещения, пересборки и PII retention.
 
-Release 0 не является production release: тестовый gate зеленый и multi-city static routing реализован, но в текущих данных опубликована только Казань, а управляемые версии, аудит, rollback и часть эксплуатационных панелей отсутствуют. Защищенный внешний test-контур подтверждает deployment-механику, но не означает готовность к реальному трафику. Demo fallback в public build с 7 сентября 2026 требует явного `ALLOW_DEMO_DATA=true` и больше не срабатывает молча при недоступном API.
+Release 0 не является production release: тестовый gate и multi-city static routing реализованы, но управляемые версии, аудит, rollback и часть эксплуатационных панелей отсутствуют. Защищенный внешний test-контур подтверждает deployment-механику, но не означает готовность к реальному трафику. Demo fallback в public build требует явного `ALLOW_DEMO_DATA=true` и больше не срабатывает молча при недоступном API.
 
 ## Release 1 — минимальный публичный запуск
 
@@ -39,7 +39,7 @@ Release 0 не является production release: тестовый gate зел
 
 Цель: добавить городские тарифные, сервисные и прочие страницы из полной структуры без hardcoded Казани и без нарушения release-aware публикации.
 
-Dynamic маршруты City/Page/Tariff, published-only sitemap, городская навигация, одношаговые HTTP 301 с CRUD/hit tracking и multi-city build smoke уже существуют в прототипе, но сейчас публикуют слишком широкий набор. Перед Release 2 они должны подчиняться явной релизной политике, введенной в Release 1; затем scope расширяется только отдельным решением.
+City HOME, published-only Release 1 sitemap, глобальная навигация, одношаговые HTTP 301 с CRUD/hit tracking и multi-city build smoke уже подчиняются явной релизной политике. Перед Release 2 эту policy нужно расширить отдельным решением, а не возвращать автоматическую публикацию всех `Page`/`Tariff` со статусом `PUBLISHED`.
 
 ## Release 3 — управляемая CMS и эксплуатация
 
