@@ -38,6 +38,10 @@ test('tariff catalog and full-snapshot import are separate nested workspaces', (
   assert.match(importer, /provider\.sites|\.sites\.map/);
   assert.match(importer, /publicationRefreshKey/);
   assert.doesNotMatch(importer, /\/admin\/rebuilds/);
+  assert.match(importer, /\/admin\/tariffs\/imports\/\$\{item\.id\}\/undo/);
+  assert.match(importer, /window\.confirm/);
+  assert.match(importer, /canUndo/);
+  assert.match(importer, /Отменить импорт/);
   assert.match(importer, /accept=["']\.xlsx["']/);
   assert.match(importer, /confirmWarnings/);
   assert.match(importer, /report\.diff/);

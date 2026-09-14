@@ -1,5 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { Prisma, ServiceType, type Redirect, type Tariff } from '../generated';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { isDeepStrictEqual } from 'node:util';
+import { Prisma, PublishStatus, ServiceType, type Redirect, type Tariff } from '../generated';
 import { readSheet, type SheetData } from 'read-excel-file/node';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
@@ -145,15 +146,22 @@ type StoredRedirect = {
   updatedAt: string;
 };
 
+type StoredLeadAssignment = {
+  id: string;
+  tariffId: string;
+  updatedAt: string;
+};
+
 type TariffImportChangeSet = {
-  version: 1;
+  version: 2;
   kind: 'TARIFF_IMPORT';
   providerId: string;
   runId: string;
   beforeTariffs: StoredTariff[];
   afterTariffs: StoredTariff[];
   redirectSnapshot: StoredRedirect[];
-  sites: Array<{ siteId: string; beforeTariffs: StoredTariff[]; afterTariffs: StoredTariff[] }>;
+  leadAssignments: StoredLeadAssignment[];
+  siteCityIds: Array<{ siteId: string; cityIds: string[] }>;
   workingRevisions: Array<{ siteId: string; workingRevision: number }>;
 };
 
@@ -194,6 +202,48 @@ const snapshotRedirect = (redirect: Redirect): StoredRedirect => ({
   createdAt: redirect.createdAt.toISOString(),
   updatedAt: redirect.updatedAt.toISOString(),
 });
+const redirectContentSnapshot = (redirect: StoredRedirect) => ({
+  id: redirect.id,
+  siteId: redirect.siteId,
+  cityId: redirect.cityId,
+  sourcePath: redirect.sourcePath,
+  targetPath: redirect.targetPath,
+  managedTariffId: redirect.managedTariffId,
+  status: redirect.status,
+});
+const restoreTariffData = (tariff: StoredTariff) => ({
+  providerId: tariff.providerId,
+  cityId: tariff.cityId,
+  name: tariff.name,
+  slug: tariff.slug,
+  serviceType: tariff.serviceType as ServiceType,
+  standardPrice: tariff.standardPrice,
+  promoPrice: tariff.promoPrice,
+  speed: tariff.speed,
+  promoText: tariff.promoText,
+  connectionFee: tariff.connectionFee,
+  availability: tariff.availability,
+  externalId: tariff.externalId,
+  identityKey: tariff.identityKey,
+  dataSource: tariff.dataSource,
+  attributes: tariff.attributes === null ? Prisma.JsonNull : tariff.attributes as Prisma.InputJsonValue,
+  seo: tariff.seo === null ? Prisma.JsonNull : tariff.seo as Prisma.InputJsonValue,
+  status: tariff.status as PublishStatus,
+});
+const isTariffImportChangeSet = (value: unknown): value is TariffImportChangeSet => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const changeSet = value as Partial<TariffImportChangeSet>;
+  return changeSet.version === 2
+    && changeSet.kind === 'TARIFF_IMPORT'
+    && typeof changeSet.providerId === 'string'
+    && typeof changeSet.runId === 'string'
+    && Array.isArray(changeSet.beforeTariffs)
+    && Array.isArray(changeSet.afterTariffs)
+    && Array.isArray(changeSet.redirectSnapshot)
+    && Array.isArray(changeSet.leadAssignments)
+    && Array.isArray(changeSet.siteCityIds)
+    && Array.isArray(changeSet.workingRevisions);
+};
 
 const text = (value: unknown) => value === null || value === undefined ? '' : String(value).trim();
 const empty = (value: unknown) => text(value) === '';
@@ -485,6 +535,13 @@ export class TariffImportService {
         else { await transaction.tariff.create({ data }); created += 1; }
       }
       const staleIds = existingTariffs.filter((tariff) => !matchedIds.has(tariff.id)).map((tariff) => tariff.id);
+      const leadAssignments = runId && staleIds.length
+        ? await transaction.lead.findMany({
+          where: { tariffId: { in: staleIds } },
+          select: { id: true, tariffId: true, updatedAt: true },
+          orderBy: { id: 'asc' },
+        })
+        : [];
       if (staleIds.length) await transaction.tariff.deleteMany({ where: { id: { in: staleIds } } });
       const afterTariffs = await transaction.tariff.findMany({ where: { providerId: report.providerId } });
       const workingRevisions: Array<{ siteId: string; workingRevision: number }> = [];
@@ -502,6 +559,7 @@ export class TariffImportService {
           : [];
         const sites = siteIds.map((siteId) => ({
           siteId,
+          cityIds: cities.filter((city) => city.siteId === siteId).map((city) => city.id).sort(),
           beforeTariffs: beforeSnapshots.filter((tariff) => siteByCity.get(tariff.cityId) === siteId),
           afterTariffs: afterSnapshots.filter((tariff) => siteByCity.get(tariff.cityId) === siteId),
         }));
@@ -520,14 +578,19 @@ export class TariffImportService {
           workingRevisions.push({ siteId: site.siteId, workingRevision: revision.siteRevision });
         }
         const changeSet: TariffImportChangeSet = {
-          version: 1,
+          version: 2,
           kind: 'TARIFF_IMPORT',
           providerId: report.providerId,
           runId,
           beforeTariffs: beforeSnapshots,
           afterTariffs: afterSnapshots,
           redirectSnapshot: redirects.map(snapshotRedirect),
-          sites,
+          leadAssignments: leadAssignments.map((lead) => ({
+            id: lead.id,
+            tariffId: lead.tariffId!,
+            updatedAt: lead.updatedAt.toISOString(),
+          })),
+          siteCityIds: sites.map(({ siteId, cityIds }) => ({ siteId, cityIds })),
           workingRevisions,
         };
         const claimedRun = await transaction.tariffImportRun.updateMany({
@@ -548,6 +611,145 @@ export class TariffImportService {
         applied: report.candidates.length,
         ...(runId ? { workingRevisions } : {}),
       };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: IMPORT_TRANSACTION_TIMEOUT_MS });
+  }
+
+  async undoImport(runId: string, actorId?: string) {
+    return this.prisma.$transaction(async (transaction) => {
+      const run = await transaction.tariffImportRun.findUnique({ where: { id: runId } });
+      if (!run) throw new BadRequestException('Импорт тарифов не найден');
+      if (run.status !== 'APPLIED') throw new BadRequestException('Отменить можно только примененный импорт');
+      if (!isTariffImportChangeSet(run.changeSet) || run.changeSet.runId !== run.id || run.changeSet.providerId !== run.providerId) {
+        throw new BadRequestException('Для этого импорта нет полного безопасного снимка отмены');
+      }
+      const changeSet = run.changeSet;
+      const currentTariffs = (await transaction.tariff.findMany({ where: { providerId: run.providerId } }))
+        .map(snapshotTariff)
+        .sort((left, right) => left.id.localeCompare(right.id));
+      if (!isDeepStrictEqual(currentTariffs, changeSet.afterTariffs)) {
+        throw new ConflictException('Каталог тарифов изменен после импорта; безопасная отмена заблокирована');
+      }
+
+      const siteIds = changeSet.siteCityIds.map((site) => site.siteId);
+      const importedRevisionBySite = new Map(
+        changeSet.workingRevisions.map(({ siteId, workingRevision }) => [siteId, workingRevision]),
+      );
+      if (
+        importedRevisionBySite.size !== changeSet.siteCityIds.length
+        || changeSet.siteCityIds.some(({ siteId }) => !Number.isInteger(importedRevisionBySite.get(siteId)))
+      ) {
+        throw new BadRequestException('Для этого импорта нет полного безопасного снимка отмены');
+      }
+      for (const site of changeSet.siteCityIds) {
+        const cityIds = new Set(site.cityIds);
+        const tariffIds = [...new Set([...changeSet.beforeTariffs, ...changeSet.afterTariffs]
+          .filter((tariff) => cityIds.has(tariff.cityId))
+          .map((tariff) => tariff.id))];
+        const revisionTargets: Prisma.ContentRevisionWhereInput[] = [
+          { entityType: 'REDIRECT' },
+          { entityType: 'SITE', source: { startsWith: 'tariff-import' } },
+        ];
+        if (tariffIds.length) revisionTargets.unshift({ entityType: 'TARIFF', entityId: { in: tariffIds } });
+        const laterRevision = await transaction.contentRevision.findFirst({
+          where: {
+            siteId: site.siteId,
+            siteRevision: { gt: importedRevisionBySite.get(site.siteId)! },
+            OR: revisionTargets,
+          },
+          select: { id: true },
+        });
+        if (laterRevision) {
+          throw new ConflictException('Затронутые данные изменялись после импорта; безопасная отмена заблокирована');
+        }
+      }
+      const currentRedirects = siteIds.length
+        ? (await transaction.redirect.findMany({ where: { siteId: { in: siteIds } }, orderBy: { id: 'asc' } })).map(snapshotRedirect)
+        : [];
+      if (!isDeepStrictEqual(
+        currentRedirects.map(redirectContentSnapshot),
+        changeSet.redirectSnapshot.map(redirectContentSnapshot),
+      )) {
+        throw new ConflictException('Редиректы затронутого сайта изменены после импорта; безопасная отмена заблокирована');
+      }
+
+      const beforeIds = new Set(changeSet.beforeTariffs.map((tariff) => tariff.id));
+      const createdIds = changeSet.afterTariffs.filter((tariff) => !beforeIds.has(tariff.id)).map((tariff) => tariff.id);
+      if (createdIds.length) {
+        const newLeads = await transaction.lead.findMany({
+          where: { tariffId: { in: createdIds } },
+          select: { id: true },
+          take: 1,
+        });
+        if (newLeads.length) throw new ConflictException('После импорта появились заявки на новые тарифы; безопасная отмена заблокирована');
+      }
+
+      if (changeSet.leadAssignments.length) {
+        const currentLeads = await transaction.lead.findMany({
+          where: { id: { in: changeSet.leadAssignments.map((lead) => lead.id) } },
+          select: { id: true, tariffId: true, updatedAt: true },
+        });
+        const currentById = new Map(currentLeads.map((lead) => [lead.id, lead]));
+        const leadChanged = changeSet.leadAssignments.some((saved) => {
+          const current = currentById.get(saved.id);
+          return !current || current.tariffId !== null || current.updatedAt.toISOString() !== saved.updatedAt;
+        });
+        if (leadChanged) throw new ConflictException('Связанная заявка изменена после импорта; безопасная отмена заблокирована');
+      }
+
+      if (createdIds.length) await transaction.tariff.deleteMany({ where: { id: { in: createdIds } } });
+      for (const tariff of changeSet.beforeTariffs) {
+        const data = restoreTariffData(tariff);
+        await transaction.tariff.upsert({
+          where: { id: tariff.id },
+          create: { id: tariff.id, ...data, createdAt: new Date(tariff.createdAt) },
+          update: data,
+        });
+      }
+      for (const saved of changeSet.leadAssignments) {
+        const restored = await transaction.lead.updateMany({
+          where: { id: saved.id, tariffId: null, updatedAt: new Date(saved.updatedAt) },
+          data: { tariffId: saved.tariffId },
+        });
+        if (restored.count !== 1) throw new ConflictException('Связанная заявка изменилась во время отмены; операция отменена');
+      }
+
+      const workingRevisions: Array<{ siteId: string; workingRevision: number }> = [];
+      for (const site of changeSet.siteCityIds) {
+        const cityIds = new Set(site.cityIds);
+        const beforeTariffs = changeSet.beforeTariffs.filter((tariff) => cityIds.has(tariff.cityId));
+        const afterTariffs = changeSet.afterTariffs.filter((tariff) => cityIds.has(tariff.cityId));
+        const siteTariffIds = new Set([...beforeTariffs, ...afterTariffs].map((tariff) => tariff.id));
+        const leadAssignments = changeSet.leadAssignments.filter((lead) => siteTariffIds.has(lead.tariffId));
+        const revision = await this.publications.recordWorkingRevision(transaction, {
+          siteId: site.siteId,
+          entityType: 'SITE',
+          entityId: site.siteId,
+          action: 'UNDO',
+          previousSnapshot: {
+            tariffs: afterTariffs,
+            leadAssignments: leadAssignments.map(({ id }) => ({ id, tariffId: null })),
+          },
+          snapshot: {
+            tariffs: beforeTariffs,
+            leadAssignments: leadAssignments.map(({ id, tariffId }) => ({ id, tariffId })),
+          },
+          changedFields: ['tariffs', 'leadAssignments'],
+          actorId,
+          source: `tariff-import-undo:${runId}`,
+        });
+        workingRevisions.push({ siteId: site.siteId, workingRevision: revision.siteRevision });
+      }
+      const claimed = await transaction.tariffImportRun.updateMany({
+        where: { id: run.id, status: 'APPLIED' },
+        data: {
+          status: 'UNDONE',
+          undoneAt: new Date(),
+          undoneById: actorId || null,
+          undoSiteRevisions: workingRevisions as unknown as Prisma.InputJsonValue,
+        },
+      });
+      if (claimed.count !== 1) throw new ConflictException('Статус импорта изменился во время отмены; операция отменена');
+      return { runId: run.id, restored: changeSet.beforeTariffs.length, removed: createdIds.length, workingRevisions };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: IMPORT_TRANSACTION_TIMEOUT_MS });
   }
 }

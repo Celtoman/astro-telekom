@@ -16,7 +16,7 @@ interface Administrator { id: string; email: string }
 interface Provider { id: string; name: string; slug: string; sites: Array<{ id: string; name: string; slug: string; status: string }> }
 interface ImportIssue { row: number; level: "error" | "warning"; message: string; key?: string }
 interface ImportReport { totalRows: number; validRows: number; errorRows: number; warningRows: number; diff: { created: number; updated: number; deleted: number }; issues: ImportIssue[] }
-interface ImportRun { id: string; fileName: string; status: string; totalRows: number; validRows: number; errorRows: number; warningRows: number; createdAt: string }
+interface ImportRun { id: string; providerId: string; fileName: string; status: string; totalRows: number; validRows: number; errorRows: number; warningRows: number; createdAt: string; undoneAt: string | null; canUndo: boolean }
 interface WorkspaceData { providers: Provider[]; imports: ImportRun[] }
 type ScreenState = { status: "loading" } | { status: "error"; message: string } | { status: "ready"; user: Administrator; data: WorkspaceData }
 
@@ -31,7 +31,9 @@ export function TariffImportApp({ apiUrl }: { apiUrl: string }) {
   const [selectedProviderId, setSelectedProviderId] = useState("")
   const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
   const [busy, setBusy] = useState<"validate" | "apply" | "refresh" | null>(null)
+  const [undoingRunId, setUndoingRunId] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
+  const [actionMessage, setActionMessage] = useState<string | null>(null)
   const selectionGeneration = useRef(0)
   const fileInput = useRef<HTMLInputElement>(null)
 
@@ -63,6 +65,7 @@ export function TariffImportApp({ apiUrl }: { apiUrl: string }) {
     const generation = selectionGeneration.current
     setBusy("validate")
     setActionError(null)
+    setActionMessage(null)
     try {
       const fileBase64 = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader()
@@ -86,6 +89,7 @@ export function TariffImportApp({ apiUrl }: { apiUrl: string }) {
     if (!runId || !report) return
     setBusy("apply")
     setActionError(null)
+    setActionMessage(null)
     try {
       await requestJson(apiUrl, "/admin/tariffs/import/apply", { method: "POST", body: { runId, confirmWarnings } })
       setReport(null)
@@ -99,6 +103,27 @@ export function TariffImportApp({ apiUrl }: { apiUrl: string }) {
     } finally { setBusy(null) }
   }
 
+  async function undoImport(item: ImportRun) {
+    if (!item.canUndo || !window.confirm(`Отменить импорт «${item.fileName}»? Отмена сработает только если затронутые данные не менялись позже.`)) return
+    setUndoingRunId(item.id)
+    setActionError(null)
+    setActionMessage(null)
+    try {
+      const result = await requestJson<{ workingRevisions: Array<{ siteId: string; workingRevision: number }> }>(apiUrl, `/admin/tariffs/imports/${item.id}/undo`, {
+        method: "POST",
+        body: { confirm: true },
+      })
+      setSelectedProviderId(item.providerId)
+      setPublicationRefreshKey((current) => current + 1)
+      setActionMessage(`Импорт отменен. Создана рабочая версия ${result.workingRevisions.map((revision) => revision.workingRevision).join(", ") || "без изменений"}; опубликуйте ее отдельно.`)
+      await loadWorkspace("refresh")
+    } catch (caught: unknown) {
+      setActionError(caught instanceof Error ? caught.message : "Импорт не отменен")
+    } finally {
+      setUndoingRunId(null)
+    }
+  }
+
   if (state.status === "loading") return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-96 w-full" /></main>
   if (state.status === "error") return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Импорт тарифов недоступен</CardTitle></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void loadWorkspace()}>Повторить</Button></CardContent></Card></main>
   const selectedProvider = state.data.providers.find((provider) => provider.id === selectedProviderId)
@@ -107,8 +132,9 @@ export function TariffImportApp({ apiUrl }: { apiUrl: string }) {
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-6 lg:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Импорт тарифов</h1><p className="mt-1 text-sm text-muted-foreground">Проверка и атомарное применение полного XLSX snapshot.</p></div><Button variant="outline" disabled={busy !== null} onClick={() => void loadWorkspace("refresh")}><RefreshCw data-icon="inline-start" />Обновить</Button></div>
       {actionError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Операция не выполнена</AlertTitle><AlertDescription>{actionError}</AlertDescription></Alert> : null}
+      {actionMessage ? <Alert><FileCheck2 /><AlertTitle>Рабочая версия обновлена</AlertTitle><AlertDescription>{actionMessage}</AlertDescription></Alert> : null}
       <Card><CardHeader><CardTitle>Новый импорт</CardTitle><CardDescription>Файл сначала проходит preview. При применении он целиком заменяет каталог выбранного провайдера.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><label className="flex max-w-md flex-col gap-2 text-sm font-medium" htmlFor="tariff-provider">Провайдер<select id="tariff-provider" className="h-9 rounded-lg border border-input bg-background px-3 font-normal" value={selectedProviderId} disabled={busy !== null} onChange={(event) => { selectionGeneration.current += 1; setSelectedProviderId(event.target.value); setFile(null); if (fileInput.current) fileInput.current.value = ""; setReport(null); setRunId(null) }}><option value="">Выберите провайдера</option>{state.data.providers.map((provider) => <option value={provider.id} key={provider.id}>{provider.name}</option>)}</select></label>{state.data.providers.length > 1 ? <Alert><CircleAlert /><AlertTitle>Проверьте провайдера</AlertTitle><AlertDescription>Полный импорт удалит отсутствующие в файле тарифы только выбранного провайдера.</AlertDescription></Alert> : null}<div className="flex flex-col gap-3 sm:flex-row sm:items-center"><Input ref={fileInput} type="file" accept=".xlsx" disabled={!selectedProviderId || busy !== null} onChange={(event) => { selectionGeneration.current += 1; setFile(event.target.files?.[0] || null); setReport(null); setRunId(null) }} /><Button disabled={!file || !selectedProviderId || busy !== null} onClick={() => void validateImport()}><FileUp data-icon="inline-start" />{busy === "validate" ? "Проверяем…" : "Проверить файл"}</Button></div>{report ? <div className="flex flex-col gap-4"><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{[["Строк", report.totalRows], ["Валидно", report.validRows], ["Ошибок", report.errorRows], ["Предупреждений", report.warningRows]].map(([label, value]) => <Card size="sm" key={label}><CardHeader><CardDescription>{label}</CardDescription><CardTitle>{value}</CardTitle></CardHeader></Card>)}</div><Alert><FileCheck2 /><AlertTitle>Изменения полного snapshot</AlertTitle><AlertDescription>Создать: {report.diff.created}; обновить: {report.diff.updated}; удалить: {report.diff.deleted}.</AlertDescription></Alert>{report.issues.length ? <div className="overflow-x-auto"><Table><TableHeader><TableRow><TableHead>Строка</TableHead><TableHead>Уровень</TableHead><TableHead>Сообщение</TableHead></TableRow></TableHeader><TableBody>{report.issues.slice(0, 100).map((issue, index) => <TableRow key={`${issue.row}-${index}`}><TableCell>{issue.row}</TableCell><TableCell><Badge variant={issue.level === "error" ? "destructive" : "secondary"}>{issue.level}</Badge></TableCell><TableCell className="whitespace-normal">{issue.message}</TableCell></TableRow>)}</TableBody></Table></div> : null}{report.warningRows > 0 ? <label className="flex items-center gap-2 text-sm"><Checkbox checked={confirmWarnings} onCheckedChange={(checked) => setConfirmWarnings(checked === true)} />Подтверждаю предупреждения</label> : null}<Button disabled={busy !== null || report.errorRows > 0 || (report.warningRows > 0 && !confirmWarnings)} onClick={() => void applyImport()}>{busy === "apply" ? "Применяем…" : "Применить целиком"}</Button></div> : null}</CardContent></Card>
-      <Card><CardHeader><CardTitle>Последние импорты</CardTitle><CardDescription>Сохраненные отчеты проверки. Статус APPLIED означает, что данные сохранены в рабочей версии, но еще не обязательно опубликованы.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{state.data.imports.length ? state.data.imports.slice(0, 12).map((item) => <div className="flex items-center justify-between gap-3" key={item.id}><div className="min-w-0"><p className="truncate font-medium">{item.fileName}</p><p className="text-xs text-muted-foreground">{item.validRows}/{item.totalRows} строк</p></div><Badge variant={statusVariant(item.status)}>{item.status}</Badge></div>) : <p className="text-sm text-muted-foreground">Импортов еще не было.</p>}</CardContent></Card>
+      <Card><CardHeader><CardTitle>Последние импорты</CardTitle><CardDescription>Сохраненные отчеты проверки. Статус APPLIED означает, что данные сохранены в рабочей версии, но еще не обязательно опубликованы.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{state.data.imports.length ? state.data.imports.slice(0, 12).map((item) => <div className="flex flex-wrap items-center justify-between gap-3" key={item.id}><div className="min-w-0 flex-1"><p className="truncate font-medium">{item.fileName}</p><p className="text-xs text-muted-foreground">{item.validRows}/{item.totalRows} строк</p></div><Badge variant={statusVariant(item.status)}>{item.status}</Badge>{item.canUndo ? <Button type="button" size="sm" variant="outline" disabled={undoingRunId !== null} onClick={() => void undoImport(item)}>{undoingRunId === item.id ? "Отменяем…" : "Отменить импорт"}</Button> : null}</div>) : <p className="text-sm text-muted-foreground">Импортов еще не было.</p>}</CardContent></Card>
       {selectedProvider?.sites.map((site) => <div className="flex flex-col gap-2" key={site.id}>{selectedProvider.sites.length > 1 ? <p className="text-sm font-medium">Сайт: {site.name}</p> : null}<PublicationStatusCard apiUrl={apiUrl} siteId={site.id} publicationRefreshKey={publicationRefreshKey} /></div>)}
     </div>
   </AdminShell>

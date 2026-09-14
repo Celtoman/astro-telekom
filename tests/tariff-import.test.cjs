@@ -329,6 +329,7 @@ test('full snapshot apply records one audited working revision per affected site
       page: { findMany: async () => [] },
       city: { findMany: async () => [{ id: 'city-1', siteId: 'site-1' }] },
       redirect: { findMany: async () => [] },
+      lead: { findMany: async () => [] },
       tariff: {
         findMany: async () => records,
         deleteMany: async () => { records.splice(0, records.length); return { count: 1 }; },
@@ -363,9 +364,333 @@ test('full snapshot apply records one audited working revision per affected site
   assert.equal(revisions[0].snapshot.tariffs.length, 0);
   assert.equal(runUpdate.status, 'APPLIED');
   assert.equal(runUpdate.appliedById, 'user-1');
-  assert.equal(runUpdate.changeSet.version, 1);
+  assert.equal(runUpdate.changeSet.version, 2);
   assert.equal(runUpdate.changeSet.kind, 'TARIFF_IMPORT');
+  assert.deepEqual(runUpdate.changeSet.leadAssignments, []);
+  assert.deepEqual(runUpdate.changeSet.siteCityIds, [{ siteId: 'site-1', cityIds: ['city-1'] }]);
   assert.deepEqual(runUpdate.changeSet.workingRevisions, [{ siteId: 'site-1', workingRevision: 12 }]);
+});
+
+test('safe undo restores the tariff business snapshot and detached lead links as a new working revision', async () => {
+  const record = (overrides = {}) => ({
+    id: 'tariff-updated', providerId: 'provider-1', cityId: 'city-1', name: 'Тариф', slug: 'tariff',
+    serviceType: 'INTERNET', standardPrice: 500, promoPrice: null, speed: 100, promoText: null,
+    connectionFee: null, availability: true, externalId: null, identityKey: 'city-1:tariff:internet',
+    dataSource: 'tariffs.xlsx', attributes: {}, seo: null, status: 'PUBLISHED',
+    createdAt: new Date('2026-09-01T00:00:00.000Z'), updatedAt: new Date('2026-09-14T10:00:00.000Z'),
+    ...overrides,
+  });
+  const stored = (tariff) => ({
+    ...tariff,
+    standardPrice: tariff.standardPrice === null ? null : String(tariff.standardPrice),
+    promoPrice: tariff.promoPrice === null ? null : String(tariff.promoPrice),
+    connectionFee: tariff.connectionFee === null ? null : String(tariff.connectionFee),
+    createdAt: tariff.createdAt.toISOString(),
+    updatedAt: tariff.updatedAt.toISOString(),
+  });
+  const before = [
+    record({ standardPrice: 500 }),
+    record({ id: 'tariff-deleted', name: 'Удаленный тариф', slug: 'deleted', identityKey: 'city-1:deleted:internet' }),
+  ];
+  const after = [
+    record({ standardPrice: 650, updatedAt: new Date('2026-09-14T11:00:00.000Z') }),
+    record({ id: 'tariff-created', name: 'Новый тариф', slug: 'created', identityKey: 'city-1:created:internet', updatedAt: new Date('2026-09-14T11:00:00.000Z') }),
+  ];
+  let tariffs = structuredClone(after);
+  const leadTime = new Date('2026-09-14T10:30:00.000Z');
+  const leads = [{ id: 'lead-1', tariffId: null, updatedAt: leadTime }];
+  const revisions = [];
+  const tariffWrites = [];
+  const leadWrites = [];
+  const undoTime = new Date('2026-09-14T14:00:00.000Z');
+  let runUpdate;
+  const changeSet = {
+    version: 2,
+    kind: 'TARIFF_IMPORT',
+    providerId: 'provider-1',
+    runId: 'run-1',
+    beforeTariffs: before.map(stored).sort((left, right) => left.id.localeCompare(right.id)),
+    afterTariffs: after.map(stored).sort((left, right) => left.id.localeCompare(right.id)),
+    redirectSnapshot: [],
+    leadAssignments: [{ id: 'lead-1', tariffId: 'tariff-deleted', updatedAt: leadTime.toISOString() }],
+    siteCityIds: [{ siteId: 'site-1', cityIds: ['city-1'] }],
+    workingRevisions: [{ siteId: 'site-1', workingRevision: 12 }],
+  };
+  const prisma = {
+    $transaction: async (callback) => callback({
+      tariffImportRun: {
+        findUnique: async () => ({ id: 'run-1', providerId: 'provider-1', status: 'APPLIED', changeSet }),
+        updateMany: async ({ data }) => { runUpdate = data; return { count: 1 }; },
+      },
+      tariff: {
+        findMany: async () => tariffs,
+        deleteMany: async ({ where }) => {
+          tariffs = tariffs.filter((tariff) => !where.id.in.includes(tariff.id));
+          return { count: 1 };
+        },
+        upsert: async ({ where, create, update }) => {
+          tariffWrites.push({ create, update });
+          const index = tariffs.findIndex((tariff) => tariff.id === where.id);
+          const restored = structuredClone({
+            ...(index === -1 ? create : { ...tariffs[index], ...update }),
+            updatedAt: undoTime,
+          });
+          if (index === -1) tariffs.push(restored); else tariffs[index] = restored;
+          return restored;
+        },
+      },
+      redirect: { findMany: async () => [] },
+      contentRevision: { findFirst: async () => null },
+      lead: {
+        findMany: async ({ where }) => where.id?.in
+          ? leads.filter((lead) => where.id.in.includes(lead.id))
+          : leads.filter((lead) => lead.tariffId && where.tariffId.in.includes(lead.tariffId)),
+        updateMany: async ({ where, data }) => {
+          leadWrites.push(data);
+          const lead = leads.find((item) => item.id === where.id && item.tariffId === null && item.updatedAt.getTime() === where.updatedAt.getTime());
+          if (!lead) return { count: 0 };
+          Object.assign(lead, data, { updatedAt: undoTime });
+          return { count: 1 };
+        },
+      },
+    }),
+  };
+  const publications = {
+    recordWorkingRevision: async (_transaction, input) => {
+      revisions.push(input);
+      return { siteRevision: 13 };
+    },
+  };
+
+  const result = await new TariffImportService(prisma, publications).undoImport('run-1', 'user-1');
+
+  assert.deepEqual(tariffs.map((tariff) => tariff.id).sort(), ['tariff-deleted', 'tariff-updated']);
+  assert.equal(tariffs.find((tariff) => tariff.id === 'tariff-updated').standardPrice, '500');
+  assert.equal(tariffs.every((tariff) => tariff.updatedAt.getTime() === undoTime.getTime()), true);
+  assert.equal(tariffWrites.every(({ create, update }) => !('updatedAt' in create) && !('updatedAt' in update)), true);
+  assert.equal(tariffWrites.every(({ update }) => !('createdAt' in update)), true);
+  assert.equal(leads[0].tariffId, 'tariff-deleted');
+  assert.equal(leads[0].updatedAt.getTime(), undoTime.getTime());
+  assert.deepEqual(leadWrites, [{ tariffId: 'tariff-deleted' }]);
+  assert.equal(revisions.length, 1);
+  assert.equal(revisions[0].action, 'UNDO');
+  assert.equal(revisions[0].actorId, 'user-1');
+  assert.equal(revisions[0].source, 'tariff-import-undo:run-1');
+  assert.deepEqual(revisions[0].changedFields, ['tariffs', 'leadAssignments']);
+  assert.deepEqual(revisions[0].previousSnapshot.leadAssignments, [{ id: 'lead-1', tariffId: null }]);
+  assert.deepEqual(revisions[0].snapshot.leadAssignments, [{ id: 'lead-1', tariffId: 'tariff-deleted' }]);
+  assert.equal(runUpdate.status, 'UNDONE');
+  assert.equal(runUpdate.undoneById, 'user-1');
+  assert.deepEqual(runUpdate.undoSiteRevisions, [{ siteId: 'site-1', workingRevision: 13 }]);
+  assert.deepEqual(result.workingRevisions, [{ siteId: 'site-1', workingRevision: 13 }]);
+});
+
+test('safe undo rejects a later audited mutation even when the catalog matches the import snapshot again', async () => {
+  let writes = 0;
+  const tariff = {
+    id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1', name: 'После импорта', slug: 'tariff',
+    serviceType: 'INTERNET', standardPrice: 500, promoPrice: null, speed: 100, promoText: null,
+    connectionFee: null, availability: true, externalId: null, identityKey: 'city-1:tariff:internet',
+    dataSource: 'tariffs.xlsx', attributes: {}, seo: null, status: 'PUBLISHED',
+    createdAt: new Date('2026-09-01T00:00:00.000Z'), updatedAt: new Date('2026-09-14T12:00:00.000Z'),
+  };
+  const storedTariff = {
+    ...tariff,
+    standardPrice: '500',
+    createdAt: tariff.createdAt.toISOString(),
+    updatedAt: tariff.updatedAt.toISOString(),
+  };
+  const changeSet = {
+    version: 2, kind: 'TARIFF_IMPORT', providerId: 'provider-1', runId: 'run-1',
+    beforeTariffs: [storedTariff], afterTariffs: [storedTariff], redirectSnapshot: [], leadAssignments: [],
+    siteCityIds: [{ siteId: 'site-1', cityIds: ['city-1'] }],
+    workingRevisions: [{ siteId: 'site-1', workingRevision: 12 }],
+  };
+  const prisma = {
+    $transaction: async (callback) => callback({
+      tariffImportRun: {
+        findUnique: async () => ({ id: 'run-1', providerId: 'provider-1', status: 'APPLIED', changeSet }),
+        updateMany: async () => { writes += 1; return { count: 1 }; },
+      },
+      tariff: {
+        findMany: async () => [tariff],
+        upsert: async () => { writes += 1; return tariff; },
+      },
+      redirect: { findMany: async () => [] },
+      contentRevision: { findFirst: async () => ({ id: 'later-revision' }) },
+    }),
+  };
+
+  await assert.rejects(
+    new TariffImportService(prisma, { recordWorkingRevision: async () => { writes += 1; } }).undoImport('run-1', 'user-1'),
+    /изменялись после импорта/i,
+  );
+  assert.equal(writes, 0);
+});
+
+test('safe undo rejects a tariff changed after import before writing anything', async () => {
+  let writes = 0;
+  const tariff = {
+    id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1', name: 'Изменен позже', slug: 'tariff',
+    serviceType: 'INTERNET', standardPrice: 500, promoPrice: null, speed: 100, promoText: null,
+    connectionFee: null, availability: true, externalId: null, identityKey: 'city-1:tariff:internet',
+    dataSource: 'tariffs.xlsx', attributes: {}, seo: null, status: 'PUBLISHED',
+    createdAt: new Date('2026-09-01T00:00:00.000Z'), updatedAt: new Date('2026-09-14T12:00:00.000Z'),
+  };
+  const changeSet = {
+    version: 2, kind: 'TARIFF_IMPORT', providerId: 'provider-1', runId: 'run-1',
+    beforeTariffs: [],
+    afterTariffs: [{ ...tariff, name: 'После импорта', standardPrice: '500', createdAt: tariff.createdAt.toISOString(), updatedAt: tariff.updatedAt.toISOString() }],
+    redirectSnapshot: [], leadAssignments: [],
+    siteCityIds: [{ siteId: 'site-1', cityIds: ['city-1'] }], workingRevisions: [],
+  };
+  const prisma = {
+    $transaction: async (callback) => callback({
+      tariffImportRun: { findUnique: async () => ({ id: 'run-1', providerId: 'provider-1', status: 'APPLIED', changeSet }) },
+      tariff: {
+        findMany: async () => [tariff],
+        deleteMany: async () => { writes += 1; },
+        upsert: async () => { writes += 1; },
+      },
+    }),
+  };
+
+  await assert.rejects(
+    new TariffImportService(prisma, { recordWorkingRevision: async () => { writes += 1; } }).undoImport('run-1', 'user-1'),
+    /изменен после импорта/i,
+  );
+  assert.equal(writes, 0);
+});
+
+test('safe undo ignores redirect hit metrics while preserving the redirect content guard', async () => {
+  const tariff = {
+    id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1', name: 'Тариф', slug: 'tariff',
+    serviceType: 'INTERNET', standardPrice: 500, promoPrice: null, speed: 100, promoText: null,
+    connectionFee: null, availability: true, externalId: null, identityKey: 'city-1:tariff:internet',
+    dataSource: 'tariffs.xlsx', attributes: {}, seo: null, status: 'PUBLISHED',
+    createdAt: new Date('2026-09-01T00:00:00.000Z'), updatedAt: new Date('2026-09-14T12:00:00.000Z'),
+  };
+  const storedTariff = { ...tariff, standardPrice: '500', createdAt: tariff.createdAt.toISOString(), updatedAt: tariff.updatedAt.toISOString() };
+  const redirect = {
+    id: 'redirect-1', siteId: 'site-1', cityId: 'city-1', sourcePath: '/old', targetPath: '/city/tariff',
+    managedTariffId: 'tariff-1', status: 'PUBLISHED', hitCount: 10,
+    lastHitAt: new Date('2026-09-14T13:00:00.000Z'), createdAt: new Date('2026-09-01T00:00:00.000Z'),
+    updatedAt: new Date('2026-09-14T13:00:00.000Z'),
+  };
+  const changeSet = {
+    version: 2, kind: 'TARIFF_IMPORT', providerId: 'provider-1', runId: 'run-1',
+    beforeTariffs: [storedTariff], afterTariffs: [storedTariff],
+    redirectSnapshot: [{
+      ...redirect,
+      hitCount: 0,
+      lastHitAt: null,
+      createdAt: redirect.createdAt.toISOString(),
+      updatedAt: new Date('2026-09-14T12:00:00.000Z').toISOString(),
+    }],
+    leadAssignments: [], siteCityIds: [{ siteId: 'site-1', cityIds: ['city-1'] }],
+    workingRevisions: [{ siteId: 'site-1', workingRevision: 12 }],
+  };
+  let runUpdate;
+  const prisma = {
+    $transaction: async (callback) => callback({
+      tariffImportRun: {
+        findUnique: async () => ({ id: 'run-1', providerId: 'provider-1', status: 'APPLIED', changeSet }),
+        updateMany: async ({ data }) => { runUpdate = data; return { count: 1 }; },
+      },
+      tariff: { findMany: async () => [tariff], upsert: async () => tariff },
+      redirect: { findMany: async () => [redirect] },
+      contentRevision: { findFirst: async () => null },
+    }),
+  };
+
+  await new TariffImportService(prisma, {
+    recordWorkingRevision: async () => ({ siteRevision: 14 }),
+  }).undoImport('run-1', 'user-1');
+
+  assert.equal(runUpdate.status, 'UNDONE');
+  redirect.targetPath = '/other-target';
+  await assert.rejects(
+    new TariffImportService(prisma, { recordWorkingRevision: async () => ({ siteRevision: 15 }) }).undoImport('run-1', 'user-1'),
+    /Редиректы затронутого сайта изменены после импорта/i,
+  );
+});
+
+test('safe undo blocks removal of an imported tariff referenced by a newer lead', async () => {
+  let writes = 0;
+  const tariff = {
+    id: 'tariff-created', providerId: 'provider-1', cityId: 'city-1', name: 'Новый тариф', slug: 'created',
+    serviceType: 'INTERNET', standardPrice: 500, promoPrice: null, speed: 100, promoText: null,
+    connectionFee: null, availability: true, externalId: null, identityKey: 'city-1:created:internet',
+    dataSource: 'tariffs.xlsx', attributes: {}, seo: null, status: 'PUBLISHED',
+    createdAt: new Date('2026-09-14T12:00:00.000Z'), updatedAt: new Date('2026-09-14T12:00:00.000Z'),
+  };
+  const changeSet = {
+    version: 2, kind: 'TARIFF_IMPORT', providerId: 'provider-1', runId: 'run-1', beforeTariffs: [],
+    afterTariffs: [{ ...tariff, standardPrice: '500', createdAt: tariff.createdAt.toISOString(), updatedAt: tariff.updatedAt.toISOString() }],
+    redirectSnapshot: [], leadAssignments: [],
+    siteCityIds: [{ siteId: 'site-1', cityIds: ['city-1'] }],
+    workingRevisions: [{ siteId: 'site-1', workingRevision: 12 }],
+  };
+  const prisma = {
+    $transaction: async (callback) => callback({
+      tariffImportRun: { findUnique: async () => ({ id: 'run-1', providerId: 'provider-1', status: 'APPLIED', changeSet }) },
+      tariff: { findMany: async () => [tariff], deleteMany: async () => { writes += 1; } },
+      redirect: { findMany: async () => [] },
+      contentRevision: { findFirst: async () => null },
+      lead: { findMany: async () => [{ id: 'lead-new' }] },
+    }),
+  };
+
+  await assert.rejects(
+    new TariffImportService(prisma, { recordWorkingRevision: async () => { writes += 1; } }).undoImport('run-1', 'user-1'),
+    /появились заявки на новые тарифы/i,
+  );
+  assert.equal(writes, 0);
+});
+
+test('tariff import undo requires explicit confirmation and attributes the operator', async () => {
+  const calls = [];
+  const controller = new AdminTariffsController({}, {}, {
+    undoImport: async (runId, actorId) => { calls.push({ runId, actorId }); return { workingRevisions: [] }; },
+  }, {});
+
+  assert.throws(
+    () => controller.undoImport('run-1', { confirm: false }, { user: { id: 'user-1' } }),
+    /подтвердить отмену/i,
+  );
+  const result = await controller.undoImport('run-1', { confirm: true }, { user: { id: 'user-1' } });
+
+  assert.deepEqual(calls, [{ runId: 'run-1', actorId: 'user-1' }]);
+  assert.deepEqual(result.workingRevisions, []);
+});
+
+test('tariff import history exposes undo only for applied runs with a complete safe snapshot', async () => {
+  const queries = [];
+  const controller = new AdminTariffsController({
+    tariffImportRun: {
+      findMany: async (query) => {
+        queries.push(query);
+        if (query.where) return [{ id: 'safe' }];
+        return [
+          { id: 'safe', status: 'APPLIED' },
+          { id: 'legacy', status: 'APPLIED' },
+          { id: 'undone', status: 'UNDONE' },
+        ];
+      },
+    },
+  }, {}, {}, {});
+
+  const rows = await controller.listImports();
+
+  assert.deepEqual(rows.map(({ id, canUndo }) => ({ id, canUndo })), [
+    { id: 'safe', canUndo: true },
+    { id: 'legacy', canUndo: false },
+    { id: 'undone', canUndo: false },
+  ]);
+  assert.equal('changeSet' in rows[0], false);
+  assert.equal(queries[0].select.changeSet, undefined);
+  assert.deepEqual(queries[1].select, { id: true });
+  assert.deepEqual(queries[1].where.id.in, ['safe', 'legacy']);
 });
 
 test('tariff import controller preserves the working version and does not publish it', async () => {

@@ -212,8 +212,43 @@ export class AdminTariffsController {
   }
 
   @Get('imports')
-  listImports() {
-    return this.prisma.tariffImportRun.findMany({ orderBy: { createdAt: 'desc' }, take: 50, select: { id: true, fileName: true, status: true, totalRows: true, validRows: true, errorRows: true, warningRows: true, createdAt: true, appliedAt: true } });
+  async listImports() {
+    const rows = await this.prisma.tariffImportRun.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+      select: {
+        id: true,
+        providerId: true,
+        fileName: true,
+        status: true,
+        totalRows: true,
+        validRows: true,
+        errorRows: true,
+        warningRows: true,
+        createdAt: true,
+        appliedAt: true,
+        undoneAt: true,
+      },
+    });
+    const appliedIds = rows.filter((row) => row.status === 'APPLIED').map((row) => row.id);
+    const undoable = appliedIds.length
+      ? await this.prisma.tariffImportRun.findMany({
+        where: {
+          id: { in: appliedIds },
+          status: 'APPLIED',
+          AND: [
+            { changeSet: { path: ['version'], equals: 2 } },
+            { changeSet: { path: ['kind'], equals: 'TARIFF_IMPORT' } },
+          ],
+        },
+        select: { id: true },
+      })
+      : [];
+    const undoableIds = new Set(undoable.map((run) => run.id));
+    return rows.map((row) => ({
+      ...row,
+      canUndo: row.status === 'APPLIED' && undoableIds.has(row.id),
+    }));
   }
 
   @Get('imports/:id')
@@ -221,6 +256,16 @@ export class AdminTariffsController {
     const run = await this.prisma.tariffImportRun.findUnique({ where: { id } });
     if (!run) throw new BadRequestException('Отчет импорта не найден');
     return run;
+  }
+
+  @Post('imports/:id/undo')
+  undoImport(
+    @Param('id') id: string,
+    @Body() body: { confirm?: boolean },
+    @Req() request?: AdminRequest,
+  ) {
+    if (body.confirm !== true) throw new BadRequestException('Необходимо явно подтвердить отмену импорта');
+    return this.imports.undoImport(id, request?.user?.id);
   }
 
   @Get(':id')
