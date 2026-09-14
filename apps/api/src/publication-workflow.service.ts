@@ -63,7 +63,6 @@ export class PublicationWorkflowService {
     });
     const previous = await transaction.contentRevision.aggregate({
       where: {
-        siteId: input.siteId,
         entityType: input.entityType,
         entityId: input.entityId,
       },

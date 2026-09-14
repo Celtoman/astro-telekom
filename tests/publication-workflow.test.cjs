@@ -43,7 +43,7 @@ function fixture() {
       aggregate: async ({ where }) => ({
         _max: {
           entityRevision: contentRevisions
-            .filter((row) => row.siteId === where.siteId && row.entityType === where.entityType && row.entityId === where.entityId)
+            .filter((row) => row.entityType === where.entityType && row.entityId === where.entityId)
             .reduce((maximum, row) => Math.max(maximum, row.entityRevision), 0) || null,
         },
       }),

@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
-import { RebuildQueueService } from './rebuild-queue.service';
+import { PublicationWorkflowService } from './publication-workflow.service';
 
 type PublishStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
@@ -14,10 +15,17 @@ interface SiteBody {
   status?: PublishStatus;
 }
 
+interface AdminRequest {
+  user?: { id: string };
+}
+
 @Controller('admin/sites')
 @UseGuards(AdminTokenGuard)
 export class AdminSitesController {
-  constructor(private readonly prisma: PrismaService, private readonly rebuild: RebuildQueueService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly publications: PublicationWorkflowService,
+  ) {}
 
   @Get()
   list() {
@@ -25,16 +33,41 @@ export class AdminSitesController {
   }
 
   @Post()
-  async create(@Body() body: SiteBody) {
-    const site = await this.prisma.site.create({ data: body });
-    await this.rebuild.enqueue({ entity: 'site', id: site.id, siteId: site.id });
-    return site;
+  create(@Body() body: SiteBody, @Req() request?: AdminRequest) {
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const site = await transaction.site.create({ data: body });
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: site.id,
+        entityType: 'SITE',
+        entityId: site.id,
+        action: 'CREATE',
+        snapshot: site as unknown as Record<string, unknown>,
+        changedFields: Object.keys(body),
+        actorId: request?.user?.id,
+        source: 'admin',
+      });
+      return { ...site, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() body: Partial<SiteBody>) {
-    const site = await this.prisma.site.update({ where: { id }, data: body });
-    await this.rebuild.enqueue({ entity: 'site', id: site.id, siteId: site.id });
-    return site;
+  update(@Param('id') id: string, @Body() body: Partial<SiteBody>, @Req() request?: AdminRequest) {
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const current = await transaction.site.findUnique({ where: { id } });
+      if (!current) throw new BadRequestException('Сайт не найден');
+      const site = await transaction.site.update({ where: { id }, data: body });
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: site.id,
+        entityType: 'SITE',
+        entityId: site.id,
+        action: 'UPDATE',
+        previousSnapshot: current as unknown as Record<string, unknown>,
+        snapshot: site as unknown as Record<string, unknown>,
+        changedFields: Object.keys(body),
+        actorId: request?.user?.id,
+        source: 'admin',
+      });
+      return { ...site, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 }
