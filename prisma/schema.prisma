@@ -81,12 +81,14 @@ enum DeliveryAttemptStatus {
 enum TariffImportStatus {
   VALIDATED
   APPLIED
+  UNDONE
   FAILED
 }
 
 enum CityImportStatus {
   VALIDATED
   APPLIED
+  UNDONE
   FAILED
 }
 
@@ -113,6 +115,7 @@ enum ContentRevisionAction {
   CREATE
   UPDATE
   IMPORT
+  UNDO
   ARCHIVE
   RESTORE
 }
@@ -390,10 +393,19 @@ model TariffImportRun {
   errorRows   Int
   warningRows Int
   report      Json
+  changeSet   Json?
   createdAt   DateTime           @default(now())
   appliedAt   DateTime?
+  appliedById String?
+  undoneAt    DateTime?
+  undoneById  String?
+  undoSiteRevisions Json?
   provider    Provider           @relation(fields: [providerId], references: [id])
+  appliedBy   User?              @relation("TariffImportAppliedBy", fields: [appliedById], references: [id], onDelete: SetNull)
+  undoneBy    User?              @relation("TariffImportUndoneBy", fields: [undoneById], references: [id], onDelete: SetNull)
   @@index([providerId, createdAt])
+  @@index([appliedById, appliedAt])
+  @@index([undoneById, undoneAt])
 }
 
 model CityImportRun {
@@ -406,10 +418,19 @@ model CityImportRun {
   errorRows   Int
   warningRows Int
   report      Json
+  changeSet   Json?
   createdAt   DateTime         @default(now())
   appliedAt   DateTime?
+  appliedById String?
+  undoneAt    DateTime?
+  undoneById  String?
+  undoSiteRevisions Json?
   site        Site             @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  appliedBy   User?            @relation("CityImportAppliedBy", fields: [appliedById], references: [id], onDelete: SetNull)
+  undoneBy    User?            @relation("CityImportUndoneBy", fields: [undoneById], references: [id], onDelete: SetNull)
   @@index([siteId, createdAt])
+  @@index([appliedById, appliedAt])
+  @@index([undoneById, undoneAt])
 }
 
 model AddressCheck {
@@ -586,6 +607,10 @@ model User {
   contentRevisions ContentRevision[]
   publications SitePublication[]
   auditEvents AuditEvent[]
+  tariffImportsApplied TariffImportRun[] @relation("TariffImportAppliedBy")
+  tariffImportsUndone  TariffImportRun[] @relation("TariffImportUndoneBy")
+  cityImportsApplied   CityImportRun[]   @relation("CityImportAppliedBy")
+  cityImportsUndone    CityImportRun[]   @relation("CityImportUndoneBy")
 }
 
 model Session {

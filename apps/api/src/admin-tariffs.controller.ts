@@ -183,25 +183,31 @@ export class AdminTariffsController {
   }
 
   @Post('import/apply')
-  async applyImport(@Body() body: { runId?: string; confirmWarnings?: boolean; acceptedKeys?: unknown }) {
+  async applyImport(
+    @Body() body: { runId?: string; confirmWarnings?: boolean; acceptedKeys?: unknown },
+    @Req() request?: AdminRequest,
+  ) {
     if (!body.runId) throw new BadRequestException('runId обязателен');
     if (body.acceptedKeys !== undefined) throw new BadRequestException('Частичное применение acceptedKeys больше не поддерживается: импорт применяется целиком');
     const run = await this.prisma.tariffImportRun.findUnique({ where: { id: body.runId } });
     if (!run) throw new BadRequestException('Отчет импорта не найден');
-    if (run.status === 'APPLIED') throw new BadRequestException('Этот импорт уже применен');
+    if (run.status === 'APPLIED' || run.status === 'UNDONE') throw new BadRequestException('Этот импорт уже применен');
     const report = run.report as unknown as ImportReport;
     let result;
     try {
-      result = await this.imports.applyReport(report, { confirmWarnings: body.confirmWarnings === true }, run.id);
+      result = await this.imports.applyReport(
+        report,
+        { confirmWarnings: body.confirmWarnings === true },
+        run.id,
+        request?.user?.id,
+      );
     } catch (error) {
       await this.prisma.tariffImportRun.updateMany({
-        where: { id: run.id, status: { not: 'APPLIED' } },
+        where: { id: run.id, status: 'VALIDATED' },
         data: { status: 'FAILED' },
       });
       throw error;
     }
-    const sites = await this.prisma.site.findMany({ where: { providerId: report.providerId }, select: { id: true } });
-    for (const site of sites) await this.rebuild.enqueue({ entity: 'tariff-import', id: run.id, siteId: site.id });
     return { runId: run.id, ...result };
   }
 

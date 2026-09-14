@@ -81,12 +81,14 @@ enum DeliveryAttemptStatus {
 enum TariffImportStatus {
   VALIDATED
   APPLIED
+  UNDONE
   FAILED
 }
 
 enum CityImportStatus {
   VALIDATED
   APPLIED
+  UNDONE
   FAILED
 }
 
@@ -113,6 +115,7 @@ enum ContentRevisionAction {
   CREATE
   UPDATE
   IMPORT
+  UNDO
   ARCHIVE
   RESTORE
 }
@@ -386,37 +389,55 @@ model Tariff {
 }
 
 model TariffImportRun {
-  id          String             @id @default(cuid())
-  providerId  String
-  fileName    String
-  status      TariffImportStatus @default(VALIDATED)
-  totalRows   Int
-  validRows   Int
-  errorRows   Int
-  warningRows Int
-  report      Json
-  createdAt   DateTime           @default(now())
-  appliedAt   DateTime?
-  provider    Provider           @relation(fields: [providerId], references: [id])
+  id                String             @id @default(cuid())
+  providerId        String
+  fileName          String
+  status            TariffImportStatus @default(VALIDATED)
+  totalRows         Int
+  validRows         Int
+  errorRows         Int
+  warningRows       Int
+  report            Json
+  changeSet         Json?
+  createdAt         DateTime           @default(now())
+  appliedAt         DateTime?
+  appliedById       String?
+  undoneAt          DateTime?
+  undoneById        String?
+  undoSiteRevisions Json?
+  provider          Provider           @relation(fields: [providerId], references: [id])
+  appliedBy         User?              @relation("TariffImportAppliedBy", fields: [appliedById], references: [id], onDelete: SetNull)
+  undoneBy          User?              @relation("TariffImportUndoneBy", fields: [undoneById], references: [id], onDelete: SetNull)
 
   @@index([providerId, createdAt])
+  @@index([appliedById, appliedAt])
+  @@index([undoneById, undoneAt])
 }
 
 model CityImportRun {
-  id          String           @id @default(cuid())
-  siteId      String
-  fileName    String
-  status      CityImportStatus @default(VALIDATED)
-  totalRows   Int
-  validRows   Int
-  errorRows   Int
-  warningRows Int
-  report      Json
-  createdAt   DateTime         @default(now())
-  appliedAt   DateTime?
-  site        Site             @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  id                String           @id @default(cuid())
+  siteId            String
+  fileName          String
+  status            CityImportStatus @default(VALIDATED)
+  totalRows         Int
+  validRows         Int
+  errorRows         Int
+  warningRows       Int
+  report            Json
+  changeSet         Json?
+  createdAt         DateTime         @default(now())
+  appliedAt         DateTime?
+  appliedById       String?
+  undoneAt          DateTime?
+  undoneById        String?
+  undoSiteRevisions Json?
+  site              Site             @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  appliedBy         User?            @relation("CityImportAppliedBy", fields: [appliedById], references: [id], onDelete: SetNull)
+  undoneBy          User?            @relation("CityImportUndoneBy", fields: [undoneById], references: [id], onDelete: SetNull)
 
   @@index([siteId, createdAt])
+  @@index([appliedById, appliedAt])
+  @@index([undoneById, undoneAt])
 }
 
 model AddressCheck {
@@ -589,17 +610,21 @@ model LeadStatusHistory {
 }
 
 model User {
-  id               String            @id @default(cuid())
-  email            String            @unique
-  passwordHash     String
-  name             String?
-  active           Boolean           @default(true)
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  sessions         Session[]
-  contentRevisions ContentRevision[]
-  publications     SitePublication[]
-  auditEvents      AuditEvent[]
+  id                   String            @id @default(cuid())
+  email                String            @unique
+  passwordHash         String
+  name                 String?
+  active               Boolean           @default(true)
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  sessions             Session[]
+  contentRevisions     ContentRevision[]
+  publications         SitePublication[]
+  auditEvents          AuditEvent[]
+  tariffImportsApplied TariffImportRun[] @relation("TariffImportAppliedBy")
+  tariffImportsUndone  TariffImportRun[] @relation("TariffImportUndoneBy")
+  cityImportsApplied   CityImportRun[]   @relation("CityImportAppliedBy")
+  cityImportsUndone    CityImportRun[]   @relation("CityImportUndoneBy")
 }
 
 model Session {

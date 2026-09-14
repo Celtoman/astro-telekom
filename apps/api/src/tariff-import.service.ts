@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Prisma, ServiceType } from '../generated';
+import { Prisma, ServiceType, type Redirect, type Tariff } from '../generated';
 import { readSheet, type SheetData } from 'read-excel-file/node';
 import { PrismaService } from './prisma.service';
+import { PublicationWorkflowService } from './publication-workflow.service';
 
 export const REQUIRED_IMPORT_COLUMNS = [
   'subekt_rf', 'gorod_name', 'gorod_slug', 'tarif_type', 'post_title', 'post_title_lat',
@@ -107,6 +108,93 @@ export interface ImportReport {
   diff: ImportDiff;
 }
 
+type StoredTariff = {
+  id: string;
+  providerId: string;
+  cityId: string;
+  name: string;
+  slug: string;
+  serviceType: string;
+  standardPrice: string | null;
+  promoPrice: string | null;
+  speed: number | null;
+  promoText: string | null;
+  connectionFee: string | null;
+  availability: boolean;
+  externalId: string | null;
+  identityKey: string | null;
+  dataSource: string | null;
+  attributes: Prisma.JsonValue | null;
+  seo: Prisma.JsonValue | null;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type StoredRedirect = {
+  id: string;
+  siteId: string;
+  cityId: string | null;
+  sourcePath: string;
+  targetPath: string;
+  managedTariffId: string | null;
+  status: string;
+  hitCount: number;
+  lastHitAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type TariffImportChangeSet = {
+  version: 1;
+  kind: 'TARIFF_IMPORT';
+  providerId: string;
+  runId: string;
+  beforeTariffs: StoredTariff[];
+  afterTariffs: StoredTariff[];
+  redirectSnapshot: StoredRedirect[];
+  sites: Array<{ siteId: string; beforeTariffs: StoredTariff[]; afterTariffs: StoredTariff[] }>;
+  workingRevisions: Array<{ siteId: string; workingRevision: number }>;
+};
+
+const jsonCopy = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+const dateText = (value: Date | null) => value ? value.toISOString() : null;
+const snapshotTariff = (tariff: Tariff): StoredTariff => ({
+  id: tariff.id,
+  providerId: tariff.providerId,
+  cityId: tariff.cityId,
+  name: tariff.name,
+  slug: tariff.slug,
+  serviceType: tariff.serviceType,
+  standardPrice: tariff.standardPrice === null ? null : String(tariff.standardPrice),
+  promoPrice: tariff.promoPrice === null ? null : String(tariff.promoPrice),
+  speed: tariff.speed,
+  promoText: tariff.promoText,
+  connectionFee: tariff.connectionFee === null ? null : String(tariff.connectionFee),
+  availability: tariff.availability,
+  externalId: tariff.externalId,
+  identityKey: tariff.identityKey,
+  dataSource: tariff.dataSource,
+  attributes: tariff.attributes === null ? null : jsonCopy(tariff.attributes),
+  seo: tariff.seo === null ? null : jsonCopy(tariff.seo),
+  status: tariff.status,
+  createdAt: tariff.createdAt.toISOString(),
+  updatedAt: tariff.updatedAt.toISOString(),
+});
+const snapshotRedirect = (redirect: Redirect): StoredRedirect => ({
+  id: redirect.id,
+  siteId: redirect.siteId,
+  cityId: redirect.cityId,
+  sourcePath: redirect.sourcePath,
+  targetPath: redirect.targetPath,
+  managedTariffId: redirect.managedTariffId,
+  status: redirect.status,
+  hitCount: redirect.hitCount,
+  lastHitAt: dateText(redirect.lastHitAt),
+  createdAt: redirect.createdAt.toISOString(),
+  updatedAt: redirect.updatedAt.toISOString(),
+});
+
 const text = (value: unknown) => value === null || value === undefined ? '' : String(value).trim();
 const empty = (value: unknown) => text(value) === '';
 const number = (value: unknown) => {
@@ -208,7 +296,10 @@ export async function parseWorkbook(buffer: Buffer, fileName = 'import.xlsx'): P
 
 @Injectable()
 export class TariffImportService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly publications: PublicationWorkflowService,
+  ) {}
 
   async validateRows(providerId: string, fileName: string, sourceRows: Record<string, unknown>[]): Promise<ImportReport> {
     if (!providerId) throw new BadRequestException('providerId обязателен');
@@ -340,7 +431,7 @@ export class TariffImportService {
     };
   }
 
-  async applyReport(report: ImportReport, options: { confirmWarnings?: boolean } = {}, runId?: string) {
+  async applyReport(report: ImportReport, options: { confirmWarnings?: boolean } = {}, runId?: string, actorId?: string) {
     if (report.reportVersion !== 2 || !Array.isArray(report.existingSnapshot)) {
       throw new BadRequestException('Отчет импорта создан в старом формате; проверьте файл заново');
     }
@@ -350,6 +441,9 @@ export class TariffImportService {
     }
     return this.prisma.$transaction(async (transaction) => {
       const existingTariffs = await transaction.tariff.findMany({ where: { providerId: report.providerId } });
+      const beforeSnapshots = runId
+        ? existingTariffs.map(snapshotTariff).sort((left, right) => left.id.localeCompare(right.id))
+        : [];
       const expectedById = new Map(report.existingSnapshot.map((tariff) => [tariff.id, tariff.updatedAt]));
       const catalogChanged = existingTariffs.length !== report.existingSnapshot.length
         || existingTariffs.some((tariff) => expectedById.get(tariff.id) !== tariff.updatedAt.toISOString());
@@ -392,14 +486,68 @@ export class TariffImportService {
       }
       const staleIds = existingTariffs.filter((tariff) => !matchedIds.has(tariff.id)).map((tariff) => tariff.id);
       if (staleIds.length) await transaction.tariff.deleteMany({ where: { id: { in: staleIds } } });
+      const afterTariffs = await transaction.tariff.findMany({ where: { providerId: report.providerId } });
+      const workingRevisions: Array<{ siteId: string; workingRevision: number }> = [];
       if (runId) {
+        const afterSnapshots = afterTariffs.map(snapshotTariff).sort((left, right) => left.id.localeCompare(right.id));
+        const cityIds = [...new Set([...beforeSnapshots, ...afterSnapshots].map((tariff) => tariff.cityId))];
+        const cities = cityIds.length
+          ? await transaction.city.findMany({ where: { id: { in: cityIds } }, select: { id: true, siteId: true } })
+          : [];
+        const siteByCity = new Map(cities.map((city) => [city.id, city.siteId]));
+        if (siteByCity.size !== cityIds.length) throw new BadRequestException('Не удалось определить сайты всех тарифов импорта');
+        const siteIds = [...new Set(cities.map((city) => city.siteId))].sort();
+        const redirects = siteIds.length
+          ? await transaction.redirect.findMany({ where: { siteId: { in: siteIds } }, orderBy: { id: 'asc' } })
+          : [];
+        const sites = siteIds.map((siteId) => ({
+          siteId,
+          beforeTariffs: beforeSnapshots.filter((tariff) => siteByCity.get(tariff.cityId) === siteId),
+          afterTariffs: afterSnapshots.filter((tariff) => siteByCity.get(tariff.cityId) === siteId),
+        }));
+        for (const site of sites) {
+          const revision = await this.publications.recordWorkingRevision(transaction, {
+            siteId: site.siteId,
+            entityType: 'SITE',
+            entityId: site.siteId,
+            action: 'IMPORT',
+            previousSnapshot: { tariffs: site.beforeTariffs },
+            snapshot: { tariffs: site.afterTariffs },
+            changedFields: ['tariffs'],
+            actorId,
+            source: `tariff-import:${runId}`,
+          });
+          workingRevisions.push({ siteId: site.siteId, workingRevision: revision.siteRevision });
+        }
+        const changeSet: TariffImportChangeSet = {
+          version: 1,
+          kind: 'TARIFF_IMPORT',
+          providerId: report.providerId,
+          runId,
+          beforeTariffs: beforeSnapshots,
+          afterTariffs: afterSnapshots,
+          redirectSnapshot: redirects.map(snapshotRedirect),
+          sites,
+          workingRevisions,
+        };
         const claimedRun = await transaction.tariffImportRun.updateMany({
           where: { id: runId, status: 'VALIDATED' },
-          data: { status: 'APPLIED', appliedAt: new Date() },
+          data: {
+            status: 'APPLIED',
+            appliedAt: new Date(),
+            appliedById: actorId || null,
+            changeSet: changeSet as unknown as Prisma.InputJsonValue,
+          },
         });
         if (claimedRun.count !== 1) throw new BadRequestException('Импорт уже применен или его статус изменился');
       }
-      return { created, updated, deleted: staleIds.length, applied: report.candidates.length };
+      return {
+        created,
+        updated,
+        deleted: staleIds.length,
+        applied: report.candidates.length,
+        ...(runId ? { workingRevisions } : {}),
+      };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: IMPORT_TRANSACTION_TIMEOUT_MS });
   }
 }

@@ -303,8 +303,13 @@ exports.Prisma.TariffImportRunScalarFieldEnum = {
   errorRows: 'errorRows',
   warningRows: 'warningRows',
   report: 'report',
+  changeSet: 'changeSet',
   createdAt: 'createdAt',
-  appliedAt: 'appliedAt'
+  appliedAt: 'appliedAt',
+  appliedById: 'appliedById',
+  undoneAt: 'undoneAt',
+  undoneById: 'undoneById',
+  undoSiteRevisions: 'undoSiteRevisions'
 };
 
 exports.Prisma.CityImportRunScalarFieldEnum = {
@@ -317,8 +322,13 @@ exports.Prisma.CityImportRunScalarFieldEnum = {
   errorRows: 'errorRows',
   warningRows: 'warningRows',
   report: 'report',
+  changeSet: 'changeSet',
   createdAt: 'createdAt',
-  appliedAt: 'appliedAt'
+  appliedAt: 'appliedAt',
+  appliedById: 'appliedById',
+  undoneAt: 'undoneAt',
+  undoneById: 'undoneById',
+  undoSiteRevisions: 'undoSiteRevisions'
 };
 
 exports.Prisma.AddressCheckScalarFieldEnum = {
@@ -518,6 +528,7 @@ exports.ContentRevisionAction = exports.$Enums.ContentRevisionAction = {
   CREATE: 'CREATE',
   UPDATE: 'UPDATE',
   IMPORT: 'IMPORT',
+  UNDO: 'UNDO',
   ARCHIVE: 'ARCHIVE',
   RESTORE: 'RESTORE'
 };
@@ -554,12 +565,14 @@ exports.ServiceType = exports.$Enums.ServiceType = {
 exports.TariffImportStatus = exports.$Enums.TariffImportStatus = {
   VALIDATED: 'VALIDATED',
   APPLIED: 'APPLIED',
+  UNDONE: 'UNDONE',
   FAILED: 'FAILED'
 };
 
 exports.CityImportStatus = exports.$Enums.CityImportStatus = {
   VALIDATED: 'VALIDATED',
   APPLIED: 'APPLIED',
+  UNDONE: 'UNDONE',
   FAILED: 'FAILED'
 };
 

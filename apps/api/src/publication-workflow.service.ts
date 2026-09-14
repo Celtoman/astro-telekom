@@ -10,7 +10,7 @@ type WorkingRevisionInput = {
   siteId: string;
   entityType: 'PROVIDER' | 'SITE' | 'REGION' | 'CITY' | 'PAGE' | 'TARIFF' | 'REDIRECT';
   entityId: string;
-  action: 'CREATE' | 'UPDATE' | 'IMPORT' | 'ARCHIVE' | 'RESTORE';
+  action: 'CREATE' | 'UPDATE' | 'IMPORT' | 'UNDO' | 'ARCHIVE' | 'RESTORE';
   previousSnapshot?: JsonObject | null;
   snapshot: JsonObject;
   changedFields: string[];

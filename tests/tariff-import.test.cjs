@@ -20,6 +20,25 @@ function service() {
   });
 }
 
+test('import runs persist change sets and attributed undo state', () => {
+  const schema = fs.readFileSync(path.join(__dirname, '..', 'prisma', 'schema.prisma'), 'utf8');
+  const tariffRun = schema.slice(schema.indexOf('model TariffImportRun {'), schema.indexOf('model CityImportRun {'));
+  const cityRun = schema.slice(schema.indexOf('model CityImportRun {'), schema.indexOf('model AddressCheck {'));
+  for (const model of [tariffRun, cityRun]) {
+    assert.match(model, /changeSet\s+Json\?/);
+    assert.match(model, /appliedById\s+String\?/);
+    assert.match(model, /undoneAt\s+DateTime\?/);
+    assert.match(model, /undoneById\s+String\?/);
+    assert.match(model, /undoSiteRevisions\s+Json\?/);
+  }
+  assert.match(schema.slice(schema.indexOf('enum TariffImportStatus'), schema.indexOf('enum CityImportStatus')), /UNDONE/);
+  assert.match(schema.slice(schema.indexOf('enum CityImportStatus'), schema.indexOf('enum SiteRebuildStatus')), /UNDONE/);
+  assert.match(schema.slice(schema.indexOf('enum ContentRevisionAction'), schema.indexOf('enum SitePublicationStatus')), /UNDO/);
+  const migration = fs.readFileSync(path.join(__dirname, '..', 'prisma', 'migrations', '0029_versioned_import_undo', 'migration.sql'), 'utf8');
+  assert.match(migration, /ADD VALUE IF NOT EXISTS 'UNDONE'/);
+  assert.match(migration, /ADD COLUMN "changeSet" JSONB/);
+});
+
 test('the tariff attribute registry preserves every observed source field', () => {
   assert.deepEqual(TARIFF_ATTRIBUTE_FIELDS.map(({ key }) => key), [
     'nazvanie_tarifa', 'card_subtitle', 'badge_text', 'promo_feature', 'opisanie_tarifa',
@@ -290,30 +309,91 @@ test('full snapshot transaction rolls back all changes when one write fails', as
   assert.deepEqual(records, original);
 });
 
-test('apply queues rebuilds for every provider site, including deletion-only sites', async () => {
+test('full snapshot apply records one audited working revision per affected site', async () => {
+  const before = [{
+    id: 'tariff-old', providerId: 'provider-1', cityId: 'city-1', name: 'Старый тариф', slug: 'old',
+    serviceType: 'INTERNET', standardPrice: 500, promoPrice: null, speed: 100, promoText: null,
+    connectionFee: null, availability: true, externalId: null, identityKey: 'city-1:old:internet',
+    dataSource: 'old.xlsx', attributes: {}, seo: null, status: 'PUBLISHED',
+    createdAt: new Date('2026-09-01T00:00:00.000Z'), updatedAt: SNAPSHOT_TIME,
+  }];
+  const records = structuredClone(before);
+  let runUpdate;
+  const revisions = [];
+  const report = {
+    reportVersion: 2, providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [],
+    existingSnapshot: [{ id: 'tariff-old', updatedAt: SNAPSHOT_TIME.toISOString() }],
+  };
+  const prisma = {
+    $transaction: async (callback) => callback({
+      page: { findMany: async () => [] },
+      city: { findMany: async () => [{ id: 'city-1', siteId: 'site-1' }] },
+      redirect: { findMany: async () => [] },
+      tariff: {
+        findMany: async () => records,
+        deleteMany: async () => { records.splice(0, records.length); return { count: 1 }; },
+      },
+      tariffImportRun: {
+        updateMany: async ({ data }) => { runUpdate = data; return { count: 1 }; },
+      },
+    }),
+  };
+  const publications = {
+    recordWorkingRevision: async (_transaction, input) => {
+      revisions.push(input);
+      return { siteRevision: 12 };
+    },
+  };
+
+  const result = await new TariffImportService(prisma, publications).applyReport(
+    report,
+    { confirmWarnings: true },
+    'run-1',
+    'user-1',
+  );
+
+  assert.deepEqual(result.workingRevisions, [{ siteId: 'site-1', workingRevision: 12 }]);
+  assert.equal(revisions.length, 1);
+  assert.equal(revisions[0].entityType, 'SITE');
+  assert.equal(revisions[0].entityId, 'site-1');
+  assert.equal(revisions[0].action, 'IMPORT');
+  assert.equal(revisions[0].actorId, 'user-1');
+  assert.equal(revisions[0].source, 'tariff-import:run-1');
+  assert.equal(revisions[0].previousSnapshot.tariffs.length, 1);
+  assert.equal(revisions[0].snapshot.tariffs.length, 0);
+  assert.equal(runUpdate.status, 'APPLIED');
+  assert.equal(runUpdate.appliedById, 'user-1');
+  assert.equal(runUpdate.changeSet.version, 1);
+  assert.equal(runUpdate.changeSet.kind, 'TARIFF_IMPORT');
+  assert.deepEqual(runUpdate.changeSet.workingRevisions, [{ siteId: 'site-1', workingRevision: 12 }]);
+});
+
+test('tariff import controller preserves the working version and does not publish it', async () => {
   const report = { reportVersion: 2, providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [], existingSnapshot: [] };
   const queued = [];
   const prisma = {
     tariffImportRun: {
       findUnique: async () => ({ id: 'run-1', status: 'VALIDATED', report }),
       update: async () => { throw new Error('run status must be committed inside the import transaction'); },
+      updateMany: async () => ({ count: 1 }),
     },
-    site: { findMany: async () => [{ id: 'site-1' }, { id: 'site-2' }] },
   };
   const imports = {
-    applyReport: async (receivedReport, options, runId) => {
+    applyReport: async (receivedReport, options, runId, actorId) => {
       assert.equal(receivedReport, report);
       assert.deepEqual(options, { confirmWarnings: false });
       assert.equal(runId, 'run-1');
-      return { created: 0, updated: 0, deleted: 2, applied: 0 };
+      assert.equal(actorId, 'user-1');
+      return { created: 0, updated: 0, deleted: 2, applied: 0, workingRevisions: [{ siteId: 'site-1', workingRevision: 7 }] };
     },
   };
   const controller = new AdminTariffsController(prisma, { enqueue: async (job) => queued.push(job) }, imports);
 
-  const result = await controller.applyImport({ runId: 'run-1' });
+  const result = await controller.applyImport({ runId: 'run-1' }, { user: { id: 'user-1' } });
 
   assert.equal(result.deleted, 2);
-  assert.deepEqual(queued.map((job) => job.siteId), ['site-1', 'site-2']);
+  assert.deepEqual(result.workingRevisions, [{ siteId: 'site-1', workingRevision: 7 }]);
+  assert.deepEqual(queued, []);
 });
 
 test('full snapshot rejects a catalog changed after validation before writing', async () => {

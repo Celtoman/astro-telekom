@@ -231,6 +231,7 @@ export type DeliveryAttemptStatus = (typeof DeliveryAttemptStatus)[keyof typeof 
 export const TariffImportStatus: {
   VALIDATED: 'VALIDATED',
   APPLIED: 'APPLIED',
+  UNDONE: 'UNDONE',
   FAILED: 'FAILED'
 };
 
@@ -240,6 +241,7 @@ export type TariffImportStatus = (typeof TariffImportStatus)[keyof typeof Tariff
 export const CityImportStatus: {
   VALIDATED: 'VALIDATED',
   APPLIED: 'APPLIED',
+  UNDONE: 'UNDONE',
   FAILED: 'FAILED'
 };
 
@@ -275,6 +277,7 @@ export const ContentRevisionAction: {
   CREATE: 'CREATE',
   UPDATE: 'UPDATE',
   IMPORT: 'IMPORT',
+  UNDO: 'UNDO',
   ARCHIVE: 'ARCHIVE',
   RESTORE: 'RESTORE'
 };
@@ -3631,6 +3634,10 @@ export namespace Prisma {
     contentRevisions: number
     publications: number
     auditEvents: number
+    tariffImportsApplied: number
+    tariffImportsUndone: number
+    cityImportsApplied: number
+    cityImportsUndone: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3638,6 +3645,10 @@ export namespace Prisma {
     contentRevisions?: boolean | UserCountOutputTypeCountContentRevisionsArgs
     publications?: boolean | UserCountOutputTypeCountPublicationsArgs
     auditEvents?: boolean | UserCountOutputTypeCountAuditEventsArgs
+    tariffImportsApplied?: boolean | UserCountOutputTypeCountTariffImportsAppliedArgs
+    tariffImportsUndone?: boolean | UserCountOutputTypeCountTariffImportsUndoneArgs
+    cityImportsApplied?: boolean | UserCountOutputTypeCountCityImportsAppliedArgs
+    cityImportsUndone?: boolean | UserCountOutputTypeCountCityImportsUndoneArgs
   }
 
   // Custom InputTypes
@@ -3677,6 +3688,34 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountAuditEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AuditEventWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTariffImportsAppliedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TariffImportRunWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTariffImportsUndoneArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TariffImportRunWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCityImportsAppliedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CityImportRunWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCityImportsUndoneArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CityImportRunWhereInput
   }
 
 
@@ -17689,6 +17728,9 @@ export namespace Prisma {
     warningRows: number | null
     createdAt: Date | null
     appliedAt: Date | null
+    appliedById: string | null
+    undoneAt: Date | null
+    undoneById: string | null
   }
 
   export type TariffImportRunMaxAggregateOutputType = {
@@ -17702,6 +17744,9 @@ export namespace Prisma {
     warningRows: number | null
     createdAt: Date | null
     appliedAt: Date | null
+    appliedById: string | null
+    undoneAt: Date | null
+    undoneById: string | null
   }
 
   export type TariffImportRunCountAggregateOutputType = {
@@ -17714,8 +17759,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: number
+    changeSet: number
     createdAt: number
     appliedAt: number
+    appliedById: number
+    undoneAt: number
+    undoneById: number
+    undoSiteRevisions: number
     _all: number
   }
 
@@ -17745,6 +17795,9 @@ export namespace Prisma {
     warningRows?: true
     createdAt?: true
     appliedAt?: true
+    appliedById?: true
+    undoneAt?: true
+    undoneById?: true
   }
 
   export type TariffImportRunMaxAggregateInputType = {
@@ -17758,6 +17811,9 @@ export namespace Prisma {
     warningRows?: true
     createdAt?: true
     appliedAt?: true
+    appliedById?: true
+    undoneAt?: true
+    undoneById?: true
   }
 
   export type TariffImportRunCountAggregateInputType = {
@@ -17770,8 +17826,13 @@ export namespace Prisma {
     errorRows?: true
     warningRows?: true
     report?: true
+    changeSet?: true
     createdAt?: true
     appliedAt?: true
+    appliedById?: true
+    undoneAt?: true
+    undoneById?: true
+    undoSiteRevisions?: true
     _all?: true
   }
 
@@ -17871,8 +17932,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonValue
+    changeSet: JsonValue | null
     createdAt: Date
     appliedAt: Date | null
+    appliedById: string | null
+    undoneAt: Date | null
+    undoneById: string | null
+    undoSiteRevisions: JsonValue | null
     _count: TariffImportRunCountAggregateOutputType | null
     _avg: TariffImportRunAvgAggregateOutputType | null
     _sum: TariffImportRunSumAggregateOutputType | null
@@ -17904,9 +17970,16 @@ export namespace Prisma {
     errorRows?: boolean
     warningRows?: boolean
     report?: boolean
+    changeSet?: boolean
     createdAt?: boolean
     appliedAt?: boolean
+    appliedById?: boolean
+    undoneAt?: boolean
+    undoneById?: boolean
+    undoSiteRevisions?: boolean
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    appliedBy?: boolean | TariffImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | TariffImportRun$undoneByArgs<ExtArgs>
   }, ExtArgs["result"]["tariffImportRun"]>
 
   export type TariffImportRunSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -17919,9 +17992,16 @@ export namespace Prisma {
     errorRows?: boolean
     warningRows?: boolean
     report?: boolean
+    changeSet?: boolean
     createdAt?: boolean
     appliedAt?: boolean
+    appliedById?: boolean
+    undoneAt?: boolean
+    undoneById?: boolean
+    undoSiteRevisions?: boolean
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    appliedBy?: boolean | TariffImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | TariffImportRun$undoneByArgs<ExtArgs>
   }, ExtArgs["result"]["tariffImportRun"]>
 
   export type TariffImportRunSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -17934,9 +18014,16 @@ export namespace Prisma {
     errorRows?: boolean
     warningRows?: boolean
     report?: boolean
+    changeSet?: boolean
     createdAt?: boolean
     appliedAt?: boolean
+    appliedById?: boolean
+    undoneAt?: boolean
+    undoneById?: boolean
+    undoSiteRevisions?: boolean
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    appliedBy?: boolean | TariffImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | TariffImportRun$undoneByArgs<ExtArgs>
   }, ExtArgs["result"]["tariffImportRun"]>
 
   export type TariffImportRunSelectScalar = {
@@ -17949,25 +18036,38 @@ export namespace Prisma {
     errorRows?: boolean
     warningRows?: boolean
     report?: boolean
+    changeSet?: boolean
     createdAt?: boolean
     appliedAt?: boolean
+    appliedById?: boolean
+    undoneAt?: boolean
+    undoneById?: boolean
+    undoSiteRevisions?: boolean
   }
 
-  export type TariffImportRunOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "providerId" | "fileName" | "status" | "totalRows" | "validRows" | "errorRows" | "warningRows" | "report" | "createdAt" | "appliedAt", ExtArgs["result"]["tariffImportRun"]>
+  export type TariffImportRunOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "providerId" | "fileName" | "status" | "totalRows" | "validRows" | "errorRows" | "warningRows" | "report" | "changeSet" | "createdAt" | "appliedAt" | "appliedById" | "undoneAt" | "undoneById" | "undoSiteRevisions", ExtArgs["result"]["tariffImportRun"]>
   export type TariffImportRunInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    appliedBy?: boolean | TariffImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | TariffImportRun$undoneByArgs<ExtArgs>
   }
   export type TariffImportRunIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    appliedBy?: boolean | TariffImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | TariffImportRun$undoneByArgs<ExtArgs>
   }
   export type TariffImportRunIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
+    appliedBy?: boolean | TariffImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | TariffImportRun$undoneByArgs<ExtArgs>
   }
 
   export type $TariffImportRunPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "TariffImportRun"
     objects: {
       provider: Prisma.$ProviderPayload<ExtArgs>
+      appliedBy: Prisma.$UserPayload<ExtArgs> | null
+      undoneBy: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -17979,8 +18079,13 @@ export namespace Prisma {
       errorRows: number
       warningRows: number
       report: Prisma.JsonValue
+      changeSet: Prisma.JsonValue | null
       createdAt: Date
       appliedAt: Date | null
+      appliedById: string | null
+      undoneAt: Date | null
+      undoneById: string | null
+      undoSiteRevisions: Prisma.JsonValue | null
     }, ExtArgs["result"]["tariffImportRun"]>
     composites: {}
   }
@@ -18376,6 +18481,8 @@ export namespace Prisma {
   export interface Prisma__TariffImportRunClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     provider<T extends ProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProviderDefaultArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    appliedBy<T extends TariffImportRun$appliedByArgs<ExtArgs> = {}>(args?: Subset<T, TariffImportRun$appliedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    undoneBy<T extends TariffImportRun$undoneByArgs<ExtArgs> = {}>(args?: Subset<T, TariffImportRun$undoneByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18414,8 +18521,13 @@ export namespace Prisma {
     readonly errorRows: FieldRef<"TariffImportRun", 'Int'>
     readonly warningRows: FieldRef<"TariffImportRun", 'Int'>
     readonly report: FieldRef<"TariffImportRun", 'Json'>
+    readonly changeSet: FieldRef<"TariffImportRun", 'Json'>
     readonly createdAt: FieldRef<"TariffImportRun", 'DateTime'>
     readonly appliedAt: FieldRef<"TariffImportRun", 'DateTime'>
+    readonly appliedById: FieldRef<"TariffImportRun", 'String'>
+    readonly undoneAt: FieldRef<"TariffImportRun", 'DateTime'>
+    readonly undoneById: FieldRef<"TariffImportRun", 'String'>
+    readonly undoSiteRevisions: FieldRef<"TariffImportRun", 'Json'>
   }
     
 
@@ -18817,6 +18929,44 @@ export namespace Prisma {
   }
 
   /**
+   * TariffImportRun.appliedBy
+   */
+  export type TariffImportRun$appliedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * TariffImportRun.undoneBy
+   */
+  export type TariffImportRun$undoneByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
    * TariffImportRun without action
    */
   export type TariffImportRunDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18872,6 +19022,9 @@ export namespace Prisma {
     warningRows: number | null
     createdAt: Date | null
     appliedAt: Date | null
+    appliedById: string | null
+    undoneAt: Date | null
+    undoneById: string | null
   }
 
   export type CityImportRunMaxAggregateOutputType = {
@@ -18885,6 +19038,9 @@ export namespace Prisma {
     warningRows: number | null
     createdAt: Date | null
     appliedAt: Date | null
+    appliedById: string | null
+    undoneAt: Date | null
+    undoneById: string | null
   }
 
   export type CityImportRunCountAggregateOutputType = {
@@ -18897,8 +19053,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: number
+    changeSet: number
     createdAt: number
     appliedAt: number
+    appliedById: number
+    undoneAt: number
+    undoneById: number
+    undoSiteRevisions: number
     _all: number
   }
 
@@ -18928,6 +19089,9 @@ export namespace Prisma {
     warningRows?: true
     createdAt?: true
     appliedAt?: true
+    appliedById?: true
+    undoneAt?: true
+    undoneById?: true
   }
 
   export type CityImportRunMaxAggregateInputType = {
@@ -18941,6 +19105,9 @@ export namespace Prisma {
     warningRows?: true
     createdAt?: true
     appliedAt?: true
+    appliedById?: true
+    undoneAt?: true
+    undoneById?: true
   }
 
   export type CityImportRunCountAggregateInputType = {
@@ -18953,8 +19120,13 @@ export namespace Prisma {
     errorRows?: true
     warningRows?: true
     report?: true
+    changeSet?: true
     createdAt?: true
     appliedAt?: true
+    appliedById?: true
+    undoneAt?: true
+    undoneById?: true
+    undoSiteRevisions?: true
     _all?: true
   }
 
@@ -19054,8 +19226,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonValue
+    changeSet: JsonValue | null
     createdAt: Date
     appliedAt: Date | null
+    appliedById: string | null
+    undoneAt: Date | null
+    undoneById: string | null
+    undoSiteRevisions: JsonValue | null
     _count: CityImportRunCountAggregateOutputType | null
     _avg: CityImportRunAvgAggregateOutputType | null
     _sum: CityImportRunSumAggregateOutputType | null
@@ -19087,9 +19264,16 @@ export namespace Prisma {
     errorRows?: boolean
     warningRows?: boolean
     report?: boolean
+    changeSet?: boolean
     createdAt?: boolean
     appliedAt?: boolean
+    appliedById?: boolean
+    undoneAt?: boolean
+    undoneById?: boolean
+    undoSiteRevisions?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
+    appliedBy?: boolean | CityImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | CityImportRun$undoneByArgs<ExtArgs>
   }, ExtArgs["result"]["cityImportRun"]>
 
   export type CityImportRunSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -19102,9 +19286,16 @@ export namespace Prisma {
     errorRows?: boolean
     warningRows?: boolean
     report?: boolean
+    changeSet?: boolean
     createdAt?: boolean
     appliedAt?: boolean
+    appliedById?: boolean
+    undoneAt?: boolean
+    undoneById?: boolean
+    undoSiteRevisions?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
+    appliedBy?: boolean | CityImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | CityImportRun$undoneByArgs<ExtArgs>
   }, ExtArgs["result"]["cityImportRun"]>
 
   export type CityImportRunSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -19117,9 +19308,16 @@ export namespace Prisma {
     errorRows?: boolean
     warningRows?: boolean
     report?: boolean
+    changeSet?: boolean
     createdAt?: boolean
     appliedAt?: boolean
+    appliedById?: boolean
+    undoneAt?: boolean
+    undoneById?: boolean
+    undoSiteRevisions?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
+    appliedBy?: boolean | CityImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | CityImportRun$undoneByArgs<ExtArgs>
   }, ExtArgs["result"]["cityImportRun"]>
 
   export type CityImportRunSelectScalar = {
@@ -19132,25 +19330,38 @@ export namespace Prisma {
     errorRows?: boolean
     warningRows?: boolean
     report?: boolean
+    changeSet?: boolean
     createdAt?: boolean
     appliedAt?: boolean
+    appliedById?: boolean
+    undoneAt?: boolean
+    undoneById?: boolean
+    undoSiteRevisions?: boolean
   }
 
-  export type CityImportRunOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "fileName" | "status" | "totalRows" | "validRows" | "errorRows" | "warningRows" | "report" | "createdAt" | "appliedAt", ExtArgs["result"]["cityImportRun"]>
+  export type CityImportRunOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "fileName" | "status" | "totalRows" | "validRows" | "errorRows" | "warningRows" | "report" | "changeSet" | "createdAt" | "appliedAt" | "appliedById" | "undoneAt" | "undoneById" | "undoSiteRevisions", ExtArgs["result"]["cityImportRun"]>
   export type CityImportRunInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
+    appliedBy?: boolean | CityImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | CityImportRun$undoneByArgs<ExtArgs>
   }
   export type CityImportRunIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
+    appliedBy?: boolean | CityImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | CityImportRun$undoneByArgs<ExtArgs>
   }
   export type CityImportRunIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
+    appliedBy?: boolean | CityImportRun$appliedByArgs<ExtArgs>
+    undoneBy?: boolean | CityImportRun$undoneByArgs<ExtArgs>
   }
 
   export type $CityImportRunPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "CityImportRun"
     objects: {
       site: Prisma.$SitePayload<ExtArgs>
+      appliedBy: Prisma.$UserPayload<ExtArgs> | null
+      undoneBy: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19162,8 +19373,13 @@ export namespace Prisma {
       errorRows: number
       warningRows: number
       report: Prisma.JsonValue
+      changeSet: Prisma.JsonValue | null
       createdAt: Date
       appliedAt: Date | null
+      appliedById: string | null
+      undoneAt: Date | null
+      undoneById: string | null
+      undoSiteRevisions: Prisma.JsonValue | null
     }, ExtArgs["result"]["cityImportRun"]>
     composites: {}
   }
@@ -19559,6 +19775,8 @@ export namespace Prisma {
   export interface Prisma__CityImportRunClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     site<T extends SiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SiteDefaultArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    appliedBy<T extends CityImportRun$appliedByArgs<ExtArgs> = {}>(args?: Subset<T, CityImportRun$appliedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    undoneBy<T extends CityImportRun$undoneByArgs<ExtArgs> = {}>(args?: Subset<T, CityImportRun$undoneByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19597,8 +19815,13 @@ export namespace Prisma {
     readonly errorRows: FieldRef<"CityImportRun", 'Int'>
     readonly warningRows: FieldRef<"CityImportRun", 'Int'>
     readonly report: FieldRef<"CityImportRun", 'Json'>
+    readonly changeSet: FieldRef<"CityImportRun", 'Json'>
     readonly createdAt: FieldRef<"CityImportRun", 'DateTime'>
     readonly appliedAt: FieldRef<"CityImportRun", 'DateTime'>
+    readonly appliedById: FieldRef<"CityImportRun", 'String'>
+    readonly undoneAt: FieldRef<"CityImportRun", 'DateTime'>
+    readonly undoneById: FieldRef<"CityImportRun", 'String'>
+    readonly undoSiteRevisions: FieldRef<"CityImportRun", 'Json'>
   }
     
 
@@ -19997,6 +20220,44 @@ export namespace Prisma {
      * Limit how many CityImportRuns to delete.
      */
     limit?: number
+  }
+
+  /**
+   * CityImportRun.appliedBy
+   */
+  export type CityImportRun$appliedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * CityImportRun.undoneBy
+   */
+  export type CityImportRun$undoneByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -29936,6 +30197,10 @@ export namespace Prisma {
     contentRevisions?: boolean | User$contentRevisionsArgs<ExtArgs>
     publications?: boolean | User$publicationsArgs<ExtArgs>
     auditEvents?: boolean | User$auditEventsArgs<ExtArgs>
+    tariffImportsApplied?: boolean | User$tariffImportsAppliedArgs<ExtArgs>
+    tariffImportsUndone?: boolean | User$tariffImportsUndoneArgs<ExtArgs>
+    cityImportsApplied?: boolean | User$cityImportsAppliedArgs<ExtArgs>
+    cityImportsUndone?: boolean | User$cityImportsUndoneArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -29975,6 +30240,10 @@ export namespace Prisma {
     contentRevisions?: boolean | User$contentRevisionsArgs<ExtArgs>
     publications?: boolean | User$publicationsArgs<ExtArgs>
     auditEvents?: boolean | User$auditEventsArgs<ExtArgs>
+    tariffImportsApplied?: boolean | User$tariffImportsAppliedArgs<ExtArgs>
+    tariffImportsUndone?: boolean | User$tariffImportsUndoneArgs<ExtArgs>
+    cityImportsApplied?: boolean | User$cityImportsAppliedArgs<ExtArgs>
+    cityImportsUndone?: boolean | User$cityImportsUndoneArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -29987,6 +30256,10 @@ export namespace Prisma {
       contentRevisions: Prisma.$ContentRevisionPayload<ExtArgs>[]
       publications: Prisma.$SitePublicationPayload<ExtArgs>[]
       auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
+      tariffImportsApplied: Prisma.$TariffImportRunPayload<ExtArgs>[]
+      tariffImportsUndone: Prisma.$TariffImportRunPayload<ExtArgs>[]
+      cityImportsApplied: Prisma.$CityImportRunPayload<ExtArgs>[]
+      cityImportsUndone: Prisma.$CityImportRunPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -30394,6 +30667,10 @@ export namespace Prisma {
     contentRevisions<T extends User$contentRevisionsArgs<ExtArgs> = {}>(args?: Subset<T, User$contentRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     publications<T extends User$publicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     auditEvents<T extends User$auditEventsArgs<ExtArgs> = {}>(args?: Subset<T, User$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tariffImportsApplied<T extends User$tariffImportsAppliedArgs<ExtArgs> = {}>(args?: Subset<T, User$tariffImportsAppliedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TariffImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tariffImportsUndone<T extends User$tariffImportsUndoneArgs<ExtArgs> = {}>(args?: Subset<T, User$tariffImportsUndoneArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TariffImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cityImportsApplied<T extends User$cityImportsAppliedArgs<ExtArgs> = {}>(args?: Subset<T, User$cityImportsAppliedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CityImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cityImportsUndone<T extends User$cityImportsUndoneArgs<ExtArgs> = {}>(args?: Subset<T, User$cityImportsUndoneArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CityImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -30916,6 +31193,102 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AuditEventScalarFieldEnum | AuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * User.tariffImportsApplied
+   */
+  export type User$tariffImportsAppliedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TariffImportRun
+     */
+    select?: TariffImportRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TariffImportRun
+     */
+    omit?: TariffImportRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TariffImportRunInclude<ExtArgs> | null
+    where?: TariffImportRunWhereInput
+    orderBy?: TariffImportRunOrderByWithRelationInput | TariffImportRunOrderByWithRelationInput[]
+    cursor?: TariffImportRunWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TariffImportRunScalarFieldEnum | TariffImportRunScalarFieldEnum[]
+  }
+
+  /**
+   * User.tariffImportsUndone
+   */
+  export type User$tariffImportsUndoneArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TariffImportRun
+     */
+    select?: TariffImportRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TariffImportRun
+     */
+    omit?: TariffImportRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TariffImportRunInclude<ExtArgs> | null
+    where?: TariffImportRunWhereInput
+    orderBy?: TariffImportRunOrderByWithRelationInput | TariffImportRunOrderByWithRelationInput[]
+    cursor?: TariffImportRunWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TariffImportRunScalarFieldEnum | TariffImportRunScalarFieldEnum[]
+  }
+
+  /**
+   * User.cityImportsApplied
+   */
+  export type User$cityImportsAppliedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CityImportRun
+     */
+    select?: CityImportRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CityImportRun
+     */
+    omit?: CityImportRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CityImportRunInclude<ExtArgs> | null
+    where?: CityImportRunWhereInput
+    orderBy?: CityImportRunOrderByWithRelationInput | CityImportRunOrderByWithRelationInput[]
+    cursor?: CityImportRunWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CityImportRunScalarFieldEnum | CityImportRunScalarFieldEnum[]
+  }
+
+  /**
+   * User.cityImportsUndone
+   */
+  export type User$cityImportsUndoneArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CityImportRun
+     */
+    select?: CityImportRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CityImportRun
+     */
+    omit?: CityImportRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CityImportRunInclude<ExtArgs> | null
+    where?: CityImportRunWhereInput
+    orderBy?: CityImportRunOrderByWithRelationInput | CityImportRunOrderByWithRelationInput[]
+    cursor?: CityImportRunWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CityImportRunScalarFieldEnum | CityImportRunScalarFieldEnum[]
   }
 
   /**
@@ -32230,8 +32603,13 @@ export namespace Prisma {
     errorRows: 'errorRows',
     warningRows: 'warningRows',
     report: 'report',
+    changeSet: 'changeSet',
     createdAt: 'createdAt',
-    appliedAt: 'appliedAt'
+    appliedAt: 'appliedAt',
+    appliedById: 'appliedById',
+    undoneAt: 'undoneAt',
+    undoneById: 'undoneById',
+    undoSiteRevisions: 'undoSiteRevisions'
   };
 
   export type TariffImportRunScalarFieldEnum = (typeof TariffImportRunScalarFieldEnum)[keyof typeof TariffImportRunScalarFieldEnum]
@@ -32247,8 +32625,13 @@ export namespace Prisma {
     errorRows: 'errorRows',
     warningRows: 'warningRows',
     report: 'report',
+    changeSet: 'changeSet',
     createdAt: 'createdAt',
-    appliedAt: 'appliedAt'
+    appliedAt: 'appliedAt',
+    appliedById: 'appliedById',
+    undoneAt: 'undoneAt',
+    undoneById: 'undoneById',
+    undoSiteRevisions: 'undoSiteRevisions'
   };
 
   export type CityImportRunScalarFieldEnum = (typeof CityImportRunScalarFieldEnum)[keyof typeof CityImportRunScalarFieldEnum]
@@ -33950,9 +34333,16 @@ export namespace Prisma {
     errorRows?: IntFilter<"TariffImportRun"> | number
     warningRows?: IntFilter<"TariffImportRun"> | number
     report?: JsonFilter<"TariffImportRun">
+    changeSet?: JsonNullableFilter<"TariffImportRun">
     createdAt?: DateTimeFilter<"TariffImportRun"> | Date | string
     appliedAt?: DateTimeNullableFilter<"TariffImportRun"> | Date | string | null
+    appliedById?: StringNullableFilter<"TariffImportRun"> | string | null
+    undoneAt?: DateTimeNullableFilter<"TariffImportRun"> | Date | string | null
+    undoneById?: StringNullableFilter<"TariffImportRun"> | string | null
+    undoSiteRevisions?: JsonNullableFilter<"TariffImportRun">
     provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+    appliedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    undoneBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type TariffImportRunOrderByWithRelationInput = {
@@ -33965,9 +34355,16 @@ export namespace Prisma {
     errorRows?: SortOrder
     warningRows?: SortOrder
     report?: SortOrder
+    changeSet?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     appliedAt?: SortOrderInput | SortOrder
+    appliedById?: SortOrderInput | SortOrder
+    undoneAt?: SortOrderInput | SortOrder
+    undoneById?: SortOrderInput | SortOrder
+    undoSiteRevisions?: SortOrderInput | SortOrder
     provider?: ProviderOrderByWithRelationInput
+    appliedBy?: UserOrderByWithRelationInput
+    undoneBy?: UserOrderByWithRelationInput
   }
 
   export type TariffImportRunWhereUniqueInput = Prisma.AtLeast<{
@@ -33983,9 +34380,16 @@ export namespace Prisma {
     errorRows?: IntFilter<"TariffImportRun"> | number
     warningRows?: IntFilter<"TariffImportRun"> | number
     report?: JsonFilter<"TariffImportRun">
+    changeSet?: JsonNullableFilter<"TariffImportRun">
     createdAt?: DateTimeFilter<"TariffImportRun"> | Date | string
     appliedAt?: DateTimeNullableFilter<"TariffImportRun"> | Date | string | null
+    appliedById?: StringNullableFilter<"TariffImportRun"> | string | null
+    undoneAt?: DateTimeNullableFilter<"TariffImportRun"> | Date | string | null
+    undoneById?: StringNullableFilter<"TariffImportRun"> | string | null
+    undoSiteRevisions?: JsonNullableFilter<"TariffImportRun">
     provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
+    appliedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    undoneBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type TariffImportRunOrderByWithAggregationInput = {
@@ -33998,8 +34402,13 @@ export namespace Prisma {
     errorRows?: SortOrder
     warningRows?: SortOrder
     report?: SortOrder
+    changeSet?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     appliedAt?: SortOrderInput | SortOrder
+    appliedById?: SortOrderInput | SortOrder
+    undoneAt?: SortOrderInput | SortOrder
+    undoneById?: SortOrderInput | SortOrder
+    undoSiteRevisions?: SortOrderInput | SortOrder
     _count?: TariffImportRunCountOrderByAggregateInput
     _avg?: TariffImportRunAvgOrderByAggregateInput
     _max?: TariffImportRunMaxOrderByAggregateInput
@@ -34020,8 +34429,13 @@ export namespace Prisma {
     errorRows?: IntWithAggregatesFilter<"TariffImportRun"> | number
     warningRows?: IntWithAggregatesFilter<"TariffImportRun"> | number
     report?: JsonWithAggregatesFilter<"TariffImportRun">
+    changeSet?: JsonNullableWithAggregatesFilter<"TariffImportRun">
     createdAt?: DateTimeWithAggregatesFilter<"TariffImportRun"> | Date | string
     appliedAt?: DateTimeNullableWithAggregatesFilter<"TariffImportRun"> | Date | string | null
+    appliedById?: StringNullableWithAggregatesFilter<"TariffImportRun"> | string | null
+    undoneAt?: DateTimeNullableWithAggregatesFilter<"TariffImportRun"> | Date | string | null
+    undoneById?: StringNullableWithAggregatesFilter<"TariffImportRun"> | string | null
+    undoSiteRevisions?: JsonNullableWithAggregatesFilter<"TariffImportRun">
   }
 
   export type CityImportRunWhereInput = {
@@ -34037,9 +34451,16 @@ export namespace Prisma {
     errorRows?: IntFilter<"CityImportRun"> | number
     warningRows?: IntFilter<"CityImportRun"> | number
     report?: JsonFilter<"CityImportRun">
+    changeSet?: JsonNullableFilter<"CityImportRun">
     createdAt?: DateTimeFilter<"CityImportRun"> | Date | string
     appliedAt?: DateTimeNullableFilter<"CityImportRun"> | Date | string | null
+    appliedById?: StringNullableFilter<"CityImportRun"> | string | null
+    undoneAt?: DateTimeNullableFilter<"CityImportRun"> | Date | string | null
+    undoneById?: StringNullableFilter<"CityImportRun"> | string | null
+    undoSiteRevisions?: JsonNullableFilter<"CityImportRun">
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    appliedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    undoneBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type CityImportRunOrderByWithRelationInput = {
@@ -34052,9 +34473,16 @@ export namespace Prisma {
     errorRows?: SortOrder
     warningRows?: SortOrder
     report?: SortOrder
+    changeSet?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     appliedAt?: SortOrderInput | SortOrder
+    appliedById?: SortOrderInput | SortOrder
+    undoneAt?: SortOrderInput | SortOrder
+    undoneById?: SortOrderInput | SortOrder
+    undoSiteRevisions?: SortOrderInput | SortOrder
     site?: SiteOrderByWithRelationInput
+    appliedBy?: UserOrderByWithRelationInput
+    undoneBy?: UserOrderByWithRelationInput
   }
 
   export type CityImportRunWhereUniqueInput = Prisma.AtLeast<{
@@ -34070,9 +34498,16 @@ export namespace Prisma {
     errorRows?: IntFilter<"CityImportRun"> | number
     warningRows?: IntFilter<"CityImportRun"> | number
     report?: JsonFilter<"CityImportRun">
+    changeSet?: JsonNullableFilter<"CityImportRun">
     createdAt?: DateTimeFilter<"CityImportRun"> | Date | string
     appliedAt?: DateTimeNullableFilter<"CityImportRun"> | Date | string | null
+    appliedById?: StringNullableFilter<"CityImportRun"> | string | null
+    undoneAt?: DateTimeNullableFilter<"CityImportRun"> | Date | string | null
+    undoneById?: StringNullableFilter<"CityImportRun"> | string | null
+    undoSiteRevisions?: JsonNullableFilter<"CityImportRun">
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    appliedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    undoneBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type CityImportRunOrderByWithAggregationInput = {
@@ -34085,8 +34520,13 @@ export namespace Prisma {
     errorRows?: SortOrder
     warningRows?: SortOrder
     report?: SortOrder
+    changeSet?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     appliedAt?: SortOrderInput | SortOrder
+    appliedById?: SortOrderInput | SortOrder
+    undoneAt?: SortOrderInput | SortOrder
+    undoneById?: SortOrderInput | SortOrder
+    undoSiteRevisions?: SortOrderInput | SortOrder
     _count?: CityImportRunCountOrderByAggregateInput
     _avg?: CityImportRunAvgOrderByAggregateInput
     _max?: CityImportRunMaxOrderByAggregateInput
@@ -34107,8 +34547,13 @@ export namespace Prisma {
     errorRows?: IntWithAggregatesFilter<"CityImportRun"> | number
     warningRows?: IntWithAggregatesFilter<"CityImportRun"> | number
     report?: JsonWithAggregatesFilter<"CityImportRun">
+    changeSet?: JsonNullableWithAggregatesFilter<"CityImportRun">
     createdAt?: DateTimeWithAggregatesFilter<"CityImportRun"> | Date | string
     appliedAt?: DateTimeNullableWithAggregatesFilter<"CityImportRun"> | Date | string | null
+    appliedById?: StringNullableWithAggregatesFilter<"CityImportRun"> | string | null
+    undoneAt?: DateTimeNullableWithAggregatesFilter<"CityImportRun"> | Date | string | null
+    undoneById?: StringNullableWithAggregatesFilter<"CityImportRun"> | string | null
+    undoSiteRevisions?: JsonNullableWithAggregatesFilter<"CityImportRun">
   }
 
   export type AddressCheckWhereInput = {
@@ -34906,6 +35351,10 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionListRelationFilter
     publications?: SitePublicationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
+    tariffImportsApplied?: TariffImportRunListRelationFilter
+    tariffImportsUndone?: TariffImportRunListRelationFilter
+    cityImportsApplied?: CityImportRunListRelationFilter
+    cityImportsUndone?: CityImportRunListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -34920,6 +35369,10 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionOrderByRelationAggregateInput
     publications?: SitePublicationOrderByRelationAggregateInput
     auditEvents?: AuditEventOrderByRelationAggregateInput
+    tariffImportsApplied?: TariffImportRunOrderByRelationAggregateInput
+    tariffImportsUndone?: TariffImportRunOrderByRelationAggregateInput
+    cityImportsApplied?: CityImportRunOrderByRelationAggregateInput
+    cityImportsUndone?: CityImportRunOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -34937,6 +35390,10 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionListRelationFilter
     publications?: SitePublicationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
+    tariffImportsApplied?: TariffImportRunListRelationFilter
+    tariffImportsUndone?: TariffImportRunListRelationFilter
+    cityImportsApplied?: CityImportRunListRelationFilter
+    cityImportsUndone?: CityImportRunListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -36329,9 +36786,14 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
     provider: ProviderCreateNestedOneWithoutTariffImportsInput
+    appliedBy?: UserCreateNestedOneWithoutTariffImportsAppliedInput
+    undoneBy?: UserCreateNestedOneWithoutTariffImportsUndoneInput
   }
 
   export type TariffImportRunUncheckedCreateInput = {
@@ -36344,8 +36806,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type TariffImportRunUpdateInput = {
@@ -36357,9 +36824,14 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
     provider?: ProviderUpdateOneRequiredWithoutTariffImportsNestedInput
+    appliedBy?: UserUpdateOneWithoutTariffImportsAppliedNestedInput
+    undoneBy?: UserUpdateOneWithoutTariffImportsUndoneNestedInput
   }
 
   export type TariffImportRunUncheckedUpdateInput = {
@@ -36372,8 +36844,13 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type TariffImportRunCreateManyInput = {
@@ -36386,8 +36863,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type TariffImportRunUpdateManyMutationInput = {
@@ -36399,8 +36881,11 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type TariffImportRunUncheckedUpdateManyInput = {
@@ -36413,8 +36898,13 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CityImportRunCreateInput = {
@@ -36426,9 +36916,14 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
     site: SiteCreateNestedOneWithoutCityImportsInput
+    appliedBy?: UserCreateNestedOneWithoutCityImportsAppliedInput
+    undoneBy?: UserCreateNestedOneWithoutCityImportsUndoneInput
   }
 
   export type CityImportRunUncheckedCreateInput = {
@@ -36441,8 +36936,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CityImportRunUpdateInput = {
@@ -36454,9 +36954,14 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
     site?: SiteUpdateOneRequiredWithoutCityImportsNestedInput
+    appliedBy?: UserUpdateOneWithoutCityImportsAppliedNestedInput
+    undoneBy?: UserUpdateOneWithoutCityImportsUndoneNestedInput
   }
 
   export type CityImportRunUncheckedUpdateInput = {
@@ -36469,8 +36974,13 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CityImportRunCreateManyInput = {
@@ -36483,8 +36993,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CityImportRunUpdateManyMutationInput = {
@@ -36496,8 +37011,11 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CityImportRunUncheckedUpdateManyInput = {
@@ -36510,8 +37028,13 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type AddressCheckCreateInput = {
@@ -37385,6 +37908,10 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -37399,6 +37926,10 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
   }
 
   export type UserUpdateInput = {
@@ -37413,6 +37944,10 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -37427,6 +37962,10 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -38754,8 +39293,13 @@ export namespace Prisma {
     errorRows?: SortOrder
     warningRows?: SortOrder
     report?: SortOrder
+    changeSet?: SortOrder
     createdAt?: SortOrder
     appliedAt?: SortOrder
+    appliedById?: SortOrder
+    undoneAt?: SortOrder
+    undoneById?: SortOrder
+    undoSiteRevisions?: SortOrder
   }
 
   export type TariffImportRunAvgOrderByAggregateInput = {
@@ -38776,6 +39320,9 @@ export namespace Prisma {
     warningRows?: SortOrder
     createdAt?: SortOrder
     appliedAt?: SortOrder
+    appliedById?: SortOrder
+    undoneAt?: SortOrder
+    undoneById?: SortOrder
   }
 
   export type TariffImportRunMinOrderByAggregateInput = {
@@ -38789,6 +39336,9 @@ export namespace Prisma {
     warningRows?: SortOrder
     createdAt?: SortOrder
     appliedAt?: SortOrder
+    appliedById?: SortOrder
+    undoneAt?: SortOrder
+    undoneById?: SortOrder
   }
 
   export type TariffImportRunSumOrderByAggregateInput = {
@@ -38825,8 +39375,13 @@ export namespace Prisma {
     errorRows?: SortOrder
     warningRows?: SortOrder
     report?: SortOrder
+    changeSet?: SortOrder
     createdAt?: SortOrder
     appliedAt?: SortOrder
+    appliedById?: SortOrder
+    undoneAt?: SortOrder
+    undoneById?: SortOrder
+    undoSiteRevisions?: SortOrder
   }
 
   export type CityImportRunAvgOrderByAggregateInput = {
@@ -38847,6 +39402,9 @@ export namespace Prisma {
     warningRows?: SortOrder
     createdAt?: SortOrder
     appliedAt?: SortOrder
+    appliedById?: SortOrder
+    undoneAt?: SortOrder
+    undoneById?: SortOrder
   }
 
   export type CityImportRunMinOrderByAggregateInput = {
@@ -38860,6 +39418,9 @@ export namespace Prisma {
     warningRows?: SortOrder
     createdAt?: SortOrder
     appliedAt?: SortOrder
+    appliedById?: SortOrder
+    undoneAt?: SortOrder
+    undoneById?: SortOrder
   }
 
   export type CityImportRunSumOrderByAggregateInput = {
@@ -41044,6 +41605,18 @@ export namespace Prisma {
     connect?: ProviderWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutTariffImportsAppliedInput = {
+    create?: XOR<UserCreateWithoutTariffImportsAppliedInput, UserUncheckedCreateWithoutTariffImportsAppliedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTariffImportsAppliedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutTariffImportsUndoneInput = {
+    create?: XOR<UserCreateWithoutTariffImportsUndoneInput, UserUncheckedCreateWithoutTariffImportsUndoneInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTariffImportsUndoneInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type EnumTariffImportStatusFieldUpdateOperationsInput = {
     set?: $Enums.TariffImportStatus
   }
@@ -41056,10 +41629,42 @@ export namespace Prisma {
     update?: XOR<XOR<ProviderUpdateToOneWithWhereWithoutTariffImportsInput, ProviderUpdateWithoutTariffImportsInput>, ProviderUncheckedUpdateWithoutTariffImportsInput>
   }
 
+  export type UserUpdateOneWithoutTariffImportsAppliedNestedInput = {
+    create?: XOR<UserCreateWithoutTariffImportsAppliedInput, UserUncheckedCreateWithoutTariffImportsAppliedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTariffImportsAppliedInput
+    upsert?: UserUpsertWithoutTariffImportsAppliedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTariffImportsAppliedInput, UserUpdateWithoutTariffImportsAppliedInput>, UserUncheckedUpdateWithoutTariffImportsAppliedInput>
+  }
+
+  export type UserUpdateOneWithoutTariffImportsUndoneNestedInput = {
+    create?: XOR<UserCreateWithoutTariffImportsUndoneInput, UserUncheckedCreateWithoutTariffImportsUndoneInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTariffImportsUndoneInput
+    upsert?: UserUpsertWithoutTariffImportsUndoneInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTariffImportsUndoneInput, UserUpdateWithoutTariffImportsUndoneInput>, UserUncheckedUpdateWithoutTariffImportsUndoneInput>
+  }
+
   export type SiteCreateNestedOneWithoutCityImportsInput = {
     create?: XOR<SiteCreateWithoutCityImportsInput, SiteUncheckedCreateWithoutCityImportsInput>
     connectOrCreate?: SiteCreateOrConnectWithoutCityImportsInput
     connect?: SiteWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCityImportsAppliedInput = {
+    create?: XOR<UserCreateWithoutCityImportsAppliedInput, UserUncheckedCreateWithoutCityImportsAppliedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCityImportsAppliedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCityImportsUndoneInput = {
+    create?: XOR<UserCreateWithoutCityImportsUndoneInput, UserUncheckedCreateWithoutCityImportsUndoneInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCityImportsUndoneInput
+    connect?: UserWhereUniqueInput
   }
 
   export type EnumCityImportStatusFieldUpdateOperationsInput = {
@@ -41072,6 +41677,26 @@ export namespace Prisma {
     upsert?: SiteUpsertWithoutCityImportsInput
     connect?: SiteWhereUniqueInput
     update?: XOR<XOR<SiteUpdateToOneWithWhereWithoutCityImportsInput, SiteUpdateWithoutCityImportsInput>, SiteUncheckedUpdateWithoutCityImportsInput>
+  }
+
+  export type UserUpdateOneWithoutCityImportsAppliedNestedInput = {
+    create?: XOR<UserCreateWithoutCityImportsAppliedInput, UserUncheckedCreateWithoutCityImportsAppliedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCityImportsAppliedInput
+    upsert?: UserUpsertWithoutCityImportsAppliedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCityImportsAppliedInput, UserUpdateWithoutCityImportsAppliedInput>, UserUncheckedUpdateWithoutCityImportsAppliedInput>
+  }
+
+  export type UserUpdateOneWithoutCityImportsUndoneNestedInput = {
+    create?: XOR<UserCreateWithoutCityImportsUndoneInput, UserUncheckedCreateWithoutCityImportsUndoneInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCityImportsUndoneInput
+    upsert?: UserUpsertWithoutCityImportsUndoneInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCityImportsUndoneInput, UserUpdateWithoutCityImportsUndoneInput>, UserUncheckedUpdateWithoutCityImportsUndoneInput>
   }
 
   export type SiteCreateNestedOneWithoutChecksInput = {
@@ -41654,6 +42279,34 @@ export namespace Prisma {
     connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
   }
 
+  export type TariffImportRunCreateNestedManyWithoutAppliedByInput = {
+    create?: XOR<TariffImportRunCreateWithoutAppliedByInput, TariffImportRunUncheckedCreateWithoutAppliedByInput> | TariffImportRunCreateWithoutAppliedByInput[] | TariffImportRunUncheckedCreateWithoutAppliedByInput[]
+    connectOrCreate?: TariffImportRunCreateOrConnectWithoutAppliedByInput | TariffImportRunCreateOrConnectWithoutAppliedByInput[]
+    createMany?: TariffImportRunCreateManyAppliedByInputEnvelope
+    connect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+  }
+
+  export type TariffImportRunCreateNestedManyWithoutUndoneByInput = {
+    create?: XOR<TariffImportRunCreateWithoutUndoneByInput, TariffImportRunUncheckedCreateWithoutUndoneByInput> | TariffImportRunCreateWithoutUndoneByInput[] | TariffImportRunUncheckedCreateWithoutUndoneByInput[]
+    connectOrCreate?: TariffImportRunCreateOrConnectWithoutUndoneByInput | TariffImportRunCreateOrConnectWithoutUndoneByInput[]
+    createMany?: TariffImportRunCreateManyUndoneByInputEnvelope
+    connect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+  }
+
+  export type CityImportRunCreateNestedManyWithoutAppliedByInput = {
+    create?: XOR<CityImportRunCreateWithoutAppliedByInput, CityImportRunUncheckedCreateWithoutAppliedByInput> | CityImportRunCreateWithoutAppliedByInput[] | CityImportRunUncheckedCreateWithoutAppliedByInput[]
+    connectOrCreate?: CityImportRunCreateOrConnectWithoutAppliedByInput | CityImportRunCreateOrConnectWithoutAppliedByInput[]
+    createMany?: CityImportRunCreateManyAppliedByInputEnvelope
+    connect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+  }
+
+  export type CityImportRunCreateNestedManyWithoutUndoneByInput = {
+    create?: XOR<CityImportRunCreateWithoutUndoneByInput, CityImportRunUncheckedCreateWithoutUndoneByInput> | CityImportRunCreateWithoutUndoneByInput[] | CityImportRunUncheckedCreateWithoutUndoneByInput[]
+    connectOrCreate?: CityImportRunCreateOrConnectWithoutUndoneByInput | CityImportRunCreateOrConnectWithoutUndoneByInput[]
+    createMany?: CityImportRunCreateManyUndoneByInputEnvelope
+    connect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+  }
+
   export type SessionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -41680,6 +42333,34 @@ export namespace Prisma {
     connectOrCreate?: AuditEventCreateOrConnectWithoutActorInput | AuditEventCreateOrConnectWithoutActorInput[]
     createMany?: AuditEventCreateManyActorInputEnvelope
     connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+  }
+
+  export type TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput = {
+    create?: XOR<TariffImportRunCreateWithoutAppliedByInput, TariffImportRunUncheckedCreateWithoutAppliedByInput> | TariffImportRunCreateWithoutAppliedByInput[] | TariffImportRunUncheckedCreateWithoutAppliedByInput[]
+    connectOrCreate?: TariffImportRunCreateOrConnectWithoutAppliedByInput | TariffImportRunCreateOrConnectWithoutAppliedByInput[]
+    createMany?: TariffImportRunCreateManyAppliedByInputEnvelope
+    connect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+  }
+
+  export type TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput = {
+    create?: XOR<TariffImportRunCreateWithoutUndoneByInput, TariffImportRunUncheckedCreateWithoutUndoneByInput> | TariffImportRunCreateWithoutUndoneByInput[] | TariffImportRunUncheckedCreateWithoutUndoneByInput[]
+    connectOrCreate?: TariffImportRunCreateOrConnectWithoutUndoneByInput | TariffImportRunCreateOrConnectWithoutUndoneByInput[]
+    createMany?: TariffImportRunCreateManyUndoneByInputEnvelope
+    connect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+  }
+
+  export type CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput = {
+    create?: XOR<CityImportRunCreateWithoutAppliedByInput, CityImportRunUncheckedCreateWithoutAppliedByInput> | CityImportRunCreateWithoutAppliedByInput[] | CityImportRunUncheckedCreateWithoutAppliedByInput[]
+    connectOrCreate?: CityImportRunCreateOrConnectWithoutAppliedByInput | CityImportRunCreateOrConnectWithoutAppliedByInput[]
+    createMany?: CityImportRunCreateManyAppliedByInputEnvelope
+    connect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+  }
+
+  export type CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput = {
+    create?: XOR<CityImportRunCreateWithoutUndoneByInput, CityImportRunUncheckedCreateWithoutUndoneByInput> | CityImportRunCreateWithoutUndoneByInput[] | CityImportRunUncheckedCreateWithoutUndoneByInput[]
+    connectOrCreate?: CityImportRunCreateOrConnectWithoutUndoneByInput | CityImportRunCreateOrConnectWithoutUndoneByInput[]
+    createMany?: CityImportRunCreateManyUndoneByInputEnvelope
+    connect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
   }
 
   export type SessionUpdateManyWithoutUserNestedInput = {
@@ -41738,6 +42419,62 @@ export namespace Prisma {
     deleteMany?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
   }
 
+  export type TariffImportRunUpdateManyWithoutAppliedByNestedInput = {
+    create?: XOR<TariffImportRunCreateWithoutAppliedByInput, TariffImportRunUncheckedCreateWithoutAppliedByInput> | TariffImportRunCreateWithoutAppliedByInput[] | TariffImportRunUncheckedCreateWithoutAppliedByInput[]
+    connectOrCreate?: TariffImportRunCreateOrConnectWithoutAppliedByInput | TariffImportRunCreateOrConnectWithoutAppliedByInput[]
+    upsert?: TariffImportRunUpsertWithWhereUniqueWithoutAppliedByInput | TariffImportRunUpsertWithWhereUniqueWithoutAppliedByInput[]
+    createMany?: TariffImportRunCreateManyAppliedByInputEnvelope
+    set?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    disconnect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    delete?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    connect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    update?: TariffImportRunUpdateWithWhereUniqueWithoutAppliedByInput | TariffImportRunUpdateWithWhereUniqueWithoutAppliedByInput[]
+    updateMany?: TariffImportRunUpdateManyWithWhereWithoutAppliedByInput | TariffImportRunUpdateManyWithWhereWithoutAppliedByInput[]
+    deleteMany?: TariffImportRunScalarWhereInput | TariffImportRunScalarWhereInput[]
+  }
+
+  export type TariffImportRunUpdateManyWithoutUndoneByNestedInput = {
+    create?: XOR<TariffImportRunCreateWithoutUndoneByInput, TariffImportRunUncheckedCreateWithoutUndoneByInput> | TariffImportRunCreateWithoutUndoneByInput[] | TariffImportRunUncheckedCreateWithoutUndoneByInput[]
+    connectOrCreate?: TariffImportRunCreateOrConnectWithoutUndoneByInput | TariffImportRunCreateOrConnectWithoutUndoneByInput[]
+    upsert?: TariffImportRunUpsertWithWhereUniqueWithoutUndoneByInput | TariffImportRunUpsertWithWhereUniqueWithoutUndoneByInput[]
+    createMany?: TariffImportRunCreateManyUndoneByInputEnvelope
+    set?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    disconnect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    delete?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    connect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    update?: TariffImportRunUpdateWithWhereUniqueWithoutUndoneByInput | TariffImportRunUpdateWithWhereUniqueWithoutUndoneByInput[]
+    updateMany?: TariffImportRunUpdateManyWithWhereWithoutUndoneByInput | TariffImportRunUpdateManyWithWhereWithoutUndoneByInput[]
+    deleteMany?: TariffImportRunScalarWhereInput | TariffImportRunScalarWhereInput[]
+  }
+
+  export type CityImportRunUpdateManyWithoutAppliedByNestedInput = {
+    create?: XOR<CityImportRunCreateWithoutAppliedByInput, CityImportRunUncheckedCreateWithoutAppliedByInput> | CityImportRunCreateWithoutAppliedByInput[] | CityImportRunUncheckedCreateWithoutAppliedByInput[]
+    connectOrCreate?: CityImportRunCreateOrConnectWithoutAppliedByInput | CityImportRunCreateOrConnectWithoutAppliedByInput[]
+    upsert?: CityImportRunUpsertWithWhereUniqueWithoutAppliedByInput | CityImportRunUpsertWithWhereUniqueWithoutAppliedByInput[]
+    createMany?: CityImportRunCreateManyAppliedByInputEnvelope
+    set?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    disconnect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    delete?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    connect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    update?: CityImportRunUpdateWithWhereUniqueWithoutAppliedByInput | CityImportRunUpdateWithWhereUniqueWithoutAppliedByInput[]
+    updateMany?: CityImportRunUpdateManyWithWhereWithoutAppliedByInput | CityImportRunUpdateManyWithWhereWithoutAppliedByInput[]
+    deleteMany?: CityImportRunScalarWhereInput | CityImportRunScalarWhereInput[]
+  }
+
+  export type CityImportRunUpdateManyWithoutUndoneByNestedInput = {
+    create?: XOR<CityImportRunCreateWithoutUndoneByInput, CityImportRunUncheckedCreateWithoutUndoneByInput> | CityImportRunCreateWithoutUndoneByInput[] | CityImportRunUncheckedCreateWithoutUndoneByInput[]
+    connectOrCreate?: CityImportRunCreateOrConnectWithoutUndoneByInput | CityImportRunCreateOrConnectWithoutUndoneByInput[]
+    upsert?: CityImportRunUpsertWithWhereUniqueWithoutUndoneByInput | CityImportRunUpsertWithWhereUniqueWithoutUndoneByInput[]
+    createMany?: CityImportRunCreateManyUndoneByInputEnvelope
+    set?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    disconnect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    delete?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    connect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    update?: CityImportRunUpdateWithWhereUniqueWithoutUndoneByInput | CityImportRunUpdateWithWhereUniqueWithoutUndoneByInput[]
+    updateMany?: CityImportRunUpdateManyWithWhereWithoutUndoneByInput | CityImportRunUpdateManyWithWhereWithoutUndoneByInput[]
+    deleteMany?: CityImportRunScalarWhereInput | CityImportRunScalarWhereInput[]
+  }
+
   export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -41792,6 +42529,62 @@ export namespace Prisma {
     update?: AuditEventUpdateWithWhereUniqueWithoutActorInput | AuditEventUpdateWithWhereUniqueWithoutActorInput[]
     updateMany?: AuditEventUpdateManyWithWhereWithoutActorInput | AuditEventUpdateManyWithWhereWithoutActorInput[]
     deleteMany?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
+  }
+
+  export type TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput = {
+    create?: XOR<TariffImportRunCreateWithoutAppliedByInput, TariffImportRunUncheckedCreateWithoutAppliedByInput> | TariffImportRunCreateWithoutAppliedByInput[] | TariffImportRunUncheckedCreateWithoutAppliedByInput[]
+    connectOrCreate?: TariffImportRunCreateOrConnectWithoutAppliedByInput | TariffImportRunCreateOrConnectWithoutAppliedByInput[]
+    upsert?: TariffImportRunUpsertWithWhereUniqueWithoutAppliedByInput | TariffImportRunUpsertWithWhereUniqueWithoutAppliedByInput[]
+    createMany?: TariffImportRunCreateManyAppliedByInputEnvelope
+    set?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    disconnect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    delete?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    connect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    update?: TariffImportRunUpdateWithWhereUniqueWithoutAppliedByInput | TariffImportRunUpdateWithWhereUniqueWithoutAppliedByInput[]
+    updateMany?: TariffImportRunUpdateManyWithWhereWithoutAppliedByInput | TariffImportRunUpdateManyWithWhereWithoutAppliedByInput[]
+    deleteMany?: TariffImportRunScalarWhereInput | TariffImportRunScalarWhereInput[]
+  }
+
+  export type TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput = {
+    create?: XOR<TariffImportRunCreateWithoutUndoneByInput, TariffImportRunUncheckedCreateWithoutUndoneByInput> | TariffImportRunCreateWithoutUndoneByInput[] | TariffImportRunUncheckedCreateWithoutUndoneByInput[]
+    connectOrCreate?: TariffImportRunCreateOrConnectWithoutUndoneByInput | TariffImportRunCreateOrConnectWithoutUndoneByInput[]
+    upsert?: TariffImportRunUpsertWithWhereUniqueWithoutUndoneByInput | TariffImportRunUpsertWithWhereUniqueWithoutUndoneByInput[]
+    createMany?: TariffImportRunCreateManyUndoneByInputEnvelope
+    set?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    disconnect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    delete?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    connect?: TariffImportRunWhereUniqueInput | TariffImportRunWhereUniqueInput[]
+    update?: TariffImportRunUpdateWithWhereUniqueWithoutUndoneByInput | TariffImportRunUpdateWithWhereUniqueWithoutUndoneByInput[]
+    updateMany?: TariffImportRunUpdateManyWithWhereWithoutUndoneByInput | TariffImportRunUpdateManyWithWhereWithoutUndoneByInput[]
+    deleteMany?: TariffImportRunScalarWhereInput | TariffImportRunScalarWhereInput[]
+  }
+
+  export type CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput = {
+    create?: XOR<CityImportRunCreateWithoutAppliedByInput, CityImportRunUncheckedCreateWithoutAppliedByInput> | CityImportRunCreateWithoutAppliedByInput[] | CityImportRunUncheckedCreateWithoutAppliedByInput[]
+    connectOrCreate?: CityImportRunCreateOrConnectWithoutAppliedByInput | CityImportRunCreateOrConnectWithoutAppliedByInput[]
+    upsert?: CityImportRunUpsertWithWhereUniqueWithoutAppliedByInput | CityImportRunUpsertWithWhereUniqueWithoutAppliedByInput[]
+    createMany?: CityImportRunCreateManyAppliedByInputEnvelope
+    set?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    disconnect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    delete?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    connect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    update?: CityImportRunUpdateWithWhereUniqueWithoutAppliedByInput | CityImportRunUpdateWithWhereUniqueWithoutAppliedByInput[]
+    updateMany?: CityImportRunUpdateManyWithWhereWithoutAppliedByInput | CityImportRunUpdateManyWithWhereWithoutAppliedByInput[]
+    deleteMany?: CityImportRunScalarWhereInput | CityImportRunScalarWhereInput[]
+  }
+
+  export type CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput = {
+    create?: XOR<CityImportRunCreateWithoutUndoneByInput, CityImportRunUncheckedCreateWithoutUndoneByInput> | CityImportRunCreateWithoutUndoneByInput[] | CityImportRunUncheckedCreateWithoutUndoneByInput[]
+    connectOrCreate?: CityImportRunCreateOrConnectWithoutUndoneByInput | CityImportRunCreateOrConnectWithoutUndoneByInput[]
+    upsert?: CityImportRunUpsertWithWhereUniqueWithoutUndoneByInput | CityImportRunUpsertWithWhereUniqueWithoutUndoneByInput[]
+    createMany?: CityImportRunCreateManyUndoneByInputEnvelope
+    set?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    disconnect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    delete?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    connect?: CityImportRunWhereUniqueInput | CityImportRunWhereUniqueInput[]
+    update?: CityImportRunUpdateWithWhereUniqueWithoutUndoneByInput | CityImportRunUpdateWithWhereUniqueWithoutUndoneByInput[]
+    updateMany?: CityImportRunUpdateManyWithWhereWithoutUndoneByInput | CityImportRunUpdateManyWithWhereWithoutUndoneByInput[]
+    deleteMany?: CityImportRunScalarWhereInput | CityImportRunScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutSessionsInput = {
@@ -42494,8 +43287,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    appliedBy?: UserCreateNestedOneWithoutTariffImportsAppliedInput
+    undoneBy?: UserCreateNestedOneWithoutTariffImportsUndoneInput
   }
 
   export type TariffImportRunUncheckedCreateWithoutProviderInput = {
@@ -42507,8 +43305,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type TariffImportRunCreateOrConnectWithoutProviderInput = {
@@ -42625,8 +43428,13 @@ export namespace Prisma {
     errorRows?: IntFilter<"TariffImportRun"> | number
     warningRows?: IntFilter<"TariffImportRun"> | number
     report?: JsonFilter<"TariffImportRun">
+    changeSet?: JsonNullableFilter<"TariffImportRun">
     createdAt?: DateTimeFilter<"TariffImportRun"> | Date | string
     appliedAt?: DateTimeNullableFilter<"TariffImportRun"> | Date | string | null
+    appliedById?: StringNullableFilter<"TariffImportRun"> | string | null
+    undoneAt?: DateTimeNullableFilter<"TariffImportRun"> | Date | string | null
+    undoneById?: StringNullableFilter<"TariffImportRun"> | string | null
+    undoSiteRevisions?: JsonNullableFilter<"TariffImportRun">
   }
 
   export type ProviderCreateWithoutSitesInput = {
@@ -42953,8 +43761,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    appliedBy?: UserCreateNestedOneWithoutCityImportsAppliedInput
+    undoneBy?: UserCreateNestedOneWithoutCityImportsUndoneInput
   }
 
   export type CityImportRunUncheckedCreateWithoutSiteInput = {
@@ -42966,8 +43779,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CityImportRunCreateOrConnectWithoutSiteInput = {
@@ -43447,8 +44265,13 @@ export namespace Prisma {
     errorRows?: IntFilter<"CityImportRun"> | number
     warningRows?: IntFilter<"CityImportRun"> | number
     report?: JsonFilter<"CityImportRun">
+    changeSet?: JsonNullableFilter<"CityImportRun">
     createdAt?: DateTimeFilter<"CityImportRun"> | Date | string
     appliedAt?: DateTimeNullableFilter<"CityImportRun"> | Date | string | null
+    appliedById?: StringNullableFilter<"CityImportRun"> | string | null
+    undoneAt?: DateTimeNullableFilter<"CityImportRun"> | Date | string | null
+    undoneById?: StringNullableFilter<"CityImportRun"> | string | null
+    undoSiteRevisions?: JsonNullableFilter<"CityImportRun">
   }
 
   export type SiteRebuildUpsertWithWhereUniqueWithoutSiteInput = {
@@ -44053,6 +44876,10 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
   }
 
   export type UserUncheckedCreateWithoutContentRevisionsInput = {
@@ -44066,6 +44893,10 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
   }
 
   export type UserCreateOrConnectWithoutContentRevisionsInput = {
@@ -44154,6 +44985,10 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutContentRevisionsInput = {
@@ -44167,6 +45002,10 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
   }
 
   export type SiteCreateWithoutPublicationsInput = {
@@ -44233,6 +45072,10 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
   }
 
   export type UserUncheckedCreateWithoutPublicationsInput = {
@@ -44246,6 +45089,10 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
   }
 
   export type UserCreateOrConnectWithoutPublicationsInput = {
@@ -44520,6 +45367,10 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPublicationsInput = {
@@ -44533,6 +45384,10 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
   }
 
   export type SiteRebuildUpsertWithWhereUniqueWithoutRequestedPublicationInput = {
@@ -44647,6 +45502,10 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
   }
 
   export type UserUncheckedCreateWithoutAuditEventsInput = {
@@ -44660,6 +45519,10 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
   }
 
   export type UserCreateOrConnectWithoutAuditEventsInput = {
@@ -44748,6 +45611,10 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditEventsInput = {
@@ -44761,6 +45628,10 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
   }
 
   export type SiteCreateWithoutRegionsInput = {
@@ -46267,6 +47138,84 @@ export namespace Prisma {
     create: XOR<ProviderCreateWithoutTariffImportsInput, ProviderUncheckedCreateWithoutTariffImportsInput>
   }
 
+  export type UserCreateWithoutTariffImportsAppliedInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
+    publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
+  }
+
+  export type UserUncheckedCreateWithoutTariffImportsAppliedInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+  }
+
+  export type UserCreateOrConnectWithoutTariffImportsAppliedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTariffImportsAppliedInput, UserUncheckedCreateWithoutTariffImportsAppliedInput>
+  }
+
+  export type UserCreateWithoutTariffImportsUndoneInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
+    publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
+    cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
+  }
+
+  export type UserUncheckedCreateWithoutTariffImportsUndoneInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+  }
+
+  export type UserCreateOrConnectWithoutTariffImportsUndoneInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTariffImportsUndoneInput, UserUncheckedCreateWithoutTariffImportsUndoneInput>
+  }
+
   export type ProviderUpsertWithoutTariffImportsInput = {
     update: XOR<ProviderUpdateWithoutTariffImportsInput, ProviderUncheckedUpdateWithoutTariffImportsInput>
     create: XOR<ProviderCreateWithoutTariffImportsInput, ProviderUncheckedCreateWithoutTariffImportsInput>
@@ -46300,6 +47249,96 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sites?: SiteUncheckedUpdateManyWithoutProviderNestedInput
     tariffs?: TariffUncheckedUpdateManyWithoutProviderNestedInput
+  }
+
+  export type UserUpsertWithoutTariffImportsAppliedInput = {
+    update: XOR<UserUpdateWithoutTariffImportsAppliedInput, UserUncheckedUpdateWithoutTariffImportsAppliedInput>
+    create: XOR<UserCreateWithoutTariffImportsAppliedInput, UserUncheckedCreateWithoutTariffImportsAppliedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTariffImportsAppliedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTariffImportsAppliedInput, UserUncheckedUpdateWithoutTariffImportsAppliedInput>
+  }
+
+  export type UserUpdateWithoutTariffImportsAppliedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTariffImportsAppliedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+  }
+
+  export type UserUpsertWithoutTariffImportsUndoneInput = {
+    update: XOR<UserUpdateWithoutTariffImportsUndoneInput, UserUncheckedUpdateWithoutTariffImportsUndoneInput>
+    create: XOR<UserCreateWithoutTariffImportsUndoneInput, UserUncheckedCreateWithoutTariffImportsUndoneInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTariffImportsUndoneInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTariffImportsUndoneInput, UserUncheckedUpdateWithoutTariffImportsUndoneInput>
+  }
+
+  export type UserUpdateWithoutTariffImportsUndoneInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
+    cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTariffImportsUndoneInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
   }
 
   export type SiteCreateWithoutCityImportsInput = {
@@ -46353,6 +47392,84 @@ export namespace Prisma {
   export type SiteCreateOrConnectWithoutCityImportsInput = {
     where: SiteWhereUniqueInput
     create: XOR<SiteCreateWithoutCityImportsInput, SiteUncheckedCreateWithoutCityImportsInput>
+  }
+
+  export type UserCreateWithoutCityImportsAppliedInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
+    publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
+    cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
+  }
+
+  export type UserUncheckedCreateWithoutCityImportsAppliedInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+    cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+  }
+
+  export type UserCreateOrConnectWithoutCityImportsAppliedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCityImportsAppliedInput, UserUncheckedCreateWithoutCityImportsAppliedInput>
+  }
+
+  export type UserCreateWithoutCityImportsUndoneInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
+    publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
+  }
+
+  export type UserUncheckedCreateWithoutCityImportsUndoneInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+  }
+
+  export type UserCreateOrConnectWithoutCityImportsUndoneInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCityImportsUndoneInput, UserUncheckedCreateWithoutCityImportsUndoneInput>
   }
 
   export type SiteUpsertWithoutCityImportsInput = {
@@ -46412,6 +47529,96 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+  }
+
+  export type UserUpsertWithoutCityImportsAppliedInput = {
+    update: XOR<UserUpdateWithoutCityImportsAppliedInput, UserUncheckedUpdateWithoutCityImportsAppliedInput>
+    create: XOR<UserCreateWithoutCityImportsAppliedInput, UserUncheckedCreateWithoutCityImportsAppliedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCityImportsAppliedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCityImportsAppliedInput, UserUncheckedUpdateWithoutCityImportsAppliedInput>
+  }
+
+  export type UserUpdateWithoutCityImportsAppliedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
+    cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCityImportsAppliedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+    cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+  }
+
+  export type UserUpsertWithoutCityImportsUndoneInput = {
+    update: XOR<UserUpdateWithoutCityImportsUndoneInput, UserUncheckedUpdateWithoutCityImportsUndoneInput>
+    create: XOR<UserCreateWithoutCityImportsUndoneInput, UserUncheckedCreateWithoutCityImportsUndoneInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCityImportsUndoneInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCityImportsUndoneInput, UserUncheckedUpdateWithoutCityImportsUndoneInput>
+  }
+
+  export type UserUpdateWithoutCityImportsUndoneInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCityImportsUndoneInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
   }
 
   export type SiteCreateWithoutChecksInput = {
@@ -49116,6 +50323,190 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TariffImportRunCreateWithoutAppliedByInput = {
+    id?: string
+    fileName: string
+    status?: $Enums.TariffImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    provider: ProviderCreateNestedOneWithoutTariffImportsInput
+    undoneBy?: UserCreateNestedOneWithoutTariffImportsUndoneInput
+  }
+
+  export type TariffImportRunUncheckedCreateWithoutAppliedByInput = {
+    id?: string
+    providerId: string
+    fileName: string
+    status?: $Enums.TariffImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type TariffImportRunCreateOrConnectWithoutAppliedByInput = {
+    where: TariffImportRunWhereUniqueInput
+    create: XOR<TariffImportRunCreateWithoutAppliedByInput, TariffImportRunUncheckedCreateWithoutAppliedByInput>
+  }
+
+  export type TariffImportRunCreateManyAppliedByInputEnvelope = {
+    data: TariffImportRunCreateManyAppliedByInput | TariffImportRunCreateManyAppliedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TariffImportRunCreateWithoutUndoneByInput = {
+    id?: string
+    fileName: string
+    status?: $Enums.TariffImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    provider: ProviderCreateNestedOneWithoutTariffImportsInput
+    appliedBy?: UserCreateNestedOneWithoutTariffImportsAppliedInput
+  }
+
+  export type TariffImportRunUncheckedCreateWithoutUndoneByInput = {
+    id?: string
+    providerId: string
+    fileName: string
+    status?: $Enums.TariffImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type TariffImportRunCreateOrConnectWithoutUndoneByInput = {
+    where: TariffImportRunWhereUniqueInput
+    create: XOR<TariffImportRunCreateWithoutUndoneByInput, TariffImportRunUncheckedCreateWithoutUndoneByInput>
+  }
+
+  export type TariffImportRunCreateManyUndoneByInputEnvelope = {
+    data: TariffImportRunCreateManyUndoneByInput | TariffImportRunCreateManyUndoneByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CityImportRunCreateWithoutAppliedByInput = {
+    id?: string
+    fileName: string
+    status?: $Enums.CityImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    site: SiteCreateNestedOneWithoutCityImportsInput
+    undoneBy?: UserCreateNestedOneWithoutCityImportsUndoneInput
+  }
+
+  export type CityImportRunUncheckedCreateWithoutAppliedByInput = {
+    id?: string
+    siteId: string
+    fileName: string
+    status?: $Enums.CityImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type CityImportRunCreateOrConnectWithoutAppliedByInput = {
+    where: CityImportRunWhereUniqueInput
+    create: XOR<CityImportRunCreateWithoutAppliedByInput, CityImportRunUncheckedCreateWithoutAppliedByInput>
+  }
+
+  export type CityImportRunCreateManyAppliedByInputEnvelope = {
+    data: CityImportRunCreateManyAppliedByInput | CityImportRunCreateManyAppliedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CityImportRunCreateWithoutUndoneByInput = {
+    id?: string
+    fileName: string
+    status?: $Enums.CityImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    site: SiteCreateNestedOneWithoutCityImportsInput
+    appliedBy?: UserCreateNestedOneWithoutCityImportsAppliedInput
+  }
+
+  export type CityImportRunUncheckedCreateWithoutUndoneByInput = {
+    id?: string
+    siteId: string
+    fileName: string
+    status?: $Enums.CityImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type CityImportRunCreateOrConnectWithoutUndoneByInput = {
+    where: CityImportRunWhereUniqueInput
+    create: XOR<CityImportRunCreateWithoutUndoneByInput, CityImportRunUncheckedCreateWithoutUndoneByInput>
+  }
+
+  export type CityImportRunCreateManyUndoneByInputEnvelope = {
+    data: CityImportRunCreateManyUndoneByInput | CityImportRunCreateManyUndoneByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
     where: SessionWhereUniqueInput
     update: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
@@ -49191,6 +50582,70 @@ export namespace Prisma {
     data: XOR<AuditEventUpdateManyMutationInput, AuditEventUncheckedUpdateManyWithoutActorInput>
   }
 
+  export type TariffImportRunUpsertWithWhereUniqueWithoutAppliedByInput = {
+    where: TariffImportRunWhereUniqueInput
+    update: XOR<TariffImportRunUpdateWithoutAppliedByInput, TariffImportRunUncheckedUpdateWithoutAppliedByInput>
+    create: XOR<TariffImportRunCreateWithoutAppliedByInput, TariffImportRunUncheckedCreateWithoutAppliedByInput>
+  }
+
+  export type TariffImportRunUpdateWithWhereUniqueWithoutAppliedByInput = {
+    where: TariffImportRunWhereUniqueInput
+    data: XOR<TariffImportRunUpdateWithoutAppliedByInput, TariffImportRunUncheckedUpdateWithoutAppliedByInput>
+  }
+
+  export type TariffImportRunUpdateManyWithWhereWithoutAppliedByInput = {
+    where: TariffImportRunScalarWhereInput
+    data: XOR<TariffImportRunUpdateManyMutationInput, TariffImportRunUncheckedUpdateManyWithoutAppliedByInput>
+  }
+
+  export type TariffImportRunUpsertWithWhereUniqueWithoutUndoneByInput = {
+    where: TariffImportRunWhereUniqueInput
+    update: XOR<TariffImportRunUpdateWithoutUndoneByInput, TariffImportRunUncheckedUpdateWithoutUndoneByInput>
+    create: XOR<TariffImportRunCreateWithoutUndoneByInput, TariffImportRunUncheckedCreateWithoutUndoneByInput>
+  }
+
+  export type TariffImportRunUpdateWithWhereUniqueWithoutUndoneByInput = {
+    where: TariffImportRunWhereUniqueInput
+    data: XOR<TariffImportRunUpdateWithoutUndoneByInput, TariffImportRunUncheckedUpdateWithoutUndoneByInput>
+  }
+
+  export type TariffImportRunUpdateManyWithWhereWithoutUndoneByInput = {
+    where: TariffImportRunScalarWhereInput
+    data: XOR<TariffImportRunUpdateManyMutationInput, TariffImportRunUncheckedUpdateManyWithoutUndoneByInput>
+  }
+
+  export type CityImportRunUpsertWithWhereUniqueWithoutAppliedByInput = {
+    where: CityImportRunWhereUniqueInput
+    update: XOR<CityImportRunUpdateWithoutAppliedByInput, CityImportRunUncheckedUpdateWithoutAppliedByInput>
+    create: XOR<CityImportRunCreateWithoutAppliedByInput, CityImportRunUncheckedCreateWithoutAppliedByInput>
+  }
+
+  export type CityImportRunUpdateWithWhereUniqueWithoutAppliedByInput = {
+    where: CityImportRunWhereUniqueInput
+    data: XOR<CityImportRunUpdateWithoutAppliedByInput, CityImportRunUncheckedUpdateWithoutAppliedByInput>
+  }
+
+  export type CityImportRunUpdateManyWithWhereWithoutAppliedByInput = {
+    where: CityImportRunScalarWhereInput
+    data: XOR<CityImportRunUpdateManyMutationInput, CityImportRunUncheckedUpdateManyWithoutAppliedByInput>
+  }
+
+  export type CityImportRunUpsertWithWhereUniqueWithoutUndoneByInput = {
+    where: CityImportRunWhereUniqueInput
+    update: XOR<CityImportRunUpdateWithoutUndoneByInput, CityImportRunUncheckedUpdateWithoutUndoneByInput>
+    create: XOR<CityImportRunCreateWithoutUndoneByInput, CityImportRunUncheckedCreateWithoutUndoneByInput>
+  }
+
+  export type CityImportRunUpdateWithWhereUniqueWithoutUndoneByInput = {
+    where: CityImportRunWhereUniqueInput
+    data: XOR<CityImportRunUpdateWithoutUndoneByInput, CityImportRunUncheckedUpdateWithoutUndoneByInput>
+  }
+
+  export type CityImportRunUpdateManyWithWhereWithoutUndoneByInput = {
+    where: CityImportRunScalarWhereInput
+    data: XOR<CityImportRunUpdateManyMutationInput, CityImportRunUncheckedUpdateManyWithoutUndoneByInput>
+  }
+
   export type UserCreateWithoutSessionsInput = {
     id?: string
     email: string
@@ -49202,6 +50657,10 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -49215,6 +50674,10 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -49244,6 +50707,10 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -49257,6 +50724,10 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
   }
 
   export type SiteCreateManyProviderInput = {
@@ -49303,8 +50774,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type SiteUpdateWithoutProviderInput = {
@@ -49445,8 +50921,13 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    appliedBy?: UserUpdateOneWithoutTariffImportsAppliedNestedInput
+    undoneBy?: UserUpdateOneWithoutTariffImportsUndoneNestedInput
   }
 
   export type TariffImportRunUncheckedUpdateWithoutProviderInput = {
@@ -49458,8 +50939,13 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type TariffImportRunUncheckedUpdateManyWithoutProviderInput = {
@@ -49471,8 +50957,13 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type RegionCreateManySiteInput = {
@@ -49581,8 +51072,13 @@ export namespace Prisma {
     errorRows: number
     warningRows: number
     report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type SiteRebuildCreateManySiteInput = {
@@ -49987,8 +51483,13 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    appliedBy?: UserUpdateOneWithoutCityImportsAppliedNestedInput
+    undoneBy?: UserUpdateOneWithoutCityImportsUndoneNestedInput
   }
 
   export type CityImportRunUncheckedUpdateWithoutSiteInput = {
@@ -50000,8 +51501,13 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CityImportRunUncheckedUpdateManyWithoutSiteInput = {
@@ -50013,8 +51519,13 @@ export namespace Prisma {
     errorRows?: IntFieldUpdateOperationsInput | number
     warningRows?: IntFieldUpdateOperationsInput | number
     report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type SiteRebuildUpdateWithoutSiteInput = {
@@ -51886,6 +53397,78 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type TariffImportRunCreateManyAppliedByInput = {
+    id?: string
+    providerId: string
+    fileName: string
+    status?: $Enums.TariffImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type TariffImportRunCreateManyUndoneByInput = {
+    id?: string
+    providerId: string
+    fileName: string
+    status?: $Enums.TariffImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type CityImportRunCreateManyAppliedByInput = {
+    id?: string
+    siteId: string
+    fileName: string
+    status?: $Enums.CityImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type CityImportRunCreateManyUndoneByInput = {
+    id?: string
+    siteId: string
+    fileName: string
+    status?: $Enums.CityImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
   export type SessionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     tokenHash?: StringFieldUpdateOperationsInput | string
@@ -52043,6 +53626,222 @@ export namespace Prisma {
     changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TariffImportRunUpdateWithoutAppliedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumTariffImportStatusFieldUpdateOperationsInput | $Enums.TariffImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    provider?: ProviderUpdateOneRequiredWithoutTariffImportsNestedInput
+    undoneBy?: UserUpdateOneWithoutTariffImportsUndoneNestedInput
+  }
+
+  export type TariffImportRunUncheckedUpdateWithoutAppliedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumTariffImportStatusFieldUpdateOperationsInput | $Enums.TariffImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type TariffImportRunUncheckedUpdateManyWithoutAppliedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumTariffImportStatusFieldUpdateOperationsInput | $Enums.TariffImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type TariffImportRunUpdateWithoutUndoneByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumTariffImportStatusFieldUpdateOperationsInput | $Enums.TariffImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    provider?: ProviderUpdateOneRequiredWithoutTariffImportsNestedInput
+    appliedBy?: UserUpdateOneWithoutTariffImportsAppliedNestedInput
+  }
+
+  export type TariffImportRunUncheckedUpdateWithoutUndoneByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumTariffImportStatusFieldUpdateOperationsInput | $Enums.TariffImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type TariffImportRunUncheckedUpdateManyWithoutUndoneByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumTariffImportStatusFieldUpdateOperationsInput | $Enums.TariffImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type CityImportRunUpdateWithoutAppliedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumCityImportStatusFieldUpdateOperationsInput | $Enums.CityImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    site?: SiteUpdateOneRequiredWithoutCityImportsNestedInput
+    undoneBy?: UserUpdateOneWithoutCityImportsUndoneNestedInput
+  }
+
+  export type CityImportRunUncheckedUpdateWithoutAppliedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumCityImportStatusFieldUpdateOperationsInput | $Enums.CityImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type CityImportRunUncheckedUpdateManyWithoutAppliedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumCityImportStatusFieldUpdateOperationsInput | $Enums.CityImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type CityImportRunUpdateWithoutUndoneByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumCityImportStatusFieldUpdateOperationsInput | $Enums.CityImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    site?: SiteUpdateOneRequiredWithoutCityImportsNestedInput
+    appliedBy?: UserUpdateOneWithoutCityImportsAppliedNestedInput
+  }
+
+  export type CityImportRunUncheckedUpdateWithoutUndoneByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumCityImportStatusFieldUpdateOperationsInput | $Enums.CityImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type CityImportRunUncheckedUpdateManyWithoutUndoneByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumCityImportStatusFieldUpdateOperationsInput | $Enums.CityImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
   }
 
 

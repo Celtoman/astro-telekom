@@ -31,9 +31,13 @@ test('tariff catalog and full-snapshot import are separate nested workspaces', (
   assert.doesNotMatch(catalog, /import\/validate|accept=["']\.xlsx["']|confirmWarnings|report\.diff/);
 
   const importer = readFileSync(importPath, 'utf8');
-  for (const endpoint of ['/admin/providers', '/admin/tariffs/imports', '/admin/tariffs/import/validate', '/admin/tariffs/import/apply', '/admin/rebuilds']) {
+  for (const endpoint of ['/admin/providers', '/admin/tariffs/imports', '/admin/tariffs/import/validate', '/admin/tariffs/import/apply']) {
     assert.ok(importer.includes(endpoint), `missing ${endpoint} integration`);
   }
+  assert.match(importer, /PublicationStatusCard/);
+  assert.match(importer, /provider\.sites|\.sites\.map/);
+  assert.match(importer, /publicationRefreshKey/);
+  assert.doesNotMatch(importer, /\/admin\/rebuilds/);
   assert.match(importer, /accept=["']\.xlsx["']/);
   assert.match(importer, /confirmWarnings/);
   assert.match(importer, /report\.diff/);
