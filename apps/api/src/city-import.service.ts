@@ -231,16 +231,16 @@ export class CityImportService {
           regionsByName.set(region.name, region);
           regionsBySlug.set(region.slug, region);
         }
-        const data = { regionId: region.id, name: candidate.name, slug: candidate.slug, nameInstrumental: candidate.nameInstrumental, namePrepositional: candidate.namePrepositional, nameGenitive: candidate.nameGenitive, legacyUrl: candidate.legacyUrl, officeAddress: candidate.officeAddress, officeHours: candidate.officeHours };
+        const data = { regionId: region.id, name: candidate.name, slug: candidate.slug, nameInstrumental: candidate.nameInstrumental, namePrepositional: candidate.namePrepositional, nameGenitive: candidate.nameGenitive, legacyUrl: candidate.legacyUrl, officeAddress: candidate.officeAddress, officeHours: candidate.officeHours, status: 'PUBLISHED' as const };
         if (current) {
           const city = await tx.city.update({ where: { id: current.id }, data });
           citiesBySlug.set(city.slug, { ...city, region: { name: region.name } });
           updated += 1;
         } else {
-          const city = await tx.city.create({ data: { siteId: candidate.siteId, ...data, status: 'DRAFT', seo: {} as Prisma.InputJsonObject, content: {} as Prisma.InputJsonObject } });
+          const city = await tx.city.create({ data: { siteId: candidate.siteId, ...data, seo: {} as Prisma.InputJsonObject, content: {} as Prisma.InputJsonObject } });
           const pages = [['HOME', '', 'Главная города']] as const;
           const pageResult = await tx.page.createMany({
-            data: pages.map(([type, slug, title]) => ({ siteId: candidate.siteId, cityId: city.id, type, slug, title, status: 'DRAFT' as const, seo: {}, content: {} })),
+            data: pages.map(([type, slug, title]) => ({ siteId: candidate.siteId, cityId: city.id, type, slug, title, status: 'PUBLISHED' as const, seo: {}, content: {} })),
           });
           citiesBySlug.set(city.slug, { ...city, region: { name: region.name } });
           pagesCreated += pageResult.count;

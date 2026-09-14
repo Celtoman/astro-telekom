@@ -2,7 +2,7 @@
 
 > Выполнять задачи последовательно. После каждого изменения сначала получать красный целевой тест, затем минимально менять production-код и возвращать весь gate в зеленое состояние.
 
-**Цель:** публиковать ровно канонический набор Release 1: `/`, `/{location}` для каждого опубликованного города, четыре общие страницы, и корректную 404; страницы следующих релизов не должны появляться в output, ссылках, sitemap или redirects.
+**Цель:** публиковать ровно канонический набор Release 1: `/`, `/{location}` для каждого города полного импорта, пять общих страниц и корректную 404; страницы следующих релизов не должны появляться в output, ссылках, sitemap или redirects.
 
 **Архитектура:** `Page` получает site-global scope, API становится authoritative источником release-aware route inventory, а Astro строит output только из этого inventory. Статус тарифа остается статусом предложения и больше не означает автоматическое наличие tariff detail URL.
 
@@ -14,7 +14,7 @@
 
 **Проблемы:** [#133](https://github.com/Celtoman/astro-telekom/issues/133), [#134](https://github.com/Celtoman/astro-telekom/issues/134), [#135](https://github.com/Celtoman/astro-telekom/issues/135)
 
-**Статус 14 сентября 2026:** задачи 1–6 и синхронизация локальной документации реализованы; production-like fixture подтверждает exact output. Для задачи 7 добавлены канонический read-only SQL-аудит и runbook; их синтаксис, все 23 migration, custom dump и восстановление с совпадающими totals проверены на отдельной PostgreSQL 18. Внешнее применение и закрытие #136 остаются незавершенными до backup/pre-audit фактической БД, публикации утвержденных legal-текстов и exact-SHA deployment smoke. Bootstrap намеренно оставляет четыре global pages в `DRAFT`, поэтому неподготовленный production publisher завершается до переключения активного release.
+**Статус 14 сентября 2026:** scope уточнен владельцем: Release 1 публикует все города полного импорта, но только одну `/{location}` на город; тарифы остаются содержимым этой страницы. Добавлена третья legal-страница, поэтому точный inventory равен `N + 6`. Миграции `0024`–`0025` расширяют PageType, публикуют пять global pages, весь существующий городской каталог и его `HOME`. Внешнее применение и закрытие #136 остаются незавершенными до backup/pre-audit фактической БД, проверки реквизитов legal-текстов и exact-SHA deployment smoke.
 
 ---
 
@@ -40,11 +40,11 @@
 **Шаги:**
 
 1. В fixture web build оставить два опубликованных города, опубликованные тарифы и legacy service pages.
-2. Изменить expected output на exact список: root, два city home, четыре global pages и 404; service/tariff detail должны отсутствовать.
+2. Изменить expected output на exact список: root, два city home, пять global pages и 404; service/tariff detail должны отсутствовать.
 3. Проверить exact sitemap без будущих URL.
 4. Добавить ожидание, что public catalog возвращает `routes` и отдельные site-global pages.
 5. Добавить redirect cases: target из Release 1 разрешен, опубликованный tariff detail вне Release 1 отклонен.
-6. Изменить city import expectation: новый город создает только city-home bootstrap, существующие публикационные статусы не меняются.
+6. Изменить city import expectation: каждый примененный город публикуется, а новый город создает только опубликованный city-home bootstrap.
 7. Запустить только затронутые тесты и подтвердить ожидаемое падение:
 
 ```powershell
@@ -67,8 +67,8 @@ node --test tests/web-build-data.test.mjs tests/public-city-catalog.test.cjs tes
 
 **Шаги:**
 
-1. Добавить типы `COVERAGE`, `CITIES`, `PRIVACY`, `PERSONAL_DATA_CONSENT`.
-2. Сделать `Page.cityId`/relation nullable и ввести явную scope-валидацию: эти четыре типа только site-global; city types только city-scoped.
+1. Добавить типы `COVERAGE`, `CITIES`, `PRIVACY`, `PERSONAL_DATA_CONSENT`, `COOKIE_POLICY` отдельными enum-миграциями при необходимости.
+2. Сделать `Page.cityId`/relation nullable и ввести явную scope-валидацию: эти пять типов только site-global; city types только city-scoped.
 3. Добавить partial unique index PostgreSQL для `(siteId, slug)` при `cityId IS NULL`; сохранить уникальность `(cityId, slug)` городских страниц.
 4. Обновить admin create/update так, чтобы неверные сочетания отклонялись до Prisma.
 5. Вернуть global pages отдельным полем public catalog, не смешивая их с массивом города.
@@ -86,15 +86,15 @@ node --test tests/public-city-catalog.test.cjs
 **Файлы:**
 
 - Изменить: `apps/api/src/seed.ts`
-- Создать: data migration или идемпотентный bootstrap для четырех страниц
+- Создать: data migration или идемпотентный bootstrap для пяти страниц
 - Изменить/добавить: тест bootstrap/migration
 - Изменить: `.env.example` только если появляется новая обязательная конфигурация
 - Изменить: `docs/deployment.md`
 
 **Шаги:**
 
-1. Добавить четыре записи с точными slug из `docs/site-structure.md`.
-2. Не подставлять неподтвержденный legal-текст. Создать legal pages в `DRAFT` и сохранить намеренный production build blocker до получения и публикации утвержденных текстов владельца.
+1. Добавить пять записей с точными slug из `docs/site-structure.md`.
+2. Использовать три переданных владельцем legal-источника, адаптировать тексты под целевой домен и публиковать их только с явной отметкой о необходимости проверки реквизитов до реального трафика.
 3. Сделать операцию идемпотентной и не перезаписывать вручную отредактированный контент.
 4. Проверить повторный запуск на fixture DB.
 
@@ -111,7 +111,7 @@ node --test tests/public-city-catalog.test.cjs
 **Шаги:**
 
 1. Удалить post-apply цикл, который меняет статусы всех городов относительно `CITY_IMPORT_PUBLISHED_SLUG`.
-2. Сохранить правило: вновь созданный город и его city-home bootstrap — `DRAFT`.
+2. Закрепить правило Release 1: каждый примененный город и новый city-home bootstrap — `PUBLISHED`.
 3. Не создавать legacy `INTERNET`, `INTERNET_TV`, `TV`, `ADDRESS_CHECK`, `FAQ` автоматически.
 4. Нормализовать служебный HOME slug; публичный URL все равно строить только из `City.slug`.
 5. Проверить импорт с двумя ранее опубликованными городами: оба статуса сохраняются.
@@ -133,7 +133,7 @@ node --test tests/public-city-catalog.test.cjs
 **Контракт inventory:**
 
 - `/` всегда один;
-- четыре exact global paths берутся из опубликованных обязательных global pages;
+- пять exact global paths берутся из опубликованных обязательных global pages;
 - `/{city.slug}` создается для каждого `City.status = PUBLISHED`;
 - никакая другая Page/Tariff не получает route в Release 1;
 - отсутствие любой обязательной global page, дубли или конфликт slug дают явную ошибку сборочного контракта;
@@ -165,7 +165,7 @@ node --test tests/public-city-catalog.test.cjs
 
 1. Расширить `SiteCatalog` global pages и route inventory.
 2. Генерировать `[city]/index` только для inventory city routes.
-3. Генерировать четыре общие страницы из global `Page`, сохраняя общий renderer/SEO contract.
+3. Генерировать пять общих страниц из global `Page`, сохраняя общий renderer/SEO contract.
 4. Не генерировать `[city]/[slug]` для Release 1.
 5. Убрать/заменить links на service и tariff detail. До решения PF-015 использовать только подтвержденное назначение; не придумывать CTA.
 6. Формировать sitemap строго из inventory.
@@ -184,7 +184,7 @@ node --test tests/public-city-catalog.test.cjs
 **Шаги:**
 
 1. Перед записью получить backup и exact counts: сайты, города по статусам, pages по type/status, тарифы, лиды, redirects.
-2. Проверить коллизии четырех global slug со slug городов и redirect sources.
+2. Проверить коллизии пяти global slug со slug городов и redirect sources.
 3. Создать global pages и сохранить существующие городские Page/Tariff/Lead relations.
 4. Не удалять legacy pages: снять их route eligibility через policy; дальнейшая архивация — отдельное осознанное действие.
 5. После миграции повторить counts и проверить referential integrity.
@@ -209,7 +209,7 @@ node --test tests/public-city-catalog.test.cjs
 
 1. Разделить во всех документах текущий факт, Release 1 и будущую полную структуру.
 2. Удалить инструкции, утверждающие invariant «опубликована только Казань».
-3. Зафиксировать формулу `N + 5`, global page scope и route inventory API.
+3. Зафиксировать формулу `N + 6`, global page scope и route inventory API.
 4. Запустить обязательные проверки в заданном порядке:
 
 ```powershell
@@ -235,4 +235,4 @@ redirect targets outside inventory = 0
 
 ## Критерий завершения всего перехода
 
-Работа завершена, только если exact output соответствует `docs/site-structure.md`, данные нескольких опубликованных городов не сбрасываются импортом, четыре общие страницы управляются через одну модель, redirects не указывают за пределы output, полный `pnpm check` зеленый и production-like проверка выполнена на фактическом каталоге.
+Работа завершена, только если exact output соответствует `docs/site-structure.md`, весь примененный каталог городов опубликован, пять общих страниц управляются через одну модель, redirects не указывают за пределы output, полный `pnpm check` зеленый и production-like проверка выполнена на фактическом каталоге.

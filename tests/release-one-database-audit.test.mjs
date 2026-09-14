@@ -51,6 +51,7 @@ test('Release 1 database audit reports counts, route blockers and relation integ
   assert.match(sql, /goroda-obsluzhivaniya/);
   assert.match(sql, /politika-konfidencialnosti/);
   assert.match(sql, /soglasie-na-obrabotku-personalnyh-dannyh/);
+  assert.match(sql, /politika-obrabotki-faylov-kuki/);
 });
 
 test('Release 1 migration runbook requires backup and comparable pre/post audit evidence', () => {
@@ -63,6 +64,6 @@ test('Release 1 migration runbook requires backup and comparable pre/post audit 
   assert.match(runbook, /post-migration/i);
   assert.match(runbook, /release-one-database-audit\.sql/);
   assert.match(runbook, /relation_integrity_violations/);
-  assert.match(runbook, /N \+ 5/);
+  assert.match(runbook, /N \+ 6/);
   assert.match(deployment, /runbooks\/release-one-data-migration\.md/);
 });

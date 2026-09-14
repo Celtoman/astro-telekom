@@ -92,9 +92,10 @@ test('validation exposes row, region diff and an existing snapshot for safe revi
   });
 });
 
-test('new city creates only one canonical draft city home', async () => {
+test('new city creates one published city home for the full Release 1 catalog', async () => {
   const pages = [];
   const calls = [];
+  const cities = [];
   const prisma = {
     site: { findUnique: async () => ({ id: 'site-1' }) },
     city: { findMany: async () => [] },
@@ -102,7 +103,7 @@ test('new city creates only one canonical draft city home', async () => {
       assert.deepEqual(options, { timeout: 30_000, isolationLevel: 'Serializable' });
       return callback({
         region: { findMany: async () => [], create: async ({ data }) => ({ id: 'region-1', ...data }) },
-        city: { findMany: async () => [], create: async ({ data }) => ({ id: 'city-1', ...data }), update: async () => ({}) },
+        city: { findMany: async () => [], create: async ({ data }) => { cities.push(data); return { id: 'city-1', ...data }; }, update: async () => ({}) },
         page: { createMany: async ({ data }) => { pages.push(...data); return { count: data.length }; } },
       });
     },
@@ -114,8 +115,9 @@ test('new city creates only one canonical draft city home', async () => {
   assert.equal(result.created, 1);
   assert.equal(result.pagesCreated, 1);
   assert.deepEqual(pages.map((page) => ({ type: page.type, slug: page.slug, status: page.status })), [
-    { type: 'HOME', slug: '', status: 'DRAFT' },
+    { type: 'HOME', slug: '', status: 'PUBLISHED' },
   ]);
+  assert.equal(cities[0].status, 'PUBLISHED');
 });
 
 test('city import reuses a seed region with the same normalized slug', async () => {
@@ -215,7 +217,9 @@ test('city import applies an explicit create, update and skip action map atomica
 
   assert.deepEqual(result, { created: 1, updated: 1, skipped: 1, pagesCreated: 1 });
   assert.deepEqual(updated.map((item) => item.where.id), ['city-update']);
+  assert.equal(updated[0].data.status, 'PUBLISHED');
   assert.equal(created.length, 1);
+  assert.equal(created[0].status, 'PUBLISHED');
   assert.equal(pages.length, 1);
   assert.equal(transactionOptions.isolationLevel, 'Serializable');
 });

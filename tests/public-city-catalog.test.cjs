@@ -8,11 +8,12 @@ const releaseOneGlobalPages = [
   { type: 'CITIES', slug: 'goroda-obsluzhivaniya' },
   { type: 'PRIVACY', slug: 'politika-konfidencialnosti' },
   { type: 'PERSONAL_DATA_CONSENT', slug: 'soglasie-na-obrabotku-personalnyh-dannyh' },
+  { type: 'COOKIE_POLICY', slug: 'politika-obrabotki-faylov-kuki' },
 ];
 
 test('Release 1 route policy rejects missing, extra and colliding route sources', () => {
-  assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], releaseOneGlobalPages.slice(0, 3)), /Не опубликована обязательная/);
-  assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], [...releaseOneGlobalPages, { type: 'FAQ', slug: 'faq' }]), /ровно 4/);
+  assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], releaseOneGlobalPages.slice(0, 4)), /Не опубликована обязательная/);
+  assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], [...releaseOneGlobalPages, { type: 'FAQ', slug: 'faq' }]), /ровно 5/);
   assert.throws(() => buildReleaseOneRoutes([{ slug: 'goroda-obsluzhivaniya' }], releaseOneGlobalPages), /Конфликт маршрута Release 1/);
 });
 
@@ -64,6 +65,7 @@ test('public city catalog returns only published entities for one published site
           { id: 'cities', siteId: 'site-1', cityId: null, slug: 'goroda-obsluzhivaniya', type: 'CITIES', title: 'Города обслуживания', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
           { id: 'privacy', siteId: 'site-1', cityId: null, slug: 'politika-konfidencialnosti', type: 'PRIVACY', title: 'Политика конфиденциальности', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
           { id: 'consent', siteId: 'site-1', cityId: null, slug: 'soglasie-na-obrabotku-personalnyh-dannyh', type: 'PERSONAL_DATA_CONSENT', title: 'Согласие', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
+          { id: 'cookies', siteId: 'site-1', cityId: null, slug: 'politika-obrabotki-faylov-kuki', type: 'COOKIE_POLICY', title: 'Cookie', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
         ];
       },
     },
@@ -97,13 +99,14 @@ test('public city catalog returns only published entities for one published site
   assert.equal(result.cities[0].pages[0].slug, 'internet');
   assert.equal(result.cities[0].pages[0].blocks[0].blockType, 'hero');
   assert.equal(result.cities[0].tariffs[0].slug, 'giga-500');
-  assert.deepEqual(result.globalPages.map((page) => page.type), ['COVERAGE', 'CITIES', 'PRIVACY', 'PERSONAL_DATA_CONSENT']);
+  assert.deepEqual(result.globalPages.map((page) => page.type), ['COVERAGE', 'CITIES', 'PRIVACY', 'PERSONAL_DATA_CONSENT', 'COOKIE_POLICY']);
   assert.deepEqual(result.routes.map((route) => route.path), [
     '/',
     '/karta-pokrytiya-provaydera',
     '/goroda-obsluzhivaniya',
     '/politika-konfidencialnosti',
     '/soglasie-na-obrabotku-personalnyh-dannyh',
+    '/politika-obrabotki-faylov-kuki',
     '/kazan',
   ]);
   assert.deepEqual(result.redirects, [{ id: 'redirect-1', sourcePath: '/old', targetPath: '/kazan', status: 'PUBLISHED' }]);

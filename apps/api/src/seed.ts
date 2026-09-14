@@ -4,7 +4,6 @@ import { Pool } from 'pg';
 import { randomBytes, scryptSync } from 'node:crypto';
 
 const PUBLISHED = 'PUBLISHED' as const;
-const DRAFT = 'DRAFT' as const;
 const HOME = 'HOME' as const;
 const INTERNET = 'INTERNET' as const;
 const INTERNET_TV = 'INTERNET_TV' as const;
@@ -41,16 +40,17 @@ async function main() {
   });
 
   const globalPages = [
-    { type: 'COVERAGE', title: 'Карта покрытия', slug: 'karta-pokrytiya-provaydera', content: { releaseBlocker: 'Проверить и опубликовать вводный текст.' } },
-    { type: 'CITIES', title: 'Города обслуживания', slug: 'goroda-obsluzhivaniya', content: { releaseBlocker: 'Проверить и опубликовать вводный текст.' } },
-    { type: 'PRIVACY', title: 'Политика конфиденциальности', slug: 'politika-konfidencialnosti', content: { releaseBlocker: 'Требуется утвержденный юридический текст.' } },
-    { type: 'PERSONAL_DATA_CONSENT', title: 'Согласие на обработку персональных данных', slug: 'soglasie-na-obrabotku-personalnyh-dannyh', content: { releaseBlocker: 'Требуется утвержденный юридический текст.' } },
+    { type: 'COVERAGE', title: 'Карта покрытия', slug: 'karta-pokrytiya-provaydera', content: { text: 'Выберите город и проверьте возможность подключения Дом.ру по точному адресу.' } },
+    { type: 'CITIES', title: 'Города обслуживания', slug: 'goroda-obsluzhivaniya', content: { text: 'Полный список городов из опубликованного каталога сайта.' } },
+    { type: 'PRIVACY', title: 'Политика обработки персональных данных', slug: 'politika-konfidencialnosti', content: { legalTemplate: 'privacy-2026-09-14' } },
+    { type: 'PERSONAL_DATA_CONSENT', title: 'Согласие на обработку персональных данных', slug: 'soglasie-na-obrabotku-personalnyh-dannyh', content: { legalTemplate: 'consent-2026-09-14' } },
+    { type: 'COOKIE_POLICY', title: 'Политика обработки файлов cookie', slug: 'politika-obrabotki-faylov-kuki', content: { legalTemplate: 'cookies-2026-09-14' } },
   ] as const;
   for (const page of globalPages) {
     const existingPage = await prisma.page.findFirst({ where: { siteId: site.id, cityId: null, type: page.type } });
     if (!existingPage) {
       await prisma.page.create({
-        data: { ...page, siteId: site.id, cityId: null, status: DRAFT },
+        data: { ...page, siteId: site.id, cityId: null, status: PUBLISHED },
       });
     }
   }
@@ -68,11 +68,13 @@ async function main() {
 
   const city = await prisma.city.upsert({
     where: { siteId_slug: { siteId: site.id, slug: 'kazan' } },
-    update: { name: 'Казань', regionId: region.id, status: PUBLISHED, phone: '8 (800) 555-72-44', supportPhone: '8 (800) 250-77-77' },
+    update: { name: 'Казань', namePrepositional: 'Казани', nameGenitive: 'Казани', regionId: region.id, status: PUBLISHED, phone: '8 (800) 555-72-44', supportPhone: '8 (800) 250-77-77' },
     create: {
       siteId: site.id,
       regionId: region.id,
       name: 'Казань',
+      namePrepositional: 'Казани',
+      nameGenitive: 'Казани',
       slug: 'kazan',
       status: PUBLISHED,
       phone: '8 (800) 555-72-44',

@@ -2,9 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { loadSiteData, pageMeta } from '../data/site';
 import { publicHtmlPath } from '../data/public-url';
+import { legalSections } from '../data/legal-pages';
 
 interface Props {
-  type: 'COVERAGE' | 'CITIES' | 'PRIVACY' | 'PERSONAL_DATA_CONSENT';
+  type: 'COVERAGE' | 'CITIES' | 'PRIVACY' | 'PERSONAL_DATA_CONSENT' | 'COOKIE_POLICY';
 }
 
 const { type } = Astro.props as Props;
@@ -29,11 +30,17 @@ const defaults = {
     title: 'Согласие на обработку персональных данных',
     description: 'Согласие на обработку персональных данных на сайте партнера Дом.ру.',
   },
+  COOKIE_POLICY: {
+    title: 'Политика обработки файлов cookie',
+    description: 'Правила использования файлов cookie на сайте партнера Дом.ру.',
+  },
 }[type];
 const meta = pageMeta(globalPages, page.slug, page.title || defaults.title, defaults.description);
 const contentText = typeof page.content?.text === 'string' ? page.content.text : '';
 const richTextBlocks = (page.blocks || []).filter((block) => block.blockType === 'rich_text');
 const isCityCatalog = type === 'CITIES' || type === 'COVERAGE';
+const domain = Astro.site?.hostname || 'tv-internet-dom.ru';
+const versionedLegalSections = legalSections(type, domain);
 ---
 
 <BaseLayout title={meta.title} description={meta.description}>
@@ -54,13 +61,14 @@ const isCityCatalog = type === 'CITIES' || type === 'COVERAGE';
       </a>
     </article>)}</div> : <p class="lead">Опубликованных городов пока нет.</p>}
   </section> : <section class="section container legal-copy">
-    {contentText && <p>{contentText}</p>}
-    {!contentText && <p class="lead">Содержание страницы пока не опубликовано.</p>}
+    {contentText && versionedLegalSections.length === 0 && <p>{contentText}</p>}
+    {versionedLegalSections.map((section) => <section><h2>{section.title}</h2>{section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}</section>)}
     {richTextBlocks.map((block) => {
       const title = typeof block.data.title === 'string' ? block.data.title : '';
       const text = typeof block.data.text === 'string' ? block.data.text : '';
       return <section>{title && <h2>{title}</h2>}{text && <p>{text}</p>}</section>;
     })}
+    {!contentText && versionedLegalSections.length === 0 && richTextBlocks.length === 0 && <p class="lead">Содержание страницы пока не опубликовано.</p>}
   </section>}
 </BaseLayout>
 

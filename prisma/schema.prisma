@@ -25,6 +25,7 @@ enum PageType {
   CITIES
   PRIVACY
   PERSONAL_DATA_CONSENT
+  COOKIE_POLICY
 }
 
 enum ServiceType {

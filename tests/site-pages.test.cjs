@@ -24,6 +24,14 @@ test('Page schema represents Release 1 site-global pages without a fake city', (
   assert.match(scopeMigration, /DROP NOT NULL/);
   assert.match(scopeMigration, /WHERE "cityId" IS NULL/);
   assert.match(scopeMigration, /Page_global_scope_check/);
+  const cookieEnumMigration = readFileSync(join(repositoryRoot, 'prisma', 'migrations', '0024_cookie_policy_page_type', 'migration.sql'), 'utf8');
+  const publicationMigration = readFileSync(join(repositoryRoot, 'prisma', 'migrations', '0025_publish_release_one_catalog', 'migration.sql'), 'utf8');
+  assert.match(schema, /\bCOOKIE_POLICY\b/);
+  assert.match(cookieEnumMigration, /ADD VALUE 'COOKIE_POLICY'/);
+  assert.match(publicationMigration, /'COOKIE_POLICY'/);
+  assert.match(publicationMigration, /UPDATE "City"[\s\S]*"status" = 'PUBLISHED'/);
+  assert.match(publicationMigration, /'HOME'::"PageType"[\s\S]*'PUBLISHED'::"PublishStatus"/);
+  assert.match(publicationMigration, /WHERE "type" = 'HOME' AND "cityId" IS NOT NULL/);
 });
 
 test('admin pages reject incompatible global and city page scopes before writing', async () => {

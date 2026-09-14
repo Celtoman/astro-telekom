@@ -177,7 +177,7 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
         {sites.length !== 1 ? <Alert variant="destructive"><Building2 /><AlertTitle>Нельзя выбрать сайт импорта однозначно</AlertTitle><AlertDescription>Для безопасного импорта должен быть настроен ровно один сайт. Сейчас найдено: {sites.length}.</AlertDescription></Alert> : null}
 
         <Card>
-          <CardHeader><CardTitle>Новый импорт</CardTitle><CardDescription>Файл сначала проходит preview. Новые города и их стандартные страницы создаются в DRAFT.</CardDescription></CardHeader>
+          <CardHeader><CardTitle>Новый импорт</CardTitle><CardDescription>Файл сначала проходит preview. Примененные города и их единственная главная страница публикуются в Release 1.</CardDescription></CardHeader>
           <CardContent>
             <FieldGroup>
               <Field data-disabled={sites.length !== 1 || busy !== null}>

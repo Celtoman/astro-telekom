@@ -463,7 +463,8 @@ exports.PageType = exports.$Enums.PageType = {
   COVERAGE: 'COVERAGE',
   CITIES: 'CITIES',
   PRIVACY: 'PRIVACY',
-  PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT'
+  PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT',
+  COOKIE_POLICY: 'COOKIE_POLICY'
 };
 
 exports.ServiceType = exports.$Enums.ServiceType = {

@@ -63,6 +63,7 @@ export const releaseOneGlobalPages = [
   { type: 'CITIES', slug: 'goroda-obsluzhivaniya' },
   { type: 'PRIVACY', slug: 'politika-konfidencialnosti' },
   { type: 'PERSONAL_DATA_CONSENT', slug: 'soglasie-na-obrabotku-personalnyh-dannyh' },
+  { type: 'COOKIE_POLICY', slug: 'politika-obrabotki-faylov-kuki' },
 ] as const;
 
 function normalizePage(item: Record<string, any>): PageView {
@@ -156,6 +157,7 @@ const demoGlobalPages: PageView[] = [
   { type: 'CITIES', slug: 'goroda-obsluzhivaniya', title: 'Города обслуживания', status: 'PUBLISHED', content: { text: 'Список опубликованных городов обслуживания.' } },
   { type: 'PRIVACY', slug: 'politika-konfidencialnosti', title: 'Политика конфиденциальности', status: 'PUBLISHED', content: { text: 'Демонстрационный текст политики конфиденциальности.' } },
   { type: 'PERSONAL_DATA_CONSENT', slug: 'soglasie-na-obrabotku-personalnyh-dannyh', title: 'Согласие на обработку персональных данных', status: 'PUBLISHED', content: { text: 'Демонстрационный текст согласия на обработку персональных данных.' } },
+  { type: 'COOKIE_POLICY', slug: 'politika-obrabotki-faylov-kuki', title: 'Политика обработки файлов cookie', status: 'PUBLISHED', content: { text: 'Демонстрационный текст политики обработки файлов cookie.' } },
 ];
 const demoCities: CityView[] = [{
   name: 'Казань',

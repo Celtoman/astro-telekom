@@ -62,7 +62,8 @@ WITH required_pages(page_type, expected_slug) AS (
     ('COVERAGE', 'karta-pokrytiya-provaydera'),
     ('CITIES', 'goroda-obsluzhivaniya'),
     ('PRIVACY', 'politika-konfidencialnosti'),
-    ('PERSONAL_DATA_CONSENT', 'soglasie-na-obrabotku-personalnyh-dannyh')
+    ('PERSONAL_DATA_CONSENT', 'soglasie-na-obrabotku-personalnyh-dannyh'),
+    ('COOKIE_POLICY', 'politika-obrabotki-faylov-kuki')
 )
 SELECT
   'global_page_inventory' AS check_name,
@@ -91,7 +92,8 @@ WITH required_pages(expected_slug) AS (
     ('karta-pokrytiya-provaydera'),
     ('goroda-obsluzhivaniya'),
     ('politika-konfidencialnosti'),
-    ('soglasie-na-obrabotku-personalnyh-dannyh')
+    ('soglasie-na-obrabotku-personalnyh-dannyh'),
+    ('politika-obrabotki-faylov-kuki')
 ), collisions AS (
   SELECT city."id", site."slug" AS site_slug, city."slug" AS city_slug, city."status"::text AS city_status
   FROM "City" AS city
@@ -109,7 +111,8 @@ WITH required_pages(page_type, expected_slug) AS (
     ('COVERAGE', 'karta-pokrytiya-provaydera'),
     ('CITIES', 'goroda-obsluzhivaniya'),
     ('PRIVACY', 'politika-konfidencialnosti'),
-    ('PERSONAL_DATA_CONSENT', 'soglasie-na-obrabotku-personalnyh-dannyh')
+    ('PERSONAL_DATA_CONSENT', 'soglasie-na-obrabotku-personalnyh-dannyh'),
+    ('COOKIE_POLICY', 'politika-obrabotki-faylov-kuki')
 ), release_paths AS (
   SELECT site."id" AS site_id, '/'::text AS path
   FROM "Site" AS site
@@ -151,7 +154,8 @@ WITH required_pages(page_type, expected_slug) AS (
     ('COVERAGE', 'karta-pokrytiya-provaydera'),
     ('CITIES', 'goroda-obsluzhivaniya'),
     ('PRIVACY', 'politika-konfidencialnosti'),
-    ('PERSONAL_DATA_CONSENT', 'soglasie-na-obrabotku-personalnyh-dannyh')
+    ('PERSONAL_DATA_CONSENT', 'soglasie-na-obrabotku-personalnyh-dannyh'),
+    ('COOKIE_POLICY', 'politika-obrabotki-faylov-kuki')
 ), release_paths AS (
   SELECT site."id" AS site_id, '/'::text AS path
   FROM "Site" AS site
@@ -206,11 +210,11 @@ WITH violations AS (
   UNION ALL
   SELECT 'global_type_with_city', page."id"
   FROM "Page" AS page
-  WHERE page."type"::text IN ('COVERAGE', 'CITIES', 'PRIVACY', 'PERSONAL_DATA_CONSENT') AND page."cityId" IS NOT NULL
+  WHERE page."type"::text IN ('COVERAGE', 'CITIES', 'PRIVACY', 'PERSONAL_DATA_CONSENT', 'COOKIE_POLICY') AND page."cityId" IS NOT NULL
   UNION ALL
   SELECT 'city_type_without_city', page."id"
   FROM "Page" AS page
-  WHERE page."type"::text NOT IN ('COVERAGE', 'CITIES', 'PRIVACY', 'PERSONAL_DATA_CONSENT') AND page."cityId" IS NULL
+  WHERE page."type"::text NOT IN ('COVERAGE', 'CITIES', 'PRIVACY', 'PERSONAL_DATA_CONSENT', 'COOKIE_POLICY') AND page."cityId" IS NULL
   UNION ALL
   SELECT 'page_block_page_missing', page_block."id"
   FROM "PageBlock" AS page_block

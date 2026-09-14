@@ -36,6 +36,7 @@ const apiFixture = {
     globalPage('CITIES', 'goroda-obsluzhivaniya', 'Города обслуживания', 'Дом.ру доступен в опубликованных городах.'),
     globalPage('PRIVACY', 'politika-konfidencialnosti', 'Политика конфиденциальности', 'Утвержденный текст политики.'),
     globalPage('PERSONAL_DATA_CONSENT', 'soglasie-na-obrabotku-personalnyh-dannyh', 'Согласие на обработку персональных данных', 'Утвержденный текст согласия.'),
+    globalPage('COOKIE_POLICY', 'politika-obrabotki-faylov-kuki', 'Политика обработки файлов cookie', 'Утвержденный текст cookie.'),
   ],
   routes: [
     { id: 'HOME', kind: 'HOME', path: '/' },
@@ -43,6 +44,7 @@ const apiFixture = {
     { id: 'CITIES', kind: 'GLOBAL_PAGE', path: '/goroda-obsluzhivaniya', pageType: 'CITIES' },
     { id: 'PRIVACY', kind: 'GLOBAL_PAGE', path: '/politika-konfidencialnosti', pageType: 'PRIVACY' },
     { id: 'PERSONAL_DATA_CONSENT', kind: 'GLOBAL_PAGE', path: '/soglasie-na-obrabotku-personalnyh-dannyh', pageType: 'PERSONAL_DATA_CONSENT' },
+    { id: 'COOKIE_POLICY', kind: 'GLOBAL_PAGE', path: '/politika-obrabotki-faylov-kuki', pageType: 'COOKIE_POLICY' },
     { id: 'CITY_HOME', kind: 'CITY_HOME', path: '/kazan', citySlug: 'kazan' },
     { id: 'CITY_HOME', kind: 'CITY_HOME', path: '/almetyevsk', citySlug: 'almetyevsk' },
   ],
@@ -170,7 +172,7 @@ test('web build emits exactly the Release 1 inventory for every published city',
   await withApiFixture(async (apiUrl) => {
     const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, PUBLIC_YANDEX_METRIKA_ID: '12345678', ALLOW_DEMO_DATA: '' });
     assert.equal(build.code, 0, build.output);
-    assert.match(build.output, /Pre-publication SEO gate passed: 7 indexable URL\(s\), 8 HTML file\(s\)\./);
+    assert.match(build.output, /Pre-publication SEO gate passed: 8 indexable URL\(s\), 9 HTML file\(s\)\./);
   });
 
   const htmlFiles = (await collectTextFiles(webDist)).filter((path) => path.endsWith('.html'))
@@ -178,6 +180,7 @@ test('web build emits exactly the Release 1 inventory for every published city',
   assert.deepEqual(htmlFiles, [
     '404.html', 'almetyevsk/index.html', 'goroda-obsluzhivaniya/index.html', 'index.html',
     'karta-pokrytiya-provaydera/index.html', 'kazan/index.html', 'politika-konfidencialnosti/index.html',
+    'politika-obrabotki-faylov-kuki/index.html',
     'soglasie-na-obrabotku-personalnyh-dannyh/index.html',
   ]);
 
@@ -188,6 +191,7 @@ test('web build emits exactly the Release 1 inventory for every published city',
   const cities = await readBuilt(join('goroda-obsluzhivaniya', 'index.html'));
   const privacy = await readBuilt(join('politika-konfidencialnosti', 'index.html'));
   const consent = await readBuilt(join('soglasie-na-obrabotku-personalnyh-dannyh', 'index.html'));
+  const cookies = await readBuilt(join('politika-obrabotki-faylov-kuki', 'index.html'));
   const robots = await readBuilt('robots.txt');
   const sitemap = await readBuilt('sitemap.xml');
   const notFound = await readBuilt('404.html');
@@ -239,8 +243,9 @@ test('web build emits exactly the Release 1 inventory for every published city',
   assert.match(cities, /<h1>Города обслуживания<\/h1>/);
   assert.match(cities, /Казань/);
   assert.match(cities, /Альметьевск/);
-  assert.match(privacy, /Утвержденный текст политики/);
-  assert.match(consent, /Утвержденный текст согласия/);
+  assert.match(privacy, /Основные принципы/);
+  assert.match(consent, /Предоставление согласия/);
+  assert.match(cookies, /Назначение cookie/);
 
   assert.match(addressFormSource, /\/address-suggestions/);
   assert.match(addressFormSource, /suggestion:\s*selectedSuggestion/);
@@ -258,6 +263,7 @@ test('web build emits exactly the Release 1 inventory for every published city',
   assert.deepEqual(sitemapLocations, [
     `${productionSite}/`, `${productionSite}/karta-pokrytiya-provaydera`, `${productionSite}/goroda-obsluzhivaniya`,
     `${productionSite}/politika-konfidencialnosti`, `${productionSite}/soglasie-na-obrabotku-personalnyh-dannyh`,
+    `${productionSite}/politika-obrabotki-faylov-kuki`,
     `${productionSite}/kazan`, `${productionSite}/almetyevsk`,
   ]);
   assert.match(robots, /Sitemap: https:\/\/partner\.example\.test\/sitemap\.xml/);
@@ -300,7 +306,7 @@ test('web build uses Release 1 demo data only when ALLOW_DEMO_DATA=true is expli
   const build = await runWebBuild({ SITE_DATA_API_URL: '', PUBLIC_API_URL: 'http://127.0.0.1:1/api/v1', PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: 'true' });
   assert.equal(build.code, 0, build.output);
   assert.match(build.output, /ALLOW_DEMO_DATA=true: используются демонстрационные данные/);
-  assert.match(build.output, /Pre-publication SEO gate passed: 6 indexable URL\(s\), 7 HTML file\(s\)\./);
+  assert.match(build.output, /Pre-publication SEO gate passed: 7 indexable URL\(s\), 8 HTML file\(s\)\./);
 });
 
 test('web build rejects a city slug that collides with a global Release 1 route', { timeout: 120_000 }, async () => {

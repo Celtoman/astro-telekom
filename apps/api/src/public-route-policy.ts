@@ -3,6 +3,7 @@ export const RELEASE_ONE_GLOBAL_PAGES = [
   { type: 'CITIES', slug: 'goroda-obsluzhivaniya' },
   { type: 'PRIVACY', slug: 'politika-konfidencialnosti' },
   { type: 'PERSONAL_DATA_CONSENT', slug: 'soglasie-na-obrabotku-personalnyh-dannyh' },
+  { type: 'COOKIE_POLICY', slug: 'politika-obrabotki-faylov-kuki' },
 ] as const;
 
 export type ReleaseOneGlobalPageType = typeof RELEASE_ONE_GLOBAL_PAGES[number]['type'];

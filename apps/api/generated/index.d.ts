@@ -138,7 +138,8 @@ export const PageType: {
   COVERAGE: 'COVERAGE',
   CITIES: 'CITIES',
   PRIVACY: 'PRIVACY',
-  PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT'
+  PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT',
+  COOKIE_POLICY: 'COOKIE_POLICY'
 };
 
 export type PageType = (typeof PageType)[keyof typeof PageType]

@@ -5,7 +5,7 @@ import { RebuildQueueService } from './rebuild-queue.service';
 import { RELEASE_ONE_GLOBAL_PAGES } from './public-route-policy';
 
 type PageType = 'HOME' | 'INTERNET' | 'INTERNET_TV' | 'TV' | 'TARIFF' | 'ADDRESS_CHECK' | 'FAQ'
-  | 'COVERAGE' | 'CITIES' | 'PRIVACY' | 'PERSONAL_DATA_CONSENT';
+  | 'COVERAGE' | 'CITIES' | 'PRIVACY' | 'PERSONAL_DATA_CONSENT' | 'COOKIE_POLICY';
 type PublishStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
 interface PageBody {

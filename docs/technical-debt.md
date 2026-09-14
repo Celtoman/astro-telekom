@@ -69,6 +69,8 @@
 | TD-104 | [#133](https://github.com/Celtoman/astro-telekom/issues/133) 🟢 | Public build, sitemap, ссылки и redirects не ограничены каноническим составом Release 1 |
 | TD-105 | [#134](https://github.com/Celtoman/astro-telekom/issues/134) 🟢 | `Page` не поддерживает общие страницы сайта, обязательные для Release 1 |
 | TD-106 | [#135](https://github.com/Celtoman/astro-telekom/issues/135) 🟢 | Импорт городов закрепляет одну опубликованную Казань и старый комплект страниц |
+| TD-107 | [#137](https://github.com/Celtoman/astro-telekom/issues/137) ✅ | Seed заполняет предложный и родительный падежи Казани для корректных локальных заголовков |
+| TD-108 | [#138](https://github.com/Celtoman/astro-telekom/issues/138) 🟢 | Public site не задает favicon и получает лишний 404 |
 
 ## P2
 

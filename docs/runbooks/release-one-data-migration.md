@@ -1,6 +1,6 @@
 # Безопасная миграция данных на структуру Release 1
 
-Этот runbook применяется перед первым deployment ревизии, содержащей миграции `0021`–`0023`. Он не разрешает запуск production-трафика: задача — сохранить доказательства состояния данных, применить миграции без потери связей и подтвердить точный route inventory.
+Этот runbook применяется перед первым deployment ревизии, содержащей миграции `0021`–`0025`. Он не разрешает запуск production-трафика: задача — сохранить доказательства состояния данных, применить миграции без потери связей и подтвердить точный route inventory.
 
 ## Ограничения безопасности
 
@@ -53,7 +53,7 @@ $backupFile | Select-Object FullName, Length, LastWriteTimeUtc
 
 ## 3. Выполнить pre-migration audit
 
-Скрипт [release-one-database-audit.sql](../../scripts/release-one-database-audit.sql) начинает `BEGIN TRANSACTION READ ONLY` и завершает `ROLLBACK`. Он выводит migration history, точные totals и разрезы по статусам, четыре обязательные global pages, route collisions, redirects за пределы Release 1 и нарушения связей.
+Скрипт [release-one-database-audit.sql](../../scripts/release-one-database-audit.sql) начинает `BEGIN TRANSACTION READ ONLY` и завершает `ROLLBACK`. Он выводит migration history, точные totals и разрезы по статусам, пять обязательных global pages, route collisions, redirects за пределы Release 1 и нарушения связей.
 
 ```powershell
 $preAuditPath = Join-Path $backupRoot "release-one-pre-$stamp.txt"
@@ -79,9 +79,11 @@ if ($LASTEXITCODE -ne 0) { throw 'Pre-migration audit завершился ош�
 
 Ожидаемая последовательность migration:
 
-1. `0021_site_global_release_pages` добавляет четыре enum value;
+1. `0021_site_global_release_pages` добавляет первые четыре enum value;
 2. `0022_site_global_page_scope` делает `Page.cityId` nullable и добавляет scope/unique ограничения;
 3. `0023_bootstrap_release_one_global_pages` идемпотентно создает недостающие global pages в `DRAFT`.
+4. `0024_cookie_policy_page_type` отдельной транзакцией добавляет `COOKIE_POLICY`.
+5. `0025_publish_release_one_catalog` обновляет scope constraint, создает cookie page, публикует пять global pages, все города и их единственную `HOME`.
 
 Не публиковать страницы и не запускать web publisher вручную до post-migration audit.
 
@@ -99,16 +101,16 @@ if ($LASTEXITCODE -ne 0) { throw 'Post-migration audit завершился ош
 
 Приемка post-migration:
 
-- migration history содержит завершенные `0021`, `0022`, `0023` без `rolled_back_at`;
+- migration history содержит завершенные `0021`–`0025` без `rolled_back_at`;
 - totals сайтов, городов, блоков, тарифов, проверок адреса, заявок и redirects точно равны pre-migration;
-- `pages_total` увеличился только на количество действительно отсутствовавших global pages;
-- для каждого сайта `global_page_inventory` содержит ровно четыре канонические пары type/slug;
-- созданные страницы имеют `DRAFT`, пока владелец не добавил и не утвердил контент;
+- `pages_total` увеличился только на действительно отсутствовавшие cookie/HOME pages;
+- для каждого сайта `global_page_inventory` содержит ровно пять канонических пар type/slug в `PUBLISHED`;
+- все строки `City` и их `HOME` имеют `PUBLISHED`, при этом totals тарифов, заявок, проверок и блоков не изменились;
 - collision-проверки и `relation_integrity_violations` равны нулю после применения policy; legacy redirects за пределы inventory могут храниться, но не должны стать эффективными.
 
 Если counts расходятся не по указанному правилу или integrity/collision check ненулевой, остановить deployment до web publication. Не выполнять самодельную down migration; исследовать расхождение на копии и использовать проверенный backup для согласованного восстановления.
 
-## 6. Подготовить четыре global pages
+## 6. Проверить пять global pages
 
 Через административный API заполнить и отдельно утвердить:
 
@@ -116,8 +118,9 @@ if ($LASTEXITCODE -ne 0) { throw 'Post-migration audit завершился ош
 - `/goroda-obsluzhivaniya`;
 - `/politika-konfidencialnosti`;
 - `/soglasie-na-obrabotku-personalnyh-dannyh`.
+- `/politika-obrabotki-faylov-kuki`.
 
-Legal-тексты нельзя заменять демонстрационными формулировками. Публикация всех четырех записей — обязательное условие build-time inventory; до этого publisher должен завершаться ошибкой до переключения активного symlink.
+Три legal-текста версионированы в `apps/web/src/data/legal-pages.ts` и используют hostname текущего `PUBLIC_SITE_URL`. Перед реальным трафиком сверить ИП, ИНН, ОГРНИП, адрес, получателей данных и работоспособность `info@tv-internet-dom.ru`; публикация всех пяти записей остается обязательным условием build-time inventory.
 
 ## 7. Проверить production-like build и deployment
 
@@ -125,8 +128,8 @@ Legal-тексты нельзя заменять демонстрационны�
 
 ```text
 published city routes = N
-indexable HTML routes = N + 5
-sitemap routes = N + 5
+indexable HTML routes = N + 6
+sitemap routes = N + 6
 future service/tariff detail routes = 0
 effective redirect targets outside inventory = 0
 404 = HTTP 404 + noindex + no canonical
