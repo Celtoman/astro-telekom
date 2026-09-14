@@ -1,5 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const { spawnSync } = require('node:child_process');
 const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 const { HealthController } = require('../apps/api/dist/health.controller.js');
@@ -178,13 +179,33 @@ test('API images share filtered build dependencies and keep a dedicated producti
   assert.match(coolifyCompose, /true\) node \/workspace\/apps\/api\/dist\/seed\.js ;;/);
 });
 
-test('documented local database seed loads the repository environment file', () => {
+test('documented local database seed builds and runs the production CommonJS entrypoint', () => {
   const apiPackage = JSON.parse(readFileSync(join(repositoryRoot, 'apps', 'api', 'package.json'), 'utf8'));
   const databasePackage = JSON.parse(readFileSync(join(repositoryRoot, 'packages', 'database', 'package.json'), 'utf8'));
 
   assert.equal(databasePackage.scripts.seed, 'pnpm --filter @provider/api seed');
-  assert.match(apiPackage.scripts.seed, /^node --env-file=\.\.\/\.\.\/\.env /);
-  assert.match(apiPackage.scripts.seed, /--experimental-strip-types src\/seed\.ts$/);
+  assert.equal(apiPackage.scripts.seed, 'pnpm run build && node --env-file=../../.env dist/seed.js');
+
+  const probeEnv = {
+    DATABASE_URL: 'postgresql://seed_probe:seed_probe@127.0.0.1:1/seed_probe',
+    ADMIN_EMAIL: 'seed-probe@example.invalid',
+    ADMIN_PASSWORD: 'seed-probe-password',
+  };
+  for (const name of ['SystemRoot', 'WINDIR', 'TEMP', 'TMP', 'TMPDIR', 'HOME', 'USERPROFILE']) {
+    if (process.env[name]) probeEnv[name] = process.env[name];
+  }
+
+  const probe = spawnSync(process.execPath, ['dist/seed.js'], {
+    cwd: join(repositoryRoot, 'apps', 'api'),
+    encoding: 'utf8',
+    env: probeEnv,
+    timeout: 10_000,
+  });
+  const output = `${probe.stdout || ''}\n${probe.stderr || ''}`;
+
+  assert.equal(probe.status, 1);
+  assert.match(output, /P1001|Can't reach database server/);
+  assert.doesNotMatch(output, /ERR_MODULE_NOT_FOUND|MODULE_TYPELESS_PACKAGE_JSON/);
 });
 
 test('bootstrap seed does not republish demo tariffs over an imported city catalog', () => {

@@ -88,7 +88,7 @@
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) ✅ | `PageBlock` поддерживает семь строго валидируемых типов, а Astro рендерит полный минимальный набор |
 | TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) ✅ | Public DTO/rate limit/honeypot и 180-дневный policy-driven purge реализованы; legal scope вынесен в [#144](https://github.com/Celtoman/astro-telekom/issues/144) |
 | TD-114 | [#147](https://github.com/Celtoman/astro-telekom/issues/147) 🟢 | Живые документы и technical-debt index синхронизируются с Release 1, 26 миграциями и текущими Issue states |
-| TD-80 | [#102](https://github.com/Celtoman/astro-telekom/issues/102) 🟢 | Локальный TypeScript seed падает до подключения к БД из-за неразрешимого ESM-импорта `city-home-template` |
+| TD-80 | [#102](https://github.com/Celtoman/astro-telekom/issues/102) ✅ | Локальная seed-команда собирает и запускает production CommonJS entrypoint; два прогона на чистой PostgreSQL 18 идемпотентны |
 | TD-92 | [#117](https://github.com/Celtoman/astro-telekom/issues/117) ✅ | Tariff PATCH принимает `null` для обязательных полей и может передать ошибку целостности в Prisma |
 | TD-94 | [#119](https://github.com/Celtoman/astro-telekom/issues/119) ✅ | Запоздалый ответ быстрого просмотра может открыть не последний выбранный тариф |
 | TD-95 | [#120](https://github.com/Celtoman/astro-telekom/issues/120) ✅ | После apply импорт тарифов не очищает DOM file input и мешает повторно выбрать тот же XLSX |
