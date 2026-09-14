@@ -11,7 +11,7 @@
 | Тип | Где живёт | Что это |
 | --- | --- | --- |
 | **Проблема** (баг, риск, недоделка, подтверждённая кодом) | GitHub Issue, label `tech-debt` + `P0`–`P3` | Атомарная находка. Один issue = одна проблема. |
-| **Задача** (спланированный кусок работы, закрывающий одну или несколько проблем) | GitHub Issue, label `task`; milestone `MVP: безопасный Казань-релиз` только если работа входит в этот релиз | Чек-лист шагов (нативные GitHub checkboxes) + sub-issues на закрываемые проблемы. |
+| **Задача** (спланированный кусок работы, закрывающий одну или несколько проблем) | GitHub Issue, label `task`; milestone `Release 1: минимальный публичный запуск` только если работа входит в этот релиз | Чек-лист шагов (нативные GitHub checkboxes) + sub-issues на закрываемые проблемы. |
 | **Продуктовое решение** (согласованный замысел, не факт кода) | [docs/decisions.md](decisions.md) | Не привязано к issue — это не «сделать», а «мы так решили». Issues и Tasks могут на него ссылаться. |
 | **Продуктовая/UX/UI-находка** (наблюдение или идея, ещё не согласованная к реализации) | [docs/product-findings.md](product-findings.md) | Входящий реестр для отдельного обсуждения; после решения запись связывается с `decisions.md` и/или issue. |
 
@@ -44,7 +44,7 @@
 ### Планируешь исполнение
 
 1. Создать issue с label `task` (шаблон `.github/ISSUE_TEMPLATE/task.yml`), чек-лист шагов в теле.
-2. Привязать milestone `MVP: безопасный Казань-релиз`, если задача входит в MVP.
+2. Привязать milestone `Release 1: минимальный публичный запуск`, если задача входит в Release 1.
 3. Связать с закрываемыми проблемами **дважды**: текстом в теле (`Closes #N`, для читаемости) и нативной sub-issue связью:
    ```bash
    # получить numeric id (не number!) обеих issue
@@ -68,7 +68,7 @@
 ```bash
 gh issue list --repo Celtoman/astro-telekom --state open --label task           # все открытые спланированные задачи
 gh issue list --repo Celtoman/astro-telekom --state open --label tech-debt      # все открытые проблемы
-gh issue list --repo Celtoman/astro-telekom --state all --milestone "MVP: безопасный Казань-релиз"  # полный состав MVP и его прогресс
+gh issue list --repo Celtoman/astro-telekom --state all --milestone "Release 1: минимальный публичный запуск"  # полный состав Release 1 и его прогресс
 gh api repos/Celtoman/astro-telekom/issues/<N>/sub_issues                       # что входит в конкретный Task
 ```
 
@@ -87,7 +87,7 @@ gh api repos/Celtoman/astro-telekom/issues/<N>/sub_issues                       
 
 ## Milestone
 
-`MVP: безопасный Казань-релиз` назначается только элементам, которые входят в приемку этого релиза. Обычно это task issue с чек-листом и sub-issues; отдельную `tech-debt` issue допустимо включить напрямую, если она сама является независимо проверяемым release blocker. Не включать в milestone улучшения следующих релизов только потому, что они открыты.
+`Release 1: минимальный публичный запуск` назначается только элементам, которые входят в приемку этого релиза. Обычно это task issue с чек-листом и sub-issues; отдельную `tech-debt` issue допустимо включить напрямую, если она сама является независимо проверяемым release blocker. Не включать в milestone улучшения следующих релизов только потому, что они открыты.
 
 Состав и прогресс `closed/total` считаются GitHub автоматически: [milestone #1](https://github.com/Celtoman/astro-telekom/milestone/1). Фиксированное количество issues или tasks в Markdown не хранить: для текущего состояния всегда использовать milestone и `gh issue list`.
 

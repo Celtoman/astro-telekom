@@ -66,6 +66,9 @@
 | TD-90 | [#115](https://github.com/Celtoman/astro-telekom/issues/115) ✅ | Устаревший ответ проверки XLSX может примениться после смены файла или провайдера в форме импорта тарифов |
 | TD-91 | [#116](https://github.com/Celtoman/astro-telekom/issues/116) ✅ | Опубликованный redirect может остаться в public catalog после снятия с публикации города или целевого тарифа |
 | TD-93 | [#118](https://github.com/Celtoman/astro-telekom/issues/118) ✅ | Full-snapshot импорт может применить тариф с URL опубликованной страницы и оставить сайт несобираемым |
+| TD-104 | [#133](https://github.com/Celtoman/astro-telekom/issues/133) 🟢 | Public build, sitemap, ссылки и redirects не ограничены каноническим составом Release 1 |
+| TD-105 | [#134](https://github.com/Celtoman/astro-telekom/issues/134) 🟢 | `Page` не поддерживает общие страницы сайта, обязательные для Release 1 |
+| TD-106 | [#135](https://github.com/Celtoman/astro-telekom/issues/135) 🟢 | Импорт городов закрепляет одну опубликованную Казань и старый комплект страниц |
 
 ## P2
 
