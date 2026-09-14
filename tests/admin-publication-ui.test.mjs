@@ -31,6 +31,11 @@ test('publication state presentation distinguishes published, unpublished, runni
     kind: 'publishing', title: 'Публикация версии 5 выполняется', description: 'До успешного завершения сайт показывает версию 4.', canPublish: false,
   });
   assert.deepEqual(describePublicationState({
+    workingRevision: 5, publishedRevision: 4, hasUnpublishedChanges: true, latestPublication: { status: 'SCHEDULED', siteRevision: 5 }, scheduledPublication: { id: 'publication-5', status: 'SCHEDULED', siteRevision: 5, scheduledFor: '2026-09-15T12:00:00.000Z' }, rebuild: null,
+  }), {
+    kind: 'scheduled', title: 'Публикация версии 5 запланирована', description: 'Снимок уже зафиксирован и будет передан в сборку в указанное время.', canPublish: true,
+  });
+  assert.deepEqual(describePublicationState({
     workingRevision: 5, publishedRevision: 4, hasUnpublishedChanges: true, latestPublication: { status: 'FAILED', siteRevision: 5, lastError: 'Coolify failed' }, rebuild: { status: 'FAILED' },
   }), {
     kind: 'failed', title: 'Публикация версии 5 завершилась ошибкой', description: 'На сайте осталась версия 4. Coolify failed', canPublish: true,

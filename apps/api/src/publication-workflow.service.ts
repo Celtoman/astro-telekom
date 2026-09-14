@@ -25,11 +25,20 @@ type PublicationInput = {
   triggerEntity: string;
   triggerEntityId: string;
   requestedById?: string | null;
+  status?: 'SCHEDULED' | 'PENDING';
+  scheduledFor?: Date | null;
 };
 
 type PreparePublicationInput = Omit<PublicationInput, 'siteRevision' | 'catalog'> & {
   expectedWorkingRevision: number;
 };
+
+type PrepareScheduledPublicationInput = PreparePublicationInput & {
+  scheduledFor: Date;
+};
+
+const DUE_PUBLICATION_LIMIT = 25;
+const SCHEDULE_CLAIM_LEASE_MS = 5 * 60 * 1000;
 
 @Injectable()
 export class PublicationWorkflowService {
@@ -112,6 +121,8 @@ export class PublicationWorkflowService {
         triggerEntity: input.triggerEntity,
         triggerEntityId: input.triggerEntityId,
         requestedById: input.requestedById || null,
+        status: input.status || 'PENDING',
+        scheduledFor: input.scheduledFor || null,
       },
     });
   }
@@ -148,11 +159,24 @@ export class PublicationWorkflowService {
         },
       });
       if (existing) {
-        if (existing.status !== 'FAILED') return existing;
+        if (existing.status === 'SCHEDULED') {
+          return transaction.sitePublication.update({
+            where: { id: existing.id },
+            data: {
+              status: 'PENDING',
+              scheduledFor: null,
+              cancelledAt: null,
+              lastError: null,
+            },
+          });
+        }
+        if (existing.status !== 'FAILED' && existing.status !== 'CANCELLED') return existing;
         return transaction.sitePublication.update({
           where: { id: existing.id },
           data: {
             status: 'PENDING',
+            scheduledFor: null,
+            cancelledAt: null,
             lastError: null,
             providerDeploymentId: null,
             providerResponse: Prisma.DbNull,
@@ -170,10 +194,149 @@ export class PublicationWorkflowService {
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
+  async prepareScheduledPublication(input: PrepareScheduledPublicationInput) {
+    if (!(input.scheduledFor instanceof Date) || !Number.isFinite(input.scheduledFor.getTime())) {
+      throw new ConflictException('Некорректная дата публикации');
+    }
+    if (input.scheduledFor.getTime() <= Date.now()) {
+      throw new ConflictException('Дата публикации должна быть в будущем');
+    }
+    return this.prisma.$transaction(async (transaction) => {
+      const site = await transaction.site.findUnique({ where: { id: input.siteId } });
+      if (!site) throw new NotFoundException('Site not found');
+      if (site.workingRevision !== input.expectedWorkingRevision) {
+        throw new ConflictException('Рабочая ревизия сайта изменилась; обновите состояние перед планированием');
+      }
+      if (site.workingRevision <= site.publishedRevision) {
+        throw new ConflictException('Нет неопубликованных изменений');
+      }
+
+      const activeSchedule = await transaction.sitePublication.findFirst({
+        where: { siteId: site.id, status: 'SCHEDULED' },
+        orderBy: { scheduledFor: 'asc' },
+      });
+      const existing = await transaction.sitePublication.findUnique({
+        where: { siteId_siteRevision: { siteId: site.id, siteRevision: site.workingRevision } },
+      });
+      if (activeSchedule && activeSchedule.id !== existing?.id) {
+        throw new ConflictException(`Для сайта уже запланирована версия ${activeSchedule.siteRevision}; сначала отмените ее`);
+      }
+      if (existing?.status === 'SCHEDULED') {
+        if (existing.scheduledFor?.getTime() === input.scheduledFor.getTime()) return existing;
+        throw new ConflictException('Эта рабочая версия уже запланирована на другое время; сначала отмените расписание');
+      }
+      if (existing && existing.status !== 'FAILED' && existing.status !== 'CANCELLED') {
+        throw new ConflictException('Публикация этой рабочей версии уже запущена или завершена');
+      }
+      if (existing) {
+        return transaction.sitePublication.update({
+          where: { id: existing.id },
+          data: {
+            status: 'SCHEDULED',
+            scheduledFor: input.scheduledFor,
+            cancelledAt: null,
+            lastError: null,
+            providerDeploymentId: null,
+            providerResponse: Prisma.DbNull,
+            publishedAt: null,
+          },
+        });
+      }
+      return this.captureWorkingPublication(transaction, {
+        siteId: site.id,
+        siteRevision: site.workingRevision,
+        triggerEntity: input.triggerEntity,
+        triggerEntityId: input.triggerEntityId,
+        requestedById: input.requestedById,
+        status: 'SCHEDULED',
+        scheduledFor: input.scheduledFor,
+      });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+  }
+
+  async cancelScheduledPublication(siteId: string, publicationId: string) {
+    return this.prisma.$transaction(async (transaction) => {
+      const publication = await transaction.sitePublication.findUnique({ where: { id: publicationId } });
+      if (!publication || publication.siteId !== siteId) throw new NotFoundException('Запланированная публикация не найдена');
+      if (publication.status !== 'SCHEDULED') {
+        throw new ConflictException('Отменить можно только публикацию, которая еще ожидает своего времени');
+      }
+      const cancelledAt = new Date();
+      const result = await transaction.sitePublication.updateMany({
+        where: { id: publication.id, status: 'SCHEDULED' },
+        data: { status: 'CANCELLED', cancelledAt },
+      });
+      if (result.count !== 1) throw new ConflictException('Состояние расписания уже изменилось');
+      return transaction.sitePublication.findUnique({ where: { id: publication.id } });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+  }
+
+  async claimDuePublications(now = new Date()) {
+    const recoveryBefore = new Date(now.getTime() - SCHEDULE_CLAIM_LEASE_MS);
+    return this.prisma.$transaction(async (transaction) => {
+      const candidates = await transaction.sitePublication.findMany({
+        where: {
+          scheduledFor: { lte: now },
+          OR: [
+            { status: 'SCHEDULED' },
+            {
+              status: 'PENDING',
+              updatedAt: { lte: recoveryBefore },
+              requestedRebuilds: { none: {} },
+              processingRebuilds: { none: {} },
+            },
+          ],
+        },
+        orderBy: [{ scheduledFor: 'asc' }, { id: 'asc' }],
+        take: DUE_PUBLICATION_LIMIT,
+        include: { site: { select: { publishedRevision: true } } },
+      });
+      const claimed = [];
+      for (const candidate of candidates) {
+        const newer = await transaction.sitePublication.findFirst({
+          where: {
+            siteId: candidate.siteId,
+            siteRevision: { gt: candidate.siteRevision },
+            status: { in: ['SCHEDULED', 'PENDING', 'RUNNING', 'SUCCEEDED'] },
+          },
+          select: { id: true },
+        });
+        if (candidate.site.publishedRevision >= candidate.siteRevision || newer) {
+          await transaction.sitePublication.updateMany({
+            where: { id: candidate.id, status: candidate.status },
+            data: {
+              status: 'CANCELLED',
+              cancelledAt: now,
+              lastError: 'Расписание отменено автоматически: существует более новая активная или опубликованная версия',
+            },
+          });
+          continue;
+        }
+        const result = await transaction.sitePublication.updateMany({
+          where: {
+            id: candidate.id,
+            status: candidate.status,
+            ...(candidate.status === 'PENDING' ? { updatedAt: candidate.updatedAt } : {}),
+          },
+          data: { status: 'PENDING', lastError: null },
+        });
+        if (result.count === 1) claimed.push({ ...candidate, status: 'PENDING' as const });
+      }
+      return claimed;
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+  }
+
+  async releaseScheduleClaim(publicationId: string, error: string) {
+    await this.prisma.sitePublication.updateMany({
+      where: { id: publicationId, status: 'PENDING', scheduledFor: { not: null } },
+      data: { status: 'SCHEDULED', lastError: error.slice(0, 2000) },
+    });
+  }
+
   async getState(siteId: string) {
     const site = await this.prisma.site.findUnique({ where: { id: siteId } });
     if (!site) throw new NotFoundException('Site not found');
-    const [latestPublication, rebuild] = await Promise.all([
+    const [latestPublication, scheduledPublication, rebuild] = await Promise.all([
       this.prisma.sitePublication.findFirst({
         where: { siteId },
         orderBy: { siteRevision: 'desc' },
@@ -186,9 +349,25 @@ export class PublicationWorkflowService {
           requestedById: true,
           lastError: true,
           providerDeploymentId: true,
+          scheduledFor: true,
+          cancelledAt: true,
           createdAt: true,
           updatedAt: true,
           publishedAt: true,
+        },
+      }),
+      this.prisma.sitePublication.findFirst({
+        where: { siteId, status: 'SCHEDULED' },
+        orderBy: { scheduledFor: 'asc' },
+        select: {
+          id: true,
+          siteRevision: true,
+          status: true,
+          scheduledFor: true,
+          requestedById: true,
+          lastError: true,
+          createdAt: true,
+          updatedAt: true,
         },
       }),
       this.prisma.siteRebuild.findUnique({
@@ -220,6 +399,7 @@ export class PublicationWorkflowService {
       publishedRevision: site.publishedRevision,
       hasUnpublishedChanges: site.workingRevision > site.publishedRevision,
       latestPublication,
+      scheduledPublication,
       rebuild,
     };
   }

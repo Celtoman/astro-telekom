@@ -76,6 +76,14 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
   async enqueue(data: RebuildTrigger) {
     const dedupeKey = `site:${data.siteId || 'all'}`;
     const existing = await this.prisma.siteRebuild.findUnique({ where: { dedupeKey } });
+    if (data.publicationId && existing && ACTIVE_STATUSES.includes(existing.status as typeof ACTIVE_STATUSES[number])
+      && [existing.requestedPublicationId, existing.processingPublicationId].includes(data.publicationId)) {
+      if (existing.status === 'PENDING') {
+        await this.schedule(existing.id, existing.requestedRevision, existing.maxAttempts);
+        return this.get(existing.id);
+      }
+      return existing;
+    }
     const terminal = existing?.status === 'SUCCEEDED' || existing?.status === 'FAILED';
     const rebuild = await this.prisma.siteRebuild.upsert({
       where: { dedupeKey },

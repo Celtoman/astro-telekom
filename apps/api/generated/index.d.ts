@@ -286,10 +286,12 @@ export type ContentRevisionAction = (typeof ContentRevisionAction)[keyof typeof 
 
 
 export const SitePublicationStatus: {
+  SCHEDULED: 'SCHEDULED',
   PENDING: 'PENDING',
   RUNNING: 'RUNNING',
   SUCCEEDED: 'SUCCEEDED',
-  FAILED: 'FAILED'
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
 };
 
 export type SitePublicationStatus = (typeof SitePublicationStatus)[keyof typeof SitePublicationStatus]
@@ -9059,6 +9061,8 @@ export namespace Prisma {
     requestedById: string | null
     lastError: string | null
     providerDeploymentId: string | null
+    scheduledFor: Date | null
+    cancelledAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     publishedAt: Date | null
@@ -9074,6 +9078,8 @@ export namespace Prisma {
     requestedById: string | null
     lastError: string | null
     providerDeploymentId: string | null
+    scheduledFor: Date | null
+    cancelledAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     publishedAt: Date | null
@@ -9091,6 +9097,8 @@ export namespace Prisma {
     lastError: number
     providerDeploymentId: number
     providerResponse: number
+    scheduledFor: number
+    cancelledAt: number
     createdAt: number
     updatedAt: number
     publishedAt: number
@@ -9116,6 +9124,8 @@ export namespace Prisma {
     requestedById?: true
     lastError?: true
     providerDeploymentId?: true
+    scheduledFor?: true
+    cancelledAt?: true
     createdAt?: true
     updatedAt?: true
     publishedAt?: true
@@ -9131,6 +9141,8 @@ export namespace Prisma {
     requestedById?: true
     lastError?: true
     providerDeploymentId?: true
+    scheduledFor?: true
+    cancelledAt?: true
     createdAt?: true
     updatedAt?: true
     publishedAt?: true
@@ -9148,6 +9160,8 @@ export namespace Prisma {
     lastError?: true
     providerDeploymentId?: true
     providerResponse?: true
+    scheduledFor?: true
+    cancelledAt?: true
     createdAt?: true
     updatedAt?: true
     publishedAt?: true
@@ -9252,6 +9266,8 @@ export namespace Prisma {
     lastError: string | null
     providerDeploymentId: string | null
     providerResponse: JsonValue | null
+    scheduledFor: Date | null
+    cancelledAt: Date | null
     createdAt: Date
     updatedAt: Date
     publishedAt: Date | null
@@ -9288,6 +9304,8 @@ export namespace Prisma {
     lastError?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
+    scheduledFor?: boolean
+    cancelledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     publishedAt?: boolean
@@ -9311,6 +9329,8 @@ export namespace Prisma {
     lastError?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
+    scheduledFor?: boolean
+    cancelledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     publishedAt?: boolean
@@ -9330,6 +9350,8 @@ export namespace Prisma {
     lastError?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
+    scheduledFor?: boolean
+    cancelledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     publishedAt?: boolean
@@ -9349,12 +9371,14 @@ export namespace Prisma {
     lastError?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
+    scheduledFor?: boolean
+    cancelledAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     publishedAt?: boolean
   }
 
-  export type SitePublicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "siteRevision" | "status" | "catalog" | "triggerEntity" | "triggerEntityId" | "requestedById" | "lastError" | "providerDeploymentId" | "providerResponse" | "createdAt" | "updatedAt" | "publishedAt", ExtArgs["result"]["sitePublication"]>
+  export type SitePublicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "siteRevision" | "status" | "catalog" | "triggerEntity" | "triggerEntityId" | "requestedById" | "lastError" | "providerDeploymentId" | "providerResponse" | "scheduledFor" | "cancelledAt" | "createdAt" | "updatedAt" | "publishedAt", ExtArgs["result"]["sitePublication"]>
   export type SitePublicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
@@ -9393,6 +9417,8 @@ export namespace Prisma {
       lastError: string | null
       providerDeploymentId: string | null
       providerResponse: Prisma.JsonValue | null
+      scheduledFor: Date | null
+      cancelledAt: Date | null
       createdAt: Date
       updatedAt: Date
       publishedAt: Date | null
@@ -9835,6 +9861,8 @@ export namespace Prisma {
     readonly lastError: FieldRef<"SitePublication", 'String'>
     readonly providerDeploymentId: FieldRef<"SitePublication", 'String'>
     readonly providerResponse: FieldRef<"SitePublication", 'Json'>
+    readonly scheduledFor: FieldRef<"SitePublication", 'DateTime'>
+    readonly cancelledAt: FieldRef<"SitePublication", 'DateTime'>
     readonly createdAt: FieldRef<"SitePublication", 'DateTime'>
     readonly updatedAt: FieldRef<"SitePublication", 'DateTime'>
     readonly publishedAt: FieldRef<"SitePublication", 'DateTime'>
@@ -32491,6 +32519,8 @@ export namespace Prisma {
     lastError: 'lastError',
     providerDeploymentId: 'providerDeploymentId',
     providerResponse: 'providerResponse',
+    scheduledFor: 'scheduledFor',
+    cancelledAt: 'cancelledAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     publishedAt: 'publishedAt'
@@ -33646,6 +33676,8 @@ export namespace Prisma {
     lastError?: StringNullableFilter<"SitePublication"> | string | null
     providerDeploymentId?: StringNullableFilter<"SitePublication"> | string | null
     providerResponse?: JsonNullableFilter<"SitePublication">
+    scheduledFor?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
+    cancelledAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
     createdAt?: DateTimeFilter<"SitePublication"> | Date | string
     updatedAt?: DateTimeFilter<"SitePublication"> | Date | string
     publishedAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
@@ -33668,6 +33700,8 @@ export namespace Prisma {
     lastError?: SortOrderInput | SortOrder
     providerDeploymentId?: SortOrderInput | SortOrder
     providerResponse?: SortOrderInput | SortOrder
+    scheduledFor?: SortOrderInput | SortOrder
+    cancelledAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrderInput | SortOrder
@@ -33694,6 +33728,8 @@ export namespace Prisma {
     lastError?: StringNullableFilter<"SitePublication"> | string | null
     providerDeploymentId?: StringNullableFilter<"SitePublication"> | string | null
     providerResponse?: JsonNullableFilter<"SitePublication">
+    scheduledFor?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
+    cancelledAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
     createdAt?: DateTimeFilter<"SitePublication"> | Date | string
     updatedAt?: DateTimeFilter<"SitePublication"> | Date | string
     publishedAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
@@ -33716,6 +33752,8 @@ export namespace Prisma {
     lastError?: SortOrderInput | SortOrder
     providerDeploymentId?: SortOrderInput | SortOrder
     providerResponse?: SortOrderInput | SortOrder
+    scheduledFor?: SortOrderInput | SortOrder
+    cancelledAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrderInput | SortOrder
@@ -33741,6 +33779,8 @@ export namespace Prisma {
     lastError?: StringNullableWithAggregatesFilter<"SitePublication"> | string | null
     providerDeploymentId?: StringNullableWithAggregatesFilter<"SitePublication"> | string | null
     providerResponse?: JsonNullableWithAggregatesFilter<"SitePublication">
+    scheduledFor?: DateTimeNullableWithAggregatesFilter<"SitePublication"> | Date | string | null
+    cancelledAt?: DateTimeNullableWithAggregatesFilter<"SitePublication"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"SitePublication"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SitePublication"> | Date | string
     publishedAt?: DateTimeNullableWithAggregatesFilter<"SitePublication"> | Date | string | null
@@ -36024,6 +36064,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -36046,6 +36088,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -36064,6 +36108,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -36086,6 +36132,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -36106,6 +36154,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -36121,6 +36171,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -36138,6 +36190,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -38816,6 +38870,8 @@ export namespace Prisma {
     lastError?: SortOrder
     providerDeploymentId?: SortOrder
     providerResponse?: SortOrder
+    scheduledFor?: SortOrder
+    cancelledAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrder
@@ -38835,6 +38891,8 @@ export namespace Prisma {
     requestedById?: SortOrder
     lastError?: SortOrder
     providerDeploymentId?: SortOrder
+    scheduledFor?: SortOrder
+    cancelledAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrder
@@ -38850,6 +38908,8 @@ export namespace Prisma {
     requestedById?: SortOrder
     lastError?: SortOrder
     providerDeploymentId?: SortOrder
+    scheduledFor?: SortOrder
+    cancelledAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrder
@@ -43939,6 +43999,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -43959,6 +44021,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -44415,6 +44479,8 @@ export namespace Prisma {
     lastError?: StringNullableFilter<"SitePublication"> | string | null
     providerDeploymentId?: StringNullableFilter<"SitePublication"> | string | null
     providerResponse?: JsonNullableFilter<"SitePublication">
+    scheduledFor?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
+    cancelledAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
     createdAt?: DateTimeFilter<"SitePublication"> | Date | string
     updatedAt?: DateTimeFilter<"SitePublication"> | Date | string
     publishedAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
@@ -44516,6 +44582,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -44537,6 +44605,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -44559,6 +44629,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -44580,6 +44652,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -44602,6 +44676,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -44623,6 +44699,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -44715,6 +44793,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -44736,6 +44816,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -44764,6 +44846,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -44785,6 +44869,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -44813,6 +44899,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -44834,6 +44922,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -50281,6 +50371,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -50301,6 +50393,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -51165,6 +51259,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -51693,6 +51789,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51713,6 +51811,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51732,6 +51832,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53415,6 +53517,8 @@ export namespace Prisma {
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
@@ -53581,6 +53685,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53601,6 +53707,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53620,6 +53728,8 @@ export namespace Prisma {
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

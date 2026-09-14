@@ -141,6 +141,34 @@ test('rebuild changes for one site are persisted and deduplicated while queued',
   });
 });
 
+test('re-enqueueing the same publication snapshot is idempotent', async () => {
+  const f = fixture();
+
+  await f.service.enqueue({ entity: 'site-publication', id: 'publication-1', siteId: 'site-1', publicationId: 'publication-1' });
+  await f.service.enqueue({ entity: 'site-publication-schedule', id: 'publication-1', siteId: 'site-1', publicationId: 'publication-1' });
+
+  assert.equal(f.getRecord().requestedRevision, 1);
+  assert.equal(f.getRecord().requestedPublicationId, 'publication-1');
+  assert.equal(f.queueCalls.length, 1);
+});
+
+test('a pending rebuild for the same publication is requeued without incrementing its revision', async () => {
+  const f = fixture({
+    record: {
+      id: 'rebuild-1', dedupeKey: 'site:site-1', siteId: 'site-1', status: 'PENDING', affectedPaths: ['/*'],
+      requestedRevision: 4, processingRevision: 0, publishedRevision: 3, attempts: 0, maxAttempts: 3,
+      requestedPublicationId: 'publication-4', processingPublicationId: null, publishedPublicationId: null,
+    },
+  });
+
+  await f.service.enqueue({ entity: 'site-publication-schedule', id: 'publication-4', siteId: 'site-1', publicationId: 'publication-4' });
+
+  assert.equal(f.getRecord().requestedRevision, 4);
+  assert.equal(f.getRecord().status, 'QUEUED');
+  assert.equal(f.queueCalls.length, 1);
+  assert.equal(f.queueCalls[0][2].jobId, 'rebuild-1-4');
+});
+
 test('transient provider error is recorded for BullMQ retry', async () => {
   const f = fixture({
     record: {

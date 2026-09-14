@@ -1,6 +1,6 @@
 # Технологическая база
 
-Последняя сверка с `package.json`, `pnpm-lock.yaml`, Dockerfiles, Compose, Prisma migrations и GitHub Actions: 14 сентября 2026 года.
+Последняя сверка с `package.json`, `pnpm-lock.yaml`, Dockerfiles, Compose, Prisma migrations и GitHub Actions: 15 сентября 2026 года.
 
 ## Зафиксированные версии
 
@@ -47,7 +47,7 @@ Datasource URL описан в `prisma.config.ts`, клиент генериру
 
 ### Redis и BullMQ
 
-API создает `lead-deliveries` и `site-rebuilds` при наличии `REDIS_URL`. Worker также владеет очередью `maintenance`: при валидном `PII_RETENTION_DAYS` BullMQ Job Scheduler ежедневно ставит worker-only PII purge, который через API удаляет bounded batches. Без Redis lead delivery использует process-local fallback, а rebuild остается в PostgreSQL как `PENDING` и восстанавливается при следующем запуске API с Redis; retention scheduler без worker/Redis не выполняется. Production требует Redis и отдельный worker.
+API создает `lead-deliveries` и `site-rebuilds` при наличии `REDIS_URL`. Worker также владеет очередью `maintenance`: постоянный минутный Job Scheduler передает наступившие `SitePublication` в rebuild через worker-only API, а при валидном `PII_RETENTION_DAYS` второй scheduler ежедневно ставит bounded PII purge. Без Redis lead delivery использует process-local fallback, rebuild остается в PostgreSQL как `PENDING`, а запланированные snapshots — как `SCHEDULED`; API восстанавливает rebuild при следующем запуске с Redis, но оба scheduler без worker/Redis не выполняются. Production требует Redis и отдельный worker.
 
 Rebuild provider выбирается через `REBUILD_PROVIDER`. Режим `webhook` сохраняет прежний синхронный контракт; `coolify` использует HTTPS API token/resource UUID, сохраняет полученный deployment UUID в PostgreSQL и выполняет bounded polling статусов. Повтор BullMQ продолжает уже сохраненный `queued`/`in_progress` deployment, а не запускает второй. Live Coolify API подтвержден polling rehearsal до `finished`; issue [#57](https://github.com/Celtoman/astro-telekom/issues/57) закрыта.
 

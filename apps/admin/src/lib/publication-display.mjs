@@ -22,6 +22,14 @@ export function describePublicationState(state) {
       canPublish: false,
     }
   }
+  if (currentPublication?.status === "SCHEDULED") {
+    return {
+      kind: "scheduled",
+      title: `Публикация версии ${state.workingRevision} запланирована`,
+      description: "Снимок уже зафиксирован и будет передан в сборку в указанное время.",
+      canPublish: true,
+    }
+  }
   if (currentPublication?.status === "FAILED") {
     return {
       kind: "failed",

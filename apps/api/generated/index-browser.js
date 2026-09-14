@@ -199,6 +199,8 @@ exports.Prisma.SitePublicationScalarFieldEnum = {
   lastError: 'lastError',
   providerDeploymentId: 'providerDeploymentId',
   providerResponse: 'providerResponse',
+  scheduledFor: 'scheduledFor',
+  cancelledAt: 'cancelledAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   publishedAt: 'publishedAt'
@@ -535,10 +537,12 @@ exports.ContentRevisionAction = exports.$Enums.ContentRevisionAction = {
 };
 
 exports.SitePublicationStatus = exports.$Enums.SitePublicationStatus = {
+  SCHEDULED: 'SCHEDULED',
   PENDING: 'PENDING',
   RUNNING: 'RUNNING',
   SUCCEEDED: 'SUCCEEDED',
-  FAILED: 'FAILED'
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.PageType = exports.$Enums.PageType = {

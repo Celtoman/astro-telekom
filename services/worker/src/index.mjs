@@ -80,11 +80,18 @@ const leadNotificationWorker = new Worker(
   { connection, concurrency: 4 },
 );
 
-const piiRetentionWorker = new Worker(
+const maintenanceWorker = new Worker(
   'maintenance',
   async (job) => {
-    if (job.name !== 'pii-retention') throw new Error(`Unsupported maintenance job: ${job.name}`);
     if (!adminToken) throw new Error('ADMIN_API_TOKEN is not configured');
+    if (job.name === 'publication-schedules') {
+      return jsonRequest(`${apiUrl}/internal/site-publications/release-due`, {
+        method: 'POST',
+        headers: { 'x-admin-token': adminToken },
+        body: '{}',
+      });
+    }
+    if (job.name !== 'pii-retention') throw new Error(`Unsupported maintenance job: ${job.name}`);
     const totals = { leads: 0, addressChecks: 0, accessTokens: 0, detachedDuplicates: 0, batches: 0 };
     for (let batch = 0; batch < 100; batch += 1) {
       const result = await jsonRequest(`${apiUrl}/internal/pii-retention`, {
@@ -104,6 +111,12 @@ const piiRetentionWorker = new Worker(
   { connection, concurrency: 1 },
 );
 
+await maintenanceQueue.upsertJobScheduler(
+  'publication-schedules-every-minute',
+  { pattern: '* * * * *', tz: 'UTC' },
+  { name: 'publication-schedules', data: {}, opts: { attempts: 3, backoff: { type: 'exponential', delay: 30_000 }, removeOnComplete: 100, removeOnFail: 100 } },
+);
+
 if (hasValidPiiRetention) {
   await maintenanceQueue.upsertJobScheduler(
     'pii-retention-daily',
@@ -114,7 +127,7 @@ if (hasValidPiiRetention) {
   console.warn('[worker] PII_RETENTION_DAYS is missing or invalid; retention scheduler is disabled');
 }
 
-for (const worker of [importWorker, rebuildWorker, leadDeliveryWorker, leadNotificationWorker, piiRetentionWorker]) {
+for (const worker of [importWorker, rebuildWorker, leadDeliveryWorker, leadNotificationWorker, maintenanceWorker]) {
   worker.on('completed', (job) => console.log(`[worker] ${job.queueName}/${job.id} completed`));
   worker.on('failed', (job, error) => console.error(`[worker] ${job?.queueName}/${job?.id} failed`, error));
 }
@@ -124,7 +137,7 @@ async function shutdown(signal) {
   if (shuttingDown) return;
   shuttingDown = true;
   console.log(`[worker] received ${signal}, closing workers`);
-  await Promise.all([importWorker.close(), rebuildWorker.close(), leadDeliveryWorker.close(), leadNotificationWorker.close(), piiRetentionWorker.close(), maintenanceQueue.close()]);
+  await Promise.all([importWorker.close(), rebuildWorker.close(), leadDeliveryWorker.close(), leadNotificationWorker.close(), maintenanceWorker.close(), maintenanceQueue.close()]);
   await connection.quit();
   console.log('[worker] shutdown complete');
   process.exit(0);
