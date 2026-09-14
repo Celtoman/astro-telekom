@@ -169,6 +169,7 @@ test('API images share filtered build dependencies and keep a dedicated producti
   assert.match(coolifyCompose, /api:[\s\S]*?target:\s*runtime/);
   const bootstrapService = coolifyCompose.match(/\n  bootstrap-seed:[\s\S]*?(?=\n  [a-z][a-z-]+:|\nvolumes:)/)?.[0] || '';
   assert.doesNotMatch(bootstrapService, /\n    build:/);
+  assert.match(bootstrapService, /\n    pull_policy:\s*never/);
   assert.equal(
     (coolifyCompose.match(/image:\s*"\$\{COOLIFY_RESOURCE_UUID:-astro-telekom\}-api:runtime"/g) || []).length,
     2,

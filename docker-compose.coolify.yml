@@ -87,6 +87,7 @@ services:
   bootstrap-seed:
     exclude_from_hc: true
     image: "${COOLIFY_RESOURCE_UUID:-astro-telekom}-api:runtime"
+    pull_policy: never
     restart: "no"
     env_file: ${ENV_FILE:-.env}
     environment:

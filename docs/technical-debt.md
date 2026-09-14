@@ -72,6 +72,7 @@
 | TD-107 | [#137](https://github.com/Celtoman/astro-telekom/issues/137) ✅ | Seed заполняет предложный и родительный падежи Казани для корректных локальных заголовков |
 | TD-108 | [#138](https://github.com/Celtoman/astro-telekom/issues/138) 🟢 | Public site не задает favicon и получает лишний 404 |
 | TD-109 | [#139](https://github.com/Celtoman/astro-telekom/issues/139) ✅ | Городская HOME Release 1 выводит полный тарифный snapshot без legacy-фильтра и лимита |
+| TD-110 | [#140](https://github.com/Celtoman/astro-telekom/issues/140) 🟢 | Coolify 4.3.19 пытается скачать локальный API image для `bootstrap-seed` и блокирует deployment |
 
 ## P2
 
