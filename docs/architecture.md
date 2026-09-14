@@ -12,7 +12,7 @@
 | `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, каталоги `/tariffs` и `/cities`, отдельные `/tariffs/import` и `/cities/import`, длинная форма `/tariffs/edit`, `/leads`, `/redirects` и `/lead-access/` реализованы как React-root с runtime API-запросами. Sidebar поддерживает вложенные рабочие сценарии «Каталог»/«Импорт». Legacy demo удален; заявки доступны как реальный master-detail журнал, редиректы — как CRUD со статистикой переходов. Целевой референс паттернов — next-shadcn-admin-dashboard-aria; текущие Radix-примитивы еще требуют миграции [#97](https://github.com/Celtoman/astro-telekom/issues/97), см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов, обычных оповещений, пересборок сайта и ежедневной PII retention; также слушает пока не используемую import-очередь. |
-| `prisma` / `packages/database` | Prisma 7 + PostgreSQL | Схема, миграции, seed и сгенерированный клиент. |
+| `prisma` / `packages/database` | Prisma 7 + PostgreSQL | `prisma/` хранит единственные schema и migrations; `packages/database` только делегирует Prisma CLI-команды. Bootstrap seed принадлежит `apps/api/src/seed.ts`, а единственный client output генерируется в `apps/api/generated`. |
 | `deploy` | Caddy + Docker Compose | Образы, reverse proxy, TLS и persistent volumes. |
 
 ## Контуры и потоки

@@ -41,3 +41,14 @@ test('the exact test baseline has docs/TEST_COVERAGE.md as its only source of tr
     );
   }
 });
+
+test('task management derives milestone composition from GitHub instead of a fixed count', () => {
+  const taskManagement = readFileSync(join(repositoryRoot, 'docs', 'task-management.md'), 'utf8');
+
+  assert.match(taskManagement, /GitHub автоматически/);
+  assert.match(taskManagement, /--state all --milestone/);
+  assert.doesNotMatch(
+    taskManagement,
+    /(?:milestone|MVP)[^\r\n]{0,100}\b\d+\s+(?:Task issues?|задач|issues?)/i,
+  );
+});

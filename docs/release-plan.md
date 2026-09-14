@@ -7,13 +7,13 @@
 Статус: **реализован, но с известными ограничениями**.
 
 - Monorepo, Docker Compose, Prisma migrations и seed.
-- NestJS API, Bearer-сессии с единым уровнем доступа администратора и CRUD базовых сущностей.
+- NestJS API, HttpOnly-cookie/совместимые Bearer-сессии с единым уровнем доступа администратора и CRUD базовых сущностей.
 - Статический Astro-сайт с dynamic paths для опубликованных городов, страниц и тарифов; в текущей базе опубликована только Казань.
 - XLSX-import городов/тарифов с validate/apply reports.
-- Прием лида, deduplication, contract check, delivery attempts, CRM API.
-- Static admin с рабочими экранами тарифов, городов и заявок, а также worker listeners.
+- Прием лида, deduplication, contract check, delivery attempts и доставка в Tarifnik/email fallback.
+- Static admin с рабочими каталогами и импортами тарифов/городов, заявками и редиректами; отдельный BullMQ worker обрабатывает доставки, оповещения, пересборки и PII retention.
 
-Release 0 не является production release: тестовый gate зеленый и multi-city static routing реализован, но в текущих данных опубликована только Казань, а часть запланированных admin-разделов еще не реализована. Защищенный внешний test-контур подтверждает deployment-механику, но не означает готовность к реальному трафику. Demo fallback в public build с 7 сентября 2026 требует явного `ALLOW_DEMO_DATA=true` и больше не срабатывает молча при недоступном API.
+Release 0 не является production release: тестовый gate зеленый и multi-city static routing реализован, но в текущих данных опубликована только Казань, а управляемые версии, аудит, rollback и часть эксплуатационных панелей отсутствуют. Защищенный внешний test-контур подтверждает deployment-механику, но не означает готовность к реальному трафику. Demo fallback в public build с 7 сентября 2026 требует явного `ALLOW_DEMO_DATA=true` и больше не срабатывает молча при недоступном API.
 
 ## Release 1 — безопасный MVP Казани
 
@@ -28,7 +28,9 @@ Release 0 не является production release: тестовый gate зел
 5. Fallback link безопасно открывает нужную заявку либо удалена из письма.
 6. Админский вертикальный поток import -> apply -> rebuild status показывает реальные данные.
 7. Real/sandbox contracts DaData, Tarifnik `address/check`, Dom.ru `contract-asterisked`, Tarifnik `appeal/create` и email согласованы и проверены. Обычная форма и видимая проверка подключения разделены; delivery невозможен без обязательной проверки провайдеров и однозначного `contacts: []`.
-8. Срок хранения сырых заявок 180 дней согласован; до реального трафика утверждены остальные меры PII, legal basis, согласие и anti-abuse.
+8. Срок хранения сырых заявок 180 дней согласован; до реального трафика утверждены оператор, legal basis, политика, согласие/отзыв и правила передачи PII внешним сервисам.
+9. `TARIFNIK_UTM_CAMPAIGN` переведен с test-метки на подтвержденное production-значение.
+10. Настроен внешний application-aware PostgreSQL backup и подтверждено восстановление в изолированную БД с проверкой schema/migrations и целостности данных.
 
 ## Release 2 — мультигородской контентный контур
 
@@ -40,7 +42,7 @@ Dynamic маршруты City/Page/Tariff, published-only sitemap, городс�
 
 Цель: дать редактору управляемые версии, шаблоны/блоки, аудит, историю импортов и эксплуатационные панели без demo UI.
 
-Нужны: versioning, audit log, media, SEO validation, analytics, раздел «Переменные» с согласованными уровнями наследования, управление учетными записями администраторов без ролевой модели, monitoring, backup/restore и CI/CD. Для PII purge срок 180 дней уже согласован; юридическая основа и согласие остаются в Release 1.
+Нужны: versioning, audit log, media, SEO validation, analytics, раздел «Переменные» с согласованными уровнями наследования, управление учетными записями администраторов без ролевой модели, monitoring и автоматизированный deployment pipeline. Базовый backup/restore является условием Release 1; в Release 3 он может быть расширен политиками ротации, мониторингом и регулярными учениями. Для PII purge срок 180 дней уже согласован; юридическая основа и согласие остаются в Release 1.
 
 ## Внешние зависимости
 

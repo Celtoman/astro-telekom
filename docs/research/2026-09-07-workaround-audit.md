@@ -12,7 +12,7 @@
 
 | ID | Класс | Доказательство | Вердикт |
 | --- | --- | --- | --- |
-| W-01 | Устранимый legacy/prototype workaround | [`loadKazanData`](../../apps/web/src/data/kazan.ts) ловит любую ошибку API и возвращает встроенную Казань и два demo-тарифа. | Убрать из production-контра: failure build должен быть явным; demo сохранить только за отдельным флагом. |
+| W-01 | Устранимый legacy/prototype workaround | Существовавший на дату аудита `apps/web/src/data/kazan.ts::loadKazanData` ловил любую ошибку API и возвращал встроенную Казань и два demo-тарифа; файл позднее заменен новой data-layer. | Убрать из production-контура: failure build должен быть явным; demo сохранить только за отдельным флагом. |
 | W-02 | Устранимый build workaround | Все Dockerfiles делают `COPY . .` и `pnpm install --no-frozen-lockfile`; `.dockerignore` отсутствует. | Перейти на lockfile-only слой и `--frozen-lockfile`; не копировать host `node_modules`, `.git`, artifacts. |
 | W-03 | Устранимый legacy-артефакт | В `apps/api/src` лежат 10 tracked скомпилированных `.js` рядом с актуальными `.ts`; `main.js` не содержит текущие Fastify body limit и CORS. | Удалить из source tree после подтверждения, что scripts используют только `src/*.ts` и `dist/*.js`. |
 | W-04 | Устранимый устаревший generated client | `packages/database/generated` содержит 21 tracked файл; его embedded schema не знает `CityImportStatus` и `DELIVERY_ERROR_EMAIL_FAILED`, а canonical schema генерирует в `apps/api/generated`. | Удалить устаревший output и исключить generated artifacts из VCS либо выбрать единый generated-client package. |
@@ -25,7 +25,7 @@
 
 ### W-01 — fallback для локального прототипа может стать опубликованным контентом
 
-**Доказательство.** [`apps/web/src/data/kazan.ts:17-53`](../../apps/web/src/data/kazan.ts) содержит зашитый город и тарифы, использует 2-секундный timeout и в `catch` всегда возвращает эти данные. При этом [`apps/web/astro.config.mjs:7-9`](../../apps/web/astro.config.mjs) задает `output: 'static'`: результат fetch фиксируется в HTML при build, а не обновляется во время запроса пользователя.
+**Доказательство на дату аудита.** Удаленный позднее `apps/web/src/data/kazan.ts:17-53` содержал зашитый город и тарифы, использовал 2-секундный timeout и в `catch` всегда возвращал эти данные. При этом [`apps/web/astro.config.mjs`](../../apps/web/astro.config.mjs) задает `output: 'static'`: результат fetch фиксируется в HTML при build, а не обновляется во время запроса пользователя.
 
 Это не требование Astro и не совместимость с Vite. Это полезный UX-режим раннего прототипа, но небезопасный fallback для коммерческой публикации. Astro документирует static replacement `PUBLIC_` variables при build и SSG data loading через build-time routes/loaders: [Astro environment variables](https://docs.astro.build/en/guides/environment-variables/), [Astro static paths](https://docs.astro.build/en/guides/routing/#static-ssg-mode).
 
@@ -49,7 +49,7 @@
 
 ### W-03 — stale JavaScript рядом с TypeScript source
 
-**Доказательство.** Git отслеживает 10 файлов `apps/api/src/*.js`; canonical runtime собирается из TypeScript: [`apps/api/package.json`](../../apps/api/package.json) запускает `nest build`, a production CMD — `node dist/main.js` ([`apps/api/Dockerfile:14-20`](../../apps/api/Dockerfile)). Tracked [`apps/api/src/main.js`](../../apps/api/src/main.js) отстает от [`main.ts`](../../apps/api/src/main.ts): в старом JS нет Fastify body limit и CORS.
+**Доказательство на дату аудита.** Git отслеживал 10 файлов `apps/api/src/*.js`; canonical runtime собирался из TypeScript: [`apps/api/package.json`](../../apps/api/package.json) запускает `nest build`, а production CMD — `node dist/main.js` ([`apps/api/Dockerfile`](../../apps/api/Dockerfile)). Удаленный позднее `apps/api/src/main.js` отставал от [`main.ts`](../../apps/api/src/main.ts): в старом JS не было Fastify body limit и CORS.
 
 Это не runtime-совместимость для Node 22: current package scripts его не запускают. Два варианта source создают ложный ориентир, а случайный `node apps/api/src/main.js` запускает другое приложение. Это уже зафиксировано как TD-19 в [`docs/technical-debt.md:43-44`](../technical-debt.md).
 
@@ -59,7 +59,7 @@
 
 ### W-04 — второй Prisma generated client от старой schema
 
-**Доказательство.** Canonical [`prisma/schema.prisma:1-4`](../../prisma/schema.prisma) генерирует в `apps/api/generated`, и API/seed импортируют именно этот путь. Одновременно Git хранит 21 файл в `packages/database/generated`; embedded [`schema.prisma`](../../packages/database/generated/schema.prisma) генерировал в себя и отстает от canonical schema: нет `CityImportStatus`, `CityImportRun` и `DELIVERY_ERROR_EMAIL_FAILED`. Поиск репозитория не находит runtime imports из `packages/database/generated`.
+**Доказательство на дату аудита.** Canonical [`prisma/schema.prisma`](../../prisma/schema.prisma) генерирует в `apps/api/generated`, и API/seed импортируют именно этот путь. Одновременно Git хранил 21 файл в удаленном позднее `packages/database/generated`; embedded schema генерировала в себя и отставала от canonical schema: не содержала `CityImportStatus`, `CityImportRun` и `DELIVERY_ERROR_EMAIL_FAILED`. Поиск репозитория не находил runtime imports из `packages/database/generated`.
 
 Это недвусмысленный stale artifact, а не Prisma 7 compatibility layer. Prisma 7 действительно требует adapter при конструировании клиента, но не требует двух generated outputs. [Prisma v7 driver adapters](https://www.prisma.io/docs/orm/overview/databases/database-drivers), [Prisma generate](https://www.prisma.io/docs/orm/prisma-schema/overview/generators).
 

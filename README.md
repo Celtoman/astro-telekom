@@ -2,32 +2,37 @@
 
 Монорепозиторий локального прототипа платформы для партнерских сайтов интернет-провайдеров. В коде реализован первый вертикальный срез для Дом.ру и Казани: статическая публичная витрина с управляемой библиотекой из семи типов блоков, полной городской страницей `/kazan` и эталонной страницей услуги `/kazan/internet`, API, PostgreSQL-модель, импорт городов и тарифов, одношаговые HTTP 301, прием заявок, журнал заявок и фоновые задачи.
 
-Текущий статус на 11 сентября 2026 года: **прототип с защищенным внешним test-контуром, не готовый к реальному production-трафику**. На `tv-internet-dom.ru` развернута проверочная публикация из GitHub через Coolify, но в данных опубликована только Казань, а legal и эксплуатационные условия первого релиза еще не закрыты. Точная граница между работающими возможностями, демонстрационными интерфейсами и планом находится в [состоянии проекта](docs/current-state.md).
+Текущий статус на 14 сентября 2026 года: **прототип с защищенным внешним test-контуром, не готовый к реальному production-трафику**. На `tv-internet-dom.ru` развернута проверочная публикация из GitHub через Coolify, но в данных опубликована только Казань, а legal, production campaign и backup/restore первого релиза еще не закрыты. Точная граница между работающими возможностями, демонстрационными интерфейсами и планом находится в [состоянии проекта](docs/current-state.md).
 
 ## Документация
 
 - [Текущее состояние и границы](docs/current-state.md) — что доказано кодом, что зависит от окружения и что еще не реализовано.
 - [Архитектура](docs/architecture.md) — приложения, потоки данных и границы модулей.
 - [Технологическая база](docs/technology-baseline.md) — версии, инфраструктура и правила сборки.
+- [Дизайн-система admin](docs/admin-design-system.md) — обязательный React Aria-референс и текущая граница Radix-реализации.
+- [Дизайн-система public web](docs/web-design-system.md) — обязательный визуальный и UX-референс официального dom.ru.
 - [API-контракты](docs/api-contracts.md) — реализованные HTTP-маршруты и их ограничения.
 - [Модель данных](docs/data-model.md) — Prisma-схема и отличие модели от продуктового замысла.
 - [Развертывание](docs/deployment.md) — локальный и production-контуры, обязательные переменные и проверки.
 - [Фоновые задачи](docs/worker.md) — реальные очереди, их производители и обработчики.
+- [Управление задачами](docs/task-management.md) — GitHub Issues, labels, milestone и sub-issues как механический источник статуса.
 - [Технический долг](docs/technical-debt.md) — подтвержденные проблемы, риски и порядок устранения.
 - [Продуктовые и UX/UI-находки](docs/product-findings.md) — постоянный входящий реестр идей для отдельного обсуждения и критической проверки.
 - [План реализации](docs/plans/2026-09-07-platform-stabilization-and-mvp.md) — последовательность стабилизации и развития.
+- [Релизные границы](docs/release-plan.md) — условия Release 0–3 и оставшиеся блокеры первого MVP.
+- [Покрытие тестами](docs/TEST_COVERAGE.md) — единственный точный baseline и назначение каждого suite.
 - [Реестр решений](docs/decisions.md) — согласованный продуктовый замысел; не подтверждает наличие функции в коде.
-- [Исследование примеров](docs/research/README.md) — исторические наблюдения для проектирования структуры сайта.
+- [Исследования](docs/research/README.md) — индекс датированных аудитов и исторических наблюдений; текущий статус из них не выводится.
 
 ## Состав репозитория
 
 ```text
 apps/web        Статический Astro-сайт из опубликованных городов; сейчас опубликована только Казань
 apps/admin      Static Astro + React/Tailwind/shadcn: раздельные каталоги/импорты, редактор тарифов, заявки, редиректы и fallback-доступ
-apps/api        NestJS + Fastify API и бизнес-правила
+apps/api        NestJS + Fastify API, бизнес-правила, bootstrap seed и единственный Prisma client output
 services/worker BullMQ workers для импорта, пересборки, доставки заявок, оповещений и PII retention
-packages/database Prisma package и сгенерированный клиент
-prisma/         Схема, миграции и seed
+packages/database Делегат Prisma CLI-команд generate/validate/migrate/seed
+prisma/         Единственные схема и миграции Prisma; client генерируется в apps/api/generated
 data/imports/    Канонические исходные файлы для штатного импорта
 deploy/         Конфигурация Caddy
 docs/           Документация и план развития
@@ -36,7 +41,7 @@ tests/          Локальные модульные и контрактные 
 
 ## Локальный запуск
 
-Нужны Node.js 22+, Corepack, Docker Engine с Compose и pnpm 11.19.0.
+Нужны Node.js 22.23.2, Corepack, Docker Engine с Compose и pnpm 11.19.0. Другие совместимые Node 22 могут работать, но проверяемый baseline закреплен в [технологической базе](docs/technology-baseline.md).
 
 ```powershell
 Copy-Item .env.example .env
@@ -85,7 +90,7 @@ pnpm test
 
 `apps/web` получает build-time каталог опубликованных городов, страниц, тарифов и редиректов из API через server-only `SITE_DATA_API_URL`; при его отсутствии для обратной совместимости используется `PUBLIC_API_URL`, который отдельно встраивается в browser-формы. Все публичные HTML-URL, кроме корня `/`, канонизируются без завершающего слэша; slash-вариант получает один HTTP 301 с сохранением query string, а API и asset namespaces не затрагиваются. Для контента web создаёт static paths, а для опубликованных редиректов — проверенный фрагмент Caddy, который проксирует старый путь в API и возвращает HTTP 301 с учетом перехода. В текущей базе опубликована только Казань, поэтому остальные 206 городов не попадают ни в output, ни в sitemap. Production build требует `PUBLIC_SITE_URL` в виде чистого HTTPS origin, а `PUBLIC_API_URL` — в виде внешнего HTTPS base URL с точным path `/api/v1`; пустые, HTTP, credentialed, query/hash и loopback-значения блокируют сборку. После `astro build` обязательный pre-publication SEO gate сверяет sitemap с готовыми `*/index.html`, отклоняет неизвестные плоские HTML-файлы, проверяет canonical, title, description, H1, robots без глобального запрета индексации, loopback-утечки и неиндексируемую 404. Если API недоступен, публичные URL конфликтуют или редирект образует цепочку, сборка также осознанно падает. `ALLOW_DEMO_DATA=true` явно разрешает демонстрационные данные и loopback URL только для разработки и локальной проверки без поднятого API.
 
-Прямой `docker-compose.prod.yml` принимает `SITE_DATA_API_URL` отдельно от browser API и требует уже доступный источник каталога на стадии image build. Для целевого Coolify-контура это ограничение снято отдельным `docker-compose.coolify.yml`: images собираются без обращения к каталогу, затем runtime-цепочка `migrate → api → bootstrap-seed → web-publish → web` создает проверенную static-публикацию из внутреннего API. API использует отдельные кешируемые dependency stages: облегченный production runtime и migration image с Prisma CLI; migration target переиспользует уже установленный build dependency tree, а `api` и `bootstrap-seed` разделяют один runtime image без повторного build target. Все Docker install stages используют общий BuildKit pnpm-store cache, повторяют transiently failed install с уже заполненным store и доверяют frozen lockfile только внутри production image build; обычный CI install продолжает независимо проверять supply-chain policy. Publisher устанавливает только зависимости `apps/web`, admin — только `apps/admin`, worker — только свои production-зависимости, поэтому повторный export не переносит весь monorepo `node_modules`. Publication symlink заменяется атомарным `mv -fT`: команда не следует уже существующей ссылке на каталог и не оставляет `current` битой после очистки предыдущего release. Завершенные one-shot services явно исключены из Coolify health-оценки, а API, worker, web и admin имеют собственные healthchecks. Два последовательных live deployment коммита `1eeb609` завершились за 146 и 85 секунд; после второго ресурс остался `running:healthy`, а web/API/admin прошли контрольные запросы без 503.
+Прямой `docker-compose.prod.yml` принимает `SITE_DATA_API_URL` отдельно от browser API и требует уже доступный источник каталога на стадии image build. Для целевого Coolify-контура это ограничение снято отдельным `docker-compose.coolify.yml`: images собираются без обращения к каталогу, затем runtime-цепочка `migrate → api → bootstrap-seed → web-publish → web` создает проверенную static-публикацию из внутреннего API. API использует отдельные кешируемые dependency stages: облегченный production runtime и migration image с Prisma CLI; migration target переиспользует уже установленный build dependency tree, а `api` и `bootstrap-seed` разделяют один runtime image без повторного build target. Все Docker install stages используют общий BuildKit pnpm-store cache, повторяют transiently failed install с уже заполненным store и доверяют frozen lockfile только внутри production image build; обычный CI install продолжает независимо проверять supply-chain policy. Publisher устанавливает только зависимости `apps/web`, admin — только `apps/admin`, worker — только свои production-зависимости, поэтому повторный export не переносит весь monorepo `node_modules`. Publication symlink заменяется атомарным `mv -fT`: команда не следует уже существующей ссылке на каталог и не оставляет `current` битой после очистки предыдущего release. Завершенные one-shot services явно исключены из Coolify health-оценки, а API, worker, web и admin имеют собственные healthchecks. Точные датированные deployment-доказательства хранятся в [эксплуатационной документации](docs/deployment.md), а не используются здесь как текущий status cache.
 
 Целевой внешний test-контур развертывается из GitHub через Coolify на `tv-internet-dom.ru`, без дополнительного `stage`-контура. `web` (`tv-internet-dom.ru`) и `admin` (`admin.tv-internet-dom.ru`) публикуются через Coolify proxy; browser security middleware стоит перед общим Basic Auth, поэтому HSTS, `nosniff`, Referrer/Permissions Policy и frame policy применяются также к неавторизованному `401`. API остается внутренним и доступен браузеру через same-origin `/api/*`. Astro добавляет к каждому HTML hash-based CSP: public разрешает только необходимые endpoints Яндекс Метрики при включенном счетчике, admin — свой API origin; единственное `unsafe-inline` ограничено `style-src-attr` админки для используемых Radix checkbox. Public framing разрешен только себе и официальным Webvisor origins без конфликтующего `X-Frame-Options`, admin запрещает framing через `frame-ancestors 'none'` и `X-Frame-Options: DENY`. Для Compose bcrypt verifier хранится в Coolify как `Literal`, доступный на Buildtime и Runtime, а `Escape special characters in labels` выключен: иначе `$` экранируется до `$${...}` либо переменная отсутствует во время `docker compose build`. Админка намеренно вынесена на поддомен и получает явный `X-Robots-Tag: noindex, nofollow, noarchive`.
 
@@ -101,7 +106,7 @@ pnpm test
 
 ## Версионирование
 
-Единая версия на весь монорепозиторий, автоматизирована через [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) на основе Conventional Commits. Релиз запускается вручную командой `pnpm release` (`pnpm release:dry-run` — предпросмотр без изменений) прямо в `master`, без веток и PR; тег и GitHub Release создаются после `git push --follow-tags`. Подробности — [CLAUDE.md](CLAUDE.md), раздел «Версионирование и релизы».
+Единая версия на весь монорепозиторий, автоматизирована через [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) на основе Conventional Commits. Релиз запускается вручную командой `pnpm release` (`pnpm release:dry-run` — предпросмотр без изменений) прямо в `master`, без веток и PR; тег и GitHub Release создаются после `git push --follow-tags`. Подробности — в разделе «Версионирование и релизы» файла [AGENTS.md](AGENTS.md).
 
 ## Безопасность и данные
 

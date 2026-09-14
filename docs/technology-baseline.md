@@ -1,6 +1,6 @@
 # Технологическая база
 
-Последняя сверка с `package.json`, `pnpm-lock.yaml`, Dockerfiles, Compose и GitHub Actions: 9 сентября 2026 года.
+Последняя сверка с `package.json`, `pnpm-lock.yaml`, Dockerfiles, Compose, Prisma migrations и GitHub Actions: 14 сентября 2026 года.
 
 ## Зафиксированные версии
 
@@ -43,7 +43,7 @@ API имеет глобальный prefix `/api/v1`, включенный CORS 
 
 ### Prisma и PostgreSQL
 
-Datasource URL описан в `prisma.config.ts`, клиент генерируется в `apps/api/generated`. `PrismaService` использует `PrismaPg` поверх `pg.Pool`. Seed также принадлежит API (`apps/api/src/seed.ts`), а database package сохраняет совместимую команду-делегат. Локальный API seed-script сам загружает корневой `.env` через Node `--env-file`; в runtime image seed запускается как `/app/dist/seed.js` и получает окружение от Compose, поэтому использует тот же generated client и зависимости, что API без зависимости от локального файла. В репозитории 15 последовательных миграций: `0011_single_admin_access` удаляет ролевую модель админки, `0012_pii_retention_indexes` добавляет индексы для bounded retention queries, `0013_lead_provider_outcomes` фиксирует однозначные причины непередачи, `0014_delivery_queue_status` делает сбой постановки в очередь отдельным наблюдаемым состоянием, а `0015_lead_notification_outbox` добавляет persistent журнал обычных оповещений.
+Datasource URL описан в `prisma.config.ts`, клиент генерируется только в `apps/api/generated`. `PrismaService` использует `PrismaPg` поверх `pg.Pool`. Seed также принадлежит API (`apps/api/src/seed.ts`), а database package сохраняет совместимую команду-делегат. Локальный API seed-script сам загружает корневой `.env` через Node `--env-file`; в runtime image seed запускается как `/app/dist/seed.js` и получает окружение от Compose, поэтому использует тот же generated client и зависимости, что API без зависимости от локального файла. В репозитории 20 последовательных миграций от `0001_initial` до `0020_city_support_phone`. Последние пять добавляют cursor-индексы admin (`0016`), provenance управляемых тарифных редиректов (`0017`), нормализацию legacy CTA (`0018`), канонические снимки блоков Казани (`0019`) и отдельный телефон техподдержки города (`0020`). Состояние production нельзя выводить из числа файлов: оно подтверждается отдельным exact-SHA deployment/rehearsal.
 
 ### Redis и BullMQ
 

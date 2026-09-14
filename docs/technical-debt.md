@@ -1,6 +1,6 @@
 # Технический долг — индекс
 
-Дата фиксации реестра: 11 сентября 2026 года. **Полное описание каждой проблемы (доказательство, влияние, следующее действие) живёт в GitHub Issue, не здесь** — эта таблица дублировала текст до 8 сентября 2026, что и было источником рассинхронизации; теперь она только индекс. Как устроена вся система — [docs/task-management.md](task-management.md).
+Дата последней сверки реестра с GitHub: 14 сентября 2026 года. **Полное описание каждой проблемы (доказательство, влияние, следующее действие) живёт в GitHub Issue, не здесь** — эта таблица дублировала текст до 8 сентября 2026, что и было источником рассинхронизации; теперь она только индекс. Как устроена вся система — [docs/task-management.md](task-management.md).
 
 Приоритеты: P0 — блокирует безопасный запуск или ведет к недостоверным данным; P1 — нарушает ключевой путь первого релиза; P2 — существенно ограничивает эксплуатацию; P3 — улучшение качества и поддерживаемости.
 
@@ -124,7 +124,9 @@
 | TD-75 | [#97](https://github.com/Celtoman/astro-telekom/issues/97) 🟢 | Текущие Radix-примитивы admin расходятся с новым обязательным React Aria-референсом |
 | TD-76 | [#98](https://github.com/Celtoman/astro-telekom/issues/98) 🟢 | Astro выдает ложные `formId` hints для inline-скрипта `AddressForm` |
 | TD-80 | [#102](https://github.com/Celtoman/astro-telekom/issues/102) 🟢 | Локальный TypeScript seed вызывает `MODULE_TYPELESS_PACKAGE_JSON` и повторный ESM parse |
-| TD-84 | [#107](https://github.com/Celtoman/astro-telekom/issues/107) 🟢 | `task-management.md` хранит устаревшее фиксированное число Task issues и расходится с GitHub milestone |
+| TD-84 | [#107](https://github.com/Celtoman/astro-telekom/issues/107) ✅ | Ручное число Task issues удалено; milestone читается из GitHub, возврат фиксированного baseline блокирует тест |
+| TD-102 | [#131](https://github.com/Celtoman/astro-telekom/issues/131) ✅ | Живые документы согласованы с 20 миграциями, а исторические production-проверки явно привязаны к exact SHA |
+| TD-103 | [#132](https://github.com/Celtoman/astro-telekom/issues/132) ✅ | `packages/database` описан как делегат Prisma CLI, единственный client output — `apps/api/generated` |
 | TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) ✅ | `docs/worker.md` синхронизирован с фактическим routing и retry-поведением |
 | TD-70 | [#90](https://github.com/Celtoman/astro-telekom/issues/90) ✅ | DTO ограничивает query официальным максимумом DaData 300 символов |
 
