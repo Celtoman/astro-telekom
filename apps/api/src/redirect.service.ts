@@ -1,7 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { PublishStatus } from '../generated';
+import { Prisma, PublishStatus } from '../generated';
 import { PrismaService } from './prisma.service';
-import { RebuildQueueService } from './rebuild-queue.service';
 import { releaseOnePaths } from './public-route-policy';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { normalizeRedirectPath } from './redirect-path';
@@ -17,12 +16,12 @@ type RedirectInput = {
 };
 
 type RedirectUpdate = Partial<Omit<RedirectInput, 'siteId'>>;
+type Transaction = Prisma.TransactionClient | PrismaService;
 
 @Injectable()
 export class RedirectService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly rebuild: RebuildQueueService,
     private readonly publications: PublicationWorkflowService,
   ) {}
 
@@ -37,34 +36,74 @@ export class RedirectService {
     });
   }
 
-  async create(body: RedirectInput) {
-    const candidate = await this.prepareCandidate(body);
-    const redirect = await this.prisma.redirect.create({ data: candidate });
-    await this.rebuild.enqueue({ entity: 'redirect', id: redirect.id, siteId: redirect.siteId });
-    return redirect;
+  async create(body: RedirectInput, actorId?: string) {
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const candidate = await this.prepareCandidate(transaction, body);
+      const redirect = await transaction.redirect.create({ data: candidate });
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: redirect.siteId,
+        entityType: 'REDIRECT',
+        entityId: redirect.id,
+        action: 'CREATE',
+        snapshot: redirect as unknown as Record<string, unknown>,
+        changedFields: Object.keys(candidate).sort(),
+        actorId,
+        source: 'admin',
+      });
+      return { ...redirect, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
-  async update(id: string, body: RedirectUpdate) {
-    const current = await this.prisma.redirect.findUnique({ where: { id } });
-    if (!current) throw new NotFoundException('Redirect not found');
-    const candidate = await this.prepareCandidate({
-      siteId: current.siteId,
-      cityId: body.cityId === undefined ? current.cityId : body.cityId,
-      sourcePath: body.sourcePath ?? current.sourcePath,
-      targetPath: body.targetPath ?? current.targetPath,
-      status: body.status ?? current.status,
-    }, id);
-    const redirect = await this.prisma.redirect.update({ where: { id }, data: candidate });
-    await this.rebuild.enqueue({ entity: 'redirect', id: redirect.id, siteId: redirect.siteId });
-    return redirect;
+  async update(id: string, body: RedirectUpdate, actorId?: string) {
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const current = await transaction.redirect.findUnique({ where: { id } });
+      if (!current) throw new NotFoundException('Redirect not found');
+      const candidate = await this.prepareCandidate(transaction, {
+        siteId: current.siteId,
+        cityId: body.cityId === undefined ? current.cityId : body.cityId,
+        sourcePath: body.sourcePath ?? current.sourcePath,
+        targetPath: body.targetPath ?? current.targetPath,
+        status: body.status ?? current.status,
+      }, id);
+      const redirect = await transaction.redirect.update({ where: { id }, data: candidate });
+      const action = body.status === PublishStatus.ARCHIVED && current.status !== PublishStatus.ARCHIVED
+        ? 'ARCHIVE'
+        : current.status === PublishStatus.ARCHIVED && body.status && body.status !== PublishStatus.ARCHIVED
+          ? 'RESTORE'
+          : 'UPDATE';
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: redirect.siteId,
+        entityType: 'REDIRECT',
+        entityId: redirect.id,
+        action,
+        previousSnapshot: current as unknown as Record<string, unknown>,
+        snapshot: redirect as unknown as Record<string, unknown>,
+        changedFields: Object.keys(body).sort(),
+        actorId,
+        source: 'admin',
+      });
+      return { ...redirect, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
-  async archive(id: string) {
-    const current = await this.prisma.redirect.findUnique({ where: { id } });
-    if (!current) throw new NotFoundException('Redirect not found');
-    const redirect = await this.prisma.redirect.update({ where: { id }, data: { status: PublishStatus.ARCHIVED } });
-    await this.rebuild.enqueue({ entity: 'redirect', id: redirect.id, siteId: redirect.siteId });
-    return redirect;
+  async archive(id: string, actorId?: string) {
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const current = await transaction.redirect.findUnique({ where: { id } });
+      if (!current) throw new NotFoundException('Redirect not found');
+      const redirect = await transaction.redirect.update({ where: { id }, data: { status: PublishStatus.ARCHIVED } });
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: redirect.siteId,
+        entityType: 'REDIRECT',
+        entityId: redirect.id,
+        action: current.status === PublishStatus.ARCHIVED ? 'UPDATE' : 'ARCHIVE',
+        previousSnapshot: current as unknown as Record<string, unknown>,
+        snapshot: redirect as unknown as Record<string, unknown>,
+        changedFields: ['status'],
+        actorId,
+        source: 'admin',
+      });
+      return { ...redirect, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
   async resolvePublished(siteSlug: string, id: string) {
@@ -85,7 +124,7 @@ export class RedirectService {
     return targetPath;
   }
 
-  private async prepareCandidate(body: RedirectInput, currentId?: string) {
+  private async prepareCandidate(transaction: Transaction, body: RedirectInput, currentId?: string) {
     if (!body.siteId) throw new BadRequestException('siteId обязателен');
     const status = body.status ?? PublishStatus.PUBLISHED;
     if (![PublishStatus.DRAFT, PublishStatus.PUBLISHED, PublishStatus.ARCHIVED].includes(status)) {
@@ -95,40 +134,40 @@ export class RedirectService {
     const targetPath = normalizeRedirectPath(body.targetPath, 'targetPath');
     if (sourcePath === targetPath) throw new BadRequestException('sourcePath и targetPath должны отличаться');
 
-    const site = await this.prisma.site.findUnique({ where: { id: body.siteId }, select: { id: true } });
+    const site = await transaction.site.findUnique({ where: { id: body.siteId }, select: { id: true } });
     if (!site) throw new BadRequestException('Сайт не найден');
     if (body.cityId) {
-      const city = await this.prisma.city.findUnique({ where: { id: body.cityId }, select: { siteId: true } });
+      const city = await transaction.city.findUnique({ where: { id: body.cityId }, select: { siteId: true } });
       if (!city || city.siteId !== body.siteId) throw new BadRequestException('Город не принадлежит выбранному сайту');
     }
 
     const occupiedCandidates = [...new Set([sourcePath, `${sourcePath}/`])];
-    const occupied = (await Promise.all(occupiedCandidates.map((candidatePath) => this.prisma.redirect.findUnique({
+    const occupied = (await Promise.all(occupiedCandidates.map((candidatePath) => transaction.redirect.findUnique({
       where: { siteId_sourcePath: { siteId: body.siteId, sourcePath: candidatePath } },
       select: { id: true },
     })))).find((candidate) => candidate && candidate.id !== currentId);
     if (occupied) throw new ConflictException(`Redirect для ${sourcePath} уже существует`);
 
     if (status === PublishStatus.PUBLISHED) {
-      await this.assertPublishedPolicy(body.siteId, sourcePath, targetPath, currentId);
+      await this.assertPublishedPolicy(transaction, body.siteId, sourcePath, targetPath, currentId);
     }
     return { siteId: body.siteId, cityId: body.cityId || null, sourcePath, targetPath, status };
   }
 
-  private async assertPublishedPolicy(siteId: string, sourcePath: string, targetPath: string, currentId?: string) {
+  private async assertPublishedPolicy(transaction: Transaction, siteId: string, sourcePath: string, targetPath: string, currentId?: string) {
     const [cities, globalPages, redirects] = await Promise.all([
-      this.prisma.city.findMany({
+      transaction.city.findMany({
         where: { siteId, status: PublishStatus.PUBLISHED },
         select: {
           slug: true,
           tariffs: { where: { status: PublishStatus.PUBLISHED }, select: { slug: true } },
         },
       }),
-      this.prisma.page.findMany({
+      transaction.page.findMany({
         where: { siteId, cityId: null, status: PublishStatus.PUBLISHED },
         select: { type: true, slug: true },
       }),
-      this.prisma.redirect.findMany({
+      transaction.redirect.findMany({
         where: { siteId, status: PublishStatus.PUBLISHED, ...(currentId ? { id: { not: currentId } } : {}) },
         select: { id: true, sourcePath: true, targetPath: true },
       }),

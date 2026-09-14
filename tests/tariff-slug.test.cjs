@@ -4,7 +4,6 @@ const { AdminTariffsController } = require('../apps/api/dist/admin-tariffs.contr
 
 const publicationStub = {
   recordWorkingRevision: async () => ({ siteRevision: 1 }),
-  captureWorkingPublication: async (_transaction, input) => ({ id: `publication-${input.siteRevision}`, siteRevision: input.siteRevision, status: 'PENDING' }),
 };
 
 function fixture({ pageConflict = false, tariffConflict = false, redirectConflict = false, status = 'PUBLISHED', cityStatus = 'PUBLISHED' } = {}) {
@@ -42,7 +41,7 @@ function fixture({ pageConflict = false, tariffConflict = false, redirectConflic
 test('manual published tariff slug change creates a managed redirect record atomically', async () => {
   const f = fixture();
 
-  await f.controller.update('tariff-1', { expectedUpdatedAt: '2026-09-10T00:00:00.000Z', slug: 'new-slug', confirmSensitiveChanges: true });
+  const result = await f.controller.update('tariff-1', { expectedUpdatedAt: '2026-09-10T00:00:00.000Z', slug: 'new-slug', confirmSensitiveChanges: true });
 
   assert.equal(f.getUpdatedTariff().slug, 'new-slug');
   assert.deepEqual(f.createdRedirects, [{
@@ -52,7 +51,8 @@ test('manual published tariff slug change creates a managed redirect record atom
     where: { siteId: 'site-1', targetPath: '/kazan/old-slug' },
     data: { targetPath: '/kazan/new-slug' },
   }]);
-  assert.equal(f.rebuilds[0].siteId, 'site-1');
+  assert.equal(result.workingRevision, 1);
+  assert.deepEqual(f.rebuilds, []);
 });
 
 test('slug change is blocked when the old URL belongs to a published page', async () => {

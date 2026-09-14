@@ -9,7 +9,7 @@ const publicationStub = {
 
 test('manual tariff edit keeps the deterministic identity key aligned with import business key', async () => {
   let saved;
-  let rebuild;
+  let rebuildCalls = 0;
   const updatedAt = new Date('2026-09-10T00:00:00Z');
   const tx = {
     city: { findUnique: async () => ({ id: 'city', slug: 'kazan', siteId: 'site', site: { providerId: 'provider' } }) },
@@ -19,10 +19,10 @@ test('manual tariff edit keeps the deterministic identity key aligned with impor
     },
   };
   const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
-  const controller = new AdminTariffsController(prisma, { enqueue: async (data) => { rebuild = data; } }, undefined, publicationStub);
+  const controller = new AdminTariffsController(prisma, { enqueue: async () => { rebuildCalls += 1; } }, undefined, publicationStub);
   await controller.update('tariff', { expectedUpdatedAt: updatedAt.toISOString(), name: 'Новый тариф', serviceType: 'INTERNET_TV' });
   assert.equal(saved.identityKey, 'city:stable-slug:internet_tv');
-  assert.equal(rebuild.siteId, 'site');
+  assert.equal(rebuildCalls, 0);
 });
 
 test('import updates legacy tariff found by its slug instead of creating a duplicate', async () => {
@@ -44,6 +44,8 @@ test('import updates legacy tariff found by its slug instead of creating a dupli
 
 test('manual create ignores a caller-supplied identity key and derives the canonical key', async () => {
   let saved;
+  const revisions = [];
+  const rebuilds = [];
   const prisma = {
     city: { findUnique: async () => ({ siteId: 'site' }) },
     tariff: {
@@ -53,12 +55,28 @@ test('manual create ignores a caller-supplied identity key and derives the canon
       },
     },
   };
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => {} });
+  prisma.$transaction = async (callback, options) => {
+    assert.equal(options.isolationLevel, 'Serializable');
+    return callback(prisma);
+  };
+  const controller = new AdminTariffsController(
+    prisma,
+    { enqueue: async (input) => { rebuilds.push(input); } },
+    undefined,
+    { recordWorkingRevision: async (_transaction, input) => { revisions.push(input); return { siteRevision: 3 }; } },
+  );
 
-  await controller.create({
+  const result = await controller.create({
     providerId: 'provider', cityId: 'city', name: 'Интернет 500', slug: 'internet-500',
     serviceType: 'INTERNET', identityKey: 'attacker:key',
-  });
+  }, { user: { id: 'user-1' } });
 
   assert.equal(saved.identityKey, 'city:internet-500:internet');
+  assert.equal(result.workingRevision, 3);
+  assert.deepEqual(rebuilds, []);
+  assert.equal(revisions[0].siteId, 'site');
+  assert.equal(revisions[0].entityType, 'TARIFF');
+  assert.equal(revisions[0].action, 'CREATE');
+  assert.equal(revisions[0].actorId, 'user-1');
+  assert.deepEqual(revisions[0].snapshot, { id: 'tariff', ...saved });
 });

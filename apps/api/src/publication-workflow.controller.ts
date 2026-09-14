@@ -29,13 +29,26 @@ export class PublicationWorkflowController {
       triggerEntityId: siteId,
       requestedById: request?.user?.id,
     });
-    const rebuild = await this.rebuilds.enqueue({
-      entity: 'site-publication',
-      id: publication.id,
-      siteId,
-      publicationId: publication.id,
-    });
-    return { publication, rebuild };
+    try {
+      const rebuild = await this.rebuilds.enqueue({
+        entity: 'site-publication',
+        id: publication.id,
+        siteId,
+        publicationId: publication.id,
+      });
+      return { publication, rebuild };
+    } catch (error) {
+      const lastError = error instanceof Error ? error.message : 'Не удалось поставить публикацию в очередь';
+      const failed = await this.publications.markFailed(publication.id, lastError);
+      return {
+        publication: failed,
+        rebuild: {
+          id: null,
+          status: 'ENQUEUE_FAILED' as const,
+          lastError,
+        },
+      };
+    }
   }
 
   @Get('admin/sites/:siteId/publication-state')

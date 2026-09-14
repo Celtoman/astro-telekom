@@ -3,6 +3,7 @@ import { Archive, CircleAlert, Pencil, Plus, RefreshCw, RotateCcw, Route } from 
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { FilterResetButton } from "./FilterResetButton"
+import { PublicationStatusCard } from "./PublicationStatusCard"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
@@ -43,6 +44,8 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
   const [editingStatus, setEditingStatus] = useState<RedirectRecord["status"]>("PUBLISHED")
   const [busy, setBusy] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
+  const [actionMessage, setActionMessage] = useState<string | null>(null)
+  const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
 
   const loadWorkspace = useCallback(async (mode: "initial" | "refresh" = "initial") => {
     if (mode === "refresh") setBusy("refresh")
@@ -88,13 +91,16 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
     if (state.status !== "ready" || state.data.sites.length !== 1 || !sourcePath.trim() || !targetPath.trim()) return
     setBusy(editingId || "create")
     setActionError(null)
+    setActionMessage(null)
     try {
-      await requestJson(apiUrl, editingId ? `/admin/redirects/${editingId}` : "/admin/redirects", {
+      const result = await requestJson<{ workingRevision: number }>(apiUrl, editingId ? `/admin/redirects/${editingId}` : "/admin/redirects", {
         method: editingId ? "PATCH" : "POST",
         body: editingId
           ? { sourcePath, targetPath, status: editingStatus }
           : { siteId: state.data.sites[0].id, sourcePath, targetPath, status: "PUBLISHED" },
       })
+      setActionMessage(`Рабочая версия ${result.workingRevision} сохранена. Редирект нужно опубликовать отдельно.`)
+      setPublicationRefreshKey((current) => current + 1)
       resetForm()
       await loadWorkspace("refresh")
     } catch (caught: unknown) {
@@ -105,12 +111,16 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
   async function changeStatus(item: RedirectRecord) {
     setBusy(item.id)
     setActionError(null)
+    setActionMessage(null)
     try {
+      let result: { workingRevision: number }
       if (item.status === "ARCHIVED") {
-        await requestJson(apiUrl, `/admin/redirects/${item.id}`, { method: "PATCH", body: { status: "PUBLISHED" } })
+        result = await requestJson(apiUrl, `/admin/redirects/${item.id}`, { method: "PATCH", body: { status: "PUBLISHED" } })
       } else {
-        await requestJson(apiUrl, `/admin/redirects/${item.id}`, { method: "DELETE" })
+        result = await requestJson(apiUrl, `/admin/redirects/${item.id}`, { method: "DELETE" })
       }
+      setActionMessage(`Рабочая версия ${result.workingRevision} сохранена. Изменение статуса нужно опубликовать отдельно.`)
+      setPublicationRefreshKey((current) => current + 1)
       if (editingId === item.id) resetForm()
       await loadWorkspace("refresh")
     } catch (caught: unknown) {
@@ -129,7 +139,9 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-6 lg:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Редиректы</h1><p className="mt-1 text-sm text-muted-foreground">Одношаговые HTTP 301, конфликты URL и статистика переходов.</p></div><Button variant="outline" disabled={busy !== null} onClick={() => void loadWorkspace("refresh")}><RefreshCw data-icon="inline-start" />Обновить</Button></div>
         {actionError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Операция не выполнена</AlertTitle><AlertDescription>{actionError}</AlertDescription></Alert> : null}
+        {actionMessage ? <Alert><Route /><AlertTitle>Рабочая версия сохранена</AlertTitle><AlertDescription>{actionMessage}</AlertDescription></Alert> : null}
         {sites.length !== 1 ? <Alert variant="destructive"><Route /><AlertTitle>Нельзя выбрать сайт однозначно</AlertTitle><AlertDescription>Управление в текущем интерфейсе доступно при ровно одном сайте. Сейчас найдено: {sites.length}.</AlertDescription></Alert> : null}
+        {sites.length === 1 ? <PublicationStatusCard apiUrl={apiUrl} siteId={sites[0].id} publicationRefreshKey={publicationRefreshKey} /> : null}
 
         <section className="grid gap-4 sm:grid-cols-3" aria-label="Состояние редиректов">
           <Card size="sm"><CardHeader><CardDescription>Всего</CardDescription><CardTitle>{redirects.length}</CardTitle></CardHeader></Card>

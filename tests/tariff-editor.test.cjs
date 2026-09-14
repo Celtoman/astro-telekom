@@ -55,9 +55,9 @@ test('sensitive tariff changes require explicit confirmation before any write', 
   assert.equal(updated, false);
 });
 
-test('confirmed manual edit returns the persisted tariff and rebuild outcome', async () => {
+test('confirmed manual edit returns the persisted tariff and working revision without publishing', async () => {
   let saved;
-  const rebuild = { id: 'rebuild-1', status: 'PENDING', requestedRevision: 4, publishedRevision: 3 };
+  const calls = [];
   const tx = {
     city: { findUnique: async () => ({ id: 'city-1', slug: 'kazan', siteId: 'site-1', site: { providerId: 'provider-1' } }) },
     page: { findFirst: async () => null },
@@ -69,7 +69,15 @@ test('confirmed manual edit returns the persisted tariff and rebuild outcome', a
     },
   };
   const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => rebuild }, undefined, publicationStub);
+  const controller = new AdminTariffsController(
+    prisma,
+    { enqueue: async () => { calls.push('enqueue'); } },
+    undefined,
+    {
+      recordWorkingRevision: async () => { calls.push('revision'); return { siteRevision: 4 }; },
+      captureWorkingPublication: async () => { calls.push('snapshot'); return { id: 'publication-4' }; },
+    },
+  );
 
   const result = await controller.update('tariff-1', {
     expectedUpdatedAt: existingTariff.updatedAt.toISOString(), name: 'Гига 500 новый', standardPrice: 950, confirmSensitiveChanges: true,
@@ -82,7 +90,10 @@ test('confirmed manual edit returns the persisted tariff and rebuild outcome', a
   assert.equal(result.tariff.publicPath, '/kazan/giga-500');
   assert.ok(result.tariff.attributeSchema.some((field) => field.key === 'show_on_site'));
   assert.equal(result.tariff.provider.name, 'Дом.ру');
-  assert.deepEqual(result.rebuild, rebuild);
+  assert.equal(result.workingRevision, 4);
+  assert.equal('publication' in result, false);
+  assert.equal('rebuild' in result, false);
+  assert.deepEqual(calls, ['revision']);
 });
 
 test('tariff update DTO rejects unknown, empty and malformed edit fields at runtime', async () => {
@@ -131,7 +142,7 @@ test('manual editor rejects attributes outside the shared tariff field registry'
   }), /surprise.*не входит.*контракт/i);
 });
 
-test('persisted tariff edit reports a rebuild enqueue failure without pretending the save rolled back', async () => {
+test('persisted tariff edit does not touch the rebuild queue during save', async () => {
   const tx = {
     city: { findUnique: async () => ({ id: 'city-1', slug: 'kazan', siteId: 'site-1', site: { providerId: 'provider-1' } }) },
     page: { findFirst: async () => null },
@@ -142,18 +153,19 @@ test('persisted tariff edit reports a rebuild enqueue failure without pretending
     },
   };
   const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
-  const controller = new AdminTariffsController(prisma, { enqueue: async () => { throw new Error('Redis unavailable'); } }, undefined, publicationStub);
+  let enqueueCalls = 0;
+  const controller = new AdminTariffsController(prisma, { enqueue: async () => { enqueueCalls += 1; throw new Error('Redis unavailable'); } }, undefined, publicationStub);
 
   const result = await controller.update('tariff-1', {
     expectedUpdatedAt: existingTariff.updatedAt.toISOString(), name: 'Сохраненный тариф',
   });
 
   assert.equal(result.tariff.name, 'Сохраненный тариф');
-  assert.equal(result.rebuild.status, 'ENQUEUE_FAILED');
-  assert.match(result.rebuild.lastError, /Redis unavailable/);
+  assert.equal(result.workingRevision, 1);
+  assert.equal(enqueueCalls, 0);
 });
 
-test('manual tariff edit snapshots its working revision before enqueueing publication', async () => {
+test('manual tariff edit records only a working revision until explicit publication', async () => {
   const calls = [];
   const tx = {
     city: { findUnique: async () => ({ id: 'city-1', slug: 'kazan', siteId: 'site-1', status: 'PUBLISHED', site: { providerId: 'provider-1' } }) },
@@ -189,13 +201,13 @@ test('manual tariff edit snapshots its working revision before enqueueing public
     name: 'Гига 500 — рабочая версия',
   });
 
-  assert.deepEqual(calls.map(([type]) => type), ['revision', 'snapshot', 'enqueue']);
+  assert.deepEqual(calls.map(([type]) => type), ['revision']);
   assert.equal(calls[0][1].entityType, 'TARIFF');
   assert.equal(calls[0][1].siteId, 'site-1');
   assert.deepEqual(calls[0][1].changedFields, ['name']);
-  assert.equal(calls[1][1].siteRevision, 7);
-  assert.equal(calls[2][1].publicationId, 'publication-7');
-  assert.equal(result.publication.id, 'publication-7');
+  assert.equal(result.workingRevision, 7);
+  assert.equal('publication' in result, false);
+  assert.equal('rebuild' in result, false);
 });
 
 test('an imported tariff round-trips through detail and the manual editor contract', async () => {

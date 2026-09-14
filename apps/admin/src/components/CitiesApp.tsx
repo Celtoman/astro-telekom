@@ -3,6 +3,7 @@ import { CircleAlert, FileUp, Pencil, RefreshCw, Save, X } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { FilterResetButton } from "./FilterResetButton"
+import { PublicationStatusCard } from "./PublicationStatusCard"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
@@ -43,6 +44,7 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
   const [cityForm, setCityForm] = useState({ name: "", phone: "", supportPhone: "", status: "DRAFT" })
   const [saving, setSaving] = useState(false)
   const [actionMessage, setActionMessage] = useState<{ kind: "error" | "success"; text: string } | null>(null)
+  const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
 
   const loadCities = useCallback(async (mode: "initial" | "refresh" = "initial") => {
     if (mode === "refresh") setRefreshing(true)
@@ -87,11 +89,12 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
     setSaving(true)
     setActionMessage(null)
     try {
-      await requestJson(apiUrl, `/admin/cities/${selectedCity.id}`, {
+      const result = await requestJson<{ workingRevision: number }>(apiUrl, `/admin/cities/${selectedCity.id}`, {
         method: "PATCH",
         body: { name: cityForm.name.trim(), phone: cityForm.phone.trim() || null, supportPhone: cityForm.supportPhone.trim() || null, status: cityForm.status },
       })
-      setActionMessage({ kind: "success", text: "Город сохранен, пересборка поставлена в очередь" })
+      setActionMessage({ kind: "success", text: `Рабочая версия ${result.workingRevision} сохранена. Изменения нужно опубликовать отдельно.` })
+      setPublicationRefreshKey((current) => current + 1)
       await loadCities("refresh")
       setSelectedCity(null)
     } catch (caught: unknown) {
@@ -107,6 +110,7 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
   }
 
   const publishedCount = state.cities.filter((city) => city.status === "PUBLISHED").length
+  const siteIds = [...new Set(state.cities.map((city) => city.site.id))]
 
   return (
     <AdminShell apiUrl={apiUrl} user={state.user} active="cities">
@@ -126,6 +130,7 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
         </section>
 
         {actionMessage ? <Alert variant={actionMessage.kind === "error" ? "destructive" : "default"}>{actionMessage.kind === "error" ? <CircleAlert /> : <Save />}<AlertTitle>{actionMessage.kind === "error" ? "Операция не подтверждена" : "Изменения приняты"}</AlertTitle><AlertDescription>{actionMessage.text}</AlertDescription></Alert> : null}
+        {siteIds.length === 1 ? <PublicationStatusCard apiUrl={apiUrl} siteId={siteIds[0]} publicationRefreshKey={publicationRefreshKey} /> : null}
 
         <Card>
           <CardHeader><CardTitle>Справочник</CardTitle><CardDescription>{visibleCities.length.toLocaleString("ru-RU")} из {state.cities.length.toLocaleString("ru-RU")} городов.</CardDescription></CardHeader>

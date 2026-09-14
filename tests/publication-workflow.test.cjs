@@ -333,6 +333,28 @@ test('publication controller enqueues the exact snapshot and returns current pub
   ]);
 });
 
+test('publication controller marks a snapshot failed when its rebuild cannot be enqueued', async () => {
+  const publication = { id: 'publication-8', siteId: 'site-1', siteRevision: 8, status: 'PENDING' };
+  const calls = [];
+  const publications = {
+    preparePublication: async () => publication,
+    markFailed: async (id, message) => {
+      calls.push(['failed', id, message]);
+      return { ...publication, status: 'FAILED', lastError: message };
+    },
+  };
+  const controller = new PublicationWorkflowController(publications, {
+    enqueue: async () => { throw new Error('Redis unavailable'); },
+  });
+
+  const result = await controller.create('site-1', { expectedWorkingRevision: 8 }, { user: { id: 'user-1' } });
+
+  assert.equal(result.publication.status, 'FAILED');
+  assert.equal(result.rebuild.status, 'ENQUEUE_FAILED');
+  assert.match(result.rebuild.lastError, /Redis unavailable/);
+  assert.deepEqual(calls, [['failed', 'publication-8', 'Redis unavailable']]);
+});
+
 test('publication state does not expose the full catalog or provider response', async () => {
   const f = fixture();
   await f.service.recordWorkingRevision(f.prisma, {

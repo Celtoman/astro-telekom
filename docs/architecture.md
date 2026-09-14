@@ -9,7 +9,7 @@
 | Зона | Реализация | Назначение |
 | --- | --- | --- |
 | `apps/web` | Astro 7, static output | SEO HTML и sitemap строго из Release 1 inventory; build генерирует Caddy routes только для редиректов с target внутри того же inventory. Все city HOME используют один блочный renderer и встроенную адресную форму; отдельного fallback-шаблона нет. `/goroda-obsluzhivaniya` серверно выводит все ссылки, группирует города по региону и добавляет прогрессивный client-side поиск. Дизайн/UX-референс — официальный dom.ru, визуально, не кодом — [docs/web-design-system.md](web-design-system.md). |
-| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, каталоги `/tariffs` и `/cities`, отдельные `/tariffs/import` и `/cities/import`, длинная форма `/tariffs/edit`, `/leads`, `/redirects` и `/lead-access/` реализованы как React-root с runtime API-запросами. Sidebar поддерживает вложенные рабочие сценарии «Каталог»/«Импорт». Legacy demo удален; заявки доступны как реальный master-detail журнал, редиректы — как CRUD со статистикой переходов. Целевой референс паттернов — next-shadcn-admin-dashboard-aria; текущие Radix-примитивы еще требуют миграции [#97](https://github.com/Celtoman/astro-telekom/issues/97), см. [docs/admin-design-system.md](admin-design-system.md). |
+| `apps/admin` | Astro 7 static output + React 19 + Tailwind 4 + shadcn/ui | `/login`, защищенный shell `/`, каталоги `/tariffs` и `/cities`, отдельные `/tariffs/import` и `/cities/import`, длинная форма `/tariffs/edit`, `/leads`, `/redirects` и `/lead-access/` реализованы как React-root с runtime API-запросами. Sidebar поддерживает вложенные рабочие сценарии «Каталог»/«Импорт». Общий publication control на ручных экранах тарифов, городов и редиректов показывает рабочую/опубликованную ревизии и запускает точный снимок отдельно от сохранения. Legacy demo удален; заявки доступны как реальный master-detail журнал, редиректы — как CRUD со статистикой переходов. Целевой референс паттернов — next-shadcn-admin-dashboard-aria; текущие Radix-примитивы еще требуют миграции [#97](https://github.com/Celtoman/astro-telekom/issues/97), см. [docs/admin-design-system.md](admin-design-system.md). |
 | `apps/api` | NestJS 12 + Fastify | HTTP API, авторизация, ORM, импорт, лиды, интеграционные адаптеры и publication workflow: рабочие ревизии, снимки каталога и выбор последней успешной публикации. |
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов, обычных оповещений, пересборок сайта и ежедневной PII retention; также слушает пока не используемую import-очередь. |
 | `prisma` / `packages/database` | Prisma 7 + PostgreSQL | `prisma/` хранит единственные schema и migrations; `packages/database` только делегирует Prisma CLI-команды. Bootstrap seed принадлежит `apps/api/src/seed.ts`, а единственный client output генерируется в `apps/api/generated`. |
@@ -21,7 +21,7 @@ Production Compose запускает one-shot `migrate` из API image посл
 
 Целевой внешний deployment provider — Coolify с Git-based `docker-compose.coolify.yml` из GitHub. Первый rehearsal использует `tv-internet-dom.ru` и `admin.tv-internet-dom.ru` без дополнительного stage-контура; Coolify edge применяет один password middleware к обоим human-facing сервисам. API не получает внешний hostname: внутренние Caddy в web/admin проксируют same-origin `/api/*` в `api:3000`, поэтому Basic Auth не ломает browser fetch. Прямой `docker-compose.prod.yml` с внешним Caddy и портами 80/443 остается только локальной production-like конфигурацией.
 
-В Coolify images собираются без сетевой зависимости от API. После запуска PostgreSQL/Redis и миграций healthy API разрешает явный `bootstrap-seed` (`RUN_BOOTSTRAP_SEED=true` только на первом deploy), затем one-shot `web-publish` выполняет реальный Astro build и post-build SEO gate из защищенного внутреннего build-каталога. Если rebuild связан со `SitePublication`, каталог берется из неизменяемого processing snapshot; ручная правка тарифа после старта сборки его уже не меняет. Проверенный `dist` копируется в release-каталог persistent volume и атомарно назначается текущей публикацией; web server стартует только после успешного publisher.
+В Coolify images собираются без сетевой зависимости от API. После запуска PostgreSQL/Redis и миграций healthy API разрешает явный `bootstrap-seed` (`RUN_BOOTSTRAP_SEED=true` только на первом deploy), затем one-shot `web-publish` выполняет реальный Astro build и post-build SEO gate из защищенного внутреннего build-каталога. Если rebuild связан со `SitePublication`, каталог берется из неизменяемого processing snapshot; любая следующая ручная правка после старта сборки его уже не меняет. Проверенный `dist` копируется в release-каталог persistent volume и атомарно назначается текущей публикацией; web server стартует только после успешного publisher.
 
 Автоматический rebuild поддерживает отдельный Coolify adapter: deploy API сначала возвращает `deployment_uuid`, worker сохраняет его через internal progress endpoint и опрашивает deployment до `finished`/failure с bounded timeout. Очередь раздельно хранит requested/processing/published publication IDs; только финальный `finished` переводит processing snapshot в `SUCCEEDED` и продвигает `Site.publishedRevision`. Финальная ошибка помечает только этот snapshot и сохраняет предыдущий публичный каталог. Legacy synchronous webhook сохранен как отдельный provider mode. Механика #57 подтверждена реальным Coolify polling rehearsal до `finished` на точном deployment commit.
 
@@ -45,7 +45,7 @@ Production Compose запускает one-shot `migrate` из API image посл
   -> Caddy -> static admin
   -> HttpOnly admin cookie -> API -> PostgreSQL
 
-Ручное изменение города/страницы/блоков в API
+Ручное изменение города/страницы/блока/тарифа/редиректа в API
   -> рабочая ревизия + before/after audit в PostgreSQL
   -> явная публикация ожидаемой ревизии -> неизменяемый SitePublication
   -> PostgreSQL SiteRebuild -> Redis/BullMQ -> worker
@@ -72,7 +72,7 @@ PII retention scheduler в worker
 | `pii-retention` | Worker-only bounded hard-delete лидов и связанных payloads старше согласованных 180 дней; fail-safe без валидной настройки. |
 | `crm-leads` | Список, карточка, смена статуса, повторная постановка доставки и отзыв fallback-доступа. |
 | `rebuild-queue` | Persistent rebuild/outbox, дедупликация по сайту, BullMQ producer, start/progress/result API, сохранение provider deployment UUID и фиксация только финального результата deployment. |
-| `redirects` | Admin CRUD с архивированием, проверкой конфликтов/петель/цепочек, public resolver HTTP 301 и атомарным `hitCount`/`lastHitAt`; каждое изменение ставит rebuild сайта. |
+| `redirects` | Admin CRUD с архивированием, проверкой конфликтов/петель/цепочек, рабочими ревизиями без автоматической публикации, public resolver HTTP 301 и атомарным `hitCount`/`lastHitAt`. |
 
 ## Границы модулей
 
@@ -85,11 +85,11 @@ PII retention scheduler в worker
 1. Сущности `Site`, `City`, `Page`, `Tariff` имеют статус `DRAFT`, `PUBLISHED` или `ARCHIVED`.
 2. Public API возвращает опубликованные данные, но отдельно применяет release policy к URL.
 3. Astro получает authoritative inventory и выпускает `N + T + 6` indexable HTML для `N` опубликованных городов и `T` опубликованных тарифов этих городов плюс общую 404. Страница тарифа создаётся только из route с `kind = CITY_TARIFF_DETAIL`; service pages остаются вне Release 1.
-4. Ручные изменения cities/pages/blocks сохраняют рабочую ревизию и before/after audit в одной транзакции; явный publication endpoint проверяет ожидаемый номер и фиксирует неизменяемый полный снимок.
+4. Ручные изменения cities/pages/blocks/tariffs/redirects сохраняют рабочую ревизию и before/after audit в одной транзакции; явный publication endpoint проверяет ожидаемый номер и фиксирует неизменяемый полный снимок.
 5. `SiteRebuild` получает ID именно этого снимка и ставит BullMQ job; изменения одного сайта дедуплицируются, но запрошенный и обрабатываемый snapshots не подменяют друг друга.
 6. Worker получает попытку через internal API, вызывает deployment provider и сохраняет результат через API; только явный `{ status: "SUCCEEDED" }` обновляет `publishedRevision`.
 
-Статус rebuild доступен через admin API и показан в рабочих потоках импорта тарифов и городов. Отдельный компактный publication state API уже возвращает рабочую/опубликованную ревизии, последний snapshot и rebuild, но UI центра публикаций еще не подключен. Coolify provider и production rebuild подтверждены live polling rehearsal до финального `finished`. Нет полноценного content preview, schedule, rollback или общей корзины.
+Статус rebuild доступен через admin API и показан в рабочих потоках импорта тарифов и городов. Отдельный компактный publication state API возвращает рабочую/опубликованную ревизии, последний snapshot и rebuild; общий UI-блок использует его на ручных экранах тарифов, городов и редиректов и запускает публикацию точной рабочей ревизии. Coolify provider и production rebuild подтверждены live polling rehearsal до финального `finished`, но новый UI-путь еще не прошел внешний exact-SHA smoke. Нет полноценного content preview, schedule, rollback или общей корзины.
 
 ## Что не является частью текущей реализации
 

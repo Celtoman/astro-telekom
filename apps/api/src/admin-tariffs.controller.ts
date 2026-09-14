@@ -117,11 +117,24 @@ export class AdminTariffsController {
   }
 
   @Post()
-  async create(@Body() body: TariffBody) {
-    const data = { ...body, identityKey: this.identityKey(body.cityId, body.slug, body.serviceType) };
-    const tariff = await this.prisma.tariff.create({ data });
-    await this.rebuild.enqueue({ entity: 'tariff', id: tariff.id, siteId: await this.siteIdForCity(tariff.cityId) });
-    return tariff;
+  async create(@Body() body: TariffBody, @Req() request?: AdminRequest) {
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+      const city = await transaction.city.findUnique({ where: { id: body.cityId }, select: { siteId: true } });
+      if (!city) throw new BadRequestException('Город тарифа не найден');
+      const data = { ...body, identityKey: this.identityKey(body.cityId, body.slug, body.serviceType) };
+      const tariff = await transaction.tariff.create({ data });
+      const revision = await this.publications.recordWorkingRevision(transaction, {
+        siteId: city.siteId,
+        entityType: 'TARIFF',
+        entityId: tariff.id,
+        action: 'CREATE',
+        snapshot: tariff as unknown as Record<string, unknown>,
+        changedFields: Object.keys(data),
+        actorId: request?.user?.id,
+        source: 'admin',
+      });
+      return { ...tariff, workingRevision: revision.siteRevision };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
   @Post('import')
@@ -219,7 +232,7 @@ export class AdminTariffsController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() body: UpdateTariffDto, @Req() request?: AdminRequest) {
-    const result = await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const existing = await transaction.tariff.findUnique({ where: { id } });
       if (!existing) throw new NotFoundException('Тариф не найден');
       if (!body.expectedUpdatedAt || existing.updatedAt.toISOString() !== body.expectedUpdatedAt) {
@@ -343,37 +356,11 @@ export class AdminTariffsController {
         actorId: request?.user?.id,
         source: 'admin',
       });
-      const publication = await this.publications.captureWorkingPublication(transaction, {
-        siteId: newCity.siteId,
-        siteRevision: revision.siteRevision,
-        triggerEntity: 'tariff',
-        triggerEntityId: tariff.id,
-        requestedById: request?.user?.id,
-      });
       return {
         tariff: { ...tariff, publicPath: `/${tariff.city.slug}/${tariff.slug}`, attributeSchema: TARIFF_ATTRIBUTE_FIELDS },
-        siteId: newCity.siteId,
         redirectOutcome,
-        publication,
+        workingRevision: revision.siteRevision,
       };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
-    let rebuild;
-    try {
-      rebuild = await this.rebuild.enqueue({
-        entity: 'tariff',
-        id: result.tariff.id,
-        siteId: result.siteId,
-        publicationId: result.publication.id,
-      });
-    } catch (error) {
-      rebuild = {
-        id: null,
-        status: 'ENQUEUE_FAILED' as const,
-        requestedRevision: 0,
-        publishedRevision: 0,
-        lastError: error instanceof Error ? error.message : 'Не удалось поставить пересборку в очередь',
-      };
-    }
-    return { tariff: result.tariff, redirectOutcome: result.redirectOutcome, publication: result.publication, rebuild };
   }
 }
