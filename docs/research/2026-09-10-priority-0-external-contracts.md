@@ -97,4 +97,4 @@
 
 ## Критерий завершения Priority 0
 
-Production secrets перенесены в Coolify без Git и логов. DaData, оба Tarifnik API, обе ветки `contacts` Дом.ру, полный городской справочник, 180-дневный retention, Resend transport и реальный Coolify rebuild rehearsal подтверждены. Priority 0 остается незавершенным до юридического основания/согласия на обработку и передачу PII, исправления наблюдаемости обычного Resend-уведомления [#86](https://github.com/Celtoman/astro-telekom/issues/86) и отдельного backup/restore rehearsal.
+Production secrets перенесены в Coolify без Git и логов. DaData, оба Tarifnik API, обе ветки `contacts` Дом.ру, полный городской справочник, 180-дневный retention, Resend transport и реальный Coolify rebuild rehearsal подтверждены. Priority 0 остается незавершенным до юридического основания/согласия на обработку и передачу PII; наблюдаемость обычного Resend-уведомления закрыта в [#86](https://github.com/Celtoman/astro-telekom/issues/86). С 15 сентября 2026 года backup/restore обеспечивает внешнее решение владельца и не входит в критерии этого репозитория или отмененную #145.

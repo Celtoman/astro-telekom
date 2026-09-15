@@ -13,7 +13,7 @@
 3. `COOLIFY_API_TOKEN` должен быть отдельной runtime-only переменной Normal view. Compose больше не интерполирует его при разборе, а worker получает token через runtime `.env`;
 4. Source-код v4.3.18 должен исключать `restart: "no"`, но реальный resource после двух успешных запусков сервисов становился `exited:unhealthy`. Поэтому `migrate`, `bootstrap-seed` и `web-publish` дополнительно получили официальный Coolify marker `exclude_from_hc: true`; у worker, web и admin добавлены явные healthchecks.
 
-Кроме того, резервное копирование пока не настроено. Новая версия Coolify умеет архивировать application volumes и делает database-aware backup PostgreSQL внутри **Service**, но Git-based Docker Compose создается как **Application** и пока не получает этот интерфейс — официальный feature issue [#7528](https://github.com/coollabsio/coolify/issues/7528) открыт. До приема реальных заявок нужен проверенный `pg_dump` во внешнее хранилище и тест восстановления.
+Актуализация от 15 сентября 2026 года: выводы ниже о вариантах резервного копирования сохранены только как историческое исследование. Встроенный в репозиторий backup workflow/runner не выбран и не нужен; владелец использует другое внешнее решение, а #145 закрыта как `not planned`. Его конфигурация и приемка не входят в область этого аудита.
 
 ## Какая версия документации и Coolify проверена
 
@@ -122,17 +122,16 @@ API polling worker корректно считает `finished` terminal success
 
 На rehearsal обязательно проверить `publishedRevision === requestedRevision`, HTTP status, Basic Auth boundary и содержимое страницы. Автоматический post-deploy public probe можно рассматривать отдельной задачей после живой проверки.
 
-### 7. Backup policy отсутствует
+### 7. Исторический вариант backup policy — не выбран
 
 Named volumes переживают обычный redeploy, но не удаление volume, поломку диска, потерю сервера или corruption. [Persistent storage overview](https://next.coolify.io/docs/core/persistent-storage/storage-mounts/overview)
 
 В актуальном Coolify появились scheduled storage backups application volumes с локальным архивом и необязательной копией в S3. Однако документация предупреждает, что архив работающей БД может быть неконсистентным; dashboard пока не восстанавливает такой архив автоматически. [Storage mount backups](https://next.coolify.io/docs/core/persistent-storage/storage-mounts/backups)
 
-Для текущего Git-based Compose PostgreSQL:
+Ниже сохранены исторические рекомендации аудита. После решения владельца от 15 сентября 2026 года они не являются планом изменений репозитория: backup/restore выполняет другое внешнее решение.
 
-- не считать tar-архив `postgres_data` единственной резервной копией;
-- организовать application-aware `pg_dump` с проверяемым off-server/S3 результатом;
-- выполнить ручной backup и restore в отдельную БД до реальных заявок;
+- не добавлять в Compose собственный backup runner или GitHub workflow без нового отдельного решения;
+- проверять recovery уже в выбранном владельцем внешнем решении и не переносить его credentials в репозиторий;
 - `web_publication` можно архивировать, но это производный artifact: он восстанавливается новой успешной публикацией;
 - Redis содержит очередь и не заменяет PostgreSQL source of truth; его потеря влияет на незавершенные jobs, поэтому recovery поведение также нужно проверить.
 
@@ -303,9 +302,9 @@ curl -I -u '<user>:<password>' https://admin.tv-internet-dom.ru/api/v1/health/re
 | Environment values | Нужна отдельная Coolify-матрица; `.env.example` напрямую не вставлять |
 | Coolify API rebuild | Runtime-only token исправлен; нужны token scopes и live rehearsal |
 | Persistent volumes | Compose настроен корректно; не является backup |
-| Backup | Не готово; нужен `pg_dump` + off-server storage + restore test |
+| Backup | Вынесен во внешнее решение владельца; встроенная реализация репозитория отменена и не планируется |
 | Rollback | Только code/image path; БД и публикационный volume требуют отдельного плана |
-| Production readiness | Стабильный ручной deployment и повторная публикация подтверждены; до приема реальных заявок остаются rebuild rehearsal и backup restore |
+| Production readiness | Стабильный ручной deployment и повторная публикация подтверждены; backup/restore оценивается отдельно в выбранном владельцем внешнем решении |
 
 ## Основные официальные источники
 

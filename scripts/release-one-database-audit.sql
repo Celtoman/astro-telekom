@@ -1,12 +1,7 @@
 \set ON_ERROR_STOP on
 \pset pager off
 
-\if :{?snapshot_id}
-BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY;
-SET TRANSACTION SNAPSHOT :'snapshot_id';
-\else
 BEGIN TRANSACTION READ ONLY;
-\endif
 
 SELECT
   'applied_migrations' AS check_name,
@@ -15,12 +10,6 @@ SELECT
   "rolled_back_at"
 FROM "_prisma_migrations"
 ORDER BY "started_at";
-
-SELECT
-  'migration_integrity_violations' AS check_name,
-  COUNT(*) AS violation_count
-FROM "_prisma_migrations"
-WHERE "finished_at" IS NULL OR "rolled_back_at" IS NOT NULL;
 
 SELECT 'sites_total' AS check_name, COUNT(*) AS row_count FROM "Site";
 

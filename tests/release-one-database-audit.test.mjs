@@ -24,7 +24,6 @@ test('Release 1 database audit reports counts, route blockers and relation integ
 
   for (const requiredCheck of [
     'applied_migrations',
-    'migration_integrity_violations',
     'sites_total',
     'sites_by_status',
     'cities_total',

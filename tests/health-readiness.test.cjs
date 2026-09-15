@@ -76,14 +76,14 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.match(siteDataSource, /internal\/site-publications\/\$\{publicSiteSlug\}\/catalog/);
   assert.match(siteDataSource, /'x-admin-token'/);
   assert.match(coolifyCompose, /web-publish:\s+condition:\s*service_completed_successfully/);
-  for (const service of ['backup-bootstrap', 'migrate', 'bootstrap-seed', 'web-publish']) {
+  for (const service of ['migrate', 'bootstrap-seed', 'web-publish']) {
     assert.match(
       coolifyCompose,
       new RegExp(`${service}:[\\s\\S]*?exclude_from_hc:\\s*true[\\s\\S]*?restart:\\s*["']no["']`),
       `${service} must be explicitly excluded from Coolify application health`,
     );
   }
-  assert.equal((coolifyCompose.match(/exclude_from_hc:\s*true/g) || []).length, 4);
+  assert.equal((coolifyCompose.match(/exclude_from_hc:\s*true/g) || []).length, 3);
   for (const service of ['web', 'admin']) {
     assert.match(
       coolifyCompose,

@@ -16,7 +16,7 @@
 | TD-96 | [#121](https://github.com/Celtoman/astro-telekom/issues/121) ✅ | Публичные формы восстановлены после CSP-регресса; исполняемый код собирается first-party bundle, а final HTML проверяет каждый оставшийся inline hash |
 | TD-100 | [#129](https://github.com/Celtoman/astro-telekom/issues/129) ✅ | Legacy hero CTA с конечным слэшем нормализован идемпотентной data migration до строгой runtime-публикации |
 | TD-101 | [#130](https://github.com/Celtoman/astro-telekom/issues/130) ✅ | Production HOME/INTERNET Казани сохраняют неполный legacy PageBlock snapshot вместо нового прототипа |
-| TD-115 | [#145](https://github.com/Celtoman/astro-telekom/issues/145) 🟢 | Нет внешнего application-aware PostgreSQL backup и подтвержденного restore rehearsal |
+| TD-115 | [#145](https://github.com/Celtoman/astro-telekom/issues/145) ✅ | Встроенный backup-контур отменен как ненужный: владелец использует внешнее решение вне репозитория |
 
 ## P1
 
@@ -87,7 +87,6 @@
 | TD-11 | [#13](https://github.com/Celtoman/astro-telekom/issues/13) 🟢 | Нет аудита, версий, schedule публикации, корзины, rollback |
 | TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) 🟢 | Наследование `content` — только shallow merge верхнего уровня |
 | TD-118 | [#150](https://github.com/Celtoman/astro-telekom/issues/150) 🟢 | У 206 городов одновременно опубликованы legacy `HOME` со slug `home` и каноническая `HOME` с пустым slug |
-| TD-119 | [#152](https://github.com/Celtoman/astro-telekom/issues/152) 🟢 | Backup retention пока управляется приложением: общий S3 credential может удалять свежие копии, Versioning/Object Lock не подтверждены |
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) ✅ | `PageBlock` поддерживает семь строго валидируемых типов, а Astro рендерит полный минимальный набор |
 | TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) ✅ | Public DTO/rate limit/honeypot и 180-дневный policy-driven purge реализованы; legal scope вынесен в [#144](https://github.com/Celtoman/astro-telekom/issues/144) |
 | TD-114 | [#147](https://github.com/Celtoman/astro-telekom/issues/147) ✅ | Живые документы и technical-debt index синхронизированы с Release 1, 26 миграциями, post-deploy evidence и текущими Issue states |
