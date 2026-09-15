@@ -141,6 +141,7 @@
 | TD-84 | [#107](https://github.com/Celtoman/astro-telekom/issues/107) ✅ | Ручное число Task issues удалено; milestone читается из GitHub, возврат фиксированного baseline блокирует тест |
 | TD-102 | [#131](https://github.com/Celtoman/astro-telekom/issues/131) ✅ | Живые документы согласованы с 20 миграциями, а исторические production-проверки явно привязаны к exact SHA |
 | TD-103 | [#132](https://github.com/Celtoman/astro-telekom/issues/132) ✅ | `packages/database` описан как делегат Prisma CLI, единственный client output — `apps/api/generated` |
+| TD-119 | [#153](https://github.com/Celtoman/astro-telekom/issues/153) 🟢 | `deployment.md` и `technology-baseline.md` расходятся с текущими 31 миграцией и Release 1 с tariff detail |
 | TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) ✅ | `docs/worker.md` синхронизирован с фактическим routing и retry-поведением |
 | TD-70 | [#90](https://github.com/Celtoman/astro-telekom/issues/90) ✅ | DTO ограничивает query официальным максимумом DaData 300 символов |
 
