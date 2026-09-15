@@ -2,9 +2,9 @@
 
 Runbook относится к PostgreSQL 18 в Git-based Docker Compose Application `astro-telekom`. Встроенный database-aware backup Coolify для такого типа ресурса недоступен, поэтому источником консистентной копии служит `pg_dump --format=custom`, а не архив работающего `postgres_data`.
 
-## Предлагаемая политика
+## Согласованная политика
 
-Техническая реализация ниже готова, но значения хранения и восстановления считаются согласованными для #145 только после явного подтверждения владельца.
+Владелец подтвердил применение этой политики 15 сентября 2026 года вместе с разрешением на push, deployment и финальный restore rehearsal.
 
 | Параметр | Значение |
 | --- | --- |
@@ -31,16 +31,11 @@ SHA-256 fingerprint сертификата: `20:79:60:06:48:2F:20:35:29:C8:1C:99
 
 ## Подготовка read-only роли
 
-Один раз выполнить в защищенной `psql`-сессии от владельца production database; пароль задается интерактивно и не попадает в shell history:
+В Coolify задать production `BACKUP_POSTGRES_USER=astro_backup` и независимый случайный `BACKUP_POSTGRES_PASSWORD` длиной не менее 32 символов. Обе переменные должны быть runtime-only и literal; build-time/preview scope для production password запрещен.
 
-```sql
-CREATE ROLE astro_backup LOGIN;
-GRANT pg_read_all_data TO astro_backup;
-GRANT CONNECT ON DATABASE provider_platform TO astro_backup;
-\password astro_backup
-```
+При каждом deployment one-shot `backup-bootstrap` из того же exact-revision image запускает `scripts/provision-postgres-backup-role.sql` от DB owner. SQL читает backup password только из environment через `psql \\getenv`, не передает его аргументом процесса и не печатает значение. Первый запуск создает login role, повторные идемпотентно обновляют пароль и минимальные атрибуты, затем выдают только `pg_read_all_data` и `CONNECT` к текущей БД. Существующая роль с ownership, elevated attributes или любым membership кроме `pg_read_all_data` останавливает deployment до изменения данных. Постоянный `backup-runner` стартует только после успешного завершения bootstrap и не получает DB owner credential.
 
-Имя и введенный пароль сохранить в Coolify как runtime-only `BACKUP_POSTGRES_USER`/`BACKUP_POSTGRES_PASSWORD`. Не выдавать этой роли `pg_write_all_data`, ownership, `CREATEDB`, `CREATEROLE`, `SUPERUSER` или application secrets. После смены имени production database повторить только `GRANT CONNECT` для новой database.
+Runner повторно проверяет фактические database/schema/table/sequence privileges перед каждым dump. Не выдавать `astro_backup` `pg_write_all_data`, ownership, `CREATEDB`, `CREATEROLE`, `SUPERUSER`, replication/BYPASSRLS или application secrets. После смены production database обычный redeploy повторит `GRANT CONNECT` для новой БД.
 
 Внутри контейнера `scripts/postgres-backup-rehearsal.sh`:
 

@@ -7,6 +7,7 @@ import { pathToFileURL } from 'node:url';
 const repositoryRoot = process.cwd();
 const orchestratorPath = join(repositoryRoot, 'scripts', 'postgres-backup-rehearsal.mjs');
 const remoteScriptPath = join(repositoryRoot, 'scripts', 'postgres-backup-rehearsal.sh');
+const roleProvisionPath = join(repositoryRoot, 'scripts', 'provision-postgres-backup-role.sql');
 const workflowPath = join(repositoryRoot, '.github', 'workflows', 'postgres-backup.yml');
 const runbookPath = join(repositoryRoot, 'docs', 'runbooks', 'postgresql-backup-restore.md');
 const recipientPath = join(repositoryRoot, 'deploy', 'backup', 'recipient-certificate.pem');
@@ -245,10 +246,27 @@ test('remote script enforces encrypted S3 round-trip and isolated PostgreSQL 18 
   assert.doesNotMatch(script, /set\s+-x/);
 });
 
-test('restore runner is a separate resource-bounded service without the production database volume', () => {
+test('backup role is provisioned by an isolated one-shot before the resource-bounded runner starts', () => {
+  assert.equal(existsSync(roleProvisionPath), true, 'backup role provision SQL is missing');
+  const roleProvision = readFileSync(roleProvisionPath, 'utf8');
+  assert.match(roleProvision, /\\getenv backup_password BACKUP_POSTGRES_PASSWORD/);
+  assert.match(roleProvision, /CREATE ROLE %I LOGIN/);
+  assert.match(roleProvision, /GRANT pg_read_all_data TO %I/);
+  assert.match(roleProvision, /NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS/);
+  assert.match(roleProvision, /granted_role\.rolname <> 'pg_read_all_data'/);
+  assert.doesNotMatch(roleProvision, /\\quit/);
+  assert.doesNotMatch(roleProvision, /BACKUP_POSTGRES_PASSWORD[^\n]*\\echo/);
+
   for (const composePath of [coolifyComposePath, productionComposePath]) {
     const compose = readFileSync(composePath, 'utf8');
+    const bootstrap = compose.match(/\n  backup-bootstrap:[\s\S]*?(?=\n  [a-z][a-z-]+:|\nvolumes:)/)?.[0] ?? '';
     const runner = compose.match(/\n  backup-runner:[\s\S]*?(?=\n  [a-z][a-z-]+:|\nvolumes:)/)?.[0] ?? '';
+    assert.match(bootstrap, /pull_policy:\s*never/);
+    assert.match(bootstrap, /restart:\s*["']no["']/);
+    assert.match(bootstrap, /PGUSER:\s*\$\{POSTGRES_USER/);
+    assert.match(bootstrap, /PGPASSWORD:\s*\$\{POSTGRES_PASSWORD/);
+    assert.match(bootstrap, /provision-postgres-backup-role\.sql/);
+    assert.doesNotMatch(bootstrap, /postgres_data|\/var\/lib\/postgresql/);
     assert.match(runner, /dockerfile:\s*deploy\/backup\/Dockerfile/);
     assert.match(runner, /PGHOST:\s*postgres/);
     assert.match(runner, /POSTGRES_USER:\s*\$\{BACKUP_POSTGRES_USER/);
@@ -256,12 +274,15 @@ test('restore runner is a separate resource-bounded service without the producti
     assert.doesNotMatch(runner, /POSTGRES_USER:\s*\$\{POSTGRES_USER/);
     assert.match(runner, /mem_limit:/);
     assert.match(runner, /cpus:/);
+    assert.match(runner, /backup-bootstrap:[\s\S]*condition:\s*service_completed_successfully/);
+    assert.match(runner, /psql[\s\S]*SELECT 1/);
     assert.doesNotMatch(runner, /postgres_data|\/var\/lib\/postgresql/);
   }
 
   const backupDockerfile = readFileSync(backupDockerfilePath, 'utf8');
   assert.match(backupDockerfile, /^FROM postgres:18\.6-alpine/m);
   assert.match(backupDockerfile, /COPY scripts\/postgres-backup-rehearsal\.sh/);
+  assert.match(backupDockerfile, /COPY scripts\/provision-postgres-backup-role\.sql/);
   assert.match(backupDockerfile, /COPY scripts\/release-one-database-audit\.sql/);
   assert.match(backupDockerfile, /COPY deploy\/backup\/recipient-certificate\.pem/);
 
@@ -330,13 +351,17 @@ test('scheduled workflow and runbook pin the operational policy and secret bound
   assert.match(workflow, /name:\s*Create encrypted backup[\s\S]*?env:[\s\S]*?COOLIFY_API_TOKEN/);
   assert.doesNotMatch(workflow, /jobs:[\s\S]*?backup:[\s\S]*?runs-on:[^\n]*\n\s+timeout-minutes:[^\n]*\n\s+env:/);
   assert.match(workflow, /postgres-backup-rehearsal\.mjs/);
-  assert.match(workflow, /upload-artifact@v4/);
+  assert.match(workflow, /actions\/checkout@v7/);
+  assert.match(workflow, /actions\/setup-node@v7/);
+  assert.match(workflow, /upload-artifact@v7/);
   assert.match(runbook, /RPO[^\n]*24/i);
   assert.match(runbook, /RTO[^\n]*4/i);
   assert.match(runbook, /35\s+дн/i);
   assert.match(runbook, /Timeweb S3/i);
   assert.match(runbook, /recipient-certificate\.pem/);
-  assert.match(runbook, /GRANT pg_read_all_data TO astro_backup/);
+  assert.match(runbook, /one-shot `backup-bootstrap`/);
+  assert.match(runbook, /runtime-only/i);
+  assert.match(runbook, /build-time\/preview scope[^\n]*запрещен/i);
   assert.match(runbook, /Секреты и PII не выводятся/i);
   assert.match(environmentExample, /BACKUP_POSTGRES_USER=astro_backup/);
   assert.match(environmentExample, /BACKUP_POSTGRES_PASSWORD=/);
