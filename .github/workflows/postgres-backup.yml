@@ -1,0 +1,67 @@
+name: PostgreSQL backup
+
+on:
+  schedule:
+    - cron: '15 7 * * *'
+    - cron: '15 15 * * *'
+    - cron: '15 23 * * 0-5'
+    - cron: '15 23 * * 6'
+  workflow_dispatch:
+    inputs:
+      rehearse:
+        description: Restore the uploaded backup into an isolated PostgreSQL 18 cluster
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: postgres-backup-production
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: Encrypted backup and restore gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout exact operation revision
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Create encrypted backup
+        shell: bash
+        env:
+          COOLIFY_API_URL: ${{ secrets.COOLIFY_API_URL }}
+          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+          COOLIFY_RESOURCE_UUID: ${{ secrets.COOLIFY_RESOURCE_UUID }}
+          BACKUP_S3_STORAGE_UUID: ${{ vars.BACKUP_S3_STORAGE_UUID }}
+          BACKUP_DEPLOYMENT_SHA: ${{ vars.BACKUP_DEPLOYMENT_SHA }}
+          BACKUP_RETENTION_DAYS: '35'
+          BACKUP_EVIDENCE_FILE: ${{ runner.temp }}/postgres-backup-evidence.json
+        run: |
+          set -euo pipefail
+          args=()
+          if [[ "${{ github.event.schedule }}" == '15 23 * * 6' ]]; then
+            args+=(--rehearse)
+          fi
+          if [[ "${{ github.event_name }}" == 'workflow_dispatch' && "${{ inputs.rehearse }}" == 'true' ]]; then
+            args+=(--rehearse)
+          fi
+          node scripts/postgres-backup-rehearsal.mjs "${args[@]}"
+
+      - name: Preserve safe evidence
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: postgres-backup-evidence-${{ github.run_id }}
+          path: ${{ runner.temp }}/postgres-backup-evidence.json
+          if-no-files-found: error
+          retention-days: 35

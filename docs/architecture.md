@@ -14,10 +14,13 @@
 | `services/worker` | Node.js + BullMQ | Обработка доставок лидов, обычных оповещений, пересборок сайта и ежедневной PII retention; также слушает пока не используемую import-очередь. |
 | `prisma` / `packages/database` | Prisma 7 + PostgreSQL | `prisma/` хранит единственные schema и migrations; `packages/database` только делегирует Prisma CLI-команды. Bootstrap seed принадлежит `apps/api/src/seed.ts`, а единственный client output генерируется в `apps/api/generated`. |
 | `deploy` | Caddy + Docker Compose | Образы, reverse proxy, TLS и persistent volumes. |
+| `backup-runner` | PostgreSQL 18 client + disposable restore cluster | Отдельный ограниченный Compose-сервис без `postgres_data`: exact-revision image содержит helper/audit/public certificate, снимает custom dump через один exported snapshot, шифрует до S3 и выполняет restore rehearsal без filesystem namespace production-БД. |
 
 ## Контуры и потоки
 
 Production Compose запускает one-shot `migrate` из API image после PostgreSQL healthcheck. `api` стартует только после успешного `prisma migrate deploy` и готового Redis; его `/health/ready` проверяет обе зависимости, а `/health/live` — только процесс. Seed остается отдельной операторской операцией, поскольку создает или обновляет продуктовые данные и администратора.
+
+Backup-контур не пишет доменные данные: `backup-runner` fail-closed проверяет отдельную роль `pg_read_all_data` на отсутствие ownership/наследуемых и фактических write privileges, затем создает `pg_dump --format=custom`, шифрует его client-side и загружает в приватный off-server S3. Удаленный task получает только allowlisted data-config; код из S3 не исполняется. Rehearsal удаляет source credential из окружения и поднимает второй PostgreSQL 18 внутри runner-контейнера, у которого нет production volume и application secrets; archive восстанавливается локальной ролью без superuser, затем выполняются staged `ANALYZE` и полный SQL-аудит, после чего временный кластер удаляется.
 
 Целевой внешний deployment provider — Coolify с Git-based `docker-compose.coolify.yml` из GitHub. Первый rehearsal использует `tv-internet-dom.ru` и `admin.tv-internet-dom.ru` без дополнительного stage-контура; Coolify edge применяет один password middleware к обоим human-facing сервисам. API не получает внешний hostname: внутренние Caddy в web/admin проксируют same-origin `/api/*` в `api:3000`, поэтому Basic Auth не ломает browser fetch. Прямой `docker-compose.prod.yml` с внешним Caddy и портами 80/443 остается только локальной production-like конфигурацией.
 

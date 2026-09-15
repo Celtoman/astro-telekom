@@ -7,6 +7,7 @@
 - [Возможности и ограничения выбранного стека на 7 сентября](./2026-09-07-stack-capability-audit.md)
 - [Переходные решения и legacy-остатки на 7 сентября](./2026-09-07-workaround-audit.md)
 - [Coolify deployment и backup-границы на 9 сентября](./2026-09-09-coolify-deployment.md)
+- [PostgreSQL 18 backup/restore для Git-based Coolify Application](./2026-09-15-postgresql-backup-restore.md)
 - [Priority 0: внешние контракты и секреты на 10 сентября](./2026-09-10-priority-0-external-contracts.md)
 - [Расхождения реализации с канонической структурой Release 1 на 14 сентября](./2026-09-14-release-1-site-structure-gap-audit.md)
 

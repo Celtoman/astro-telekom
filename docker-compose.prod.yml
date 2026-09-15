@@ -14,6 +14,29 @@ services:
       timeout: 5s
       retries: 10
 
+  backup-runner:
+    build:
+      context: .
+      dockerfile: deploy/backup/Dockerfile
+    restart: unless-stopped
+    environment:
+      PGHOST: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${BACKUP_POSTGRES_USER}
+      PGPASSWORD: ${BACKUP_POSTGRES_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["sh", "-c", "trap 'exit 0' TERM INT; while :; do sleep 3600 & wait $$!; done"]
+    mem_limit: 1g
+    cpus: "1.0"
+    pids_limit: 128
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h postgres -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
   redis:
     image: redis:8.10.1-alpine
     restart: unless-stopped

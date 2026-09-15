@@ -27,7 +27,7 @@ docker inspect $postgresContainer --format '{{.Name}} {{.State.Status}} {{.State
 
 ## 2. Получить и проверить backup
 
-`$backupRoot` должен указывать на защищенный каталог вне репозитория. После проверки копию нужно перенести в зашифрованное off-server/S3-хранилище согласно backup policy.
+`$backupRoot` должен указывать на защищенный каталог вне репозитория. Для обычной production-процедуры используйте [канонический encrypted backup/restore runbook](postgresql-backup-restore.md): он загружает копию в приватный Timeweb S3, читает ее обратно и выполняет полный rehearsal. Команды ниже остаются локальным pre-migration safeguard, но сами по себе не закрывают внешний backup.
 
 ```powershell
 $backupRoot = 'C:\secure-backups\astro-telekom'
@@ -49,7 +49,7 @@ if ($LASTEXITCODE -ne 0) { throw 'pg_restore не смог прочитать du
 $backupFile | Select-Object FullName, Length, LastWriteTimeUtc
 ```
 
-Читаемый список `pg_restore --list` подтверждает структуру custom dump, но не заменяет restore rehearsal. До реального трафика восстановить эту копию в отдельную PostgreSQL 18 и повторить audit уже на восстановленной базе.
+Читаемый список `pg_restore --list` подтверждает структуру custom dump, но не заменяет restore rehearsal. Перед production-изменением должен существовать свежий успешный evidence из [полного backup/restore flow](postgresql-backup-restore.md) с совпавшими pre/restore audit.
 
 ## 3. Выполнить pre-migration audit
 
