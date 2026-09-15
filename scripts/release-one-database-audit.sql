@@ -68,6 +68,18 @@ FROM "Redirect"
 GROUP BY "status"
 ORDER BY key;
 
+SELECT
+  'active_site_publications' AS check_name,
+  COUNT(*) AS violation_count
+FROM "SitePublication"
+WHERE "status"::text IN ('SCHEDULED', 'PENDING', 'RUNNING');
+
+SELECT
+  'active_site_rebuilds' AS check_name,
+  COUNT(*) AS violation_count
+FROM "SiteRebuild"
+WHERE "status"::text IN ('PENDING', 'QUEUED', 'RUNNING', 'RETRYING');
+
 WITH required_pages(page_type, expected_slug) AS (
   VALUES
     ('COVERAGE', 'karta-pokrytiya-provaydera'),
@@ -95,8 +107,66 @@ CROSS JOIN required_pages
 LEFT JOIN "Page" AS page
   ON page."siteId" = site."id"
   AND page."cityId" IS NULL
-  AND page."type"::text = required_pages.page_type
+    AND page."type"::text = required_pages.page_type
 ORDER BY site_slug, page_type;
+
+WITH city_home_counts AS (
+  SELECT
+    site."slug" AS site_slug,
+    city."slug" AS city_slug,
+    COUNT(page."id") FILTER (WHERE page."type"::text = 'HOME') AS home_count
+  FROM "City" AS city
+  JOIN "Site" AS site ON site."id" = city."siteId"
+  LEFT JOIN "Page" AS page ON page."cityId" = city."id"
+  GROUP BY site."slug", city."slug"
+), missing_homes AS (
+  SELECT * FROM city_home_counts WHERE home_count = 0
+)
+SELECT
+  'missing_city_home_pages' AS check_name,
+  COUNT(*) AS violation_count,
+  COALESCE(jsonb_agg(to_jsonb(missing_homes) ORDER BY site_slug, city_slug), '[]'::jsonb) AS details
+FROM missing_homes;
+
+WITH legacy_homes AS (
+  SELECT site."slug" AS site_slug, city."slug" AS city_slug, page."id" AS page_id, page."status"::text AS page_status
+  FROM "Page" AS page
+  JOIN "City" AS city ON city."id" = page."cityId"
+  JOIN "Site" AS site ON site."id" = page."siteId"
+  WHERE page."type"::text = 'HOME' AND page."slug" = 'home'
+)
+SELECT
+  'legacy_city_home_pages' AS check_name,
+  COUNT(*) AS violation_count,
+  COALESCE(jsonb_agg(to_jsonb(legacy_homes) ORDER BY site_slug, city_slug), '[]'::jsonb) AS details
+FROM legacy_homes;
+
+WITH noncanonical_homes AS (
+  SELECT site."slug" AS site_slug, city."slug" AS city_slug, page."id" AS page_id, page."slug" AS page_slug
+  FROM "Page" AS page
+  JOIN "City" AS city ON city."id" = page."cityId"
+  JOIN "Site" AS site ON site."id" = page."siteId"
+  WHERE page."type"::text = 'HOME' AND page."slug" <> ''
+)
+SELECT
+  'noncanonical_city_home_pages' AS check_name,
+  COUNT(*) AS violation_count,
+  COALESCE(jsonb_agg(to_jsonb(noncanonical_homes) ORDER BY site_slug, city_slug), '[]'::jsonb) AS details
+FROM noncanonical_homes;
+
+WITH duplicate_homes AS (
+  SELECT site."slug" AS site_slug, city."slug" AS city_slug, COUNT(page."id") AS home_count
+  FROM "City" AS city
+  JOIN "Site" AS site ON site."id" = city."siteId"
+  JOIN "Page" AS page ON page."cityId" = city."id" AND page."type"::text = 'HOME'
+  GROUP BY site."slug", city."slug"
+  HAVING COUNT(page."id") > 1
+)
+SELECT
+  'duplicate_city_home_pages' AS check_name,
+  COUNT(*) AS violation_count,
+  COALESCE(jsonb_agg(to_jsonb(duplicate_homes) ORDER BY site_slug, city_slug), '[]'::jsonb) AS details
+FROM duplicate_homes;
 
 WITH published_city_homes AS (
   SELECT
@@ -339,5 +409,22 @@ SELECT
   COALESCE(SUM(row_count), 0) AS violation_count,
   COALESCE(jsonb_object_agg(violation, row_count ORDER BY violation), '{}'::jsonb) AS details
 FROM violation_counts;
+
+WITH dangling_references AS (
+  SELECT 'Lead' AS relation, lead."id" AS entity_id, lead."pageId" AS missing_page_id
+  FROM "Lead" AS lead
+  LEFT JOIN "Page" AS lead_page ON lead_page."id" = lead."pageId"
+  WHERE lead."pageId" IS NOT NULL AND lead_page."id" IS NULL
+  UNION ALL
+  SELECT 'AddressCheck', address_check."id", address_check."pageId"
+  FROM "AddressCheck" AS address_check
+  LEFT JOIN "Page" AS address_page ON address_page."id" = address_check."pageId"
+  WHERE address_check."pageId" IS NOT NULL AND address_page."id" IS NULL
+)
+SELECT
+  'dangling_page_references' AS check_name,
+  COUNT(*) AS violation_count,
+  COALESCE(jsonb_agg(to_jsonb(dangling_references) ORDER BY relation, entity_id), '[]'::jsonb) AS details
+FROM dangling_references;
 
 ROLLBACK;

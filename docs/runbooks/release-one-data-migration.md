@@ -1,12 +1,12 @@
 # Безопасная миграция данных на структуру Release 1
 
-Этот runbook впервые применялся перед deployment ревизии с миграциями `0021`–`0026`, но остается операционным аудитом текущего Release 1. После уточнения владельца 14 сентября 2026 года route inventory включает отдельный URL каждого опубликованного тарифа опубликованного города. Он не разрешает запуск production-трафика: задача — сохранить доказательства состояния данных, применить миграции без потери связей и подтвердить точный route inventory.
+Этот runbook впервые применялся перед deployment ревизии с миграциями `0021`–`0026`, а текущая процедура дополнена для `0032_canonical_city_home`. После уточнения владельца 14 сентября 2026 года route inventory включает отдельный URL каждого опубликованного тарифа опубликованного города. Решение о готовности платформы к реальному трафику принимает только владелец; runbook не выносит такой вердикт. Его задача — сохранить доказательства состояния данных, применить миграции без потери связей и подтвердить точный route inventory.
 
 ## Ограничения безопасности
 
 - Не запускать migration без проверенной точки восстановления во внешнем backup-решении владельца и pre-migration audit. Ручной `pg_dump` ниже остается только аварийным одноразовым safeguard и не является реализацией отмененной #145.
 - Не сохранять dump или audit output в репозитории. Dump может содержать персональные данные заявок.
-- На время backup и обоих audit не выполнять импорт городов/тарифов, редактирование страниц, заявок или redirects.
+- От начала pre-migration audit до создания и успешного завершения чистого publication snapshot остановить импорты, CMS-записи и ручные публикации. Перед migration должны отсутствовать `SitePublication` в `SCHEDULED`/`PENDING`/`RUNNING` и `SiteRebuild` в `PENDING`/`QUEUED`/`RUNNING`/`RETRYING`; `0032` повторяет эту проверку под табличными блокировками и завершается по bounded timeout, а не конкурирует с записью.
 - Не редактировать строки напрямую в PostgreSQL. Контент и статусы страниц меняются через административный API после проверки миграции.
 - При любом ненулевом blocker или нарушении связей остановиться до deployment. Старый static release должен оставаться активным.
 
@@ -49,11 +49,11 @@ if ($LASTEXITCODE -ne 0) { throw 'pg_restore не смог прочитать du
 $backupFile | Select-Object FullName, Length, LastWriteTimeUtc
 ```
 
-Читаемый список `pg_restore --list` подтверждает структуру custom dump, но не заменяет restore rehearsal. До реального трафика восстановить эту копию в отдельную PostgreSQL 18 и повторить audit уже на восстановленной базе.
+Читаемый список `pg_restore --list` подтверждает структуру custom dump, но не заменяет restore rehearsal. До применения `0032` восстановить эту копию в отдельную PostgreSQL 18 и повторить audit уже на восстановленной базе.
 
 ## 3. Выполнить pre-migration audit
 
-Скрипт [release-one-database-audit.sql](../../scripts/release-one-database-audit.sql) начинает `BEGIN TRANSACTION READ ONLY` и завершает `ROLLBACK`. Он выводит migration history, точные totals и разрезы по статусам, пять обязательных global pages, route collisions, redirects за пределы Release 1 и нарушения связей.
+Скрипт [release-one-database-audit.sql](../../scripts/release-one-database-audit.sql) начинает `BEGIN TRANSACTION READ ONLY` и завершает `ROLLBACK`. Он выводит migration history, точные totals и разрезы по статусам, пять обязательных global pages, отсутствующие/legacy/неканонические/повторные городские HOME, dangling page references, route collisions, redirects за пределы Release 1 и нарушения связей.
 
 ```powershell
 $preAuditPath = Join-Path $backupRoot "release-one-pre-$stamp.txt"
@@ -69,7 +69,11 @@ if ($LASTEXITCODE -ne 0) { throw 'Pre-migration audit завершился ош�
 - все разрезы `*_by_status` и `pages_by_type_status`;
 - `city_global_slug_collisions = 0`;
 - `redirect_source_route_collisions = 0`;
+- `missing_city_home_pages = 0` и `dangling_page_references = 0`;
 - `relation_integrity_violations = 0`.
+- `active_site_publications = 0` и `active_site_rebuilds = 0`; не запускать новые CMS-записи и публикации до успешного snapshot шага 7.
+
+Перед первым применением `0032` в известном внешнем контуре ожидаются `legacy_city_home_pages = 206`, `noncanonical_city_home_pages = 206` и `duplicate_city_home_pages = 206`. Любое другое число требует повторной сверки с текущей БД: migration намеренно не угадывает нестандартную конфигурацию.
 
 `redirect_targets_outside_release_one` до перехода может быть ненулевым из-за legacy service/detail URL. Такие записи не удалять без отдельного разбора. Managed redirect тарифа становится эффективным, только если сам тариф, его город и сайт опубликованы; остальные правила остаются provenance-данными вне публикации.
 
@@ -83,8 +87,9 @@ if ($LASTEXITCODE -ne 0) { throw 'Pre-migration audit завершился ош�
 2. `0022_site_global_page_scope` делает `Page.cityId` nullable и добавляет scope/unique ограничения;
 3. `0023_bootstrap_release_one_global_pages` идемпотентно создает недостающие global pages в `DRAFT`.
 4. `0024_cookie_policy_page_type` отдельной транзакцией добавляет `COOKIE_POLICY`.
-5. `0025_publish_release_one_catalog` обновляет scope constraint, создает cookie page, публикует пять global pages, все города и их единственную `HOME`.
+5. `0025_publish_release_one_catalog` обновляет scope constraint, создает cookie page, публикует пять global pages и все города, а также создает каноническую `HOME` с пустым slug, если именно такой записи еще нет. Историческая HOME со slug `home` этой проверкой не переиспользуется — это причина cleanup в `0032`.
 6. `0026_backfill_city_home_template` добавляет канонические семь блоков только тем опубликованным city HOME, у которых до миграции не было ни одного `PageBlock`; существующие композиции не перезаписываются.
+7. `0032_canonical_city_home` внутри явной транзакции и под bounded `SHARE ROW EXCLUSIVE` locks сначала отклоняет активную publication/rebuild. Затем она принимает только единственную HOME с пустым slug либо известную пару `slug=''` + `slug='home'` с одинаковыми status/SEO/content/нормализованными блоками. Заголовки известной legacy-пары различаются, поэтому сохраняется title канонической строки, а legacy title не считается payload. Для пары migration переводит `Lead.pageId` и `AddressCheck.pageId` на каноническую страницу, удаляет legacy HOME с ее блоками, добавляет DB constraint/index и одну системную рабочую ревизию затронутого сайта. При ином расхождении migration падает до записи; исторические `SitePublication.catalog` остаются неизменяемыми. Поэтому `0032` выпускается по стандартной схеме expand–migrate–contract: совместимый backend и DB-инварианты, новый чистый publication snapshot, затем строгая web-проверка.
 
 Не публиковать страницы и не запускать web publisher вручную до post-migration audit.
 
@@ -102,14 +107,17 @@ if ($LASTEXITCODE -ne 0) { throw 'Post-migration audit завершился ош
 
 Приемка post-migration:
 
-- migration history содержит завершенные `0021`–`0026` без `rolled_back_at`;
+- migration history содержит завершенные `0021`–`0032` без `rolled_back_at`;
 - totals сайтов, городов, тарифов, проверок адреса, заявок и redirects точно равны pre-migration;
-- `pages_total` увеличился только на действительно отсутствовавшие cookie/HOME pages;
-- `page_blocks_total` увеличился ровно на семь для каждой ранее пустой опубликованной городской `HOME`, заполненной `0026`; существующие композиции не изменились;
+- для первого применения `0032` `pages_total` уменьшается ровно на pre-migration `legacy_city_home_pages`, а `page_blocks_total` — на число блоков удаленных legacy HOME; содержимое сохраненных канонических HOME не меняется;
+- все существовавшие ссылки `Lead.pageId` и `AddressCheck.pageId` на legacy HOME теперь указывают на соответствующую каноническую HOME, а totals обеих таблиц не меняются;
+- `Site.workingRevision` каждого затронутого сайта увеличен на один, добавлены одна `ContentRevision` и один `AuditEvent` с source `migration:0032_canonical_city_home`; `Site.publishedRevision` и старые `SitePublication.catalog` не изменены;
+- зафиксирован точный `Site.workingRevision`, созданный `0032`; именно этот номер передается как `expectedWorkingRevision` в шаге 7, а любые другие CMS-записи до завершения snapshot запрещены процедурой;
 - для каждого сайта `global_page_inventory` содержит ровно пять канонических пар type/slug в `PUBLISHED`;
 - `published_tariff_detail_routes` равен числу опубликованных тарифов, принадлежащих опубликованным городам опубликованного сайта;
 - все строки `City` и их `HOME` имеют `PUBLISHED`;
 - `invalid_published_city_home_templates` имеет `violation_count = 0`, то есть видимые блоки каждой опубликованной городской `HOME` идут в точной канонической последовательности;
+- `missing_city_home_pages`, `legacy_city_home_pages`, `noncanonical_city_home_pages`, `duplicate_city_home_pages` и `dangling_page_references` имеют `violation_count = 0`;
 - collision-проверки и `relation_integrity_violations` равны нулю после применения policy; legacy redirects за пределы inventory могут храниться, но не должны стать эффективными.
 
 Если counts расходятся не по указанному правилу или integrity/collision check ненулевой, остановить deployment до web publication. Не выполнять самодельную down migration; исследовать расхождение на копии и использовать проверенный backup для согласованного восстановления.
@@ -124,7 +132,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Post-migration audit завершился ош
 - `/soglasie-na-obrabotku-personalnyh-dannyh`.
 - `/politika-obrabotki-faylov-kuki`.
 
-Три legal-текста версионированы в `apps/web/src/data/legal-pages.ts` и используют hostname текущего `PUBLIC_SITE_URL`. Перед реальным трафиком сверить ИП, ИНН, ОГРНИП, адрес, получателей данных и работоспособность `info@tv-internet-dom.ru`; публикация всех пяти записей остается обязательным условием build-time inventory.
+Три legal-текста версионированы в `apps/web/src/data/legal-pages.ts` и используют hostname текущего `PUBLIC_SITE_URL`. Дополнительная сверка ИП, ИНН, ОГРНИП, адреса, получателей данных и `info@tv-internet-dom.ru` вынесена в низкоприоритетную #144 и не является rollout-gate; публикация всех пяти записей остается техническим условием build-time inventory.
 
 ## 7. Проверить production-like build и deployment
 
@@ -140,4 +148,11 @@ effective redirect targets outside inventory = 0
 404 = HTTP 404 + noindex + no canonical
 ```
 
-Затем выполнить production-like web build без `ALLOW_DEMO_DATA`, проверить post-build SEO gate и только после этого завершить exact-SHA deployment. В evidence сохранить SHA, deployment ID, число опубликованных городов, exact список sitemap URL и HTTP/canonical smoke. Родительская задача #136 закрывается только после этой проверки.
+Выпуск выполняется тремя независимыми exact-SHA этапами без временной legacy-ветки в финальном коде:
+
+1. **A0 — tolerant reader:** exact-SHA deployment `06e2e45560d93aa1fea2ae873d0694b80179af20` (`xri5lnmbcouzqw2rcglslrqv`) оставил чтение исторического snapshot совместимым, но заставил city form брать каноническую HOME с пустым slug. CI и deployment завершились успешно; авторизованный `/kazan` вернул HTTP 200, одну форму и ни одного `pageSlug=home`.
+2. **A1 — expand/migrate:** развернуть migration, API/admin guards и audit при совместимом web-reader. Убедиться, что migration и post-migration audit завершились, а старый успешный static release продолжает обслуживаться.
+3. Не снимая запрет на CMS-записи, штатным `POST /admin/sites/:siteId/publications` опубликовать зафиксированный после migration точный `workingRevision` как `expectedWorkingRevision`. Дождаться `SUCCEEDED` и подтвердить, что build catalog этого immutable snapshot содержит ровно одну HOME с пустым slug для каждого города.
+4. **B — contract:** отдельным exact-SHA deployment включить строгую web-проверку дублей/непустого slug, выполнить production-like build без `ALLOW_DEMO_DATA`, post-build SEO gate и HTTP/canonical smoke.
+
+Не объединять A1 и B: при отсутствии активной publication Coolify build берет последний `SUCCEEDED` snapshot, который до нового snapshot еще содержит legacy-дубли и закономерно блокируется строгим reader. В evidence сохранить три SHA и deployment ID, номера рабочей/опубликованной ревизий, число опубликованных городов, exact список sitemap URL и HTTP/canonical smoke. Эти проверки подтверждают технический результат, но решение о готовности платформы к трафику остается только за владельцем.

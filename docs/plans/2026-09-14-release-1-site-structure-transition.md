@@ -16,7 +16,7 @@
 
 **Проблемы:** [#133](https://github.com/Celtoman/astro-telekom/issues/133), [#134](https://github.com/Celtoman/astro-telekom/issues/134), [#135](https://github.com/Celtoman/astro-telekom/issues/135)
 
-**Статус 14 сентября 2026: завершено.** Scope уточнен владельцем: Release 1 публикует все города полного импорта, но только одну `/{location}` на город; тарифы остаются содержимым этой страницы. Добавлена третья legal-страница, поэтому точный inventory равен `N + 6`. Миграции `0024`–`0026` расширили PageType, опубликовали пять global pages, весь существующий городской каталог и его `HOME`, а затем заполнили пустые HOME каноническими блоками. Exact-SHA deployment `uj00fuh7wtffgblbcrafev76` на `0f1f80c` подтвердил 207 городов, 41 регион и 213 sitemap URL; deployment `f1ov3qbxzzxyvvaxmd1airxx` на `6692652` завершил live-приемку явного HTTP 404 с `noindex` и без canonical. [#141](https://github.com/Celtoman/astro-telekom/issues/141) и родительская [#136](https://github.com/Celtoman/astro-telekom/issues/136) закрыты по результату полной внешней приемки. Legal-подготовка остается отдельным блокером общего запуска в [#31](https://github.com/Celtoman/astro-telekom/issues/31); #31 остается открытой. Backup/restore обеспечивает внешнее решение владельца и после отмены #145 не входит в задачи этого репозитория.
+**Текущий статус после уточнений 14–15 сентября 2026: исторический переход завершен, route contract заменен.** Release 1 публикует все города полного импорта, `/{location}` каждого города и `/{location}/{tariffSlug}` каждого опубликованного тарифа такого города; с пятью global pages и корнем точный inventory равен `N + T + 6`. Первоначальные deployments этого плана подтвердили 207 городов и 213 URL без tariff detail; последующий exact-SHA deployment `9q5evkornouucg0k7pwpkeua` на `0a1743f` подтвердил уже актуальные 207 городов, 3 859 тарифов и 4 072 URL. [#141](https://github.com/Celtoman/astro-telekom/issues/141), [#136](https://github.com/Celtoman/astro-telekom/issues/136) и возврат тарифных страниц [#149](https://github.com/Celtoman/astro-telekom/issues/149) закрыты. [#31](https://github.com/Celtoman/astro-telekom/issues/31) также закрыта решением владельца и не является gate готовности к трафику; отдельная legal-задача [#144](https://github.com/Celtoman/astro-telekom/issues/144) сохраняет собственный статус. Решение о трафике принимает только владелец. Backup/restore обеспечивает внешнее решение владельца и после отмены #145 не входит в задачи этого репозитория.
 
 ---
 
@@ -27,7 +27,7 @@
 - Не создавать общие страницы hardcoded-файлами в обход API/CMS.
 - Не менять production-данные до backup и read-only inventory.
 - Не включать страницы со значением «позже» без отдельного решения владельца.
-- Контентные вопросы PF-015 не блокируют модель и route contract, но блокируют итоговую готовность к реальному трафику.
+- Контентные вопросы PF-015 не блокируют модель и route contract; их состояние фиксируется отдельно и учитывается владельцем при решении о трафике.
 
 ## Задача 1. Закрепить новый контракт красными тестами
 

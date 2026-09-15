@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, NotFoundException, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
@@ -35,6 +35,39 @@ function assertPageScope(page: Pick<PageBody, 'type' | 'cityId' | 'slug'>) {
   if (expectedSlug !== undefined && page.slug !== expectedSlug) {
     throw new BadRequestException(`Slug общей страницы не соответствует каноническому маршруту: ${expectedSlug}`);
   }
+  if (page.type === 'HOME' && page.slug !== '') {
+    throw new BadRequestException('Городская HOME должна иметь пустой slug');
+  }
+}
+
+async function assertUniqueCityHome(
+  transaction: Prisma.TransactionClient,
+  page: Pick<PageBody, 'type' | 'cityId'>,
+  excludedId?: string,
+) {
+  if (page.type !== 'HOME' || !page.cityId) return;
+  const existing = await transaction.page.findFirst({
+    where: {
+      cityId: page.cityId,
+      type: 'HOME',
+      ...(excludedId ? { id: { not: excludedId } } : {}),
+    },
+    select: { id: true },
+  });
+  if (existing) throw new ConflictException('Для этого города уже существует страница HOME');
+}
+
+function rethrowPageWriteConflict(error: unknown): never {
+  const code = typeof error === 'object' && error !== null && 'code' in error
+    ? String(error.code)
+    : null;
+  if (code === 'P2002') {
+    throw new ConflictException('Страница с такими уникальными параметрами уже существует');
+  }
+  if (code === 'P2034') {
+    throw new ConflictException('Страница была изменена параллельно, повторите запрос');
+  }
+  throw error;
 }
 
 @Controller('admin/pages')
@@ -53,50 +86,61 @@ export class AdminPagesController {
   @Post()
   async create(@Body() body: PageBody, @Req() request?: AdminRequest) {
     assertPageScope(body);
-    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
-      const page = await transaction.page.create({ data: body });
-      const revision = await this.publications.recordWorkingRevision(transaction, {
-        siteId: page.siteId,
-        entityType: 'PAGE',
-        entityId: page.id,
-        action: 'CREATE',
-        snapshot: page as unknown as Record<string, unknown>,
-        changedFields: Object.keys(body),
-        actorId: request?.user?.id,
-        source: 'admin',
-      });
-      return { ...page, workingRevision: revision.siteRevision };
-    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    try {
+      return await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+        await assertUniqueCityHome(transaction, body);
+        const page = await transaction.page.create({ data: body });
+        const revision = await this.publications.recordWorkingRevision(transaction, {
+          siteId: page.siteId,
+          entityType: 'PAGE',
+          entityId: page.id,
+          action: 'CREATE',
+          snapshot: page as unknown as Record<string, unknown>,
+          changedFields: Object.keys(body),
+          actorId: request?.user?.id,
+          source: 'admin',
+        });
+        return { ...page, workingRevision: revision.siteRevision };
+      }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    } catch (error) {
+      rethrowPageWriteConflict(error);
+    }
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() body: Partial<PageBody>, @Req() request?: AdminRequest) {
-    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
-      const current = await transaction.page.findUnique({ where: { id } });
-      if (!current) throw new NotFoundException('Page not found');
-      assertPageScope({
-        type: body.type ?? current.type,
-        cityId: body.cityId === undefined ? current.cityId : body.cityId,
-        slug: body.slug ?? current.slug,
-      });
-      const page = await transaction.page.update({ where: { id }, data: body });
-      const action = body.status === 'ARCHIVED' && current.status !== 'ARCHIVED'
-        ? 'ARCHIVE'
-        : current.status === 'ARCHIVED' && body.status && body.status !== 'ARCHIVED'
-          ? 'RESTORE'
-          : 'UPDATE';
-      const revision = await this.publications.recordWorkingRevision(transaction, {
-        siteId: page.siteId,
-        entityType: 'PAGE',
-        entityId: page.id,
-        action,
-        previousSnapshot: current as unknown as Record<string, unknown>,
-        snapshot: page as unknown as Record<string, unknown>,
-        changedFields: Object.keys(body),
-        actorId: request?.user?.id,
-        source: 'admin',
-      });
-      return { ...page, workingRevision: revision.siteRevision };
-    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    try {
+      return await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
+        const current = await transaction.page.findUnique({ where: { id } });
+        if (!current) throw new NotFoundException('Page not found');
+        const nextScope = {
+          type: body.type ?? current.type,
+          cityId: body.cityId === undefined ? current.cityId : body.cityId,
+          slug: body.slug ?? current.slug,
+        };
+        assertPageScope(nextScope);
+        await assertUniqueCityHome(transaction, nextScope, id);
+        const page = await transaction.page.update({ where: { id }, data: body });
+        const action = body.status === 'ARCHIVED' && current.status !== 'ARCHIVED'
+          ? 'ARCHIVE'
+          : current.status === 'ARCHIVED' && body.status && body.status !== 'ARCHIVED'
+            ? 'RESTORE'
+            : 'UPDATE';
+        const revision = await this.publications.recordWorkingRevision(transaction, {
+          siteId: page.siteId,
+          entityType: 'PAGE',
+          entityId: page.id,
+          action,
+          previousSnapshot: current as unknown as Record<string, unknown>,
+          snapshot: page as unknown as Record<string, unknown>,
+          changedFields: Object.keys(body),
+          actorId: request?.user?.id,
+          source: 'admin',
+        });
+        return { ...page, workingRevision: revision.siteRevision };
+      }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    } catch (error) {
+      rethrowPageWriteConflict(error);
+    }
   }
 }

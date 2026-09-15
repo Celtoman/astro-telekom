@@ -30,6 +30,7 @@
 | TD-09 | [#10](https://github.com/Celtoman/astro-telekom/issues/10) ✅ | Реализованы HttpOnly-cookie login/me/logout и auth-gated React shell; browser service-token удален |
 | TD-10 | [#11](https://github.com/Celtoman/astro-telekom/issues/11) ✅ | Защищенный release configuration gate блокирует готовность при пустых Contract/Tarifnik/coverage/email/rebuild variables без раскрытия значений |
 | TD-117 | [#148](https://github.com/Celtoman/astro-telekom/issues/148) ✅ | Отдельные страницы 3 859 опубликованных тарифов возвращены в Release 1 и подтверждены exact-SHA live smoke |
+| TD-118 | [#150](https://github.com/Celtoman/astro-telekom/issues/150) 🟢 | У 206 городов одновременно опубликованы legacy `HOME` со slug `home` и каноническая `HOME` с пустым slug; cleanup готов локально, внешний deploy ожидает backup/evidence |
 | TD-21 | [#12](https://github.com/Celtoman/astro-telekom/issues/12) ✅ | Уязвимый `xlsx@0.18.5` заменен на `read-excel-file`; импорт принимает только ограниченный XLSX |
 | TD-22 | [#37](https://github.com/Celtoman/astro-telekom/issues/37) ✅ | Compose переведен на обязательный для PostgreSQL 18 volume mount `/var/lib/postgresql` |
 | TD-23 | [#38](https://github.com/Celtoman/astro-telekom/issues/38) ✅ | Seed использует явный ESM entrypoint сгенерированного Prisma client и снова запускается на Node 22 |
@@ -86,10 +87,9 @@
 | --- | --- | --- |
 | TD-11 | [#13](https://github.com/Celtoman/astro-telekom/issues/13) 🟢 | Нет аудита, версий, schedule публикации, корзины, rollback |
 | TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) 🟢 | Наследование `content` — только shallow merge верхнего уровня |
-| TD-118 | [#150](https://github.com/Celtoman/astro-telekom/issues/150) 🟢 | У 206 городов одновременно опубликованы legacy `HOME` со slug `home` и каноническая `HOME` с пустым slug |
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) ✅ | `PageBlock` поддерживает семь строго валидируемых типов, а Astro рендерит полный минимальный набор |
 | TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) ✅ | Public DTO/rate limit/honeypot и 180-дневный policy-driven purge реализованы; legal scope вынесен в [#144](https://github.com/Celtoman/astro-telekom/issues/144) |
-| TD-114 | [#147](https://github.com/Celtoman/astro-telekom/issues/147) ✅ | Живые документы и technical-debt index синхронизированы с Release 1, 26 миграциями, post-deploy evidence и текущими Issue states |
+| TD-114 | [#147](https://github.com/Celtoman/astro-telekom/issues/147) ✅ | На момент закрытия живые документы и technical-debt index были синхронизированы с тогдашними 26 миграциями, post-deploy evidence и Issue states |
 | TD-80 | [#102](https://github.com/Celtoman/astro-telekom/issues/102) ✅ | Локальная seed-команда собирает и запускает production CommonJS entrypoint; два прогона на чистой PostgreSQL 18 идемпотентны |
 | TD-92 | [#117](https://github.com/Celtoman/astro-telekom/issues/117) ✅ | Tariff PATCH принимает `null` для обязательных полей и может передать ошибку целостности в Prisma |
 | TD-94 | [#119](https://github.com/Celtoman/astro-telekom/issues/119) ✅ | Запоздалый ответ быстрого просмотра может открыть не последний выбранный тариф |
@@ -141,7 +141,7 @@
 | TD-84 | [#107](https://github.com/Celtoman/astro-telekom/issues/107) ✅ | Ручное число Task issues удалено; milestone читается из GitHub, возврат фиксированного baseline блокирует тест |
 | TD-102 | [#131](https://github.com/Celtoman/astro-telekom/issues/131) ✅ | Живые документы согласованы с 20 миграциями, а исторические production-проверки явно привязаны к exact SHA |
 | TD-103 | [#132](https://github.com/Celtoman/astro-telekom/issues/132) ✅ | `packages/database` описан как делегат Prisma CLI, единственный client output — `apps/api/generated` |
-| TD-119 | [#153](https://github.com/Celtoman/astro-telekom/issues/153) 🟢 | `deployment.md` и `technology-baseline.md` расходятся с текущими 31 миграцией и Release 1 с tariff detail |
+| TD-119 | [#153](https://github.com/Celtoman/astro-telekom/issues/153) 🟢 | Живые документы синхронизируются с 32 локальными миграциями, внешним контуром до `0031`, tariff detail и owner-only решением о трафике |
 | TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) ✅ | `docs/worker.md` синхронизирован с фактическим routing и retry-поведением |
 | TD-70 | [#90](https://github.com/Celtoman/astro-telekom/issues/90) ✅ | DTO ограничивает query официальным максимумом DaData 300 символов |
 

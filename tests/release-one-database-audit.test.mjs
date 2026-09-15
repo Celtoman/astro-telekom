@@ -38,13 +38,20 @@ test('Release 1 database audit reports counts, route blockers and relation integ
     'leads_by_status',
     'redirects_total',
     'redirects_by_status',
+    'active_site_publications',
+    'active_site_rebuilds',
     'global_page_inventory',
     'published_tariff_detail_routes',
+    'missing_city_home_pages',
+    'legacy_city_home_pages',
+    'noncanonical_city_home_pages',
+    'duplicate_city_home_pages',
     'invalid_published_city_home_templates',
     'city_global_slug_collisions',
     'redirect_source_route_collisions',
     'redirect_targets_outside_release_one',
     'relation_integrity_violations',
+    'dangling_page_references',
   ]) {
     assert.match(sql, new RegExp(`'${requiredCheck}'`), `missing ${requiredCheck}`);
   }
@@ -58,6 +65,9 @@ test('Release 1 database audit reports counts, route blockers and relation integ
   assert.match(sql, /FILTER \(WHERE page_block\."visible"\)/);
   assert.match(sql, /ORDER BY page_block\."position", page_block\."id"/);
   assert.match(sql, /'\/' \|\| city\."slug" \|\| '\/' \|\| tariff\."slug"/);
+  assert.match(sql, /COUNT\(page\."id"\).*FILTER.*page\."type"::text = 'HOME'/s);
+  assert.match(sql, /LEFT JOIN "Page" AS lead_page/);
+  assert.match(sql, /LEFT JOIN "Page" AS address_page/);
 });
 
 test('Release 1 migration runbook requires backup and comparable pre/post audit evidence', () => {

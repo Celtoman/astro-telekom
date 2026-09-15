@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { validateCityHomeBlocks, validatePublishedBlocks } from './block-validation';
 import { mergeContent, publicContent } from './content-resolution';
@@ -78,6 +78,13 @@ export class SiteCatalogService {
     const inheritedContent = mergeContent(publicContent(site.provider.settings), publicContent(site.settings), city.region.content, city.content);
     const inheritedSeo = mergeContent(city.seo);
     const { site: _site, region, pages, tariffs, ...cityData } = city;
+    const homePages = pages.filter((page: any) => page.type === 'HOME');
+    if (homePages.length !== 1) {
+      throw new BadRequestException(`У опубликованного города «${city.name}» должна быть ровно одна страница HOME`);
+    }
+    if (homePages[0].slug !== '') {
+      throw new BadRequestException(`Городская HOME «${city.name}» должна иметь пустой slug`);
+    }
     return {
       ...cityData,
       content: inheritedContent,

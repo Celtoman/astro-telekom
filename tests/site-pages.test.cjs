@@ -43,6 +43,34 @@ test('Page schema represents Release 1 site-global pages without a fake city', (
   }
 });
 
+test('canonical city HOME migration is fail-closed, repoints references and enforces one HOME per city', () => {
+  const migrationPath = join(repositoryRoot, 'prisma', 'migrations', '0032_canonical_city_home', 'migration.sql');
+  assert.equal(existsSync(migrationPath), true, 'canonical city HOME migration must exist');
+  const migration = readFileSync(migrationPath, 'utf8');
+
+  assert.match(migration, /BEGIN\s*;/);
+  assert.match(migration, /COMMIT\s*;\s*$/);
+  assert.match(migration, /SET LOCAL lock_timeout\s*=\s*'\d+s'/);
+  assert.match(
+    migration,
+    /LOCK TABLE[\s\S]*"Page"[\s\S]*"PageBlock"[\s\S]*"Site"[\s\S]*"ContentRevision"[\s\S]*"AuditEvent"[\s\S]*"Lead"[\s\S]*"AddressCheck"[\s\S]*"SitePublication"[\s\S]*"SiteRebuild"[\s\S]*IN SHARE ROW EXCLUSIVE MODE/,
+  );
+  assert.ok(migration.indexOf('LOCK TABLE') < migration.indexOf('DO $$'), 'write locks must precede fail-closed prechecks');
+  assert.match(migration, /"SitePublication"[\s\S]*"status" IN \('SCHEDULED', 'PENDING', 'RUNNING'\)/);
+  assert.match(migration, /"SiteRebuild"[\s\S]*"status" IN \('PENDING', 'QUEUED', 'RUNNING', 'RETRYING'\)/);
+  assert.match(migration, /IS NOT DISTINCT FROM/);
+  assert.match(migration, /jsonb_agg[\s\S]*"PageBlock"/);
+  assert.match(migration, /RAISE EXCEPTION[\s\S]*canonical city HOME/i);
+  assert.match(migration, /UPDATE "Lead"[\s\S]*"pageId"/);
+  assert.match(migration, /UPDATE "AddressCheck"[\s\S]*"pageId"/);
+  assert.match(migration, /DELETE FROM "Page"/);
+  assert.match(migration, /ADD CONSTRAINT "Page_city_home_slug_check"[\s\S]*"type" <> 'HOME' OR "slug" = ''/);
+  assert.match(migration, /CREATE UNIQUE INDEX "Page_cityId_home_type_key"[\s\S]*WHERE "cityId" IS NOT NULL AND "type" = 'HOME'/);
+  assert.match(migration, /UPDATE "Site"[\s\S]*"workingRevision"/);
+  assert.match(migration, /INSERT INTO "ContentRevision"/);
+  assert.match(migration, /INSERT INTO "AuditEvent"/);
+});
+
 test('admin pages reject incompatible global and city page scopes before writing', async () => {
   let writes = 0;
   const prisma = {
@@ -70,6 +98,48 @@ test('admin pages reject incompatible global and city page scopes before writing
   await assert.rejects(controller.update('page-1', { cityId: 'city-1' }), /области страницы/i);
   await assert.rejects(controller.update('page-1', { slug: 'coverage' }), /каноническому маршруту/i);
   assert.equal(writes, 0);
+});
+
+test('admin pages reject a noncanonical or second city HOME before writing', async () => {
+  let writes = 0;
+  const current = {
+    id: 'page-1', siteId: 'site-1', cityId: 'city-1', type: 'INTERNET', title: 'Интернет',
+    slug: 'internet', status: 'DRAFT', seo: {}, content: {},
+  };
+  const prisma = {
+    page: {
+      findFirst: async () => ({ id: 'home-existing' }),
+      findUnique: async () => current,
+      create: async () => { writes += 1; return {}; },
+      update: async () => { writes += 1; return {}; },
+    },
+  };
+  prisma.$transaction = async (callback) => callback(prisma);
+  const controller = new AdminPagesController(prisma, { recordWorkingRevision: async () => ({ siteRevision: 1 }) });
+
+  await assert.rejects(controller.create({
+    siteId: 'site-1', cityId: 'city-1', type: 'HOME', title: 'Главная', slug: 'home', status: 'DRAFT',
+  }), /пустой slug/i);
+  await assert.rejects(controller.create({
+    siteId: 'site-1', cityId: 'city-1', type: 'HOME', title: 'Главная', slug: '', status: 'DRAFT',
+  }), /уже существует/i);
+  await assert.rejects(controller.update('page-1', { type: 'HOME', slug: '' }), /уже существует/i);
+  assert.equal(writes, 0);
+
+  const racingPrisma = {
+    page: {
+      findFirst: async () => null,
+      create: async () => { throw { code: 'P2002' }; },
+    },
+  };
+  racingPrisma.$transaction = async (callback) => callback(racingPrisma);
+  const racingController = new AdminPagesController(
+    racingPrisma,
+    { recordWorkingRevision: async () => ({ siteRevision: 1 }) },
+  );
+  await assert.rejects(racingController.create({
+    siteId: 'site-1', cityId: 'city-1', type: 'HOME', title: 'Главная', slug: '', status: 'DRAFT',
+  }), (error) => error?.status === 409 && /уже существует/i.test(error.message));
 });
 
 test('admin pages save a canonical site-global page as a working revision without publishing it', async () => {

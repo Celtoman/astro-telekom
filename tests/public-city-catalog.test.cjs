@@ -12,6 +12,24 @@ const releaseOneGlobalPages = [
   { type: 'COOKIE_POLICY', slug: 'politika-obrabotki-faylov-kuki' },
 ];
 
+const canonicalHome = (id = 'home') => ({
+  id,
+  slug: '',
+  type: 'HOME',
+  status: 'PUBLISHED',
+  content: {},
+  seo: {},
+  blocks: [
+    { id: `${id}-hero`, blockType: 'hero', position: 10, visible: true, data: { title: 'Домашний интернет', text: 'Проверьте подключение по адресу.' } },
+    { id: `${id}-services`, blockType: 'service_grid', position: 20, visible: true, data: { title: 'Услуги', items: [{ pageType: 'INTERNET', title: 'Интернет', text: 'Тарифы для дома.' }] } },
+    { id: `${id}-tariffs`, blockType: 'tariff_grid', position: 30, visible: true, data: { title: 'Тарифы', serviceType: 'INTERNET', limit: 6, morePageType: 'INTERNET' } },
+    { id: `${id}-steps`, blockType: 'steps', position: 40, visible: true, data: { title: 'Как подключиться', items: [{ title: 'Укажите адрес', text: 'Выберите адрес.' }, { title: 'Подтвердите заявку', text: 'Дождитесь звонка.' }] } },
+    { id: `${id}-equipment`, blockType: 'feature_grid', position: 50, visible: true, data: { title: 'Оборудование', items: [{ title: 'Wi-Fi', text: 'Условия уточнит оператор.' }] } },
+    { id: `${id}-benefits`, blockType: 'feature_grid', position: 60, visible: true, data: { title: 'Преимущества', items: [{ title: 'Проверка адреса', text: 'До оформления заявки.' }] } },
+    { id: `${id}-faq`, blockType: 'faq', position: 70, visible: true, data: { title: 'Вопросы и ответы', items: [{ question: 'Как подключиться?', answer: 'Оставьте заявку.' }] } },
+  ],
+});
+
 const controllerFor = (prisma) => {
   const catalog = new SiteCatalogService(prisma);
   return new CitiesController(catalog, {
@@ -96,7 +114,7 @@ test('public city catalog returns only published entities for one published site
           pages: [{
             id: 'page-1', slug: 'internet', type: 'INTERNET', status: 'PUBLISHED', content: {}, seo: {},
             blocks: [{ id: 'block-1', blockType: 'hero', position: 10, visible: true, data: { title: 'Интернет', text: 'Проверьте подключение по адресу.' } }],
-          }],
+          }, canonicalHome()],
           tariffs: [{ id: 'tariff-1', slug: 'giga-500', status: 'PUBLISHED', seo: {} }],
         }];
       },
@@ -171,7 +189,7 @@ test('public city catalog fails closed when a stored visible block violates its 
     content: {},
     seo: {},
     region: { content: {} },
-    pages: [{
+    pages: [canonicalHome(), {
       id: 'page-1',
       slug: 'internet',
       type: 'INTERNET',
@@ -203,7 +221,7 @@ test('public city catalog requires exactly one visible hero when a published pag
 
   for (const blocks of [[richText], [hero, { ...hero, id: 'hero-2', position: 20 }]]) {
     assert.throws(
-      () => controller.cityResponse({ ...baseCity, pages: [page(blocks)] }, site),
+      () => controller.cityResponse({ ...baseCity, pages: [canonicalHome(), page(blocks)] }, site),
       error => error.getStatus() === 400 && /hero/.test(error.message),
     );
   }
@@ -221,6 +239,25 @@ test('public city catalog rejects a published city HOME without the canonical bl
   assert.throws(
     () => controller.cityResponse(city, site),
     error => error.getStatus() === 400 && /HOME.*каноническ/i.test(error.message),
+  );
+});
+
+test('public city catalog rejects duplicate or noncanonical published city HOME pages before rendering', () => {
+  const controller = controllerFor({});
+  const baseCity = {
+    id: 'city-1', siteId: 'site-1', regionId: 'region-1', name: 'Альметьевск', slug: 'almetyevsk', status: 'PUBLISHED',
+    content: {}, seo: {}, region: { name: 'Татарстан', slug: 'tatarstan', content: {} }, tariffs: [],
+  };
+  const site = { settings: {}, provider: { settings: {} } };
+  const home = (id, slug) => ({ id, slug, type: 'HOME', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] });
+
+  assert.throws(
+    () => controller.cityResponse({ ...baseCity, pages: [home('canonical', ''), home('legacy', 'home')] }, site),
+    error => error.getStatus() === 400 && /ровно одна.*HOME/i.test(error.message),
+  );
+  assert.throws(
+    () => controller.cityResponse({ ...baseCity, pages: [home('legacy', 'home')] }, site),
+    error => error.getStatus() === 400 && /пустой slug/i.test(error.message),
   );
 });
 
