@@ -12,7 +12,7 @@ export async function getStaticPaths() {
 }
 
 const { city } = Astro.props as Props;
-const homePage = city.pages.find((page) => page.type === 'HOME');
+const homePage = city.pages.find((page) => page.type === 'HOME' && page.slug === '');
 if (!homePage) throw new Error(`Не опубликована HOME города «${city.name}»`);
 const meta = pageMeta(city.pages, homePage?.slug || '', `Домашний интернет в ${city.nameIn}`, `Тарифы домашнего интернета, телевидения и подключения в ${city.nameIn}.`);
 const heroBlock = homePage?.blocks?.find((block) => block.blockType === 'hero');

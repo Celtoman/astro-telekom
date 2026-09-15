@@ -339,6 +339,24 @@ test('web build rejects a published city HOME without the canonical block templa
   }, fixture);
 });
 
+test('web build keeps address forms on the canonical HOME while a legacy duplicate still exists', { timeout: 120_000 }, async () => {
+  const fixture = structuredClone(apiFixture);
+  const [canonicalHome, ...otherPages] = fixture.cities[0].pages;
+  fixture.cities[0].pages = [
+    { ...structuredClone(canonicalHome), id: 'legacy-home', slug: 'home', title: 'Legacy HOME' },
+    canonicalHome,
+    ...otherPages,
+  ];
+
+  await withApiFixture(async (apiUrl) => {
+    const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: '' });
+    assert.equal(build.code, 0, build.output);
+    const cityHome = await readBuilt('kazan/index.html');
+    assert.match(cityHome, /<form[^>]*data-page-slug(?:\s|>)/);
+    assert.doesNotMatch(cityHome, /data-page-slug="home"/);
+  }, fixture);
+});
+
 test('web production build is blocked without a clean HTTPS origin', { timeout: 120_000 }, async () => {
   await withApiFixture(async (apiUrl) => {
     for (const publicSiteUrl of ['', 'http://partner.example.test']) {
