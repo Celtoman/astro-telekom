@@ -24,8 +24,8 @@ services:
       PGDATABASE: ${POSTGRES_DB:?Set POSTGRES_DB in Coolify}
       PGUSER: ${POSTGRES_USER:?Set POSTGRES_USER in Coolify}
       PGPASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in Coolify}
-      BACKUP_POSTGRES_USER: ${BACKUP_POSTGRES_USER:?Set BACKUP_POSTGRES_USER in Coolify}
-      BACKUP_POSTGRES_PASSWORD: ${BACKUP_POSTGRES_PASSWORD:?Set BACKUP_POSTGRES_PASSWORD in Coolify}
+      BACKUP_POSTGRES_USER: ${BACKUP_POSTGRES_USER}
+      BACKUP_POSTGRES_PASSWORD: ${BACKUP_POSTGRES_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
@@ -40,8 +40,8 @@ services:
     environment:
       PGHOST: postgres
       POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in Coolify}
-      POSTGRES_USER: ${BACKUP_POSTGRES_USER:?Set BACKUP_POSTGRES_USER in Coolify}
-      PGPASSWORD: ${BACKUP_POSTGRES_PASSWORD:?Set BACKUP_POSTGRES_PASSWORD in Coolify}
+      POSTGRES_USER: ${BACKUP_POSTGRES_USER}
+      PGPASSWORD: ${BACKUP_POSTGRES_PASSWORD}
     depends_on:
       backup-bootstrap:
         condition: service_completed_successfully

@@ -279,6 +279,13 @@ test('backup role is provisioned by an isolated one-shot before the resource-bou
     assert.doesNotMatch(runner, /postgres_data|\/var\/lib\/postgresql/);
   }
 
+  const coolifyCompose = readFileSync(coolifyComposePath, 'utf8');
+  assert.doesNotMatch(
+    coolifyCompose,
+    /BACKUP_POSTGRES_(?:USER|PASSWORD):\?Set/,
+    'runtime-only backup credentials must not be required during Coolify build-time interpolation',
+  );
+
   const backupDockerfile = readFileSync(backupDockerfilePath, 'utf8');
   assert.match(backupDockerfile, /^FROM postgres:18\.6-alpine/m);
   assert.match(backupDockerfile, /COPY scripts\/postgres-backup-rehearsal\.sh/);
