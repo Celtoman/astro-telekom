@@ -82,9 +82,12 @@ function normalizePage(item: Record<string, any>): PageView {
 }
 
 function assertCityHomeTemplate(city: CityView): void {
-  const homePages = city.pages.filter((page) => page.type === 'HOME' && page.slug === '');
-  const sequence = homePages[0]?.blocks?.map((block) => block.blockType) || [];
-  if (homePages.length !== 1 || JSON.stringify(sequence) !== JSON.stringify(cityHomeBlockSequence)) {
+  const homePages = city.pages.filter((page) => page.type === 'HOME');
+  if (homePages.length !== 1 || homePages[0]?.slug !== '') {
+    throw new Error(`Город «${city.name}» должен иметь ровно одну опубликованную HOME с пустым slug`);
+  }
+  const sequence = homePages[0].blocks?.map((block) => block.blockType) || [];
+  if (JSON.stringify(sequence) !== JSON.stringify(cityHomeBlockSequence)) {
     throw new Error(`Город «${city.name}»: опубликованная HOME не соответствует каноническому шаблону из 7 блоков`);
   }
 }

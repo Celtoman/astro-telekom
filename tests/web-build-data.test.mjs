@@ -339,7 +339,7 @@ test('web build rejects a published city HOME without the canonical block templa
   }, fixture);
 });
 
-test('web build keeps address forms on the canonical HOME while a legacy duplicate still exists', { timeout: 120_000 }, async () => {
+test('web build rejects a published city with a legacy duplicate HOME', { timeout: 120_000 }, async () => {
   const fixture = structuredClone(apiFixture);
   const [canonicalHome, ...otherPages] = fixture.cities[0].pages;
   fixture.cities[0].pages = [
@@ -350,10 +350,8 @@ test('web build keeps address forms on the canonical HOME while a legacy duplica
 
   await withApiFixture(async (apiUrl) => {
     const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: '' });
-    assert.equal(build.code, 0, build.output);
-    const cityHome = await readBuilt('kazan/index.html');
-    assert.match(cityHome, /<form[^>]*data-page-slug(?:\s|>)/);
-    assert.doesNotMatch(cityHome, /data-page-slug="home"/);
+    assert.notEqual(build.code, 0, build.output);
+    assert.match(build.output, /Казань.*ровно одну.*HOME/i);
   }, fixture);
 });
 
