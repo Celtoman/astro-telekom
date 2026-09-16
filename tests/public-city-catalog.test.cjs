@@ -185,6 +185,71 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(result.sitemap, { excludedPaths: ['/kazan/giga-500'] });
 });
 
+test('public city catalog resolves nested content and SEO through the documented layer order', () => {
+  const catalog = new SiteCatalogService({});
+  const site = {
+    settings: {
+      content: {
+        hero: { title: 'Заголовок сайта', cta: { label: 'Подключить', href: '/kazan' } },
+        cards: ['Карточка сайта'],
+      },
+    },
+    provider: {
+      settings: {
+        content: {
+          hero: { eyebrow: 'Дом.ру', cta: { analyticsId: 'provider-cta' } },
+          legalNote: 'Условия провайдера',
+        },
+      },
+    },
+  };
+  const city = {
+    id: 'city-1',
+    siteId: 'site-1',
+    regionId: 'region-1',
+    name: 'Казань',
+    slug: 'kazan',
+    status: 'PUBLISHED',
+    content: { hero: { title: 'Интернет в Казани' } },
+    seo: { openGraph: { title: 'Казань', image: '/city.jpg' }, robots: { index: true, follow: true } },
+    region: { name: 'Татарстан', slug: 'tatarstan', content: { hero: { cta: { label: 'Проверить адрес' } } } },
+    pages: [
+      canonicalHome(),
+      {
+        id: 'internet',
+        slug: 'internet',
+        type: 'INTERNET',
+        status: 'PUBLISHED',
+        content: { hero: { cta: { label: 'Выбрать тариф' } }, cards: [] },
+        seo: { openGraph: { title: 'Домашний интернет' }, robots: null },
+        blocks: [{ id: 'hero', blockType: 'hero', position: 10, visible: true, data: { title: 'Интернет', text: 'Проверьте адрес.' } }],
+      },
+    ],
+    tariffs: [{ id: 'tariff', slug: 'giga-500', status: 'PUBLISHED', seo: { openGraph: { title: 'Гига 500' }, robots: { follow: false } } }],
+  };
+
+  const result = catalog.cityResponse(city, site);
+  const internet = result.pages.find((page) => page.id === 'internet');
+
+  assert.deepEqual(internet.content, {
+    hero: {
+      eyebrow: 'Дом.ру',
+      title: 'Интернет в Казани',
+      cta: { analyticsId: 'provider-cta', label: 'Выбрать тариф', href: '/kazan' },
+    },
+    legalNote: 'Условия провайдера',
+    cards: [],
+  });
+  assert.deepEqual(internet.seo, {
+    openGraph: { title: 'Домашний интернет', image: '/city.jpg' },
+    robots: null,
+  });
+  assert.deepEqual(result.tariffs[0].seo, {
+    openGraph: { title: 'Гига 500', image: '/city.jpg' },
+    robots: { index: true, follow: false },
+  });
+});
+
 test('public city catalog fails closed when a stored visible block violates its type contract', () => {
   const controller = controllerFor({});
   const city = {

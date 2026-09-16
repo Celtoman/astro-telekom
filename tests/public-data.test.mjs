@@ -14,6 +14,44 @@ test('private provider and site settings never become inherited public content',
   assert.deepEqual(publicContent({ apiKey: 'secret' }), {});
 });
 
+test('nested CMS objects inherit recursively while arrays and null replace parent values', () => {
+  const provider = {
+    hero: {
+      title: 'Домашний интернет',
+      cta: { label: 'Подключить', href: '/kazan' },
+    },
+    features: ['Интернет', 'Телевидение'],
+    notice: 'Общее условие',
+    legalNote: 'Уточните условия',
+    display: { mode: 'detailed' },
+    form: 'inline',
+  };
+  const site = {
+    hero: { cta: { label: 'Проверить адрес' } },
+    features: ['Интернет'],
+    display: 'compact',
+  };
+  const page = {
+    hero: { title: 'Интернет в Казани' },
+    legalNote: null,
+    form: { variant: 'address' },
+  };
+
+  assert.deepEqual(mergeContent(provider, site, page), {
+    hero: {
+      title: 'Интернет в Казани',
+      cta: { label: 'Проверить адрес', href: '/kazan' },
+    },
+    features: ['Интернет'],
+    notice: 'Общее условие',
+    legalNote: null,
+    display: 'compact',
+    form: { variant: 'address' },
+  });
+  assert.deepEqual(provider.hero.cta, { label: 'Подключить', href: '/kazan' });
+  assert.deepEqual(site.hero.cta, { label: 'Проверить адрес' });
+});
+
 test('API tariffs enter the service categories used by public pages', () => {
   const tariffs = ['INTERNET', 'INTERNET_TV', 'TV'].map(serviceType => tariffView({ slug: serviceType, name: 'Тариф', serviceType }));
   assert.equal(tariffs.filter(t => t.service === 'Домашний интернет').length, 1);

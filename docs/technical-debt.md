@@ -86,7 +86,7 @@
 | ID | Issue | Суть |
 | --- | --- | --- |
 | TD-11 | [#13](https://github.com/Celtoman/astro-telekom/issues/13) 🟢 | Нет аудита, версий, schedule публикации, корзины, rollback |
-| TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) 🟢 | Наследование `content` — только shallow merge верхнего уровня |
+| TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) ✅ | Вложенные `content` и SEO разрешаются рекурсивно по явному контракту; массивы, скалярные значения и `null` заменяются атомарно |
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) ✅ | `PageBlock` поддерживает семь строго валидируемых типов, а Astro рендерит полный минимальный набор |
 | TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) ✅ | Public DTO/rate limit/honeypot и 180-дневный policy-driven purge реализованы; legal scope вынесен в [#144](https://github.com/Celtoman/astro-telekom/issues/144) |
 | TD-114 | [#147](https://github.com/Celtoman/astro-telekom/issues/147) ✅ | На момент закрытия живые документы и technical-debt index были синхронизированы с тогдашними 26 миграциями, post-deploy evidence и Issue states |
