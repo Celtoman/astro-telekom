@@ -141,6 +141,12 @@ test('public city catalog returns only published entities for one published site
         ];
       },
     },
+    sitemapExclusion: {
+      findMany: async (query) => {
+        calls.sitemapExclusions = query;
+        return [{ path: '/kazan/giga-500', reason: 'Управляемое исключение' }];
+      },
+    },
   });
 
   const result = await controller.list('domru-kazan');
@@ -155,6 +161,7 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(calls.pages.where, { siteId: 'site-1', cityId: null, status: 'PUBLISHED' });
   assert.deepEqual(calls.pages.include.blocks.where, { visible: true, archivedAt: null });
   assert.deepEqual(calls.redirects.where, { siteId: 'site-1', status: 'PUBLISHED' });
+  assert.deepEqual(calls.sitemapExclusions.where, { siteId: 'site-1' });
   assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test' });
   assert.equal(result.cities.length, 1);
   assert.equal(result.cities[0].namePrepositional, 'Казани');
@@ -175,6 +182,7 @@ test('public city catalog returns only published entities for one published site
     '/kazan/giga-500',
   ]);
   assert.deepEqual(result.redirects, [{ id: 'redirect-1', sourcePath: '/old', targetPath: '/kazan', status: 'PUBLISHED' }]);
+  assert.deepEqual(result.sitemap, { excludedPaths: ['/kazan/giga-500'] });
 });
 
 test('public city catalog fails closed when a stored visible block violates its type contract', () => {

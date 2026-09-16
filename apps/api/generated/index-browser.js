@@ -144,6 +144,16 @@ exports.Prisma.SiteScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SitemapExclusionScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  path: 'path',
+  reason: 'reason',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SiteRebuildScalarFieldEnum = {
   id: 'id',
   siteId: 'siteId',
@@ -636,6 +646,7 @@ exports.DeliveryAttemptStatus = exports.$Enums.DeliveryAttemptStatus = {
 exports.Prisma.ModelName = {
   Provider: 'Provider',
   Site: 'Site',
+  SitemapExclusion: 'SitemapExclusion',
   SiteRebuild: 'SiteRebuild',
   ContentRevision: 'ContentRevision',
   SitePublication: 'SitePublication',

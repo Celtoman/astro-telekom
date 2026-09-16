@@ -125,7 +125,7 @@ function validateIndexableHtml(html, route, expectedUrl, errors) {
 
   const robots = tags(html, 'meta').filter((tag) => getAttribute(tag, 'name')?.toLowerCase() === 'robots');
   if (robots.some((tag) => getAttribute(tag, 'content')?.toLowerCase().split(/[\s,]+/).includes('noindex'))) {
-    errors.push(`${route}: URL из sitemap.xml не может содержать noindex`);
+    errors.push(`${route}: публичный HTML Release 1 не может содержать noindex`);
   }
 
   for (const anchor of tags(html, 'a')) {
@@ -175,6 +175,7 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
   }
 
   const sitemapPath = join(distDirectory, 'sitemap.xml');
+  const childSitemapNames = ['sitemap-pages.xml', 'sitemap-cities.xml', 'sitemap-tariffs.xml'];
   const robotsPath = join(distDirectory, 'robots.txt');
   const notFoundPath = join(distDirectory, '404.html');
   const [sitemap, robots, notFound] = await Promise.all([
@@ -183,38 +184,49 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
     readFile(notFoundPath, 'utf8'),
   ]);
 
-  if (!/<urlset\b[^>]*xmlns=["']http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9["']/i.test(sitemap)) {
-    errors.push('sitemap.xml: отсутствует корректный urlset namespace');
+  if (!/<sitemapindex\b[^>]*xmlns=["']http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9["']/i.test(sitemap)) {
+    errors.push('sitemap.xml: отсутствует корректный sitemapindex namespace');
   }
 
-  const locations = [...sitemap.matchAll(/<loc>([\s\S]*?)<\/loc>/gi)].map((match) => decodeXml(match[1].trim()));
+  const indexLocations = [...sitemap.matchAll(/<loc>([\s\S]*?)<\/loc>/gi)].map((match) => decodeXml(match[1].trim()));
+  const expectedIndexLocations = childSitemapNames.map((name) => `${origin}/${name}`);
+  if (JSON.stringify(indexLocations) !== JSON.stringify(expectedIndexLocations)) {
+    errors.push(`sitemap.xml: индекс должен содержать ${expectedIndexLocations.join(', ')}`);
+  }
+  const childSitemaps = await Promise.all(childSitemapNames.map(async (name) => ({
+    name,
+    content: await readFile(join(distDirectory, name), 'utf8'),
+  })));
   const sitemapRoutes = [];
   const seenLocations = new Set();
-  for (const location of locations) {
+  for (const { name, content } of childSitemaps) {
+    if (!/<urlset\b[^>]*xmlns=["']http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9["']/i.test(content)) {
+      errors.push(`${name}: отсутствует корректный urlset namespace`);
+    }
+    const locations = [...content.matchAll(/<loc>([\s\S]*?)<\/loc>/gi)].map((match) => decodeXml(match[1].trim()));
+    for (const location of locations) {
     let url;
     try {
       url = new URL(location);
     } catch {
-      errors.push(`sitemap.xml: некорректный абсолютный URL ${location}`);
+      errors.push(`${name}: некорректный абсолютный URL ${location}`);
       continue;
     }
     if (url.origin !== origin || url.search || url.hash || (url.pathname !== '/' && url.pathname.endsWith('/'))) {
-      errors.push(`sitemap.xml: URL должен принадлежать ${origin}, не иметь query/hash и завершающего /: ${location}`);
+      errors.push(`${name}: URL должен принадлежать ${origin}, не иметь query/hash и завершающего /: ${location}`);
     }
-    if (seenLocations.has(url.href)) errors.push(`sitemap.xml: дублируется ${url.href}`);
+    if (seenLocations.has(url.href)) errors.push(`${name}: дублируется ${url.href}`);
     seenLocations.add(url.href);
     sitemapRoutes.push(url.pathname);
+    }
   }
 
-  if (!sitemapRoutes.includes('/')) errors.push('sitemap.xml не содержит корневой URL /');
+  if (!sitemapRoutes.includes('/')) errors.push('sitemap-pages.xml не содержит корневой URL /');
 
   const htmlRoutes = new Set(publicHtml.map(({ route }) => route));
   const sitemapRouteSet = new Set(sitemapRoutes);
   for (const route of sitemapRouteSet) {
-    if (!htmlRoutes.has(route)) errors.push(`sitemap.xml содержит ${route}, но соответствующий HTML отсутствует`);
-  }
-  for (const route of htmlRoutes) {
-    if (!sitemapRouteSet.has(route)) errors.push(`HTML ${route} нет в sitemap.xml`);
+    if (!htmlRoutes.has(route)) errors.push(`Дочерний sitemap содержит ${route}, но соответствующий HTML отсутствует`);
   }
 
   for (const { path, route } of publicHtml) {

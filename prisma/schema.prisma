@@ -173,8 +173,24 @@ model Site {
   contentRevisions ContentRevision[]
   publications SitePublication[]
   auditEvents AuditEvent[]
+  sitemapExclusions SitemapExclusion[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model SitemapExclusion {
+  id          String   @id @default(cuid())
+  siteId      String
+  path        String
+  reason      String
+  createdById String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+  site        Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@unique([siteId, path])
+  @@index([createdById, createdAt])
 }
 
 model SiteRebuild {
@@ -614,6 +630,7 @@ model User {
   contentRevisions ContentRevision[]
   publications SitePublication[]
   auditEvents AuditEvent[]
+  sitemapExclusionsCreated SitemapExclusion[]
   tariffImportsApplied TariffImportRun[] @relation("TariffImportAppliedBy")
   tariffImportsUndone  TariffImportRun[] @relation("TariffImportUndoneBy")
   cityImportsApplied   CityImportRun[]   @relation("CityImportAppliedBy")

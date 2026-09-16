@@ -31,8 +31,11 @@ async function createFixture(overrides = {}) {
   await writeFile(join(directory, '404.html'), overrides.notFound ?? notFoundHtml());
   await writeFile(
     join(directory, 'sitemap.xml'),
-    overrides.sitemap ?? `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${publicSiteUrl}/</loc></url><url><loc>${publicSiteUrl}/kazan</loc></url></urlset>`,
+    `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>${publicSiteUrl}/sitemap-pages.xml</loc></sitemap><sitemap><loc>${publicSiteUrl}/sitemap-cities.xml</loc></sitemap><sitemap><loc>${publicSiteUrl}/sitemap-tariffs.xml</loc></sitemap></sitemapindex>`,
   );
+  await writeFile(join(directory, 'sitemap-pages.xml'), overrides.sitemap ?? `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${publicSiteUrl}/</loc></url></urlset>`);
+  await writeFile(join(directory, 'sitemap-cities.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${publicSiteUrl}/kazan</loc></url></urlset>`);
+  await writeFile(join(directory, 'sitemap-tariffs.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`);
   await writeFile(
     join(directory, 'robots.txt'),
     overrides.robots ?? `User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /admin/\nSitemap: ${publicSiteUrl}/sitemap.xml\n`,
@@ -60,20 +63,20 @@ test('publication SEO verifier accepts a complete sitemap and valid raw HTML', a
   });
 });
 
-test('publication SEO verifier rejects sitemap and HTML inventory drift', async () => {
+test('publication SEO verifier rejects sitemap URLs without HTML but permits intentional HTML omissions', async () => {
   await withFixture({
     sitemap: `<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${publicSiteUrl}/kazan/</loc></url></urlset>`,
   }, async (distDirectory) => {
     await assert.rejects(
       verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
-      /sitemap\.xml.*\//i,
+      /sitemap-pages\.xml.*\//i,
     );
   });
 
-  await withFixture({ extra: indexableHtml(`${publicSiteUrl}/extra/`) }, async (distDirectory) => {
-    await assert.rejects(
-      verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
-      /\/extra.*нет в sitemap\.xml/i,
+  await withFixture({ extra: indexableHtml(`${publicSiteUrl}/extra`, { canonical: `${publicSiteUrl}/extra` }) }, async (distDirectory) => {
+    assert.deepEqual(
+      await verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
+      { indexablePages: 2, htmlPages: 4 },
     );
   });
 
@@ -127,7 +130,7 @@ test('publication SEO verifier rejects invalid canonical and raw HTML metadata',
   }, async (distDirectory) => {
     await assert.rejects(
       verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
-      /sitemap\.xml.*noindex/i,
+      /публичный HTML Release 1.*noindex/i,
     );
   });
 });

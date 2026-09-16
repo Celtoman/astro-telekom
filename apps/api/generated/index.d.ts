@@ -24,6 +24,11 @@ export type Provider = $Result.DefaultSelection<Prisma.$ProviderPayload>
  */
 export type Site = $Result.DefaultSelection<Prisma.$SitePayload>
 /**
+ * Model SitemapExclusion
+ * 
+ */
+export type SitemapExclusion = $Result.DefaultSelection<Prisma.$SitemapExclusionPayload>
+/**
  * Model SiteRebuild
  * 
  */
@@ -510,6 +515,16 @@ export class PrismaClient<
     * ```
     */
   get site(): Prisma.SiteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.sitemapExclusion`: Exposes CRUD operations for the **SitemapExclusion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SitemapExclusions
+    * const sitemapExclusions = await prisma.sitemapExclusion.findMany()
+    * ```
+    */
+  get sitemapExclusion(): Prisma.SitemapExclusionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.siteRebuild`: Exposes CRUD operations for the **SiteRebuild** model.
@@ -1169,6 +1184,7 @@ export namespace Prisma {
   export const ModelName: {
     Provider: 'Provider',
     Site: 'Site',
+    SitemapExclusion: 'SitemapExclusion',
     SiteRebuild: 'SiteRebuild',
     ContentRevision: 'ContentRevision',
     SitePublication: 'SitePublication',
@@ -1205,7 +1221,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "provider" | "site" | "siteRebuild" | "contentRevision" | "sitePublication" | "auditEvent" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
+      modelProps: "provider" | "site" | "sitemapExclusion" | "siteRebuild" | "contentRevision" | "sitePublication" | "auditEvent" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1354,6 +1370,80 @@ export namespace Prisma {
           count: {
             args: Prisma.SiteCountArgs<ExtArgs>
             result: $Utils.Optional<SiteCountAggregateOutputType> | number
+          }
+        }
+      }
+      SitemapExclusion: {
+        payload: Prisma.$SitemapExclusionPayload<ExtArgs>
+        fields: Prisma.SitemapExclusionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SitemapExclusionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitemapExclusionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SitemapExclusionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitemapExclusionPayload>
+          }
+          findFirst: {
+            args: Prisma.SitemapExclusionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitemapExclusionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SitemapExclusionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitemapExclusionPayload>
+          }
+          findMany: {
+            args: Prisma.SitemapExclusionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitemapExclusionPayload>[]
+          }
+          create: {
+            args: Prisma.SitemapExclusionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitemapExclusionPayload>
+          }
+          createMany: {
+            args: Prisma.SitemapExclusionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SitemapExclusionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitemapExclusionPayload>[]
+          }
+          delete: {
+            args: Prisma.SitemapExclusionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitemapExclusionPayload>
+          }
+          update: {
+            args: Prisma.SitemapExclusionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitemapExclusionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SitemapExclusionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SitemapExclusionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SitemapExclusionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitemapExclusionPayload>[]
+          }
+          upsert: {
+            args: Prisma.SitemapExclusionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitemapExclusionPayload>
+          }
+          aggregate: {
+            args: Prisma.SitemapExclusionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSitemapExclusion>
+          }
+          groupBy: {
+            args: Prisma.SitemapExclusionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SitemapExclusionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SitemapExclusionCountArgs<ExtArgs>
+            result: $Utils.Optional<SitemapExclusionCountAggregateOutputType> | number
           }
         }
       }
@@ -3036,6 +3126,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     provider?: ProviderOmit
     site?: SiteOmit
+    sitemapExclusion?: SitemapExclusionOmit
     siteRebuild?: SiteRebuildOmit
     contentRevision?: ContentRevisionOmit
     sitePublication?: SitePublicationOmit
@@ -3197,6 +3288,7 @@ export namespace Prisma {
     contentRevisions: number
     publications: number
     auditEvents: number
+    sitemapExclusions: number
   }
 
   export type SiteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3211,6 +3303,7 @@ export namespace Prisma {
     contentRevisions?: boolean | SiteCountOutputTypeCountContentRevisionsArgs
     publications?: boolean | SiteCountOutputTypeCountPublicationsArgs
     auditEvents?: boolean | SiteCountOutputTypeCountAuditEventsArgs
+    sitemapExclusions?: boolean | SiteCountOutputTypeCountSitemapExclusionsArgs
   }
 
   // Custom InputTypes
@@ -3299,6 +3392,13 @@ export namespace Prisma {
    */
   export type SiteCountOutputTypeCountAuditEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AuditEventWhereInput
+  }
+
+  /**
+   * SiteCountOutputType without action
+   */
+  export type SiteCountOutputTypeCountSitemapExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitemapExclusionWhereInput
   }
 
 
@@ -3636,6 +3736,7 @@ export namespace Prisma {
     contentRevisions: number
     publications: number
     auditEvents: number
+    sitemapExclusionsCreated: number
     tariffImportsApplied: number
     tariffImportsUndone: number
     cityImportsApplied: number
@@ -3647,6 +3748,7 @@ export namespace Prisma {
     contentRevisions?: boolean | UserCountOutputTypeCountContentRevisionsArgs
     publications?: boolean | UserCountOutputTypeCountPublicationsArgs
     auditEvents?: boolean | UserCountOutputTypeCountAuditEventsArgs
+    sitemapExclusionsCreated?: boolean | UserCountOutputTypeCountSitemapExclusionsCreatedArgs
     tariffImportsApplied?: boolean | UserCountOutputTypeCountTariffImportsAppliedArgs
     tariffImportsUndone?: boolean | UserCountOutputTypeCountTariffImportsUndoneArgs
     cityImportsApplied?: boolean | UserCountOutputTypeCountCityImportsAppliedArgs
@@ -3690,6 +3792,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountAuditEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AuditEventWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSitemapExclusionsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitemapExclusionWhereInput
   }
 
   /**
@@ -5132,6 +5241,7 @@ export namespace Prisma {
     contentRevisions?: boolean | Site$contentRevisionsArgs<ExtArgs>
     publications?: boolean | Site$publicationsArgs<ExtArgs>
     auditEvents?: boolean | Site$auditEventsArgs<ExtArgs>
+    sitemapExclusions?: boolean | Site$sitemapExclusionsArgs<ExtArgs>
     _count?: boolean | SiteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["site"]>
 
@@ -5193,6 +5303,7 @@ export namespace Prisma {
     contentRevisions?: boolean | Site$contentRevisionsArgs<ExtArgs>
     publications?: boolean | Site$publicationsArgs<ExtArgs>
     auditEvents?: boolean | Site$auditEventsArgs<ExtArgs>
+    sitemapExclusions?: boolean | Site$sitemapExclusionsArgs<ExtArgs>
     _count?: boolean | SiteCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SiteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5217,6 +5328,7 @@ export namespace Prisma {
       contentRevisions: Prisma.$ContentRevisionPayload<ExtArgs>[]
       publications: Prisma.$SitePublicationPayload<ExtArgs>[]
       auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
+      sitemapExclusions: Prisma.$SitemapExclusionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5636,6 +5748,7 @@ export namespace Prisma {
     contentRevisions<T extends Site$contentRevisionsArgs<ExtArgs> = {}>(args?: Subset<T, Site$contentRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     publications<T extends Site$publicationsArgs<ExtArgs> = {}>(args?: Subset<T, Site$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     auditEvents<T extends Site$auditEventsArgs<ExtArgs> = {}>(args?: Subset<T, Site$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sitemapExclusions<T extends Site$sitemapExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, Site$sitemapExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6341,6 +6454,30 @@ export namespace Prisma {
   }
 
   /**
+   * Site.sitemapExclusions
+   */
+  export type Site$sitemapExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
+    where?: SitemapExclusionWhereInput
+    orderBy?: SitemapExclusionOrderByWithRelationInput | SitemapExclusionOrderByWithRelationInput[]
+    cursor?: SitemapExclusionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SitemapExclusionScalarFieldEnum | SitemapExclusionScalarFieldEnum[]
+  }
+
+  /**
    * Site without action
    */
   export type SiteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6356,6 +6493,1122 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SiteInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SitemapExclusion
+   */
+
+  export type AggregateSitemapExclusion = {
+    _count: SitemapExclusionCountAggregateOutputType | null
+    _min: SitemapExclusionMinAggregateOutputType | null
+    _max: SitemapExclusionMaxAggregateOutputType | null
+  }
+
+  export type SitemapExclusionMinAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    path: string | null
+    reason: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SitemapExclusionMaxAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    path: string | null
+    reason: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SitemapExclusionCountAggregateOutputType = {
+    id: number
+    siteId: number
+    path: number
+    reason: number
+    createdById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SitemapExclusionMinAggregateInputType = {
+    id?: true
+    siteId?: true
+    path?: true
+    reason?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SitemapExclusionMaxAggregateInputType = {
+    id?: true
+    siteId?: true
+    path?: true
+    reason?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SitemapExclusionCountAggregateInputType = {
+    id?: true
+    siteId?: true
+    path?: true
+    reason?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SitemapExclusionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SitemapExclusion to aggregate.
+     */
+    where?: SitemapExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitemapExclusions to fetch.
+     */
+    orderBy?: SitemapExclusionOrderByWithRelationInput | SitemapExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SitemapExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitemapExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitemapExclusions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SitemapExclusions
+    **/
+    _count?: true | SitemapExclusionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SitemapExclusionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SitemapExclusionMaxAggregateInputType
+  }
+
+  export type GetSitemapExclusionAggregateType<T extends SitemapExclusionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSitemapExclusion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSitemapExclusion[P]>
+      : GetScalarType<T[P], AggregateSitemapExclusion[P]>
+  }
+
+
+
+
+  export type SitemapExclusionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitemapExclusionWhereInput
+    orderBy?: SitemapExclusionOrderByWithAggregationInput | SitemapExclusionOrderByWithAggregationInput[]
+    by: SitemapExclusionScalarFieldEnum[] | SitemapExclusionScalarFieldEnum
+    having?: SitemapExclusionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SitemapExclusionCountAggregateInputType | true
+    _min?: SitemapExclusionMinAggregateInputType
+    _max?: SitemapExclusionMaxAggregateInputType
+  }
+
+  export type SitemapExclusionGroupByOutputType = {
+    id: string
+    siteId: string
+    path: string
+    reason: string
+    createdById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SitemapExclusionCountAggregateOutputType | null
+    _min: SitemapExclusionMinAggregateOutputType | null
+    _max: SitemapExclusionMaxAggregateOutputType | null
+  }
+
+  type GetSitemapExclusionGroupByPayload<T extends SitemapExclusionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SitemapExclusionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SitemapExclusionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SitemapExclusionGroupByOutputType[P]>
+            : GetScalarType<T[P], SitemapExclusionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SitemapExclusionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    path?: boolean
+    reason?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    createdBy?: boolean | SitemapExclusion$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["sitemapExclusion"]>
+
+  export type SitemapExclusionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    path?: boolean
+    reason?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    createdBy?: boolean | SitemapExclusion$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["sitemapExclusion"]>
+
+  export type SitemapExclusionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    path?: boolean
+    reason?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    createdBy?: boolean | SitemapExclusion$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["sitemapExclusion"]>
+
+  export type SitemapExclusionSelectScalar = {
+    id?: boolean
+    siteId?: boolean
+    path?: boolean
+    reason?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SitemapExclusionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "path" | "reason" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["sitemapExclusion"]>
+  export type SitemapExclusionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    createdBy?: boolean | SitemapExclusion$createdByArgs<ExtArgs>
+  }
+  export type SitemapExclusionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    createdBy?: boolean | SitemapExclusion$createdByArgs<ExtArgs>
+  }
+  export type SitemapExclusionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    createdBy?: boolean | SitemapExclusion$createdByArgs<ExtArgs>
+  }
+
+  export type $SitemapExclusionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SitemapExclusion"
+    objects: {
+      site: Prisma.$SitePayload<ExtArgs>
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      siteId: string
+      path: string
+      reason: string
+      createdById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["sitemapExclusion"]>
+    composites: {}
+  }
+
+  type SitemapExclusionGetPayload<S extends boolean | null | undefined | SitemapExclusionDefaultArgs> = $Result.GetResult<Prisma.$SitemapExclusionPayload, S>
+
+  type SitemapExclusionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SitemapExclusionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SitemapExclusionCountAggregateInputType | true
+    }
+
+  export interface SitemapExclusionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SitemapExclusion'], meta: { name: 'SitemapExclusion' } }
+    /**
+     * Find zero or one SitemapExclusion that matches the filter.
+     * @param {SitemapExclusionFindUniqueArgs} args - Arguments to find a SitemapExclusion
+     * @example
+     * // Get one SitemapExclusion
+     * const sitemapExclusion = await prisma.sitemapExclusion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SitemapExclusionFindUniqueArgs>(args: SelectSubset<T, SitemapExclusionFindUniqueArgs<ExtArgs>>): Prisma__SitemapExclusionClient<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SitemapExclusion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SitemapExclusionFindUniqueOrThrowArgs} args - Arguments to find a SitemapExclusion
+     * @example
+     * // Get one SitemapExclusion
+     * const sitemapExclusion = await prisma.sitemapExclusion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SitemapExclusionFindUniqueOrThrowArgs>(args: SelectSubset<T, SitemapExclusionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SitemapExclusionClient<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SitemapExclusion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitemapExclusionFindFirstArgs} args - Arguments to find a SitemapExclusion
+     * @example
+     * // Get one SitemapExclusion
+     * const sitemapExclusion = await prisma.sitemapExclusion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SitemapExclusionFindFirstArgs>(args?: SelectSubset<T, SitemapExclusionFindFirstArgs<ExtArgs>>): Prisma__SitemapExclusionClient<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SitemapExclusion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitemapExclusionFindFirstOrThrowArgs} args - Arguments to find a SitemapExclusion
+     * @example
+     * // Get one SitemapExclusion
+     * const sitemapExclusion = await prisma.sitemapExclusion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SitemapExclusionFindFirstOrThrowArgs>(args?: SelectSubset<T, SitemapExclusionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SitemapExclusionClient<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SitemapExclusions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitemapExclusionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SitemapExclusions
+     * const sitemapExclusions = await prisma.sitemapExclusion.findMany()
+     * 
+     * // Get first 10 SitemapExclusions
+     * const sitemapExclusions = await prisma.sitemapExclusion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sitemapExclusionWithIdOnly = await prisma.sitemapExclusion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SitemapExclusionFindManyArgs>(args?: SelectSubset<T, SitemapExclusionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SitemapExclusion.
+     * @param {SitemapExclusionCreateArgs} args - Arguments to create a SitemapExclusion.
+     * @example
+     * // Create one SitemapExclusion
+     * const SitemapExclusion = await prisma.sitemapExclusion.create({
+     *   data: {
+     *     // ... data to create a SitemapExclusion
+     *   }
+     * })
+     * 
+     */
+    create<T extends SitemapExclusionCreateArgs>(args: SelectSubset<T, SitemapExclusionCreateArgs<ExtArgs>>): Prisma__SitemapExclusionClient<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SitemapExclusions.
+     * @param {SitemapExclusionCreateManyArgs} args - Arguments to create many SitemapExclusions.
+     * @example
+     * // Create many SitemapExclusions
+     * const sitemapExclusion = await prisma.sitemapExclusion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SitemapExclusionCreateManyArgs>(args?: SelectSubset<T, SitemapExclusionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SitemapExclusions and returns the data saved in the database.
+     * @param {SitemapExclusionCreateManyAndReturnArgs} args - Arguments to create many SitemapExclusions.
+     * @example
+     * // Create many SitemapExclusions
+     * const sitemapExclusion = await prisma.sitemapExclusion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SitemapExclusions and only return the `id`
+     * const sitemapExclusionWithIdOnly = await prisma.sitemapExclusion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SitemapExclusionCreateManyAndReturnArgs>(args?: SelectSubset<T, SitemapExclusionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SitemapExclusion.
+     * @param {SitemapExclusionDeleteArgs} args - Arguments to delete one SitemapExclusion.
+     * @example
+     * // Delete one SitemapExclusion
+     * const SitemapExclusion = await prisma.sitemapExclusion.delete({
+     *   where: {
+     *     // ... filter to delete one SitemapExclusion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SitemapExclusionDeleteArgs>(args: SelectSubset<T, SitemapExclusionDeleteArgs<ExtArgs>>): Prisma__SitemapExclusionClient<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SitemapExclusion.
+     * @param {SitemapExclusionUpdateArgs} args - Arguments to update one SitemapExclusion.
+     * @example
+     * // Update one SitemapExclusion
+     * const sitemapExclusion = await prisma.sitemapExclusion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SitemapExclusionUpdateArgs>(args: SelectSubset<T, SitemapExclusionUpdateArgs<ExtArgs>>): Prisma__SitemapExclusionClient<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SitemapExclusions.
+     * @param {SitemapExclusionDeleteManyArgs} args - Arguments to filter SitemapExclusions to delete.
+     * @example
+     * // Delete a few SitemapExclusions
+     * const { count } = await prisma.sitemapExclusion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SitemapExclusionDeleteManyArgs>(args?: SelectSubset<T, SitemapExclusionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SitemapExclusions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitemapExclusionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SitemapExclusions
+     * const sitemapExclusion = await prisma.sitemapExclusion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SitemapExclusionUpdateManyArgs>(args: SelectSubset<T, SitemapExclusionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SitemapExclusions and returns the data updated in the database.
+     * @param {SitemapExclusionUpdateManyAndReturnArgs} args - Arguments to update many SitemapExclusions.
+     * @example
+     * // Update many SitemapExclusions
+     * const sitemapExclusion = await prisma.sitemapExclusion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SitemapExclusions and only return the `id`
+     * const sitemapExclusionWithIdOnly = await prisma.sitemapExclusion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SitemapExclusionUpdateManyAndReturnArgs>(args: SelectSubset<T, SitemapExclusionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SitemapExclusion.
+     * @param {SitemapExclusionUpsertArgs} args - Arguments to update or create a SitemapExclusion.
+     * @example
+     * // Update or create a SitemapExclusion
+     * const sitemapExclusion = await prisma.sitemapExclusion.upsert({
+     *   create: {
+     *     // ... data to create a SitemapExclusion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SitemapExclusion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SitemapExclusionUpsertArgs>(args: SelectSubset<T, SitemapExclusionUpsertArgs<ExtArgs>>): Prisma__SitemapExclusionClient<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SitemapExclusions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitemapExclusionCountArgs} args - Arguments to filter SitemapExclusions to count.
+     * @example
+     * // Count the number of SitemapExclusions
+     * const count = await prisma.sitemapExclusion.count({
+     *   where: {
+     *     // ... the filter for the SitemapExclusions we want to count
+     *   }
+     * })
+    **/
+    count<T extends SitemapExclusionCountArgs>(
+      args?: Subset<T, SitemapExclusionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SitemapExclusionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SitemapExclusion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitemapExclusionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SitemapExclusionAggregateArgs>(args: Subset<T, SitemapExclusionAggregateArgs>): Prisma.PrismaPromise<GetSitemapExclusionAggregateType<T>>
+
+    /**
+     * Group by SitemapExclusion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitemapExclusionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SitemapExclusionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SitemapExclusionGroupByArgs['orderBy'] }
+        : { orderBy?: SitemapExclusionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SitemapExclusionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSitemapExclusionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SitemapExclusion model
+   */
+  readonly fields: SitemapExclusionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SitemapExclusion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SitemapExclusionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    site<T extends SiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SiteDefaultArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends SitemapExclusion$createdByArgs<ExtArgs> = {}>(args?: Subset<T, SitemapExclusion$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SitemapExclusion model
+   */
+  interface SitemapExclusionFieldRefs {
+    readonly id: FieldRef<"SitemapExclusion", 'String'>
+    readonly siteId: FieldRef<"SitemapExclusion", 'String'>
+    readonly path: FieldRef<"SitemapExclusion", 'String'>
+    readonly reason: FieldRef<"SitemapExclusion", 'String'>
+    readonly createdById: FieldRef<"SitemapExclusion", 'String'>
+    readonly createdAt: FieldRef<"SitemapExclusion", 'DateTime'>
+    readonly updatedAt: FieldRef<"SitemapExclusion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SitemapExclusion findUnique
+   */
+  export type SitemapExclusionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitemapExclusion to fetch.
+     */
+    where: SitemapExclusionWhereUniqueInput
+  }
+
+  /**
+   * SitemapExclusion findUniqueOrThrow
+   */
+  export type SitemapExclusionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitemapExclusion to fetch.
+     */
+    where: SitemapExclusionWhereUniqueInput
+  }
+
+  /**
+   * SitemapExclusion findFirst
+   */
+  export type SitemapExclusionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitemapExclusion to fetch.
+     */
+    where?: SitemapExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitemapExclusions to fetch.
+     */
+    orderBy?: SitemapExclusionOrderByWithRelationInput | SitemapExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SitemapExclusions.
+     */
+    cursor?: SitemapExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitemapExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitemapExclusions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitemapExclusions.
+     */
+    distinct?: SitemapExclusionScalarFieldEnum | SitemapExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * SitemapExclusion findFirstOrThrow
+   */
+  export type SitemapExclusionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitemapExclusion to fetch.
+     */
+    where?: SitemapExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitemapExclusions to fetch.
+     */
+    orderBy?: SitemapExclusionOrderByWithRelationInput | SitemapExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SitemapExclusions.
+     */
+    cursor?: SitemapExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitemapExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitemapExclusions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitemapExclusions.
+     */
+    distinct?: SitemapExclusionScalarFieldEnum | SitemapExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * SitemapExclusion findMany
+   */
+  export type SitemapExclusionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
+    /**
+     * Filter, which SitemapExclusions to fetch.
+     */
+    where?: SitemapExclusionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitemapExclusions to fetch.
+     */
+    orderBy?: SitemapExclusionOrderByWithRelationInput | SitemapExclusionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SitemapExclusions.
+     */
+    cursor?: SitemapExclusionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitemapExclusions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitemapExclusions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitemapExclusions.
+     */
+    distinct?: SitemapExclusionScalarFieldEnum | SitemapExclusionScalarFieldEnum[]
+  }
+
+  /**
+   * SitemapExclusion create
+   */
+  export type SitemapExclusionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SitemapExclusion.
+     */
+    data: XOR<SitemapExclusionCreateInput, SitemapExclusionUncheckedCreateInput>
+  }
+
+  /**
+   * SitemapExclusion createMany
+   */
+  export type SitemapExclusionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SitemapExclusions.
+     */
+    data: SitemapExclusionCreateManyInput | SitemapExclusionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SitemapExclusion createManyAndReturn
+   */
+  export type SitemapExclusionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * The data used to create many SitemapExclusions.
+     */
+    data: SitemapExclusionCreateManyInput | SitemapExclusionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SitemapExclusion update
+   */
+  export type SitemapExclusionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SitemapExclusion.
+     */
+    data: XOR<SitemapExclusionUpdateInput, SitemapExclusionUncheckedUpdateInput>
+    /**
+     * Choose, which SitemapExclusion to update.
+     */
+    where: SitemapExclusionWhereUniqueInput
+  }
+
+  /**
+   * SitemapExclusion updateMany
+   */
+  export type SitemapExclusionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SitemapExclusions.
+     */
+    data: XOR<SitemapExclusionUpdateManyMutationInput, SitemapExclusionUncheckedUpdateManyInput>
+    /**
+     * Filter which SitemapExclusions to update
+     */
+    where?: SitemapExclusionWhereInput
+    /**
+     * Limit how many SitemapExclusions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SitemapExclusion updateManyAndReturn
+   */
+  export type SitemapExclusionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * The data used to update SitemapExclusions.
+     */
+    data: XOR<SitemapExclusionUpdateManyMutationInput, SitemapExclusionUncheckedUpdateManyInput>
+    /**
+     * Filter which SitemapExclusions to update
+     */
+    where?: SitemapExclusionWhereInput
+    /**
+     * Limit how many SitemapExclusions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SitemapExclusion upsert
+   */
+  export type SitemapExclusionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SitemapExclusion to update in case it exists.
+     */
+    where: SitemapExclusionWhereUniqueInput
+    /**
+     * In case the SitemapExclusion found by the `where` argument doesn't exist, create a new SitemapExclusion with this data.
+     */
+    create: XOR<SitemapExclusionCreateInput, SitemapExclusionUncheckedCreateInput>
+    /**
+     * In case the SitemapExclusion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SitemapExclusionUpdateInput, SitemapExclusionUncheckedUpdateInput>
+  }
+
+  /**
+   * SitemapExclusion delete
+   */
+  export type SitemapExclusionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
+    /**
+     * Filter which SitemapExclusion to delete.
+     */
+    where: SitemapExclusionWhereUniqueInput
+  }
+
+  /**
+   * SitemapExclusion deleteMany
+   */
+  export type SitemapExclusionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SitemapExclusions to delete
+     */
+    where?: SitemapExclusionWhereInput
+    /**
+     * Limit how many SitemapExclusions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SitemapExclusion.createdBy
+   */
+  export type SitemapExclusion$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * SitemapExclusion without action
+   */
+  export type SitemapExclusionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
   }
 
 
@@ -30238,6 +31491,7 @@ export namespace Prisma {
     contentRevisions?: boolean | User$contentRevisionsArgs<ExtArgs>
     publications?: boolean | User$publicationsArgs<ExtArgs>
     auditEvents?: boolean | User$auditEventsArgs<ExtArgs>
+    sitemapExclusionsCreated?: boolean | User$sitemapExclusionsCreatedArgs<ExtArgs>
     tariffImportsApplied?: boolean | User$tariffImportsAppliedArgs<ExtArgs>
     tariffImportsUndone?: boolean | User$tariffImportsUndoneArgs<ExtArgs>
     cityImportsApplied?: boolean | User$cityImportsAppliedArgs<ExtArgs>
@@ -30281,6 +31535,7 @@ export namespace Prisma {
     contentRevisions?: boolean | User$contentRevisionsArgs<ExtArgs>
     publications?: boolean | User$publicationsArgs<ExtArgs>
     auditEvents?: boolean | User$auditEventsArgs<ExtArgs>
+    sitemapExclusionsCreated?: boolean | User$sitemapExclusionsCreatedArgs<ExtArgs>
     tariffImportsApplied?: boolean | User$tariffImportsAppliedArgs<ExtArgs>
     tariffImportsUndone?: boolean | User$tariffImportsUndoneArgs<ExtArgs>
     cityImportsApplied?: boolean | User$cityImportsAppliedArgs<ExtArgs>
@@ -30297,6 +31552,7 @@ export namespace Prisma {
       contentRevisions: Prisma.$ContentRevisionPayload<ExtArgs>[]
       publications: Prisma.$SitePublicationPayload<ExtArgs>[]
       auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
+      sitemapExclusionsCreated: Prisma.$SitemapExclusionPayload<ExtArgs>[]
       tariffImportsApplied: Prisma.$TariffImportRunPayload<ExtArgs>[]
       tariffImportsUndone: Prisma.$TariffImportRunPayload<ExtArgs>[]
       cityImportsApplied: Prisma.$CityImportRunPayload<ExtArgs>[]
@@ -30708,6 +31964,7 @@ export namespace Prisma {
     contentRevisions<T extends User$contentRevisionsArgs<ExtArgs> = {}>(args?: Subset<T, User$contentRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     publications<T extends User$publicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     auditEvents<T extends User$auditEventsArgs<ExtArgs> = {}>(args?: Subset<T, User$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sitemapExclusionsCreated<T extends User$sitemapExclusionsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$sitemapExclusionsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tariffImportsApplied<T extends User$tariffImportsAppliedArgs<ExtArgs> = {}>(args?: Subset<T, User$tariffImportsAppliedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TariffImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tariffImportsUndone<T extends User$tariffImportsUndoneArgs<ExtArgs> = {}>(args?: Subset<T, User$tariffImportsUndoneArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TariffImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cityImportsApplied<T extends User$cityImportsAppliedArgs<ExtArgs> = {}>(args?: Subset<T, User$cityImportsAppliedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CityImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -31234,6 +32491,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AuditEventScalarFieldEnum | AuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * User.sitemapExclusionsCreated
+   */
+  export type User$sitemapExclusionsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitemapExclusion
+     */
+    select?: SitemapExclusionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitemapExclusion
+     */
+    omit?: SitemapExclusionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitemapExclusionInclude<ExtArgs> | null
+    where?: SitemapExclusionWhereInput
+    orderBy?: SitemapExclusionOrderByWithRelationInput | SitemapExclusionOrderByWithRelationInput[]
+    cursor?: SitemapExclusionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SitemapExclusionScalarFieldEnum | SitemapExclusionScalarFieldEnum[]
   }
 
   /**
@@ -32458,6 +33739,19 @@ export namespace Prisma {
   export type SiteScalarFieldEnum = (typeof SiteScalarFieldEnum)[keyof typeof SiteScalarFieldEnum]
 
 
+  export const SitemapExclusionScalarFieldEnum: {
+    id: 'id',
+    siteId: 'siteId',
+    path: 'path',
+    reason: 'reason',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SitemapExclusionScalarFieldEnum = (typeof SitemapExclusionScalarFieldEnum)[keyof typeof SitemapExclusionScalarFieldEnum]
+
+
   export const SiteRebuildScalarFieldEnum: {
     id: 'id',
     siteId: 'siteId',
@@ -33305,6 +34599,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionListRelationFilter
     publications?: SitePublicationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
+    sitemapExclusions?: SitemapExclusionListRelationFilter
   }
 
   export type SiteOrderByWithRelationInput = {
@@ -33331,6 +34626,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionOrderByRelationAggregateInput
     publications?: SitePublicationOrderByRelationAggregateInput
     auditEvents?: AuditEventOrderByRelationAggregateInput
+    sitemapExclusions?: SitemapExclusionOrderByRelationAggregateInput
   }
 
   export type SiteWhereUniqueInput = Prisma.AtLeast<{
@@ -33360,6 +34656,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionListRelationFilter
     publications?: SitePublicationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
+    sitemapExclusions?: SitemapExclusionListRelationFilter
   }, "id" | "slug">
 
   export type SiteOrderByWithAggregationInput = {
@@ -33396,6 +34693,75 @@ export namespace Prisma {
     publishedRevision?: IntWithAggregatesFilter<"Site"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Site"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Site"> | Date | string
+  }
+
+  export type SitemapExclusionWhereInput = {
+    AND?: SitemapExclusionWhereInput | SitemapExclusionWhereInput[]
+    OR?: SitemapExclusionWhereInput[]
+    NOT?: SitemapExclusionWhereInput | SitemapExclusionWhereInput[]
+    id?: StringFilter<"SitemapExclusion"> | string
+    siteId?: StringFilter<"SitemapExclusion"> | string
+    path?: StringFilter<"SitemapExclusion"> | string
+    reason?: StringFilter<"SitemapExclusion"> | string
+    createdById?: StringNullableFilter<"SitemapExclusion"> | string | null
+    createdAt?: DateTimeFilter<"SitemapExclusion"> | Date | string
+    updatedAt?: DateTimeFilter<"SitemapExclusion"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type SitemapExclusionOrderByWithRelationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    path?: SortOrder
+    reason?: SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    site?: SiteOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+  }
+
+  export type SitemapExclusionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    siteId_path?: SitemapExclusionSiteIdPathCompoundUniqueInput
+    AND?: SitemapExclusionWhereInput | SitemapExclusionWhereInput[]
+    OR?: SitemapExclusionWhereInput[]
+    NOT?: SitemapExclusionWhereInput | SitemapExclusionWhereInput[]
+    siteId?: StringFilter<"SitemapExclusion"> | string
+    path?: StringFilter<"SitemapExclusion"> | string
+    reason?: StringFilter<"SitemapExclusion"> | string
+    createdById?: StringNullableFilter<"SitemapExclusion"> | string | null
+    createdAt?: DateTimeFilter<"SitemapExclusion"> | Date | string
+    updatedAt?: DateTimeFilter<"SitemapExclusion"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "siteId_path">
+
+  export type SitemapExclusionOrderByWithAggregationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    path?: SortOrder
+    reason?: SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SitemapExclusionCountOrderByAggregateInput
+    _max?: SitemapExclusionMaxOrderByAggregateInput
+    _min?: SitemapExclusionMinOrderByAggregateInput
+  }
+
+  export type SitemapExclusionScalarWhereWithAggregatesInput = {
+    AND?: SitemapExclusionScalarWhereWithAggregatesInput | SitemapExclusionScalarWhereWithAggregatesInput[]
+    OR?: SitemapExclusionScalarWhereWithAggregatesInput[]
+    NOT?: SitemapExclusionScalarWhereWithAggregatesInput | SitemapExclusionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SitemapExclusion"> | string
+    siteId?: StringWithAggregatesFilter<"SitemapExclusion"> | string
+    path?: StringWithAggregatesFilter<"SitemapExclusion"> | string
+    reason?: StringWithAggregatesFilter<"SitemapExclusion"> | string
+    createdById?: StringNullableWithAggregatesFilter<"SitemapExclusion"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SitemapExclusion"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SitemapExclusion"> | Date | string
   }
 
   export type SiteRebuildWhereInput = {
@@ -35410,6 +36776,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionListRelationFilter
     publications?: SitePublicationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
+    sitemapExclusionsCreated?: SitemapExclusionListRelationFilter
     tariffImportsApplied?: TariffImportRunListRelationFilter
     tariffImportsUndone?: TariffImportRunListRelationFilter
     cityImportsApplied?: CityImportRunListRelationFilter
@@ -35428,6 +36795,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionOrderByRelationAggregateInput
     publications?: SitePublicationOrderByRelationAggregateInput
     auditEvents?: AuditEventOrderByRelationAggregateInput
+    sitemapExclusionsCreated?: SitemapExclusionOrderByRelationAggregateInput
     tariffImportsApplied?: TariffImportRunOrderByRelationAggregateInput
     tariffImportsUndone?: TariffImportRunOrderByRelationAggregateInput
     cityImportsApplied?: CityImportRunOrderByRelationAggregateInput
@@ -35449,6 +36817,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionListRelationFilter
     publications?: SitePublicationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
+    sitemapExclusionsCreated?: SitemapExclusionListRelationFilter
     tariffImportsApplied?: TariffImportRunListRelationFilter
     tariffImportsUndone?: TariffImportRunListRelationFilter
     cityImportsApplied?: CityImportRunListRelationFilter
@@ -35641,6 +37010,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateInput = {
@@ -35666,6 +37036,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUpdateInput = {
@@ -35691,6 +37062,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateInput = {
@@ -35716,6 +37088,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteCreateManyInput = {
@@ -35755,6 +37128,74 @@ export namespace Prisma {
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
     publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SitemapExclusionCreateInput = {
+    id?: string
+    path: string
+    reason: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutSitemapExclusionsInput
+    createdBy?: UserCreateNestedOneWithoutSitemapExclusionsCreatedInput
+  }
+
+  export type SitemapExclusionUncheckedCreateInput = {
+    id?: string
+    siteId: string
+    path: string
+    reason: string
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SitemapExclusionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutSitemapExclusionsNestedInput
+    createdBy?: UserUpdateOneWithoutSitemapExclusionsCreatedNestedInput
+  }
+
+  export type SitemapExclusionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SitemapExclusionCreateManyInput = {
+    id?: string
+    siteId: string
+    path: string
+    reason: string
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SitemapExclusionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SitemapExclusionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -37988,6 +39429,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
@@ -38006,6 +39448,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -38024,6 +39467,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
@@ -38042,6 +39486,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -38405,6 +39850,12 @@ export namespace Prisma {
     none?: AuditEventWhereInput
   }
 
+  export type SitemapExclusionListRelationFilter = {
+    every?: SitemapExclusionWhereInput
+    some?: SitemapExclusionWhereInput
+    none?: SitemapExclusionWhereInput
+  }
+
   export type RegionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -38446,6 +39897,10 @@ export namespace Prisma {
   }
 
   export type AuditEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SitemapExclusionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -38541,6 +39996,51 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type SiteScalarRelationFilter = {
+    is?: SiteWhereInput
+    isNot?: SiteWhereInput
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type SitemapExclusionSiteIdPathCompoundUniqueInput = {
+    siteId: string
+    path: string
+  }
+
+  export type SitemapExclusionCountOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    path?: SortOrder
+    reason?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SitemapExclusionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    path?: SortOrder
+    reason?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SitemapExclusionMinOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    path?: SortOrder
+    reason?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EnumSiteRebuildStatusFilter<$PrismaModel = never> = {
@@ -38749,16 +40249,6 @@ export namespace Prisma {
     in?: $Enums.ContentRevisionAction[] | ListEnumContentRevisionActionFieldRefInput<$PrismaModel>
     notIn?: $Enums.ContentRevisionAction[] | ListEnumContentRevisionActionFieldRefInput<$PrismaModel>
     not?: NestedEnumContentRevisionActionFilter<$PrismaModel> | $Enums.ContentRevisionAction
-  }
-
-  export type SiteScalarRelationFilter = {
-    is?: SiteWhereInput
-    isNot?: SiteWhereInput
-  }
-
-  export type UserNullableScalarRelationFilter = {
-    is?: UserWhereInput | null
-    isNot?: UserWhereInput | null
   }
 
   export type ContentRevisionEntityTypeEntityIdEntityRevisionCompoundUniqueInput = {
@@ -40417,6 +41907,13 @@ export namespace Prisma {
     connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
   }
 
+  export type SitemapExclusionCreateNestedManyWithoutSiteInput = {
+    create?: XOR<SitemapExclusionCreateWithoutSiteInput, SitemapExclusionUncheckedCreateWithoutSiteInput> | SitemapExclusionCreateWithoutSiteInput[] | SitemapExclusionUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitemapExclusionCreateOrConnectWithoutSiteInput | SitemapExclusionCreateOrConnectWithoutSiteInput[]
+    createMany?: SitemapExclusionCreateManySiteInputEnvelope
+    connect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+  }
+
   export type RegionUncheckedCreateNestedManyWithoutSiteInput = {
     create?: XOR<RegionCreateWithoutSiteInput, RegionUncheckedCreateWithoutSiteInput> | RegionCreateWithoutSiteInput[] | RegionUncheckedCreateWithoutSiteInput[]
     connectOrCreate?: RegionCreateOrConnectWithoutSiteInput | RegionCreateOrConnectWithoutSiteInput[]
@@ -40492,6 +41989,13 @@ export namespace Prisma {
     connectOrCreate?: AuditEventCreateOrConnectWithoutSiteInput | AuditEventCreateOrConnectWithoutSiteInput[]
     createMany?: AuditEventCreateManySiteInputEnvelope
     connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+  }
+
+  export type SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput = {
+    create?: XOR<SitemapExclusionCreateWithoutSiteInput, SitemapExclusionUncheckedCreateWithoutSiteInput> | SitemapExclusionCreateWithoutSiteInput[] | SitemapExclusionUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitemapExclusionCreateOrConnectWithoutSiteInput | SitemapExclusionCreateOrConnectWithoutSiteInput[]
+    createMany?: SitemapExclusionCreateManySiteInputEnvelope
+    connect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -40672,6 +42176,20 @@ export namespace Prisma {
     deleteMany?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
   }
 
+  export type SitemapExclusionUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<SitemapExclusionCreateWithoutSiteInput, SitemapExclusionUncheckedCreateWithoutSiteInput> | SitemapExclusionCreateWithoutSiteInput[] | SitemapExclusionUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitemapExclusionCreateOrConnectWithoutSiteInput | SitemapExclusionCreateOrConnectWithoutSiteInput[]
+    upsert?: SitemapExclusionUpsertWithWhereUniqueWithoutSiteInput | SitemapExclusionUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: SitemapExclusionCreateManySiteInputEnvelope
+    set?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    disconnect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    delete?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    connect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    update?: SitemapExclusionUpdateWithWhereUniqueWithoutSiteInput | SitemapExclusionUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: SitemapExclusionUpdateManyWithWhereWithoutSiteInput | SitemapExclusionUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: SitemapExclusionScalarWhereInput | SitemapExclusionScalarWhereInput[]
+  }
+
   export type RegionUncheckedUpdateManyWithoutSiteNestedInput = {
     create?: XOR<RegionCreateWithoutSiteInput, RegionUncheckedCreateWithoutSiteInput> | RegionCreateWithoutSiteInput[] | RegionUncheckedCreateWithoutSiteInput[]
     connectOrCreate?: RegionCreateOrConnectWithoutSiteInput | RegionCreateOrConnectWithoutSiteInput[]
@@ -40824,6 +42342,50 @@ export namespace Prisma {
     update?: AuditEventUpdateWithWhereUniqueWithoutSiteInput | AuditEventUpdateWithWhereUniqueWithoutSiteInput[]
     updateMany?: AuditEventUpdateManyWithWhereWithoutSiteInput | AuditEventUpdateManyWithWhereWithoutSiteInput[]
     deleteMany?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
+  }
+
+  export type SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<SitemapExclusionCreateWithoutSiteInput, SitemapExclusionUncheckedCreateWithoutSiteInput> | SitemapExclusionCreateWithoutSiteInput[] | SitemapExclusionUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitemapExclusionCreateOrConnectWithoutSiteInput | SitemapExclusionCreateOrConnectWithoutSiteInput[]
+    upsert?: SitemapExclusionUpsertWithWhereUniqueWithoutSiteInput | SitemapExclusionUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: SitemapExclusionCreateManySiteInputEnvelope
+    set?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    disconnect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    delete?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    connect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    update?: SitemapExclusionUpdateWithWhereUniqueWithoutSiteInput | SitemapExclusionUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: SitemapExclusionUpdateManyWithWhereWithoutSiteInput | SitemapExclusionUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: SitemapExclusionScalarWhereInput | SitemapExclusionScalarWhereInput[]
+  }
+
+  export type SiteCreateNestedOneWithoutSitemapExclusionsInput = {
+    create?: XOR<SiteCreateWithoutSitemapExclusionsInput, SiteUncheckedCreateWithoutSitemapExclusionsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutSitemapExclusionsInput
+    connect?: SiteWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutSitemapExclusionsCreatedInput = {
+    create?: XOR<UserCreateWithoutSitemapExclusionsCreatedInput, UserUncheckedCreateWithoutSitemapExclusionsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSitemapExclusionsCreatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SiteUpdateOneRequiredWithoutSitemapExclusionsNestedInput = {
+    create?: XOR<SiteCreateWithoutSitemapExclusionsInput, SiteUncheckedCreateWithoutSitemapExclusionsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutSitemapExclusionsInput
+    upsert?: SiteUpsertWithoutSitemapExclusionsInput
+    connect?: SiteWhereUniqueInput
+    update?: XOR<XOR<SiteUpdateToOneWithWhereWithoutSitemapExclusionsInput, SiteUpdateWithoutSitemapExclusionsInput>, SiteUncheckedUpdateWithoutSitemapExclusionsInput>
+  }
+
+  export type UserUpdateOneWithoutSitemapExclusionsCreatedNestedInput = {
+    create?: XOR<UserCreateWithoutSitemapExclusionsCreatedInput, UserUncheckedCreateWithoutSitemapExclusionsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSitemapExclusionsCreatedInput
+    upsert?: UserUpsertWithoutSitemapExclusionsCreatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSitemapExclusionsCreatedInput, UserUpdateWithoutSitemapExclusionsCreatedInput>, UserUncheckedUpdateWithoutSitemapExclusionsCreatedInput>
   }
 
   export type SiteCreateNestedOneWithoutRebuildsInput = {
@@ -42368,6 +43930,13 @@ export namespace Prisma {
     connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
   }
 
+  export type SitemapExclusionCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<SitemapExclusionCreateWithoutCreatedByInput, SitemapExclusionUncheckedCreateWithoutCreatedByInput> | SitemapExclusionCreateWithoutCreatedByInput[] | SitemapExclusionUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: SitemapExclusionCreateOrConnectWithoutCreatedByInput | SitemapExclusionCreateOrConnectWithoutCreatedByInput[]
+    createMany?: SitemapExclusionCreateManyCreatedByInputEnvelope
+    connect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+  }
+
   export type TariffImportRunCreateNestedManyWithoutAppliedByInput = {
     create?: XOR<TariffImportRunCreateWithoutAppliedByInput, TariffImportRunUncheckedCreateWithoutAppliedByInput> | TariffImportRunCreateWithoutAppliedByInput[] | TariffImportRunUncheckedCreateWithoutAppliedByInput[]
     connectOrCreate?: TariffImportRunCreateOrConnectWithoutAppliedByInput | TariffImportRunCreateOrConnectWithoutAppliedByInput[]
@@ -42422,6 +43991,13 @@ export namespace Prisma {
     connectOrCreate?: AuditEventCreateOrConnectWithoutActorInput | AuditEventCreateOrConnectWithoutActorInput[]
     createMany?: AuditEventCreateManyActorInputEnvelope
     connect?: AuditEventWhereUniqueInput | AuditEventWhereUniqueInput[]
+  }
+
+  export type SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<SitemapExclusionCreateWithoutCreatedByInput, SitemapExclusionUncheckedCreateWithoutCreatedByInput> | SitemapExclusionCreateWithoutCreatedByInput[] | SitemapExclusionUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: SitemapExclusionCreateOrConnectWithoutCreatedByInput | SitemapExclusionCreateOrConnectWithoutCreatedByInput[]
+    createMany?: SitemapExclusionCreateManyCreatedByInputEnvelope
+    connect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
   }
 
   export type TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput = {
@@ -42506,6 +44082,20 @@ export namespace Prisma {
     update?: AuditEventUpdateWithWhereUniqueWithoutActorInput | AuditEventUpdateWithWhereUniqueWithoutActorInput[]
     updateMany?: AuditEventUpdateManyWithWhereWithoutActorInput | AuditEventUpdateManyWithWhereWithoutActorInput[]
     deleteMany?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
+  }
+
+  export type SitemapExclusionUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<SitemapExclusionCreateWithoutCreatedByInput, SitemapExclusionUncheckedCreateWithoutCreatedByInput> | SitemapExclusionCreateWithoutCreatedByInput[] | SitemapExclusionUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: SitemapExclusionCreateOrConnectWithoutCreatedByInput | SitemapExclusionCreateOrConnectWithoutCreatedByInput[]
+    upsert?: SitemapExclusionUpsertWithWhereUniqueWithoutCreatedByInput | SitemapExclusionUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: SitemapExclusionCreateManyCreatedByInputEnvelope
+    set?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    disconnect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    delete?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    connect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    update?: SitemapExclusionUpdateWithWhereUniqueWithoutCreatedByInput | SitemapExclusionUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: SitemapExclusionUpdateManyWithWhereWithoutCreatedByInput | SitemapExclusionUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: SitemapExclusionScalarWhereInput | SitemapExclusionScalarWhereInput[]
   }
 
   export type TariffImportRunUpdateManyWithoutAppliedByNestedInput = {
@@ -42618,6 +44208,20 @@ export namespace Prisma {
     update?: AuditEventUpdateWithWhereUniqueWithoutActorInput | AuditEventUpdateWithWhereUniqueWithoutActorInput[]
     updateMany?: AuditEventUpdateManyWithWhereWithoutActorInput | AuditEventUpdateManyWithWhereWithoutActorInput[]
     deleteMany?: AuditEventScalarWhereInput | AuditEventScalarWhereInput[]
+  }
+
+  export type SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<SitemapExclusionCreateWithoutCreatedByInput, SitemapExclusionUncheckedCreateWithoutCreatedByInput> | SitemapExclusionCreateWithoutCreatedByInput[] | SitemapExclusionUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: SitemapExclusionCreateOrConnectWithoutCreatedByInput | SitemapExclusionCreateOrConnectWithoutCreatedByInput[]
+    upsert?: SitemapExclusionUpsertWithWhereUniqueWithoutCreatedByInput | SitemapExclusionUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: SitemapExclusionCreateManyCreatedByInputEnvelope
+    set?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    disconnect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    delete?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    connect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+    update?: SitemapExclusionUpdateWithWhereUniqueWithoutCreatedByInput | SitemapExclusionUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: SitemapExclusionUpdateManyWithWhereWithoutCreatedByInput | SitemapExclusionUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: SitemapExclusionScalarWhereInput | SitemapExclusionScalarWhereInput[]
   }
 
   export type TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput = {
@@ -43275,6 +44879,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutProviderInput = {
@@ -43299,6 +44904,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutProviderInput = {
@@ -44077,6 +45683,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SitemapExclusionCreateWithoutSiteInput = {
+    id?: string
+    path: string
+    reason: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutSitemapExclusionsCreatedInput
+  }
+
+  export type SitemapExclusionUncheckedCreateWithoutSiteInput = {
+    id?: string
+    path: string
+    reason: string
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SitemapExclusionCreateOrConnectWithoutSiteInput = {
+    where: SitemapExclusionWhereUniqueInput
+    create: XOR<SitemapExclusionCreateWithoutSiteInput, SitemapExclusionUncheckedCreateWithoutSiteInput>
+  }
+
+  export type SitemapExclusionCreateManySiteInputEnvelope = {
+    data: SitemapExclusionCreateManySiteInput | SitemapExclusionCreateManySiteInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProviderUpsertWithoutSitesInput = {
     update: XOR<ProviderUpdateWithoutSitesInput, ProviderUncheckedUpdateWithoutSitesInput>
     create: XOR<ProviderCreateWithoutSitesInput, ProviderUncheckedCreateWithoutSitesInput>
@@ -44519,6 +46153,239 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"AuditEvent"> | Date | string
   }
 
+  export type SitemapExclusionUpsertWithWhereUniqueWithoutSiteInput = {
+    where: SitemapExclusionWhereUniqueInput
+    update: XOR<SitemapExclusionUpdateWithoutSiteInput, SitemapExclusionUncheckedUpdateWithoutSiteInput>
+    create: XOR<SitemapExclusionCreateWithoutSiteInput, SitemapExclusionUncheckedCreateWithoutSiteInput>
+  }
+
+  export type SitemapExclusionUpdateWithWhereUniqueWithoutSiteInput = {
+    where: SitemapExclusionWhereUniqueInput
+    data: XOR<SitemapExclusionUpdateWithoutSiteInput, SitemapExclusionUncheckedUpdateWithoutSiteInput>
+  }
+
+  export type SitemapExclusionUpdateManyWithWhereWithoutSiteInput = {
+    where: SitemapExclusionScalarWhereInput
+    data: XOR<SitemapExclusionUpdateManyMutationInput, SitemapExclusionUncheckedUpdateManyWithoutSiteInput>
+  }
+
+  export type SitemapExclusionScalarWhereInput = {
+    AND?: SitemapExclusionScalarWhereInput | SitemapExclusionScalarWhereInput[]
+    OR?: SitemapExclusionScalarWhereInput[]
+    NOT?: SitemapExclusionScalarWhereInput | SitemapExclusionScalarWhereInput[]
+    id?: StringFilter<"SitemapExclusion"> | string
+    siteId?: StringFilter<"SitemapExclusion"> | string
+    path?: StringFilter<"SitemapExclusion"> | string
+    reason?: StringFilter<"SitemapExclusion"> | string
+    createdById?: StringNullableFilter<"SitemapExclusion"> | string | null
+    createdAt?: DateTimeFilter<"SitemapExclusion"> | Date | string
+    updatedAt?: DateTimeFilter<"SitemapExclusion"> | Date | string
+  }
+
+  export type SiteCreateWithoutSitemapExclusionsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    provider: ProviderCreateNestedOneWithoutSitesInput
+    regions?: RegionCreateNestedManyWithoutSiteInput
+    cities?: CityCreateNestedManyWithoutSiteInput
+    pages?: PageCreateNestedManyWithoutSiteInput
+    leads?: LeadCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckCreateNestedManyWithoutSiteInput
+    redirects?: RedirectCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteUncheckedCreateWithoutSitemapExclusionsInput = {
+    id?: string
+    providerId: string
+    name: string
+    slug: string
+    domain?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
+    cities?: CityUncheckedCreateNestedManyWithoutSiteInput
+    pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
+    redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteCreateOrConnectWithoutSitemapExclusionsInput = {
+    where: SiteWhereUniqueInput
+    create: XOR<SiteCreateWithoutSitemapExclusionsInput, SiteUncheckedCreateWithoutSitemapExclusionsInput>
+  }
+
+  export type UserCreateWithoutSitemapExclusionsCreatedInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
+    publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
+  }
+
+  export type UserUncheckedCreateWithoutSitemapExclusionsCreatedInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+  }
+
+  export type UserCreateOrConnectWithoutSitemapExclusionsCreatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSitemapExclusionsCreatedInput, UserUncheckedCreateWithoutSitemapExclusionsCreatedInput>
+  }
+
+  export type SiteUpsertWithoutSitemapExclusionsInput = {
+    update: XOR<SiteUpdateWithoutSitemapExclusionsInput, SiteUncheckedUpdateWithoutSitemapExclusionsInput>
+    create: XOR<SiteCreateWithoutSitemapExclusionsInput, SiteUncheckedCreateWithoutSitemapExclusionsInput>
+    where?: SiteWhereInput
+  }
+
+  export type SiteUpdateToOneWithWhereWithoutSitemapExclusionsInput = {
+    where?: SiteWhereInput
+    data: XOR<SiteUpdateWithoutSitemapExclusionsInput, SiteUncheckedUpdateWithoutSitemapExclusionsInput>
+  }
+
+  export type SiteUpdateWithoutSitemapExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
+    regions?: RegionUpdateManyWithoutSiteNestedInput
+    cities?: CityUpdateManyWithoutSiteNestedInput
+    pages?: PageUpdateManyWithoutSiteNestedInput
+    leads?: LeadUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+  }
+
+  export type SiteUncheckedUpdateWithoutSitemapExclusionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
+    cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
+    pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+  }
+
+  export type UserUpsertWithoutSitemapExclusionsCreatedInput = {
+    update: XOR<UserUpdateWithoutSitemapExclusionsCreatedInput, UserUncheckedUpdateWithoutSitemapExclusionsCreatedInput>
+    create: XOR<UserCreateWithoutSitemapExclusionsCreatedInput, UserUncheckedCreateWithoutSitemapExclusionsCreatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSitemapExclusionsCreatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSitemapExclusionsCreatedInput, UserUncheckedUpdateWithoutSitemapExclusionsCreatedInput>
+  }
+
+  export type UserUpdateWithoutSitemapExclusionsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSitemapExclusionsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+  }
+
   export type SiteCreateWithoutRebuildsInput = {
     id?: string
     name: string
@@ -44541,6 +46408,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutRebuildsInput = {
@@ -44565,6 +46433,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutRebuildsInput = {
@@ -44746,6 +46615,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutRebuildsInput = {
@@ -44770,6 +46640,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SitePublicationUpsertWithoutRequestedRebuildsInput = {
@@ -44953,6 +46824,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutContentRevisionsInput = {
@@ -44977,6 +46849,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutContentRevisionsInput = {
@@ -44995,6 +46868,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
@@ -45012,6 +46886,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -45056,6 +46931,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutContentRevisionsInput = {
@@ -45080,6 +46956,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type UserUpsertWithoutContentRevisionsInput = {
@@ -45104,6 +46981,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
@@ -45121,6 +46999,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -45149,6 +47028,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutPublicationsInput = {
@@ -45173,6 +47053,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutPublicationsInput = {
@@ -45191,6 +47072,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
@@ -45208,6 +47090,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -45438,6 +47321,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutPublicationsInput = {
@@ -45462,6 +47346,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type UserUpsertWithoutPublicationsInput = {
@@ -45486,6 +47371,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
@@ -45503,6 +47389,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -45579,6 +47466,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutAuditEventsInput = {
@@ -45603,6 +47491,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutAuditEventsInput = {
@@ -45621,6 +47510,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
@@ -45638,6 +47528,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -45682,6 +47573,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutAuditEventsInput = {
@@ -45706,6 +47598,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type UserUpsertWithoutAuditEventsInput = {
@@ -45730,6 +47623,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
@@ -45747,6 +47641,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -45775,6 +47670,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutRegionsInput = {
@@ -45799,6 +47695,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutRegionsInput = {
@@ -45895,6 +47792,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutRegionsInput = {
@@ -45919,6 +47817,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithWhereUniqueWithoutRegionInput = {
@@ -45959,6 +47858,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutCitiesInput = {
@@ -45983,6 +47883,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutCitiesInput = {
@@ -46304,6 +48205,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutCitiesInput = {
@@ -46328,6 +48230,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type RegionUpsertWithoutCitiesInput = {
@@ -46461,6 +48364,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutPagesInput = {
@@ -46485,6 +48389,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutPagesInput = {
@@ -46730,6 +48635,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutPagesInput = {
@@ -46754,6 +48660,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutPagesInput = {
@@ -47272,6 +49179,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
     cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
@@ -47289,6 +49197,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
@@ -47311,6 +49220,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
     cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
     cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
@@ -47328,6 +49238,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
@@ -47396,6 +49307,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
     cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
@@ -47413,6 +49325,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
@@ -47441,6 +49354,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
     cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
     cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
@@ -47458,6 +49372,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
@@ -47485,6 +49400,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutCityImportsInput = {
@@ -47509,6 +49425,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutCityImportsInput = {
@@ -47528,6 +49445,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
     cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
@@ -47545,6 +49463,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
     cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
@@ -47567,6 +49486,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
@@ -47584,6 +49504,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -47627,6 +49548,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutCityImportsInput = {
@@ -47651,6 +49573,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type UserUpsertWithoutCityImportsAppliedInput = {
@@ -47676,6 +49599,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
     cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
@@ -47693,6 +49617,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
     cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
@@ -47721,6 +49646,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
@@ -47738,6 +49664,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -47765,6 +49692,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutChecksInput = {
@@ -47789,6 +49717,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutChecksInput = {
@@ -48005,6 +49934,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutChecksInput = {
@@ -48029,6 +49959,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutChecksInput = {
@@ -48169,6 +50100,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutLeadsInput = {
@@ -48193,6 +50125,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutLeadsInput = {
@@ -48729,6 +50662,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutLeadsInput = {
@@ -48753,6 +50687,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutLeadsInput = {
@@ -49927,6 +51862,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutRedirectsInput = {
@@ -49951,6 +51887,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutRedirectsInput = {
@@ -50042,6 +51979,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutRedirectsInput = {
@@ -50066,6 +52004,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutRedirectsInput = {
@@ -50449,6 +52388,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SitemapExclusionCreateWithoutCreatedByInput = {
+    id?: string
+    path: string
+    reason: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutSitemapExclusionsInput
+  }
+
+  export type SitemapExclusionUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    siteId: string
+    path: string
+    reason: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SitemapExclusionCreateOrConnectWithoutCreatedByInput = {
+    where: SitemapExclusionWhereUniqueInput
+    create: XOR<SitemapExclusionCreateWithoutCreatedByInput, SitemapExclusionUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type SitemapExclusionCreateManyCreatedByInputEnvelope = {
+    data: SitemapExclusionCreateManyCreatedByInput | SitemapExclusionCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type TariffImportRunCreateWithoutAppliedByInput = {
     id?: string
     fileName: string
@@ -50708,6 +52675,22 @@ export namespace Prisma {
     data: XOR<AuditEventUpdateManyMutationInput, AuditEventUncheckedUpdateManyWithoutActorInput>
   }
 
+  export type SitemapExclusionUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: SitemapExclusionWhereUniqueInput
+    update: XOR<SitemapExclusionUpdateWithoutCreatedByInput, SitemapExclusionUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<SitemapExclusionCreateWithoutCreatedByInput, SitemapExclusionUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type SitemapExclusionUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: SitemapExclusionWhereUniqueInput
+    data: XOR<SitemapExclusionUpdateWithoutCreatedByInput, SitemapExclusionUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type SitemapExclusionUpdateManyWithWhereWithoutCreatedByInput = {
+    where: SitemapExclusionScalarWhereInput
+    data: XOR<SitemapExclusionUpdateManyMutationInput, SitemapExclusionUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
   export type TariffImportRunUpsertWithWhereUniqueWithoutAppliedByInput = {
     where: TariffImportRunWhereUniqueInput
     update: XOR<TariffImportRunUpdateWithoutAppliedByInput, TariffImportRunUncheckedUpdateWithoutAppliedByInput>
@@ -50783,6 +52766,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
@@ -50800,6 +52784,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
     cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -50833,6 +52818,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
@@ -50850,6 +52836,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -50931,6 +52918,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutProviderInput = {
@@ -50955,6 +52943,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateManyWithoutProviderInput = {
@@ -51277,6 +53266,15 @@ export namespace Prisma {
     source: string
     actorId?: string | null
     createdAt?: Date | string
+  }
+
+  export type SitemapExclusionCreateManySiteInput = {
+    id?: string
+    path: string
+    reason: string
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type RegionUpdateWithoutSiteInput = {
@@ -51876,6 +53874,33 @@ export namespace Prisma {
     source?: StringFieldUpdateOperationsInput | string
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SitemapExclusionUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutSitemapExclusionsCreatedNestedInput
+  }
+
+  export type SitemapExclusionUncheckedUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SitemapExclusionUncheckedUpdateManyWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SiteRebuildCreateManyRequestedPublicationInput = {
@@ -53537,6 +55562,15 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type SitemapExclusionCreateManyCreatedByInput = {
+    id?: string
+    siteId: string
+    path: string
+    reason: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type TariffImportRunCreateManyAppliedByInput = {
     id?: string
     providerId: string
@@ -53772,6 +55806,33 @@ export namespace Prisma {
     changes?: JsonNullValueInput | InputJsonValue
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SitemapExclusionUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutSitemapExclusionsNestedInput
+  }
+
+  export type SitemapExclusionUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SitemapExclusionUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TariffImportRunUpdateWithoutAppliedByInput = {

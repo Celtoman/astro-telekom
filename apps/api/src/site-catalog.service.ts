@@ -27,7 +27,7 @@ export class SiteCatalogService {
     });
     if (!site) throw new NotFoundException('Site not found');
 
-    const [cities, globalPages, redirects] = await Promise.all([
+    const [cities, globalPages, redirects, sitemapExclusions] = await Promise.all([
       client.city.findMany({
         where: { siteId: site.id, status: 'PUBLISHED' },
         orderBy: { name: 'asc' },
@@ -47,6 +47,11 @@ export class SiteCatalogService {
         orderBy: { sourcePath: 'asc' },
         select: { id: true, sourcePath: true, targetPath: true, status: true },
       }),
+      client.sitemapExclusion.findMany({
+        where: { siteId: site.id },
+        orderBy: { path: 'asc' },
+        select: { path: true },
+      }),
     ]);
 
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
@@ -55,6 +60,7 @@ export class SiteCatalogService {
       site: { name: site.name, slug: site.slug, domain: site.domain },
       globalPages: resolvedGlobalPages,
       routes,
+      sitemap: { excludedPaths: sitemapExclusions.map((item) => item.path) },
       redirects: this.effectiveRedirects(routes, redirects),
       cities: cities.map((city: any) => this.cityResponse(city, site)),
     };

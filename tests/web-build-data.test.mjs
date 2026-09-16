@@ -61,6 +61,7 @@ const apiFixture = {
     { id: 'CITY_TARIFF_DETAIL', kind: 'CITY_TARIFF_DETAIL', path: '/almetyevsk/almet-internet-300', citySlug: 'almetyevsk', tariffSlug: 'almet-internet-300' },
   ],
   redirects: [{ id: 'redirect-old-kazan', sourcePath: '/old-kazan/', targetPath: '/kazan/', status: 'PUBLISHED' }],
+  sitemap: { excludedPaths: ['/kazan/api-internet-tv-500'] },
   cities: [
     {
       name: 'Казань', namePrepositional: 'Казани', slug: 'kazan', phone: '8 (800) 555-35-35', supportPhone: '8 (800) 250-77-77', status: 'PUBLISHED', region: { name: 'Татарстан', slug: 'tatarstan' },
@@ -183,7 +184,7 @@ test('web build emits city and tariff detail inventory for every published city'
   await withApiFixture(async (apiUrl) => {
     const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, PUBLIC_YANDEX_METRIKA_ID: '12345678', ALLOW_DEMO_DATA: '' });
     assert.equal(build.code, 0, build.output);
-    assert.match(build.output, /Pre-publication SEO gate passed: 11 indexable URL\(s\), 12 HTML file\(s\)\./);
+    assert.match(build.output, /Pre-publication SEO gate passed: 10 indexable URL\(s\), 12 HTML file\(s\)\./);
   });
 
   const htmlFiles = (await collectTextFiles(webDist)).filter((path) => path.endsWith('.html'))
@@ -207,6 +208,9 @@ test('web build emits city and tariff detail inventory for every published city'
   const cookies = await readBuilt(join('politika-obrabotki-faylov-kuki', 'index.html'));
   const robots = await readBuilt('robots.txt');
   const sitemap = await readBuilt('sitemap.xml');
+  const sitemapPages = await readBuilt('sitemap-pages.xml');
+  const sitemapCities = await readBuilt('sitemap-cities.xml');
+  const sitemapTariffs = await readBuilt('sitemap-tariffs.xml');
   const notFound = await readBuilt('404.html');
   const redirectRoutes = await readBuilt('redirects.caddy');
   const addressFormSource = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'components', 'AddressForm.astro'), 'utf8');
@@ -300,14 +304,19 @@ test('web build emits city and tariff detail inventory for every published city'
 
   const sitemapLocations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
   assert.deepEqual(sitemapLocations, [
+    `${productionSite}/sitemap-pages.xml`, `${productionSite}/sitemap-cities.xml`, `${productionSite}/sitemap-tariffs.xml`,
+  ]);
+  assert.deepEqual([...sitemapPages.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]), [
     `${productionSite}/`, `${productionSite}/karta-pokrytiya-provaydera`, `${productionSite}/goroda-obsluzhivaniya`,
     `${productionSite}/politika-konfidencialnosti`, `${productionSite}/soglasie-na-obrabotku-personalnyh-dannyh`,
     `${productionSite}/politika-obrabotki-faylov-kuki`,
-    `${productionSite}/kazan`, `${productionSite}/kazan/api-internet-500`, `${productionSite}/kazan/api-internet-tv-500`,
-    `${productionSite}/almetyevsk`, `${productionSite}/almetyevsk/almet-internet-300`,
+  ]);
+  assert.deepEqual([...sitemapCities.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]), [`${productionSite}/kazan`, `${productionSite}/almetyevsk`]);
+  assert.deepEqual([...sitemapTariffs.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]), [
+    `${productionSite}/kazan/api-internet-500`, `${productionSite}/almetyevsk/almet-internet-300`,
   ]);
   assert.match(robots, /Sitemap: https:\/\/partner\.example\.test\/sitemap\.xml/);
-  assert.doesNotMatch(sitemap, /draft-tariff|draft-city|\/kazan\/internet<\/loc>/);
+  assert.doesNotMatch(`${sitemapPages}${sitemapCities}${sitemapTariffs}`, /draft-tariff|draft-city|\/kazan\/internet<\/loc>|api-internet-tv-500/);
   assert.match(notFound, /<meta name="robots" content="noindex, follow">/);
   assert.doesNotMatch(notFound, /rel="canonical"/);
   assert.match(redirectRoutes, /@redirect_0 path \/old-kazan \/old-kazan\//);

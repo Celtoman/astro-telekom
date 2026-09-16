@@ -1,8 +1,8 @@
-export type AdminSection = "overview" | "preview" | "tariffs" | "tariffs-import" | "cities" | "cities-import" | "leads" | "redirects" | "audit" | "trash"
-export type AdminNavigationIcon = "home" | "preview" | "tariffs" | "cities" | "catalog" | "import" | "leads" | "redirects" | "audit" | "trash"
+export type AdminSection = "overview" | "preview" | "tariffs" | "tariffs-import" | "cities" | "cities-import" | "leads" | "redirects" | "seo-sitemap" | "audit" | "trash"
+export type AdminNavigationIcon = "home" | "preview" | "tariffs" | "cities" | "catalog" | "import" | "leads" | "redirects" | "seo" | "sitemap" | "audit" | "trash"
 
 export interface AdminNavigationItem {
-  id: AdminSection | "tariffs" | "cities"
+  id: AdminSection | "tariffs" | "cities" | "seo"
   label: string
   href: string
   icon: AdminNavigationIcon

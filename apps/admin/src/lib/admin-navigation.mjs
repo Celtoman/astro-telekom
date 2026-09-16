@@ -26,6 +26,15 @@ export const adminNavigation = [
   },
   { id: "leads", label: "Заявки", href: "/leads", icon: "leads" },
   { id: "redirects", label: "Редиректы", href: "/redirects", icon: "redirects" },
+  {
+    id: "seo",
+    label: "SEO",
+    href: "/seo/sitemap",
+    icon: "seo",
+    children: [
+      { id: "seo-sitemap", label: "Sitemap", href: "/seo/sitemap", icon: "sitemap" },
+    ],
+  },
   { id: "audit", label: "История изменений", href: "/audit", icon: "audit" },
   { id: "trash", label: "Корзина", href: "/trash", icon: "trash" },
 ]

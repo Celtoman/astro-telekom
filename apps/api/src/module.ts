@@ -44,6 +44,8 @@ import { SiteCatalogService } from './site-catalog.service';
 import { PublicationWorkflowController } from './publication-workflow.controller';
 import { AdminAuditEventsController } from './admin-audit-events.controller';
 import { AdminTrashController } from './admin-trash.controller';
+import { AdminSitemapController } from './admin-sitemap.controller';
+import { SitemapService } from './sitemap.service';
 
 @Module({
   controllers: [
@@ -73,7 +75,8 @@ import { AdminTrashController } from './admin-trash.controller';
     PublicationWorkflowController,
     AdminAuditEventsController,
     AdminTrashController,
+    AdminSitemapController,
   ],
-  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, PublicationWorkflowService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

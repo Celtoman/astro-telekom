@@ -51,6 +51,7 @@ export interface SiteCatalog {
   routes: PublicRouteView[];
   cities: CityView[];
   redirects: RedirectView[];
+  sitemap: { excludedPaths: string[] };
 }
 
 export const publicSiteSlug = import.meta.env.PUBLIC_SITE_SLUG || 'domru-kazan';
@@ -180,6 +181,22 @@ function normalizeRedirects(value: unknown, routes: PublicRouteView[]): Redirect
   return redirects;
 }
 
+function normalizeSitemap(value: unknown, routes: PublicRouteView[]) {
+  const raw = value && typeof value === 'object' && Array.isArray((value as Record<string, unknown>).excludedPaths)
+    ? (value as { excludedPaths: unknown[] }).excludedPaths
+    : [];
+  const routePaths = new Set(routes.map((route) => route.path));
+  const excludedPaths = raw.map((item) => normalizePublicHtmlPath(String(item || '')));
+  const unique = new Set<string>();
+  for (const path of excludedPaths) {
+    if (path === '/') throw new Error('Корневой URL нельзя исключить из sitemap');
+    if (!routePaths.has(path)) throw new Error(`Sitemap исключает неизвестный опубликованный URL: ${path}`);
+    if (unique.has(path)) throw new Error(`Sitemap содержит дублирующее исключение: ${path}`);
+    unique.add(path);
+  }
+  return { excludedPaths: [...unique].sort() };
+}
+
 const demoGlobalPages: PageView[] = [
   { type: 'COVERAGE', slug: 'karta-pokrytiya-provaydera', title: 'Карта покрытия', status: 'PUBLISHED', content: { text: 'Выберите город и проверьте возможность подключения по адресу.' } },
   { type: 'CITIES', slug: 'goroda-obsluzhivaniya', title: 'Города обслуживания', status: 'PUBLISHED', content: { text: 'Список опубликованных городов обслуживания.' } },
@@ -217,6 +234,7 @@ const demoCatalog: SiteCatalog = {
   globalPages: demoGlobalPages,
   routes: demoRoutes,
   redirects: [],
+  sitemap: { excludedPaths: [] },
   cities: demoCities,
 };
 
@@ -258,6 +276,7 @@ function normalizedCatalog(value: unknown): SiteCatalog {
   const expectedRoutes = expectedReleaseOneRoutes(cities, globalPages);
   const routes = normalizeRoutes(payload.routes, expectedRoutes);
   const redirects = normalizeRedirects(payload.redirects, routes);
+  const sitemap = normalizeSitemap(payload.sitemap, routes);
   return {
     site: {
       name: String(payload.site.name || 'Дом.ру'),
@@ -268,6 +287,7 @@ function normalizedCatalog(value: unknown): SiteCatalog {
     routes,
     cities,
     redirects,
+    sitemap,
   };
 }
 
