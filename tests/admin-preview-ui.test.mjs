@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { buildPreviewDocument, previewRouteOptions } from '../apps/admin/src/lib/preview-document.mjs';
+import { adminNavigation } from '../apps/admin/src/lib/admin-navigation.mjs';
 
 const catalog = {
   site: { name: 'Дом.ру', slug: 'domru-kazan' },
@@ -68,10 +69,9 @@ test('preview renderer rejects a route outside the working release inventory', (
 });
 
 test('admin preview is a private sandboxed screen with three canonical viewport sizes', async () => {
-  const [component, route, shell] = await Promise.all([
+  const [component, route] = await Promise.all([
     readFile(new URL('../apps/admin/src/components/PreviewApp.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../apps/admin/src/pages/preview.astro', import.meta.url), 'utf8'),
-    readFile(new URL('../apps/admin/src/components/AdminShell.tsx', import.meta.url), 'utf8'),
   ]);
 
   assert.match(component, /preview-catalog/);
@@ -82,5 +82,5 @@ test('admin preview is a private sandboxed screen with three canonical viewport 
   assert.match(component, /Рабочая версия/);
   assert.doesNotMatch(component, /target="_blank"/);
   assert.match(route, /noindex, nofollow/);
-  assert.match(shell, /href="\/preview"/);
+  assert.equal(adminNavigation.find((item) => item.id === 'preview')?.href, '/preview');
 });

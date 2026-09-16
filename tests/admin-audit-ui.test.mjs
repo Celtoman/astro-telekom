@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { statusPresentation } from '../apps/admin/src/lib/status-presentation.mjs';
+import { adminNavigation } from '../apps/admin/src/lib/admin-navigation.mjs';
 
 const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 
@@ -11,9 +12,8 @@ test('audit route mounts an authenticated React workspace and is linked from the
   assert.equal(existsSync(routePath), true, 'audit route must exist');
   assert.match(readFileSync(routePath, 'utf8'), /<AuditApp[^>]+client:load/);
 
-  const shell = readFileSync(join(adminRoot, 'components', 'AdminShell.tsx'), 'utf8');
-  assert.match(shell, /href=["']\/audit["']/);
-  assert.match(shell, /История изменений/);
+  const item = adminNavigation.find((entry) => entry.id === 'audit');
+  assert.deepEqual({ href: item?.href, label: item?.label }, { href: '/audit', label: 'История изменений' });
 });
 
 test('audit workspace uses paginated list and detail APIs without unsafe browser credentials', () => {

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { adminNavigation } from '../apps/admin/src/lib/admin-navigation.mjs';
 
 const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 
@@ -11,11 +12,9 @@ test('tariffs route mounts the authenticated React workspace and is linked from 
   assert.equal(existsSync(routePath), true, 'tariffs route must exist');
   assert.match(readFileSync(routePath, 'utf8'), /<TariffsApp[^>]+client:load/);
 
-  const shell = readFileSync(join(adminRoot, 'components', 'AdminShell.tsx'), 'utf8');
-  assert.match(shell, /href=["']\/tariffs["']/);
-  const tariffNavigation = shell.split('\n').find((line) => line.includes('href="/tariffs"'));
-  assert.ok(tariffNavigation);
-  assert.doesNotMatch(tariffNavigation, /disabled/);
+  const tariffNavigation = adminNavigation.find((item) => item.id === 'tariffs');
+  assert.equal(tariffNavigation?.href, '/tariffs');
+  assert.deepEqual(tariffNavigation?.children?.map((item) => item.href), ['/tariffs', '/tariffs/import']);
 });
 
 test('tariff catalog and full-snapshot import are separate nested workspaces', () => {

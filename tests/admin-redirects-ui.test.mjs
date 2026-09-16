@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { adminNavigation } from '../apps/admin/src/lib/admin-navigation.mjs';
 
 const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 
@@ -10,9 +11,8 @@ test('redirects route mounts an authenticated React workspace and is linked from
   assert.equal(existsSync(routePath), true);
   assert.match(readFileSync(routePath, 'utf8'), /<RedirectsApp[^>]+client:load/);
 
-  const shell = readFileSync(join(adminRoot, 'components', 'AdminShell.tsx'), 'utf8');
-  assert.match(shell, /href=["']\/redirects["']/);
-  assert.match(shell, /Редиректы/);
+  const item = adminNavigation.find((entry) => entry.id === 'redirects');
+  assert.deepEqual({ href: item?.href, label: item?.label }, { href: '/redirects', label: 'Редиректы' });
 });
 
 test('redirects workspace uses real CRUD endpoints and shadcn primitives', () => {

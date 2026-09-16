@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { adminNavigation } from '../apps/admin/src/lib/admin-navigation.mjs';
 
 const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 
@@ -10,9 +11,8 @@ test('trash route mounts an authenticated React workspace and is linked from the
   assert.equal(existsSync(routePath), true, 'trash route must exist');
   assert.match(readFileSync(routePath, 'utf8'), /<TrashApp[^>]+client:load/);
 
-  const shell = readFileSync(join(adminRoot, 'components', 'AdminShell.tsx'), 'utf8');
-  assert.match(shell, /href=["']\/trash["']/);
-  assert.match(shell, /Корзина/);
+  const item = adminNavigation.find((entry) => entry.id === 'trash');
+  assert.deepEqual({ href: item?.href, label: item?.label }, { href: '/trash', label: 'Корзина' });
 });
 
 test('trash workspace reuses safe entity restore contracts and never hard-deletes content', () => {

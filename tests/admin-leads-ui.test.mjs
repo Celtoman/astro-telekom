@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { statusPresentation } from '../apps/admin/src/lib/status-presentation.mjs';
+import { adminNavigation } from '../apps/admin/src/lib/admin-navigation.mjs';
 
 const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 
@@ -11,11 +12,8 @@ test('leads route mounts the authenticated React workspace and is linked from th
   assert.equal(existsSync(routePath), true, 'leads route must exist');
   assert.match(readFileSync(routePath, 'utf8'), /<LeadsApp[^>]+client:load/);
 
-  const shell = readFileSync(join(adminRoot, 'components', 'AdminShell.tsx'), 'utf8');
-  assert.match(shell, /href=["']\/leads["']/);
-  const leadNavigation = shell.split('\n').find((line) => line.includes('href="/leads"'));
-  assert.ok(leadNavigation);
-  assert.doesNotMatch(leadNavigation, /disabled/);
+  const leadNavigation = adminNavigation.find((item) => item.id === 'leads');
+  assert.deepEqual({ href: leadNavigation?.href, label: leadNavigation?.label }, { href: '/leads', label: 'Заявки' });
 });
 
 test('lead workspace uses real list, detail and status endpoints without unsafe browser credentials', () => {

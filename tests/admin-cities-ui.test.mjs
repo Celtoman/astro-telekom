@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { adminNavigation } from '../apps/admin/src/lib/admin-navigation.mjs';
 
 const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 
@@ -14,11 +15,9 @@ test('city catalog and import have separate static routes', () => {
   assert.equal(existsSync(importRoutePath), true, 'city import route must exist');
   assert.match(readFileSync(importRoutePath, 'utf8'), /<CityImportApp[^>]+client:load/);
 
-  const shell = readFileSync(join(adminRoot, 'components', 'AdminShell.tsx'), 'utf8');
-  assert.match(shell, /href=["']\/cities["']/);
-  const cityNavigation = shell.split('\n').find((line) => line.includes('href="/cities"'));
-  assert.ok(cityNavigation);
-  assert.doesNotMatch(cityNavigation, /disabled/);
+  const cityNavigation = adminNavigation.find((item) => item.id === 'cities');
+  assert.equal(cityNavigation?.href, '/cities');
+  assert.deepEqual(cityNavigation?.children?.map((item) => item.href), ['/cities', '/cities/import']);
 });
 
 test('city catalog loads management controls and links to its separate import workflow', () => {
