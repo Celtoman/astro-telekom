@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { statusPresentation } from '../apps/admin/src/lib/status-presentation.mjs';
 
 const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 
@@ -53,19 +54,21 @@ test('lead workspace distinguishes the page source city from the submitted addre
   assert.match(accessSource, /Город страницы/);
 });
 
-test('lead workspace translates technical statuses and reads the real external lead fields', () => {
+test('lead workspace translates technical statuses through the shared presentation layer and reads real external lead fields', () => {
   const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
 
-  for (const label of [
-    'Дом.ру доступен по адресу',
-    'Действующий договор не найден',
-    'Очередь отправки',
-    'Успешно',
-    'Не удалось поставить в очередь',
-    'Создана в Tarifnik',
+  for (const [kind, value] of [
+    ['addressCheckStatus', 'AVAILABLE'],
+    ['contractStatus', 'NOT_FOUND'],
+    ['deliveryChannel', 'QUEUE'],
+    ['deliveryAttemptStatus', 'SUCCEEDED'],
+    ['leadProcessingStatus', 'DELIVERY_QUEUE_ERROR'],
+    ['externalLeadStatus', 'created'],
   ]) {
-    assert.ok(source.includes(label), `missing understandable label: ${label}`);
+    assert.equal(statusPresentation(kind, value).known, true, `missing understandable label: ${kind}.${value}`);
   }
+  assert.match(source, /StatusBadge/);
+  assert.match(source, /presentationText/);
   assert.match(source, /externalLeadId/);
   assert.match(source, /externalStatus/);
   assert.doesNotMatch(source, /recordText\(lead\.apiResult,\s*["']id["']\)/);
@@ -85,7 +88,7 @@ test('lead journal makes processing problems visible before opening a card', () 
 
   assert.match(source, /Требуют внимания/);
   assert.match(source, /<TableHead>Обработка<\/TableHead>/);
-  assert.match(source, /statusText\(processingLabels, lead\.processingStatus/);
+  assert.match(source, /<StatusBadge kind="leadProcessingStatus" value=\{lead\.processingStatus\}/);
 });
 
 test('lead workspace exposes notification status, safe technical details and manual retry', () => {

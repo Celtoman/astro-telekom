@@ -3,33 +3,17 @@ import { CalendarClock, CheckCircle2, CircleAlert, CloudUpload, LoaderCircle, Re
 import { describePublicationState, type PublicationState } from "../lib/publication-display.mjs"
 import { requestJson } from "../lib/admin-api.mjs"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
-import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
+import { StatusBadge } from "./StatusBadge"
 
 interface PublicationStatusCardProps {
   apiUrl: string
   siteId: string
   publicationRefreshKey?: number
 }
-
-const kindLabel = {
-  published: "Опубликовано",
-  unpublished: "Ожидает публикации",
-  publishing: "Выполняется",
-  scheduled: "Запланировано",
-  failed: "Ошибка",
-} as const
-
-const kindVariant = {
-  published: "default",
-  unpublished: "secondary",
-  publishing: "outline",
-  scheduled: "outline",
-  failed: "destructive",
-} as const
 
 export function PublicationStatusCard({ apiUrl, siteId, publicationRefreshKey = 0 }: PublicationStatusCardProps) {
   const [state, setState] = useState<PublicationState | null>(null)
@@ -130,7 +114,7 @@ export function PublicationStatusCard({ apiUrl, siteId, publicationRefreshKey = 
     <CardHeader>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div><CardTitle>Публикация сайта</CardTitle><CardDescription>Сохранение создает рабочую версию. Сайт меняется только после успешной публикации.</CardDescription></div>
-        {presentation ? <Badge variant={kindVariant[presentation.kind]}>{kindLabel[presentation.kind]}</Badge> : null}
+        {presentation ? <StatusBadge kind="publicationView" value={presentation.kind} /> : null}
       </div>
     </CardHeader>
     <CardContent className="flex flex-col gap-4">

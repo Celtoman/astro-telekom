@@ -4,8 +4,8 @@ import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { FilterResetButton } from "./FilterResetButton"
 import { PublicationStatusCard } from "./PublicationStatusCard"
+import { StatusBadge } from "./StatusBadge"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
-import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "./ui/field"
@@ -32,8 +32,6 @@ type ScreenState =
   | { status: "loading" }
   | { status: "error"; message: string }
   | { status: "ready"; user: Administrator; data: WorkspaceData }
-
-const statusVariant = (status: RedirectRecord["status"]) => status === "PUBLISHED" ? "default" as const : status === "ARCHIVED" ? "destructive" as const : "secondary" as const
 
 export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
   const [state, setState] = useState<ScreenState>({ status: "loading" })
@@ -167,7 +165,7 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
               <Field><FieldLabel htmlFor="redirect-search" className="sr-only">Поиск редиректа</FieldLabel><Input id="redirect-search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Старый URL, новый URL или статус" /></Field>
               <FilterResetButton active={Boolean(search)} onReset={resetFilters} />
             </div>
-            {visibleRedirects.length ? <Table><TableHeader><TableRow><TableHead>Источник</TableHead><TableHead>Цель</TableHead><TableHead>Статус</TableHead><TableHead>Переходы</TableHead><TableHead>Последний переход</TableHead><TableHead>Действия</TableHead></TableRow></TableHeader><TableBody>{visibleRedirects.map((item) => <TableRow key={item.id}><TableCell className="font-medium">{item.sourcePath}</TableCell><TableCell>{item.targetPath}</TableCell><TableCell><Badge variant={statusVariant(item.status)}>{item.status}</Badge></TableCell><TableCell>{item.hitCount.toLocaleString("ru-RU")}</TableCell><TableCell>{item.lastHitAt ? new Date(item.lastHitAt).toLocaleString("ru-RU") : "—"}</TableCell><TableCell><div className="flex gap-2"><Button variant="outline" size="sm" disabled={busy !== null} onClick={() => { setEditingId(item.id); setEditingStatus(item.status); setSourcePath(item.sourcePath); setTargetPath(item.targetPath) }}><Pencil data-icon="inline-start" />Изменить</Button><Button variant="outline" size="sm" disabled={busy !== null} onClick={() => void changeStatus(item)}>{item.status === "ARCHIVED" ? <RotateCcw data-icon="inline-start" /> : <Archive data-icon="inline-start" />}{item.status === "ARCHIVED" ? "Вернуть" : "Архив"}</Button></div></TableCell></TableRow>)}</TableBody></Table> : <Alert><Route /><AlertTitle>Редиректов пока нет</AlertTitle><AlertDescription>Создайте первое правило после изменения публичного URL.</AlertDescription></Alert>}
+            {visibleRedirects.length ? <Table><TableHeader><TableRow><TableHead>Источник</TableHead><TableHead>Цель</TableHead><TableHead>Статус</TableHead><TableHead>Переходы</TableHead><TableHead>Последний переход</TableHead><TableHead>Действия</TableHead></TableRow></TableHeader><TableBody>{visibleRedirects.map((item) => <TableRow key={item.id}><TableCell className="font-medium">{item.sourcePath}</TableCell><TableCell>{item.targetPath}</TableCell><TableCell><StatusBadge kind="publishStatus" value={item.status} /></TableCell><TableCell>{item.hitCount.toLocaleString("ru-RU")}</TableCell><TableCell>{item.lastHitAt ? new Date(item.lastHitAt).toLocaleString("ru-RU") : "—"}</TableCell><TableCell><div className="flex gap-2"><Button variant="outline" size="sm" disabled={busy !== null} onClick={() => { setEditingId(item.id); setEditingStatus(item.status); setSourcePath(item.sourcePath); setTargetPath(item.targetPath) }}><Pencil data-icon="inline-start" />Изменить</Button><Button variant="outline" size="sm" disabled={busy !== null} onClick={() => void changeStatus(item)}>{item.status === "ARCHIVED" ? <RotateCcw data-icon="inline-start" /> : <Archive data-icon="inline-start" />}{item.status === "ARCHIVED" ? "Вернуть" : "Архив"}</Button></div></TableCell></TableRow>)}</TableBody></Table> : <Alert><Route /><AlertTitle>Редиректов пока нет</AlertTitle><AlertDescription>Создайте первое правило после изменения публичного URL.</AlertDescription></Alert>}
           </CardContent>
         </Card>
       </div>

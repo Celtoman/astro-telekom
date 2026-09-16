@@ -3,6 +3,7 @@ import { ArrowLeft, Building2, CircleAlert, FileCheck2, FileUp, RefreshCw } from
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { PublicationStatusCard } from "./PublicationStatusCard"
+import { StatusBadge } from "./StatusBadge"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
@@ -41,12 +42,6 @@ type ScreenState =
   | { status: "loading" }
   | { status: "error"; message: string }
   | { status: "ready"; user: Administrator; data: WorkspaceData }
-
-const statusVariant = (status: string) => status === "APPLIED" || status === "SUCCEEDED"
-  ? "default" as const
-  : status === "FAILED"
-    ? "destructive" as const
-    : "secondary" as const
 
 const changeLabels: Record<string, string> = {
   subject: "Регион",
@@ -208,7 +203,7 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
         {sites.length !== 1 ? <Alert variant="destructive"><Building2 /><AlertTitle>Нельзя выбрать сайт импорта однозначно</AlertTitle><AlertDescription>Для безопасного импорта должен быть настроен ровно один сайт. Сейчас найдено: {sites.length}.</AlertDescription></Alert> : null}
 
         <Card>
-          <CardHeader><CardTitle>Новый импорт</CardTitle><CardDescription>Файл сначала проходит preview. Применение сохраняет рабочую версию городов и их главных страниц; на сайте она появится только после отдельной успешной публикации.</CardDescription></CardHeader>
+          <CardHeader><CardTitle>Новый импорт</CardTitle><CardDescription>Файл сначала проходит предварительную проверку. Применение сохраняет рабочую версию городов и их главных страниц; на сайте она появится только после отдельной успешной публикации.</CardDescription></CardHeader>
           <CardContent>
             <FieldGroup>
               <Field data-disabled={sites.length !== 1 || busy !== null}>
@@ -227,7 +222,7 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
                 <Card size="sm"><CardHeader><CardDescription>Без изменений</CardDescription><CardTitle>{unchangedCount}</CardTitle></CardHeader></Card>
               </div>
               <Alert><FileCheck2 /><AlertTitle>Результат проверки</AlertTitle><AlertDescription>Валидно: {report.validRows}; ошибок: {report.errorRows}; предупреждений: {report.warningRows}.</AlertDescription></Alert>
-              {report.issues.length ? <Table><TableHeader><TableRow><TableHead>Строка</TableHead><TableHead>Уровень</TableHead><TableHead>Сообщение</TableHead></TableRow></TableHeader><TableBody>{report.issues.slice(0, 100).map((issue, index) => <TableRow key={`${issue.row}-${index}`}><TableCell>{issue.row}</TableCell><TableCell><Badge variant={issue.level === "error" ? "destructive" : "secondary"}>{issue.level}</Badge></TableCell><TableCell className="whitespace-normal">{issue.message}</TableCell></TableRow>)}</TableBody></Table> : null}
+              {report.issues.length ? <Table><TableHeader><TableRow><TableHead>Строка</TableHead><TableHead>Уровень</TableHead><TableHead>Сообщение</TableHead></TableRow></TableHeader><TableBody>{report.issues.slice(0, 100).map((issue, index) => <TableRow key={`${issue.row}-${index}`}><TableCell>{issue.row}</TableCell><TableCell><StatusBadge kind="importIssueLevel" value={issue.level} /></TableCell><TableCell className="whitespace-normal">{issue.message}</TableCell></TableRow>)}</TableBody></Table> : null}
               <div className="flex flex-col gap-3">
                 <div><h2 className="font-heading font-semibold">Решения по строкам</h2><p className="text-sm text-muted-foreground">Выбрано: создать {selectedCounts.create}, обновить {selectedCounts.update}, пропустить {selectedCounts.skip}. Без решения: {unresolvedActionCount}.</p></div>
                 <div className="min-w-0 overflow-x-auto">
@@ -251,7 +246,7 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
           </CardContent>
         </Card>
 
-        <Card><CardHeader><CardTitle>Последние импорты</CardTitle><CardDescription>Сохраненные validation reports. Статус APPLIED означает рабочую версию, а не публикацию на сайте. Безопасная отмена тоже создаёт новую рабочую версию.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{imports.length ? imports.slice(0, 8).map((item) => <div className="flex flex-wrap items-center justify-between gap-3" key={item.id}><div className="min-w-0 flex-1"><p className="truncate font-medium">{item.fileName}</p><p className="text-xs text-muted-foreground">{item.validRows}/{item.totalRows} строк</p></div><Badge variant={statusVariant(item.status)}>{item.status}</Badge>{item.canUndo ? <Button type="button" size="sm" variant="outline" disabled={busy !== null} onClick={() => void undoImport(item)}>{undoingRunId === item.id ? "Отменяем…" : "Отменить импорт"}</Button> : null}</div>) : <p className="text-sm text-muted-foreground">Импортов еще не было.</p>}</CardContent></Card>
+        <Card><CardHeader><CardTitle>Последние импорты</CardTitle><CardDescription>Сохраненные отчеты проверки. Состояние «Применено» означает рабочую версию, а не публикацию на сайте. Безопасная отмена тоже создаёт новую рабочую версию.</CardDescription></CardHeader><CardContent className="flex flex-col gap-3">{imports.length ? imports.slice(0, 8).map((item) => <div className="flex flex-wrap items-center justify-between gap-3" key={item.id}><div className="min-w-0 flex-1"><p className="truncate font-medium">{item.fileName}</p><p className="text-xs text-muted-foreground">{item.validRows}/{item.totalRows} строк</p></div><StatusBadge kind="importStatus" value={item.status} />{item.canUndo ? <Button type="button" size="sm" variant="outline" disabled={busy !== null} onClick={() => void undoImport(item)}>{undoingRunId === item.id ? "Отменяем…" : "Отменить импорт"}</Button> : null}</div>) : <p className="text-sm text-muted-foreground">Импортов еще не было.</p>}</CardContent></Card>
         {sites.length === 1 ? <PublicationStatusCard apiUrl={apiUrl} siteId={sites[0].id} publicationRefreshKey={publicationRefreshKey} /> : null}
       </div>
     </AdminShell>

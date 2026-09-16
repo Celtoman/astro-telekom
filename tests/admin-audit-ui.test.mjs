@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { statusPresentation } from '../apps/admin/src/lib/status-presentation.mjs';
 
 const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 
@@ -32,12 +33,14 @@ test('audit workspace uses paginated list and detail APIs without unsafe browser
 test('audit workspace translates entities and actions and explains before and after values', () => {
   const source = readFileSync(join(adminRoot, 'components', 'AuditApp.tsx'), 'utf8');
 
-  for (const label of ['Провайдер', 'Сайт', 'Регион', 'Город', 'Страница', 'Тариф', 'Редирект']) {
-    assert.ok(source.includes(label), `missing entity label: ${label}`);
+  for (const value of ['PROVIDER', 'SITE', 'REGION', 'CITY', 'PAGE', 'TARIFF', 'REDIRECT']) {
+    assert.equal(statusPresentation('contentEntityType', value).known, true, `missing entity label: ${value}`);
   }
-  for (const label of ['Создание', 'Изменение', 'Импорт', 'Отмена операции', 'Архивация', 'Восстановление']) {
-    assert.ok(source.includes(label), `missing action label: ${label}`);
+  for (const value of ['CREATE', 'UPDATE', 'IMPORT', 'UNDO', 'ARCHIVE', 'RESTORE']) {
+    assert.equal(statusPresentation('contentRevisionAction', value).known, true, `missing action label: ${value}`);
   }
+  assert.match(source, /statusPresentation/);
+  assert.match(source, /StatusBadge/);
   assert.match(source, /До изменения/);
   assert.match(source, /После изменения/);
   assert.match(source, /Измененные поля/);

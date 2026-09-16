@@ -8,11 +8,11 @@ test('source publication recommendation has explicit text and semantic color for
   const missing = sourcePublicationRecommendation(null);
 
   assert.equal(recommended.label, 'Рекомендуется показывать');
-  assert.match(recommended.className, /emerald/);
+  assert.equal(recommended.tone, 'success');
   assert.equal(discouraged.label, 'Рекомендуется не показывать');
-  assert.match(discouraged.className, /amber/);
+  assert.equal(discouraged.tone, 'warning');
   assert.equal(missing.label, 'Не указана');
-  assert.match(missing.className, /slate/);
+  assert.equal(missing.tone, 'neutral');
 });
 
 test('admin connection fee distinguishes free, paid and missing values', () => {

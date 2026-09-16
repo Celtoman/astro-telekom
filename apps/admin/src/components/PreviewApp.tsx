@@ -119,12 +119,12 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
     <AdminShell apiUrl={apiUrl} user={state.user} active="preview">
       <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6 p-6 lg:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <div><h1 className="font-heading text-2xl font-semibold">Предпросмотр рабочих страниц</h1><p className="mt-1 text-sm text-muted-foreground">Личный preview текущей рабочей версии. Он не создает публикацию и не меняет публичный сайт.</p></div>
+          <div><h1 className="font-heading text-2xl font-semibold">Предпросмотр рабочих страниц</h1><p className="mt-1 text-sm text-muted-foreground">Личный предпросмотр текущей рабочей версии. Он не создает публикацию и не меняет публичный сайт.</p></div>
           <Button variant="outline" disabled={loadingPreview || !selectedSiteId} onClick={() => setRefreshKey((value) => value + 1)}><RefreshCw data-icon="inline-start" />Обновить данные</Button>
         </div>
 
         {!state.sites.length ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Сайты не найдены</AlertTitle><AlertDescription>Для предпросмотра нужен хотя бы один сайт.</AlertDescription></Alert> : null}
-        {previewError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Рабочую страницу нельзя показать</AlertTitle><AlertDescription>{previewError}. Исправьте неполный шаблон или конфликт маршрутов и обновите preview.</AlertDescription></Alert> : null}
+        {previewError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Рабочую страницу нельзя показать</AlertTitle><AlertDescription>{previewError}. Исправьте неполный шаблон или конфликт маршрутов и обновите предпросмотр.</AlertDescription></Alert> : null}
         {documentResult.error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Маршрут не отрисован</AlertTitle><AlertDescription>{documentResult.error}</AlertDescription></Alert> : null}
 
         <Card>
@@ -138,7 +138,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
 
         {preview ? <div className="flex flex-wrap items-center gap-2"><Badge>Рабочая версия {preview.workingRevision}</Badge><Badge variant="secondary">На сайте версия {preview.publishedRevision}</Badge><span className="text-sm text-muted-foreground">{selectedSite?.name} · {frame.label} {frame.width}px</span></div> : null}
         {loadingPreview ? <Card aria-busy="true"><CardContent className="p-6"><Skeleton className="h-[720px] w-full" /></CardContent></Card> : null}
-        {!loadingPreview && preview && documentResult.html ? <Card className="overflow-hidden"><CardHeader className="border-b"><CardTitle className="text-base">Рабочая версия {preview.workingRevision}</CardTitle><CardDescription>Ссылки и формы внутри preview отключены. Для свежих данных нажмите «Обновить данные».</CardDescription></CardHeader><CardContent className="overflow-auto bg-muted p-4"><div className="mx-auto w-max overflow-hidden rounded-lg border bg-white shadow-sm" style={{ width: frame.width }}><iframe key={`${preview.workingRevision}:${selectedPath}:${viewport}`} title={`Предпросмотр ${selectedPath}`} sandbox="" srcDoc={documentResult.html} className="block h-[760px] border-0 bg-white" style={{ width: frame.width }} /></div></CardContent></Card> : null}
+        {!loadingPreview && preview && documentResult.html ? <Card className="overflow-hidden"><CardHeader className="border-b"><CardTitle className="text-base">Рабочая версия {preview.workingRevision}</CardTitle><CardDescription>Ссылки и формы внутри предпросмотра отключены. Для свежих данных нажмите «Обновить данные».</CardDescription></CardHeader><CardContent className="overflow-auto bg-muted p-4"><div className="mx-auto w-max overflow-hidden rounded-lg border bg-white shadow-sm" style={{ width: frame.width }}><iframe key={`${preview.workingRevision}:${selectedPath}:${viewport}`} title={`Предпросмотр ${selectedPath}`} sandbox="" srcDoc={documentResult.html} className="block h-[760px] border-0 bg-white" style={{ width: frame.width }} /></div></CardContent></Card> : null}
       </div>
     </AdminShell>
   )
