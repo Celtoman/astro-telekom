@@ -64,7 +64,7 @@ export class AdminTrashController {
           where: { city: { siteId: query.siteId }, status: 'ARCHIVED' },
           orderBy: [{ updatedAt: 'desc' }, { id: 'desc' }],
           take: TRASH_GROUP_LIMIT + 1,
-          select: { id: true, name: true, slug: true, updatedAt: true, city: { select: { name: true, slug: true } } },
+          select: { id: true, name: true, slug: true, updatedAt: true, archivedAt: true, archiveReason: true, archivedByImportRunId: true, city: { select: { name: true, slug: true } } },
         }),
         transaction.redirect.findMany({
           where: { siteId: query.siteId, status: 'ARCHIVED' },
@@ -108,8 +108,8 @@ export class AdminTrashController {
           group('TARIFF', 'Тарифы', tariffs.map((tariff) => ({
             id: tariff.id,
             label: tariff.name,
-            context: `${tariff.city.name} · /${tariff.city.slug}/${tariff.slug}`,
-            archivedAt: tariff.updatedAt,
+            context: `${tariff.city.name} · /${tariff.city.slug}/${tariff.slug}${tariff.archiveReason === 'ABSENT_FROM_IMPORT' ? ` · full-snapshot ${tariff.archivedByImportRunId || ''}`.trimEnd() : ' · вручную'}`,
+            archivedAt: tariff.archivedAt,
             updatedAt: tariff.updatedAt,
           })), tariffTotal),
           group('REDIRECT', 'Редиректы', redirects.map((redirect) => ({

@@ -54,8 +54,8 @@ export class UpdateTariffDto {
   connectionFee?: number | null;
 
   @ValidateIf((_object, value) => value !== undefined)
-  @IsBoolean()
-  availability?: boolean;
+  @IsIn(['ACTIVE', 'ARCHIVED'])
+  availability?: 'ACTIVE' | 'ARCHIVED';
 
   @IsOptional()
   @IsObject()

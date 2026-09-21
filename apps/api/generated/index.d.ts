@@ -261,6 +261,22 @@ export const CityOfficeState: {
 export type CityOfficeState = (typeof CityOfficeState)[keyof typeof CityOfficeState]
 
 
+export const TariffAvailability: {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+};
+
+export type TariffAvailability = (typeof TariffAvailability)[keyof typeof TariffAvailability]
+
+
+export const TariffArchiveReason: {
+  ABSENT_FROM_IMPORT: 'ABSENT_FROM_IMPORT',
+  MANUAL: 'MANUAL'
+};
+
+export type TariffArchiveReason = (typeof TariffArchiveReason)[keyof typeof TariffArchiveReason]
+
+
 export const SiteRebuildStatus: {
   PENDING: 'PENDING',
   QUEUED: 'QUEUED',
@@ -366,6 +382,14 @@ export const CityImportStatus: typeof $Enums.CityImportStatus
 export type CityOfficeState = $Enums.CityOfficeState
 
 export const CityOfficeState: typeof $Enums.CityOfficeState
+
+export type TariffAvailability = $Enums.TariffAvailability
+
+export const TariffAvailability: typeof $Enums.TariffAvailability
+
+export type TariffArchiveReason = $Enums.TariffArchiveReason
+
+export const TariffArchiveReason: typeof $Enums.TariffArchiveReason
 
 export type SiteRebuildStatus = $Enums.SiteRebuildStatus
 
@@ -3642,6 +3666,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type TariffImportRunCountOutputType
+   */
+
+  export type TariffImportRunCountOutputType = {
+    archivedTariffs: number
+  }
+
+  export type TariffImportRunCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    archivedTariffs?: boolean | TariffImportRunCountOutputTypeCountArchivedTariffsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TariffImportRunCountOutputType without action
+   */
+  export type TariffImportRunCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TariffImportRunCountOutputType
+     */
+    select?: TariffImportRunCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TariffImportRunCountOutputType without action
+   */
+  export type TariffImportRunCountOutputTypeCountArchivedTariffsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TariffWhereInput
+  }
+
+
+  /**
    * Count Type AddressCheckCountOutputType
    */
 
@@ -4513,6 +4568,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Provider", 'DateTime'>
     readonly updatedAt: FieldRef<"Provider", 'DateTime'>
   }
+
 
   // Custom InputTypes
   /**
@@ -5827,6 +5883,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Site", 'DateTime'>
     readonly updatedAt: FieldRef<"Site", 'DateTime'>
   }
+
 
   // Custom InputTypes
   /**
@@ -7211,6 +7268,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"SitemapExclusion", 'DateTime'>
     readonly updatedAt: FieldRef<"SitemapExclusion", 'DateTime'>
   }
+
 
   // Custom InputTypes
   /**
@@ -8605,6 +8663,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"SiteRebuild", 'DateTime'>
     readonly updatedAt: FieldRef<"SiteRebuild", 'DateTime'>
   }
+
 
   // Custom InputTypes
   /**
@@ -17696,11 +17755,14 @@ export namespace Prisma {
     speed: number | null
     promoText: string | null
     connectionFee: Decimal | null
-    availability: boolean | null
+    availability: $Enums.TariffAvailability | null
     externalId: string | null
     identityKey: string | null
     dataSource: string | null
     status: $Enums.PublishStatus | null
+    archiveReason: $Enums.TariffArchiveReason | null
+    archivedAt: Date | null
+    archivedByImportRunId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -17717,11 +17779,14 @@ export namespace Prisma {
     speed: number | null
     promoText: string | null
     connectionFee: Decimal | null
-    availability: boolean | null
+    availability: $Enums.TariffAvailability | null
     externalId: string | null
     identityKey: string | null
     dataSource: string | null
     status: $Enums.PublishStatus | null
+    archiveReason: $Enums.TariffArchiveReason | null
+    archivedAt: Date | null
+    archivedByImportRunId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -17745,6 +17810,9 @@ export namespace Prisma {
     attributes: number
     seo: number
     status: number
+    archiveReason: number
+    archivedAt: number
+    archivedByImportRunId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -17782,6 +17850,9 @@ export namespace Prisma {
     identityKey?: true
     dataSource?: true
     status?: true
+    archiveReason?: true
+    archivedAt?: true
+    archivedByImportRunId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -17803,6 +17874,9 @@ export namespace Prisma {
     identityKey?: true
     dataSource?: true
     status?: true
+    archiveReason?: true
+    archivedAt?: true
+    archivedByImportRunId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -17826,6 +17900,9 @@ export namespace Prisma {
     attributes?: true
     seo?: true
     status?: true
+    archiveReason?: true
+    archivedAt?: true
+    archivedByImportRunId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -17929,13 +18006,16 @@ export namespace Prisma {
     speed: number | null
     promoText: string | null
     connectionFee: Decimal | null
-    availability: boolean
+    availability: $Enums.TariffAvailability
     externalId: string | null
     identityKey: string
     dataSource: string | null
     attributes: JsonValue | null
     seo: JsonValue | null
     status: $Enums.PublishStatus
+    archiveReason: $Enums.TariffArchiveReason | null
+    archivedAt: Date | null
+    archivedByImportRunId: string | null
     createdAt: Date
     updatedAt: Date
     _count: TariffCountAggregateOutputType | null
@@ -17978,10 +18058,14 @@ export namespace Prisma {
     attributes?: boolean
     seo?: boolean
     status?: boolean
+    archiveReason?: boolean
+    archivedAt?: boolean
+    archivedByImportRunId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
     city?: boolean | CityDefaultArgs<ExtArgs>
+    archivedByImportRun?: boolean | Tariff$archivedByImportRunArgs<ExtArgs>
     leads?: boolean | Tariff$leadsArgs<ExtArgs>
     _count?: boolean | TariffCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tariff"]>
@@ -18005,10 +18089,14 @@ export namespace Prisma {
     attributes?: boolean
     seo?: boolean
     status?: boolean
+    archiveReason?: boolean
+    archivedAt?: boolean
+    archivedByImportRunId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
     city?: boolean | CityDefaultArgs<ExtArgs>
+    archivedByImportRun?: boolean | Tariff$archivedByImportRunArgs<ExtArgs>
   }, ExtArgs["result"]["tariff"]>
 
   export type TariffSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18030,10 +18118,14 @@ export namespace Prisma {
     attributes?: boolean
     seo?: boolean
     status?: boolean
+    archiveReason?: boolean
+    archivedAt?: boolean
+    archivedByImportRunId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
     city?: boolean | CityDefaultArgs<ExtArgs>
+    archivedByImportRun?: boolean | Tariff$archivedByImportRunArgs<ExtArgs>
   }, ExtArgs["result"]["tariff"]>
 
   export type TariffSelectScalar = {
@@ -18055,24 +18147,30 @@ export namespace Prisma {
     attributes?: boolean
     seo?: boolean
     status?: boolean
+    archiveReason?: boolean
+    archivedAt?: boolean
+    archivedByImportRunId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type TariffOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "providerId" | "cityId" | "name" | "slug" | "serviceType" | "standardPrice" | "promoPrice" | "speed" | "promoText" | "connectionFee" | "availability" | "externalId" | "identityKey" | "dataSource" | "attributes" | "seo" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["tariff"]>
+  export type TariffOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "providerId" | "cityId" | "name" | "slug" | "serviceType" | "standardPrice" | "promoPrice" | "speed" | "promoText" | "connectionFee" | "availability" | "externalId" | "identityKey" | "dataSource" | "attributes" | "seo" | "status" | "archiveReason" | "archivedAt" | "archivedByImportRunId" | "createdAt" | "updatedAt", ExtArgs["result"]["tariff"]>
   export type TariffInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
     city?: boolean | CityDefaultArgs<ExtArgs>
+    archivedByImportRun?: boolean | Tariff$archivedByImportRunArgs<ExtArgs>
     leads?: boolean | Tariff$leadsArgs<ExtArgs>
     _count?: boolean | TariffCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TariffIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
     city?: boolean | CityDefaultArgs<ExtArgs>
+    archivedByImportRun?: boolean | Tariff$archivedByImportRunArgs<ExtArgs>
   }
   export type TariffIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
     city?: boolean | CityDefaultArgs<ExtArgs>
+    archivedByImportRun?: boolean | Tariff$archivedByImportRunArgs<ExtArgs>
   }
 
   export type $TariffPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18080,6 +18178,7 @@ export namespace Prisma {
     objects: {
       provider: Prisma.$ProviderPayload<ExtArgs>
       city: Prisma.$CityPayload<ExtArgs>
+      archivedByImportRun: Prisma.$TariffImportRunPayload<ExtArgs> | null
       leads: Prisma.$LeadPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -18094,13 +18193,16 @@ export namespace Prisma {
       speed: number | null
       promoText: string | null
       connectionFee: Prisma.Decimal | null
-      availability: boolean
+      availability: $Enums.TariffAvailability
       externalId: string | null
       identityKey: string
       dataSource: string | null
       attributes: Prisma.JsonValue | null
       seo: Prisma.JsonValue | null
       status: $Enums.PublishStatus
+      archiveReason: $Enums.TariffArchiveReason | null
+      archivedAt: Date | null
+      archivedByImportRunId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["tariff"]>
@@ -18499,6 +18601,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     provider<T extends ProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProviderDefaultArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     city<T extends CityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CityDefaultArgs<ExtArgs>>): Prisma__CityClient<$Result.GetResult<Prisma.$CityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    archivedByImportRun<T extends Tariff$archivedByImportRunArgs<ExtArgs> = {}>(args?: Subset<T, Tariff$archivedByImportRunArgs<ExtArgs>>): Prisma__TariffImportRunClient<$Result.GetResult<Prisma.$TariffImportRunPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     leads<T extends Tariff$leadsArgs<ExtArgs> = {}>(args?: Subset<T, Tariff$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -18540,13 +18643,16 @@ export namespace Prisma {
     readonly speed: FieldRef<"Tariff", 'Int'>
     readonly promoText: FieldRef<"Tariff", 'String'>
     readonly connectionFee: FieldRef<"Tariff", 'Decimal'>
-    readonly availability: FieldRef<"Tariff", 'Boolean'>
+    readonly availability: FieldRef<"Tariff", 'TariffAvailability'>
     readonly externalId: FieldRef<"Tariff", 'String'>
     readonly identityKey: FieldRef<"Tariff", 'String'>
     readonly dataSource: FieldRef<"Tariff", 'String'>
     readonly attributes: FieldRef<"Tariff", 'Json'>
     readonly seo: FieldRef<"Tariff", 'Json'>
     readonly status: FieldRef<"Tariff", 'PublishStatus'>
+    readonly archiveReason: FieldRef<"Tariff", 'TariffArchiveReason'>
+    readonly archivedAt: FieldRef<"Tariff", 'DateTime'>
+    readonly archivedByImportRunId: FieldRef<"Tariff", 'String'>
     readonly createdAt: FieldRef<"Tariff", 'DateTime'>
     readonly updatedAt: FieldRef<"Tariff", 'DateTime'>
   }
@@ -18950,6 +19056,25 @@ export namespace Prisma {
   }
 
   /**
+   * Tariff.archivedByImportRun
+   */
+  export type Tariff$archivedByImportRunArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TariffImportRun
+     */
+    select?: TariffImportRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TariffImportRun
+     */
+    omit?: TariffImportRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TariffImportRunInclude<ExtArgs> | null
+    where?: TariffImportRunWhereInput
+  }
+
+  /**
    * Tariff.leads
    */
   export type Tariff$leadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19281,6 +19406,8 @@ export namespace Prisma {
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
     appliedBy?: boolean | TariffImportRun$appliedByArgs<ExtArgs>
     undoneBy?: boolean | TariffImportRun$undoneByArgs<ExtArgs>
+    archivedTariffs?: boolean | TariffImportRun$archivedTariffsArgs<ExtArgs>
+    _count?: boolean | TariffImportRunCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tariffImportRun"]>
 
   export type TariffImportRunSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -19351,6 +19478,8 @@ export namespace Prisma {
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
     appliedBy?: boolean | TariffImportRun$appliedByArgs<ExtArgs>
     undoneBy?: boolean | TariffImportRun$undoneByArgs<ExtArgs>
+    archivedTariffs?: boolean | TariffImportRun$archivedTariffsArgs<ExtArgs>
+    _count?: boolean | TariffImportRunCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TariffImportRunIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
@@ -19369,6 +19498,7 @@ export namespace Prisma {
       provider: Prisma.$ProviderPayload<ExtArgs>
       appliedBy: Prisma.$UserPayload<ExtArgs> | null
       undoneBy: Prisma.$UserPayload<ExtArgs> | null
+      archivedTariffs: Prisma.$TariffPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19784,6 +19914,7 @@ export namespace Prisma {
     provider<T extends ProviderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProviderDefaultArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     appliedBy<T extends TariffImportRun$appliedByArgs<ExtArgs> = {}>(args?: Subset<T, TariffImportRun$appliedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     undoneBy<T extends TariffImportRun$undoneByArgs<ExtArgs> = {}>(args?: Subset<T, TariffImportRun$undoneByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    archivedTariffs<T extends TariffImportRun$archivedTariffsArgs<ExtArgs> = {}>(args?: Subset<T, TariffImportRun$archivedTariffsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TariffPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20265,6 +20396,30 @@ export namespace Prisma {
      */
     include?: UserInclude<ExtArgs> | null
     where?: UserWhereInput
+  }
+
+  /**
+   * TariffImportRun.archivedTariffs
+   */
+  export type TariffImportRun$archivedTariffsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tariff
+     */
+    select?: TariffSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tariff
+     */
+    omit?: TariffOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TariffInclude<ExtArgs> | null
+    where?: TariffWhereInput
+    orderBy?: TariffOrderByWithRelationInput | TariffOrderByWithRelationInput[]
+    cursor?: TariffWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TariffScalarFieldEnum | TariffScalarFieldEnum[]
   }
 
   /**
@@ -33930,6 +34085,9 @@ export namespace Prisma {
     attributes: 'attributes',
     seo: 'seo',
     status: 'status',
+    archiveReason: 'archiveReason',
+    archivedAt: 'archivedAt',
+    archivedByImportRunId: 'archivedByImportRunId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -34335,10 +34493,12 @@ export namespace Prisma {
   export type EnumCityOfficeStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CityOfficeState'>
 
 
+
   /**
    * Reference to a field of type 'CityOfficeState[]'
    */
   export type ListEnumCityOfficeStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CityOfficeState[]'>
+
 
 
   /**
@@ -34388,6 +34548,34 @@ export namespace Prisma {
    */
   export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
+
+
+  /**
+   * Reference to a field of type 'TariffAvailability'
+   */
+  export type EnumTariffAvailabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TariffAvailability'>
+
+
+
+  /**
+   * Reference to a field of type 'TariffAvailability[]'
+   */
+  export type ListEnumTariffAvailabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TariffAvailability[]'>
+
+
+
+  /**
+   * Reference to a field of type 'TariffArchiveReason'
+   */
+  export type EnumTariffArchiveReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TariffArchiveReason'>
+
+
+
+  /**
+   * Reference to a field of type 'TariffArchiveReason[]'
+   */
+  export type ListEnumTariffArchiveReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TariffArchiveReason[]'>
+
 
 
   /**
@@ -35633,17 +35821,21 @@ export namespace Prisma {
     speed?: IntNullableFilter<"Tariff"> | number | null
     promoText?: StringNullableFilter<"Tariff"> | string | null
     connectionFee?: DecimalNullableFilter<"Tariff"> | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFilter<"Tariff"> | boolean
+    availability?: EnumTariffAvailabilityFilter<"Tariff"> | $Enums.TariffAvailability
     externalId?: StringNullableFilter<"Tariff"> | string | null
     identityKey?: StringFilter<"Tariff"> | string
     dataSource?: StringNullableFilter<"Tariff"> | string | null
     attributes?: JsonNullableFilter<"Tariff">
     seo?: JsonNullableFilter<"Tariff">
     status?: EnumPublishStatusFilter<"Tariff"> | $Enums.PublishStatus
+    archiveReason?: EnumTariffArchiveReasonNullableFilter<"Tariff"> | $Enums.TariffArchiveReason | null
+    archivedAt?: DateTimeNullableFilter<"Tariff"> | Date | string | null
+    archivedByImportRunId?: StringNullableFilter<"Tariff"> | string | null
     createdAt?: DateTimeFilter<"Tariff"> | Date | string
     updatedAt?: DateTimeFilter<"Tariff"> | Date | string
     provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
     city?: XOR<CityScalarRelationFilter, CityWhereInput>
+    archivedByImportRun?: XOR<TariffImportRunNullableScalarRelationFilter, TariffImportRunWhereInput> | null
     leads?: LeadListRelationFilter
   }
 
@@ -35666,10 +35858,14 @@ export namespace Prisma {
     attributes?: SortOrderInput | SortOrder
     seo?: SortOrderInput | SortOrder
     status?: SortOrder
+    archiveReason?: SortOrderInput | SortOrder
+    archivedAt?: SortOrderInput | SortOrder
+    archivedByImportRunId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     provider?: ProviderOrderByWithRelationInput
     city?: CityOrderByWithRelationInput
+    archivedByImportRun?: TariffImportRunOrderByWithRelationInput
     leads?: LeadOrderByRelationAggregateInput
   }
 
@@ -35690,17 +35886,21 @@ export namespace Prisma {
     speed?: IntNullableFilter<"Tariff"> | number | null
     promoText?: StringNullableFilter<"Tariff"> | string | null
     connectionFee?: DecimalNullableFilter<"Tariff"> | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFilter<"Tariff"> | boolean
+    availability?: EnumTariffAvailabilityFilter<"Tariff"> | $Enums.TariffAvailability
     externalId?: StringNullableFilter<"Tariff"> | string | null
     identityKey?: StringFilter<"Tariff"> | string
     dataSource?: StringNullableFilter<"Tariff"> | string | null
     attributes?: JsonNullableFilter<"Tariff">
     seo?: JsonNullableFilter<"Tariff">
     status?: EnumPublishStatusFilter<"Tariff"> | $Enums.PublishStatus
+    archiveReason?: EnumTariffArchiveReasonNullableFilter<"Tariff"> | $Enums.TariffArchiveReason | null
+    archivedAt?: DateTimeNullableFilter<"Tariff"> | Date | string | null
+    archivedByImportRunId?: StringNullableFilter<"Tariff"> | string | null
     createdAt?: DateTimeFilter<"Tariff"> | Date | string
     updatedAt?: DateTimeFilter<"Tariff"> | Date | string
     provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
     city?: XOR<CityScalarRelationFilter, CityWhereInput>
+    archivedByImportRun?: XOR<TariffImportRunNullableScalarRelationFilter, TariffImportRunWhereInput> | null
     leads?: LeadListRelationFilter
   }, "id" | "cityId_slug" | "cityId_identityKey">
 
@@ -35723,6 +35923,9 @@ export namespace Prisma {
     attributes?: SortOrderInput | SortOrder
     seo?: SortOrderInput | SortOrder
     status?: SortOrder
+    archiveReason?: SortOrderInput | SortOrder
+    archivedAt?: SortOrderInput | SortOrder
+    archivedByImportRunId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: TariffCountOrderByAggregateInput
@@ -35747,13 +35950,16 @@ export namespace Prisma {
     speed?: IntNullableWithAggregatesFilter<"Tariff"> | number | null
     promoText?: StringNullableWithAggregatesFilter<"Tariff"> | string | null
     connectionFee?: DecimalNullableWithAggregatesFilter<"Tariff"> | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolWithAggregatesFilter<"Tariff"> | boolean
+    availability?: EnumTariffAvailabilityWithAggregatesFilter<"Tariff"> | $Enums.TariffAvailability
     externalId?: StringNullableWithAggregatesFilter<"Tariff"> | string | null
     identityKey?: StringWithAggregatesFilter<"Tariff"> | string
     dataSource?: StringNullableWithAggregatesFilter<"Tariff"> | string | null
     attributes?: JsonNullableWithAggregatesFilter<"Tariff">
     seo?: JsonNullableWithAggregatesFilter<"Tariff">
     status?: EnumPublishStatusWithAggregatesFilter<"Tariff"> | $Enums.PublishStatus
+    archiveReason?: EnumTariffArchiveReasonNullableWithAggregatesFilter<"Tariff"> | $Enums.TariffArchiveReason | null
+    archivedAt?: DateTimeNullableWithAggregatesFilter<"Tariff"> | Date | string | null
+    archivedByImportRunId?: StringNullableWithAggregatesFilter<"Tariff"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Tariff"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Tariff"> | Date | string
   }
@@ -35781,6 +35987,7 @@ export namespace Prisma {
     provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
     appliedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     undoneBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    archivedTariffs?: TariffListRelationFilter
   }
 
   export type TariffImportRunOrderByWithRelationInput = {
@@ -35803,6 +36010,7 @@ export namespace Prisma {
     provider?: ProviderOrderByWithRelationInput
     appliedBy?: UserOrderByWithRelationInput
     undoneBy?: UserOrderByWithRelationInput
+    archivedTariffs?: TariffOrderByRelationAggregateInput
   }
 
   export type TariffImportRunWhereUniqueInput = Prisma.AtLeast<{
@@ -35828,6 +36036,7 @@ export namespace Prisma {
     provider?: XOR<ProviderScalarRelationFilter, ProviderWhereInput>
     appliedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     undoneBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    archivedTariffs?: TariffListRelationFilter
   }, "id">
 
   export type TariffImportRunOrderByWithAggregationInput = {
@@ -38151,17 +38360,20 @@ export namespace Prisma {
     speed?: number | null
     promoText?: string | null
     connectionFee?: Decimal | DecimalJsLike | number | string | null
-    availability?: boolean
+    availability?: $Enums.TariffAvailability
     externalId?: string | null
     identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutTariffsInput
     city: CityCreateNestedOneWithoutTariffsInput
+    archivedByImportRun?: TariffImportRunCreateNestedOneWithoutArchivedTariffsInput
     leads?: LeadCreateNestedManyWithoutTariffInput
   }
 
@@ -38177,13 +38389,16 @@ export namespace Prisma {
     speed?: number | null
     promoText?: string | null
     connectionFee?: Decimal | DecimalJsLike | number | string | null
-    availability?: boolean
+    availability?: $Enums.TariffAvailability
     externalId?: string | null
     identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
+    archivedByImportRunId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     leads?: LeadUncheckedCreateNestedManyWithoutTariffInput
@@ -38199,17 +38414,20 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutTariffsNestedInput
     city?: CityUpdateOneRequiredWithoutTariffsNestedInput
+    archivedByImportRun?: TariffImportRunUpdateOneWithoutArchivedTariffsNestedInput
     leads?: LeadUpdateManyWithoutTariffNestedInput
   }
 
@@ -38225,13 +38443,16 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedByImportRunId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     leads?: LeadUncheckedUpdateManyWithoutTariffNestedInput
@@ -38249,13 +38470,16 @@ export namespace Prisma {
     speed?: number | null
     promoText?: string | null
     connectionFee?: Decimal | DecimalJsLike | number | string | null
-    availability?: boolean
+    availability?: $Enums.TariffAvailability
     externalId?: string | null
     identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
+    archivedByImportRunId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -38270,13 +38494,15 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -38293,13 +38519,16 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedByImportRunId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -38321,6 +38550,7 @@ export namespace Prisma {
     provider: ProviderCreateNestedOneWithoutTariffImportsInput
     appliedBy?: UserCreateNestedOneWithoutTariffImportsAppliedInput
     undoneBy?: UserCreateNestedOneWithoutTariffImportsUndoneInput
+    archivedTariffs?: TariffCreateNestedManyWithoutArchivedByImportRunInput
   }
 
   export type TariffImportRunUncheckedCreateInput = {
@@ -38340,6 +38570,7 @@ export namespace Prisma {
     undoneAt?: Date | string | null
     undoneById?: string | null
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    archivedTariffs?: TariffUncheckedCreateNestedManyWithoutArchivedByImportRunInput
   }
 
   export type TariffImportRunUpdateInput = {
@@ -38359,6 +38590,7 @@ export namespace Prisma {
     provider?: ProviderUpdateOneRequiredWithoutTariffImportsNestedInput
     appliedBy?: UserUpdateOneWithoutTariffImportsAppliedNestedInput
     undoneBy?: UserUpdateOneWithoutTariffImportsUndoneNestedInput
+    archivedTariffs?: TariffUpdateManyWithoutArchivedByImportRunNestedInput
   }
 
   export type TariffImportRunUncheckedUpdateInput = {
@@ -38378,6 +38610,7 @@ export namespace Prisma {
     undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     undoneById?: NullableStringFieldUpdateOperationsInput | string | null
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    archivedTariffs?: TariffUncheckedUpdateManyWithoutArchivedByImportRunNestedInput
   }
 
   export type TariffImportRunCreateManyInput = {
@@ -40745,9 +40978,28 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type EnumTariffAvailabilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.TariffAvailability | EnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    in?: $Enums.TariffAvailability[] | ListEnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TariffAvailability[] | ListEnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTariffAvailabilityFilter<$PrismaModel> | $Enums.TariffAvailability
+  }
+
+  export type EnumTariffArchiveReasonNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.TariffArchiveReason | EnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TariffArchiveReason[] | ListEnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TariffArchiveReason[] | ListEnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTariffArchiveReasonNullableFilter<$PrismaModel> | $Enums.TariffArchiveReason | null
+  }
+
   export type CityScalarRelationFilter = {
     is?: CityWhereInput
     isNot?: CityWhereInput
+  }
+
+  export type TariffImportRunNullableScalarRelationFilter = {
+    is?: TariffImportRunWhereInput | null
+    isNot?: TariffImportRunWhereInput | null
   }
 
   export type TariffCityIdSlugCompoundUniqueInput = {
@@ -40779,6 +41031,9 @@ export namespace Prisma {
     attributes?: SortOrder
     seo?: SortOrder
     status?: SortOrder
+    archiveReason?: SortOrder
+    archivedAt?: SortOrder
+    archivedByImportRunId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -40807,6 +41062,9 @@ export namespace Prisma {
     identityKey?: SortOrder
     dataSource?: SortOrder
     status?: SortOrder
+    archiveReason?: SortOrder
+    archivedAt?: SortOrder
+    archivedByImportRunId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -40828,6 +41086,9 @@ export namespace Prisma {
     identityKey?: SortOrder
     dataSource?: SortOrder
     status?: SortOrder
+    archiveReason?: SortOrder
+    archivedAt?: SortOrder
+    archivedByImportRunId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -40879,6 +41140,26 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type EnumTariffAvailabilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TariffAvailability | EnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    in?: $Enums.TariffAvailability[] | ListEnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TariffAvailability[] | ListEnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTariffAvailabilityWithAggregatesFilter<$PrismaModel> | $Enums.TariffAvailability
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTariffAvailabilityFilter<$PrismaModel>
+    _max?: NestedEnumTariffAvailabilityFilter<$PrismaModel>
+  }
+
+  export type EnumTariffArchiveReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TariffArchiveReason | EnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TariffArchiveReason[] | ListEnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TariffArchiveReason[] | ListEnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTariffArchiveReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.TariffArchiveReason | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumTariffArchiveReasonNullableFilter<$PrismaModel>
+    _max?: NestedEnumTariffArchiveReasonNullableFilter<$PrismaModel>
   }
 
   export type EnumTariffImportStatusFilter<$PrismaModel = never> = {
@@ -43202,6 +43483,12 @@ export namespace Prisma {
     connect?: CityWhereUniqueInput
   }
 
+  export type TariffImportRunCreateNestedOneWithoutArchivedTariffsInput = {
+    create?: XOR<TariffImportRunCreateWithoutArchivedTariffsInput, TariffImportRunUncheckedCreateWithoutArchivedTariffsInput>
+    connectOrCreate?: TariffImportRunCreateOrConnectWithoutArchivedTariffsInput
+    connect?: TariffImportRunWhereUniqueInput
+  }
+
   export type LeadCreateNestedManyWithoutTariffInput = {
     create?: XOR<LeadCreateWithoutTariffInput, LeadUncheckedCreateWithoutTariffInput> | LeadCreateWithoutTariffInput[] | LeadUncheckedCreateWithoutTariffInput[]
     connectOrCreate?: LeadCreateOrConnectWithoutTariffInput | LeadCreateOrConnectWithoutTariffInput[]
@@ -43236,6 +43523,14 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type EnumTariffAvailabilityFieldUpdateOperationsInput = {
+    set?: $Enums.TariffAvailability
+  }
+
+  export type NullableEnumTariffArchiveReasonFieldUpdateOperationsInput = {
+    set?: $Enums.TariffArchiveReason | null
+  }
+
   export type ProviderUpdateOneRequiredWithoutTariffsNestedInput = {
     create?: XOR<ProviderCreateWithoutTariffsInput, ProviderUncheckedCreateWithoutTariffsInput>
     connectOrCreate?: ProviderCreateOrConnectWithoutTariffsInput
@@ -43250,6 +43545,16 @@ export namespace Prisma {
     upsert?: CityUpsertWithoutTariffsInput
     connect?: CityWhereUniqueInput
     update?: XOR<XOR<CityUpdateToOneWithWhereWithoutTariffsInput, CityUpdateWithoutTariffsInput>, CityUncheckedUpdateWithoutTariffsInput>
+  }
+
+  export type TariffImportRunUpdateOneWithoutArchivedTariffsNestedInput = {
+    create?: XOR<TariffImportRunCreateWithoutArchivedTariffsInput, TariffImportRunUncheckedCreateWithoutArchivedTariffsInput>
+    connectOrCreate?: TariffImportRunCreateOrConnectWithoutArchivedTariffsInput
+    upsert?: TariffImportRunUpsertWithoutArchivedTariffsInput
+    disconnect?: TariffImportRunWhereInput | boolean
+    delete?: TariffImportRunWhereInput | boolean
+    connect?: TariffImportRunWhereUniqueInput
+    update?: XOR<XOR<TariffImportRunUpdateToOneWithWhereWithoutArchivedTariffsInput, TariffImportRunUpdateWithoutArchivedTariffsInput>, TariffImportRunUncheckedUpdateWithoutArchivedTariffsInput>
   }
 
   export type LeadUpdateManyWithoutTariffNestedInput = {
@@ -43298,6 +43603,20 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type TariffCreateNestedManyWithoutArchivedByImportRunInput = {
+    create?: XOR<TariffCreateWithoutArchivedByImportRunInput, TariffUncheckedCreateWithoutArchivedByImportRunInput> | TariffCreateWithoutArchivedByImportRunInput[] | TariffUncheckedCreateWithoutArchivedByImportRunInput[]
+    connectOrCreate?: TariffCreateOrConnectWithoutArchivedByImportRunInput | TariffCreateOrConnectWithoutArchivedByImportRunInput[]
+    createMany?: TariffCreateManyArchivedByImportRunInputEnvelope
+    connect?: TariffWhereUniqueInput | TariffWhereUniqueInput[]
+  }
+
+  export type TariffUncheckedCreateNestedManyWithoutArchivedByImportRunInput = {
+    create?: XOR<TariffCreateWithoutArchivedByImportRunInput, TariffUncheckedCreateWithoutArchivedByImportRunInput> | TariffCreateWithoutArchivedByImportRunInput[] | TariffUncheckedCreateWithoutArchivedByImportRunInput[]
+    connectOrCreate?: TariffCreateOrConnectWithoutArchivedByImportRunInput | TariffCreateOrConnectWithoutArchivedByImportRunInput[]
+    createMany?: TariffCreateManyArchivedByImportRunInputEnvelope
+    connect?: TariffWhereUniqueInput | TariffWhereUniqueInput[]
+  }
+
   export type EnumTariffImportStatusFieldUpdateOperationsInput = {
     set?: $Enums.TariffImportStatus
   }
@@ -43328,6 +43647,34 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTariffImportsUndoneInput, UserUpdateWithoutTariffImportsUndoneInput>, UserUncheckedUpdateWithoutTariffImportsUndoneInput>
+  }
+
+  export type TariffUpdateManyWithoutArchivedByImportRunNestedInput = {
+    create?: XOR<TariffCreateWithoutArchivedByImportRunInput, TariffUncheckedCreateWithoutArchivedByImportRunInput> | TariffCreateWithoutArchivedByImportRunInput[] | TariffUncheckedCreateWithoutArchivedByImportRunInput[]
+    connectOrCreate?: TariffCreateOrConnectWithoutArchivedByImportRunInput | TariffCreateOrConnectWithoutArchivedByImportRunInput[]
+    upsert?: TariffUpsertWithWhereUniqueWithoutArchivedByImportRunInput | TariffUpsertWithWhereUniqueWithoutArchivedByImportRunInput[]
+    createMany?: TariffCreateManyArchivedByImportRunInputEnvelope
+    set?: TariffWhereUniqueInput | TariffWhereUniqueInput[]
+    disconnect?: TariffWhereUniqueInput | TariffWhereUniqueInput[]
+    delete?: TariffWhereUniqueInput | TariffWhereUniqueInput[]
+    connect?: TariffWhereUniqueInput | TariffWhereUniqueInput[]
+    update?: TariffUpdateWithWhereUniqueWithoutArchivedByImportRunInput | TariffUpdateWithWhereUniqueWithoutArchivedByImportRunInput[]
+    updateMany?: TariffUpdateManyWithWhereWithoutArchivedByImportRunInput | TariffUpdateManyWithWhereWithoutArchivedByImportRunInput[]
+    deleteMany?: TariffScalarWhereInput | TariffScalarWhereInput[]
+  }
+
+  export type TariffUncheckedUpdateManyWithoutArchivedByImportRunNestedInput = {
+    create?: XOR<TariffCreateWithoutArchivedByImportRunInput, TariffUncheckedCreateWithoutArchivedByImportRunInput> | TariffCreateWithoutArchivedByImportRunInput[] | TariffUncheckedCreateWithoutArchivedByImportRunInput[]
+    connectOrCreate?: TariffCreateOrConnectWithoutArchivedByImportRunInput | TariffCreateOrConnectWithoutArchivedByImportRunInput[]
+    upsert?: TariffUpsertWithWhereUniqueWithoutArchivedByImportRunInput | TariffUpsertWithWhereUniqueWithoutArchivedByImportRunInput[]
+    createMany?: TariffCreateManyArchivedByImportRunInputEnvelope
+    set?: TariffWhereUniqueInput | TariffWhereUniqueInput[]
+    disconnect?: TariffWhereUniqueInput | TariffWhereUniqueInput[]
+    delete?: TariffWhereUniqueInput | TariffWhereUniqueInput[]
+    connect?: TariffWhereUniqueInput | TariffWhereUniqueInput[]
+    update?: TariffUpdateWithWhereUniqueWithoutArchivedByImportRunInput | TariffUpdateWithWhereUniqueWithoutArchivedByImportRunInput[]
+    updateMany?: TariffUpdateManyWithWhereWithoutArchivedByImportRunInput | TariffUpdateManyWithWhereWithoutArchivedByImportRunInput[]
+    deleteMany?: TariffScalarWhereInput | TariffScalarWhereInput[]
   }
 
   export type SiteCreateNestedOneWithoutCityImportsInput = {
@@ -44681,6 +45028,20 @@ export namespace Prisma {
     not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
   }
 
+  export type NestedEnumTariffAvailabilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.TariffAvailability | EnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    in?: $Enums.TariffAvailability[] | ListEnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TariffAvailability[] | ListEnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTariffAvailabilityFilter<$PrismaModel> | $Enums.TariffAvailability
+  }
+
+  export type NestedEnumTariffArchiveReasonNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.TariffArchiveReason | EnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TariffArchiveReason[] | ListEnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TariffArchiveReason[] | ListEnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTariffArchiveReasonNullableFilter<$PrismaModel> | $Enums.TariffArchiveReason | null
+  }
+
   export type NestedEnumServiceTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ServiceType | EnumServiceTypeFieldRefInput<$PrismaModel>
     in?: $Enums.ServiceType[] | ListEnumServiceTypeFieldRefInput<$PrismaModel>
@@ -44732,6 +45093,26 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumTariffAvailabilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TariffAvailability | EnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    in?: $Enums.TariffAvailability[] | ListEnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TariffAvailability[] | ListEnumTariffAvailabilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTariffAvailabilityWithAggregatesFilter<$PrismaModel> | $Enums.TariffAvailability
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTariffAvailabilityFilter<$PrismaModel>
+    _max?: NestedEnumTariffAvailabilityFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTariffArchiveReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TariffArchiveReason | EnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TariffArchiveReason[] | ListEnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TariffArchiveReason[] | ListEnumTariffArchiveReasonFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTariffArchiveReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.TariffArchiveReason | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumTariffArchiveReasonNullableFilter<$PrismaModel>
+    _max?: NestedEnumTariffArchiveReasonNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumTariffImportStatusFilter<$PrismaModel = never> = {
@@ -44978,16 +45359,19 @@ export namespace Prisma {
     speed?: number | null
     promoText?: string | null
     connectionFee?: Decimal | DecimalJsLike | number | string | null
-    availability?: boolean
+    availability?: $Enums.TariffAvailability
     externalId?: string | null
     identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     city: CityCreateNestedOneWithoutTariffsInput
+    archivedByImportRun?: TariffImportRunCreateNestedOneWithoutArchivedTariffsInput
     leads?: LeadCreateNestedManyWithoutTariffInput
   }
 
@@ -45002,13 +45386,16 @@ export namespace Prisma {
     speed?: number | null
     promoText?: string | null
     connectionFee?: Decimal | DecimalJsLike | number | string | null
-    availability?: boolean
+    availability?: $Enums.TariffAvailability
     externalId?: string | null
     identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
+    archivedByImportRunId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     leads?: LeadUncheckedCreateNestedManyWithoutTariffInput
@@ -45040,6 +45427,7 @@ export namespace Prisma {
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
     appliedBy?: UserCreateNestedOneWithoutTariffImportsAppliedInput
     undoneBy?: UserCreateNestedOneWithoutTariffImportsUndoneInput
+    archivedTariffs?: TariffCreateNestedManyWithoutArchivedByImportRunInput
   }
 
   export type TariffImportRunUncheckedCreateWithoutProviderInput = {
@@ -45058,6 +45446,7 @@ export namespace Prisma {
     undoneAt?: Date | string | null
     undoneById?: string | null
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    archivedTariffs?: TariffUncheckedCreateNestedManyWithoutArchivedByImportRunInput
   }
 
   export type TariffImportRunCreateOrConnectWithoutProviderInput = {
@@ -45136,13 +45525,16 @@ export namespace Prisma {
     speed?: IntNullableFilter<"Tariff"> | number | null
     promoText?: StringNullableFilter<"Tariff"> | string | null
     connectionFee?: DecimalNullableFilter<"Tariff"> | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFilter<"Tariff"> | boolean
+    availability?: EnumTariffAvailabilityFilter<"Tariff"> | $Enums.TariffAvailability
     externalId?: StringNullableFilter<"Tariff"> | string | null
     identityKey?: StringFilter<"Tariff"> | string
     dataSource?: StringNullableFilter<"Tariff"> | string | null
     attributes?: JsonNullableFilter<"Tariff">
     seo?: JsonNullableFilter<"Tariff">
     status?: EnumPublishStatusFilter<"Tariff"> | $Enums.PublishStatus
+    archiveReason?: EnumTariffArchiveReasonNullableFilter<"Tariff"> | $Enums.TariffArchiveReason | null
+    archivedAt?: DateTimeNullableFilter<"Tariff"> | Date | string | null
+    archivedByImportRunId?: StringNullableFilter<"Tariff"> | string | null
     createdAt?: DateTimeFilter<"Tariff"> | Date | string
     updatedAt?: DateTimeFilter<"Tariff"> | Date | string
   }
@@ -48056,16 +48448,19 @@ export namespace Prisma {
     speed?: number | null
     promoText?: string | null
     connectionFee?: Decimal | DecimalJsLike | number | string | null
-    availability?: boolean
+    availability?: $Enums.TariffAvailability
     externalId?: string | null
     identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutTariffsInput
+    archivedByImportRun?: TariffImportRunCreateNestedOneWithoutArchivedTariffsInput
     leads?: LeadCreateNestedManyWithoutTariffInput
   }
 
@@ -48080,13 +48475,16 @@ export namespace Prisma {
     speed?: number | null
     promoText?: string | null
     connectionFee?: Decimal | DecimalJsLike | number | string | null
-    availability?: boolean
+    availability?: $Enums.TariffAvailability
     externalId?: string | null
     identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
+    archivedByImportRunId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     leads?: LeadUncheckedCreateNestedManyWithoutTariffInput
@@ -49034,6 +49432,49 @@ export namespace Prisma {
     create: XOR<CityCreateWithoutTariffsInput, CityUncheckedCreateWithoutTariffsInput>
   }
 
+  export type TariffImportRunCreateWithoutArchivedTariffsInput = {
+    id?: string
+    fileName: string
+    status?: $Enums.TariffImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    undoneAt?: Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    provider: ProviderCreateNestedOneWithoutTariffImportsInput
+    appliedBy?: UserCreateNestedOneWithoutTariffImportsAppliedInput
+    undoneBy?: UserCreateNestedOneWithoutTariffImportsUndoneInput
+  }
+
+  export type TariffImportRunUncheckedCreateWithoutArchivedTariffsInput = {
+    id?: string
+    providerId: string
+    fileName: string
+    status?: $Enums.TariffImportStatus
+    totalRows: number
+    validRows: number
+    errorRows: number
+    warningRows: number
+    report: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    appliedAt?: Date | string | null
+    appliedById?: string | null
+    undoneAt?: Date | string | null
+    undoneById?: string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type TariffImportRunCreateOrConnectWithoutArchivedTariffsInput = {
+    where: TariffImportRunWhereUniqueInput
+    create: XOR<TariffImportRunCreateWithoutArchivedTariffsInput, TariffImportRunUncheckedCreateWithoutArchivedTariffsInput>
+  }
+
   export type LeadCreateWithoutTariffInput = {
     id?: string
     name?: string | null
@@ -49212,6 +49653,55 @@ export namespace Prisma {
     redirects?: RedirectUncheckedUpdateManyWithoutCityNestedInput
   }
 
+  export type TariffImportRunUpsertWithoutArchivedTariffsInput = {
+    update: XOR<TariffImportRunUpdateWithoutArchivedTariffsInput, TariffImportRunUncheckedUpdateWithoutArchivedTariffsInput>
+    create: XOR<TariffImportRunCreateWithoutArchivedTariffsInput, TariffImportRunUncheckedCreateWithoutArchivedTariffsInput>
+    where?: TariffImportRunWhereInput
+  }
+
+  export type TariffImportRunUpdateToOneWithWhereWithoutArchivedTariffsInput = {
+    where?: TariffImportRunWhereInput
+    data: XOR<TariffImportRunUpdateWithoutArchivedTariffsInput, TariffImportRunUncheckedUpdateWithoutArchivedTariffsInput>
+  }
+
+  export type TariffImportRunUpdateWithoutArchivedTariffsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumTariffImportStatusFieldUpdateOperationsInput | $Enums.TariffImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    provider?: ProviderUpdateOneRequiredWithoutTariffImportsNestedInput
+    appliedBy?: UserUpdateOneWithoutTariffImportsAppliedNestedInput
+    undoneBy?: UserUpdateOneWithoutTariffImportsUndoneNestedInput
+  }
+
+  export type TariffImportRunUncheckedUpdateWithoutArchivedTariffsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    status?: EnumTariffImportStatusFieldUpdateOperationsInput | $Enums.TariffImportStatus
+    totalRows?: IntFieldUpdateOperationsInput | number
+    validRows?: IntFieldUpdateOperationsInput | number
+    errorRows?: IntFieldUpdateOperationsInput | number
+    warningRows?: IntFieldUpdateOperationsInput | number
+    report?: JsonNullValueInput | InputJsonValue
+    changeSet?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appliedById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    undoneById?: NullableStringFieldUpdateOperationsInput | string | null
+    undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
   export type LeadUpsertWithWhereUniqueWithoutTariffInput = {
     where: LeadWhereUniqueInput
     update: XOR<LeadUpdateWithoutTariffInput, LeadUncheckedUpdateWithoutTariffInput>
@@ -49337,6 +49827,68 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutTariffImportsUndoneInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutTariffImportsUndoneInput, UserUncheckedCreateWithoutTariffImportsUndoneInput>
+  }
+
+  export type TariffCreateWithoutArchivedByImportRunInput = {
+    id?: string
+    name: string
+    slug: string
+    serviceType: $Enums.ServiceType
+    standardPrice?: Decimal | DecimalJsLike | number | string | null
+    promoPrice?: Decimal | DecimalJsLike | number | string | null
+    speed?: number | null
+    promoText?: string | null
+    connectionFee?: Decimal | DecimalJsLike | number | string | null
+    availability?: $Enums.TariffAvailability
+    externalId?: string | null
+    identityKey: string
+    dataSource?: string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    provider: ProviderCreateNestedOneWithoutTariffsInput
+    city: CityCreateNestedOneWithoutTariffsInput
+    leads?: LeadCreateNestedManyWithoutTariffInput
+  }
+
+  export type TariffUncheckedCreateWithoutArchivedByImportRunInput = {
+    id?: string
+    providerId: string
+    cityId: string
+    name: string
+    slug: string
+    serviceType: $Enums.ServiceType
+    standardPrice?: Decimal | DecimalJsLike | number | string | null
+    promoPrice?: Decimal | DecimalJsLike | number | string | null
+    speed?: number | null
+    promoText?: string | null
+    connectionFee?: Decimal | DecimalJsLike | number | string | null
+    availability?: $Enums.TariffAvailability
+    externalId?: string | null
+    identityKey: string
+    dataSource?: string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leads?: LeadUncheckedCreateNestedManyWithoutTariffInput
+  }
+
+  export type TariffCreateOrConnectWithoutArchivedByImportRunInput = {
+    where: TariffWhereUniqueInput
+    create: XOR<TariffCreateWithoutArchivedByImportRunInput, TariffUncheckedCreateWithoutArchivedByImportRunInput>
+  }
+
+  export type TariffCreateManyArchivedByImportRunInputEnvelope = {
+    data: TariffCreateManyArchivedByImportRunInput | TariffCreateManyArchivedByImportRunInput[]
+    skipDuplicates?: boolean
   }
 
   export type ProviderUpsertWithoutTariffImportsInput = {
@@ -49466,6 +50018,22 @@ export namespace Prisma {
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+  }
+
+  export type TariffUpsertWithWhereUniqueWithoutArchivedByImportRunInput = {
+    where: TariffWhereUniqueInput
+    update: XOR<TariffUpdateWithoutArchivedByImportRunInput, TariffUncheckedUpdateWithoutArchivedByImportRunInput>
+    create: XOR<TariffCreateWithoutArchivedByImportRunInput, TariffUncheckedCreateWithoutArchivedByImportRunInput>
+  }
+
+  export type TariffUpdateWithWhereUniqueWithoutArchivedByImportRunInput = {
+    where: TariffWhereUniqueInput
+    data: XOR<TariffUpdateWithoutArchivedByImportRunInput, TariffUncheckedUpdateWithoutArchivedByImportRunInput>
+  }
+
+  export type TariffUpdateManyWithWhereWithoutArchivedByImportRunInput = {
+    where: TariffScalarWhereInput
+    data: XOR<TariffUpdateManyMutationInput, TariffUncheckedUpdateManyWithoutArchivedByImportRunInput>
   }
 
   export type SiteCreateWithoutCityImportsInput = {
@@ -50335,17 +50903,20 @@ export namespace Prisma {
     speed?: number | null
     promoText?: string | null
     connectionFee?: Decimal | DecimalJsLike | number | string | null
-    availability?: boolean
+    availability?: $Enums.TariffAvailability
     externalId?: string | null
     identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     provider: ProviderCreateNestedOneWithoutTariffsInput
     city: CityCreateNestedOneWithoutTariffsInput
+    archivedByImportRun?: TariffImportRunCreateNestedOneWithoutArchivedTariffsInput
   }
 
   export type TariffUncheckedCreateWithoutLeadsInput = {
@@ -50360,13 +50931,16 @@ export namespace Prisma {
     speed?: number | null
     promoText?: string | null
     connectionFee?: Decimal | DecimalJsLike | number | string | null
-    availability?: boolean
+    availability?: $Enums.TariffAvailability
     externalId?: string | null
     identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
+    archivedByImportRunId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -50917,17 +51491,20 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutTariffsNestedInput
     city?: CityUpdateOneRequiredWithoutTariffsNestedInput
+    archivedByImportRun?: TariffImportRunUpdateOneWithoutArchivedTariffsNestedInput
   }
 
   export type TariffUncheckedUpdateWithoutLeadsInput = {
@@ -50942,13 +51519,16 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedByImportRunId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52542,6 +53122,7 @@ export namespace Prisma {
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
     provider: ProviderCreateNestedOneWithoutTariffImportsInput
     undoneBy?: UserCreateNestedOneWithoutTariffImportsUndoneInput
+    archivedTariffs?: TariffCreateNestedManyWithoutArchivedByImportRunInput
   }
 
   export type TariffImportRunUncheckedCreateWithoutAppliedByInput = {
@@ -52560,6 +53141,7 @@ export namespace Prisma {
     undoneAt?: Date | string | null
     undoneById?: string | null
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    archivedTariffs?: TariffUncheckedCreateNestedManyWithoutArchivedByImportRunInput
   }
 
   export type TariffImportRunCreateOrConnectWithoutAppliedByInput = {
@@ -52588,6 +53170,7 @@ export namespace Prisma {
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
     provider: ProviderCreateNestedOneWithoutTariffImportsInput
     appliedBy?: UserCreateNestedOneWithoutTariffImportsAppliedInput
+    archivedTariffs?: TariffCreateNestedManyWithoutArchivedByImportRunInput
   }
 
   export type TariffImportRunUncheckedCreateWithoutUndoneByInput = {
@@ -52606,6 +53189,7 @@ export namespace Prisma {
     appliedById?: string | null
     undoneAt?: Date | string | null
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    archivedTariffs?: TariffUncheckedCreateNestedManyWithoutArchivedByImportRunInput
   }
 
   export type TariffImportRunCreateOrConnectWithoutUndoneByInput = {
@@ -52979,13 +53563,16 @@ export namespace Prisma {
     speed?: number | null
     promoText?: string | null
     connectionFee?: Decimal | DecimalJsLike | number | string | null
-    availability?: boolean
+    availability?: $Enums.TariffAvailability
     externalId?: string | null
     identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
+    archivedByImportRunId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -53087,16 +53674,19 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     city?: CityUpdateOneRequiredWithoutTariffsNestedInput
+    archivedByImportRun?: TariffImportRunUpdateOneWithoutArchivedTariffsNestedInput
     leads?: LeadUpdateManyWithoutTariffNestedInput
   }
 
@@ -53111,13 +53701,16 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedByImportRunId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     leads?: LeadUncheckedUpdateManyWithoutTariffNestedInput
@@ -53134,13 +53727,16 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedByImportRunId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53161,6 +53757,7 @@ export namespace Prisma {
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
     appliedBy?: UserUpdateOneWithoutTariffImportsAppliedNestedInput
     undoneBy?: UserUpdateOneWithoutTariffImportsUndoneNestedInput
+    archivedTariffs?: TariffUpdateManyWithoutArchivedByImportRunNestedInput
   }
 
   export type TariffImportRunUncheckedUpdateWithoutProviderInput = {
@@ -53179,6 +53776,7 @@ export namespace Prisma {
     undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     undoneById?: NullableStringFieldUpdateOperationsInput | string | null
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    archivedTariffs?: TariffUncheckedUpdateManyWithoutArchivedByImportRunNestedInput
   }
 
   export type TariffImportRunUncheckedUpdateManyWithoutProviderInput = {
@@ -54423,13 +55021,16 @@ export namespace Prisma {
     speed?: number | null
     promoText?: string | null
     connectionFee?: Decimal | DecimalJsLike | number | string | null
-    availability?: boolean
+    availability?: $Enums.TariffAvailability
     externalId?: string | null
     identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
+    archivedByImportRunId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -54547,16 +55148,19 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     provider?: ProviderUpdateOneRequiredWithoutTariffsNestedInput
+    archivedByImportRun?: TariffImportRunUpdateOneWithoutArchivedTariffsNestedInput
     leads?: LeadUpdateManyWithoutTariffNestedInput
   }
 
@@ -54571,13 +55175,16 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedByImportRunId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     leads?: LeadUncheckedUpdateManyWithoutTariffNestedInput
@@ -54594,13 +55201,16 @@ export namespace Prisma {
     speed?: NullableIntFieldUpdateOperationsInput | number | null
     promoText?: NullableStringFieldUpdateOperationsInput | string | null
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    availability?: BoolFieldUpdateOperationsInput | boolean
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
     identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedByImportRunId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -55167,6 +55777,108 @@ export namespace Prisma {
     contractResult?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     apiResult?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TariffCreateManyArchivedByImportRunInput = {
+    id?: string
+    providerId: string
+    cityId: string
+    name: string
+    slug: string
+    serviceType: $Enums.ServiceType
+    standardPrice?: Decimal | DecimalJsLike | number | string | null
+    promoPrice?: Decimal | DecimalJsLike | number | string | null
+    speed?: number | null
+    promoText?: string | null
+    connectionFee?: Decimal | DecimalJsLike | number | string | null
+    availability?: $Enums.TariffAvailability
+    externalId?: string | null
+    identityKey: string
+    dataSource?: string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    archiveReason?: $Enums.TariffArchiveReason | null
+    archivedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TariffUpdateWithoutArchivedByImportRunInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    serviceType?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+    standardPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    promoPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    speed?: NullableIntFieldUpdateOperationsInput | number | null
+    promoText?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
+    externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
+    dataSource?: NullableStringFieldUpdateOperationsInput | string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    provider?: ProviderUpdateOneRequiredWithoutTariffsNestedInput
+    city?: CityUpdateOneRequiredWithoutTariffsNestedInput
+    leads?: LeadUpdateManyWithoutTariffNestedInput
+  }
+
+  export type TariffUncheckedUpdateWithoutArchivedByImportRunInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    cityId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    serviceType?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+    standardPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    promoPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    speed?: NullableIntFieldUpdateOperationsInput | number | null
+    promoText?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
+    externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
+    dataSource?: NullableStringFieldUpdateOperationsInput | string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leads?: LeadUncheckedUpdateManyWithoutTariffNestedInput
+  }
+
+  export type TariffUncheckedUpdateManyWithoutArchivedByImportRunInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    cityId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    serviceType?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType
+    standardPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    promoPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    speed?: NullableIntFieldUpdateOperationsInput | number | null
+    promoText?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    availability?: EnumTariffAvailabilityFieldUpdateOperationsInput | $Enums.TariffAvailability
+    externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
+    dataSource?: NullableStringFieldUpdateOperationsInput | string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    archiveReason?: NullableEnumTariffArchiveReasonFieldUpdateOperationsInput | $Enums.TariffArchiveReason | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -55953,6 +56665,7 @@ export namespace Prisma {
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
     provider?: ProviderUpdateOneRequiredWithoutTariffImportsNestedInput
     undoneBy?: UserUpdateOneWithoutTariffImportsUndoneNestedInput
+    archivedTariffs?: TariffUpdateManyWithoutArchivedByImportRunNestedInput
   }
 
   export type TariffImportRunUncheckedUpdateWithoutAppliedByInput = {
@@ -55971,6 +56684,7 @@ export namespace Prisma {
     undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     undoneById?: NullableStringFieldUpdateOperationsInput | string | null
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    archivedTariffs?: TariffUncheckedUpdateManyWithoutArchivedByImportRunNestedInput
   }
 
   export type TariffImportRunUncheckedUpdateManyWithoutAppliedByInput = {
@@ -56007,6 +56721,7 @@ export namespace Prisma {
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
     provider?: ProviderUpdateOneRequiredWithoutTariffImportsNestedInput
     appliedBy?: UserUpdateOneWithoutTariffImportsAppliedNestedInput
+    archivedTariffs?: TariffUpdateManyWithoutArchivedByImportRunNestedInput
   }
 
   export type TariffImportRunUncheckedUpdateWithoutUndoneByInput = {
@@ -56025,6 +56740,7 @@ export namespace Prisma {
     appliedById?: NullableStringFieldUpdateOperationsInput | string | null
     undoneAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     undoSiteRevisions?: NullableJsonNullValueInput | InputJsonValue
+    archivedTariffs?: TariffUncheckedUpdateManyWithoutArchivedByImportRunNestedInput
   }
 
   export type TariffImportRunUncheckedUpdateManyWithoutUndoneByInput = {

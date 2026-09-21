@@ -13,9 +13,10 @@ const publicationStub = {
 const existingTariff = {
   id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500',
   serviceType: 'INTERNET', standardPrice: 900, promoPrice: 700, speed: 500, promoText: 'Первые 3 месяца',
-  connectionFee: 0, availability: true, externalId: 'external-1', identityKey: 'city-1:гига 500:INTERNET',
+  connectionFee: 0, availability: 'ACTIVE', externalId: 'external-1', identityKey: 'city-1:гига 500:INTERNET',
   dataSource: 'tariffs.xlsx', attributes: { opisanie_tarifa: 'Описание' }, seo: { title: 'SEO title' },
-  status: 'PUBLISHED', createdAt: new Date('2026-09-01T00:00:00Z'), updatedAt: new Date('2026-09-10T00:00:00Z'),
+  status: 'PUBLISHED', archiveReason: null, archivedAt: null, archivedByImportRunId: null,
+  createdAt: new Date('2026-09-01T00:00:00Z'), updatedAt: new Date('2026-09-10T00:00:00Z'),
 };
 const withRelations = (tariff) => ({
   ...tariff,
@@ -96,6 +97,44 @@ test('confirmed manual edit returns the persisted tariff and working revision wi
   assert.deepEqual(calls, ['revision']);
 });
 
+test('manual archive and restore keep lifecycle provenance consistent', async () => {
+  let record = { ...existingTariff };
+  const writes = [];
+  const tx = {
+    city: { findUnique: async () => ({ id: 'city-1', slug: 'kazan', siteId: 'site-1', site: { providerId: 'provider-1' } }) },
+    page: { findFirst: async () => null },
+    redirect: { findUnique: async () => null, updateMany: async () => ({ count: 0 }), create: async () => ({}) },
+    tariff: {
+      findUnique: async () => record,
+      findFirst: async () => null,
+      update: async ({ data }) => {
+        writes.push(data);
+        record = { ...record, ...data, updatedAt: new Date(record.updatedAt.getTime() + 1_000) };
+        return withRelations(record);
+      },
+    },
+  };
+  const controller = new AdminTariffsController({ ...tx, $transaction: async (callback) => callback(tx) }, undefined, publicationStub);
+
+  await controller.update('tariff-1', {
+    expectedUpdatedAt: record.updatedAt.toISOString(), status: 'ARCHIVED', confirmSensitiveChanges: true,
+  });
+  assert.equal(writes[0].availability, 'ARCHIVED');
+  assert.equal(writes[0].status, 'ARCHIVED');
+  assert.equal(writes[0].archiveReason, 'MANUAL');
+  assert.ok(writes[0].archivedAt instanceof Date);
+  assert.equal(writes[0].archivedByImportRunId, null);
+
+  await controller.update('tariff-1', {
+    expectedUpdatedAt: record.updatedAt.toISOString(), status: 'DRAFT', confirmSensitiveChanges: true,
+  });
+  assert.equal(writes[1].availability, 'ACTIVE');
+  assert.equal(writes[1].status, 'DRAFT');
+  assert.equal(writes[1].archiveReason, null);
+  assert.equal(writes[1].archivedAt, null);
+  assert.equal(writes[1].archivedByImportRunId, null);
+});
+
 test('tariff update DTO rejects unknown, empty and malformed edit fields at runtime', async () => {
   const pipe = createGlobalValidationPipe();
   const metadata = { type: 'body', metatype: UpdateTariffDto };
@@ -107,6 +146,7 @@ test('tariff update DTO rejects unknown, empty and malformed edit fields at runt
   for (const field of ['cityId', 'name', 'slug', 'serviceType', 'availability', 'status']) {
     await rejectsWith({ expectedUpdatedAt: existingTariff.updatedAt.toISOString(), [field]: null }, new RegExp(field, 'i'));
   }
+  await rejectsWith({ expectedUpdatedAt: existingTariff.updatedAt.toISOString(), availability: true }, /availability/i);
   const nullable = await pipe.transform({
     expectedUpdatedAt: existingTariff.updatedAt.toISOString(), standardPrice: null, promoPrice: null, speed: null,
     promoText: null, connectionFee: null, attributes: null, seo: null,

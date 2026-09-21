@@ -68,7 +68,7 @@ export class AdminCitiesController {
       include: {
         region: { select: { id: true, name: true, slug: true } },
         site: { select: { id: true, name: true, slug: true, domain: true, workingRevision: true, publishedRevision: true, publications: { where: { status: 'SUCCEEDED' }, orderBy: { publishedAt: 'desc' }, take: 1, select: { publishedAt: true } } } },
-        tariffs: { where: { status: 'PUBLISHED' }, select: { id: true } },
+        tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE' }, select: { id: true } },
         pages: { where: { type: 'HOME' }, select: { type: true, slug: true, status: true, blocks: { where: { archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
       },
     });
@@ -182,9 +182,9 @@ export class AdminCitiesController {
       }
       const updated = await transaction.city.update({ where: { id }, data: { ...data, status: nextStatus } });
       if (body.status !== undefined && body.status !== current.status) {
-        const tariffs = await transaction.tariff.findMany({ where: { cityId: id }, select: { id: true, status: true } });
+        const tariffs = await transaction.tariff.findMany({ where: { cityId: id }, select: { id: true, status: true, availability: true } });
         const publishedTariffIds = updated.status === 'PUBLISHED'
-          ? tariffs.filter((tariff) => tariff.status === 'PUBLISHED').map((tariff) => tariff.id)
+          ? tariffs.filter((tariff) => tariff.status === 'PUBLISHED' && tariff.availability === 'ACTIVE').map((tariff) => tariff.id)
           : [];
         const draftTariffIds = tariffs.filter((tariff) => !publishedTariffIds.includes(tariff.id)).map((tariff) => tariff.id);
         if (publishedTariffIds.length) {
@@ -228,7 +228,7 @@ export class AdminCitiesController {
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const city = await transaction.city.findUnique({
         where: { id },
-        include: { tariffs: { where: { status: 'PUBLISHED' }, select: { id: true, slug: true } } },
+        include: { tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE' }, select: { id: true, slug: true } } },
       });
       if (!city) throw new BadRequestException('Город не найден');
       if (city.status !== 'PUBLISHED') throw new BadRequestException('Отдельное опасное действие используется только для опубликованного города');

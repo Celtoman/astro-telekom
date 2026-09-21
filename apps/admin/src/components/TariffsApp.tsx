@@ -16,7 +16,7 @@ import { Skeleton } from "./ui/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 
 interface Administrator { id: string; email: string }
-interface Tariff { id: string; name: string; slug: string; serviceType: string; standardPrice: string | number | null; promoPrice: string | number | null; speed: number | null; status: string; availability: boolean; city: { name: string; slug: string } }
+interface Tariff { id: string; name: string; slug: string; serviceType: string; standardPrice: string | number | null; promoPrice: string | number | null; speed: number | null; status: string; availability: "ACTIVE" | "ARCHIVED"; city: { name: string; slug: string } }
 interface TariffDetail extends Tariff { promoText: string | null; connectionFee: string | number | null; externalId: string | null; identityKey: string | null; dataSource: string | null; attributes: Record<string, unknown> | null; seo: Record<string, unknown> | null; publicPath: string; provider: { id: string; name: string }; city: { id: string; name: string; slug: string; siteId: string }; createdAt: string; updatedAt: string }
 interface TariffPage {
   items: Tariff[]

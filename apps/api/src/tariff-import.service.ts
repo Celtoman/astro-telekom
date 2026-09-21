@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { isDeepStrictEqual } from 'node:util';
-import { Prisma, PublishStatus, ServiceType, type Redirect, type Tariff } from '../generated';
+import { Prisma, PublishStatus, ServiceType, TariffArchiveReason, TariffAvailability, type Redirect, type Tariff } from '../generated';
 import { readSheet, type SheetData } from 'read-excel-file/node';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
@@ -82,7 +82,7 @@ export interface ImportCandidate {
   speed: number;
   promoText: string | null;
   connectionFee: number | null;
-  availability: boolean;
+  availability: 'ACTIVE';
   identityKey: string;
   dataSource: string;
   attributes: Prisma.InputJsonObject;
@@ -92,8 +92,17 @@ export interface ImportCandidate {
 export interface ImportDiff {
   created: number;
   updated: number;
-  deleted: number;
-  deletedTariffs: Array<{ id: string; cityId: string; name: string; slug: string }>;
+  archived: number;
+  unchanged: number;
+  archivedTariffs: Array<{ id: string; cityId: string; name: string; slug: string }>;
+  changes: Array<{
+    action: 'create' | 'update' | 'archive' | 'unchanged';
+    id: string | null;
+    key: string;
+    citySlug: string;
+    name: string;
+    fields: Array<{ field: string; before: unknown; after: unknown }>;
+  }>;
 }
 
 export interface TariffImportSnapshot {
@@ -102,7 +111,7 @@ export interface TariffImportSnapshot {
 }
 
 export interface ImportReport {
-  reportVersion: 2;
+  reportVersion: 3;
   fileName: string;
   providerId: string;
   createdAt: string;
@@ -128,13 +137,16 @@ type StoredTariff = {
   speed: number | null;
   promoText: string | null;
   connectionFee: string | null;
-  availability: boolean;
+  availability: string | boolean;
   externalId: string | null;
-  identityKey: string | null;
+  identityKey: string;
   dataSource: string | null;
   attributes: Prisma.JsonValue | null;
   seo: Prisma.JsonValue | null;
   status: string;
+  archiveReason?: string | null;
+  archivedAt?: string | null;
+  archivedByImportRunId?: string | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -160,7 +172,7 @@ type StoredLeadAssignment = {
 };
 
 type TariffImportChangeSet = {
-  version: 2;
+  version: 2 | 3;
   kind: 'TARIFF_IMPORT';
   providerId: string;
   runId: string;
@@ -188,14 +200,28 @@ const snapshotTariff = (tariff: Tariff): StoredTariff => ({
   connectionFee: tariff.connectionFee === null ? null : String(tariff.connectionFee),
   availability: tariff.availability,
   externalId: tariff.externalId,
-  identityKey: tariff.identityKey ?? tariffIdentityKey(tariff.cityId, tariff.name, tariff.serviceType),
+  identityKey: tariff.identityKey,
   dataSource: tariff.dataSource,
   attributes: tariff.attributes === null ? null : jsonCopy(tariff.attributes),
   seo: tariff.seo === null ? null : jsonCopy(tariff.seo),
   status: tariff.status,
+  archiveReason: tariff.archiveReason,
+  archivedAt: dateText(tariff.archivedAt),
+  archivedByImportRunId: tariff.archivedByImportRunId,
   createdAt: tariff.createdAt.toISOString(),
   updatedAt: tariff.updatedAt.toISOString(),
 });
+const normalizeStoredTariff = (tariff: StoredTariff): StoredTariff => {
+  const archived = tariff.availability === false || tariff.availability === 'ARCHIVED' || tariff.status === 'ARCHIVED';
+  return {
+    ...tariff,
+    availability: archived ? 'ARCHIVED' : 'ACTIVE',
+    status: archived ? 'ARCHIVED' : tariff.status,
+    archiveReason: tariff.archiveReason ?? (archived ? 'MANUAL' : null),
+    archivedAt: tariff.archivedAt ?? (archived ? tariff.updatedAt : null),
+    archivedByImportRunId: tariff.archivedByImportRunId ?? null,
+  };
+};
 const snapshotRedirect = (redirect: Redirect): StoredRedirect => ({
   id: redirect.id,
   siteId: redirect.siteId,
@@ -229,18 +255,21 @@ const restoreTariffData = (tariff: StoredTariff) => ({
   speed: tariff.speed,
   promoText: tariff.promoText,
   connectionFee: tariff.connectionFee,
-  availability: tariff.availability,
+  availability: (tariff.availability === false || tariff.availability === 'ARCHIVED' ? 'ARCHIVED' : 'ACTIVE') as TariffAvailability,
   externalId: tariff.externalId,
-  identityKey: tariff.identityKey ?? tariffIdentityKey(tariff.cityId, tariff.name, tariff.serviceType),
+  identityKey: tariff.identityKey,
   dataSource: tariff.dataSource,
   attributes: tariff.attributes === null ? Prisma.JsonNull : tariff.attributes as Prisma.InputJsonValue,
   seo: tariff.seo === null ? Prisma.JsonNull : tariff.seo as Prisma.InputJsonValue,
   status: tariff.status as PublishStatus,
+  archiveReason: (tariff.archiveReason ?? null) as TariffArchiveReason | null,
+  archivedAt: tariff.archivedAt ? new Date(tariff.archivedAt) : null,
+  archivedByImportRunId: tariff.archivedByImportRunId ?? null,
 });
 const isTariffImportChangeSet = (value: unknown): value is TariffImportChangeSet => {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const changeSet = value as Partial<TariffImportChangeSet>;
-  return changeSet.version === 2
+  return (changeSet.version === 2 || changeSet.version === 3)
     && changeSet.kind === 'TARIFF_IMPORT'
     && typeof changeSet.providerId === 'string'
     && typeof changeSet.runId === 'string'
@@ -458,7 +487,12 @@ export class TariffImportService {
     });
     const existingTariffs = await this.prisma.tariff.findMany({
       where: { providerId },
-      select: { id: true, cityId: true, name: true, slug: true, identityKey: true, updatedAt: true },
+      select: {
+        id: true, cityId: true, name: true, slug: true, serviceType: true,
+        standardPrice: true, promoPrice: true, speed: true, promoText: true, connectionFee: true,
+        availability: true, identityKey: true, dataSource: true, attributes: true, status: true,
+        archiveReason: true, archivedAt: true, archivedByImportRunId: true, updatedAt: true,
+      },
     });
     const cityBySlug = new Map(cities.map((city) => [city.slug.toLowerCase(), city]));
     const publishedPagePaths = new Set(cities.flatMap((city) => (city.pages || []).map((page) => `${city.id}:${page.slug}`)));
@@ -580,7 +614,7 @@ export class TariffImportService {
         candidates.push({
           key, providerId, cityId: city.id, citySlug, name: canonicalName, slug: tariffSlug,
           serviceType, standardPrice, promoPrice, speed, promoText: htmlToPlainText(row.opisanie_aktsii) || null,
-          connectionFee, availability: true,
+          connectionFee, availability: 'ACTIVE',
           identityKey: tariffIdentityKey(city.id, canonicalName, serviceType), dataSource: fileName, attributes: attributes as Prisma.InputJsonObject, status: 'PUBLISHED',
         });
       }
@@ -589,31 +623,92 @@ export class TariffImportService {
     const matchedIds = new Set<string>();
     let created = 0;
     let updated = 0;
+    let unchanged = 0;
+    const changes: ImportDiff['changes'] = [];
     for (const candidate of candidates) {
       const existing = existingTariffs.find((tariff) => tariff.cityId === candidate.cityId
         && tariff.identityKey === candidate.identityKey);
       if (existing) {
         matchedIds.add(existing.id);
-        updated += 1;
+        const comparable = {
+          name: candidate.name,
+          slug: candidate.slug,
+          serviceType: candidate.serviceType,
+          standardPrice: String(candidate.standardPrice),
+          promoPrice: candidate.promoPrice === null ? null : String(candidate.promoPrice),
+          speed: candidate.speed,
+          promoText: candidate.promoText,
+          connectionFee: candidate.connectionFee === null ? null : String(candidate.connectionFee),
+          availability: candidate.availability,
+          dataSource: candidate.dataSource,
+          attributes: jsonCopy(candidate.attributes),
+          status: candidate.status,
+          archiveReason: null,
+          archivedAt: null,
+          archivedByImportRunId: null,
+        };
+        const current = {
+          name: existing.name,
+          slug: existing.slug,
+          serviceType: existing.serviceType,
+          standardPrice: existing.standardPrice === null ? null : String(existing.standardPrice),
+          promoPrice: existing.promoPrice === null ? null : String(existing.promoPrice),
+          speed: existing.speed,
+          promoText: existing.promoText,
+          connectionFee: existing.connectionFee === null ? null : String(existing.connectionFee),
+          availability: existing.availability,
+          dataSource: existing.dataSource,
+          attributes: existing.attributes == null ? {} : jsonCopy(existing.attributes),
+          status: existing.status,
+          archiveReason: existing.archiveReason,
+          archivedAt: dateText(existing.archivedAt),
+          archivedByImportRunId: existing.archivedByImportRunId,
+        };
+        const fields = Object.keys(comparable).flatMap((field) => isDeepStrictEqual(
+          current[field as keyof typeof current],
+          comparable[field as keyof typeof comparable],
+        ) ? [] : [{
+          field,
+          before: current[field as keyof typeof current],
+          after: comparable[field as keyof typeof comparable],
+        }]);
+        if (fields.length) {
+          updated += 1;
+          changes.push({ action: 'update', id: existing.id, key: candidate.key, citySlug: candidate.citySlug, name: candidate.name, fields });
+        } else {
+          unchanged += 1;
+          changes.push({ action: 'unchanged', id: existing.id, key: candidate.key, citySlug: candidate.citySlug, name: candidate.name, fields: [] });
+        }
       } else {
         created += 1;
+        changes.push({ action: 'create', id: null, key: candidate.key, citySlug: candidate.citySlug, name: candidate.name, fields: [] });
       }
     }
-    const deletedTariffs = existingTariffs
-      .filter((tariff) => !matchedIds.has(tariff.id))
+    const archivedTariffs = existingTariffs
+      .filter((tariff) => !matchedIds.has(tariff.id) && tariff.availability !== TariffAvailability.ARCHIVED)
       .map(({ id, cityId, name, slug: tariffSlug }) => ({ id, cityId, name, slug: tariffSlug }));
+    for (const tariff of archivedTariffs) {
+      const city = cities.find((item) => item.id === tariff.cityId);
+      changes.push({
+        action: 'archive', id: tariff.id, key: tariff.id, citySlug: city?.slug ?? '', name: tariff.name,
+        fields: [
+          { field: 'availability', before: TariffAvailability.ACTIVE, after: TariffAvailability.ARCHIVED },
+          { field: 'archiveReason', before: null, after: TariffArchiveReason.ABSENT_FROM_IMPORT },
+        ],
+      });
+    }
     const errorRows = new Set(issues.filter((issue) => issue.level === 'error').map((issue) => issue.row)).size;
     const warningRows = new Set(issues.filter((issue) => issue.level === 'warning').map((issue) => issue.row)).size;
     return {
-      reportVersion: 2 as const, fileName, providerId, createdAt: new Date().toISOString(), totalRows: normalizedRows.length,
+      reportVersion: 3 as const, fileName, providerId, createdAt: new Date().toISOString(), totalRows: normalizedRows.length,
       validRows: candidates.length, errorRows, warningRows, issues, candidates,
       existingSnapshot: existingTariffs.map((tariff) => ({ id: tariff.id, updatedAt: tariff.updatedAt.toISOString() })),
-      diff: { created, updated, deleted: deletedTariffs.length, deletedTariffs },
+      diff: { created, updated, archived: archivedTariffs.length, unchanged, archivedTariffs, changes },
     };
   }
 
   async applyReport(report: ImportReport, options: { confirmWarnings?: boolean } = {}, runId?: string, actorId?: string) {
-    if (report.reportVersion !== 2 || !Array.isArray(report.existingSnapshot)) {
+    if (report.reportVersion !== 3 || !Array.isArray(report.existingSnapshot) || !Array.isArray(report.diff?.changes)) {
       throw new BadRequestException('Отчет импорта создан в старом формате; проверьте файл заново');
     }
     if (report.errorRows > 0) throw new BadRequestException('Нельзя применить импорт с ошибками');
@@ -648,6 +743,7 @@ export class TariffImportService {
       const matchedIds = new Set<string>();
       let created = 0;
       let updated = 0;
+      let unchanged = 0;
       for (const candidate of report.candidates) {
         const data = {
           providerId: candidate.providerId, cityId: candidate.cityId, name: candidate.name, slug: candidate.slug,
@@ -655,25 +751,38 @@ export class TariffImportService {
           speed: candidate.speed, promoText: candidate.promoText, connectionFee: candidate.connectionFee,
           availability: candidate.availability, identityKey: candidate.identityKey, dataSource: candidate.dataSource,
           attributes: candidate.attributes, status: candidate.status,
+          archiveReason: null, archivedAt: null, archivedByImportRunId: null,
         } satisfies Prisma.TariffUncheckedCreateInput;
         const existing = existingTariffs.find((tariff) => tariff.cityId === candidate.cityId
           && tariff.identityKey === candidate.identityKey);
         if (existing) {
           matchedIds.add(existing.id);
-          await transaction.tariff.update({ where: { id: existing.id }, data });
-          updated += 1;
+          const action = report.diff.changes.find((change) => change.id === existing.id && change.key === candidate.key)?.action;
+          if (action === 'unchanged') unchanged += 1;
+          else {
+            await transaction.tariff.update({ where: { id: existing.id }, data });
+            updated += 1;
+          }
         }
         else { await transaction.tariff.create({ data }); created += 1; }
       }
-      const staleIds = existingTariffs.filter((tariff) => !matchedIds.has(tariff.id)).map((tariff) => tariff.id);
-      const leadAssignments = runId && staleIds.length
-        ? await transaction.lead.findMany({
-          where: { tariffId: { in: staleIds } },
-          select: { id: true, tariffId: true, updatedAt: true },
-          orderBy: { id: 'asc' },
-        })
-        : [];
-      if (staleIds.length) await transaction.tariff.deleteMany({ where: { id: { in: staleIds } } });
+      const staleIds = existingTariffs
+        .filter((tariff) => !matchedIds.has(tariff.id) && tariff.availability !== TariffAvailability.ARCHIVED)
+        .map((tariff) => tariff.id);
+      if (staleIds.length && !runId) throw new BadRequestException('Для архивирования отсутствующих тарифов обязателен сохраненный import run');
+      const leadAssignments: Array<{ id: string; tariffId: string; updatedAt: Date }> = [];
+      if (staleIds.length) {
+        await transaction.tariff.updateMany({
+          where: { id: { in: staleIds } },
+          data: {
+            availability: TariffAvailability.ARCHIVED,
+            status: PublishStatus.ARCHIVED,
+            archiveReason: TariffArchiveReason.ABSENT_FROM_IMPORT,
+            archivedAt: new Date(),
+            archivedByImportRunId: runId!,
+          },
+        });
+      }
       const afterTariffs = await transaction.tariff.findMany({ where: { providerId: report.providerId } });
       const workingRevisions: Array<{ siteId: string; workingRevision: number }> = [];
       if (runId) {
@@ -709,7 +818,7 @@ export class TariffImportService {
           workingRevisions.push({ siteId: site.siteId, workingRevision: revision.siteRevision });
         }
         const changeSet: TariffImportChangeSet = {
-          version: 2,
+          version: 3,
           kind: 'TARIFF_IMPORT',
           providerId: report.providerId,
           runId,
@@ -738,7 +847,8 @@ export class TariffImportService {
       return {
         created,
         updated,
-        deleted: staleIds.length,
+        archived: staleIds.length,
+        unchanged,
         applied: report.candidates.length,
         ...(runId ? { workingRevisions } : {}),
       };
@@ -753,9 +863,15 @@ export class TariffImportService {
       if (!isTariffImportChangeSet(run.changeSet) || run.changeSet.runId !== run.id || run.changeSet.providerId !== run.providerId) {
         throw new BadRequestException('Для этого импорта нет полного безопасного снимка отмены');
       }
-      const changeSet = run.changeSet;
+      const changeSet: TariffImportChangeSet = {
+        ...run.changeSet,
+        version: 3,
+        beforeTariffs: run.changeSet.beforeTariffs.map(normalizeStoredTariff),
+        afterTariffs: run.changeSet.afterTariffs.map(normalizeStoredTariff),
+      };
       const currentTariffs = (await transaction.tariff.findMany({ where: { providerId: run.providerId } }))
         .map(snapshotTariff)
+        .map(normalizeStoredTariff)
         .sort((left, right) => left.id.localeCompare(right.id));
       if (!isDeepStrictEqual(currentTariffs, changeSet.afterTariffs)) {
         throw new ConflictException('Каталог тарифов изменен после импорта; безопасная отмена заблокирована');

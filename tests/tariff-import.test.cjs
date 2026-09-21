@@ -49,6 +49,10 @@ test('import runs persist change sets and attributed undo state', () => {
   const migration = fs.readFileSync(path.join(__dirname, '..', 'prisma', 'migrations', '0029_versioned_import_undo', 'migration.sql'), 'utf8');
   assert.match(migration, /ADD VALUE IF NOT EXISTS 'UNDONE'/);
   assert.match(migration, /ADD COLUMN "changeSet" JSONB/);
+  const lifecycleMigration = fs.readFileSync(path.join(__dirname, '..', 'prisma', 'migrations', '0038_tariff_archive_lifecycle', 'migration.sql'), 'utf8');
+  assert.match(lifecycleMigration, /CREATE TYPE "TariffAvailability" AS ENUM \('ACTIVE', 'ARCHIVED'\)/);
+  assert.match(lifecycleMigration, /"archiveReason" = 'ABSENT_FROM_IMPORT'.*"archivedByImportRunId" IS NOT NULL/s);
+  assert.match(lifecycleMigration, /FOREIGN KEY \("archivedByImportRunId"\) REFERENCES "TariffImportRun"/);
 });
 
 test('the tariff attribute registry exposes only canonical typed tariff attributes', () => {
@@ -110,9 +114,10 @@ test('validation maps canonical top-level tariff values without price coercion',
   assert.equal(report.candidates[0].standardPrice, 990);
   assert.equal(report.candidates[0].promoPrice, 890);
   assert.equal(report.candidates[0].connectionFee, 0);
-  assert.equal(report.reportVersion, 2);
+  assert.equal(report.reportVersion, 3);
   assert.deepEqual(report.existingSnapshot, []);
-  assert.deepEqual(report.diff, { created: 1, updated: 0, deleted: 0, deletedTariffs: [] });
+  assert.deepEqual({ created: report.diff.created, updated: report.diff.updated, archived: report.diff.archived, unchanged: report.diff.unchanged }, { created: 1, updated: 0, archived: 0, unchanged: 0 });
+  assert.equal(report.diff.changes[0].action, 'create');
 });
 
 test('validation preserves tariff description and normalized TV channel counters in attributes', async () => {
@@ -227,17 +232,14 @@ test('matching uses normalized name instead of slug and treats a rename as a new
   });
 
   const matched = await instance.validateRows('provider-1', 'tariffs.xlsx', [row()]);
-  assert.deepEqual(matched.diff, { created: 0, updated: 1, deleted: 0, deletedTariffs: [] });
+  assert.deepEqual({ created: matched.diff.created, updated: matched.diff.updated, archived: matched.diff.archived }, { created: 0, updated: 1, archived: 0 });
 
   const renamed = await instance.validateRows('provider-1', 'tariffs.xlsx', [row({
     post_title: 'Гига 500 Новый', nazvanie_tarifa: 'Гига 500 Новый', tariff_slug: 'giga-500-new',
   })]);
-  assert.deepEqual(renamed.diff, {
-    created: 1,
-    updated: 0,
-    deleted: 1,
-    deletedTariffs: [{ id: 'existing', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500' }],
-  });
+  assert.deepEqual({ created: renamed.diff.created, updated: renamed.diff.updated, archived: renamed.diff.archived }, { created: 1, updated: 0, archived: 1 });
+  assert.deepEqual(renamed.diff.archivedTariffs, [{ id: 'existing', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500' }]);
+  assert.deepEqual(renamed.diff.changes.map(({ action }) => action), ['create', 'archive']);
 });
 
 test('a matched tariff slug change must use the confirmed editor redirect flow', async () => {
@@ -374,47 +376,61 @@ test('apply creates every validated row as one full package', async () => {
   const instance = new TariffImportService(prisma);
   const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row()]);
   const result = await instance.applyReport(report, { confirmWarnings: true });
-  assert.deepEqual(result, { created: 1, updated: 0, deleted: 0, applied: 1 });
+  assert.deepEqual(result, { created: 1, updated: 0, archived: 0, unchanged: 0, applied: 1 });
   assert.equal(calls[0].identityKey, 'city-1:гига 500:INTERNET');
   assert.equal(calls[0].status, 'PUBLISHED');
 });
 
-test('full snapshot deletes provider tariffs that disappeared from the file', async () => {
+test('full snapshot archives missing tariffs without deleting records or lead links', async () => {
+  const record = (overrides) => ({
+    providerId: 'provider-1', cityId: 'city-1', serviceType: 'INTERNET', standardPrice: 500,
+    promoPrice: null, speed: 100, promoText: null, connectionFee: null, availability: 'ACTIVE',
+    externalId: null, dataSource: 'tariffs.xlsx', attributes: {}, seo: null, status: 'PUBLISHED',
+    archiveReason: null, archivedAt: null, archivedByImportRunId: null,
+    createdAt: new Date('2026-09-01T00:00:00.000Z'), updatedAt: SNAPSHOT_TIME,
+    ...overrides,
+  });
   const records = [
-    { id: 'keep', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500', identityKey: 'city-1:гига 500:INTERNET', updatedAt: SNAPSHOT_TIME },
-    { id: 'stale', providerId: 'provider-1', cityId: 'city-1', name: 'Старый 100', slug: 'old-100', identityKey: 'city-1:старый 100:INTERNET', updatedAt: SNAPSHOT_TIME },
+    record({ id: 'keep', name: 'Гига 500', slug: 'giga-500', identityKey: 'city-1:гига 500:INTERNET' }),
+    record({ id: 'stale', name: 'Старый 100', slug: 'old-100', identityKey: 'city-1:старый 100:INTERNET' }),
   ];
+  let leadQueries = 0;
   const prisma = {
     city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', siteId: 'site-1' }] },
     tariff: { findMany: async () => records },
     $transaction: async (callback) => callback({
       page: { findMany: async () => [] },
+      city: { findMany: async () => [{ id: 'city-1', siteId: 'site-1' }] },
+      redirect: { findMany: async () => [] },
+      lead: { findMany: async () => { leadQueries += 1; return []; } },
+      tariffImportRun: { updateMany: async () => ({ count: 1 }) },
       tariff: {
         findMany: async () => records,
         findFirst: async ({ where }) => records.find((item) => item.cityId === where.cityId && item.identityKey === where.identityKey) || null,
         update: async ({ where, data }) => Object.assign(records.find((item) => item.id === where.id), data),
         create: async ({ data }) => { records.push({ id: `new-${records.length}`, ...data }); },
-        deleteMany: async ({ where }) => {
-          const before = records.length;
-          for (let index = records.length - 1; index >= 0; index -= 1) if (where.id.in.includes(records[index].id)) records.splice(index, 1);
-          return { count: before - records.length };
+        updateMany: async ({ where, data }) => {
+          const targets = records.filter((item) => where.id.in.includes(item.id));
+          for (const target of targets) Object.assign(target, data, { updatedAt: new Date('2026-09-11T01:00:00.000Z') });
+          return { count: targets.length };
         },
       },
     }),
   };
-  const instance = new TariffImportService(prisma);
+  const instance = new TariffImportService(prisma, { recordWorkingRevision: async () => ({ siteRevision: 1 }) });
   const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row()]);
-  assert.deepEqual(report.diff, {
-    created: 0,
-    updated: 1,
-    deleted: 1,
-    deletedTariffs: [{ id: 'stale', cityId: 'city-1', name: 'Старый 100', slug: 'old-100' }],
-  });
+  assert.equal(report.diff.archived, 1);
+  assert.deepEqual(report.diff.archivedTariffs, [{ id: 'stale', cityId: 'city-1', name: 'Старый 100', slug: 'old-100' }]);
 
-  const result = await instance.applyReport(report, { confirmWarnings: true });
+  const result = await instance.applyReport(report, { confirmWarnings: true }, 'run-1', 'user-1');
 
-  assert.equal(result.deleted, 1);
-  assert.deepEqual(records.map((item) => item.id), ['keep']);
+  assert.equal(result.archived, 1);
+  assert.deepEqual(records.map((item) => item.id), ['keep', 'stale']);
+  assert.equal(records[1].availability, 'ARCHIVED');
+  assert.equal(records[1].status, 'ARCHIVED');
+  assert.equal(records[1].archiveReason, 'ABSENT_FROM_IMPORT');
+  assert.equal(records[1].archivedByImportRunId, 'run-1');
+  assert.equal(leadQueries, 0);
 });
 
 test('warnings block apply until they are explicitly confirmed', async () => {
@@ -460,15 +476,15 @@ test('full snapshot apply records one audited working revision per affected site
   const before = [{
     id: 'tariff-old', providerId: 'provider-1', cityId: 'city-1', name: 'Старый тариф', slug: 'old',
     serviceType: 'INTERNET', standardPrice: 500, promoPrice: null, speed: 100, promoText: null,
-    connectionFee: null, availability: true, externalId: null, identityKey: 'city-1:old:internet',
-    dataSource: 'old.xlsx', attributes: {}, seo: null, status: 'PUBLISHED',
+    connectionFee: null, availability: 'ACTIVE', externalId: null, identityKey: 'city-1:old:internet',
+    dataSource: 'old.xlsx', attributes: {}, seo: null, status: 'PUBLISHED', archiveReason: null, archivedAt: null, archivedByImportRunId: null,
     createdAt: new Date('2026-09-01T00:00:00.000Z'), updatedAt: SNAPSHOT_TIME,
   }];
   const records = structuredClone(before);
   let runUpdate;
   const revisions = [];
   const report = {
-    reportVersion: 2, providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [],
+    reportVersion: 3, providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [], diff: { changes: [], created: 0, updated: 0, archived: 1, unchanged: 0 },
     existingSnapshot: [{ id: 'tariff-old', updatedAt: SNAPSHOT_TIME.toISOString() }],
   };
   const prisma = {
@@ -476,10 +492,9 @@ test('full snapshot apply records one audited working revision per affected site
       page: { findMany: async () => [] },
       city: { findMany: async () => [{ id: 'city-1', siteId: 'site-1' }] },
       redirect: { findMany: async () => [] },
-      lead: { findMany: async () => [] },
       tariff: {
         findMany: async () => records,
-        deleteMany: async () => { records.splice(0, records.length); return { count: 1 }; },
+        updateMany: async ({ data }) => { Object.assign(records[0], data, { updatedAt: new Date('2026-09-11T01:00:00.000Z') }); return { count: 1 }; },
       },
       tariffImportRun: {
         updateMany: async ({ data }) => { runUpdate = data; return { count: 1 }; },
@@ -508,14 +523,64 @@ test('full snapshot apply records one audited working revision per affected site
   assert.equal(revisions[0].actorId, 'user-1');
   assert.equal(revisions[0].source, 'tariff-import:run-1');
   assert.equal(revisions[0].previousSnapshot.tariffs.length, 1);
-  assert.equal(revisions[0].snapshot.tariffs.length, 0);
+  assert.equal(revisions[0].snapshot.tariffs.length, 1);
+  assert.equal(revisions[0].snapshot.tariffs[0].availability, 'ARCHIVED');
   assert.equal(runUpdate.status, 'APPLIED');
   assert.equal(runUpdate.appliedById, 'user-1');
-  assert.equal(runUpdate.changeSet.version, 2);
+  assert.equal(runUpdate.changeSet.version, 3);
   assert.equal(runUpdate.changeSet.kind, 'TARIFF_IMPORT');
   assert.deepEqual(runUpdate.changeSet.leadAssignments, []);
   assert.deepEqual(runUpdate.changeSet.siteCityIds, [{ siteId: 'site-1', cityIds: ['city-1'] }]);
   assert.deepEqual(runUpdate.changeSet.workingRevisions, [{ siteId: 'site-1', workingRevision: 12 }]);
+});
+
+test('version 3 undo restores an imported archive when no later change exists', async () => {
+  const base = {
+    id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1', name: 'Тариф', slug: 'tariff',
+    serviceType: 'INTERNET', standardPrice: 500, promoPrice: null, speed: 100, promoText: null,
+    connectionFee: null, externalId: null, identityKey: 'city-1:тариф:INTERNET', dataSource: 'old.xlsx',
+    attributes: {}, seo: null, createdAt: new Date('2026-09-01T00:00:00.000Z'),
+  };
+  const before = { ...base, availability: 'ACTIVE', status: 'PUBLISHED', archiveReason: null, archivedAt: null, archivedByImportRunId: null, updatedAt: SNAPSHOT_TIME };
+  const archivedAt = new Date('2026-09-11T01:00:00.000Z');
+  let current = { ...base, availability: 'ARCHIVED', status: 'ARCHIVED', archiveReason: 'ABSENT_FROM_IMPORT', archivedAt, archivedByImportRunId: 'run-1', updatedAt: archivedAt };
+  const stored = (tariff) => ({
+    ...tariff,
+    standardPrice: String(tariff.standardPrice),
+    createdAt: tariff.createdAt.toISOString(),
+    updatedAt: tariff.updatedAt.toISOString(),
+    archivedAt: tariff.archivedAt?.toISOString() ?? null,
+  });
+  const changeSet = {
+    version: 3, kind: 'TARIFF_IMPORT', providerId: 'provider-1', runId: 'run-1',
+    beforeTariffs: [stored(before)], afterTariffs: [stored(current)], redirectSnapshot: [], leadAssignments: [],
+    siteCityIds: [{ siteId: 'site-1', cityIds: ['city-1'] }], workingRevisions: [{ siteId: 'site-1', workingRevision: 12 }],
+  };
+  let runUpdate;
+  const prisma = {
+    $transaction: async (callback) => callback({
+      tariffImportRun: {
+        findUnique: async () => ({ id: 'run-1', providerId: 'provider-1', status: 'APPLIED', changeSet }),
+        updateMany: async ({ data }) => { runUpdate = data; return { count: 1 }; },
+      },
+      tariff: {
+        findMany: async () => [current],
+        upsert: async ({ update }) => { current = { ...current, ...update, updatedAt: new Date('2026-09-11T02:00:00.000Z') }; return current; },
+      },
+      contentRevision: { findFirst: async () => null },
+      redirect: { findMany: async () => [] },
+    }),
+  };
+
+  const result = await new TariffImportService(prisma, { recordWorkingRevision: async () => ({ siteRevision: 13 }) }).undoImport('run-1', 'user-1');
+
+  assert.equal(current.availability, 'ACTIVE');
+  assert.equal(current.status, 'PUBLISHED');
+  assert.equal(current.archiveReason, null);
+  assert.equal(current.archivedAt, null);
+  assert.equal(current.archivedByImportRunId, null);
+  assert.equal(runUpdate.status, 'UNDONE');
+  assert.deepEqual(result.workingRevisions, [{ siteId: 'site-1', workingRevision: 13 }]);
 });
 
 test('safe undo restores the tariff business snapshot and detached lead links as a new working revision', async () => {
@@ -838,10 +903,11 @@ test('tariff import history exposes undo only for applied runs with a complete s
   assert.equal(queries[0].select.changeSet, undefined);
   assert.deepEqual(queries[1].select, { id: true });
   assert.deepEqual(queries[1].where.id.in, ['safe', 'legacy']);
+  assert.deepEqual(queries[1].where.OR.map((condition) => condition.changeSet.equals), [2, 3]);
 });
 
 test('tariff import controller preserves the working version and does not publish it', async () => {
-  const report = { reportVersion: 2, providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [], existingSnapshot: [] };
+  const report = { reportVersion: 3, providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [], existingSnapshot: [], diff: { changes: [] } };
   const prisma = {
     tariffImportRun: {
       findUnique: async () => ({ id: 'run-1', status: 'VALIDATED', report }),
@@ -855,14 +921,14 @@ test('tariff import controller preserves the working version and does not publis
       assert.deepEqual(options, { confirmWarnings: false });
       assert.equal(runId, 'run-1');
       assert.equal(actorId, 'user-1');
-      return { created: 0, updated: 0, deleted: 2, applied: 0, workingRevisions: [{ siteId: 'site-1', workingRevision: 7 }] };
+      return { created: 0, updated: 0, archived: 2, unchanged: 0, applied: 0, workingRevisions: [{ siteId: 'site-1', workingRevision: 7 }] };
     },
   };
   const controller = new AdminTariffsController(prisma, imports);
 
   const result = await controller.applyImport({ runId: 'run-1' }, { user: { id: 'user-1' } });
 
-  assert.equal(result.deleted, 2);
+  assert.equal(result.archived, 2);
   assert.deepEqual(result.workingRevisions, [{ siteId: 'site-1', workingRevision: 7 }]);
 });
 
@@ -917,7 +983,7 @@ test('legacy tariff reports without a catalog snapshot require revalidation', as
 
 test('concurrent full snapshot apply cannot claim the same validated run twice', async () => {
   let writes = 0;
-  const report = { reportVersion: 2, providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [], existingSnapshot: [] };
+  const report = { reportVersion: 3, providerId: 'provider-1', errorRows: 0, warningRows: 0, candidates: [], existingSnapshot: [], diff: { changes: [] } };
   const prisma = {
     $transaction: async (callback) => callback({
       tariff: { findMany: async () => [], create: async () => { writes += 1; } },

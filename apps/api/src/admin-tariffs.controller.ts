@@ -1,6 +1,6 @@
 import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { isDeepStrictEqual } from 'node:util';
-import { Prisma } from '../generated';
+import { Prisma, TariffArchiveReason, TariffAvailability } from '../generated';
 import { CursorPageQueryDto, decodeCursor, encodeCursor, pageSize, searchQuery } from './admin-pagination';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
@@ -22,7 +22,7 @@ interface TariffBody {
   speed?: number;
   promoText?: string;
   connectionFee?: number;
-  availability?: boolean;
+  availability?: TariffAvailability;
   externalId?: string;
   dataSource?: string;
   attributes?: object;
@@ -107,7 +107,22 @@ export class AdminTariffsController {
       if (!city) throw new BadRequestException('Город тарифа не найден');
       const name = normalizeTariffName(body.name);
       if (!name) throw new BadRequestException('Название тарифа обязательно');
-      const data = { ...body, name, identityKey: tariffIdentityKey(body.cityId, name, body.serviceType) };
+      if (body.status !== undefined && body.availability !== undefined) {
+        const statusArchived = body.status === 'ARCHIVED';
+        const availabilityArchived = body.availability === TariffAvailability.ARCHIVED;
+        if (statusArchived !== availabilityArchived) throw new BadRequestException('Статус и доступность архива должны быть согласованы');
+      }
+      const archived = body.status === 'ARCHIVED' || body.availability === TariffAvailability.ARCHIVED;
+      const data = {
+        ...body,
+        name,
+        identityKey: tariffIdentityKey(body.cityId, name, body.serviceType),
+        availability: archived ? TariffAvailability.ARCHIVED : TariffAvailability.ACTIVE,
+        status: archived ? 'ARCHIVED' as const : body.status,
+        archiveReason: archived ? TariffArchiveReason.MANUAL : null,
+        archivedAt: archived ? new Date() : null,
+        archivedByImportRunId: null,
+      };
       const tariff = await transaction.tariff.create({ data });
       const revision = await this.publications.recordWorkingRevision(transaction, {
         siteId: city.siteId,
@@ -200,9 +215,10 @@ export class AdminTariffsController {
         where: {
           id: { in: appliedIds },
           status: 'APPLIED',
-          AND: [
+          AND: [{ changeSet: { path: ['kind'], equals: 'TARIFF_IMPORT' } }],
+          OR: [
             { changeSet: { path: ['version'], equals: 2 } },
-            { changeSet: { path: ['kind'], equals: 'TARIFF_IMPORT' } },
+            { changeSet: { path: ['version'], equals: 3 } },
           ],
         },
         select: { id: true },
@@ -266,6 +282,7 @@ export class AdminTariffsController {
       if (body.cityId !== undefined && body.cityId !== existing.cityId) sensitive.add('URL');
       if (body.slug !== undefined && body.slug !== existing.slug) sensitive.add('URL');
       if (body.status !== undefined && body.status !== existing.status) sensitive.add('статус публикации');
+      if (body.availability !== undefined && body.availability !== existing.availability) sensitive.add('доступность');
       if (body.seo !== undefined && !isDeepStrictEqual(body.seo, existing.seo)) sensitive.add('SEO');
       if (normalizedAttributes !== undefined && normalizedAttributes !== null) {
         const currentAttributes = existing.attributes && typeof existing.attributes === 'object' && !Array.isArray(existing.attributes)
@@ -288,7 +305,19 @@ export class AdminTariffsController {
       const nextSlug = body.slug ?? existing.slug;
       const nextName = body.name === undefined ? existing.name : normalizeTariffName(body.name);
       const nextServiceType = body.serviceType ?? existing.serviceType as ServiceType;
-      const nextStatus = body.status ?? existing.status;
+      if (body.status !== undefined && body.availability !== undefined) {
+        const statusArchived = body.status === 'ARCHIVED';
+        const availabilityArchived = body.availability === TariffAvailability.ARCHIVED;
+        if (statusArchived !== availabilityArchived) throw new BadRequestException('Статус и доступность архива должны изменяться согласованно');
+      }
+      const archiveRequested = body.status === 'ARCHIVED' || body.availability === TariffAvailability.ARCHIVED;
+      const restoreRequested = (body.status !== undefined && body.status !== 'ARCHIVED') || body.availability === TariffAvailability.ACTIVE;
+      const nextAvailability = archiveRequested
+        ? TariffAvailability.ARCHIVED
+        : restoreRequested ? TariffAvailability.ACTIVE : existing.availability;
+      const nextStatus = archiveRequested
+        ? 'ARCHIVED' as const
+        : body.status ?? (body.availability === TariffAvailability.ACTIVE && existing.status === 'ARCHIVED' ? 'DRAFT' as const : existing.status);
       const currentIdentityKey = tariffIdentityKey(existing.cityId, existing.name, existing.serviceType);
       const nextIdentityKey = tariffIdentityKey(nextCityId, nextName, nextServiceType);
       if (nextIdentityKey !== currentIdentityKey) {
@@ -341,7 +370,7 @@ export class AdminTariffsController {
           await transaction.redirect.create({ data: { siteId: oldCity.siteId, cityId: oldCity.id, sourcePath, targetPath, status: redirectStatus, managedTariffId: id } });
           redirectOutcome = 'created';
         }
-      } else if (body.status !== undefined && body.status !== existing.status) {
+      } else if (nextStatus !== existing.status) {
         await transaction.redirect.updateMany({
           where: { siteId: oldCity.siteId, managedTariffId: id },
           data: { status: redirectStatus },
@@ -350,8 +379,22 @@ export class AdminTariffsController {
 
       const { confirmSensitiveChanges: _confirmed, expectedUpdatedAt: _expected, ...editable } = body;
       if (!Object.keys(editable).length) throw new BadRequestException('Нет изменений для сохранения');
-      const data: Prisma.TariffUncheckedUpdateInput = { identityKey: nextIdentityKey };
-      for (const field of ['cityId', 'name', 'slug', 'serviceType', 'standardPrice', 'promoPrice', 'speed', 'promoText', 'connectionFee', 'availability', 'status'] as const) {
+      const newlyArchived = nextAvailability === TariffAvailability.ARCHIVED && existing.availability !== TariffAvailability.ARCHIVED;
+      const data: Prisma.TariffUncheckedUpdateInput = {
+        identityKey: nextIdentityKey,
+        availability: nextAvailability,
+        status: nextStatus,
+        archiveReason: nextAvailability === TariffAvailability.ARCHIVED
+          ? newlyArchived ? TariffArchiveReason.MANUAL : existing.archiveReason ?? TariffArchiveReason.MANUAL
+          : null,
+        archivedAt: nextAvailability === TariffAvailability.ARCHIVED
+          ? newlyArchived ? new Date() : existing.archivedAt ?? new Date()
+          : null,
+        archivedByImportRunId: nextAvailability === TariffAvailability.ARCHIVED && !newlyArchived
+          ? existing.archivedByImportRunId
+          : null,
+      };
+      for (const field of ['cityId', 'name', 'slug', 'serviceType', 'standardPrice', 'promoPrice', 'speed', 'promoText', 'connectionFee'] as const) {
         if (body[field] !== undefined) Object.assign(data, { [field]: body[field] });
       }
       if (body.name !== undefined) data.name = nextName;

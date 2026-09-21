@@ -72,7 +72,7 @@ export function tariffView(tariff: Record<string, unknown>): TariffView {
     priceAmount: Number.isFinite(priceAmount) && priceAmount !== null ? priceAmount : null,
     connection: connectionLabel(tariff.connectionFee),
     promoText: typeof tariff.promoText === 'string' && tariff.promoText.trim() ? tariff.promoText.trim() : null,
-    availability: tariff.availability !== false,
+    availability: tariff.availability === true || tariff.availability === 'ACTIVE',
     attributes: publicAttributes(tariff.attributes),
     seo: tariff.seo && typeof tariff.seo === 'object' && !Array.isArray(tariff.seo)
       ? tariff.seo as Record<string, unknown>

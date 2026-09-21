@@ -160,7 +160,7 @@ export class RedirectService {
         where: { siteId, status: PublishStatus.PUBLISHED },
         select: {
           slug: true,
-          tariffs: { where: { status: PublishStatus.PUBLISHED }, select: { slug: true } },
+          tariffs: { where: { status: PublishStatus.PUBLISHED, availability: 'ACTIVE' }, select: { slug: true } },
         },
       }),
       transaction.page.findMany({

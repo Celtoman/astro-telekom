@@ -35,7 +35,7 @@ export class SiteCatalogService {
         include: {
           region: { select: { name: true, slug: true } },
           pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true, archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
-          tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
+          tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE' }, orderBy: { createdAt: 'asc' } },
         },
       }),
       client.page.findMany({
@@ -80,7 +80,7 @@ export class SiteCatalogService {
         site: { select: { settings: true, provider: { select: { settings: true } } } },
         region: { select: { name: true, slug: true } },
         pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true, archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
-        tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
+        tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE' }, orderBy: { createdAt: 'asc' } },
       },
     });
     if (!city) throw new NotFoundException('City not found');

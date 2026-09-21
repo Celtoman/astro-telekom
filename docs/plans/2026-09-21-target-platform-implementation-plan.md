@@ -191,7 +191,7 @@ node --test tests/*.test.cjs tests/*.test.mjs
 | EXT1 | `TAR-044–096` | Celtoman/tarifs#1 | Dependency | не начато в `main` генератора |
 | T1 | тарифный value contract | #172 | Да | реализовано, issue закрыта |
 | T2 | `TAR-042–043`, `080–086` | #173 | Да | реализовано, ожидает rollout |
-| T3 | `TAR-001–004`, `014`, `019`, `083` | #174 | Да | частично в незакоммиченном diff |
+| T3 | `TAR-001–004`, `014`, `019`, `083` | #174 | Да | реализовано, ожидает rollout |
 | T4 | tariff catalog/editor contract | #175 | Да | частично |
 | T5 | tariff archive/slug lifecycle | #180 | Нет | не начато |
 | T6 | typed tariff renderer | #176 | Да | foundation существует |

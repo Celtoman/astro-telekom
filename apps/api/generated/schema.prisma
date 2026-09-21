@@ -97,6 +97,16 @@ enum CityOfficeState {
   NO_OFFICE
 }
 
+enum TariffAvailability {
+  ACTIVE
+  ARCHIVED
+}
+
+enum TariffArchiveReason {
+  ABSENT_FROM_IMPORT
+  MANUAL
+}
+
 enum SiteRebuildStatus {
   PENDING
   QUEUED
@@ -386,34 +396,40 @@ model PageBlock {
 }
 
 model Tariff {
-  id            String        @id @default(cuid())
-  providerId    String
-  cityId        String
-  name          String
-  slug          String
-  serviceType   ServiceType
-  standardPrice Decimal?      @db.Decimal(10, 2)
-  promoPrice    Decimal?      @db.Decimal(10, 2)
-  speed         Int?
-  promoText     String?
-  connectionFee Decimal?      @db.Decimal(10, 2)
-  availability  Boolean       @default(true)
-  externalId    String?
-  identityKey   String
-  dataSource    String?
-  attributes    Json?
-  seo           Json?
-  status        PublishStatus @default(DRAFT)
-  provider      Provider      @relation(fields: [providerId], references: [id])
-  city          City          @relation(fields: [cityId], references: [id])
-  leads         Lead[]
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id                    String               @id @default(cuid())
+  providerId            String
+  cityId                String
+  name                  String
+  slug                  String
+  serviceType           ServiceType
+  standardPrice         Decimal?             @db.Decimal(10, 2)
+  promoPrice            Decimal?             @db.Decimal(10, 2)
+  speed                 Int?
+  promoText             String?
+  connectionFee         Decimal?             @db.Decimal(10, 2)
+  availability          TariffAvailability   @default(ACTIVE)
+  externalId            String?
+  identityKey           String
+  dataSource            String?
+  attributes            Json?
+  seo                   Json?
+  status                PublishStatus        @default(DRAFT)
+  archiveReason         TariffArchiveReason?
+  archivedAt            DateTime?            @db.Timestamptz(3)
+  archivedByImportRunId String?
+  provider              Provider             @relation(fields: [providerId], references: [id])
+  city                  City                 @relation(fields: [cityId], references: [id])
+  archivedByImportRun   TariffImportRun?     @relation("ArchivedTariffs", fields: [archivedByImportRunId], references: [id], onDelete: SetNull)
+  leads                 Lead[]
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
 
   @@unique([cityId, slug])
   @@unique([cityId, identityKey])
   @@index([cityId, serviceType, status])
   @@index([providerId, externalId])
+  @@index([availability, archivedAt])
+  @@index([archivedByImportRunId])
   @@index([updatedAt, id])
 }
 
@@ -437,6 +453,7 @@ model TariffImportRun {
   provider          Provider           @relation(fields: [providerId], references: [id])
   appliedBy         User?              @relation("TariffImportAppliedBy", fields: [appliedById], references: [id], onDelete: SetNull)
   undoneBy          User?              @relation("TariffImportUndoneBy", fields: [undoneById], references: [id], onDelete: SetNull)
+  archivedTariffs   Tariff[]           @relation("ArchivedTariffs")
 
   @@index([providerId, createdAt])
   @@index([appliedById, appliedAt])

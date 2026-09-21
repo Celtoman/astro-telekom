@@ -38,7 +38,7 @@ export class SitemapService {
     const [site, pages, cities, exclusions, latestPublication] = await Promise.all([
       this.prisma.site.findUnique({ where: { id: siteId }, select: { id: true, name: true, slug: true, domain: true, status: true, workingRevision: true, publishedRevision: true } }),
       this.prisma.page.findMany({ where: { siteId, cityId: null }, orderBy: { createdAt: 'asc' }, select: { id: true, title: true, type: true, slug: true, status: true } }),
-      this.prisma.city.findMany({ where: { siteId }, orderBy: { name: 'asc' }, select: { id: true, name: true, slug: true, status: true, tariffs: { orderBy: { name: 'asc' }, select: { id: true, name: true, slug: true, status: true } } } }),
+      this.prisma.city.findMany({ where: { siteId }, orderBy: { name: 'asc' }, select: { id: true, name: true, slug: true, status: true, tariffs: { orderBy: { name: 'asc' }, select: { id: true, name: true, slug: true, status: true, availability: true } } } }),
       this.prisma.sitemapExclusion.findMany({ where: { siteId }, orderBy: { path: 'asc' }, select: { id: true, path: true, reason: true, createdById: true, createdAt: true, updatedAt: true } }),
       this.prisma.sitePublication.findFirst({ where: { siteId }, orderBy: { createdAt: 'desc' }, select: { id: true, siteRevision: true, status: true, updatedAt: true, publishedAt: true, lastError: true } }),
     ]);
@@ -158,7 +158,7 @@ export class SitemapService {
       for (const tariff of city.tariffs) {
         const path = `${cityPath}/${tariff.slug}`;
         if (!paths.has(path)) {
-          entries.push({ path, group: 'TARIFFS', sourceType: 'CITY_TARIFF_DETAIL', sourceLabel: `${city.name} / ${tariff.name}`, publishStatus: tariff.status, eligible: false, included: false, reason: city.status === 'PUBLISHED' ? 'Тариф не опубликован' : 'Город не опубликован', });
+          entries.push({ path, group: 'TARIFFS', sourceType: 'CITY_TARIFF_DETAIL', sourceLabel: `${city.name} / ${tariff.name}`, publishStatus: tariff.status, eligible: false, included: false, reason: tariff.availability === 'ARCHIVED' ? 'Тариф в архиве' : city.status === 'PUBLISHED' ? 'Тариф не опубликован' : 'Город не опубликован', });
           paths.add(path);
         }
       }

@@ -301,6 +301,9 @@ exports.Prisma.TariffScalarFieldEnum = {
   attributes: 'attributes',
   seo: 'seo',
   status: 'status',
+  archiveReason: 'archiveReason',
+  archivedAt: 'archivedAt',
+  archivedByImportRunId: 'archivedByImportRunId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -579,6 +582,16 @@ exports.ServiceType = exports.$Enums.ServiceType = {
   INTERNET_TV: 'INTERNET_TV',
   TV: 'TV',
   OTHER: 'OTHER'
+};
+
+exports.TariffAvailability = exports.$Enums.TariffAvailability = {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.TariffArchiveReason = exports.$Enums.TariffArchiveReason = {
+  ABSENT_FROM_IMPORT: 'ABSENT_FROM_IMPORT',
+  MANUAL: 'MANUAL'
 };
 
 exports.TariffImportStatus = exports.$Enums.TariffImportStatus = {

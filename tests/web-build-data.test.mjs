@@ -26,7 +26,7 @@ const globalPage = (type, slug, title, text) => ({
   id: `global-${type.toLowerCase()}`, cityId: null, ...page(type, slug, title), content: { text },
 });
 const tariff = (slug, name, speed, standardPrice, connectionFee = null, serviceType = 'INTERNET') => ({
-  name, slug, serviceType, speed, standardPrice, promoPrice: null, promoText: null, connectionFee, availability: true, attributes: {}, status: 'PUBLISHED', seo: {},
+  name, slug, serviceType, speed, standardPrice, promoPrice: null, promoText: null, connectionFee, availability: 'ACTIVE', attributes: {}, status: 'PUBLISHED', seo: {},
 });
 const cityHomeBlocks = (cityIn) => [
   { blockType: 'hero', data: { eyebrow: `Дом.ру в ${cityIn}`, title: `Домашний интернет и телевидение в ${cityIn}`, text: 'Выберите услугу и проверьте подключение.' } },

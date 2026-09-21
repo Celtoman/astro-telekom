@@ -77,7 +77,7 @@ test('public tariff view preserves supported CMS detail fields and removes unkno
     slug: 'giga-500-tv',
     name: 'Гига 500 + ТВ',
     promoText: 'Скидка первые 3 месяца',
-    availability: false,
+    availability: 'ARCHIVED',
     attributes: {
       card_subtitle: 'Для фильмов и игр',
       tv_channels_total: 190,

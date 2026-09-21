@@ -41,7 +41,7 @@ export class PublicLeadsController {
       ? await this.prisma.page.findFirst({ where: { cityId: city.id, slug: body.pageSlug, status: 'PUBLISHED' } })
       : null;
     const tariff = body.tariffSlug
-      ? await this.prisma.tariff.findFirst({ where: { cityId: city.id, slug: body.tariffSlug, status: 'PUBLISHED' } })
+      ? await this.prisma.tariff.findFirst({ where: { cityId: city.id, slug: body.tariffSlug, status: 'PUBLISHED', availability: 'ACTIVE' } })
       : null;
     const addressCheck = body.addressCheckId
       ? await this.prisma.addressCheck.findFirst({ where: { id: body.addressCheckId, cityId: city.id, siteId: site.id } })
