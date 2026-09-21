@@ -105,4 +105,4 @@ PII retention scheduler в worker
 - Универсальный undo остальных массовых операций и аналитический контур; для двух XLSX-импортов реализован guarded undo, а для ручного удаления — архив и восстановление в новую рабочую ревизию.
 - Сертифицированный production-контур с реальным трафиком: внешний защищенный test deployment и sandbox/test-контракты уже подтверждены, но legal и эксплуатационные блокеры Release 1 остаются.
 
-Детальный статус находится в [current-state.md](current-state.md), а шаги развития — в [плане реализации](plans/2026-09-07-platform-stabilization-and-mvp.md).
+Детальный статус находится в [current-state.md](current-state.md). Стабилизационный план прототипа сохранен в [плане от 7 сентября](plans/2026-09-07-platform-stabilization-and-mvp.md), целевая модель — в [product-contract.md](product-contract.md), а переход к ней — в [плане от 21 сентября](plans/2026-09-21-target-platform-implementation-plan.md).
