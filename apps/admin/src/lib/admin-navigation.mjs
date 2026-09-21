@@ -26,6 +26,7 @@ export const adminNavigation = [
   },
   { id: "leads", label: "Заявки", href: "/leads", icon: "leads" },
   { id: "redirects", label: "Редиректы", href: "/redirects", icon: "redirects" },
+  { id: "variables", label: "Переменные", href: "/variables", icon: "variables" },
   {
     id: "seo",
     label: "SEO",

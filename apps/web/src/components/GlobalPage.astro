@@ -10,7 +10,7 @@ interface Props {
 }
 
 const { type } = Astro.props as Props;
-const { cities, globalPages } = await loadSiteData();
+const { site, cities, globalPages } = await loadSiteData();
 const page = globalPages.find((candidate) => candidate.type === type);
 if (!page) throw new Error(`Не опубликована обязательная общая страница Release 1: ${type}`);
 
@@ -44,7 +44,7 @@ const domain = Astro.site?.hostname || 'tv-internet-dom.ru';
 const versionedLegalSections = legalSections(type, domain);
 ---
 
-<BaseLayout title={meta.title} description={meta.description}>
+<BaseLayout title={meta.title} description={meta.description} {site}>
   {type === 'CITIES' ? <CitiesDirectory {cities} intro={contentText} /> : <section class="hero">
     <div class="container">
       <span class="eyebrow">Дом.ру</span>

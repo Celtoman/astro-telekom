@@ -63,8 +63,6 @@ type StoredCity = {
   officeAddress: string | null;
   officeHours: string | null;
   status: string;
-  phone: string | null;
-  supportPhone: string | null;
   seo: unknown;
   content: unknown;
 };
@@ -122,7 +120,7 @@ const storedCity = (city: {
   id: string; siteId: string; regionId: string; name: string; slug: string;
   nameInstrumental: string | null; namePrepositional: string | null; nameGenitive: string | null;
   legacyUrl: string | null; officeAddress: string | null; officeHours: string | null; status: string;
-  phone: string | null; supportPhone: string | null; seo: unknown; content: unknown;
+  seo: unknown; content: unknown;
 }): StoredCity => ({
   id: city.id,
   siteId: city.siteId,
@@ -136,8 +134,6 @@ const storedCity = (city: {
   officeAddress: city.officeAddress,
   officeHours: city.officeHours,
   status: city.status,
-  phone: city.phone,
-  supportPhone: city.supportPhone,
   seo: city.seo === null ? null : jsonCopy(city.seo),
   content: city.content === null ? null : jsonCopy(city.content),
 });
@@ -185,7 +181,7 @@ const nullableString = (value: unknown) => value === null || typeof value === 's
 const isStoredCity = (value: unknown): value is StoredCity => {
   if (!isRecord(value)) return false;
   return ['id', 'siteId', 'regionId', 'name', 'slug', 'status'].every((key) => typeof value[key] === 'string')
-    && ['nameInstrumental', 'namePrepositional', 'nameGenitive', 'legacyUrl', 'officeAddress', 'officeHours', 'phone', 'supportPhone']
+    && ['nameInstrumental', 'namePrepositional', 'nameGenitive', 'legacyUrl', 'officeAddress', 'officeHours']
       .every((key) => nullableString(value[key]))
     && hasOwn(value, 'seo')
     && hasOwn(value, 'content');
@@ -244,8 +240,6 @@ const restoreCityData = (city: StoredCity) => ({
   officeAddress: city.officeAddress,
   officeHours: city.officeHours,
   status: city.status as PublishStatus,
-  phone: city.phone,
-  supportPhone: city.supportPhone,
   seo: city.seo === null ? Prisma.JsonNull : city.seo as Prisma.InputJsonValue,
   content: city.content === null ? Prisma.JsonNull : city.content as Prisma.InputJsonValue,
 });
@@ -549,8 +543,8 @@ export class CityImportService {
       }
       const changeSet = run.changeSet;
       const createdCityIds = [...changeSet.createdCityIds].sort();
-      const beforeCities = [...changeSet.beforeCities].sort((left, right) => left.id.localeCompare(right.id));
-      const afterCities = [...changeSet.afterCities].sort((left, right) => left.id.localeCompare(right.id));
+      const beforeCities = changeSet.beforeCities.map(storedCity).sort((left, right) => left.id.localeCompare(right.id));
+      const afterCities = changeSet.afterCities.map(storedCity).sort((left, right) => left.id.localeCompare(right.id));
       const createdRegions = [...changeSet.createdRegions].sort((left, right) => left.id.localeCompare(right.id));
       const createdPages = [...changeSet.createdPages].sort((left, right) => left.id.localeCompare(right.id));
       const beforeIds = new Set(beforeCities.map((city) => city.id));

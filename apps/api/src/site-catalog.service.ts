@@ -5,6 +5,7 @@ import { mergeContent, publicContent } from './content-resolution';
 import { PrismaService } from './prisma.service';
 import { buildReleaseOneRoutes } from './public-route-policy';
 import { normalizeRedirectPath } from './redirect-path';
+import { formatSitePhone } from './site-phone';
 
 type CatalogClient = Prisma.TransactionClient | PrismaService;
 
@@ -57,7 +58,13 @@ export class SiteCatalogService {
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
     const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages);
     return {
-      site: { name: site.name, slug: site.slug, domain: site.domain },
+      site: {
+        name: site.name,
+        slug: site.slug,
+        domain: site.domain,
+        connectionPhone: site.connectionPhone ? formatSitePhone(site.connectionPhone) : null,
+        supportPhone: site.supportPhone ? formatSitePhone(site.supportPhone) : null,
+      },
       globalPages: resolvedGlobalPages,
       routes,
       sitemap: { excludedPaths: sitemapExclusions.map((item) => item.path) },

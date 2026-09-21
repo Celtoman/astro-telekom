@@ -90,6 +90,8 @@ test('public city catalog returns only published entities for one published site
           name: 'Дом.ру',
           slug: 'domru-site',
           domain: 'partner.example.test',
+          connectionPhone: '78005553535',
+          supportPhone: '78002507777',
           settings: { content: { phone: '8 (800) 555-35-35' } },
           provider: { settings: { content: { brand: 'Дом.ру' } } },
         };
@@ -106,8 +108,6 @@ test('public city catalog returns only published entities for one published site
           slug: 'kazan',
           namePrepositional: 'Казани',
           status: 'PUBLISHED',
-          phone: null,
-          supportPhone: '8 (800) 250-77-77',
           seo: {},
           content: {},
           region: { name: 'Республика Татарстан', slug: 'tatarstan', content: {} },
@@ -162,10 +162,10 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(calls.pages.include.blocks.where, { visible: true, archivedAt: null });
   assert.deepEqual(calls.redirects.where, { siteId: 'site-1', status: 'PUBLISHED' });
   assert.deepEqual(calls.sitemapExclusions.where, { siteId: 'site-1' });
-  assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test' });
+  assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test', connectionPhone: '+7 (800) 555-35-35', supportPhone: '+7 (800) 250-77-77' });
   assert.equal(result.cities.length, 1);
   assert.equal(result.cities[0].namePrepositional, 'Казани');
-  assert.equal(result.cities[0].supportPhone, '8 (800) 250-77-77');
+  assert.equal('supportPhone' in result.cities[0], false);
   assert.deepEqual(result.cities[0].region, { name: 'Республика Татарстан', slug: 'tatarstan' });
   assert.equal(result.cities[0].pages[0].slug, 'internet');
   assert.equal(result.cities[0].pages[0].blocks[0].blockType, 'hero');

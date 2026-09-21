@@ -13,8 +13,6 @@ interface CityBody {
   regionId: string;
   name: string;
   slug: string;
-  phone?: string;
-  supportPhone?: string;
   status?: PublishStatus;
   seo?: object;
   content?: object;

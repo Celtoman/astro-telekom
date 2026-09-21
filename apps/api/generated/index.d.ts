@@ -5011,6 +5011,8 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     domain: string | null
+    connectionPhone: string | null
+    supportPhone: string | null
     status: $Enums.PublishStatus | null
     workingRevision: number | null
     publishedRevision: number | null
@@ -5024,6 +5026,8 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     domain: string | null
+    connectionPhone: string | null
+    supportPhone: string | null
     status: $Enums.PublishStatus | null
     workingRevision: number | null
     publishedRevision: number | null
@@ -5037,6 +5041,8 @@ export namespace Prisma {
     name: number
     slug: number
     domain: number
+    connectionPhone: number
+    supportPhone: number
     settings: number
     status: number
     workingRevision: number
@@ -5063,6 +5069,8 @@ export namespace Prisma {
     name?: true
     slug?: true
     domain?: true
+    connectionPhone?: true
+    supportPhone?: true
     status?: true
     workingRevision?: true
     publishedRevision?: true
@@ -5076,6 +5084,8 @@ export namespace Prisma {
     name?: true
     slug?: true
     domain?: true
+    connectionPhone?: true
+    supportPhone?: true
     status?: true
     workingRevision?: true
     publishedRevision?: true
@@ -5089,6 +5099,8 @@ export namespace Prisma {
     name?: true
     slug?: true
     domain?: true
+    connectionPhone?: true
+    supportPhone?: true
     settings?: true
     status?: true
     workingRevision?: true
@@ -5190,6 +5202,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain: string | null
+    connectionPhone: string | null
+    supportPhone: string | null
     settings: JsonValue | null
     status: $Enums.PublishStatus
     workingRevision: number
@@ -5223,6 +5237,8 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     domain?: boolean
+    connectionPhone?: boolean
+    supportPhone?: boolean
     settings?: boolean
     status?: boolean
     workingRevision?: boolean
@@ -5251,6 +5267,8 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     domain?: boolean
+    connectionPhone?: boolean
+    supportPhone?: boolean
     settings?: boolean
     status?: boolean
     workingRevision?: boolean
@@ -5266,6 +5284,8 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     domain?: boolean
+    connectionPhone?: boolean
+    supportPhone?: boolean
     settings?: boolean
     status?: boolean
     workingRevision?: boolean
@@ -5281,6 +5301,8 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     domain?: boolean
+    connectionPhone?: boolean
+    supportPhone?: boolean
     settings?: boolean
     status?: boolean
     workingRevision?: boolean
@@ -5289,7 +5311,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "providerId" | "name" | "slug" | "domain" | "settings" | "status" | "workingRevision" | "publishedRevision" | "createdAt" | "updatedAt", ExtArgs["result"]["site"]>
+  export type SiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "providerId" | "name" | "slug" | "domain" | "connectionPhone" | "supportPhone" | "settings" | "status" | "workingRevision" | "publishedRevision" | "createdAt" | "updatedAt", ExtArgs["result"]["site"]>
   export type SiteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     provider?: boolean | ProviderDefaultArgs<ExtArgs>
     regions?: boolean | Site$regionsArgs<ExtArgs>
@@ -5336,6 +5358,8 @@ export namespace Prisma {
       name: string
       slug: string
       domain: string | null
+      connectionPhone: string | null
+      supportPhone: string | null
       settings: Prisma.JsonValue | null
       status: $Enums.PublishStatus
       workingRevision: number
@@ -5783,6 +5807,8 @@ export namespace Prisma {
     readonly name: FieldRef<"Site", 'String'>
     readonly slug: FieldRef<"Site", 'String'>
     readonly domain: FieldRef<"Site", 'String'>
+    readonly connectionPhone: FieldRef<"Site", 'String'>
+    readonly supportPhone: FieldRef<"Site", 'String'>
     readonly settings: FieldRef<"Site", 'Json'>
     readonly status: FieldRef<"Site", 'PublishStatus'>
     readonly workingRevision: FieldRef<"Site", 'Int'>
@@ -13948,8 +13974,6 @@ export namespace Prisma {
     officeAddress: string | null
     officeHours: string | null
     status: $Enums.PublishStatus | null
-    phone: string | null
-    supportPhone: string | null
   }
 
   export type CityMaxAggregateOutputType = {
@@ -13965,8 +13989,6 @@ export namespace Prisma {
     officeAddress: string | null
     officeHours: string | null
     status: $Enums.PublishStatus | null
-    phone: string | null
-    supportPhone: string | null
   }
 
   export type CityCountAggregateOutputType = {
@@ -13982,8 +14004,6 @@ export namespace Prisma {
     officeAddress: number
     officeHours: number
     status: number
-    phone: number
-    supportPhone: number
     seo: number
     content: number
     _all: number
@@ -14003,8 +14023,6 @@ export namespace Prisma {
     officeAddress?: true
     officeHours?: true
     status?: true
-    phone?: true
-    supportPhone?: true
   }
 
   export type CityMaxAggregateInputType = {
@@ -14020,8 +14038,6 @@ export namespace Prisma {
     officeAddress?: true
     officeHours?: true
     status?: true
-    phone?: true
-    supportPhone?: true
   }
 
   export type CityCountAggregateInputType = {
@@ -14037,8 +14053,6 @@ export namespace Prisma {
     officeAddress?: true
     officeHours?: true
     status?: true
-    phone?: true
-    supportPhone?: true
     seo?: true
     content?: true
     _all?: true
@@ -14129,8 +14143,6 @@ export namespace Prisma {
     officeAddress: string | null
     officeHours: string | null
     status: $Enums.PublishStatus
-    phone: string | null
-    supportPhone: string | null
     seo: JsonValue | null
     content: JsonValue | null
     _count: CityCountAggregateOutputType | null
@@ -14165,8 +14177,6 @@ export namespace Prisma {
     officeAddress?: boolean
     officeHours?: boolean
     status?: boolean
-    phone?: boolean
-    supportPhone?: boolean
     seo?: boolean
     content?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
@@ -14192,8 +14202,6 @@ export namespace Prisma {
     officeAddress?: boolean
     officeHours?: boolean
     status?: boolean
-    phone?: boolean
-    supportPhone?: boolean
     seo?: boolean
     content?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
@@ -14213,8 +14221,6 @@ export namespace Prisma {
     officeAddress?: boolean
     officeHours?: boolean
     status?: boolean
-    phone?: boolean
-    supportPhone?: boolean
     seo?: boolean
     content?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
@@ -14234,13 +14240,11 @@ export namespace Prisma {
     officeAddress?: boolean
     officeHours?: boolean
     status?: boolean
-    phone?: boolean
-    supportPhone?: boolean
     seo?: boolean
     content?: boolean
   }
 
-  export type CityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "regionId" | "name" | "slug" | "nameInstrumental" | "namePrepositional" | "nameGenitive" | "legacyUrl" | "officeAddress" | "officeHours" | "status" | "phone" | "supportPhone" | "seo" | "content", ExtArgs["result"]["city"]>
+  export type CityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "regionId" | "name" | "slug" | "nameInstrumental" | "namePrepositional" | "nameGenitive" | "legacyUrl" | "officeAddress" | "officeHours" | "status" | "seo" | "content", ExtArgs["result"]["city"]>
   export type CityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     region?: boolean | RegionDefaultArgs<ExtArgs>
@@ -14284,8 +14288,6 @@ export namespace Prisma {
       officeAddress: string | null
       officeHours: string | null
       status: $Enums.PublishStatus
-      phone: string | null
-      supportPhone: string | null
       seo: Prisma.JsonValue | null
       content: Prisma.JsonValue | null
     }, ExtArgs["result"]["city"]>
@@ -14730,8 +14732,6 @@ export namespace Prisma {
     readonly officeAddress: FieldRef<"City", 'String'>
     readonly officeHours: FieldRef<"City", 'String'>
     readonly status: FieldRef<"City", 'PublishStatus'>
-    readonly phone: FieldRef<"City", 'String'>
-    readonly supportPhone: FieldRef<"City", 'String'>
     readonly seo: FieldRef<"City", 'Json'>
     readonly content: FieldRef<"City", 'Json'>
   }
@@ -33728,6 +33728,8 @@ export namespace Prisma {
     name: 'name',
     slug: 'slug',
     domain: 'domain',
+    connectionPhone: 'connectionPhone',
+    supportPhone: 'supportPhone',
     settings: 'settings',
     status: 'status',
     workingRevision: 'workingRevision',
@@ -33865,8 +33867,6 @@ export namespace Prisma {
     officeAddress: 'officeAddress',
     officeHours: 'officeHours',
     status: 'status',
-    phone: 'phone',
-    supportPhone: 'supportPhone',
     seo: 'seo',
     content: 'content'
   };
@@ -34581,6 +34581,8 @@ export namespace Prisma {
     name?: StringFilter<"Site"> | string
     slug?: StringFilter<"Site"> | string
     domain?: StringNullableFilter<"Site"> | string | null
+    connectionPhone?: StringNullableFilter<"Site"> | string | null
+    supportPhone?: StringNullableFilter<"Site"> | string | null
     settings?: JsonNullableFilter<"Site">
     status?: EnumPublishStatusFilter<"Site"> | $Enums.PublishStatus
     workingRevision?: IntFilter<"Site"> | number
@@ -34608,6 +34610,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     domain?: SortOrderInput | SortOrder
+    connectionPhone?: SortOrderInput | SortOrder
+    supportPhone?: SortOrderInput | SortOrder
     settings?: SortOrderInput | SortOrder
     status?: SortOrder
     workingRevision?: SortOrder
@@ -34638,6 +34642,8 @@ export namespace Prisma {
     providerId?: StringFilter<"Site"> | string
     name?: StringFilter<"Site"> | string
     domain?: StringNullableFilter<"Site"> | string | null
+    connectionPhone?: StringNullableFilter<"Site"> | string | null
+    supportPhone?: StringNullableFilter<"Site"> | string | null
     settings?: JsonNullableFilter<"Site">
     status?: EnumPublishStatusFilter<"Site"> | $Enums.PublishStatus
     workingRevision?: IntFilter<"Site"> | number
@@ -34665,6 +34671,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     domain?: SortOrderInput | SortOrder
+    connectionPhone?: SortOrderInput | SortOrder
+    supportPhone?: SortOrderInput | SortOrder
     settings?: SortOrderInput | SortOrder
     status?: SortOrder
     workingRevision?: SortOrder
@@ -34687,6 +34695,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Site"> | string
     slug?: StringWithAggregatesFilter<"Site"> | string
     domain?: StringNullableWithAggregatesFilter<"Site"> | string | null
+    connectionPhone?: StringNullableWithAggregatesFilter<"Site"> | string | null
+    supportPhone?: StringNullableWithAggregatesFilter<"Site"> | string | null
     settings?: JsonNullableWithAggregatesFilter<"Site">
     status?: EnumPublishStatusWithAggregatesFilter<"Site"> | $Enums.PublishStatus
     workingRevision?: IntWithAggregatesFilter<"Site"> | number
@@ -35322,8 +35332,6 @@ export namespace Prisma {
     officeAddress?: StringNullableFilter<"City"> | string | null
     officeHours?: StringNullableFilter<"City"> | string | null
     status?: EnumPublishStatusFilter<"City"> | $Enums.PublishStatus
-    phone?: StringNullableFilter<"City"> | string | null
-    supportPhone?: StringNullableFilter<"City"> | string | null
     seo?: JsonNullableFilter<"City">
     content?: JsonNullableFilter<"City">
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
@@ -35348,8 +35356,6 @@ export namespace Prisma {
     officeAddress?: SortOrderInput | SortOrder
     officeHours?: SortOrderInput | SortOrder
     status?: SortOrder
-    phone?: SortOrderInput | SortOrder
-    supportPhone?: SortOrderInput | SortOrder
     seo?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
     site?: SiteOrderByWithRelationInput
@@ -35378,8 +35384,6 @@ export namespace Prisma {
     officeAddress?: StringNullableFilter<"City"> | string | null
     officeHours?: StringNullableFilter<"City"> | string | null
     status?: EnumPublishStatusFilter<"City"> | $Enums.PublishStatus
-    phone?: StringNullableFilter<"City"> | string | null
-    supportPhone?: StringNullableFilter<"City"> | string | null
     seo?: JsonNullableFilter<"City">
     content?: JsonNullableFilter<"City">
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
@@ -35404,8 +35408,6 @@ export namespace Prisma {
     officeAddress?: SortOrderInput | SortOrder
     officeHours?: SortOrderInput | SortOrder
     status?: SortOrder
-    phone?: SortOrderInput | SortOrder
-    supportPhone?: SortOrderInput | SortOrder
     seo?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
     _count?: CityCountOrderByAggregateInput
@@ -35429,8 +35431,6 @@ export namespace Prisma {
     officeAddress?: StringNullableWithAggregatesFilter<"City"> | string | null
     officeHours?: StringNullableWithAggregatesFilter<"City"> | string | null
     status?: EnumPublishStatusWithAggregatesFilter<"City"> | $Enums.PublishStatus
-    phone?: StringNullableWithAggregatesFilter<"City"> | string | null
-    supportPhone?: StringNullableWithAggregatesFilter<"City"> | string | null
     seo?: JsonNullableWithAggregatesFilter<"City">
     content?: JsonNullableWithAggregatesFilter<"City">
   }
@@ -36992,6 +36992,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -37019,6 +37021,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -37044,6 +37048,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -37071,6 +37077,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -37097,6 +37105,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -37110,6 +37120,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -37124,6 +37136,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -37811,8 +37825,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site: SiteCreateNestedOneWithoutCitiesInput
@@ -37837,8 +37849,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
@@ -37859,8 +37869,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
@@ -37885,8 +37893,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
@@ -37909,8 +37915,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -37926,8 +37930,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -37945,8 +37947,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -39910,6 +39910,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     domain?: SortOrder
+    connectionPhone?: SortOrder
+    supportPhone?: SortOrder
     settings?: SortOrder
     status?: SortOrder
     workingRevision?: SortOrder
@@ -39929,6 +39931,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     domain?: SortOrder
+    connectionPhone?: SortOrder
+    supportPhone?: SortOrder
     status?: SortOrder
     workingRevision?: SortOrder
     publishedRevision?: SortOrder
@@ -39942,6 +39946,8 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     domain?: SortOrder
+    connectionPhone?: SortOrder
+    supportPhone?: SortOrder
     status?: SortOrder
     workingRevision?: SortOrder
     publishedRevision?: SortOrder
@@ -40518,8 +40524,6 @@ export namespace Prisma {
     officeAddress?: SortOrder
     officeHours?: SortOrder
     status?: SortOrder
-    phone?: SortOrder
-    supportPhone?: SortOrder
     seo?: SortOrder
     content?: SortOrder
   }
@@ -40537,8 +40541,6 @@ export namespace Prisma {
     officeAddress?: SortOrder
     officeHours?: SortOrder
     status?: SortOrder
-    phone?: SortOrder
-    supportPhone?: SortOrder
   }
 
   export type CityMinOrderByAggregateInput = {
@@ -40554,8 +40556,6 @@ export namespace Prisma {
     officeAddress?: SortOrder
     officeHours?: SortOrder
     status?: SortOrder
-    phone?: SortOrder
-    supportPhone?: SortOrder
   }
 
   export type EnumPageTypeFilter<$PrismaModel = never> = {
@@ -44862,6 +44862,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -44887,6 +44889,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -45044,6 +45048,8 @@ export namespace Prisma {
     name?: StringFilter<"Site"> | string
     slug?: StringFilter<"Site"> | string
     domain?: StringNullableFilter<"Site"> | string | null
+    connectionPhone?: StringNullableFilter<"Site"> | string | null
+    supportPhone?: StringNullableFilter<"Site"> | string | null
     settings?: JsonNullableFilter<"Site">
     status?: EnumPublishStatusFilter<"Site"> | $Enums.PublishStatus
     workingRevision?: IntFilter<"Site"> | number
@@ -45200,8 +45206,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     region: RegionCreateNestedOneWithoutCitiesInput
@@ -45224,8 +45228,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
@@ -45806,8 +45808,6 @@ export namespace Prisma {
     officeAddress?: StringNullableFilter<"City"> | string | null
     officeHours?: StringNullableFilter<"City"> | string | null
     status?: EnumPublishStatusFilter<"City"> | $Enums.PublishStatus
-    phone?: StringNullableFilter<"City"> | string | null
-    supportPhone?: StringNullableFilter<"City"> | string | null
     seo?: JsonNullableFilter<"City">
     content?: JsonNullableFilter<"City">
   }
@@ -46187,6 +46187,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -46213,6 +46215,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -46294,6 +46298,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -46320,6 +46326,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -46391,6 +46399,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -46417,6 +46427,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -46598,6 +46610,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -46624,6 +46638,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -46807,6 +46823,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -46833,6 +46851,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -46914,6 +46934,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -46940,6 +46962,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -47011,6 +47035,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -47037,6 +47063,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -47304,6 +47332,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -47330,6 +47360,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -47449,6 +47481,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -47475,6 +47509,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -47556,6 +47592,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -47582,6 +47620,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -47653,6 +47693,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -47679,6 +47721,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -47714,8 +47758,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site: SiteCreateNestedOneWithoutCitiesInput
@@ -47738,8 +47780,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
@@ -47775,6 +47815,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -47801,6 +47843,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -47841,6 +47885,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -47867,6 +47913,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -48188,6 +48236,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -48214,6 +48264,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -48347,6 +48399,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -48373,6 +48427,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -48408,8 +48464,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site: SiteCreateNestedOneWithoutCitiesInput
@@ -48433,8 +48487,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     tariffs?: TariffUncheckedCreateNestedManyWithoutCityInput
@@ -48618,6 +48670,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -48644,6 +48698,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -48685,8 +48741,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
@@ -48710,8 +48764,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     tariffs?: TariffUncheckedUpdateManyWithoutCityNestedInput
@@ -48902,8 +48954,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site: SiteCreateNestedOneWithoutCitiesInput
@@ -48927,8 +48977,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
@@ -49087,8 +49135,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
@@ -49112,8 +49158,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
@@ -49383,6 +49427,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -49409,6 +49455,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -49531,6 +49579,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -49557,6 +49607,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -49675,6 +49727,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -49701,6 +49755,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -49736,8 +49792,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site: SiteCreateNestedOneWithoutCitiesInput
@@ -49761,8 +49815,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
@@ -49917,6 +49969,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -49943,6 +49997,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -49984,8 +50040,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
@@ -50009,8 +50063,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
@@ -50083,6 +50135,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -50109,6 +50163,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -50144,8 +50200,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site: SiteCreateNestedOneWithoutCitiesInput
@@ -50169,8 +50223,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
@@ -50645,6 +50697,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -50671,6 +50725,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -50712,8 +50768,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
@@ -50737,8 +50791,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
@@ -51845,6 +51897,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -51871,6 +51925,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -51906,8 +51962,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site: SiteCreateNestedOneWithoutCitiesInput
@@ -51931,8 +51985,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
@@ -51962,6 +52014,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -51988,6 +52042,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -52029,8 +52085,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
@@ -52054,8 +52108,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
@@ -52848,6 +52900,8 @@ export namespace Prisma {
     name: string
     slug: string
     domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.PublishStatus
     workingRevision?: number
@@ -52901,6 +52955,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -52926,6 +52982,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -52951,6 +53009,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     settings?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
@@ -53101,8 +53161,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -53314,8 +53372,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     region?: RegionUpdateOneRequiredWithoutCitiesNestedInput
@@ -53338,8 +53394,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
@@ -53361,8 +53415,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -54227,8 +54279,6 @@ export namespace Prisma {
     officeAddress?: string | null
     officeHours?: string | null
     status?: $Enums.PublishStatus
-    phone?: string | null
-    supportPhone?: string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -54244,8 +54294,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
@@ -54268,8 +54316,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
@@ -54291,8 +54337,6 @@ export namespace Prisma {
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
   }

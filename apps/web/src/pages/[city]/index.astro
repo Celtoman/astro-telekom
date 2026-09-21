@@ -2,16 +2,16 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlockRenderer from '../../components/BlockRenderer.astro';
 import CityHomeFirstScreen from '../../components/CityHomeFirstScreen.astro';
-import { loadSiteData, pageMeta, publicSiteSlug, type CityView } from '../../data/site';
+import { loadSiteData, pageMeta, publicSiteSlug, type CityView, type SiteView } from '../../data/site';
 
-interface Props { city: CityView }
+interface Props { city: CityView; site: SiteView }
 
 export async function getStaticPaths() {
-  const { cities } = await loadSiteData();
-  return cities.map((city) => ({ params: { city: city.slug }, props: { city } }));
+  const { cities, site } = await loadSiteData();
+  return cities.map((city) => ({ params: { city: city.slug }, props: { city, site } }));
 }
 
-const { city } = Astro.props as Props;
+const { city, site } = Astro.props as Props;
 const homePage = city.pages.find((page) => page.type === 'HOME' && page.slug === '');
 if (!homePage) throw new Error(`Не опубликована HOME города «${city.name}»`);
 const meta = pageMeta(city.pages, homePage?.slug || '', `Домашний интернет в ${city.nameIn}`, `Тарифы домашнего интернета, телевидения и подключения в ${city.nameIn}.`);
@@ -21,7 +21,7 @@ const contentBlocks = homePage?.blocks?.filter((block) => block.blockType !== 'h
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 ---
 
-<BaseLayout title={meta.title} description={meta.description} city={city} pages={city.pages}>
-  <CityHomeFirstScreen block={heroBlock} {city} tariffs={city.tariffs} {apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage.slug} />
+<BaseLayout title={meta.title} description={meta.description} city={city} pages={city.pages} {site}>
+  <CityHomeFirstScreen block={heroBlock} {city} {site} tariffs={city.tariffs} {apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage.slug} />
   <BlockRenderer blocks={contentBlocks} tariffs={city.tariffs} citySlug={city.slug} pages={city.pages} />
 </BaseLayout>

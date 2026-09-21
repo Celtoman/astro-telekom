@@ -1,22 +1,23 @@
 ---
 import { createHash } from 'node:crypto';
 import '@fontsource-variable/geist';
-import type { CityView, PageView } from '../data/site';
+import type { CityView, PageView, SiteView } from '../data/site';
 import { normalizePublicHtmlPath } from '../data/public-url';
 
 interface Props {
   title: string;
   description: string;
   city?: CityView;
+  site: SiteView;
   pages?: PageView[];
   indexable?: boolean;
 }
 
-const { title, description, city, indexable = true } = Astro.props as Props;
+const { title, description, city, site, indexable = true } = Astro.props as Props;
 const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
-const connectionPhone = city?.phone || import.meta.env.PUBLIC_CONNECTION_PHONE || '8 (800) 000-00-00';
+const connectionPhone = site.connectionPhone;
 const connectionPhoneHref = `tel:${connectionPhone.replace(/[^+\d]/g, '')}`;
-const supportPhone = city?.supportPhone || import.meta.env.PUBLIC_SUPPORT_PHONE || connectionPhone;
+const supportPhone = site.supportPhone;
 const supportPhoneHref = `tel:${supportPhone.replace(/[^+\d]/g, '')}`;
 const navItems = [
   { href: '/goroda-obsluzhivaniya', label: 'Города' },

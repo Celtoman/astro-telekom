@@ -136,6 +136,8 @@ exports.Prisma.SiteScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   domain: 'domain',
+  connectionPhone: 'connectionPhone',
+  supportPhone: 'supportPhone',
   settings: 'settings',
   status: 'status',
   workingRevision: 'workingRevision',
@@ -252,8 +254,6 @@ exports.Prisma.CityScalarFieldEnum = {
   officeAddress: 'officeAddress',
   officeHours: 'officeHours',
   status: 'status',
-  phone: 'phone',
-  supportPhone: 'supportPhone',
   seo: 'seo',
   content: 'content'
 };

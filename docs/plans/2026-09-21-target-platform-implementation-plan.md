@@ -125,6 +125,8 @@ git commit -m "feat(platform): adopt global Dom.ru site identity Closes #162"
 
 ### Task 3: Добавить глобальные значения сайта и убрать городские телефоны
 
+Статус 2026-09-21: реализовано локально; полный gate и commit фиксируются после проверки всего репозитория. Внешнее применение `0035` и новая публикация выполняются отдельным deployment-этапом.
+
 **Files:**
 
 - Modify: `prisma/schema.prisma`

@@ -157,6 +157,8 @@ model Site {
   name              String
   slug              String             @unique
   domain            String?
+  connectionPhone   String?
+  supportPhone      String?
   settings          Json?
   status            PublishStatus      @default(DRAFT)
   workingRevision   Int                @default(0)
@@ -328,8 +330,6 @@ model City {
   officeAddress     String?
   officeHours       String?
   status            PublishStatus  @default(DRAFT)
-  phone             String?
-  supportPhone      String?
   seo               Json?
   content           Json?
   site              Site           @relation(fields: [siteId], references: [id])

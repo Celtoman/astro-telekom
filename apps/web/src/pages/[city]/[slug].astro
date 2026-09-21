@@ -1,16 +1,17 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TariffDetail from '../../components/TariffDetail.astro';
-import { loadSiteData, publicSiteSlug, type CityView } from '../../data/site';
+import { loadSiteData, publicSiteSlug, type CityView, type SiteView } from '../../data/site';
 import type { TariffView } from '../../data/tariff-view';
 
 interface Props {
   city: CityView;
   tariff: TariffView;
+  site: SiteView;
 }
 
 export async function getStaticPaths() {
-  const { routes, cities } = await loadSiteData();
+  const { routes, cities, site } = await loadSiteData();
   return routes
     .filter((route) => route.kind === 'CITY_TARIFF_DETAIL')
     .map((route) => {
@@ -19,11 +20,11 @@ export async function getStaticPaths() {
       if (!city || !tariff || !route.citySlug || !route.tariffSlug) {
         throw new Error(`Маршрут тарифа ${route.path} не соответствует опубликованному каталогу`);
       }
-      return { params: { city: route.citySlug, slug: route.tariffSlug }, props: { city, tariff } };
+      return { params: { city: route.citySlug, slug: route.tariffSlug }, props: { city, tariff, site } };
     });
 }
 
-const { city, tariff } = Astro.props as Props;
+const { city, tariff, site } = Astro.props as Props;
 const seo = tariff.seo || {};
 const title = typeof seo.title === 'string' && seo.title.trim()
   ? seo.title.trim()
@@ -35,6 +36,6 @@ const relatedTariffs = city.tariffs.filter((item) => item.slug !== tariff.slug).
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 ---
 
-<BaseLayout {title} {description} {city} pages={city.pages}>
-  <TariffDetail {city} {tariff} {relatedTariffs} {apiUrl} siteSlug={publicSiteSlug} />
+<BaseLayout {title} {description} {city} pages={city.pages} {site}>
+  <TariffDetail {city} {site} {tariff} {relatedTariffs} {apiUrl} siteSlug={publicSiteSlug} />
 </BaseLayout>

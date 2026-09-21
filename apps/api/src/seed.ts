@@ -31,12 +31,14 @@ async function main() {
 
   const site = await prisma.site.upsert({
     where: { slug: 'domru-site' },
-    update: { name: 'Дом.ру', providerId: provider.id, status: PUBLISHED },
+    update: { name: 'Дом.ру', providerId: provider.id, status: PUBLISHED, connectionPhone: '78005557244', supportPhone: '78002507777' },
     create: {
       providerId: provider.id,
       name: 'Дом.ру',
       slug: 'domru-site',
       status: PUBLISHED,
+      connectionPhone: '78005557244',
+      supportPhone: '78002507777',
     },
   });
 
@@ -69,7 +71,7 @@ async function main() {
 
   const city = await prisma.city.upsert({
     where: { siteId_slug: { siteId: site.id, slug: 'kazan' } },
-    update: { name: 'Казань', namePrepositional: 'Казани', nameGenitive: 'Казани', regionId: region.id, status: PUBLISHED, phone: '8 (800) 555-72-44', supportPhone: '8 (800) 250-77-77' },
+    update: { name: 'Казань', namePrepositional: 'Казани', nameGenitive: 'Казани', regionId: region.id, status: PUBLISHED },
     create: {
       siteId: site.id,
       regionId: region.id,
@@ -78,8 +80,6 @@ async function main() {
       nameGenitive: 'Казани',
       slug: 'kazan',
       status: PUBLISHED,
-      phone: '8 (800) 555-72-44',
-      supportPhone: '8 (800) 250-77-77',
     },
   });
 

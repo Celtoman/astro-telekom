@@ -39,7 +39,7 @@ const cityHomeBlocks = (cityIn) => [
 ];
 
 const apiFixture = {
-  site: { name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test' },
+  site: { name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test', connectionPhone: '+7 (800) 555-35-35', supportPhone: '+7 (800) 250-77-77' },
   globalPages: [
     globalPage('COVERAGE', 'karta-pokrytiya-provaydera', 'Карта покрытия', 'Выберите город и проверьте адрес на его странице.'),
     globalPage('CITIES', 'goroda-obsluzhivaniya', 'Города обслуживания', 'Дом.ру доступен в опубликованных городах.'),
@@ -64,7 +64,7 @@ const apiFixture = {
   sitemap: { excludedPaths: ['/kazan/api-internet-tv-500'] },
   cities: [
     {
-      name: 'Казань', namePrepositional: 'Казани', slug: 'kazan', phone: '8 (800) 555-35-35', supportPhone: '8 (800) 250-77-77', status: 'PUBLISHED', region: { name: 'Татарстан', slug: 'tatarstan' },
+      name: 'Казань', namePrepositional: 'Казани', slug: 'kazan', status: 'PUBLISHED', region: { name: 'Татарстан', slug: 'tatarstan' },
       pages: [
         {
           ...page('HOME', '', 'Домашний интернет в Казани'),
@@ -95,7 +95,7 @@ const apiFixture = {
       ],
     },
     {
-      name: 'Альметьевск', namePrepositional: 'Альметьевске', slug: 'almetyevsk', phone: '8 (800) 555-35-35', supportPhone: '8 (800) 250-77-77', status: 'PUBLISHED', region: { name: 'Татарстан', slug: 'tatarstan' },
+      name: 'Альметьевск', namePrepositional: 'Альметьевске', slug: 'almetyevsk', status: 'PUBLISHED', region: { name: 'Татарстан', slug: 'tatarstan' },
       pages: [{ ...page('HOME', '', 'Домашний интернет в Альметьевске'), blocks: cityHomeBlocks('Альметьевске') }, page('INTERNET', 'internet', 'Домашний интернет в Альметьевске')],
       tariffs: [tariff('almet-internet-300', 'Альмет Интернет 300', 300, 650, 1500)],
     },
@@ -252,8 +252,8 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.deepEqual(homeBlockOrder, [...homeBlockOrder].sort((left, right) => left - right));
   assert.equal((kazan.match(/<h1\b/g) || []).length, 1);
   assert.match(kazan, /data-api-url="https:\/\/api\.partner\.example\.test\/api\/v1"/);
-  assert.match(kazan, /href="tel:88005553535"[^>]*>8 \(800\) 555-35-35<\/a>/);
-  assert.match(kazan, /data-support-phone="8 \(800\) 250-77-77"/);
+  assert.match(kazan, /href="tel:\+78005553535"[^>]*>\+7 \(800\) 555-35-35<\/a>/);
+  assert.match(kazan, /data-support-phone="\+7 \(800\) 250-77-77"/);
   assert.match(almetyevsk, /<link rel="canonical" href="https:\/\/partner\.example\.test\/almetyevsk">/);
   assert.match(almetyevsk, /<h1[^>]*>Домашний интернет и телевидение в Альметьевске<\/h1>/);
   assert.match(almetyevsk, /data-form-mode="visible"/);

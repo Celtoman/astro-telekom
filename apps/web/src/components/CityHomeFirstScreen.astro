@@ -1,18 +1,19 @@
 ---
 import AddressForm from './AddressForm.astro';
-import type { CityView } from '../data/site';
+import type { CityView, SiteView } from '../data/site';
 import type { TariffView } from '../data/tariff-view';
 
 interface Props {
   block: { blockType: string; data: Record<string, unknown> };
   city: CityView;
+  site: SiteView;
   tariffs: TariffView[];
   apiUrl: string;
   siteSlug: string;
   pageSlug: string;
 }
 
-const { block, city, tariffs, apiUrl, siteSlug, pageSlug } = Astro.props as Props;
+const { block, city, site, tariffs, apiUrl, siteSlug, pageSlug } = Astro.props as Props;
 const title = typeof block.data.title === 'string' ? block.data.title : `Домашний интернет и телевидение в ${city.nameIn}`;
 const text = typeof block.data.text === 'string' ? block.data.text : 'Сравните опубликованные тарифы и проверьте возможность подключения по вашему адресу.';
 const eyebrow = typeof block.data.eyebrow === 'string' ? block.data.eyebrow : `Дом.ру в ${city.nameIn}`;
@@ -31,8 +32,8 @@ const tariffWord = (count: number) => {
 const priceLabel = minimumPrice === null
   ? 'Условия уточнит оператор'
   : `от ${new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(minimumPrice).replace(/[\u00a0\u202f]/g, ' ')} ₽/мес.`;
-const phoneHref = `tel:${city.phone.replace(/[^+\d]/g, '')}`;
-const supportPhoneHref = `tel:${city.supportPhone.replace(/[^+\d]/g, '')}`;
+const phoneHref = `tel:${site.connectionPhone.replace(/[^+\d]/g, '')}`;
+const supportPhoneHref = `tel:${site.supportPhone.replace(/[^+\d]/g, '')}`;
 ---
 
 <section class="city-first-screen" data-block-type="hero" data-city-first-screen>
@@ -58,14 +59,14 @@ const supportPhoneHref = `tel:${city.supportPhone.replace(/[^+\d]/g, '')}`;
         <span class="panel-kicker">Проверка доступности</span>
         <h2>Проверим возможность подключения по вашему адресу</h2>
         <p>Введите город, улицу и дом. После точного выбора адреса система проверит техническую доступность, а при успехе предложит оставить телефон.</p>
-        <AddressForm {apiUrl} {siteSlug} {pageSlug} {city} mode="visible" embedded />
+        <AddressForm {apiUrl} {siteSlug} {pageSlug} {city} {site} mode="visible" embedded />
       </article>
       <aside class="contact-panel" aria-labelledby="consultation-title">
         <span class="panel-kicker">Помощь с выбором</span>
         <h2 id="consultation-title">Получить консультацию</h2>
         <p>Оператор уточнит условия опубликованных тарифов и ответит на вопросы о подключении.</p>
         <div class="phone-label">Отдел подключений</div>
-        <a class="consultation-phone subscriber-phone" href={phoneHref} data-support-phone={city.supportPhone} data-support-phone-href={supportPhoneHref}>{city.phone}</a>
+        <a class="consultation-phone subscriber-phone" href={phoneHref} data-support-phone={site.supportPhone} data-support-phone-href={supportPhoneHref}>{site.connectionPhone}</a>
       </aside>
     </div>
   </div>

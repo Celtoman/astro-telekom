@@ -27,9 +27,7 @@ test('city catalog loads management controls and links to its separate import wo
   assert.match(source, /method:\s*["']PATCH["']/);
   assert.match(source, /Управление городом/);
   assert.match(source, /\{selectedCity\s*\?\s*<aside aria-label="Редактирование города"/);
-  assert.match(source, /Телефон подключения/);
-  assert.match(source, /Техническая поддержка/);
-  assert.match(source, /supportPhone:\s*cityForm\.supportPhone\.trim\(\)\s*\|\|\s*null/);
+  assert.doesNotMatch(source, /city-phone|city-support-phone|supportPhone:\s*cityForm/);
   assert.doesNotMatch(source, /\/admin\/cities\/imports|\/admin\/cities\/import\/validate|\/admin\/cities\/import\/apply|accept=["']\.xlsx["']/);
 });
 

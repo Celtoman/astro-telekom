@@ -1,18 +1,19 @@
 ---
 import AddressForm from './AddressForm.astro';
 import { publicHtmlPath } from '../data/public-url';
-import type { CityView } from '../data/site';
+import type { CityView, SiteView } from '../data/site';
 import type { TariffView } from '../data/tariff-view';
 
 interface Props {
   city: CityView;
+  site: SiteView;
   tariff: TariffView;
   relatedTariffs: TariffView[];
   apiUrl: string;
   siteSlug: string;
 }
 
-const { city, tariff, relatedTariffs, apiUrl, siteSlug } = Astro.props as Props;
+const { city, site, tariff, relatedTariffs, apiUrl, siteSlug } = Astro.props as Props;
 const attributes = tariff.attributes;
 const textAttribute = (key: string) => typeof attributes[key] === 'string' ? String(attributes[key]) : null;
 const numberAttribute = (key: string) => typeof attributes[key] === 'number' ? Number(attributes[key]) : null;
@@ -99,7 +100,7 @@ const services = serviceDefinitions.flatMap(([statusKey, title, priceKey]) => {
 
   {services.length > 0 && <section class="section container"><span class="section-kicker">Дополнительные возможности</span><h2>Сервисы и опции</h2><div class="cards">{services.map((service) => <article class="card"><h3>{service.title}</h3><p>{service.status}{service.price !== null ? ` — ${money(service.price)}/мес.` : ''}</p></article>)}</div></section>}
 
-  <section class="section address-section"><div class="container address-layout"><div><span class="section-kicker">Проверка подключения</span><h2>Доступен ли тариф по вашему адресу</h2><p>Введите точный адрес. Если подключение возможно, форма предложит оставить номер для оформления заявки.</p></div><AddressForm {apiUrl} {siteSlug} pageSlug="" {city} mode="visible" serviceType={tariff.serviceType} tariffSlug={tariff.slug} embedded /></div></section>
+  <section class="section address-section"><div class="container address-layout"><div><span class="section-kicker">Проверка подключения</span><h2>Доступен ли тариф по вашему адресу</h2><p>Введите точный адрес. Если подключение возможно, форма предложит оставить номер для оформления заявки.</p></div><AddressForm {apiUrl} {siteSlug} pageSlug="" {city} {site} mode="visible" serviceType={tariff.serviceType} tariffSlug={tariff.slug} embedded /></div></section>
 
   {relatedTariffs.length > 0 && <section class="section container"><span class="section-kicker">Другие варианты</span><h2>Похожие тарифы в {city.nameIn}</h2><div class="cards related-cards">{relatedTariffs.map((item) => <article class="card"><span class="service-label">{item.service}</span><h3>{item.name}</h3><p>{item.speed}</p><div class="related-price">{item.price}</div><a class="card-link" href={publicHtmlPath(city.slug, item.slug)}>Подробнее о тарифе →</a></article>)}</div></section>}
 

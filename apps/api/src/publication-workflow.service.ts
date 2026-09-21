@@ -2,6 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { SiteCatalogService } from './site-catalog.service';
+import { sitePhoneReadinessErrors } from './site-phone';
 
 type Transaction = Prisma.TransactionClient | PrismaService;
 type JsonObject = Record<string, unknown>;
@@ -135,6 +136,10 @@ export class PublicationWorkflowService {
     if (!site) throw new NotFoundException('Site not found');
     if (site.workingRevision !== input.siteRevision) {
       throw new ConflictException('Рабочая ревизия сайта изменилась до создания снимка публикации');
+    }
+    const missingPhones = sitePhoneReadinessErrors(site);
+    if (missingPhones.length > 0) {
+      throw new ConflictException(`Публикация заблокирована: заполните ${missingPhones.join(' и ')}`);
     }
     const catalog = await this.catalog.listBySiteId(input.siteId, transaction);
     return this.createPublication(transaction, { ...input, catalog: this.jsonSnapshot(catalog) as JsonObject });
@@ -421,6 +426,10 @@ export class PublicationWorkflowService {
   async getBuildCatalog(siteSlug: string): Promise<JsonObject> {
     const site = await this.prisma.site.findUnique({ where: { slug: siteSlug } });
     if (!site) throw new NotFoundException('Site not found');
+    const missingPhones = sitePhoneReadinessErrors(site);
+    if (missingPhones.length > 0) {
+      throw new ConflictException(`Сборка заблокирована: заполните ${missingPhones.join(' и ')}`);
+    }
     const rebuild = await this.prisma.siteRebuild.findUnique({ where: { dedupeKey: `site:${site.id}` } });
     if (rebuild?.processingPublicationId) {
       const processing = await this.prisma.sitePublication.findUnique({ where: { id: rebuild.processingPublicationId } });

@@ -8,7 +8,7 @@ const title = `Домашний интернет и телевидение ${sit
 const description = 'Выберите город, чтобы посмотреть тарифы домашнего интернета и телевидения.';
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} {site}>
   <section class="hero"><div class="container"><span class="eyebrow">{site.name}</span><h1>{title}</h1><p class="lead">Выберите город, чтобы посмотреть доступные услуги, тарифы и проверку подключения по адресу.</p>{cities[0] && <a class="button" href={publicHtmlPath(cities[0].slug)}>Выбрать город</a>}</div></section>
   <section class="section container" id="cities"><h2>Популярные города</h2>{featuredCities.length > 0 ? <><div class="grid">{featuredCities.map((city) => <article class="card"><h3>{city.name}</h3><p>Домашний интернет, телевидение и актуальные предложения.</p><a class="card-link" href={publicHtmlPath(city.slug)}>Открыть страницу города →</a></article>)}</div><p><a class="card-link" href="/goroda-obsluzhivaniya">Все города обслуживания →</a></p></> : <p class="lead">Опубликованных городов пока нет.</p>}</section>
 </BaseLayout>

@@ -1,5 +1,5 @@
 ---
-import type { CityView } from '../data/site';
+import type { CityView, SiteView } from '../data/site';
 
 type FormMode = 'visible' | 'lead';
 type ServiceType = 'INTERNET' | 'INTERNET_TV' | 'TV' | 'OTHER';
@@ -9,6 +9,7 @@ interface Props {
   siteSlug: string;
   pageSlug: string;
   city: CityView;
+  site: SiteView;
   mode?: FormMode;
   serviceType?: ServiceType;
   tariffSlug?: string;
@@ -20,13 +21,14 @@ const {
   siteSlug,
   pageSlug,
   city,
+  site,
   mode = 'visible',
   serviceType = 'INTERNET',
   tariffSlug,
   embedded = false,
 } = Astro.props;
 const formId = `addressForm-${city.slug}-${mode}-${tariffSlug || pageSlug}`;
-const supportPhoneHref = `tel:${city.supportPhone.replace(/[^+\d]/g, '')}`;
+const supportPhoneHref = `tel:${site.supportPhone.replace(/[^+\d]/g, '')}`;
 ---
 
 {mode === 'visible' && !embedded && <section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>Проверьте возможность подключения</h1><p class="lead">Укажите адрес, и мы сразу покажем результат проверки.</p></div></section>}
@@ -42,7 +44,7 @@ const supportPhoneHref = `tel:${city.supportPhone.replace(/[^+\d]/g, '')}`;
     data-page-slug={pageSlug}
     data-service-type={serviceType}
     data-tariff-slug={tariffSlug || ''}
-    data-support-phone={city.supportPhone}
+    data-support-phone={site.supportPhone}
     data-support-phone-href={supportPhoneHref}
   >
     {mode === 'lead' && <><h2>Оставить заявку</h2><p>Укажите адрес и телефон. Возможность подключения мы проверим автоматически.</p></>}

@@ -65,7 +65,7 @@ function card(title, body, extra = "") {
 
 function renderHeader(catalog, city) {
   const siteName = text(catalog.site?.name, "Дом.ру")
-  const phone = text(city?.phone)
+  const phone = text(catalog.site?.connectionPhone)
   return `<header class="site-header"><div class="container header-inner"><span class="brand">${escapeHtml(siteName)}</span><nav aria-label="Основная навигация"><span>Тарифы</span><span>Проверка адреса</span><span>Города</span></nav>${phone ? `<span class="header-phone">${escapeHtml(phone)}</span>` : ""}</div></header>`
 }
 
@@ -88,11 +88,11 @@ function tariffStats(tariffs) {
   }
 }
 
-function renderCityHero(city, page, hero) {
+function renderCityHero(catalog, city, page, hero) {
   const data = record(hero?.data)
   const tariffs = list(city.tariffs)
   const { maximumSpeed, minimumPrice } = tariffStats(tariffs)
-  return `<section class="city-first"><div class="container stack"><div class="city-hero"><div class="city-copy"><span class="kicker">${escapeHtml(text(data.eyebrow, `Дом.ру в ${text(city.nameIn, city.name)}`))}</span><h1>${escapeHtml(text(data.title, page?.title || `Домашний интернет в ${text(city.nameIn, city.name)}`))}</h1><p class="lead">${escapeHtml(text(data.text, "Сравните тарифы и проверьте возможность подключения по вашему адресу."))}</p><dl class="proof"><div><dt>Опубликовано</dt><dd>${tariffs.length} тарифов</dd></div><div><dt>Скорость</dt><dd>${maximumSpeed === null ? "Уточняется" : `до ${escapeHtml(maximumSpeed)} Мбит/с`}</dd></div><div><dt>Стоимость</dt><dd>${minimumPrice === null ? "Уточняется" : `от ${escapeHtml(minimumPrice)} ₽/мес.`}</dd></div></dl></div><div class="hero-visual" aria-hidden="true"><span>Wi-Fi</span></div></div><div class="actions"><article class="panel"><span class="kicker">Проверка доступности</span><h2>Проверим возможность подключения по вашему адресу</h2><p>Введите город, улицу и дом. В предпросмотре форма отключена.</p><div class="fake-form"><span>Город, улица, дом</span><b>Проверить адрес</b></div></article><aside class="panel"><span class="kicker">Помощь с выбором</span><h2>Получить консультацию</h2><p>Оператор уточнит условия тарифов и ответит на вопросы.</p><strong class="phone">${escapeHtml(text(city.phone, "Телефон уточняется"))}</strong></aside></div></div></section>`
+  return `<section class="city-first"><div class="container stack"><div class="city-hero"><div class="city-copy"><span class="kicker">${escapeHtml(text(data.eyebrow, `Дом.ру в ${text(city.nameIn, city.name)}`))}</span><h1>${escapeHtml(text(data.title, page?.title || `Домашний интернет в ${text(city.nameIn, city.name)}`))}</h1><p class="lead">${escapeHtml(text(data.text, "Сравните тарифы и проверьте возможность подключения по вашему адресу."))}</p><dl class="proof"><div><dt>Опубликовано</dt><dd>${tariffs.length} тарифов</dd></div><div><dt>Скорость</dt><dd>${maximumSpeed === null ? "Уточняется" : `до ${escapeHtml(maximumSpeed)} Мбит/с`}</dd></div><div><dt>Стоимость</dt><dd>${minimumPrice === null ? "Уточняется" : `от ${escapeHtml(minimumPrice)} ₽/мес.`}</dd></div></dl></div><div class="hero-visual" aria-hidden="true"><span>Wi-Fi</span></div></div><div class="actions"><article class="panel"><span class="kicker">Проверка доступности</span><h2>Проверим возможность подключения по вашему адресу</h2><p>Введите город, улицу и дом. В предпросмотре форма отключена.</p><div class="fake-form"><span>Город, улица, дом</span><b>Проверить адрес</b></div></article><aside class="panel"><span class="kicker">Помощь с выбором</span><h2>Получить консультацию</h2><p>Оператор уточнит условия тарифов и ответит на вопросы.</p><strong class="phone">${escapeHtml(text(catalog.site?.connectionPhone, "Телефон уточняется"))}</strong></aside></div></div></section>`
 }
 
 function renderTariffGrid(city) {
@@ -130,7 +130,7 @@ function renderCityHome(catalog, route) {
   const blocks = list(page.blocks)
   const hero = blocks.find((block) => block?.blockType === "hero")
   if (!hero) throw new Error("HOME маршрута предпросмотра не содержит hero")
-  return renderCityHero(city, page, hero) + blocks.filter((block) => block?.blockType !== "hero").map((block, index) => block.blockType === "tariff_grid" ? renderTariffGrid(city) : renderItemsBlock(block, index)).join("")
+  return renderCityHero(catalog, city, page, hero) + blocks.filter((block) => block?.blockType !== "hero").map((block, index) => block.blockType === "tariff_grid" ? renderTariffGrid(city) : renderItemsBlock(block, index)).join("")
 }
 
 function renderTariffDetail(catalog, route) {

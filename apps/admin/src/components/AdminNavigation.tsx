@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { Building2, ChevronRight, Eye, FileClock, FileSearch, FileUp, Home, Inbox, List, Map, PackageOpen, Route, Trash2 } from "lucide-react"
+import { Braces, Building2, ChevronRight, Eye, FileClock, FileSearch, FileUp, Home, Inbox, List, Map, PackageOpen, Route, Trash2 } from "lucide-react"
 import { cn } from "cn"
 import { Collapsible, DropdownMenu, Tooltip } from "radix-ui"
 import {
@@ -20,6 +20,7 @@ const navigationIcons: Record<AdminNavigationIcon, LucideIcon> = {
   import: FileUp,
   leads: Inbox,
   redirects: Route,
+  variables: Braces,
   seo: FileSearch,
   sitemap: Map,
   audit: FileClock,

@@ -8,6 +8,8 @@ function fixture() {
     ['site-1', {
       id: 'site-1',
       slug: 'domru-site',
+      connectionPhone: '78005557244',
+      supportPhone: '78002507777',
       workingRevision: 0,
       publishedRevision: 0,
     }],

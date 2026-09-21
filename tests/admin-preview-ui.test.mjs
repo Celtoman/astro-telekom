@@ -5,7 +5,7 @@ import { buildPreviewDocument, previewRouteOptions } from '../apps/admin/src/lib
 import { adminNavigation } from '../apps/admin/src/lib/admin-navigation.mjs';
 
 const catalog = {
-  site: { name: 'Дом.ру', slug: 'domru-site' },
+  site: { name: 'Дом.ру', slug: 'domru-site', connectionPhone: '+7 (800) 000-00-00', supportPhone: '+7 (800) 111-11-11' },
   routes: [
     { id: 'HOME', kind: 'HOME', path: '/' },
     { id: 'CITY_HOME', kind: 'CITY_HOME', path: '/kazan', citySlug: 'kazan' },
@@ -14,7 +14,7 @@ const catalog = {
   ],
   globalPages: [{ type: 'PRIVACY', slug: 'politika', title: 'Политика', content: { text: 'Текст политики' }, blocks: [] }],
   cities: [{
-    name: 'Казань', nameIn: 'Казани', slug: 'kazan', phone: '8 800 000-00-00', supportPhone: '8 800 111-11-11',
+    name: 'Казань', nameIn: 'Казани', slug: 'kazan',
     pages: [{ type: 'HOME', slug: '', title: 'Домашний интернет', blocks: [
       { blockType: 'hero', data: { eyebrow: 'Дом.ру в Казани', title: '<script>alert(1)</script>', text: 'Рабочая версия' } },
       { blockType: 'service_grid', data: { title: 'Услуги', items: [{ title: 'Интернет', text: 'Для дома' }] } },

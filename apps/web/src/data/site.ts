@@ -16,8 +16,6 @@ export interface CityView {
   nameIn: string;
   slug: string;
   region: { name: string; slug: string };
-  phone: string;
-  supportPhone: string;
   status: string;
   pages: PageView[];
   tariffs: TariffView[];
@@ -27,6 +25,8 @@ export interface SiteView {
   name: string;
   slug: string;
   domain?: string | null;
+  connectionPhone: string;
+  supportPhone: string;
 }
 
 export interface RedirectView {
@@ -209,8 +209,6 @@ const demoCities: CityView[] = [{
   nameIn: 'Казани',
   slug: 'kazan',
   region: { name: 'Республика Татарстан', slug: 'respublika-tatarstan' },
-  phone: fallbackConnectionPhone,
-  supportPhone: fallbackSupportPhone,
   status: 'PUBLISHED',
   pages: [{
     type: 'HOME', slug: '', title: 'Домашний интернет в Казани', status: 'PUBLISHED', seo: {}, blocks: [
@@ -230,7 +228,7 @@ const demoCities: CityView[] = [{
 }];
 const demoRoutes = expectedReleaseOneRoutes(demoCities, demoGlobalPages);
 const demoCatalog: SiteCatalog = {
-  site: { name: 'Дом.ру', slug: publicSiteSlug },
+  site: { name: 'Дом.ру', slug: publicSiteSlug, connectionPhone: fallbackConnectionPhone, supportPhone: fallbackSupportPhone },
   globalPages: demoGlobalPages,
   routes: demoRoutes,
   redirects: [],
@@ -257,8 +255,6 @@ function normalizedCatalog(value: unknown): SiteCatalog {
         nameIn: String(item.namePrepositional || item.name || slug),
         slug,
         region: { name: regionName, slug: regionSlug },
-        phone: String(item.phone || fallbackConnectionPhone),
-        supportPhone: String(item.supportPhone || fallbackSupportPhone),
         status: 'PUBLISHED',
         pages: (Array.isArray(item.pages) ? item.pages : [])
           .filter((page: Record<string, unknown>) => page?.status === 'PUBLISHED')
@@ -277,11 +273,16 @@ function normalizedCatalog(value: unknown): SiteCatalog {
   const routes = normalizeRoutes(payload.routes, expectedRoutes);
   const redirects = normalizeRedirects(payload.redirects, routes);
   const sitemap = normalizeSitemap(payload.sitemap, routes);
+  const connectionPhone = String(payload.site.connectionPhone || '').trim();
+  const supportPhone = String(payload.site.supportPhone || '').trim();
+  if (!connectionPhone || !supportPhone) throw new Error('API не вернул обязательные телефоны сайта');
   return {
     site: {
       name: String(payload.site.name || 'Дом.ру'),
       slug: String(payload.site.slug || publicSiteSlug),
       domain: typeof payload.site.domain === 'string' ? payload.site.domain : null,
+      connectionPhone,
+      supportPhone,
     },
     globalPages,
     routes,
