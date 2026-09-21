@@ -5,38 +5,42 @@ import { readSheet, type SheetData } from 'read-excel-file/node';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
 
-export const REQUIRED_IMPORT_COLUMNS = [
-  'subekt_rf', 'gorod_name', 'gorod_slug', 'tarif_type', 'post_title', 'post_title_lat',
-  'nazvanie_tarifa', 'skorost_interneta', 'stoimost_tarifa',
+export const CANONICAL_IMPORT_COLUMNS = [
+  'subekt_rf', 'gorod_name', 'gorod_slug', 'tarif_type', 'post_title', 'tariff_slug',
+  'nazvanie_tarifa', 'card_subtitle', 'skorost_interneta', 'tv_channels_total',
+  'tv_channels_hd', 'price_standard', 'price_promo', 'connection_cost', 'opisanie_aktsii',
+  'opisanie_tarifa', 'card_feature', 'online_cinemas', 'tvbox_installment_price',
+  'tvbox_installment_months', 'tvbox_buyout_price', 'router_installment_price',
+  'router_installment_months', 'router_buyout_price', 'srv_vkplaycloud_status',
+  'srv_video_status', 'srv_video_price', 'cctv_buyout_price', 'cctv_connection_price',
+  'srv_gaming_status', 'game_code', 'srv_litres_status', 'srv_ont_status',
+  'ont_buyout_price', 'srv_staticip_status', 'badge_text', 'is_sticky',
 ] as const;
 
+export const REQUIRED_IMPORT_COLUMNS = CANONICAL_IMPORT_COLUMNS;
+
 export const TARIFF_ATTRIBUTE_FIELDS = [
-  { key: 'nazvanie_tarifa', label: 'Название в карточке', group: 'Карточка', kind: 'text' },
   { key: 'card_subtitle', label: 'Подзаголовок карточки', group: 'Карточка', kind: 'text' },
   { key: 'badge_text', label: 'Бейдж', group: 'Карточка', kind: 'text' },
-  { key: 'promo_feature', label: 'Короткая особенность', group: 'Карточка', kind: 'text', maxLength: 164 },
+  { key: 'card_feature', label: 'Короткая особенность', group: 'Карточка', kind: 'text', maxLength: 164 },
   { key: 'opisanie_tarifa', label: 'Полное описание', group: 'Карточка', kind: 'text', multiline: true },
-  { key: 'show_on_site', label: 'Рекомендация «показывать на сайте»', group: 'Карточка', kind: 'boolean' },
   { key: 'is_sticky', label: 'Закрепленный тариф', group: 'Карточка', kind: 'boolean' },
-  { key: 'is_gaming_tarif', label: 'Игровой тариф', group: 'Карточка', kind: 'boolean' },
   { key: 'tv_channels_total', label: 'ТВ-каналов', group: 'Телевидение', kind: 'integer' },
   { key: 'tv_channels_hd', label: 'HD-каналов', group: 'Телевидение', kind: 'integer' },
-  { key: 'online_cinemas', label: 'Онлайн-кинотеатры', group: 'Телевидение', kind: 'text', multiline: true },
-  { key: 'equip_router', label: 'Условия роутера', group: 'Оборудование', kind: 'text' },
-  { key: 'router_buyout_price', label: 'Выкуп роутера, ₽', group: 'Оборудование', kind: 'number' },
+  { key: 'online_cinemas', label: 'Онлайн-кинотеатры', group: 'Телевидение', kind: 'code-list' },
+  { key: 'router_buyout_price', label: 'Выкуп роутера, ₽', group: 'Оборудование', kind: 'integer' },
   { key: 'router_installment_months', label: 'Рассрочка роутера, мес.', group: 'Оборудование', kind: 'integer' },
-  { key: 'router_installment_price', label: 'Платеж за роутер, ₽', group: 'Оборудование', kind: 'number' },
-  { key: 'equip_tv_box', label: 'Условия ТВ-приставки', group: 'Оборудование', kind: 'text' },
-  { key: 'tvbox_buyout_price', label: 'Выкуп ТВ-приставки, ₽', group: 'Оборудование', kind: 'number' },
+  { key: 'router_installment_price', label: 'Платеж за роутер, ₽', group: 'Оборудование', kind: 'integer' },
+  { key: 'tvbox_buyout_price', label: 'Выкуп ТВ-приставки, ₽', group: 'Оборудование', kind: 'integer' },
   { key: 'tvbox_installment_months', label: 'Рассрочка ТВ-приставки, мес.', group: 'Оборудование', kind: 'integer' },
-  { key: 'tvbox_installment_price', label: 'Платеж за ТВ-приставку, ₽', group: 'Оборудование', kind: 'number' },
-  { key: 'ont_buyout_price', label: 'Выкуп ONT, ₽', group: 'Оборудование', kind: 'number' },
-  { key: 'cctv_buyout_price', label: 'Выкуп камеры, ₽', group: 'Оборудование', kind: 'number' },
-  { key: 'cctv_connection_price', label: 'Подключение камеры, ₽', group: 'Оборудование', kind: 'number' },
-  { key: 'srv_video_status', label: 'Видеосервис', group: 'Сервисы', kind: 'service-status' },
-  { key: 'srv_video_price', label: 'Цена видеосервиса, ₽', group: 'Сервисы', kind: 'number' },
+  { key: 'tvbox_installment_price', label: 'Платеж за ТВ-приставку, ₽', group: 'Оборудование', kind: 'integer' },
+  { key: 'ont_buyout_price', label: 'Выкуп ONT, ₽', group: 'Оборудование', kind: 'integer' },
+  { key: 'cctv_buyout_price', label: 'Выкуп видеонаблюдения, ₽', group: 'Оборудование', kind: 'integer' },
+  { key: 'cctv_connection_price', label: 'Подключение видеонаблюдения, ₽', group: 'Оборудование', kind: 'integer' },
+  { key: 'srv_video_status', label: 'Видеонаблюдение', group: 'Сервисы', kind: 'service-status' },
+  { key: 'srv_video_price', label: 'Цена видеонаблюдения, ₽', group: 'Сервисы', kind: 'integer' },
   { key: 'srv_gaming_status', label: 'Игровой сервис', group: 'Сервисы', kind: 'service-status' },
-  { key: 'srv_gaming_name', label: 'Название игрового сервиса', group: 'Сервисы', kind: 'text' },
+  { key: 'game_code', label: 'Код игрового предложения', group: 'Сервисы', kind: 'game-code' },
   { key: 'srv_vkplaycloud_status', label: 'VK Play Cloud', group: 'Сервисы', kind: 'service-status' },
   { key: 'srv_litres_status', label: 'ЛитРес', group: 'Сервисы', kind: 'service-status' },
   { key: 'srv_ont_status', label: 'ONT', group: 'Сервисы', kind: 'service-status' },
@@ -49,11 +53,14 @@ const IMPORT_TRANSACTION_TIMEOUT_MS = 120_000;
 const MAX_IMPORT_FILE_SIZE_BYTES = 25 * 1024 * 1024;
 const MAX_IMPORT_ROWS = 10_000;
 const MAX_IMPORT_COLUMNS = 256;
-const IGNORED_ATTRIBUTE_COLUMNS = new Set([
-  ...REQUIRED_IMPORT_COLUMNS,
-  'staraia_stoimost', 'connection_cost', 'opisanie_aktsii',
+const ONLINE_CINEMA_CODES = new Set(['ivi', 'kinopoisk', 'start', 'premier', 'amediateka']);
+const GAME_CODES = new Set(['warface', 'lesta']);
+const SERVICE_STATUS_BY_SOURCE = new Map<number, 'UNAVAILABLE' | 'OPTIONAL' | 'INCLUDED'>([
+  [0, 'UNAVAILABLE'],
+  [1, 'OPTIONAL'],
+  [-1, 'INCLUDED'],
 ]);
-const KNOWN_IMPORT_COLUMNS = new Set([...IGNORED_ATTRIBUTE_COLUMNS, ...TARIFF_ATTRIBUTE_FIELDS.map((field) => field.key)]);
+const SERVICE_STATUSES = new Set(SERVICE_STATUS_BY_SOURCE.values());
 
 export interface ImportIssue {
   row: number;
@@ -247,43 +254,83 @@ const isTariffImportChangeSet = (value: unknown): value is TariffImportChangeSet
 
 const text = (value: unknown) => value === null || value === undefined ? '' : String(value).trim();
 const empty = (value: unknown) => text(value) === '';
-const number = (value: unknown) => {
-  if (typeof value === 'number' && Number.isFinite(value)) return value;
-  const normalized = text(value).replace(/\s/g, '').replace(',', '.');
-  if (!normalized || normalized === '-1') return null;
-  const parsed = Number(normalized);
-  return Number.isFinite(parsed) ? parsed : null;
-};
-const signedNumber = (value: unknown) => {
-  if (typeof value === 'number' && Number.isFinite(value)) return value;
-  const normalized = text(value).replace(/\s/g, '').replace(',', '.');
-  if (!normalized) return null;
-  const parsed = Number(normalized);
-  return Number.isFinite(parsed) ? parsed : null;
+const integer = (value: unknown): number | null => {
+  if (value === null || value === undefined || text(value) === '') return null;
+  if (typeof value === 'number') return Number.isFinite(value) && Number.isInteger(value) ? value : Number.NaN;
+  const normalized = text(value);
+  return /^-?\d+$/.test(normalized) ? Number(normalized) : Number.NaN;
 };
 const slug = (value: unknown) => text(value).toLowerCase();
+
+function decodeHtmlEntities(value: string) {
+  const named: Record<string, string> = {
+    amp: '&', apos: "'", gt: '>', hellip: '…', laquo: '«', lt: '<', mdash: '—', nbsp: ' ', ndash: '–', quot: '"', raquo: '»',
+  };
+  return value.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (entity, code: string) => {
+    if (!code.startsWith('#')) return named[code.toLowerCase()] ?? entity;
+    const codePoint = Number.parseInt(code.startsWith('#x') ? code.slice(2) : code.slice(1), code.startsWith('#x') ? 16 : 10);
+    if (!Number.isInteger(codePoint) || codePoint < 0 || codePoint > 0x10ffff || (codePoint >= 0xd800 && codePoint <= 0xdfff)) return entity;
+    return String.fromCodePoint(codePoint);
+  });
+}
+
+export function htmlToPlainText(value: unknown, multiline = false) {
+  let normalized = decodeHtmlEntities(text(value))
+    .replace(/<\s*(script|style)(?:\s[^>]*)?>[\s\S]*?<\s*\/\s*\1\s*>/gi, '')
+    .replace(/<\s*br\s*\/?\s*>/gi, '\n')
+    .replace(/<\s*\/\s*p\s*>/gi, '\n')
+    .replace(/<\s*li(?:\s[^>]*)?>/gi, '- ')
+    .replace(/<\s*\/\s*li\s*>/gi, '\n')
+    .replace(/<[^>]*>/g, '');
+  normalized = normalized.replace(/\r\n?/g, '\n').replace(/[\t\f\v ]+/g, ' ');
+  if (!multiline) return normalized.replace(/\s+/g, ' ').trim();
+  return normalized
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line, index, lines) => line || (index > 0 && lines[index - 1]))
+    .join('\n')
+    .trim();
+}
+
 function normalizeAttributeValue(field: TariffAttributeField, value: unknown): Prisma.InputJsonValue | null {
   if (empty(value)) return null;
   if (field.kind === 'text') {
-    const normalized = text(value);
+    const normalized = htmlToPlainText(value, 'multiline' in field && field.multiline === true);
     const maxLength = 'maxLength' in field ? field.maxLength : 50_000;
     if (normalized.length > maxLength) throw new BadRequestException(`${field.key} длиннее ${maxLength} символов`);
     return normalized;
   }
+  if (field.kind === 'code-list') {
+    const codes = [...new Set(text(value).split(',').map((item) => item.trim().toLowerCase()).filter(Boolean))];
+    const unknown = codes.find((code) => !ONLINE_CINEMA_CODES.has(code));
+    if (unknown) throw new BadRequestException(`${field.key} содержит неизвестный код «${unknown}»`);
+    return codes.join(',');
+  }
+  if (field.kind === 'game-code') {
+    const code = text(value).toLowerCase();
+    if (!GAME_CODES.has(code)) throw new BadRequestException(`${field.key} содержит неизвестный код «${code}»`);
+    return code;
+  }
   if (field.kind === 'boolean') {
     if (typeof value === 'boolean') return value;
-    const normalized = number(value);
+    const normalized = integer(value);
     if (normalized === null || ![0, 1].includes(normalized)) throw new BadRequestException(`${field.key} должен быть 0 или 1`);
     return normalized === 1;
   }
-  const normalized = field.kind === 'service-status' ? signedNumber(value) : number(value);
   if (field.kind === 'service-status') {
-    if (normalized === null || ![-1, 0, 1].includes(normalized)) throw new BadRequestException(`${field.key} должен быть -1, 0 или 1`);
+    const internalStatus = text(value).toUpperCase();
+    if (SERVICE_STATUSES.has(internalStatus as 'UNAVAILABLE' | 'OPTIONAL' | 'INCLUDED')) {
+      return internalStatus;
+    }
+    const sourceStatus = integer(value);
+    const normalized = sourceStatus === null ? undefined : SERVICE_STATUS_BY_SOURCE.get(sourceStatus);
+    if (!normalized) throw new BadRequestException(`${field.key} должен быть -1, 0 или 1`);
     return normalized;
   }
+  const normalized = integer(value);
   if (normalized === null) return null;
-  if (normalized < 0 || (field.kind === 'integer' && !Number.isInteger(normalized))) {
-    throw new BadRequestException(`${field.key} должен быть ${field.kind === 'integer' ? 'целым числом от 0' : 'числом от 0'}`);
+  if (!Number.isInteger(normalized) || normalized < 0) {
+    throw new BadRequestException(`${field.key} должен быть целым числом от 0`);
   }
   return normalized;
 }
@@ -300,8 +347,37 @@ export function normalizeTariffAttributes(value: unknown): Prisma.InputJsonObjec
   }
   const total = result.tv_channels_total;
   const hd = result.tv_channels_hd;
+  if (typeof total === 'number' && total <= 0) throw new BadRequestException('tv_channels_total должен быть положительным целым числом');
+  if (typeof hd === 'number' && hd <= 0) throw new BadRequestException('tv_channels_hd должен быть положительным целым числом');
   if (typeof total === 'number' && typeof hd === 'number' && hd > total) {
     throw new BadRequestException('tv_channels_hd не может быть больше tv_channels_total');
+  }
+  for (const [priceKey, monthsKey] of [
+    ['router_installment_price', 'router_installment_months'],
+    ['tvbox_installment_price', 'tvbox_installment_months'],
+  ] as const) {
+    const price = result[priceKey];
+    const months = result[monthsKey];
+    if ((price === undefined) !== (months === undefined)) throw new BadRequestException(`${priceKey} и ${monthsKey} должны быть заполнены вместе`);
+    if ((typeof price === 'number' && price <= 0) || (typeof months === 'number' && months <= 0)) {
+      throw new BadRequestException(`${priceKey} и ${monthsKey} должны быть положительными или пустыми`);
+    }
+  }
+  const gamingStatus = result.srv_gaming_status;
+  const gameCode = result.game_code;
+  if (gamingStatus !== undefined && gamingStatus !== 'UNAVAILABLE' && gameCode === undefined) {
+    throw new BadRequestException('game_code обязателен для доступного игрового предложения');
+  }
+  if (gamingStatus === 'UNAVAILABLE' && gameCode !== undefined) {
+    throw new BadRequestException('Для srv_gaming_status=UNAVAILABLE поле game_code должно быть пустым');
+  }
+  for (const [statusKey, dependentKeys] of [
+    ['srv_video_status', ['srv_video_price', 'cctv_buyout_price', 'cctv_connection_price']],
+    ['srv_ont_status', ['ont_buyout_price']],
+  ] as const) {
+    if (result[statusKey] === 'UNAVAILABLE' && dependentKeys.some((key) => result[key] !== undefined)) {
+      throw new BadRequestException(`Для ${statusKey}=UNAVAILABLE зависимые цены должны быть пустыми`);
+    }
   }
   return result as Prisma.InputJsonObject;
 }
@@ -330,10 +406,8 @@ export async function parseWorkbook(buffer: Buffer, fileName = 'import.xlsx'): P
     throw new BadRequestException(`В файле больше ${MAX_IMPORT_ROWS} строк`);
   }
 
-  const columns = headerRow
-    .map((value, index) => ({ index, name: String(value ?? '').replace(/^\uFEFF/, '').trim() }))
-    .filter((column) => column.name);
-  if (!columns.length) throw new BadRequestException('В файле нет заголовков');
+  const columns = headerRow.map((value, index) => ({ index, name: String(value ?? '').replace(/^\uFEFF/, '').trim() }));
+  if (columns.some((column) => !column.name)) throw new BadRequestException('Заголовки XLSX не могут быть пустыми');
   const duplicate = columns.find((column, index) => columns.findIndex((candidate) => candidate.name === column.name) !== index);
   if (duplicate) throw new BadRequestException(`В файле повторяется колонка «${duplicate.name}»`);
 
@@ -355,16 +429,22 @@ export class TariffImportService {
     if (!providerId) throw new BadRequestException('providerId обязателен');
     if (!sourceRows.length) throw new BadRequestException('Файл не содержит строк');
     const normalizedRows = sourceRows.map((row) => Object.fromEntries(Object.entries(row).map(([column, value]) => [column.replace(/^\uFEFF/, '').trim(), value])));
-    const columns = new Set(Object.keys(normalizedRows[0] || {}));
-    const missing = REQUIRED_IMPORT_COLUMNS.filter((column) => !columns.has(column));
-    if (missing.length) throw new BadRequestException(`В файле отсутствуют обязательные колонки: ${missing.join(', ')}`);
+    const columns = Object.keys(normalizedRows[0] || {});
+    if (!isDeepStrictEqual(columns, [...CANONICAL_IMPORT_COLUMNS])) {
+      throw new BadRequestException(`Структура XLSX не соответствует каноническому контракту. Ожидаются 37 колонок в точном порядке: ${CANONICAL_IMPORT_COLUMNS.join(', ')}`);
+    }
+    if (normalizedRows.some((row) => !isDeepStrictEqual(Object.keys(row), columns))) {
+      throw new BadRequestException('Все строки XLSX должны соответствовать единому набору из 37 колонок');
+    }
 
     const citySlugs = [...new Set(normalizedRows.map((row) => slug(row.gorod_slug)).filter(Boolean))];
     const cities = await this.prisma.city.findMany({
       where: { slug: { in: citySlugs }, site: { providerId } },
       select: {
         id: true,
+        name: true,
         slug: true,
+        region: { select: { name: true } },
         pages: { where: { status: 'PUBLISHED', type: { notIn: ['HOME', 'TARIFF'] } }, select: { slug: true } },
       },
     });
@@ -372,80 +452,109 @@ export class TariffImportService {
     const publishedPagePaths = new Set(cities.flatMap((city) => (city.pages || []).map((page) => `${city.id}:${page.slug}`)));
     const issues: ImportIssue[] = [];
     const candidates: ImportCandidate[] = [];
-    const seen = new Set<string>();
     const keyCounts = new Map<string, number>();
     const citySlugCounts = new Map<string, number>();
     for (const row of normalizedRows) {
-      const candidateKey = `${slug(row.gorod_slug)}-${slug(row.post_title_lat)}-${text(row.tarif_type)}`;
+      const candidateKey = `${slug(row.gorod_slug)}-${slug(row.tariff_slug)}-${text(row.tarif_type)}`;
       if (candidateKey !== '--') keyCounts.set(candidateKey, (keyCounts.get(candidateKey) || 0) + 1);
-      const citySlugKey = `${slug(row.gorod_slug)}|${slug(row.post_title_lat)}`;
+      const citySlugKey = `${slug(row.gorod_slug)}|${slug(row.tariff_slug)}`;
       if (citySlugKey !== '|') citySlugCounts.set(citySlugKey, (citySlugCounts.get(citySlugKey) || 0) + 1);
     }
 
     normalizedRows.forEach((row, index) => {
       const rowNumber = index + 2;
       const citySlug = slug(row.gorod_slug);
-      const tariffSlug = slug(row.post_title_lat);
+      const tariffSlug = slug(row.tariff_slug);
       const typeText = text(row.tarif_type);
       const serviceType = typeText === 'Интернет' ? ServiceType.INTERNET : typeText === 'Интернет+ТВ' ? ServiceType.INTERNET_TV : null;
+      const canonicalName = htmlToPlainText(row.nazvanie_tarifa);
       const key = citySlug && tariffSlug && typeText ? `${citySlug}-${tariffSlug}-${typeText}` : undefined;
       const add = (level: ImportIssue['level'], message: string) => issues.push({ row: rowNumber, level, message, key });
 
-      for (const field of REQUIRED_IMPORT_COLUMNS) if (empty(row[field])) add('error', `Обязательное поле «${field}» пусто`);
+      for (const field of ['subekt_rf', 'gorod_name', 'gorod_slug', 'tarif_type', 'post_title', 'tariff_slug', 'nazvanie_tarifa', 'skorost_interneta', 'price_standard']) {
+        if (empty(row[field])) add('error', `Обязательное поле «${field}» пусто`);
+      }
+      for (const field of ['srv_vkplaycloud_status', 'srv_video_status', 'srv_gaming_status', 'srv_litres_status', 'srv_ont_status', 'srv_staticip_status']) {
+        if (empty(row[field])) add('error', `Обязательный статус «${field}» пуст`);
+        else {
+          const sourceStatus = integer(row[field]);
+          if (sourceStatus === null || !SERVICE_STATUS_BY_SOURCE.has(sourceStatus)) add('error', `${field} должен быть -1, 0 или 1`);
+        }
+      }
       if (citySlug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(citySlug)) add('error', 'gorod_slug должен быть латинским slug');
-      if (tariffSlug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(tariffSlug)) add('error', 'post_title_lat должен быть латинским slug');
+      if (tariffSlug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(tariffSlug)) add('error', 'tariff_slug должен быть латинским slug');
       if (citySlug && !cityBySlug.has(citySlug)) add('error', `Город «${citySlug}» не найден у выбранного провайдера`);
       const matchedCity = cityBySlug.get(citySlug);
+      if (matchedCity?.name && htmlToPlainText(row.gorod_name).toLocaleLowerCase('ru-RU') !== htmlToPlainText(matchedCity.name).toLocaleLowerCase('ru-RU')) {
+        add('error', `gorod_name не соответствует городу со slug «${citySlug}»`);
+      }
+      if (matchedCity?.region?.name && htmlToPlainText(row.subekt_rf).toLocaleLowerCase('ru-RU') !== htmlToPlainText(matchedCity.region.name).toLocaleLowerCase('ru-RU')) {
+        add('error', `subekt_rf не соответствует региону города «${citySlug}»`);
+      }
       if (matchedCity && tariffSlug && publishedPagePaths.has(`${matchedCity.id}:${tariffSlug}`)) {
         add('error', `URL /${citySlug}/${tariffSlug} уже занят опубликованной страницей`);
       }
       if (!serviceType && !empty(row.tarif_type)) add('error', 'tarif_type должен быть «Интернет» или «Интернет+ТВ»');
       if (key && (keyCounts.get(key) || 0) > 1) add('error', `Дубликат ключа ${key} в одном файле`);
       if (citySlug && tariffSlug && (citySlugCounts.get(`${citySlug}|${tariffSlug}`) || 0) > 1) {
-        add('error', `post_title_lat «${tariffSlug}» повторяется в городе «${citySlug}»`);
+        add('error', `tariff_slug «${tariffSlug}» повторяется в городе «${citySlug}»`);
       }
-      if (key && seen.has(key)) add('error', `Дубликат ключа ${key} в одном файле`);
-      if (key) seen.add(key);
+      const postTitle = htmlToPlainText(row.post_title);
+      if (postTitle && canonicalName && postTitle !== canonicalName) add('error', 'post_title должен точно совпадать с nazvanie_tarifa');
 
-      const speed = number(row.skorost_interneta);
-      const currentPrice = number(row.stoimost_tarifa);
-      const tvChannelsTotal = number(row.tv_channels_total);
-      const tvChannelsHd = number(row.tv_channels_hd);
+      const speed = integer(row.skorost_interneta);
+      const standardPrice = integer(row.price_standard);
+      const promoPrice = integer(row.price_promo);
+      const connectionFee = integer(row.connection_cost);
+      const tvChannelsTotal = integer(row.tv_channels_total);
+      const tvChannelsHd = integer(row.tv_channels_hd);
       if (speed === null || speed <= 0 || !Number.isInteger(speed)) add('error', 'skorost_interneta должен быть положительным целым числом');
-      if (currentPrice === null || currentPrice <= 0) add('error', 'stoimost_tarifa должен быть больше нуля');
-      if (!empty(row.tv_channels_total) && (tvChannelsTotal === null || tvChannelsTotal < 0 || !Number.isInteger(tvChannelsTotal))) {
-        add('error', 'tv_channels_total должен быть целым числом от 0');
+      if (standardPrice === null || standardPrice <= 0 || !Number.isInteger(standardPrice)) add('error', 'price_standard должен быть положительным целым числом');
+      if (promoPrice !== null && (!Number.isInteger(promoPrice) || promoPrice <= 0 || (standardPrice !== null && promoPrice >= standardPrice))) {
+        add('error', 'price_promo должен быть положительным целым числом меньше price_standard');
       }
-      if (!empty(row.tv_channels_hd) && (tvChannelsHd === null || tvChannelsHd < 0 || !Number.isInteger(tvChannelsHd))) {
-        add('error', 'tv_channels_hd должен быть целым числом от 0');
+      if (connectionFee !== null && (!Number.isInteger(connectionFee) || connectionFee < 0)) add('error', 'connection_cost должен быть целым числом от 0 или пустым');
+      if (serviceType === ServiceType.INTERNET && (!empty(row.tv_channels_total) || !empty(row.tv_channels_hd))) {
+        add('error', 'Для тарифа «Интернет» поля телеканалов должны быть пустыми');
+      }
+      if (serviceType === ServiceType.INTERNET_TV && (tvChannelsTotal === null || tvChannelsTotal <= 0 || !Number.isInteger(tvChannelsTotal))) {
+        add('error', 'Для тарифа «Интернет+ТВ» tv_channels_total должен быть положительным целым числом');
+      }
+      if (tvChannelsHd !== null && (tvChannelsHd <= 0 || !Number.isInteger(tvChannelsHd))) {
+        add('error', 'tv_channels_hd должен быть положительным целым числом или пустым');
       }
       if (tvChannelsTotal !== null && tvChannelsHd !== null && tvChannelsHd > tvChannelsTotal) {
         add('error', 'tv_channels_hd не может быть больше tv_channels_total');
       }
-      for (const [column, value] of Object.entries(row)) {
-        if (!KNOWN_IMPORT_COLUMNS.has(column) && !empty(value)) add('error', `${column} не входит в текущий контракт полей тарифа`);
-      }
-      const oldPrice = number(row.staraia_stoimost);
-      if (oldPrice !== null && currentPrice !== null && oldPrice <= currentPrice) add('warning', 'staraia_stoimost не выше текущей цены, акция не будет выделена');
-      if (text(row.promo_feature).length >= 165) add('warning', 'promo_feature длиннее 164 символов и будет очищен');
-      const attributes: Record<string, Prisma.InputJsonValue> = {};
-      for (const field of TARIFF_ATTRIBUTE_FIELDS) {
-        try {
-          if (field.key === 'promo_feature' && text(row[field.key]).length >= 165) continue;
-          const converted = normalizeAttributeValue(field, row[field.key]);
-          if (converted !== null) attributes[field.key] = converted;
-        } catch (error) {
-          add('error', error instanceof Error ? error.message : `${field.key} содержит некорректное значение`);
+      const attributeSource = Object.fromEntries(TARIFF_ATTRIBUTE_FIELDS.map((field) => [field.key, row[field.key]]));
+      for (const [priceKey, monthsKey] of [
+        ['router_installment_price', 'router_installment_months'],
+        ['tvbox_installment_price', 'tvbox_installment_months'],
+      ] as const) {
+        const price = integer(attributeSource[priceKey]);
+        const months = integer(attributeSource[monthsKey]);
+        if ((price === null || price === 0) && (months === null || months === 0)) {
+          attributeSource[priceKey] = null;
+          attributeSource[monthsKey] = null;
         }
       }
+      if (htmlToPlainText(row.card_feature).length > 164) {
+        add('warning', 'card_feature длиннее 164 символов и будет очищен');
+        attributeSource.card_feature = null;
+      }
+      let attributes: Prisma.InputJsonObject = {};
+      try {
+        attributes = normalizeTariffAttributes(attributeSource);
+      } catch (error) {
+        add('error', error instanceof Error ? error.message : 'Атрибуты тарифа содержат некорректное значение');
+      }
 
-      if (key && serviceType && cityBySlug.has(citySlug) && speed !== null && speed > 0 && Number.isInteger(speed) && currentPrice !== null && currentPrice > 0 && !issues.some((issue) => issue.row === rowNumber && issue.level === 'error')) {
+      if (key && serviceType && matchedCity && speed !== null && speed > 0 && Number.isInteger(speed) && standardPrice !== null && standardPrice > 0 && !issues.some((issue) => issue.row === rowNumber && issue.level === 'error')) {
         const city = cityBySlug.get(citySlug)!;
-        const hasPromo = oldPrice !== null && oldPrice > currentPrice;
         candidates.push({
-          key, providerId, cityId: city.id, citySlug, name: text(row.post_title), slug: tariffSlug,
-          serviceType, standardPrice: hasPromo ? oldPrice! : currentPrice, promoPrice: hasPromo ? currentPrice : null,
-          speed, promoText: text(row.opisanie_aktsii) || null, connectionFee: number(row.connection_cost), availability: true,
+          key, providerId, cityId: city.id, citySlug, name: canonicalName, slug: tariffSlug,
+          serviceType, standardPrice, promoPrice, speed, promoText: htmlToPlainText(row.opisanie_aktsii) || null,
+          connectionFee, availability: true,
           identityKey: `${city.id}:${tariffSlug}:${serviceType.toLowerCase()}`, dataSource: fileName, attributes: attributes as Prisma.InputJsonObject, status: 'PUBLISHED',
         });
       }

@@ -34,7 +34,8 @@ test('tariff detail exposes the full stored model with provider and city context
   assert.equal(detail.attributes.opisanie_tarifa, 'Описание');
   assert.deepEqual(detail.provider, { id: 'provider-1', name: 'Дом.ру' });
   assert.deepEqual(query.include.city.select, { id: true, name: true, slug: true, siteId: true });
-  assert.ok(detail.attributeSchema.some((field) => field.key === 'show_on_site' && field.kind === 'boolean'));
+  assert.ok(detail.attributeSchema.some((field) => field.key === 'game_code' && field.kind === 'game-code'));
+  assert.equal(detail.attributeSchema.some((field) => field.key === 'show_on_site'), false);
 });
 
 test('sensitive tariff changes require explicit confirmation before any write', async () => {
@@ -87,7 +88,7 @@ test('confirmed manual edit returns the persisted tariff and working revision wi
   assert.equal(saved.name, 'Гига 500 новый');
   assert.equal(result.tariff.standardPrice, 950);
   assert.equal(result.tariff.publicPath, '/kazan/giga-500');
-  assert.ok(result.tariff.attributeSchema.some((field) => field.key === 'show_on_site'));
+  assert.ok(result.tariff.attributeSchema.some((field) => field.key === 'online_cinemas' && field.kind === 'code-list'));
   assert.equal(result.tariff.provider.name, 'Дом.ру');
   assert.equal(result.workingRevision, 4);
   assert.equal('publication' in result, false);
@@ -235,22 +236,28 @@ test('an imported tariff round-trips through detail and the manual editor contra
   const importer = new TariffImportService(prisma);
   const report = await importer.validateRows('provider-1', 'tariffs.xlsx', [{
     subekt_rf: 'Республика Татарстан', gorod_name: 'Казань', gorod_slug: 'kazan', tarif_type: 'Интернет',
-    post_title: 'Гига 500', post_title_lat: 'giga-500', nazvanie_tarifa: 'Название карточки',
-    skorost_interneta: 500, stoimost_tarifa: 900, show_on_site: 1, srv_video_status: '-1',
+    post_title: 'Гига 500', tariff_slug: 'giga-500', nazvanie_tarifa: 'Гига 500', card_subtitle: 'Название карточки',
+    skorost_interneta: 500, tv_channels_total: null, tv_channels_hd: null, price_standard: 900, price_promo: null,
+    connection_cost: 0, opisanie_aktsii: null, opisanie_tarifa: null, card_feature: null, online_cinemas: 'ivi',
+    tvbox_installment_price: null, tvbox_installment_months: null, tvbox_buyout_price: null,
+    router_installment_price: null, router_installment_months: null, router_buyout_price: null,
+    srv_vkplaycloud_status: 0, srv_video_status: '-1', srv_video_price: null, cctv_buyout_price: null,
+    cctv_connection_price: null, srv_gaming_status: 0, game_code: null, srv_litres_status: 0,
+    srv_ont_status: 0, ont_buyout_price: null, srv_staticip_status: 0, badge_text: null, is_sticky: 0,
   }]);
   await importer.applyReport(report, { confirmWarnings: true });
 
   const controller = new AdminTariffsController(prisma, importer, publicationStub);
   const detail = await controller.detail('tariff-1');
-  assert.equal(detail.attributes.nazvanie_tarifa, 'Название карточки');
-  assert.equal(detail.attributes.show_on_site, true);
-  assert.equal(detail.attributes.srv_video_status, -1);
+  assert.equal(detail.attributes.card_subtitle, 'Название карточки');
+  assert.equal(detail.attributes.online_cinemas, 'ivi');
+  assert.equal(detail.attributes.srv_video_status, 'INCLUDED');
 
   const result = await controller.update('tariff-1', {
     expectedUpdatedAt: detail.updatedAt.toISOString(),
-    attributes: { ...detail.attributes, show_on_site: false },
+    attributes: { ...detail.attributes, card_subtitle: 'Новое название карточки' },
   });
-  assert.equal(result.tariff.attributes.show_on_site, false);
+  assert.equal(result.tariff.attributes.card_subtitle, 'Новое название карточки');
   assert.equal(result.tariff.publicPath, '/kazan/giga-500');
-  assert.ok(result.tariff.attributeSchema.some((field) => field.key === 'show_on_site'));
+  assert.equal(result.tariff.attributeSchema.some((field) => field.key === 'show_on_site'), false);
 });

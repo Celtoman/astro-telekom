@@ -2,20 +2,32 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { TariffImportService, TARIFF_ATTRIBUTE_FIELDS, parseWorkbook } = require('../apps/api/dist/tariff-import.service.js');
+const {
+  CANONICAL_IMPORT_COLUMNS,
+  TariffImportService,
+  TARIFF_ATTRIBUTE_FIELDS,
+  htmlToPlainText,
+  parseWorkbook,
+} = require('../apps/api/dist/tariff-import.service.js');
 const { AdminTariffsController } = require('../apps/api/dist/admin-tariffs.controller.js');
 const SNAPSHOT_TIME = new Date('2026-09-11T00:00:00.000Z');
 
 const row = (overrides = {}) => ({
   subekt_rf: 'Республика Татарстан', gorod_name: 'Казань', gorod_slug: 'kazan', tarif_type: 'Интернет',
-  post_title: 'Гига 500', post_title_lat: 'giga-500', nazvanie_tarifa: 'Гига 500', skorost_interneta: 500,
-  stoimost_tarifa: 890, staraia_stoimost: 990, connection_cost: 0, opisanie_aktsii: 'Промо', promo_feature: '',
-  srv_video_status: 0, srv_ont_status: 1, is_sticky: 0, is_gaming_tarif: 0, ...overrides,
+  post_title: 'Гига 500', tariff_slug: 'giga-500', nazvanie_tarifa: 'Гига 500', card_subtitle: null,
+  skorost_interneta: 500, tv_channels_total: null, tv_channels_hd: null, price_standard: 990, price_promo: 890,
+  connection_cost: 0, opisanie_aktsii: 'Промо', opisanie_tarifa: null, card_feature: null, online_cinemas: null,
+  tvbox_installment_price: null, tvbox_installment_months: null, tvbox_buyout_price: null,
+  router_installment_price: null, router_installment_months: null, router_buyout_price: null,
+  srv_vkplaycloud_status: 0, srv_video_status: 0, srv_video_price: null, cctv_buyout_price: null,
+  cctv_connection_price: null, srv_gaming_status: 0, game_code: null, srv_litres_status: 0,
+  srv_ont_status: 1, ont_buyout_price: null, srv_staticip_status: 0, badge_text: null, is_sticky: 0,
+  ...overrides,
 });
 
 function service() {
   return new TariffImportService({
-    city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', siteId: 'site-1', pages: [] }] },
+    city: { findMany: async () => [{ id: 'city-1', name: 'Казань', slug: 'kazan', siteId: 'site-1', region: { name: 'Республика Татарстан' }, pages: [] }] },
     tariff: { findMany: async () => [] },
   });
 }
@@ -39,16 +51,23 @@ test('import runs persist change sets and attributed undo state', () => {
   assert.match(migration, /ADD COLUMN "changeSet" JSONB/);
 });
 
-test('the tariff attribute registry preserves every observed source field', () => {
+test('the tariff attribute registry exposes only canonical typed tariff attributes', () => {
   assert.deepEqual(TARIFF_ATTRIBUTE_FIELDS.map(({ key }) => key), [
-    'nazvanie_tarifa', 'card_subtitle', 'badge_text', 'promo_feature', 'opisanie_tarifa',
-    'show_on_site', 'is_sticky', 'is_gaming_tarif', 'tv_channels_total', 'tv_channels_hd',
-    'online_cinemas', 'equip_router', 'router_buyout_price', 'router_installment_months',
-    'router_installment_price', 'equip_tv_box', 'tvbox_buyout_price', 'tvbox_installment_months',
+    'card_subtitle', 'badge_text', 'card_feature', 'opisanie_tarifa', 'is_sticky',
+    'tv_channels_total', 'tv_channels_hd', 'online_cinemas', 'router_buyout_price', 'router_installment_months',
+    'router_installment_price', 'tvbox_buyout_price', 'tvbox_installment_months',
     'tvbox_installment_price', 'ont_buyout_price', 'cctv_buyout_price', 'cctv_connection_price',
-    'srv_video_status', 'srv_video_price', 'srv_gaming_status', 'srv_gaming_name',
+    'srv_video_status', 'srv_video_price', 'srv_gaming_status', 'game_code',
     'srv_vkplaycloud_status', 'srv_litres_status', 'srv_ont_status', 'srv_staticip_status',
   ]);
+});
+
+test('canonical tariff XLSX contains exactly 37 agreed headers in order', () => {
+  assert.equal(CANONICAL_IMPORT_COLUMNS.length, 37);
+  assert.deepEqual(Object.keys(row()), [...CANONICAL_IMPORT_COLUMNS]);
+  for (const forbidden of ['show_on_site', 'external_id', 'equip_router', 'equip_tv_box', 'srv_gaming_name', 'is_gaming_tarif']) {
+    assert.equal(CANONICAL_IMPORT_COLUMNS.includes(forbidden), false);
+  }
 });
 
 test('XLSX parser reads the canonical first sheet into records', async () => {
@@ -83,7 +102,7 @@ test('XLSX parser rejects files larger than 25 MB before parsing', async () => {
   );
 });
 
-test('validation creates the agreed identity key and separates promo price', async () => {
+test('validation maps canonical top-level tariff values without price coercion', async () => {
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row()]);
   assert.equal(report.errorRows, 0);
   assert.equal(report.validRows, 1);
@@ -98,6 +117,7 @@ test('validation creates the agreed identity key and separates promo price', asy
 
 test('validation preserves tariff description and normalized TV channel counters in attributes', async () => {
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row({
+    tarif_type: 'Интернет+ТВ',
     opisanie_tarifa: '  Полное описание тарифа  ',
     tv_channels_total: ' 215 ',
     tv_channels_hd: 87,
@@ -111,24 +131,23 @@ test('validation preserves tariff description and normalized TV channel counters
 
 test('validation preserves the complete allowlisted editor contract with normalized types', async () => {
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row({
-    nazvanie_tarifa: 'Название в карточке', card_subtitle: 'Подзаголовок', show_on_site: 1,
-    is_sticky: 0, srv_video_status: 1, router_installment_months: 12, badge_text: 'Хит',
+    post_title: 'Название в карточке', nazvanie_tarifa: 'Название в карточке', card_subtitle: 'Подзаголовок',
+    is_sticky: 0, srv_video_status: 1, router_installment_months: 12, router_installment_price: 350, badge_text: 'Хит',
   })]);
 
   assert.equal(report.errorRows, 0);
-  assert.equal(report.candidates[0].attributes.nazvanie_tarifa, 'Название в карточке');
+  assert.equal(report.candidates[0].name, 'Название в карточке');
   assert.equal(report.candidates[0].attributes.card_subtitle, 'Подзаголовок');
-  assert.equal(report.candidates[0].attributes.show_on_site, true);
   assert.equal(report.candidates[0].attributes.is_sticky, false);
-  assert.equal(report.candidates[0].attributes.srv_video_status, 1);
+  assert.equal(report.candidates[0].attributes.srv_video_status, 'OPTIONAL');
   assert.equal(report.candidates[0].attributes.router_installment_months, 12);
 });
 
 test('validation rejects a non-empty column outside the current tariff field registry', async () => {
-  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row({ surprise_column: 'unexpected' })]);
-
-  assert.equal(report.errorRows, 1);
-  assert.match(report.issues[0].message, /surprise_column.*не входит.*контракт/i);
+  await assert.rejects(
+    service().validateRows('provider-1', 'tariffs.xlsx', [row({ surprise_column: 'unexpected' })]),
+    /37 колонок в точном порядке/i,
+  );
 });
 
 test('validation omits empty optional tariff details from attributes', async () => {
@@ -146,9 +165,9 @@ test('validation omits empty optional tariff details from attributes', async () 
 
 test('validation rejects invalid TV channel counters', async () => {
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [
-    row({ post_title_lat: 'negative-total', tv_channels_total: -2 }),
-    row({ post_title_lat: 'fractional-hd', tv_channels_total: 100, tv_channels_hd: 10.5 }),
-    row({ post_title_lat: 'hd-over-total', tv_channels_total: 50, tv_channels_hd: 51 }),
+    row({ tariff_slug: 'negative-total', post_title: 'Negative', nazvanie_tarifa: 'Negative', tarif_type: 'Интернет+ТВ', tv_channels_total: -2 }),
+    row({ tariff_slug: 'fractional-hd', post_title: 'Fractional', nazvanie_tarifa: 'Fractional', tarif_type: 'Интернет+ТВ', tv_channels_total: 100, tv_channels_hd: 10.5 }),
+    row({ tariff_slug: 'hd-over-total', post_title: 'Over', nazvanie_tarifa: 'Over', tarif_type: 'Интернет+ТВ', tv_channels_total: 50, tv_channels_hd: 51 }),
   ]);
 
   assert.equal(report.validRows, 0);
@@ -161,7 +180,7 @@ test('validation rejects invalid TV channel counters', async () => {
 test('validation blocks duplicate keys, invalid service states and missing cities', async () => {
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [
     row({ srv_video_status: 2 }),
-    row({ gorod_slug: 'unknown', post_title_lat: 'giga-500-2' }),
+    row({ gorod_slug: 'unknown', gorod_name: 'Неизвестный', tariff_slug: 'giga-500-2' }),
   ]);
   assert.equal(report.validRows, 0);
   assert.ok(report.issues.some((issue) => issue.message.includes('srv_video_status')));
@@ -172,7 +191,7 @@ test('validation accepts service status minus one from a string XLSX cell', asyn
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row({ srv_video_status: '-1' })]);
 
   assert.equal(report.errorRows, 0);
-  assert.equal(report.candidates[0].attributes.srv_video_status, -1);
+  assert.equal(report.candidates[0].attributes.srv_video_status, 'INCLUDED');
 });
 
 test('validation reports duplicate business keys before apply', async () => {
@@ -184,26 +203,98 @@ test('validation reports duplicate business keys before apply', async () => {
 test('validation rejects a city slug collision across different service types', async () => {
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [
     row({ tarif_type: 'Интернет' }),
-    row({ tarif_type: 'Интернет+ТВ' }),
+    row({ tarif_type: 'Интернет+ТВ', tv_channels_total: 150 }),
   ]);
 
   assert.equal(report.validRows, 0);
   assert.equal(report.errorRows, 2);
-  assert.ok(report.issues.some((issue) => issue.message.includes('post_title_lat «giga-500»')));
+  assert.ok(report.issues.some((issue) => issue.message.includes('tariff_slug «giga-500»')));
   assert.ok(report.issues.some((issue) => issue.message.includes('городе «kazan»')));
 });
 
 test('validation rejects a tariff URL already occupied by a published page', async () => {
   const instance = new TariffImportService({
-    city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', pages: [{ slug: 'internet' }] }] },
+    city: { findMany: async () => [{ id: 'city-1', name: 'Казань', slug: 'kazan', region: { name: 'Республика Татарстан' }, pages: [{ slug: 'internet' }] }] },
     tariff: { findMany: async () => [] },
   });
 
-  const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row({ post_title_lat: 'internet' })]);
+  const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row({ tariff_slug: 'internet' })]);
 
   assert.equal(report.errorRows, 1);
   assert.equal(report.validRows, 0);
   assert.match(report.issues[0].message, /URL \/kazan\/internet.*занят опубликованной страницей/i);
+});
+
+test('validation rejects missing or reordered canonical headers before reading values', async () => {
+  const missing = row();
+  delete missing.badge_text;
+  await assert.rejects(service().validateRows('provider-1', 'tariffs.xlsx', [missing]), /37 колонок в точном порядке/i);
+
+  const entries = Object.entries(row());
+  [entries[0], entries[1]] = [entries[1], entries[0]];
+  await assert.rejects(
+    service().validateRows('provider-1', 'tariffs.xlsx', [Object.fromEntries(entries)]),
+    /37 колонок в точном порядке/i,
+  );
+});
+
+test('validation rejects fractional, negative and decorated numeric values without coercion', async () => {
+  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [
+    row({ tariff_slug: 'decorated-speed', post_title: 'Decorated speed', nazvanie_tarifa: 'Decorated speed', skorost_interneta: '500 Мбит/с' }),
+    row({ tariff_slug: 'fractional-price', post_title: 'Fractional price', nazvanie_tarifa: 'Fractional price', price_standard: 990.5 }),
+    row({ tariff_slug: 'invalid-promo', post_title: 'Invalid promo', nazvanie_tarifa: 'Invalid promo', price_promo: 990 }),
+    row({ tariff_slug: 'negative-connection', post_title: 'Negative connection', nazvanie_tarifa: 'Negative connection', connection_cost: -1 }),
+  ]);
+
+  assert.equal(report.validRows, 0);
+  assert.equal(report.errorRows, 4);
+  assert.ok(report.issues.some((issue) => issue.message.includes('skorost_interneta')));
+  assert.ok(report.issues.some((issue) => issue.message.includes('price_standard')));
+  assert.ok(report.issues.some((issue) => issue.message.includes('price_promo')));
+  assert.ok(report.issues.some((issue) => issue.message.includes('connection_cost')));
+});
+
+test('validation normalizes only an empty zero installment pair and rejects a half-filled pair', async () => {
+  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [
+    row({ router_installment_price: 0, router_installment_months: 0 }),
+    row({ tariff_slug: 'half-installment', post_title: 'Half installment', nazvanie_tarifa: 'Half installment', router_installment_price: 350 }),
+  ]);
+
+  assert.equal(report.validRows, 1);
+  assert.equal(report.errorRows, 1);
+  assert.equal(Object.hasOwn(report.candidates[0].attributes, 'router_installment_price'), false);
+  assert.equal(Object.hasOwn(report.candidates[0].attributes, 'router_installment_months'), false);
+  assert.ok(report.issues.some((issue) => issue.message.includes('должны быть заполнены вместе')));
+});
+
+test('validation accepts only closed cinema and game codes with consistent service status', async () => {
+  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [
+    row({ online_cinemas: 'IVI, kinopoisk,ivi', srv_gaming_status: 1, game_code: 'LESTA' }),
+    row({ tariff_slug: 'unknown-cinema', post_title: 'Unknown cinema', nazvanie_tarifa: 'Unknown cinema', online_cinemas: 'netflix' }),
+    row({ tariff_slug: 'unknown-game', post_title: 'Unknown game', nazvanie_tarifa: 'Unknown game', srv_gaming_status: 1, game_code: 'unknown' }),
+    row({ tariff_slug: 'contradicting-game', post_title: 'Contradicting game', nazvanie_tarifa: 'Contradicting game', srv_gaming_status: 0, game_code: 'warface' }),
+  ]);
+
+  assert.equal(report.validRows, 1);
+  assert.equal(report.errorRows, 3);
+  assert.equal(report.candidates[0].attributes.online_cinemas, 'ivi,kinopoisk');
+  assert.equal(report.candidates[0].attributes.srv_gaming_status, 'OPTIONAL');
+  assert.equal(report.candidates[0].attributes.game_code, 'lesta');
+});
+
+test('public text normalization removes markup, decodes entities and preserves multiline structure only where allowed', async () => {
+  const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row({
+    post_title: '<b>Гига &amp; 500</b>',
+    nazvanie_tarifa: '<b>Гига &amp; 500</b>',
+    card_subtitle: '<i>Одна   строка</i>',
+    opisanie_tarifa: '<p>Первый&nbsp;абзац</p><ul><li>Пункт &amp; один</li></ul><script>alert(1)</script>',
+  })]);
+
+  assert.equal(report.errorRows, 0);
+  assert.equal(report.candidates[0].name, 'Гига & 500');
+  assert.equal(report.candidates[0].attributes.card_subtitle, 'Одна строка');
+  assert.equal(report.candidates[0].attributes.opisanie_tarifa, 'Первый абзац\n- Пункт & один');
+  assert.equal(htmlToPlainText('A &#x110000; B'), 'A &#x110000; B');
 });
 
 test('apply creates every validated row as one full package', async () => {
@@ -272,7 +363,7 @@ test('full snapshot deletes provider tariffs that disappeared from the file', as
 
 test('warnings block apply until they are explicitly confirmed', async () => {
   const instance = service();
-  const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row({ promo_feature: 'x'.repeat(165) })]);
+  const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row({ card_feature: 'x'.repeat(165) })]);
 
   await assert.rejects(instance.applyReport(report, { confirmWarnings: false }), /подтвердить предупреждения/i);
 });

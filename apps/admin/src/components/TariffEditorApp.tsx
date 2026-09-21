@@ -15,7 +15,7 @@ import { Skeleton } from "./ui/skeleton"
 
 interface Administrator { id: string; email: string }
 interface City { id: string; name: string; slug: string; siteId: string }
-interface AttributeField { key: string; label: string; group: string; kind: "text" | "number" | "integer" | "boolean" | "service-status"; maxLength?: number; multiline?: boolean }
+interface AttributeField { key: string; label: string; group: string; kind: "text" | "number" | "integer" | "boolean" | "service-status" | "code-list" | "game-code"; maxLength?: number; multiline?: boolean }
 interface TariffDetail {
   id: string
   providerId: string
@@ -97,7 +97,7 @@ function attributesPayload(form: FormState, schema: AttributeField[]) {
     if (value === "" || value === undefined) continue
     result[field.key] = field.kind === "boolean"
       ? value === "true"
-      : field.kind === "number" || field.kind === "integer" || field.kind === "service-status"
+      : field.kind === "number" || field.kind === "integer"
         ? Number(value)
         : value
   }
@@ -123,7 +123,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
     form.cityId !== initialForm.cityId || form.slug !== initialForm.slug || form.status !== initialForm.status ||
     form.standardPrice !== initialForm.standardPrice || form.promoPrice !== initialForm.promoPrice ||
     form.connectionFee !== initialForm.connectionFee || form.seo !== initialForm.seo ||
-    tariff?.attributeSchema.some((field) => field.kind === "number" && field.key.includes("price") && form.attributes[field.key] !== initialForm.attributes[field.key])
+    tariff?.attributeSchema.some((field) => field.kind === "integer" && field.key.includes("price") && form.attributes[field.key] !== initialForm.attributes[field.key])
   )), [form, initialForm, tariff])
 
   useEffect(() => {
@@ -192,7 +192,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
       if (field.kind === "text" && field.maxLength && value.length > field.maxLength) errors[errorKey] = `Не больше ${field.maxLength} символов`
       if ((field.kind === "number" || field.kind === "integer") && (!Number.isFinite(Number(value)) || Number(value) < 0)) errors[errorKey] = "Число не меньше 0"
       if (field.kind === "integer" && !Number.isInteger(Number(value))) errors[errorKey] = "Требуется целое число"
-      if (field.kind === "service-status" && ![-1, 0, 1].includes(Number(value))) errors[errorKey] = "Выберите состояние из списка"
+      if (field.kind === "service-status" && !["UNAVAILABLE", "OPTIONAL", "INCLUDED"].includes(value)) errors[errorKey] = "Выберите состояние из списка"
     }
     setFieldErrors(errors)
     const first = Object.keys(errors)[0]
@@ -266,7 +266,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
 
           <Card id="conditions"><CardHeader><CardTitle>Условия тарифа</CardTitle><CardDescription>Цена, скорость и текст предложения.</CardDescription></CardHeader><CardContent><FieldGroup><div className="grid gap-4 md:grid-cols-3">{([["standardPrice", "Базовая цена"], ["promoPrice", "Промо-цена"], ["connectionFee", "Подключение"]] as const).map(([field, label]) => <Field key={field} data-invalid={Boolean(fieldErrors[field])}><FieldLabel htmlFor={field}>{label}, ₽</FieldLabel><Input id={field} name={field} type="number" min={field === "standardPrice" ? "0.01" : "0"} step="0.01" value={form[field]} onChange={(event) => update(field, event.target.value)} aria-invalid={Boolean(fieldErrors[field])} /><FieldError>{fieldErrors[field]}</FieldError></Field>)}<Field data-invalid={Boolean(fieldErrors.speed)}><FieldLabel htmlFor="speed">Скорость, Мбит/с</FieldLabel><Input id="speed" name="speed" type="number" min="1" step="1" value={form.speed} onChange={(event) => update("speed", event.target.value)} aria-invalid={Boolean(fieldErrors.speed)} /><FieldError>{fieldErrors.speed}</FieldError></Field></div><Field><FieldLabel htmlFor="promoText">Промо-текст</FieldLabel><textarea id="promoText" name="promoText" className={inputClass} value={form.promoText} onChange={(event) => update("promoText", event.target.value)} /></Field></FieldGroup></CardContent></Card>
 
-          {attributeGroups.map(([group, fields], groupIndex) => <details id={`attributes-${groupIndex}`} open className="rounded-xl border bg-card" key={group}><summary className="cursor-pointer px-6 py-5 font-heading font-semibold">{group}</summary><div className="border-t px-6 py-5"><FieldGroup><div className="grid gap-4 md:grid-cols-2">{fields.map((field) => { const errorKey = `attribute-${field.key}`; const value = form.attributes[field.key] ?? ""; const isPublicationRecommendation = field.key === "show_on_site"; return <Field key={field.key} data-invalid={Boolean(fieldErrors[errorKey])}><FieldLabel htmlFor={errorKey}>{field.label}</FieldLabel>{field.kind === "boolean" ? <select id={errorKey} name={errorKey} className={selectClass} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)}><option value="">Не задано</option><option value="true">{isPublicationRecommendation ? "Рекомендуется показывать" : "Да"}</option><option value="false">{isPublicationRecommendation ? "Рекомендуется не показывать" : "Нет"}</option></select> : field.kind === "service-status" ? <select id={errorKey} name={errorKey} className={selectClass} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)}><option value="">Не задано</option><option value="-1">Недоступен</option><option value="0">Не включен</option><option value="1">Включен</option></select> : field.multiline ? <textarea id={errorKey} name={errorKey} className={inputClass} maxLength={field.maxLength} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)} /> : <Input id={errorKey} name={errorKey} type={field.kind === "number" || field.kind === "integer" ? "number" : "text"} min={field.kind === "number" || field.kind === "integer" ? "0" : undefined} step={field.kind === "integer" ? "1" : field.kind === "number" ? "0.01" : undefined} maxLength={field.maxLength} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)} />}{isPublicationRecommendation ? <FieldDescription>Рекомендация из файла не изменяет статус публикации: им управляет поле «Статус публикации» выше.</FieldDescription> : null}<FieldError>{fieldErrors[errorKey]}</FieldError></Field>})}</div></FieldGroup></div></details>)}
+          {attributeGroups.map(([group, fields], groupIndex) => <details id={`attributes-${groupIndex}`} open className="rounded-xl border bg-card" key={group}><summary className="cursor-pointer px-6 py-5 font-heading font-semibold">{group}</summary><div className="border-t px-6 py-5"><FieldGroup><div className="grid gap-4 md:grid-cols-2">{fields.map((field) => { const errorKey = `attribute-${field.key}`; const value = form.attributes[field.key] ?? ""; return <Field key={field.key} data-invalid={Boolean(fieldErrors[errorKey])}><FieldLabel htmlFor={errorKey}>{field.label}</FieldLabel>{field.kind === "boolean" ? <select id={errorKey} name={errorKey} className={selectClass} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)}><option value="">Не задано</option><option value="true">Да</option><option value="false">Нет</option></select> : field.kind === "service-status" ? <select id={errorKey} name={errorKey} className={selectClass} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)}><option value="">Не задано</option><option value="UNAVAILABLE">Недоступно</option><option value="OPTIONAL">Доступно как опция</option><option value="INCLUDED">Включено в тариф</option></select> : field.multiline ? <textarea id={errorKey} name={errorKey} className={inputClass} maxLength={field.maxLength} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)} /> : <Input id={errorKey} name={errorKey} type={field.kind === "number" || field.kind === "integer" ? "number" : "text"} min={field.kind === "number" || field.kind === "integer" ? "0" : undefined} step={field.kind === "integer" ? "1" : field.kind === "number" ? "0.01" : undefined} maxLength={field.maxLength} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)} />}<FieldError>{fieldErrors[errorKey]}</FieldError></Field>})}</div></FieldGroup></div></details>)}
           <Card id="seo"><CardHeader><CardTitle>SEO</CardTitle><CardDescription>Структурированные SEO-переопределения тарифа.</CardDescription></CardHeader><CardContent><Field data-invalid={Boolean(fieldErrors.seo)}><FieldLabel htmlFor="seo-json">SEO JSON</FieldLabel><textarea id="seo-json" name="seo" spellCheck={false} className={`${inputClass} min-h-40 font-mono`} value={form.seo} onChange={(event) => update("seo", event.target.value)} aria-invalid={Boolean(fieldErrors.seo)} /><FieldError>{fieldErrors.seo}</FieldError></Field></CardContent></Card>
         </div>
 

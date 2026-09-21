@@ -329,7 +329,7 @@ export class AdminTariffsController {
           ? existing.attributes as Record<string, unknown>
           : {};
         for (const field of TARIFF_ATTRIBUTE_FIELDS) {
-          if (field.kind === 'number' && field.key.includes('price') && String(normalizedAttributes[field.key]) !== String(currentAttributes[field.key])) {
+          if (field.kind === 'integer' && field.key.includes('price') && String(normalizedAttributes[field.key]) !== String(currentAttributes[field.key])) {
             sensitive.add('цена');
           }
         }
