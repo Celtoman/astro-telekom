@@ -188,7 +188,7 @@ const snapshotTariff = (tariff: Tariff): StoredTariff => ({
   connectionFee: tariff.connectionFee === null ? null : String(tariff.connectionFee),
   availability: tariff.availability,
   externalId: tariff.externalId,
-  identityKey: tariff.identityKey,
+  identityKey: tariff.identityKey ?? tariffIdentityKey(tariff.cityId, tariff.name, tariff.serviceType),
   dataSource: tariff.dataSource,
   attributes: tariff.attributes === null ? null : jsonCopy(tariff.attributes),
   seo: tariff.seo === null ? null : jsonCopy(tariff.seo),
@@ -231,7 +231,7 @@ const restoreTariffData = (tariff: StoredTariff) => ({
   connectionFee: tariff.connectionFee,
   availability: tariff.availability,
   externalId: tariff.externalId,
-  identityKey: tariff.identityKey,
+  identityKey: tariff.identityKey ?? tariffIdentityKey(tariff.cityId, tariff.name, tariff.serviceType),
   dataSource: tariff.dataSource,
   attributes: tariff.attributes === null ? Prisma.JsonNull : tariff.attributes as Prisma.InputJsonValue,
   seo: tariff.seo === null ? Prisma.JsonNull : tariff.seo as Prisma.InputJsonValue,
@@ -290,6 +290,14 @@ export function htmlToPlainText(value: unknown, multiline = false) {
     .filter((line, index, lines) => line || (index > 0 && lines[index - 1]))
     .join('\n')
     .trim();
+}
+
+export function normalizeTariffName(value: unknown) {
+  return text(value).replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+export function tariffIdentityKey(cityId: string, name: unknown, serviceType: ServiceType | string) {
+  return `${cityId}:${normalizeTariffName(name).toLocaleLowerCase('ru-RU')}:${serviceType}`;
 }
 
 function normalizeAttributeValue(field: TariffAttributeField, value: unknown): Prisma.InputJsonValue | null {
@@ -448,6 +456,10 @@ export class TariffImportService {
         pages: { where: { status: 'PUBLISHED', type: { notIn: ['HOME', 'TARIFF'] } }, select: { slug: true } },
       },
     });
+    const existingTariffs = await this.prisma.tariff.findMany({
+      where: { providerId },
+      select: { id: true, cityId: true, name: true, slug: true, identityKey: true, updatedAt: true },
+    });
     const cityBySlug = new Map(cities.map((city) => [city.slug.toLowerCase(), city]));
     const publishedPagePaths = new Set(cities.flatMap((city) => (city.pages || []).map((page) => `${city.id}:${page.slug}`)));
     const issues: ImportIssue[] = [];
@@ -455,8 +467,8 @@ export class TariffImportService {
     const keyCounts = new Map<string, number>();
     const citySlugCounts = new Map<string, number>();
     for (const row of normalizedRows) {
-      const candidateKey = `${slug(row.gorod_slug)}-${slug(row.tariff_slug)}-${text(row.tarif_type)}`;
-      if (candidateKey !== '--') keyCounts.set(candidateKey, (keyCounts.get(candidateKey) || 0) + 1);
+      const candidateKey = `${slug(row.gorod_slug)}|${normalizeTariffName(htmlToPlainText(row.nazvanie_tarifa)).toLocaleLowerCase('ru-RU')}|${text(row.tarif_type)}`;
+      if (candidateKey !== '||') keyCounts.set(candidateKey, (keyCounts.get(candidateKey) || 0) + 1);
       const citySlugKey = `${slug(row.gorod_slug)}|${slug(row.tariff_slug)}`;
       if (citySlugKey !== '|') citySlugCounts.set(citySlugKey, (citySlugCounts.get(citySlugKey) || 0) + 1);
     }
@@ -467,8 +479,9 @@ export class TariffImportService {
       const tariffSlug = slug(row.tariff_slug);
       const typeText = text(row.tarif_type);
       const serviceType = typeText === 'Интернет' ? ServiceType.INTERNET : typeText === 'Интернет+ТВ' ? ServiceType.INTERNET_TV : null;
-      const canonicalName = htmlToPlainText(row.nazvanie_tarifa);
-      const key = citySlug && tariffSlug && typeText ? `${citySlug}-${tariffSlug}-${typeText}` : undefined;
+      const canonicalName = normalizeTariffName(htmlToPlainText(row.nazvanie_tarifa));
+      const normalizedName = canonicalName.toLocaleLowerCase('ru-RU');
+      const key = citySlug && normalizedName && typeText ? `${citySlug}|${normalizedName}|${typeText}` : undefined;
       const add = (level: ImportIssue['level'], message: string) => issues.push({ row: rowNumber, level, message, key });
 
       for (const field of ['subekt_rf', 'gorod_name', 'gorod_slug', 'tarif_type', 'post_title', 'tariff_slug', 'nazvanie_tarifa', 'skorost_interneta', 'price_standard']) {
@@ -499,7 +512,7 @@ export class TariffImportService {
       if (citySlug && tariffSlug && (citySlugCounts.get(`${citySlug}|${tariffSlug}`) || 0) > 1) {
         add('error', `tariff_slug «${tariffSlug}» повторяется в городе «${citySlug}»`);
       }
-      const postTitle = htmlToPlainText(row.post_title);
+      const postTitle = normalizeTariffName(htmlToPlainText(row.post_title));
       if (postTitle && canonicalName && postTitle !== canonicalName) add('error', 'post_title должен точно совпадать с nazvanie_tarifa');
 
       const speed = integer(row.skorost_interneta);
@@ -525,6 +538,19 @@ export class TariffImportService {
       }
       if (tvChannelsTotal !== null && tvChannelsHd !== null && tvChannelsHd > tvChannelsTotal) {
         add('error', 'tv_channels_hd не может быть больше tv_channels_total');
+      }
+      const identityKey = matchedCity && serviceType
+        ? tariffIdentityKey(matchedCity.id, canonicalName, serviceType)
+        : undefined;
+      const existing = identityKey
+        ? existingTariffs.find((tariff) => tariff.cityId === matchedCity?.id && tariff.identityKey === identityKey)
+        : undefined;
+      const slugOwner = matchedCity && tariffSlug
+        ? existingTariffs.find((tariff) => tariff.cityId === matchedCity.id && tariff.slug === tariffSlug && tariff.id !== existing?.id)
+        : undefined;
+      if (slugOwner) add('error', `tariff_slug «${tariffSlug}» уже принадлежит другому тарифу в городе «${citySlug}»`);
+      if (existing && existing.slug !== tariffSlug) {
+        add('error', `Измените URL /${citySlug}/${existing.slug} → /${citySlug}/${tariffSlug} отдельно в редакторе с явным подтверждением и подготовкой 301-редиректа, затем проверьте XLSX повторно`);
       }
       const attributeSource = Object.fromEntries(TARIFF_ATTRIBUTE_FIELDS.map((field) => [field.key, row[field.key]]));
       for (const [priceKey, monthsKey] of [
@@ -555,21 +581,17 @@ export class TariffImportService {
           key, providerId, cityId: city.id, citySlug, name: canonicalName, slug: tariffSlug,
           serviceType, standardPrice, promoPrice, speed, promoText: htmlToPlainText(row.opisanie_aktsii) || null,
           connectionFee, availability: true,
-          identityKey: `${city.id}:${tariffSlug}:${serviceType.toLowerCase()}`, dataSource: fileName, attributes: attributes as Prisma.InputJsonObject, status: 'PUBLISHED',
+          identityKey: tariffIdentityKey(city.id, canonicalName, serviceType), dataSource: fileName, attributes: attributes as Prisma.InputJsonObject, status: 'PUBLISHED',
         });
       }
     });
 
-    const existingTariffs = await this.prisma.tariff.findMany({
-      where: { providerId },
-      select: { id: true, cityId: true, name: true, slug: true, identityKey: true, updatedAt: true },
-    });
     const matchedIds = new Set<string>();
     let created = 0;
     let updated = 0;
     for (const candidate of candidates) {
       const existing = existingTariffs.find((tariff) => tariff.cityId === candidate.cityId
-        && (tariff.identityKey === candidate.identityKey || tariff.slug === candidate.slug));
+        && tariff.identityKey === candidate.identityKey);
       if (existing) {
         matchedIds.add(existing.id);
         updated += 1;
@@ -635,7 +657,7 @@ export class TariffImportService {
           attributes: candidate.attributes, status: candidate.status,
         } satisfies Prisma.TariffUncheckedCreateInput;
         const existing = existingTariffs.find((tariff) => tariff.cityId === candidate.cityId
-          && (tariff.identityKey === candidate.identityKey || tariff.slug === candidate.slug));
+          && tariff.identityKey === candidate.identityKey);
         if (existing) {
           matchedIds.add(existing.id);
           await transaction.tariff.update({ where: { id: existing.id }, data });

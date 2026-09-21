@@ -106,7 +106,7 @@ test('validation maps canonical top-level tariff values without price coercion',
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row()]);
   assert.equal(report.errorRows, 0);
   assert.equal(report.validRows, 1);
-  assert.equal(report.candidates[0].key, 'kazan-giga-500-Интернет');
+  assert.equal(report.candidates[0].key, 'kazan|гига 500|Интернет');
   assert.equal(report.candidates[0].standardPrice, 990);
   assert.equal(report.candidates[0].promoPrice, 890);
   assert.equal(report.candidates[0].connectionFee, 0);
@@ -198,6 +198,62 @@ test('validation reports duplicate business keys before apply', async () => {
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row(), row()]);
   assert.equal(report.validRows, 0);
   assert.ok(report.issues.some((issue) => issue.message.includes('Дубликат ключа')));
+});
+
+test('business-key normalization collapses spaces and case but preserves е/ё', async () => {
+  const duplicate = await service().validateRows('provider-1', 'tariffs.xlsx', [
+    row(),
+    row({ post_title: '  ГИГА\u00a0 500  ', nazvanie_tarifa: '  ГИГА\u00a0 500  ', tariff_slug: 'giga-500-copy' }),
+  ]);
+  assert.equal(duplicate.validRows, 0);
+  assert.ok(duplicate.issues.some((issue) => issue.message.includes('Дубликат ключа')));
+
+  const distinct = await service().validateRows('provider-1', 'tariffs.xlsx', [
+    row({ post_title: 'Все', nazvanie_tarifa: 'Все', tariff_slug: 'vse' }),
+    row({ post_title: 'Всё', nazvanie_tarifa: 'Всё', tariff_slug: 'vsyo' }),
+  ]);
+  assert.equal(distinct.errorRows, 0);
+  assert.equal(distinct.validRows, 2);
+});
+
+test('matching uses normalized name instead of slug and treats a rename as a new tariff', async () => {
+  const existing = {
+    id: 'existing', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500',
+    identityKey: 'city-1:гига 500:INTERNET', updatedAt: SNAPSHOT_TIME,
+  };
+  const instance = new TariffImportService({
+    city: { findMany: async () => [{ id: 'city-1', name: 'Казань', slug: 'kazan', region: { name: 'Республика Татарстан' }, pages: [] }] },
+    tariff: { findMany: async () => [existing] },
+  });
+
+  const matched = await instance.validateRows('provider-1', 'tariffs.xlsx', [row()]);
+  assert.deepEqual(matched.diff, { created: 0, updated: 1, deleted: 0, deletedTariffs: [] });
+
+  const renamed = await instance.validateRows('provider-1', 'tariffs.xlsx', [row({
+    post_title: 'Гига 500 Новый', nazvanie_tarifa: 'Гига 500 Новый', tariff_slug: 'giga-500-new',
+  })]);
+  assert.deepEqual(renamed.diff, {
+    created: 1,
+    updated: 0,
+    deleted: 1,
+    deletedTariffs: [{ id: 'existing', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500' }],
+  });
+});
+
+test('a matched tariff slug change must use the confirmed editor redirect flow', async () => {
+  const instance = new TariffImportService({
+    city: { findMany: async () => [{ id: 'city-1', name: 'Казань', slug: 'kazan', region: { name: 'Республика Татарстан' }, pages: [] }] },
+    tariff: { findMany: async () => [{
+      id: 'existing', cityId: 'city-1', name: 'Гига 500', slug: 'old-slug',
+      identityKey: 'city-1:гига 500:INTERNET', updatedAt: SNAPSHOT_TIME,
+    }] },
+  });
+
+  const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row({ tariff_slug: 'new-slug' })]);
+
+  assert.equal(report.validRows, 0);
+  assert.equal(report.errorRows, 1);
+  assert.ok(report.issues.some((issue) => /редакторе.*301-редиректа/i.test(issue.message)));
 });
 
 test('validation rejects a city slug collision across different service types', async () => {
@@ -319,14 +375,14 @@ test('apply creates every validated row as one full package', async () => {
   const report = await instance.validateRows('provider-1', 'tariffs.xlsx', [row()]);
   const result = await instance.applyReport(report, { confirmWarnings: true });
   assert.deepEqual(result, { created: 1, updated: 0, deleted: 0, applied: 1 });
-  assert.equal(calls[0].identityKey, 'city-1:giga-500:internet');
+  assert.equal(calls[0].identityKey, 'city-1:гига 500:INTERNET');
   assert.equal(calls[0].status, 'PUBLISHED');
 });
 
 test('full snapshot deletes provider tariffs that disappeared from the file', async () => {
   const records = [
-    { id: 'keep', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500', identityKey: 'city-1:giga-500:internet', updatedAt: SNAPSHOT_TIME },
-    { id: 'stale', providerId: 'provider-1', cityId: 'city-1', name: 'Старый 100', slug: 'old-100', identityKey: 'city-1:old-100:internet', updatedAt: SNAPSHOT_TIME },
+    { id: 'keep', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500', identityKey: 'city-1:гига 500:INTERNET', updatedAt: SNAPSHOT_TIME },
+    { id: 'stale', providerId: 'provider-1', cityId: 'city-1', name: 'Старый 100', slug: 'old-100', identityKey: 'city-1:старый 100:INTERNET', updatedAt: SNAPSHOT_TIME },
   ];
   const prisma = {
     city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', siteId: 'site-1' }] },
@@ -335,7 +391,7 @@ test('full snapshot deletes provider tariffs that disappeared from the file', as
       page: { findMany: async () => [] },
       tariff: {
         findMany: async () => records,
-        findFirst: async ({ where }) => records.find((item) => item.cityId === where.cityId && (item.identityKey === where.OR[0].identityKey || item.slug === where.OR[1].slug)) || null,
+        findFirst: async ({ where }) => records.find((item) => item.cityId === where.cityId && item.identityKey === where.identityKey) || null,
         update: async ({ where, data }) => Object.assign(records.find((item) => item.id === where.id), data),
         create: async ({ data }) => { records.push({ id: `new-${records.length}`, ...data }); },
         deleteMany: async ({ where }) => {
@@ -814,7 +870,7 @@ test('full snapshot rejects a catalog changed after validation before writing', 
   let updated = false;
   const validatedTariff = {
     id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500',
-    identityKey: 'city-1:giga-500:internet', updatedAt: SNAPSHOT_TIME,
+    identityKey: 'city-1:гига 500:INTERNET', updatedAt: SNAPSHOT_TIME,
   };
   const prisma = {
     city: { findMany: async () => [{ id: 'city-1', slug: 'kazan', siteId: 'site-1' }] },

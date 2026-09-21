@@ -1,118 +1,60 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const { AdminTariffsController } = require('../apps/api/dist/admin-tariffs.controller.js');
+const { normalizeTariffName, tariffIdentityKey } = require('../apps/api/dist/tariff-import.service.js');
 
 const publicationStub = {
   recordWorkingRevision: async () => ({ siteRevision: 1 }),
   captureWorkingPublication: async (_transaction, input) => ({ id: `publication-${input.siteRevision}`, siteRevision: input.siteRevision, status: 'PENDING' }),
 };
 
-test('manual tariff edit keeps the deterministic identity key aligned with import business key', async () => {
+test('tariff business identity normalizes only spaces and case while preserving punctuation and е/ё', () => {
+  assert.equal(normalizeTariffName('  Гига\u00a0 500  '), 'Гига 500');
+  assert.equal(tariffIdentityKey('city', '  ГИГА\u00a0 500  ', 'INTERNET'), 'city:гига 500:INTERNET');
+  assert.notEqual(tariffIdentityKey('city', 'Все', 'INTERNET'), tariffIdentityKey('city', 'Всё', 'INTERNET'));
+  assert.notEqual(tariffIdentityKey('city', 'Гига-500', 'INTERNET'), tariffIdentityKey('city', 'Гига 500', 'INTERNET'));
+});
+
+test('manual tariff edit preserves one identity and rejects a business-key rename', async () => {
   let saved;
   const updatedAt = new Date('2026-09-10T00:00:00Z');
+  const existing = {
+    id: 'tariff', providerId: 'provider', cityId: 'city', name: 'Старый тариф', slug: 'stable-slug',
+    serviceType: 'INTERNET', status: 'DRAFT', updatedAt,
+  };
   const tx = {
-    city: { findUnique: async () => ({ id: 'city', slug: 'kazan', siteId: 'site', site: { providerId: 'provider' } }) },
+    city: { findUnique: async () => ({ id: 'city', slug: 'kazan', siteId: 'site', status: 'PUBLISHED', site: { providerId: 'provider' } }) },
     tariff: {
-      findUnique: async () => ({ id: 'tariff', providerId: 'provider', cityId: 'city', name: 'Старый тариф', slug: 'stable-slug', serviceType: 'INTERNET', status: 'DRAFT', updatedAt }),
-      update: async ({ data }) => { saved = data; return { id: 'tariff', provider: { id: 'provider', name: 'Дом.ру' }, city: { id: 'city', name: 'Казань', slug: 'kazan', siteId: 'site' }, cityId: 'city', slug: 'stable-slug', ...data }; },
-    },
-  };
-  const prisma = { ...tx, $transaction: async (callback) => callback(tx) };
-  const controller = new AdminTariffsController(prisma, undefined, publicationStub);
-  await controller.update('tariff', { expectedUpdatedAt: updatedAt.toISOString(), name: 'Новый тариф', serviceType: 'INTERNET_TV' });
-  assert.equal(saved.identityKey, 'city:stable-slug:internet_tv');
-});
-
-test('legacy API import updates by slug and records one working snapshot without rebuilding', async () => {
-  const calls = { create: 0, update: 0 };
-  const revisions = [];
-  let tariffs = [{ id: 'legacy', providerId: 'provider', cityId: 'city', name: 'Старое имя', slug: 'internet-300', serviceType: 'INTERNET' }];
-  const transaction = {
-    city: { findUnique: async () => ({ siteId: 'site', site: { providerId: 'provider' } }) },
-    tariff: {
-      findMany: async () => tariffs,
-      findFirst: async ({ where }) => {
-        assert.equal(where.OR[0].identityKey, 'city:internet-300:internet');
-        assert.equal(where.OR[1].slug, 'internet-300');
-        return tariffs[0];
-      },
+      findUnique: async () => existing,
       update: async ({ data }) => {
-        calls.update += 1;
-        assert.equal(data.identityKey, 'city:internet-300:internet');
-        tariffs = [{ ...tariffs[0], ...data }];
-        return tariffs[0];
+        saved = data;
+        return { ...existing, ...data, provider: { id: 'provider', name: 'Дом.ру' }, city: { id: 'city', name: 'Казань', slug: 'kazan', siteId: 'site' } };
       },
-      create: async () => { calls.create += 1; },
     },
   };
-  const prisma = {
-    $transaction: async (callback, options) => {
-      assert.equal(options.isolationLevel, 'Serializable');
-      return callback(transaction);
-    },
-  };
-  const controller = new AdminTariffsController(
-    prisma,
-    undefined,
-    { recordWorkingRevision: async (_transaction, input) => { revisions.push(input); return { siteRevision: 7 }; } },
-  );
-  const result = await controller.import(
-    { providerId: 'provider', cityId: 'city', items: [{ name: 'Интернет 300', slug: 'internet-300', serviceType: 'INTERNET', identityKey: 'attacker:key' }] },
-    { user: { id: 'user-1' } },
-  );
-  assert.equal(result.imported, 1);
-  assert.equal(result.workingRevision, 7);
-  assert.equal(calls.update, 1);
-  assert.equal(calls.create, 0);
-  assert.equal(revisions.length, 1);
-  assert.deepEqual({
-    siteId: revisions[0].siteId,
-    entityType: revisions[0].entityType,
-    action: revisions[0].action,
-    changedFields: revisions[0].changedFields,
-    actorId: revisions[0].actorId,
-    source: revisions[0].source,
-  }, {
-    siteId: 'site',
-    entityType: 'SITE',
-    action: 'IMPORT',
-    changedFields: ['tariffs'],
-    actorId: 'user-1',
-    source: 'tariff-import:legacy-api',
-  });
-  assert.equal(revisions[0].previousSnapshot.tariffs[0].name, 'Старое имя');
-  assert.equal(revisions[0].snapshot.tariffs[0].name, 'Интернет 300');
-});
+  const controller = new AdminTariffsController({ ...tx, $transaction: async (callback) => callback(tx) }, undefined, publicationStub);
 
-test('legacy API import rejects empty input and a city from another provider before tariff writes', async () => {
-  let tariffWrites = 0;
-  const transaction = {
-    city: { findUnique: async () => ({ siteId: 'site', site: { providerId: 'other-provider' } }) },
-    tariff: {
-      findMany: async () => { tariffWrites += 1; return []; },
-      findFirst: async () => { tariffWrites += 1; return null; },
-      update: async () => { tariffWrites += 1; },
-      create: async () => { tariffWrites += 1; },
-    },
-  };
-  const controller = new AdminTariffsController(
-    { $transaction: async (callback) => callback(transaction) },
-    undefined,
-    { recordWorkingRevision: async () => { throw new Error('revision must not be created'); } },
-  );
+  await controller.update('tariff', { expectedUpdatedAt: updatedAt.toISOString(), name: '  СТАРЫЙ\u00a0 ТАРИФ  ' });
+  assert.equal(saved.name, 'СТАРЫЙ ТАРИФ');
+  assert.equal(saved.identityKey, 'city:старый тариф:INTERNET');
 
-  assert.throws(
-    () => controller.import({ providerId: 'provider', cityId: 'city', items: [] }),
-    /хотя бы один тариф/i,
-  );
+  saved = undefined;
   await assert.rejects(
-    controller.import({ providerId: 'provider', cityId: 'city', items: [{ name: 'Интернет 300', slug: 'internet-300', serviceType: 'INTERNET' }] }),
-    /другому провайдеру/i,
+    controller.update('tariff', { expectedUpdatedAt: updatedAt.toISOString(), name: 'Новый тариф' }),
+    /создайте новый тариф/i,
   );
-  assert.equal(tariffWrites, 0);
+  assert.equal(saved, undefined);
 });
 
-test('manual create ignores a caller-supplied identity key and derives the canonical key', async () => {
+test('the slug-based legacy import endpoint is removed in favor of validated full snapshots', () => {
+  assert.equal(AdminTariffsController.prototype.import, undefined);
+  const source = fs.readFileSync(path.join(__dirname, '..', 'apps', 'api', 'src', 'admin-tariffs.controller.ts'), 'utf8');
+  assert.doesNotMatch(source, /@Post\(['"]import['"]\)/);
+});
+
+test('manual create ignores a caller-supplied identity key and derives the canonical business key', async () => {
   let saved;
   const revisions = [];
   const prisma = {
@@ -135,15 +77,42 @@ test('manual create ignores a caller-supplied identity key and derives the canon
   );
 
   const result = await controller.create({
-    providerId: 'provider', cityId: 'city', name: 'Интернет 500', slug: 'internet-500',
+    providerId: 'provider', cityId: 'city', name: '  Интернет\u00a0 500  ', slug: 'internet-500',
     serviceType: 'INTERNET', identityKey: 'attacker:key',
   }, { user: { id: 'user-1' } });
 
-  assert.equal(saved.identityKey, 'city:internet-500:internet');
+  assert.equal(saved.name, 'Интернет 500');
+  assert.equal(saved.identityKey, 'city:интернет 500:INTERNET');
   assert.equal(result.workingRevision, 3);
   assert.equal(revisions[0].siteId, 'site');
   assert.equal(revisions[0].entityType, 'TARIFF');
   assert.equal(revisions[0].action, 'CREATE');
   assert.equal(revisions[0].actorId, 'user-1');
   assert.deepEqual(revisions[0].snapshot, { id: 'tariff', ...saved });
+});
+
+test('manual create rejects an empty canonical tariff name before writing', async () => {
+  let writes = 0;
+  const tx = {
+    city: { findUnique: async () => ({ siteId: 'site' }) },
+    tariff: { create: async () => { writes += 1; } },
+  };
+  const controller = new AdminTariffsController({ $transaction: async (callback) => callback(tx) }, undefined, publicationStub);
+
+  await assert.rejects(
+    controller.create({ providerId: 'provider', cityId: 'city', name: '\u00a0  ', slug: 'empty', serviceType: 'INTERNET' }),
+    /название тарифа обязательно/i,
+  );
+  assert.equal(writes, 0);
+});
+
+test('identity migration fails closed on duplicate business keys and makes identity mandatory', () => {
+  const schema = fs.readFileSync(path.join(__dirname, '..', 'prisma', 'schema.prisma'), 'utf8');
+  const migration = fs.readFileSync(path.join(__dirname, '..', 'prisma', 'migrations', '0037_tariff_business_identity', 'migration.sql'), 'utf8');
+
+  assert.match(schema, /identityKey\s+String\s*\n/);
+  assert.match(migration, /HAVING count\(\*\) > 1/);
+  assert.match(migration, /RAISE EXCEPTION 'Tariff business key conflict/);
+  assert.match(migration, /ALTER COLUMN "identityKey" SET NOT NULL/);
+  assert.match(migration, /replace\("name", chr\(160\), ' '\)/);
 });

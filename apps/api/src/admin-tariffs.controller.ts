@@ -4,7 +4,7 @@ import { Prisma } from '../generated';
 import { CursorPageQueryDto, decodeCursor, encodeCursor, pageSize, searchQuery } from './admin-pagination';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
-import { ImportReport, normalizeTariffAttributes, parseWorkbook, TARIFF_ATTRIBUTE_FIELDS, TariffImportService } from './tariff-import.service';
+import { ImportReport, normalizeTariffAttributes, normalizeTariffName, parseWorkbook, TARIFF_ATTRIBUTE_FIELDS, tariffIdentityKey, TariffImportService } from './tariff-import.service';
 import { UpdateTariffDto } from './tariff.dto';
 import { PublicationWorkflowService } from './publication-workflow.service';
 
@@ -30,12 +30,6 @@ interface TariffBody {
   status?: PublishStatus;
 }
 
-interface ImportBody {
-  providerId: string;
-  cityId: string;
-  items: Array<Omit<TariffBody, 'providerId' | 'cityId'>>;
-}
-
 interface AdminRequest {
   user?: { id: string };
 }
@@ -48,10 +42,6 @@ export class AdminTariffsController {
     private readonly imports: TariffImportService,
     private readonly publications: PublicationWorkflowService,
   ) {}
-
-  private identityKey(cityId: string, slug: string, serviceType: ServiceType) {
-    return `${cityId}:${slug}:${serviceType.toLowerCase()}`;
-  }
 
   @Get()
   async list(@Query() query: CursorPageQueryDto = {}) {
@@ -115,7 +105,9 @@ export class AdminTariffsController {
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const city = await transaction.city.findUnique({ where: { id: body.cityId }, select: { siteId: true } });
       if (!city) throw new BadRequestException('Город тарифа не найден');
-      const data = { ...body, identityKey: this.identityKey(body.cityId, body.slug, body.serviceType) };
+      const name = normalizeTariffName(body.name);
+      if (!name) throw new BadRequestException('Название тарифа обязательно');
+      const data = { ...body, name, identityKey: tariffIdentityKey(body.cityId, name, body.serviceType) };
       const tariff = await transaction.tariff.create({ data });
       const revision = await this.publications.recordWorkingRevision(transaction, {
         siteId: city.siteId,
@@ -128,55 +120,6 @@ export class AdminTariffsController {
         source: 'admin',
       });
       return { ...tariff, workingRevision: revision.siteRevision };
-    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
-  }
-
-  @Post('import')
-  import(@Body() body: ImportBody, @Req() request?: AdminRequest) {
-    if (!Array.isArray(body.items) || body.items.length === 0) {
-      throw new BadRequestException('Передайте хотя бы один тариф');
-    }
-    return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
-      const city = await transaction.city.findUnique({
-        where: { id: body.cityId },
-        select: { siteId: true, site: { select: { providerId: true } } },
-      });
-      if (!city) throw new BadRequestException('Город импорта не найден');
-      if (city.site.providerId !== body.providerId) {
-        throw new BadRequestException('Город относится к другому провайдеру');
-      }
-      const beforeTariffs = await transaction.tariff.findMany({
-        where: { cityId: body.cityId },
-        orderBy: { id: 'asc' },
-      });
-      const imported = [];
-      for (const item of body.items) {
-        const identityKey = this.identityKey(body.cityId, item.slug, item.serviceType);
-        // `slug` is a one-time compatibility lookup for records created before identityKey existed.
-        const existing = await transaction.tariff.findFirst({
-          where: { cityId: body.cityId, OR: [{ identityKey }, { slug: item.slug }] },
-        });
-        const data = { ...item, identityKey, dataSource: item.dataSource || 'import' };
-        imported.push(existing
-          ? await transaction.tariff.update({ where: { id: existing.id }, data })
-          : await transaction.tariff.create({ data: { ...data, providerId: body.providerId, cityId: body.cityId } }));
-      }
-      const afterTariffs = await transaction.tariff.findMany({
-        where: { cityId: body.cityId },
-        orderBy: { id: 'asc' },
-      });
-      const revision = await this.publications.recordWorkingRevision(transaction, {
-        siteId: city.siteId,
-        entityType: 'SITE',
-        entityId: city.siteId,
-        action: 'IMPORT',
-        previousSnapshot: { tariffs: beforeTariffs },
-        snapshot: { tariffs: afterTariffs },
-        changedFields: ['tariffs'],
-        actorId: request?.user?.id,
-        source: 'tariff-import:legacy-api',
-      });
-      return { imported: imported.length, tariffs: imported, workingRevision: revision.siteRevision };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
@@ -343,8 +286,14 @@ export class AdminTariffsController {
 
       const nextCityId = body.cityId ?? existing.cityId;
       const nextSlug = body.slug ?? existing.slug;
+      const nextName = body.name === undefined ? existing.name : normalizeTariffName(body.name);
       const nextServiceType = body.serviceType ?? existing.serviceType as ServiceType;
       const nextStatus = body.status ?? existing.status;
+      const currentIdentityKey = tariffIdentityKey(existing.cityId, existing.name, existing.serviceType);
+      const nextIdentityKey = tariffIdentityKey(nextCityId, nextName, nextServiceType);
+      if (nextIdentityKey !== currentIdentityKey) {
+        throw new BadRequestException('Город, каноническое название и тип образуют бизнес-ключ тарифа; для их изменения создайте новый тариф');
+      }
       const oldCity = await transaction.city.findUnique({
         where: { id: existing.cityId },
         select: { id: true, slug: true, siteId: true, status: true, site: { select: { providerId: true } } },
@@ -401,11 +350,11 @@ export class AdminTariffsController {
 
       const { confirmSensitiveChanges: _confirmed, expectedUpdatedAt: _expected, ...editable } = body;
       if (!Object.keys(editable).length) throw new BadRequestException('Нет изменений для сохранения');
-      const identityKey = this.identityKey(nextCityId, nextSlug, nextServiceType);
-      const data: Prisma.TariffUncheckedUpdateInput = { identityKey };
+      const data: Prisma.TariffUncheckedUpdateInput = { identityKey: nextIdentityKey };
       for (const field of ['cityId', 'name', 'slug', 'serviceType', 'standardPrice', 'promoPrice', 'speed', 'promoText', 'connectionFee', 'availability', 'status'] as const) {
         if (body[field] !== undefined) Object.assign(data, { [field]: body[field] });
       }
+      if (body.name !== undefined) data.name = nextName;
       if (normalizedAttributes !== undefined) data.attributes = normalizedAttributes === null ? Prisma.JsonNull : normalizedAttributes;
       if (body.seo !== undefined) data.seo = body.seo === null ? Prisma.JsonNull : body.seo as Prisma.InputJsonValue;
       const tariff = await transaction.tariff.update({

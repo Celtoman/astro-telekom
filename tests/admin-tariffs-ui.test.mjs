@@ -85,6 +85,10 @@ test('tariff workspace provides quick detail and a separate guarded long editor'
   assert.match(editor, /value="OPTIONAL"/);
   assert.match(editor, /value="INCLUDED"/);
   assert.doesNotMatch(editor, /show_on_site|Рекомендация из файла/);
+  assert.match(editor, /Город, название и тип образуют бизнес-ключ/);
+  assert.match(editor, /<Input id="name" name="name" value=\{form\.name\} disabled/);
+  assert.match(editor, /<select id="cityId"[^>]+disabled>/);
+  assert.match(editor, /<select id="serviceType"[^>]+disabled>/);
   assert.match(editor, /form\.attributes\[field\.key\] \?\? ""/);
   for (const field of ['name', 'serviceType', 'standardPrice', 'promoPrice', 'speed', 'promoText', 'connectionFee', 'availability', 'externalId', 'dataSource', 'attributes', 'seo']) {
     assert.ok(editor.includes(field), `editor is missing ${field}`);

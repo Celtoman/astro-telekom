@@ -8,7 +8,7 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 | --- | --- | --- | --- |
 | `lead-deliveries` | POST `/api/v1/internal/lead-deliveries/:id` с `ADMIN_API_TOKEN` | `LeadDeliveryService` в API | Работает при настроенном Redis и отдельном worker. |
 | `lead-notifications` | POST `/api/v1/internal/lead-notifications/:id` с `ADMIN_API_TOKEN` | `LeadNotificationOutboxService` в API | Persistent outbox: три DB-accounted попытки с exponential backoff 30 секунд, periodic recovery и revision/attempt job ID. |
-| `tariff-imports` | POST `/api/v1/admin/tariffs/import` | В коде не найден | Listener есть, producer нет. Админка вызывает validate/apply напрямую. |
+| `tariff-imports` | Legacy route удален | В коде не найден | Listener остался без producer и не используется; админка вызывает versioned validate/apply напрямую. |
 | `site-rebuilds` | POST deployment provider, затем `/api/v1/internal/site-rebuilds/:id/result` | `RebuildQueueService` в API | Persistent job в PostgreSQL, три попытки BullMQ с exponential backoff 30 секунд. |
 | `maintenance` | POST `/api/v1/internal/pii-retention` и `/api/v1/internal/site-publications/release-due` с `ADMIN_API_TOKEN` | Job Scheduler `pii-retention-daily` и `publication-schedules-every-minute` | PII job регистрируется только при валидном `PII_RETENTION_DAYS`; publication reconciler регистрируется всегда и каждую минуту передает наступившие snapshots в `site-rebuilds`. |
 

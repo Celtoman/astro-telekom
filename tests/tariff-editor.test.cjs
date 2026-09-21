@@ -13,7 +13,7 @@ const publicationStub = {
 const existingTariff = {
   id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'giga-500',
   serviceType: 'INTERNET', standardPrice: 900, promoPrice: 700, speed: 500, promoText: 'Первые 3 месяца',
-  connectionFee: 0, availability: true, externalId: 'external-1', identityKey: 'city-1:giga-500:internet',
+  connectionFee: 0, availability: true, externalId: 'external-1', identityKey: 'city-1:гига 500:INTERNET',
   dataSource: 'tariffs.xlsx', attributes: { opisanie_tarifa: 'Описание' }, seo: { title: 'SEO title' },
   status: 'PUBLISHED', createdAt: new Date('2026-09-01T00:00:00Z'), updatedAt: new Date('2026-09-10T00:00:00Z'),
 };
@@ -80,12 +80,12 @@ test('confirmed manual edit returns the persisted tariff and working revision wi
   );
 
   const result = await controller.update('tariff-1', {
-    expectedUpdatedAt: existingTariff.updatedAt.toISOString(), name: 'Гига 500 новый', standardPrice: 950, confirmSensitiveChanges: true,
+    expectedUpdatedAt: existingTariff.updatedAt.toISOString(), promoText: 'Новое промо', standardPrice: 950, confirmSensitiveChanges: true,
   });
 
   assert.equal(saved.confirmSensitiveChanges, undefined);
   assert.equal(saved.expectedUpdatedAt, undefined);
-  assert.equal(saved.name, 'Гига 500 новый');
+  assert.equal(saved.promoText, 'Новое промо');
   assert.equal(result.tariff.standardPrice, 950);
   assert.equal(result.tariff.publicPath, '/kazan/giga-500');
   assert.ok(result.tariff.attributeSchema.some((field) => field.key === 'online_cinemas' && field.kind === 'code-list'));
@@ -156,10 +156,10 @@ test('persisted tariff edit does not touch the rebuild queue during save', async
   const controller = new AdminTariffsController(prisma, undefined, publicationStub);
 
   const result = await controller.update('tariff-1', {
-    expectedUpdatedAt: existingTariff.updatedAt.toISOString(), name: 'Сохраненный тариф',
+    expectedUpdatedAt: existingTariff.updatedAt.toISOString(), promoText: 'Сохраненное промо',
   });
 
-  assert.equal(result.tariff.name, 'Сохраненный тариф');
+  assert.equal(result.tariff.promoText, 'Сохраненное промо');
   assert.equal(result.workingRevision, 1);
 });
 
@@ -190,13 +190,13 @@ test('manual tariff edit records only a working revision until explicit publicat
 
   const result = await controller.update('tariff-1', {
     expectedUpdatedAt: existingTariff.updatedAt.toISOString(),
-    name: 'Гига 500 — рабочая версия',
+    promoText: 'Промо рабочей версии',
   });
 
   assert.deepEqual(calls.map(([type]) => type), ['revision']);
   assert.equal(calls[0][1].entityType, 'TARIFF');
   assert.equal(calls[0][1].siteId, 'site-1');
-  assert.deepEqual(calls[0][1].changedFields, ['name']);
+  assert.deepEqual(calls[0][1].changedFields, ['promoText']);
   assert.equal(result.workingRevision, 7);
   assert.equal('publication' in result, false);
   assert.equal('rebuild' in result, false);

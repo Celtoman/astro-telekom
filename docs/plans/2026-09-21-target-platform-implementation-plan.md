@@ -189,8 +189,8 @@ node --test tests/*.test.cjs tests/*.test.mjs
 | R3 | `CITY-003–006`, `008–010`, `012–018`, `020–023` | #160 | Да | локальный commit, rollout не выполнен |
 | R4 | `ADMIN-003` | #161 | Нет | не начато |
 | EXT1 | `TAR-044–096` | Celtoman/tarifs#1 | Dependency | не начато в `main` генератора |
-| T1 | тарифный value contract | #172 | Да | частично в незакоммиченном diff |
-| T2 | `TAR-042–043`, `080–086` | #173 | Да | частично в незакоммиченном diff |
+| T1 | тарифный value contract | #172 | Да | реализовано, issue закрыта |
+| T2 | `TAR-042–043`, `080–086` | #173 | Да | реализовано, ожидает rollout |
 | T3 | `TAR-001–004`, `014`, `019`, `083` | #174 | Да | частично в незакоммиченном diff |
 | T4 | tariff catalog/editor contract | #175 | Да | частично |
 | T5 | tariff archive/slug lifecycle | #180 | Нет | не начато |

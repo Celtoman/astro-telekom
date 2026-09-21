@@ -399,7 +399,7 @@ model Tariff {
   connectionFee Decimal?      @db.Decimal(10, 2)
   availability  Boolean       @default(true)
   externalId    String?
-  identityKey   String?
+  identityKey   String
   dataSource    String?
   attributes    Json?
   seo           Json?

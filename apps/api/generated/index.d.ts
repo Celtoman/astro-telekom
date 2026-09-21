@@ -4514,7 +4514,6 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Provider", 'DateTime'>
   }
 
-
   // Custom InputTypes
   /**
    * Provider findUnique
@@ -5828,7 +5827,6 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Site", 'DateTime'>
     readonly updatedAt: FieldRef<"Site", 'DateTime'>
   }
-
 
   // Custom InputTypes
   /**
@@ -7213,7 +7211,6 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"SitemapExclusion", 'DateTime'>
     readonly updatedAt: FieldRef<"SitemapExclusion", 'DateTime'>
   }
-
 
   // Custom InputTypes
   /**
@@ -8608,7 +8605,6 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"SiteRebuild", 'DateTime'>
     readonly updatedAt: FieldRef<"SiteRebuild", 'DateTime'>
   }
-
 
   // Custom InputTypes
   /**
@@ -17935,7 +17931,7 @@ export namespace Prisma {
     connectionFee: Decimal | null
     availability: boolean
     externalId: string | null
-    identityKey: string | null
+    identityKey: string
     dataSource: string | null
     attributes: JsonValue | null
     seo: JsonValue | null
@@ -18100,7 +18096,7 @@ export namespace Prisma {
       connectionFee: Prisma.Decimal | null
       availability: boolean
       externalId: string | null
-      identityKey: string | null
+      identityKey: string
       dataSource: string | null
       attributes: Prisma.JsonValue | null
       seo: Prisma.JsonValue | null
@@ -35639,7 +35635,7 @@ export namespace Prisma {
     connectionFee?: DecimalNullableFilter<"Tariff"> | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFilter<"Tariff"> | boolean
     externalId?: StringNullableFilter<"Tariff"> | string | null
-    identityKey?: StringNullableFilter<"Tariff"> | string | null
+    identityKey?: StringFilter<"Tariff"> | string
     dataSource?: StringNullableFilter<"Tariff"> | string | null
     attributes?: JsonNullableFilter<"Tariff">
     seo?: JsonNullableFilter<"Tariff">
@@ -35665,7 +35661,7 @@ export namespace Prisma {
     connectionFee?: SortOrderInput | SortOrder
     availability?: SortOrder
     externalId?: SortOrderInput | SortOrder
-    identityKey?: SortOrderInput | SortOrder
+    identityKey?: SortOrder
     dataSource?: SortOrderInput | SortOrder
     attributes?: SortOrderInput | SortOrder
     seo?: SortOrderInput | SortOrder
@@ -35696,7 +35692,7 @@ export namespace Prisma {
     connectionFee?: DecimalNullableFilter<"Tariff"> | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFilter<"Tariff"> | boolean
     externalId?: StringNullableFilter<"Tariff"> | string | null
-    identityKey?: StringNullableFilter<"Tariff"> | string | null
+    identityKey?: StringFilter<"Tariff"> | string
     dataSource?: StringNullableFilter<"Tariff"> | string | null
     attributes?: JsonNullableFilter<"Tariff">
     seo?: JsonNullableFilter<"Tariff">
@@ -35722,7 +35718,7 @@ export namespace Prisma {
     connectionFee?: SortOrderInput | SortOrder
     availability?: SortOrder
     externalId?: SortOrderInput | SortOrder
-    identityKey?: SortOrderInput | SortOrder
+    identityKey?: SortOrder
     dataSource?: SortOrderInput | SortOrder
     attributes?: SortOrderInput | SortOrder
     seo?: SortOrderInput | SortOrder
@@ -35753,7 +35749,7 @@ export namespace Prisma {
     connectionFee?: DecimalNullableWithAggregatesFilter<"Tariff"> | Decimal | DecimalJsLike | number | string | null
     availability?: BoolWithAggregatesFilter<"Tariff"> | boolean
     externalId?: StringNullableWithAggregatesFilter<"Tariff"> | string | null
-    identityKey?: StringNullableWithAggregatesFilter<"Tariff"> | string | null
+    identityKey?: StringWithAggregatesFilter<"Tariff"> | string
     dataSource?: StringNullableWithAggregatesFilter<"Tariff"> | string | null
     attributes?: JsonNullableWithAggregatesFilter<"Tariff">
     seo?: JsonNullableWithAggregatesFilter<"Tariff">
@@ -38157,7 +38153,7 @@ export namespace Prisma {
     connectionFee?: Decimal | DecimalJsLike | number | string | null
     availability?: boolean
     externalId?: string | null
-    identityKey?: string | null
+    identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -38183,7 +38179,7 @@ export namespace Prisma {
     connectionFee?: Decimal | DecimalJsLike | number | string | null
     availability?: boolean
     externalId?: string | null
-    identityKey?: string | null
+    identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -38205,7 +38201,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -38231,7 +38227,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -38255,7 +38251,7 @@ export namespace Prisma {
     connectionFee?: Decimal | DecimalJsLike | number | string | null
     availability?: boolean
     externalId?: string | null
-    identityKey?: string | null
+    identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -38276,7 +38272,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -38299,7 +38295,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -44984,7 +44980,7 @@ export namespace Prisma {
     connectionFee?: Decimal | DecimalJsLike | number | string | null
     availability?: boolean
     externalId?: string | null
-    identityKey?: string | null
+    identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -45008,7 +45004,7 @@ export namespace Prisma {
     connectionFee?: Decimal | DecimalJsLike | number | string | null
     availability?: boolean
     externalId?: string | null
-    identityKey?: string | null
+    identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -45142,7 +45138,7 @@ export namespace Prisma {
     connectionFee?: DecimalNullableFilter<"Tariff"> | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFilter<"Tariff"> | boolean
     externalId?: StringNullableFilter<"Tariff"> | string | null
-    identityKey?: StringNullableFilter<"Tariff"> | string | null
+    identityKey?: StringFilter<"Tariff"> | string
     dataSource?: StringNullableFilter<"Tariff"> | string | null
     attributes?: JsonNullableFilter<"Tariff">
     seo?: JsonNullableFilter<"Tariff">
@@ -48062,7 +48058,7 @@ export namespace Prisma {
     connectionFee?: Decimal | DecimalJsLike | number | string | null
     availability?: boolean
     externalId?: string | null
-    identityKey?: string | null
+    identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -48086,7 +48082,7 @@ export namespace Prisma {
     connectionFee?: Decimal | DecimalJsLike | number | string | null
     availability?: boolean
     externalId?: string | null
-    identityKey?: string | null
+    identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -50341,7 +50337,7 @@ export namespace Prisma {
     connectionFee?: Decimal | DecimalJsLike | number | string | null
     availability?: boolean
     externalId?: string | null
-    identityKey?: string | null
+    identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -50366,7 +50362,7 @@ export namespace Prisma {
     connectionFee?: Decimal | DecimalJsLike | number | string | null
     availability?: boolean
     externalId?: string | null
-    identityKey?: string | null
+    identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -50923,7 +50919,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -50948,7 +50944,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -52985,7 +52981,7 @@ export namespace Prisma {
     connectionFee?: Decimal | DecimalJsLike | number | string | null
     availability?: boolean
     externalId?: string | null
-    identityKey?: string | null
+    identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -53093,7 +53089,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -53117,7 +53113,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -53140,7 +53136,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -54429,7 +54425,7 @@ export namespace Prisma {
     connectionFee?: Decimal | DecimalJsLike | number | string | null
     availability?: boolean
     externalId?: string | null
-    identityKey?: string | null
+    identityKey: string
     dataSource?: string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -54553,7 +54549,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -54577,7 +54573,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue
@@ -54600,7 +54596,7 @@ export namespace Prisma {
     connectionFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     availability?: BoolFieldUpdateOperationsInput | boolean
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
-    identityKey?: NullableStringFieldUpdateOperationsInput | string | null
+    identityKey?: StringFieldUpdateOperationsInput | string
     dataSource?: NullableStringFieldUpdateOperationsInput | string | null
     attributes?: NullableJsonNullValueInput | InputJsonValue
     seo?: NullableJsonNullValueInput | InputJsonValue

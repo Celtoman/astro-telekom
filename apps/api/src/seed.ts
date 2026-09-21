@@ -16,8 +16,8 @@ function hashPassword(password: string) {
 }
 
 function tariffIdentityKey(cityId: string, name: string, serviceType: string) {
-  const normalizedName = name.trim().toLocaleLowerCase('ru-RU').normalize('NFKC').replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '');
-  return `${cityId}:${normalizedName}:${serviceType.toLowerCase()}`;
+  const normalizedName = name.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim().toLocaleLowerCase('ru-RU');
+  return `${cityId}:${normalizedName}:${serviceType}`;
 }
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
