@@ -1,6 +1,6 @@
 # Технический долг — индекс
 
-Дата последней сверки реестра с GitHub: 15 сентября 2026 года. **Полное описание каждой проблемы (доказательство, влияние, следующее действие) живёт в GitHub Issue, не здесь** — эта таблица дублировала текст до 8 сентября 2026, что и было источником рассинхронизации; теперь она только индекс. Как устроена вся система — [docs/task-management.md](task-management.md).
+Дата последней сверки реестра с GitHub: 21 сентября 2026 года. **Полное описание каждой проблемы (доказательство, влияние, следующее действие) живёт в GitHub Issue, не здесь** — эта таблица дублировала текст до 8 сентября 2026, что и было источником рассинхронизации; теперь она только индекс. Как устроена вся система — [docs/task-management.md](task-management.md).
 
 Приоритеты: P0 — блокирует безопасный запуск или ведет к недостоверным данным; P1 — нарушает ключевой путь первого релиза; P2 — существенно ограничивает эксплуатацию; P3 — улучшение качества и поддерживаемости.
 
@@ -31,6 +31,7 @@
 | TD-10 | [#11](https://github.com/Celtoman/astro-telekom/issues/11) ✅ | Защищенный release configuration gate блокирует готовность при пустых Contract/Tarifnik/coverage/email/rebuild variables без раскрытия значений |
 | TD-117 | [#148](https://github.com/Celtoman/astro-telekom/issues/148) ✅ | Отдельные страницы 3 859 опубликованных тарифов возвращены в Release 1 и подтверждены exact-SHA live smoke |
 | TD-118 | [#150](https://github.com/Celtoman/astro-telekom/issues/150) ✅ | `0032` удалила 206 legacy `HOME`, чистый snapshot ревизии 3 опубликован через strict web-build; live catalog имеет ровно одну каноническую HOME для 207 городов |
+| TD-120 | [#202](https://github.com/Celtoman/astro-telekom/issues/202) 🟢 | `0034`–`0035` меняют живой Site, но не создают публикабельную ревизию для несовместимого legacy publication snapshot |
 | TD-21 | [#12](https://github.com/Celtoman/astro-telekom/issues/12) ✅ | Уязвимый `xlsx@0.18.5` заменен на `read-excel-file`; импорт принимает только ограниченный XLSX |
 | TD-22 | [#37](https://github.com/Celtoman/astro-telekom/issues/37) ✅ | Compose переведен на обязательный для PostgreSQL 18 volume mount `/var/lib/postgresql` |
 | TD-23 | [#38](https://github.com/Celtoman/astro-telekom/issues/38) ✅ | Seed использует явный ESM entrypoint сгенерированного Prisma client и снова запускается на Node 22 |
