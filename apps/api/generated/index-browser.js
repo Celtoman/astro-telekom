@@ -236,9 +236,7 @@ exports.Prisma.RegionScalarFieldEnum = {
   id: 'id',
   siteId: 'siteId',
   name: 'name',
-  slug: 'slug',
-  phone: 'phone',
-  content: 'content'
+  slug: 'slug'
 };
 
 exports.Prisma.CityScalarFieldEnum = {
@@ -247,15 +245,16 @@ exports.Prisma.CityScalarFieldEnum = {
   regionId: 'regionId',
   name: 'name',
   slug: 'slug',
-  nameInstrumental: 'nameInstrumental',
   namePrepositional: 'namePrepositional',
   nameGenitive: 'nameGenitive',
   legacyUrl: 'legacyUrl',
+  officeState: 'officeState',
   officeAddress: 'officeAddress',
   officeHours: 'officeHours',
+  subscriberProfileKey: 'subscriberProfileKey',
   status: 'status',
-  seo: 'seo',
-  content: 'content'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.PageScalarFieldEnum = {
@@ -553,6 +552,11 @@ exports.SitePublicationStatus = exports.$Enums.SitePublicationStatus = {
   SUCCEEDED: 'SUCCEEDED',
   FAILED: 'FAILED',
   CANCELLED: 'CANCELLED'
+};
+
+exports.CityOfficeState = exports.$Enums.CityOfficeState = {
+  HAS_OFFICE: 'HAS_OFFICE',
+  NO_OFFICE: 'NO_OFFICE'
 };
 
 exports.PageType = exports.$Enums.PageType = {

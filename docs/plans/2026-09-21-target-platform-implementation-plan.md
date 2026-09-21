@@ -179,6 +179,8 @@ git commit -m "feat(settings): centralize site phone values Closes #158"
 
 ### Task 4: Привести городскую модель и каталог к контракту
 
+Статус 2026-09-21: реализовано локально; внешний rollout миграции `0036`, новая публикация и live smoke остаются отдельным deployment-этапом.
+
 **Files:**
 
 - Modify: `prisma/schema.prisma`

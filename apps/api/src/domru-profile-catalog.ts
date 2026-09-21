@@ -14,6 +14,7 @@ export interface ExtractedDomruLocation {
 }
 
 export interface DomruContractProfile {
+  key: string;
   city: string;
   region: string;
   origin: string;
@@ -22,7 +23,7 @@ export interface DomruContractProfile {
   fallbackUsed: boolean;
 }
 
-interface ParsedProfile extends Omit<DomruContractProfile, 'fallbackUsed'> {
+interface ParsedProfile extends Omit<DomruContractProfile, 'fallbackUsed' | 'key'> {
   fallback: string;
 }
 
@@ -70,6 +71,7 @@ function profileSignature(profile: ParsedProfile): string {
 
 function publicProfile(profile: ParsedProfile, fallbackUsed: boolean): DomruContractProfile {
   return {
+    key: profileKey(profile.region, profile.city),
     city: profile.city,
     region: profile.region,
     origin: profile.origin,
@@ -77,6 +79,10 @@ function publicProfile(profile: ParsedProfile, fallbackUsed: boolean): DomruCont
     referer: profile.referer,
     fallbackUsed,
   };
+}
+
+export function profileKey(region: unknown, locality: unknown): string {
+  return `${normalizeDomruRegion(region)}|${normalizeDomruLocality(locality)}`;
 }
 
 export class DomruProfileCatalog {
@@ -149,6 +155,17 @@ export class DomruProfileCatalog {
     }
     const fallback = regionKey ? this.fallbackByRegion.get(regionKey) : undefined;
     return fallback ? publicProfile(fallback, true) : null;
+  }
+
+  resolveByKey(key: string): DomruContractProfile | null {
+    const profile = this.byLocation.get(key);
+    return profile ? publicProfile(profile, false) : null;
+  }
+
+  options(): Array<{ key: string; city: string; region: string }> {
+    return [...this.byLocation.values()]
+      .map((profile) => ({ key: profileKey(profile.region, profile.city), city: profile.city, region: profile.region }))
+      .sort((left, right) => left.region.localeCompare(right.region, 'ru') || left.city.localeCompare(right.city, 'ru'));
   }
 }
 

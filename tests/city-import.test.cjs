@@ -27,15 +27,15 @@ function validationPrisma() {
 
 const candidate = (overrides = {}) => ({
   key: 'kazan', row: 2, siteId: 'site-1', subject: 'Республика Татарстан', name: 'Казань',
-  nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани', slug: 'kazan',
+  namePrepositional: 'Казани', nameGenitive: 'Казани', slug: 'kazan',
   legacyUrl: null, officeAddress: null, officeHours: null, ...overrides,
 });
 
 const storedCity = (overrides = {}) => ({
   id: 'city-1', siteId: 'site-1', regionId: 'region-1', name: 'Казань', slug: 'kazan',
-  nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани', legacyUrl: null,
-  officeAddress: null, officeHours: null, status: 'PUBLISHED', phone: null, supportPhone: null,
-  seo: {}, content: {}, ...overrides,
+  namePrepositional: 'Казани', nameGenitive: 'Казани', legacyUrl: null,
+  officeAddress: null, officeHours: null, officeState: 'NO_OFFICE', subscriberProfileKey: null,
+  status: 'PUBLISHED', ...overrides,
 });
 
 const storedPage = (overrides = {}) => ({
@@ -106,12 +106,12 @@ test('validation exposes row, region diff and an existing snapshot for safe revi
   assert.deepEqual(report.candidates[0].changes.subject, { from: 'Старый регион', to: 'Республика Татарстан' });
   assert.deepEqual(report.candidates[0].existingSnapshot, {
     id: 'city-1', regionId: 'region-old', subject: 'Старый регион', name: 'Казань',
-    nameInstrumental: null, namePrepositional: 'Казани', nameGenitive: 'Казани',
+    namePrepositional: 'Казани', nameGenitive: 'Казани',
     legacyUrl: null, officeAddress: null, officeHours: null,
   });
 });
 
-test('new city creates one published city home for the full Release 1 catalog', async () => {
+test('new city remains a draft and creates one canonical city home', async () => {
   const pages = [];
   const pageCreates = [];
   const calls = [];
@@ -149,7 +149,7 @@ test('new city creates one published city home for the full Release 1 catalog', 
   assert.ok(blocks.every((block) => block.source === 'template:city-home:v1'));
   assert.match(blocks[0].data.title, /Алейске/);
   assert.doesNotMatch(JSON.stringify(blocks), /Казан/);
-  assert.equal(cities[0].status, 'PUBLISHED');
+  assert.equal(cities[0].status, 'DRAFT');
 });
 
 test('city import reuses a seed region with the same normalized slug', async () => {
@@ -255,9 +255,9 @@ test('city import applies an explicit create, update and skip action map atomica
 
   assert.deepEqual(result, { created: 1, updated: 1, skipped: 1, pagesCreated: 1 });
   assert.deepEqual(updated.map((item) => item.where.id), ['city-update']);
-  assert.equal(updated[0].data.status, 'PUBLISHED');
+  assert.equal(updated[0].data.status, undefined);
   assert.equal(created.length, 1);
-  assert.equal(created[0].status, 'PUBLISHED');
+  assert.equal(created[0].status, 'DRAFT');
   assert.equal(pages.length, 1);
   assert.equal(transactionOptions.isolationLevel, 'Serializable');
 });
@@ -320,7 +320,7 @@ test('city import apply records an attributed working snapshot without publishin
   assert.equal(runUpdate.changeSet.version, 1);
   assert.equal(runUpdate.changeSet.kind, 'CITY_IMPORT');
   assert.equal(runUpdate.changeSet.beforeCities[0].status, 'DRAFT');
-  assert.equal(runUpdate.changeSet.afterCities[0].status, 'PUBLISHED');
+  assert.equal(runUpdate.changeSet.afterCities[0].status, 'DRAFT');
   assert.equal(runUpdate.changeSet.workingRevision, 18);
   assert.equal(revisions.length, 1);
   assert.equal(revisions[0].action, 'IMPORT');
@@ -753,9 +753,11 @@ test('unpublishing a city disables every managed tariff redirect in the same tra
   const redirectUpdates = [];
   const tx = {
     city: {
-      findUnique: async () => ({ status: 'PUBLISHED' }),
-      update: async ({ data }) => ({ id: 'city-1', siteId: 'site-1', status: data.status }),
+      findUnique: async () => ({ id: 'city-1', siteId: 'site-1', regionId: 'region-1', name: 'Казань', slug: 'kazan', namePrepositional: 'Казани', nameGenitive: 'Казани', legacyUrl: null, officeState: 'NO_OFFICE', officeAddress: null, officeHours: null, subscriberProfileKey: null, status: 'PUBLISHED' }),
+      findFirst: async () => null,
+      update: async ({ data }) => ({ id: 'city-1', siteId: 'site-1', ...data }),
     },
+    region: { findFirst: async () => ({ id: 'region-1' }) },
     tariff: {
       findMany: async () => [
         { id: 'tariff-published', status: 'PUBLISHED' },

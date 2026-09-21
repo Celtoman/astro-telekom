@@ -20,13 +20,16 @@ test('city catalog and import have separate static routes', () => {
   assert.deepEqual(cityNavigation?.children?.map((item) => item.href), ['/cities', '/cities/import']);
 });
 
-test('city catalog loads management controls and links to its separate import workflow', () => {
+test('city catalog uses server controls, an overlay drawer and a guarded published-slug action', () => {
   const source = readFileSync(join(adminRoot, 'components', 'CitiesApp.tsx'), 'utf8');
   assert.ok(source.includes('/admin/cities'));
   assert.match(source, /href=["']\/cities\/import["']/);
-  assert.match(source, /method:\s*["']PATCH["']/);
-  assert.match(source, /Управление городом/);
-  assert.match(source, /\{selectedCity\s*\?\s*<aside aria-label="Редактирование города"/);
+  assert.match(source, /method:\s*form\.id\s*\?\s*["']PATCH["']\s*:\s*["']POST["']/);
+  assert.match(source, /Dialog\.Content/);
+  assert.match(source, /Новый город/);
+  assert.match(source, /change-slug/);
+  assert.match(source, /301-редиректы/);
+  assert.match(source, /beforeunload/);
   assert.doesNotMatch(source, /city-phone|city-support-phone|supportPhone:\s*cityForm/);
   assert.doesNotMatch(source, /\/admin\/cities\/imports|\/admin\/cities\/import\/validate|\/admin\/cities\/import\/apply|accept=["']\.xlsx["']/);
 });

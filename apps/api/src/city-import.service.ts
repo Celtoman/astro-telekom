@@ -2,6 +2,7 @@ import { BadRequestException, ConflictException, Injectable } from '@nestjs/comm
 import { isDeepStrictEqual } from 'node:util';
 import { Prisma, PublishStatus } from '../generated';
 import { cityHomeTemplateBlocks } from './city-home-template';
+import { defaultDomruProfileCatalog } from './domru-profile-catalog';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { parseWorkbook } from './tariff-import.service';
@@ -13,7 +14,6 @@ export interface CityImportSnapshot {
   regionId: string;
   subject: string;
   name: string;
-  nameInstrumental: string | null;
   namePrepositional: string | null;
   nameGenitive: string | null;
   legacyUrl: string | null;
@@ -26,7 +26,6 @@ export interface CityImportCandidate {
   siteId: string;
   subject: string;
   name: string;
-  nameInstrumental: string | null;
   namePrepositional: string | null;
   nameGenitive: string | null;
   slug: string;
@@ -56,15 +55,14 @@ type StoredCity = {
   regionId: string;
   name: string;
   slug: string;
-  nameInstrumental: string | null;
   namePrepositional: string | null;
   nameGenitive: string | null;
   legacyUrl: string | null;
   officeAddress: string | null;
   officeHours: string | null;
+  officeState: 'HAS_OFFICE' | 'NO_OFFICE';
+  subscriberProfileKey: string | null;
   status: string;
-  seo: unknown;
-  content: unknown;
 };
 
 type StoredRegion = {
@@ -72,8 +70,6 @@ type StoredRegion = {
   siteId: string;
   name: string;
   slug: string;
-  phone: string | null;
-  content: unknown;
 };
 
 type StoredPageBlock = {
@@ -118,34 +114,31 @@ type CityImportChangeSet = {
 const jsonCopy = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 const storedCity = (city: {
   id: string; siteId: string; regionId: string; name: string; slug: string;
-  nameInstrumental: string | null; namePrepositional: string | null; nameGenitive: string | null;
+  namePrepositional: string | null; nameGenitive: string | null;
   legacyUrl: string | null; officeAddress: string | null; officeHours: string | null; status: string;
-  seo: unknown; content: unknown;
+  officeState?: 'HAS_OFFICE' | 'NO_OFFICE'; subscriberProfileKey?: string | null;
 }): StoredCity => ({
   id: city.id,
   siteId: city.siteId,
   regionId: city.regionId,
   name: city.name,
   slug: city.slug,
-  nameInstrumental: city.nameInstrumental,
   namePrepositional: city.namePrepositional,
   nameGenitive: city.nameGenitive,
   legacyUrl: city.legacyUrl,
   officeAddress: city.officeAddress,
   officeHours: city.officeHours,
+  officeState: city.officeState || (city.officeAddress && city.officeHours ? 'HAS_OFFICE' : 'NO_OFFICE'),
+  subscriberProfileKey: city.subscriberProfileKey || null,
   status: city.status,
-  seo: city.seo === null ? null : jsonCopy(city.seo),
-  content: city.content === null ? null : jsonCopy(city.content),
 });
 const storedRegion = (region: {
-  id: string; siteId: string; name: string; slug: string; phone: string | null; content: unknown;
+  id: string; siteId: string; name: string; slug: string;
 }): StoredRegion => ({
   id: region.id,
   siteId: region.siteId,
   name: region.name,
   slug: region.slug,
-  phone: region.phone,
-  content: region.content === null ? null : jsonCopy(region.content),
 });
 const storedPage = (page: {
   id: string; siteId: string; cityId: string | null; type: string; title: string; slug: string; status: string;
@@ -181,16 +174,14 @@ const nullableString = (value: unknown) => value === null || typeof value === 's
 const isStoredCity = (value: unknown): value is StoredCity => {
   if (!isRecord(value)) return false;
   return ['id', 'siteId', 'regionId', 'name', 'slug', 'status'].every((key) => typeof value[key] === 'string')
-    && ['nameInstrumental', 'namePrepositional', 'nameGenitive', 'legacyUrl', 'officeAddress', 'officeHours']
+    && ['namePrepositional', 'nameGenitive', 'legacyUrl', 'officeAddress', 'officeHours']
       .every((key) => nullableString(value[key]))
-    && hasOwn(value, 'seo')
-    && hasOwn(value, 'content');
+    && (!hasOwn(value, 'subscriberProfileKey') || nullableString(value.subscriberProfileKey))
+    && (!hasOwn(value, 'officeState') || value.officeState === 'HAS_OFFICE' || value.officeState === 'NO_OFFICE');
 };
 const isStoredRegion = (value: unknown): value is StoredRegion => {
   if (!isRecord(value)) return false;
-  return ['id', 'siteId', 'name', 'slug'].every((key) => typeof value[key] === 'string')
-    && nullableString(value.phone)
-    && hasOwn(value, 'content');
+  return ['id', 'siteId', 'name', 'slug'].every((key) => typeof value[key] === 'string');
 };
 const isStoredPageBlock = (value: unknown): value is StoredPageBlock => {
   if (!isRecord(value)) return false;
@@ -233,15 +224,14 @@ const restoreCityData = (city: StoredCity) => ({
   regionId: city.regionId,
   name: city.name,
   slug: city.slug,
-  nameInstrumental: city.nameInstrumental,
   namePrepositional: city.namePrepositional,
   nameGenitive: city.nameGenitive,
   legacyUrl: city.legacyUrl,
   officeAddress: city.officeAddress,
   officeHours: city.officeHours,
+  officeState: city.officeState,
+  subscriberProfileKey: city.subscriberProfileKey,
   status: city.status as PublishStatus,
-  seo: city.seo === null ? Prisma.JsonNull : city.seo as Prisma.InputJsonValue,
-  content: city.content === null ? Prisma.JsonNull : city.content as Prisma.InputJsonValue,
 });
 
 const text = (value: unknown) => value === null || value === undefined ? '' : String(value).trim();
@@ -253,7 +243,6 @@ const importActions = new Set<CityImportAction>(['create', 'update', 'skip']);
 const FIELD_ALIASES = {
   subject: ['subekt_rf', 'subject', 'region', 'subekt_rossiyskoy_federatsii', 'субъект_рф'],
   name: ['gorod_name', 'city_name', 'city', 'город', 'город_имен', 'город_имен_падеж', 'город_именительный_падеж'],
-  instrumental: ['gorod_v_imenitelnom_padezhe', 'gorod_v_imenitelnom', 'gorod_imenit_padezh', 'gorod_v_imenit_padezhe', 'город_имен_падеж', 'город_gorod_v_imenit_padezhe'],
   prepositional: ['dom_ru_v', 'gorod_v_predlozhnom_padezhe', 'gorod_predlozh_padezh', 'gorod_v_predlozhnom', 'город_предлож_падеж_dom_ru_v', 'город_предложный_падеж'],
   genitive: ['gorod_v_roditelnom_padezhe', 'gorod_rodit_padezh', 'gorod_v_roditelnom', 'город_родит_падеж', 'город_родительный_падеж', 'город_родит_падеж_gorod_v_rodit_padezhe'],
   slug: ['gorod_slug', 'slug', 'city_slug'],
@@ -271,7 +260,6 @@ function snapshot(city: {
   id: string;
   regionId: string;
   name: string;
-  nameInstrumental: string | null;
   namePrepositional: string | null;
   nameGenitive: string | null;
   legacyUrl: string | null;
@@ -284,7 +272,6 @@ function snapshot(city: {
     regionId: city.regionId,
     subject: city.region.name,
     name: city.name,
-    nameInstrumental: city.nameInstrumental,
     namePrepositional: city.namePrepositional,
     nameGenitive: city.nameGenitive,
     legacyUrl: city.legacyUrl,
@@ -294,7 +281,7 @@ function snapshot(city: {
 }
 
 const snapshotFields = [
-  'id', 'regionId', 'subject', 'name', 'nameInstrumental', 'namePrepositional', 'nameGenitive',
+  'id', 'regionId', 'subject', 'name', 'namePrepositional', 'nameGenitive',
   'legacyUrl', 'officeAddress', 'officeHours',
 ] as const satisfies readonly (keyof CityImportSnapshot)[];
 
@@ -343,7 +330,7 @@ export class CityImportService {
     const seen = new Set<string>();
     const normalized = rows.map((row) => ({
       subject: valueByAlias(row, FIELD_ALIASES.subject), name: valueByAlias(row, FIELD_ALIASES.name),
-      nameInstrumental: valueByAlias(row, FIELD_ALIASES.instrumental), namePrepositional: valueByAlias(row, FIELD_ALIASES.prepositional),
+      namePrepositional: valueByAlias(row, FIELD_ALIASES.prepositional),
       nameGenitive: valueByAlias(row, FIELD_ALIASES.genitive), slug: valueByAlias(row, FIELD_ALIASES.slug),
       legacyUrl: valueByAlias(row, FIELD_ALIASES.legacyUrl), officeAddress: valueByAlias(row, FIELD_ALIASES.officeAddress), officeHours: valueByAlias(row, FIELD_ALIASES.officeHours),
     }));
@@ -353,7 +340,7 @@ export class CityImportService {
     const existing = await this.prisma.city.findMany({
       where: { siteId, slug: { in: slugs } },
       select: {
-        id: true, regionId: true, slug: true, name: true, nameInstrumental: true, namePrepositional: true,
+        id: true, regionId: true, slug: true, name: true, namePrepositional: true,
         nameGenitive: true, legacyUrl: true, officeAddress: true, officeHours: true,
         region: { select: { name: true } },
       },
@@ -371,12 +358,13 @@ export class CityImportService {
       if (slug) seen.add(slug);
       if (row.name && !row.namePrepositional) add('warning', 'Не заполнено название в предложном падеже');
       if (row.name && !row.nameGenitive) add('warning', 'Не заполнено название в родительном падеже');
+      if (Boolean(row.officeAddress) !== Boolean(row.officeHours)) add('error', 'Адрес и режим работы офиса должны быть заполнены вместе');
       if (row.legacyUrl && !/^https?:\/\//i.test(row.legacyUrl)) add('warning', 'Legacy URL не начинается с http:// или https://');
       const current = bySlug.get(slug);
       const changes: Record<string, { from: unknown; to: unknown }> = {};
       if (current) {
         if (current.region.name !== row.subject) changes.subject = { from: current.region.name, to: row.subject };
-        for (const field of ['name', 'nameInstrumental', 'namePrepositional', 'nameGenitive', 'legacyUrl', 'officeAddress', 'officeHours'] as const) {
+        for (const field of ['name', 'namePrepositional', 'nameGenitive', 'legacyUrl', 'officeAddress', 'officeHours'] as const) {
           const next = row[field] || null;
           if ((current[field] ?? null) !== next) changes[field] = { from: current[field] ?? null, to: next };
         }
@@ -384,7 +372,7 @@ export class CityImportService {
       if (slug && row.subject && row.name && !issues.some((issue) => issue.row === rowNumber && issue.level === 'error')) {
         candidates.push({
           key: slug, row: rowNumber, siteId, subject: row.subject, name: row.name,
-          nameInstrumental: row.nameInstrumental || null, namePrepositional: row.namePrepositional || null,
+          namePrepositional: row.namePrepositional || null,
           nameGenitive: row.nameGenitive || null, slug, legacyUrl: row.legacyUrl || null,
           officeAddress: row.officeAddress || null, officeHours: row.officeHours || null,
           existingId: current?.id, existingSnapshot: current ? snapshot(current) : undefined,
@@ -437,7 +425,19 @@ export class CityImportService {
           regionsByName.set(region.name, region);
           regionsBySlug.set(region.slug, region);
         }
-        const data = { regionId: region.id, name: candidate.name, slug: candidate.slug, nameInstrumental: candidate.nameInstrumental, namePrepositional: candidate.namePrepositional, nameGenitive: candidate.nameGenitive, legacyUrl: candidate.legacyUrl, officeAddress: candidate.officeAddress, officeHours: candidate.officeHours, status: 'PUBLISHED' as const };
+        const profile = defaultDomruProfileCatalog.resolve({ city: candidate.name, region: candidate.subject });
+        const data = {
+          regionId: region.id,
+          name: candidate.name,
+          slug: candidate.slug,
+          namePrepositional: candidate.namePrepositional,
+          nameGenitive: candidate.nameGenitive,
+          legacyUrl: candidate.legacyUrl,
+          officeState: candidate.officeAddress && candidate.officeHours ? 'HAS_OFFICE' as const : 'NO_OFFICE' as const,
+          officeAddress: candidate.officeAddress,
+          officeHours: candidate.officeHours,
+          subscriberProfileKey: profile?.key || null,
+        };
         if (current) {
           if (runId) beforeCities.push(storedCity(current));
           const city = await tx.city.update({ where: { id: current.id }, data });
@@ -445,7 +445,7 @@ export class CityImportService {
           citiesBySlug.set(city.slug, { ...city, region: { name: region.name } });
           updated += 1;
         } else {
-          const city = await tx.city.create({ data: { siteId: candidate.siteId, ...data, seo: {} as Prisma.InputJsonObject, content: {} as Prisma.InputJsonObject } });
+          const city = await tx.city.create({ data: { siteId: candidate.siteId, ...data, status: 'DRAFT' } });
           const page = await tx.page.create({
             data: {
               siteId: candidate.siteId,
@@ -545,7 +545,7 @@ export class CityImportService {
       const createdCityIds = [...changeSet.createdCityIds].sort();
       const beforeCities = changeSet.beforeCities.map(storedCity).sort((left, right) => left.id.localeCompare(right.id));
       const afterCities = changeSet.afterCities.map(storedCity).sort((left, right) => left.id.localeCompare(right.id));
-      const createdRegions = [...changeSet.createdRegions].sort((left, right) => left.id.localeCompare(right.id));
+      const createdRegions = changeSet.createdRegions.map(storedRegion).sort((left, right) => left.id.localeCompare(right.id));
       const createdPages = [...changeSet.createdPages].sort((left, right) => left.id.localeCompare(right.id));
       const beforeIds = new Set(beforeCities.map((city) => city.id));
       const afterIds = new Set(afterCities.map((city) => city.id));

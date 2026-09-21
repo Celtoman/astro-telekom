@@ -43,9 +43,11 @@ function readEndpoint(): string | null {
 export class DomruContractService {
   private readonly logger = new Logger(DomruContractService.name);
 
-  async check(phone: string, location: DomruAddressLocation): Promise<ContractCheckResult> {
+  async check(phone: string, location: DomruAddressLocation, profileKey?: string | null): Promise<ContractCheckResult> {
     const endpoint = readEndpoint();
-    const profile = defaultDomruProfileCatalog.resolve(location);
+    const profile = profileKey
+      ? defaultDomruProfileCatalog.resolveByKey(profileKey)
+      : defaultDomruProfileCatalog.resolve(location);
     if (!endpoint || !profile) {
       return { status: 'NOT_CONFIGURED', active: null, message: 'Профиль API проверки договора для города не настроен' };
     }

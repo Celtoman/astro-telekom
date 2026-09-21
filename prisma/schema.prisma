@@ -92,6 +92,11 @@ enum CityImportStatus {
   FAILED
 }
 
+enum CityOfficeState {
+  HAS_OFFICE
+  NO_OFFICE
+}
+
 enum SiteRebuildStatus {
   PENDING
   QUEUED
@@ -309,8 +314,6 @@ model Region {
   siteId      String
   name        String
   slug        String
-  phone       String?
-  content     Json?
   site        Site     @relation(fields: [siteId], references: [id])
   cities      City[]
   @@unique([siteId, slug])
@@ -322,15 +325,14 @@ model City {
   regionId    String
   name        String
   slug        String
-  nameInstrumental String?
   namePrepositional String?
   nameGenitive String?
   legacyUrl   String?
+  officeState CityOfficeState @default(NO_OFFICE)
   officeAddress String?
   officeHours String?
+  subscriberProfileKey String?
   status      PublishStatus @default(DRAFT)
-  seo         Json?
-  content     Json?
   site        Site     @relation(fields: [siteId], references: [id])
   region      Region   @relation(fields: [regionId], references: [id])
   pages       Page[]
@@ -338,7 +340,11 @@ model City {
   leads       Lead[]
   checks      AddressCheck[]
   redirects   Redirect[]
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
   @@unique([siteId, slug])
+  @@index([siteId, status, updatedAt, id])
+  @@index([regionId, status, name, id])
 }
 
 model Page {

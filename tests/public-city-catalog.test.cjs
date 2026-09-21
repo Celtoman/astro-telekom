@@ -156,7 +156,7 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(calls.cities.include.pages.where, { status: 'PUBLISHED' });
   assert.deepEqual(calls.cities.include.pages.include.blocks.where, { visible: true, archivedAt: null });
   assert.deepEqual(calls.cities.include.pages.include.blocks.orderBy, [{ position: 'asc' }, { id: 'asc' }]);
-  assert.deepEqual(calls.cities.include.region.select, { name: true, slug: true, content: true });
+  assert.deepEqual(calls.cities.include.region.select, { name: true, slug: true });
   assert.deepEqual(calls.cities.include.tariffs.where, { status: 'PUBLISHED' });
   assert.deepEqual(calls.pages.where, { siteId: 'site-1', cityId: null, status: 'PUBLISHED' });
   assert.deepEqual(calls.pages.include.blocks.where, { visible: true, archivedAt: null });
@@ -185,7 +185,7 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(result.sitemap, { excludedPaths: ['/kazan/giga-500'] });
 });
 
-test('public city catalog resolves nested content and SEO through the documented layer order', () => {
+test('public city catalog does not apply removed city or region content and SEO overrides', () => {
   const catalog = new SiteCatalogService({});
   const site = {
     settings: {
@@ -234,19 +234,19 @@ test('public city catalog resolves nested content and SEO through the documented
   assert.deepEqual(internet.content, {
     hero: {
       eyebrow: 'Дом.ру',
-      title: 'Интернет в Казани',
+      title: 'Заголовок сайта',
       cta: { analyticsId: 'provider-cta', label: 'Выбрать тариф', href: '/kazan' },
     },
     legalNote: 'Условия провайдера',
     cards: [],
   });
   assert.deepEqual(internet.seo, {
-    openGraph: { title: 'Домашний интернет', image: '/city.jpg' },
+    openGraph: { title: 'Домашний интернет' },
     robots: null,
   });
   assert.deepEqual(result.tariffs[0].seo, {
-    openGraph: { title: 'Гига 500', image: '/city.jpg' },
-    robots: { index: true, follow: false },
+    openGraph: { title: 'Гига 500' },
+    robots: { follow: false },
   });
 });
 

@@ -32,10 +32,13 @@ test('server-filtered catalogs reset committed filters and cursor pagination', (
 
   const audit = readFileSync(join(componentsRoot, 'AuditApp.tsx'), 'utf8');
   assert.match(audit, /function resetFilters\(\)\s*\{[^}]*setSearch\(""\)[^}]*setSearchQuery\(""\)[^}]*setEntityType\("ALL"\)[^}]*setAction\("ALL"\)[^}]*setCursorStack\(\[""\]\)/);
+
+  const cities = readFileSync(join(componentsRoot, 'CitiesApp.tsx'), 'utf8');
+  assert.match(cities, /function resetFilters\(\)\s*\{[^}]*setSearch\(""\)[^}]*setQuery\(""\)[^}]*setFilters\(initialFilters\)[^}]*setCursorStack\(\[""\]\)[^}]*\}/);
 });
 
 test('client-filtered catalogs reset search without clearing edit forms', () => {
-  for (const component of ['CitiesApp.tsx', 'RedirectsApp.tsx']) {
+  for (const component of ['RedirectsApp.tsx']) {
     const source = readFileSync(join(componentsRoot, component), 'utf8');
     assert.match(source, /function resetFilters\(\)\s*\{\s*setSearch\(""\)\s*\}/);
   }

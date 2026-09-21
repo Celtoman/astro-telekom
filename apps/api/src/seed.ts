@@ -3,6 +3,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { randomBytes, scryptSync } from 'node:crypto';
 import { cityHomeTemplateBlocks } from './city-home-template';
+import { defaultDomruProfileCatalog } from './domru-profile-catalog';
 
 const PUBLISHED = 'PUBLISHED' as const;
 const HOME = 'HOME' as const;
@@ -69,9 +70,10 @@ async function main() {
     },
   });
 
+  const kazanProfile = defaultDomruProfileCatalog.resolve({ city: 'Казань', region: 'Республика Татарстан' });
   const city = await prisma.city.upsert({
     where: { siteId_slug: { siteId: site.id, slug: 'kazan' } },
-    update: { name: 'Казань', namePrepositional: 'Казани', nameGenitive: 'Казани', regionId: region.id, status: PUBLISHED },
+    update: { name: 'Казань', namePrepositional: 'Казани', nameGenitive: 'Казани', regionId: region.id, officeState: 'NO_OFFICE', subscriberProfileKey: kazanProfile?.key, status: PUBLISHED },
     create: {
       siteId: site.id,
       regionId: region.id,
@@ -79,6 +81,8 @@ async function main() {
       namePrepositional: 'Казани',
       nameGenitive: 'Казани',
       slug: 'kazan',
+      officeState: 'NO_OFFICE',
+      subscriberProfileKey: kazanProfile?.key,
       status: PUBLISHED,
     },
   });

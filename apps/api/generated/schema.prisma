@@ -92,6 +92,11 @@ enum CityImportStatus {
   FAILED
 }
 
+enum CityOfficeState {
+  HAS_OFFICE
+  NO_OFFICE
+}
+
 enum SiteRebuildStatus {
   PENDING
   QUEUED
@@ -305,42 +310,43 @@ model AuditEvent {
 }
 
 model Region {
-  id      String  @id @default(cuid())
-  siteId  String
-  name    String
-  slug    String
-  phone   String?
-  content Json?
-  site    Site    @relation(fields: [siteId], references: [id])
-  cities  City[]
+  id     String @id @default(cuid())
+  siteId String
+  name   String
+  slug   String
+  site   Site   @relation(fields: [siteId], references: [id])
+  cities City[]
 
   @@unique([siteId, slug])
 }
 
 model City {
-  id                String         @id @default(cuid())
-  siteId            String
-  regionId          String
-  name              String
-  slug              String
-  nameInstrumental  String?
-  namePrepositional String?
-  nameGenitive      String?
-  legacyUrl         String?
-  officeAddress     String?
-  officeHours       String?
-  status            PublishStatus  @default(DRAFT)
-  seo               Json?
-  content           Json?
-  site              Site           @relation(fields: [siteId], references: [id])
-  region            Region         @relation(fields: [regionId], references: [id])
-  pages             Page[]
-  tariffs           Tariff[]
-  leads             Lead[]
-  checks            AddressCheck[]
-  redirects         Redirect[]
+  id                   String          @id @default(cuid())
+  siteId               String
+  regionId             String
+  name                 String
+  slug                 String
+  namePrepositional    String?
+  nameGenitive         String?
+  legacyUrl            String?
+  officeState          CityOfficeState @default(NO_OFFICE)
+  officeAddress        String?
+  officeHours          String?
+  subscriberProfileKey String?
+  status               PublishStatus   @default(DRAFT)
+  site                 Site            @relation(fields: [siteId], references: [id])
+  region               Region          @relation(fields: [regionId], references: [id])
+  pages                Page[]
+  tariffs              Tariff[]
+  leads                Lead[]
+  checks               AddressCheck[]
+  redirects            Redirect[]
+  createdAt            DateTime        @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime        @updatedAt @db.Timestamptz(3)
 
   @@unique([siteId, slug])
+  @@index([siteId, status, updatedAt, id])
+  @@index([regionId, status, name, id])
 }
 
 model Page {

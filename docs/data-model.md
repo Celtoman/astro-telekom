@@ -1,6 +1,6 @@
 # Модель данных текущего прототипа
 
-Источник правды: `prisma/schema.prisma` и 35 последовательных миграций от `0001_initial` до `0035_site_contact_values`. Этот документ отличает существующие таблицы от объектов, которые фигурируют только в продуктовом плане; примененность конкретной миграции во внешнем контуре подтверждается отдельно, а не выводится из репозитория.
+Источник правды: `prisma/schema.prisma` и 36 последовательных миграций от `0001_initial` до `0036_city_contract`. Этот документ отличает существующие таблицы от объектов, которые фигурируют только в продуктовом плане; примененность конкретной миграции во внешнем контуре подтверждается отдельно, а не выводится из репозитория.
 
 ## Сущности контента и географии
 
@@ -8,8 +8,8 @@
 | --- | --- | --- |
 | `Provider` | `name`, unique `slug`, `legalData`, `settings` | Имеет sites и tariffs. |
 | `Site` | `providerId`, `name`, unique `slug`, `domain`, нормализованные `connectionPhone` и `supportPhone`, `settings`, `status`, `workingRevision`, `publishedRevision` | Имеет regions, cities, pages, leads, checks, redirects, sitemap exclusions, revisions, publications, audit events и rebuild status. |
-| `Region` | `siteId`, `name`, `slug`, `phone`, `content` | Unique `(siteId, slug)`, содержит cities. |
-| `City` | site/region, names in three cases, legacy/office fields, `status`, `seo`, `content` | Unique `(siteId, slug)`, имеет pages, tariffs, leads, checks, redirects. Телефоны городу не принадлежат. |
+| `Region` | `siteId`, `name`, `slug` | Unique `(siteId, slug)`, содержит cities. Телефон и произвольный content региону не принадлежат. |
+| `City` | site/region, название и используемые родительный/предложный варианты, slug, legacy URL, явное состояние офиса, адрес/режим, проверенный `subscriberProfileKey`, `status`, timestamps | Unique `(siteId, slug)`, имеет pages, tariffs, leads, checks, redirects. Телефоны, SEO и произвольный content городу не принадлежат. |
 | `Page` | `siteId`, nullable `cityId`, `type`, `title`, `slug`, `status`, `seo`, `content` | City pages имеют unique `(cityId, slug)`; site-global pages — partial unique `(siteId, slug) WHERE cityId IS NULL`; городская `HOME` дополнительно имеет пустой slug и partial unique `(cityId) WHERE type = HOME`; имеет ordered blocks. |
 | `PageBlock` | `blockType`, `position`, `visible`, JSON `data`, optional `source`, nullable `archivedAt` | Cascade delete только вместе с parent Page. Ручной DELETE выставляет `archivedAt`, а restore очищает его; API разрешает `hero`, `rich_text`, `tariff_grid`, `service_grid`, `feature_grid`, `steps` и `faq`; `position` задает порядок активных visible-блоков. |
 
@@ -20,6 +20,8 @@ JSON `data` не является произвольным хранилищем.
 Форма заявки остается отдельным системным компонентом публичной страницы и в `PageBlock` не моделируется. Для городской HOME именно упорядоченный набор блоков определяет контентную структуру; отдельный hardcoded fallback удален. Внутренние `hero.data.ctaHref` хранятся без завершающего слэша; migration `0018_page_block_cta_paths` идемпотентно нормализует legacy-значения. `0019` и `0020` фиксируют снимки Казани и отдельный номер техподдержки. Миграции `0021`–`0023` добавляют первые четыре global-типа и nullable scope. `0024` отдельно добавляет `COOKIE_POLICY`, а `0025` обновляет scope constraint, создает пятую global page, публикует обязательные общие страницы, все существующие города и их `HOME`, не изменяя тарифы и заявки. `0026` добавляет канонические блоки только в пустые опубликованные городские HOME, используя `namePrepositional`, и сохраняет любые уже существующие композиции. `0030` только добавляет nullable `archivedAt` и индекс, поэтому существующие блоки остаются активными. `0031` аддитивно расширяет жизненный цикл публикации состояниями `SCHEDULED`/`CANCELLED`, добавляет `scheduledFor`/`cancelledAt` и индекс выборки наступивших расписаний; существующие снимки и публикации не меняются. `0032` fail-closed принимает только единственную каноническую HOME либо известную пару `slug=''` + `slug='home'` с одинаковыми status/SEO/content/блоками; во втором случае переводит `Lead.pageId` и `AddressCheck.pageId`, удаляет legacy-строку, добавляет DB-инварианты и системную рабочую ревизию. Исторические `SitePublication.catalog` не переписываются. Seed и city import используют общий application-level factory `template:city-home:v1`; отдельной сущности шаблона в БД пока нет.
 
 Миграция `0035` переносит единственные непротиворечивые городские номера на `Site`, нормализует их в `7XXXXXXXXXX` и удаляет поля City. Несколько разных значений или неверный российский номер останавливают миграцию с ошибкой; скрытого выбора и подстановки нет. Nullable-схема позволяет развернуть миграцию на пустой базе, но readiness gate запрещает публикацию и build без обоих телефонов.
+
+Миграция `0036` вводит `HAS_OFFICE`/`NO_OFFICE`, runtime-ссылку на проверенный профиль абонента и timestamps города; удаляет неиспользуемый творительный падеж, City SEO/content и Region phone/content. Она fail-closed отклоняет частично заполненный офис и непустые удаляемые JSON override, чтобы deployment не потерял редакционные данные молча. Readiness города отдельно проверяет регион, название и обе используемые формы, slug, согласованность офиса, каноническую HOME и хотя бы один опубликованный тариф; отсутствие профиля остается предупреждением с отдельным подтверждением.
 
 ## Тарифы и импорты
 
@@ -64,12 +66,12 @@ JSON `data` не является произвольным хранилищем.
 Public catalog разрешает уровни `content` в таком порядке:
 
 ```text
-Provider.settings.content -> Site.settings.content -> Region.content -> City.content -> Page.content
+Provider.settings.content -> Site.settings.content -> Page.content
 ```
 
 Для site-global Page цепочка сокращается до `Provider.settings.content -> Site.settings.content -> Page.content`. В публичное наследование из настроек Provider/Site входит только явный namespace `content`; соседние credentials, integration settings и другие приватные ключи не участвуют.
 
-Контракт разрешения един для `content` и `seo`: вложенные JSON-объекты объединяются рекурсивно, а массив, строка, число, boolean и `null` целиком заменяют родительское значение. Отсутствующий ключ наследуется; присутствующий `null` означает явное публичное значение `null`, а не возврат к родителю. Более узкий уровень всегда выигрывает, исходные JSON-объекты не изменяются. Для SEO фактическая цепочка сейчас ограничена `City.seo -> Page.seo` либо `City.seo -> Tariff.seo`, потому что у Provider, Site и Region отдельных SEO-полей нет.
+Контракт разрешения `content` пока сохраняет переходную цепочку Provider → Site → Page: вложенные JSON-объекты объединяются рекурсивно, а массив, строка, число, boolean и `null` целиком заменяют родительское значение. Город и регион больше не участвуют в наследовании. SEO страницы или тарифа читается только из соответствующей записи до перехода на общие SEO-шаблоны; локального SEO города нет.
 
 `PageBlock` не участвует в JSON-наследовании и не объединяется как массив: city HOME получает снимок общего application-level шаблона при создании или backfill, после чего блоки остаются самостоятельной упорядоченной композицией Page. Отдельной версионируемой сущности шаблона и UI с происхождением каждого эффективного поля пока нет; их нельзя подменять неявным merge-механизмом.
 

@@ -253,6 +253,14 @@ export const CityImportStatus: {
 export type CityImportStatus = (typeof CityImportStatus)[keyof typeof CityImportStatus]
 
 
+export const CityOfficeState: {
+  HAS_OFFICE: 'HAS_OFFICE',
+  NO_OFFICE: 'NO_OFFICE'
+};
+
+export type CityOfficeState = (typeof CityOfficeState)[keyof typeof CityOfficeState]
+
+
 export const SiteRebuildStatus: {
   PENDING: 'PENDING',
   QUEUED: 'QUEUED',
@@ -354,6 +362,10 @@ export const TariffImportStatus: typeof $Enums.TariffImportStatus
 export type CityImportStatus = $Enums.CityImportStatus
 
 export const CityImportStatus: typeof $Enums.CityImportStatus
+
+export type CityOfficeState = $Enums.CityOfficeState
+
+export const CityOfficeState: typeof $Enums.CityOfficeState
 
 export type SiteRebuildStatus = $Enums.SiteRebuildStatus
 
@@ -4501,7 +4513,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Provider", 'DateTime'>
     readonly updatedAt: FieldRef<"Provider", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -5816,7 +5828,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Site", 'DateTime'>
     readonly updatedAt: FieldRef<"Site", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -7201,7 +7213,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"SitemapExclusion", 'DateTime'>
     readonly updatedAt: FieldRef<"SitemapExclusion", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -8596,7 +8608,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"SiteRebuild", 'DateTime'>
     readonly updatedAt: FieldRef<"SiteRebuild", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -12864,7 +12876,6 @@ export namespace Prisma {
     siteId: string | null
     name: string | null
     slug: string | null
-    phone: string | null
   }
 
   export type RegionMaxAggregateOutputType = {
@@ -12872,7 +12883,6 @@ export namespace Prisma {
     siteId: string | null
     name: string | null
     slug: string | null
-    phone: string | null
   }
 
   export type RegionCountAggregateOutputType = {
@@ -12880,8 +12890,6 @@ export namespace Prisma {
     siteId: number
     name: number
     slug: number
-    phone: number
-    content: number
     _all: number
   }
 
@@ -12891,7 +12899,6 @@ export namespace Prisma {
     siteId?: true
     name?: true
     slug?: true
-    phone?: true
   }
 
   export type RegionMaxAggregateInputType = {
@@ -12899,7 +12906,6 @@ export namespace Prisma {
     siteId?: true
     name?: true
     slug?: true
-    phone?: true
   }
 
   export type RegionCountAggregateInputType = {
@@ -12907,8 +12913,6 @@ export namespace Prisma {
     siteId?: true
     name?: true
     slug?: true
-    phone?: true
-    content?: true
     _all?: true
   }
 
@@ -12989,8 +12993,6 @@ export namespace Prisma {
     siteId: string
     name: string
     slug: string
-    phone: string | null
-    content: JsonValue | null
     _count: RegionCountAggregateOutputType | null
     _min: RegionMinAggregateOutputType | null
     _max: RegionMaxAggregateOutputType | null
@@ -13015,8 +13017,6 @@ export namespace Prisma {
     siteId?: boolean
     name?: boolean
     slug?: boolean
-    phone?: boolean
-    content?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
     cities?: boolean | Region$citiesArgs<ExtArgs>
     _count?: boolean | RegionCountOutputTypeDefaultArgs<ExtArgs>
@@ -13027,8 +13027,6 @@ export namespace Prisma {
     siteId?: boolean
     name?: boolean
     slug?: boolean
-    phone?: boolean
-    content?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["region"]>
 
@@ -13037,8 +13035,6 @@ export namespace Prisma {
     siteId?: boolean
     name?: boolean
     slug?: boolean
-    phone?: boolean
-    content?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["region"]>
 
@@ -13047,11 +13043,9 @@ export namespace Prisma {
     siteId?: boolean
     name?: boolean
     slug?: boolean
-    phone?: boolean
-    content?: boolean
   }
 
-  export type RegionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "name" | "slug" | "phone" | "content", ExtArgs["result"]["region"]>
+  export type RegionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "name" | "slug", ExtArgs["result"]["region"]>
   export type RegionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     cities?: boolean | Region$citiesArgs<ExtArgs>
@@ -13075,8 +13069,6 @@ export namespace Prisma {
       siteId: string
       name: string
       slug: string
-      phone: string | null
-      content: Prisma.JsonValue | null
     }, ExtArgs["result"]["region"]>
     composites: {}
   }
@@ -13506,8 +13498,6 @@ export namespace Prisma {
     readonly siteId: FieldRef<"Region", 'String'>
     readonly name: FieldRef<"Region", 'String'>
     readonly slug: FieldRef<"Region", 'String'>
-    readonly phone: FieldRef<"Region", 'String'>
-    readonly content: FieldRef<"Region", 'Json'>
   }
     
 
@@ -13967,13 +13957,16 @@ export namespace Prisma {
     regionId: string | null
     name: string | null
     slug: string | null
-    nameInstrumental: string | null
     namePrepositional: string | null
     nameGenitive: string | null
     legacyUrl: string | null
+    officeState: $Enums.CityOfficeState | null
     officeAddress: string | null
     officeHours: string | null
+    subscriberProfileKey: string | null
     status: $Enums.PublishStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type CityMaxAggregateOutputType = {
@@ -13982,13 +13975,16 @@ export namespace Prisma {
     regionId: string | null
     name: string | null
     slug: string | null
-    nameInstrumental: string | null
     namePrepositional: string | null
     nameGenitive: string | null
     legacyUrl: string | null
+    officeState: $Enums.CityOfficeState | null
     officeAddress: string | null
     officeHours: string | null
+    subscriberProfileKey: string | null
     status: $Enums.PublishStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type CityCountAggregateOutputType = {
@@ -13997,15 +13993,16 @@ export namespace Prisma {
     regionId: number
     name: number
     slug: number
-    nameInstrumental: number
     namePrepositional: number
     nameGenitive: number
     legacyUrl: number
+    officeState: number
     officeAddress: number
     officeHours: number
+    subscriberProfileKey: number
     status: number
-    seo: number
-    content: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -14016,13 +14013,16 @@ export namespace Prisma {
     regionId?: true
     name?: true
     slug?: true
-    nameInstrumental?: true
     namePrepositional?: true
     nameGenitive?: true
     legacyUrl?: true
+    officeState?: true
     officeAddress?: true
     officeHours?: true
+    subscriberProfileKey?: true
     status?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type CityMaxAggregateInputType = {
@@ -14031,13 +14031,16 @@ export namespace Prisma {
     regionId?: true
     name?: true
     slug?: true
-    nameInstrumental?: true
     namePrepositional?: true
     nameGenitive?: true
     legacyUrl?: true
+    officeState?: true
     officeAddress?: true
     officeHours?: true
+    subscriberProfileKey?: true
     status?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type CityCountAggregateInputType = {
@@ -14046,15 +14049,16 @@ export namespace Prisma {
     regionId?: true
     name?: true
     slug?: true
-    nameInstrumental?: true
     namePrepositional?: true
     nameGenitive?: true
     legacyUrl?: true
+    officeState?: true
     officeAddress?: true
     officeHours?: true
+    subscriberProfileKey?: true
     status?: true
-    seo?: true
-    content?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -14136,15 +14140,16 @@ export namespace Prisma {
     regionId: string
     name: string
     slug: string
-    nameInstrumental: string | null
     namePrepositional: string | null
     nameGenitive: string | null
     legacyUrl: string | null
+    officeState: $Enums.CityOfficeState
     officeAddress: string | null
     officeHours: string | null
+    subscriberProfileKey: string | null
     status: $Enums.PublishStatus
-    seo: JsonValue | null
-    content: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
     _count: CityCountAggregateOutputType | null
     _min: CityMinAggregateOutputType | null
     _max: CityMaxAggregateOutputType | null
@@ -14170,15 +14175,16 @@ export namespace Prisma {
     regionId?: boolean
     name?: boolean
     slug?: boolean
-    nameInstrumental?: boolean
     namePrepositional?: boolean
     nameGenitive?: boolean
     legacyUrl?: boolean
+    officeState?: boolean
     officeAddress?: boolean
     officeHours?: boolean
+    subscriberProfileKey?: boolean
     status?: boolean
-    seo?: boolean
-    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
     region?: boolean | RegionDefaultArgs<ExtArgs>
     pages?: boolean | City$pagesArgs<ExtArgs>
@@ -14195,15 +14201,16 @@ export namespace Prisma {
     regionId?: boolean
     name?: boolean
     slug?: boolean
-    nameInstrumental?: boolean
     namePrepositional?: boolean
     nameGenitive?: boolean
     legacyUrl?: boolean
+    officeState?: boolean
     officeAddress?: boolean
     officeHours?: boolean
+    subscriberProfileKey?: boolean
     status?: boolean
-    seo?: boolean
-    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
     region?: boolean | RegionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["city"]>
@@ -14214,15 +14221,16 @@ export namespace Prisma {
     regionId?: boolean
     name?: boolean
     slug?: boolean
-    nameInstrumental?: boolean
     namePrepositional?: boolean
     nameGenitive?: boolean
     legacyUrl?: boolean
+    officeState?: boolean
     officeAddress?: boolean
     officeHours?: boolean
+    subscriberProfileKey?: boolean
     status?: boolean
-    seo?: boolean
-    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
     region?: boolean | RegionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["city"]>
@@ -14233,18 +14241,19 @@ export namespace Prisma {
     regionId?: boolean
     name?: boolean
     slug?: boolean
-    nameInstrumental?: boolean
     namePrepositional?: boolean
     nameGenitive?: boolean
     legacyUrl?: boolean
+    officeState?: boolean
     officeAddress?: boolean
     officeHours?: boolean
+    subscriberProfileKey?: boolean
     status?: boolean
-    seo?: boolean
-    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type CityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "regionId" | "name" | "slug" | "nameInstrumental" | "namePrepositional" | "nameGenitive" | "legacyUrl" | "officeAddress" | "officeHours" | "status" | "seo" | "content", ExtArgs["result"]["city"]>
+  export type CityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "regionId" | "name" | "slug" | "namePrepositional" | "nameGenitive" | "legacyUrl" | "officeState" | "officeAddress" | "officeHours" | "subscriberProfileKey" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["city"]>
   export type CityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     region?: boolean | RegionDefaultArgs<ExtArgs>
@@ -14281,15 +14290,16 @@ export namespace Prisma {
       regionId: string
       name: string
       slug: string
-      nameInstrumental: string | null
       namePrepositional: string | null
       nameGenitive: string | null
       legacyUrl: string | null
+      officeState: $Enums.CityOfficeState
       officeAddress: string | null
       officeHours: string | null
+      subscriberProfileKey: string | null
       status: $Enums.PublishStatus
-      seo: Prisma.JsonValue | null
-      content: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["city"]>
     composites: {}
   }
@@ -14725,15 +14735,16 @@ export namespace Prisma {
     readonly regionId: FieldRef<"City", 'String'>
     readonly name: FieldRef<"City", 'String'>
     readonly slug: FieldRef<"City", 'String'>
-    readonly nameInstrumental: FieldRef<"City", 'String'>
     readonly namePrepositional: FieldRef<"City", 'String'>
     readonly nameGenitive: FieldRef<"City", 'String'>
     readonly legacyUrl: FieldRef<"City", 'String'>
+    readonly officeState: FieldRef<"City", 'CityOfficeState'>
     readonly officeAddress: FieldRef<"City", 'String'>
     readonly officeHours: FieldRef<"City", 'String'>
+    readonly subscriberProfileKey: FieldRef<"City", 'String'>
     readonly status: FieldRef<"City", 'PublishStatus'>
-    readonly seo: FieldRef<"City", 'Json'>
-    readonly content: FieldRef<"City", 'Json'>
+    readonly createdAt: FieldRef<"City", 'DateTime'>
+    readonly updatedAt: FieldRef<"City", 'DateTime'>
   }
     
 
@@ -33846,9 +33857,7 @@ export namespace Prisma {
     id: 'id',
     siteId: 'siteId',
     name: 'name',
-    slug: 'slug',
-    phone: 'phone',
-    content: 'content'
+    slug: 'slug'
   };
 
   export type RegionScalarFieldEnum = (typeof RegionScalarFieldEnum)[keyof typeof RegionScalarFieldEnum]
@@ -33860,15 +33869,16 @@ export namespace Prisma {
     regionId: 'regionId',
     name: 'name',
     slug: 'slug',
-    nameInstrumental: 'nameInstrumental',
     namePrepositional: 'namePrepositional',
     nameGenitive: 'nameGenitive',
     legacyUrl: 'legacyUrl',
+    officeState: 'officeState',
     officeAddress: 'officeAddress',
     officeHours: 'officeHours',
+    subscriberProfileKey: 'subscriberProfileKey',
     status: 'status',
-    seo: 'seo',
-    content: 'content'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type CityScalarFieldEnum = (typeof CityScalarFieldEnum)[keyof typeof CityScalarFieldEnum]
@@ -34321,6 +34331,18 @@ export namespace Prisma {
    */
   export type ListEnumSitePublicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SitePublicationStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'CityOfficeState'
+   */
+  export type EnumCityOfficeStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CityOfficeState'>
+
+
+  /**
+   * Reference to a field of type 'CityOfficeState[]'
+   */
+  export type ListEnumCityOfficeStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CityOfficeState[]'>
 
 
   /**
@@ -35260,8 +35282,6 @@ export namespace Prisma {
     siteId?: StringFilter<"Region"> | string
     name?: StringFilter<"Region"> | string
     slug?: StringFilter<"Region"> | string
-    phone?: StringNullableFilter<"Region"> | string | null
-    content?: JsonNullableFilter<"Region">
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
     cities?: CityListRelationFilter
   }
@@ -35271,8 +35291,6 @@ export namespace Prisma {
     siteId?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    phone?: SortOrderInput | SortOrder
-    content?: SortOrderInput | SortOrder
     site?: SiteOrderByWithRelationInput
     cities?: CityOrderByRelationAggregateInput
   }
@@ -35286,8 +35304,6 @@ export namespace Prisma {
     siteId?: StringFilter<"Region"> | string
     name?: StringFilter<"Region"> | string
     slug?: StringFilter<"Region"> | string
-    phone?: StringNullableFilter<"Region"> | string | null
-    content?: JsonNullableFilter<"Region">
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
     cities?: CityListRelationFilter
   }, "id" | "siteId_slug">
@@ -35297,8 +35313,6 @@ export namespace Prisma {
     siteId?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    phone?: SortOrderInput | SortOrder
-    content?: SortOrderInput | SortOrder
     _count?: RegionCountOrderByAggregateInput
     _max?: RegionMaxOrderByAggregateInput
     _min?: RegionMinOrderByAggregateInput
@@ -35312,8 +35326,6 @@ export namespace Prisma {
     siteId?: StringWithAggregatesFilter<"Region"> | string
     name?: StringWithAggregatesFilter<"Region"> | string
     slug?: StringWithAggregatesFilter<"Region"> | string
-    phone?: StringNullableWithAggregatesFilter<"Region"> | string | null
-    content?: JsonNullableWithAggregatesFilter<"Region">
   }
 
   export type CityWhereInput = {
@@ -35325,15 +35337,16 @@ export namespace Prisma {
     regionId?: StringFilter<"City"> | string
     name?: StringFilter<"City"> | string
     slug?: StringFilter<"City"> | string
-    nameInstrumental?: StringNullableFilter<"City"> | string | null
     namePrepositional?: StringNullableFilter<"City"> | string | null
     nameGenitive?: StringNullableFilter<"City"> | string | null
     legacyUrl?: StringNullableFilter<"City"> | string | null
+    officeState?: EnumCityOfficeStateFilter<"City"> | $Enums.CityOfficeState
     officeAddress?: StringNullableFilter<"City"> | string | null
     officeHours?: StringNullableFilter<"City"> | string | null
+    subscriberProfileKey?: StringNullableFilter<"City"> | string | null
     status?: EnumPublishStatusFilter<"City"> | $Enums.PublishStatus
-    seo?: JsonNullableFilter<"City">
-    content?: JsonNullableFilter<"City">
+    createdAt?: DateTimeFilter<"City"> | Date | string
+    updatedAt?: DateTimeFilter<"City"> | Date | string
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
     region?: XOR<RegionScalarRelationFilter, RegionWhereInput>
     pages?: PageListRelationFilter
@@ -35349,15 +35362,16 @@ export namespace Prisma {
     regionId?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    nameInstrumental?: SortOrderInput | SortOrder
     namePrepositional?: SortOrderInput | SortOrder
     nameGenitive?: SortOrderInput | SortOrder
     legacyUrl?: SortOrderInput | SortOrder
+    officeState?: SortOrder
     officeAddress?: SortOrderInput | SortOrder
     officeHours?: SortOrderInput | SortOrder
+    subscriberProfileKey?: SortOrderInput | SortOrder
     status?: SortOrder
-    seo?: SortOrderInput | SortOrder
-    content?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     site?: SiteOrderByWithRelationInput
     region?: RegionOrderByWithRelationInput
     pages?: PageOrderByRelationAggregateInput
@@ -35377,15 +35391,16 @@ export namespace Prisma {
     regionId?: StringFilter<"City"> | string
     name?: StringFilter<"City"> | string
     slug?: StringFilter<"City"> | string
-    nameInstrumental?: StringNullableFilter<"City"> | string | null
     namePrepositional?: StringNullableFilter<"City"> | string | null
     nameGenitive?: StringNullableFilter<"City"> | string | null
     legacyUrl?: StringNullableFilter<"City"> | string | null
+    officeState?: EnumCityOfficeStateFilter<"City"> | $Enums.CityOfficeState
     officeAddress?: StringNullableFilter<"City"> | string | null
     officeHours?: StringNullableFilter<"City"> | string | null
+    subscriberProfileKey?: StringNullableFilter<"City"> | string | null
     status?: EnumPublishStatusFilter<"City"> | $Enums.PublishStatus
-    seo?: JsonNullableFilter<"City">
-    content?: JsonNullableFilter<"City">
+    createdAt?: DateTimeFilter<"City"> | Date | string
+    updatedAt?: DateTimeFilter<"City"> | Date | string
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
     region?: XOR<RegionScalarRelationFilter, RegionWhereInput>
     pages?: PageListRelationFilter
@@ -35401,15 +35416,16 @@ export namespace Prisma {
     regionId?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    nameInstrumental?: SortOrderInput | SortOrder
     namePrepositional?: SortOrderInput | SortOrder
     nameGenitive?: SortOrderInput | SortOrder
     legacyUrl?: SortOrderInput | SortOrder
+    officeState?: SortOrder
     officeAddress?: SortOrderInput | SortOrder
     officeHours?: SortOrderInput | SortOrder
+    subscriberProfileKey?: SortOrderInput | SortOrder
     status?: SortOrder
-    seo?: SortOrderInput | SortOrder
-    content?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: CityCountOrderByAggregateInput
     _max?: CityMaxOrderByAggregateInput
     _min?: CityMinOrderByAggregateInput
@@ -35424,15 +35440,16 @@ export namespace Prisma {
     regionId?: StringWithAggregatesFilter<"City"> | string
     name?: StringWithAggregatesFilter<"City"> | string
     slug?: StringWithAggregatesFilter<"City"> | string
-    nameInstrumental?: StringNullableWithAggregatesFilter<"City"> | string | null
     namePrepositional?: StringNullableWithAggregatesFilter<"City"> | string | null
     nameGenitive?: StringNullableWithAggregatesFilter<"City"> | string | null
     legacyUrl?: StringNullableWithAggregatesFilter<"City"> | string | null
+    officeState?: EnumCityOfficeStateWithAggregatesFilter<"City"> | $Enums.CityOfficeState
     officeAddress?: StringNullableWithAggregatesFilter<"City"> | string | null
     officeHours?: StringNullableWithAggregatesFilter<"City"> | string | null
+    subscriberProfileKey?: StringNullableWithAggregatesFilter<"City"> | string | null
     status?: EnumPublishStatusWithAggregatesFilter<"City"> | $Enums.PublishStatus
-    seo?: JsonNullableWithAggregatesFilter<"City">
-    content?: JsonNullableWithAggregatesFilter<"City">
+    createdAt?: DateTimeWithAggregatesFilter<"City"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"City"> | Date | string
   }
 
   export type PageWhereInput = {
@@ -37752,8 +37769,6 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    phone?: string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
     site: SiteCreateNestedOneWithoutRegionsInput
     cities?: CityCreateNestedManyWithoutRegionInput
   }
@@ -37763,8 +37778,6 @@ export namespace Prisma {
     siteId: string
     name: string
     slug: string
-    phone?: string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
     cities?: CityUncheckedCreateNestedManyWithoutRegionInput
   }
 
@@ -37772,8 +37785,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
     site?: SiteUpdateOneRequiredWithoutRegionsNestedInput
     cities?: CityUpdateManyWithoutRegionNestedInput
   }
@@ -37783,8 +37794,6 @@ export namespace Prisma {
     siteId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
     cities?: CityUncheckedUpdateManyWithoutRegionNestedInput
   }
 
@@ -37793,16 +37802,12 @@ export namespace Prisma {
     siteId: string
     name: string
     slug: string
-    phone?: string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type RegionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type RegionUncheckedUpdateManyInput = {
@@ -37810,23 +37815,22 @@ export namespace Prisma {
     siteId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CityCreateInput = {
     id?: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutCitiesInput
     region: RegionCreateNestedOneWithoutCitiesInput
     pages?: PageCreateNestedManyWithoutCityInput
@@ -37842,15 +37846,16 @@ export namespace Prisma {
     regionId: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
     tariffs?: TariffUncheckedCreateNestedManyWithoutCityInput
     leads?: LeadUncheckedCreateNestedManyWithoutCityInput
@@ -37862,15 +37867,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
     region?: RegionUpdateOneRequiredWithoutCitiesNestedInput
     pages?: PageUpdateManyWithoutCityNestedInput
@@ -37886,15 +37892,16 @@ export namespace Prisma {
     regionId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
     tariffs?: TariffUncheckedUpdateManyWithoutCityNestedInput
     leads?: LeadUncheckedUpdateManyWithoutCityNestedInput
@@ -37908,30 +37915,32 @@ export namespace Prisma {
     regionId: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CityUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CityUncheckedUpdateManyInput = {
@@ -37940,15 +37949,16 @@ export namespace Prisma {
     regionId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PageCreateInput = {
@@ -40481,8 +40491,6 @@ export namespace Prisma {
     siteId?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    phone?: SortOrder
-    content?: SortOrder
   }
 
   export type RegionMaxOrderByAggregateInput = {
@@ -40490,7 +40498,6 @@ export namespace Prisma {
     siteId?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    phone?: SortOrder
   }
 
   export type RegionMinOrderByAggregateInput = {
@@ -40498,7 +40505,13 @@ export namespace Prisma {
     siteId?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    phone?: SortOrder
+  }
+
+  export type EnumCityOfficeStateFilter<$PrismaModel = never> = {
+    equals?: $Enums.CityOfficeState | EnumCityOfficeStateFieldRefInput<$PrismaModel>
+    in?: $Enums.CityOfficeState[] | ListEnumCityOfficeStateFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CityOfficeState[] | ListEnumCityOfficeStateFieldRefInput<$PrismaModel>
+    not?: NestedEnumCityOfficeStateFilter<$PrismaModel> | $Enums.CityOfficeState
   }
 
   export type RegionScalarRelationFilter = {
@@ -40517,15 +40530,16 @@ export namespace Prisma {
     regionId?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    nameInstrumental?: SortOrder
     namePrepositional?: SortOrder
     nameGenitive?: SortOrder
     legacyUrl?: SortOrder
+    officeState?: SortOrder
     officeAddress?: SortOrder
     officeHours?: SortOrder
+    subscriberProfileKey?: SortOrder
     status?: SortOrder
-    seo?: SortOrder
-    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CityMaxOrderByAggregateInput = {
@@ -40534,13 +40548,16 @@ export namespace Prisma {
     regionId?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    nameInstrumental?: SortOrder
     namePrepositional?: SortOrder
     nameGenitive?: SortOrder
     legacyUrl?: SortOrder
+    officeState?: SortOrder
     officeAddress?: SortOrder
     officeHours?: SortOrder
+    subscriberProfileKey?: SortOrder
     status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CityMinOrderByAggregateInput = {
@@ -40549,13 +40566,26 @@ export namespace Prisma {
     regionId?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    nameInstrumental?: SortOrder
     namePrepositional?: SortOrder
     nameGenitive?: SortOrder
     legacyUrl?: SortOrder
+    officeState?: SortOrder
     officeAddress?: SortOrder
     officeHours?: SortOrder
+    subscriberProfileKey?: SortOrder
     status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumCityOfficeStateWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CityOfficeState | EnumCityOfficeStateFieldRefInput<$PrismaModel>
+    in?: $Enums.CityOfficeState[] | ListEnumCityOfficeStateFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CityOfficeState[] | ListEnumCityOfficeStateFieldRefInput<$PrismaModel>
+    not?: NestedEnumCityOfficeStateWithAggregatesFilter<$PrismaModel> | $Enums.CityOfficeState
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCityOfficeStateFilter<$PrismaModel>
+    _max?: NestedEnumCityOfficeStateFilter<$PrismaModel>
   }
 
   export type EnumPageTypeFilter<$PrismaModel = never> = {
@@ -42826,6 +42856,10 @@ export namespace Prisma {
     connect?: RedirectWhereUniqueInput | RedirectWhereUniqueInput[]
   }
 
+  export type EnumCityOfficeStateFieldUpdateOperationsInput = {
+    set?: $Enums.CityOfficeState
+  }
+
   export type SiteUpdateOneRequiredWithoutCitiesNestedInput = {
     create?: XOR<SiteCreateWithoutCitiesInput, SiteUncheckedCreateWithoutCitiesInput>
     connectOrCreate?: SiteCreateOrConnectWithoutCitiesInput
@@ -44586,6 +44620,23 @@ export namespace Prisma {
     _max?: NestedEnumSitePublicationStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumCityOfficeStateFilter<$PrismaModel = never> = {
+    equals?: $Enums.CityOfficeState | EnumCityOfficeStateFieldRefInput<$PrismaModel>
+    in?: $Enums.CityOfficeState[] | ListEnumCityOfficeStateFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CityOfficeState[] | ListEnumCityOfficeStateFieldRefInput<$PrismaModel>
+    not?: NestedEnumCityOfficeStateFilter<$PrismaModel> | $Enums.CityOfficeState
+  }
+
+  export type NestedEnumCityOfficeStateWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CityOfficeState | EnumCityOfficeStateFieldRefInput<$PrismaModel>
+    in?: $Enums.CityOfficeState[] | ListEnumCityOfficeStateFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CityOfficeState[] | ListEnumCityOfficeStateFieldRefInput<$PrismaModel>
+    not?: NestedEnumCityOfficeStateWithAggregatesFilter<$PrismaModel> | $Enums.CityOfficeState
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCityOfficeStateFilter<$PrismaModel>
+    _max?: NestedEnumCityOfficeStateFilter<$PrismaModel>
+  }
+
   export type NestedEnumPageTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.PageType | EnumPageTypeFieldRefInput<$PrismaModel>
     in?: $Enums.PageType[] | ListEnumPageTypeFieldRefInput<$PrismaModel>
@@ -45171,8 +45222,6 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    phone?: string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
     cities?: CityCreateNestedManyWithoutRegionInput
   }
 
@@ -45180,8 +45229,6 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    phone?: string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
     cities?: CityUncheckedCreateNestedManyWithoutRegionInput
   }
 
@@ -45199,15 +45246,16 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     region: RegionCreateNestedOneWithoutCitiesInput
     pages?: PageCreateNestedManyWithoutCityInput
     tariffs?: TariffCreateNestedManyWithoutCityInput
@@ -45221,15 +45269,16 @@ export namespace Prisma {
     regionId: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
     tariffs?: TariffUncheckedCreateNestedManyWithoutCityInput
     leads?: LeadUncheckedCreateNestedManyWithoutCityInput
@@ -45772,8 +45821,6 @@ export namespace Prisma {
     siteId?: StringFilter<"Region"> | string
     name?: StringFilter<"Region"> | string
     slug?: StringFilter<"Region"> | string
-    phone?: StringNullableFilter<"Region"> | string | null
-    content?: JsonNullableFilter<"Region">
   }
 
   export type CityUpsertWithWhereUniqueWithoutSiteInput = {
@@ -45801,15 +45848,16 @@ export namespace Prisma {
     regionId?: StringFilter<"City"> | string
     name?: StringFilter<"City"> | string
     slug?: StringFilter<"City"> | string
-    nameInstrumental?: StringNullableFilter<"City"> | string | null
     namePrepositional?: StringNullableFilter<"City"> | string | null
     nameGenitive?: StringNullableFilter<"City"> | string | null
     legacyUrl?: StringNullableFilter<"City"> | string | null
+    officeState?: EnumCityOfficeStateFilter<"City"> | $Enums.CityOfficeState
     officeAddress?: StringNullableFilter<"City"> | string | null
     officeHours?: StringNullableFilter<"City"> | string | null
+    subscriberProfileKey?: StringNullableFilter<"City"> | string | null
     status?: EnumPublishStatusFilter<"City"> | $Enums.PublishStatus
-    seo?: JsonNullableFilter<"City">
-    content?: JsonNullableFilter<"City">
+    createdAt?: DateTimeFilter<"City"> | Date | string
+    updatedAt?: DateTimeFilter<"City"> | Date | string
   }
 
   export type PageUpsertWithWhereUniqueWithoutSiteInput = {
@@ -47751,15 +47799,16 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutCitiesInput
     pages?: PageCreateNestedManyWithoutCityInput
     tariffs?: TariffCreateNestedManyWithoutCityInput
@@ -47773,15 +47822,16 @@ export namespace Prisma {
     siteId: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
     tariffs?: TariffUncheckedCreateNestedManyWithoutCityInput
     leads?: LeadUncheckedCreateNestedManyWithoutCityInput
@@ -47943,8 +47993,6 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    phone?: string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
     site: SiteCreateNestedOneWithoutRegionsInput
   }
 
@@ -47953,8 +48001,6 @@ export namespace Prisma {
     siteId: string
     name: string
     slug: string
-    phone?: string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type RegionCreateOrConnectWithoutCitiesInput = {
@@ -48300,8 +48346,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
     site?: SiteUpdateOneRequiredWithoutRegionsNestedInput
   }
 
@@ -48310,8 +48354,6 @@ export namespace Prisma {
     siteId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type PageUpsertWithWhereUniqueWithoutCityInput = {
@@ -48457,15 +48499,16 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutCitiesInput
     region: RegionCreateNestedOneWithoutCitiesInput
     tariffs?: TariffCreateNestedManyWithoutCityInput
@@ -48480,15 +48523,16 @@ export namespace Prisma {
     regionId: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     tariffs?: TariffUncheckedCreateNestedManyWithoutCityInput
     leads?: LeadUncheckedCreateNestedManyWithoutCityInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutCityInput
@@ -48734,15 +48778,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
     region?: RegionUpdateOneRequiredWithoutCitiesNestedInput
     tariffs?: TariffUpdateManyWithoutCityNestedInput
@@ -48757,15 +48802,16 @@ export namespace Prisma {
     regionId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tariffs?: TariffUncheckedUpdateManyWithoutCityNestedInput
     leads?: LeadUncheckedUpdateManyWithoutCityNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutCityNestedInput
@@ -48947,15 +48993,16 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutCitiesInput
     region: RegionCreateNestedOneWithoutCitiesInput
     pages?: PageCreateNestedManyWithoutCityInput
@@ -48970,15 +49017,16 @@ export namespace Prisma {
     regionId: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
     leads?: LeadUncheckedCreateNestedManyWithoutCityInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutCityInput
@@ -49128,15 +49176,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
     region?: RegionUpdateOneRequiredWithoutCitiesNestedInput
     pages?: PageUpdateManyWithoutCityNestedInput
@@ -49151,15 +49200,16 @@ export namespace Prisma {
     regionId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
     leads?: LeadUncheckedUpdateManyWithoutCityNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutCityNestedInput
@@ -49785,15 +49835,16 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutCitiesInput
     region: RegionCreateNestedOneWithoutCitiesInput
     pages?: PageCreateNestedManyWithoutCityInput
@@ -49808,15 +49859,16 @@ export namespace Prisma {
     regionId: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
     tariffs?: TariffUncheckedCreateNestedManyWithoutCityInput
     leads?: LeadUncheckedCreateNestedManyWithoutCityInput
@@ -50033,15 +50085,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
     region?: RegionUpdateOneRequiredWithoutCitiesNestedInput
     pages?: PageUpdateManyWithoutCityNestedInput
@@ -50056,15 +50109,16 @@ export namespace Prisma {
     regionId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
     tariffs?: TariffUncheckedUpdateManyWithoutCityNestedInput
     leads?: LeadUncheckedUpdateManyWithoutCityNestedInput
@@ -50193,15 +50247,16 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutCitiesInput
     region: RegionCreateNestedOneWithoutCitiesInput
     pages?: PageCreateNestedManyWithoutCityInput
@@ -50216,15 +50271,16 @@ export namespace Prisma {
     regionId: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
     tariffs?: TariffUncheckedCreateNestedManyWithoutCityInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutCityInput
@@ -50761,15 +50817,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
     region?: RegionUpdateOneRequiredWithoutCitiesNestedInput
     pages?: PageUpdateManyWithoutCityNestedInput
@@ -50784,15 +50841,16 @@ export namespace Prisma {
     regionId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
     tariffs?: TariffUncheckedUpdateManyWithoutCityNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutCityNestedInput
@@ -51955,15 +52013,16 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutCitiesInput
     region: RegionCreateNestedOneWithoutCitiesInput
     pages?: PageCreateNestedManyWithoutCityInput
@@ -51978,15 +52037,16 @@ export namespace Prisma {
     regionId: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
     pages?: PageUncheckedCreateNestedManyWithoutCityInput
     tariffs?: TariffUncheckedCreateNestedManyWithoutCityInput
     leads?: LeadUncheckedCreateNestedManyWithoutCityInput
@@ -52078,15 +52138,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
     region?: RegionUpdateOneRequiredWithoutCitiesNestedInput
     pages?: PageUpdateManyWithoutCityNestedInput
@@ -52101,15 +52162,16 @@ export namespace Prisma {
     regionId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
     tariffs?: TariffUncheckedUpdateManyWithoutCityNestedInput
     leads?: LeadUncheckedUpdateManyWithoutCityNestedInput
@@ -53145,8 +53207,6 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    phone?: string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CityCreateManySiteInput = {
@@ -53154,15 +53214,16 @@ export namespace Prisma {
     regionId: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PageCreateManySiteInput = {
@@ -53339,8 +53400,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
     cities?: CityUpdateManyWithoutRegionNestedInput
   }
 
@@ -53348,8 +53407,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
     cities?: CityUncheckedUpdateManyWithoutRegionNestedInput
   }
 
@@ -53357,23 +53414,22 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type CityUpdateWithoutSiteInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     region?: RegionUpdateOneRequiredWithoutCitiesNestedInput
     pages?: PageUpdateManyWithoutCityNestedInput
     tariffs?: TariffUpdateManyWithoutCityNestedInput
@@ -53387,15 +53443,16 @@ export namespace Prisma {
     regionId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
     tariffs?: TariffUncheckedUpdateManyWithoutCityNestedInput
     leads?: LeadUncheckedUpdateManyWithoutCityNestedInput
@@ -53408,15 +53465,16 @@ export namespace Prisma {
     regionId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PageUpdateWithoutSiteInput = {
@@ -54272,30 +54330,32 @@ export namespace Prisma {
     siteId: string
     name: string
     slug: string
-    nameInstrumental?: string | null
     namePrepositional?: string | null
     nameGenitive?: string | null
     legacyUrl?: string | null
+    officeState?: $Enums.CityOfficeState
     officeAddress?: string | null
     officeHours?: string | null
+    subscriberProfileKey?: string | null
     status?: $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CityUpdateWithoutRegionInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutCitiesNestedInput
     pages?: PageUpdateManyWithoutCityNestedInput
     tariffs?: TariffUpdateManyWithoutCityNestedInput
@@ -54309,15 +54369,16 @@ export namespace Prisma {
     siteId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pages?: PageUncheckedUpdateManyWithoutCityNestedInput
     tariffs?: TariffUncheckedUpdateManyWithoutCityNestedInput
     leads?: LeadUncheckedUpdateManyWithoutCityNestedInput
@@ -54330,15 +54391,16 @@ export namespace Prisma {
     siteId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    nameInstrumental?: NullableStringFieldUpdateOperationsInput | string | null
     namePrepositional?: NullableStringFieldUpdateOperationsInput | string | null
     nameGenitive?: NullableStringFieldUpdateOperationsInput | string | null
     legacyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    officeState?: EnumCityOfficeStateFieldUpdateOperationsInput | $Enums.CityOfficeState
     officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
     officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriberProfileKey?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
-    seo?: NullableJsonNullValueInput | InputJsonValue
-    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PageCreateManyCityInput = {

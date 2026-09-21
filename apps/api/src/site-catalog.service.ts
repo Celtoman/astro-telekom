@@ -33,7 +33,7 @@ export class SiteCatalogService {
         where: { siteId: site.id, status: 'PUBLISHED' },
         orderBy: { name: 'asc' },
         include: {
-          region: { select: { name: true, slug: true, content: true } },
+          region: { select: { name: true, slug: true } },
           pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true, archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
           tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
         },
@@ -78,7 +78,7 @@ export class SiteCatalogService {
       where: { site: { slug: siteSlug, status: 'PUBLISHED' }, slug: citySlug, status: 'PUBLISHED' },
       include: {
         site: { select: { settings: true, provider: { select: { settings: true } } } },
-        region: { select: { name: true, slug: true, content: true } },
+        region: { select: { name: true, slug: true } },
         pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true, archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
         tariffs: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' } },
       },
@@ -88,8 +88,8 @@ export class SiteCatalogService {
   }
 
   cityResponse(city: any, site: any) {
-    const inheritedContent = mergeContent(publicContent(site.provider.settings), publicContent(site.settings), city.region.content, city.content);
-    const inheritedSeo = mergeContent(city.seo);
+    const inheritedContent = mergeContent(publicContent(site.provider.settings), publicContent(site.settings));
+    const inheritedSeo: Record<string, unknown> = {};
     const { site: _site, region, pages, tariffs, ...cityData } = city;
     const homePages = pages.filter((page: any) => page.type === 'HOME');
     if (homePages.length !== 1) {
