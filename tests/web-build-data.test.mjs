@@ -39,7 +39,7 @@ const cityHomeBlocks = (cityIn) => [
 ];
 
 const apiFixture = {
-  site: { name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test' },
+  site: { name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test' },
   globalPages: [
     globalPage('COVERAGE', 'karta-pokrytiya-provaydera', 'Карта покрытия', 'Выберите город и проверьте адрес на его странице.'),
     globalPage('CITIES', 'goroda-obsluzhivaniya', 'Города обслуживания', 'Дом.ру доступен в опубликованных городах.'),
@@ -122,7 +122,7 @@ function runWebBuild(environment) {
 
 async function withApiFixture(callback, fixture = apiFixture) {
   const server = createServer((request, response) => {
-    if (request.url === '/api/v1/public/sites/domru-kazan/cities') {
+    if (request.url === '/api/v1/public/sites/domru-site/cities') {
       response.writeHead(200, { 'content-type': 'application/json' });
       response.end(JSON.stringify(fixture));
       return;
@@ -320,7 +320,7 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(notFound, /<meta name="robots" content="noindex, follow">/);
   assert.doesNotMatch(notFound, /rel="canonical"/);
   assert.match(redirectRoutes, /@redirect_0 path \/old-kazan \/old-kazan\//);
-  assert.match(redirectRoutes, /rewrite \* \/api\/v1\/public\/sites\/domru-kazan\/redirects\/redirect-old-kazan/);
+  assert.match(redirectRoutes, /rewrite \* \/api\/v1\/public\/sites\/domru-site\/redirects\/redirect-old-kazan/);
   assertInlineScriptsAuthorized(root, 'public root');
   assertInlineScriptsAuthorized(kazan, 'city home');
 

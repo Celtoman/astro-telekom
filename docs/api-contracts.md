@@ -27,7 +27,7 @@
 | POST | `/leads` | Сохраняет заявку, выявляет дубликат и принимает routing-решение только по persisted `AddressCheck`. Отсутствующая/ошибочная проверка не разрешает contract check или delivery; очередь ставится только для найденного Дом.ру после однозначного `NOT_FOUND`. |
 | POST | `/lead-access/:leadId/consume` | Однократно обменивает 43-символьный fallback token на минимальную карточку одной заявки; истекший, измененный, отозванный, повторный или относящийся к другой заявке token возвращает 401. |
 
-Для `address-checks` и `leads` по умолчанию подставляется `siteSlug=domru-kazan`; endpoint публично принимает только published site/city/page/tariff. Этот default — свойство прототипа, не универсальный контракт платформы.
+Для `address-suggestions`, `address-checks` и `leads` по умолчанию подставляется единый `siteSlug=domru-site`; endpoint публично принимает только published site/city/page/tariff. Казань передается отдельно как `citySlug`, а не кодируется в идентичности сайта.
 
 ### `POST /address-suggestions`
 

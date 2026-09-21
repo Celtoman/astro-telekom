@@ -54,7 +54,7 @@ export interface SiteCatalog {
   sitemap: { excludedPaths: string[] };
 }
 
-export const publicSiteSlug = import.meta.env.PUBLIC_SITE_SLUG || 'domru-kazan';
+export const publicSiteSlug = import.meta.env.PUBLIC_SITE_SLUG || 'domru-site';
 const fallbackConnectionPhone = import.meta.env.PUBLIC_CONNECTION_PHONE || '8 (800) 000-00-00';
 const fallbackSupportPhone = import.meta.env.PUBLIC_SUPPORT_PHONE || fallbackConnectionPhone;
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;

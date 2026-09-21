@@ -5,7 +5,7 @@ import { buildPreviewDocument, previewRouteOptions } from '../apps/admin/src/lib
 import { adminNavigation } from '../apps/admin/src/lib/admin-navigation.mjs';
 
 const catalog = {
-  site: { name: 'Дом.ру', slug: 'domru-kazan' },
+  site: { name: 'Дом.ру', slug: 'domru-site' },
   routes: [
     { id: 'HOME', kind: 'HOME', path: '/' },
     { id: 'CITY_HOME', kind: 'CITY_HOME', path: '/kazan', citySlug: 'kazan' },

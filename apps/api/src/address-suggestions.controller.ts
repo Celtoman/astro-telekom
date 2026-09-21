@@ -27,7 +27,7 @@ export class AddressSuggestionsController {
     @Res({ passthrough: true }) response: AddressSuggestionReply,
   ) {
     if (body.website) throw new BadRequestException('Некорректный запрос');
-    const site = await this.prisma.site.findUnique({ where: { slug: body.siteSlug || 'domru-kazan' } });
+    const site = await this.prisma.site.findUnique({ where: { slug: body.siteSlug || 'domru-site' } });
     if (!site || site.status !== 'PUBLISHED') throw new BadRequestException('Сайт недоступен');
     const city = await this.prisma.city.findFirst({
       where: { siteId: site.id, slug: body.citySlug ?? 'kazan', status: 'PUBLISHED' },

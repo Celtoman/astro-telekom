@@ -8,7 +8,7 @@ const { PublicationWorkflowController } = require('../apps/api/dist/publication-
 const repositoryRoot = join(__dirname, '..');
 
 function fixture() {
-  const site = { id: 'site-1', slug: 'domru-kazan', workingRevision: 3, publishedRevision: 2 };
+  const site = { id: 'site-1', slug: 'domru-site', workingRevision: 3, publishedRevision: 2 };
   const publications = [];
   const prisma = {
     site: { findUnique: async ({ where }) => where.id === site.id ? site : null },

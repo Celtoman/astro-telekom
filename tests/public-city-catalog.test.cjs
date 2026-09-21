@@ -40,18 +40,18 @@ const controllerFor = (prisma) => {
 
 test('public catalog returns the successful publication snapshot instead of working rows', async () => {
   const snapshot = {
-    site: { name: 'Дом.ру', slug: 'domru-kazan' },
+    site: { name: 'Дом.ру', slug: 'domru-site' },
     globalPages: [], routes: [], redirects: [], cities: [{ id: 'city-published', slug: 'kazan' }],
   };
   const controller = new CitiesController(
     { getCity: async () => assert.fail('working city queried'), cityResponse: () => {}, pageResponse: () => {}, effectiveRedirects: () => {} },
     { getPublishedCatalog: async (siteSlug) => {
-      assert.equal(siteSlug, 'domru-kazan');
+      assert.equal(siteSlug, 'domru-site');
       return snapshot;
     } },
   );
 
-  assert.equal(await controller.list('domru-kazan'), snapshot);
+  assert.equal(await controller.list('domru-site'), snapshot);
 });
 
 test('Release 1 route policy rejects missing, extra and colliding route sources', () => {
@@ -88,7 +88,7 @@ test('public city catalog returns only published entities for one published site
         return {
           id: 'site-1',
           name: 'Дом.ру',
-          slug: 'domru-kazan',
+          slug: 'domru-site',
           domain: 'partner.example.test',
           settings: { content: { phone: '8 (800) 555-35-35' } },
           provider: { settings: { content: { brand: 'Дом.ру' } } },
@@ -149,9 +149,9 @@ test('public city catalog returns only published entities for one published site
     },
   });
 
-  const result = await controller.list('domru-kazan');
+  const result = await controller.list('domru-site');
 
-  assert.deepEqual(calls.site.where, { slug: 'domru-kazan', status: 'PUBLISHED' });
+  assert.deepEqual(calls.site.where, { slug: 'domru-site', status: 'PUBLISHED' });
   assert.deepEqual(calls.cities.where, { siteId: 'site-1', status: 'PUBLISHED' });
   assert.deepEqual(calls.cities.include.pages.where, { status: 'PUBLISHED' });
   assert.deepEqual(calls.cities.include.pages.include.blocks.where, { visible: true, archivedAt: null });
@@ -162,7 +162,7 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(calls.pages.include.blocks.where, { visible: true, archivedAt: null });
   assert.deepEqual(calls.redirects.where, { siteId: 'site-1', status: 'PUBLISHED' });
   assert.deepEqual(calls.sitemapExclusions.where, { siteId: 'site-1' });
-  assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test' });
+  assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test' });
   assert.equal(result.cities.length, 1);
   assert.equal(result.cities[0].namePrepositional, 'Казани');
   assert.equal(result.cities[0].supportPhone, '8 (800) 250-77-77');

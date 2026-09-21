@@ -23,7 +23,7 @@ function fixture({ currentExclusions = [], routes, latestPublication = null } = 
   const revisions = [];
   const transactions = [];
   const site = {
-    id: 'site-1', name: 'Дом.ру', slug: 'domru-kazan', domain: 'partner.example.test',
+    id: 'site-1', name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test',
     status: 'PUBLISHED', workingRevision: 8, publishedRevision: 7,
   };
   const prisma = {

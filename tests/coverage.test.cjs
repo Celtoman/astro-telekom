@@ -58,7 +58,7 @@ test('normalized address from another city is checked and persisted with the pag
   );
 
   const result = await controller.check({
-    siteSlug: 'domru-kazan',
+    siteSlug: 'domru-site',
     citySlug: 'kazan',
     address: 'Набережные Челны, Тестовый, 1',
     suggestion: { value: 'Набережные Челны, Тестовый, 1', unrestricted_value: 'Набережные Челны, Тестовый, 1', data: {} },

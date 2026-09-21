@@ -20,7 +20,7 @@ function fixture({ redirects = [], current = null, publishedCities, publishedGlo
   const transactions = [];
   const hitUpdates = [];
   const prisma = {
-    site: { findUnique: async () => ({ id: 'site-1', slug: 'domru-kazan', status: 'PUBLISHED' }) },
+    site: { findUnique: async () => ({ id: 'site-1', slug: 'domru-site', status: 'PUBLISHED' }) },
     city: {
       findUnique: async () => ({ id: 'city-1', siteId: 'site-1' }),
       findMany: async () => publishedCities ?? [{
@@ -62,7 +62,7 @@ function fixture({ redirects = [], current = null, publishedCities, publishedGlo
 
 const publicationFor = (current, routes = [{ path: '/kazan' }]) => ({
   getPublishedCatalog: async () => ({
-    site: { slug: 'domru-kazan' },
+    site: { slug: 'domru-site' },
     routes,
     redirects: current ? [{ id: current.id, sourcePath: current.sourcePath, targetPath: current.targetPath, status: current.status }] : [],
   }),
@@ -184,11 +184,11 @@ test('updating and archiving a redirect append before/after working revisions wi
 
 test('public redirect resolver returns 301 and atomically records the hit', async () => {
   const { RedirectService, PublicRedirectsController } = loadRedirectModules();
-  const current = { id: 'redirect-1', siteId: 'site-1', sourcePath: '/old/', targetPath: '/kazan/', status: 'PUBLISHED', site: { slug: 'domru-kazan', status: 'PUBLISHED' } };
+  const current = { id: 'redirect-1', siteId: 'site-1', sourcePath: '/old/', targetPath: '/kazan/', status: 'PUBLISHED', site: { slug: 'domru-site', status: 'PUBLISHED' } };
   const f = fixture({ current });
   const controller = new PublicRedirectsController(new RedirectService(f.prisma, publicationFor(current)));
 
-  const result = await controller.resolve('domru-kazan', 'redirect-1', { url: '/api/v1/public/sites/domru-kazan/redirects/redirect-1?utm_source=test' });
+  const result = await controller.resolve('domru-site', 'redirect-1', { url: '/api/v1/public/sites/domru-site/redirects/redirect-1?utm_source=test' });
 
   assert.deepEqual(result, { url: '/kazan?utm_source=test', statusCode: 301 });
   assert.equal(f.hitUpdates.length, 1);
@@ -202,14 +202,14 @@ test('public redirect resolver ignores a newer working target until its publicat
   const f = fixture({ current });
   const publications = {
     getPublishedCatalog: async () => ({
-      site: { slug: 'domru-kazan' },
+      site: { slug: 'domru-site' },
       routes: [{ path: '/kazan' }],
       redirects: [{ id: 'redirect-1', sourcePath: '/old', targetPath: '/kazan', status: 'PUBLISHED' }],
     }),
   };
   const service = new RedirectService(f.prisma, publications);
 
-  assert.equal(await service.resolvePublished('domru-kazan', 'redirect-1'), '/kazan');
+  assert.equal(await service.resolvePublished('domru-site', 'redirect-1'), '/kazan');
   assert.equal(f.hitUpdates.length, 1);
 });
 
@@ -220,7 +220,7 @@ test('public redirect resolver fails closed when its target is no longer publish
   f.prisma.city.findMany = async () => [];
   const controller = new PublicRedirectsController(new RedirectService(f.prisma, publicationFor(current, [])));
 
-  await assert.rejects(controller.resolve('domru-kazan', 'redirect-1', { url: '/api/v1/public/sites/domru-kazan/redirects/redirect-1' }), /Redirect not found/);
+  await assert.rejects(controller.resolve('domru-site', 'redirect-1', { url: '/api/v1/public/sites/domru-site/redirects/redirect-1' }), /Redirect not found/);
   assert.equal(f.hitUpdates.length, 0);
 });
 
@@ -230,7 +230,7 @@ test('redirect policy fails safely while mandatory global pages are still drafts
   const f = fixture({ current, publishedGlobalPages: [] });
   const service = new RedirectService(f.prisma, publicationFor(null));
 
-  await assert.rejects(service.resolvePublished('domru-kazan', 'redirect-1'), error => error.getStatus() === 404);
+  await assert.rejects(service.resolvePublished('domru-site', 'redirect-1'), error => error.getStatus() === 404);
   await assert.rejects(
     service.create({ siteId: 'site-1', sourcePath: '/older', targetPath: '/kazan', status: 'PUBLISHED' }),
     error => error.getStatus() === 409 && /Release 1/.test(error.message),

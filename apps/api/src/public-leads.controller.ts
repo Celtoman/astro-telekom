@@ -28,7 +28,7 @@ export class PublicLeadsController {
     }
 
     const site = await this.prisma.site.findFirst({
-      where: { slug: body.siteSlug || 'domru-kazan', status: 'PUBLISHED' },
+      where: { slug: body.siteSlug || 'domru-site', status: 'PUBLISHED' },
     });
     if (!site) throw new BadRequestException('Сайт не найден');
 

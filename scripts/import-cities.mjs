@@ -10,7 +10,7 @@ const actionsPath = actionsArg ? path.resolve(actionsArg.slice('--actions='.leng
 const configuredApiUrl = (process.env.PUBLIC_API_URL || process.env.API_URL || 'http://localhost:3000').replace(/\/$/, '');
 const apiUrl = configuredApiUrl.endsWith('/api/v1') ? configuredApiUrl : `${configuredApiUrl}/api/v1`;
 const adminToken = process.env.ADMIN_API_TOKEN;
-const siteSlug = process.env.CITY_IMPORT_SITE_SLUG || 'domru-kazan';
+const siteSlug = process.env.CITY_IMPORT_SITE_SLUG || 'domru-site';
 
 if (!adminToken) throw new Error('ADMIN_API_TOKEN обязателен для импорта городов');
 if (apply && !actionsPath) throw new Error('--apply требует --actions=<путь к JSON-файлу с решением для каждой строки>');

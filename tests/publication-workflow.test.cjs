@@ -7,7 +7,7 @@ function fixture() {
   const sites = new Map([
     ['site-1', {
       id: 'site-1',
-      slug: 'domru-kazan',
+      slug: 'domru-site',
       workingRevision: 0,
       publishedRevision: 0,
     }],
@@ -110,7 +110,7 @@ function fixture() {
   };
 
   const catalogService = {
-    listBySiteId: async (siteId) => ({ site: { id: siteId, slug: 'domru-kazan' }, marker: 'working' }),
+    listBySiteId: async (siteId) => ({ site: { id: siteId, slug: 'domru-site' }, marker: 'working' }),
   };
   const service = new PublicationWorkflowService(prisma, catalogService);
   return {
@@ -172,14 +172,14 @@ test('the build reads the fixed processing snapshot even when a newer publicatio
   const first = await f.service.createPublication(f.prisma, {
     siteId: 'site-1',
     siteRevision: 1,
-    catalog: { site: { slug: 'domru-kazan' }, marker: 'first' },
+    catalog: { site: { slug: 'domru-site' }, marker: 'first' },
     triggerEntity: 'tariff',
     triggerEntityId: 'tariff-1',
   });
   const second = await f.service.createPublication(f.prisma, {
     siteId: 'site-1',
     siteRevision: 2,
-    catalog: { site: { slug: 'domru-kazan' }, marker: 'second' },
+    catalog: { site: { slug: 'domru-site' }, marker: 'second' },
     triggerEntity: 'tariff',
     triggerEntityId: 'tariff-1',
   });
@@ -189,7 +189,7 @@ test('the build reads the fixed processing snapshot even when a newer publicatio
     requestedPublicationId: second.id,
   });
 
-  const catalog = await f.service.getBuildCatalog('domru-kazan');
+  const catalog = await f.service.getBuildCatalog('domru-site');
 
   assert.equal(catalog.marker, 'first');
 });
@@ -199,7 +199,7 @@ test('a legacy rebuild without a publication snapshot reads the current working 
   const published = await f.service.createPublication(f.prisma, {
     siteId: 'site-1',
     siteRevision: 0,
-    catalog: { site: { slug: 'domru-kazan' }, marker: 'published' },
+    catalog: { site: { slug: 'domru-site' }, marker: 'published' },
     triggerEntity: 'bootstrap',
     triggerEntityId: 'site-1',
   });
@@ -211,7 +211,7 @@ test('a legacy rebuild without a publication snapshot reads the current working 
     requestedPublicationId: null,
   });
 
-  const catalog = await f.service.getBuildCatalog('domru-kazan');
+  const catalog = await f.service.getBuildCatalog('domru-site');
 
   assert.equal(catalog.marker, 'working');
 });
@@ -238,7 +238,7 @@ test('capturing a publication stores the catalog from the same working revision'
 test('the first build freezes the current catalog as the successful baseline', async () => {
   const f = fixture();
 
-  const catalog = await f.service.getBuildCatalog('domru-kazan');
+  const catalog = await f.service.getBuildCatalog('domru-site');
 
   assert.equal(catalog.marker, 'working');
   const [baseline] = [...f.publications.values()];
@@ -252,7 +252,7 @@ test('a failed publication preserves the last published revision', async () => {
   const published = await f.service.createPublication(f.prisma, {
     siteId: 'site-1',
     siteRevision: 1,
-    catalog: { site: { slug: 'domru-kazan' }, marker: 'published' },
+    catalog: { site: { slug: 'domru-site' }, marker: 'published' },
     triggerEntity: 'bootstrap',
     triggerEntityId: 'site-1',
   });
@@ -260,7 +260,7 @@ test('a failed publication preserves the last published revision', async () => {
   const candidate = await f.service.createPublication(f.prisma, {
     siteId: 'site-1',
     siteRevision: 2,
-    catalog: { site: { slug: 'domru-kazan' }, marker: 'candidate' },
+    catalog: { site: { slug: 'domru-site' }, marker: 'candidate' },
     triggerEntity: 'tariff',
     triggerEntityId: 'tariff-1',
   });
@@ -270,7 +270,7 @@ test('a failed publication preserves the last published revision', async () => {
   assert.equal(f.sites.get('site-1').publishedRevision, 1);
   assert.equal(f.publications.get(candidate.id).status, 'FAILED');
   assert.equal(f.publications.get(candidate.id).lastError, 'Coolify failed');
-  assert.equal((await f.service.getPublishedCatalog('domru-kazan')).marker, 'published');
+  assert.equal((await f.service.getPublishedCatalog('domru-site')).marker, 'published');
 });
 
 test('explicit publication captures exactly the expected working revision and is idempotent while pending', async () => {

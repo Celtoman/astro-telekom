@@ -30,12 +30,12 @@ async function main() {
   });
 
   const site = await prisma.site.upsert({
-    where: { slug: 'domru-kazan' },
-    update: { name: 'Дом.ру — Казань', providerId: provider.id, status: PUBLISHED },
+    where: { slug: 'domru-site' },
+    update: { name: 'Дом.ру', providerId: provider.id, status: PUBLISHED },
     create: {
       providerId: provider.id,
-      name: 'Дом.ру — Казань',
-      slug: 'domru-kazan',
+      name: 'Дом.ру',
+      slug: 'domru-site',
       status: PUBLISHED,
     },
   });
