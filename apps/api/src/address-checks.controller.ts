@@ -1,9 +1,10 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, UnprocessableEntityException } from '@nestjs/common';
 import { CoverageService } from './coverage.service';
 import { PrismaService } from './prisma.service';
 import { AddressCheckDto } from './public.dto';
 import { DadataService } from './dadata.service';
 import { readDadataSuggestion } from './coverage.service';
+import { mapAddressCheckPublicResult } from './address-check-result';
 
 @Controller('address-checks')
 export class AddressChecksController {
@@ -30,6 +31,12 @@ export class AddressChecksController {
     if (body.pageSlug && !page) throw new BadRequestException('Страница недоступна');
     const selectedSuggestion = readDadataSuggestion(body.suggestion);
     const normalizedSuggestion = selectedSuggestion ? await this.dadata.clean(selectedSuggestion) : null;
+    const normalizedHouse = normalizedSuggestion && typeof normalizedSuggestion.data.house === 'string'
+      ? normalizedSuggestion.data.house.trim()
+      : '';
+    if (normalizedSuggestion && !normalizedHouse) {
+      throw new UnprocessableEntityException('Выберите адрес с номером дома');
+    }
     const cleanedResult = normalizedSuggestion && typeof normalizedSuggestion.data.result === 'string'
       ? normalizedSuggestion.data.result.trim()
       : '';
@@ -51,7 +58,10 @@ export class AddressChecksController {
         response: result.providerResponse as object | undefined,
       },
     });
-    const { providerResponse: _providerResponse, ...publicResult } = result;
-    return { ...publicResult, id: check?.id, address: normalizedAddress, citySlug: body.citySlug ?? 'kazan' };
+    return mapAddressCheckPublicResult(result, {
+      checkId: check.id,
+      address: normalizedAddress,
+      citySlug: body.citySlug ?? 'kazan',
+    });
   }
 }

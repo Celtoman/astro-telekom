@@ -59,7 +59,7 @@ const supportPhoneHref = `tel:${site.supportPhone.replace(/[^+\d]/g, '')}`;
         <span class="panel-kicker">Проверка доступности</span>
         <h2>Проверим возможность подключения по вашему адресу</h2>
         <p>Введите город, улицу и дом. После точного выбора адреса система проверит техническую доступность, а при успехе предложит оставить телефон.</p>
-        <AddressForm {apiUrl} {siteSlug} {pageSlug} {city} {site} mode="visible" embedded />
+        <AddressForm {apiUrl} {siteSlug} {pageSlug} {city} {site} presentation="embedded" />
       </article>
       <aside class="contact-panel" aria-labelledby="consultation-title">
         <span class="panel-kicker">Помощь с выбором</span>

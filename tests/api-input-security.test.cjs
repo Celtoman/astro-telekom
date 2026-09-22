@@ -38,6 +38,10 @@ test('global security options enforce strict DTOs and tighter public write limit
     (error) => error.getStatus() === 400,
   );
   await assert.rejects(
+    pipe.transform({ address: 'Казань, Баумана, 1', citySlug: 'kazan' }, metadata(AddressCheckDto)),
+    (error) => error.getStatus() === 400,
+  );
+  await assert.rejects(
     pipe.transform({ query: 'а'.repeat(301), citySlug: 'kazan' }, metadata(AddressSuggestionsDto)),
     (error) => error.getStatus() === 400,
   );

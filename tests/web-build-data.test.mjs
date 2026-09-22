@@ -224,6 +224,7 @@ test('web build emits city and tariff detail inventory for every published city'
   const notFound = await readBuilt('404.html');
   const redirectRoutes = await readBuilt('redirects.caddy');
   const addressFormSource = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'components', 'AddressForm.astro'), 'utf8');
+  const addressClientSource = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'lib', 'address-check-client.mjs'), 'utf8');
   const csp = extractCsp(root, 'public root');
 
   assert.equal(getDirective(csp, 'default-src', 'public root'), "default-src 'self'");
@@ -245,14 +246,14 @@ test('web build emits city and tariff detail inventory for every published city'
 
   assert.match(kazan, /<h1[^>]*>Домашний интернет и телевидение в Казани<\/h1>/);
   assert.match(kazan, /data-city-first-screen/);
-  assert.match(kazan, /data-form-mode="visible"/);
+  assert.match(kazan, /data-address-check-root data-presentation="embedded"/);
   assert.match(kazan, /API Интернет 500/);
   assert.match(kazan, /API Интернет и ТВ 500/);
   assert.match(kazan, /777 ₽\/мес\./);
   assert.match(kazan, /999 ₽\/мес\./);
   assert.match(kazan, /<h2[^>]*>Все тарифы Дом\.ру<\/h2>/);
   assert.match(kazan, /Бесплатное подключение/);
-  assert.match(kazan, /href="#address-check"[^>]*>Проверить подключение/);
+  assert.match(kazan, /data-address-dialog-trigger="address-entry-kazan-catalog"[^>]*>Проверить подключение/);
   assert.match(kazan, /href="\/kazan\/api-internet-500"[^>]*>Подробнее о тарифе/);
   assert.doesNotMatch(kazan, /href="\/kazan\/(?:internet|internet-tv)"/);
   assert.equal((kazan.match(/data-block-type="tariff_grid"/g) || []).length, 1);
@@ -266,7 +267,7 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(kazan, /data-support-phone="\+7 \(800\) 250-77-77"/);
   assert.match(almetyevsk, /<link rel="canonical" href="https:\/\/partner\.example\.test\/almetyevsk">/);
   assert.match(almetyevsk, /<h1[^>]*>Домашний интернет и телевидение в Альметьевске<\/h1>/);
-  assert.match(almetyevsk, /data-form-mode="visible"/);
+  assert.match(almetyevsk, /data-address-check-root data-presentation="embedded"/);
   assert.match(almetyevsk, /data-city-first-screen/);
   assert.match(almetyevsk, /data-block-type="service_grid"/);
   assert.match(almetyevsk, /data-block-type="tariff_grid"/);
@@ -315,17 +316,17 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(consent, /Предоставление согласия/);
   assert.match(cookies, /Назначение cookie/);
 
-  assert.match(addressFormSource, /\/address-suggestions/);
-  assert.match(addressFormSource, /suggestion:\s*selectedSuggestion/);
-  assert.equal((addressFormSource.match(/pageSlug:\s*pageSlug\s*\|\|\s*undefined/g) || []).length, 2);
-  assert.match(addressFormSource, /SUGGESTION_DEBOUNCE_MS\s*=\s*500/);
-  assert.match(addressFormSource, /response\.status\s*===\s*429/);
-  assert.match(addressFormSource, /ArrowDown/);
-  assert.match(addressFormSource, /createElement\('mark'\)/);
-  assert.match(addressFormSource, /items\.slice\(0,\s*5\)/);
-  assert.match(addressFormSource, /credentials:\s*'include'/);
-  assert.doesNotMatch(addressFormSource, /innerHTML/);
-  assert.match(addressFormSource, /SUBSCRIBER_MODE_STORAGE_KEY/);
+  assert.match(addressClientSource, /\/address-suggestions/);
+  assert.match(addressClientSource, /suggestion:\s*selectedSuggestion/);
+  assert.equal((addressClientSource.match(/pageSlug:\s*pageSlug\s*\|\|\s*undefined/g) || []).length, 2);
+  assert.match(addressClientSource, /SUGGESTION_DEBOUNCE_MS\s*=\s*500/);
+  assert.match(addressClientSource, /response\.status\s*===\s*429/);
+  assert.match(addressClientSource, /ArrowDown/);
+  assert.match(addressClientSource, /createElement\('mark'\)/);
+  assert.match(addressClientSource, /items\.slice\(0,\s*5\)/);
+  assert.match(addressClientSource, /credentials:\s*'include'/);
+  assert.doesNotMatch(`${addressFormSource}${addressClientSource}`, /innerHTML/);
+  assert.match(addressClientSource, /SUBSCRIBER_MODE_STORAGE_KEY/);
 
   const sitemapLocations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
   assert.deepEqual(sitemapLocations, [

@@ -23,5 +23,15 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 
 <BaseLayout title={meta.title} description={meta.description} city={city} pages={city.pages} {site}>
   <CityHomeFirstScreen block={heroBlock} {city} {site} tariffs={city.tariffs} {apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage.slug} />
-  <BlockRenderer blocks={contentBlocks} tariffs={city.tariffs} citySlug={city.slug} pages={city.pages} />
+  <BlockRenderer
+    blocks={contentBlocks}
+    tariffs={city.tariffs}
+    citySlug={city.slug}
+    pages={city.pages}
+    {city}
+    {site}
+    {apiUrl}
+    siteSlug={publicSiteSlug}
+    pageSlug={homePage.slug}
+  />
 </BaseLayout>

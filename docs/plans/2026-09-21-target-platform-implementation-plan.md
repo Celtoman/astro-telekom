@@ -18,7 +18,8 @@
 - T1–T4 (#172–#175) реализованы и закрыты, parent #163 закрыт после приемочной сверки 3/3 sub-issues;
 - `0037`–`0039` развернуты exact-SHA deployment `41odv3auf5vez3nknm0z2gcj` на `96df68594f9955edd7bc7090db03046acae7ea27`;
 - #202 закрыта после зеленого CI, успешного one-shot migrate и live no-op уже восстановленного Site на publication ревизии 5;
-- T6 (#176) закрыт после зеленого CI и exact-SHA deployment `yhjasgyz0mpqzjjnpauyjmsy` на `b4ade905090e9519dcd8ef5974d3d3987768b7d3`; следующий продуктовый путь: F1 → T7/F2 → T8 → P1 → полный gate;
+- T6 (#176) закрыт после зеленого CI и exact-SHA deployment `yhjasgyz0mpqzjjnpauyjmsy` на `b4ade905090e9519dcd8ef5974d3d3987768b7d3`;
+- F1 (#170) реализован в текущем рабочем срезе: единый typed address-check contract, три business outcomes, отдельная technical error, embedded/modal entry, a11y и stale-response guard; следующий продуктовый путь: T7/F2 → T8 → P1 → полный gate;
 - внешний генератор Celtoman/tarifs#1 остается отдельной dependency и не входит в завершенный scope #163.
 
 Старые формулировки «локально», «ожидает CI» и «незавершенный diff» в историческом порядке волн не являются текущим статусом.
@@ -214,7 +215,7 @@ node --test tests/*.test.cjs tests/*.test.mjs
 | T7 | tariff calculator/configurator | #177 | Да | не начато |
 | T8 | `TAR-034` | #178 | Да | не начато |
 | T9 | `CMS-024–037` | #181 | Нет | не начато |
-| F1 | `FORM-001–015` | #170 | Да | foundation существует |
+| F1 | `FORM-001–015` | #170 | Да | реализовано; rollout и live acceptance ожидаются |
 | F2 | `FORM-016–023`, `LEAD-014` | #171 | Да | частично |
 | L1 | `LEAD-001–006`, `011` | #154 | Нет | частично |
 | L2 | reason registry/short-circuit | #182 | Нет | не начато |

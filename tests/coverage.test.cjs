@@ -64,12 +64,48 @@ test('normalized address from another city is checked and persisted with the pag
     suggestion: { value: 'Набережные Челны, Тестовый, 1', unrestricted_value: 'Набережные Челны, Тестовый, 1', data: {} },
   });
 
-  assert.equal(result.id, 'check');
+  assert.equal(result.type, 'business');
+  assert.equal(result.outcome, 'ALTERNATIVES_AVAILABLE');
+  assert.equal(result.checkId, 'check');
   assert.equal(result.address, normalizedSuggestion.data.result);
   assert.equal(result.citySlug, 'kazan');
+  assert.deepEqual(result.providers, [{ id: '17', name: 'Альтернативный провайдер' }]);
+  assert.equal(result.actionUrl, 'https://tarifnik.ru/');
   assert.equal(persisted.cityId, 'city');
   assert.equal(persisted.address, normalizedSuggestion.data.result);
   assert.deepEqual(persisted.response.suggestion.data, normalizedSuggestion.data);
+});
+
+test('selected address without a house never invokes coverage or creates an address check', async () => {
+  const controller = new AddressChecksController(
+    { check: () => assert.fail('coverage invoked') },
+    {
+      site: { findUnique: async () => ({ id: 'site', status: 'PUBLISHED' }) },
+      city: { findFirst: async () => ({ id: 'city', status: 'PUBLISHED' }) },
+      addressCheck: { create: () => assert.fail('address check persisted') },
+    },
+    {
+      clean: async () => ({
+        value: 'г Казань, ул Тестовая',
+        unrestricted_value: 'Республика Татарстан, г Казань, ул Тестовая',
+        data: { city: 'Казань', street: 'Тестовая' },
+      }),
+    },
+  );
+
+  await assert.rejects(
+    controller.check({
+      siteSlug: 'domru-site',
+      citySlug: 'kazan',
+      address: 'Казань, Тестовая',
+      suggestion: {
+        value: 'г Казань, ул Тестовая',
+        unrestricted_value: 'Республика Татарстан, г Казань, ул Тестовая',
+        data: { city: 'Казань', street: 'Тестовая' },
+      },
+    }),
+    /Выберите адрес с номером дома/,
+  );
 });
 
 test('Tarifnik coverage sends the selected DaData suggestion and maps the provider dictionary', async (t) => {

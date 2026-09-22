@@ -1,7 +1,8 @@
 ---
 import type { CityView, SiteView } from '../data/site';
+import type { TariffView } from '../data/tariff-view';
 
-type FormMode = 'visible' | 'lead';
+type Presentation = 'embedded' | 'dialog';
 type ServiceType = 'INTERNET' | 'INTERNET_TV' | 'TV' | 'OTHER';
 
 interface Props {
@@ -10,10 +11,10 @@ interface Props {
   pageSlug: string;
   city: CityView;
   site: SiteView;
-  mode?: FormMode;
+  presentation?: Presentation;
+  dialogId?: string;
   serviceType?: ServiceType;
-  tariffSlug?: string;
-  embedded?: boolean;
+  tariff?: TariffView;
 }
 
 const {
@@ -22,511 +23,207 @@ const {
   pageSlug,
   city,
   site,
-  mode = 'visible',
+  presentation = 'embedded',
+  dialogId,
   serviceType = 'INTERNET',
-  tariffSlug,
-  embedded = false,
-} = Astro.props;
-const formId = `addressForm-${city.slug}-${mode}-${tariffSlug || pageSlug}`;
+  tariff,
+} = Astro.props as Props;
+const suffix = tariff?.slug || pageSlug || 'catalog';
+const formId = `address-form-${city.slug}-${presentation}-${suffix}`;
+const entryDialogId = dialogId || `address-entry-${city.slug}-${suffix}`;
+const resultDialogId = `address-result-${city.slug}-${presentation}-${suffix}`;
+const resultHeadingId = `${resultDialogId}-heading`;
 const supportPhoneHref = `tel:${site.supportPhone.replace(/[^+\d]/g, '')}`;
+const tariffSummary = tariff ? JSON.stringify({
+  slug: tariff.slug,
+  name: tariff.name,
+  price: tariff.price,
+  serviceType: tariff.serviceType,
+  components: tariff.baseComponents.filter((item) => item.included).map((item) => item.value),
+}) : '';
+const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
 ---
 
-{mode === 'visible' && !embedded && <section class="hero"><div class="container"><span class="eyebrow">{city.name}</span><h1>Проверьте возможность подключения</h1><p class="lead">Укажите адрес, и мы сразу покажем результат проверки.</p></div></section>}
-<section class:list={['section', 'container', { embedded }]} id={mode === 'lead' ? 'request' : embedded ? 'address-check' : undefined}>
-  <form
-    class="card"
-    id={formId}
-    data-address-form
-    data-form-mode={mode}
-    data-api-url={apiUrl}
-    data-site-slug={siteSlug}
-    data-city-slug={city.slug}
-    data-page-slug={pageSlug}
-    data-service-type={serviceType}
-    data-tariff-slug={tariffSlug || ''}
-    data-support-phone={site.supportPhone}
-    data-support-phone-href={supportPhoneHref}
+<div
+  class:list={['address-check-root', { embedded: presentation === 'embedded', modal: presentation === 'dialog' }]}
+  data-address-check-root
+  data-presentation={presentation}
+  data-entry-dialog-id={presentation === 'dialog' ? entryDialogId : ''}
+>
+  <EntryContainer
+    id={presentation === 'dialog' ? entryDialogId : 'address-check'}
+    class:list={['address-entry', { 'entry-dialog': presentation === 'dialog' }]}
+    data-address-entry-dialog={presentation === 'dialog' ? '' : undefined}
+    aria-labelledby={presentation === 'dialog' ? `${formId}-title` : undefined}
   >
-    {mode === 'lead' && <><h2>Оставить заявку</h2><p>Укажите адрес и телефон. Возможность подключения мы проверим автоматически.</p></>}
-    <div class="bot-field" aria-hidden="true"><label for={`website-${formId}`}>Ваш сайт</label><input id={`website-${formId}`} name="website" tabindex="-1" autocomplete="off" /></div>
-    <label for={`address-${formId}`}>Адрес</label>
-    <div class="address-field">
-      <input id={`address-${formId}`} name="address" required maxlength="300" autocomplete="street-address" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls={`address-suggestions-${formId}`} placeholder="Город, улица, дом, квартира" />
-      <div id={`address-suggestions-${formId}`} data-address-suggestions class="address-suggestions" role="listbox" aria-label="Подсказки адреса" hidden></div>
+    <div class:list={{ 'dialog-card': presentation === 'dialog' }}>
+      {presentation === 'dialog' && (
+        <button type="button" class="dialog-close" data-entry-close aria-label="Закрыть проверку адреса">×</button>
+      )}
+      {presentation === 'dialog' && <h2 id={`${formId}-title`}>Проверить адрес</h2>}
+      <form
+        class="address-form"
+        id={formId}
+        data-address-form
+        data-api-url={apiUrl}
+        data-site-slug={siteSlug}
+        data-city-slug={city.slug}
+        data-page-slug={pageSlug}
+        data-service-type={tariff?.serviceType || serviceType}
+        data-tariff-slug={tariff?.slug || ''}
+        data-tariff-summary={tariffSummary}
+        autocomplete="off"
+      >
+        <div class="bot-field" aria-hidden="true">
+          <label for={`website-${formId}`}>Ваш сайт</label>
+          <input id={`website-${formId}`} name="website" tabindex="-1" autocomplete="off" />
+        </div>
+        <label for={`address-${formId}`}>Адрес</label>
+        <div class="address-field">
+          <input
+            id={`address-${formId}`}
+            type="text"
+            name="address"
+            required
+            maxlength="300"
+            autocomplete="off"
+            aria-autocomplete="list"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            aria-controls={`address-suggestions-${formId}`}
+            placeholder="Город, улица, дом, квартира"
+          />
+          <div
+            id={`address-suggestions-${formId}`}
+            data-address-suggestions
+            class="address-suggestions"
+            role="listbox"
+            aria-label="Подсказки адреса"
+            hidden
+          ></div>
+        </div>
+        <p class="address-hint" data-address-hint aria-live="polite">Начните вводить город и адрес, затем выберите подходящий вариант.</p>
+        <button class="button" type="submit" data-submit disabled>Проверить адрес</button>
+        <p class="form-result" data-form-result role="status"></p>
+      </form>
     </div>
-    <p class="address-hint" data-address-hint aria-live="polite">Начните вводить город и адрес, затем выберите подходящий вариант.</p>
-    <div class="phone-step" data-phone-step hidden={mode === 'visible'}>
-      <label for={`phone-${formId}`}>Телефон</label>
-      <input id={`phone-${formId}`} name="phone" required={mode === 'lead'} autocomplete="tel" placeholder="+7 ___ ___-__-__" />
-      <p>Нажимая кнопку, вы соглашаетесь на обработку заявки оператором.</p>
+  </EntryContainer>
+
+  <dialog id={resultDialogId} class="result-dialog" data-address-result-dialog aria-labelledby={resultHeadingId}>
+    <div class="dialog-card result-card">
+      <button type="button" class="dialog-close" data-result-close aria-label="Закрыть результат проверки">×</button>
+      <h2 id={resultHeadingId} data-result-heading tabindex="-1">Результат проверки</h2>
+
+      <section data-business-outcome="TARGET_AVAILABLE" hidden>
+        <span class="result-mark success" aria-hidden="true">✓</span>
+        <h3>Дом.ру доступен</h3>
+        <p>Подключение доступно по адресу <strong data-result-address></strong>.</p>
+        <div class="tariff-summary" data-result-tariff hidden>
+          <span>Выбранный тариф</span>
+          <strong data-result-tariff-name></strong>
+          <span data-result-tariff-price></span>
+          <ul data-result-tariff-components></ul>
+        </div>
+        <form class="lead-form" data-lead-form>
+          <label for={`phone-${formId}`}>Телефон</label>
+          <input id={`phone-${formId}`} type="tel" name="phone" required autocomplete="tel" placeholder="+7 ___ ___-__-__" />
+          <button class="button" type="submit" data-lead-submit>Оставить заявку</button>
+          <p class="consent-copy">Нажимая кнопку, вы соглашаетесь на обработку заявки оператором.</p>
+          <p data-lead-result role="status"></p>
+        </form>
+      </section>
+
+      <section data-business-outcome="ALTERNATIVES_AVAILABLE" hidden>
+        <span class="result-mark neutral" aria-hidden="true">→</span>
+        <h3>Дом.ру по этому адресу не найден</h3>
+        <p>По адресу <strong data-result-address></strong> доступны другие провайдеры:</p>
+        <ul class="provider-list" data-provider-list></ul>
+        <a class="button" data-provider-action target="_blank" rel="noopener noreferrer sponsored">Посмотреть тарифы на Tarifnik.ru</a>
+        <button class="secondary-button" type="button" data-change-address>Проверить другой адрес</button>
+      </section>
+
+      <section data-business-outcome="NO_PROVIDERS" hidden>
+        <span class="result-mark neutral" aria-hidden="true">i</span>
+        <h3>Провайдеры не найдены</h3>
+        <p>По адресу <strong data-result-address></strong> пока нет доступных предложений.</p>
+        <p>Уточнить возможность подключения можно по телефону <a href={supportPhoneHref}>{site.supportPhone}</a>.</p>
+        <button class="secondary-button" type="button" data-change-address>Проверить другой адрес</button>
+      </section>
+
+      <section data-technical-error hidden>
+        <span class="result-mark error" aria-hidden="true">!</span>
+        <h3>Не удалось выполнить проверку</h3>
+        <p data-technical-message>Попробуйте еще раз.</p>
+        <div class="dialog-actions">
+          <button class="button" type="button" data-retry-check>Повторить</button>
+          <button class="secondary-button" type="button" data-change-address>Изменить адрес</button>
+        </div>
+      </section>
     </div>
-    <button class="button" type="submit" data-submit>{mode === 'visible' ? 'Проверить адрес' : 'Отправить заявку'}</button>
-    <p data-form-result role="status"></p>
-    <div data-alternatives class="alternatives" aria-live="polite"></div>
-  </form>
-</section>
+  </dialog>
+</div>
 
 <script>
-  // @ts-nocheck -- DOM values are validated at the API boundary; this script is browser-only.
-  import {
-    SUBSCRIBER_MODE_EVENT,
-    SUBSCRIBER_MODE_STORAGE_KEY,
-    subscriberModeExpiresAt,
-  } from '../lib/subscriber-mode.mjs';
-  for (const form of document.querySelectorAll('[data-address-form]')) {
-  if (form.dataset.addressFormReady === 'true') continue;
-  form.dataset.addressFormReady = 'true';
-  const {
-    apiUrl,
-    siteSlug,
-    citySlug,
-    pageSlug,
-    formMode: mode,
-    serviceType,
-    tariffSlug,
-    supportPhone,
-    supportPhoneHref,
-  } = form.dataset;
-  const formId = form.id;
-  const result = form?.querySelector('[data-form-result]');
-  const alternatives = form?.querySelector('[data-alternatives]');
-  const addressInput = form?.querySelector('input[name="address"]');
-  const phoneInput = form?.querySelector('input[name="phone"]');
-  const phoneStep = form?.querySelector('[data-phone-step]');
-  const submitButton = form?.querySelector('[data-submit]');
-  const suggestionList = form?.querySelector('[data-address-suggestions]');
-  const addressHint = form?.querySelector('[data-address-hint]');
-  let selectedSuggestion = null;
-  let verifiedCheck = null;
-  let suggestionTimer;
-  let suggestionController;
-  let activeSuggestionIndex = -1;
-  const SUGGESTION_DEBOUNCE_MS = 500;
-  const SUGGESTION_CACHE_LIMIT = 20;
-  const suggestionCache = new Map();
-
-  const setAddressHint = (message, state = '') => {
-    if (!addressHint) return;
-    addressHint.textContent = message;
-    if (state) addressHint.dataset.state = state;
-    else delete addressHint.dataset.state;
-  };
-
-  const clearSuggestions = () => {
-    suggestionList?.replaceChildren();
-    if (suggestionList) suggestionList.hidden = true;
-    activeSuggestionIndex = -1;
-    addressInput?.setAttribute('aria-expanded', 'false');
-    addressInput?.removeAttribute('aria-activedescendant');
-  };
-
-  const resetForm = () => {
-    form?.reset();
-    selectedSuggestion = null;
-    verifiedCheck = null;
-    clearSuggestions();
-    alternatives?.replaceChildren();
-    if (addressInput) addressInput.disabled = false;
-    if (mode === 'visible') {
-      if (phoneStep) phoneStep.hidden = true;
-      if (phoneInput) phoneInput.required = false;
-      if (submitButton) submitButton.textContent = 'Проверить адрес';
-    }
-    setAddressHint('Начните вводить город и адрес, затем выберите подходящий вариант.');
-  };
-
-  const appendSupport = () => {
-    if (!alternatives) return;
-    const text = document.createElement('p');
-    text.textContent = 'Свяжитесь с технической поддержкой, чтобы уточнить возможность подключения дома: ';
-    const link = document.createElement('a');
-    link.href = supportPhoneHref;
-    link.textContent = supportPhone;
-    text.append(link);
-    alternatives.append(text);
-  };
-
-  const renderUnavailable = (check) => {
-    alternatives?.replaceChildren();
-    if (Array.isArray(check.alternatives) && check.alternatives.length > 0) {
-      result.textContent = 'Дом.ру по этому адресу не найден. Доступны другие провайдеры:';
-      for (const alternative of check.alternatives) {
-        const url = typeof alternative.url === 'string' && /^https?:\/\//i.test(alternative.url) ? alternative.url : null;
-        const item = document.createElement(url ? 'a' : 'span');
-        item.textContent = String(alternative.name || 'Альтернативный провайдер');
-        if (url) {
-          item.href = url;
-          item.target = '_blank';
-          item.rel = 'noopener noreferrer sponsored';
-        }
-        alternatives?.append(item);
-      }
-      return;
-    }
-    result.textContent = check.status === 'UNAVAILABLE'
-      ? 'По этому адресу доступные провайдеры не найдены.'
-      : 'Не удалось однозначно проверить адрес.';
-    appendSupport();
-  };
-
-  const formatSuggestion = (suggestion) => {
-    const data = suggestion?.data && typeof suggestion.data === 'object' ? suggestion.data : {};
-    const typedPart = (type, value) => typeof value === 'string' && value.trim()
-      ? `${typeof type === 'string' ? type : ''} ${value}`.trim()
-      : '';
-    const primaryParts = [
-      data.street_with_type,
-      typedPart(data.stead_type, data.stead),
-      typedPart(data.house_type, data.house),
-      typedPart(data.block_type, data.block),
-      typedPart(data.flat_type, data.flat),
-    ].filter((part) => typeof part === 'string' && part.trim());
-    const secondaryParts = [
-      data.city_with_type,
-      data.city_district_with_type,
-      data.settlement_with_type,
-      data.area_with_type,
-      data.region_with_type,
-    ].filter((part, index, parts) => typeof part === 'string' && part.trim() && parts.indexOf(part) === index);
-    return {
-      primary: primaryParts.length > 0 ? primaryParts.join(', ') : suggestion.value,
-      secondary: primaryParts.length > 0 ? secondaryParts.join(', ') : '',
-    };
-  };
-
-  const appendHighlightedText = (element, text, query) => {
-    const tokens = [...new Set(String(query).toLocaleLowerCase('ru-RU').match(/[\p{L}\p{N}]+/gu) || [])]
-      .filter((token) => token.length >= 2)
-      .sort((left, right) => right.length - left.length)
-      .map((token) => token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-    if (tokens.length === 0) {
-      element.textContent = text;
-      return;
-    }
-    const matcher = new RegExp(`(${tokens.join('|')})`, 'giu');
-    for (const part of String(text).split(matcher)) {
-      if (!part) continue;
-      if (matcher.test(part)) {
-        matcher.lastIndex = 0;
-        const mark = document.createElement('mark');
-        mark.textContent = part;
-        element.append(mark);
-      } else {
-        matcher.lastIndex = 0;
-        element.append(document.createTextNode(part));
-      }
-    }
-  };
-
-  const selectSuggestion = (suggestion) => {
-    selectedSuggestion = suggestion;
-    addressInput.value = suggestion.value;
-    setAddressHint('Адрес выбран и будет проверен.', 'success');
-    clearSuggestions();
-    addressInput.focus();
-  };
-
-  const setActiveSuggestion = (nextIndex) => {
-    const options = Array.from(suggestionList?.querySelectorAll('[role="option"]') || []);
-    if (options.length === 0) return;
-    activeSuggestionIndex = (nextIndex + options.length) % options.length;
-    options.forEach((option, index) => option.setAttribute('aria-selected', String(index === activeSuggestionIndex)));
-    const activeOption = options[activeSuggestionIndex];
-    addressInput?.setAttribute('aria-activedescendant', activeOption.id);
-    activeOption.scrollIntoView({ block: 'nearest' });
-  };
-
-  const renderSuggestions = (items, query = addressInput?.value || '') => {
-    clearSuggestions();
-    if (!suggestionList || !Array.isArray(items) || items.length === 0) {
-      setAddressHint('Подходящий адрес не найден. Уточните город, улицу и дом.');
-      return;
-    }
-    const title = document.createElement('div');
-    title.className = 'address-suggestions-title';
-    title.textContent = 'Выберите адрес';
-    title.setAttribute('role', 'presentation');
-    suggestionList.append(title);
-    for (const [index, suggestion] of items.slice(0, 5).entries()) {
-      if (!suggestion || typeof suggestion.value !== 'string') continue;
-      const option = document.createElement('button');
-      option.type = 'button';
-      option.className = 'address-option';
-      option.id = `${formId}-address-option-${index}`;
-      option.setAttribute('role', 'option');
-      option.setAttribute('aria-selected', 'false');
-      option.setAttribute('aria-label', suggestion.value);
-      option.tabIndex = -1;
-      const parts = formatSuggestion(suggestion);
-      const primary = document.createElement('span');
-      primary.className = 'address-option-primary';
-      appendHighlightedText(primary, parts.primary, query);
-      option.append(primary);
-      if (parts.secondary) {
-        const secondary = document.createElement('span');
-        secondary.className = 'address-option-secondary';
-        appendHighlightedText(secondary, parts.secondary, query);
-        option.append(secondary);
-      }
-      option.addEventListener('pointerenter', () => setActiveSuggestion(index));
-      option.addEventListener('click', () => selectSuggestion(suggestion));
-      suggestionList.append(option);
-    }
-    suggestionList.hidden = suggestionList.querySelectorAll('[role="option"]').length === 0;
-    addressInput?.setAttribute('aria-expanded', String(!suggestionList.hidden));
-    if (!suggestionList.hidden) setAddressHint('Выберите подходящий адрес из списка.');
-  };
-
-  const cacheSuggestions = (key, items) => {
-    if (suggestionCache.size >= SUGGESTION_CACHE_LIMIT && !suggestionCache.has(key)) {
-      suggestionCache.delete(suggestionCache.keys().next().value);
-    }
-    suggestionCache.set(key, items);
-  };
-
-  const retryAfterSeconds = (response) => {
-    const value = response.headers.get('retry-after');
-    if (!value) return null;
-    if (/^\d+$/.test(value)) return Number(value);
-    const retryAt = Date.parse(value);
-    return Number.isFinite(retryAt) ? Math.max(1, Math.ceil((retryAt - Date.now()) / 1000)) : null;
-  };
-
-  const suggestionErrorMessage = (response) => {
-    if (response.status === 429) {
-      const seconds = retryAfterSeconds(response);
-      return seconds
-        ? `Слишком много запросов. Повторите через ${seconds} сек.`
-        : 'Слишком много запросов. Подождите немного и продолжите ввод.';
-    }
-    if (response.status === 400) return 'Уточните город, улицу и дом.';
-    return 'Подсказки адреса временно недоступны. Введите адрес немного позже.';
-  };
-
-  addressInput?.addEventListener('input', () => {
-    selectedSuggestion = null;
-    verifiedCheck = null;
-    clearTimeout(suggestionTimer);
-    suggestionController?.abort();
-    const query = addressInput.value.trim();
-    if (query.length < 3) {
-      clearSuggestions();
-      setAddressHint('Введите не менее трех символов.');
-      return;
-    }
-    const cacheKey = query.replace(/\s+/g, ' ').toLocaleLowerCase('ru-RU');
-    if (suggestionCache.has(cacheKey)) {
-      renderSuggestions(suggestionCache.get(cacheKey), query);
-      return;
-    }
-    setAddressHint('Ищем адрес…', 'loading');
-    suggestionTimer = setTimeout(async () => {
-      const controller = new AbortController();
-      suggestionController = controller;
-      try {
-        const response = await fetch(`${apiUrl}/address-suggestions`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({ siteSlug, citySlug, query, website: '' }),
-        });
-        if (!response.ok) {
-          const responseError = new Error(suggestionErrorMessage(response));
-          responseError.name = 'AddressSuggestionResponseError';
-          throw responseError;
-        }
-        const payload = await response.json();
-        const suggestions = Array.isArray(payload.suggestions) ? payload.suggestions : [];
-        cacheSuggestions(cacheKey, suggestions);
-        if (addressInput.value.trim() === query) renderSuggestions(suggestions, query);
-      } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') return;
-        clearSuggestions();
-        const message = error instanceof Error && error.name === 'AddressSuggestionResponseError'
-          ? error.message
-          : 'Подсказки адреса временно недоступны. Проверьте соединение и попробуйте еще раз.';
-        setAddressHint(message, 'error');
-      } finally {
-        if (suggestionController === controller) suggestionController = null;
-      }
-    }, SUGGESTION_DEBOUNCE_MS);
-  });
-
-  addressInput?.addEventListener('keydown', (event) => {
-    if (!suggestionList || suggestionList.hidden) return;
-    const options = suggestionList.querySelectorAll('[role="option"]');
-    if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      setActiveSuggestion(activeSuggestionIndex + 1);
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      setActiveSuggestion(activeSuggestionIndex - 1);
-    } else if (event.key === 'Enter' && activeSuggestionIndex >= 0) {
-      event.preventDefault();
-      options[activeSuggestionIndex]?.click();
-    } else if (event.key === 'Escape') {
-      event.preventDefault();
-      clearSuggestions();
-      setAddressHint('Продолжите ввод или выберите адрес из подсказок.');
-    }
-  });
-
-  document.addEventListener('pointerdown', (event) => {
-    if (event.target instanceof Node && !form?.contains(event.target)) clearSuggestions();
-  });
-
-  const createLead = async (data, check) => {
-    let viewedPages = [];
-    try { viewedPages = JSON.parse(sessionStorage.getItem('provider_visited_pages') || '[]'); } catch { /* storage may be unavailable */ }
-    const response = await fetch(`${apiUrl}/leads`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        siteSlug,
-        citySlug,
-        pageSlug: pageSlug || undefined,
-        tariffSlug: tariffSlug || undefined,
-        formName: mode === 'visible' ? 'visible-address-check' : 'lead-form',
-        phone: data.phone,
-        address: check?.address || selectedSuggestion?.value || data.address,
-        serviceType,
-        addressCheckId: check?.id,
-        referrer: document.referrer,
-        pageUrl: location.href,
-        timeOnSiteSeconds: Math.max(0, Math.round((Date.now() - performance.timeOrigin) / 1000)),
-        deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
-        viewedPages,
-        website: data.website,
-      }),
-    });
-    if (!response.ok) throw new Error('Не удалось сохранить заявку');
-    return response.json();
-  };
-
-  const applyLeadSubscriberMode = (lead) => {
-    if (!lead?.subscriberMode) return;
-    try {
-      localStorage.setItem(SUBSCRIBER_MODE_STORAGE_KEY, String(subscriberModeExpiresAt()));
-    } catch { /* private browsing can disable localStorage */ }
-    window.dispatchEvent(new Event(SUBSCRIBER_MODE_EVENT));
-  };
-
-  form?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const data = Object.fromEntries(new FormData(form).entries());
-    if (mode === 'visible' && verifiedCheck) {
-      if (!form.reportValidity()) return;
-      if (submitButton) submitButton.disabled = true;
-      result.textContent = 'Отправляем заявку…';
-      try {
-        const lead = await createLead(data, verifiedCheck);
-        applyLeadSubscriberMode(lead);
-        resetForm();
-        result.textContent = 'Спасибо! Заявка отправлена.';
-      } catch (error) {
-        result.textContent = error instanceof Error ? error.message : 'Произошла ошибка. Попробуйте еще раз.';
-      } finally {
-        if (submitButton) submitButton.disabled = false;
-      }
-      return;
-    }
-
-    if (!selectedSuggestion || selectedSuggestion.value !== String(data.address).trim()) {
-      result.textContent = 'Выберите адрес из подсказок.';
-      addressInput?.focus();
-      return;
-    }
-
-    if (submitButton) submitButton.disabled = true;
-    result.textContent = 'Проверяем адрес…';
-    alternatives?.replaceChildren();
-    let check = null;
-    try {
-      const checkResponse = await fetch(`${apiUrl}/address-checks`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ siteSlug, citySlug, pageSlug: pageSlug || undefined, address: data.address, suggestion: selectedSuggestion, objectType: 'apartment', website: data.website }),
-      });
-      if (!checkResponse.ok) throw new Error('Не удалось проверить адрес');
-      check = await checkResponse.json();
-
-      if (mode === 'visible') {
-        if (check.status !== 'AVAILABLE') {
-          renderUnavailable(check);
-          return;
-        }
-        verifiedCheck = check;
-        if (addressInput) addressInput.disabled = true;
-        if (phoneStep) phoneStep.hidden = false;
-        if (phoneInput) phoneInput.required = true;
-        if (submitButton) submitButton.textContent = 'Оставить заявку';
-        result.textContent = 'Дом.ру доступен по этому адресу. Оставьте телефон для подключения.';
-        phoneInput?.focus();
-        return;
-      }
-    } catch (error) {
-      if (mode === 'visible') {
-        result.textContent = error instanceof Error ? error.message : 'Не удалось проверить адрес.';
-        appendSupport();
-        return;
-      }
-      check = null;
-    } finally {
-      if (submitButton) submitButton.disabled = false;
-    }
-
-    try {
-      if (submitButton) submitButton.disabled = true;
-      const lead = await createLead(data, check);
-      applyLeadSubscriberMode(lead);
-      resetForm();
-      result.textContent = 'Спасибо! Заявка отправлена.';
-    } catch (error) {
-      result.textContent = error instanceof Error ? error.message : 'Произошла ошибка. Попробуйте еще раз.';
-    } finally {
-      if (submitButton) submitButton.disabled = false;
-    }
-  });
-  }
+  import { initializeAddressChecks } from '../lib/address-check-client.mjs';
+  initializeAddressChecks();
 </script>
 
 <style>
-  section { scroll-margin-top: 24px; }
-  form { max-width: 560px; display: grid; gap: 12px; }
-  form h2, form p { margin: 0; }
-  label { font-weight: 700; }
-  input { border: 1px solid #d6dde6; border-radius: 10px; padding: 14px; font: inherit; margin-bottom: 8px; }
-  input:disabled { background: #f3f5f7; color: #526071; }
-  .phone-step { display: grid; gap: 12px; }
-  .phone-step[hidden] { display: none; }
+  .address-check-root { width: 100%; }
+  .address-entry { scroll-margin-top: 24px; }
+  .address-form { position: relative; display: grid; max-width: 560px; gap: 12px; }
+  .address-form label, .lead-form label { font-weight: 750; }
+  input { width: 100%; min-height: 48px; box-sizing: border-box; border: 1px solid #d6dde6; border-radius: 12px; padding: 12px 14px; background: #fff; color: #18202a; font: inherit; }
+  input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #8fc4ef; outline-offset: 3px; }
+  input[data-confirmed='true'] { border-color: #2e8b63; box-shadow: 0 0 0 3px rgb(46 139 99 / 14%); }
   .address-field { position: relative; display: grid; }
-  .address-field input { margin-bottom: 0; }
-  .address-hint { color: #526071; font-size: 14px; line-height: 1.4; }
-  .address-hint[data-state='error'] { color: #b42318; }
+  .address-hint, .form-result, .consent-copy, [data-lead-result] { margin: 0; color: #526071; font-size: 14px; line-height: 1.45; }
+  .address-hint[data-state='error'], [data-lead-result][data-state='error'] { color: #b42318; }
   .address-hint[data-state='success'] { color: #176b45; }
-  .address-suggestions { position: absolute; z-index: 20; inset: calc(100% + 6px) 0 auto; display: grid; gap: 2px; max-height: 300px; padding: 8px; overflow-y: auto; overscroll-behavior: contain; border: 1px solid #e2e5eb; border-radius: 16px; background: #fff; box-shadow: 0 12px 28px rgb(21 40 66 / 14%); }
-  .address-suggestions[hidden] { display: none; }
-  .address-suggestions :global(.address-suggestions-title) { padding: 2px 12px 6px; color: #526071; font-size: 12px; font-weight: 650; line-height: 1.35; }
-  .address-suggestions :global(.address-option) { display: grid; gap: 2px; width: 100%; min-height: 44px; padding: 8px 12px; border: 0; border-radius: 12px; background: #fff; color: #18202a; font: inherit; cursor: pointer; text-align: left; }
+  .address-suggestions { position: absolute; z-index: 20; inset: calc(100% + 6px) 0 auto; display: grid; max-height: 300px; gap: 2px; overflow-y: auto; overscroll-behavior: contain; border: 1px solid #e2e5eb; border-radius: 16px; padding: 8px; background: #fff; box-shadow: 0 12px 28px rgb(21 40 66 / 14%); }
+  .address-suggestions[hidden], [hidden] { display: none !important; }
+  .address-suggestions :global(.address-suggestions-title) { padding: 2px 12px 6px; color: #526071; font-size: 12px; font-weight: 650; }
+  .address-suggestions :global(.address-option) { display: grid; width: 100%; min-height: 44px; gap: 2px; border: 0; border-radius: 12px; padding: 8px 12px; background: #fff; color: #18202a; font: inherit; cursor: pointer; text-align: left; }
   .address-suggestions :global(.address-option:hover), .address-suggestions :global(.address-option:focus-visible), .address-suggestions :global(.address-option[aria-selected='true']) { background: #eef4ff; outline: none; }
-  .address-suggestions :global(.address-option-primary) { font-size: 15px; font-weight: 650; line-height: 1.35; }
+  .address-suggestions :global(.address-option-primary) { font-size: 15px; font-weight: 700; line-height: 1.35; }
   .address-suggestions :global(.address-option-secondary) { color: #526071; font-size: 13px; line-height: 1.35; }
-  .address-suggestions :global(mark) { padding: 0; background: transparent; color: inherit; font-weight: 800; }
-  button { border: 0; cursor: pointer; font: inherit; width: fit-content; }
-  button:disabled { cursor: wait; opacity: 0.7; }
-  .alternatives { display: grid; gap: 8px; color: #526071; }
-  .alternatives a { color: #1769aa; font-weight: 700; }
+  .address-suggestions :global(mark) { padding: 0; background: transparent; color: inherit; font-weight: 850; }
+  .button, .secondary-button { display: inline-flex; min-height: 48px; width: fit-content; align-items: center; justify-content: center; border: 0; border-radius: 14px; padding: 12px 22px; font: inherit; font-weight: 800; cursor: pointer; text-decoration: none; }
+  .button { color: #fff; background: #c91f5c; }
+  .button:hover { background: #ad174d; }
+  .secondary-button { color: #18202a; background: #eef2f6; }
+  button:disabled { cursor: not-allowed; opacity: .55; }
   .bot-field { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .embedded { width: 100%; margin: 20px 0 0; padding: 0; }
-  .embedded form { grid-template-columns: minmax(0, 1fr) auto; max-width: none; border: 0; padding: 0; background: transparent; box-shadow: none; }
-  .embedded form > label { grid-column: 1 / -1; }
+  dialog { width: min(620px, calc(100% - 24px)); max-height: min(88vh, 760px); overflow: auto; border: 0; border-radius: 26px; padding: 0; color: #18202a; background: transparent; box-shadow: 0 28px 90px rgb(21 40 66 / 30%); }
+  dialog::backdrop { background: rgb(15 23 42 / 62%); backdrop-filter: blur(3px); }
+  .dialog-card { position: relative; display: grid; gap: 16px; padding: clamp(24px, 5vw, 42px); background: #fff; }
+  .dialog-card h2, .dialog-card h3, .dialog-card p { margin: 0; }
+  .dialog-card h2 { padding-right: 36px; font-size: clamp(28px, 5vw, 38px); line-height: 1.05; letter-spacing: -.035em; }
+  .dialog-card h3 { margin: 10px 0 8px; font-size: clamp(24px, 4vw, 32px); }
+  .dialog-close { position: absolute; z-index: 2; inset: 14px 14px auto auto; display: grid; width: 42px; height: 42px; place-items: center; border: 0; border-radius: 50%; background: #eef2f6; color: #18202a; font-size: 26px; cursor: pointer; }
+  .result-card > section { display: grid; gap: 16px; }
+  .result-mark { display: grid; width: 52px; height: 52px; place-items: center; border-radius: 17px; font-size: 24px; font-weight: 900; }
+  .result-mark.success { color: #176b45; background: #e8f7ef; }
+  .result-mark.neutral { color: #1769aa; background: #eaf4ff; }
+  .result-mark.error { color: #b42318; background: #fff0ed; }
+  .tariff-summary { display: grid; gap: 5px; border: 1px solid #dce5ee; border-radius: 18px; padding: 18px; background: #f8fafc; }
+  .tariff-summary > span:first-child { color: #697789; font-size: 13px; font-weight: 700; }
+  .tariff-summary ul, .provider-list { display: grid; gap: 8px; margin: 6px 0 0; padding-left: 20px; }
+  .lead-form { display: grid; gap: 12px; border-top: 1px solid #e3e8ef; padding-top: 18px; }
+  .provider-list { color: #334155; }
+  .dialog-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .embedded { margin-top: 20px; }
+  .embedded .address-entry { width: 100%; }
+  .embedded .address-form { grid-template-columns: minmax(0, 1fr) auto; max-width: none; border: 0; padding: 0; background: transparent; box-shadow: none; }
+  .embedded .address-form > label { grid-column: 1 / -1; }
   .embedded .address-field { grid-column: 1; }
-  .embedded .address-hint, .embedded .phone-step, .embedded [data-form-result], .embedded .alternatives { grid-column: 1 / -1; }
+  .embedded .address-hint, .embedded .form-result { grid-column: 1 / -1; }
   .embedded [data-submit] { grid-column: 2; grid-row: 2; min-width: 178px; }
   @media (max-width: 620px) {
-    .embedded form { grid-template-columns: 1fr; }
+    .embedded .address-form { grid-template-columns: 1fr; }
     .embedded .address-field, .embedded [data-submit] { grid-column: 1; grid-row: auto; }
-    .embedded [data-submit] { width: 100%; }
+    .embedded [data-submit], .result-card .button, .result-card .secondary-button { width: 100%; }
+    dialog { width: min(100% - 16px, 620px); border-radius: 22px; }
+    .dialog-card { padding: 28px 20px 24px; }
   }
 </style>

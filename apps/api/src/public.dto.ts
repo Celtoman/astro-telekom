@@ -4,6 +4,7 @@ import {
   IsArray,
   IsEmail,
   IsEmpty,
+  IsDefined,
   IsIn,
   IsInt,
   IsNotEmpty,
@@ -185,10 +186,10 @@ export class AddressCheckDto {
   @MaxLength(500)
   address!: string;
 
-  @IsOptional()
+  @IsDefined()
   @ValidateNested()
   @Type(() => DadataSuggestionDto)
-  suggestion?: DadataSuggestionDto;
+  suggestion!: DadataSuggestionDto;
 
   @IsOptional()
   @IsString()
