@@ -10,11 +10,24 @@
 
 ---
 
+## Состояние исполнения на 22 сентября 2026 года
+
+План ниже сохраняет исходную последовательность и обоснование, но GitHub Issues остается единственным механическим источником статуса. После выполнения первых волн:
+
+- #158, #160 и #162 закрыты; `0034`–`0036` применены на внешнем test-контуре, publication ревизии 4 успешна;
+- T1–T4 (#172–#175) реализованы и закрыты, parent #163 закрыт после приемочной сверки 3/3 sub-issues;
+- `0037`–`0038` проверены локально, но еще не подтверждены внешним deployment;
+- #202 включена в Release 1 как stop-the-line blocker безопасного upgrade существующего publication snapshot;
+- актуальный следующий продуктовый путь: #202 → T6/F1 → T7/F2 → T8 → P1 → полный gate и exact-SHA deployment;
+- внешний генератор Celtoman/tarifs#1 остается отдельной dependency и не входит в завершенный scope #163.
+
+Старые формулировки «локально», «ожидает CI» и «незавершенный diff» в историческом порядке волн не являются текущим статусом.
+
 ## Подтвержденные решения владельца от 2026-09-21
 
 1. Release 1 планируется по кратчайшему пути к рабочей публичной версии, а не по попытке одновременно реализовать весь целевой контракт.
 2. Работа над внешним генератором вынесена в [Celtoman/tarifs#1](https://github.com/Celtoman/tarifs/issues/1) и является dependency платформенного тарифного импорта.
-3. Незавершенный тарифный diff сохраняется и раскладывается по T1–T3; его нельзя продолжать или коммитить как одну неделимую #163.
+3. Тарифный diff был разложен по T1–T3 и завершен атомарно; #172–#174 и parent #163 закрыты. Внешний генератор остается за границей #163.
 4. До появления финальных дизайнов C1 создает только явно помеченный черновой реестр паспортов. Финальное утверждение остается заблокировано `OPEN-005`.
 5. [#144](https://github.com/Celtoman/astro-telekom/issues/144) отложена до отдельного явного запроса владельца. Она остается открытой P3, но не является gate или dependency технической реализации формы.
 6. Для lead pipeline подтвержден строгий short-circuit: сначала классификация причины и комментария, затем DaData Phone только для применимой ветки, затем subscriber check, решение и delivery.
@@ -61,13 +74,13 @@
 
 ## Milestone Release 1
 
-Фактический состав всегда проверяется через GitHub milestone. На момент фиксации план включает:
+Фактический состав всегда проверяется через GitHub milestone. Актуализированный состав включает как открытые, так и уже закрытые элементы Release 1:
 
 | Срез | Issue | Причина включения |
 | --- | --- | --- |
-| R1: единая идентичность Дом.ру | [#162](https://github.com/Celtoman/astro-telekom/issues/162) | Уже реализовано локально; нужен rollout |
-| R2: глобальные телефоны | [#158](https://github.com/Celtoman/astro-telekom/issues/158) | Обязательные контакты и readiness |
-| R3: канонический каталог городов | [#160](https://github.com/Celtoman/astro-telekom/issues/160) | Основа городских URL и tariff relation |
+| R1: единая идентичность Дом.ру | [#162](https://github.com/Celtoman/astro-telekom/issues/162) | Закрыто; внешний rollout подтвержден |
+| R2: глобальные телефоны | [#158](https://github.com/Celtoman/astro-telekom/issues/158) | Закрыто; внешний rollout подтвержден |
+| R3: канонический каталог городов | [#160](https://github.com/Celtoman/astro-telekom/issues/160) | Закрыто; внешний rollout подтвержден |
 | F1: три результата адресной проверки | [#170](https://github.com/Celtoman/astro-telekom/issues/170) | Основной публичный flow |
 | F2: положительная ветка заявки | [#171](https://github.com/Celtoman/astro-telekom/issues/171) | Конверсионное завершение flow |
 | T1: parser XLSX | [#172](https://github.com/Celtoman/astro-telekom/issues/172) | Канонический вход каталога |
@@ -78,6 +91,7 @@
 | T7: конфигуратор | [#177](https://github.com/Celtoman/astro-telekom/issues/177) | Расчет выбранной комплектации |
 | T8: configuration snapshot | [#178](https://github.com/Celtoman/astro-telekom/issues/178) | Доказуемая заявка |
 | P1: all-URL validation report | [#179](https://github.com/Celtoman/astro-telekom/issues/179) | Атомарная безопасная публикация |
+| D1: repair legacy publication revision | [#202](https://github.com/Celtoman/astro-telekom/issues/202) | Stop-the-line blocker безопасного deployment |
 
 Родительская [#157](https://github.com/Celtoman/astro-telekom/issues/157) также остается в milestone. Внешняя [Celtoman/tarifs#1](https://github.com/Celtoman/tarifs/issues/1) не может входить в milestone другого репозитория, но является явной release dependency.
 
@@ -85,29 +99,31 @@
 
 ```text
 R1 #162 ─┐
-R2 #158 ─┼─> foundation готов к test rollout
+R2 #158 ─┼─> foundation rollout подтвержден
 R3 #160 ─┘
+        ↓
+D1 #202 → безопасный upgrade существующего publication snapshot
 
 Celtoman/tarifs#1
         ↓
-T1 #172 → T2 #173 → T3 #174 → T4 #175
-        ↓                         ↓
-      T6 #176 → T7 #177 → T8 #178
-                         ↓
-F1 #170 ───────────────→ F2 #171
-                         ↓
-                      P1 #179
-                         ↓
+T1 #172 → T2 #173 → T3 #174 → T4 #175  (закрыты)
+                                  ↓
+                               T6 #176 → T7 #177 ─┐
+                                                  ├→ T8 #178
+F1 #170 ─────────────────────────→ F2 #171 ───────┘
+                                                  ↓
+                                               P1 #179
+                                                  ↓
              full gate + migration rehearsal
-                         ↓
+                                                  ↓
                   exact-SHA test deploy
 ```
 
-F1 можно выполнять параллельно с T1–T7. F2 завершается после согласования DTO T8. P1 интегрируется последним, когда доменные validators уже существуют.
+F1 можно выполнять параллельно с T6–T7. F2 создает базовую успешную отправку; T8 зависит от F2 и T7 и добавляет immutable configuration snapshot. P1 интегрируется последним, когда доменные validators уже существуют. #202 должен быть устранен и проверен до следующего exact-SHA deployment существующего контура.
 
 ## Порядок исполнения Release 1
 
-### Волна 0. Зафиксировать foundation rollout
+### Волна 0. Зафиксировать foundation rollout — выполнено
 
 1. Проверить точные SHA `3842d5c`, `0e3ee43`, `027bf97` и отсутствие смешения с незакоммиченным тарифным diff.
 2. Подготовить согласованный exact-SHA deployment миграций `0034`, `0035`, `0036`.
@@ -124,7 +140,7 @@ F1 можно выполнять параллельно с T1–T7. F2 заве�
 - доказать баланс строк и отсутствие silent loss;
 - получить канонический XLSX из 37 колонок.
 
-### Волна 2. Разложить незавершенный тарифный diff
+### Волна 2. Разложить незавершенный тарифный diff — выполнено
 
 Перед реализацией:
 
@@ -145,9 +161,9 @@ F1 можно выполнять параллельно с T1–T7. F2 заве�
 ### Волна 4. Конфигуратор и форма
 
 1. T7 [#177](https://github.com/Celtoman/astro-telekom/issues/177) реализует чистый calculator и UI без скрытых платежей.
-2. T8 [#178](https://github.com/Celtoman/astro-telekom/issues/178) сохраняет неизменяемый снимок комплектации.
-3. F1 [#170](https://github.com/Celtoman/astro-telekom/issues/170) фиксирует typed result DTO и accessible modal states.
-4. F2 [#171](https://github.com/Celtoman/astro-telekom/issues/171) соединяет положительный результат с телефоном, T8 snapshot и сохранением заявки.
+2. F1 [#170](https://github.com/Celtoman/astro-telekom/issues/170) фиксирует typed result DTO и accessible modal states.
+3. F2 [#171](https://github.com/Celtoman/astro-telekom/issues/171) соединяет положительный результат с телефоном и базовым сохранением заявки.
+4. T8 [#178](https://github.com/Celtoman/astro-telekom/issues/178) после F2 и T7 сохраняет неизменяемый снимок комплектации.
 
 ### Волна 5. Publication gate
 
@@ -184,15 +200,15 @@ node --test tests/*.test.cjs tests/*.test.mjs
 
 | ID | Решения | Issue | Release 1 | Статус на момент планирования |
 | --- | --- | --- | --- | --- |
-| R1 | `ADMIN-004–005` | #162 | Да | локальный commit, rollout не выполнен |
-| R2 | `ADMIN-001`, `008`, `010`, `013`, `037`, `042` | #158 | Да | локальный commit, rollout не выполнен |
-| R3 | `CITY-003–006`, `008–010`, `012–018`, `020–023` | #160 | Да | локальный commit, rollout не выполнен |
+| R1 | `ADMIN-004–005` | #162 | Да | закрыто; rollout подтвержден |
+| R2 | `ADMIN-001`, `008`, `010`, `013`, `037`, `042` | #158 | Да | закрыто; rollout подтвержден |
+| R3 | `CITY-003–006`, `008–010`, `012–018`, `020–023` | #160 | Да | закрыто; rollout подтвержден |
 | R4 | `ADMIN-003` | #161 | Нет | не начато |
 | EXT1 | `TAR-044–096` | Celtoman/tarifs#1 | Dependency | не начато в `main` генератора |
 | T1 | тарифный value contract | #172 | Да | реализовано, issue закрыта |
-| T2 | `TAR-042–043`, `080–086` | #173 | Да | реализовано, ожидает rollout |
-| T3 | `TAR-001–004`, `014`, `019`, `083` | #174 | Да | реализовано, ожидает rollout |
-| T4 | tariff catalog/editor contract | #175 | Да | реализовано локально |
+| T2 | `TAR-042–043`, `080–086` | #173 | Да | реализовано, issue закрыта; rollout `0037` не выполнен |
+| T3 | `TAR-001–004`, `014`, `019`, `083` | #174 | Да | реализовано, issue закрыта; rollout `0038` не выполнен |
+| T4 | tariff catalog/editor contract | #175 | Да | реализовано, issue закрыта |
 | T5 | tariff archive/slug lifecycle | #180 | Нет | не начато |
 | T6 | typed tariff renderer | #176 | Да | foundation существует |
 | T7 | tariff calculator/configurator | #177 | Да | не начато |
@@ -222,6 +238,7 @@ node --test tests/*.test.cjs tests/*.test.mjs
 | S4 | local SEO cleanup | #200 | Нет | не начато |
 | P1 | `CORE-006`, `CMS-014`, `036–037`, `ADMIN-043` | #179 | Да | foundation частичный |
 | P2 | `CMS-029–035` | #201 | Нет | не начато |
+| D1 | publication revision repair | #202 | Да | открыт; stop-the-line deployment blocker |
 
 ## Родительские программы
 
@@ -229,7 +246,7 @@ node --test tests/*.test.cjs tests/*.test.mjs
 | --- | --- |
 | #156 lead pipeline | #182–#187 |
 | #157 address modal | #170–#171 |
-| #163 canonical tariff import | #172–#174 |
+| #163 canonical tariff import (закрыт) | #172–#174 (3/3 закрыты) |
 | #164 tariff admin | #175, #180 |
 | #165 tariff page | #176–#178, #181 |
 | #166 variables | #188–#190 |

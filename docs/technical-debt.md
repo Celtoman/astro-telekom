@@ -86,7 +86,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| TD-11 | [#13](https://github.com/Celtoman/astro-telekom/issues/13) 🟢 | Нет аудита, версий, schedule публикации, корзины, rollback |
+| TD-11 | [#13](https://github.com/Celtoman/astro-telekom/issues/13) ✅ | Нет аудита, версий, schedule публикации, корзины, rollback |
 | TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) ✅ | Вложенные `content` и SEO разрешаются рекурсивно по явному контракту; массивы, скалярные значения и `null` заменяются атомарно |
 | TD-13 | [#15](https://github.com/Celtoman/astro-telekom/issues/15) ✅ | `PageBlock` поддерживает семь строго валидируемых типов, а Astro рендерит полный минимальный набор |
 | TD-14 | [#16](https://github.com/Celtoman/astro-telekom/issues/16) ✅ | Public DTO/rate limit/honeypot и 180-дневный policy-driven purge реализованы; legal scope вынесен в [#144](https://github.com/Celtoman/astro-telekom/issues/144) |
@@ -142,7 +142,7 @@
 | TD-84 | [#107](https://github.com/Celtoman/astro-telekom/issues/107) ✅ | Ручное число Task issues удалено; milestone читается из GitHub, возврат фиксированного baseline блокирует тест |
 | TD-102 | [#131](https://github.com/Celtoman/astro-telekom/issues/131) ✅ | Живые документы согласованы с 20 миграциями, а исторические production-проверки явно привязаны к exact SHA |
 | TD-103 | [#132](https://github.com/Celtoman/astro-telekom/issues/132) ✅ | `packages/database` описан как делегат Prisma CLI, единственный client output — `apps/api/generated` |
-| TD-119 | [#153](https://github.com/Celtoman/astro-telekom/issues/153) 🟢 | Живые документы синхронизируются с 33 локальными миграциями, внешним контуром до `0032`, tariff detail и owner-only решением о трафике |
+| TD-119 | [#153](https://github.com/Celtoman/astro-telekom/issues/153) ✅ | Живые документы синхронизируются с 33 локальными миграциями, внешним контуром до `0032`, tariff detail и owner-only решением о трафике |
 | TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) ✅ | `docs/worker.md` синхронизирован с фактическим routing и retry-поведением |
 | TD-70 | [#90](https://github.com/Celtoman/astro-telekom/issues/90) ✅ | DTO ограничивает query официальным максимумом DaData 300 символов |
 
