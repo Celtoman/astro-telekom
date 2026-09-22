@@ -16,9 +16,9 @@
 
 - #158, #160 и #162 закрыты; `0034`–`0036` применены на внешнем test-контуре, publication ревизии 4 успешна;
 - T1–T4 (#172–#175) реализованы и закрыты, parent #163 закрыт после приемочной сверки 3/3 sub-issues;
-- `0037`–`0038` проверены локально, но еще не подтверждены внешним deployment;
-- #202 включена в Release 1; forward-only `0039` и PostgreSQL 18 rehearsal реализованы локально, но issue остается stop-the-line deployment gate до CI и внешней приемки;
-- актуальный следующий продуктовый путь: T6/F1 → T7/F2 → T8 → P1 → полный gate; rollout/acceptance #202 входят в следующий exact-SHA deployment;
+- `0037`–`0039` развернуты exact-SHA deployment `41odv3auf5vez3nknm0z2gcj` на `96df68594f9955edd7bc7090db03046acae7ea27`;
+- #202 закрыта после зеленого CI, успешного one-shot migrate и live no-op уже восстановленного Site на publication ревизии 5;
+- актуальный следующий продуктовый путь: T6/F1 → T7/F2 → T8 → P1 → полный gate;
 - внешний генератор Celtoman/tarifs#1 остается отдельной dependency и не входит в завершенный scope #163.
 
 Старые формулировки «локально», «ожидает CI» и «незавершенный diff» в историческом порядке волн не являются текущим статусом.
@@ -91,7 +91,7 @@
 | T7: конфигуратор | [#177](https://github.com/Celtoman/astro-telekom/issues/177) | Расчет выбранной комплектации |
 | T8: configuration snapshot | [#178](https://github.com/Celtoman/astro-telekom/issues/178) | Доказуемая заявка |
 | P1: all-URL validation report | [#179](https://github.com/Celtoman/astro-telekom/issues/179) | Атомарная безопасная публикация |
-| D1: repair legacy publication revision | [#202](https://github.com/Celtoman/astro-telekom/issues/202) | Stop-the-line blocker безопасного deployment |
+| D1: repair legacy publication revision | [#202](https://github.com/Celtoman/astro-telekom/issues/202) | Закрыто; exact-SHA rollout подтвержден |
 
 Родительская [#157](https://github.com/Celtoman/astro-telekom/issues/157) также остается в milestone. Внешняя [Celtoman/tarifs#1](https://github.com/Celtoman/tarifs/issues/1) не может входить в milestone другого репозитория, но является явной release dependency.
 
@@ -119,7 +119,7 @@ F1 #170 ────────────────────────
                   exact-SHA test deploy
 ```
 
-F1 можно выполнять параллельно с T6–T7. F2 создает базовую успешную отправку; T8 зависит от F2 и T7 и добавляет immutable configuration snapshot. P1 интегрируется последним, когда доменные validators уже существуют. #202 должен быть устранен и проверен до следующего exact-SHA deployment существующего контура.
+F1 можно выполнять параллельно с T6–T7. F2 создает базовую успешную отправку; T8 зависит от F2 и T7 и добавляет immutable configuration snapshot. P1 интегрируется последним, когда доменные validators уже существуют. #202 устранена и проверена exact-SHA rollout; dependency больше не блокирует следующие задачи.
 
 ## Порядок исполнения Release 1
 
@@ -206,8 +206,8 @@ node --test tests/*.test.cjs tests/*.test.mjs
 | R4 | `ADMIN-003` | #161 | Нет | не начато |
 | EXT1 | `TAR-044–096` | Celtoman/tarifs#1 | Dependency | не начато в `main` генератора |
 | T1 | тарифный value contract | #172 | Да | реализовано, issue закрыта |
-| T2 | `TAR-042–043`, `080–086` | #173 | Да | реализовано, issue закрыта; rollout `0037` не выполнен |
-| T3 | `TAR-001–004`, `014`, `019`, `083` | #174 | Да | реализовано, issue закрыта; rollout `0038` не выполнен |
+| T2 | `TAR-042–043`, `080–086` | #173 | Да | реализовано, issue закрыта; rollout `0037` подтвержден |
+| T3 | `TAR-001–004`, `014`, `019`, `083` | #174 | Да | реализовано, issue закрыта; rollout `0038` подтвержден |
 | T4 | tariff catalog/editor contract | #175 | Да | реализовано, issue закрыта |
 | T5 | tariff archive/slug lifecycle | #180 | Нет | не начато |
 | T6 | typed tariff renderer | #176 | Да | foundation существует |
@@ -238,7 +238,7 @@ node --test tests/*.test.cjs tests/*.test.mjs
 | S4 | local SEO cleanup | #200 | Нет | не начато |
 | P1 | `CORE-006`, `CMS-014`, `036–037`, `ADMIN-043` | #179 | Да | foundation частичный |
 | P2 | `CMS-029–035` | #201 | Нет | не начато |
-| D1 | publication revision repair | #202 | Да | forward-only `0039` и local rehearsal готовы; issue открыта до CI/exact-SHA rollout |
+| D1 | publication revision repair | #202 | Да | закрыто; `0039`, CI, exact-SHA rollout и live smoke подтверждены |
 
 ## Родительские программы
 

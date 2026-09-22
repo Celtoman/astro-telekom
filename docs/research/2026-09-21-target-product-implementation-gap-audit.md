@@ -16,11 +16,11 @@
 | --- | --- |
 | Идентичность Site, телефоны и City contract | #162, #158 и #160 закрыты; миграции `0034`–`0036` применены на внешнем test-контуре в exact-SHA `7baaccf93efceff9c2ff6d094a34d1b8c07427ba`, publication ревизии 4 завершилась `SUCCEEDED`. |
 | T1–T4 | #172–#175 закрыты; текущий `master` содержит точный 37-колоночный parser, business identity, lifecycle/guarded undo и общий каталог/редактор. Parent #163 закрыт после сверки 3/3 sub-issues. |
-| Миграции тарифов | `0037`–`0038` прошли локальный PostgreSQL 18 rehearsal, но еще не подтверждены внешним deployment. |
+| Миграции тарифов | `0037`–`0038` прошли локальный PostgreSQL 18 rehearsal и внешний exact-SHA deployment `41odv3auf5vez3nknm0z2gcj`. |
 | Preview | Защищенный рабочий `/preview` реализован; внешняя preview-ссылка/token отсутствует. |
 | Retention | Согласованный срок сырых заявок — 180 дней; runtime policy задается обязательным `PII_RETENTION_DAYS=180`. |
 | Переменные | `/variables` и `GET/PATCH /admin/sites/:siteId/values` реализуют два типизированных телефонных значения Site. Универсальный registry/parser/catalog V1–V3 не реализован. |
-| Deployment blocker | #202 включена в milestone Release 1. Forward-only `0039` локально устраняет legacy-разрыв через одну repair-revision без изменения `SitePublication`; внешний rollout, явная publication и закрытие issue еще не подтверждены. |
+| Deployment blocker | #202 закрыта. Forward-only `0039` развернута на exact SHA `96df68594f9955edd7bc7090db03046acae7ea27`; live Site уже имел совместимую publication ревизии 5, поэтому migration ожидаемо выполнила no-op без нового audit event. |
 
 Все последующие таблицы остаются историческим объяснением разрыва на 21 сентября. Актуальный порядок исполнения фиксирует [план](../plans/2026-09-21-target-platform-implementation-plan.md), а механический open/closed статус — GitHub Issues.
 
@@ -205,8 +205,8 @@
 Этот раздел уточняет планирование, но не переписывает доказательства исходного read-only аудита выше.
 
 - Release 1 сокращен до сквозного публичного пути: foundation rollout, канонический тарифный импорт, минимальный тарифный admin, публичная тарифная страница и конфигуратор, трехрезультатная форма, immutable snapshot заявки и all-URL publication report.
-- Коммиты `3842d5c`, `0e3ee43`, `027bf97` соответствуют identity, site phones и city catalog; внешнее применение миграций `0034–0036`, общая publication ревизии 4 и live smoke подтверждены 21 сентября на exact-SHA `7baaccf93efceff9c2ff6d094a34d1b8c07427ba`. Forward-only repair `0039` и его четыре локальных PostgreSQL 18 сценария реализованы; внешняя приемка #202 еще не выполнена.
-- На момент исходного среза тарифный diff был незавершенным. В текущем `master` T1 [#172](https://github.com/Celtoman/astro-telekom/issues/172), T2 [#173](https://github.com/Celtoman/astro-telekom/issues/173), T3 [#174](https://github.com/Celtoman/astro-telekom/issues/174) и T4 [#175](https://github.com/Celtoman/astro-telekom/issues/175) реализованы и закрыты; внешний rollout `0037`–`0038` еще не подтвержден.
+- Коммиты `3842d5c`, `0e3ee43`, `027bf97` соответствуют identity, site phones и city catalog; внешнее применение миграций `0034–0036`, общая publication ревизии 4 и live smoke подтверждены 21 сентября на exact-SHA `7baaccf93efceff9c2ff6d094a34d1b8c07427ba`. Forward-only repair `0039`, четыре локальных PostgreSQL 18 сценария и внешний no-op уже восстановленного Site подтверждены; #202 закрыта.
+- На момент исходного среза тарифный diff был незавершенным. В текущем `master` T1 [#172](https://github.com/Celtoman/astro-telekom/issues/172), T2 [#173](https://github.com/Celtoman/astro-telekom/issues/173), T3 [#174](https://github.com/Celtoman/astro-telekom/issues/174) и T4 [#175](https://github.com/Celtoman/astro-telekom/issues/175) реализованы и закрыты; внешний rollout `0037`–`0038` подтвержден deployment `41odv3auf5vez3nknm0z2gcj`.
 - Внешний генератор получил отдельную задачу [Celtoman/tarifs#1](https://github.com/Celtoman/tarifs/issues/1) на 37 колонок и полный отчет покрытия исходных столбцов.
 - Родительские #156–#169 декомпозированы native sub-issues; #163 закрыт после завершения #172–#174. Фактический статус и Release 1 membership читаются из GitHub, а не из фиксированного количества задач в Markdown.
 - C1 [#191](https://github.com/Celtoman/astro-telekom/issues/191) ограничен черновым реестром до появления финальных дизайнов и решения `OPEN-005`.
