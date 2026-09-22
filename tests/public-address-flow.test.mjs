@@ -123,6 +123,7 @@ test('address component exposes one accessible autocomplete and separates busine
   const cityFirstScreen = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'components', 'CityHomeFirstScreen.astro'), 'utf8');
   const blockRenderer = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'components', 'BlockRenderer.astro'), 'utf8');
   const tariffDetail = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'components', 'TariffDetail.astro'), 'utf8');
+  const globalPage = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'components', 'GlobalPage.astro'), 'utf8');
 
   assert.match(addressForm, /<form[\s\S]*autocomplete="off"/);
   assert.match(addressForm, /type="text"[\s\S]*name="address"[\s\S]*autocomplete="off"/);
@@ -140,8 +141,14 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(addressClient, /createLatestRequestGate/);
   assert.match(addressClient, /\.focus\(\)/);
   assert.match(addressClient, /showModal\(\)/);
+  assert.match(addressClient, /trigger\.dataset\.citySlug/);
+  assert.match(addressClient, /form\.dataset\.citySlug.*query\.replace/);
 
   assert.match(cityFirstScreen, /presentation="embedded"/);
   assert.match(blockRenderer, /data-address-dialog-trigger/);
   assert.match(tariffDetail, /data-address-dialog-trigger/);
+  assert.match(globalPage, /data-address-dialog-trigger/);
+  assert.match(globalPage, /data-city-slug=\{city\.slug\}/);
+  assert.match(globalPage, /<AddressForm[\s\S]*presentation="dialog"/);
+  assert.doesNotMatch(globalPage, /#address-check/);
 });

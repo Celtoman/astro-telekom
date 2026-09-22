@@ -303,7 +303,9 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(comboTariffDetail, /Доступно, стоимость уточняется/);
 
   assert.match(coverage, /<h1>Карта покрытия<\/h1>/);
-  assert.match(coverage, /href="\/kazan#address-check"/);
+  assert.match(coverage, /data-address-dialog-trigger="address-entry-coverage"[^>]*data-city-slug="kazan"/);
+  assert.equal((coverage.match(/data-address-check-root data-presentation="dialog"/g) || []).length, 1);
+  assert.doesNotMatch(coverage, /#address-check/);
   assert.match(cities, /<h1[^>]*>Города подключения Дом\.\u0440у<\/h1>/);
   assert.match(cities, /Казань/);
   assert.match(cities, /Альметьевск/);
@@ -318,7 +320,7 @@ test('web build emits city and tariff detail inventory for every published city'
 
   assert.match(addressClientSource, /\/address-suggestions/);
   assert.match(addressClientSource, /suggestion:\s*selectedSuggestion/);
-  assert.equal((addressClientSource.match(/pageSlug:\s*pageSlug\s*\|\|\s*undefined/g) || []).length, 2);
+  assert.equal((addressClientSource.match(/pageSlug:\s*form\.dataset\.pageSlug\s*\|\|\s*undefined/g) || []).length, 2);
   assert.match(addressClientSource, /SUGGESTION_DEBOUNCE_MS\s*=\s*500/);
   assert.match(addressClientSource, /response\.status\s*===\s*429/);
   assert.match(addressClientSource, /ArrowDown/);

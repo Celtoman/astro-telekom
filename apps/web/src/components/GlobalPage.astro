@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { loadSiteData, pageMeta } from '../data/site';
-import { publicHtmlPath } from '../data/public-url';
 import { legalSections } from '../data/legal-pages';
 import CitiesDirectory from './CitiesDirectory.astro';
+import AddressForm from './AddressForm.astro';
 
 interface Props {
   type: 'COVERAGE' | 'CITIES' | 'PRIVACY' | 'PERSONAL_DATA_CONSENT' | 'COOKIE_POLICY';
@@ -42,6 +42,10 @@ const richTextBlocks = (page.blocks || []).filter((block) => block.blockType ===
 const isCoverage = type === 'COVERAGE';
 const domain = Astro.site?.hostname || 'tv-internet-dom.ru';
 const versionedLegalSections = legalSections(type, domain);
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+const publicSiteSlug = import.meta.env.PUBLIC_SITE_SLUG || 'domru-site';
+const coverageDialogId = 'address-entry-coverage';
+const defaultCoverageCity = cities[0];
 ---
 
 <BaseLayout title={meta.title} description={meta.description} {site}>
@@ -57,7 +61,13 @@ const versionedLegalSections = legalSections(type, domain);
     {cities.length > 0 ? <div class="grid">{cities.map((city) => <article class="card">
       <h3>{city.name}</h3>
       <p>Откройте страницу города и укажите адрес для проверки технической возможности.</p>
-      <a class="card-link" href={`${publicHtmlPath(city.slug)}#address-check`}>Проверить адрес →</a>
+      <button
+        class="card-link link-button"
+        type="button"
+        data-address-dialog-trigger={coverageDialogId}
+        data-city-slug={city.slug}
+        aria-label={`Проверить адрес в городе ${city.name}`}
+      >Проверить адрес →</button>
     </article>)}</div> : <p class="lead">Опубликованных городов пока нет.</p>}
   </section> : type !== 'CITIES' && <section class="section container legal-copy">
     {contentText && versionedLegalSections.length === 0 && <p>{contentText}</p>}
@@ -69,9 +79,21 @@ const versionedLegalSections = legalSections(type, domain);
     })}
     {!contentText && versionedLegalSections.length === 0 && richTextBlocks.length === 0 && <p class="lead">Содержание страницы пока не опубликовано.</p>}
   </section>}
+  {isCoverage && defaultCoverageCity && (
+    <AddressForm
+      {apiUrl}
+      siteSlug={publicSiteSlug}
+      pageSlug=""
+      city={defaultCoverageCity}
+      {site}
+      presentation="dialog"
+      dialogId={coverageDialogId}
+    />
+  )}
 </BaseLayout>
 
 <style is:global>
+  .link-button { border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; }
   .legal-copy { max-width: 880px; }
   .legal-copy section + section { margin-top: 32px; }
   .legal-copy p { color: #526071; font-size: 18px; line-height: 1.7; white-space: pre-line; }

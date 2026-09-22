@@ -66,7 +66,7 @@ function initializeRoot(root) {
   const resultHeading = resultDialog?.querySelector('[data-result-heading]');
   if (!form || !addressInput || !submitButton || !suggestionList || !resultDialog || !resultHeading) return;
 
-  const { apiUrl, siteSlug, citySlug, pageSlug } = form.dataset;
+  const { apiUrl, siteSlug } = form.dataset;
   let currentTariff = parseSummary(form.dataset.tariffSummary);
   let selectedSuggestion = null;
   let verifiedCheck = null;
@@ -310,7 +310,7 @@ function initializeRoot(root) {
       setAddressHint('Введите не менее трех символов.');
       return;
     }
-    const cacheKey = query.replace(/\s+/g, ' ').toLocaleLowerCase('ru-RU');
+    const cacheKey = `${form.dataset.citySlug || ''}:${query.replace(/\s+/g, ' ').toLocaleLowerCase('ru-RU')}`;
     if (suggestionCache.has(cacheKey)) {
       renderSuggestions(suggestionCache.get(cacheKey), query);
       return;
@@ -325,7 +325,7 @@ function initializeRoot(root) {
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           signal: controller.signal,
-          body: JSON.stringify({ siteSlug, citySlug, query, website: '' }),
+          body: JSON.stringify({ siteSlug, citySlug: form.dataset.citySlug, query, website: '' }),
         });
         if (!response.ok) {
           const responseError = new Error(suggestionErrorMessage(response));
@@ -397,8 +397,8 @@ function initializeRoot(root) {
         signal: controller.signal,
         body: JSON.stringify({
           siteSlug,
-          citySlug,
-          pageSlug: pageSlug || undefined,
+          citySlug: form.dataset.citySlug,
+          pageSlug: form.dataset.pageSlug || undefined,
           address: addressInput.value,
           suggestion: selectedSuggestion,
           objectType: 'apartment',
@@ -436,6 +436,16 @@ function initializeRoot(root) {
   for (const trigger of document.querySelectorAll(`[data-address-dialog-trigger="${root.dataset.entryDialogId}"]`)) {
     trigger.addEventListener('click', () => {
       opener = trigger;
+      const nextCitySlug = trigger.dataset.citySlug || form.dataset.citySlug;
+      if (nextCitySlug !== form.dataset.citySlug) {
+        form.dataset.citySlug = nextCitySlug;
+        selectedSuggestion = null;
+        invalidateChecks();
+        clearSuggestions();
+        addressInput.value = '';
+        setConfirmed(false);
+        setAddressHint('Начните вводить город и адрес, затем выберите подходящий вариант.');
+      }
       currentTariff = parseSummary(trigger.dataset.tariffSummary) || parseSummary(form.dataset.tariffSummary);
       form.dataset.tariffSlug = trigger.dataset.tariffSlug || currentTariff?.slug || '';
       form.dataset.serviceType = trigger.dataset.serviceType || currentTariff?.serviceType || form.dataset.serviceType;
@@ -480,8 +490,8 @@ function initializeRoot(root) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           siteSlug,
-          citySlug,
-          pageSlug: pageSlug || undefined,
+          citySlug: form.dataset.citySlug,
+          pageSlug: form.dataset.pageSlug || undefined,
           tariffSlug: form.dataset.tariffSlug || undefined,
           formName: 'address-result-dialog',
           phone,
