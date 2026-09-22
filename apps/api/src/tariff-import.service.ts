@@ -419,6 +419,42 @@ export function normalizeTariffAttributes(value: unknown): Prisma.InputJsonObjec
   return result as Prisma.InputJsonObject;
 }
 
+export interface CanonicalTariffCoreInput {
+  name: unknown;
+  slug: unknown;
+  serviceType: ServiceType | string;
+  standardPrice: unknown;
+  promoPrice?: unknown;
+  speed: unknown;
+  connectionFee?: unknown;
+  attributes?: unknown;
+}
+
+export function normalizeCanonicalTariffCore(value: CanonicalTariffCoreInput) {
+  const name = normalizeTariffName(value.name);
+  if (!name) throw new BadRequestException('Название тарифа обязательно');
+  const normalizedSlug = text(value.slug);
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(normalizedSlug)) throw new BadRequestException('slug должен содержать только строчные латинские буквы, цифры и дефисы');
+  const standardPrice = integer(value.standardPrice);
+  const promoPrice = integer(value.promoPrice);
+  const speed = integer(value.speed);
+  const connectionFee = integer(value.connectionFee);
+  if (standardPrice === null || standardPrice <= 0) throw new BadRequestException('Базовая цена должна быть положительным целым числом');
+  if (promoPrice !== null && (promoPrice <= 0 || promoPrice >= standardPrice)) throw new BadRequestException('Промо-цена должна быть положительным целым числом меньше базовой цены');
+  if (speed === null || speed <= 0) throw new BadRequestException('Скорость должна быть положительным целым числом');
+  if (connectionFee !== null && connectionFee < 0) throw new BadRequestException('Стоимость подключения должна быть целым числом от 0 или пустой');
+  const attributes = normalizeTariffAttributes(value.attributes);
+  const total = attributes.tv_channels_total;
+  const hd = attributes.tv_channels_hd;
+  if (value.serviceType === ServiceType.INTERNET && (total !== undefined || hd !== undefined)) {
+    throw new BadRequestException('Для тарифа «Интернет» поля телеканалов должны быть пустыми');
+  }
+  if (value.serviceType === ServiceType.INTERNET_TV && (typeof total !== 'number' || total <= 0)) {
+    throw new BadRequestException('Для тарифа «Интернет+ТВ» tv_channels_total должен быть положительным целым числом');
+  }
+  return { name, slug: normalizedSlug, standardPrice, promoPrice, speed, connectionFee, attributes };
+}
+
 export async function parseWorkbook(buffer: Buffer, fileName = 'import.xlsx'): Promise<Record<string, unknown>[]> {
   if (!/\.xlsx$/i.test(fileName.trim())) {
     throw new BadRequestException('Поддерживаются только файлы .xlsx');
@@ -611,10 +647,13 @@ export class TariffImportService {
 
       if (key && serviceType && matchedCity && speed !== null && speed > 0 && Number.isInteger(speed) && standardPrice !== null && standardPrice > 0 && !issues.some((issue) => issue.row === rowNumber && issue.level === 'error')) {
         const city = cityBySlug.get(citySlug)!;
+        const canonical = normalizeCanonicalTariffCore({
+          name: canonicalName, slug: tariffSlug, serviceType, standardPrice, promoPrice, speed, connectionFee, attributes,
+        });
         candidates.push({
           key, providerId, cityId: city.id, citySlug, name: canonicalName, slug: tariffSlug,
-          serviceType, standardPrice, promoPrice, speed, promoText: htmlToPlainText(row.opisanie_aktsii) || null,
-          connectionFee, availability: 'ACTIVE',
+          serviceType, standardPrice: canonical.standardPrice, promoPrice: canonical.promoPrice, speed: canonical.speed, promoText: htmlToPlainText(row.opisanie_aktsii) || null,
+          connectionFee: canonical.connectionFee, availability: 'ACTIVE',
           identityKey: tariffIdentityKey(city.id, canonicalName, serviceType), dataSource: fileName, attributes: attributes as Prisma.InputJsonObject, status: 'PUBLISHED',
         });
       }

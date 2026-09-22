@@ -68,11 +68,18 @@ test('tariff workspace provides quick detail and a separate guarded long editor'
   assert.match(readFileSync(editorRoute, 'utf8'), /<TariffEditorApp[^>]+client:load/);
   assert.match(listSource, /\/admin\/tariffs\/\$\{id\}/);
   assert.match(listSource, /Быстрый просмотр/);
-  assert.match(listSource, /Рекомендация источника/);
+  assert.match(listSource, /Рекомендация/);
+  assert.match(listSource, /\/admin\/tariffs\/filter-options/);
+  for (const filter of ['cityId', 'regionId', 'serviceType', 'status', 'source', 'promotion', 'archiveReason', 'unpublished']) {
+    assert.ok(listSource.includes(filter), `catalog is missing ${filter} filter`);
+  }
+  assert.match(listSource, /Создать тариф/);
+  assert.match(listSource, /Рабочий статус/);
+  assert.match(listSource, /Есть неопубликованные изменения/);
   assert.match(listSource, /\/tariffs\/edit\?id=/);
 
   const editor = readFileSync(editorPath, 'utf8');
-  assert.match(editor, /method:\s*"PATCH"/);
+  assert.match(editor, /method: isCreate \? "POST" : "PATCH"/);
   assert.match(editor, /confirmSensitiveChanges/);
   assert.match(editor, /hasUnsavedChanges/);
   assert.match(editor, /PublicationStatusCard/);
@@ -86,9 +93,9 @@ test('tariff workspace provides quick detail and a separate guarded long editor'
   assert.match(editor, /value="INCLUDED"/);
   assert.doesNotMatch(editor, /show_on_site|Рекомендация из файла/);
   assert.match(editor, /Город, название и тип образуют бизнес-ключ/);
-  assert.match(editor, /<Input id="name" name="name" value=\{form\.name\} disabled/);
-  assert.match(editor, /<select id="cityId"[^>]+disabled>/);
-  assert.match(editor, /<select id="serviceType"[^>]+disabled>/);
+  assert.match(editor, /method: isCreate \? "POST" : "PATCH"/);
+  assert.match(editor, /Создание тарифа/);
+  assert.match(editor, /disabled=\{!isCreate\}/);
   assert.match(editor, /form\.attributes\[field\.key\] \?\? ""/);
   for (const field of ['name', 'serviceType', 'standardPrice', 'promoPrice', 'speed', 'promoText', 'connectionFee', 'availability', 'externalId', 'dataSource', 'attributes', 'seo']) {
     assert.ok(editor.includes(field), `editor is missing ${field}`);

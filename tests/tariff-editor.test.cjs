@@ -2,7 +2,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { AdminTariffsController } = require('../apps/api/dist/admin-tariffs.controller.js');
 const { TariffImportService } = require('../apps/api/dist/tariff-import.service.js');
-const { UpdateTariffDto } = require('../apps/api/dist/tariff.dto.js');
+const { CreateTariffDto, UpdateTariffDto } = require('../apps/api/dist/tariff.dto.js');
 const { createGlobalValidationPipe } = require('../apps/api/dist/security-options.js');
 
 const publicationStub = {
@@ -21,12 +21,12 @@ const existingTariff = {
 const withRelations = (tariff) => ({
   ...tariff,
   provider: { id: 'provider-1', name: 'Дом.ру' },
-  city: { id: 'city-1', name: 'Казань', slug: 'kazan', siteId: 'site-1' },
+  city: { id: 'city-1', name: 'Казань', slug: 'kazan', siteId: 'site-1', site: { workingRevision: 2, publishedRevision: 1 } },
 });
 
 test('tariff detail exposes the full stored model with provider and city context', async () => {
   let query;
-  const prisma = { tariff: { findUnique: async (request) => { query = request; return { ...existingTariff, provider: { id: 'provider-1', name: 'Дом.ру' }, city: { id: 'city-1', name: 'Казань', slug: 'kazan', siteId: 'site-1' } }; } } };
+  const prisma = { tariff: { findUnique: async (request) => { query = request; return { ...existingTariff, provider: { id: 'provider-1', name: 'Дом.ру' }, city: { id: 'city-1', name: 'Казань', slug: 'kazan', siteId: 'site-1', site: { workingRevision: 2, publishedRevision: 1 } } }; } } };
   const controller = new AdminTariffsController(prisma);
 
   const detail = await controller.detail('tariff-1');
@@ -34,7 +34,8 @@ test('tariff detail exposes the full stored model with provider and city context
   assert.equal(detail.id, 'tariff-1');
   assert.equal(detail.attributes.opisanie_tarifa, 'Описание');
   assert.deepEqual(detail.provider, { id: 'provider-1', name: 'Дом.ру' });
-  assert.deepEqual(query.include.city.select, { id: true, name: true, slug: true, siteId: true });
+  assert.deepEqual(query.include.city.select, { id: true, name: true, slug: true, siteId: true, site: { select: { workingRevision: true, publishedRevision: true } } });
+  assert.equal(detail.publicationState, 'UNPUBLISHED');
   assert.ok(detail.attributeSchema.some((field) => field.key === 'game_code' && field.kind === 'game-code'));
   assert.equal(detail.attributeSchema.some((field) => field.key === 'show_on_site'), false);
 });
@@ -160,6 +161,23 @@ test('tariff update DTO rejects unknown, empty and malformed edit fields at runt
   assert.equal(nullable.seo, null);
 });
 
+test('manual create DTO uses the same integer price and required core contract as import', async () => {
+  const pipe = createGlobalValidationPipe();
+  const metadata = { type: 'body', metatype: CreateTariffDto };
+  const valid = {
+    cityId: 'city-1', name: 'Гига 500', slug: 'giga-500', serviceType: 'INTERNET', standardPrice: 900, speed: 500,
+  };
+  assert.equal((await pipe.transform(valid, metadata)).standardPrice, 900);
+  for (const payload of [
+    { ...valid, standardPrice: 900.5 },
+    { ...valid, speed: undefined },
+    { ...valid, externalId: 'caller-controlled' },
+    { ...valid, status: 'ARCHIVED' },
+  ]) {
+    await assert.rejects(pipe.transform(payload, metadata), (error) => error.getStatus() === 400);
+  }
+});
+
 test('stale tariff editor cannot overwrite a newer import or manual update', async () => {
   let updated = false;
   const tx = { tariff: { findUnique: async () => existingTariff, update: async () => { updated = true; } } };
@@ -248,7 +266,7 @@ test('an imported tariff round-trips through detail and the manual editor contra
   const enrich = (tariff) => ({
     ...tariff,
     provider: { id: 'provider-1', name: 'Дом.ру' },
-    city: { ...city, name: 'Казань' },
+    city: { ...city, name: 'Казань', site: { workingRevision: 1, publishedRevision: 0 } },
   });
   const prisma = {
     city: {

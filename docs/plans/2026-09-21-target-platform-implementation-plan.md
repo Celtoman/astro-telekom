@@ -192,7 +192,7 @@ node --test tests/*.test.cjs tests/*.test.mjs
 | T1 | тарифный value contract | #172 | Да | реализовано, issue закрыта |
 | T2 | `TAR-042–043`, `080–086` | #173 | Да | реализовано, ожидает rollout |
 | T3 | `TAR-001–004`, `014`, `019`, `083` | #174 | Да | реализовано, ожидает rollout |
-| T4 | tariff catalog/editor contract | #175 | Да | частично |
+| T4 | tariff catalog/editor contract | #175 | Да | реализовано локально |
 | T5 | tariff archive/slug lifecycle | #180 | Нет | не начато |
 | T6 | typed tariff renderer | #176 | Да | foundation существует |
 | T7 | tariff calculator/configurator | #177 | Да | не начато |

@@ -1,34 +1,12 @@
 import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { isDeepStrictEqual } from 'node:util';
-import { Prisma, TariffArchiveReason, TariffAvailability } from '../generated';
-import { CursorPageQueryDto, decodeCursor, encodeCursor, pageSize, searchQuery } from './admin-pagination';
+import { Prisma, ServiceType, TariffArchiveReason, TariffAvailability } from '../generated';
+import { decodeCursor, encodeCursor, pageSize, searchQuery } from './admin-pagination';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
-import { ImportReport, normalizeTariffAttributes, normalizeTariffName, parseWorkbook, TARIFF_ATTRIBUTE_FIELDS, tariffIdentityKey, TariffImportService } from './tariff-import.service';
-import { UpdateTariffDto } from './tariff.dto';
+import { ImportReport, normalizeCanonicalTariffCore, normalizeTariffAttributes, normalizeTariffName, parseWorkbook, TARIFF_ATTRIBUTE_FIELDS, tariffIdentityKey, TariffImportService } from './tariff-import.service';
+import { CreateTariffDto, TariffListQueryDto, UpdateTariffDto } from './tariff.dto';
 import { PublicationWorkflowService } from './publication-workflow.service';
-
-type ServiceType = 'INTERNET' | 'INTERNET_TV' | 'TV' | 'OTHER';
-type PublishStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
-
-interface TariffBody {
-  providerId: string;
-  cityId: string;
-  name: string;
-  slug: string;
-  serviceType: ServiceType;
-  standardPrice?: number;
-  promoPrice?: number;
-  speed?: number;
-  promoText?: string;
-  connectionFee?: number;
-  availability?: TariffAvailability;
-  externalId?: string;
-  dataSource?: string;
-  attributes?: object;
-  seo?: object;
-  status?: PublishStatus;
-}
 
 interface AdminRequest {
   user?: { id: string };
@@ -44,27 +22,37 @@ export class AdminTariffsController {
   ) {}
 
   @Get()
-  async list(@Query() query: CursorPageQueryDto = {}) {
+  async list(@Query() query: TariffListQueryDto = {}) {
     const limit = pageSize(query.limit);
     const q = searchQuery(query.q);
     const cursor = decodeCursor(query.cursor);
+    const sites = await this.prisma.site.findMany({ select: { id: true, workingRevision: true, publishedRevision: true } });
+    const unpublishedSiteIds = sites.filter((site) => site.workingRevision > site.publishedRevision).map((site) => site.id);
     const searchWhere: Prisma.TariffWhereInput | undefined = q ? {
       OR: [
         { name: { contains: q, mode: 'insensitive' } },
         { slug: { contains: q, mode: 'insensitive' } },
-        { city: { name: { contains: q, mode: 'insensitive' } } },
+        { externalId: { contains: q, mode: 'insensitive' } },
       ],
     } : undefined;
+    const filters: Prisma.TariffWhereInput[] = [
+      ...(query.cityId ? [{ cityId: query.cityId }] : []),
+      ...(query.regionId ? [{ city: { regionId: query.regionId } }] : []),
+      ...(query.serviceType ? [{ serviceType: query.serviceType }] : []),
+      ...(query.status ? [{ status: query.status }] : []),
+      ...(query.source ? [{ dataSource: query.source }] : []),
+      ...(query.promotion === 'WITH' ? [{ promoPrice: { not: null } }] : query.promotion === 'WITHOUT' ? [{ promoPrice: null }] : []),
+      ...(query.archiveReason === 'NONE' ? [{ archiveReason: null }] : query.archiveReason ? [{ archiveReason: query.archiveReason }] : []),
+      ...(query.unpublished === 'true' ? [{ city: { siteId: { in: unpublishedSiteIds } } }] : query.unpublished === 'false' ? [{ city: { siteId: { notIn: unpublishedSiteIds } } }] : []),
+    ];
     const cursorWhere: Prisma.TariffWhereInput | undefined = cursor ? {
       OR: [
         { updatedAt: { lt: cursor.sortValue } },
         { updatedAt: cursor.sortValue, id: { lt: cursor.id } },
       ],
     } : undefined;
-    const where: Prisma.TariffWhereInput = searchWhere && cursorWhere
-      ? { AND: [searchWhere, cursorWhere] }
-      : searchWhere || cursorWhere || {};
-    const filterWhere: Prisma.TariffWhereInput = searchWhere || {};
+    const filterWhere: Prisma.TariffWhereInput = { AND: [...filters, ...(searchWhere ? [searchWhere] : [])] };
+    const where: Prisma.TariffWhereInput = { AND: [...filters, ...(searchWhere ? [searchWhere] : []), ...(cursorWhere ? [cursorWhere] : [])] };
     const [rows, total] = await this.prisma.$transaction([
       this.prisma.tariff.findMany({
         where,
@@ -80,14 +68,20 @@ export class AdminTariffsController {
           speed: true,
           status: true,
           availability: true,
+          archiveReason: true,
+          dataSource: true,
+          externalId: true,
           updatedAt: true,
-          city: { select: { id: true, name: true, slug: true } },
+          city: { select: { id: true, name: true, slug: true, region: { select: { id: true, name: true } }, site: { select: { id: true, workingRevision: true, publishedRevision: true } } } },
         },
       }),
       this.prisma.tariff.count({ where: filterWhere }),
     ]);
     const hasNextPage = rows.length > limit;
-    const items = rows.slice(0, limit);
+    const items = rows.slice(0, limit).map((tariff) => {
+      const hasUnpublishedChanges = Boolean(tariff.city?.site && tariff.city.site.workingRevision > tariff.city.site.publishedRevision);
+      return { ...tariff, publicationState: hasUnpublishedChanges ? 'UNPUBLISHED' : 'PUBLISHED', hasUnpublishedChanges };
+    });
     const last = items.at(-1);
     return {
       items,
@@ -100,41 +94,83 @@ export class AdminTariffsController {
     };
   }
 
+  @Get('filter-options')
+  async filterOptions() {
+    const [cities, sources] = await this.prisma.$transaction([
+      this.prisma.city.findMany({
+        orderBy: [{ name: 'asc' }, { id: 'asc' }],
+        select: {
+          id: true, name: true, slug: true, siteId: true,
+          region: { select: { id: true, name: true } },
+          site: { select: { provider: { select: { id: true, name: true } } } },
+        },
+      }),
+      this.prisma.tariff.findMany({ where: { dataSource: { not: null } }, distinct: ['dataSource'], orderBy: { dataSource: 'asc' }, select: { dataSource: true } }),
+    ]);
+    const regions = [...new Map(cities.map((city) => [city.region.id, city.region])).values()].sort((left, right) => left.name.localeCompare(right.name, 'ru'));
+    return { cities, regions, sources: sources.flatMap((item) => item.dataSource ? [item.dataSource] : []), attributeSchema: TARIFF_ATTRIBUTE_FIELDS };
+  }
+
   @Post()
-  async create(@Body() body: TariffBody, @Req() request?: AdminRequest) {
+  async create(@Body() body: CreateTariffDto, @Req() request?: AdminRequest) {
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
-      const city = await transaction.city.findUnique({ where: { id: body.cityId }, select: { siteId: true } });
+      const city = await transaction.city.findUnique({
+        where: { id: body.cityId },
+        select: { id: true, slug: true, siteId: true, status: true, site: { select: { providerId: true } } },
+      });
       if (!city) throw new BadRequestException('Город тарифа не найден');
-      const name = normalizeTariffName(body.name);
-      if (!name) throw new BadRequestException('Название тарифа обязательно');
-      if (body.status !== undefined && body.availability !== undefined) {
-        const statusArchived = body.status === 'ARCHIVED';
-        const availabilityArchived = body.availability === TariffAvailability.ARCHIVED;
-        if (statusArchived !== availabilityArchived) throw new BadRequestException('Статус и доступность архива должны быть согласованы');
+      if (body.status === 'PUBLISHED' && body.confirmSensitiveChanges !== true) throw new BadRequestException('Требуется подтверждение статуса публикации');
+      for (const [field, value] of [['attributes', body.attributes], ['seo', body.seo]] as const) {
+        if (value !== undefined && JSON.stringify(value).length > 262_144) throw new BadRequestException(`${field} превышает допустимый размер`);
       }
-      const archived = body.status === 'ARCHIVED' || body.availability === TariffAvailability.ARCHIVED;
-      const data = {
-        ...body,
-        name,
-        identityKey: tariffIdentityKey(body.cityId, name, body.serviceType),
-        availability: archived ? TariffAvailability.ARCHIVED : TariffAvailability.ACTIVE,
-        status: archived ? 'ARCHIVED' as const : body.status,
-        archiveReason: archived ? TariffArchiveReason.MANUAL : null,
-        archivedAt: archived ? new Date() : null,
+      const canonical = normalizeCanonicalTariffCore(body);
+      const identityKey = tariffIdentityKey(body.cityId, canonical.name, body.serviceType);
+      const occupiedPage = await transaction.page.findFirst({ where: { cityId: city.id, slug: canonical.slug, status: 'PUBLISHED' }, select: { id: true } });
+      if (occupiedPage) throw new ConflictException('Целевой URL занят опубликованной страницей');
+      const occupiedTariff = await transaction.tariff.findFirst({ where: { cityId: city.id, OR: [{ slug: canonical.slug }, { identityKey }] }, select: { id: true, slug: true } });
+      if (occupiedTariff?.slug === canonical.slug) throw new ConflictException(`Целевой URL /${city.slug}/${canonical.slug} занят другим тарифом`);
+      if (occupiedTariff) throw new ConflictException('Тариф с таким городом, названием и типом уже существует');
+      const data: Prisma.TariffUncheckedCreateInput = {
+        providerId: city.site.providerId,
+        cityId: city.id,
+        name: canonical.name,
+        slug: canonical.slug,
+        serviceType: body.serviceType,
+        standardPrice: canonical.standardPrice,
+        promoPrice: canonical.promoPrice,
+        speed: canonical.speed,
+        promoText: body.promoText?.trim() || null,
+        connectionFee: canonical.connectionFee,
+        identityKey,
+        dataSource: 'manual',
+        attributes: canonical.attributes,
+        seo: body.seo === null || body.seo === undefined ? Prisma.JsonNull : body.seo as Prisma.InputJsonValue,
+        availability: TariffAvailability.ACTIVE,
+        status: body.status ?? 'DRAFT',
+        archiveReason: null,
+        archivedAt: null,
         archivedByImportRunId: null,
       };
-      const tariff = await transaction.tariff.create({ data });
+      const tariff = await transaction.tariff.create({
+        data,
+        include: { provider: { select: { id: true, name: true } }, city: { select: { id: true, name: true, slug: true, siteId: true } } },
+      });
+      const { provider: _provider, city: _city, ...tariffSnapshot } = tariff;
       const revision = await this.publications.recordWorkingRevision(transaction, {
         siteId: city.siteId,
         entityType: 'TARIFF',
         entityId: tariff.id,
         action: 'CREATE',
-        snapshot: tariff as unknown as Record<string, unknown>,
+        snapshot: tariffSnapshot as unknown as Record<string, unknown>,
         changedFields: Object.keys(data),
         actorId: request?.user?.id,
         source: 'admin',
       });
-      return { ...tariff, workingRevision: revision.siteRevision };
+      return {
+        tariff: { ...tariff, publicPath: `/${tariff.city.slug}/${tariff.slug}`, attributeSchema: TARIFF_ATTRIBUTE_FIELDS, publicationState: 'UNPUBLISHED', hasUnpublishedChanges: true },
+        workingRevision: revision.siteRevision,
+        redirectOutcome: 'unchanged',
+      };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
@@ -254,11 +290,19 @@ export class AdminTariffsController {
       where: { id },
       include: {
         provider: { select: { id: true, name: true } },
-        city: { select: { id: true, name: true, slug: true, siteId: true } },
+        city: { select: { id: true, name: true, slug: true, siteId: true, site: { select: { workingRevision: true, publishedRevision: true } } } },
       },
     });
     if (!tariff) throw new NotFoundException('Тариф не найден');
-    return { ...tariff, publicPath: `/${tariff.city.slug}/${tariff.slug}`, attributeSchema: TARIFF_ATTRIBUTE_FIELDS };
+    const siteState = tariff.city.site ?? { workingRevision: 0, publishedRevision: 0 };
+    const hasUnpublishedChanges = siteState.workingRevision > siteState.publishedRevision;
+    return {
+      ...tariff,
+      publicPath: `/${tariff.city.slug}/${tariff.slug}`,
+      attributeSchema: TARIFF_ATTRIBUTE_FIELDS,
+      publicationState: hasUnpublishedChanges ? 'UNPUBLISHED' : 'PUBLISHED',
+      hasUnpublishedChanges,
+    };
   }
 
   @Patch(':id')
@@ -305,6 +349,16 @@ export class AdminTariffsController {
       const nextSlug = body.slug ?? existing.slug;
       const nextName = body.name === undefined ? existing.name : normalizeTariffName(body.name);
       const nextServiceType = body.serviceType ?? existing.serviceType as ServiceType;
+      const canonical = normalizeCanonicalTariffCore({
+        name: nextName,
+        slug: nextSlug,
+        serviceType: nextServiceType,
+        standardPrice: body.standardPrice === undefined ? existing.standardPrice : body.standardPrice,
+        promoPrice: body.promoPrice === undefined ? existing.promoPrice : body.promoPrice,
+        speed: body.speed === undefined ? existing.speed : body.speed,
+        connectionFee: body.connectionFee === undefined ? existing.connectionFee : body.connectionFee,
+        attributes: normalizedAttributes === undefined ? existing.attributes : normalizedAttributes,
+      });
       if (body.status !== undefined && body.availability !== undefined) {
         const statusArchived = body.status === 'ARCHIVED';
         const availabilityArchived = body.availability === TariffAvailability.ARCHIVED;
@@ -398,6 +452,11 @@ export class AdminTariffsController {
         if (body[field] !== undefined) Object.assign(data, { [field]: body[field] });
       }
       if (body.name !== undefined) data.name = nextName;
+      if (body.slug !== undefined) data.slug = canonical.slug;
+      if (body.standardPrice !== undefined) data.standardPrice = canonical.standardPrice;
+      if (body.promoPrice !== undefined) data.promoPrice = canonical.promoPrice;
+      if (body.speed !== undefined) data.speed = canonical.speed;
+      if (body.connectionFee !== undefined) data.connectionFee = canonical.connectionFee;
       if (normalizedAttributes !== undefined) data.attributes = normalizedAttributes === null ? Prisma.JsonNull : normalizedAttributes;
       if (body.seo !== undefined) data.seo = body.seo === null ? Prisma.JsonNull : body.seo as Prisma.InputJsonValue;
       const tariff = await transaction.tariff.update({

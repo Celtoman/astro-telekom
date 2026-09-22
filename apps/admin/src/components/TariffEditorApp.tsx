@@ -14,7 +14,7 @@ import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
 
 interface Administrator { id: string; email: string }
-interface City { id: string; name: string; slug: string; siteId: string }
+interface City { id: string; name: string; slug: string; siteId: string; site: { provider: { id: string; name: string } } }
 interface AttributeField { key: string; label: string; group: string; kind: "text" | "number" | "integer" | "boolean" | "service-status" | "code-list" | "game-code"; maxLength?: number; multiline?: boolean }
 interface TariffDetail {
   id: string
@@ -46,6 +46,7 @@ interface TariffDetail {
   attributeSchema: AttributeField[]
 }
 interface UpdateResult { tariff: TariffDetail; workingRevision: number; redirectOutcome: string }
+interface FilterOptions { cities: City[]; attributeSchema: AttributeField[] }
 interface FormState {
   cityId: string
   name: string
@@ -118,31 +119,41 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
   const [confirmed, setConfirmed] = useState(false)
   const [savedWorkingRevision, setSavedWorkingRevision] = useState<number | null>(null)
   const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
+  const [isCreate, setIsCreate] = useState(false)
 
   const hasUnsavedChanges = useMemo(() => Boolean(form && initialForm && JSON.stringify(form) !== JSON.stringify(initialForm)), [form, initialForm])
-  const needsConfirmation = useMemo(() => Boolean(form && initialForm && (
+  const needsConfirmation = useMemo(() => Boolean(form && initialForm && (isCreate ? form.status === "PUBLISHED" : (
     form.cityId !== initialForm.cityId || form.slug !== initialForm.slug || form.status !== initialForm.status ||
     form.standardPrice !== initialForm.standardPrice || form.promoPrice !== initialForm.promoPrice ||
     form.connectionFee !== initialForm.connectionFee || form.seo !== initialForm.seo ||
     tariff?.attributeSchema.some((field) => field.kind === "integer" && field.key.includes("price") && form.attributes[field.key] !== initialForm.attributes[field.key])
-  )), [form, initialForm, tariff])
+  ))), [form, initialForm, isCreate, tariff])
 
   useEffect(() => {
     let active = true
     async function load() {
       const tariffId = new URLSearchParams(window.location.search).get("id") || ""
-      if (!tariffId) { setError("В адресе не указан тариф"); setLoading(false); return }
       try {
         const session = await requestJson<{ user: Administrator }>(apiUrl, "/auth/me")
-        const [detail, cityRows] = await Promise.all([
-          requestJson<TariffDetail>(apiUrl, `/admin/tariffs/${tariffId}`),
-          requestJson<City[]>(apiUrl, "/admin/cities"),
-        ])
+        const metadata = await requestJson<FilterOptions>(apiUrl, "/admin/tariffs/filter-options")
+        if (!active) return
+        if (!metadata.cities.length) throw new Error("Сначала создайте город")
+        const detail = tariffId ? await requestJson<TariffDetail>(apiUrl, `/admin/tariffs/${tariffId}`) : (() => {
+          const city = metadata.cities[0]
+          return {
+            id: "", providerId: city.site.provider.id, cityId: city.id, name: "", slug: "", serviceType: "INTERNET" as const,
+            standardPrice: null, promoPrice: null, speed: null, promoText: null, connectionFee: null, availability: "ACTIVE" as const,
+            archiveReason: null, archivedAt: null, archivedByImportRunId: null, externalId: null, identityKey: null, dataSource: "manual",
+            attributes: {}, seo: null, status: "DRAFT" as const, provider: city.site.provider, city, createdAt: "", updatedAt: "",
+            attributeSchema: metadata.attributeSchema,
+          }
+        })()
         if (!active) return
         const nextForm = formFromTariff(detail)
         setUser(session.user)
         setTariff(detail)
-        setCities(cityRows.filter((city) => city.siteId === detail.city.siteId))
+        setCities(metadata.cities.filter((city) => !tariffId || city.siteId === detail.city.siteId))
+        setIsCreate(!tariffId)
         setForm(nextForm)
         setInitialForm(nextForm)
       } catch (caught: unknown) {
@@ -180,10 +191,13 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
     const errors: Record<string, string> = {}
     if (!current.name.trim()) errors.name = "Укажите название"
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(current.slug)) errors.slug = "Только строчные латинские буквы, цифры и дефисы"
-    for (const [field, min] of [["standardPrice", 0.01], ["promoPrice", 0], ["connectionFee", 0]] as const) {
+    if (!current.standardPrice) errors.standardPrice = "Укажите базовую цену"
+    if (!current.speed) errors.speed = "Укажите скорость"
+    for (const [field, min] of [["standardPrice", 1], ["promoPrice", 1], ["connectionFee", 0]] as const) {
       const value = current[field]
-      if (value && (!Number.isFinite(Number(value)) || Number(value) < min)) errors[field] = `Число не меньше ${min}`
+      if (value && (!Number.isInteger(Number(value)) || Number(value) < min)) errors[field] = `Целое число не меньше ${min}`
     }
+    if (current.promoPrice && current.standardPrice && Number(current.promoPrice) >= Number(current.standardPrice)) errors.promoPrice = "Промо-цена должна быть меньше базовой"
     if (current.speed && (!Number.isInteger(Number(current.speed)) || Number(current.speed) < 1)) errors.speed = "Целое число не меньше 1"
     try { parseObject(current.seo, "SEO") } catch (caught) { errors.seo = caught instanceof Error ? caught.message : "Некорректный JSON" }
     for (const field of tariff?.attributeSchema || []) {
@@ -208,10 +222,10 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
     setSaving(true)
     setError(null)
     try {
-      const result = await requestJson<UpdateResult>(apiUrl, `/admin/tariffs/${tariff.id}`, {
-        method: "PATCH",
+      const result = await requestJson<UpdateResult>(apiUrl, isCreate ? "/admin/tariffs" : `/admin/tariffs/${tariff.id}`, {
+        method: isCreate ? "POST" : "PATCH",
         body: {
-          expectedUpdatedAt: tariff.updatedAt,
+          ...(!isCreate ? { expectedUpdatedAt: tariff.updatedAt } : {}),
           cityId: form.cityId,
           name: form.name.trim(),
           slug: form.slug,
@@ -234,6 +248,10 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
       setConfirmed(false)
       setSavedWorkingRevision(result.workingRevision)
       setPublicationRefreshKey((current) => current + 1)
+      if (isCreate) {
+        setIsCreate(false)
+        window.history.replaceState(null, "", `/tariffs/edit?id=${encodeURIComponent(result.tariff.id)}`)
+      }
     } catch (caught: unknown) {
       setError(caught instanceof Error ? caught.message : "Тариф не сохранен")
     } finally { setSaving(false) }
@@ -255,16 +273,16 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
 
   return <AdminShell apiUrl={apiUrl} user={user} active="tariffs">
     <form onSubmit={(event) => void save(event)} className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-6 lg:p-8">
-      <div className="flex flex-wrap items-start justify-between gap-4"><div><Button type="button" variant="ghost" className="-ml-2 mb-2" onClick={leaveEditor}><ArrowLeft data-icon="inline-start" />К тарифам</Button><h1 className="font-heading text-2xl font-semibold">Редактирование тарифа</h1><p className="mt-1 text-sm text-muted-foreground">{tariff.provider.name} · {tariff.city.name} · {tariff.publicPath}</p></div><div className="flex gap-2"><Button type="button" variant="outline" onClick={leaveEditor}>Отмена</Button>{renderSaveButton()}</div></div>
+      <div className="flex flex-wrap items-start justify-between gap-4"><div><Button type="button" variant="ghost" className="-ml-2 mb-2" onClick={leaveEditor}><ArrowLeft data-icon="inline-start" />К тарифам</Button><h1 className="font-heading text-2xl font-semibold">{isCreate ? "Создание тарифа" : "Редактирование тарифа"}</h1><p className="mt-1 text-sm text-muted-foreground">{tariff.provider.name} · {tariff.city.name}{tariff.publicPath ? ` · ${tariff.publicPath}` : ""}</p></div><div className="flex gap-2"><Button type="button" variant="outline" onClick={leaveEditor}>Отмена</Button>{renderSaveButton()}</div></div>
       {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Не удалось сохранить</AlertTitle><AlertDescription>{error}</AlertDescription></Alert> : null}
       {savedWorkingRevision ? <Alert><Save /><AlertTitle>Рабочая версия {savedWorkingRevision} сохранена</AlertTitle><AlertDescription>Изменения еще не опубликованы. Проверьте состояние ниже и запустите публикацию отдельно.</AlertDescription></Alert> : null}
-      <PublicationStatusCard apiUrl={apiUrl} siteId={tariff.city.siteId} publicationRefreshKey={publicationRefreshKey} />
+      {!isCreate ? <PublicationStatusCard apiUrl={apiUrl} siteId={tariff.city.siteId} publicationRefreshKey={publicationRefreshKey} /> : null}
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="flex min-w-0 flex-col gap-6">
-          <Card id="main"><CardHeader><CardTitle>Основные данные</CardTitle><CardDescription>Город, название и тип образуют бизнес-ключ. Для их изменения создайте новый тариф; slug меняется отдельно с подтверждением и 301.</CardDescription></CardHeader><CardContent><FieldGroup><div className="grid gap-4 md:grid-cols-2"><Field data-invalid={Boolean(fieldErrors.name)}><FieldLabel htmlFor="name">Название</FieldLabel><Input id="name" name="name" value={form.name} disabled aria-invalid={Boolean(fieldErrors.name)} /><FieldError>{fieldErrors.name}</FieldError></Field><Field data-invalid={Boolean(fieldErrors.slug)}><FieldLabel htmlFor="slug">Slug</FieldLabel><Input id="slug" name="slug" value={form.slug} onChange={(event) => update("slug", event.target.value)} aria-invalid={Boolean(fieldErrors.slug)} /><FieldDescription>Публичный URL без завершающего слэша.</FieldDescription><FieldError>{fieldErrors.slug}</FieldError></Field><Field><FieldLabel htmlFor="cityId">Город</FieldLabel><select id="cityId" name="cityId" className={selectClass} value={form.cityId} disabled>{cities.map((city) => <option value={city.id} key={city.id}>{city.name}</option>)}</select></Field><Field><FieldLabel htmlFor="serviceType">Тип услуги</FieldLabel><select id="serviceType" name="serviceType" className={selectClass} value={form.serviceType} disabled>{serviceTypeOptions.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}</select></Field><Field><FieldLabel htmlFor="status">Статус публикации</FieldLabel><select id="status" name="status" className={selectClass} value={form.status} onChange={(event) => update("status", event.target.value as FormState["status"])}>{publishStatusOptions.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}</select></Field><Field><FieldLabel htmlFor="availability">Жизненный цикл</FieldLabel><Input id="availability" value={tariff.availability === "ACTIVE" ? "Активен" : "Архив"} disabled /><FieldDescription>Изменяется через статус публикации или полный импорт тарифов.</FieldDescription></Field></div></FieldGroup></CardContent></Card>
+          <Card id="main"><CardHeader><CardTitle>Основные данные</CardTitle><CardDescription>Город, название и тип образуют бизнес-ключ. После создания для их изменения потребуется новый тариф; slug меняется отдельно с подтверждением и 301.</CardDescription></CardHeader><CardContent><FieldGroup><div className="grid gap-4 md:grid-cols-2"><Field data-invalid={Boolean(fieldErrors.name)}><FieldLabel htmlFor="name">Название</FieldLabel><Input id="name" name="name" value={form.name} disabled={!isCreate} onChange={(event) => update("name", event.target.value)} aria-invalid={Boolean(fieldErrors.name)} /><FieldError>{fieldErrors.name}</FieldError></Field><Field data-invalid={Boolean(fieldErrors.slug)}><FieldLabel htmlFor="slug">Slug</FieldLabel><Input id="slug" name="slug" value={form.slug} onChange={(event) => update("slug", event.target.value)} aria-invalid={Boolean(fieldErrors.slug)} /><FieldDescription>Публичный URL без завершающего слэша.</FieldDescription><FieldError>{fieldErrors.slug}</FieldError></Field><Field><FieldLabel htmlFor="cityId">Город</FieldLabel><select id="cityId" name="cityId" className={selectClass} value={form.cityId} disabled={!isCreate} onChange={(event) => update("cityId", event.target.value)}>{cities.map((city) => <option value={city.id} key={city.id}>{city.name}</option>)}</select></Field><Field><FieldLabel htmlFor="serviceType">Тип услуги</FieldLabel><select id="serviceType" name="serviceType" className={selectClass} value={form.serviceType} disabled={!isCreate} onChange={(event) => update("serviceType", event.target.value as FormState["serviceType"])}>{serviceTypeOptions.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}</select></Field><Field><FieldLabel htmlFor="status">Статус публикации</FieldLabel><select id="status" name="status" className={selectClass} value={form.status} onChange={(event) => update("status", event.target.value as FormState["status"])}>{publishStatusOptions.filter((option) => !isCreate || option.value !== "ARCHIVED").map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}</select></Field><Field><FieldLabel htmlFor="availability">Жизненный цикл</FieldLabel><Input id="availability" value={tariff.availability === "ACTIVE" ? "Активен" : "Архив"} disabled /><FieldDescription>Изменяется через статус публикации или полный импорт тарифов.</FieldDescription></Field></div></FieldGroup></CardContent></Card>
 
-          <Card id="conditions"><CardHeader><CardTitle>Условия тарифа</CardTitle><CardDescription>Цена, скорость и текст предложения.</CardDescription></CardHeader><CardContent><FieldGroup><div className="grid gap-4 md:grid-cols-3">{([["standardPrice", "Базовая цена"], ["promoPrice", "Промо-цена"], ["connectionFee", "Подключение"]] as const).map(([field, label]) => <Field key={field} data-invalid={Boolean(fieldErrors[field])}><FieldLabel htmlFor={field}>{label}, ₽</FieldLabel><Input id={field} name={field} type="number" min={field === "standardPrice" ? "0.01" : "0"} step="0.01" value={form[field]} onChange={(event) => update(field, event.target.value)} aria-invalid={Boolean(fieldErrors[field])} /><FieldError>{fieldErrors[field]}</FieldError></Field>)}<Field data-invalid={Boolean(fieldErrors.speed)}><FieldLabel htmlFor="speed">Скорость, Мбит/с</FieldLabel><Input id="speed" name="speed" type="number" min="1" step="1" value={form.speed} onChange={(event) => update("speed", event.target.value)} aria-invalid={Boolean(fieldErrors.speed)} /><FieldError>{fieldErrors.speed}</FieldError></Field></div><Field><FieldLabel htmlFor="promoText">Промо-текст</FieldLabel><textarea id="promoText" name="promoText" className={inputClass} value={form.promoText} onChange={(event) => update("promoText", event.target.value)} /></Field></FieldGroup></CardContent></Card>
+          <Card id="conditions"><CardHeader><CardTitle>Условия тарифа</CardTitle><CardDescription>Целые цены и скорость проходят тот же базовый контракт, что XLSX-импорт.</CardDescription></CardHeader><CardContent><FieldGroup><div className="grid gap-4 md:grid-cols-3">{([["standardPrice", "Базовая цена"], ["promoPrice", "Промо-цена"], ["connectionFee", "Подключение"]] as const).map(([field, label]) => <Field key={field} data-invalid={Boolean(fieldErrors[field])}><FieldLabel htmlFor={field}>{label}, ₽</FieldLabel><Input id={field} name={field} type="number" min={field === "standardPrice" || field === "promoPrice" ? "1" : "0"} step="1" value={form[field]} onChange={(event) => update(field, event.target.value)} aria-invalid={Boolean(fieldErrors[field])} /><FieldError>{fieldErrors[field]}</FieldError></Field>)}<Field data-invalid={Boolean(fieldErrors.speed)}><FieldLabel htmlFor="speed">Скорость, Мбит/с</FieldLabel><Input id="speed" name="speed" type="number" min="1" step="1" value={form.speed} onChange={(event) => update("speed", event.target.value)} aria-invalid={Boolean(fieldErrors.speed)} /><FieldError>{fieldErrors.speed}</FieldError></Field></div><Field><FieldLabel htmlFor="promoText">Промо-текст</FieldLabel><textarea id="promoText" name="promoText" className={inputClass} value={form.promoText} onChange={(event) => update("promoText", event.target.value)} /></Field></FieldGroup></CardContent></Card>
 
           {attributeGroups.map(([group, fields], groupIndex) => <details id={`attributes-${groupIndex}`} open className="rounded-xl border bg-card" key={group}><summary className="cursor-pointer px-6 py-5 font-heading font-semibold">{group}</summary><div className="border-t px-6 py-5"><FieldGroup><div className="grid gap-4 md:grid-cols-2">{fields.map((field) => { const errorKey = `attribute-${field.key}`; const value = form.attributes[field.key] ?? ""; return <Field key={field.key} data-invalid={Boolean(fieldErrors[errorKey])}><FieldLabel htmlFor={errorKey}>{field.label}</FieldLabel>{field.kind === "boolean" ? <select id={errorKey} name={errorKey} className={selectClass} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)}><option value="">Не задано</option><option value="true">Да</option><option value="false">Нет</option></select> : field.kind === "service-status" ? <select id={errorKey} name={errorKey} className={selectClass} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)}><option value="">Не задано</option><option value="UNAVAILABLE">Недоступно</option><option value="OPTIONAL">Доступно как опция</option><option value="INCLUDED">Включено в тариф</option></select> : field.multiline ? <textarea id={errorKey} name={errorKey} className={inputClass} maxLength={field.maxLength} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)} /> : <Input id={errorKey} name={errorKey} type={field.kind === "number" || field.kind === "integer" ? "number" : "text"} min={field.kind === "number" || field.kind === "integer" ? "0" : undefined} step={field.kind === "integer" ? "1" : field.kind === "number" ? "0.01" : undefined} maxLength={field.maxLength} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)} />}<FieldError>{fieldErrors[errorKey]}</FieldError></Field>})}</div></FieldGroup></div></details>)}
           <Card id="seo"><CardHeader><CardTitle>SEO</CardTitle><CardDescription>Структурированные SEO-переопределения тарифа.</CardDescription></CardHeader><CardContent><Field data-invalid={Boolean(fieldErrors.seo)}><FieldLabel htmlFor="seo-json">SEO JSON</FieldLabel><textarea id="seo-json" name="seo" spellCheck={false} className={`${inputClass} min-h-40 font-mono`} value={form.seo} onChange={(event) => update("seo", event.target.value)} aria-invalid={Boolean(fieldErrors.seo)} /><FieldError>{fieldErrors.seo}</FieldError></Field></CardContent></Card>

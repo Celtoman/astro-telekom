@@ -4,6 +4,7 @@ const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 const { AdminTariffsController } = require('../apps/api/dist/admin-tariffs.controller.js');
 const { CursorPageQueryDto } = require('../apps/api/dist/admin-pagination.js');
+const { TariffListQueryDto } = require('../apps/api/dist/tariff.dto.js');
 const { CrmLeadsController, LeadListQueryDto } = require('../apps/api/dist/crm-leads.controller.js');
 const { createGlobalValidationPipe } = require('../apps/api/dist/security-options.js');
 
@@ -25,6 +26,7 @@ function transactionPrisma(modelName, rows, counts) {
           return counts[countIndex++];
         },
       },
+      site: { findMany: async () => [] },
       $transaction: async (queries) => Promise.all(queries),
     },
   };
@@ -74,7 +76,39 @@ test('tariff catalog applies server search and enforces the page-size upper boun
   assert.equal(result.pageInfo.hasNextPage, true);
   assert.equal(prisma.calls.findMany[0].take, 101);
   assert.deepEqual(prisma.calls.findMany[0].orderBy, [{ updatedAt: 'desc' }, { id: 'desc' }]);
-  assert.equal(prisma.calls.findMany[0].where.OR.length, 3);
+  assert.equal(prisma.calls.findMany[0].where.AND[0].OR.length, 3);
+  assert.deepEqual(prisma.calls.findMany[0].where.AND[0].OR.map((item) => Object.keys(item)[0]), ['name', 'slug', 'externalId']);
+});
+
+test('tariff catalog applies all Release 1 filters on the server and separates site publication state', async () => {
+  const calls = [];
+  const row = {
+    id: 'tariff-1', updatedAt: new Date('2026-09-10T00:00:00Z'),
+    city: { site: { id: 'site-1', workingRevision: 4, publishedRevision: 3 } },
+  };
+  const prisma = {
+    site: { findMany: async () => [{ id: 'site-1', workingRevision: 4, publishedRevision: 3 }] },
+    tariff: {
+      findMany: async (query) => { calls.push(query); return [row]; },
+      count: async () => 1,
+    },
+    $transaction: async (queries) => Promise.all(queries),
+  };
+
+  const result = await new AdminTariffsController(prisma, {}, {}).list({
+    cityId: 'city-1', regionId: 'region-1', serviceType: 'INTERNET', status: 'DRAFT', source: 'manual',
+    promotion: 'WITH', archiveReason: 'NONE', unpublished: 'true', q: 'external-1',
+  });
+
+  const where = JSON.stringify(calls[0].where);
+  for (const expected of ['city-1', 'region-1', 'INTERNET', 'DRAFT', 'manual', 'site-1', 'externalId']) assert.match(where, new RegExp(expected));
+  assert.equal(result.items[0].publicationState, 'UNPUBLISHED');
+  assert.equal(result.items[0].hasUnpublishedChanges, true);
+
+  const pipe = createGlobalValidationPipe();
+  const transformed = await pipe.transform({ promotion: 'WITHOUT', unpublished: 'false' }, queryMetadata(TariffListQueryDto));
+  assert.equal(transformed.promotion, 'WITHOUT');
+  await assert.rejects(pipe.transform({ unpublished: 'sometimes' }, queryMetadata(TariffListQueryDto)), (error) => error.getStatus() === 400);
 });
 
 test('admin list endpoints reject malformed opaque cursors', async () => {

@@ -10,7 +10,11 @@ function fixture({ pageConflict = false, tariffConflict = false, redirectConflic
   const createdRedirects = [];
   const flattenedRedirects = [];
   let updatedTariff = null;
-  const existing = { id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'old-slug', serviceType: 'INTERNET', status, updatedAt: new Date('2026-09-10T00:00:00Z') };
+  const existing = {
+    id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1', name: 'Гига 500', slug: 'old-slug', serviceType: 'INTERNET',
+    standardPrice: 900, promoPrice: 700, speed: 500, connectionFee: 0, attributes: {}, availability: 'ACTIVE', status,
+    updatedAt: new Date('2026-09-10T00:00:00Z'),
+  };
   const tx = {
     tariff: {
       findUnique: async () => existing,

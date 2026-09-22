@@ -22,7 +22,8 @@ test('manual tariff edit preserves one identity and rejects a business-key renam
   const updatedAt = new Date('2026-09-10T00:00:00Z');
   const existing = {
     id: 'tariff', providerId: 'provider', cityId: 'city', name: 'Старый тариф', slug: 'stable-slug',
-    serviceType: 'INTERNET', status: 'DRAFT', updatedAt,
+    serviceType: 'INTERNET', standardPrice: 900, promoPrice: null, speed: 500, connectionFee: 0,
+    attributes: {}, status: 'DRAFT', availability: 'ACTIVE', updatedAt,
   };
   const tx = {
     city: { findUnique: async () => ({ id: 'city', slug: 'kazan', siteId: 'site', status: 'PUBLISHED', site: { providerId: 'provider' } }) },
@@ -58,11 +59,13 @@ test('manual create ignores a caller-supplied identity key and derives the canon
   let saved;
   const revisions = [];
   const prisma = {
-    city: { findUnique: async () => ({ siteId: 'site' }) },
+    city: { findUnique: async () => ({ id: 'city', slug: 'kazan', siteId: 'site', status: 'PUBLISHED', site: { providerId: 'provider' } }) },
+    page: { findFirst: async () => null },
     tariff: {
+      findFirst: async () => null,
       create: async ({ data }) => {
         saved = data;
-        return { id: 'tariff', ...data };
+        return { id: 'tariff', ...data, provider: { id: 'provider', name: 'Дом.ру' }, city: { id: 'city', name: 'Казань', slug: 'kazan', siteId: 'site' } };
       },
     },
   };
@@ -78,12 +81,13 @@ test('manual create ignores a caller-supplied identity key and derives the canon
 
   const result = await controller.create({
     providerId: 'provider', cityId: 'city', name: '  Интернет\u00a0 500  ', slug: 'internet-500',
-    serviceType: 'INTERNET', identityKey: 'attacker:key',
+    serviceType: 'INTERNET', standardPrice: 900, speed: 500, identityKey: 'attacker:key',
   }, { user: { id: 'user-1' } });
 
   assert.equal(saved.name, 'Интернет 500');
   assert.equal(saved.identityKey, 'city:интернет 500:INTERNET');
   assert.equal(result.workingRevision, 3);
+  assert.equal(result.tariff.publicPath, '/kazan/internet-500');
   assert.equal(revisions[0].siteId, 'site');
   assert.equal(revisions[0].entityType, 'TARIFF');
   assert.equal(revisions[0].action, 'CREATE');
@@ -100,7 +104,7 @@ test('manual create rejects an empty canonical tariff name before writing', asyn
   const controller = new AdminTariffsController({ $transaction: async (callback) => callback(tx) }, undefined, publicationStub);
 
   await assert.rejects(
-    controller.create({ providerId: 'provider', cityId: 'city', name: '\u00a0  ', slug: 'empty', serviceType: 'INTERNET' }),
+    controller.create({ providerId: 'provider', cityId: 'city', name: '\u00a0  ', slug: 'empty', serviceType: 'INTERNET', standardPrice: 900, speed: 500 }),
     /название тарифа обязательно/i,
   );
   assert.equal(writes, 0);
