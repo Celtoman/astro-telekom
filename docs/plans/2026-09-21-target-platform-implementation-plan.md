@@ -17,8 +17,8 @@
 - #158, #160 и #162 закрыты; `0034`–`0036` применены на внешнем test-контуре, publication ревизии 4 успешна;
 - T1–T4 (#172–#175) реализованы и закрыты, parent #163 закрыт после приемочной сверки 3/3 sub-issues;
 - `0037`–`0038` проверены локально, но еще не подтверждены внешним deployment;
-- #202 включена в Release 1 как stop-the-line blocker безопасного upgrade существующего publication snapshot;
-- актуальный следующий продуктовый путь: #202 → T6/F1 → T7/F2 → T8 → P1 → полный gate и exact-SHA deployment;
+- #202 включена в Release 1; forward-only `0039` и PostgreSQL 18 rehearsal реализованы локально, но issue остается stop-the-line deployment gate до CI и внешней приемки;
+- актуальный следующий продуктовый путь: T6/F1 → T7/F2 → T8 → P1 → полный gate; rollout/acceptance #202 входят в следующий exact-SHA deployment;
 - внешний генератор Celtoman/tarifs#1 остается отдельной dependency и не входит в завершенный scope #163.
 
 Старые формулировки «локально», «ожидает CI» и «незавершенный diff» в историческом порядке волн не являются текущим статусом.
@@ -238,7 +238,7 @@ node --test tests/*.test.cjs tests/*.test.mjs
 | S4 | local SEO cleanup | #200 | Нет | не начато |
 | P1 | `CORE-006`, `CMS-014`, `036–037`, `ADMIN-043` | #179 | Да | foundation частичный |
 | P2 | `CMS-029–035` | #201 | Нет | не начато |
-| D1 | publication revision repair | #202 | Да | открыт; stop-the-line deployment blocker |
+| D1 | publication revision repair | #202 | Да | forward-only `0039` и local rehearsal готовы; issue открыта до CI/exact-SHA rollout |
 
 ## Родительские программы
 
