@@ -82,15 +82,24 @@ const apiFixture = {
           promoText: 'Три месяца по специальной цене',
           attributes: {
             card_subtitle: 'Для большой квартиры',
-            promo_feature: 'Быстрый интернет для всей семьи',
             opisanie_tarifa: 'Тариф для работы, учебы и развлечений дома.',
-            equip_router: 'Wi-Fi 6 роутер доступен в рассрочку',
             router_installment_months: 12,
             router_installment_price: 200,
           },
           seo: { title: 'API Интернет 500 в Казани', description: 'Условия тарифа API Интернет 500 и проверка подключения в Казани.' },
         },
-        tariff('api-internet-tv-500', 'API Интернет и ТВ 500', 500, 999, 0, 'INTERNET_TV'),
+        {
+          ...tariff('api-internet-tv-500', 'API Интернет и ТВ 500', 500, 999, 0, 'INTERNET_TV'),
+          attributes: {
+            tv_channels_total: 190,
+            tv_channels_hd: 60,
+            online_cinemas: 'ivi,kinopoisk',
+            tvbox_buyout_price: 5000,
+            srv_gaming_status: 'INCLUDED',
+            game_code: 'warface',
+            srv_litres_status: 'OPTIONAL',
+          },
+        },
         { ...tariff('draft-tariff-in-published-city', 'Черновой тариф', 100, 100), status: 'DRAFT' },
       ],
     },
@@ -201,6 +210,7 @@ test('web build emits city and tariff detail inventory for every published city'
   const kazan = await readBuilt(join('kazan', 'index.html'));
   const almetyevsk = await readBuilt(join('almetyevsk', 'index.html'));
   const tariffDetail = await readBuilt(join('kazan', 'api-internet-500', 'index.html'));
+  const comboTariffDetail = await readBuilt(join('kazan', 'api-internet-tv-500', 'index.html'));
   const coverage = await readBuilt(join('karta-pokrytiya-provaydera', 'index.html'));
   const cities = await readBuilt(join('goroda-obsluzhivaniya', 'index.html'));
   const privacy = await readBuilt(join('politika-konfidencialnosti', 'index.html'));
@@ -269,12 +279,27 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(tariffDetail, /Для большой квартиры/);
   assert.match(tariffDetail, /до 500 Мбит\/с/);
   assert.match(tariffDetail, /777 ₽\/мес\./);
-  assert.match(tariffDetail, /Wi-Fi 6 роутер доступен в рассрочку/);
+  assert.match(tariffDetail, /Wi-Fi-роутер/);
+  assert.match(tariffDetail, /У меня свой роутер/);
   assert.match(tariffDetail, /12 месяцев/);
   assert.match(tariffDetail, /200 ₽\/мес\./);
+  assert.match(tariffDetail, /ТВ не включено/);
   assert.match(tariffDetail, /data-tariff-slug="api-internet-500"/);
   assert.match(tariffDetail, /href="\/kazan\/api-internet-tv-500"/);
   assert.doesNotMatch(tariffDetail, /private_token|secret/);
+  const tariffBlockOrder = ['hero', 'description', 'equipment', 'address', 'related', 'faq']
+    .map((block) => tariffDetail.indexOf(`data-tariff-block="${block}"`));
+  assert.ok(tariffBlockOrder.every((index) => index >= 0));
+  assert.deepEqual(tariffBlockOrder, [...tariffBlockOrder].sort((left, right) => left - right));
+
+  assert.match(comboTariffDetail, /190 каналов, 60 HD/);
+  assert.match(comboTariffDetail, /Иви/);
+  assert.match(comboTariffDetail, /Кинопоиск/);
+  assert.match(comboTariffDetail, /ТВ-приставка/);
+  assert.match(comboTariffDetail, /Warface/);
+  assert.match(comboTariffDetail, /Включено в тариф/);
+  assert.match(comboTariffDetail, /ЛитРес/);
+  assert.match(comboTariffDetail, /Доступно, стоимость уточняется/);
 
   assert.match(coverage, /<h1>Карта покрытия<\/h1>/);
   assert.match(coverage, /href="\/kazan#address-check"/);

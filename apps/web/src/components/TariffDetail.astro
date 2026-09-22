@@ -14,10 +14,6 @@ interface Props {
 }
 
 const { city, site, tariff, relatedTariffs, apiUrl, siteSlug } = Astro.props as Props;
-const attributes = tariff.attributes;
-const textAttribute = (key: string) => typeof attributes[key] === 'string' ? String(attributes[key]) : null;
-const numberAttribute = (key: string) => typeof attributes[key] === 'number' ? Number(attributes[key]) : null;
-const money = (value: number) => `${new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(value).replace(/[\u00a0\u202f]/g, ' ')} ₽`;
 const monthWord = (count: number) => {
   const mod100 = count % 100;
   const mod10 = count % 10;
@@ -26,45 +22,6 @@ const monthWord = (count: number) => {
   if (mod10 >= 2 && mod10 <= 4) return 'месяца';
   return 'месяцев';
 };
-
-const subtitle = textAttribute('card_subtitle') || textAttribute('promo_feature');
-const description = textAttribute('opisanie_tarifa');
-const badge = textAttribute('badge_text');
-const tvChannels = numberAttribute('tv_channels_total');
-const hdChannels = numberAttribute('tv_channels_hd');
-const onlineCinemas = textAttribute('online_cinemas');
-
-const equipment = [
-  {
-    title: 'Wi-Fi-роутер',
-    condition: textAttribute('equip_router'),
-    buyout: numberAttribute('router_buyout_price'),
-    installmentMonths: numberAttribute('router_installment_months'),
-    installmentPrice: numberAttribute('router_installment_price'),
-  },
-  {
-    title: 'ТВ-приставка',
-    condition: textAttribute('equip_tv_box'),
-    buyout: numberAttribute('tvbox_buyout_price'),
-    installmentMonths: numberAttribute('tvbox_installment_months'),
-    installmentPrice: numberAttribute('tvbox_installment_price'),
-  },
-].filter((item) => item.condition || item.buyout !== null || item.installmentPrice !== null);
-
-const serviceDefinitions = [
-  ['srv_video_status', 'Видеосервис', 'srv_video_price'],
-  ['srv_gaming_status', textAttribute('srv_gaming_name') || 'Игровой сервис', null],
-  ['srv_vkplaycloud_status', 'VK Play Cloud', null],
-  ['srv_litres_status', 'ЛитРес', null],
-  ['srv_ont_status', 'ONT-терминал', null],
-  ['srv_staticip_status', 'Статический IP', null],
-] as const;
-const services = serviceDefinitions.flatMap(([statusKey, title, priceKey]) => {
-  const status = numberAttribute(statusKey);
-  if (status === null || status < 0) return [];
-  const price = priceKey ? numberAttribute(priceKey) : null;
-  return [{ title, status: status === 1 ? 'Включено в тариф' : 'Можно подключить отдельно', price }];
-});
 ---
 
 <article class="tariff-detail" data-tariff-detail>
@@ -73,20 +30,28 @@ const services = serviceDefinitions.flatMap(([statusKey, title, priceKey]) => {
       <a href="/">Главная</a><span aria-hidden="true">/</span><a href={publicHtmlPath(city.slug)}>{city.name}</a><span aria-hidden="true">/</span><span aria-current="page">{tariff.name}</span>
     </nav>
 
-    <section class="tariff-hero">
+    <section class="tariff-hero" data-tariff-block="hero">
       <div class="tariff-copy">
-        <div class="tariff-labels"><span class="service-label">{tariff.service}</span>{badge && <span class="badge">{badge}</span>}</div>
+        <div class="tariff-labels">
+          <span class="service-label">{tariff.service}</span>
+          {tariff.badge && <span class="badge">{tariff.badge}</span>}
+        </div>
         <h1>{tariff.name}</h1>
-        {subtitle && <p class="subtitle">{subtitle}</p>}
+        {tariff.subtitle && <p class="subtitle">{tariff.subtitle}</p>}
         <dl class="tariff-facts">
-          {tariff.speedMbps !== null && <div><dt>Скорость</dt><dd>{tariff.speed}</dd></div>}
-          {tvChannels !== null && <div><dt>Телевидение</dt><dd>{tvChannels} каналов{hdChannels !== null ? `, ${hdChannels} HD` : ''}</dd></div>}
-          <div><dt>Доступность</dt><dd>{tariff.availability ? 'Проверяется по адресу' : 'Временно недоступен'}</dd></div>
+          {tariff.baseComponents.map((component) => (
+            <div class:list={{ 'is-missing': !component.included }} data-component={component.code}>
+              <dt>{component.title}</dt>
+              <dd>{component.value}</dd>
+            </div>
+          ))}
+          <div><dt>Доступность</dt><dd>{tariff.availability ? 'Проверяется по адресу' : 'Тариф в архиве'}</dd></div>
         </dl>
       </div>
       <aside class="price-panel" aria-label="Стоимость тарифа">
         {tariff.promoText && <span class="promo">{tariff.promoText}</span>}
-        <div class="price">{tariff.price}</div>
+        {tariff.pricing.standardLabel && <del class="standard-price">{tariff.pricing.standardLabel}</del>}
+        <div class="price">{tariff.pricing.currentLabel}</div>
         {tariff.connection && <p>{tariff.connection}</p>}
         <a class="button" href="#address-check">Проверить адрес</a>
         <small>Окончательные условия и техническую возможность подтвердит оператор.</small>
@@ -94,17 +59,116 @@ const services = serviceDefinitions.flatMap(([statusKey, title, priceKey]) => {
     </section>
   </div>
 
-  {(description || onlineCinemas) && <section class="section container details-section"><div><span class="section-kicker">Состав тарифа</span><h2>Что входит</h2></div><div class="details-copy">{description && <p>{description}</p>}{onlineCinemas && <p><strong>Онлайн-кинотеатры:</strong> {onlineCinemas}</p>}</div></section>}
+  {tariff.description && (
+    <section class="section container details-section" data-tariff-block="description">
+      <div><span class="section-kicker">Состав тарифа</span><h2>Что входит</h2></div>
+      <p class="details-copy">{tariff.description}</p>
+    </section>
+  )}
 
-  {equipment.length > 0 && <section class="section soft-section"><div class="container"><span class="section-kicker">Оборудование</span><h2>Оборудование для подключения</h2><div class="cards">{equipment.map((item) => <article class="card"><h3>{item.title}</h3>{item.condition && <p>{item.condition}</p>}<ul>{item.buyout !== null && <li>Выкуп: {money(item.buyout)}</li>}{item.installmentPrice !== null && <li>Рассрочка: {money(item.installmentPrice)}/мес.{item.installmentMonths !== null ? ` на ${item.installmentMonths} ${monthWord(item.installmentMonths)}` : ''}</li>}</ul></article>)}</div></div></section>}
+  {tariff.cinemas.length > 0 && (
+    <section class="section container" data-tariff-block="cinemas">
+      <span class="section-kicker">Уже включено</span>
+      <h2>Онлайн-кинотеатры</h2>
+      <div class="cinema-list">
+        {tariff.cinemas.map((cinema) => <span class="cinema-chip" data-cinema-code={cinema.code}>{cinema.title}</span>)}
+      </div>
+    </section>
+  )}
 
-  {services.length > 0 && <section class="section container"><span class="section-kicker">Дополнительные возможности</span><h2>Сервисы и опции</h2><div class="cards">{services.map((service) => <article class="card"><h3>{service.title}</h3><p>{service.status}{service.price !== null ? ` — ${money(service.price)}/мес.` : ''}</p></article>)}</div></section>}
+  {tariff.equipment.length > 0 && (
+    <section class="section soft-section" data-tariff-block="equipment">
+      <div class="container">
+        <span class="section-kicker">Оборудование</span>
+        <h2>Варианты для подключения</h2>
+        <div class="cards">
+          {tariff.equipment.map((item) => (
+            <article class="card" data-equipment-code={item.code}>
+              <h3>{item.title}</h3>
+              <ul class="option-list">
+                {item.options.map((option) => (
+                  <li>
+                    <span>{option.label}</span>
+                    <strong>{option.amountLabel}{option.months ? ` на ${option.months} ${monthWord(option.months)}` : ''}</strong>
+                  </li>
+                ))}
+                <li><span>Без оборудования</span><strong>{item.alternative}</strong></li>
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
-  <section class="section address-section"><div class="container address-layout"><div><span class="section-kicker">Проверка подключения</span><h2>Доступен ли тариф по вашему адресу</h2><p>Введите точный адрес. Если подключение возможно, форма предложит оставить номер для оформления заявки.</p></div><AddressForm {apiUrl} {siteSlug} pageSlug="" {city} {site} mode="visible" serviceType={tariff.serviceType} tariffSlug={tariff.slug} embedded /></div></section>
+  {(tariff.game || tariff.services.length > 0) && (
+    <section class="section container" data-tariff-block="services">
+      <span class="section-kicker">Дополнительные возможности</span>
+      <h2>Сервисы и игры</h2>
+      <div class="cards">
+        {tariff.game && (
+          <article class="card accent-card" data-game-code={tariff.game.code}>
+            <span class="card-eyebrow">Игровое предложение</span>
+            <h3>{tariff.game.title}</h3>
+            <p>{tariff.game.statusLabel}</p>
+          </article>
+        )}
+        {tariff.services.map((service) => (
+          <article class="card" data-service-code={service.code}>
+            <h3>{service.title}</h3>
+            <p>{service.statusLabel}</p>
+            {service.monthlyPriceLabel && <p><strong>{service.monthlyPriceLabel}</strong></p>}
+            {service.oneTimeCharges.length > 0 && (
+              <ul class="charge-list">
+                {service.oneTimeCharges.map((item) => <li>{item.label}: <strong>{item.amountLabel}</strong></li>)}
+              </ul>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
 
-  {relatedTariffs.length > 0 && <section class="section container"><span class="section-kicker">Другие варианты</span><h2>Похожие тарифы в {city.nameIn}</h2><div class="cards related-cards">{relatedTariffs.map((item) => <article class="card"><span class="service-label">{item.service}</span><h3>{item.name}</h3><p>{item.speed}</p><div class="related-price">{item.price}</div><a class="card-link" href={publicHtmlPath(city.slug, item.slug)}>Подробнее о тарифе →</a></article>)}</div></section>}
+  <section class="section address-section" data-tariff-block="address">
+    <div class="container address-layout">
+      <div>
+        <span class="section-kicker">Проверка подключения</span>
+        <h2>Доступен ли тариф по вашему адресу</h2>
+        <p>Введите точный адрес. Если подключение возможно, форма предложит оставить номер для оформления заявки.</p>
+      </div>
+      <AddressForm {apiUrl} {siteSlug} pageSlug="" {city} {site} mode="visible" serviceType={tariff.serviceType} tariffSlug={tariff.slug} embedded />
+    </div>
+  </section>
 
-  <section class="section soft-section"><div class="container faq-layout"><div><span class="section-kicker">Вопросы и ответы</span><h2>О тарифе и подключении</h2></div><div class="faq-list"><details><summary>Как узнать, доступен ли тариф по моему адресу?</summary><p>Введите город, улицу и дом в форме выше. Техническая доступность проверяется для точного адреса.</p></details><details><summary>Какая стоимость будет после заявки?</summary><p>На странице показаны опубликованные условия тарифа. Итоговую стоимость, оборудование и доступные опции подтвердит оператор перед подключением.</p></details><details><summary>Можно ли выбрать другой тариф?</summary><p>Да. Ниже и на странице города показаны другие опубликованные предложения для {city.nameIn}.</p></details></div></div></section>
+  {relatedTariffs.length > 0 && (
+    <section class="section container" data-tariff-block="related">
+      <span class="section-kicker">Другие варианты</span>
+      <h2>Похожие тарифы в {city.nameIn}</h2>
+      <div class="cards related-cards">
+        {relatedTariffs.map((item) => (
+          <article class="card">
+            <span class="service-label">{item.service}</span>
+            <h3>{item.name}</h3>
+            <p>{item.speed}</p>
+            {item.cardFeature && <p>{item.cardFeature}</p>}
+            <div class="related-price">{item.price}</div>
+            <a class="card-link" href={publicHtmlPath(city.slug, item.slug)}>Подробнее о тарифе →</a>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="section soft-section" data-tariff-block="faq">
+    <div class="container faq-layout">
+      <div><span class="section-kicker">Вопросы и ответы</span><h2>О тарифе и подключении</h2></div>
+      <div class="faq-list">
+        <details><summary>Как узнать, доступен ли тариф по моему адресу?</summary><p>Введите город, улицу и дом в форме выше. Техническая доступность проверяется для точного адреса.</p></details>
+        <details><summary>Какая стоимость будет после заявки?</summary><p>На странице показаны опубликованные условия тарифа. Итоговую стоимость, оборудование и доступные опции подтвердит оператор перед подключением.</p></details>
+        <details><summary>Можно ли выбрать другой тариф?</summary><p>Да. Ниже и на странице города показаны другие опубликованные предложения для {city.nameIn}.</p></details>
+      </div>
+    </div>
+  </section>
 </article>
 
 <style>
@@ -117,30 +181,36 @@ const services = serviceDefinitions.flatMap(([statusKey, title, priceKey]) => {
   .tariff-copy, .price-panel { border: 1px solid #dcecf7; border-radius: 30px; background: #eaf7ff; box-shadow: 0 18px 50px rgb(21 40 66 / 8%); }
   .tariff-copy { padding: clamp(28px, 4vw, 52px); }
   .tariff-labels { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-  .service-label, .section-kicker { color: #c91f5c; font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+  .service-label, .section-kicker, .card-eyebrow { color: #c91f5c; font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
   .badge, .promo { display: inline-flex; border-radius: 999px; padding: 7px 11px; color: #8d1744; background: #fde8f0; font-size: 13px; font-weight: 800; }
   h1 { max-width: 760px; margin: 18px 0 14px; font-size: clamp(40px, 5.5vw, 68px); line-height: .98; letter-spacing: -.055em; }
   .subtitle { max-width: 700px; margin: 0; color: #526071; font-size: clamp(18px, 2vw, 22px); line-height: 1.45; }
   .tariff-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 30px 0 0; }
   .tariff-facts div { border: 1px solid rgb(255 255 255 / 88%); border-radius: 16px; padding: 14px; background: rgb(255 255 255 / 74%); }
+  .tariff-facts .is-missing { background: rgb(255 255 255 / 45%); }
   .tariff-facts dt { margin-bottom: 6px; color: #697789; font-size: 12px; font-weight: 700; }
   .tariff-facts dd { margin: 0; font-weight: 850; }
+  .tariff-facts .is-missing dd { color: #697789; }
   .price-panel { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 32px; background: #fff; }
-  .price { margin: 18px 0 4px; font-size: clamp(34px, 4vw, 46px); font-weight: 900; letter-spacing: -.05em; }
+  .standard-price { margin-top: 18px; color: #697789; font-size: 18px; }
+  .price { margin: 4px 0; font-size: clamp(34px, 4vw, 46px); font-weight: 900; letter-spacing: -.05em; }
   .price-panel p { color: #526071; }
   .price-panel .button { width: 100%; margin-top: 18px; }
   .price-panel small { margin-top: 16px; color: #697789; line-height: 1.45; }
   .section { padding: 64px 0; }
   .section h2 { margin: 10px 0 28px; font-size: clamp(32px, 4vw, 46px); line-height: 1.08; letter-spacing: -.04em; }
   .details-section { display: grid; grid-template-columns: .65fr 1.35fr; gap: 56px; }
-  .details-copy { color: #334155; font-size: 19px; line-height: 1.65; }
-  .details-copy p { margin: 0 0 16px; }
+  .details-copy { margin: 0; color: #334155; font-size: 19px; line-height: 1.65; white-space: pre-line; }
   .soft-section, .address-section { background: #edf4fb; }
   .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
   .card { border: 1px solid #dce5ee; border-radius: 22px; padding: 26px; background: #fff; }
+  .accent-card { border-color: #f3b4cc; background: #fff7fa; }
   .card h3 { margin: 10px 0; font-size: 22px; }
   .card p, .card li { color: #526071; line-height: 1.5; }
-  .card ul { padding-left: 20px; }
+  .option-list, .charge-list { display: grid; gap: 10px; padding: 0; list-style: none; }
+  .option-list li { display: flex; flex-direction: column; gap: 3px; padding-top: 10px; border-top: 1px solid #edf1f5; }
+  .cinema-list { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cinema-chip { border: 1px solid #dce5ee; border-radius: 999px; padding: 12px 18px; background: #fff; font-weight: 800; }
   .address-layout, .faq-layout { display: grid; grid-template-columns: .75fr 1.25fr; align-items: start; gap: 48px; }
   .address-layout > div > p { color: #526071; font-size: 18px; line-height: 1.55; }
   .related-price { margin: 20px 0 4px; font-size: 25px; font-weight: 850; }
@@ -155,8 +225,7 @@ const services = serviceDefinitions.flatMap(([statusKey, title, priceKey]) => {
   }
   @media (max-width: 620px) {
     .container { width: min(100% - 20px, 1200px); }
-    .tariff-copy, .price-panel { border-radius: 22px; }
-    .tariff-copy, .price-panel { padding: 24px 20px; }
+    .tariff-copy, .price-panel { border-radius: 22px; padding: 24px 20px; }
     .tariff-facts, .cards { grid-template-columns: 1fr; }
     .section { padding: 48px 0; }
   }

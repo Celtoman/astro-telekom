@@ -223,7 +223,13 @@ const demoCities: CityView[] = [{
   }],
   tariffs: [
     tariffView({ slug: 'internet-300', name: 'Интернет 300 Мбит/с', serviceType: 'INTERNET', speed: 300 }),
-    tariffView({ slug: 'internet-tv-500', name: 'Интернет + ТВ 500 Мбит/с', serviceType: 'INTERNET_TV', speed: 500 }),
+    tariffView({
+      slug: 'internet-tv-500',
+      name: 'Интернет + ТВ 500 Мбит/с',
+      serviceType: 'INTERNET_TV',
+      speed: 500,
+      attributes: { tv_channels_total: 190, tv_channels_hd: 60 },
+    }),
   ],
 }];
 const demoRoutes = expectedReleaseOneRoutes(demoCities, demoGlobalPages);
