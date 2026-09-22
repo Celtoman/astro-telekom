@@ -117,6 +117,24 @@ test('browser contract validates typed responses, complete house suggestions and
   assert.equal(gate.isCurrent(second), false);
 });
 
+test('browser phone contract normalizes Russian numbers and formats the final mask', async () => {
+  const moduleUrl = pathToFileURL(join(repositoryRoot, 'apps', 'web', 'src', 'lib', 'address-check-flow.mjs'));
+  const {
+    createSubmissionKey,
+    formatRussianPhone,
+    normalizeRussianPhone,
+  } = await import(moduleUrl.href);
+
+  assert.equal(normalizeRussianPhone('+7 (900) 123-45-67'), '79001234567');
+  assert.equal(normalizeRussianPhone('8 900 123 45 67'), '79001234567');
+  assert.equal(normalizeRussianPhone('9001234567'), '79001234567');
+  assert.equal(normalizeRussianPhone('900123456'), null);
+  assert.equal(normalizeRussianPhone('+1 900 123-45-67'), null);
+  assert.equal(formatRussianPhone('89001234567'), '+7 (900) 123-45-67');
+  assert.equal(formatRussianPhone('+1 900 123-45-67'), '+19001234567');
+  assert.match(createSubmissionKey(), /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+});
+
 test('address component exposes one accessible autocomplete and separates business dialogs from technical recovery', async () => {
   const addressForm = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'components', 'AddressForm.astro'), 'utf8');
   const addressClient = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'lib', 'address-check-client.mjs'), 'utf8');
@@ -136,6 +154,13 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(addressForm, />Повторить</);
   assert.match(addressForm, />Изменить адрес</);
   assert.match(addressForm, />Проверить другой адрес</);
+  assert.match(addressForm, /data-phone-input/);
+  assert.match(addressForm, /Введите российский номер из 10 цифр/);
+  assert.match(addressForm, /href="\/politika-konfidencialnosti"/);
+  assert.match(addressForm, /href="\/soglasie-na-obrabotku-personalnyh-dannyh"/);
+  assert.match(addressForm, /data-lead-success/);
+  assert.match(addressForm, />Спасибо! Заявка отправлена</);
+  assert.match(addressForm, /data-lead-success-close/);
   assert.match(addressClient, /aria-activedescendant/);
   for (const key of ['ArrowDown', 'ArrowUp', 'Enter', 'Escape']) assert.match(addressClient, new RegExp(key));
   assert.match(addressClient, /createLatestRequestGate/);
@@ -143,6 +168,10 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(addressClient, /showModal\(\)/);
   assert.match(addressClient, /trigger\.dataset\.citySlug/);
   assert.match(addressClient, /form\.dataset\.citySlug.*query\.replace/);
+  assert.match(addressClient, /leadSubmitting/);
+  assert.match(addressClient, /submissionKey/);
+  assert.match(addressClient, /consentVersion/);
+  assert.match(addressClient, /Попробовать ещё раз/);
 
   assert.match(cityFirstScreen, /presentation="embedded"/);
   assert.match(blockRenderer, /data-address-dialog-trigger/);

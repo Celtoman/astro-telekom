@@ -8,6 +8,7 @@ import { LeadNotificationOutboxService } from './lead-notification-outbox.servic
 import { normalizeAddress, normalizePhone } from './lead-utils';
 import { CreateLeadDto } from './public.dto';
 import { readTarifnikCoverageSnapshot } from './coverage.service';
+import { LEAD_CONSENT_VERSION } from './lead-consent';
 
 @Controller('leads')
 export class PublicLeadsController {
@@ -25,6 +26,13 @@ export class PublicLeadsController {
     if (body.website) throw new BadRequestException('Некорректный запрос');
     if (typeof body.phone !== 'string' || !body.phone.trim() || typeof body.citySlug !== 'string' || !body.citySlug.trim()) {
       throw new BadRequestException('Телефон и город обязательны');
+    }
+    if (!body.submissionKey || body.consentVersion !== LEAD_CONSENT_VERSION) {
+      throw new BadRequestException('Не удалось подтвердить условия отправки заявки. Обновите страницу');
+    }
+    const phone = normalizePhone(body.phone);
+    if (!/^7\d{10}$/.test(phone)) {
+      throw new BadRequestException('Введите российский номер из 10 цифр');
     }
 
     const site = await this.prisma.site.findFirst({
@@ -63,90 +71,141 @@ export class PublicLeadsController {
       throw new BadRequestException('Тип объекта изменился. Выполните проверку повторно');
     }
 
-    const phone = body.phone.trim();
     const address = addressCheck?.address ?? body.address?.trim();
+    const coverage = addressCheck ? readTarifnikCoverageSnapshot(addressCheck.response) : null;
+    if (!addressCheck || addressCheck.status !== 'AVAILABLE' || !coverage?.hasTargetProvider) {
+      throw new BadRequestException('Заявку можно отправить только после положительной проверки адреса');
+    }
+
+    const submissionBinding = {
+      siteId: site.id,
+      cityId: city.id,
+      addressCheckId: addressCheck.id,
+      pageId: page?.id ?? null,
+      tariffId: tariff?.id ?? null,
+      serviceType: body.serviceType || tariff?.serviceType || null,
+      phone,
+    };
+    const findSubmission = () => this.prisma.lead.findUnique({
+      where: { submissionKey: body.submissionKey },
+      select: {
+        id: true,
+        status: true,
+        processingStatus: true,
+        siteId: true,
+        cityId: true,
+        addressCheckId: true,
+        pageId: true,
+        tariffId: true,
+        serviceType: true,
+        phone: true,
+      },
+    });
+    const returnExistingSubmission = (existing: Awaited<ReturnType<typeof findSubmission>>) => {
+      if (!existing) return null;
+      const matches = existing.siteId === submissionBinding.siteId
+        && existing.cityId === submissionBinding.cityId
+        && existing.addressCheckId === submissionBinding.addressCheckId
+        && (existing.pageId ?? null) === submissionBinding.pageId
+        && (existing.tariffId ?? null) === submissionBinding.tariffId
+        && (existing.serviceType ?? null) === submissionBinding.serviceType
+        && existing.phone === submissionBinding.phone;
+      if (!matches) throw new BadRequestException('Ключ отправки уже использован для другой заявки');
+      return {
+        id: existing.id,
+        status: existing.status,
+        message: 'Заявка принята',
+        subscriberMode: existing.processingStatus === 'ACTIVE_SUBSCRIBER_NOT_SENT',
+      };
+    };
+    const existingSubmission = returnExistingSubmission(await findSubmission());
+    if (existingSubmission) return existingSubmission;
+
     const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentLeads = await this.prisma.lead.findMany({
       where: { siteId: site.id, createdAt: { gte: cutoff } },
       orderBy: { createdAt: 'desc' },
       select: { id: true, phone: true, address: true },
     });
-    const normalizedPhone = normalizePhone(phone);
+    const normalizedPhone = phone;
     const normalizedInputAddress = normalizeAddress(address);
     const duplicate = recentLeads.find((candidate) =>
       (normalizedPhone && normalizePhone(candidate.phone) === normalizedPhone)
       || (normalizedInputAddress && normalizeAddress(candidate.address) === normalizedInputAddress),
     );
 
-    const coverage = addressCheck ? readTarifnikCoverageSnapshot(addressCheck.response) : null;
-    const coverageStatusMatches = Boolean(coverage && (
-      (coverage.hasTargetProvider && addressCheck?.status === 'AVAILABLE')
-      || (!coverage.hasTargetProvider && addressCheck?.status === 'UNAVAILABLE')
-    ));
-    let processingStatus: 'PENDING' | 'DUPLICATE_SUPPRESSED' | 'ACTIVE_SUBSCRIBER_NOT_SENT' | 'PROVIDER_NOT_AVAILABLE_NOT_SENT' | 'NO_PROVIDERS_NOT_SENT' | 'MANUAL_CHECK' | 'ADDRESS_CLARIFICATION' | 'MANUAL_CHECK_API' = 'PENDING';
+    let processingStatus: 'PENDING' | 'DUPLICATE_SUPPRESSED' | 'ACTIVE_SUBSCRIBER_NOT_SENT' | 'MANUAL_CHECK_API' = 'PENDING';
     if (duplicate) processingStatus = 'DUPLICATE_SUPPRESSED';
-    else if (!addressCheck || addressCheck.status === 'MANUAL_CHECK') processingStatus = 'MANUAL_CHECK';
-    else if (addressCheck?.status === 'AMBIGUOUS') processingStatus = 'ADDRESS_CLARIFICATION';
-    else if (addressCheck?.status === 'ERROR') processingStatus = 'MANUAL_CHECK_API';
-    else if (!coverage || !coverageStatusMatches) processingStatus = 'MANUAL_CHECK_API';
-    else if (!coverage.hasAnyProvider) processingStatus = 'NO_PROVIDERS_NOT_SENT';
 
     let contractResult: Awaited<ReturnType<DomruContractService['check']>> | undefined;
-    if (!duplicate && processingStatus === 'PENDING' && coverage?.hasAnyProvider) {
+    if (!duplicate && processingStatus === 'PENDING') {
       contractResult = await this.contract.check(phone, coverage.suggestion.data, city.subscriberProfileKey);
       if (contractResult.status === 'ACTIVE') processingStatus = 'ACTIVE_SUBSCRIBER_NOT_SENT';
       else if (contractResult.status === 'ERROR' || contractResult.status === 'NOT_CONFIGURED') processingStatus = 'MANUAL_CHECK_API';
-      else if (!coverage.hasTargetProvider) processingStatus = 'PROVIDER_NOT_AVAILABLE_NOT_SENT';
     }
 
-    const { lead, notification } = await this.prisma.$transaction(async (tx) => {
-      const created = await tx.lead.create({
-        data: {
-          siteId: site.id,
-          cityId: city.id,
-          pageId: page?.id,
-          tariffId: tariff?.id,
-          name: body.name?.trim(),
-          phone,
-          email: body.email?.trim(),
-          address,
-          objectType: addressCheck?.objectType ?? body.objectType,
-          serviceType: body.serviceType || tariff?.serviceType,
-          addressCheckId: addressCheck?.id,
-          source: body.source || 'website',
-          utm: body.utm ? { ...body.utm } as Prisma.InputJsonValue : undefined,
-          referrer: body.referrer || request.headers?.referer,
-          pageUrl: body.pageUrl || request.url,
-          formName: body.formName || 'lead',
-          timeOnSiteSeconds: typeof body.timeOnSiteSeconds === 'number' && body.timeOnSiteSeconds >= 0 ? Math.round(body.timeOnSiteSeconds) : undefined,
-          deviceType: body.deviceType,
-          viewedPages: Array.isArray(body.viewedPages) ? body.viewedPages.slice(-50) : undefined,
-          processingStatus,
-          duplicateOfId: duplicate?.id,
-          duplicateReason: duplicate ? (normalizedPhone && normalizePhone(duplicate.phone) === normalizedPhone ? 'phone_24h' : 'address_24h') : undefined,
-          deliveryKey: randomUUID(),
-          contractResult: contractResult ? {
-            status: contractResult.status,
-            active: contractResult.active,
-            message: contractResult.message,
-            response: contractResult.response,
-          } as any : undefined,
-          apiResult: addressCheck ? { status: addressCheck.status, response: addressCheck.response } : undefined,
-        },
-      });
-      if (Array.isArray(body.activity)) {
-        const events = body.activity.filter((event) => event && typeof event.type === 'string').slice(-100);
-        if (events.length) await tx.leadActivityEvent.createMany({
-          data: events.map((event) => ({
-            leadId: created.id,
-            type: event.type,
-            data: event.data ? event.data as Prisma.InputJsonValue : undefined,
-          })),
+    let leadAndNotification: { lead: { id: string; status: unknown }; notification: { id: string } };
+    try {
+      leadAndNotification = await this.prisma.$transaction(async (tx) => {
+        const created = await tx.lead.create({
+          data: {
+            siteId: site.id,
+            cityId: city.id,
+            pageId: page?.id,
+            tariffId: tariff?.id,
+            name: body.name?.trim(),
+            phone,
+            submissionKey: body.submissionKey,
+            consentVersion: LEAD_CONSENT_VERSION,
+            consentAcceptedAt: new Date(),
+            email: body.email?.trim(),
+            address,
+            objectType: addressCheck?.objectType ?? body.objectType,
+            serviceType: body.serviceType || tariff?.serviceType,
+            addressCheckId: addressCheck.id,
+            source: body.source || 'website',
+            utm: body.utm ? { ...body.utm } as Prisma.InputJsonValue : undefined,
+            referrer: body.referrer || request.headers?.referer,
+            pageUrl: body.pageUrl || request.url,
+            formName: body.formName || 'lead',
+            timeOnSiteSeconds: typeof body.timeOnSiteSeconds === 'number' && body.timeOnSiteSeconds >= 0 ? Math.round(body.timeOnSiteSeconds) : undefined,
+            deviceType: body.deviceType,
+            viewedPages: Array.isArray(body.viewedPages) ? body.viewedPages.slice(-50) : undefined,
+            processingStatus,
+            duplicateOfId: duplicate?.id,
+            duplicateReason: duplicate ? (normalizedPhone && normalizePhone(duplicate.phone) === normalizedPhone ? 'phone_24h' : 'address_24h') : undefined,
+            deliveryKey: randomUUID(),
+            contractResult: contractResult ? {
+              status: contractResult.status,
+              active: contractResult.active,
+              message: contractResult.message,
+              response: contractResult.response,
+            } as any : undefined,
+            apiResult: { status: addressCheck.status, response: addressCheck.response },
+          },
         });
+        if (Array.isArray(body.activity)) {
+          const events = body.activity.filter((event) => event && typeof event.type === 'string').slice(-100);
+          if (events.length) await tx.leadActivityEvent.createMany({
+            data: events.map((event) => ({
+              leadId: created.id,
+              type: event.type,
+              data: event.data ? event.data as Prisma.InputJsonValue : undefined,
+            })),
+          });
+        }
+        const createdNotification = await this.notifications.create(tx, created.id);
+        return { lead: created, notification: createdNotification };
+      });
+    } catch (error) {
+      const code = typeof error === 'object' && error !== null && 'code' in error ? String(error.code) : null;
+      if (code === 'P2002') {
+        const racedSubmission = returnExistingSubmission(await findSubmission());
+        if (racedSubmission) return racedSubmission;
       }
-      const createdNotification = await this.notifications.create(tx, created.id);
-      return { lead: created, notification: createdNotification };
-    });
+      throw error;
+    }
+    const { lead, notification } = leadAndNotification;
 
     try {
       await this.notifications.enqueueTracked(notification.id);

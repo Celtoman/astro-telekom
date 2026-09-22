@@ -33,6 +33,7 @@ const formId = `address-form-${city.slug}-${presentation}-${suffix}`;
 const entryDialogId = dialogId || `address-entry-${city.slug}-${suffix}`;
 const resultDialogId = `address-result-${city.slug}-${presentation}-${suffix}`;
 const resultHeadingId = `${resultDialogId}-heading`;
+const consentVersion = 'lead-form-v1-2026-09-22';
 const supportPhoneHref = `tel:${site.supportPhone.replace(/[^+\d]/g, '')}`;
 const tariffSummary = tariff ? JSON.stringify({
   slug: tariff.slug,
@@ -115,22 +116,48 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
       <h2 id={resultHeadingId} data-result-heading tabindex="-1">Результат проверки</h2>
 
       <section data-business-outcome="TARGET_AVAILABLE" hidden>
-        <span class="result-mark success" aria-hidden="true">✓</span>
-        <h3>Дом.ру доступен</h3>
-        <p>Подключение доступно по адресу <strong data-result-address></strong>.</p>
-        <div class="tariff-summary" data-result-tariff hidden>
-          <span>Выбранный тариф</span>
-          <strong data-result-tariff-name></strong>
-          <span data-result-tariff-price></span>
-          <ul data-result-tariff-components></ul>
+        <div class="lead-content" data-lead-content>
+          <span class="result-mark success" aria-hidden="true">✓</span>
+          <h3>Дом.ру доступен</h3>
+          <p>Подключение доступно по адресу <strong data-result-address></strong>.</p>
+          <div class="tariff-summary" data-result-tariff hidden>
+            <span>Выбранный тариф</span>
+            <strong data-result-tariff-name></strong>
+            <span data-result-tariff-price></span>
+            <ul data-result-tariff-components></ul>
+          </div>
+          <form class="lead-form" data-lead-form data-consent-version={consentVersion}>
+            <label for={`phone-${formId}`}>Телефон</label>
+            <input
+              id={`phone-${formId}`}
+              data-phone-input
+              type="tel"
+              name="phone"
+              required
+              inputmode="tel"
+              autocomplete="tel"
+              maxlength="18"
+              aria-describedby={`phone-error-${formId}`}
+              placeholder="+7 (___) ___-__-__"
+            />
+            <p id={`phone-error-${formId}`} class="field-error" data-phone-error role="alert" hidden>Введите российский номер из 10 цифр</p>
+            <button class="button" type="submit" data-lead-submit>
+              <span data-lead-submit-label>Оставить заявку</span>
+              <span class="submit-spinner" data-lead-spinner aria-hidden="true" hidden></span>
+            </button>
+            <p class="consent-copy">
+              Нажимая кнопку, вы соглашаетесь с <a href="/politika-konfidencialnosti">политикой конфиденциальности</a>
+              и даёте <a href="/soglasie-na-obrabotku-personalnyh-dannyh">согласие на обработку персональных данных</a>.
+            </p>
+            <p data-lead-result role="status" aria-live="polite"></p>
+          </form>
         </div>
-        <form class="lead-form" data-lead-form>
-          <label for={`phone-${formId}`}>Телефон</label>
-          <input id={`phone-${formId}`} type="tel" name="phone" required autocomplete="tel" placeholder="+7 ___ ___-__-__" />
-          <button class="button" type="submit" data-lead-submit>Оставить заявку</button>
-          <p class="consent-copy">Нажимая кнопку, вы соглашаетесь на обработку заявки оператором.</p>
-          <p data-lead-result role="status"></p>
-        </form>
+        <section class="lead-success" data-lead-success hidden>
+          <span class="result-mark success" aria-hidden="true">✓</span>
+          <h3>Спасибо! Заявка отправлена</h3>
+          <p>Оператор свяжется с вами, чтобы подтвердить детали подключения.</p>
+          <button class="button" type="button" data-lead-success-close>Закрыть</button>
+        </section>
       </section>
 
       <section data-business-outcome="ALTERNATIVES_AVAILABLE" hidden>
@@ -178,6 +205,8 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
   input[data-confirmed='true'] { border-color: #2e8b63; box-shadow: 0 0 0 3px rgb(46 139 99 / 14%); }
   .address-field { position: relative; display: grid; }
   .address-hint, .form-result, .consent-copy, [data-lead-result] { margin: 0; color: #526071; font-size: 14px; line-height: 1.45; }
+  .consent-copy a { color: inherit; text-underline-offset: 2px; }
+  .field-error { margin: -4px 0 0; color: #b42318; font-size: 14px; }
   .address-hint[data-state='error'], [data-lead-result][data-state='error'] { color: #b42318; }
   .address-hint[data-state='success'] { color: #176b45; }
   .address-suggestions { position: absolute; z-index: 20; inset: calc(100% + 6px) 0 auto; display: grid; max-height: 300px; gap: 2px; overflow-y: auto; overscroll-behavior: contain; border: 1px solid #e2e5eb; border-radius: 16px; padding: 8px; background: #fff; box-shadow: 0 12px 28px rgb(21 40 66 / 14%); }
@@ -209,7 +238,10 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
   .tariff-summary { display: grid; gap: 5px; border: 1px solid #dce5ee; border-radius: 18px; padding: 18px; background: #f8fafc; }
   .tariff-summary > span:first-child { color: #697789; font-size: 13px; font-weight: 700; }
   .tariff-summary ul, .provider-list { display: grid; gap: 8px; margin: 6px 0 0; padding-left: 20px; }
+  .lead-content, .lead-success { display: grid; gap: 16px; }
   .lead-form { display: grid; gap: 12px; border-top: 1px solid #e3e8ef; padding-top: 18px; }
+  .submit-spinner { width: 16px; height: 16px; margin-left: 8px; border: 2px solid rgb(255 255 255 / 50%); border-top-color: #fff; border-radius: 50%; animation: submit-spin .8s linear infinite; }
+  @keyframes submit-spin { to { transform: rotate(360deg); } }
   .provider-list { color: #334155; }
   .dialog-actions { display: flex; flex-wrap: wrap; gap: 10px; }
   .embedded { margin-top: 20px; }

@@ -515,6 +515,9 @@ model Lead {
   addressCheckId    String?
   name              String?
   phone             String
+  submissionKey     String?               @unique
+  consentVersion    String?
+  consentAcceptedAt DateTime?
   email             String?
   address           String?
   objectType        String?

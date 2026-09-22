@@ -53,7 +53,12 @@ test('global security options enforce strict DTOs and tighter public write limit
 
 test('lead telemetry is allowlisted and bounded before the controller runs', async () => {
   const pipe = createGlobalValidationPipe();
-  const base = { citySlug: 'kazan', phone: '+7 900 000-00-00' };
+  const base = {
+    citySlug: 'kazan',
+    phone: '+7 900 000-00-00',
+    submissionKey: '11111111-1111-4111-8111-111111111111',
+    consentVersion: 'lead-form-v1-2026-09-22',
+  };
 
   const valid = await pipe.transform({
     ...base,
@@ -62,6 +67,15 @@ test('lead telemetry is allowlisted and bounded before the controller runs', asy
   }, metadata(CreateLeadDto));
   assert.equal(valid.utm.utm_source, 'search');
   assert.equal(valid.activity[0].type, 'tariff_view');
+
+  await assert.rejects(
+    pipe.transform({ citySlug: 'kazan', phone: '+7 900 000-00-00' }, metadata(CreateLeadDto)),
+    (error) => error.getStatus() === 400,
+  );
+  await assert.rejects(
+    pipe.transform({ ...base, consentVersion: 'outdated-copy' }, metadata(CreateLeadDto)),
+    (error) => error.getStatus() === 400,
+  );
 
   for (const telemetry of [
     { utm: { arbitrary_tracking_id: 'not-allowlisted' } },

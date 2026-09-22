@@ -1,6 +1,7 @@
 import {
   ArrayMaxSize,
   Allow,
+  Equals,
   IsArray,
   IsEmail,
   IsEmpty,
@@ -11,6 +12,7 @@ import {
   IsObject,
   IsOptional,
   IsString,
+  IsUUID,
   Matches,
   Max,
   MaxLength,
@@ -23,6 +25,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { LEAD_CONSENT_VERSION } from './lead-consent';
 
 const slug = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const telemetryKey = /^[a-zA-Z][a-zA-Z0-9_.-]{0,63}$/;
@@ -272,6 +275,13 @@ export class CreateLeadDto {
   @MinLength(5)
   @MaxLength(32)
   phone!: string;
+
+  @IsUUID()
+  submissionKey!: string;
+
+  @IsString()
+  @Equals(LEAD_CONSENT_VERSION)
+  consentVersion!: string;
 
   @IsOptional()
   @IsEmail()

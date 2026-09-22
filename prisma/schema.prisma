@@ -506,7 +506,10 @@ model Lead {
   tariffId        String?
   addressCheckId  String?
   name            String?
-  phone           String
+  phone             String
+  submissionKey     String?  @unique
+  consentVersion    String?
+  consentAcceptedAt DateTime?
   email           String?
   address         String?
   objectType      String?

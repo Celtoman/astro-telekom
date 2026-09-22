@@ -1,6 +1,9 @@
 import {
+  createSubmissionKey,
   createLatestRequestGate,
+  formatRussianPhone,
   hasHouseNumber,
+  normalizeRussianPhone,
   readAddressCheckResponse,
 } from './address-check-flow.mjs';
 import {
@@ -75,9 +78,20 @@ function initializeRoot(root) {
   let suggestionTimer;
   let suggestionController;
   let checkController;
+  let leadSubmitting = false;
+  let submissionKey = null;
   const suggestionCache = new Map();
   const suggestionGate = createLatestRequestGate();
   const checkGate = createLatestRequestGate();
+  const leadForm = resultDialog.querySelector('[data-lead-form]');
+  const phoneInput = leadForm?.querySelector('[data-phone-input]');
+  const phoneError = leadForm?.querySelector('[data-phone-error]');
+  const leadSubmit = leadForm?.querySelector('[data-lead-submit]');
+  const leadSubmitLabel = leadForm?.querySelector('[data-lead-submit-label]');
+  const leadSpinner = leadForm?.querySelector('[data-lead-spinner]');
+  const leadResult = leadForm?.querySelector('[data-lead-result]');
+  const leadContent = resultDialog.querySelector('[data-lead-content]');
+  const leadSuccess = resultDialog.querySelector('[data-lead-success]');
 
   const setAddressHint = (message, state = '') => {
     addressHint.textContent = message;
@@ -133,6 +147,31 @@ function initializeRoot(root) {
     }));
   };
 
+  const setPhoneError = (invalid) => {
+    if (!phoneInput || !phoneError) return;
+    phoneInput.setAttribute('aria-invalid', String(invalid));
+    phoneError.hidden = !invalid;
+  };
+
+  const resetLeadState = () => {
+    leadSubmitting = false;
+    submissionKey = createSubmissionKey();
+    if (leadContent) leadContent.hidden = false;
+    if (leadSuccess) leadSuccess.hidden = true;
+    if (phoneInput) {
+      phoneInput.disabled = false;
+      phoneInput.value = '';
+    }
+    setPhoneError(false);
+    if (leadSubmit) leadSubmit.disabled = false;
+    if (leadSubmitLabel) leadSubmitLabel.textContent = 'Оставить заявку';
+    if (leadSpinner) leadSpinner.hidden = true;
+    if (leadResult) {
+      leadResult.textContent = '';
+      delete leadResult.dataset.state;
+    }
+  };
+
   const renderBusinessResult = (check) => {
     clearResultPanels();
     for (const element of resultDialog.querySelectorAll('[data-result-address]')) element.textContent = check.address;
@@ -141,6 +180,7 @@ function initializeRoot(root) {
     panel.hidden = false;
     if (check.outcome === 'TARGET_AVAILABLE') {
       verifiedCheck = { id: check.checkId, address: check.address };
+      resetLeadState();
       populateTariff();
       resultHeading.textContent = 'Дом.ру доступен';
     } else if (check.outcome === 'ALTERNATIVES_AVAILABLE') {
@@ -472,15 +512,30 @@ function initializeRoot(root) {
     if (!entryDialog?.open) restoreOpener();
   });
 
-  const leadForm = resultDialog.querySelector('[data-lead-form]');
+  phoneInput?.addEventListener('input', () => {
+    phoneInput.value = formatRussianPhone(phoneInput.value);
+    setPhoneError(false);
+    if (leadSubmitLabel?.textContent === 'Попробовать ещё раз') leadSubmitLabel.textContent = 'Оставить заявку';
+  });
+  phoneInput?.addEventListener('blur', () => {
+    if (phoneInput.value && !normalizeRussianPhone(phoneInput.value)) setPhoneError(true);
+  });
+
   leadForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (!verifiedCheck) return;
-    const phone = new FormData(leadForm).get('phone');
-    const leadSubmit = leadForm.querySelector('[data-lead-submit]');
-    const leadResult = leadForm.querySelector('[data-lead-result]');
+    if (!verifiedCheck || leadSubmitting || !phoneInput || !leadSubmit || !leadResult) return;
+    const phone = normalizeRussianPhone(phoneInput.value);
+    if (!phone) {
+      setPhoneError(true);
+      phoneInput.focus();
+      return;
+    }
+    setPhoneError(false);
+    leadSubmitting = true;
     leadSubmit.disabled = true;
-    leadResult.textContent = 'Отправляем заявку…';
+    if (leadSubmitLabel) leadSubmitLabel.textContent = 'Отправляем…';
+    if (leadSpinner) leadSpinner.hidden = false;
+    leadResult.textContent = '';
     delete leadResult.dataset.state;
     try {
       let viewedPages = [];
@@ -495,6 +550,8 @@ function initializeRoot(root) {
           tariffSlug: form.dataset.tariffSlug || undefined,
           formName: 'address-result-dialog',
           phone,
+          submissionKey,
+          consentVersion: leadForm.dataset.consentVersion,
           address: verifiedCheck.address,
           serviceType: form.dataset.serviceType,
           addressCheckId: verifiedCheck.id,
@@ -506,20 +563,31 @@ function initializeRoot(root) {
           website: '',
         }),
       });
-      if (!response.ok) throw new Error('Не удалось сохранить заявку');
-      const lead = await response.json();
+      const lead = await response.json().catch(() => null);
+      if (!response.ok) {
+        const responseMessage = Array.isArray(lead?.message) ? lead.message[0] : lead?.message;
+        throw new Error(typeof responseMessage === 'string' && responseMessage ? responseMessage : 'Не удалось сохранить заявку');
+      }
       if (lead?.subscriberMode) {
         try { localStorage.setItem(SUBSCRIBER_MODE_STORAGE_KEY, String(subscriberModeExpiresAt())); } catch { /* private browsing can disable localStorage */ }
         window.dispatchEvent(new Event(SUBSCRIBER_MODE_EVENT));
       }
-      leadResult.textContent = 'Спасибо! Заявка отправлена.';
-      leadForm.querySelector('input[name="phone"]').disabled = true;
+      phoneInput.disabled = true;
+      if (leadContent) leadContent.hidden = true;
+      if (leadSuccess) leadSuccess.hidden = false;
+      resultHeading.textContent = 'Заявка отправлена';
+      resultDialog.querySelector('[data-lead-success-close]')?.focus();
     } catch (error) {
       leadResult.textContent = error instanceof Error ? error.message : 'Произошла ошибка. Попробуйте еще раз.';
       leadResult.dataset.state = 'error';
       leadSubmit.disabled = false;
+      if (leadSubmitLabel) leadSubmitLabel.textContent = 'Попробовать ещё раз';
+    } finally {
+      leadSubmitting = false;
+      if (leadSpinner) leadSpinner.hidden = true;
     }
   });
+  resultDialog.querySelector('[data-lead-success-close]')?.addEventListener('click', () => resultDialog.close());
 
   setConfirmed(false);
 }

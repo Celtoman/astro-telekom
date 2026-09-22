@@ -22953,6 +22953,9 @@ export namespace Prisma {
     addressCheckId: string | null
     name: string | null
     phone: string | null
+    submissionKey: string | null
+    consentVersion: string | null
+    consentAcceptedAt: Date | null
     email: string | null
     address: string | null
     objectType: string | null
@@ -22983,6 +22986,9 @@ export namespace Prisma {
     addressCheckId: string | null
     name: string | null
     phone: string | null
+    submissionKey: string | null
+    consentVersion: string | null
+    consentAcceptedAt: Date | null
     email: string | null
     address: string | null
     objectType: string | null
@@ -23013,6 +23019,9 @@ export namespace Prisma {
     addressCheckId: number
     name: number
     phone: number
+    submissionKey: number
+    consentVersion: number
+    consentAcceptedAt: number
     email: number
     address: number
     objectType: number
@@ -23057,6 +23066,9 @@ export namespace Prisma {
     addressCheckId?: true
     name?: true
     phone?: true
+    submissionKey?: true
+    consentVersion?: true
+    consentAcceptedAt?: true
     email?: true
     address?: true
     objectType?: true
@@ -23087,6 +23099,9 @@ export namespace Prisma {
     addressCheckId?: true
     name?: true
     phone?: true
+    submissionKey?: true
+    consentVersion?: true
+    consentAcceptedAt?: true
     email?: true
     address?: true
     objectType?: true
@@ -23117,6 +23132,9 @@ export namespace Prisma {
     addressCheckId?: true
     name?: true
     phone?: true
+    submissionKey?: true
+    consentVersion?: true
+    consentAcceptedAt?: true
     email?: true
     address?: true
     objectType?: true
@@ -23238,6 +23256,9 @@ export namespace Prisma {
     addressCheckId: string | null
     name: string | null
     phone: string
+    submissionKey: string | null
+    consentVersion: string | null
+    consentAcceptedAt: Date | null
     email: string | null
     address: string | null
     objectType: string | null
@@ -23291,6 +23312,9 @@ export namespace Prisma {
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
+    submissionKey?: boolean
+    consentVersion?: boolean
+    consentAcceptedAt?: boolean
     email?: boolean
     address?: boolean
     objectType?: boolean
@@ -23338,6 +23362,9 @@ export namespace Prisma {
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
+    submissionKey?: boolean
+    consentVersion?: boolean
+    consentAcceptedAt?: boolean
     email?: boolean
     address?: boolean
     objectType?: boolean
@@ -23378,6 +23405,9 @@ export namespace Prisma {
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
+    submissionKey?: boolean
+    consentVersion?: boolean
+    consentAcceptedAt?: boolean
     email?: boolean
     address?: boolean
     objectType?: boolean
@@ -23418,6 +23448,9 @@ export namespace Prisma {
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
+    submissionKey?: boolean
+    consentVersion?: boolean
+    consentAcceptedAt?: boolean
     email?: boolean
     address?: boolean
     objectType?: boolean
@@ -23443,7 +23476,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "pageId" | "tariffId" | "addressCheckId" | "name" | "phone" | "email" | "address" | "objectType" | "serviceType" | "source" | "utm" | "referrer" | "pageUrl" | "formName" | "timeOnSiteSeconds" | "deviceType" | "viewedPages" | "processingStatus" | "duplicateOfId" | "duplicateReason" | "deliveryKey" | "externalLeadId" | "externalStatus" | "contractResult" | "status" | "apiResult" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
+  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "pageId" | "tariffId" | "addressCheckId" | "name" | "phone" | "submissionKey" | "consentVersion" | "consentAcceptedAt" | "email" | "address" | "objectType" | "serviceType" | "source" | "utm" | "referrer" | "pageUrl" | "formName" | "timeOnSiteSeconds" | "deviceType" | "viewedPages" | "processingStatus" | "duplicateOfId" | "duplicateReason" | "deliveryKey" | "externalLeadId" | "externalStatus" | "contractResult" | "status" | "apiResult" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
   export type LeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | CityDefaultArgs<ExtArgs>
@@ -23501,6 +23534,9 @@ export namespace Prisma {
       addressCheckId: string | null
       name: string | null
       phone: string
+      submissionKey: string | null
+      consentVersion: string | null
+      consentAcceptedAt: Date | null
       email: string | null
       address: string | null
       objectType: string | null
@@ -23967,6 +24003,9 @@ export namespace Prisma {
     readonly addressCheckId: FieldRef<"Lead", 'String'>
     readonly name: FieldRef<"Lead", 'String'>
     readonly phone: FieldRef<"Lead", 'String'>
+    readonly submissionKey: FieldRef<"Lead", 'String'>
+    readonly consentVersion: FieldRef<"Lead", 'String'>
+    readonly consentAcceptedAt: FieldRef<"Lead", 'DateTime'>
     readonly email: FieldRef<"Lead", 'String'>
     readonly address: FieldRef<"Lead", 'String'>
     readonly objectType: FieldRef<"Lead", 'String'>
@@ -34164,6 +34203,9 @@ export namespace Prisma {
     addressCheckId: 'addressCheckId',
     name: 'name',
     phone: 'phone',
+    submissionKey: 'submissionKey',
+    consentVersion: 'consentVersion',
+    consentAcceptedAt: 'consentAcceptedAt',
     email: 'email',
     address: 'address',
     objectType: 'objectType',
@@ -36304,6 +36346,9 @@ export namespace Prisma {
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
+    submissionKey?: StringNullableFilter<"Lead"> | string | null
+    consentVersion?: StringNullableFilter<"Lead"> | string | null
+    consentAcceptedAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
     email?: StringNullableFilter<"Lead"> | string | null
     address?: StringNullableFilter<"Lead"> | string | null
     objectType?: StringNullableFilter<"Lead"> | string | null
@@ -36350,6 +36395,9 @@ export namespace Prisma {
     addressCheckId?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     phone?: SortOrder
+    submissionKey?: SortOrderInput | SortOrder
+    consentVersion?: SortOrderInput | SortOrder
+    consentAcceptedAt?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     objectType?: SortOrderInput | SortOrder
@@ -36389,6 +36437,7 @@ export namespace Prisma {
 
   export type LeadWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    submissionKey?: string
     deliveryKey?: string
     AND?: LeadWhereInput | LeadWhereInput[]
     OR?: LeadWhereInput[]
@@ -36400,6 +36449,8 @@ export namespace Prisma {
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
+    consentVersion?: StringNullableFilter<"Lead"> | string | null
+    consentAcceptedAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
     email?: StringNullableFilter<"Lead"> | string | null
     address?: StringNullableFilter<"Lead"> | string | null
     objectType?: StringNullableFilter<"Lead"> | string | null
@@ -36434,7 +36485,7 @@ export namespace Prisma {
     accessTokens?: LeadAccessTokenListRelationFilter
     duplicateOf?: XOR<LeadNullableScalarRelationFilter, LeadWhereInput> | null
     duplicates?: LeadListRelationFilter
-  }, "id" | "deliveryKey">
+  }, "id" | "submissionKey" | "deliveryKey">
 
   export type LeadOrderByWithAggregationInput = {
     id?: SortOrder
@@ -36445,6 +36496,9 @@ export namespace Prisma {
     addressCheckId?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     phone?: SortOrder
+    submissionKey?: SortOrderInput | SortOrder
+    consentVersion?: SortOrderInput | SortOrder
+    consentAcceptedAt?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     objectType?: SortOrderInput | SortOrder
@@ -36487,6 +36541,9 @@ export namespace Prisma {
     addressCheckId?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     name?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     phone?: StringWithAggregatesFilter<"Lead"> | string
+    submissionKey?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    consentVersion?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    consentAcceptedAt?: DateTimeNullableWithAggregatesFilter<"Lead"> | Date | string | null
     email?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     address?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     objectType?: StringNullableWithAggregatesFilter<"Lead"> | string | null
@@ -38893,6 +38950,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -38938,6 +38998,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -38973,6 +39036,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39018,6 +39084,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39058,6 +39127,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -39087,6 +39159,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39120,6 +39195,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41475,6 +41553,9 @@ export namespace Prisma {
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
+    submissionKey?: SortOrder
+    consentVersion?: SortOrder
+    consentAcceptedAt?: SortOrder
     email?: SortOrder
     address?: SortOrder
     objectType?: SortOrder
@@ -41513,6 +41594,9 @@ export namespace Prisma {
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
+    submissionKey?: SortOrder
+    consentVersion?: SortOrder
+    consentAcceptedAt?: SortOrder
     email?: SortOrder
     address?: SortOrder
     objectType?: SortOrder
@@ -41543,6 +41627,9 @@ export namespace Prisma {
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
+    submissionKey?: SortOrder
+    consentVersion?: SortOrder
+    consentAcceptedAt?: SortOrder
     email?: SortOrder
     address?: SortOrder
     objectType?: SortOrder
@@ -45730,6 +45817,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -45773,6 +45863,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -46309,6 +46402,9 @@ export namespace Prisma {
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
+    submissionKey?: StringNullableFilter<"Lead"> | string | null
+    consentVersion?: StringNullableFilter<"Lead"> | string | null
+    consentAcceptedAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
     email?: StringNullableFilter<"Lead"> | string | null
     address?: StringNullableFilter<"Lead"> | string | null
     objectType?: StringNullableFilter<"Lead"> | string | null
@@ -48504,6 +48600,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -48547,6 +48646,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -48972,6 +49074,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -49015,6 +49120,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -49479,6 +49587,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -49522,6 +49633,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -50485,6 +50599,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -50528,6 +50645,9 @@ export namespace Prisma {
     tariffId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -51140,6 +51260,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -51184,6 +51307,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -51223,6 +51349,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -51267,6 +51396,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -51748,6 +51880,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51792,6 +51927,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51842,6 +51980,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -51886,6 +52027,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -51936,6 +52080,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51980,6 +52127,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52014,6 +52164,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -52058,6 +52211,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -52108,6 +52264,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52152,6 +52311,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52186,6 +52348,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -52230,6 +52395,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -52280,6 +52448,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52324,6 +52495,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52358,6 +52532,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -52402,6 +52579,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -52452,6 +52632,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52496,6 +52679,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52758,6 +52944,9 @@ export namespace Prisma {
     id?: string
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -52802,6 +52991,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -52852,6 +53044,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52896,6 +53091,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53841,6 +54039,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -54120,6 +54321,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54163,6 +54367,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54202,6 +54409,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55043,6 +55253,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -55219,6 +55432,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55262,6 +55478,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55301,6 +55520,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55421,6 +55643,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -55492,6 +55717,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55535,6 +55763,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55574,6 +55805,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55645,6 +55879,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -55674,6 +55911,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55717,6 +55957,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55756,6 +55999,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55891,6 +56137,9 @@ export namespace Prisma {
     tariffId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -55920,6 +56169,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55963,6 +56215,9 @@ export namespace Prisma {
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56002,6 +56257,9 @@ export namespace Prisma {
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56074,6 +56332,9 @@ export namespace Prisma {
     addressCheckId?: string | null
     name?: string | null
     phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
     email?: string | null
     address?: string | null
     objectType?: string | null
@@ -56216,6 +56477,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56260,6 +56524,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56299,6 +56566,9 @@ export namespace Prisma {
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     objectType?: NullableStringFieldUpdateOperationsInput | string | null

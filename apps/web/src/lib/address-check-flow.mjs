@@ -26,6 +26,49 @@ function safeHttpUrl(value) {
   }
 }
 
+export function normalizeRussianPhone(value) {
+  const digits = String(value ?? '').replace(/\D/g, '');
+  if (digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8'))) {
+    return `7${digits.slice(1)}`;
+  }
+  if (digits.length === 10) return `7${digits}`;
+  return null;
+}
+
+export function formatRussianPhone(value) {
+  const raw = String(value ?? '');
+  let digits = raw.replace(/\D/g, '');
+  if (digits.length > 10 && !digits.startsWith('7') && !digits.startsWith('8')) {
+    return `+${digits.slice(0, 11)}`;
+  }
+  if ((digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8')))
+    || /^\s*\+7/.test(raw)
+    || (digits.length === 1 && (digits === '7' || digits === '8'))) {
+    digits = digits.slice(1);
+  }
+  digits = digits.slice(0, 10);
+  if (!digits) return '+7 ';
+  const area = digits.slice(0, 3);
+  const first = digits.slice(3, 6);
+  const second = digits.slice(6, 8);
+  const third = digits.slice(8, 10);
+  let formatted = `+7 (${area}`;
+  if (area.length === 3) formatted += ')';
+  if (first) formatted += ` ${first}`;
+  if (second) formatted += `-${second}`;
+  if (third) formatted += `-${third}`;
+  return formatted;
+}
+
+export function createSubmissionKey() {
+  if (typeof globalThis.crypto?.randomUUID === 'function') return globalThis.crypto.randomUUID();
+  const bytes = globalThis.crypto.getRandomValues(new Uint8Array(16));
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = [...bytes].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
 export function hasHouseNumber(suggestion) {
   const data = suggestion?.data;
   if (!data || typeof data !== 'object' || Array.isArray(data)) return false;
