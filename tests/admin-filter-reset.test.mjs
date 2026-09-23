@@ -25,7 +25,7 @@ test('every filtered admin catalog uses the shared always-visible reset action w
 
 test('server-filtered catalogs reset committed filters and cursor pagination', () => {
   const leads = readFileSync(join(componentsRoot, 'LeadsApp.tsx'), 'utf8');
-  assert.match(leads, /function resetFilters\(\)\s*\{[^}]*setSearch\(""\)[^}]*setSearchQuery\(""\)[^}]*setStatusFilter\("ALL"\)[^}]*setCursorStack\(\[""\]\)[^}]*\}/);
+  assert.match(leads, /function resetFilters\(\)\s*\{[^}]*setSearch\(""\)[^}]*setSearchQuery\(""\)[^}]*setStatusFilter\("ALL"\)[^}]*setReasonFilter\("ALL"\)[^}]*setCursorStack\(\[""\]\)[^}]*\}/);
 
   const tariffs = readFileSync(join(componentsRoot, 'TariffsApp.tsx'), 'utf8');
   assert.match(tariffs, /function resetFilters\(\)\s*\{[^}]*setSearch\(""\)[^}]*setSearchQuery\(""\)[^}]*setCursorStack\(\[""\]\)[^}]*\}/);

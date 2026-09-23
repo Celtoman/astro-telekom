@@ -32,6 +32,16 @@ test('lead workspace uses real list, detail and status endpoints without unsafe 
   assert.doesNotMatch(source, /state\.leads\.filter/);
 });
 
+test('lead journal filters and explains the immutable reason without offering to edit it', () => {
+  const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
+  assert.match(source, /\/crm\/leads\/reasons/);
+  assert.match(source, /reasonCode/);
+  assert.match(source, /reasonLabel/);
+  assert.match(source, /Причина обращения/);
+  assert.match(source, /Несбытовое обращение/);
+  assert.doesNotMatch(source, /method:\s*["']PATCH["'][\s\S]{0,120}reasonCode/);
+});
+
 test('lead detail renders the stored tariff snapshot before the mutable tariff relation', () => {
   const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
   assert.match(source, /configurationSnapshot\?: ConfigurationSnapshot/);

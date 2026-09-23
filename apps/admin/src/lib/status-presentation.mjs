@@ -52,6 +52,7 @@ const registry = {
     PENDING: entry("Ожидает отправки", "Проверки пройдены, внешний ответ еще не получен.", "warning"),
     DELIVERED: entry("Передана в Tarifnik", "Tarifnik принял заявку и вернул внешний идентификатор.", "success"),
     DUPLICATE_SUPPRESSED: entry("Повтор не отправлен", "Отправка остановлена защитой от повторных заявок.", "neutral"),
+    NON_SALES_NOT_SENT: entry("Несбытовое обращение", "Заявка сохранена для оператора и не передается в Tarifnik.", "warning"),
     ACTIVE_SUBSCRIBER_NOT_SENT: entry("Действующий абонент", "Заявка сохранена, но не передана как новое подключение.", "neutral"),
     PROVIDER_NOT_AVAILABLE_NOT_SENT: entry("Дом.ру недоступен", "Заявка сохранена без автоматической передачи.", "neutral"),
     NO_PROVIDERS_NOT_SENT: entry("Провайдеры не найдены", "По адресу нет провайдеров для автоматической передачи.", "neutral"),

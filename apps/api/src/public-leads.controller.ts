@@ -10,6 +10,7 @@ import { CreateLeadDto } from './public.dto';
 import { readTarifnikCoverageSnapshot } from './coverage.service';
 import { LEAD_CONSENT_VERSION } from './lead-consent';
 import { configurationSnapshot, quoteFingerprint, quoteTariffConfiguration } from './tariff-configuration.service';
+import { classifyLeadReason } from './lead-reasons';
 
 @Controller('leads')
 export class PublicLeadsController {
@@ -25,6 +26,9 @@ export class PublicLeadsController {
   @Post()
   async create(@Body() body: CreateLeadDto, @Req() request: { headers?: Record<string, string | undefined>; url?: string }) {
     if (body.website) throw new BadRequestException('Некорректный запрос');
+    const reason = classifyLeadReason(body.reasonCode);
+    if (body.reasonCode !== undefined && !reason) throw new BadRequestException('Неизвестная причина обращения');
+    const isSales = !reason || reason.route === 'SALES';
     if (typeof body.phone !== 'string' || !body.phone.trim() || typeof body.citySlug !== 'string' || !body.citySlug.trim()) {
       throw new BadRequestException('Телефон и город обязательны');
     }
@@ -48,6 +52,7 @@ export class PublicLeadsController {
         pageId: true,
         tariffId: true,
         configurationSnapshot: true,
+        reasonCode: true,
         serviceType: true,
         phone: true,
         address: true,
@@ -69,7 +74,8 @@ export class PublicLeadsController {
         && (!body.objectType || existing.objectType === body.objectType)
         && ((existing.configurationSnapshot as { fingerprint?: string } | null)?.fingerprint ?? null) === (body.configuration?.fingerprint ?? null)
         && (existing.serviceType ?? null) === (body.serviceType || existing.tariff?.serviceType || null)
-        && existing.phone === phone;
+        && existing.phone === phone
+        && (existing.reasonCode ?? null) === (reason?.code ?? null);
       if (!matches) throw new BadRequestException('Ключ отправки уже использован для другой заявки');
       return {
         id: existing.id,
@@ -131,7 +137,7 @@ export class PublicLeadsController {
 
     const address = addressCheck?.address ?? body.address?.trim();
     const coverage = addressCheck ? readTarifnikCoverageSnapshot(addressCheck.response) : null;
-    if (!addressCheck || addressCheck.status !== 'AVAILABLE' || !coverage?.hasTargetProvider) {
+    if (isSales && (!addressCheck || addressCheck.status !== 'AVAILABLE' || !coverage?.hasTargetProvider)) {
       throw new BadRequestException('Заявку можно отправить только после положительной проверки адреса');
     }
 
@@ -165,11 +171,14 @@ export class PublicLeadsController {
       || (normalizedInputAddress && normalizeAddress(candidate.address) === normalizedInputAddress),
     );
 
-    let processingStatus: 'PENDING' | 'DUPLICATE_SUPPRESSED' | 'ACTIVE_SUBSCRIBER_NOT_SENT' | 'MANUAL_CHECK_API' = 'PENDING';
-    if (duplicate) processingStatus = 'DUPLICATE_SUPPRESSED';
+    let processingStatus: 'PENDING' | 'DUPLICATE_SUPPRESSED' | 'ACTIVE_SUBSCRIBER_NOT_SENT' | 'MANUAL_CHECK_API' | 'NON_SALES_NOT_SENT' | 'MANUAL_CHECK' = 'PENDING';
+    if (reason?.route === 'NON_SALES') processingStatus = 'NON_SALES_NOT_SENT';
+    else if (reason?.route === 'MANUAL') processingStatus = 'MANUAL_CHECK';
+    else if (duplicate) processingStatus = 'DUPLICATE_SUPPRESSED';
 
     let contractResult: Awaited<ReturnType<DomruContractService['check']>> | undefined;
     if (!duplicate && processingStatus === 'PENDING') {
+      if (!coverage) throw new BadRequestException('Заявку можно отправить только после положительной проверки адреса');
       contractResult = await this.contract.check(phone, coverage.suggestion.data, city.subscriberProfileKey);
       if (contractResult.status === 'ACTIVE') processingStatus = 'ACTIVE_SUBSCRIBER_NOT_SENT';
       else if (contractResult.status === 'ERROR' || contractResult.status === 'NOT_CONFIGURED') processingStatus = 'MANUAL_CHECK_API';
@@ -185,6 +194,10 @@ export class PublicLeadsController {
             pageId: page?.id,
             tariffId: tariff?.id,
             configurationSnapshot: storedConfiguration,
+            reasonCode: reason?.code,
+            reasonLabel: reason?.label,
+            reasonRoute: reason?.route,
+            reasonRegistryVersion: reason?.version,
             name: body.name?.trim(),
             phone,
             submissionKey: body.submissionKey,
@@ -194,7 +207,7 @@ export class PublicLeadsController {
             address,
             objectType: addressCheck?.objectType ?? body.objectType,
             serviceType: body.serviceType || tariff?.serviceType,
-            addressCheckId: addressCheck.id,
+            addressCheckId: addressCheck?.id,
             source: body.source || 'website',
             utm: body.utm ? { ...body.utm } as Prisma.InputJsonValue : undefined,
             referrer: body.referrer || request.headers?.referer,
@@ -213,7 +226,7 @@ export class PublicLeadsController {
               message: contractResult.message,
               response: contractResult.response,
             } as any : undefined,
-            apiResult: { status: addressCheck.status, response: addressCheck.response },
+            apiResult: addressCheck ? { status: addressCheck.status, response: addressCheck.response } : undefined,
           },
         });
         if (Array.isArray(body.activity)) {

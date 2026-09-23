@@ -14,7 +14,7 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 
 ## Доставка заявок
 
-1. `POST /leads` создает `Lead` и при `PENDING` вызывает `LeadDeliveryService.enqueueTracked`. Проверка Dom.ru выполняется при наличии хотя бы одного провайдера, но `PENDING` допустим только при одновременном наличии Дом.ру, проверенном `AddressCheck` и однозначном ответе `contacts: []`. Профиль Дом.ру выбирается по нормализованным DaData городу и региону из полного встроенного справочника.
+1. `POST /leads` создает `Lead` и при `PENDING` вызывает `LeadDeliveryService.enqueueTracked`. Только `new_connection` и старые запросы без причины идут по sales-маршруту: проверка Dom.ru выполняется при наличии хотя бы одного провайдера, а `PENDING` допустим только при одновременном наличии Дом.ру, проверенном `AddressCheck` и однозначном ответе `contacts: []`. Профиль Дом.ру выбирается по нормализованным DaData городу и региону из полного встроенного справочника. Несбытовые причины (`existing_subscriber_support`, `billing`) сохраняются как `NON_SALES_NOT_SENT`, а `relocation`/`other` — как `MANUAL_CHECK`, без постановки в очередь доставки. Worker дополнительно отсекает лид с несбытовым или ручным снимком причины, даже если ему пришёл устаревший job.
 2. Если определен `REDIS_URL`, API ставит BullMQ job с допустимым детерминированным `jobId=lead-delivery-<leadId>-attempt-<attemptNumber>`. Ошибка producer создает failed `QUEUE` attempt и переводит лид в `DELIVERY_QUEUE_ERROR`, а не остается скрытым `PENDING`.
 3. Worker вызывает внутренний endpoint; тот запускает `LeadDeliveryService.process`.
 4. Успехом считаются только `created` или `created_duplicate` с непустым `appeal_id`; тогда создается успешный `LeadDeliveryAttempt`, а лид получает `DELIVERED`.

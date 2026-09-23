@@ -201,6 +201,7 @@ export const LeadProcessingStatus: {
   PENDING: 'PENDING',
   DELIVERED: 'DELIVERED',
   DUPLICATE_SUPPRESSED: 'DUPLICATE_SUPPRESSED',
+  NON_SALES_NOT_SENT: 'NON_SALES_NOT_SENT',
   ACTIVE_SUBSCRIBER_NOT_SENT: 'ACTIVE_SUBSCRIBER_NOT_SENT',
   PROVIDER_NOT_AVAILABLE_NOT_SENT: 'PROVIDER_NOT_AVAILABLE_NOT_SENT',
   NO_PROVIDERS_NOT_SENT: 'NO_PROVIDERS_NOT_SENT',
@@ -22938,10 +22939,12 @@ export namespace Prisma {
   }
 
   export type LeadAvgAggregateOutputType = {
+    reasonRegistryVersion: number | null
     timeOnSiteSeconds: number | null
   }
 
   export type LeadSumAggregateOutputType = {
+    reasonRegistryVersion: number | null
     timeOnSiteSeconds: number | null
   }
 
@@ -22951,6 +22954,10 @@ export namespace Prisma {
     cityId: string | null
     pageId: string | null
     tariffId: string | null
+    reasonCode: string | null
+    reasonLabel: string | null
+    reasonRoute: string | null
+    reasonRegistryVersion: number | null
     addressCheckId: string | null
     name: string | null
     phone: string | null
@@ -22984,6 +22991,10 @@ export namespace Prisma {
     cityId: string | null
     pageId: string | null
     tariffId: string | null
+    reasonCode: string | null
+    reasonLabel: string | null
+    reasonRoute: string | null
+    reasonRegistryVersion: number | null
     addressCheckId: string | null
     name: string | null
     phone: string | null
@@ -23018,6 +23029,10 @@ export namespace Prisma {
     pageId: number
     tariffId: number
     configurationSnapshot: number
+    reasonCode: number
+    reasonLabel: number
+    reasonRoute: number
+    reasonRegistryVersion: number
     addressCheckId: number
     name: number
     phone: number
@@ -23052,10 +23067,12 @@ export namespace Prisma {
 
 
   export type LeadAvgAggregateInputType = {
+    reasonRegistryVersion?: true
     timeOnSiteSeconds?: true
   }
 
   export type LeadSumAggregateInputType = {
+    reasonRegistryVersion?: true
     timeOnSiteSeconds?: true
   }
 
@@ -23065,6 +23082,10 @@ export namespace Prisma {
     cityId?: true
     pageId?: true
     tariffId?: true
+    reasonCode?: true
+    reasonLabel?: true
+    reasonRoute?: true
+    reasonRegistryVersion?: true
     addressCheckId?: true
     name?: true
     phone?: true
@@ -23098,6 +23119,10 @@ export namespace Prisma {
     cityId?: true
     pageId?: true
     tariffId?: true
+    reasonCode?: true
+    reasonLabel?: true
+    reasonRoute?: true
+    reasonRegistryVersion?: true
     addressCheckId?: true
     name?: true
     phone?: true
@@ -23132,6 +23157,10 @@ export namespace Prisma {
     pageId?: true
     tariffId?: true
     configurationSnapshot?: true
+    reasonCode?: true
+    reasonLabel?: true
+    reasonRoute?: true
+    reasonRegistryVersion?: true
     addressCheckId?: true
     name?: true
     phone?: true
@@ -23257,6 +23286,10 @@ export namespace Prisma {
     pageId: string | null
     tariffId: string | null
     configurationSnapshot: JsonValue | null
+    reasonCode: string | null
+    reasonLabel: string | null
+    reasonRoute: string | null
+    reasonRegistryVersion: number | null
     addressCheckId: string | null
     name: string | null
     phone: string
@@ -23314,6 +23347,10 @@ export namespace Prisma {
     pageId?: boolean
     tariffId?: boolean
     configurationSnapshot?: boolean
+    reasonCode?: boolean
+    reasonLabel?: boolean
+    reasonRoute?: boolean
+    reasonRegistryVersion?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23365,6 +23402,10 @@ export namespace Prisma {
     pageId?: boolean
     tariffId?: boolean
     configurationSnapshot?: boolean
+    reasonCode?: boolean
+    reasonLabel?: boolean
+    reasonRoute?: boolean
+    reasonRegistryVersion?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23409,6 +23450,10 @@ export namespace Prisma {
     pageId?: boolean
     tariffId?: boolean
     configurationSnapshot?: boolean
+    reasonCode?: boolean
+    reasonLabel?: boolean
+    reasonRoute?: boolean
+    reasonRegistryVersion?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23453,6 +23498,10 @@ export namespace Prisma {
     pageId?: boolean
     tariffId?: boolean
     configurationSnapshot?: boolean
+    reasonCode?: boolean
+    reasonLabel?: boolean
+    reasonRoute?: boolean
+    reasonRegistryVersion?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23484,7 +23533,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "pageId" | "tariffId" | "configurationSnapshot" | "addressCheckId" | "name" | "phone" | "submissionKey" | "consentVersion" | "consentAcceptedAt" | "email" | "address" | "objectType" | "serviceType" | "source" | "utm" | "referrer" | "pageUrl" | "formName" | "timeOnSiteSeconds" | "deviceType" | "viewedPages" | "processingStatus" | "duplicateOfId" | "duplicateReason" | "deliveryKey" | "externalLeadId" | "externalStatus" | "contractResult" | "status" | "apiResult" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
+  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "pageId" | "tariffId" | "configurationSnapshot" | "reasonCode" | "reasonLabel" | "reasonRoute" | "reasonRegistryVersion" | "addressCheckId" | "name" | "phone" | "submissionKey" | "consentVersion" | "consentAcceptedAt" | "email" | "address" | "objectType" | "serviceType" | "source" | "utm" | "referrer" | "pageUrl" | "formName" | "timeOnSiteSeconds" | "deviceType" | "viewedPages" | "processingStatus" | "duplicateOfId" | "duplicateReason" | "deliveryKey" | "externalLeadId" | "externalStatus" | "contractResult" | "status" | "apiResult" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
   export type LeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | CityDefaultArgs<ExtArgs>
@@ -23540,6 +23589,10 @@ export namespace Prisma {
       pageId: string | null
       tariffId: string | null
       configurationSnapshot: Prisma.JsonValue | null
+      reasonCode: string | null
+      reasonLabel: string | null
+      reasonRoute: string | null
+      reasonRegistryVersion: number | null
       addressCheckId: string | null
       name: string | null
       phone: string
@@ -24010,6 +24063,10 @@ export namespace Prisma {
     readonly pageId: FieldRef<"Lead", 'String'>
     readonly tariffId: FieldRef<"Lead", 'String'>
     readonly configurationSnapshot: FieldRef<"Lead", 'Json'>
+    readonly reasonCode: FieldRef<"Lead", 'String'>
+    readonly reasonLabel: FieldRef<"Lead", 'String'>
+    readonly reasonRoute: FieldRef<"Lead", 'String'>
+    readonly reasonRegistryVersion: FieldRef<"Lead", 'Int'>
     readonly addressCheckId: FieldRef<"Lead", 'String'>
     readonly name: FieldRef<"Lead", 'String'>
     readonly phone: FieldRef<"Lead", 'String'>
@@ -34211,6 +34268,10 @@ export namespace Prisma {
     pageId: 'pageId',
     tariffId: 'tariffId',
     configurationSnapshot: 'configurationSnapshot',
+    reasonCode: 'reasonCode',
+    reasonLabel: 'reasonLabel',
+    reasonRoute: 'reasonRoute',
+    reasonRegistryVersion: 'reasonRegistryVersion',
     addressCheckId: 'addressCheckId',
     name: 'name',
     phone: 'phone',
@@ -36355,6 +36416,10 @@ export namespace Prisma {
     pageId?: StringNullableFilter<"Lead"> | string | null
     tariffId?: StringNullableFilter<"Lead"> | string | null
     configurationSnapshot?: JsonNullableFilter<"Lead">
+    reasonCode?: StringNullableFilter<"Lead"> | string | null
+    reasonLabel?: StringNullableFilter<"Lead"> | string | null
+    reasonRoute?: StringNullableFilter<"Lead"> | string | null
+    reasonRegistryVersion?: IntNullableFilter<"Lead"> | number | null
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
@@ -36405,6 +36470,10 @@ export namespace Prisma {
     pageId?: SortOrderInput | SortOrder
     tariffId?: SortOrderInput | SortOrder
     configurationSnapshot?: SortOrderInput | SortOrder
+    reasonCode?: SortOrderInput | SortOrder
+    reasonLabel?: SortOrderInput | SortOrder
+    reasonRoute?: SortOrderInput | SortOrder
+    reasonRegistryVersion?: SortOrderInput | SortOrder
     addressCheckId?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     phone?: SortOrder
@@ -36460,6 +36529,10 @@ export namespace Prisma {
     pageId?: StringNullableFilter<"Lead"> | string | null
     tariffId?: StringNullableFilter<"Lead"> | string | null
     configurationSnapshot?: JsonNullableFilter<"Lead">
+    reasonCode?: StringNullableFilter<"Lead"> | string | null
+    reasonLabel?: StringNullableFilter<"Lead"> | string | null
+    reasonRoute?: StringNullableFilter<"Lead"> | string | null
+    reasonRegistryVersion?: IntNullableFilter<"Lead"> | number | null
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
@@ -36508,6 +36581,10 @@ export namespace Prisma {
     pageId?: SortOrderInput | SortOrder
     tariffId?: SortOrderInput | SortOrder
     configurationSnapshot?: SortOrderInput | SortOrder
+    reasonCode?: SortOrderInput | SortOrder
+    reasonLabel?: SortOrderInput | SortOrder
+    reasonRoute?: SortOrderInput | SortOrder
+    reasonRegistryVersion?: SortOrderInput | SortOrder
     addressCheckId?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     phone?: SortOrder
@@ -36554,6 +36631,10 @@ export namespace Prisma {
     pageId?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     tariffId?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     configurationSnapshot?: JsonNullableWithAggregatesFilter<"Lead">
+    reasonCode?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    reasonLabel?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    reasonRoute?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    reasonRegistryVersion?: IntNullableWithAggregatesFilter<"Lead"> | number | null
     addressCheckId?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     name?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     phone?: StringWithAggregatesFilter<"Lead"> | string
@@ -38965,6 +39046,10 @@ export namespace Prisma {
   export type LeadCreateInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -39013,6 +39098,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -39053,6 +39142,10 @@ export namespace Prisma {
   export type LeadUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39101,6 +39194,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -39145,6 +39242,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -39179,6 +39280,10 @@ export namespace Prisma {
   export type LeadUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39215,6 +39320,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -41574,6 +41683,10 @@ export namespace Prisma {
     pageId?: SortOrder
     tariffId?: SortOrder
     configurationSnapshot?: SortOrder
+    reasonCode?: SortOrder
+    reasonLabel?: SortOrder
+    reasonRoute?: SortOrder
+    reasonRegistryVersion?: SortOrder
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -41606,6 +41719,7 @@ export namespace Prisma {
   }
 
   export type LeadAvgOrderByAggregateInput = {
+    reasonRegistryVersion?: SortOrder
     timeOnSiteSeconds?: SortOrder
   }
 
@@ -41615,6 +41729,10 @@ export namespace Prisma {
     cityId?: SortOrder
     pageId?: SortOrder
     tariffId?: SortOrder
+    reasonCode?: SortOrder
+    reasonLabel?: SortOrder
+    reasonRoute?: SortOrder
+    reasonRegistryVersion?: SortOrder
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -41648,6 +41766,10 @@ export namespace Prisma {
     cityId?: SortOrder
     pageId?: SortOrder
     tariffId?: SortOrder
+    reasonCode?: SortOrder
+    reasonLabel?: SortOrder
+    reasonRoute?: SortOrder
+    reasonRegistryVersion?: SortOrder
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -41676,6 +41798,7 @@ export namespace Prisma {
   }
 
   export type LeadSumOrderByAggregateInput = {
+    reasonRegistryVersion?: SortOrder
     timeOnSiteSeconds?: SortOrder
   }
 
@@ -45840,6 +45963,10 @@ export namespace Prisma {
   export type LeadCreateWithoutSiteInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -45886,6 +46013,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -46426,6 +46557,10 @@ export namespace Prisma {
     pageId?: StringNullableFilter<"Lead"> | string | null
     tariffId?: StringNullableFilter<"Lead"> | string | null
     configurationSnapshot?: JsonNullableFilter<"Lead">
+    reasonCode?: StringNullableFilter<"Lead"> | string | null
+    reasonLabel?: StringNullableFilter<"Lead"> | string | null
+    reasonRoute?: StringNullableFilter<"Lead"> | string | null
+    reasonRegistryVersion?: IntNullableFilter<"Lead"> | number | null
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
@@ -48626,6 +48761,10 @@ export namespace Prisma {
   export type LeadCreateWithoutCityInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -48672,6 +48811,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -49102,6 +49245,10 @@ export namespace Prisma {
   export type LeadCreateWithoutPageInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -49148,6 +49295,10 @@ export namespace Prisma {
     cityId: string
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -49617,6 +49768,10 @@ export namespace Prisma {
   export type LeadCreateWithoutTariffInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -49663,6 +49818,10 @@ export namespace Prisma {
     cityId: string
     pageId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -50631,6 +50790,10 @@ export namespace Prisma {
   export type LeadCreateWithoutAddressCheckInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -50678,6 +50841,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -51294,6 +51461,10 @@ export namespace Prisma {
   export type LeadCreateWithoutDuplicatesInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -51341,6 +51512,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -51385,6 +51560,10 @@ export namespace Prisma {
   export type LeadCreateWithoutDuplicateOfInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -51432,6 +51611,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -51918,6 +52101,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutDuplicatesInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51965,6 +52152,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -52020,6 +52211,10 @@ export namespace Prisma {
   export type LeadCreateWithoutNotificationInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -52067,6 +52262,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -52122,6 +52321,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutNotificationInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52169,6 +52372,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -52208,6 +52415,10 @@ export namespace Prisma {
   export type LeadCreateWithoutAccessTokensInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -52255,6 +52466,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -52310,6 +52525,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutAccessTokensInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52357,6 +52576,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -52396,6 +52619,10 @@ export namespace Prisma {
   export type LeadCreateWithoutDeliveryAttemptsInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -52443,6 +52670,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -52498,6 +52729,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutDeliveryAttemptsInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52545,6 +52780,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -52584,6 +52823,10 @@ export namespace Prisma {
   export type LeadCreateWithoutActivityEventsInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -52631,6 +52874,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -52686,6 +52933,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutActivityEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52733,6 +52984,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -53000,6 +53255,10 @@ export namespace Prisma {
   export type LeadCreateWithoutHistoryInput = {
     id?: string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -53047,6 +53306,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -53102,6 +53365,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53149,6 +53416,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -54098,6 +54369,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -54382,6 +54657,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutSiteInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54428,6 +54707,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -54471,6 +54754,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -55316,6 +55603,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -55497,6 +55788,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutCityInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55543,6 +55838,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -55586,6 +55885,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -55710,6 +56013,10 @@ export namespace Prisma {
     cityId: string
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -55786,6 +56093,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutPageInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55832,6 +56143,10 @@ export namespace Prisma {
     cityId?: StringFieldUpdateOperationsInput | string
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -55875,6 +56190,10 @@ export namespace Prisma {
     cityId?: StringFieldUpdateOperationsInput | string
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -55950,6 +56269,10 @@ export namespace Prisma {
     cityId: string
     pageId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -55984,6 +56307,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutTariffInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56030,6 +56357,10 @@ export namespace Prisma {
     cityId?: StringFieldUpdateOperationsInput | string
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -56073,6 +56404,10 @@ export namespace Prisma {
     cityId?: StringFieldUpdateOperationsInput | string
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -56213,6 +56548,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -56246,6 +56585,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutAddressCheckInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56293,6 +56636,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56336,6 +56683,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56411,6 +56762,10 @@ export namespace Prisma {
     pageId?: string | null
     tariffId?: string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -56558,6 +56913,10 @@ export namespace Prisma {
   export type LeadUpdateWithoutDuplicateOfInput = {
     id?: StringFieldUpdateOperationsInput | string
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56605,6 +56964,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -56648,6 +57011,10 @@ export namespace Prisma {
     pageId?: NullableStringFieldUpdateOperationsInput | string | null
     tariffId?: NullableStringFieldUpdateOperationsInput | string | null
     configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string

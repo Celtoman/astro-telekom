@@ -34,6 +34,7 @@ interface LeadHistory { id: string; fromStatus?: LeadStatus; toStatus: LeadStatu
 interface DeliveryAttempt { id: string; attemptNumber: number; channel: string; status: string; error?: string; nextAttemptAt?: string; createdAt: string }
 interface LeadNotification { id: string; status: string; attempts: number; maxAttempts: number; transport?: string; errorCode?: string; httpStatus?: number; providerMessageId?: string; updatedAt: string }
 interface ActivityEvent { id: string; type: string; createdAt: string }
+interface LeadReasonOption { code: string; label: string; route: "SALES" | "NON_SALES" | "MANUAL"; version: number }
 interface LeadSummary {
   id: string
   name?: string
@@ -41,6 +42,10 @@ interface LeadSummary {
   email?: string
   address?: string
   source?: string
+  reasonCode?: string | null
+  reasonLabel?: string | null
+  reasonRoute?: string | null
+  reasonRegistryVersion?: number | null
   pageUrl?: string
   formName?: string
   deviceType?: string
@@ -86,7 +91,7 @@ interface LeadPage {
 type ScreenState =
   | { status: "loading" }
   | { status: "error"; message: string }
-  | { status: "ready"; user: Administrator }
+  | { status: "ready"; user: Administrator; reasons: LeadReasonOption[] }
 
 type DetailState =
   | { status: "idle" }
@@ -114,6 +119,14 @@ function sourcePresentationText(value: unknown) {
   return typeof value === "string" && value ? sourcePresentation(value).label : ""
 }
 
+function reasonRouteExplanation(route: string | null | undefined, version: number | null | undefined) {
+  const suffix = version ? ` Справочник v${version}.` : ""
+  if (route === "NON_SALES") return `Несбытовое обращение: сохранено для оператора без проверки абонента и передачи в Tarifnik.${suffix}`
+  if (route === "MANUAL") return `Требует ручного решения оператора; автоматическая передача не запускалась.${suffix}`
+  if (route === "SALES") return `Причина допускает проверку подключения и последующую передачу при успешных проверках.${suffix}`
+  return "Историческая заявка без снимка причины."
+}
+
 export function LeadsApp({ apiUrl }: { apiUrl: string }) {
   const [state, setState] = useState<ScreenState>({ status: "loading" })
   const [detail, setDetail] = useState<DetailState>({ status: "idle" })
@@ -121,6 +134,7 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
   const [search, setSearch] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState<"ALL" | LeadStatus>("ALL")
+  const [reasonFilter, setReasonFilter] = useState("ALL")
   const [leadPage, setLeadPage] = useState<LeadPage | null>(null)
   const [cursorStack, setCursorStack] = useState([""])
   const [pageSize, setPageSize] = useState(25)
@@ -143,8 +157,11 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
   const loadWorkspace = useCallback(async () => {
     setState({ status: "loading" })
     try {
-      const session = await requestJson<{ user: Administrator }>(apiUrl, "/auth/me")
-      setState({ status: "ready", user: session.user })
+      const [session, reasons] = await Promise.all([
+        requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
+        requestJson<LeadReasonOption[]>(apiUrl, "/crm/leads/reasons"),
+      ])
+      setState({ status: "ready", user: session.user, reasons })
     } catch (caught: unknown) {
       const message = handleError(caught, "API недоступен")
       if (message) setState({ status: "error", message })
@@ -165,6 +182,7 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
     setSearch("")
     setSearchQuery("")
     setStatusFilter("ALL")
+    setReasonFilter("ALL")
     setCursorStack([""])
   }
 
@@ -174,6 +192,7 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
     const params = new URLSearchParams({ limit: String(pageSize) })
     if (searchQuery) params.set("q", searchQuery)
     if (statusFilter !== "ALL") params.set("status", statusFilter)
+    if (reasonFilter !== "ALL") params.set("reasonCode", reasonFilter)
     if (currentCursor) params.set("cursor", currentCursor)
     setListBusy(true)
     setListError(null)
@@ -186,7 +205,7 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
       })
       .finally(() => { if (active) setListBusy(false) })
     return () => { active = false }
-  }, [apiUrl, currentCursor, handleError, listRevision, pageSize, searchQuery, statusFilter])
+  }, [apiUrl, currentCursor, handleError, listRevision, pageSize, searchQuery, statusFilter, reasonFilter])
 
   async function loadDetail(id: string) {
     setSelectedLeadId(id)
@@ -296,14 +315,15 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
           <Card className="min-w-0">
             <CardHeader><CardTitle>Журнал</CardTitle><CardDescription>{leadPage.pageInfo.total.toLocaleString("ru-RU")} заявок соответствует фильтру.</CardDescription></CardHeader>
             <CardContent className="flex min-w-0 flex-col gap-4">
-              <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_13rem_auto]">
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_12rem_12rem_auto]">
                 <Field><FieldLabel htmlFor="lead-search" className="sr-only">Поиск заявки</FieldLabel><div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" /><Input id="lead-search" className="pl-9" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Телефон, адрес, имя или ID" /></div></Field>
                 <Field><FieldLabel htmlFor="lead-status-filter" className="sr-only">Фильтр по статусу</FieldLabel><select id="lead-status-filter" className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value as "ALL" | LeadStatus); setCursorStack([""]) }}><option value="ALL">Все статусы</option>{leadStatusOptions.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}</select></Field>
-                <FilterResetButton active={Boolean(search || searchQuery || statusFilter !== "ALL")} onReset={resetFilters} />
+                <Field><FieldLabel htmlFor="lead-reason-filter" className="sr-only">Фильтр по причине обращения</FieldLabel><select id="lead-reason-filter" className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" value={reasonFilter} onChange={(event) => { setReasonFilter(event.target.value); setCursorStack([""]) }}><option value="ALL">Все причины</option>{state.reasons.map(({ code, label }) => <option key={code} value={code}>{label}</option>)}<option value="NONE">Без причины</option></select></Field>
+                <FilterResetButton active={Boolean(search || searchQuery || statusFilter !== "ALL" || reasonFilter !== "ALL")} onReset={resetFilters} />
               </div>
               {listError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Журнал не обновлен</AlertTitle><AlertDescription>{listError}</AlertDescription></Alert> : null}
               <div aria-busy={listBusy} className="min-w-0 overflow-x-auto">
-                {leadPage.items.length ? <Table><TableHeader><TableRow><TableHead>Создана</TableHead><TableHead>Контакт</TableHead><TableHead>Адрес подключения</TableHead><TableHead>Статус</TableHead><TableHead>Обработка</TableHead><TableHead>Оповещение</TableHead><TableHead><span className="sr-only">Действие</span></TableHead></TableRow></TableHeader><TableBody>{leadPage.items.map((lead) => <TableRow key={lead.id} data-state={selectedLeadId === lead.id ? "selected" : undefined}><TableCell className="whitespace-nowrap">{dateFormatter.format(new Date(lead.createdAt))}</TableCell><TableCell><div className="font-medium">{lead.phone}</div><div className="text-xs text-muted-foreground">{lead.name || sourcePresentationText(lead.source) || "Имя не указано"}</div></TableCell><TableCell><div className="max-w-64 truncate font-medium">{lead.address || "Адрес не указан"}</div><div className="text-xs text-muted-foreground">Город страницы: {lead.city.name}</div></TableCell><TableCell><StatusBadge kind="leadStatus" value={lead.status} /></TableCell><TableCell><StatusBadge kind="leadProcessingStatus" value={lead.processingStatus} /></TableCell><TableCell><StatusBadge kind="leadNotificationStatus" value={lead.notification?.status || "PENDING"} /></TableCell><TableCell><Button variant="ghost" size="sm" onClick={() => void loadDetail(lead.id)}>Открыть</Button></TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><Inbox className="text-muted-foreground" aria-hidden="true" /><p className="font-medium">Заявки не найдены</p><p className="text-sm text-muted-foreground">Измените поиск или фильтр либо дождитесь первого обращения.</p></div>}
+                {leadPage.items.length ? <Table><TableHeader><TableRow><TableHead>Создана</TableHead><TableHead>Контакт</TableHead><TableHead>Адрес подключения</TableHead><TableHead>Причина</TableHead><TableHead>Статус</TableHead><TableHead>Обработка</TableHead><TableHead>Оповещение</TableHead><TableHead><span className="sr-only">Действие</span></TableHead></TableRow></TableHeader><TableBody>{leadPage.items.map((lead) => <TableRow key={lead.id} data-state={selectedLeadId === lead.id ? "selected" : undefined}><TableCell className="whitespace-nowrap">{dateFormatter.format(new Date(lead.createdAt))}</TableCell><TableCell><div className="font-medium">{lead.phone}</div><div className="text-xs text-muted-foreground">{lead.name || sourcePresentationText(lead.source) || "Имя не указано"}</div></TableCell><TableCell><div className="max-w-64 truncate font-medium">{lead.address || "Адрес не указан"}</div><div className="text-xs text-muted-foreground">Город страницы: {lead.city.name}</div></TableCell><TableCell>{lead.reasonLabel || "Не указана"}</TableCell><TableCell><StatusBadge kind="leadStatus" value={lead.status} /></TableCell><TableCell><StatusBadge kind="leadProcessingStatus" value={lead.processingStatus} /></TableCell><TableCell><StatusBadge kind="leadNotificationStatus" value={lead.notification?.status || "PENDING"} /></TableCell><TableCell><Button variant="ghost" size="sm" onClick={() => void loadDetail(lead.id)}>Открыть</Button></TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><Inbox className="text-muted-foreground" aria-hidden="true" /><p className="font-medium">Заявки не найдены</p><p className="text-sm text-muted-foreground">Измените поиск или фильтр либо дождитесь первого обращения.</p></div>}
               </div>
               <ServerPagination
                 page={cursorStack.length}
@@ -361,7 +381,7 @@ function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment
   return <Card>
     <CardHeader><div className="flex flex-wrap items-start justify-between gap-3"><div><CardTitle>{lead.name || lead.phone}</CardTitle><CardDescription>{lead.phone} · {dateFormatter.format(new Date(lead.createdAt))}</CardDescription></div><StatusBadge kind="leadStatus" value={lead.status} /></div></CardHeader>
     <CardContent className="flex flex-col gap-6">
-      <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Контакт и контекст</h2><dl className="grid gap-2 text-sm"><DetailRow label="Email" value={lead.email} /><DetailRow label="Город страницы" value={lead.city.name} /><DetailRow label="Адрес подключения" value={lead.address} /><DetailRow label="Страница" value={lead.pageUrl || lead.page?.slug} /><DetailRow label="Тариф" value={configuration?.tariff.name || lead.tariff?.name} /><DetailRow label="Источник" value={lead.source ? <SourceLabel value={lead.source} /> : undefined} /><DetailRow label="Форма" value={lead.formName} /></dl></section>
+      <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Контакт и контекст</h2><dl className="grid gap-2 text-sm"><DetailRow label="Email" value={lead.email} /><DetailRow label="Город страницы" value={lead.city.name} /><DetailRow label="Адрес подключения" value={lead.address} /><DetailRow label="Страница" value={lead.pageUrl || lead.page?.slug} /><DetailRow label="Тариф" value={configuration?.tariff.name || lead.tariff?.name} /><DetailRow label="Причина обращения" value={lead.reasonLabel || "Не указана"} description={reasonRouteExplanation(lead.reasonRoute, lead.reasonRegistryVersion)} /><DetailRow label="Источник" value={lead.source ? <SourceLabel value={lead.source} /> : undefined} /><DetailRow label="Форма" value={lead.formName} /></dl></section>
       {configuration ? <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Комплектация при отправке</h2><p className="text-xs text-muted-foreground">Неизменяемый снимок условий заявки{configuration.capturedAt ? ` · ${dateFormatter.format(new Date(configuration.capturedAt))}` : ""}.</p><dl className="grid gap-2 text-sm"><DetailRow label="Тариф" value={configuration.tariff.name} /><DetailRow label="ID тарифа" value={configuration.tariff.id} /></dl>{configuration.components.length ? <ul className="list-disc pl-5 text-sm">{configuration.components.map((item) => <li key={item.code}>{item.title} ({item.code}){item.methodTitle ? ` — ${item.methodTitle}` : ""}</li>)}</ul> : <p className="text-sm text-muted-foreground">Дополнительные опции не выбраны.</p>}<h3 className="text-sm font-medium">Ежемесячно</h3><ul className="list-disc pl-5 text-sm">{configuration.charges.monthly.map((item) => <li key={item.code}>{item.title}: {rubles(item.amount)}</li>)}</ul><strong className="text-sm">{rubles(configuration.totals.monthly)}/мес.</strong><h3 className="text-sm font-medium">Разовые платежи</h3><ul className="list-disc pl-5 text-sm">{configuration.charges.oneTime.map((item) => <li key={item.code}>{item.title}: {item.amount === null ? "стоимость уточняется" : rubles(item.amount)}</li>)}</ul><strong className="text-sm">{configuration.totals.oneTime === null ? `Известная часть: ${rubles(configuration.totals.knownOneTime)}; полная сумма уточняется` : rubles(configuration.totals.oneTime)}</strong></section> : null}
       <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Проверки и доставка</h2><dl className="grid gap-2 text-sm"><DetailRow label="Обработка" value={<StatusBadge kind="leadProcessingStatus" value={lead.processingStatus} />} description={processingPresentation.description} /><DetailRow label="Проверка адреса" value={presentationText("addressCheckStatus", addressStatus, "Результат проверки адреса отсутствует")} /><DetailRow label="Статус договора" value={presentationText("contractStatus", contractStatus, "Результат проверки договора отсутствует")} /><DetailRow label="Внешняя заявка" value={externalLead} /></dl>{unknownOutcome ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Проверьте результат резервного письма</AlertTitle><AlertDescription>Отправка могла состояться, но подтверждение не сохранилось. Проверьте почту или журнал внешнего сервиса до повтора: повторная передача может создать дубль.{!unknownOutcomeOldEnough ? " Обновите карточку через две минуты." : ""}</AlertDescription></Alert> : null}{canRetryDelivery ? <Button variant="outline" disabled={busy} onClick={() => void onRetryDelivery()}><RefreshCw data-icon="inline-start" />{deliveryRetryBusy ? "Ставим в очередь…" : unknownOutcome ? "Проверил результат — повторить" : "Повторить передачу"}</Button> : null}{lead.duplicateOf ? <Alert><CircleAlert /><AlertTitle>Повторная заявка {lead.duplicateOf.id}</AlertTitle><AlertDescription>{statusPresentation("duplicateReason", lead.duplicateReason).description}</AlertDescription></Alert> : null}</section>
       <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Оповещение оператора</h2><dl className="grid gap-2 text-sm"><DetailRow label="Статус" value={lead.notification ? <StatusBadge kind="leadNotificationStatus" value={lead.notification.status} /> : "Нет записи"} /><DetailRow label="Канал" value={presentationText("notificationTransport", lead.notification?.transport, "Еще не выбран")} /><DetailRow label="Попытки" value={lead.notification ? `${lead.notification.attempts} из ${lead.notification.maxAttempts}` : "—"} /></dl>{canRetryNotification ? <Button variant="outline" disabled={busy} onClick={() => void onRetryNotification()}><RefreshCw data-icon="inline-start" />{notificationRetryBusy ? "Ставим в очередь…" : "Повторить оповещение"}</Button> : null}{lead.notification?.errorCode ? <details className="text-sm"><summary className="cursor-pointer text-muted-foreground">Техническая информация</summary><p className="mt-1 break-words text-destructive">Код: {lead.notification.errorCode}{lead.notification.httpStatus ? ` · HTTP ${lead.notification.httpStatus}` : ""}</p></details> : null}</section>

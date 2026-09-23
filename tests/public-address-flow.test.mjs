@@ -186,6 +186,7 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(addressClient, /После \+7 мобильный номер должен начинаться с 9/);
   assert.match(addressClient, /phoneInput\.value = '\+7 '/);
   assert.match(addressClient, /submissionKey/);
+  assert.match(addressClient, /reasonCode:\s*'new_connection'/);
   assert.match(addressClient, /consentVersion/);
   assert.match(addressClient, /Попробовать ещё раз/);
 

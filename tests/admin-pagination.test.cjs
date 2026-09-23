@@ -64,6 +64,20 @@ test('lead journal returns a bounded cursor page and a minimal list DTO', async 
   assert.deepEqual(attentionFilter[1].deliveryAttempts.some, { channel: 'API', status: 'FAILED', nextAttemptAt: null });
 });
 
+test('lead journal filters by immutable reason snapshot and exposes the closed registry', async () => {
+  const prisma = transactionPrisma('lead', [], [0, 0, 0, 0, 0, 0]);
+  const controller = new CrmLeadsController(prisma.client);
+  const reasons = controller.reasons();
+  assert.deepEqual(reasons.map((item) => item.code), ['new_connection', 'existing_subscriber_support', 'billing', 'relocation', 'other']);
+  await controller.list({ reasonCode: 'billing' });
+  assert.deepEqual(prisma.calls.findMany[0].where.AND[0], { reasonCode: 'billing' });
+  assert.equal(prisma.calls.findMany[0].select.reasonLabel, true);
+  const pipe = createGlobalValidationPipe();
+  const transformed = await pipe.transform({ reasonCode: 'billing' }, queryMetadata(LeadListQueryDto));
+  assert.equal(transformed.reasonCode, 'billing');
+  await assert.rejects(pipe.transform({ reasonCode: 'domofon' }, queryMetadata(LeadListQueryDto)), (error) => error.getStatus() === 400);
+});
+
 test('tariff catalog applies server search and enforces the page-size upper bound', async () => {
   const rows = Array.from({ length: 101 }, (_, index) => ({
     id: `tariff-${index}`,

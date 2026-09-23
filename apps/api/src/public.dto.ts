@@ -26,6 +26,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { LEAD_CONSENT_VERSION } from './lead-consent';
+import { LEAD_REASON_CODES } from './lead-reasons';
 
 const slug = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const telemetryKey = /^[a-zA-Z][a-zA-Z0-9_.-]{0,63}$/;
@@ -270,6 +271,10 @@ export class LeadConfigurationDto {
 }
 
 export class CreateLeadDto {
+  @IsOptional()
+  @IsIn([...LEAD_REASON_CODES])
+  reasonCode?: string;
+
   @IsOptional()
   @IsString()
   @Matches(slug)

@@ -133,6 +133,14 @@ test('in-process fallback preserves the retry number', async () => {
   assert.deepEqual(processed, [['lead-1', 4, 2]]);
 });
 
+test('delivery refuses a non-sales reason even if a stale job sees PENDING', async () => {
+  const f = fixture(lead({ reasonRoute: 'NON_SALES' }));
+  const result = await f.service.process('lead-1', 1, 1);
+  assert.deepEqual(result, { skipped: true, reason: 'non_sales_reason' });
+  assert.equal(f.updates.at(-1).processingStatus, 'NON_SALES_NOT_SENT');
+  assert.equal(f.attempts.length, 0);
+});
+
 async function withDeliveryEnvironment(callback) {
   const names = ['REDIS_URL', 'TARIFNIK_API_URL', 'TARIFNIK_API_KEY', 'TARIFNIK_UTM_CAMPAIGN', 'TARIFNIK_TARGET_PROVIDER_ID'];
   const previous = Object.fromEntries(names.map((name) => [name, process.env[name]]));

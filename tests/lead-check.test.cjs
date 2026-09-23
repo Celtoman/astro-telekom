@@ -153,6 +153,36 @@ test('manual lead cannot manufacture a positive coverage result', async () => {
   assert.equal(f.deliveryEnqueues(), 0);
 });
 
+test('non-sales reason is snapshotted and bypasses address coverage, subscriber check and delivery', async () => {
+  const f = fixture(null);
+  const result = await f.create({ ...base, reasonCode: 'billing' });
+  assert.equal(result.id, 'lead');
+  assert.deepEqual({ code: f.saved().reasonCode, label: f.saved().reasonLabel, route: f.saved().reasonRoute, version: f.saved().reasonRegistryVersion },
+    { code: 'billing', label: 'Оплата', route: 'NON_SALES', version: 1 });
+  assert.equal(f.saved().processingStatus, 'NON_SALES_NOT_SENT');
+  assert.equal(f.contractChecks(), 0);
+  assert.equal(f.deliveryEnqueues(), 0);
+  assert.equal(f.notificationEnqueues(), 1);
+});
+
+test('other reason stays in manual review and unknown reasons are rejected before save', async () => {
+  const f = fixture(null);
+  await f.create({ ...base, reasonCode: 'other' });
+  assert.equal(f.saved().processingStatus, 'MANUAL_CHECK');
+  assert.equal(f.contractChecks(), 0);
+  assert.equal(f.deliveryEnqueues(), 0);
+  const unknown = fixture(null);
+  await assert.rejects(unknown.create({ ...base, reasonCode: 'domofon' }), /Неизвестная причина обращения/);
+  assert.equal(unknown.leadCreates(), 0);
+});
+
+test('reason cannot be changed by reusing an existing submission key', async () => {
+  const f = fixture(targetCheck());
+  await f.create({ ...base, reasonCode: 'new_connection', addressCheckId: 'check' });
+  await assert.rejects(f.create({ ...base, reasonCode: 'billing', addressCheckId: 'check' }), /Ключ отправки/);
+  assert.equal(f.leadCreates(), 1);
+});
+
 test('lead and its notification outbox record are created atomically before enqueue', async () => {
   const f = fixture(targetCheck());
   const created = await f.create({ ...base, addressCheckId: 'check' });

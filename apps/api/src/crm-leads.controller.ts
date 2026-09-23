@@ -7,6 +7,7 @@ import { PrismaService } from './prisma.service';
 import { LeadDeliveryService } from './lead-delivery.service';
 import { LeadAccessService } from './lead-access.service';
 import { LeadNotificationOutboxService } from './lead-notification-outbox.service';
+import { LEAD_REASONS, LEAD_REASON_CODES } from './lead-reasons';
 
 type LeadStatus = 'NEW' | 'IN_PROGRESS' | 'CALL_LATER' | 'CONNECTED' | 'REJECTED';
 
@@ -19,6 +20,10 @@ export class LeadListQueryDto extends CursorPageQueryDto {
   @IsOptional()
   @IsIn(['NEW', 'IN_PROGRESS', 'CALL_LATER', 'CONNECTED', 'REJECTED'])
   status?: LeadStatus;
+
+  @IsOptional()
+  @IsIn([...LEAD_REASON_CODES, 'NONE'])
+  reasonCode?: string;
 }
 
 export class RetryDeliveryBodyDto {
@@ -44,6 +49,7 @@ export class CrmLeadsController {
     const cursor = decodeCursor(query.cursor);
     const filters: Prisma.LeadWhereInput[] = [];
     if (query.status) filters.push({ status: query.status });
+    if (query.reasonCode) filters.push({ reasonCode: query.reasonCode === 'NONE' ? null : query.reasonCode });
     if (q) {
       filters.push({
         OR: [
@@ -67,7 +73,7 @@ export class CrmLeadsController {
     const where: Prisma.LeadWhereInput = filters.length ? { AND: filters } : {};
     const attentionWhere: Prisma.LeadWhereInput = {
       OR: [
-        { processingStatus: { in: ['MANUAL_CHECK', 'ADDRESS_CLARIFICATION', 'MANUAL_CHECK_API', 'DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED', 'DELIVERY_EMAIL_OUTCOME_UNKNOWN'] } },
+        { processingStatus: { in: ['MANUAL_CHECK', 'NON_SALES_NOT_SENT', 'ADDRESS_CLARIFICATION', 'MANUAL_CHECK_API', 'DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED', 'DELIVERY_EMAIL_OUTCOME_UNKNOWN'] } },
         { processingStatus: 'PENDING', updatedAt: { lt: new Date(Date.now() - 2 * 60_000) }, deliveryAttempts: { some: { channel: 'API', status: 'FAILED', nextAttemptAt: null } } },
         { notification: { is: { OR: [{ status: 'FAILED' }, { errorCode: { not: null } }] } } },
       ],
@@ -83,6 +89,9 @@ export class CrmLeadsController {
           phone: true,
           address: true,
           source: true,
+          reasonCode: true,
+          reasonLabel: true,
+          reasonRoute: true,
           status: true,
           processingStatus: true,
           createdAt: true,
@@ -109,6 +118,11 @@ export class CrmLeadsController {
       },
       summary: { total: allTotal, new: newTotal, pending: pendingTotal, attention: attentionTotal },
     };
+  }
+
+  @Get('reasons')
+  reasons() {
+    return LEAD_REASONS;
   }
 
   @Get(':id')

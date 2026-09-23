@@ -55,6 +55,7 @@ enum LeadProcessingStatus {
   PENDING
   DELIVERED
   DUPLICATE_SUPPRESSED
+  NON_SALES_NOT_SENT
   ACTIVE_SUBSCRIBER_NOT_SENT
   PROVIDER_NOT_AVAILABLE_NOT_SENT
   NO_PROVIDERS_NOT_SENT
@@ -514,6 +515,10 @@ model Lead {
   pageId                String?
   tariffId              String?
   configurationSnapshot Json?
+  reasonCode            String?
+  reasonLabel           String?
+  reasonRoute           String?
+  reasonRegistryVersion Int?
   addressCheckId        String?
   name                  String?
   phone                 String
@@ -559,6 +564,7 @@ model Lead {
   @@index([status, createdAt])
   @@index([processingStatus, createdAt])
   @@index([siteId, phone, createdAt])
+  @@index([siteId, reasonCode, createdAt])
   @@index([siteId, duplicateOfId])
   @@index([createdAt, id])
 }

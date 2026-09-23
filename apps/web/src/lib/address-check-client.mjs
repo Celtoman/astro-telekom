@@ -605,6 +605,7 @@ function initializeRoot(root) {
           tariffSlug: form.dataset.tariffSlug || undefined,
           configuration: configuration || undefined,
           formName: 'address-result-dialog',
+          reasonCode: 'new_connection',
           phone,
           submissionKey,
           consentVersion: leadForm.dataset.consentVersion,
