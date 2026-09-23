@@ -17,15 +17,18 @@ interface TariffSource {
   attributes?: unknown;
 }
 
-function price(value: unknown, label: string, required = false): number | null {
+function price(value: unknown, label: string, required = false, decimalString = false): number | null {
   if (value === null || value === undefined || value === '') {
     if (required) throw new Error(`${label} обязателен`);
     return null;
   }
-  if (!Number.isSafeInteger(value) || (required ? (value as number) <= 0 : (value as number) < 0)) {
+  const amount = decimalString && typeof value === 'string' && /^(0|[1-9]\d*)(\.0{1,2})?$/.test(value)
+    ? Number(value)
+    : value;
+  if (!Number.isSafeInteger(amount) || (required ? (amount as number) <= 0 : (amount as number) < 0)) {
     throw new Error(`${label} должен быть корректной целой ценой`);
   }
-  return value as number;
+  return amount as number;
 }
 
 function equipmentChoices(attributes: Record<string, unknown>, code: EquipmentCode, title: string) {
@@ -55,10 +58,10 @@ function safeSum(values: number[]): number {
 }
 
 export function quoteTariffConfiguration(tariff: TariffSource, requested: TariffSelection = {}) {
-  const standard = price(tariff.standardPrice, 'standardPrice', true)!;
-  const promo = price(tariff.promoPrice, 'promoPrice');
+  const standard = price(tariff.standardPrice, 'standardPrice', true, true)!;
+  const promo = price(tariff.promoPrice, 'promoPrice', false, true);
   if (promo !== null && (promo <= 0 || promo >= standard)) throw new Error('promoPrice должен быть меньше standardPrice');
-  const connection = price(tariff.connectionFee, 'connectionFee');
+  const connection = price(tariff.connectionFee, 'connectionFee', false, true);
   const attributes = tariff.attributes && typeof tariff.attributes === 'object' && !Array.isArray(tariff.attributes)
     ? tariff.attributes as Record<string, unknown>
     : {};

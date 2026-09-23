@@ -37,6 +37,15 @@ test('default configuration includes only the base tariff and keeps unknown conn
   });
 });
 
+test('published Prisma Decimal strings preserve whole-ruble prices and explicit free connection', () => {
+  const published = { ...tariff, standardPrice: '1200.00', promoPrice: '900', connectionFee: '0.00' };
+  const quote = calculator()(published, {});
+  assert.deepEqual(quote.totals, { monthly: 900, oneTime: 0, knownOneTime: 0 });
+  for (const standardPrice of ['850.50', '8e2', ' 850', '-1', 'Infinity', '0850']) {
+    assert.throws(() => calculator()({ ...tariff, standardPrice }, {}), /standardPrice/);
+  }
+});
+
 test('router installment and tvbox buyout add separate monthly and one-time charges', () => {
   const quote = calculator()({ ...tariff, connectionFee: 0, attributes: {
     ...tariff.attributes, tvbox_buyout_price: 4500,
@@ -88,6 +97,7 @@ test('invalid selections and malformed tariff pricing are rejected instead of be
   }
   assert.throws(() => calculator()({ ...tariff, standardPrice: null }, {}), /standardPrice/);
   assert.throws(() => calculator()({ ...tariff, connectionFee: -1 }, {}), /connectionFee/);
+  assert.throws(() => calculator()({ ...tariff, attributes: { router_buyout_price: '6000' } }, {}), /router_buyout_price/);
 });
 
 test('public quote uses only the published city snapshot and rejects another tariff or forged option', async () => {

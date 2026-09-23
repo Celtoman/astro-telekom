@@ -36,6 +36,7 @@
 | TD-122 | [#204](https://github.com/Celtoman/astro-telekom/issues/204) ✅ | Повторный EMAIL fallback сохраняется под номером текущего delivery cycle без конфликта уникального индекса |
 | TD-123 | [#205](https://github.com/Celtoman/astro-telekom/issues/205) 🟢 | Сбой БД после принятого EMAIL fallback может оставить лид `PENDING` без безопасного пути восстановления |
 | TD-124 | [#206](https://github.com/Celtoman/astro-telekom/issues/206) ✅ | Валидное `OPTIONAL` видеонаблюдение без цены блокирует сборку тарифа вместо невыбираемого состояния «стоимость уточняется» |
+| TD-125 | [#207](https://github.com/Celtoman/astro-telekom/issues/207) ✅ | Quote опубликованного тарифа должен принимать канонические целые цены, сериализованные Prisma Decimal как строки |
 | TD-21 | [#12](https://github.com/Celtoman/astro-telekom/issues/12) ✅ | Уязвимый `xlsx@0.18.5` заменен на `read-excel-file`; импорт принимает только ограниченный XLSX |
 | TD-22 | [#37](https://github.com/Celtoman/astro-telekom/issues/37) ✅ | Compose переведен на обязательный для PostgreSQL 18 volume mount `/var/lib/postgresql` |
 | TD-23 | [#38](https://github.com/Celtoman/astro-telekom/issues/38) ✅ | Seed использует явный ESM entrypoint сгенерированного Prisma client и снова запускается на Node 22 |
