@@ -202,6 +202,11 @@ export class LeadDeliveryService implements OnModuleDestroy {
         }
         return { delivered: false, retryAt: nextAttemptAt.toISOString() };
       }
+      const claimed = await this.prisma.lead.updateMany({
+        where: { id: leadId, processingStatus: 'PENDING' },
+        data: { processingStatus: 'DELIVERY_EMAIL_OUTCOME_UNKNOWN' },
+      });
+      if (claimed.count !== 1) return { skipped: true, reason: 'delivery_state_changed' };
       let emailError: string | null = null;
       try {
         await this.notifications.notifyDeliveryFallback({ id: lead.id, phone: lead.phone, name: lead.name, city: lead.city.name, address: lead.address, tariff: lead.tariff?.name });
@@ -209,8 +214,8 @@ export class LeadDeliveryService implements OnModuleDestroy {
         emailError = error instanceof Error ? error.message : String(error);
       }
       const emailSent = emailError === null;
-      await this.prisma.$transaction([
-        this.prisma.leadDeliveryAttempt.create({
+      await this.prisma.$transaction(async (tx) => {
+        await tx.leadDeliveryAttempt.create({
           data: {
             leadId,
             attemptNumber,
@@ -219,9 +224,13 @@ export class LeadDeliveryService implements OnModuleDestroy {
             idempotencyKey: deliveryKey,
             ...(emailSent ? { response: { fallback: true } } : { error: emailError }),
           },
-        }),
-        this.prisma.lead.update({ where: { id: leadId }, data: { processingStatus: emailSent ? 'DELIVERY_ERROR_EMAIL_SENT' : 'DELIVERY_ERROR_EMAIL_FAILED' } }),
-      ]);
+        });
+        const finished = await tx.lead.updateMany({
+          where: { id: leadId, processingStatus: 'DELIVERY_EMAIL_OUTCOME_UNKNOWN' },
+          data: { processingStatus: emailSent ? 'DELIVERY_ERROR_EMAIL_SENT' : 'DELIVERY_ERROR_EMAIL_FAILED' },
+        });
+        if (finished.count !== 1) throw new Error('Lead state changed after fallback; outcome requires manual review');
+      });
       return { delivered: false, fallback: emailSent };
     }
   }

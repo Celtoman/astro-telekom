@@ -69,6 +69,14 @@ interface LeadDetail extends LeadSummary {
   configurationSnapshot?: ConfigurationSnapshot | null
 }
 
+function hasUnknownDeliveryOutcome(lead: LeadDetail): boolean {
+  if (lead.processingStatus === "DELIVERY_EMAIL_OUTCOME_UNKNOWN") return true
+  const latestApi = lead.deliveryAttempts.filter((item) => item.channel === "API")
+    .toSorted((a, b) => b.attemptNumber - a.attemptNumber)[0]
+  return lead.processingStatus === "PENDING" && latestApi?.status === "FAILED"
+    && latestApi.nextAttemptAt == null && Date.now() - Date.parse(lead.updatedAt) >= 2 * 60_000
+}
+
 interface LeadPage {
   items: LeadSummary[]
   pageInfo: { limit: number; total: number; hasNextPage: boolean; nextCursor: string | null }
@@ -219,10 +227,14 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
 
   async function retryDelivery() {
     if (detail.status !== "ready") return
+    const unknownOutcome = hasUnknownDeliveryOutcome(detail.lead)
+    if (unknownOutcome && !window.confirm("Результат резервного письма неизвестен. Сначала проверьте почту или журнал внешнего сервиса. Повторная передача может создать дубль. Вы проверили результат и подтверждаете повтор?")) return
     setBusy("retryDelivery")
     setActionError(null)
     try {
-      await requestJson(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}/retry-delivery`, { method: "POST" })
+      await requestJson(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}/retry-delivery`, {
+        method: "POST", ...(unknownOutcome ? { body: { confirmUnknownOutcome: true } } : {}),
+      })
       const lead = await requestJson<LeadDetail>(apiUrl, `/crm/leads/${encodeURIComponent(selectedLeadId)}`)
       setListRevision((value) => value + 1)
       setDetail({ status: "ready", lead })
@@ -332,12 +344,15 @@ function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment
   if (detail.status === "error") return <Card><CardHeader><CardTitle>Карточка не загружена</CardTitle></CardHeader><CardContent><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{detail.message}</AlertDescription></Alert></CardContent></Card>
 
   const lead = detail.lead
+  const unknownOutcome = hasUnknownDeliveryOutcome(lead)
+  const unknownOutcomeOldEnough = Date.now() - Date.parse(lead.updatedAt) >= 2 * 60_000
   const configuration = lead.configurationSnapshot
   const rubles = (amount: number) => `${new Intl.NumberFormat("ru-RU").format(amount)} ₽`
   const addressStatus = lead.addressCheck?.status || recordText(lead.apiResult, "status")
   const contractStatus = recordText(lead.contractResult, "status")
   const canRetryDelivery = ["DELIVERY_QUEUE_ERROR", "DELIVERY_ERROR_EMAIL_SENT", "DELIVERY_ERROR_EMAIL_FAILED"].includes(lead.processingStatus)
     || (lead.processingStatus === "PENDING" && lead.deliveryAttempts.length === 0)
+    || (unknownOutcome && unknownOutcomeOldEnough)
   const canRetryNotification = lead.notification?.status === "FAILED"
   const externalLead = lead.externalLeadId
     ? `${lead.externalLeadId} · ${presentationText("externalLeadStatus", lead.externalStatus, "Статус Tarifnik не распознан")}`
@@ -348,7 +363,7 @@ function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment
     <CardContent className="flex flex-col gap-6">
       <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Контакт и контекст</h2><dl className="grid gap-2 text-sm"><DetailRow label="Email" value={lead.email} /><DetailRow label="Город страницы" value={lead.city.name} /><DetailRow label="Адрес подключения" value={lead.address} /><DetailRow label="Страница" value={lead.pageUrl || lead.page?.slug} /><DetailRow label="Тариф" value={configuration?.tariff.name || lead.tariff?.name} /><DetailRow label="Источник" value={lead.source ? <SourceLabel value={lead.source} /> : undefined} /><DetailRow label="Форма" value={lead.formName} /></dl></section>
       {configuration ? <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Комплектация при отправке</h2><p className="text-xs text-muted-foreground">Неизменяемый снимок условий заявки{configuration.capturedAt ? ` · ${dateFormatter.format(new Date(configuration.capturedAt))}` : ""}.</p><dl className="grid gap-2 text-sm"><DetailRow label="Тариф" value={configuration.tariff.name} /><DetailRow label="ID тарифа" value={configuration.tariff.id} /></dl>{configuration.components.length ? <ul className="list-disc pl-5 text-sm">{configuration.components.map((item) => <li key={item.code}>{item.title} ({item.code}){item.methodTitle ? ` — ${item.methodTitle}` : ""}</li>)}</ul> : <p className="text-sm text-muted-foreground">Дополнительные опции не выбраны.</p>}<h3 className="text-sm font-medium">Ежемесячно</h3><ul className="list-disc pl-5 text-sm">{configuration.charges.monthly.map((item) => <li key={item.code}>{item.title}: {rubles(item.amount)}</li>)}</ul><strong className="text-sm">{rubles(configuration.totals.monthly)}/мес.</strong><h3 className="text-sm font-medium">Разовые платежи</h3><ul className="list-disc pl-5 text-sm">{configuration.charges.oneTime.map((item) => <li key={item.code}>{item.title}: {item.amount === null ? "стоимость уточняется" : rubles(item.amount)}</li>)}</ul><strong className="text-sm">{configuration.totals.oneTime === null ? `Известная часть: ${rubles(configuration.totals.knownOneTime)}; полная сумма уточняется` : rubles(configuration.totals.oneTime)}</strong></section> : null}
-      <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Проверки и доставка</h2><dl className="grid gap-2 text-sm"><DetailRow label="Обработка" value={<StatusBadge kind="leadProcessingStatus" value={lead.processingStatus} />} description={processingPresentation.description} /><DetailRow label="Проверка адреса" value={presentationText("addressCheckStatus", addressStatus, "Результат проверки адреса отсутствует")} /><DetailRow label="Статус договора" value={presentationText("contractStatus", contractStatus, "Результат проверки договора отсутствует")} /><DetailRow label="Внешняя заявка" value={externalLead} /></dl>{canRetryDelivery ? <Button variant="outline" disabled={busy} onClick={() => void onRetryDelivery()}><RefreshCw data-icon="inline-start" />{deliveryRetryBusy ? "Ставим в очередь…" : "Повторить передачу"}</Button> : null}{lead.duplicateOf ? <Alert><CircleAlert /><AlertTitle>Повторная заявка {lead.duplicateOf.id}</AlertTitle><AlertDescription>{statusPresentation("duplicateReason", lead.duplicateReason).description}</AlertDescription></Alert> : null}</section>
+      <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Проверки и доставка</h2><dl className="grid gap-2 text-sm"><DetailRow label="Обработка" value={<StatusBadge kind="leadProcessingStatus" value={lead.processingStatus} />} description={processingPresentation.description} /><DetailRow label="Проверка адреса" value={presentationText("addressCheckStatus", addressStatus, "Результат проверки адреса отсутствует")} /><DetailRow label="Статус договора" value={presentationText("contractStatus", contractStatus, "Результат проверки договора отсутствует")} /><DetailRow label="Внешняя заявка" value={externalLead} /></dl>{unknownOutcome ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Проверьте результат резервного письма</AlertTitle><AlertDescription>Отправка могла состояться, но подтверждение не сохранилось. Проверьте почту или журнал внешнего сервиса до повтора: повторная передача может создать дубль.{!unknownOutcomeOldEnough ? " Обновите карточку через две минуты." : ""}</AlertDescription></Alert> : null}{canRetryDelivery ? <Button variant="outline" disabled={busy} onClick={() => void onRetryDelivery()}><RefreshCw data-icon="inline-start" />{deliveryRetryBusy ? "Ставим в очередь…" : unknownOutcome ? "Проверил результат — повторить" : "Повторить передачу"}</Button> : null}{lead.duplicateOf ? <Alert><CircleAlert /><AlertTitle>Повторная заявка {lead.duplicateOf.id}</AlertTitle><AlertDescription>{statusPresentation("duplicateReason", lead.duplicateReason).description}</AlertDescription></Alert> : null}</section>
       <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Оповещение оператора</h2><dl className="grid gap-2 text-sm"><DetailRow label="Статус" value={lead.notification ? <StatusBadge kind="leadNotificationStatus" value={lead.notification.status} /> : "Нет записи"} /><DetailRow label="Канал" value={presentationText("notificationTransport", lead.notification?.transport, "Еще не выбран")} /><DetailRow label="Попытки" value={lead.notification ? `${lead.notification.attempts} из ${lead.notification.maxAttempts}` : "—"} /></dl>{canRetryNotification ? <Button variant="outline" disabled={busy} onClick={() => void onRetryNotification()}><RefreshCw data-icon="inline-start" />{notificationRetryBusy ? "Ставим в очередь…" : "Повторить оповещение"}</Button> : null}{lead.notification?.errorCode ? <details className="text-sm"><summary className="cursor-pointer text-muted-foreground">Техническая информация</summary><p className="mt-1 break-words text-destructive">Код: {lead.notification.errorCode}{lead.notification.httpStatus ? ` · HTTP ${lead.notification.httpStatus}` : ""}</p></details> : null}</section>
       <FieldGroup>
         <Field><FieldLabel htmlFor="lead-next-status">Новый статус</FieldLabel><select id="lead-next-status" className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" value={nextStatus} disabled={busy} onChange={(event) => setNextStatus(event.target.value as LeadStatus)}>{leadStatusOptions.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}</select></Field>

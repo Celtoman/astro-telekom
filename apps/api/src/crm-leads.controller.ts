@@ -21,6 +21,12 @@ export class LeadListQueryDto extends CursorPageQueryDto {
   status?: LeadStatus;
 }
 
+export class RetryDeliveryBodyDto {
+  @IsOptional()
+  @IsIn([true])
+  confirmUnknownOutcome?: true;
+}
+
 @Controller('crm/leads')
 @UseGuards(AdminTokenGuard)
 export class CrmLeadsController {
@@ -61,7 +67,8 @@ export class CrmLeadsController {
     const where: Prisma.LeadWhereInput = filters.length ? { AND: filters } : {};
     const attentionWhere: Prisma.LeadWhereInput = {
       OR: [
-        { processingStatus: { in: ['MANUAL_CHECK', 'ADDRESS_CLARIFICATION', 'MANUAL_CHECK_API', 'DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED'] } },
+        { processingStatus: { in: ['MANUAL_CHECK', 'ADDRESS_CLARIFICATION', 'MANUAL_CHECK_API', 'DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED', 'DELIVERY_EMAIL_OUTCOME_UNKNOWN'] } },
+        { processingStatus: 'PENDING', updatedAt: { lt: new Date(Date.now() - 2 * 60_000) }, deliveryAttempts: { some: { channel: 'API', status: 'FAILED', nextAttemptAt: null } } },
         { notification: { is: { OR: [{ status: 'FAILED' }, { errorCode: { not: null } }] } } },
       ],
     };
@@ -113,7 +120,7 @@ export class CrmLeadsController {
   }
 
   @Post(':id/retry-delivery')
-  async retryDelivery(@Param('id') id: string) {
+  async retryDelivery(@Param('id') id: string, @Body() body: RetryDeliveryBodyDto = {}) {
     const lead = await this.prisma.lead.findUnique({
       where: { id },
       include: { deliveryAttempts: { where: { channel: 'API' }, orderBy: { attemptNumber: 'desc' }, take: 1 } },
@@ -122,10 +129,20 @@ export class CrmLeadsController {
     const apiAttempts = lead.deliveryAttempts || [];
     const isOrphanPending = lead.processingStatus === 'PENDING' && apiAttempts.length === 0;
     const isRecoverableFailure = ['DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED'].includes(lead.processingStatus);
-    if (!isOrphanPending && !isRecoverableFailure) {
+    const latestApi = apiAttempts[0];
+    const oldEnough = lead.updatedAt instanceof Date && Date.now() - lead.updatedAt.getTime() >= 2 * 60_000;
+    const isUnknownOutcome = lead.processingStatus === 'DELIVERY_EMAIL_OUTCOME_UNKNOWN'
+      || (lead.processingStatus === 'PENDING' && latestApi?.status === 'FAILED' && latestApi.nextAttemptAt === null);
+    if (!isOrphanPending && !isRecoverableFailure && !(isUnknownOutcome && oldEnough && body?.confirmUnknownOutcome === true)) {
       throw new BadRequestException('Для этой заявки повторная передача не требуется');
     }
-    if (lead.processingStatus !== 'PENDING') {
+    if (isUnknownOutcome) {
+      const claimed = await this.prisma.lead.updateMany({
+        where: { id, processingStatus: lead.processingStatus, updatedAt: lead.updatedAt },
+        data: { processingStatus: 'PENDING', updatedAt: new Date() },
+      });
+      if (claimed.count !== 1) throw new ConflictException('Заявка уже изменена. Обновите карточку перед повтором.');
+    } else if (lead.processingStatus !== 'PENDING') {
       await this.prisma.lead.update({ where: { id }, data: { processingStatus: 'PENDING' } });
     }
     const attemptNumber = (apiAttempts[0]?.attemptNumber || 0) + 1;

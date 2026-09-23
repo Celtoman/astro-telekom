@@ -121,6 +121,47 @@ test('delivery retry starts after the last persisted API attempt without losing 
   assert.equal(result.processingStatus, 'PENDING');
 });
 
+test('uncertain email outcome requires explicit operator acknowledgement before another delivery', async () => {
+  let saved;
+  let requested;
+  const controller = new CrmLeadsController({
+    lead: {
+      findUnique: async () => ({
+        id: 'lead', processingStatus: 'DELIVERY_EMAIL_OUTCOME_UNKNOWN',
+        updatedAt: new Date('2026-01-01'),
+        deliveryAttempts: [{ attemptNumber: 3, channel: 'API' }],
+      }),
+      updateMany: async ({ data }) => { saved = data; return { count: 1 }; },
+    },
+  }, {
+    enqueueTracked: async (...args) => { requested = args; return { queued: true, processingStatus: 'PENDING' }; },
+  });
+
+  await assert.rejects(controller.retryDelivery('lead'), error => error.getStatus() === 400);
+  assert.equal(requested, undefined);
+  assert.equal((await controller.retryDelivery('lead', { confirmUnknownOutcome: true })).processingStatus, 'PENDING');
+  assert.equal(saved.processingStatus, 'PENDING');
+  assert.ok(saved.updatedAt instanceof Date);
+  assert.deepEqual(requested, ['lead', 4, 0, 1]);
+});
+
+test('legacy pending lead after terminal API attempt needs the same explicit acknowledgement', async () => {
+  let enqueued = 0;
+  const controller = new CrmLeadsController({
+    lead: {
+      findUnique: async () => ({
+        id: 'lead', processingStatus: 'PENDING', updatedAt: new Date('2026-01-01'),
+        deliveryAttempts: [{ attemptNumber: 2, channel: 'API', status: 'FAILED', nextAttemptAt: null }],
+      }),
+      updateMany: async () => ({ count: 1 }),
+    },
+  }, { enqueueTracked: async () => { enqueued += 1; return { queued: true, processingStatus: 'PENDING' }; } });
+
+  await assert.rejects(controller.retryDelivery('lead'), error => error.getStatus() === 400);
+  await controller.retryDelivery('lead', { confirmUnknownOutcome: true });
+  assert.equal(enqueued, 1);
+});
+
 test('notification retry is delegated to the durable outbox service', async () => {
   let requested;
   const controller = new CrmLeadsController({}, {}, {}, {

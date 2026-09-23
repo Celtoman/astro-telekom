@@ -49,7 +49,13 @@ function fixture(record) {
   const prisma = {
     lead: {
       findUnique: async () => record,
-      update: async ({ data }) => { updates.push(data); return { ...record, ...data }; },
+      update: async ({ data }) => { updates.push(data); Object.assign(record, data); return record; },
+      updateMany: async ({ where, data }) => {
+        if (record.id !== where.id || record.processingStatus !== where.processingStatus) return { count: 0 };
+        updates.push(data);
+        Object.assign(record, data);
+        return { count: 1 };
+      },
     },
     leadDeliveryAttempt: {
       create: async ({ data }) => {
@@ -62,7 +68,18 @@ function fixture(record) {
       count: async ({ where }) => attempts.filter((attempt) => attempt.leadId === where.leadId && attempt.channel === where.channel).length,
       update: async ({ where, data }) => { attemptUpdates.push({ where, data }); return data; },
     },
-    $transaction: async (operations) => Promise.all(operations),
+    $transaction: async (operations) => {
+      if (typeof operations !== 'function') return Promise.all(operations);
+      const beforeLead = { ...record };
+      const beforeAttemptCount = attempts.length;
+      try {
+        return await operations(prisma);
+      } catch (error) {
+        Object.assign(record, beforeLead);
+        attempts.length = beforeAttemptCount;
+        throw error;
+      }
+    },
   };
   const notifications = { notifyDeliveryFallback: async () => {} };
   const service = new LeadDeliveryService(prisma, notifications);
@@ -334,7 +351,8 @@ test('a second manual delivery cycle records a distinct failed email fallback an
 
 test('a failed email outcome write is not reported as a failed email transport', async () => {
   await withDeliveryEnvironment(async () => {
-    const f = fixture(lead());
+    const currentLead = lead();
+    const f = fixture(currentLead);
     const createAttempt = f.prisma.leadDeliveryAttempt.create;
     let fallbackCalls = 0;
     f.service.notifications.notifyDeliveryFallback = async () => { fallbackCalls += 1; };
@@ -350,6 +368,22 @@ test('a failed email outcome write is not reported as a failed email transport',
 
     assert.equal(fallbackCalls, 1);
     assert.equal(f.attempts.filter((attempt) => attempt.channel === 'EMAIL').length, 0);
+    assert.equal(currentLead.processingStatus, 'DELIVERY_EMAIL_OUTCOME_UNKNOWN');
+    assert.deepEqual(await f.service.process('lead-1', 1), { skipped: true, reason: 'DELIVERY_EMAIL_OUTCOME_UNKNOWN' });
+    assert.equal(fallbackCalls, 1, 'a replay must not send a second fallback email');
+  });
+});
+
+test('email fallback is not sent when the durable uncertain-outcome marker cannot be written', async () => {
+  await withDeliveryEnvironment(async () => {
+    const f = fixture(lead());
+    let fallbackCalls = 0;
+    f.service.notifications.notifyDeliveryFallback = async () => { fallbackCalls += 1; };
+    f.prisma.lead.updateMany = async () => { throw new Error('Database unavailable before email send'); };
+    global.fetch = async () => new Response('{}', { status: 403 });
+
+    await assert.rejects(f.service.process('lead-1', 1), /Database unavailable before email send/);
+    assert.equal(fallbackCalls, 0);
   });
 });
 

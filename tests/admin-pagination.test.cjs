@@ -58,6 +58,10 @@ test('lead journal returns a bounded cursor page and a minimal list DTO', async 
   assert.equal(prisma.calls.findMany[0].select.deliveryAttempts, undefined);
   assert.equal(prisma.calls.findMany[0].select.activityEvents, undefined);
   assert.equal(prisma.calls.findMany[0].where.AND[0].status, 'NEW');
+  const attentionFilter = prisma.calls.count.at(-1).where.OR;
+  assert.ok(attentionFilter[0].processingStatus.in.includes('DELIVERY_EMAIL_OUTCOME_UNKNOWN'));
+  assert.equal(attentionFilter[1].processingStatus, 'PENDING');
+  assert.deepEqual(attentionFilter[1].deliveryAttempts.some, { channel: 'API', status: 'FAILED', nextAttemptAt: null });
 });
 
 test('tariff catalog applies server search and enforces the page-size upper bound', async () => {

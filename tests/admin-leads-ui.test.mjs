@@ -89,6 +89,9 @@ test('lead workspace offers a safe delivery retry for recoverable processing sta
   assert.match(source, /\/retry-delivery/);
   assert.match(source, /DELIVERY_QUEUE_ERROR/);
   assert.match(source, /Повторить передачу/);
+  assert.match(source, /Проверьте результат резервного письма/);
+  assert.match(source, /confirmUnknownOutcome: true/);
+  assert.match(source, /window\.confirm/);
 });
 
 test('lead journal makes processing problems visible before opening a card', () => {
