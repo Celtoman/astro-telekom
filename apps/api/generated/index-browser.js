@@ -365,6 +365,7 @@ exports.Prisma.LeadScalarFieldEnum = {
   cityId: 'cityId',
   pageId: 'pageId',
   tariffId: 'tariffId',
+  configurationSnapshot: 'configurationSnapshot',
   addressCheckId: 'addressCheckId',
   name: 'name',
   phone: 'phone',

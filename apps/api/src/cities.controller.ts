@@ -1,7 +1,7 @@
 import { BadRequestException, Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { SiteCatalogService } from './site-catalog.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
-import { quoteTariffConfiguration, type TariffSelection } from './tariff-configuration.service';
+import { configurationSnapshot, quoteFingerprint, quoteTariffConfiguration, type TariffSelection } from './tariff-configuration.service';
 
 @Controller('public/sites/:siteSlug/cities')
 export class CitiesController {
@@ -35,7 +35,8 @@ export class CitiesController {
     const tariff = tariffs.find((item) => item.slug === tariffSlug);
     if (!tariff) throw new NotFoundException('Published tariff not found');
     try {
-      return quoteTariffConfiguration(tariff as unknown as Parameters<typeof quoteTariffConfiguration>[0], selection);
+      const quote = quoteTariffConfiguration(tariff as unknown as Parameters<typeof quoteTariffConfiguration>[0], selection);
+      return { ...quote, fingerprint: quoteFingerprint(configurationSnapshot(quote)) };
     } catch (error) {
       throw new BadRequestException(error instanceof Error ? error.message : 'Некорректная комплектация');
     }

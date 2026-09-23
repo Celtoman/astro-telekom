@@ -1,6 +1,6 @@
 # Модель данных текущего прототипа
 
-Источник правды: `prisma/schema.prisma` и 40 последовательных миграций от `0001_initial` до `0040_lead_positive_submission`. Этот документ отличает существующие таблицы от объектов, которые фигурируют только в продуктовом плане; примененность конкретной миграции во внешнем контуре подтверждается отдельно, а не выводится из репозитория.
+Источник правды: `prisma/schema.prisma` и 41 последовательная миграция от `0001_initial` до `0041_lead_configuration_snapshot`. Этот документ отличает существующие таблицы от объектов, которые фигурируют только в продуктовом плане; примененность конкретной миграции во внешнем контуре подтверждается отдельно, а не выводится из репозитория.
 
 ## Сущности контента и географии
 
@@ -38,7 +38,7 @@ Forward-only migration `0039` восстанавливает только про
 | Сущность | Назначение |
 | --- | --- |
 | `AddressCheck` | Фактический нормализованный адрес, object type, status, raw provider response и site/city/page source-контекст. `cityId` обозначает город страницы и не ограничивает географию адреса. |
-| `Lead` | Контакты, фактический адрес, allowlisted и bounded UTM, URL/form/device/visited pages с лимитом 16 KB JSON, address/contract results, processing status, external lead data, operator status. `cityId` обозначает город страницы-источника; nullable unique `submissionKey`, `consentVersion` и `consentAcceptedAt` сохраняют идемпотентность новой публичной отправки и техническое evidence согласия, оставаясь nullable для исторических лидов. |
+| `Lead` | Контакты, фактический адрес, allowlisted и bounded UTM, URL/form/device/visited pages с лимитом 16 KB JSON, address/contract results, processing status, external lead data, operator status. `cityId` обозначает город страницы-источника; nullable unique `submissionKey`, `consentVersion` и `consentAcceptedAt` сохраняют идемпотентность новой публичной отправки и техническое evidence согласия, оставаясь nullable для исторических лидов. Nullable `configurationSnapshot` хранит неизменяемые выбор, компоненты, цены и итоги новых тарифных заявок. |
 | `LeadDeliveryAttempt` | Каждый queue/API/email attempt, idempotency key, payload/response/error, next retry time. |
 | `LeadNotification` | Одна persistent outbox/status-запись обычного оповещения на лид: revision, attempts, transport, безопасный error code/HTTP status и provider message ID без копии телефона, адреса или текста письма. |
 | `LeadActivityEvent` | События браузера до формы: allowlisted оболочка `type/data`, до 100 событий и 64 KB JSON суммарно; `data` ограничен 4 KB, 20 ключами и глубиной. |
@@ -53,7 +53,7 @@ Forward-only migration `0039` восстанавливает только про
 
 Для retention не добавлена отдельная policy-таблица: согласованный срок 180 дней задается обязательной production-переменной `PII_RETENTION_DAYS=180`. Миграция `0012_pii_retention_indexes` добавила индексы по времени; `0016` расширяет индекс `Lead.createdAt` полем `id`, сохраняя тот же ведущий столбец для purge-запроса. `AddressCheck.createdAt` остается отдельным индексом. Bounded hard-delete старого `Lead` каскадно удаляет history, delivery attempts, notification evidence, activity и access tokens; свежие duplicates предварительно отвязываются, старый `AddressCheck` удаляется только без оставшихся ссылок. Это исключает частичную «анонимизацию», при которой PII мог бы остаться в JSON.
 
-Миграция `0040_lead_positive_submission` аддитивно добавляет `Lead.submissionKey`, `consentVersion` и `consentAcceptedAt`, а также unique index для server-side idempotency. Старые записи не переписываются; для каждой новой публичной заявки поля обязательны на уровне DTO/controller, телефон сохраняется нормализованным, а положительный `AddressCheck` и выбранный `tariffId` остаются отдельными неизменяемыми ссылками факта отправки. Полный immutable configuration snapshot добавляется отдельно в T8/#178.
+Миграция `0040_lead_positive_submission` аддитивно добавляет `Lead.submissionKey`, `consentVersion` и `consentAcceptedAt`, а также unique index для server-side idempotency. Старые записи не переписываются; для каждой новой публичной заявки поля обязательны на уровне DTO/controller, телефон сохраняется нормализованным, а положительный `AddressCheck` и выбранный `tariffId` остаются отдельными неизменяемыми ссылками факта отправки. Миграция `0041_lead_configuration_snapshot` добавляет nullable JSONB без переписывания исторических лидов. Новая тарифная заявка сохраняет нормализованный выбор, ID/название тарифа, выбранные компоненты, строки ежемесячных и разовых платежей, итоги, отпечаток серверного расчёта и время фиксации; снимок не зависит от последующих правок тарифа.
 
 ## Доступ и технические записи
 

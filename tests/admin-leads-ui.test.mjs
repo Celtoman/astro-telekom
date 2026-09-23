@@ -32,6 +32,16 @@ test('lead workspace uses real list, detail and status endpoints without unsafe 
   assert.doesNotMatch(source, /state\.leads\.filter/);
 });
 
+test('lead detail renders the stored tariff snapshot before the mutable tariff relation', () => {
+  const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
+  assert.match(source, /configurationSnapshot\?: ConfigurationSnapshot/);
+  assert.match(source, /configuration\?\.tariff\.name \|\| lead\.tariff\?\.name/);
+  assert.match(source, /Комплектация при отправке/);
+  assert.match(source, /configuration\.charges\.monthly/);
+  assert.match(source, /configuration\.charges\.oneTime/);
+  assert.match(source, /configuration\.totals\.oneTime === null/);
+});
+
 test('lead workspace exposes every supported operator status and an optional history comment', () => {
   const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
   for (const status of ['NEW', 'IN_PROGRESS', 'CALL_LATER', 'CONNECTED', 'REJECTED']) {

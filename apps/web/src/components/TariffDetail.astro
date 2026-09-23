@@ -133,7 +133,7 @@ const monthWord = (count: number) => {
 
   {tariff.pricing.currentAmount !== null && (
     <section class="section container" data-tariff-block="configurator">
-      <TariffConfigurator client:idle {apiUrl} {siteSlug} citySlug={city.slug} tariffSlug={tariff.slug} />
+      <TariffConfigurator client:idle {apiUrl} {siteSlug} citySlug={city.slug} tariffSlug={tariff.slug} dialogId={addressDialogId} />
     </section>
   )}
 

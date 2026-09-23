@@ -72,6 +72,10 @@ function initializeRoot(root) {
 
   const { apiUrl, siteSlug } = form.dataset;
   let currentTariff = parseSummary(form.dataset.tariffSummary);
+  let quoteSeen = false;
+  let quoteTariffSlug = '';
+  let quoteConfiguration = null;
+  let activeQuote = null;
   let selectedSuggestion = null;
   let verifiedCheck = null;
   let opener = null;
@@ -147,6 +151,38 @@ function initializeRoot(root) {
       return item;
     }));
   };
+
+  const applyQuoteToTariff = () => {
+    if (!currentTariff || !activeQuote || currentTariff.slug !== quoteTariffSlug) return;
+    const base = parseSummary(form.dataset.tariffSummary);
+    const format = (amount) => `${new Intl.NumberFormat('ru-RU').format(amount)} ₽`;
+    currentTariff = {
+      ...currentTariff,
+      price: `${format(activeQuote.totals.monthly)}/мес.`,
+      components: [
+        ...(base?.components || []),
+        ...activeQuote.charges.monthly.filter((item) => item.code !== 'base').map((item) => `${item.title}: ${format(item.amount)}/мес.`),
+        ...activeQuote.charges.oneTime.filter((item) => item.code !== 'connection' && item.amount !== null)
+          .map((item) => `${item.title}: ${format(item.amount)}`),
+      ],
+    };
+    if (resultDialog.open) populateTariff();
+  };
+
+  const onQuoteUpdated = (detail) => {
+    if (!detail || detail.dialogId !== root.dataset.entryDialogId) return;
+    quoteSeen = true;
+    quoteTariffSlug = detail.tariffSlug;
+    quoteConfiguration = detail.configuration;
+    activeQuote = detail.quote;
+    if (!activeQuote && currentTariff?.slug === quoteTariffSlug) {
+      currentTariff = parseSummary(form.dataset.tariffSummary);
+      if (resultDialog.open) populateTariff();
+    }
+    applyQuoteToTariff();
+  };
+  window.addEventListener('tariff-quote-updated', (event) => onQuoteUpdated(event.detail));
+  onQuoteUpdated(window.__tariffQuoteCache?.[root.dataset.entryDialogId]);
 
   const phoneFormatError = 'Введите мобильный номер в формате +7 (9XX) XXX-XX-XX';
   const phonePrefixError = 'После +7 мобильный номер должен начинаться с 9';
@@ -493,6 +529,7 @@ function initializeRoot(root) {
       currentTariff = parseSummary(trigger.dataset.tariffSummary) || parseSummary(form.dataset.tariffSummary);
       form.dataset.tariffSlug = trigger.dataset.tariffSlug || currentTariff?.slug || '';
       form.dataset.serviceType = trigger.dataset.serviceType || currentTariff?.serviceType || form.dataset.serviceType;
+      applyQuoteToTariff();
       if (!entryDialog.open) entryDialog.showModal();
       addressInput.focus();
     });
@@ -545,6 +582,19 @@ function initializeRoot(root) {
     try {
       let viewedPages = [];
       try { viewedPages = JSON.parse(sessionStorage.getItem('provider_visited_pages') || '[]'); } catch { /* storage may be unavailable */ }
+      const selectedTariffSlug = form.dataset.tariffSlug || '';
+      let configuration = quoteTariffSlug === selectedTariffSlug ? quoteConfiguration : null;
+      if (selectedTariffSlug && !configuration) {
+        if (quoteSeen && quoteTariffSlug === selectedTariffSlug) {
+          throw new Error('Дождитесь пересчёта тарифа перед отправкой заявки.');
+        }
+        const quoteResponse = await fetch(`${apiUrl}/public/sites/${encodeURIComponent(siteSlug)}/cities/${encodeURIComponent(form.dataset.citySlug)}/tariffs/${encodeURIComponent(selectedTariffSlug)}/quote`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}',
+        });
+        if (!quoteResponse.ok) throw new Error('Не удалось проверить стоимость тарифа. Повторите попытку.');
+        const quote = await quoteResponse.json();
+        configuration = { selection: quote.selection, fingerprint: quote.fingerprint };
+      }
       const response = await fetch(`${apiUrl}/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -553,6 +603,7 @@ function initializeRoot(root) {
           citySlug: form.dataset.citySlug,
           pageSlug: form.dataset.pageSlug || undefined,
           tariffSlug: form.dataset.tariffSlug || undefined,
+          configuration: configuration || undefined,
           formName: 'address-result-dialog',
           phone,
           submissionKey,

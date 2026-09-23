@@ -242,6 +242,33 @@ export class AddressSuggestionsDto {
   website?: string;
 }
 
+export class LeadTariffSelectionDto {
+  @IsOptional()
+  @IsIn(['NONE', 'INSTALLMENT', 'BUYOUT'])
+  router?: 'NONE' | 'INSTALLMENT' | 'BUYOUT';
+
+  @IsOptional()
+  @IsIn(['NONE', 'INSTALLMENT', 'BUYOUT'])
+  tvbox?: 'NONE' | 'INSTALLMENT' | 'BUYOUT';
+
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(10)
+  @Matches(slug, { each: true })
+  services?: string[];
+}
+
+export class LeadConfigurationDto {
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => LeadTariffSelectionDto)
+  selection!: LeadTariffSelectionDto;
+
+  @IsString()
+  @Matches(/^[a-f0-9]{64}$/)
+  fingerprint!: string;
+}
+
 export class CreateLeadDto {
   @IsOptional()
   @IsString()
@@ -265,6 +292,12 @@ export class CreateLeadDto {
   @Matches(slug)
   @MaxLength(120)
   tariffSlug?: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => LeadConfigurationDto)
+  @Validate(MaxJsonBytesConstraint, [4_096])
+  configuration?: LeadConfigurationDto;
 
   @IsOptional()
   @IsString()

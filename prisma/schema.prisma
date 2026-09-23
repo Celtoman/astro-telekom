@@ -504,6 +504,7 @@ model Lead {
   cityId          String
   pageId          String?
   tariffId        String?
+  configurationSnapshot Json?
   addressCheckId  String?
   name            String?
   phone             String

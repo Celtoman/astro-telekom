@@ -93,6 +93,26 @@ test('lead telemetry is allowlisted and bounded before the controller runs', asy
   }
 });
 
+test('lead configuration DTO rejects forged fields and malformed quote fingerprints', async () => {
+  const pipe = createGlobalValidationPipe();
+  const base = { citySlug: 'kazan', phone: '+7 900 000-00-00',
+    submissionKey: '11111111-1111-4111-8111-111111111111', consentVersion: 'lead-form-v1-2026-09-22' };
+  const valid = await pipe.transform({ ...base, tariffSlug: 'giga-500', configuration: {
+    selection: { router: 'BUYOUT', services: [] }, fingerprint: 'a'.repeat(64),
+  } }, metadata(CreateLeadDto));
+  assert.equal(valid.configuration.selection.router, 'BUYOUT');
+  for (const configuration of [
+    { selection: { router: 'FREE', services: [] }, fingerprint: 'a'.repeat(64) },
+    { selection: { router: 'BUYOUT', extra: 'forged' }, fingerprint: 'a'.repeat(64) },
+    { selection: { services: ['video', 'invalid service'] }, fingerprint: 'a'.repeat(64) },
+    { selection: { router: 'BUYOUT' }, fingerprint: 'not-a-hash' },
+    { selection: { router: 'BUYOUT' }, fingerprint: 'a'.repeat(64), totals: { monthly: 0 } },
+  ]) {
+    await assert.rejects(pipe.transform({ ...base, tariffSlug: 'giga-500', configuration }, metadata(CreateLeadDto)),
+      (error) => error.getStatus() === 400);
+  }
+});
+
 test('rate-limit counters are isolated by route purpose while query strings share a bucket', () => {
   assert.equal(rateLimitBucketForPath('/api/v1/address-suggestions?query=test'), 'address-suggestions');
   assert.equal(rateLimitBucketForPath('/api/v1/address-checks'), 'address-checks');

@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 type EquipmentCode = 'router' | 'tvbox';
 type EquipmentSelection = 'NONE' | 'INSTALLMENT' | 'BUYOUT';
 
@@ -76,7 +78,7 @@ export function quoteTariffConfiguration(tariff: TariffSource, requested: Tariff
   const selection = {
     router: requested.router ?? 'NONE',
     tvbox: requested.tvbox ?? 'NONE',
-    services: requested.services ?? [],
+    services: requested.services ? [...requested.services] : [],
   };
   if (!Array.isArray(selection.services) || selection.services.some((value) => typeof value !== 'string')
     || new Set(selection.services).size !== selection.services.length) {
@@ -132,4 +134,33 @@ export function quoteTariffConfiguration(tariff: TariffSource, requested: Tariff
     totals: { monthly: safeSum(monthlyCharges.map((item) => item.amount)),
       oneTime: oneTimeCharges.some((item) => item.amount === null) ? null : knownOneTime, knownOneTime },
   };
+}
+
+export function configurationSnapshot(quote: ReturnType<typeof quoteTariffConfiguration>) {
+  const equipment = quote.choices.equipment.flatMap((item) => {
+    const method = quote.selection[item.code];
+    const option = item.options.find((entry) => entry.code === method);
+    return option ? [{ kind: 'equipment' as const, code: item.code, title: item.title,
+      method: option.code, methodTitle: option.title,
+      monthlyAmount: option.monthlyAmount, oneTimeAmount: option.oneTimeAmount }] : [];
+  });
+  const services = quote.choices.services.filter((item) => quote.selection.services.includes(item.code)).map((item) => ({
+    kind: 'service' as const, code: item.code, title: item.title, monthlyAmount: item.monthlyAmount,
+    oneTimeCharges: item.oneTimeCharges.map((charge) => ({ ...charge })),
+  }));
+  return {
+    version: 1,
+    tariff: { ...quote.tariff },
+    selection: { ...quote.selection, services: [...quote.selection.services] },
+    components: [...equipment, ...services],
+    charges: {
+      monthly: quote.charges.monthly.map((charge) => ({ ...charge })),
+      oneTime: quote.charges.oneTime.map((charge) => ({ ...charge })),
+    },
+    totals: { ...quote.totals },
+  };
+}
+
+export function quoteFingerprint(snapshot: ReturnType<typeof configurationSnapshot>) {
+  return createHash('sha256').update(JSON.stringify(snapshot)).digest('hex');
 }

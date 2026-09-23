@@ -152,6 +152,79 @@ test('lead and its notification outbox record are created atomically before enqu
   assert.equal(f.notificationEnqueues(), 1);
 });
 
+test('lead stores an immutable server-validated configuration and rejects a forged shown quote', async () => {
+  const { quoteTariffConfiguration, configurationSnapshot, quoteFingerprint } = require('../apps/api/dist/tariff-configuration.service.js');
+  const publishedTariff = {
+    id: 'tariff-1', slug: 'giga-500', name: 'Гига 500', serviceType: 'INTERNET',
+    standardPrice: '1200', promoPrice: '900', connectionFee: '0',
+    attributes: { router_buyout_price: 6000 },
+  };
+  const f = fixture(targetCheck());
+  f.controller.prisma.tariff = { findFirst: async () => publishedTariff };
+  f.controller.prisma.sitePublication = { findFirst: async () => ({
+    id: 'publication-1', catalog: { cities: [{ slug: 'kazan', tariffs: [publishedTariff] }] },
+  }) };
+  const selection = { router: 'BUYOUT', tvbox: 'NONE', services: [] };
+  const fingerprint = quoteFingerprint(configurationSnapshot(quoteTariffConfiguration(publishedTariff, selection)));
+  await f.create({ ...base, tariffSlug: 'giga-500', addressCheckId: 'check', configuration: { selection, fingerprint } });
+  const saved = f.saved().configurationSnapshot;
+  assert.equal(saved.tariff.id, 'tariff-1');
+  assert.equal(saved.tariff.name, 'Гига 500');
+  assert.equal(saved.components[0].code, 'router');
+  assert.deepEqual(saved.totals, { monthly: 900, oneTime: 6000, knownOneTime: 6000 });
+  publishedTariff.name = 'Новое название';
+  publishedTariff.standardPrice = '2000';
+  assert.equal(saved.tariff.name, 'Гига 500');
+  assert.equal(saved.totals.monthly, 900);
+  await assert.rejects(f.create({ ...base, tariffSlug: 'giga-500', addressCheckId: 'check',
+    configuration: { selection, fingerprint: '0'.repeat(64) } }), /Ключ отправки/);
+  await assert.rejects(f.create({ ...base, submissionKey: '22222222-2222-4222-8222-222222222222',
+    tariffSlug: 'giga-500', addressCheckId: 'check', configuration: { selection, fingerprint } }), /изменились|расчёт/);
+  assert.equal(f.leadCreates(), 1);
+});
+
+test('lead accepts the last published tariff snapshot while its working row is archived', async () => {
+  const { quoteTariffConfiguration, configurationSnapshot, quoteFingerprint } = require('../apps/api/dist/tariff-configuration.service.js');
+  const publishedTariff = {
+    id: 'tariff-1', slug: 'giga-500', name: 'Гига 500', serviceType: 'INTERNET',
+    standardPrice: '1200', promoPrice: null, connectionFee: '0', attributes: {},
+  };
+  const f = fixture(targetCheck());
+  f.controller.prisma.tariff = { findFirst: async ({ where }) => {
+    assert.deepEqual(where, { id: 'tariff-1', cityId: 'city' });
+    return { ...publishedTariff, status: 'ARCHIVED', availability: 'ARCHIVED' };
+  } };
+  f.controller.prisma.sitePublication = { findFirst: async () => ({
+    catalog: { cities: [{ slug: 'kazan', tariffs: [publishedTariff] }] },
+  }) };
+  const selection = { router: 'NONE', tvbox: 'NONE', services: [] };
+  const fingerprint = quoteFingerprint(configurationSnapshot(quoteTariffConfiguration(publishedTariff, selection)));
+  await f.create({ ...base, tariffSlug: 'giga-500', addressCheckId: 'check', configuration: { selection, fingerprint } });
+  assert.equal(f.saved().tariffId, 'tariff-1');
+  assert.equal(f.saved().configurationSnapshot.tariff.name, 'Гига 500');
+});
+
+test('configuration snapshot has an additive nullable JSON migration for historical leads', () => {
+  const schema = readFileSync(join(__dirname, '..', 'prisma', 'schema.prisma'), 'utf8');
+  const migration = readFileSync(join(__dirname, '..', 'prisma', 'migrations', '0041_lead_configuration_snapshot', 'migration.sql'), 'utf8');
+  assert.match(schema, /configurationSnapshot\s+Json\?/);
+  assert.match(migration, /ALTER TABLE "Lead" ADD COLUMN "configurationSnapshot" JSONB/);
+  assert.doesNotMatch(migration, /NOT NULL|UPDATE "Lead"/);
+});
+
+test('lead rejects an unavailable equipment choice before creating a record', async () => {
+  const publishedTariff = { id: 'tariff-1', slug: 'giga-500', name: 'Гига 500', serviceType: 'INTERNET',
+    standardPrice: '1200', promoPrice: null, connectionFee: null, attributes: { router_buyout_price: 6000 } };
+  const f = fixture(targetCheck());
+  f.controller.prisma.tariff = { findFirst: async () => publishedTariff };
+  f.controller.prisma.sitePublication = { findFirst: async () => ({
+    catalog: { cities: [{ slug: 'kazan', tariffs: [publishedTariff] }] },
+  }) };
+  await assert.rejects(f.create({ ...base, tariffSlug: 'giga-500', addressCheckId: 'check',
+    configuration: { selection: { tvbox: 'BUYOUT', services: [] }, fingerprint: '0'.repeat(64) } }), /нельзя выбрать/);
+  assert.equal(f.leadCreates(), 0);
+});
+
 test('lead remains accepted when notification queueing fails after the transaction', async () => {
   const f = fixture(targetCheck(), [], async () => { throw new Error('database error containing +79000000000'); });
   const logged = [];

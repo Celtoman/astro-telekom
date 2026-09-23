@@ -9,6 +9,7 @@ import { normalizeAddress, normalizePhone } from './lead-utils';
 import { CreateLeadDto } from './public.dto';
 import { readTarifnikCoverageSnapshot } from './coverage.service';
 import { LEAD_CONSENT_VERSION } from './lead-consent';
+import { configurationSnapshot, quoteFingerprint, quoteTariffConfiguration } from './tariff-configuration.service';
 
 @Controller('leads')
 export class PublicLeadsController {
@@ -48,8 +49,20 @@ export class PublicLeadsController {
     const page = body.pageSlug
       ? await this.prisma.page.findFirst({ where: { cityId: city.id, slug: body.pageSlug, status: 'PUBLISHED' } })
       : null;
-    const tariff = body.tariffSlug
-      ? await this.prisma.tariff.findFirst({ where: { cityId: city.id, slug: body.tariffSlug, status: 'PUBLISHED', availability: 'ACTIVE' } })
+    const publication = body.configuration
+      ? await this.prisma.sitePublication.findFirst({
+        where: { siteId: site.id, status: 'SUCCEEDED' },
+        orderBy: { siteRevision: 'desc' },
+        select: { catalog: true },
+      })
+      : null;
+    const catalog = publication?.catalog as { cities?: Array<{ slug?: string; tariffs?: Array<Record<string, unknown>> }> } | null;
+    const publishedCity = catalog?.cities?.find((item) => item.slug === city.slug);
+    const publishedTariff = publishedCity?.tariffs?.find((item) => item.slug === body.tariffSlug);
+    const tariff = body.tariffSlug && (!body.configuration || typeof publishedTariff?.id === 'string')
+      ? await this.prisma.tariff.findFirst({ where: body.configuration
+        ? { id: publishedTariff!.id as string, cityId: city.id }
+        : { cityId: city.id, slug: body.tariffSlug, status: 'PUBLISHED', availability: 'ACTIVE' } })
       : null;
     const addressCheck = body.addressCheckId
       ? await this.prisma.addressCheck.findFirst({ where: { id: body.addressCheckId, cityId: city.id, siteId: site.id } })
@@ -97,6 +110,7 @@ export class PublicLeadsController {
         addressCheckId: true,
         pageId: true,
         tariffId: true,
+        configurationSnapshot: true,
         serviceType: true,
         phone: true,
       },
@@ -108,6 +122,7 @@ export class PublicLeadsController {
         && existing.addressCheckId === submissionBinding.addressCheckId
         && (existing.pageId ?? null) === submissionBinding.pageId
         && (existing.tariffId ?? null) === submissionBinding.tariffId
+        && ((existing.configurationSnapshot as { fingerprint?: string } | null)?.fingerprint ?? null) === (body.configuration?.fingerprint ?? null)
         && (existing.serviceType ?? null) === submissionBinding.serviceType
         && existing.phone === submissionBinding.phone;
       if (!matches) throw new BadRequestException('Ключ отправки уже использован для другой заявки');
@@ -120,6 +135,23 @@ export class PublicLeadsController {
     };
     const existingSubmission = returnExistingSubmission(await findSubmission());
     if (existingSubmission) return existingSubmission;
+
+    let storedConfiguration: Prisma.InputJsonValue | undefined;
+    if (body.configuration) {
+      if (!tariff || !publishedTariff || !body.tariffSlug) throw new BadRequestException('Условия тарифа изменились. Повторите расчёт');
+      try {
+        const quote = quoteTariffConfiguration(
+          publishedTariff as unknown as Parameters<typeof quoteTariffConfiguration>[0],
+          body.configuration.selection,
+        );
+        const snapshot = configurationSnapshot(quote);
+        const fingerprint = quoteFingerprint(snapshot);
+        if (fingerprint !== body.configuration.fingerprint) throw new Error('Условия тарифа изменились. Повторите расчёт');
+        storedConfiguration = { ...snapshot, fingerprint, capturedAt: new Date().toISOString() } as Prisma.InputJsonObject;
+      } catch (error) {
+        throw new BadRequestException(error instanceof Error ? error.message : 'Неверная комплектация');
+      }
+    }
 
     const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentLeads = await this.prisma.lead.findMany({
@@ -153,6 +185,7 @@ export class PublicLeadsController {
             cityId: city.id,
             pageId: page?.id,
             tariffId: tariff?.id,
+            configurationSnapshot: storedConfiguration,
             name: body.name?.trim(),
             phone,
             submissionKey: body.submissionKey,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type EquipmentChoice = { code: 'router' | 'tvbox'; title: string; options: Array<{
   code: 'INSTALLMENT' | 'BUYOUT'; title: string; monthlyAmount: number; oneTimeAmount: number;
@@ -8,6 +8,7 @@ type ServiceChoice = { code: string; title: string; monthlyAmount: number; oneTi
 }> };
 type Selection = { router: 'NONE' | 'INSTALLMENT' | 'BUYOUT'; tvbox: 'NONE' | 'INSTALLMENT' | 'BUYOUT'; services: string[] };
 type Quote = {
+  fingerprint: string;
   selection: Selection;
   choices: { equipment: EquipmentChoice[]; services: ServiceChoice[] };
   charges: { monthly: Array<{ code: string; title: string; amount: number }>;
@@ -17,19 +18,33 @@ type Quote = {
 
 const initialSelection: Selection = { router: 'NONE', tvbox: 'NONE', services: [] };
 const rubles = (amount: number) => `${new Intl.NumberFormat('ru-RU').format(amount)} ₽`;
+function publishQuote(dialogId: string, tariffSlug: string, quote: Quote | null) {
+  const detail = {
+    dialogId, tariffSlug,
+    configuration: quote ? { selection: quote.selection, fingerprint: quote.fingerprint } : null,
+    quote,
+  };
+  const browser = window as Window & { __tariffQuoteCache?: Record<string, typeof detail> };
+  (browser.__tariffQuoteCache ??= {})[dialogId] = detail;
+  window.dispatchEvent(new CustomEvent('tariff-quote-updated', { detail }));
+}
 
 export default function TariffConfigurator(props: {
-  apiUrl: string; siteSlug: string; citySlug: string; tariffSlug: string;
+  apiUrl: string; siteSlug: string; citySlug: string; tariffSlug: string; dialogId: string;
 }) {
   const [selection, setSelection] = useState<Selection>(initialSelection);
   const [quote, setQuote] = useState<Quote | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [retry, setRetry] = useState(0);
+  const quoteGeneration = useRef(0);
 
   useEffect(() => {
     const controller = new AbortController();
+    const generation = ++quoteGeneration.current;
     setLoading(true);
     setError(null);
+    publishQuote(props.dialogId, props.tariffSlug, null);
     const path = ['public', 'sites', props.siteSlug, 'cities', props.citySlug, 'tariffs', props.tariffSlug, 'quote']
       .map(encodeURIComponent).join('/');
     fetch(`${props.apiUrl.replace(/\/$/, '')}/${path}`, {
@@ -39,15 +54,18 @@ export default function TariffConfigurator(props: {
       if (!response.ok) throw new Error('Не удалось рассчитать стоимость. Попробуйте ещё раз.');
       return response.json() as Promise<Quote>;
     }).then((next) => {
+      if (controller.signal.aborted || generation !== quoteGeneration.current) return;
       setQuote(next);
       setLoading(false);
+      publishQuote(props.dialogId, props.tariffSlug, next);
     }).catch((reason: unknown) => {
-      if (controller.signal.aborted) return;
+      if (controller.signal.aborted || generation !== quoteGeneration.current) return;
       setError(reason instanceof Error ? reason.message : 'Не удалось рассчитать стоимость.');
       setLoading(false);
+      publishQuote(props.dialogId, props.tariffSlug, null);
     });
-    return () => controller.abort();
-  }, [props.apiUrl, props.siteSlug, props.citySlug, props.tariffSlug, selection]);
+    return () => { quoteGeneration.current += 1; controller.abort(); };
+  }, [props.apiUrl, props.siteSlug, props.citySlug, props.tariffSlug, props.dialogId, selection, retry]);
 
   const equipment = quote?.choices.equipment ?? [];
   const services = quote?.choices.services ?? [];
@@ -56,10 +74,13 @@ export default function TariffConfigurator(props: {
     <p>Дополнительное оборудование и услуги не выбраны по умолчанию.</p>
     {loading && <p role="status">Рассчитываем стоимость…</p>}
     {error && <p role="alert">{error}</p>}
+    {error && <button type="button" onClick={() => setRetry((value) => value + 1)}>Повторить расчёт</button>}
     {equipment.map((item) => <fieldset key={item.code}>
       <legend>{item.title}</legend>
       <select aria-label={item.title} value={selection[item.code]} onChange={(event) => {
+        quoteGeneration.current += 1;
         setLoading(true);
+        publishQuote(props.dialogId, props.tariffSlug, null);
         setSelection((previous) => ({ ...previous, [item.code]: event.target.value }));
       }}>
         <option value="NONE">У меня свой / не нужно</option>
@@ -70,7 +91,9 @@ export default function TariffConfigurator(props: {
     </fieldset>)}
     {services.map((item) => <label className="service-choice" key={item.code}>
       <input type="checkbox" checked={selection.services.includes(item.code)} onChange={(event) => {
+        quoteGeneration.current += 1;
         setLoading(true);
+        publishQuote(props.dialogId, props.tariffSlug, null);
         setSelection((previous) => ({ ...previous, services: event.target.checked
           ? [...previous.services, item.code]
           : previous.services.filter((code) => code !== item.code) }));
@@ -91,7 +114,7 @@ export default function TariffConfigurator(props: {
         ? `Известная часть: ${rubles(quote.totals.knownOneTime)}; полная сумма уточняется`
         : rubles(quote.totals.oneTime)}</strong>
     </div>}
-    <p className="configurator-disclaimer">Расчёт предварительный. Выбор пока не передаётся в заявку —
-      состав и итоговую стоимость подтвердит оператор.</p>
+    <p className="configurator-disclaimer">Расчёт предварительный. Выбранная комплектация будет сохранена с заявкой после проверки адреса;
+      окончательную доступность и стоимость подтвердит оператор.</p>
   </div>;
 }

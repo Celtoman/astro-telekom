@@ -197,3 +197,15 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(globalPage, /<AddressForm[\s\S]*presentation="dialog"/);
   assert.doesNotMatch(globalPage, /#address-check/);
 });
+
+test('tariff form sends only a settled server quote fingerprint with its selected configuration', async () => {
+  const widget = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'components', 'TariffConfigurator.tsx'), 'utf8');
+  const addressClient = await readFile(join(repositoryRoot, 'apps', 'web', 'src', 'lib', 'address-check-client.mjs'), 'utf8');
+  assert.match(widget, /tariff-quote-updated/);
+  assert.match(widget, /fingerprint: quote\.fingerprint/);
+  assert.match(widget, /publishQuote\(props\.dialogId, props\.tariffSlug, null\)/);
+  assert.match(addressClient, /quoteTariffSlug === selectedTariffSlug/);
+  assert.match(addressClient, /Дождитесь пересчёта тарифа/);
+  assert.match(addressClient, /configuration: configuration \|\| undefined/);
+  assert.match(addressClient, /body: '\{\}'/);
+});

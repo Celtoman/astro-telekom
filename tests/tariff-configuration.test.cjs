@@ -112,7 +112,28 @@ test('public quote uses only the published city snapshot and rejects another tar
   });
   const quote = await controller.quoteTariff('domru', 'kazan', 'giga-500', { router: 'INSTALLMENT' });
   assert.equal(quote.totals.monthly, 1100);
+  assert.match(quote.fingerprint, /^[a-f0-9]{64}$/);
   assert.equal(publishedReads, 1);
   await assert.rejects(() => controller.quoteTariff('domru', 'kazan', 'hidden', {}), /not found/i);
   await assert.rejects(() => controller.quoteTariff('domru', 'kazan', 'giga-500', { services: ['ont'] }), /нельзя выбрать/);
+});
+
+test('quote fingerprint binds displayed tariff, selection and price lines without retaining mutable source', () => {
+  const { configurationSnapshot, quoteFingerprint } = require('../apps/api/dist/tariff-configuration.service.js');
+  assert.equal(typeof configurationSnapshot, 'function');
+  assert.equal(typeof quoteFingerprint, 'function');
+  const source = { ...tariff, connectionFee: '0.00', attributes: { ...tariff.attributes } };
+  const selection = { router: 'INSTALLMENT', services: [] };
+  const quote = calculator()(source, selection);
+  const snapshot = configurationSnapshot(quote);
+  const fingerprint = quoteFingerprint(snapshot);
+  assert.match(fingerprint, /^[a-f0-9]{64}$/);
+  assert.deepEqual(snapshot.tariff, { id: 'tariff-1', slug: 'giga-500', name: 'Гига 500' });
+  assert.deepEqual(snapshot.selection, { router: 'INSTALLMENT', tvbox: 'NONE', services: [] });
+  assert.deepEqual(snapshot.totals, { monthly: 1100, oneTime: 0, knownOneTime: 0 });
+  source.name = 'Изменённый тариф';
+  source.standardPrice = '9999';
+  selection.services.push('video');
+  assert.equal(quoteFingerprint(snapshot), fingerprint);
+  assert.notEqual(quoteFingerprint(configurationSnapshot(calculator()(source, {}))), fingerprint);
 });

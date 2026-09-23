@@ -507,52 +507,53 @@ model AddressCheck {
 }
 
 model Lead {
-  id                String                @id @default(cuid())
-  siteId            String
-  cityId            String
-  pageId            String?
-  tariffId          String?
-  addressCheckId    String?
-  name              String?
-  phone             String
-  submissionKey     String?               @unique
-  consentVersion    String?
-  consentAcceptedAt DateTime?
-  email             String?
-  address           String?
-  objectType        String?
-  serviceType       ServiceType?
-  source            String?
-  utm               Json?
-  referrer          String?
-  pageUrl           String?
-  formName          String?
-  timeOnSiteSeconds Int?
-  deviceType        String?
-  viewedPages       Json?
-  processingStatus  LeadProcessingStatus  @default(PENDING)
-  duplicateOfId     String?
-  duplicateReason   String?
-  deliveryKey       String?               @unique
-  externalLeadId    String?
-  externalStatus    String?
-  contractResult    Json?
-  status            LeadStatus            @default(NEW)
-  apiResult         Json?
-  createdAt         DateTime              @default(now())
-  updatedAt         DateTime              @updatedAt
-  site              Site                  @relation(fields: [siteId], references: [id])
-  city              City                  @relation(fields: [cityId], references: [id])
-  page              Page?                 @relation(fields: [pageId], references: [id])
-  tariff            Tariff?               @relation(fields: [tariffId], references: [id])
-  addressCheck      AddressCheck?         @relation(fields: [addressCheckId], references: [id])
-  history           LeadStatusHistory[]
-  deliveryAttempts  LeadDeliveryAttempt[]
-  notification      LeadNotification?
-  activityEvents    LeadActivityEvent[]
-  accessTokens      LeadAccessToken[]
-  duplicateOf       Lead?                 @relation("LeadDuplicates", fields: [duplicateOfId], references: [id])
-  duplicates        Lead[]                @relation("LeadDuplicates")
+  id                    String                @id @default(cuid())
+  siteId                String
+  cityId                String
+  pageId                String?
+  tariffId              String?
+  configurationSnapshot Json?
+  addressCheckId        String?
+  name                  String?
+  phone                 String
+  submissionKey         String?               @unique
+  consentVersion        String?
+  consentAcceptedAt     DateTime?
+  email                 String?
+  address               String?
+  objectType            String?
+  serviceType           ServiceType?
+  source                String?
+  utm                   Json?
+  referrer              String?
+  pageUrl               String?
+  formName              String?
+  timeOnSiteSeconds     Int?
+  deviceType            String?
+  viewedPages           Json?
+  processingStatus      LeadProcessingStatus  @default(PENDING)
+  duplicateOfId         String?
+  duplicateReason       String?
+  deliveryKey           String?               @unique
+  externalLeadId        String?
+  externalStatus        String?
+  contractResult        Json?
+  status                LeadStatus            @default(NEW)
+  apiResult             Json?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  site                  Site                  @relation(fields: [siteId], references: [id])
+  city                  City                  @relation(fields: [cityId], references: [id])
+  page                  Page?                 @relation(fields: [pageId], references: [id])
+  tariff                Tariff?               @relation(fields: [tariffId], references: [id])
+  addressCheck          AddressCheck?         @relation(fields: [addressCheckId], references: [id])
+  history               LeadStatusHistory[]
+  deliveryAttempts      LeadDeliveryAttempt[]
+  notification          LeadNotification?
+  activityEvents        LeadActivityEvent[]
+  accessTokens          LeadAccessToken[]
+  duplicateOf           Lead?                 @relation("LeadDuplicates", fields: [duplicateOfId], references: [id])
+  duplicates            Lead[]                @relation("LeadDuplicates")
 
   @@index([status, createdAt])
   @@index([processingStatus, createdAt])
