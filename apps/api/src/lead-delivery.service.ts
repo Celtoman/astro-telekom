@@ -202,15 +202,26 @@ export class LeadDeliveryService implements OnModuleDestroy {
         }
         return { delivered: false, retryAt: nextAttemptAt.toISOString() };
       }
-      let emailSent = false;
+      let emailError: string | null = null;
       try {
         await this.notifications.notifyDeliveryFallback({ id: lead.id, phone: lead.phone, name: lead.name, city: lead.city.name, address: lead.address, tariff: lead.tariff?.name });
-        await this.prisma.leadDeliveryAttempt.create({ data: { leadId, attemptNumber: 1, channel: 'EMAIL', status: 'SUCCEEDED', idempotencyKey: deliveryKey, response: { fallback: true } } });
-        emailSent = true;
-      } catch (emailError) {
-        await this.prisma.leadDeliveryAttempt.create({ data: { leadId, attemptNumber: 1, channel: 'EMAIL', status: 'FAILED', idempotencyKey: deliveryKey, error: emailError instanceof Error ? emailError.message : String(emailError) } });
+      } catch (error) {
+        emailError = error instanceof Error ? error.message : String(error);
       }
-      await this.prisma.lead.update({ where: { id: leadId }, data: { processingStatus: emailSent ? 'DELIVERY_ERROR_EMAIL_SENT' : 'DELIVERY_ERROR_EMAIL_FAILED' } });
+      const emailSent = emailError === null;
+      await this.prisma.$transaction([
+        this.prisma.leadDeliveryAttempt.create({
+          data: {
+            leadId,
+            attemptNumber,
+            channel: 'EMAIL',
+            status: emailSent ? 'SUCCEEDED' : 'FAILED',
+            idempotencyKey: deliveryKey,
+            ...(emailSent ? { response: { fallback: true } } : { error: emailError }),
+          },
+        }),
+        this.prisma.lead.update({ where: { id: leadId }, data: { processingStatus: emailSent ? 'DELIVERY_ERROR_EMAIL_SENT' : 'DELIVERY_ERROR_EMAIL_FAILED' } }),
+      ]);
       return { delivered: false, fallback: emailSent };
     }
   }

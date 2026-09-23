@@ -52,7 +52,13 @@ function fixture(record) {
       update: async ({ data }) => { updates.push(data); return { ...record, ...data }; },
     },
     leadDeliveryAttempt: {
-      create: async ({ data }) => { attempts.push(data); return data; },
+      create: async ({ data }) => {
+        if (attempts.some((attempt) => attempt.leadId === data.leadId && attempt.attemptNumber === data.attemptNumber && attempt.channel === data.channel)) {
+          throw new Error('Unique constraint failed on (leadId, attemptNumber, channel)');
+        }
+        attempts.push(data);
+        return data;
+      },
       count: async ({ where }) => attempts.filter((attempt) => attempt.leadId === where.leadId && attempt.channel === where.channel).length,
       update: async ({ where, data }) => { attemptUpdates.push({ where, data }); return data; },
     },
@@ -61,7 +67,7 @@ function fixture(record) {
   const notifications = { notifyDeliveryFallback: async () => {} };
   const service = new LeadDeliveryService(prisma, notifications);
   service.logger = { warn() {}, error() {} };
-  return { service, attempts, attemptUpdates, updates };
+  return { service, prisma, attempts, attemptUpdates, updates };
 }
 
 test('BullMQ delivery job uses a deterministic custom id without forbidden colons', async () => {
@@ -278,6 +284,72 @@ test('a manual delivery cycle uses a fresh global attempt number and receives it
     assert.equal(typeof result.retryAt, 'string');
     assert.deepEqual(enqueued, [['lead-1', 5, 300_000, 2]]);
     assert.equal(f.attempts[0].attemptNumber, 4);
+  });
+});
+
+test('a second manual delivery cycle records a distinct successful email fallback and finishes the lead', async () => {
+  await withDeliveryEnvironment(async () => {
+    const currentLead = lead();
+    const f = fixture(currentLead);
+    let fallbackCalls = 0;
+    f.service.notifications.notifyDeliveryFallback = async () => { fallbackCalls += 1; };
+    global.fetch = async () => new Response('{}', { status: 403 });
+
+    assert.deepEqual(await f.service.process('lead-1', 1), { delivered: false, fallback: true });
+    currentLead.processingStatus = 'PENDING';
+    assert.deepEqual(await f.service.process('lead-1', 2), { delivered: false, fallback: true });
+
+    assert.equal(fallbackCalls, 2);
+    assert.deepEqual(f.attempts.filter((attempt) => attempt.channel === 'EMAIL').map((attempt) => [attempt.attemptNumber, attempt.status]), [
+      [1, 'SUCCEEDED'],
+      [2, 'SUCCEEDED'],
+    ]);
+    assert.equal(f.updates.at(-1).processingStatus, 'DELIVERY_ERROR_EMAIL_SENT');
+  });
+});
+
+test('a second manual delivery cycle records a distinct failed email fallback and remains retryable', async () => {
+  await withDeliveryEnvironment(async () => {
+    const currentLead = lead();
+    const f = fixture(currentLead);
+    let fallbackCalls = 0;
+    f.service.notifications.notifyDeliveryFallback = async () => {
+      fallbackCalls += 1;
+      if (fallbackCalls === 2) throw new Error('Email transport failed');
+    };
+    global.fetch = async () => new Response('{}', { status: 403 });
+
+    assert.deepEqual(await f.service.process('lead-1', 1), { delivered: false, fallback: true });
+    currentLead.processingStatus = 'PENDING';
+    assert.deepEqual(await f.service.process('lead-1', 2), { delivered: false, fallback: false });
+
+    assert.equal(fallbackCalls, 2);
+    assert.deepEqual(f.attempts.filter((attempt) => attempt.channel === 'EMAIL').map((attempt) => [attempt.attemptNumber, attempt.status]), [
+      [1, 'SUCCEEDED'],
+      [2, 'FAILED'],
+    ]);
+    assert.equal(f.updates.at(-1).processingStatus, 'DELIVERY_ERROR_EMAIL_FAILED');
+  });
+});
+
+test('a failed email outcome write is not reported as a failed email transport', async () => {
+  await withDeliveryEnvironment(async () => {
+    const f = fixture(lead());
+    const createAttempt = f.prisma.leadDeliveryAttempt.create;
+    let fallbackCalls = 0;
+    f.service.notifications.notifyDeliveryFallback = async () => { fallbackCalls += 1; };
+    f.prisma.leadDeliveryAttempt.create = async (args) => {
+      if (args.data.channel === 'EMAIL' && args.data.status === 'SUCCEEDED') {
+        throw new Error('Database unavailable after email send');
+      }
+      return createAttempt(args);
+    };
+    global.fetch = async () => new Response('{}', { status: 403 });
+
+    await assert.rejects(f.service.process('lead-1', 1), /Database unavailable after email send/);
+
+    assert.equal(fallbackCalls, 1);
+    assert.equal(f.attempts.filter((attempt) => attempt.channel === 'EMAIL').length, 0);
   });
 });
 
