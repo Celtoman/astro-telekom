@@ -1,6 +1,7 @@
 import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
 import { DadataSuggestion } from './coverage.service';
 import { readDadataSuggestion } from './coverage.service';
+import { normalizePhone } from './lead-utils';
 
 export type DadataLocationBoost =
   | { kladrId: string }
@@ -12,10 +13,49 @@ export interface DadataLocationHint {
 }
 
 const DADATA_IPLOCATE_API_URL = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address';
+const DADATA_PHONE_CLEAN_API_URL = 'https://cleaner.dadata.ru/api/v1/clean/phone';
+
+export type DadataPhoneCheck =
+  | { kind: 'FINAL'; qc: number; normalizedPhone: string | null }
+  | { kind: 'TECHNICAL_ERROR'; errorCode: string };
 
 @Injectable()
 export class DadataService {
   private readonly logger = new Logger(DadataService.name);
+
+  async cleanPhone(phone: string): Promise<DadataPhoneCheck> {
+    const endpoint = process.env.DADATA_PHONE_CLEAN_API_URL?.trim() || DADATA_PHONE_CLEAN_API_URL;
+    const token = process.env.DADATA_TOKEN?.trim();
+    const secret = process.env.DADATA_SECRET?.trim();
+    if (!token || !secret) return { kind: 'TECHNICAL_ERROR', errorCode: 'NOT_CONFIGURED' };
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        signal: AbortSignal.timeout(8000),
+        headers: { authorization: `Token ${token}`, 'x-secret': secret, 'content-type': 'application/json', accept: 'application/json' },
+        body: JSON.stringify([phone]),
+      });
+      if (!response.ok) return { kind: 'TECHNICAL_ERROR', errorCode: `HTTP_${response.status}` };
+      const raw = await response.text();
+      let parsed: unknown;
+      try { parsed = JSON.parse(raw); } catch { return { kind: 'TECHNICAL_ERROR', errorCode: 'INVALID_JSON' }; }
+      if (!Array.isArray(parsed) || parsed.length !== 1 || !parsed[0] || typeof parsed[0] !== 'object' || Array.isArray(parsed[0])) {
+        return { kind: 'TECHNICAL_ERROR', errorCode: 'INVALID_RESPONSE' };
+      }
+      const record = parsed[0] as Record<string, unknown>;
+      if (typeof record.qc !== 'number' || !Number.isSafeInteger(record.qc) || record.qc < 0) {
+        return { kind: 'TECHNICAL_ERROR', errorCode: 'INVALID_QC' };
+      }
+      const normalizedPhone = typeof record.phone === 'string' ? normalizePhone(record.phone) : null;
+      if (record.qc === 0 && (!normalizedPhone || !/^79\d{9}$/.test(normalizedPhone))) {
+        return { kind: 'TECHNICAL_ERROR', errorCode: 'INVALID_PHONE' };
+      }
+      return { kind: 'FINAL', qc: record.qc, normalizedPhone: normalizedPhone && /^79\d{9}$/.test(normalizedPhone) ? normalizedPhone : null };
+    } catch {
+      this.logger.warn('DaData phone clean failed with a transport error');
+      return { kind: 'TECHNICAL_ERROR', errorCode: 'TRANSPORT' };
+    }
+  }
 
   async suggest(query: string, boost?: DadataLocationBoost): Promise<DadataSuggestion[]> {
     const endpoint = process.env.DADATA_SUGGEST_API_URL?.trim();

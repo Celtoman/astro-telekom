@@ -1,12 +1,11 @@
-import { BadRequestException, Body, Controller, Logger, Post, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Logger, NotFoundException, Param, Post, Req } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
-import { DomruContractService } from './domru-contract.service';
-import { LeadDeliveryService } from './lead-delivery.service';
+import { LeadDecisionService } from './lead-decision.service';
 import { LeadNotificationOutboxService } from './lead-notification-outbox.service';
 import { normalizeAddress, normalizePhone } from './lead-utils';
-import { CreateLeadDto } from './public.dto';
+import { CreateLeadDto, LeadDecisionStatusDto } from './public.dto';
 import { readTarifnikCoverageSnapshot } from './coverage.service';
 import { LEAD_CONSENT_VERSION } from './lead-consent';
 import { configurationSnapshot, quoteFingerprint, quoteTariffConfiguration } from './tariff-configuration.service';
@@ -19,10 +18,20 @@ export class PublicLeadsController {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly contract: DomruContractService,
-    private readonly delivery: LeadDeliveryService,
+    private readonly decisions: LeadDecisionService,
     private readonly notifications: LeadNotificationOutboxService,
   ) {}
+
+  @Post(':id/decision-status')
+  async decisionStatus(@Param('id') id: string, @Body() body: LeadDecisionStatusDto) {
+    const lead = await this.prisma.lead.findFirst({
+      where: { id, submissionKey: body.submissionKey },
+      select: { processingStatus: true },
+    });
+    if (!lead) throw new NotFoundException('Заявка не найдена');
+    const inProgress = ['DECISION_PENDING', 'DECISION_RUNNING', 'PHONE_CHECK_RETRY'].includes(lead.processingStatus);
+    return { complete: !inProgress, subscriberMode: lead.processingStatus === 'ACTIVE_SUBSCRIBER_NOT_SENT' };
+  }
 
   @Post()
   async create(@Body() body: CreateLeadDto, @Req() request: { headers?: Record<string, string | undefined>; url?: string }) {
@@ -176,19 +185,11 @@ export class PublicLeadsController {
       || (normalizedInputAddress && normalizeAddress(candidate.address) === normalizedInputAddress),
     );
 
-    let processingStatus: 'PENDING' | 'DUPLICATE_SUPPRESSED' | 'ACTIVE_SUBSCRIBER_NOT_SENT' | 'MANUAL_CHECK_API' | 'NON_SALES_NOT_SENT' | 'MANUAL_CHECK' = 'PENDING';
+    let processingStatus: 'DECISION_PENDING' | 'DUPLICATE_SUPPRESSED' | 'NON_SALES_NOT_SENT' | 'MANUAL_CHECK' = 'DECISION_PENDING';
     if (commentAnalysis?.outcome === 'MANUAL_REVIEW') processingStatus = 'MANUAL_CHECK';
     else if (reason?.route === 'NON_SALES') processingStatus = 'NON_SALES_NOT_SENT';
     else if (reason?.route === 'MANUAL') processingStatus = 'MANUAL_CHECK';
     else if (duplicate) processingStatus = 'DUPLICATE_SUPPRESSED';
-
-    let contractResult: Awaited<ReturnType<DomruContractService['check']>> | undefined;
-    if (!duplicate && processingStatus === 'PENDING') {
-      if (!coverage) throw new BadRequestException('Заявку можно отправить только после положительной проверки адреса');
-      contractResult = await this.contract.check(phone, coverage.suggestion.data, city.subscriberProfileKey);
-      if (contractResult.status === 'ACTIVE') processingStatus = 'ACTIVE_SUBSCRIBER_NOT_SENT';
-      else if (contractResult.status === 'ERROR' || contractResult.status === 'NOT_CONFIGURED') processingStatus = 'MANUAL_CHECK_API';
-    }
 
     let leadAndNotification: { lead: { id: string; status: unknown }; notification: { id: string } };
     try {
@@ -229,15 +230,10 @@ export class PublicLeadsController {
             deviceType: body.deviceType,
             viewedPages: Array.isArray(body.viewedPages) ? body.viewedPages.slice(-50) : undefined,
             processingStatus,
+            phoneCheckStatus: processingStatus === 'DECISION_PENDING' ? 'PENDING' : 'SKIPPED',
             duplicateOfId: duplicate?.id,
             duplicateReason: duplicate ? (normalizedPhone && normalizePhone(duplicate.phone) === normalizedPhone ? 'phone_24h' : 'address_24h') : undefined,
             deliveryKey: randomUUID(),
-            contractResult: contractResult ? {
-              status: contractResult.status,
-              active: contractResult.active,
-              message: contractResult.message,
-              response: contractResult.response,
-            } as any : undefined,
             apiResult: addressCheck ? { status: addressCheck.status, response: addressCheck.response } : undefined,
           },
         });
@@ -275,9 +271,8 @@ export class PublicLeadsController {
       });
     }
 
-    if (processingStatus === 'PENDING') await this.delivery.enqueueTracked(lead.id, 1, 0, 1);
+    if (processingStatus === 'DECISION_PENDING') await this.decisions.enqueueTracked(lead.id);
 
-    const subscriberMode = processingStatus === 'ACTIVE_SUBSCRIBER_NOT_SENT';
-    return { id: lead.id, status: lead.status, message: 'Заявка принята', subscriberMode };
+    return { id: lead.id, status: lead.status, message: 'Заявка принята', subscriberMode: false };
   }
 }

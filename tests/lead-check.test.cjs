@@ -10,10 +10,7 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
   let leadCreates = 0;
   let notificationCreated;
   let notificationEnqueues = 0;
-  let contractLocation;
-  let contractPhone;
-  let contractChecks = 0;
-  let deliveryEnqueues = 0;
+  let decisionEnqueues = 0;
   const transaction = {
     lead: { create: async ({ data }) => {
       leadCreates += 1;
@@ -53,20 +50,12 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
     },
     $transaction: async (callback) => callback(transaction),
   };
-  const contract = {
-    check: async (phone, location) => {
-      contractChecks += 1;
-      assert.equal(typeof phone, 'string');
-      contractPhone = phone;
-      contractLocation = location;
-      return { status: 'NOT_FOUND', active: false };
-    },
-  };
-  const delivery = {
+  const decisions = {
     enqueueTracked: async (leadId) => {
-      deliveryEnqueues += 1;
+      decisionEnqueues += 1;
       assert.equal(leadId, 'lead');
-      return { queued: true, processingStatus: 'PENDING' };
+      assert.equal(saved.processingStatus, 'DECISION_PENDING');
+      return { queued: true };
     },
   };
   const notifications = {
@@ -77,15 +66,14 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
       return enqueueNotification(notificationId);
     },
   };
-  const controller = new PublicLeadsController(prisma, contract, delivery, notifications);
+  const controller = new PublicLeadsController(prisma, decisions, notifications);
   return {
     controller,
     create: (body) => { submittedBody = body; return controller.create(body, { headers: {}, url: '/leads' }); },
     saved: () => saved,
-    contractChecks: () => contractChecks,
-    contractLocation: () => contractLocation,
-    contractPhone: () => contractPhone,
-    deliveryEnqueues: () => deliveryEnqueues,
+    contractChecks: () => 0,
+    deliveryEnqueues: () => decisionEnqueues,
+    decisionEnqueues: () => decisionEnqueues,
     notificationCreated: () => notificationCreated,
     notificationEnqueues: () => notificationEnqueues,
     leadCreates: () => leadCreates,
@@ -211,6 +199,21 @@ test('lead and its notification outbox record are created atomically before enqu
   assert.equal(created.id, 'lead');
   assert.deepEqual(f.notificationCreated(), { leadId: 'lead' });
   assert.equal(f.notificationEnqueues(), 1);
+});
+
+test('public decision polling reveals only completion and subscriber mode to the submission key holder', async () => {
+  const f = fixture(targetCheck());
+  await f.create({ ...base, addressCheckId: 'check' });
+  f.controller.prisma.lead.findFirst = async ({ where, select }) => {
+    assert.deepEqual(where, { id: 'lead', submissionKey: base.submissionKey });
+    assert.deepEqual(select, { processingStatus: true });
+    return { processingStatus: 'DECISION_PENDING' };
+  };
+  assert.deepEqual(await f.controller.decisionStatus('lead', { submissionKey: base.submissionKey }), { complete: false, subscriberMode: false });
+  f.controller.prisma.lead.findFirst = async () => ({ processingStatus: 'ACTIVE_SUBSCRIBER_NOT_SENT' });
+  assert.deepEqual(await f.controller.decisionStatus('lead', { submissionKey: base.submissionKey }), { complete: true, subscriberMode: true });
+  f.controller.prisma.lead.findFirst = async () => null;
+  await assert.rejects(f.controller.decisionStatus('lead', { submissionKey: 'other' }), /Заявка не найдена/);
 });
 
 test('lead stores an immutable server-validated configuration and rejects a forged shown quote', async () => {
@@ -362,7 +365,7 @@ test('lead rejects alternative providers before subscriber or delivery work', as
   assert.equal(f.deliveryEnqueues(), 0);
 });
 
-test('lead from a Kazan page checks the subscriber using the normalized city of the submitted address', async () => {
+test('lead from a Kazan page persists the checked address before background decisions', async () => {
   const f = fixture({
     id: 'check',
     status: 'AVAILABLE',
@@ -386,12 +389,9 @@ test('lead from a Kazan page checks the subscriber using the normalized city of 
 
   assert.equal(f.saved().cityId, 'city');
   assert.equal(f.saved().address, 'г Набережные Челны, пр-кт Тестовый, д 1');
-  assert.deepEqual(f.contractLocation(), {
-    city: 'Набережные Челны',
-    region: 'Республика Татарстан',
-    house: '1',
-  });
-  assert.equal(f.deliveryEnqueues(), 1);
+  assert.equal(f.saved().addressCheckId, 'check');
+  assert.equal(f.saved().processingStatus, 'DECISION_PENDING');
+  assert.equal(f.decisionEnqueues(), 1);
 });
 
 test('lead with no providers is rejected without subscriber check or delivery', async () => {
@@ -417,7 +417,7 @@ test('lead with no providers is rejected without subscriber check or delivery', 
   assert.equal(f.deliveryEnqueues(), 0);
 });
 
-test('active subscriber response exposes only a non-authoritative UI mode flag', async () => {
+test('public response does not guess the subscriber result before background checks', async () => {
   const f = fixture({
     id: 'check',
     status: 'AVAILABLE',
@@ -432,14 +432,12 @@ test('active subscriber response exposes only a non-authoritative UI mode flag',
       hasTargetProvider: true,
     },
   });
-  f.controller.contract.check = async () => ({ status: 'ACTIVE', active: true, contacts: [{}] });
-
   const created = await f.create({ ...base, addressCheckId: 'check' });
 
-  assert.equal(f.saved().processingStatus, 'ACTIVE_SUBSCRIBER_NOT_SENT');
-  assert.equal(created.subscriberMode, true);
+  assert.equal(f.saved().processingStatus, 'DECISION_PENDING');
+  assert.equal(created.subscriberMode, false);
   assert.equal(Object.hasOwn(created, 'subscriberCookie'), false);
-  assert.equal(f.deliveryEnqueues(), 0);
+  assert.equal(f.decisionEnqueues(), 1);
 });
 
 test('positive lead stores normalized phone, immutable consent evidence and tariff context', async () => {
@@ -454,7 +452,7 @@ test('positive lead stores normalized phone, immutable consent evidence and tari
   });
 
   assert.equal(f.saved().phone, '79000000000');
-  assert.equal(f.contractPhone(), '79000000000');
+  assert.equal(f.saved().phoneCheckStatus, 'PENDING');
   assert.equal(f.saved().tariffId, 'tariff');
   assert.equal(f.saved().submissionKey, base.submissionKey);
   assert.equal(f.saved().consentVersion, base.consentVersion);

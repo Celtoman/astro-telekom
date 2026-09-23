@@ -52,6 +52,11 @@ enum AddressCheckStatus {
 }
 
 enum LeadProcessingStatus {
+  DECISION_PENDING
+  DECISION_RUNNING
+  PHONE_CHECK_RETRY
+  PHONE_CHECK_FAILED
+  PHONE_INVALID_NOT_SENT
   PENDING
   DELIVERED
   DUPLICATE_SUPPRESSED
@@ -66,6 +71,16 @@ enum LeadProcessingStatus {
   DELIVERY_ERROR_EMAIL_SENT
   DELIVERY_ERROR_EMAIL_FAILED
   DELIVERY_EMAIL_OUTCOME_UNKNOWN
+}
+
+enum LeadPhoneCheckStatus {
+  PENDING
+  RUNNING
+  RETRYING
+  PASSED
+  REJECTED
+  FAILED
+  SKIPPED
 }
 
 enum DeliveryChannel {
@@ -517,6 +532,15 @@ model Lead {
   commentAnalysisCategory String?
   commentAnalysisEvidence Json?
   commentAnalysisExplanation String?
+  phoneCheckStatus LeadPhoneCheckStatus?
+  phoneCheckQc Int?
+  phoneCheckNormalized String?
+  phoneCheckCheckedAt DateTime?
+  phoneCheckAttempt Int?
+  phoneCheckSource String?
+  phoneCheckErrorCode String?
+  phoneCheckNextAttemptAt DateTime?
+  decisionLeaseUntil DateTime?
   addressCheckId  String?
   name            String?
   phone             String
@@ -562,6 +586,8 @@ model Lead {
   @@index([processingStatus, createdAt])
   @@index([siteId, phone, createdAt])
   @@index([siteId, reasonCode, createdAt])
+  @@index([phone, phoneCheckCheckedAt])
+  @@index([processingStatus, phoneCheckNextAttemptAt])
   @@index([siteId, duplicateOfId])
   @@index([createdAt, id])
 }

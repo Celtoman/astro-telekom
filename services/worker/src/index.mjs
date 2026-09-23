@@ -62,6 +62,19 @@ const leadDeliveryWorker = new Worker(
   { connection, concurrency: 4 },
 );
 
+const leadDecisionWorker = new Worker(
+  'lead-decisions',
+  async (job) => {
+    if (!adminToken) throw new Error('ADMIN_API_TOKEN is not configured');
+    return jsonRequest(`${apiUrl}/internal/lead-decisions/${encodeURIComponent(job.data.leadId)}`, {
+      method: 'POST',
+      headers: { 'x-admin-token': adminToken },
+      body: JSON.stringify({ attemptNumber: job.data.attemptNumber }),
+    });
+  },
+  { connection, concurrency: 4 },
+);
+
 const leadNotificationWorker = new Worker(
   'lead-notifications',
   async (job) => {
@@ -86,6 +99,13 @@ const maintenanceWorker = new Worker(
     if (!adminToken) throw new Error('ADMIN_API_TOKEN is not configured');
     if (job.name === 'publication-schedules') {
       return jsonRequest(`${apiUrl}/internal/site-publications/release-due`, {
+        method: 'POST',
+        headers: { 'x-admin-token': adminToken },
+        body: '{}',
+      });
+    }
+    if (job.name === 'lead-decision-reconcile') {
+      return jsonRequest(`${apiUrl}/internal/lead-decisions/reconcile`, {
         method: 'POST',
         headers: { 'x-admin-token': adminToken },
         body: '{}',
@@ -117,6 +137,12 @@ await maintenanceQueue.upsertJobScheduler(
   { name: 'publication-schedules', data: {}, opts: { attempts: 3, backoff: { type: 'exponential', delay: 30_000 }, removeOnComplete: 100, removeOnFail: 100 } },
 );
 
+await maintenanceQueue.upsertJobScheduler(
+  'lead-decision-reconcile-every-minute',
+  { pattern: '* * * * *', tz: 'UTC' },
+  { name: 'lead-decision-reconcile', data: {}, opts: { attempts: 3, backoff: { type: 'exponential', delay: 30_000 }, removeOnComplete: 100, removeOnFail: 100 } },
+);
+
 if (hasValidPiiRetention) {
   await maintenanceQueue.upsertJobScheduler(
     'pii-retention-daily',
@@ -127,7 +153,7 @@ if (hasValidPiiRetention) {
   console.warn('[worker] PII_RETENTION_DAYS is missing or invalid; retention scheduler is disabled');
 }
 
-for (const worker of [importWorker, rebuildWorker, leadDeliveryWorker, leadNotificationWorker, maintenanceWorker]) {
+for (const worker of [importWorker, rebuildWorker, leadDecisionWorker, leadDeliveryWorker, leadNotificationWorker, maintenanceWorker]) {
   worker.on('completed', (job) => console.log(`[worker] ${job.queueName}/${job.id} completed`));
   worker.on('failed', (job, error) => console.error(`[worker] ${job?.queueName}/${job?.id} failed`, error));
 }
@@ -137,7 +163,7 @@ async function shutdown(signal) {
   if (shuttingDown) return;
   shuttingDown = true;
   console.log(`[worker] received ${signal}, closing workers`);
-  await Promise.all([importWorker.close(), rebuildWorker.close(), leadDeliveryWorker.close(), leadNotificationWorker.close(), maintenanceWorker.close(), maintenanceQueue.close()]);
+  await Promise.all([importWorker.close(), rebuildWorker.close(), leadDecisionWorker.close(), leadDeliveryWorker.close(), leadNotificationWorker.close(), maintenanceWorker.close(), maintenanceQueue.close()]);
   await connection.quit();
   console.log('[worker] shutdown complete');
   process.exit(0);
@@ -146,4 +172,4 @@ async function shutdown(signal) {
 process.on('SIGINT', () => void shutdown('SIGINT'));
 process.on('SIGTERM', () => void shutdown('SIGTERM'));
 
-console.log('[worker] tariff-imports, site-rebuilds, lead-deliveries, lead-notifications and maintenance are listening');
+console.log('[worker] tariff-imports, site-rebuilds, lead-decisions, lead-deliveries, lead-notifications and maintenance are listening');

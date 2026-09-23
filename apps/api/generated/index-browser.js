@@ -376,6 +376,15 @@ exports.Prisma.LeadScalarFieldEnum = {
   commentAnalysisCategory: 'commentAnalysisCategory',
   commentAnalysisEvidence: 'commentAnalysisEvidence',
   commentAnalysisExplanation: 'commentAnalysisExplanation',
+  phoneCheckStatus: 'phoneCheckStatus',
+  phoneCheckQc: 'phoneCheckQc',
+  phoneCheckNormalized: 'phoneCheckNormalized',
+  phoneCheckCheckedAt: 'phoneCheckCheckedAt',
+  phoneCheckAttempt: 'phoneCheckAttempt',
+  phoneCheckSource: 'phoneCheckSource',
+  phoneCheckErrorCode: 'phoneCheckErrorCode',
+  phoneCheckNextAttemptAt: 'phoneCheckNextAttemptAt',
+  decisionLeaseUntil: 'decisionLeaseUntil',
   addressCheckId: 'addressCheckId',
   name: 'name',
   phone: 'phone',
@@ -630,7 +639,22 @@ exports.AddressCheckStatus = exports.$Enums.AddressCheckStatus = {
   ERROR: 'ERROR'
 };
 
+exports.LeadPhoneCheckStatus = exports.$Enums.LeadPhoneCheckStatus = {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  RETRYING: 'RETRYING',
+  PASSED: 'PASSED',
+  REJECTED: 'REJECTED',
+  FAILED: 'FAILED',
+  SKIPPED: 'SKIPPED'
+};
+
 exports.LeadProcessingStatus = exports.$Enums.LeadProcessingStatus = {
+  DECISION_PENDING: 'DECISION_PENDING',
+  DECISION_RUNNING: 'DECISION_RUNNING',
+  PHONE_CHECK_RETRY: 'PHONE_CHECK_RETRY',
+  PHONE_CHECK_FAILED: 'PHONE_CHECK_FAILED',
+  PHONE_INVALID_NOT_SENT: 'PHONE_INVALID_NOT_SENT',
   PENDING: 'PENDING',
   DELIVERED: 'DELIVERED',
   DUPLICATE_SUPPRESSED: 'DUPLICATE_SUPPRESSED',

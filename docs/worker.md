@@ -1,20 +1,21 @@
 # Фоновые задачи
 
-Worker запускается из `services/worker/src/index.mjs`. Он требует `REDIS_URL`, подключается через `ioredis` и создает пять BullMQ consumers и одну maintenance queue с двумя Job Scheduler.
+Worker запускается из `services/worker/src/index.mjs`. Он требует `REDIS_URL`, подключается через `ioredis` и создает шесть BullMQ consumers и одну maintenance queue с тремя Job Scheduler.
 
 В Coolify worker имеет отдельный container healthcheck `services/worker/src/healthcheck.mjs`. Проверка создает короткоживущее Redis-соединение с отключенными бесконечными retry и требует ответ `PONG`; она не выполняет business job и не зависит от очереди, но не позволяет считать worker здоровым при потере Redis.
 
 | Queue | Consumer | Текущий producer | Фактический статус |
 | --- | --- | --- | --- |
+| `lead-decisions` | POST `/api/v1/internal/lead-decisions/:id` с `ADMIN_API_TOKEN` | `LeadDecisionService` после сохранения sales-заявки | DB-backed маршрут: причина → DaData Phone → проверка абонента → решение → доставка. Минутная сверка возвращает незавершенные решения после сбоя очереди или процесса. |
 | `lead-deliveries` | POST `/api/v1/internal/lead-deliveries/:id` с `ADMIN_API_TOKEN` | `LeadDeliveryService` в API | Работает при настроенном Redis и отдельном worker. |
 | `lead-notifications` | POST `/api/v1/internal/lead-notifications/:id` с `ADMIN_API_TOKEN` | `LeadNotificationOutboxService` в API | Persistent outbox: три DB-accounted попытки с exponential backoff 30 секунд, periodic recovery и revision/attempt job ID. |
 | `tariff-imports` | Legacy route удален | В коде не найден | Listener остался без producer и не используется; админка вызывает versioned validate/apply напрямую. |
 | `site-rebuilds` | POST deployment provider, затем `/api/v1/internal/site-rebuilds/:id/result` | `RebuildQueueService` в API | Persistent job в PostgreSQL, три попытки BullMQ с exponential backoff 30 секунд. |
-| `maintenance` | POST `/api/v1/internal/pii-retention` и `/api/v1/internal/site-publications/release-due` с `ADMIN_API_TOKEN` | Job Scheduler `pii-retention-daily` и `publication-schedules-every-minute` | PII job регистрируется только при валидном `PII_RETENTION_DAYS`; publication reconciler регистрируется всегда и каждую минуту передает наступившие snapshots в `site-rebuilds`. |
+| `maintenance` | POST `/api/v1/internal/pii-retention`, `/api/v1/internal/site-publications/release-due` и `/api/v1/internal/lead-decisions/reconcile` с `ADMIN_API_TOKEN` | Job Scheduler `pii-retention-daily`, `publication-schedules-every-minute` и `lead-decision-reconcile-every-minute` | PII job регистрируется только при валидном `PII_RETENTION_DAYS`; оба reconciler регистрируются всегда и запускаются каждую минуту. |
 
 ## Доставка заявок
 
-1. `POST /leads` создает `Lead` и при `PENDING` вызывает `LeadDeliveryService.enqueueTracked`. Причина и необязательный комментарий классифицируются до sales-проверок; объяснимый `MANUAL_REVIEW` комментария сохраняет заявку как `MANUAL_CHECK` без постановки в очередь. Только `new_connection` и старые запросы без причины и без противоречащего комментария идут по sales-маршруту: проверка Dom.ru выполняется при наличии хотя бы одного провайдера, а `PENDING` допустим только при одновременном наличии Дом.ру, проверенном `AddressCheck` и однозначном ответе `contacts: []`. Профиль Дом.ру выбирается по нормализованным DaData городу и региону. Несбытовые причины (`existing_subscriber_support`, `billing`) сохраняются как `NON_SALES_NOT_SENT`, а `relocation`/`other` — как `MANUAL_CHECK`. Worker дополнительно отсекает несбытовой/ручной снимок причины и ручной исход анализа комментария, даже если ему пришёл устаревший job.
+1. `POST /leads` атомарно сохраняет `Lead` и notification outbox. Sales-заявка получает `DECISION_PENDING`, а не выполняет внешнюю проверку в HTTP-запросе; несбытовые причины (`existing_subscriber_support`, `billing`), ручные причины (`relocation`, `other`), противоречащий комментарий и дубликаты сразу сохраняются без постановки в очередь. Фоновый `LeadDecisionService` сперва проверяет снимок причины/комментария, затем DaData Phone: только `qc=0` и совпадающий нормализованный номер ведут к проверке договора. Финальный иной `qc` блокирует передачу, техническая ошибка повторяется через 5 и 30 минут, после третьей попытки остается оператору. Финальный результат по телефону переиспользуется 24 часа; полный ответ DaData не сохраняется. Затем проверка Dom.ru выбирает профиль по фактическим данным DaData адреса. Лишь `contacts: []` с `NOT_FOUND` переводит заявку в delivery `PENDING`; прочее остается без автоматической передачи. Минутный reconciler восстанавливает сохраненные pending/due retry/истекший lease. Delivery worker повторно проверяет телефон, coverage, причину и отрицательный ответ по договору.
 2. Если определен `REDIS_URL`, API ставит BullMQ job с допустимым детерминированным `jobId=lead-delivery-<leadId>-attempt-<attemptNumber>`. Ошибка producer создает failed `QUEUE` attempt и переводит лид в `DELIVERY_QUEUE_ERROR`, а не остается скрытым `PENDING`.
 3. Worker вызывает внутренний endpoint; тот запускает `LeadDeliveryService.process`.
 4. Успехом считаются только `created` или `created_duplicate` с непустым `appeal_id`; тогда создается успешный `LeadDeliveryAttempt`, а лид получает `DELIVERED`.
@@ -61,7 +62,7 @@ Hard-delete выбран, чтобы PII не осталось в JSON payloads.
 
 ## Поведение без Redis
 
-Если API запущен без `REDIS_URL`, delivery и lead notification выполняются в памяти процесса через `queueMicrotask` или `setTimeout`. Это удобно для локального прототипа; delivery restart API может потерять, а notification остается в PostgreSQL и восстанавливается при следующем старте API. Rebuild без Redis не вызывает deployment напрямую: запись остается в PostgreSQL со статусом `PENDING`; отложенный snapshot остается `SCHEDULED`, пока отдельный worker не вызовет due reconciler. После запуска API с Redis незавершенные notification/rebuild записи повторно публикуются в BullMQ. Worker без `REDIS_URL` не стартует корректно как полноценный async consumer, поэтому production обязательно должен использовать Redis.
+Если API запущен без `REDIS_URL`, lead decision, delivery и lead notification выполняются в памяти процесса через `queueMicrotask` или `setTimeout`. Это удобно для локального прототипа; restart может потерять in-memory job, но состояние решения и notification остаются в PostgreSQL. При следующем запуске полноценного worker минутный reconciler восстанавливает pending/retry решения. Rebuild без Redis не вызывает deployment напрямую: запись остается в PostgreSQL со статусом `PENDING`; отложенный snapshot остается `SCHEDULED`, пока отдельный worker не вызовет due reconciler. Worker без `REDIS_URL` не стартует корректно как полноценный async consumer, поэтому production обязательно должен использовать Redis.
 
 ## Пересборка статического сайта
 
@@ -77,7 +78,7 @@ Hard-delete выбран, чтобы PII не осталось в JSON payloads.
 
 ## Остановка процесса
 
-Worker перехватывает `SIGINT`/`SIGTERM`: закрывает все пять `Worker` и maintenance queue (дожидаясь текущих задач через `close()`), затем завершает Redis-соединение. Live-проверка под реальной нагрузкой (`docker compose stop worker` с активной задачей) не выполнена — см. [workaround-audit.md](research/2026-09-07-workaround-audit.md), W-08.
+Worker перехватывает `SIGINT`/`SIGTERM`: закрывает все шесть `Worker` и maintenance queue (дожидаясь текущих задач через `close()`), затем завершает Redis-соединение. Live-проверка под реальной нагрузкой (`docker compose stop worker` с активной задачей) не выполнена — см. [workaround-audit.md](research/2026-09-07-workaround-audit.md), W-08.
 
 ## Оставшийся неиспользуемый listener
 

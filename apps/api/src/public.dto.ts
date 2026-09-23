@@ -270,6 +270,11 @@ export class LeadConfigurationDto {
   fingerprint!: string;
 }
 
+export class LeadDecisionStatusDto {
+  @IsUUID()
+  submissionKey!: string;
+}
+
 export class CreateLeadDto {
   @IsOptional()
   @IsIn([...LEAD_REASON_CODES])

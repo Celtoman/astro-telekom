@@ -16,6 +16,27 @@ import {
 const SUGGESTION_DEBOUNCE_MS = 500;
 const SUGGESTION_CACHE_LIMIT = 20;
 
+async function watchSubscriberDecision(apiUrl, leadId, submissionKey) {
+  if (!leadId || !submissionKey) return;
+  for (let attempt = 0; attempt < 30; attempt += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const response = await fetch(`${apiUrl}/leads/${encodeURIComponent(leadId)}/decision-status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ submissionKey }),
+      });
+      if (!response.ok) return;
+      const decision = await response.json();
+      if (decision.subscriberMode) {
+        try { localStorage.setItem(SUBSCRIBER_MODE_STORAGE_KEY, String(subscriberModeExpiresAt())); } catch { /* private browsing can disable localStorage */ }
+        window.dispatchEvent(new Event(SUBSCRIBER_MODE_EVENT));
+      }
+      if (decision.complete) return;
+    } catch { return; }
+  }
+}
+
 function parseSummary(value) {
   if (!value) return null;
   try {
@@ -634,7 +655,7 @@ function initializeRoot(root) {
       if (lead?.subscriberMode) {
         try { localStorage.setItem(SUBSCRIBER_MODE_STORAGE_KEY, String(subscriberModeExpiresAt())); } catch { /* private browsing can disable localStorage */ }
         window.dispatchEvent(new Event(SUBSCRIBER_MODE_EVENT));
-      }
+      } else void watchSubscriberDecision(apiUrl, lead?.id, submissionKey);
       phoneInput.disabled = true;
       if (commentInput) commentInput.disabled = true;
       if (leadContent) leadContent.hidden = true;

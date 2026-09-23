@@ -108,6 +108,16 @@ test('lead delivery worker forwards both the global attempt and retry-cycle numb
   assert.match(workerSource, /JSON\.stringify\(\{\s*attemptNumber:\s*job\.data\.attemptNumber,\s*retryNumber:\s*job\.data\.retryNumber\s*\}\)/);
 });
 
+test('delivery refuses a persisted phone result that did not pass DaData', async () => {
+  for (const phoneCheckStatus of ['PENDING', 'RUNNING', 'RETRYING', 'REJECTED', 'FAILED']) {
+    const record = lead({ phoneCheckStatus, phoneCheckQc: phoneCheckStatus === 'REJECTED' ? 1 : null, phoneCheckNormalized: null });
+    const f = fixture(record);
+    assert.deepEqual(await f.service.process(record.id, 1), { skipped: true, reason: 'phone_not_verified' });
+    assert.equal(record.processingStatus, 'MANUAL_CHECK_API');
+    assert.equal(f.attempts.length, 0);
+  }
+});
+
 test('queue enqueue failure is persisted and changes the lead to an actionable status', async () => {
   const f = fixture(lead());
   assert.equal(typeof f.service.enqueueTracked, 'function', 'LeadDeliveryService.enqueueTracked must exist');

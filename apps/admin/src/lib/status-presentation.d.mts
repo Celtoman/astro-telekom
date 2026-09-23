@@ -3,7 +3,7 @@ export type StatusTone = "success" | "info" | "warning" | "destructive" | "neutr
 export type StatusKind =
   | "publishStatus" | "serviceType" | "importStatus" | "siteRebuildStatus"
   | "sitePublicationStatus" | "leadStatus" | "addressCheckStatus"
-  | "leadProcessingStatus" | "deliveryChannel" | "deliveryAttemptStatus"
+  | "leadProcessingStatus" | "phoneCheckStatus" | "deliveryChannel" | "deliveryAttemptStatus"
   | "leadNotificationStatus" | "contentEntityType" | "contentRevisionAction"
   | "importIssueLevel" | "publicationView" | "contractStatus"
   | "notificationTransport" | "externalLeadStatus" | "duplicateReason"

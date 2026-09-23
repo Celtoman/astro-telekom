@@ -107,6 +107,10 @@ export class LeadDeliveryService implements OnModuleDestroy {
     });
     if (!lead) return { skipped: true, reason: 'lead_not_found' };
     if (lead.processingStatus !== 'PENDING') return { skipped: true, reason: lead.processingStatus };
+    if (lead.phoneCheckStatus != null && (lead.phoneCheckStatus !== 'PASSED' || lead.phoneCheckQc !== 0 || lead.phoneCheckNormalized !== lead.phone)) {
+      await this.prisma.lead.update({ where: { id: lead.id }, data: { processingStatus: 'MANUAL_CHECK_API' } });
+      return { skipped: true, reason: 'phone_not_verified' };
+    }
     if (lead.commentAnalysisOutcome === 'MANUAL_REVIEW') {
       await this.prisma.lead.update({ where: { id: lead.id }, data: { processingStatus: 'MANUAL_CHECK' } });
       return { skipped: true, reason: 'comment_manual_review' };

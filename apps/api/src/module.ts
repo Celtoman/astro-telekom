@@ -49,6 +49,8 @@ import { SitemapService } from './sitemap.service';
 import { AdminSiteValuesController } from './admin-site-values.controller';
 import { SiteValuesService } from './site-values.service';
 import { CityReadinessService } from './city-readiness.service';
+import { LeadDecisionService } from './lead-decision.service';
+import { LeadDecisionController } from './lead-decision.controller';
 
 @Module({
   controllers: [
@@ -68,6 +70,7 @@ import { CityReadinessService } from './city-readiness.service';
     AdminSitesController,
     AdminUsersController,
     LeadDeliveryController,
+    LeadDecisionController,
     LeadAccessController,
     RebuildQueueController,
     AdminReadinessController,
@@ -81,6 +84,6 @@ import { CityReadinessService } from './city-readiness.service';
     AdminSitemapController,
     AdminSiteValuesController,
   ],
-  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, SiteValuesService, CityReadinessService, RebuildQueueService, TariffImportService, DomruContractService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, PublicationWorkflowService, SiteValuesService, CityReadinessService, RebuildQueueService, TariffImportService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

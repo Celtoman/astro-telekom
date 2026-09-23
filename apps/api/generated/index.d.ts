@@ -198,6 +198,11 @@ export type AddressCheckStatus = (typeof AddressCheckStatus)[keyof typeof Addres
 
 
 export const LeadProcessingStatus: {
+  DECISION_PENDING: 'DECISION_PENDING',
+  DECISION_RUNNING: 'DECISION_RUNNING',
+  PHONE_CHECK_RETRY: 'PHONE_CHECK_RETRY',
+  PHONE_CHECK_FAILED: 'PHONE_CHECK_FAILED',
+  PHONE_INVALID_NOT_SENT: 'PHONE_INVALID_NOT_SENT',
   PENDING: 'PENDING',
   DELIVERED: 'DELIVERED',
   DUPLICATE_SUPPRESSED: 'DUPLICATE_SUPPRESSED',
@@ -215,6 +220,19 @@ export const LeadProcessingStatus: {
 };
 
 export type LeadProcessingStatus = (typeof LeadProcessingStatus)[keyof typeof LeadProcessingStatus]
+
+
+export const LeadPhoneCheckStatus: {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  RETRYING: 'RETRYING',
+  PASSED: 'PASSED',
+  REJECTED: 'REJECTED',
+  FAILED: 'FAILED',
+  SKIPPED: 'SKIPPED'
+};
+
+export type LeadPhoneCheckStatus = (typeof LeadPhoneCheckStatus)[keyof typeof LeadPhoneCheckStatus]
 
 
 export const DeliveryChannel: {
@@ -364,6 +382,10 @@ export const AddressCheckStatus: typeof $Enums.AddressCheckStatus
 export type LeadProcessingStatus = $Enums.LeadProcessingStatus
 
 export const LeadProcessingStatus: typeof $Enums.LeadProcessingStatus
+
+export type LeadPhoneCheckStatus = $Enums.LeadPhoneCheckStatus
+
+export const LeadPhoneCheckStatus: typeof $Enums.LeadPhoneCheckStatus
 
 export type DeliveryChannel = $Enums.DeliveryChannel
 
@@ -22941,12 +22963,16 @@ export namespace Prisma {
   export type LeadAvgAggregateOutputType = {
     reasonRegistryVersion: number | null
     commentAnalysisVersion: number | null
+    phoneCheckQc: number | null
+    phoneCheckAttempt: number | null
     timeOnSiteSeconds: number | null
   }
 
   export type LeadSumAggregateOutputType = {
     reasonRegistryVersion: number | null
     commentAnalysisVersion: number | null
+    phoneCheckQc: number | null
+    phoneCheckAttempt: number | null
     timeOnSiteSeconds: number | null
   }
 
@@ -22965,6 +22991,15 @@ export namespace Prisma {
     commentAnalysisOutcome: string | null
     commentAnalysisCategory: string | null
     commentAnalysisExplanation: string | null
+    phoneCheckStatus: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc: number | null
+    phoneCheckNormalized: string | null
+    phoneCheckCheckedAt: Date | null
+    phoneCheckAttempt: number | null
+    phoneCheckSource: string | null
+    phoneCheckErrorCode: string | null
+    phoneCheckNextAttemptAt: Date | null
+    decisionLeaseUntil: Date | null
     addressCheckId: string | null
     name: string | null
     phone: string | null
@@ -23007,6 +23042,15 @@ export namespace Prisma {
     commentAnalysisOutcome: string | null
     commentAnalysisCategory: string | null
     commentAnalysisExplanation: string | null
+    phoneCheckStatus: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc: number | null
+    phoneCheckNormalized: string | null
+    phoneCheckCheckedAt: Date | null
+    phoneCheckAttempt: number | null
+    phoneCheckSource: string | null
+    phoneCheckErrorCode: string | null
+    phoneCheckNextAttemptAt: Date | null
+    decisionLeaseUntil: Date | null
     addressCheckId: string | null
     name: string | null
     phone: string | null
@@ -23051,6 +23095,15 @@ export namespace Prisma {
     commentAnalysisCategory: number
     commentAnalysisEvidence: number
     commentAnalysisExplanation: number
+    phoneCheckStatus: number
+    phoneCheckQc: number
+    phoneCheckNormalized: number
+    phoneCheckCheckedAt: number
+    phoneCheckAttempt: number
+    phoneCheckSource: number
+    phoneCheckErrorCode: number
+    phoneCheckNextAttemptAt: number
+    decisionLeaseUntil: number
     addressCheckId: number
     name: number
     phone: number
@@ -23087,12 +23140,16 @@ export namespace Prisma {
   export type LeadAvgAggregateInputType = {
     reasonRegistryVersion?: true
     commentAnalysisVersion?: true
+    phoneCheckQc?: true
+    phoneCheckAttempt?: true
     timeOnSiteSeconds?: true
   }
 
   export type LeadSumAggregateInputType = {
     reasonRegistryVersion?: true
     commentAnalysisVersion?: true
+    phoneCheckQc?: true
+    phoneCheckAttempt?: true
     timeOnSiteSeconds?: true
   }
 
@@ -23111,6 +23168,15 @@ export namespace Prisma {
     commentAnalysisOutcome?: true
     commentAnalysisCategory?: true
     commentAnalysisExplanation?: true
+    phoneCheckStatus?: true
+    phoneCheckQc?: true
+    phoneCheckNormalized?: true
+    phoneCheckCheckedAt?: true
+    phoneCheckAttempt?: true
+    phoneCheckSource?: true
+    phoneCheckErrorCode?: true
+    phoneCheckNextAttemptAt?: true
+    decisionLeaseUntil?: true
     addressCheckId?: true
     name?: true
     phone?: true
@@ -23153,6 +23219,15 @@ export namespace Prisma {
     commentAnalysisOutcome?: true
     commentAnalysisCategory?: true
     commentAnalysisExplanation?: true
+    phoneCheckStatus?: true
+    phoneCheckQc?: true
+    phoneCheckNormalized?: true
+    phoneCheckCheckedAt?: true
+    phoneCheckAttempt?: true
+    phoneCheckSource?: true
+    phoneCheckErrorCode?: true
+    phoneCheckNextAttemptAt?: true
+    decisionLeaseUntil?: true
     addressCheckId?: true
     name?: true
     phone?: true
@@ -23197,6 +23272,15 @@ export namespace Prisma {
     commentAnalysisCategory?: true
     commentAnalysisEvidence?: true
     commentAnalysisExplanation?: true
+    phoneCheckStatus?: true
+    phoneCheckQc?: true
+    phoneCheckNormalized?: true
+    phoneCheckCheckedAt?: true
+    phoneCheckAttempt?: true
+    phoneCheckSource?: true
+    phoneCheckErrorCode?: true
+    phoneCheckNextAttemptAt?: true
+    decisionLeaseUntil?: true
     addressCheckId?: true
     name?: true
     phone?: true
@@ -23332,6 +23416,15 @@ export namespace Prisma {
     commentAnalysisCategory: string | null
     commentAnalysisEvidence: JsonValue | null
     commentAnalysisExplanation: string | null
+    phoneCheckStatus: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc: number | null
+    phoneCheckNormalized: string | null
+    phoneCheckCheckedAt: Date | null
+    phoneCheckAttempt: number | null
+    phoneCheckSource: string | null
+    phoneCheckErrorCode: string | null
+    phoneCheckNextAttemptAt: Date | null
+    decisionLeaseUntil: Date | null
     addressCheckId: string | null
     name: string | null
     phone: string
@@ -23399,6 +23492,15 @@ export namespace Prisma {
     commentAnalysisCategory?: boolean
     commentAnalysisEvidence?: boolean
     commentAnalysisExplanation?: boolean
+    phoneCheckStatus?: boolean
+    phoneCheckQc?: boolean
+    phoneCheckNormalized?: boolean
+    phoneCheckCheckedAt?: boolean
+    phoneCheckAttempt?: boolean
+    phoneCheckSource?: boolean
+    phoneCheckErrorCode?: boolean
+    phoneCheckNextAttemptAt?: boolean
+    decisionLeaseUntil?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23460,6 +23562,15 @@ export namespace Prisma {
     commentAnalysisCategory?: boolean
     commentAnalysisEvidence?: boolean
     commentAnalysisExplanation?: boolean
+    phoneCheckStatus?: boolean
+    phoneCheckQc?: boolean
+    phoneCheckNormalized?: boolean
+    phoneCheckCheckedAt?: boolean
+    phoneCheckAttempt?: boolean
+    phoneCheckSource?: boolean
+    phoneCheckErrorCode?: boolean
+    phoneCheckNextAttemptAt?: boolean
+    decisionLeaseUntil?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23514,6 +23625,15 @@ export namespace Prisma {
     commentAnalysisCategory?: boolean
     commentAnalysisEvidence?: boolean
     commentAnalysisExplanation?: boolean
+    phoneCheckStatus?: boolean
+    phoneCheckQc?: boolean
+    phoneCheckNormalized?: boolean
+    phoneCheckCheckedAt?: boolean
+    phoneCheckAttempt?: boolean
+    phoneCheckSource?: boolean
+    phoneCheckErrorCode?: boolean
+    phoneCheckNextAttemptAt?: boolean
+    decisionLeaseUntil?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23568,6 +23688,15 @@ export namespace Prisma {
     commentAnalysisCategory?: boolean
     commentAnalysisEvidence?: boolean
     commentAnalysisExplanation?: boolean
+    phoneCheckStatus?: boolean
+    phoneCheckQc?: boolean
+    phoneCheckNormalized?: boolean
+    phoneCheckCheckedAt?: boolean
+    phoneCheckAttempt?: boolean
+    phoneCheckSource?: boolean
+    phoneCheckErrorCode?: boolean
+    phoneCheckNextAttemptAt?: boolean
+    decisionLeaseUntil?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23599,7 +23728,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "pageId" | "tariffId" | "configurationSnapshot" | "reasonCode" | "reasonLabel" | "reasonRoute" | "reasonRegistryVersion" | "comment" | "commentAnalysisVersion" | "commentAnalysisOutcome" | "commentAnalysisCategory" | "commentAnalysisEvidence" | "commentAnalysisExplanation" | "addressCheckId" | "name" | "phone" | "submissionKey" | "consentVersion" | "consentAcceptedAt" | "email" | "address" | "objectType" | "serviceType" | "source" | "utm" | "referrer" | "pageUrl" | "formName" | "timeOnSiteSeconds" | "deviceType" | "viewedPages" | "processingStatus" | "duplicateOfId" | "duplicateReason" | "deliveryKey" | "externalLeadId" | "externalStatus" | "contractResult" | "status" | "apiResult" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
+  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "pageId" | "tariffId" | "configurationSnapshot" | "reasonCode" | "reasonLabel" | "reasonRoute" | "reasonRegistryVersion" | "comment" | "commentAnalysisVersion" | "commentAnalysisOutcome" | "commentAnalysisCategory" | "commentAnalysisEvidence" | "commentAnalysisExplanation" | "phoneCheckStatus" | "phoneCheckQc" | "phoneCheckNormalized" | "phoneCheckCheckedAt" | "phoneCheckAttempt" | "phoneCheckSource" | "phoneCheckErrorCode" | "phoneCheckNextAttemptAt" | "decisionLeaseUntil" | "addressCheckId" | "name" | "phone" | "submissionKey" | "consentVersion" | "consentAcceptedAt" | "email" | "address" | "objectType" | "serviceType" | "source" | "utm" | "referrer" | "pageUrl" | "formName" | "timeOnSiteSeconds" | "deviceType" | "viewedPages" | "processingStatus" | "duplicateOfId" | "duplicateReason" | "deliveryKey" | "externalLeadId" | "externalStatus" | "contractResult" | "status" | "apiResult" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
   export type LeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | CityDefaultArgs<ExtArgs>
@@ -23665,6 +23794,15 @@ export namespace Prisma {
       commentAnalysisCategory: string | null
       commentAnalysisEvidence: Prisma.JsonValue | null
       commentAnalysisExplanation: string | null
+      phoneCheckStatus: $Enums.LeadPhoneCheckStatus | null
+      phoneCheckQc: number | null
+      phoneCheckNormalized: string | null
+      phoneCheckCheckedAt: Date | null
+      phoneCheckAttempt: number | null
+      phoneCheckSource: string | null
+      phoneCheckErrorCode: string | null
+      phoneCheckNextAttemptAt: Date | null
+      decisionLeaseUntil: Date | null
       addressCheckId: string | null
       name: string | null
       phone: string
@@ -24145,6 +24283,15 @@ export namespace Prisma {
     readonly commentAnalysisCategory: FieldRef<"Lead", 'String'>
     readonly commentAnalysisEvidence: FieldRef<"Lead", 'Json'>
     readonly commentAnalysisExplanation: FieldRef<"Lead", 'String'>
+    readonly phoneCheckStatus: FieldRef<"Lead", 'LeadPhoneCheckStatus'>
+    readonly phoneCheckQc: FieldRef<"Lead", 'Int'>
+    readonly phoneCheckNormalized: FieldRef<"Lead", 'String'>
+    readonly phoneCheckCheckedAt: FieldRef<"Lead", 'DateTime'>
+    readonly phoneCheckAttempt: FieldRef<"Lead", 'Int'>
+    readonly phoneCheckSource: FieldRef<"Lead", 'String'>
+    readonly phoneCheckErrorCode: FieldRef<"Lead", 'String'>
+    readonly phoneCheckNextAttemptAt: FieldRef<"Lead", 'DateTime'>
+    readonly decisionLeaseUntil: FieldRef<"Lead", 'DateTime'>
     readonly addressCheckId: FieldRef<"Lead", 'String'>
     readonly name: FieldRef<"Lead", 'String'>
     readonly phone: FieldRef<"Lead", 'String'>
@@ -34356,6 +34503,15 @@ export namespace Prisma {
     commentAnalysisCategory: 'commentAnalysisCategory',
     commentAnalysisEvidence: 'commentAnalysisEvidence',
     commentAnalysisExplanation: 'commentAnalysisExplanation',
+    phoneCheckStatus: 'phoneCheckStatus',
+    phoneCheckQc: 'phoneCheckQc',
+    phoneCheckNormalized: 'phoneCheckNormalized',
+    phoneCheckCheckedAt: 'phoneCheckCheckedAt',
+    phoneCheckAttempt: 'phoneCheckAttempt',
+    phoneCheckSource: 'phoneCheckSource',
+    phoneCheckErrorCode: 'phoneCheckErrorCode',
+    phoneCheckNextAttemptAt: 'phoneCheckNextAttemptAt',
+    decisionLeaseUntil: 'decisionLeaseUntil',
     addressCheckId: 'addressCheckId',
     name: 'name',
     phone: 'phone',
@@ -34816,6 +34972,20 @@ export namespace Prisma {
    */
   export type ListEnumAddressCheckStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AddressCheckStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'LeadPhoneCheckStatus'
+   */
+  export type EnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadPhoneCheckStatus'>
+
+
+
+  /**
+   * Reference to a field of type 'LeadPhoneCheckStatus[]'
+   */
+  export type ListEnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadPhoneCheckStatus[]'>
+
 
 
   /**
@@ -36510,6 +36680,15 @@ export namespace Prisma {
     commentAnalysisCategory?: StringNullableFilter<"Lead"> | string | null
     commentAnalysisEvidence?: JsonNullableFilter<"Lead">
     commentAnalysisExplanation?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckStatus?: EnumLeadPhoneCheckStatusNullableFilter<"Lead"> | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: IntNullableFilter<"Lead"> | number | null
+    phoneCheckNormalized?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckCheckedAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    phoneCheckAttempt?: IntNullableFilter<"Lead"> | number | null
+    phoneCheckSource?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckErrorCode?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckNextAttemptAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    decisionLeaseUntil?: DateTimeNullableFilter<"Lead"> | Date | string | null
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
@@ -36570,6 +36749,15 @@ export namespace Prisma {
     commentAnalysisCategory?: SortOrderInput | SortOrder
     commentAnalysisEvidence?: SortOrderInput | SortOrder
     commentAnalysisExplanation?: SortOrderInput | SortOrder
+    phoneCheckStatus?: SortOrderInput | SortOrder
+    phoneCheckQc?: SortOrderInput | SortOrder
+    phoneCheckNormalized?: SortOrderInput | SortOrder
+    phoneCheckCheckedAt?: SortOrderInput | SortOrder
+    phoneCheckAttempt?: SortOrderInput | SortOrder
+    phoneCheckSource?: SortOrderInput | SortOrder
+    phoneCheckErrorCode?: SortOrderInput | SortOrder
+    phoneCheckNextAttemptAt?: SortOrderInput | SortOrder
+    decisionLeaseUntil?: SortOrderInput | SortOrder
     addressCheckId?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     phone?: SortOrder
@@ -36635,6 +36823,15 @@ export namespace Prisma {
     commentAnalysisCategory?: StringNullableFilter<"Lead"> | string | null
     commentAnalysisEvidence?: JsonNullableFilter<"Lead">
     commentAnalysisExplanation?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckStatus?: EnumLeadPhoneCheckStatusNullableFilter<"Lead"> | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: IntNullableFilter<"Lead"> | number | null
+    phoneCheckNormalized?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckCheckedAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    phoneCheckAttempt?: IntNullableFilter<"Lead"> | number | null
+    phoneCheckSource?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckErrorCode?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckNextAttemptAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    decisionLeaseUntil?: DateTimeNullableFilter<"Lead"> | Date | string | null
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
@@ -36693,6 +36890,15 @@ export namespace Prisma {
     commentAnalysisCategory?: SortOrderInput | SortOrder
     commentAnalysisEvidence?: SortOrderInput | SortOrder
     commentAnalysisExplanation?: SortOrderInput | SortOrder
+    phoneCheckStatus?: SortOrderInput | SortOrder
+    phoneCheckQc?: SortOrderInput | SortOrder
+    phoneCheckNormalized?: SortOrderInput | SortOrder
+    phoneCheckCheckedAt?: SortOrderInput | SortOrder
+    phoneCheckAttempt?: SortOrderInput | SortOrder
+    phoneCheckSource?: SortOrderInput | SortOrder
+    phoneCheckErrorCode?: SortOrderInput | SortOrder
+    phoneCheckNextAttemptAt?: SortOrderInput | SortOrder
+    decisionLeaseUntil?: SortOrderInput | SortOrder
     addressCheckId?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     phone?: SortOrder
@@ -36749,6 +36955,15 @@ export namespace Prisma {
     commentAnalysisCategory?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     commentAnalysisEvidence?: JsonNullableWithAggregatesFilter<"Lead">
     commentAnalysisExplanation?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    phoneCheckStatus?: EnumLeadPhoneCheckStatusNullableWithAggregatesFilter<"Lead"> | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: IntNullableWithAggregatesFilter<"Lead"> | number | null
+    phoneCheckNormalized?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    phoneCheckCheckedAt?: DateTimeNullableWithAggregatesFilter<"Lead"> | Date | string | null
+    phoneCheckAttempt?: IntNullableWithAggregatesFilter<"Lead"> | number | null
+    phoneCheckSource?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    phoneCheckErrorCode?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    phoneCheckNextAttemptAt?: DateTimeNullableWithAggregatesFilter<"Lead"> | Date | string | null
+    decisionLeaseUntil?: DateTimeNullableWithAggregatesFilter<"Lead"> | Date | string | null
     addressCheckId?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     name?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     phone?: StringWithAggregatesFilter<"Lead"> | string
@@ -39170,6 +39385,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -39228,6 +39452,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -39278,6 +39511,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39336,6 +39578,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -39390,6 +39641,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -39434,6 +39694,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39480,6 +39749,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -41751,6 +42029,13 @@ export namespace Prisma {
     _max?: NestedEnumAddressCheckStatusFilter<$PrismaModel>
   }
 
+  export type EnumLeadPhoneCheckStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadPhoneCheckStatus | EnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LeadPhoneCheckStatus[] | ListEnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LeadPhoneCheckStatus[] | ListEnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLeadPhoneCheckStatusNullableFilter<$PrismaModel> | $Enums.LeadPhoneCheckStatus | null
+  }
+
   export type EnumServiceTypeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.ServiceType | EnumServiceTypeFieldRefInput<$PrismaModel> | null
     in?: $Enums.ServiceType[] | ListEnumServiceTypeFieldRefInput<$PrismaModel> | null
@@ -41849,6 +42134,15 @@ export namespace Prisma {
     commentAnalysisCategory?: SortOrder
     commentAnalysisEvidence?: SortOrder
     commentAnalysisExplanation?: SortOrder
+    phoneCheckStatus?: SortOrder
+    phoneCheckQc?: SortOrder
+    phoneCheckNormalized?: SortOrder
+    phoneCheckCheckedAt?: SortOrder
+    phoneCheckAttempt?: SortOrder
+    phoneCheckSource?: SortOrder
+    phoneCheckErrorCode?: SortOrder
+    phoneCheckNextAttemptAt?: SortOrder
+    decisionLeaseUntil?: SortOrder
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -41883,6 +42177,8 @@ export namespace Prisma {
   export type LeadAvgOrderByAggregateInput = {
     reasonRegistryVersion?: SortOrder
     commentAnalysisVersion?: SortOrder
+    phoneCheckQc?: SortOrder
+    phoneCheckAttempt?: SortOrder
     timeOnSiteSeconds?: SortOrder
   }
 
@@ -41901,6 +42197,15 @@ export namespace Prisma {
     commentAnalysisOutcome?: SortOrder
     commentAnalysisCategory?: SortOrder
     commentAnalysisExplanation?: SortOrder
+    phoneCheckStatus?: SortOrder
+    phoneCheckQc?: SortOrder
+    phoneCheckNormalized?: SortOrder
+    phoneCheckCheckedAt?: SortOrder
+    phoneCheckAttempt?: SortOrder
+    phoneCheckSource?: SortOrder
+    phoneCheckErrorCode?: SortOrder
+    phoneCheckNextAttemptAt?: SortOrder
+    decisionLeaseUntil?: SortOrder
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -41943,6 +42248,15 @@ export namespace Prisma {
     commentAnalysisOutcome?: SortOrder
     commentAnalysisCategory?: SortOrder
     commentAnalysisExplanation?: SortOrder
+    phoneCheckStatus?: SortOrder
+    phoneCheckQc?: SortOrder
+    phoneCheckNormalized?: SortOrder
+    phoneCheckCheckedAt?: SortOrder
+    phoneCheckAttempt?: SortOrder
+    phoneCheckSource?: SortOrder
+    phoneCheckErrorCode?: SortOrder
+    phoneCheckNextAttemptAt?: SortOrder
+    decisionLeaseUntil?: SortOrder
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -41973,7 +42287,19 @@ export namespace Prisma {
   export type LeadSumOrderByAggregateInput = {
     reasonRegistryVersion?: SortOrder
     commentAnalysisVersion?: SortOrder
+    phoneCheckQc?: SortOrder
+    phoneCheckAttempt?: SortOrder
     timeOnSiteSeconds?: SortOrder
+  }
+
+  export type EnumLeadPhoneCheckStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadPhoneCheckStatus | EnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LeadPhoneCheckStatus[] | ListEnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LeadPhoneCheckStatus[] | ListEnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLeadPhoneCheckStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.LeadPhoneCheckStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumLeadPhoneCheckStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumLeadPhoneCheckStatusNullableFilter<$PrismaModel>
   }
 
   export type EnumServiceTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -44343,6 +44669,10 @@ export namespace Prisma {
     connect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
   }
 
+  export type NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput = {
+    set?: $Enums.LeadPhoneCheckStatus | null
+  }
+
   export type NullableEnumServiceTypeFieldUpdateOperationsInput = {
     set?: $Enums.ServiceType | null
   }
@@ -45574,6 +45904,13 @@ export namespace Prisma {
     _max?: NestedEnumAddressCheckStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumLeadPhoneCheckStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadPhoneCheckStatus | EnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LeadPhoneCheckStatus[] | ListEnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LeadPhoneCheckStatus[] | ListEnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLeadPhoneCheckStatusNullableFilter<$PrismaModel> | $Enums.LeadPhoneCheckStatus | null
+  }
+
   export type NestedEnumServiceTypeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.ServiceType | EnumServiceTypeFieldRefInput<$PrismaModel> | null
     in?: $Enums.ServiceType[] | ListEnumServiceTypeFieldRefInput<$PrismaModel> | null
@@ -45593,6 +45930,16 @@ export namespace Prisma {
     in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
+  }
+
+  export type NestedEnumLeadPhoneCheckStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadPhoneCheckStatus | EnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.LeadPhoneCheckStatus[] | ListEnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.LeadPhoneCheckStatus[] | ListEnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumLeadPhoneCheckStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.LeadPhoneCheckStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumLeadPhoneCheckStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumLeadPhoneCheckStatusNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumServiceTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -46147,6 +46494,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -46203,6 +46559,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -46753,6 +47118,15 @@ export namespace Prisma {
     commentAnalysisCategory?: StringNullableFilter<"Lead"> | string | null
     commentAnalysisEvidence?: JsonNullableFilter<"Lead">
     commentAnalysisExplanation?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckStatus?: EnumLeadPhoneCheckStatusNullableFilter<"Lead"> | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: IntNullableFilter<"Lead"> | number | null
+    phoneCheckNormalized?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckCheckedAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    phoneCheckAttempt?: IntNullableFilter<"Lead"> | number | null
+    phoneCheckSource?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckErrorCode?: StringNullableFilter<"Lead"> | string | null
+    phoneCheckNextAttemptAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    decisionLeaseUntil?: DateTimeNullableFilter<"Lead"> | Date | string | null
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
@@ -48963,6 +49337,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -49019,6 +49402,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -49459,6 +49851,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -49515,6 +49916,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -49994,6 +50404,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -50050,6 +50469,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -51028,6 +51456,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -51085,6 +51522,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -51711,6 +52157,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -51768,6 +52223,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -51822,6 +52286,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -51879,6 +52352,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -52375,6 +52857,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52432,6 +52923,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -52497,6 +52997,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -52554,6 +53063,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -52619,6 +53137,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52676,6 +53203,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -52725,6 +53261,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -52782,6 +53327,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -52847,6 +53401,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52904,6 +53467,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -52953,6 +53525,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -53010,6 +53591,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -53075,6 +53665,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53132,6 +53731,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -53181,6 +53789,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -53238,6 +53855,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -53303,6 +53929,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53360,6 +53995,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -53637,6 +54281,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -53694,6 +54347,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -53759,6 +54421,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53816,6 +54487,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -54775,6 +55455,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -55069,6 +55758,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55125,6 +55823,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -55178,6 +55885,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -56033,6 +56749,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -56224,6 +56949,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56280,6 +57014,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -56333,6 +57076,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -56467,6 +57219,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -56553,6 +57314,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56609,6 +57379,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -56662,6 +57441,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -56747,6 +57535,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -56791,6 +57588,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56847,6 +57653,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -56900,6 +57715,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -57050,6 +57874,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -57093,6 +57926,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -57150,6 +57992,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -57203,6 +58054,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -57288,6 +58148,15 @@ export namespace Prisma {
     commentAnalysisCategory?: string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -57445,6 +58314,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -57502,6 +58380,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -57555,6 +58442,15 @@ export namespace Prisma {
     commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
     commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
     commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string

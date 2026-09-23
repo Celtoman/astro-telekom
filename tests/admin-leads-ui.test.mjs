@@ -103,6 +103,16 @@ test('lead workspace translates technical statuses through the shared presentati
   assert.doesNotMatch(source, /processingLabels\[lead\.processingStatus\]\s*\|\|\s*lead\.processingStatus/);
 });
 
+test('lead detail explains phone check without rendering the provider response', () => {
+  const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
+  assert.match(source, /Проверка телефона/);
+  assert.match(source, /phoneCheckQc/);
+  assert.match(source, /phoneCheckAttempt/);
+  assert.match(source, /phoneCheckErrorCode/);
+  assert.match(source, /StatusBadge kind="phoneCheckStatus"/);
+  assert.equal(statusPresentation('phoneCheckStatus', 'REJECTED').known, true);
+});
+
 test('lead workspace offers a safe delivery retry for recoverable processing states', () => {
   const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
 

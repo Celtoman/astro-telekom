@@ -49,6 +49,11 @@ test('delivery retry cannot bypass provider or subscriber routing decisions', as
     'ACTIVE_SUBSCRIBER_NOT_SENT',
     'DUPLICATE_SUPPRESSED',
     'DELIVERED',
+    'DECISION_PENDING',
+    'DECISION_RUNNING',
+    'PHONE_CHECK_RETRY',
+    'PHONE_CHECK_FAILED',
+    'PHONE_INVALID_NOT_SENT',
   ];
   for (const processingStatus of blockedStatuses) {
     let enqueued = 0;
@@ -73,6 +78,14 @@ test('delivery retry cannot bypass provider or subscriber routing decisions', as
   assert.equal((await retryable.retryDelivery('lead')).processingStatus, 'PENDING');
   assert.deepEqual(saved, { processingStatus: 'PENDING' });
   assert.equal(enqueued, 1);
+});
+
+test('manual delivery retry cannot bypass a failed persisted phone check', async () => {
+  const controller = new CrmLeadsController({ lead: { findUnique: async () => ({
+    id: 'lead', processingStatus: 'DELIVERY_QUEUE_ERROR', phone: '79000000000',
+    phoneCheckStatus: 'REJECTED', phoneCheckQc: 1, phoneCheckNormalized: '79000000000', deliveryAttempts: [],
+  }) } }, { enqueueTracked: async () => assert.fail('phone check bypassed') });
+  await assert.rejects(controller.retryDelivery('lead'), /Телефон не прошёл проверку/);
 });
 
 test('delivery retry recovers an orphan pending lead with no attempts', async () => {

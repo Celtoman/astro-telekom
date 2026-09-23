@@ -73,7 +73,7 @@ export class CrmLeadsController {
     const where: Prisma.LeadWhereInput = filters.length ? { AND: filters } : {};
     const attentionWhere: Prisma.LeadWhereInput = {
       OR: [
-        { processingStatus: { in: ['MANUAL_CHECK', 'NON_SALES_NOT_SENT', 'ADDRESS_CLARIFICATION', 'MANUAL_CHECK_API', 'DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED', 'DELIVERY_EMAIL_OUTCOME_UNKNOWN'] } },
+        { processingStatus: { in: ['MANUAL_CHECK', 'NON_SALES_NOT_SENT', 'ADDRESS_CLARIFICATION', 'MANUAL_CHECK_API', 'PHONE_CHECK_FAILED', 'PHONE_INVALID_NOT_SENT', 'DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED', 'DELIVERY_EMAIL_OUTCOME_UNKNOWN'] } },
         { processingStatus: 'PENDING', updatedAt: { lt: new Date(Date.now() - 2 * 60_000) }, deliveryAttempts: { some: { channel: 'API', status: 'FAILED', nextAttemptAt: null } } },
         { notification: { is: { OR: [{ status: 'FAILED' }, { errorCode: { not: null } }] } } },
       ],
@@ -102,7 +102,7 @@ export class CrmLeadsController {
       this.prisma.lead.count({ where: filterWhere }),
       this.prisma.lead.count(),
       this.prisma.lead.count({ where: { status: 'NEW' } }),
-      this.prisma.lead.count({ where: { processingStatus: 'PENDING' } }),
+      this.prisma.lead.count({ where: { processingStatus: { in: ['DECISION_PENDING', 'DECISION_RUNNING', 'PHONE_CHECK_RETRY', 'PENDING'] } } }),
       this.prisma.lead.count({ where: attentionWhere }),
     ]);
     const hasNextPage = rows.length > limit;
@@ -140,6 +140,9 @@ export class CrmLeadsController {
       include: { deliveryAttempts: { where: { channel: 'API' }, orderBy: { attemptNumber: 'desc' }, take: 1 } },
     });
     if (!lead) throw new NotFoundException('Заявка не найдена');
+    if (lead.phoneCheckStatus != null && (lead.phoneCheckStatus !== 'PASSED' || lead.phoneCheckQc !== 0 || lead.phoneCheckNormalized !== lead.phone)) {
+      throw new BadRequestException('Телефон не прошёл проверку для автоматической передачи');
+    }
     const apiAttempts = lead.deliveryAttempts || [];
     const isOrphanPending = lead.processingStatus === 'PENDING' && apiAttempts.length === 0;
     const isRecoverableFailure = ['DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED'].includes(lead.processingStatus);
