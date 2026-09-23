@@ -189,3 +189,75 @@ test('notification retry is delegated to the durable outbox service', async () =
   assert.equal(requested, 'lead');
   assert.deepEqual(result, { id: 'notification', status: 'QUEUED' });
 });
+
+test('manual phone retry requires an exhausted technical check and records operator evidence before queuing', async () => {
+  assert.ok(Reflect.getMetadata('__guards__', CrmLeadsController)?.some((guard) => guard.name === 'AdminTokenGuard'));
+  const lead = { id: 'lead', phoneCheckStatus: 'FAILED', phoneCheckQc: null, phoneCheckAttempt: 3,
+    phoneCheckErrorCode: 'HTTP_503', processingStatus: 'PHONE_CHECK_FAILED', updatedAt: new Date('2026-01-01') };
+  const events = [];
+  let queued;
+  const prisma = {
+    $transaction: async (callback) => callback(prisma),
+    lead: {
+      findUnique: async () => lead,
+      updateMany: async ({ where, data }) => {
+        assert.equal(where.processingStatus, 'PHONE_CHECK_FAILED');
+        Object.assign(lead, data);
+        return { count: 1 };
+      },
+    },
+    leadDecisionEvent: { create: async ({ data }) => events.push(data) },
+  };
+  const controller = new CrmLeadsController(prisma, {}, {}, {}, {
+    enqueueTracked: async (...args) => { queued = args; return { queued: true }; },
+  });
+  const result = await controller.retryPhoneCheck('lead', { user: { id: 'operator-1' } });
+  assert.deepEqual(queued, ['lead', 4]);
+  assert.equal(result.processingStatus, 'DECISION_PENDING');
+  assert.equal(lead.phoneCheckStatus, 'PENDING');
+  assert.equal(events[0].type, 'MANUAL_PHONE_RETRY');
+  assert.equal(events[0].actorId, 'operator-1');
+  assert.equal(events[0].attemptNumber, 4);
+  assert.equal(events[0].evidence.previousErrorCode, 'HTTP_503');
+});
+
+test('manual phone retry cannot bypass a final qc or an unrelated processing state', async () => {
+  for (const override of [
+    { phoneCheckStatus: 'REJECTED', phoneCheckQc: 1, processingStatus: 'PHONE_INVALID_NOT_SENT' },
+    { phoneCheckStatus: 'FAILED', phoneCheckQc: null, processingStatus: 'MANUAL_CHECK' },
+  ]) {
+    const prisma = { $transaction: async (callback) => callback(prisma),
+      lead: { findUnique: async () => ({ id: 'lead', ...override }) } };
+    const controller = new CrmLeadsController(prisma, {}, {}, {}, {
+      enqueueTracked: async () => assert.fail('blocked retry queued'),
+    });
+    await assert.rejects(controller.retryPhoneCheck('lead', { user: { id: 'operator' } }), (error) => error.getStatus() === 400);
+  }
+});
+
+test('explicit comment reanalysis preserves the original reason and prior evidence in an audit event', async () => {
+  const lead = { id: 'lead', comment: 'Списали деньги', reasonCode: 'new_connection', reasonLabel: 'Новое подключение',
+    commentAnalysisVersion: null, commentAnalysisOutcome: null, commentAnalysisEvidence: null,
+    processingStatus: 'MANUAL_CHECK', updatedAt: new Date('2026-01-01') };
+  const events = [];
+  const prisma = {
+    $transaction: async (callback) => callback(prisma),
+    lead: {
+      findUnique: async () => lead,
+      updateMany: async ({ data }) => { Object.assign(lead, data); return { count: 1 }; },
+    },
+    leadDecisionEvent: { create: async ({ data }) => events.push(data) },
+  };
+  const controller = new CrmLeadsController(prisma, {}, {}, {}, {});
+  const result = await controller.reanalyzeComment('lead', { user: { id: 'operator-1' } });
+  assert.equal(result.version, 1);
+  assert.equal(lead.commentAnalysisOutcome, 'MANUAL_REVIEW');
+  assert.equal(lead.processingStatus, 'MANUAL_CHECK');
+  assert.equal(lead.reasonCode, 'new_connection');
+  assert.equal(lead.reasonLabel, 'Новое подключение');
+  assert.equal(events[0].type, 'COMMENT_REANALYSIS');
+  assert.equal(events[0].actorId, 'operator-1');
+  assert.equal(events[0].evidence.before.version, null);
+  assert.equal(events[0].evidence.after.version, 1);
+  await assert.rejects(controller.reanalyzeComment('lead', { user: { id: 'operator-1' } }), (error) => error.getStatus() === 400);
+});

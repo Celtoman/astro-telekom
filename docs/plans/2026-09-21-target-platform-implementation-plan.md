@@ -218,12 +218,12 @@ node --test tests/*.test.cjs tests/*.test.mjs
 | F1 | `FORM-001–015` | #170 | Да | реализовано; rollout и live acceptance ожидаются |
 | F2 | `FORM-016–023`, `LEAD-014` | #171 | Да | частично |
 | L1 | `LEAD-001–006`, `011` | #154 | Нет | частично |
-| L2 | reason registry/short-circuit | #182 | Нет | не начато |
-| L3 | comment analyzer | #183 | Нет | не начато |
-| L4 | DaData Phone | #184 | Нет | не начато |
-| L5 | durable orchestrator | #185 | Нет | foundation частичный |
+| L2 | reason registry/short-circuit | #182 | Нет | реализовано, issue закрыта |
+| L3 | comment analyzer | #183 | Нет | реализовано, issue закрыта |
+| L4 | DaData Phone | #184 | Нет | реализовано, issue закрыта; rollout подтверждён |
+| L5 | durable orchestrator | #185 | Нет | реализовано, issue закрыта; rollout подтверждён |
 | L6 | lead deduplication | #186 | Нет | не начато |
-| L7 | admin evidence/retry | #187 | Нет | не начато |
+| L7 | admin evidence/retry | #187 | Нет | реализовано локально; внешний rollout проверяется отдельно |
 | V1 | variable registry/parser/resolver | #188 | Нет | foundation только для телефонов |
 | V2 | variable catalog/context preview | #189 | Нет | не начато |
 | V3 | usage/insertion/deprecation | #190 | Нет | не начато |

@@ -113,6 +113,18 @@ test('lead detail explains phone check without rendering the provider response',
   assert.equal(statusPresentation('phoneCheckStatus', 'REJECTED').known, true);
 });
 
+test('lead detail exposes decision history and only safe manual phone and comment retries', () => {
+  const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
+  assert.match(source, /История решений/);
+  assert.match(source, /decisionEvents/);
+  assert.match(source, /\/retry-phone-check/);
+  assert.match(source, /\/reanalyze-comment/);
+  assert.match(source, /PHONE_CHECK_FAILED/);
+  assert.match(source, /Повторить проверку телефона/);
+  assert.match(source, /Повторно проанализировать комментарий/);
+  assert.doesNotMatch(source, /forceSuccess|skipPhoneCheck/);
+});
+
 test('lead workspace offers a safe delivery retry for recoverable processing states', () => {
   const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
 

@@ -385,6 +385,7 @@ exports.Prisma.LeadScalarFieldEnum = {
   phoneCheckErrorCode: 'phoneCheckErrorCode',
   phoneCheckNextAttemptAt: 'phoneCheckNextAttemptAt',
   decisionLeaseUntil: 'decisionLeaseUntil',
+  decisionAttemptNumber: 'decisionAttemptNumber',
   addressCheckId: 'addressCheckId',
   name: 'name',
   phone: 'phone',
@@ -414,6 +415,17 @@ exports.Prisma.LeadScalarFieldEnum = {
   apiResult: 'apiResult',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LeadDecisionEventScalarFieldEnum = {
+  id: 'id',
+  leadId: 'leadId',
+  type: 'type',
+  outcome: 'outcome',
+  attemptNumber: 'attemptNumber',
+  actorId: 'actorId',
+  evidence: 'evidence',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.LeadNotificationScalarFieldEnum = {
@@ -717,6 +729,7 @@ exports.Prisma.ModelName = {
   CityImportRun: 'CityImportRun',
   AddressCheck: 'AddressCheck',
   Lead: 'Lead',
+  LeadDecisionEvent: 'LeadDecisionEvent',
   LeadNotification: 'LeadNotification',
   LeadAccessToken: 'LeadAccessToken',
   LeadDeliveryAttempt: 'LeadDeliveryAttempt',

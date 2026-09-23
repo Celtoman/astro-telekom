@@ -67,6 +67,16 @@ export class LeadDecisionService implements OnModuleDestroy {
     }
   }
 
+  private async saveDecision(leadId: string, data: Prisma.LeadUpdateInput, type: string, outcome: string,
+    evidence: Record<string, string | number | boolean>, attemptNumber?: number) {
+    await this.prisma.$transaction(async (tx) => {
+      await tx.lead.update({ where: { id: leadId }, data });
+      await tx.leadDecisionEvent.create({ data: {
+        leadId, type, outcome, attemptNumber, evidence: evidence as Prisma.InputJsonObject,
+      } });
+    });
+  }
+
   async reconcilePending(now = new Date()) {
     const rows = await this.prisma.lead.findMany({
       where: {
@@ -78,13 +88,13 @@ export class LeadDecisionService implements OnModuleDestroy {
       },
       orderBy: { createdAt: 'asc' },
       take: 100,
-      select: { id: true, processingStatus: true, phoneCheckAttempt: true },
+      select: { id: true, processingStatus: true, phoneCheckAttempt: true, decisionAttemptNumber: true },
     });
     let queued = 0;
     for (const row of rows) {
-      const attemptNumber = row.processingStatus === 'PHONE_CHECK_RETRY'
-        ? Math.min((row.phoneCheckAttempt ?? 0) + 1, 3)
-        : Math.max(row.phoneCheckAttempt ?? 1, 1);
+      const attemptNumber = row.processingStatus === 'DECISION_RUNNING'
+        ? row.decisionAttemptNumber ?? Math.max(row.phoneCheckAttempt ?? 1, 1)
+        : (row.phoneCheckAttempt ?? 0) + 1;
       if ((await this.enqueueTracked(row.id, attemptNumber)).queued) queued += 1;
     }
     return { scanned: rows.length, queued };
@@ -107,19 +117,23 @@ export class LeadDecisionService implements OnModuleDestroy {
         { processingStatus: { in: ['DECISION_PENDING', 'PHONE_CHECK_RETRY'] } },
         { processingStatus: 'DECISION_RUNNING', decisionLeaseUntil: { lt: now } },
       ] },
-      data: { processingStatus: 'DECISION_RUNNING', phoneCheckStatus: 'RUNNING', decisionLeaseUntil: new Date(now.getTime() + DECISION_LEASE_MS) },
+      data: { processingStatus: 'DECISION_RUNNING', phoneCheckStatus: 'RUNNING', decisionLeaseUntil: new Date(now.getTime() + DECISION_LEASE_MS), decisionAttemptNumber: attemptNumber },
     });
     if (!claim.count) return { skipped: true, reason: 'already_claimed' };
 
     if (lead.reasonRoute && lead.reasonRoute !== 'SALES' || lead.commentAnalysisOutcome === 'MANUAL_REVIEW') {
       const processingStatus = lead.commentAnalysisOutcome === 'MANUAL_REVIEW' || lead.reasonRoute === 'MANUAL' ? 'MANUAL_CHECK' : 'NON_SALES_NOT_SENT';
-      await this.prisma.lead.update({ where: { id: leadId }, data: { processingStatus, phoneCheckStatus: 'SKIPPED', decisionLeaseUntil: null } });
+      await this.saveDecision(leadId, { processingStatus, phoneCheckStatus: 'SKIPPED', decisionLeaseUntil: null, decisionAttemptNumber: null },
+        'ROUTE_DECISION', processingStatus, {
+          reasonRoute: lead.reasonRoute || 'UNSPECIFIED', commentOutcome: lead.commentAnalysisOutcome || 'NONE',
+        });
       return { skipped: true, reason: 'non_sales_route' };
     }
 
     const coverage = readTarifnikCoverageSnapshot(lead.addressCheck?.response);
     if (!coverage?.hasTargetProvider) {
-      await this.prisma.lead.update({ where: { id: leadId }, data: { processingStatus: 'MANUAL_CHECK_API', phoneCheckStatus: 'SKIPPED', decisionLeaseUntil: null } });
+      await this.saveDecision(leadId, { processingStatus: 'MANUAL_CHECK_API', phoneCheckStatus: 'SKIPPED', decisionLeaseUntil: null, decisionAttemptNumber: null },
+        'ROUTE_DECISION', 'MANUAL_CHECK_API', { coverageVerified: false });
       return { skipped: true, reason: 'coverage_not_verified' };
     }
 
@@ -155,20 +169,24 @@ export class LeadDecisionService implements OnModuleDestroy {
       const nextAttempt = attemptNumber + 1;
       const retryDelay = PHONE_RETRY_DELAYS[attemptNumber] ?? 0;
       const final = attemptNumber >= 3;
-      await this.prisma.lead.update({ where: { id: leadId }, data: {
+      const nextAttemptAt = final ? null : new Date(now.getTime() + retryDelay);
+      await this.saveDecision(leadId, {
         processingStatus: final ? 'PHONE_CHECK_FAILED' : 'PHONE_CHECK_RETRY',
         phoneCheckStatus: final ? 'FAILED' : 'RETRYING',
         phoneCheckAttempt: attemptNumber,
         phoneCheckErrorCode: phoneResult.errorCode,
-        phoneCheckNextAttemptAt: final ? null : new Date(now.getTime() + retryDelay),
-        decisionLeaseUntil: null,
-      } });
+        phoneCheckNextAttemptAt: nextAttemptAt,
+        decisionLeaseUntil: null, decisionAttemptNumber: null,
+      }, 'PHONE_CHECK', final ? 'FAILED' : 'RETRYING', {
+        errorCode: phoneResult.errorCode,
+        ...(nextAttemptAt ? { nextAttemptAt: nextAttemptAt.toISOString() } : {}),
+      }, attemptNumber);
       if (!final) await this.enqueueTracked(leadId, nextAttempt, retryDelay);
       return { status: final ? 'PHONE_CHECK_FAILED' : 'PHONE_CHECK_RETRY', attemptNumber };
     }
 
     const passed = phoneResult.qc === 0 && phoneResult.normalizedPhone === lead.phone;
-    await this.prisma.lead.update({ where: { id: leadId }, data: {
+    await this.saveDecision(leadId, {
       phoneCheckStatus: passed ? 'PASSED' : 'REJECTED',
       phoneCheckQc: phoneResult.qc,
       phoneCheckNormalized: phoneResult.normalizedPhone,
@@ -177,8 +195,10 @@ export class LeadDecisionService implements OnModuleDestroy {
       phoneCheckSource: source,
       phoneCheckErrorCode: passed || phoneResult.qc !== 0 ? null : 'NORMALIZED_MISMATCH',
       phoneCheckNextAttemptAt: null,
-      ...(passed ? {} : { processingStatus: 'PHONE_INVALID_NOT_SENT', decisionLeaseUntil: null }),
-    } });
+      ...(passed ? {} : { processingStatus: 'PHONE_INVALID_NOT_SENT', decisionLeaseUntil: null, decisionAttemptNumber: null }),
+    }, 'PHONE_CHECK', passed ? 'PASSED' : 'REJECTED', {
+      qc: phoneResult.qc, source, checkedAt: checkedAt.toISOString(), normalizedMatch: phoneResult.normalizedPhone === lead.phone,
+    }, attemptNumber);
     if (!passed) return { status: 'PHONE_INVALID_NOT_SENT', qc: phoneResult.qc };
 
     const contractResult = await this.contract.check(lead.phone, coverage.suggestion.data, lead.city.subscriberProfileKey);
@@ -187,16 +207,26 @@ export class LeadDecisionService implements OnModuleDestroy {
       : contractResult.status === 'NOT_FOUND' && contractResult.active === false
         ? 'PENDING'
         : 'MANUAL_CHECK_API';
-    await this.prisma.lead.update({ where: { id: leadId }, data: {
+    await this.prisma.$transaction(async (tx) => {
+      await tx.lead.update({ where: { id: leadId }, data: {
       processingStatus,
-      decisionLeaseUntil: null,
+      decisionLeaseUntil: null, decisionAttemptNumber: null,
       contractResult: {
         status: contractResult.status,
         active: contractResult.active,
         message: contractResult.message,
         response: contractResult.response,
       } as Prisma.InputJsonObject,
-    } });
+      } });
+      await tx.leadDecisionEvent.create({ data: {
+        leadId, type: 'SUBSCRIBER_CHECK', outcome: contractResult.status,
+        evidence: { active: contractResult.active === true },
+      } });
+      await tx.leadDecisionEvent.create({ data: {
+        leadId, type: 'ROUTE_DECISION', outcome: processingStatus,
+        evidence: { subscriberStatus: contractResult.status, phoneQc: phoneResult.qc },
+      } });
+    });
     if (processingStatus === 'PENDING') {
       const delivery = await this.delivery.enqueueTracked(leadId);
       return { status: delivery.processingStatus || 'PENDING' };

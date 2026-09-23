@@ -237,6 +237,18 @@ export class PublicLeadsController {
             apiResult: addressCheck ? { status: addressCheck.status, response: addressCheck.response } : undefined,
           },
         });
+        if (processingStatus !== 'DECISION_PENDING') {
+          await tx.leadDecisionEvent.create({ data: {
+            leadId: created.id,
+            type: 'ROUTE_DECISION',
+            outcome: processingStatus,
+            evidence: {
+              reasonRoute: reason?.route || 'UNSPECIFIED',
+              commentOutcome: commentAnalysis?.outcome || 'NONE',
+              duplicate: Boolean(duplicate),
+            },
+          } });
+        }
         if (Array.isArray(body.activity)) {
           const events = body.activity.filter((event) => event && typeof event.type === 'string').slice(-100);
           if (events.length) await tx.leadActivityEvent.createMany({

@@ -11,6 +11,7 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
   let notificationCreated;
   let notificationEnqueues = 0;
   let decisionEnqueues = 0;
+  const decisionEvents = [];
   const transaction = {
     lead: { create: async ({ data }) => {
       leadCreates += 1;
@@ -23,6 +24,7 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
       return { id: 'notification', ...data, status: 'PENDING', revision: 1, maxAttempts: 3 };
     } },
     leadActivityEvent: { createMany: async () => ({ count: 0 }) },
+    leadDecisionEvent: { create: async ({ data }) => { decisionEvents.push(data); return data; } },
   };
   const prisma = {
     site: { findFirst: async () => ({ id: 'site' }) },
@@ -77,6 +79,7 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
     notificationCreated: () => notificationCreated,
     notificationEnqueues: () => notificationEnqueues,
     leadCreates: () => leadCreates,
+    decisionEvents: () => decisionEvents,
   };
 }
 const base = {
@@ -148,6 +151,8 @@ test('non-sales reason is snapshotted and bypasses address coverage, subscriber 
   assert.deepEqual({ code: f.saved().reasonCode, label: f.saved().reasonLabel, route: f.saved().reasonRoute, version: f.saved().reasonRegistryVersion },
     { code: 'billing', label: 'Оплата', route: 'NON_SALES', version: 1 });
   assert.equal(f.saved().processingStatus, 'NON_SALES_NOT_SENT');
+  assert.deepEqual(f.decisionEvents(), [{ leadId: 'lead', type: 'ROUTE_DECISION', outcome: 'NON_SALES_NOT_SENT',
+    evidence: { reasonRoute: 'NON_SALES', commentOutcome: 'NONE', duplicate: false } }]);
   assert.equal(f.contractChecks(), 0);
   assert.equal(f.deliveryEnqueues(), 0);
   assert.equal(f.notificationEnqueues(), 1);
@@ -157,6 +162,7 @@ test('other reason stays in manual review and unknown reasons are rejected befor
   const f = fixture(null);
   await f.create({ ...base, reasonCode: 'other' });
   assert.equal(f.saved().processingStatus, 'MANUAL_CHECK');
+  assert.equal(f.decisionEvents()[0]?.outcome, 'MANUAL_CHECK');
   assert.equal(f.contractChecks(), 0);
   assert.equal(f.deliveryEnqueues(), 0);
   const unknown = fixture(null);
@@ -181,6 +187,7 @@ test('comment contradiction is snapshotted and short-circuits sales checks witho
   assert.equal(f.saved().commentAnalysisOutcome, 'MANUAL_REVIEW');
   assert.equal(f.saved().commentAnalysisCategory, 'billing');
   assert.equal(f.saved().commentAnalysisEvidence[0].fragment, 'Списали деньги');
+  assert.equal(f.decisionEvents()[0]?.evidence.commentOutcome, 'MANUAL_REVIEW');
   assert.equal(f.contractChecks(), 0);
   assert.equal(f.deliveryEnqueues(), 0);
 });
@@ -326,6 +333,8 @@ test('lead with the same normalized phone within 24 hours is suppressed as dupli
   assert.equal(f.saved().processingStatus, 'DUPLICATE_SUPPRESSED');
   assert.equal(f.saved().duplicateOfId, 'existing-phone');
   assert.equal(f.saved().duplicateReason, 'phone_24h');
+  assert.equal(f.decisionEvents()[0]?.outcome, 'DUPLICATE_SUPPRESSED');
+  assert.equal(f.decisionEvents()[0]?.evidence.duplicate, true);
   assert.equal(f.contractChecks(), 0);
   assert.equal(f.deliveryEnqueues(), 0);
 });
@@ -338,6 +347,7 @@ test('lead with the same normalized address within 24 hours is suppressed as dup
   assert.equal(f.saved().processingStatus, 'DUPLICATE_SUPPRESSED');
   assert.equal(f.saved().duplicateOfId, 'existing-address');
   assert.equal(f.saved().duplicateReason, 'address_24h');
+  assert.equal(f.decisionEvents()[0]?.outcome, 'DUPLICATE_SUPPRESSED');
   assert.equal(f.contractChecks(), 0);
   assert.equal(f.deliveryEnqueues(), 0);
 });

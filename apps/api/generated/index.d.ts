@@ -94,6 +94,11 @@ export type AddressCheck = $Result.DefaultSelection<Prisma.$AddressCheckPayload>
  */
 export type Lead = $Result.DefaultSelection<Prisma.$LeadPayload>
 /**
+ * Model LeadDecisionEvent
+ * 
+ */
+export type LeadDecisionEvent = $Result.DefaultSelection<Prisma.$LeadDecisionEventPayload>
+/**
  * Model LeadNotification
  * 
  */
@@ -717,6 +722,16 @@ export class PrismaClient<
   get lead(): Prisma.LeadDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.leadDecisionEvent`: Exposes CRUD operations for the **LeadDecisionEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LeadDecisionEvents
+    * const leadDecisionEvents = await prisma.leadDecisionEvent.findMany()
+    * ```
+    */
+  get leadDecisionEvent(): Prisma.LeadDecisionEventDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.leadNotification`: Exposes CRUD operations for the **LeadNotification** model.
     * Example usage:
     * ```ts
@@ -1258,6 +1273,7 @@ export namespace Prisma {
     CityImportRun: 'CityImportRun',
     AddressCheck: 'AddressCheck',
     Lead: 'Lead',
+    LeadDecisionEvent: 'LeadDecisionEvent',
     LeadNotification: 'LeadNotification',
     LeadAccessToken: 'LeadAccessToken',
     LeadDeliveryAttempt: 'LeadDeliveryAttempt',
@@ -1281,7 +1297,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "provider" | "site" | "sitemapExclusion" | "siteRebuild" | "contentRevision" | "sitePublication" | "auditEvent" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
+      modelProps: "provider" | "site" | "sitemapExclusion" | "siteRebuild" | "contentRevision" | "sitePublication" | "auditEvent" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadDecisionEvent" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2469,6 +2485,80 @@ export namespace Prisma {
           }
         }
       }
+      LeadDecisionEvent: {
+        payload: Prisma.$LeadDecisionEventPayload<ExtArgs>
+        fields: Prisma.LeadDecisionEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LeadDecisionEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadDecisionEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LeadDecisionEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadDecisionEventPayload>
+          }
+          findFirst: {
+            args: Prisma.LeadDecisionEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadDecisionEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LeadDecisionEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadDecisionEventPayload>
+          }
+          findMany: {
+            args: Prisma.LeadDecisionEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadDecisionEventPayload>[]
+          }
+          create: {
+            args: Prisma.LeadDecisionEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadDecisionEventPayload>
+          }
+          createMany: {
+            args: Prisma.LeadDecisionEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LeadDecisionEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadDecisionEventPayload>[]
+          }
+          delete: {
+            args: Prisma.LeadDecisionEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadDecisionEventPayload>
+          }
+          update: {
+            args: Prisma.LeadDecisionEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadDecisionEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.LeadDecisionEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LeadDecisionEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LeadDecisionEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadDecisionEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.LeadDecisionEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadDecisionEventPayload>
+          }
+          aggregate: {
+            args: Prisma.LeadDecisionEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLeadDecisionEvent>
+          }
+          groupBy: {
+            args: Prisma.LeadDecisionEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LeadDecisionEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LeadDecisionEventCountArgs<ExtArgs>
+            result: $Utils.Optional<LeadDecisionEventCountAggregateOutputType> | number
+          }
+        }
+      }
       LeadNotification: {
         payload: Prisma.$LeadNotificationPayload<ExtArgs>
         fields: Prisma.LeadNotificationFieldRefs
@@ -3200,6 +3290,7 @@ export namespace Prisma {
     cityImportRun?: CityImportRunOmit
     addressCheck?: AddressCheckOmit
     lead?: LeadOmit
+    leadDecisionEvent?: LeadDecisionEventOmit
     leadNotification?: LeadNotificationOmit
     leadAccessToken?: LeadAccessTokenOmit
     leadDeliveryAttempt?: LeadDeliveryAttemptOmit
@@ -3757,6 +3848,7 @@ export namespace Prisma {
 
   export type LeadCountOutputType = {
     history: number
+    decisionEvents: number
     deliveryAttempts: number
     activityEvents: number
     accessTokens: number
@@ -3765,6 +3857,7 @@ export namespace Prisma {
 
   export type LeadCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     history?: boolean | LeadCountOutputTypeCountHistoryArgs
+    decisionEvents?: boolean | LeadCountOutputTypeCountDecisionEventsArgs
     deliveryAttempts?: boolean | LeadCountOutputTypeCountDeliveryAttemptsArgs
     activityEvents?: boolean | LeadCountOutputTypeCountActivityEventsArgs
     accessTokens?: boolean | LeadCountOutputTypeCountAccessTokensArgs
@@ -3787,6 +3880,13 @@ export namespace Prisma {
    */
   export type LeadCountOutputTypeCountHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LeadStatusHistoryWhereInput
+  }
+
+  /**
+   * LeadCountOutputType without action
+   */
+  export type LeadCountOutputTypeCountDecisionEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadDecisionEventWhereInput
   }
 
   /**
@@ -4592,7 +4692,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Provider", 'DateTime'>
     readonly updatedAt: FieldRef<"Provider", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -5907,7 +6007,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Site", 'DateTime'>
     readonly updatedAt: FieldRef<"Site", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -7292,7 +7392,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"SitemapExclusion", 'DateTime'>
     readonly updatedAt: FieldRef<"SitemapExclusion", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -8687,7 +8787,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"SiteRebuild", 'DateTime'>
     readonly updatedAt: FieldRef<"SiteRebuild", 'DateTime'>
   }
-
+    
 
   // Custom InputTypes
   /**
@@ -22965,6 +23065,7 @@ export namespace Prisma {
     commentAnalysisVersion: number | null
     phoneCheckQc: number | null
     phoneCheckAttempt: number | null
+    decisionAttemptNumber: number | null
     timeOnSiteSeconds: number | null
   }
 
@@ -22973,6 +23074,7 @@ export namespace Prisma {
     commentAnalysisVersion: number | null
     phoneCheckQc: number | null
     phoneCheckAttempt: number | null
+    decisionAttemptNumber: number | null
     timeOnSiteSeconds: number | null
   }
 
@@ -23000,6 +23102,7 @@ export namespace Prisma {
     phoneCheckErrorCode: string | null
     phoneCheckNextAttemptAt: Date | null
     decisionLeaseUntil: Date | null
+    decisionAttemptNumber: number | null
     addressCheckId: string | null
     name: string | null
     phone: string | null
@@ -23051,6 +23154,7 @@ export namespace Prisma {
     phoneCheckErrorCode: string | null
     phoneCheckNextAttemptAt: Date | null
     decisionLeaseUntil: Date | null
+    decisionAttemptNumber: number | null
     addressCheckId: string | null
     name: string | null
     phone: string | null
@@ -23104,6 +23208,7 @@ export namespace Prisma {
     phoneCheckErrorCode: number
     phoneCheckNextAttemptAt: number
     decisionLeaseUntil: number
+    decisionAttemptNumber: number
     addressCheckId: number
     name: number
     phone: number
@@ -23142,6 +23247,7 @@ export namespace Prisma {
     commentAnalysisVersion?: true
     phoneCheckQc?: true
     phoneCheckAttempt?: true
+    decisionAttemptNumber?: true
     timeOnSiteSeconds?: true
   }
 
@@ -23150,6 +23256,7 @@ export namespace Prisma {
     commentAnalysisVersion?: true
     phoneCheckQc?: true
     phoneCheckAttempt?: true
+    decisionAttemptNumber?: true
     timeOnSiteSeconds?: true
   }
 
@@ -23177,6 +23284,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: true
     phoneCheckNextAttemptAt?: true
     decisionLeaseUntil?: true
+    decisionAttemptNumber?: true
     addressCheckId?: true
     name?: true
     phone?: true
@@ -23228,6 +23336,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: true
     phoneCheckNextAttemptAt?: true
     decisionLeaseUntil?: true
+    decisionAttemptNumber?: true
     addressCheckId?: true
     name?: true
     phone?: true
@@ -23281,6 +23390,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: true
     phoneCheckNextAttemptAt?: true
     decisionLeaseUntil?: true
+    decisionAttemptNumber?: true
     addressCheckId?: true
     name?: true
     phone?: true
@@ -23425,6 +23535,7 @@ export namespace Prisma {
     phoneCheckErrorCode: string | null
     phoneCheckNextAttemptAt: Date | null
     decisionLeaseUntil: Date | null
+    decisionAttemptNumber: number | null
     addressCheckId: string | null
     name: string | null
     phone: string
@@ -23501,6 +23612,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: boolean
     phoneCheckNextAttemptAt?: boolean
     decisionLeaseUntil?: boolean
+    decisionAttemptNumber?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23536,6 +23648,7 @@ export namespace Prisma {
     tariff?: boolean | Lead$tariffArgs<ExtArgs>
     addressCheck?: boolean | Lead$addressCheckArgs<ExtArgs>
     history?: boolean | Lead$historyArgs<ExtArgs>
+    decisionEvents?: boolean | Lead$decisionEventsArgs<ExtArgs>
     deliveryAttempts?: boolean | Lead$deliveryAttemptsArgs<ExtArgs>
     notification?: boolean | Lead$notificationArgs<ExtArgs>
     activityEvents?: boolean | Lead$activityEventsArgs<ExtArgs>
@@ -23571,6 +23684,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: boolean
     phoneCheckNextAttemptAt?: boolean
     decisionLeaseUntil?: boolean
+    decisionAttemptNumber?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23634,6 +23748,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: boolean
     phoneCheckNextAttemptAt?: boolean
     decisionLeaseUntil?: boolean
+    decisionAttemptNumber?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23697,6 +23812,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: boolean
     phoneCheckNextAttemptAt?: boolean
     decisionLeaseUntil?: boolean
+    decisionAttemptNumber?: boolean
     addressCheckId?: boolean
     name?: boolean
     phone?: boolean
@@ -23728,7 +23844,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "pageId" | "tariffId" | "configurationSnapshot" | "reasonCode" | "reasonLabel" | "reasonRoute" | "reasonRegistryVersion" | "comment" | "commentAnalysisVersion" | "commentAnalysisOutcome" | "commentAnalysisCategory" | "commentAnalysisEvidence" | "commentAnalysisExplanation" | "phoneCheckStatus" | "phoneCheckQc" | "phoneCheckNormalized" | "phoneCheckCheckedAt" | "phoneCheckAttempt" | "phoneCheckSource" | "phoneCheckErrorCode" | "phoneCheckNextAttemptAt" | "decisionLeaseUntil" | "addressCheckId" | "name" | "phone" | "submissionKey" | "consentVersion" | "consentAcceptedAt" | "email" | "address" | "objectType" | "serviceType" | "source" | "utm" | "referrer" | "pageUrl" | "formName" | "timeOnSiteSeconds" | "deviceType" | "viewedPages" | "processingStatus" | "duplicateOfId" | "duplicateReason" | "deliveryKey" | "externalLeadId" | "externalStatus" | "contractResult" | "status" | "apiResult" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
+  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "pageId" | "tariffId" | "configurationSnapshot" | "reasonCode" | "reasonLabel" | "reasonRoute" | "reasonRegistryVersion" | "comment" | "commentAnalysisVersion" | "commentAnalysisOutcome" | "commentAnalysisCategory" | "commentAnalysisEvidence" | "commentAnalysisExplanation" | "phoneCheckStatus" | "phoneCheckQc" | "phoneCheckNormalized" | "phoneCheckCheckedAt" | "phoneCheckAttempt" | "phoneCheckSource" | "phoneCheckErrorCode" | "phoneCheckNextAttemptAt" | "decisionLeaseUntil" | "decisionAttemptNumber" | "addressCheckId" | "name" | "phone" | "submissionKey" | "consentVersion" | "consentAcceptedAt" | "email" | "address" | "objectType" | "serviceType" | "source" | "utm" | "referrer" | "pageUrl" | "formName" | "timeOnSiteSeconds" | "deviceType" | "viewedPages" | "processingStatus" | "duplicateOfId" | "duplicateReason" | "deliveryKey" | "externalLeadId" | "externalStatus" | "contractResult" | "status" | "apiResult" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
   export type LeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | CityDefaultArgs<ExtArgs>
@@ -23736,6 +23852,7 @@ export namespace Prisma {
     tariff?: boolean | Lead$tariffArgs<ExtArgs>
     addressCheck?: boolean | Lead$addressCheckArgs<ExtArgs>
     history?: boolean | Lead$historyArgs<ExtArgs>
+    decisionEvents?: boolean | Lead$decisionEventsArgs<ExtArgs>
     deliveryAttempts?: boolean | Lead$deliveryAttemptsArgs<ExtArgs>
     notification?: boolean | Lead$notificationArgs<ExtArgs>
     activityEvents?: boolean | Lead$activityEventsArgs<ExtArgs>
@@ -23770,6 +23887,7 @@ export namespace Prisma {
       tariff: Prisma.$TariffPayload<ExtArgs> | null
       addressCheck: Prisma.$AddressCheckPayload<ExtArgs> | null
       history: Prisma.$LeadStatusHistoryPayload<ExtArgs>[]
+      decisionEvents: Prisma.$LeadDecisionEventPayload<ExtArgs>[]
       deliveryAttempts: Prisma.$LeadDeliveryAttemptPayload<ExtArgs>[]
       notification: Prisma.$LeadNotificationPayload<ExtArgs> | null
       activityEvents: Prisma.$LeadActivityEventPayload<ExtArgs>[]
@@ -23803,6 +23921,7 @@ export namespace Prisma {
       phoneCheckErrorCode: string | null
       phoneCheckNextAttemptAt: Date | null
       decisionLeaseUntil: Date | null
+      decisionAttemptNumber: number | null
       addressCheckId: string | null
       name: string | null
       phone: string
@@ -24232,6 +24351,7 @@ export namespace Prisma {
     tariff<T extends Lead$tariffArgs<ExtArgs> = {}>(args?: Subset<T, Lead$tariffArgs<ExtArgs>>): Prisma__TariffClient<$Result.GetResult<Prisma.$TariffPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     addressCheck<T extends Lead$addressCheckArgs<ExtArgs> = {}>(args?: Subset<T, Lead$addressCheckArgs<ExtArgs>>): Prisma__AddressCheckClient<$Result.GetResult<Prisma.$AddressCheckPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     history<T extends Lead$historyArgs<ExtArgs> = {}>(args?: Subset<T, Lead$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    decisionEvents<T extends Lead$decisionEventsArgs<ExtArgs> = {}>(args?: Subset<T, Lead$decisionEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     deliveryAttempts<T extends Lead$deliveryAttemptsArgs<ExtArgs> = {}>(args?: Subset<T, Lead$deliveryAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadDeliveryAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notification<T extends Lead$notificationArgs<ExtArgs> = {}>(args?: Subset<T, Lead$notificationArgs<ExtArgs>>): Prisma__LeadNotificationClient<$Result.GetResult<Prisma.$LeadNotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     activityEvents<T extends Lead$activityEventsArgs<ExtArgs> = {}>(args?: Subset<T, Lead$activityEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadActivityEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -24292,6 +24412,7 @@ export namespace Prisma {
     readonly phoneCheckErrorCode: FieldRef<"Lead", 'String'>
     readonly phoneCheckNextAttemptAt: FieldRef<"Lead", 'DateTime'>
     readonly decisionLeaseUntil: FieldRef<"Lead", 'DateTime'>
+    readonly decisionAttemptNumber: FieldRef<"Lead", 'Int'>
     readonly addressCheckId: FieldRef<"Lead", 'String'>
     readonly name: FieldRef<"Lead", 'String'>
     readonly phone: FieldRef<"Lead", 'String'>
@@ -24803,6 +24924,30 @@ export namespace Prisma {
   }
 
   /**
+   * Lead.decisionEvents
+   */
+  export type Lead$decisionEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventInclude<ExtArgs> | null
+    where?: LeadDecisionEventWhereInput
+    orderBy?: LeadDecisionEventOrderByWithRelationInput | LeadDecisionEventOrderByWithRelationInput[]
+    cursor?: LeadDecisionEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LeadDecisionEventScalarFieldEnum | LeadDecisionEventScalarFieldEnum[]
+  }
+
+  /**
    * Lead.deliveryAttempts
    */
   export type Lead$deliveryAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -24952,6 +25097,1138 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: LeadInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LeadDecisionEvent
+   */
+
+  export type AggregateLeadDecisionEvent = {
+    _count: LeadDecisionEventCountAggregateOutputType | null
+    _avg: LeadDecisionEventAvgAggregateOutputType | null
+    _sum: LeadDecisionEventSumAggregateOutputType | null
+    _min: LeadDecisionEventMinAggregateOutputType | null
+    _max: LeadDecisionEventMaxAggregateOutputType | null
+  }
+
+  export type LeadDecisionEventAvgAggregateOutputType = {
+    attemptNumber: number | null
+  }
+
+  export type LeadDecisionEventSumAggregateOutputType = {
+    attemptNumber: number | null
+  }
+
+  export type LeadDecisionEventMinAggregateOutputType = {
+    id: string | null
+    leadId: string | null
+    type: string | null
+    outcome: string | null
+    attemptNumber: number | null
+    actorId: string | null
+    createdAt: Date | null
+  }
+
+  export type LeadDecisionEventMaxAggregateOutputType = {
+    id: string | null
+    leadId: string | null
+    type: string | null
+    outcome: string | null
+    attemptNumber: number | null
+    actorId: string | null
+    createdAt: Date | null
+  }
+
+  export type LeadDecisionEventCountAggregateOutputType = {
+    id: number
+    leadId: number
+    type: number
+    outcome: number
+    attemptNumber: number
+    actorId: number
+    evidence: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type LeadDecisionEventAvgAggregateInputType = {
+    attemptNumber?: true
+  }
+
+  export type LeadDecisionEventSumAggregateInputType = {
+    attemptNumber?: true
+  }
+
+  export type LeadDecisionEventMinAggregateInputType = {
+    id?: true
+    leadId?: true
+    type?: true
+    outcome?: true
+    attemptNumber?: true
+    actorId?: true
+    createdAt?: true
+  }
+
+  export type LeadDecisionEventMaxAggregateInputType = {
+    id?: true
+    leadId?: true
+    type?: true
+    outcome?: true
+    attemptNumber?: true
+    actorId?: true
+    createdAt?: true
+  }
+
+  export type LeadDecisionEventCountAggregateInputType = {
+    id?: true
+    leadId?: true
+    type?: true
+    outcome?: true
+    attemptNumber?: true
+    actorId?: true
+    evidence?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type LeadDecisionEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LeadDecisionEvent to aggregate.
+     */
+    where?: LeadDecisionEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadDecisionEvents to fetch.
+     */
+    orderBy?: LeadDecisionEventOrderByWithRelationInput | LeadDecisionEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LeadDecisionEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadDecisionEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadDecisionEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LeadDecisionEvents
+    **/
+    _count?: true | LeadDecisionEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LeadDecisionEventAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LeadDecisionEventSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LeadDecisionEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LeadDecisionEventMaxAggregateInputType
+  }
+
+  export type GetLeadDecisionEventAggregateType<T extends LeadDecisionEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateLeadDecisionEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLeadDecisionEvent[P]>
+      : GetScalarType<T[P], AggregateLeadDecisionEvent[P]>
+  }
+
+
+
+
+  export type LeadDecisionEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadDecisionEventWhereInput
+    orderBy?: LeadDecisionEventOrderByWithAggregationInput | LeadDecisionEventOrderByWithAggregationInput[]
+    by: LeadDecisionEventScalarFieldEnum[] | LeadDecisionEventScalarFieldEnum
+    having?: LeadDecisionEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LeadDecisionEventCountAggregateInputType | true
+    _avg?: LeadDecisionEventAvgAggregateInputType
+    _sum?: LeadDecisionEventSumAggregateInputType
+    _min?: LeadDecisionEventMinAggregateInputType
+    _max?: LeadDecisionEventMaxAggregateInputType
+  }
+
+  export type LeadDecisionEventGroupByOutputType = {
+    id: string
+    leadId: string
+    type: string
+    outcome: string
+    attemptNumber: number | null
+    actorId: string | null
+    evidence: JsonValue | null
+    createdAt: Date
+    _count: LeadDecisionEventCountAggregateOutputType | null
+    _avg: LeadDecisionEventAvgAggregateOutputType | null
+    _sum: LeadDecisionEventSumAggregateOutputType | null
+    _min: LeadDecisionEventMinAggregateOutputType | null
+    _max: LeadDecisionEventMaxAggregateOutputType | null
+  }
+
+  type GetLeadDecisionEventGroupByPayload<T extends LeadDecisionEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LeadDecisionEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LeadDecisionEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LeadDecisionEventGroupByOutputType[P]>
+            : GetScalarType<T[P], LeadDecisionEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LeadDecisionEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leadId?: boolean
+    type?: boolean
+    outcome?: boolean
+    attemptNumber?: boolean
+    actorId?: boolean
+    evidence?: boolean
+    createdAt?: boolean
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leadDecisionEvent"]>
+
+  export type LeadDecisionEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leadId?: boolean
+    type?: boolean
+    outcome?: boolean
+    attemptNumber?: boolean
+    actorId?: boolean
+    evidence?: boolean
+    createdAt?: boolean
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leadDecisionEvent"]>
+
+  export type LeadDecisionEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leadId?: boolean
+    type?: boolean
+    outcome?: boolean
+    attemptNumber?: boolean
+    actorId?: boolean
+    evidence?: boolean
+    createdAt?: boolean
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leadDecisionEvent"]>
+
+  export type LeadDecisionEventSelectScalar = {
+    id?: boolean
+    leadId?: boolean
+    type?: boolean
+    outcome?: boolean
+    attemptNumber?: boolean
+    actorId?: boolean
+    evidence?: boolean
+    createdAt?: boolean
+  }
+
+  export type LeadDecisionEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "leadId" | "type" | "outcome" | "attemptNumber" | "actorId" | "evidence" | "createdAt", ExtArgs["result"]["leadDecisionEvent"]>
+  export type LeadDecisionEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }
+  export type LeadDecisionEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }
+  export type LeadDecisionEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lead?: boolean | LeadDefaultArgs<ExtArgs>
+  }
+
+  export type $LeadDecisionEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LeadDecisionEvent"
+    objects: {
+      lead: Prisma.$LeadPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      leadId: string
+      type: string
+      outcome: string
+      attemptNumber: number | null
+      actorId: string | null
+      evidence: Prisma.JsonValue | null
+      createdAt: Date
+    }, ExtArgs["result"]["leadDecisionEvent"]>
+    composites: {}
+  }
+
+  type LeadDecisionEventGetPayload<S extends boolean | null | undefined | LeadDecisionEventDefaultArgs> = $Result.GetResult<Prisma.$LeadDecisionEventPayload, S>
+
+  type LeadDecisionEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LeadDecisionEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LeadDecisionEventCountAggregateInputType | true
+    }
+
+  export interface LeadDecisionEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LeadDecisionEvent'], meta: { name: 'LeadDecisionEvent' } }
+    /**
+     * Find zero or one LeadDecisionEvent that matches the filter.
+     * @param {LeadDecisionEventFindUniqueArgs} args - Arguments to find a LeadDecisionEvent
+     * @example
+     * // Get one LeadDecisionEvent
+     * const leadDecisionEvent = await prisma.leadDecisionEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LeadDecisionEventFindUniqueArgs>(args: SelectSubset<T, LeadDecisionEventFindUniqueArgs<ExtArgs>>): Prisma__LeadDecisionEventClient<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LeadDecisionEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LeadDecisionEventFindUniqueOrThrowArgs} args - Arguments to find a LeadDecisionEvent
+     * @example
+     * // Get one LeadDecisionEvent
+     * const leadDecisionEvent = await prisma.leadDecisionEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LeadDecisionEventFindUniqueOrThrowArgs>(args: SelectSubset<T, LeadDecisionEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LeadDecisionEventClient<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LeadDecisionEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadDecisionEventFindFirstArgs} args - Arguments to find a LeadDecisionEvent
+     * @example
+     * // Get one LeadDecisionEvent
+     * const leadDecisionEvent = await prisma.leadDecisionEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LeadDecisionEventFindFirstArgs>(args?: SelectSubset<T, LeadDecisionEventFindFirstArgs<ExtArgs>>): Prisma__LeadDecisionEventClient<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LeadDecisionEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadDecisionEventFindFirstOrThrowArgs} args - Arguments to find a LeadDecisionEvent
+     * @example
+     * // Get one LeadDecisionEvent
+     * const leadDecisionEvent = await prisma.leadDecisionEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LeadDecisionEventFindFirstOrThrowArgs>(args?: SelectSubset<T, LeadDecisionEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__LeadDecisionEventClient<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LeadDecisionEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadDecisionEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LeadDecisionEvents
+     * const leadDecisionEvents = await prisma.leadDecisionEvent.findMany()
+     * 
+     * // Get first 10 LeadDecisionEvents
+     * const leadDecisionEvents = await prisma.leadDecisionEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const leadDecisionEventWithIdOnly = await prisma.leadDecisionEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LeadDecisionEventFindManyArgs>(args?: SelectSubset<T, LeadDecisionEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LeadDecisionEvent.
+     * @param {LeadDecisionEventCreateArgs} args - Arguments to create a LeadDecisionEvent.
+     * @example
+     * // Create one LeadDecisionEvent
+     * const LeadDecisionEvent = await prisma.leadDecisionEvent.create({
+     *   data: {
+     *     // ... data to create a LeadDecisionEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends LeadDecisionEventCreateArgs>(args: SelectSubset<T, LeadDecisionEventCreateArgs<ExtArgs>>): Prisma__LeadDecisionEventClient<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LeadDecisionEvents.
+     * @param {LeadDecisionEventCreateManyArgs} args - Arguments to create many LeadDecisionEvents.
+     * @example
+     * // Create many LeadDecisionEvents
+     * const leadDecisionEvent = await prisma.leadDecisionEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LeadDecisionEventCreateManyArgs>(args?: SelectSubset<T, LeadDecisionEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LeadDecisionEvents and returns the data saved in the database.
+     * @param {LeadDecisionEventCreateManyAndReturnArgs} args - Arguments to create many LeadDecisionEvents.
+     * @example
+     * // Create many LeadDecisionEvents
+     * const leadDecisionEvent = await prisma.leadDecisionEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LeadDecisionEvents and only return the `id`
+     * const leadDecisionEventWithIdOnly = await prisma.leadDecisionEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LeadDecisionEventCreateManyAndReturnArgs>(args?: SelectSubset<T, LeadDecisionEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LeadDecisionEvent.
+     * @param {LeadDecisionEventDeleteArgs} args - Arguments to delete one LeadDecisionEvent.
+     * @example
+     * // Delete one LeadDecisionEvent
+     * const LeadDecisionEvent = await prisma.leadDecisionEvent.delete({
+     *   where: {
+     *     // ... filter to delete one LeadDecisionEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LeadDecisionEventDeleteArgs>(args: SelectSubset<T, LeadDecisionEventDeleteArgs<ExtArgs>>): Prisma__LeadDecisionEventClient<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LeadDecisionEvent.
+     * @param {LeadDecisionEventUpdateArgs} args - Arguments to update one LeadDecisionEvent.
+     * @example
+     * // Update one LeadDecisionEvent
+     * const leadDecisionEvent = await prisma.leadDecisionEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LeadDecisionEventUpdateArgs>(args: SelectSubset<T, LeadDecisionEventUpdateArgs<ExtArgs>>): Prisma__LeadDecisionEventClient<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LeadDecisionEvents.
+     * @param {LeadDecisionEventDeleteManyArgs} args - Arguments to filter LeadDecisionEvents to delete.
+     * @example
+     * // Delete a few LeadDecisionEvents
+     * const { count } = await prisma.leadDecisionEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LeadDecisionEventDeleteManyArgs>(args?: SelectSubset<T, LeadDecisionEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LeadDecisionEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadDecisionEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LeadDecisionEvents
+     * const leadDecisionEvent = await prisma.leadDecisionEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LeadDecisionEventUpdateManyArgs>(args: SelectSubset<T, LeadDecisionEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LeadDecisionEvents and returns the data updated in the database.
+     * @param {LeadDecisionEventUpdateManyAndReturnArgs} args - Arguments to update many LeadDecisionEvents.
+     * @example
+     * // Update many LeadDecisionEvents
+     * const leadDecisionEvent = await prisma.leadDecisionEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LeadDecisionEvents and only return the `id`
+     * const leadDecisionEventWithIdOnly = await prisma.leadDecisionEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LeadDecisionEventUpdateManyAndReturnArgs>(args: SelectSubset<T, LeadDecisionEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LeadDecisionEvent.
+     * @param {LeadDecisionEventUpsertArgs} args - Arguments to update or create a LeadDecisionEvent.
+     * @example
+     * // Update or create a LeadDecisionEvent
+     * const leadDecisionEvent = await prisma.leadDecisionEvent.upsert({
+     *   create: {
+     *     // ... data to create a LeadDecisionEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LeadDecisionEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LeadDecisionEventUpsertArgs>(args: SelectSubset<T, LeadDecisionEventUpsertArgs<ExtArgs>>): Prisma__LeadDecisionEventClient<$Result.GetResult<Prisma.$LeadDecisionEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LeadDecisionEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadDecisionEventCountArgs} args - Arguments to filter LeadDecisionEvents to count.
+     * @example
+     * // Count the number of LeadDecisionEvents
+     * const count = await prisma.leadDecisionEvent.count({
+     *   where: {
+     *     // ... the filter for the LeadDecisionEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends LeadDecisionEventCountArgs>(
+      args?: Subset<T, LeadDecisionEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LeadDecisionEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LeadDecisionEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadDecisionEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LeadDecisionEventAggregateArgs>(args: Subset<T, LeadDecisionEventAggregateArgs>): Prisma.PrismaPromise<GetLeadDecisionEventAggregateType<T>>
+
+    /**
+     * Group by LeadDecisionEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadDecisionEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LeadDecisionEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LeadDecisionEventGroupByArgs['orderBy'] }
+        : { orderBy?: LeadDecisionEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LeadDecisionEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLeadDecisionEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LeadDecisionEvent model
+   */
+  readonly fields: LeadDecisionEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LeadDecisionEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LeadDecisionEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    lead<T extends LeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeadDefaultArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LeadDecisionEvent model
+   */
+  interface LeadDecisionEventFieldRefs {
+    readonly id: FieldRef<"LeadDecisionEvent", 'String'>
+    readonly leadId: FieldRef<"LeadDecisionEvent", 'String'>
+    readonly type: FieldRef<"LeadDecisionEvent", 'String'>
+    readonly outcome: FieldRef<"LeadDecisionEvent", 'String'>
+    readonly attemptNumber: FieldRef<"LeadDecisionEvent", 'Int'>
+    readonly actorId: FieldRef<"LeadDecisionEvent", 'String'>
+    readonly evidence: FieldRef<"LeadDecisionEvent", 'Json'>
+    readonly createdAt: FieldRef<"LeadDecisionEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LeadDecisionEvent findUnique
+   */
+  export type LeadDecisionEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadDecisionEvent to fetch.
+     */
+    where: LeadDecisionEventWhereUniqueInput
+  }
+
+  /**
+   * LeadDecisionEvent findUniqueOrThrow
+   */
+  export type LeadDecisionEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadDecisionEvent to fetch.
+     */
+    where: LeadDecisionEventWhereUniqueInput
+  }
+
+  /**
+   * LeadDecisionEvent findFirst
+   */
+  export type LeadDecisionEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadDecisionEvent to fetch.
+     */
+    where?: LeadDecisionEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadDecisionEvents to fetch.
+     */
+    orderBy?: LeadDecisionEventOrderByWithRelationInput | LeadDecisionEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LeadDecisionEvents.
+     */
+    cursor?: LeadDecisionEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadDecisionEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadDecisionEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeadDecisionEvents.
+     */
+    distinct?: LeadDecisionEventScalarFieldEnum | LeadDecisionEventScalarFieldEnum[]
+  }
+
+  /**
+   * LeadDecisionEvent findFirstOrThrow
+   */
+  export type LeadDecisionEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadDecisionEvent to fetch.
+     */
+    where?: LeadDecisionEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadDecisionEvents to fetch.
+     */
+    orderBy?: LeadDecisionEventOrderByWithRelationInput | LeadDecisionEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LeadDecisionEvents.
+     */
+    cursor?: LeadDecisionEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadDecisionEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadDecisionEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeadDecisionEvents.
+     */
+    distinct?: LeadDecisionEventScalarFieldEnum | LeadDecisionEventScalarFieldEnum[]
+  }
+
+  /**
+   * LeadDecisionEvent findMany
+   */
+  export type LeadDecisionEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventInclude<ExtArgs> | null
+    /**
+     * Filter, which LeadDecisionEvents to fetch.
+     */
+    where?: LeadDecisionEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeadDecisionEvents to fetch.
+     */
+    orderBy?: LeadDecisionEventOrderByWithRelationInput | LeadDecisionEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LeadDecisionEvents.
+     */
+    cursor?: LeadDecisionEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeadDecisionEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeadDecisionEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeadDecisionEvents.
+     */
+    distinct?: LeadDecisionEventScalarFieldEnum | LeadDecisionEventScalarFieldEnum[]
+  }
+
+  /**
+   * LeadDecisionEvent create
+   */
+  export type LeadDecisionEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LeadDecisionEvent.
+     */
+    data: XOR<LeadDecisionEventCreateInput, LeadDecisionEventUncheckedCreateInput>
+  }
+
+  /**
+   * LeadDecisionEvent createMany
+   */
+  export type LeadDecisionEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LeadDecisionEvents.
+     */
+    data: LeadDecisionEventCreateManyInput | LeadDecisionEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LeadDecisionEvent createManyAndReturn
+   */
+  export type LeadDecisionEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many LeadDecisionEvents.
+     */
+    data: LeadDecisionEventCreateManyInput | LeadDecisionEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LeadDecisionEvent update
+   */
+  export type LeadDecisionEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LeadDecisionEvent.
+     */
+    data: XOR<LeadDecisionEventUpdateInput, LeadDecisionEventUncheckedUpdateInput>
+    /**
+     * Choose, which LeadDecisionEvent to update.
+     */
+    where: LeadDecisionEventWhereUniqueInput
+  }
+
+  /**
+   * LeadDecisionEvent updateMany
+   */
+  export type LeadDecisionEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LeadDecisionEvents.
+     */
+    data: XOR<LeadDecisionEventUpdateManyMutationInput, LeadDecisionEventUncheckedUpdateManyInput>
+    /**
+     * Filter which LeadDecisionEvents to update
+     */
+    where?: LeadDecisionEventWhereInput
+    /**
+     * Limit how many LeadDecisionEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LeadDecisionEvent updateManyAndReturn
+   */
+  export type LeadDecisionEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * The data used to update LeadDecisionEvents.
+     */
+    data: XOR<LeadDecisionEventUpdateManyMutationInput, LeadDecisionEventUncheckedUpdateManyInput>
+    /**
+     * Filter which LeadDecisionEvents to update
+     */
+    where?: LeadDecisionEventWhereInput
+    /**
+     * Limit how many LeadDecisionEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LeadDecisionEvent upsert
+   */
+  export type LeadDecisionEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LeadDecisionEvent to update in case it exists.
+     */
+    where: LeadDecisionEventWhereUniqueInput
+    /**
+     * In case the LeadDecisionEvent found by the `where` argument doesn't exist, create a new LeadDecisionEvent with this data.
+     */
+    create: XOR<LeadDecisionEventCreateInput, LeadDecisionEventUncheckedCreateInput>
+    /**
+     * In case the LeadDecisionEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LeadDecisionEventUpdateInput, LeadDecisionEventUncheckedUpdateInput>
+  }
+
+  /**
+   * LeadDecisionEvent delete
+   */
+  export type LeadDecisionEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventInclude<ExtArgs> | null
+    /**
+     * Filter which LeadDecisionEvent to delete.
+     */
+    where: LeadDecisionEventWhereUniqueInput
+  }
+
+  /**
+   * LeadDecisionEvent deleteMany
+   */
+  export type LeadDecisionEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LeadDecisionEvents to delete
+     */
+    where?: LeadDecisionEventWhereInput
+    /**
+     * Limit how many LeadDecisionEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LeadDecisionEvent without action
+   */
+  export type LeadDecisionEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeadDecisionEvent
+     */
+    select?: LeadDecisionEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeadDecisionEvent
+     */
+    omit?: LeadDecisionEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeadDecisionEventInclude<ExtArgs> | null
   }
 
 
@@ -34512,6 +35789,7 @@ export namespace Prisma {
     phoneCheckErrorCode: 'phoneCheckErrorCode',
     phoneCheckNextAttemptAt: 'phoneCheckNextAttemptAt',
     decisionLeaseUntil: 'decisionLeaseUntil',
+    decisionAttemptNumber: 'decisionAttemptNumber',
     addressCheckId: 'addressCheckId',
     name: 'name',
     phone: 'phone',
@@ -34544,6 +35822,20 @@ export namespace Prisma {
   };
 
   export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
+
+
+  export const LeadDecisionEventScalarFieldEnum: {
+    id: 'id',
+    leadId: 'leadId',
+    type: 'type',
+    outcome: 'outcome',
+    attemptNumber: 'attemptNumber',
+    actorId: 'actorId',
+    evidence: 'evidence',
+    createdAt: 'createdAt'
+  };
+
+  export type LeadDecisionEventScalarFieldEnum = (typeof LeadDecisionEventScalarFieldEnum)[keyof typeof LeadDecisionEventScalarFieldEnum]
 
 
   export const LeadNotificationScalarFieldEnum: {
@@ -34845,14 +36137,14 @@ export namespace Prisma {
    * Reference to a field of type 'CityOfficeState'
    */
   export type EnumCityOfficeStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CityOfficeState'>
-
+    
 
 
   /**
    * Reference to a field of type 'CityOfficeState[]'
    */
   export type ListEnumCityOfficeStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CityOfficeState[]'>
-
+    
 
 
   /**
@@ -34908,28 +36200,28 @@ export namespace Prisma {
    * Reference to a field of type 'TariffAvailability'
    */
   export type EnumTariffAvailabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TariffAvailability'>
-
+    
 
 
   /**
    * Reference to a field of type 'TariffAvailability[]'
    */
   export type ListEnumTariffAvailabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TariffAvailability[]'>
-
+    
 
 
   /**
    * Reference to a field of type 'TariffArchiveReason'
    */
   export type EnumTariffArchiveReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TariffArchiveReason'>
-
+    
 
 
   /**
    * Reference to a field of type 'TariffArchiveReason[]'
    */
   export type ListEnumTariffArchiveReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TariffArchiveReason[]'>
-
+    
 
 
   /**
@@ -34978,14 +36270,14 @@ export namespace Prisma {
    * Reference to a field of type 'LeadPhoneCheckStatus'
    */
   export type EnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadPhoneCheckStatus'>
-
+    
 
 
   /**
    * Reference to a field of type 'LeadPhoneCheckStatus[]'
    */
   export type ListEnumLeadPhoneCheckStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadPhoneCheckStatus[]'>
-
+    
 
 
   /**
@@ -36689,6 +37981,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: StringNullableFilter<"Lead"> | string | null
     phoneCheckNextAttemptAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
     decisionLeaseUntil?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    decisionAttemptNumber?: IntNullableFilter<"Lead"> | number | null
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
@@ -36724,6 +38017,7 @@ export namespace Prisma {
     tariff?: XOR<TariffNullableScalarRelationFilter, TariffWhereInput> | null
     addressCheck?: XOR<AddressCheckNullableScalarRelationFilter, AddressCheckWhereInput> | null
     history?: LeadStatusHistoryListRelationFilter
+    decisionEvents?: LeadDecisionEventListRelationFilter
     deliveryAttempts?: LeadDeliveryAttemptListRelationFilter
     notification?: XOR<LeadNotificationNullableScalarRelationFilter, LeadNotificationWhereInput> | null
     activityEvents?: LeadActivityEventListRelationFilter
@@ -36758,6 +38052,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: SortOrderInput | SortOrder
     phoneCheckNextAttemptAt?: SortOrderInput | SortOrder
     decisionLeaseUntil?: SortOrderInput | SortOrder
+    decisionAttemptNumber?: SortOrderInput | SortOrder
     addressCheckId?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     phone?: SortOrder
@@ -36793,6 +38088,7 @@ export namespace Prisma {
     tariff?: TariffOrderByWithRelationInput
     addressCheck?: AddressCheckOrderByWithRelationInput
     history?: LeadStatusHistoryOrderByRelationAggregateInput
+    decisionEvents?: LeadDecisionEventOrderByRelationAggregateInput
     deliveryAttempts?: LeadDeliveryAttemptOrderByRelationAggregateInput
     notification?: LeadNotificationOrderByWithRelationInput
     activityEvents?: LeadActivityEventOrderByRelationAggregateInput
@@ -36832,6 +38128,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: StringNullableFilter<"Lead"> | string | null
     phoneCheckNextAttemptAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
     decisionLeaseUntil?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    decisionAttemptNumber?: IntNullableFilter<"Lead"> | number | null
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
@@ -36865,6 +38162,7 @@ export namespace Prisma {
     tariff?: XOR<TariffNullableScalarRelationFilter, TariffWhereInput> | null
     addressCheck?: XOR<AddressCheckNullableScalarRelationFilter, AddressCheckWhereInput> | null
     history?: LeadStatusHistoryListRelationFilter
+    decisionEvents?: LeadDecisionEventListRelationFilter
     deliveryAttempts?: LeadDeliveryAttemptListRelationFilter
     notification?: XOR<LeadNotificationNullableScalarRelationFilter, LeadNotificationWhereInput> | null
     activityEvents?: LeadActivityEventListRelationFilter
@@ -36899,6 +38197,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: SortOrderInput | SortOrder
     phoneCheckNextAttemptAt?: SortOrderInput | SortOrder
     decisionLeaseUntil?: SortOrderInput | SortOrder
+    decisionAttemptNumber?: SortOrderInput | SortOrder
     addressCheckId?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     phone?: SortOrder
@@ -36964,6 +38263,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     phoneCheckNextAttemptAt?: DateTimeNullableWithAggregatesFilter<"Lead"> | Date | string | null
     decisionLeaseUntil?: DateTimeNullableWithAggregatesFilter<"Lead"> | Date | string | null
+    decisionAttemptNumber?: IntNullableWithAggregatesFilter<"Lead"> | number | null
     addressCheckId?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     name?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     phone?: StringWithAggregatesFilter<"Lead"> | string
@@ -36993,6 +38293,78 @@ export namespace Prisma {
     apiResult?: JsonNullableWithAggregatesFilter<"Lead">
     createdAt?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
+  }
+
+  export type LeadDecisionEventWhereInput = {
+    AND?: LeadDecisionEventWhereInput | LeadDecisionEventWhereInput[]
+    OR?: LeadDecisionEventWhereInput[]
+    NOT?: LeadDecisionEventWhereInput | LeadDecisionEventWhereInput[]
+    id?: StringFilter<"LeadDecisionEvent"> | string
+    leadId?: StringFilter<"LeadDecisionEvent"> | string
+    type?: StringFilter<"LeadDecisionEvent"> | string
+    outcome?: StringFilter<"LeadDecisionEvent"> | string
+    attemptNumber?: IntNullableFilter<"LeadDecisionEvent"> | number | null
+    actorId?: StringNullableFilter<"LeadDecisionEvent"> | string | null
+    evidence?: JsonNullableFilter<"LeadDecisionEvent">
+    createdAt?: DateTimeFilter<"LeadDecisionEvent"> | Date | string
+    lead?: XOR<LeadScalarRelationFilter, LeadWhereInput>
+  }
+
+  export type LeadDecisionEventOrderByWithRelationInput = {
+    id?: SortOrder
+    leadId?: SortOrder
+    type?: SortOrder
+    outcome?: SortOrder
+    attemptNumber?: SortOrderInput | SortOrder
+    actorId?: SortOrderInput | SortOrder
+    evidence?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    lead?: LeadOrderByWithRelationInput
+  }
+
+  export type LeadDecisionEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LeadDecisionEventWhereInput | LeadDecisionEventWhereInput[]
+    OR?: LeadDecisionEventWhereInput[]
+    NOT?: LeadDecisionEventWhereInput | LeadDecisionEventWhereInput[]
+    leadId?: StringFilter<"LeadDecisionEvent"> | string
+    type?: StringFilter<"LeadDecisionEvent"> | string
+    outcome?: StringFilter<"LeadDecisionEvent"> | string
+    attemptNumber?: IntNullableFilter<"LeadDecisionEvent"> | number | null
+    actorId?: StringNullableFilter<"LeadDecisionEvent"> | string | null
+    evidence?: JsonNullableFilter<"LeadDecisionEvent">
+    createdAt?: DateTimeFilter<"LeadDecisionEvent"> | Date | string
+    lead?: XOR<LeadScalarRelationFilter, LeadWhereInput>
+  }, "id">
+
+  export type LeadDecisionEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    leadId?: SortOrder
+    type?: SortOrder
+    outcome?: SortOrder
+    attemptNumber?: SortOrderInput | SortOrder
+    actorId?: SortOrderInput | SortOrder
+    evidence?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: LeadDecisionEventCountOrderByAggregateInput
+    _avg?: LeadDecisionEventAvgOrderByAggregateInput
+    _max?: LeadDecisionEventMaxOrderByAggregateInput
+    _min?: LeadDecisionEventMinOrderByAggregateInput
+    _sum?: LeadDecisionEventSumOrderByAggregateInput
+  }
+
+  export type LeadDecisionEventScalarWhereWithAggregatesInput = {
+    AND?: LeadDecisionEventScalarWhereWithAggregatesInput | LeadDecisionEventScalarWhereWithAggregatesInput[]
+    OR?: LeadDecisionEventScalarWhereWithAggregatesInput[]
+    NOT?: LeadDecisionEventScalarWhereWithAggregatesInput | LeadDecisionEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LeadDecisionEvent"> | string
+    leadId?: StringWithAggregatesFilter<"LeadDecisionEvent"> | string
+    type?: StringWithAggregatesFilter<"LeadDecisionEvent"> | string
+    outcome?: StringWithAggregatesFilter<"LeadDecisionEvent"> | string
+    attemptNumber?: IntNullableWithAggregatesFilter<"LeadDecisionEvent"> | number | null
+    actorId?: StringNullableWithAggregatesFilter<"LeadDecisionEvent"> | string | null
+    evidence?: JsonNullableWithAggregatesFilter<"LeadDecisionEvent">
+    createdAt?: DateTimeWithAggregatesFilter<"LeadDecisionEvent"> | Date | string
   }
 
   export type LeadNotificationWhereInput = {
@@ -39394,6 +40766,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -39427,6 +40800,7 @@ export namespace Prisma {
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
@@ -39461,6 +40835,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -39491,6 +40866,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
@@ -39520,6 +40896,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39553,6 +40930,7 @@ export namespace Prisma {
     tariff?: TariffUpdateOneWithoutLeadsNestedInput
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
@@ -39587,6 +40965,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -39617,6 +40996,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
@@ -39650,6 +41030,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -39703,6 +41084,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -39758,6 +41140,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -39787,6 +41170,82 @@ export namespace Prisma {
     apiResult?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadDecisionEventCreateInput = {
+    id?: string
+    type: string
+    outcome: string
+    attemptNumber?: number | null
+    actorId?: string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    lead: LeadCreateNestedOneWithoutDecisionEventsInput
+  }
+
+  export type LeadDecisionEventUncheckedCreateInput = {
+    id?: string
+    leadId: string
+    type: string
+    outcome: string
+    attemptNumber?: number | null
+    actorId?: string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type LeadDecisionEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    attemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lead?: LeadUpdateOneRequiredWithoutDecisionEventsNestedInput
+  }
+
+  export type LeadDecisionEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    leadId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    attemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadDecisionEventCreateManyInput = {
+    id?: string
+    leadId: string
+    type: string
+    outcome: string
+    attemptNumber?: number | null
+    actorId?: string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type LeadDecisionEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    attemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadDecisionEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    leadId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    attemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LeadNotificationCreateInput = {
@@ -42073,6 +43532,12 @@ export namespace Prisma {
     none?: LeadStatusHistoryWhereInput
   }
 
+  export type LeadDecisionEventListRelationFilter = {
+    every?: LeadDecisionEventWhereInput
+    some?: LeadDecisionEventWhereInput
+    none?: LeadDecisionEventWhereInput
+  }
+
   export type LeadDeliveryAttemptListRelationFilter = {
     every?: LeadDeliveryAttemptWhereInput
     some?: LeadDeliveryAttemptWhereInput
@@ -42102,6 +43567,10 @@ export namespace Prisma {
   }
 
   export type LeadStatusHistoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LeadDecisionEventOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -42143,6 +43612,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: SortOrder
     phoneCheckNextAttemptAt?: SortOrder
     decisionLeaseUntil?: SortOrder
+    decisionAttemptNumber?: SortOrder
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -42179,6 +43649,7 @@ export namespace Prisma {
     commentAnalysisVersion?: SortOrder
     phoneCheckQc?: SortOrder
     phoneCheckAttempt?: SortOrder
+    decisionAttemptNumber?: SortOrder
     timeOnSiteSeconds?: SortOrder
   }
 
@@ -42206,6 +43677,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: SortOrder
     phoneCheckNextAttemptAt?: SortOrder
     decisionLeaseUntil?: SortOrder
+    decisionAttemptNumber?: SortOrder
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -42257,6 +43729,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: SortOrder
     phoneCheckNextAttemptAt?: SortOrder
     decisionLeaseUntil?: SortOrder
+    decisionAttemptNumber?: SortOrder
     addressCheckId?: SortOrder
     name?: SortOrder
     phone?: SortOrder
@@ -42289,6 +43762,7 @@ export namespace Prisma {
     commentAnalysisVersion?: SortOrder
     phoneCheckQc?: SortOrder
     phoneCheckAttempt?: SortOrder
+    decisionAttemptNumber?: SortOrder
     timeOnSiteSeconds?: SortOrder
   }
 
@@ -42332,16 +43806,55 @@ export namespace Prisma {
     _max?: NestedEnumLeadStatusFilter<$PrismaModel>
   }
 
+  export type LeadScalarRelationFilter = {
+    is?: LeadWhereInput
+    isNot?: LeadWhereInput
+  }
+
+  export type LeadDecisionEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    leadId?: SortOrder
+    type?: SortOrder
+    outcome?: SortOrder
+    attemptNumber?: SortOrder
+    actorId?: SortOrder
+    evidence?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LeadDecisionEventAvgOrderByAggregateInput = {
+    attemptNumber?: SortOrder
+  }
+
+  export type LeadDecisionEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    leadId?: SortOrder
+    type?: SortOrder
+    outcome?: SortOrder
+    attemptNumber?: SortOrder
+    actorId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LeadDecisionEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    leadId?: SortOrder
+    type?: SortOrder
+    outcome?: SortOrder
+    attemptNumber?: SortOrder
+    actorId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LeadDecisionEventSumOrderByAggregateInput = {
+    attemptNumber?: SortOrder
+  }
+
   export type EnumLeadNotificationStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LeadNotificationStatus | EnumLeadNotificationStatusFieldRefInput<$PrismaModel>
     in?: $Enums.LeadNotificationStatus[] | ListEnumLeadNotificationStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.LeadNotificationStatus[] | ListEnumLeadNotificationStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumLeadNotificationStatusFilter<$PrismaModel> | $Enums.LeadNotificationStatus
-  }
-
-  export type LeadScalarRelationFilter = {
-    is?: LeadWhereInput
-    isNot?: LeadWhereInput
   }
 
   export type LeadNotificationCountOrderByAggregateInput = {
@@ -44588,6 +46101,13 @@ export namespace Prisma {
     connect?: LeadStatusHistoryWhereUniqueInput | LeadStatusHistoryWhereUniqueInput[]
   }
 
+  export type LeadDecisionEventCreateNestedManyWithoutLeadInput = {
+    create?: XOR<LeadDecisionEventCreateWithoutLeadInput, LeadDecisionEventUncheckedCreateWithoutLeadInput> | LeadDecisionEventCreateWithoutLeadInput[] | LeadDecisionEventUncheckedCreateWithoutLeadInput[]
+    connectOrCreate?: LeadDecisionEventCreateOrConnectWithoutLeadInput | LeadDecisionEventCreateOrConnectWithoutLeadInput[]
+    createMany?: LeadDecisionEventCreateManyLeadInputEnvelope
+    connect?: LeadDecisionEventWhereUniqueInput | LeadDecisionEventWhereUniqueInput[]
+  }
+
   export type LeadDeliveryAttemptCreateNestedManyWithoutLeadInput = {
     create?: XOR<LeadDeliveryAttemptCreateWithoutLeadInput, LeadDeliveryAttemptUncheckedCreateWithoutLeadInput> | LeadDeliveryAttemptCreateWithoutLeadInput[] | LeadDeliveryAttemptUncheckedCreateWithoutLeadInput[]
     connectOrCreate?: LeadDeliveryAttemptCreateOrConnectWithoutLeadInput | LeadDeliveryAttemptCreateOrConnectWithoutLeadInput[]
@@ -44633,6 +46153,13 @@ export namespace Prisma {
     connectOrCreate?: LeadStatusHistoryCreateOrConnectWithoutLeadInput | LeadStatusHistoryCreateOrConnectWithoutLeadInput[]
     createMany?: LeadStatusHistoryCreateManyLeadInputEnvelope
     connect?: LeadStatusHistoryWhereUniqueInput | LeadStatusHistoryWhereUniqueInput[]
+  }
+
+  export type LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput = {
+    create?: XOR<LeadDecisionEventCreateWithoutLeadInput, LeadDecisionEventUncheckedCreateWithoutLeadInput> | LeadDecisionEventCreateWithoutLeadInput[] | LeadDecisionEventUncheckedCreateWithoutLeadInput[]
+    connectOrCreate?: LeadDecisionEventCreateOrConnectWithoutLeadInput | LeadDecisionEventCreateOrConnectWithoutLeadInput[]
+    createMany?: LeadDecisionEventCreateManyLeadInputEnvelope
+    connect?: LeadDecisionEventWhereUniqueInput | LeadDecisionEventWhereUniqueInput[]
   }
 
   export type LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput = {
@@ -44745,6 +46272,20 @@ export namespace Prisma {
     deleteMany?: LeadStatusHistoryScalarWhereInput | LeadStatusHistoryScalarWhereInput[]
   }
 
+  export type LeadDecisionEventUpdateManyWithoutLeadNestedInput = {
+    create?: XOR<LeadDecisionEventCreateWithoutLeadInput, LeadDecisionEventUncheckedCreateWithoutLeadInput> | LeadDecisionEventCreateWithoutLeadInput[] | LeadDecisionEventUncheckedCreateWithoutLeadInput[]
+    connectOrCreate?: LeadDecisionEventCreateOrConnectWithoutLeadInput | LeadDecisionEventCreateOrConnectWithoutLeadInput[]
+    upsert?: LeadDecisionEventUpsertWithWhereUniqueWithoutLeadInput | LeadDecisionEventUpsertWithWhereUniqueWithoutLeadInput[]
+    createMany?: LeadDecisionEventCreateManyLeadInputEnvelope
+    set?: LeadDecisionEventWhereUniqueInput | LeadDecisionEventWhereUniqueInput[]
+    disconnect?: LeadDecisionEventWhereUniqueInput | LeadDecisionEventWhereUniqueInput[]
+    delete?: LeadDecisionEventWhereUniqueInput | LeadDecisionEventWhereUniqueInput[]
+    connect?: LeadDecisionEventWhereUniqueInput | LeadDecisionEventWhereUniqueInput[]
+    update?: LeadDecisionEventUpdateWithWhereUniqueWithoutLeadInput | LeadDecisionEventUpdateWithWhereUniqueWithoutLeadInput[]
+    updateMany?: LeadDecisionEventUpdateManyWithWhereWithoutLeadInput | LeadDecisionEventUpdateManyWithWhereWithoutLeadInput[]
+    deleteMany?: LeadDecisionEventScalarWhereInput | LeadDecisionEventScalarWhereInput[]
+  }
+
   export type LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput = {
     create?: XOR<LeadDeliveryAttemptCreateWithoutLeadInput, LeadDeliveryAttemptUncheckedCreateWithoutLeadInput> | LeadDeliveryAttemptCreateWithoutLeadInput[] | LeadDeliveryAttemptUncheckedCreateWithoutLeadInput[]
     connectOrCreate?: LeadDeliveryAttemptCreateOrConnectWithoutLeadInput | LeadDeliveryAttemptCreateOrConnectWithoutLeadInput[]
@@ -44835,6 +46376,20 @@ export namespace Prisma {
     deleteMany?: LeadStatusHistoryScalarWhereInput | LeadStatusHistoryScalarWhereInput[]
   }
 
+  export type LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput = {
+    create?: XOR<LeadDecisionEventCreateWithoutLeadInput, LeadDecisionEventUncheckedCreateWithoutLeadInput> | LeadDecisionEventCreateWithoutLeadInput[] | LeadDecisionEventUncheckedCreateWithoutLeadInput[]
+    connectOrCreate?: LeadDecisionEventCreateOrConnectWithoutLeadInput | LeadDecisionEventCreateOrConnectWithoutLeadInput[]
+    upsert?: LeadDecisionEventUpsertWithWhereUniqueWithoutLeadInput | LeadDecisionEventUpsertWithWhereUniqueWithoutLeadInput[]
+    createMany?: LeadDecisionEventCreateManyLeadInputEnvelope
+    set?: LeadDecisionEventWhereUniqueInput | LeadDecisionEventWhereUniqueInput[]
+    disconnect?: LeadDecisionEventWhereUniqueInput | LeadDecisionEventWhereUniqueInput[]
+    delete?: LeadDecisionEventWhereUniqueInput | LeadDecisionEventWhereUniqueInput[]
+    connect?: LeadDecisionEventWhereUniqueInput | LeadDecisionEventWhereUniqueInput[]
+    update?: LeadDecisionEventUpdateWithWhereUniqueWithoutLeadInput | LeadDecisionEventUpdateWithWhereUniqueWithoutLeadInput[]
+    updateMany?: LeadDecisionEventUpdateManyWithWhereWithoutLeadInput | LeadDecisionEventUpdateManyWithWhereWithoutLeadInput[]
+    deleteMany?: LeadDecisionEventScalarWhereInput | LeadDecisionEventScalarWhereInput[]
+  }
+
   export type LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput = {
     create?: XOR<LeadDeliveryAttemptCreateWithoutLeadInput, LeadDeliveryAttemptUncheckedCreateWithoutLeadInput> | LeadDeliveryAttemptCreateWithoutLeadInput[] | LeadDeliveryAttemptUncheckedCreateWithoutLeadInput[]
     connectOrCreate?: LeadDeliveryAttemptCreateOrConnectWithoutLeadInput | LeadDeliveryAttemptCreateOrConnectWithoutLeadInput[]
@@ -44899,6 +46454,20 @@ export namespace Prisma {
     update?: LeadUpdateWithWhereUniqueWithoutDuplicateOfInput | LeadUpdateWithWhereUniqueWithoutDuplicateOfInput[]
     updateMany?: LeadUpdateManyWithWhereWithoutDuplicateOfInput | LeadUpdateManyWithWhereWithoutDuplicateOfInput[]
     deleteMany?: LeadScalarWhereInput | LeadScalarWhereInput[]
+  }
+
+  export type LeadCreateNestedOneWithoutDecisionEventsInput = {
+    create?: XOR<LeadCreateWithoutDecisionEventsInput, LeadUncheckedCreateWithoutDecisionEventsInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutDecisionEventsInput
+    connect?: LeadWhereUniqueInput
+  }
+
+  export type LeadUpdateOneRequiredWithoutDecisionEventsNestedInput = {
+    create?: XOR<LeadCreateWithoutDecisionEventsInput, LeadUncheckedCreateWithoutDecisionEventsInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutDecisionEventsInput
+    upsert?: LeadUpsertWithoutDecisionEventsInput
+    connect?: LeadWhereUniqueInput
+    update?: XOR<XOR<LeadUpdateToOneWithWhereWithoutDecisionEventsInput, LeadUpdateWithoutDecisionEventsInput>, LeadUncheckedUpdateWithoutDecisionEventsInput>
   }
 
   export type LeadCreateNestedOneWithoutNotificationInput = {
@@ -46503,6 +48072,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -46535,6 +48105,7 @@ export namespace Prisma {
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
@@ -46568,6 +48139,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -46598,6 +48170,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
@@ -47127,6 +48700,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: StringNullableFilter<"Lead"> | string | null
     phoneCheckNextAttemptAt?: DateTimeNullableFilter<"Lead"> | Date | string | null
     decisionLeaseUntil?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    decisionAttemptNumber?: IntNullableFilter<"Lead"> | number | null
     addressCheckId?: StringNullableFilter<"Lead"> | string | null
     name?: StringNullableFilter<"Lead"> | string | null
     phone?: StringFilter<"Lead"> | string
@@ -49346,6 +50920,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -49378,6 +50953,7 @@ export namespace Prisma {
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
@@ -49411,6 +50987,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -49441,6 +51018,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
@@ -49860,6 +51438,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -49892,6 +51471,7 @@ export namespace Prisma {
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
@@ -49925,6 +51505,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -49955,6 +51536,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
@@ -50413,6 +51995,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -50445,6 +52028,7 @@ export namespace Prisma {
     page?: PageCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
@@ -50478,6 +52062,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -50508,6 +52093,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
@@ -51465,6 +53051,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -51497,6 +53084,7 @@ export namespace Prisma {
     page?: PageCreateNestedOneWithoutLeadsInput
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
@@ -51531,6 +53119,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -51560,6 +53149,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
@@ -52017,6 +53607,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LeadDecisionEventCreateWithoutLeadInput = {
+    id?: string
+    type: string
+    outcome: string
+    attemptNumber?: number | null
+    actorId?: string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type LeadDecisionEventUncheckedCreateWithoutLeadInput = {
+    id?: string
+    type: string
+    outcome: string
+    attemptNumber?: number | null
+    actorId?: string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type LeadDecisionEventCreateOrConnectWithoutLeadInput = {
+    where: LeadDecisionEventWhereUniqueInput
+    create: XOR<LeadDecisionEventCreateWithoutLeadInput, LeadDecisionEventUncheckedCreateWithoutLeadInput>
+  }
+
+  export type LeadDecisionEventCreateManyLeadInputEnvelope = {
+    data: LeadDecisionEventCreateManyLeadInput | LeadDecisionEventCreateManyLeadInput[]
+    skipDuplicates?: boolean
+  }
+
   export type LeadDeliveryAttemptCreateWithoutLeadInput = {
     id?: string
     attemptNumber: number
@@ -52166,6 +53786,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -52199,6 +53820,7 @@ export namespace Prisma {
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
@@ -52232,6 +53854,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -52262,6 +53885,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
@@ -52295,6 +53919,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -52328,6 +53953,7 @@ export namespace Prisma {
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
@@ -52361,6 +53987,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -52390,6 +54017,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
@@ -52699,6 +54327,36 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"LeadStatusHistory"> | Date | string
   }
 
+  export type LeadDecisionEventUpsertWithWhereUniqueWithoutLeadInput = {
+    where: LeadDecisionEventWhereUniqueInput
+    update: XOR<LeadDecisionEventUpdateWithoutLeadInput, LeadDecisionEventUncheckedUpdateWithoutLeadInput>
+    create: XOR<LeadDecisionEventCreateWithoutLeadInput, LeadDecisionEventUncheckedCreateWithoutLeadInput>
+  }
+
+  export type LeadDecisionEventUpdateWithWhereUniqueWithoutLeadInput = {
+    where: LeadDecisionEventWhereUniqueInput
+    data: XOR<LeadDecisionEventUpdateWithoutLeadInput, LeadDecisionEventUncheckedUpdateWithoutLeadInput>
+  }
+
+  export type LeadDecisionEventUpdateManyWithWhereWithoutLeadInput = {
+    where: LeadDecisionEventScalarWhereInput
+    data: XOR<LeadDecisionEventUpdateManyMutationInput, LeadDecisionEventUncheckedUpdateManyWithoutLeadInput>
+  }
+
+  export type LeadDecisionEventScalarWhereInput = {
+    AND?: LeadDecisionEventScalarWhereInput | LeadDecisionEventScalarWhereInput[]
+    OR?: LeadDecisionEventScalarWhereInput[]
+    NOT?: LeadDecisionEventScalarWhereInput | LeadDecisionEventScalarWhereInput[]
+    id?: StringFilter<"LeadDecisionEvent"> | string
+    leadId?: StringFilter<"LeadDecisionEvent"> | string
+    type?: StringFilter<"LeadDecisionEvent"> | string
+    outcome?: StringFilter<"LeadDecisionEvent"> | string
+    attemptNumber?: IntNullableFilter<"LeadDecisionEvent"> | number | null
+    actorId?: StringNullableFilter<"LeadDecisionEvent"> | string | null
+    evidence?: JsonNullableFilter<"LeadDecisionEvent">
+    createdAt?: DateTimeFilter<"LeadDecisionEvent"> | Date | string
+  }
+
   export type LeadDeliveryAttemptUpsertWithWhereUniqueWithoutLeadInput = {
     where: LeadDeliveryAttemptWhereUniqueInput
     update: XOR<LeadDeliveryAttemptUpdateWithoutLeadInput, LeadDeliveryAttemptUncheckedUpdateWithoutLeadInput>
@@ -52866,6 +54524,295 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    objectType?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceType?: NullableEnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    utm?: NullableJsonNullValueInput | InputJsonValue
+    referrer?: NullableStringFieldUpdateOperationsInput | string | null
+    pageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    formName?: NullableStringFieldUpdateOperationsInput | string | null
+    timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
+    duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
+    externalLeadId?: NullableStringFieldUpdateOperationsInput | string | null
+    externalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    contractResult?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    apiResult?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutLeadsNestedInput
+    city?: CityUpdateOneRequiredWithoutLeadsNestedInput
+    page?: PageUpdateOneWithoutLeadsNestedInput
+    tariff?: TariffUpdateOneWithoutLeadsNestedInput
+    addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
+    history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
+    deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
+    notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
+    activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
+    duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
+  }
+
+  export type LeadUncheckedUpdateWithoutDuplicatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    cityId?: StringFieldUpdateOperationsInput | string
+    pageId?: NullableStringFieldUpdateOperationsInput | string | null
+    tariffId?: NullableStringFieldUpdateOperationsInput | string | null
+    configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    commentAnalysisVersion?: NullableIntFieldUpdateOperationsInput | number | null
+    commentAnalysisOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+    commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
+    commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
+    consentVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    consentAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    objectType?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceType?: NullableEnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    utm?: NullableJsonNullValueInput | InputJsonValue
+    referrer?: NullableStringFieldUpdateOperationsInput | string | null
+    pageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    formName?: NullableStringFieldUpdateOperationsInput | string | null
+    timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
+    duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
+    duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
+    externalLeadId?: NullableStringFieldUpdateOperationsInput | string | null
+    externalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    contractResult?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    apiResult?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
+    deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
+    notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
+    activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
+    accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
+  }
+
+  export type LeadUpsertWithWhereUniqueWithoutDuplicateOfInput = {
+    where: LeadWhereUniqueInput
+    update: XOR<LeadUpdateWithoutDuplicateOfInput, LeadUncheckedUpdateWithoutDuplicateOfInput>
+    create: XOR<LeadCreateWithoutDuplicateOfInput, LeadUncheckedCreateWithoutDuplicateOfInput>
+  }
+
+  export type LeadUpdateWithWhereUniqueWithoutDuplicateOfInput = {
+    where: LeadWhereUniqueInput
+    data: XOR<LeadUpdateWithoutDuplicateOfInput, LeadUncheckedUpdateWithoutDuplicateOfInput>
+  }
+
+  export type LeadUpdateManyWithWhereWithoutDuplicateOfInput = {
+    where: LeadScalarWhereInput
+    data: XOR<LeadUpdateManyMutationInput, LeadUncheckedUpdateManyWithoutDuplicateOfInput>
+  }
+
+  export type LeadCreateWithoutDecisionEventsInput = {
+    id?: string
+    configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
+    comment?: string | null
+    commentAnalysisVersion?: number | null
+    commentAnalysisOutcome?: string | null
+    commentAnalysisCategory?: string | null
+    commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
+    commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
+    name?: string | null
+    phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
+    email?: string | null
+    address?: string | null
+    objectType?: string | null
+    serviceType?: $Enums.ServiceType | null
+    source?: string | null
+    utm?: NullableJsonNullValueInput | InputJsonValue
+    referrer?: string | null
+    pageUrl?: string | null
+    formName?: string | null
+    timeOnSiteSeconds?: number | null
+    deviceType?: string | null
+    viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    processingStatus?: $Enums.LeadProcessingStatus
+    duplicateReason?: string | null
+    deliveryKey?: string | null
+    externalLeadId?: string | null
+    externalStatus?: string | null
+    contractResult?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.LeadStatus
+    apiResult?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutLeadsInput
+    city: CityCreateNestedOneWithoutLeadsInput
+    page?: PageCreateNestedOneWithoutLeadsInput
+    tariff?: TariffCreateNestedOneWithoutLeadsInput
+    addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
+    history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
+    notification?: LeadNotificationCreateNestedOneWithoutLeadInput
+    activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
+    duplicateOf?: LeadCreateNestedOneWithoutDuplicatesInput
+    duplicates?: LeadCreateNestedManyWithoutDuplicateOfInput
+  }
+
+  export type LeadUncheckedCreateWithoutDecisionEventsInput = {
+    id?: string
+    siteId: string
+    cityId: string
+    pageId?: string | null
+    tariffId?: string | null
+    configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: string | null
+    reasonLabel?: string | null
+    reasonRoute?: string | null
+    reasonRegistryVersion?: number | null
+    comment?: string | null
+    commentAnalysisVersion?: number | null
+    commentAnalysisOutcome?: string | null
+    commentAnalysisCategory?: string | null
+    commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
+    commentAnalysisExplanation?: string | null
+    phoneCheckStatus?: $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: number | null
+    phoneCheckNormalized?: string | null
+    phoneCheckCheckedAt?: Date | string | null
+    phoneCheckAttempt?: number | null
+    phoneCheckSource?: string | null
+    phoneCheckErrorCode?: string | null
+    phoneCheckNextAttemptAt?: Date | string | null
+    decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
+    addressCheckId?: string | null
+    name?: string | null
+    phone: string
+    submissionKey?: string | null
+    consentVersion?: string | null
+    consentAcceptedAt?: Date | string | null
+    email?: string | null
+    address?: string | null
+    objectType?: string | null
+    serviceType?: $Enums.ServiceType | null
+    source?: string | null
+    utm?: NullableJsonNullValueInput | InputJsonValue
+    referrer?: string | null
+    pageUrl?: string | null
+    formName?: string | null
+    timeOnSiteSeconds?: number | null
+    deviceType?: string | null
+    viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    processingStatus?: $Enums.LeadProcessingStatus
+    duplicateOfId?: string | null
+    duplicateReason?: string | null
+    deliveryKey?: string | null
+    externalLeadId?: string | null
+    externalStatus?: string | null
+    contractResult?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.LeadStatus
+    apiResult?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
+    notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
+    activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
+    accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
+    duplicates?: LeadUncheckedCreateNestedManyWithoutDuplicateOfInput
+  }
+
+  export type LeadCreateOrConnectWithoutDecisionEventsInput = {
+    where: LeadWhereUniqueInput
+    create: XOR<LeadCreateWithoutDecisionEventsInput, LeadUncheckedCreateWithoutDecisionEventsInput>
+  }
+
+  export type LeadUpsertWithoutDecisionEventsInput = {
+    update: XOR<LeadUpdateWithoutDecisionEventsInput, LeadUncheckedUpdateWithoutDecisionEventsInput>
+    create: XOR<LeadCreateWithoutDecisionEventsInput, LeadUncheckedCreateWithoutDecisionEventsInput>
+    where?: LeadWhereInput
+  }
+
+  export type LeadUpdateToOneWithWhereWithoutDecisionEventsInput = {
+    where?: LeadWhereInput
+    data: XOR<LeadUpdateWithoutDecisionEventsInput, LeadUncheckedUpdateWithoutDecisionEventsInput>
+  }
+
+  export type LeadUpdateWithoutDecisionEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    configurationSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRoute?: NullableStringFieldUpdateOperationsInput | string | null
+    reasonRegistryVersion?: NullableIntFieldUpdateOperationsInput | number | null
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    commentAnalysisVersion?: NullableIntFieldUpdateOperationsInput | number | null
+    commentAnalysisOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+    commentAnalysisCategory?: NullableStringFieldUpdateOperationsInput | string | null
+    commentAnalysisEvidence?: NullableJsonNullValueInput | InputJsonValue
+    commentAnalysisExplanation?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckStatus?: NullableEnumLeadPhoneCheckStatusFieldUpdateOperationsInput | $Enums.LeadPhoneCheckStatus | null
+    phoneCheckQc?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckNormalized?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    phoneCheckAttempt?: NullableIntFieldUpdateOperationsInput | number | null
+    phoneCheckSource?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52904,9 +54851,10 @@ export namespace Prisma {
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
     accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
     duplicateOf?: LeadUpdateOneWithoutDuplicatesNestedInput
+    duplicates?: LeadUpdateManyWithoutDuplicateOfNestedInput
   }
 
-  export type LeadUncheckedUpdateWithoutDuplicatesInput = {
+  export type LeadUncheckedUpdateWithoutDecisionEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     siteId?: StringFieldUpdateOperationsInput | string
     cityId?: StringFieldUpdateOperationsInput | string
@@ -52932,6 +54880,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -52966,22 +54915,7 @@ export namespace Prisma {
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
     accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
-  }
-
-  export type LeadUpsertWithWhereUniqueWithoutDuplicateOfInput = {
-    where: LeadWhereUniqueInput
-    update: XOR<LeadUpdateWithoutDuplicateOfInput, LeadUncheckedUpdateWithoutDuplicateOfInput>
-    create: XOR<LeadCreateWithoutDuplicateOfInput, LeadUncheckedCreateWithoutDuplicateOfInput>
-  }
-
-  export type LeadUpdateWithWhereUniqueWithoutDuplicateOfInput = {
-    where: LeadWhereUniqueInput
-    data: XOR<LeadUpdateWithoutDuplicateOfInput, LeadUncheckedUpdateWithoutDuplicateOfInput>
-  }
-
-  export type LeadUpdateManyWithWhereWithoutDuplicateOfInput = {
-    where: LeadScalarWhereInput
-    data: XOR<LeadUpdateManyMutationInput, LeadUncheckedUpdateManyWithoutDuplicateOfInput>
+    duplicates?: LeadUncheckedUpdateManyWithoutDuplicateOfNestedInput
   }
 
   export type LeadCreateWithoutNotificationInput = {
@@ -53006,6 +54940,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -53039,6 +54974,7 @@ export namespace Prisma {
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
     accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
@@ -53072,6 +55008,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -53102,6 +55039,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
     accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
@@ -53146,6 +55084,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53179,6 +55118,7 @@ export namespace Prisma {
     tariff?: TariffUpdateOneWithoutLeadsNestedInput
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
     accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
@@ -53212,6 +55152,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -53242,6 +55183,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
     accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
@@ -53270,6 +55212,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -53303,6 +55246,7 @@ export namespace Prisma {
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
@@ -53336,6 +55280,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -53366,6 +55311,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
@@ -53410,6 +55356,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53443,6 +55390,7 @@ export namespace Prisma {
     tariff?: TariffUpdateOneWithoutLeadsNestedInput
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
@@ -53476,6 +55424,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -53506,6 +55455,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
@@ -53534,6 +55484,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -53567,6 +55518,7 @@ export namespace Prisma {
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
     accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
@@ -53600,6 +55552,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -53630,6 +55583,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
     accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
@@ -53674,6 +55628,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53707,6 +55662,7 @@ export namespace Prisma {
     tariff?: TariffUpdateOneWithoutLeadsNestedInput
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
     accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
@@ -53740,6 +55696,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -53770,6 +55727,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
     accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
@@ -53798,6 +55756,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -53831,6 +55790,7 @@ export namespace Prisma {
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
     history?: LeadStatusHistoryCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     accessTokens?: LeadAccessTokenCreateNestedManyWithoutLeadInput
@@ -53864,6 +55824,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -53894,6 +55855,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: LeadStatusHistoryUncheckedCreateNestedManyWithoutLeadInput
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     accessTokens?: LeadAccessTokenUncheckedCreateNestedManyWithoutLeadInput
@@ -53938,6 +55900,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53971,6 +55934,7 @@ export namespace Prisma {
     tariff?: TariffUpdateOneWithoutLeadsNestedInput
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
     accessTokens?: LeadAccessTokenUpdateManyWithoutLeadNestedInput
@@ -54004,6 +55968,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -54034,6 +55999,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     accessTokens?: LeadAccessTokenUncheckedUpdateManyWithoutLeadNestedInput
@@ -54290,6 +56256,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -54322,6 +56289,7 @@ export namespace Prisma {
     page?: PageCreateNestedOneWithoutLeadsInput
     tariff?: TariffCreateNestedOneWithoutLeadsInput
     addressCheck?: AddressCheckCreateNestedOneWithoutLeadsInput
+    decisionEvents?: LeadDecisionEventCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventCreateNestedManyWithoutLeadInput
@@ -54356,6 +56324,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -54385,6 +56354,7 @@ export namespace Prisma {
     apiResult?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    decisionEvents?: LeadDecisionEventUncheckedCreateNestedManyWithoutLeadInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedCreateNestedManyWithoutLeadInput
     notification?: LeadNotificationUncheckedCreateNestedOneWithoutLeadInput
     activityEvents?: LeadActivityEventUncheckedCreateNestedManyWithoutLeadInput
@@ -54430,6 +56400,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54462,6 +56433,7 @@ export namespace Prisma {
     page?: PageUpdateOneWithoutLeadsNestedInput
     tariff?: TariffUpdateOneWithoutLeadsNestedInput
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
@@ -54496,6 +56468,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -54525,6 +56498,7 @@ export namespace Prisma {
     apiResult?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
@@ -55464,6 +57438,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -55767,6 +57742,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55799,6 +57775,7 @@ export namespace Prisma {
     tariff?: TariffUpdateOneWithoutLeadsNestedInput
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
@@ -55832,6 +57809,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -55862,6 +57840,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
@@ -55894,6 +57873,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -56758,6 +58738,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -56958,6 +58939,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56990,6 +58972,7 @@ export namespace Prisma {
     tariff?: TariffUpdateOneWithoutLeadsNestedInput
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
@@ -57023,6 +59006,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -57053,6 +59037,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
@@ -57085,6 +59070,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -57228,6 +59214,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -57323,6 +59310,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -57355,6 +59343,7 @@ export namespace Prisma {
     tariff?: TariffUpdateOneWithoutLeadsNestedInput
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
@@ -57388,6 +59377,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -57418,6 +59408,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
@@ -57450,6 +59441,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -57544,6 +59536,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -57597,6 +59590,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -57629,6 +59623,7 @@ export namespace Prisma {
     page?: PageUpdateOneWithoutLeadsNestedInput
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
@@ -57662,6 +59657,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -57692,6 +59688,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
@@ -57724,6 +59721,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -57883,6 +59881,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     name?: string | null
     phone: string
     submissionKey?: string | null
@@ -57935,6 +59934,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -57967,6 +59967,7 @@ export namespace Prisma {
     page?: PageUpdateOneWithoutLeadsNestedInput
     tariff?: TariffUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
@@ -58001,6 +60002,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -58030,6 +60032,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
@@ -58063,6 +60066,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -58099,6 +60103,16 @@ export namespace Prisma {
     toStatus: $Enums.LeadStatus
     comment?: string | null
     actorId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LeadDecisionEventCreateManyLeadInput = {
+    id?: string
+    type: string
+    outcome: string
+    attemptNumber?: number | null
+    actorId?: string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
   }
 
@@ -58157,6 +60171,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: string | null
     phoneCheckNextAttemptAt?: Date | string | null
     decisionLeaseUntil?: Date | string | null
+    decisionAttemptNumber?: number | null
     addressCheckId?: string | null
     name?: string | null
     phone: string
@@ -58211,6 +60226,36 @@ export namespace Prisma {
     toStatus?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadDecisionEventUpdateWithoutLeadInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    attemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadDecisionEventUncheckedUpdateWithoutLeadInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    attemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadDecisionEventUncheckedUpdateManyWithoutLeadInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    attemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    evidence?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -58323,6 +60368,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     submissionKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -58356,6 +60402,7 @@ export namespace Prisma {
     tariff?: TariffUpdateOneWithoutLeadsNestedInput
     addressCheck?: AddressCheckUpdateOneWithoutLeadsNestedInput
     history?: LeadStatusHistoryUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUpdateManyWithoutLeadNestedInput
@@ -58389,6 +60436,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
@@ -58418,6 +60466,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: LeadStatusHistoryUncheckedUpdateManyWithoutLeadNestedInput
+    decisionEvents?: LeadDecisionEventUncheckedUpdateManyWithoutLeadNestedInput
     deliveryAttempts?: LeadDeliveryAttemptUncheckedUpdateManyWithoutLeadNestedInput
     notification?: LeadNotificationUncheckedUpdateOneWithoutLeadNestedInput
     activityEvents?: LeadActivityEventUncheckedUpdateManyWithoutLeadNestedInput
@@ -58451,6 +60500,7 @@ export namespace Prisma {
     phoneCheckErrorCode?: NullableStringFieldUpdateOperationsInput | string | null
     phoneCheckNextAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     decisionLeaseUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionAttemptNumber?: NullableIntFieldUpdateOperationsInput | number | null
     addressCheckId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string

@@ -8,6 +8,8 @@ import { LeadDeliveryService } from './lead-delivery.service';
 import { LeadAccessService } from './lead-access.service';
 import { LeadNotificationOutboxService } from './lead-notification-outbox.service';
 import { LEAD_REASONS, LEAD_REASON_CODES } from './lead-reasons';
+import { analyzeLeadComment, LEAD_COMMENT_RULES_VERSION } from './lead-comment-analyzer';
+import { LeadDecisionService } from './lead-decision.service';
 
 type LeadStatus = 'NEW' | 'IN_PROGRESS' | 'CALL_LATER' | 'CONNECTED' | 'REJECTED';
 
@@ -40,6 +42,7 @@ export class CrmLeadsController {
     private readonly delivery: LeadDeliveryService,
     private readonly leadAccess: LeadAccessService,
     private readonly notifications: LeadNotificationOutboxService,
+    private readonly decisions: LeadDecisionService,
   ) {}
 
   @Get()
@@ -126,10 +129,71 @@ export class CrmLeadsController {
   }
 
   @Get(':id')
-  detail(@Param('id') id: string) {
-    return this.prisma.lead.findUniqueOrThrow({
+  async detail(@Param('id') id: string) {
+    const lead = await this.prisma.lead.findUniqueOrThrow({
       where: { id },
-      include: { site: true, city: true, page: true, tariff: true, addressCheck: true, history: true, deliveryAttempts: true, notification: true, activityEvents: true, duplicateOf: true },
+      include: { site: true, city: true, page: true, tariff: true, addressCheck: true, history: true, decisionEvents: { orderBy: [{ createdAt: 'desc' }, { id: 'desc' }] }, deliveryAttempts: true, notification: true, activityEvents: true, duplicateOf: true },
+    });
+    return { ...lead, commentAnalysisLatestVersion: LEAD_COMMENT_RULES_VERSION };
+  }
+
+  @Post(':id/retry-phone-check')
+  async retryPhoneCheck(@Param('id') id: string, @Req() request: { user?: { id: string } }) {
+    const attemptNumber = await this.prisma.$transaction(async (tx) => {
+      const lead = await tx.lead.findUnique({ where: { id } });
+      if (!lead) throw new NotFoundException('Заявка не найдена');
+      if (lead.processingStatus !== 'PHONE_CHECK_FAILED' || lead.phoneCheckStatus !== 'FAILED' || lead.phoneCheckQc !== null) {
+        throw new BadRequestException('Ручной повтор возможен только после технической ошибки проверки телефона');
+      }
+      const nextAttempt = (lead.phoneCheckAttempt ?? 0) + 1;
+      const previousStatus = lead.phoneCheckStatus;
+      const previousAttempt = lead.phoneCheckAttempt ?? 0;
+      const previousErrorCode = lead.phoneCheckErrorCode || 'UNKNOWN';
+      const claimed = await tx.lead.updateMany({
+        where: { id, processingStatus: 'PHONE_CHECK_FAILED', phoneCheckStatus: 'FAILED', phoneCheckQc: null,
+          phoneCheckAttempt: lead.phoneCheckAttempt, updatedAt: lead.updatedAt },
+        data: { processingStatus: 'DECISION_PENDING', phoneCheckStatus: 'PENDING', phoneCheckNextAttemptAt: null,
+          phoneCheckErrorCode: null, decisionLeaseUntil: null, decisionAttemptNumber: null },
+      });
+      if (claimed.count !== 1) throw new ConflictException('Заявка уже изменена. Обновите карточку перед повтором.');
+      await tx.leadDecisionEvent.create({ data: {
+        leadId: id, type: 'MANUAL_PHONE_RETRY', outcome: 'REQUESTED', attemptNumber: nextAttempt,
+        actorId: request.user?.id || 'service:admin-token',
+        evidence: { previousStatus, previousAttempt, previousErrorCode },
+      } });
+      return nextAttempt;
+    });
+    const queued = await this.decisions.enqueueTracked(id, attemptNumber);
+    return { id, processingStatus: 'DECISION_PENDING', attemptNumber, queued: queued.queued };
+  }
+
+  @Post(':id/reanalyze-comment')
+  async reanalyzeComment(@Param('id') id: string, @Req() request: { user?: { id: string } }) {
+    return this.prisma.$transaction(async (tx) => {
+      const lead = await tx.lead.findUnique({ where: { id } });
+      if (!lead) throw new NotFoundException('Заявка не найдена');
+      const analysis = analyzeLeadComment(lead.comment, lead.reasonCode || undefined);
+      if (!analysis) throw new BadRequestException('У заявки нет комментария для анализа');
+      if (lead.commentAnalysisVersion !== null && lead.commentAnalysisVersion >= analysis.version) {
+        throw new BadRequestException('Комментарий уже проанализирован актуальной версией правил');
+      }
+      const before = { version: lead.commentAnalysisVersion, outcome: lead.commentAnalysisOutcome,
+        category: lead.commentAnalysisCategory, evidence: lead.commentAnalysisEvidence };
+      const claimed = await tx.lead.updateMany({
+        where: { id, updatedAt: lead.updatedAt, commentAnalysisVersion: lead.commentAnalysisVersion },
+        data: { commentAnalysisVersion: analysis.version, commentAnalysisOutcome: analysis.outcome,
+          commentAnalysisCategory: analysis.category, commentAnalysisEvidence: analysis.evidence as unknown as Prisma.InputJsonArray,
+          commentAnalysisExplanation: analysis.explanation },
+      });
+      if (claimed.count !== 1) throw new ConflictException('Заявка уже изменена. Обновите карточку перед повтором.');
+      await tx.leadDecisionEvent.create({ data: {
+        leadId: id, type: 'COMMENT_REANALYSIS', outcome: analysis.outcome,
+        actorId: request.user?.id || 'service:admin-token',
+        evidence: { before,
+          after: { version: analysis.version, outcome: analysis.outcome, category: analysis.category,
+            evidence: analysis.evidence } } as unknown as Prisma.InputJsonObject,
+      } });
+      return { version: analysis.version, outcome: analysis.outcome, category: analysis.category };
     });
   }
 

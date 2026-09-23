@@ -8,13 +8,14 @@ function fixture(phoneResult = { kind: 'FINAL', qc: 0, normalizedPhone: '7900123
   const lead = {
     id: 'lead-1', phone: '79001234567', processingStatus: 'DECISION_PENDING', reasonRoute: 'SALES',
     phoneCheckStatus: 'PENDING', phoneCheckQc: null, phoneCheckAttempt: null, phoneCheckNextAttemptAt: null,
-    decisionLeaseUntil: null, commentAnalysisOutcome: null,
+    decisionLeaseUntil: null, decisionAttemptNumber: null, commentAnalysisOutcome: null,
     city: { subscriberProfileKey: 'kazan' },
     addressCheck: { response: { integration: 'tarifnik', suggestion: { value: 'Казань, 1', unrestricted_value: 'Казань, 1', data: { city: 'Казань', house: '1' } }, providers: { 8: 'Дом.ру' }, targetProviderId: '8', hasAnyProvider: true, hasTargetProvider: true } },
     ...overrides,
   };
-  const calls = { phone: 0, contract: 0, delivery: 0, queued: [], updates: [] };
+  const calls = { phone: 0, contract: 0, delivery: 0, queued: [], updates: [], events: [] };
   const prisma = {
+    $transaction: async (callback) => callback(prisma),
     lead: {
       findUnique: async () => ({ ...lead }),
       findFirst: async () => null,
@@ -22,6 +23,7 @@ function fixture(phoneResult = { kind: 'FINAL', qc: 0, normalizedPhone: '7900123
       updateMany: async ({ data }) => { Object.assign(lead, data); return { count: 1 }; },
       update: async ({ data }) => { Object.assign(lead, data); calls.updates.push(data); return { ...lead }; },
     },
+    leadDecisionEvent: { create: async ({ data }) => { calls.events.push(data); return data; } },
   };
   const dadata = { cleanPhone: async () => { calls.phone += 1; return typeof phoneResult === 'function' ? phoneResult(calls.phone) : phoneResult; } };
   const contract = { check: async () => { calls.contract += 1; return { status: 'NOT_FOUND', active: false }; } };
@@ -74,6 +76,32 @@ test('technical errors retry at +5m and +30m, then stop without external deliver
   assert.equal(f.calls.queued.length, 2);
   assert.equal(f.calls.contract, 0);
   assert.equal(f.calls.delivery, 0);
+});
+
+test('every phone attempt and final routing decision have append-only evidence', async () => {
+  const f = fixture((attempt) => attempt < 3
+    ? { kind: 'TECHNICAL_ERROR', errorCode: 'HTTP_503' }
+    : { kind: 'FINAL', qc: 0, normalizedPhone: '79001234567' });
+  for (const attempt of [1, 2, 3]) {
+    f.lead.phoneCheckNextAttemptAt = new Date(0);
+    await f.service.process('lead-1', attempt);
+  }
+  assert.deepEqual(f.calls.events.filter(({ type }) => type === 'PHONE_CHECK').map(({ attemptNumber, outcome }) => [attemptNumber, outcome]), [
+    [1, 'RETRYING'], [2, 'RETRYING'], [3, 'PASSED'],
+  ]);
+  assert.equal(f.calls.events.at(-1).type, 'ROUTE_DECISION');
+  assert.equal(f.calls.events.at(-1).outcome, 'PENDING');
+  assert.equal(f.calls.events[0].evidence.errorCode, 'HTTP_503');
+  assert.equal(f.calls.events[2].evidence.qc, 0);
+});
+
+test('reconciler resumes a manually requested phone check at the next global attempt', async () => {
+  const f = fixture();
+  f.prisma.lead.findMany = async () => [
+    { id: 'manual', processingStatus: 'DECISION_PENDING', phoneCheckAttempt: 3 },
+  ];
+  assert.deepEqual(await f.service.reconcilePending(), { scanned: 1, queued: 1 });
+  assert.deepEqual(f.calls.queued, [['manual', 4, 0]]);
 });
 
 test('non-sales and manual reasons short-circuit before DaData Phone', async () => {
@@ -158,7 +186,7 @@ test('reconciler re-enqueues saved pending and due retry states after restart', 
     return [
       { id: 'fresh', processingStatus: 'DECISION_PENDING', phoneCheckAttempt: null },
       { id: 'retry', processingStatus: 'PHONE_CHECK_RETRY', phoneCheckAttempt: 1 },
-      { id: 'stalled', processingStatus: 'DECISION_RUNNING', phoneCheckAttempt: 2 },
+      { id: 'stalled', processingStatus: 'DECISION_RUNNING', phoneCheckAttempt: 1, decisionAttemptNumber: 2 },
     ];
   };
   assert.deepEqual(await f.service.reconcilePending(), { scanned: 3, queued: 3 });

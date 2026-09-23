@@ -155,10 +155,12 @@ Apply тарифа трактует файл как полный snapshot про
 | --- | --- | --- |
 | GET | `/crm/leads` | Cursor-страница минимального list DTO заявок; поддерживает `limit`, `cursor`, поиск `q`, фильтры `status` и `reasonCode` (включая `NONE` для исторических записей). Тяжелые relations доступны только в detail endpoint. |
 | GET | `/crm/leads/reasons` | Закрытый справочник причин обращения с русской подписью, версией и маршрутом; чтение требует admin-сессию. |
-| GET | `/crm/leads/:id` | Детальная карточка с адресной проверкой, delivery attempts, notification evidence и activity. |
+| GET | `/crm/leads/:id` | Детальная карточка с адресной проверкой, delivery attempts, notification evidence, activity, append-only `decisionEvents` и текущей `commentAnalysisLatestVersion`. |
 | PATCH | `/crm/leads/:id/status` | Изменяет операторский status и добавляет history с optimistic concurrency. |
 | POST | `/crm/leads/:id/retry-delivery` | Безопасно повторно ставит eligible lead в очередь после `DELIVERY_QUEUE_ERROR`, исчерпанной доставки либо orphan `PENDING` без API-attempts. Возвращает фактический `PENDING` или `DELIVERY_QUEUE_ERROR`; не обходит coverage/subscriber routing. |
 | POST | `/crm/leads/:id/retry-notification` | Повторно ставит обычное оповещение только после финального `FAILED`; увеличивает revision, создает новый provider idempotency key и возвращает `QUEUED` либо сохраненный `PENDING`. Автоматические попытки внутри revision используют общий ключ. |
+| POST | `/crm/leads/:id/retry-phone-check` | Только после `PHONE_CHECK_FAILED`/`FAILED` без финального `qc`: атомарно фиксирует автора и прежнее evidence, возвращает `DECISION_PENDING` и ставит новую глобальную попытку в очередь. При ошибке очереди сохраненное решение подхватывает минутный reconciler. Финальный `qc≠0`, ручной и иной маршрут не допускают bypass. |
+| POST | `/crm/leads/:id/reanalyze-comment` | Только для заявки с комментарием и более старой версией анализа: сравнивает `updatedAt`, сохраняет новый снимок и append-only before/after с автором. Не меняет исходную причину и не запускает delivery либо повторную маршрутизацию автоматически. |
 | POST | `/crm/leads/:id/revoke-fallback-access` | Отзывает все еще активные одноразовые fallback tokens заявки. Защищен общим admin guard. |
 | POST | `/internal/lead-deliveries/:id` | Worker-only handler очереди. Защищен тем же guard. |
 | POST | `/internal/lead-decisions/:id` | Worker-only handler последовательного решения по сохраненной заявке. |
