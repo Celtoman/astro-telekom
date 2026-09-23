@@ -236,6 +236,9 @@ model SeoTemplate {
   titleTemplate       String
   descriptionTemplate String
   indexState          SeoIndexState   @default(INDEX)
+  ogTitleTemplate     String?
+  ogDescriptionTemplate String?
+  ogImageUrl          String?
   site                Site            @relation(fields: [siteId], references: [id], onDelete: Cascade)
   createdAt           DateTime        @default(now())
   updatedAt           DateTime        @updatedAt

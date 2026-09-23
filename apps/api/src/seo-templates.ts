@@ -10,12 +10,18 @@ export interface SeoTemplateDefinition {
   titleTemplate: string;
   descriptionTemplate: string;
   indexState: SeoIndexState;
+  ogTitleTemplate?: string | null;
+  ogDescriptionTemplate?: string | null;
+  ogImageUrl?: string | null;
 }
 
 export interface ResolvedSeoMetadata {
   title: string;
   description: string;
   indexState: SeoIndexState;
+  ogTitle: string;
+  ogDescription: string;
+  ogImage: string;
 }
 
 export interface SeoDiagnostic {
@@ -44,6 +50,23 @@ interface SeoResolutionInput {
 
 // Editorial prompts only: Google does not impose fixed character limits for title or description.
 const LENGTH_HINTS = { title: 70, description: 180 } as const;
+export const DEFAULT_SITE_IMAGE_PATH = '/images/home-connection-equipment.webp';
+const LOCAL_SOCIAL_IMAGES = new Set([DEFAULT_SITE_IMAGE_PATH]);
+
+export function resolveSocialImage(value: string | null | undefined, path: string): string {
+  const image = value?.trim() || DEFAULT_SITE_IMAGE_PATH;
+  if (/[{}<>\s]/.test(image)) throw new BadRequestException(`OG image URL не допускает переменные и пробелы: ${path}`);
+  if (image.startsWith('/')) {
+    if (!LOCAL_SOCIAL_IMAGES.has(image)) throw new BadRequestException(`OG изображение отсутствует в публичных assets: ${path}`);
+    return image;
+  }
+  let url: URL;
+  try { url = new URL(image); } catch { throw new BadRequestException(`Некорректный OG image URL: ${path}`); }
+  if (url.protocol !== 'https:' || url.username || url.password || !/\.(?:avif|jpe?g|png|webp)$/i.test(url.pathname)) {
+    throw new BadRequestException(`OG image URL должен указывать на HTTPS-изображение: ${path}`);
+  }
+  return url.href;
+}
 
 function resolveField(template: string, context: VariableContext, path: string): string {
   if (typeof template !== 'string' || !template.trim()) throw new BadRequestException(`Пустой обязательный SEO-шаблон: ${path}`);
@@ -82,7 +105,12 @@ export function resolveSeoTemplates(input: SeoResolutionInput): { byPath: Record
     const context: VariableContext = { site: input.site, provider: input.provider, city, tariff, now: input.now };
     const title = resolveField(template.titleTemplate, context, `${route.path}.seo.title`);
     const description = resolveField(template.descriptionTemplate, context, `${route.path}.seo.description`);
-    byPath[route.path] = { title, description, indexState: template.indexState };
+    const ogTitle = template.ogTitleTemplate?.trim()
+      ? resolveField(template.ogTitleTemplate, context, `${route.path}.seo.ogTitle`) : title;
+    const ogDescription = template.ogDescriptionTemplate?.trim()
+      ? resolveField(template.ogDescriptionTemplate, context, `${route.path}.seo.ogDescription`) : description;
+    const ogImage = resolveSocialImage(template.ogImageUrl, `${route.path}.seo.ogImage`);
+    byPath[route.path] = { title, description, indexState: template.indexState, ogTitle, ogDescription, ogImage };
     if (title.length > LENGTH_HINTS.title) warnings.push({ code: 'LONG_TITLE', path: route.path, length: title.length });
     if (description.length > LENGTH_HINTS.description) warnings.push({ code: 'LONG_DESCRIPTION', path: route.path, length: description.length });
     for (const [value, seen, code] of [[title, titles, 'DUPLICATE_TITLE'], [description, descriptions, 'DUPLICATE_DESCRIPTION']] as const) {

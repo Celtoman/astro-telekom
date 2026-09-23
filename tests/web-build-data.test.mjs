@@ -375,13 +375,19 @@ test('web build uses resolved SEO snapshot and omits noindex routes from sitemap
     title: `SEO ${route.path}`,
     description: `Описание ${route.path}`,
     indexState: route.path === '/kazan' ? 'NOINDEX' : 'INDEX',
+    ...(route.path === '/' ? { ogTitle: 'Дом & интернет "вместе"', ogDescription: 'Скидка <только> & "ТВ"', ogImage: 'https://cdn.example.test/share.webp' } : {}),
   }]));
   fixture.sitemap.excludedPaths.push('/kazan');
   await withApiFixture(async (apiUrl) => {
     const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: '' });
     assert.equal(build.code, 0, build.output);
   }, fixture);
-  assert.match(await readBuilt('index.html'), /<title>SEO \/<\/title>/);
+  const homeHtml = await readBuilt('index.html');
+  assert.match(homeHtml, /<title>SEO \/<\/title>/);
+  assert.match(homeHtml, /<meta property="og:title" content="Дом &amp; интернет &quot;вместе&quot;">/);
+  assert.match(homeHtml, /<meta property="og:description" content="Скидка <только> &amp; &quot;ТВ&quot;">/);
+  assert.match(homeHtml, /<meta property="og:image" content="https:\/\/cdn\.example\.test\/share\.webp">/);
+  assert.match(await readBuilt(join('kazan', 'index.html')), /<meta property="og:image" content="https:\/\/partner\.example\.test\/images\/home-connection-equipment\.webp">/);
   assert.match(await readBuilt(join('kazan', 'index.html')), /<meta name="robots" content="noindex, follow">/);
   assert.match(await readBuilt(join('kazan', 'api-internet-500', 'index.html')), /<title>SEO \/kazan\/api-internet-500<\/title>/);
   assert.doesNotMatch(await readBuilt('sitemap-cities.xml'), /<loc>https:\/\/partner\.example\.test\/kazan<\/loc>/);

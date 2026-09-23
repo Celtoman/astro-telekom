@@ -45,9 +45,9 @@ test('SEO templates resolve exactly once per Release 1 route with city and tarif
   const { resolveSeoTemplates } = seoModule();
   const result = resolveSeoTemplates(input());
   assert.equal(Object.keys(result.byPath).length, 8);
-  assert.deepEqual(result.byPath['/'], { title: 'Интернет Дом.ру', description: 'Тарифы для дома.', indexState: 'INDEX' });
-  assert.deepEqual(result.byPath['/kazan'], { title: 'Интернет в Казани', description: 'Тарифы в Казани.', indexState: 'INDEX' });
-  assert.deepEqual(result.byPath['/kazan/giga'], { title: 'Гига в Казани', description: 'Тариф Гига от 599 ₽.', indexState: 'INDEX' });
+  assert.deepEqual(result.byPath['/'], { title: 'Интернет Дом.ру', description: 'Тарифы для дома.', indexState: 'INDEX', ogTitle: 'Интернет Дом.ру', ogDescription: 'Тарифы для дома.', ogImage: '/images/home-connection-equipment.webp' });
+  assert.deepEqual(result.byPath['/kazan'], { title: 'Интернет в Казани', description: 'Тарифы в Казани.', indexState: 'INDEX', ogTitle: 'Интернет в Казани', ogDescription: 'Тарифы в Казани.', ogImage: '/images/home-connection-equipment.webp' });
+  assert.deepEqual(result.byPath['/kazan/giga'], { title: 'Гига в Казани', description: 'Тариф Гига от 599 ₽.', indexState: 'INDEX', ogTitle: 'Гига в Казани', ogDescription: 'Тариф Гига от 599 ₽.', ogImage: '/images/home-connection-equipment.webp' });
   assert.deepEqual(result.warnings, []);
 });
 
@@ -79,6 +79,38 @@ test('SEO length and duplicate diagnostics warn without blocking publication', (
   assert.ok(result.warnings.some((warning) => warning.code === 'DUPLICATE_DESCRIPTION' && warning.path === '/goroda-obsluzhivaniya'));
 });
 
+test('Open Graph uses explicit templates and falls back independently to SEO and the site image', () => {
+  const { resolveSeoTemplates, DEFAULT_SITE_IMAGE_PATH } = seoModule();
+  assert.equal(fs.existsSync(path.join(__dirname, '..', 'apps/web/public', DEFAULT_SITE_IMAGE_PATH.slice(1))), true);
+  const data = input();
+  data.templates[0].ogTitleTemplate = 'Подключите {PROVIDER_NAME}';
+  data.templates[0].ogDescriptionTemplate = 'Специальное описание';
+  data.templates[0].ogImageUrl = 'https://cdn.example.ru/share.webp';
+  const result = resolveSeoTemplates(data);
+  assert.deepEqual(result.byPath['/'], {
+    title: 'Интернет Дом.ру', description: 'Тарифы для дома.', indexState: 'INDEX',
+    ogTitle: 'Подключите Дом.ру', ogDescription: 'Специальное описание', ogImage: 'https://cdn.example.ru/share.webp',
+  });
+  assert.equal(result.byPath['/kazan'].ogTitle, result.byPath['/kazan'].title);
+  assert.equal(result.byPath['/kazan'].ogDescription, result.byPath['/kazan'].description);
+  assert.equal(result.byPath['/kazan'].ogImage, '/images/home-connection-equipment.webp');
+});
+
+test('Open Graph rejects wrong variable context and invalid or unavailable image paths', () => {
+  const { resolveSeoTemplates } = seoModule();
+  for (const [field, value, pattern] of [
+    ['ogTitleTemplate', '{CITY_NAME}', /CITY_NAME|контекст/i],
+    ['ogDescriptionTemplate', '{UNKNOWN_CODE}', /UNKNOWN_CODE/i],
+    ['ogImageUrl', '/images/missing.webp', /изображен|asset/i],
+    ['ogImageUrl', 'javascript:alert(1)', /изображен|URL/i],
+    ['ogImageUrl', 'https://cdn.example.ru/{CITY_NAME}.webp', /переменн|URL/i],
+  ]) {
+    const data = input();
+    data.templates[0][field] = value;
+    assert.throws(() => resolveSeoTemplates(data), pattern, `${field}: ${value}`);
+  }
+});
+
 test('SEO templates are site-scoped, uniquely typed and additively backfilled without deleting legacy SEO', () => {
   const root = path.resolve(__dirname, '..');
   const schema = fs.readFileSync(path.join(root, 'prisma/schema.prisma'), 'utf8');
@@ -88,6 +120,9 @@ test('SEO templates are site-scoped, uniquely typed and additively backfilled wi
   assert.match(model, /titleTemplate\s+String/);
   assert.match(model, /descriptionTemplate\s+String/);
   assert.match(model, /indexState\s+SeoIndexState/);
+  assert.match(model, /ogTitleTemplate\s+String\?/);
+  assert.match(model, /ogDescriptionTemplate\s+String\?/);
+  assert.match(model, /ogImageUrl\s+String\?/);
   assert.match(model, /@@unique\(\[siteId, kind\]\)/);
   const migrationPath = path.join(root, 'prisma/migrations/0047_seo_templates/migration.sql');
   assert.equal(fs.existsSync(migrationPath), true, 'additive SEO template migration missing');
@@ -96,6 +131,9 @@ test('SEO templates are site-scoped, uniquely typed and additively backfilled wi
     assert.match(migration, new RegExp(`'${kind}'`));
   }
   assert.doesNotMatch(migration, /DROP\s+(COLUMN|TABLE)/i);
+  const ogMigration = fs.readFileSync(path.join(root, 'prisma/migrations/0048_seo_open_graph/migration.sql'), 'utf8');
+  for (const field of ['ogTitleTemplate', 'ogDescriptionTemplate', 'ogImageUrl']) assert.match(ogMigration, new RegExp(`ADD COLUMN "${field}" TEXT`));
+  assert.doesNotMatch(ogMigration, /DROP\s+(COLUMN|TABLE)/i);
 });
 
 test('working catalog resolves site SEO templates before a publication snapshot is captured', async () => {
@@ -124,7 +162,7 @@ test('working catalog resolves site SEO templates before a publication snapshot 
   };
   const catalog = await new SiteCatalogService(prisma).listBySiteId('site-1');
   assert.deepEqual(queries.seo.where, { siteId: 'site-1' });
-  assert.deepEqual(catalog.seoByPath['/'], { title: 'Интернет Дом.ру', description: 'Тарифы для дома.', indexState: 'INDEX' });
+  assert.deepEqual(catalog.seoByPath['/'], { title: 'Интернет Дом.ру', description: 'Тарифы для дома.', indexState: 'INDEX', ogTitle: 'Интернет Дом.ру', ogDescription: 'Тарифы для дома.', ogImage: '/images/home-connection-equipment.webp' });
   assert.equal(Object.keys(catalog.seoByPath).length, 6);
   assert.deepEqual(catalog.sitemap.excludedPaths, ['/karta-pokrytiya-provaydera']);
   assert.deepEqual(catalog.seoWarnings, []);
@@ -156,8 +194,14 @@ test('SEO template update is guarded by the site revision and creates one attrib
     titleTemplate: 'Интернет в {CITY_NAME_PREPOSITIONAL}',
     descriptionTemplate: 'Тарифы города',
     indexState: 'INDEX',
+    ogTitleTemplate: 'Подключение в {CITY_NAME_PREPOSITIONAL}',
+    ogDescriptionTemplate: null,
+    ogImageUrl: 'https://cdn.example.ru/share.webp',
   }, 'admin-1');
   assert.equal(calls.write.where.id, 'template-1');
+  assert.equal(calls.write.data.ogTitleTemplate, 'Подключение в {CITY_NAME_PREPOSITIONAL}');
+  assert.equal(calls.write.data.ogDescriptionTemplate, null);
+  assert.equal(calls.write.data.ogImageUrl, 'https://cdn.example.ru/share.webp');
   assert.equal(calls.revision.entityType, 'SITE');
   assert.equal(calls.revision.siteId, 'site-1');
   assert.equal(calls.revision.actorId, 'admin-1');

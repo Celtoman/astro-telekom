@@ -2,12 +2,16 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException }
 import { Prisma, SeoIndexState, SeoTemplateKind } from '../generated';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
+import { resolveSocialImage } from './seo-templates';
 
 export interface UpdateSeoTemplateInput {
   expectedWorkingRevision: number;
   titleTemplate: string;
   descriptionTemplate: string;
   indexState: SeoIndexState;
+  ogTitleTemplate?: string | null;
+  ogDescriptionTemplate?: string | null;
+  ogImageUrl?: string | null;
   confirmNoindexCount?: number;
 }
 
@@ -64,6 +68,16 @@ export class SeoTemplateService {
     for (const [field, value] of [['Title', input.titleTemplate], ['Description', input.descriptionTemplate]] as const) {
       if (typeof value !== 'string' || !value.trim() || value.length > 1000) throw new BadRequestException(`${field} должен содержать от 1 до 1000 символов`);
     }
+    for (const [field, value] of [['OG Title', input.ogTitleTemplate], ['OG Description', input.ogDescriptionTemplate]] as const) {
+      if (value !== undefined && value !== null && (typeof value !== 'string' || value.length > 1000)) {
+        throw new BadRequestException(`${field} должен содержать не более 1000 символов`);
+      }
+    }
+    if (input.ogImageUrl !== undefined && input.ogImageUrl !== null &&
+      (typeof input.ogImageUrl !== 'string' || input.ogImageUrl.length > 2048)) {
+      throw new BadRequestException('OG image URL должен содержать не более 2048 символов');
+    }
+    if (input.ogImageUrl?.trim()) resolveSocialImage(input.ogImageUrl, 'seo.ogImage');
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const site = await transaction.site.findUnique({ where: { id: siteId }, select: { id: true, workingRevision: true, publishedRevision: true } });
       if (!site) throw new NotFoundException('Сайт не найден');
@@ -82,6 +96,9 @@ export class SeoTemplateService {
         titleTemplate: input.titleTemplate.trim(),
         descriptionTemplate: input.descriptionTemplate.trim(),
         indexState: input.indexState,
+        ogTitleTemplate: input.ogTitleTemplate === undefined ? current.ogTitleTemplate : input.ogTitleTemplate?.trim() || null,
+        ogDescriptionTemplate: input.ogDescriptionTemplate === undefined ? current.ogDescriptionTemplate : input.ogDescriptionTemplate?.trim() || null,
+        ogImageUrl: input.ogImageUrl === undefined ? current.ogImageUrl : input.ogImageUrl?.trim() || null,
       };
       const changedFields = (Object.keys(next) as Array<keyof typeof next>).filter((field) => current[field] !== next[field]);
       if (changedFields.length === 0) return { ...current, workingRevision: site.workingRevision, publishedRevision: site.publishedRevision };

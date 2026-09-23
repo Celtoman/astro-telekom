@@ -19,6 +19,10 @@ test('SEO templates have a protected admin route and cookie-auth React editor', 
   assert.match(editor, /workingByPath/);
   assert.match(editor, /publishedByPath/);
   assert.match(editor, /confirmNoindexCount/);
+  assert.match(editor, /Социальные сети · Open Graph/);
+  assert.match(editor, /ogTitleTemplate/);
+  assert.match(editor, /ogDescriptionTemplate/);
+  assert.match(editor, /ogImageUrl/);
   assert.match(editor, /PublicationStatusCard/);
   assert.doesNotMatch(editor, /localStorage|sessionStorage|x-admin-token/);
 });

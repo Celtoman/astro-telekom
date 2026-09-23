@@ -37,6 +37,6 @@ const relatedTariffs = city.tariffs.filter((item) => item.slug !== tariff.slug).
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 ---
 
-<BaseLayout title={meta.title} description={meta.description} indexable={meta.indexState !== 'NOINDEX'} {city} pages={city.pages} {site}>
+<BaseLayout title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} indexable={meta.indexState !== 'NOINDEX'} {city} pages={city.pages} {site}>
   <TariffDetail {city} {site} {tariff} {relatedTariffs} {apiUrl} siteSlug={publicSiteSlug} />
 </BaseLayout>

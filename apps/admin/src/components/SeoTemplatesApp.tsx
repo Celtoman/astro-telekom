@@ -14,8 +14,8 @@ type Kind = "HOME" | "COVERAGE" | "CITIES" | "PRIVACY" | "PERSONAL_DATA_CONSENT"
 type IndexState = "INDEX" | "NOINDEX"
 interface Administrator { id: string; email: string }
 interface Site { id: string; name: string; slug: string }
-interface Template { id: string; kind: Kind; titleTemplate: string; descriptionTemplate: string; indexState: IndexState }
-interface Meta { title: string; description: string; indexState: IndexState }
+interface Template { id: string; kind: Kind; titleTemplate: string; descriptionTemplate: string; indexState: IndexState; ogTitleTemplate?: string | null; ogDescriptionTemplate?: string | null; ogImageUrl?: string | null }
+interface Meta { title: string; description: string; indexState: IndexState; ogTitle?: string; ogDescription?: string; ogImage?: string }
 interface Diagnostic { code: string; path: string; relatedPath?: string; length?: number }
 interface Workspace {
   id: string; slug: string; workingRevision: number; publishedRevision: number; legacySeoCount: number | null
@@ -40,6 +40,9 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
   const [path, setPath] = useState("/")
   const [titleTemplate, setTitleTemplate] = useState("")
   const [descriptionTemplate, setDescriptionTemplate] = useState("")
+  const [ogTitleTemplate, setOgTitleTemplate] = useState("")
+  const [ogDescriptionTemplate, setOgDescriptionTemplate] = useState("")
+  const [ogImageUrl, setOgImageUrl] = useState("")
   const [indexState, setIndexState] = useState<IndexState>("INDEX")
   const [confirmed, setConfirmed] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -62,6 +65,7 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
       const template = data.templates.find((item) => item.kind === nextKind)
       if (!template) throw new Error(`Не найден обязательный SEO-шаблон ${nextKind}`)
       setTitleTemplate(template.titleTemplate); setDescriptionTemplate(template.descriptionTemplate); setIndexState(template.indexState)
+      setOgTitleTemplate(template.ogTitleTemplate || ""); setOgDescriptionTemplate(template.ogDescriptionTemplate || ""); setOgImageUrl(template.ogImageUrl || "")
       setPath(data.routes.find((route) => route.id === nextKind)?.path || "")
       setConfirmed(false)
     } catch (caught) {
@@ -76,7 +80,7 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
   const routes = useMemo(() => workspace?.routes.filter((route) => route.id === kind) || [], [workspace, kind])
   const affectedCount = routes.length
   const enteringNoindex = template?.indexState !== "NOINDEX" && indexState === "NOINDEX"
-  const changed = Boolean(template && (titleTemplate !== template.titleTemplate || descriptionTemplate !== template.descriptionTemplate || indexState !== template.indexState))
+  const changed = Boolean(template && (titleTemplate !== template.titleTemplate || descriptionTemplate !== template.descriptionTemplate || indexState !== template.indexState || ogTitleTemplate !== (template.ogTitleTemplate || "") || ogDescriptionTemplate !== (template.ogDescriptionTemplate || "") || ogImageUrl !== (template.ogImageUrl || "")))
   const canSave = Boolean(changed && titleTemplate.trim() && descriptionTemplate.trim() && (!enteringNoindex || (confirmed && affectedCount > 0)))
   const working = path ? workspace?.workingByPath?.[path] : null
   const published = path ? workspace?.publishedByPath?.[path] : null
@@ -87,6 +91,7 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
     const next = workspace.templates.find((item) => item.kind === nextKind)
     if (!next) return
     setKind(nextKind); setTitleTemplate(next.titleTemplate); setDescriptionTemplate(next.descriptionTemplate)
+    setOgTitleTemplate(next.ogTitleTemplate || ""); setOgDescriptionTemplate(next.ogDescriptionTemplate || ""); setOgImageUrl(next.ogImageUrl || "")
     setIndexState(next.indexState); setPath(workspace.routes.find((route) => route.id === nextKind)?.path || "")
     setConfirmed(false); setMessage(null)
   }
@@ -98,6 +103,7 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
       await requestJson(apiUrl, `/admin/sites/${site.id}/seo-templates/${kind}`, {
         method: "PATCH", body: {
           expectedWorkingRevision: workspace.workingRevision, titleTemplate, descriptionTemplate, indexState,
+          ogTitleTemplate: ogTitleTemplate || null, ogDescriptionTemplate: ogDescriptionTemplate || null, ogImageUrl: ogImageUrl || null,
           ...(enteringNoindex ? { confirmNoindexCount: affectedCount } : {}),
         },
       })
@@ -124,6 +130,11 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
           <Field><FieldLabel htmlFor="seo-kind">Тип страницы</FieldLabel><select id="seo-kind" className={selectClass} value={kind} onChange={(event) => selectKind(event.target.value as Kind)}>{(Object.keys(labels) as Kind[]).map((item) => <option key={item} value={item}>{labels[item]}</option>)}</select><FieldDescription>{affectedCount} опубликованных URL этого типа</FieldDescription></Field>
           <Field><FieldLabel htmlFor="seo-title">Title</FieldLabel><Input id="seo-title" value={titleTemplate} onChange={(event) => setTitleTemplate(event.target.value)} maxLength={1000} /><FieldDescription>{titleTemplate.length} символов · подстановки в фигурных скобках</FieldDescription></Field>
           <Field><FieldLabel htmlFor="seo-description">Description</FieldLabel><textarea id="seo-description" className={textareaClass} value={descriptionTemplate} onChange={(event) => setDescriptionTemplate(event.target.value)} maxLength={1000} /><FieldDescription>{descriptionTemplate.length} символов</FieldDescription></Field>
+          <div className="space-y-4 rounded-lg border p-4"><h2 className="font-semibold">Социальные сети · Open Graph</h2><p className="text-sm text-muted-foreground">Все поля необязательны. Пустые Title и Description возьмут обычные SEO-значения; пустое изображение — изображение сайта.</p>
+            <Field><FieldLabel htmlFor="seo-og-title">OG Title</FieldLabel><Input id="seo-og-title" value={ogTitleTemplate} onChange={(event) => setOgTitleTemplate(event.target.value)} maxLength={1000} /><FieldDescription>Можно использовать разрешённые переменные этого типа страницы.</FieldDescription></Field>
+            <Field><FieldLabel htmlFor="seo-og-description">OG Description</FieldLabel><textarea id="seo-og-description" className={textareaClass} value={ogDescriptionTemplate} onChange={(event) => setOgDescriptionTemplate(event.target.value)} maxLength={1000} /></Field>
+            <Field><FieldLabel htmlFor="seo-og-image">OG image URL</FieldLabel><Input id="seo-og-image" value={ogImageUrl} onChange={(event) => setOgImageUrl(event.target.value)} maxLength={2048} placeholder="https://…/image.webp" /><FieldDescription>HTTPS-изображение либо доступный локальный asset; подстановки в URL запрещены.</FieldDescription></Field>
+          </div>
           <Field><FieldLabel htmlFor="seo-index">Индексация</FieldLabel><select id="seo-index" className={selectClass} value={indexState} onChange={(event) => { setIndexState(event.target.value as IndexState); setConfirmed(false) }}><option value="INDEX">index</option><option value="NOINDEX">noindex, follow</option></select><FieldDescription>При noindex URL исключаются из sitemap того же снимка публикации.</FieldDescription></Field>
           {enteringNoindex ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Массовое изменение индексации</AlertTitle><AlertDescription>После публикации {affectedCount} URL получат noindex и исчезнут из sitemap. Подтвердите точное число URL перед сохранением.</AlertDescription><label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={confirmed} onChange={(event) => setConfirmed(event.target.checked)} />Подтверждаю noindex для {affectedCount} URL</label></Alert> : null}
           <div className="flex items-center justify-between gap-4 border-t pt-4"><span className="text-sm text-muted-foreground">Изменения вступят в силу после публикации сайта.</span><Button disabled={!canSave || saving || loading} onClick={() => void save()}><Save data-icon="inline-start" />{saving ? "Сохраняем…" : "Сохранить"}</Button></div>
@@ -139,5 +150,5 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
 }
 
 function Preview({ label, meta }: { label: string; meta: Meta | null | undefined }) {
-  return <div className="rounded-lg border p-4 text-sm"><h3 className="mb-3 font-semibold">{label}</h3>{meta ? <dl className="space-y-3"><div><dt className="text-muted-foreground">Title</dt><dd className="break-words">{meta.title}</dd></div><div><dt className="text-muted-foreground">Description</dt><dd className="break-words">{meta.description}</dd></div><div><dt className="text-muted-foreground">Индексация</dt><dd>{meta.indexState === "NOINDEX" ? "noindex, follow" : "index"}</dd></div></dl> : <p className="text-muted-foreground">Нет данных в этом снимке.</p>}</div>
+  return <div className="rounded-lg border p-4 text-sm"><h3 className="mb-3 font-semibold">{label}</h3>{meta ? <dl className="space-y-3"><div><dt className="text-muted-foreground">Title</dt><dd className="break-words">{meta.title}</dd></div><div><dt className="text-muted-foreground">Description</dt><dd className="break-words">{meta.description}</dd></div><div><dt className="text-muted-foreground">OG Title</dt><dd className="break-words">{meta.ogTitle || meta.title}</dd></div><div><dt className="text-muted-foreground">OG Description</dt><dd className="break-words">{meta.ogDescription || meta.description}</dd></div><div><dt className="text-muted-foreground">OG image</dt><dd className="break-all">{meta.ogImage || "/images/home-connection-equipment.webp"}</dd></div><div><dt className="text-muted-foreground">Индексация</dt><dd>{meta.indexState === "NOINDEX" ? "noindex, follow" : "index"}</dd></div></dl> : <p className="text-muted-foreground">Нет данных в этом снимке.</p>}</div>
 }

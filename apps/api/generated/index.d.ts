@@ -6888,6 +6888,9 @@ export namespace Prisma {
     titleTemplate: string | null
     descriptionTemplate: string | null
     indexState: $Enums.SeoIndexState | null
+    ogTitleTemplate: string | null
+    ogDescriptionTemplate: string | null
+    ogImageUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6899,6 +6902,9 @@ export namespace Prisma {
     titleTemplate: string | null
     descriptionTemplate: string | null
     indexState: $Enums.SeoIndexState | null
+    ogTitleTemplate: string | null
+    ogDescriptionTemplate: string | null
+    ogImageUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6910,6 +6916,9 @@ export namespace Prisma {
     titleTemplate: number
     descriptionTemplate: number
     indexState: number
+    ogTitleTemplate: number
+    ogDescriptionTemplate: number
+    ogImageUrl: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -6923,6 +6932,9 @@ export namespace Prisma {
     titleTemplate?: true
     descriptionTemplate?: true
     indexState?: true
+    ogTitleTemplate?: true
+    ogDescriptionTemplate?: true
+    ogImageUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6934,6 +6946,9 @@ export namespace Prisma {
     titleTemplate?: true
     descriptionTemplate?: true
     indexState?: true
+    ogTitleTemplate?: true
+    ogDescriptionTemplate?: true
+    ogImageUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6945,6 +6960,9 @@ export namespace Prisma {
     titleTemplate?: true
     descriptionTemplate?: true
     indexState?: true
+    ogTitleTemplate?: true
+    ogDescriptionTemplate?: true
+    ogImageUrl?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -7029,6 +7047,9 @@ export namespace Prisma {
     titleTemplate: string
     descriptionTemplate: string
     indexState: $Enums.SeoIndexState
+    ogTitleTemplate: string | null
+    ogDescriptionTemplate: string | null
+    ogImageUrl: string | null
     createdAt: Date
     updatedAt: Date
     _count: SeoTemplateCountAggregateOutputType | null
@@ -7057,6 +7078,9 @@ export namespace Prisma {
     titleTemplate?: boolean
     descriptionTemplate?: boolean
     indexState?: boolean
+    ogTitleTemplate?: boolean
+    ogDescriptionTemplate?: boolean
+    ogImageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
@@ -7069,6 +7093,9 @@ export namespace Prisma {
     titleTemplate?: boolean
     descriptionTemplate?: boolean
     indexState?: boolean
+    ogTitleTemplate?: boolean
+    ogDescriptionTemplate?: boolean
+    ogImageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
@@ -7081,6 +7108,9 @@ export namespace Prisma {
     titleTemplate?: boolean
     descriptionTemplate?: boolean
     indexState?: boolean
+    ogTitleTemplate?: boolean
+    ogDescriptionTemplate?: boolean
+    ogImageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
@@ -7093,11 +7123,14 @@ export namespace Prisma {
     titleTemplate?: boolean
     descriptionTemplate?: boolean
     indexState?: boolean
+    ogTitleTemplate?: boolean
+    ogDescriptionTemplate?: boolean
+    ogImageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SeoTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "kind" | "titleTemplate" | "descriptionTemplate" | "indexState" | "createdAt" | "updatedAt", ExtArgs["result"]["seoTemplate"]>
+  export type SeoTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "kind" | "titleTemplate" | "descriptionTemplate" | "indexState" | "ogTitleTemplate" | "ogDescriptionTemplate" | "ogImageUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["seoTemplate"]>
   export type SeoTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
   }
@@ -7120,6 +7153,9 @@ export namespace Prisma {
       titleTemplate: string
       descriptionTemplate: string
       indexState: $Enums.SeoIndexState
+      ogTitleTemplate: string | null
+      ogDescriptionTemplate: string | null
+      ogImageUrl: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["seoTemplate"]>
@@ -7552,6 +7588,9 @@ export namespace Prisma {
     readonly titleTemplate: FieldRef<"SeoTemplate", 'String'>
     readonly descriptionTemplate: FieldRef<"SeoTemplate", 'String'>
     readonly indexState: FieldRef<"SeoTemplate", 'SeoIndexState'>
+    readonly ogTitleTemplate: FieldRef<"SeoTemplate", 'String'>
+    readonly ogDescriptionTemplate: FieldRef<"SeoTemplate", 'String'>
+    readonly ogImageUrl: FieldRef<"SeoTemplate", 'String'>
     readonly createdAt: FieldRef<"SeoTemplate", 'DateTime'>
     readonly updatedAt: FieldRef<"SeoTemplate", 'DateTime'>
   }
@@ -36778,6 +36817,9 @@ export namespace Prisma {
     titleTemplate: 'titleTemplate',
     descriptionTemplate: 'descriptionTemplate',
     indexState: 'indexState',
+    ogTitleTemplate: 'ogTitleTemplate',
+    ogDescriptionTemplate: 'ogDescriptionTemplate',
+    ogImageUrl: 'ogImageUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -37886,6 +37928,9 @@ export namespace Prisma {
     titleTemplate?: StringFilter<"SeoTemplate"> | string
     descriptionTemplate?: StringFilter<"SeoTemplate"> | string
     indexState?: EnumSeoIndexStateFilter<"SeoTemplate"> | $Enums.SeoIndexState
+    ogTitleTemplate?: StringNullableFilter<"SeoTemplate"> | string | null
+    ogDescriptionTemplate?: StringNullableFilter<"SeoTemplate"> | string | null
+    ogImageUrl?: StringNullableFilter<"SeoTemplate"> | string | null
     createdAt?: DateTimeFilter<"SeoTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"SeoTemplate"> | Date | string
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
@@ -37898,6 +37943,9 @@ export namespace Prisma {
     titleTemplate?: SortOrder
     descriptionTemplate?: SortOrder
     indexState?: SortOrder
+    ogTitleTemplate?: SortOrderInput | SortOrder
+    ogDescriptionTemplate?: SortOrderInput | SortOrder
+    ogImageUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     site?: SiteOrderByWithRelationInput
@@ -37914,6 +37962,9 @@ export namespace Prisma {
     titleTemplate?: StringFilter<"SeoTemplate"> | string
     descriptionTemplate?: StringFilter<"SeoTemplate"> | string
     indexState?: EnumSeoIndexStateFilter<"SeoTemplate"> | $Enums.SeoIndexState
+    ogTitleTemplate?: StringNullableFilter<"SeoTemplate"> | string | null
+    ogDescriptionTemplate?: StringNullableFilter<"SeoTemplate"> | string | null
+    ogImageUrl?: StringNullableFilter<"SeoTemplate"> | string | null
     createdAt?: DateTimeFilter<"SeoTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"SeoTemplate"> | Date | string
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
@@ -37926,6 +37977,9 @@ export namespace Prisma {
     titleTemplate?: SortOrder
     descriptionTemplate?: SortOrder
     indexState?: SortOrder
+    ogTitleTemplate?: SortOrderInput | SortOrder
+    ogDescriptionTemplate?: SortOrderInput | SortOrder
+    ogImageUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SeoTemplateCountOrderByAggregateInput
@@ -37943,6 +37997,9 @@ export namespace Prisma {
     titleTemplate?: StringWithAggregatesFilter<"SeoTemplate"> | string
     descriptionTemplate?: StringWithAggregatesFilter<"SeoTemplate"> | string
     indexState?: EnumSeoIndexStateWithAggregatesFilter<"SeoTemplate"> | $Enums.SeoIndexState
+    ogTitleTemplate?: StringNullableWithAggregatesFilter<"SeoTemplate"> | string | null
+    ogDescriptionTemplate?: StringNullableWithAggregatesFilter<"SeoTemplate"> | string | null
+    ogImageUrl?: StringNullableWithAggregatesFilter<"SeoTemplate"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"SeoTemplate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SeoTemplate"> | Date | string
   }
@@ -40609,6 +40666,9 @@ export namespace Prisma {
     titleTemplate: string
     descriptionTemplate: string
     indexState?: $Enums.SeoIndexState
+    ogTitleTemplate?: string | null
+    ogDescriptionTemplate?: string | null
+    ogImageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutSeoTemplatesInput
@@ -40621,6 +40681,9 @@ export namespace Prisma {
     titleTemplate: string
     descriptionTemplate: string
     indexState?: $Enums.SeoIndexState
+    ogTitleTemplate?: string | null
+    ogDescriptionTemplate?: string | null
+    ogImageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -40631,6 +40694,9 @@ export namespace Prisma {
     titleTemplate?: StringFieldUpdateOperationsInput | string
     descriptionTemplate?: StringFieldUpdateOperationsInput | string
     indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    ogTitleTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogDescriptionTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutSeoTemplatesNestedInput
@@ -40643,6 +40709,9 @@ export namespace Prisma {
     titleTemplate?: StringFieldUpdateOperationsInput | string
     descriptionTemplate?: StringFieldUpdateOperationsInput | string
     indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    ogTitleTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogDescriptionTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -40654,6 +40723,9 @@ export namespace Prisma {
     titleTemplate: string
     descriptionTemplate: string
     indexState?: $Enums.SeoIndexState
+    ogTitleTemplate?: string | null
+    ogDescriptionTemplate?: string | null
+    ogImageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -40664,6 +40736,9 @@ export namespace Prisma {
     titleTemplate?: StringFieldUpdateOperationsInput | string
     descriptionTemplate?: StringFieldUpdateOperationsInput | string
     indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    ogTitleTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogDescriptionTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -40675,6 +40750,9 @@ export namespace Prisma {
     titleTemplate?: StringFieldUpdateOperationsInput | string
     descriptionTemplate?: StringFieldUpdateOperationsInput | string
     indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    ogTitleTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogDescriptionTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43843,6 +43921,9 @@ export namespace Prisma {
     titleTemplate?: SortOrder
     descriptionTemplate?: SortOrder
     indexState?: SortOrder
+    ogTitleTemplate?: SortOrder
+    ogDescriptionTemplate?: SortOrder
+    ogImageUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43854,6 +43935,9 @@ export namespace Prisma {
     titleTemplate?: SortOrder
     descriptionTemplate?: SortOrder
     indexState?: SortOrder
+    ogTitleTemplate?: SortOrder
+    ogDescriptionTemplate?: SortOrder
+    ogImageUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43865,6 +43949,9 @@ export namespace Prisma {
     titleTemplate?: SortOrder
     descriptionTemplate?: SortOrder
     indexState?: SortOrder
+    ogTitleTemplate?: SortOrder
+    ogDescriptionTemplate?: SortOrder
+    ogImageUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -50168,6 +50255,9 @@ export namespace Prisma {
     titleTemplate: string
     descriptionTemplate: string
     indexState?: $Enums.SeoIndexState
+    ogTitleTemplate?: string | null
+    ogDescriptionTemplate?: string | null
+    ogImageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -50178,6 +50268,9 @@ export namespace Prisma {
     titleTemplate: string
     descriptionTemplate: string
     indexState?: $Enums.SeoIndexState
+    ogTitleTemplate?: string | null
+    ogDescriptionTemplate?: string | null
+    ogImageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -50710,6 +50803,9 @@ export namespace Prisma {
     titleTemplate?: StringFilter<"SeoTemplate"> | string
     descriptionTemplate?: StringFilter<"SeoTemplate"> | string
     indexState?: EnumSeoIndexStateFilter<"SeoTemplate"> | $Enums.SeoIndexState
+    ogTitleTemplate?: StringNullableFilter<"SeoTemplate"> | string | null
+    ogDescriptionTemplate?: StringNullableFilter<"SeoTemplate"> | string | null
+    ogImageUrl?: StringNullableFilter<"SeoTemplate"> | string | null
     createdAt?: DateTimeFilter<"SeoTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"SeoTemplate"> | Date | string
   }
@@ -59476,6 +59572,9 @@ export namespace Prisma {
     titleTemplate: string
     descriptionTemplate: string
     indexState?: $Enums.SeoIndexState
+    ogTitleTemplate?: string | null
+    ogDescriptionTemplate?: string | null
+    ogImageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -60177,6 +60276,9 @@ export namespace Prisma {
     titleTemplate?: StringFieldUpdateOperationsInput | string
     descriptionTemplate?: StringFieldUpdateOperationsInput | string
     indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    ogTitleTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogDescriptionTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -60187,6 +60289,9 @@ export namespace Prisma {
     titleTemplate?: StringFieldUpdateOperationsInput | string
     descriptionTemplate?: StringFieldUpdateOperationsInput | string
     indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    ogTitleTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogDescriptionTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -60197,6 +60302,9 @@ export namespace Prisma {
     titleTemplate?: StringFieldUpdateOperationsInput | string
     descriptionTemplate?: StringFieldUpdateOperationsInput | string
     indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    ogTitleTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogDescriptionTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -2,6 +2,7 @@
 import { createHash } from 'node:crypto';
 import '@fontsource-variable/geist';
 import type { CityView, PageView, SiteView } from '../data/site';
+import { defaultSiteImagePath } from '../data/site';
 import { normalizePublicHtmlPath } from '../data/public-url';
 
 interface Props {
@@ -11,9 +12,12 @@ interface Props {
   site: SiteView;
   pages?: PageView[];
   indexable?: boolean;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
 }
 
-const { title, description, city, site, indexable = true } = Astro.props as Props;
+const { title, description, city, site, indexable = true, ogTitle = title, ogDescription = description, ogImage = defaultSiteImagePath } = Astro.props as Props;
 const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
 const connectionPhone = site.connectionPhone;
 const connectionPhoneHref = `tel:${connectionPhone.replace(/[^+\d]/g, '')}`;
@@ -24,6 +28,7 @@ const navItems = [
   { href: '/karta-pokrytiya-provaydera', label: 'Карта покрытия' },
 ];
 const canonicalUrl = new URL(normalizePublicHtmlPath(Astro.url.pathname), Astro.site);
+const socialImageUrl = new URL(ogImage, Astro.site);
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -47,6 +52,11 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:url" content={canonicalUrl.href} />
+    <meta property="og:image" content={socialImageUrl.href} />
     {indexable ? <link rel="canonical" href={canonicalUrl} /> : <meta name="robots" content="noindex, follow" />}
     {indexable && <script is:inline type="application/ld+json" set:html={jsonLd}></script>}
     {metrikaBootstrap && <script is:inline set:html={metrikaBootstrap}></script>}

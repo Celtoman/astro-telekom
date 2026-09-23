@@ -153,6 +153,9 @@ exports.Prisma.SeoTemplateScalarFieldEnum = {
   titleTemplate: 'titleTemplate',
   descriptionTemplate: 'descriptionTemplate',
   indexState: 'indexState',
+  ogTitleTemplate: 'ogTitleTemplate',
+  ogDescriptionTemplate: 'ogDescriptionTemplate',
+  ogImageUrl: 'ogImageUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

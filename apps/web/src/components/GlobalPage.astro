@@ -49,7 +49,7 @@ const coverageDialogId = 'address-entry-coverage';
 const defaultCoverageCity = cities[0];
 ---
 
-<BaseLayout title={meta.title} description={meta.description} indexable={meta.indexState !== 'NOINDEX'} {site}>
+<BaseLayout title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} indexable={meta.indexState !== 'NOINDEX'} {site}>
   {type === 'CITIES' ? <CitiesDirectory {cities} intro={contentText} /> : <section class="hero">
     <div class="container">
       <span class="eyebrow">Дом.ру</span>

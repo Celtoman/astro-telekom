@@ -52,8 +52,10 @@ export interface SiteCatalog {
   cities: CityView[];
   redirects: RedirectView[];
   sitemap: { excludedPaths: string[] };
-  seoByPath?: Record<string, { title: string; description: string; indexState: 'INDEX' | 'NOINDEX' }>;
+  seoByPath?: Record<string, { title: string; description: string; indexState: 'INDEX' | 'NOINDEX'; ogTitle: string; ogDescription: string; ogImage: string }>;
 }
+
+export const defaultSiteImagePath = '/images/home-connection-equipment.webp';
 
 export const publicSiteSlug = import.meta.env.PUBLIC_SITE_SLUG || 'domru-site';
 const fallbackConnectionPhone = import.meta.env.PUBLIC_CONNECTION_PHONE || '8 (800) 000-00-00';
@@ -212,7 +214,17 @@ function normalizeSeoByPath(value: unknown, routes: PublicRouteView[]): SiteCata
     if (!meta || typeof meta.title !== 'string' || !meta.title.trim() || typeof meta.description !== 'string' || !meta.description.trim() || !['INDEX', 'NOINDEX'].includes(meta.indexState)) {
       throw new Error(`Некорректное SEO для маршрута ${route.path}`);
     }
-    normalized[route.path] = { title: meta.title.trim(), description: meta.description.trim(), indexState: meta.indexState };
+    for (const field of ['ogTitle', 'ogDescription', 'ogImage'] as const) {
+      if (meta[field] !== undefined && (typeof meta[field] !== 'string' || !meta[field].trim())) {
+        throw new Error(`Некорректное поле ${field} SEO-снимка: ${route.path}`);
+      }
+    }
+    normalized[route.path] = {
+      title: meta.title.trim(), description: meta.description.trim(), indexState: meta.indexState,
+      ogTitle: meta.ogTitle?.trim() || meta.title.trim(),
+      ogDescription: meta.ogDescription?.trim() || meta.description.trim(),
+      ogImage: meta.ogImage?.trim() || defaultSiteImagePath,
+    };
   }
   return normalized;
 }
@@ -323,7 +335,7 @@ function normalizedCatalog(value: unknown): SiteCatalog {
 export function seoMeta(catalog: SiteCatalog, path: string, fallback: { title: string; description: string }) {
   const meta = catalog.seoByPath?.[path];
   if (catalog.seoByPath && !meta) throw new Error(`SEO-снимок не содержит ${path}`);
-  return meta || { ...fallback, indexState: 'INDEX' as const };
+  return meta || { ...fallback, indexState: 'INDEX' as const, ogTitle: fallback.title, ogDescription: fallback.description, ogImage: defaultSiteImagePath };
 }
 
 let catalogPromise: Promise<SiteCatalog> | undefined;
