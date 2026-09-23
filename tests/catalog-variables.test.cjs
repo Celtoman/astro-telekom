@@ -54,6 +54,19 @@ test('catalog blocks unknown variables and variables in URL fields', () => {
   assert.throws(() => resolve(unsafe, sources()), /URL|ссыл/i);
 });
 
+test('catalog keeps legacy serialized tariff attributes but still rejects variable tokens there', () => {
+  const resolve = resolver();
+  const input = catalog();
+  const serialized = 'a:4:{i:0;s:3:"ivi";i:1;s:9:"kinopoisk";i:2;s:7:"premier";i:3;s:5:"start";}';
+  input.cities[0].tariffs[0].attributes.online_cinemas = serialized;
+  const result = resolve(input, sources());
+  assert.equal(result.cities[0].tariffs[0].attributes.online_cinemas, serialized);
+  input.cities[0].tariffs[0].attributes.online_cinemas = 'a:4:{CITY_NAME}';
+  assert.throws(() => resolve(input, sources()), /Переменные запрещены.*online_cinemas/i);
+  input.cities[0].tariffs[0].attributes.online_cinemas = '{city_name}';
+  assert.throws(() => resolve(input, sources()), /Переменные запрещены.*online_cinemas/i);
+});
+
 test('catalog snapshot value is fixed after source changes', () => {
   const resolve = resolver();
   const first = resolve(catalog(), sources());

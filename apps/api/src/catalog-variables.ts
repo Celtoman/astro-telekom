@@ -91,7 +91,9 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
 
   const assertNoSkippedTokens = (value: unknown, path: string): void => {
     if (typeof value === 'string') {
-      if (/\{[A-Z][A-Z0-9_]*\}|\{[^{}]*\}/.test(value)) {
+      // Match variable-shaped tokens, not arbitrary structured legacy values
+      // such as PHP-serialized a:4:{i:0;s:3:"ivi";...} tariff attributes.
+      if (/\{[A-Za-z][A-Za-z0-9_ ]*\}|\{[A-Z][^{}]*\}/.test(value)) {
         throw new BadRequestException(`Переменные запрещены вне редакционного поля или в URL: ${path}`);
       }
       return;
