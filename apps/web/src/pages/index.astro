@@ -1,14 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { loadSiteData } from '../data/site';
+import { loadSiteData, seoMeta } from '../data/site';
 import { publicHtmlPath } from '../data/public-url';
-const { site, cities } = await loadSiteData();
+const catalog = await loadSiteData();
+const { site, cities } = catalog;
 const featuredCities = cities.slice(0, 6);
 const title = `Домашний интернет и телевидение ${site.name}`;
 const description = 'Выберите город, чтобы посмотреть тарифы домашнего интернета и телевидения.';
+const meta = seoMeta(catalog, '/', { title, description });
 ---
 
-<BaseLayout title={title} description={description} {site}>
+<BaseLayout title={meta.title} description={meta.description} indexable={meta.indexState !== 'NOINDEX'} {site}>
   <section class="hero"><div class="container"><span class="eyebrow">{site.name}</span><h1>{title}</h1><p class="lead">Выберите город, чтобы посмотреть доступные услуги, тарифы и проверку подключения по адресу.</p>{cities[0] && <a class="button" href={publicHtmlPath(cities[0].slug)}>Выбрать город</a>}</div></section>
   <section class="section container" id="cities"><h2>Популярные города</h2>{featuredCities.length > 0 ? <><div class="grid">{featuredCities.map((city) => <article class="card"><h3>{city.name}</h3><p>Домашний интернет, телевидение и актуальные предложения.</p><a class="card-link" href={publicHtmlPath(city.slug)}>Открыть страницу города →</a></article>)}</div><p><a class="card-link" href="/goroda-obsluzhivaniya">Все города обслуживания →</a></p></> : <p class="lead">Опубликованных городов пока нет.</p>}</section>
 </BaseLayout>

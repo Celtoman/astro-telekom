@@ -58,6 +58,7 @@ test('public catalog does not expose authored variable templates or operator-onl
   const snapshot = {
     site: { slug: 'domru-site' }, cities: [], routes: [],
     variableWarnings: [{ code: 'CITY_NAME', path: 'globalPages[0].title', reason: 'OUT_OF_CONTEXT' }],
+    seoWarnings: [{ code: 'DUPLICATE_TITLE', path: '/kazan', relatedPath: '/moskva' }],
     variableUsages: [{ code: 'CITY_NAME', template: 'В {CITY_NAME}', path: 'globalPages[0].title' }],
     variableSources: { providerName: 'Дом.ру', resolvedAt: '2026-09-23T00:00:00.000Z' },
   };
@@ -160,6 +161,13 @@ test('public city catalog returns only published entities for one published site
         return [{ path: '/kazan/giga-500', reason: 'Управляемое исключение' }];
       },
     },
+    seoTemplate: {
+      findMany: async (query) => {
+        calls.seoTemplates = query;
+        return ['HOME', 'CITY_HOME', 'CITY_TARIFF_DETAIL', ...releaseOneGlobalPages.map((page) => page.type)]
+          .map((kind) => ({ kind, titleTemplate: `Заголовок ${kind}`, descriptionTemplate: `Описание ${kind}`, indexState: 'INDEX' }));
+      },
+    },
   });
 
   const result = await controller.list('domru-site');
@@ -176,6 +184,7 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(calls.pages.include.blocks.where, { visible: true, archivedAt: null });
   assert.deepEqual(calls.redirects.where, { siteId: 'site-1', status: 'PUBLISHED' });
   assert.deepEqual(calls.sitemapExclusions.where, { siteId: 'site-1' });
+  assert.deepEqual(calls.seoTemplates.where, { siteId: 'site-1' });
   assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test', connectionPhone: '+7 (800) 555-35-35', supportPhone: '+7 (800) 250-77-77' });
   assert.equal(result.cities.length, 1);
   assert.equal(result.cities[0].namePrepositional, 'Казани');

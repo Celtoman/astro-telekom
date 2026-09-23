@@ -52,6 +52,7 @@ export interface SiteCatalog {
   cities: CityView[];
   redirects: RedirectView[];
   sitemap: { excludedPaths: string[] };
+  seoByPath?: Record<string, { title: string; description: string; indexState: 'INDEX' | 'NOINDEX' }>;
 }
 
 export const publicSiteSlug = import.meta.env.PUBLIC_SITE_SLUG || 'domru-site';
@@ -181,7 +182,7 @@ function normalizeRedirects(value: unknown, routes: PublicRouteView[]): Redirect
   return redirects;
 }
 
-function normalizeSitemap(value: unknown, routes: PublicRouteView[]) {
+function normalizeSitemap(value: unknown, routes: PublicRouteView[], seoByPath?: SiteCatalog['seoByPath']) {
   const raw = value && typeof value === 'object' && Array.isArray((value as Record<string, unknown>).excludedPaths)
     ? (value as { excludedPaths: unknown[] }).excludedPaths
     : [];
@@ -189,12 +190,31 @@ function normalizeSitemap(value: unknown, routes: PublicRouteView[]) {
   const excludedPaths = raw.map((item) => normalizePublicHtmlPath(String(item || '')));
   const unique = new Set<string>();
   for (const path of excludedPaths) {
-    if (path === '/') throw new Error('Корневой URL нельзя исключить из sitemap');
+    if (path === '/' && seoByPath?.['/']?.indexState !== 'NOINDEX') throw new Error('Корневой URL нельзя исключить из sitemap без noindex');
     if (!routePaths.has(path)) throw new Error(`Sitemap исключает неизвестный опубликованный URL: ${path}`);
     if (unique.has(path)) throw new Error(`Sitemap содержит дублирующее исключение: ${path}`);
     unique.add(path);
   }
+  if (seoByPath) for (const [path, meta] of Object.entries(seoByPath)) {
+    if (meta.indexState === 'NOINDEX' && !unique.has(path)) throw new Error(`noindex URL отсутствует в исключениях sitemap: ${path}`);
+  }
   return { excludedPaths: [...unique].sort() };
+}
+
+function normalizeSeoByPath(value: unknown, routes: PublicRouteView[]): SiteCatalog['seoByPath'] {
+  if (value === undefined) return undefined; // Historical publication snapshot.
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('API вернул некорректный SEO-снимок');
+  const source = value as Record<string, any>;
+  if (Object.keys(source).length !== routes.length) throw new Error('SEO-снимок не покрывает все маршруты Release 1');
+  const normalized: NonNullable<SiteCatalog['seoByPath']> = {};
+  for (const route of routes) {
+    const meta = source[route.path];
+    if (!meta || typeof meta.title !== 'string' || !meta.title.trim() || typeof meta.description !== 'string' || !meta.description.trim() || !['INDEX', 'NOINDEX'].includes(meta.indexState)) {
+      throw new Error(`Некорректное SEO для маршрута ${route.path}`);
+    }
+    normalized[route.path] = { title: meta.title.trim(), description: meta.description.trim(), indexState: meta.indexState };
+  }
+  return normalized;
 }
 
 const demoGlobalPages: PageView[] = [
@@ -278,7 +298,8 @@ function normalizedCatalog(value: unknown): SiteCatalog {
   const expectedRoutes = expectedReleaseOneRoutes(cities, globalPages);
   const routes = normalizeRoutes(payload.routes, expectedRoutes);
   const redirects = normalizeRedirects(payload.redirects, routes);
-  const sitemap = normalizeSitemap(payload.sitemap, routes);
+  const seoByPath = normalizeSeoByPath(payload.seoByPath, routes);
+  const sitemap = normalizeSitemap(payload.sitemap, routes, seoByPath);
   const connectionPhone = String(payload.site.connectionPhone || '').trim();
   const supportPhone = String(payload.site.supportPhone || '').trim();
   if (!connectionPhone || !supportPhone) throw new Error('API не вернул обязательные телефоны сайта');
@@ -295,7 +316,14 @@ function normalizedCatalog(value: unknown): SiteCatalog {
     cities,
     redirects,
     sitemap,
+    seoByPath,
   };
+}
+
+export function seoMeta(catalog: SiteCatalog, path: string, fallback: { title: string; description: string }) {
+  const meta = catalog.seoByPath?.[path];
+  if (catalog.seoByPath && !meta) throw new Error(`SEO-снимок не содержит ${path}`);
+  return meta || { ...fallback, indexState: 'INDEX' as const };
 }
 
 let catalogPromise: Promise<SiteCatalog> | undefined;

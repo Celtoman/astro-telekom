@@ -7,6 +7,7 @@ import { PrismaService } from './prisma.service';
 import { buildReleaseOneRoutes } from './public-route-policy';
 import { normalizeRedirectPath } from './redirect-path';
 import { formatSitePhone } from './site-phone';
+import { resolveSeoTemplates } from './seo-templates';
 
 type CatalogClient = Prisma.TransactionClient | PrismaService;
 
@@ -29,7 +30,7 @@ export class SiteCatalogService {
     });
     if (!site) throw new NotFoundException('Site not found');
 
-    const [cities, globalPages, redirects, sitemapExclusions] = await Promise.all([
+    const [cities, globalPages, redirects, sitemapExclusions, seoTemplates] = await Promise.all([
       client.city.findMany({
         where: { siteId: site.id, status: 'PUBLISHED' },
         orderBy: { name: 'asc' },
@@ -54,11 +55,16 @@ export class SiteCatalogService {
         orderBy: { path: 'asc' },
         select: { path: true },
       }),
+      client.seoTemplate.findMany({
+        where: { siteId: site.id },
+        orderBy: { kind: 'asc' },
+      }),
     ]);
 
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
     const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages);
-    return resolveCatalogVariables({
+    const now = new Date();
+    const resolved = resolveCatalogVariables({
       site: {
         name: site.name,
         slug: site.slug,
@@ -74,8 +80,23 @@ export class SiteCatalogService {
     }, {
       site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
       provider: { name: site.provider.name },
-      now: new Date(),
+      now,
     });
+    const seo = resolveSeoTemplates({
+      routes,
+      templates: seoTemplates,
+      cities: resolved.cities,
+      site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
+      provider: { name: site.provider.name },
+      now,
+    });
+    const noindexPaths = Object.entries(seo.byPath).filter(([, meta]) => meta.indexState === 'NOINDEX').map(([path]) => path);
+    return {
+      ...resolved,
+      sitemap: { excludedPaths: [...new Set([...resolved.sitemap.excludedPaths, ...noindexPaths])].sort() },
+      seoByPath: seo.byPath,
+      seoWarnings: seo.warnings,
+    };
   }
 
   async getCity(siteSlug: string, citySlug: string, client: CatalogClient = this.prisma) {

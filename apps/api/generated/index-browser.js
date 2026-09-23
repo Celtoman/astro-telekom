@@ -146,6 +146,17 @@ exports.Prisma.SiteScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SeoTemplateScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  kind: 'kind',
+  titleTemplate: 'titleTemplate',
+  descriptionTemplate: 'descriptionTemplate',
+  indexState: 'indexState',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SitemapExclusionScalarFieldEnum = {
   id: 'id',
   siteId: 'siteId',
@@ -555,6 +566,22 @@ exports.PublishStatus = exports.$Enums.PublishStatus = {
   ARCHIVED: 'ARCHIVED'
 };
 
+exports.SeoTemplateKind = exports.$Enums.SeoTemplateKind = {
+  HOME: 'HOME',
+  COVERAGE: 'COVERAGE',
+  CITIES: 'CITIES',
+  PRIVACY: 'PRIVACY',
+  PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT',
+  COOKIE_POLICY: 'COOKIE_POLICY',
+  CITY_HOME: 'CITY_HOME',
+  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL'
+};
+
+exports.SeoIndexState = exports.$Enums.SeoIndexState = {
+  INDEX: 'INDEX',
+  NOINDEX: 'NOINDEX'
+};
+
 exports.SiteRebuildStatus = exports.$Enums.SiteRebuildStatus = {
   PENDING: 'PENDING',
   QUEUED: 'QUEUED',
@@ -715,6 +742,7 @@ exports.DeliveryAttemptStatus = exports.$Enums.DeliveryAttemptStatus = {
 exports.Prisma.ModelName = {
   Provider: 'Provider',
   Site: 'Site',
+  SeoTemplate: 'SeoTemplate',
   SitemapExclusion: 'SitemapExclusion',
   SiteRebuild: 'SiteRebuild',
   ContentRevision: 'ContentRevision',

@@ -47,15 +47,17 @@ export class SitemapService {
     const origin = normalizeSitemapOrigin(process.env.PUBLIC_SITE_URL || site.domain || '');
     const validation = { errors: [] as string[], warnings: [] as string[] };
     let routes: PublicRoute[] = [];
+    let noindexPaths = new Set<string>();
     try {
       const currentCatalog = await this.catalog.listBySiteId(siteId);
       routes = currentCatalog.routes as PublicRoute[];
+      noindexPaths = new Set(Object.entries(currentCatalog.seoByPath || {}).filter(([, meta]) => meta.indexState === 'NOINDEX').map(([path]) => path));
     } catch (error) {
       validation.errors.push((error as Error).message || 'Не удалось построить опубликованный route inventory');
     }
 
     const exclusionByPath = new Map(exclusions.map((item) => [item.path, item]));
-    const entries = routes.map((route) => this.publishedEntry(route, exclusionByPath.get(route.path)));
+    const entries = routes.map((route) => this.publishedEntry(route, exclusionByPath.get(route.path), noindexPaths.has(route.path)));
     const entryPaths = new Set(entries.map((entry) => entry.path));
     this.appendUnpublishedEntries(entries, entryPaths, pages, cities);
     for (const exclusion of exclusions) {
@@ -126,7 +128,7 @@ export class SitemapService {
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }
 
-  private publishedEntry(route: PublicRoute, exclusion?: { reason: string }): SitemapEntry {
+  private publishedEntry(route: PublicRoute, exclusion?: { reason: string }, noindex = false): SitemapEntry {
     return {
       path: route.path,
       group: sitemapGroupForRoute(route.kind),
@@ -135,9 +137,9 @@ export class SitemapService {
         ? `${route.citySlug} / ${route.tariffSlug}`
         : route.citySlug || route.pageType || 'Главная',
       publishStatus: 'PUBLISHED',
-      eligible: true,
-      included: !exclusion,
-      reason: exclusion?.reason || null,
+      eligible: !noindex,
+      included: !exclusion && !noindex,
+      reason: noindex ? 'Автоматически исключён: SEO-шаблон noindex' : exclusion?.reason || null,
     };
   }
 

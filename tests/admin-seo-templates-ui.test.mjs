@@ -1,0 +1,24 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const root = join(import.meta.dirname, '..');
+const read = (relativePath) => readFileSync(join(root, relativePath), 'utf8');
+
+test('SEO templates have a protected admin route and cookie-auth React editor', () => {
+  const route = read('apps/admin/src/pages/seo/templates.astro');
+  const editor = read('apps/admin/src/components/SeoTemplatesApp.tsx');
+  const controller = read('apps/api/src/admin-seo-templates.controller.ts');
+  assert.match(route, /<SeoTemplatesApp[^>]*client:load/);
+  assert.match(route, /noindex, nofollow/);
+  assert.match(controller, /@UseGuards\(AdminTokenGuard\)/);
+  assert.match(controller, /@Get\(\)/);
+  assert.match(controller, /@Patch\(':kind'\)/);
+  assert.match(editor, /\/auth\/me/);
+  assert.match(editor, /workingByPath/);
+  assert.match(editor, /publishedByPath/);
+  assert.match(editor, /confirmNoindexCount/);
+  assert.match(editor, /PublicationStatusCard/);
+  assert.doesNotMatch(editor, /localStorage|sessionStorage|x-admin-token/);
+});

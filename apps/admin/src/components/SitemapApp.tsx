@@ -20,7 +20,7 @@ interface Entry { path: string; group: Group; sourceType: string; sourceLabel: s
 interface Workspace {
   site: Site; origin: string; workingRevision: number; publishedRevision: number
   lastGeneration: { id: string; siteRevision: number; status: string; generatedAt: string; lastError: string | null } | null
-  entries: Entry[]; validation: { errors: string[]; warnings: string[] }
+  entries: Entry[]; exclusions: Array<{ path: string; reason: string }>; validation: { errors: string[]; warnings: string[] }
 }
 type Draft = Record<string, string>
 const groupLabels: Record<Group, string> = { PAGES: "Страницы", CITIES: "Города", TARIFFS: "Тарифы" }
@@ -52,7 +52,9 @@ export function SitemapApp({ apiUrl }: { apiUrl: string }) {
       const nextSiteId = selectedSiteId || siteId || availableSites[0]?.id || ""
       const data = nextSiteId ? await requestJson<Workspace>(apiUrl, `/admin/sites/${nextSiteId}/sitemap`) : null
       setUser(session.user); setSites(availableSites); setSiteId(nextSiteId); setWorkspace(data)
-      setDraft(Object.fromEntries((data?.entries || []).filter((item) => item.eligible && !item.included).map((item) => [item.path, item.reason || ""])))
+      setDraft(Object.fromEntries((data?.exclusions || [])
+        .filter((item) => data?.entries.some((entry) => entry.path === item.path && entry.publishStatus === "PUBLISHED"))
+        .map((item) => [item.path, item.reason])))
     } catch (caught) {
       if (caught instanceof AdminApiError && caught.status === 401) { window.location.replace("/login"); return }
       setError(caught instanceof Error ? caught.message : "API недоступен")
@@ -69,7 +71,7 @@ export function SitemapApp({ apiUrl }: { apiUrl: string }) {
   const visible = entries.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
   const pages = Math.max(1, Math.ceil(entries.length / PAGE_SIZE))
   const invalidReasons = Object.entries(draft).filter(([, reason]) => !reason.trim())
-  const changed = workspace ? JSON.stringify(Object.fromEntries(workspace.entries.filter((item) => item.eligible && !item.included).map((item) => [item.path, item.reason || ""]))) !== JSON.stringify(draft) : false
+  const changed = workspace ? JSON.stringify(Object.fromEntries(workspace.exclusions.map((item) => [item.path, item.reason]))) !== JSON.stringify(draft) : false
   const previewXml = workspace ? `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${workspace.entries.filter((item) => item.group === group && item.eligible && !(item.path in draft)).map((item) => `<url><loc>${xmlEscape(`${workspace.origin}${item.path}`)}</loc></url>`).join("")}</urlset>` : ""
 
   function toggle(entry: Entry, include: boolean) {

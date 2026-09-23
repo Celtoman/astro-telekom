@@ -33,6 +33,7 @@ export const adminNavigation = [
     href: "/seo/sitemap",
     icon: "seo",
     children: [
+      { id: "seo-templates", label: "Шаблоны", href: "/seo/templates", icon: "seo" },
       { id: "seo-sitemap", label: "Sitemap", href: "/seo/sitemap", icon: "sitemap" },
     ],
   },

@@ -34,7 +34,7 @@ async function createFixture(overrides = {}) {
     `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>${publicSiteUrl}/sitemap-pages.xml</loc></sitemap><sitemap><loc>${publicSiteUrl}/sitemap-cities.xml</loc></sitemap><sitemap><loc>${publicSiteUrl}/sitemap-tariffs.xml</loc></sitemap></sitemapindex>`,
   );
   await writeFile(join(directory, 'sitemap-pages.xml'), overrides.sitemap ?? `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${publicSiteUrl}/</loc></url></urlset>`);
-  await writeFile(join(directory, 'sitemap-cities.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${publicSiteUrl}/kazan</loc></url></urlset>`);
+  await writeFile(join(directory, 'sitemap-cities.xml'), overrides.citySitemap ?? `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${publicSiteUrl}/kazan</loc></url></urlset>`);
   await writeFile(join(directory, 'sitemap-tariffs.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`);
   await writeFile(
     join(directory, 'robots.txt'),
@@ -60,6 +60,20 @@ test('publication SEO verifier accepts a complete sitemap and valid raw HTML', a
       await verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
       { indexablePages: 2, htmlPages: 3 },
     );
+  });
+});
+
+test('publication SEO verifier accepts noindex only when the HTML URL is absent from sitemap', async () => {
+  const noindexCity = indexableHtml(`${publicSiteUrl}/kazan`, { head: '<meta name="robots" content="noindex, follow">', canonical: `${publicSiteUrl}/kazan` })
+    .replace(`<link rel="canonical" href="${publicSiteUrl}/kazan">`, '');
+  await withFixture({
+    kazan: noindexCity,
+    citySitemap: '<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>',
+  }, async (distDirectory) => {
+    assert.deepEqual(await verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }), { indexablePages: 1, htmlPages: 3 });
+  });
+  await withFixture({ kazan: noindexCity }, async (distDirectory) => {
+    await assert.rejects(verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }), /noindex/);
   });
 });
 

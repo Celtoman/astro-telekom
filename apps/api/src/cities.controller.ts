@@ -13,8 +13,8 @@ export class CitiesController {
   @Get()
   async list(@Param('siteSlug') siteSlug: string) {
     const catalog = await this.publications.getPublishedCatalog(siteSlug);
-    if (!('variableUsages' in catalog || 'variableSources' in catalog || 'variableWarnings' in catalog)) return catalog;
-    const { variableUsages: _usages, variableSources: _sources, variableWarnings: _warnings, ...publicCatalog } = catalog;
+    if (!('variableUsages' in catalog || 'variableSources' in catalog || 'variableWarnings' in catalog || 'seoWarnings' in catalog)) return catalog;
+    const { variableUsages: _usages, variableSources: _sources, variableWarnings: _warnings, seoWarnings: _seoWarnings, ...publicCatalog } = catalog;
     return publicCatalog;
   }
 

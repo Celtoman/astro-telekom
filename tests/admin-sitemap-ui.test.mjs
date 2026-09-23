@@ -36,5 +36,6 @@ test('sitemap workspace exposes diagnostics, XML preview and revisioned exclusio
   assert.match(component, /Tabs/);
   assert.match(component, /Причина/);
   assert.match(component, /Checkbox/);
+  assert.match(component, /workspace\.exclusions|data\?\.exclusions/, 'manual exclusions must survive while a route is temporarily noindex');
   assert.doesNotMatch(component, /innerHTML|x-admin-token|Authorization|service token/i);
 });

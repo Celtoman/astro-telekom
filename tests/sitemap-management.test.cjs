@@ -17,7 +17,7 @@ function loadSitemapModules() {
   }
 }
 
-function fixture({ currentExclusions = [], routes, latestPublication = null } = {}) {
+function fixture({ currentExclusions = [], routes, seoByPath, latestPublication = null } = {}) {
   const created = [];
   const deleted = [];
   const revisions = [];
@@ -53,6 +53,7 @@ function fixture({ currentExclusions = [], routes, latestPublication = null } = 
   };
   const catalog = {
     listBySiteId: async () => ({
+      seoByPath,
       routes: routes ?? [
         { kind: 'HOME', path: '/' },
         { kind: 'CITY_HOME', path: '/kazan' },
@@ -85,6 +86,17 @@ test('sitemap policy builds escaped absolute XML and never excludes the root rou
     () => validateSitemapExclusions([{ path: '/', reason: 'Скрыть' }], new Set(['/', '/kazan'])),
     /корневой URL/i,
   );
+});
+
+test('sitemap workspace marks template noindex URLs as automatically excluded and not manually editable', async () => {
+  const { SitemapService } = loadSitemapModules();
+  const f = fixture({ seoByPath: { '/kazan': { indexState: 'NOINDEX' } } });
+  const workspace = await new SitemapService(f.prisma, f.catalog, f.publications).getWorkspace('site-1');
+  const city = workspace.entries.find((entry) => entry.path === '/kazan');
+  assert.equal(city.included, false);
+  assert.equal(city.eligible, false);
+  assert.match(city.reason, /noindex/i);
+  assert.doesNotMatch(workspace.previews.cities, /<loc>https:\/\/partner\.example\.test\/kazan<\/loc>/);
 });
 
 test('sitemap workspace reports origin, last generation, source status and managed exclusions', async () => {

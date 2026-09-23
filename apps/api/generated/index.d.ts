@@ -24,6 +24,11 @@ export type Provider = $Result.DefaultSelection<Prisma.$ProviderPayload>
  */
 export type Site = $Result.DefaultSelection<Prisma.$SitePayload>
 /**
+ * Model SeoTemplate
+ * 
+ */
+export type SeoTemplate = $Result.DefaultSelection<Prisma.$SeoTemplatePayload>
+/**
  * Model SitemapExclusion
  * 
  */
@@ -168,6 +173,28 @@ export const PageType: {
 };
 
 export type PageType = (typeof PageType)[keyof typeof PageType]
+
+
+export const SeoTemplateKind: {
+  HOME: 'HOME',
+  COVERAGE: 'COVERAGE',
+  CITIES: 'CITIES',
+  PRIVACY: 'PRIVACY',
+  PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT',
+  COOKIE_POLICY: 'COOKIE_POLICY',
+  CITY_HOME: 'CITY_HOME',
+  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL'
+};
+
+export type SeoTemplateKind = (typeof SeoTemplateKind)[keyof typeof SeoTemplateKind]
+
+
+export const SeoIndexState: {
+  INDEX: 'INDEX',
+  NOINDEX: 'NOINDEX'
+};
+
+export type SeoIndexState = (typeof SeoIndexState)[keyof typeof SeoIndexState]
 
 
 export const ServiceType: {
@@ -371,6 +398,14 @@ export const PublishStatus: typeof $Enums.PublishStatus
 export type PageType = $Enums.PageType
 
 export const PageType: typeof $Enums.PageType
+
+export type SeoTemplateKind = $Enums.SeoTemplateKind
+
+export const SeoTemplateKind: typeof $Enums.SeoTemplateKind
+
+export type SeoIndexState = $Enums.SeoIndexState
+
+export const SeoIndexState: typeof $Enums.SeoIndexState
 
 export type ServiceType = $Enums.ServiceType
 
@@ -580,6 +615,16 @@ export class PrismaClient<
     * ```
     */
   get site(): Prisma.SiteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.seoTemplate`: Exposes CRUD operations for the **SeoTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SeoTemplates
+    * const seoTemplates = await prisma.seoTemplate.findMany()
+    * ```
+    */
+  get seoTemplate(): Prisma.SeoTemplateDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.sitemapExclusion`: Exposes CRUD operations for the **SitemapExclusion** model.
@@ -1259,6 +1304,7 @@ export namespace Prisma {
   export const ModelName: {
     Provider: 'Provider',
     Site: 'Site',
+    SeoTemplate: 'SeoTemplate',
     SitemapExclusion: 'SitemapExclusion',
     SiteRebuild: 'SiteRebuild',
     ContentRevision: 'ContentRevision',
@@ -1297,7 +1343,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "provider" | "site" | "sitemapExclusion" | "siteRebuild" | "contentRevision" | "sitePublication" | "auditEvent" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadDecisionEvent" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
+      modelProps: "provider" | "site" | "seoTemplate" | "sitemapExclusion" | "siteRebuild" | "contentRevision" | "sitePublication" | "auditEvent" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadDecisionEvent" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1446,6 +1492,80 @@ export namespace Prisma {
           count: {
             args: Prisma.SiteCountArgs<ExtArgs>
             result: $Utils.Optional<SiteCountAggregateOutputType> | number
+          }
+        }
+      }
+      SeoTemplate: {
+        payload: Prisma.$SeoTemplatePayload<ExtArgs>
+        fields: Prisma.SeoTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SeoTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeoTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SeoTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeoTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.SeoTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeoTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SeoTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeoTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.SeoTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeoTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.SeoTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeoTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.SeoTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SeoTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeoTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.SeoTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeoTemplatePayload>
+          }
+          update: {
+            args: Prisma.SeoTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeoTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.SeoTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SeoTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SeoTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeoTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.SeoTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeoTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.SeoTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSeoTemplate>
+          }
+          groupBy: {
+            args: Prisma.SeoTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SeoTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SeoTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<SeoTemplateCountAggregateOutputType> | number
           }
         }
       }
@@ -3276,6 +3396,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     provider?: ProviderOmit
     site?: SiteOmit
+    seoTemplate?: SeoTemplateOmit
     sitemapExclusion?: SitemapExclusionOmit
     siteRebuild?: SiteRebuildOmit
     contentRevision?: ContentRevisionOmit
@@ -3440,6 +3561,7 @@ export namespace Prisma {
     publications: number
     auditEvents: number
     sitemapExclusions: number
+    seoTemplates: number
   }
 
   export type SiteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3455,6 +3577,7 @@ export namespace Prisma {
     publications?: boolean | SiteCountOutputTypeCountPublicationsArgs
     auditEvents?: boolean | SiteCountOutputTypeCountAuditEventsArgs
     sitemapExclusions?: boolean | SiteCountOutputTypeCountSitemapExclusionsArgs
+    seoTemplates?: boolean | SiteCountOutputTypeCountSeoTemplatesArgs
   }
 
   // Custom InputTypes
@@ -3550,6 +3673,13 @@ export namespace Prisma {
    */
   export type SiteCountOutputTypeCountSitemapExclusionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SitemapExclusionWhereInput
+  }
+
+  /**
+   * SiteCountOutputType without action
+   */
+  export type SiteCountOutputTypeCountSeoTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SeoTemplateWhereInput
   }
 
 
@@ -5449,6 +5579,7 @@ export namespace Prisma {
     publications?: boolean | Site$publicationsArgs<ExtArgs>
     auditEvents?: boolean | Site$auditEventsArgs<ExtArgs>
     sitemapExclusions?: boolean | Site$sitemapExclusionsArgs<ExtArgs>
+    seoTemplates?: boolean | Site$seoTemplatesArgs<ExtArgs>
     _count?: boolean | SiteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["site"]>
 
@@ -5517,6 +5648,7 @@ export namespace Prisma {
     publications?: boolean | Site$publicationsArgs<ExtArgs>
     auditEvents?: boolean | Site$auditEventsArgs<ExtArgs>
     sitemapExclusions?: boolean | Site$sitemapExclusionsArgs<ExtArgs>
+    seoTemplates?: boolean | Site$seoTemplatesArgs<ExtArgs>
     _count?: boolean | SiteCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SiteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5542,6 +5674,7 @@ export namespace Prisma {
       publications: Prisma.$SitePublicationPayload<ExtArgs>[]
       auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
       sitemapExclusions: Prisma.$SitemapExclusionPayload<ExtArgs>[]
+      seoTemplates: Prisma.$SeoTemplatePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5964,6 +6097,7 @@ export namespace Prisma {
     publications<T extends Site$publicationsArgs<ExtArgs> = {}>(args?: Subset<T, Site$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     auditEvents<T extends Site$auditEventsArgs<ExtArgs> = {}>(args?: Subset<T, Site$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sitemapExclusions<T extends Site$sitemapExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, Site$sitemapExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    seoTemplates<T extends Site$seoTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, Site$seoTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6695,6 +6829,30 @@ export namespace Prisma {
   }
 
   /**
+   * Site.seoTemplates
+   */
+  export type Site$seoTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateInclude<ExtArgs> | null
+    where?: SeoTemplateWhereInput
+    orderBy?: SeoTemplateOrderByWithRelationInput | SeoTemplateOrderByWithRelationInput[]
+    cursor?: SeoTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SeoTemplateScalarFieldEnum | SeoTemplateScalarFieldEnum[]
+  }
+
+  /**
    * Site without action
    */
   export type SiteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6710,6 +6868,1108 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SiteInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SeoTemplate
+   */
+
+  export type AggregateSeoTemplate = {
+    _count: SeoTemplateCountAggregateOutputType | null
+    _min: SeoTemplateMinAggregateOutputType | null
+    _max: SeoTemplateMaxAggregateOutputType | null
+  }
+
+  export type SeoTemplateMinAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    kind: $Enums.SeoTemplateKind | null
+    titleTemplate: string | null
+    descriptionTemplate: string | null
+    indexState: $Enums.SeoIndexState | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SeoTemplateMaxAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    kind: $Enums.SeoTemplateKind | null
+    titleTemplate: string | null
+    descriptionTemplate: string | null
+    indexState: $Enums.SeoIndexState | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SeoTemplateCountAggregateOutputType = {
+    id: number
+    siteId: number
+    kind: number
+    titleTemplate: number
+    descriptionTemplate: number
+    indexState: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SeoTemplateMinAggregateInputType = {
+    id?: true
+    siteId?: true
+    kind?: true
+    titleTemplate?: true
+    descriptionTemplate?: true
+    indexState?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SeoTemplateMaxAggregateInputType = {
+    id?: true
+    siteId?: true
+    kind?: true
+    titleTemplate?: true
+    descriptionTemplate?: true
+    indexState?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SeoTemplateCountAggregateInputType = {
+    id?: true
+    siteId?: true
+    kind?: true
+    titleTemplate?: true
+    descriptionTemplate?: true
+    indexState?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SeoTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SeoTemplate to aggregate.
+     */
+    where?: SeoTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeoTemplates to fetch.
+     */
+    orderBy?: SeoTemplateOrderByWithRelationInput | SeoTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SeoTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeoTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeoTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SeoTemplates
+    **/
+    _count?: true | SeoTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SeoTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SeoTemplateMaxAggregateInputType
+  }
+
+  export type GetSeoTemplateAggregateType<T extends SeoTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateSeoTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSeoTemplate[P]>
+      : GetScalarType<T[P], AggregateSeoTemplate[P]>
+  }
+
+
+
+
+  export type SeoTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SeoTemplateWhereInput
+    orderBy?: SeoTemplateOrderByWithAggregationInput | SeoTemplateOrderByWithAggregationInput[]
+    by: SeoTemplateScalarFieldEnum[] | SeoTemplateScalarFieldEnum
+    having?: SeoTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SeoTemplateCountAggregateInputType | true
+    _min?: SeoTemplateMinAggregateInputType
+    _max?: SeoTemplateMaxAggregateInputType
+  }
+
+  export type SeoTemplateGroupByOutputType = {
+    id: string
+    siteId: string
+    kind: $Enums.SeoTemplateKind
+    titleTemplate: string
+    descriptionTemplate: string
+    indexState: $Enums.SeoIndexState
+    createdAt: Date
+    updatedAt: Date
+    _count: SeoTemplateCountAggregateOutputType | null
+    _min: SeoTemplateMinAggregateOutputType | null
+    _max: SeoTemplateMaxAggregateOutputType | null
+  }
+
+  type GetSeoTemplateGroupByPayload<T extends SeoTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SeoTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SeoTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SeoTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], SeoTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SeoTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    kind?: boolean
+    titleTemplate?: boolean
+    descriptionTemplate?: boolean
+    indexState?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["seoTemplate"]>
+
+  export type SeoTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    kind?: boolean
+    titleTemplate?: boolean
+    descriptionTemplate?: boolean
+    indexState?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["seoTemplate"]>
+
+  export type SeoTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    kind?: boolean
+    titleTemplate?: boolean
+    descriptionTemplate?: boolean
+    indexState?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["seoTemplate"]>
+
+  export type SeoTemplateSelectScalar = {
+    id?: boolean
+    siteId?: boolean
+    kind?: boolean
+    titleTemplate?: boolean
+    descriptionTemplate?: boolean
+    indexState?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SeoTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "kind" | "titleTemplate" | "descriptionTemplate" | "indexState" | "createdAt" | "updatedAt", ExtArgs["result"]["seoTemplate"]>
+  export type SeoTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+  }
+  export type SeoTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+  }
+  export type SeoTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+  }
+
+  export type $SeoTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SeoTemplate"
+    objects: {
+      site: Prisma.$SitePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      siteId: string
+      kind: $Enums.SeoTemplateKind
+      titleTemplate: string
+      descriptionTemplate: string
+      indexState: $Enums.SeoIndexState
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["seoTemplate"]>
+    composites: {}
+  }
+
+  type SeoTemplateGetPayload<S extends boolean | null | undefined | SeoTemplateDefaultArgs> = $Result.GetResult<Prisma.$SeoTemplatePayload, S>
+
+  type SeoTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SeoTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SeoTemplateCountAggregateInputType | true
+    }
+
+  export interface SeoTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SeoTemplate'], meta: { name: 'SeoTemplate' } }
+    /**
+     * Find zero or one SeoTemplate that matches the filter.
+     * @param {SeoTemplateFindUniqueArgs} args - Arguments to find a SeoTemplate
+     * @example
+     * // Get one SeoTemplate
+     * const seoTemplate = await prisma.seoTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SeoTemplateFindUniqueArgs>(args: SelectSubset<T, SeoTemplateFindUniqueArgs<ExtArgs>>): Prisma__SeoTemplateClient<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SeoTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SeoTemplateFindUniqueOrThrowArgs} args - Arguments to find a SeoTemplate
+     * @example
+     * // Get one SeoTemplate
+     * const seoTemplate = await prisma.seoTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SeoTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, SeoTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SeoTemplateClient<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SeoTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeoTemplateFindFirstArgs} args - Arguments to find a SeoTemplate
+     * @example
+     * // Get one SeoTemplate
+     * const seoTemplate = await prisma.seoTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SeoTemplateFindFirstArgs>(args?: SelectSubset<T, SeoTemplateFindFirstArgs<ExtArgs>>): Prisma__SeoTemplateClient<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SeoTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeoTemplateFindFirstOrThrowArgs} args - Arguments to find a SeoTemplate
+     * @example
+     * // Get one SeoTemplate
+     * const seoTemplate = await prisma.seoTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SeoTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, SeoTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__SeoTemplateClient<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SeoTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeoTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SeoTemplates
+     * const seoTemplates = await prisma.seoTemplate.findMany()
+     * 
+     * // Get first 10 SeoTemplates
+     * const seoTemplates = await prisma.seoTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const seoTemplateWithIdOnly = await prisma.seoTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SeoTemplateFindManyArgs>(args?: SelectSubset<T, SeoTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SeoTemplate.
+     * @param {SeoTemplateCreateArgs} args - Arguments to create a SeoTemplate.
+     * @example
+     * // Create one SeoTemplate
+     * const SeoTemplate = await prisma.seoTemplate.create({
+     *   data: {
+     *     // ... data to create a SeoTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends SeoTemplateCreateArgs>(args: SelectSubset<T, SeoTemplateCreateArgs<ExtArgs>>): Prisma__SeoTemplateClient<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SeoTemplates.
+     * @param {SeoTemplateCreateManyArgs} args - Arguments to create many SeoTemplates.
+     * @example
+     * // Create many SeoTemplates
+     * const seoTemplate = await prisma.seoTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SeoTemplateCreateManyArgs>(args?: SelectSubset<T, SeoTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SeoTemplates and returns the data saved in the database.
+     * @param {SeoTemplateCreateManyAndReturnArgs} args - Arguments to create many SeoTemplates.
+     * @example
+     * // Create many SeoTemplates
+     * const seoTemplate = await prisma.seoTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SeoTemplates and only return the `id`
+     * const seoTemplateWithIdOnly = await prisma.seoTemplate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SeoTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, SeoTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SeoTemplate.
+     * @param {SeoTemplateDeleteArgs} args - Arguments to delete one SeoTemplate.
+     * @example
+     * // Delete one SeoTemplate
+     * const SeoTemplate = await prisma.seoTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one SeoTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SeoTemplateDeleteArgs>(args: SelectSubset<T, SeoTemplateDeleteArgs<ExtArgs>>): Prisma__SeoTemplateClient<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SeoTemplate.
+     * @param {SeoTemplateUpdateArgs} args - Arguments to update one SeoTemplate.
+     * @example
+     * // Update one SeoTemplate
+     * const seoTemplate = await prisma.seoTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SeoTemplateUpdateArgs>(args: SelectSubset<T, SeoTemplateUpdateArgs<ExtArgs>>): Prisma__SeoTemplateClient<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SeoTemplates.
+     * @param {SeoTemplateDeleteManyArgs} args - Arguments to filter SeoTemplates to delete.
+     * @example
+     * // Delete a few SeoTemplates
+     * const { count } = await prisma.seoTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SeoTemplateDeleteManyArgs>(args?: SelectSubset<T, SeoTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SeoTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeoTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SeoTemplates
+     * const seoTemplate = await prisma.seoTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SeoTemplateUpdateManyArgs>(args: SelectSubset<T, SeoTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SeoTemplates and returns the data updated in the database.
+     * @param {SeoTemplateUpdateManyAndReturnArgs} args - Arguments to update many SeoTemplates.
+     * @example
+     * // Update many SeoTemplates
+     * const seoTemplate = await prisma.seoTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SeoTemplates and only return the `id`
+     * const seoTemplateWithIdOnly = await prisma.seoTemplate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SeoTemplateUpdateManyAndReturnArgs>(args: SelectSubset<T, SeoTemplateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SeoTemplate.
+     * @param {SeoTemplateUpsertArgs} args - Arguments to update or create a SeoTemplate.
+     * @example
+     * // Update or create a SeoTemplate
+     * const seoTemplate = await prisma.seoTemplate.upsert({
+     *   create: {
+     *     // ... data to create a SeoTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SeoTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SeoTemplateUpsertArgs>(args: SelectSubset<T, SeoTemplateUpsertArgs<ExtArgs>>): Prisma__SeoTemplateClient<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SeoTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeoTemplateCountArgs} args - Arguments to filter SeoTemplates to count.
+     * @example
+     * // Count the number of SeoTemplates
+     * const count = await prisma.seoTemplate.count({
+     *   where: {
+     *     // ... the filter for the SeoTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends SeoTemplateCountArgs>(
+      args?: Subset<T, SeoTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SeoTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SeoTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeoTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SeoTemplateAggregateArgs>(args: Subset<T, SeoTemplateAggregateArgs>): Prisma.PrismaPromise<GetSeoTemplateAggregateType<T>>
+
+    /**
+     * Group by SeoTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeoTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SeoTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SeoTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: SeoTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SeoTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSeoTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SeoTemplate model
+   */
+  readonly fields: SeoTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SeoTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SeoTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    site<T extends SiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SiteDefaultArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SeoTemplate model
+   */
+  interface SeoTemplateFieldRefs {
+    readonly id: FieldRef<"SeoTemplate", 'String'>
+    readonly siteId: FieldRef<"SeoTemplate", 'String'>
+    readonly kind: FieldRef<"SeoTemplate", 'SeoTemplateKind'>
+    readonly titleTemplate: FieldRef<"SeoTemplate", 'String'>
+    readonly descriptionTemplate: FieldRef<"SeoTemplate", 'String'>
+    readonly indexState: FieldRef<"SeoTemplate", 'SeoIndexState'>
+    readonly createdAt: FieldRef<"SeoTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"SeoTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SeoTemplate findUnique
+   */
+  export type SeoTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which SeoTemplate to fetch.
+     */
+    where: SeoTemplateWhereUniqueInput
+  }
+
+  /**
+   * SeoTemplate findUniqueOrThrow
+   */
+  export type SeoTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which SeoTemplate to fetch.
+     */
+    where: SeoTemplateWhereUniqueInput
+  }
+
+  /**
+   * SeoTemplate findFirst
+   */
+  export type SeoTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which SeoTemplate to fetch.
+     */
+    where?: SeoTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeoTemplates to fetch.
+     */
+    orderBy?: SeoTemplateOrderByWithRelationInput | SeoTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SeoTemplates.
+     */
+    cursor?: SeoTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeoTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeoTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SeoTemplates.
+     */
+    distinct?: SeoTemplateScalarFieldEnum | SeoTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * SeoTemplate findFirstOrThrow
+   */
+  export type SeoTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which SeoTemplate to fetch.
+     */
+    where?: SeoTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeoTemplates to fetch.
+     */
+    orderBy?: SeoTemplateOrderByWithRelationInput | SeoTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SeoTemplates.
+     */
+    cursor?: SeoTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeoTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeoTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SeoTemplates.
+     */
+    distinct?: SeoTemplateScalarFieldEnum | SeoTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * SeoTemplate findMany
+   */
+  export type SeoTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which SeoTemplates to fetch.
+     */
+    where?: SeoTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeoTemplates to fetch.
+     */
+    orderBy?: SeoTemplateOrderByWithRelationInput | SeoTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SeoTemplates.
+     */
+    cursor?: SeoTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeoTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeoTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SeoTemplates.
+     */
+    distinct?: SeoTemplateScalarFieldEnum | SeoTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * SeoTemplate create
+   */
+  export type SeoTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SeoTemplate.
+     */
+    data: XOR<SeoTemplateCreateInput, SeoTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * SeoTemplate createMany
+   */
+  export type SeoTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SeoTemplates.
+     */
+    data: SeoTemplateCreateManyInput | SeoTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SeoTemplate createManyAndReturn
+   */
+  export type SeoTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many SeoTemplates.
+     */
+    data: SeoTemplateCreateManyInput | SeoTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SeoTemplate update
+   */
+  export type SeoTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SeoTemplate.
+     */
+    data: XOR<SeoTemplateUpdateInput, SeoTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which SeoTemplate to update.
+     */
+    where: SeoTemplateWhereUniqueInput
+  }
+
+  /**
+   * SeoTemplate updateMany
+   */
+  export type SeoTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SeoTemplates.
+     */
+    data: XOR<SeoTemplateUpdateManyMutationInput, SeoTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which SeoTemplates to update
+     */
+    where?: SeoTemplateWhereInput
+    /**
+     * Limit how many SeoTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SeoTemplate updateManyAndReturn
+   */
+  export type SeoTemplateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update SeoTemplates.
+     */
+    data: XOR<SeoTemplateUpdateManyMutationInput, SeoTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which SeoTemplates to update
+     */
+    where?: SeoTemplateWhereInput
+    /**
+     * Limit how many SeoTemplates to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SeoTemplate upsert
+   */
+  export type SeoTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SeoTemplate to update in case it exists.
+     */
+    where: SeoTemplateWhereUniqueInput
+    /**
+     * In case the SeoTemplate found by the `where` argument doesn't exist, create a new SeoTemplate with this data.
+     */
+    create: XOR<SeoTemplateCreateInput, SeoTemplateUncheckedCreateInput>
+    /**
+     * In case the SeoTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SeoTemplateUpdateInput, SeoTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * SeoTemplate delete
+   */
+  export type SeoTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateInclude<ExtArgs> | null
+    /**
+     * Filter which SeoTemplate to delete.
+     */
+    where: SeoTemplateWhereUniqueInput
+  }
+
+  /**
+   * SeoTemplate deleteMany
+   */
+  export type SeoTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SeoTemplates to delete
+     */
+    where?: SeoTemplateWhereInput
+    /**
+     * Limit how many SeoTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SeoTemplate without action
+   */
+  export type SeoTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeoTemplate
+     */
+    select?: SeoTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeoTemplate
+     */
+    omit?: SeoTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeoTemplateInclude<ExtArgs> | null
   }
 
 
@@ -35511,6 +36771,20 @@ export namespace Prisma {
   export type SiteScalarFieldEnum = (typeof SiteScalarFieldEnum)[keyof typeof SiteScalarFieldEnum]
 
 
+  export const SeoTemplateScalarFieldEnum: {
+    id: 'id',
+    siteId: 'siteId',
+    kind: 'kind',
+    titleTemplate: 'titleTemplate',
+    descriptionTemplate: 'descriptionTemplate',
+    indexState: 'indexState',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SeoTemplateScalarFieldEnum = (typeof SeoTemplateScalarFieldEnum)[keyof typeof SeoTemplateScalarFieldEnum]
+
+
   export const SitemapExclusionScalarFieldEnum: {
     id: 'id',
     siteId: 'siteId',
@@ -36078,6 +37352,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'SeoTemplateKind'
+   */
+  export type EnumSeoTemplateKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SeoTemplateKind'>
+    
+
+
+  /**
+   * Reference to a field of type 'SeoTemplateKind[]'
+   */
+  export type ListEnumSeoTemplateKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SeoTemplateKind[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SeoIndexState'
+   */
+  export type EnumSeoIndexStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SeoIndexState'>
+    
+
+
+  /**
+   * Reference to a field of type 'SeoIndexState[]'
+   */
+  export type ListEnumSeoIndexStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SeoIndexState[]'>
+    
+
+
+  /**
    * Reference to a field of type 'SiteRebuildStatus'
    */
   export type EnumSiteRebuildStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SiteRebuildStatus'>
@@ -36468,6 +37770,7 @@ export namespace Prisma {
     publications?: SitePublicationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
     sitemapExclusions?: SitemapExclusionListRelationFilter
+    seoTemplates?: SeoTemplateListRelationFilter
   }
 
   export type SiteOrderByWithRelationInput = {
@@ -36497,6 +37800,7 @@ export namespace Prisma {
     publications?: SitePublicationOrderByRelationAggregateInput
     auditEvents?: AuditEventOrderByRelationAggregateInput
     sitemapExclusions?: SitemapExclusionOrderByRelationAggregateInput
+    seoTemplates?: SeoTemplateOrderByRelationAggregateInput
   }
 
   export type SiteWhereUniqueInput = Prisma.AtLeast<{
@@ -36529,6 +37833,7 @@ export namespace Prisma {
     publications?: SitePublicationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
     sitemapExclusions?: SitemapExclusionListRelationFilter
+    seoTemplates?: SeoTemplateListRelationFilter
   }, "id" | "slug">
 
   export type SiteOrderByWithAggregationInput = {
@@ -36569,6 +37874,77 @@ export namespace Prisma {
     publishedRevision?: IntWithAggregatesFilter<"Site"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Site"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Site"> | Date | string
+  }
+
+  export type SeoTemplateWhereInput = {
+    AND?: SeoTemplateWhereInput | SeoTemplateWhereInput[]
+    OR?: SeoTemplateWhereInput[]
+    NOT?: SeoTemplateWhereInput | SeoTemplateWhereInput[]
+    id?: StringFilter<"SeoTemplate"> | string
+    siteId?: StringFilter<"SeoTemplate"> | string
+    kind?: EnumSeoTemplateKindFilter<"SeoTemplate"> | $Enums.SeoTemplateKind
+    titleTemplate?: StringFilter<"SeoTemplate"> | string
+    descriptionTemplate?: StringFilter<"SeoTemplate"> | string
+    indexState?: EnumSeoIndexStateFilter<"SeoTemplate"> | $Enums.SeoIndexState
+    createdAt?: DateTimeFilter<"SeoTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"SeoTemplate"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+  }
+
+  export type SeoTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    kind?: SortOrder
+    titleTemplate?: SortOrder
+    descriptionTemplate?: SortOrder
+    indexState?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    site?: SiteOrderByWithRelationInput
+  }
+
+  export type SeoTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    siteId_kind?: SeoTemplateSiteIdKindCompoundUniqueInput
+    AND?: SeoTemplateWhereInput | SeoTemplateWhereInput[]
+    OR?: SeoTemplateWhereInput[]
+    NOT?: SeoTemplateWhereInput | SeoTemplateWhereInput[]
+    siteId?: StringFilter<"SeoTemplate"> | string
+    kind?: EnumSeoTemplateKindFilter<"SeoTemplate"> | $Enums.SeoTemplateKind
+    titleTemplate?: StringFilter<"SeoTemplate"> | string
+    descriptionTemplate?: StringFilter<"SeoTemplate"> | string
+    indexState?: EnumSeoIndexStateFilter<"SeoTemplate"> | $Enums.SeoIndexState
+    createdAt?: DateTimeFilter<"SeoTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"SeoTemplate"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+  }, "id" | "siteId_kind">
+
+  export type SeoTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    kind?: SortOrder
+    titleTemplate?: SortOrder
+    descriptionTemplate?: SortOrder
+    indexState?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SeoTemplateCountOrderByAggregateInput
+    _max?: SeoTemplateMaxOrderByAggregateInput
+    _min?: SeoTemplateMinOrderByAggregateInput
+  }
+
+  export type SeoTemplateScalarWhereWithAggregatesInput = {
+    AND?: SeoTemplateScalarWhereWithAggregatesInput | SeoTemplateScalarWhereWithAggregatesInput[]
+    OR?: SeoTemplateScalarWhereWithAggregatesInput[]
+    NOT?: SeoTemplateScalarWhereWithAggregatesInput | SeoTemplateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SeoTemplate"> | string
+    siteId?: StringWithAggregatesFilter<"SeoTemplate"> | string
+    kind?: EnumSeoTemplateKindWithAggregatesFilter<"SeoTemplate"> | $Enums.SeoTemplateKind
+    titleTemplate?: StringWithAggregatesFilter<"SeoTemplate"> | string
+    descriptionTemplate?: StringWithAggregatesFilter<"SeoTemplate"> | string
+    indexState?: EnumSeoIndexStateWithAggregatesFilter<"SeoTemplate"> | $Enums.SeoIndexState
+    createdAt?: DateTimeWithAggregatesFilter<"SeoTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SeoTemplate"> | Date | string
   }
 
   export type SitemapExclusionWhereInput = {
@@ -39090,6 +40466,7 @@ export namespace Prisma {
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateInput = {
@@ -39118,6 +40495,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUpdateInput = {
@@ -39146,6 +40524,7 @@ export namespace Prisma {
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateInput = {
@@ -39174,6 +40553,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteCreateManyInput = {
@@ -39219,6 +40599,82 @@ export namespace Prisma {
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     workingRevision?: IntFieldUpdateOperationsInput | number
     publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeoTemplateCreateInput = {
+    id?: string
+    kind: $Enums.SeoTemplateKind
+    titleTemplate: string
+    descriptionTemplate: string
+    indexState?: $Enums.SeoIndexState
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutSeoTemplatesInput
+  }
+
+  export type SeoTemplateUncheckedCreateInput = {
+    id?: string
+    siteId: string
+    kind: $Enums.SeoTemplateKind
+    titleTemplate: string
+    descriptionTemplate: string
+    indexState?: $Enums.SeoIndexState
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SeoTemplateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumSeoTemplateKindFieldUpdateOperationsInput | $Enums.SeoTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    descriptionTemplate?: StringFieldUpdateOperationsInput | string
+    indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutSeoTemplatesNestedInput
+  }
+
+  export type SeoTemplateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    kind?: EnumSeoTemplateKindFieldUpdateOperationsInput | $Enums.SeoTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    descriptionTemplate?: StringFieldUpdateOperationsInput | string
+    indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeoTemplateCreateManyInput = {
+    id?: string
+    siteId: string
+    kind: $Enums.SeoTemplateKind
+    titleTemplate: string
+    descriptionTemplate: string
+    indexState?: $Enums.SeoIndexState
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SeoTemplateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumSeoTemplateKindFieldUpdateOperationsInput | $Enums.SeoTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    descriptionTemplate?: StringFieldUpdateOperationsInput | string
+    indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeoTemplateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    kind?: EnumSeoTemplateKindFieldUpdateOperationsInput | $Enums.SeoTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    descriptionTemplate?: StringFieldUpdateOperationsInput | string
+    indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42198,6 +43654,12 @@ export namespace Prisma {
     none?: SitemapExclusionWhereInput
   }
 
+  export type SeoTemplateListRelationFilter = {
+    every?: SeoTemplateWhereInput
+    some?: SeoTemplateWhereInput
+    none?: SeoTemplateWhereInput
+  }
+
   export type RegionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -42243,6 +43705,10 @@ export namespace Prisma {
   }
 
   export type SitemapExclusionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SeoTemplateOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -42346,9 +43812,81 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type EnumSeoTemplateKindFilter<$PrismaModel = never> = {
+    equals?: $Enums.SeoTemplateKind | EnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.SeoTemplateKind[] | ListEnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SeoTemplateKind[] | ListEnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeoTemplateKindFilter<$PrismaModel> | $Enums.SeoTemplateKind
+  }
+
+  export type EnumSeoIndexStateFilter<$PrismaModel = never> = {
+    equals?: $Enums.SeoIndexState | EnumSeoIndexStateFieldRefInput<$PrismaModel>
+    in?: $Enums.SeoIndexState[] | ListEnumSeoIndexStateFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SeoIndexState[] | ListEnumSeoIndexStateFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeoIndexStateFilter<$PrismaModel> | $Enums.SeoIndexState
+  }
+
   export type SiteScalarRelationFilter = {
     is?: SiteWhereInput
     isNot?: SiteWhereInput
+  }
+
+  export type SeoTemplateSiteIdKindCompoundUniqueInput = {
+    siteId: string
+    kind: $Enums.SeoTemplateKind
+  }
+
+  export type SeoTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    kind?: SortOrder
+    titleTemplate?: SortOrder
+    descriptionTemplate?: SortOrder
+    indexState?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SeoTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    kind?: SortOrder
+    titleTemplate?: SortOrder
+    descriptionTemplate?: SortOrder
+    indexState?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SeoTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    kind?: SortOrder
+    titleTemplate?: SortOrder
+    descriptionTemplate?: SortOrder
+    indexState?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumSeoTemplateKindWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SeoTemplateKind | EnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.SeoTemplateKind[] | ListEnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SeoTemplateKind[] | ListEnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeoTemplateKindWithAggregatesFilter<$PrismaModel> | $Enums.SeoTemplateKind
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSeoTemplateKindFilter<$PrismaModel>
+    _max?: NestedEnumSeoTemplateKindFilter<$PrismaModel>
+  }
+
+  export type EnumSeoIndexStateWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SeoIndexState | EnumSeoIndexStateFieldRefInput<$PrismaModel>
+    in?: $Enums.SeoIndexState[] | ListEnumSeoIndexStateFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SeoIndexState[] | ListEnumSeoIndexStateFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeoIndexStateWithAggregatesFilter<$PrismaModel> | $Enums.SeoIndexState
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSeoIndexStateFilter<$PrismaModel>
+    _max?: NestedEnumSeoIndexStateFilter<$PrismaModel>
   }
 
   export type UserNullableScalarRelationFilter = {
@@ -44468,6 +46006,13 @@ export namespace Prisma {
     connect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
   }
 
+  export type SeoTemplateCreateNestedManyWithoutSiteInput = {
+    create?: XOR<SeoTemplateCreateWithoutSiteInput, SeoTemplateUncheckedCreateWithoutSiteInput> | SeoTemplateCreateWithoutSiteInput[] | SeoTemplateUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SeoTemplateCreateOrConnectWithoutSiteInput | SeoTemplateCreateOrConnectWithoutSiteInput[]
+    createMany?: SeoTemplateCreateManySiteInputEnvelope
+    connect?: SeoTemplateWhereUniqueInput | SeoTemplateWhereUniqueInput[]
+  }
+
   export type RegionUncheckedCreateNestedManyWithoutSiteInput = {
     create?: XOR<RegionCreateWithoutSiteInput, RegionUncheckedCreateWithoutSiteInput> | RegionCreateWithoutSiteInput[] | RegionUncheckedCreateWithoutSiteInput[]
     connectOrCreate?: RegionCreateOrConnectWithoutSiteInput | RegionCreateOrConnectWithoutSiteInput[]
@@ -44550,6 +46095,13 @@ export namespace Prisma {
     connectOrCreate?: SitemapExclusionCreateOrConnectWithoutSiteInput | SitemapExclusionCreateOrConnectWithoutSiteInput[]
     createMany?: SitemapExclusionCreateManySiteInputEnvelope
     connect?: SitemapExclusionWhereUniqueInput | SitemapExclusionWhereUniqueInput[]
+  }
+
+  export type SeoTemplateUncheckedCreateNestedManyWithoutSiteInput = {
+    create?: XOR<SeoTemplateCreateWithoutSiteInput, SeoTemplateUncheckedCreateWithoutSiteInput> | SeoTemplateCreateWithoutSiteInput[] | SeoTemplateUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SeoTemplateCreateOrConnectWithoutSiteInput | SeoTemplateCreateOrConnectWithoutSiteInput[]
+    createMany?: SeoTemplateCreateManySiteInputEnvelope
+    connect?: SeoTemplateWhereUniqueInput | SeoTemplateWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -44744,6 +46296,20 @@ export namespace Prisma {
     deleteMany?: SitemapExclusionScalarWhereInput | SitemapExclusionScalarWhereInput[]
   }
 
+  export type SeoTemplateUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<SeoTemplateCreateWithoutSiteInput, SeoTemplateUncheckedCreateWithoutSiteInput> | SeoTemplateCreateWithoutSiteInput[] | SeoTemplateUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SeoTemplateCreateOrConnectWithoutSiteInput | SeoTemplateCreateOrConnectWithoutSiteInput[]
+    upsert?: SeoTemplateUpsertWithWhereUniqueWithoutSiteInput | SeoTemplateUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: SeoTemplateCreateManySiteInputEnvelope
+    set?: SeoTemplateWhereUniqueInput | SeoTemplateWhereUniqueInput[]
+    disconnect?: SeoTemplateWhereUniqueInput | SeoTemplateWhereUniqueInput[]
+    delete?: SeoTemplateWhereUniqueInput | SeoTemplateWhereUniqueInput[]
+    connect?: SeoTemplateWhereUniqueInput | SeoTemplateWhereUniqueInput[]
+    update?: SeoTemplateUpdateWithWhereUniqueWithoutSiteInput | SeoTemplateUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: SeoTemplateUpdateManyWithWhereWithoutSiteInput | SeoTemplateUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: SeoTemplateScalarWhereInput | SeoTemplateScalarWhereInput[]
+  }
+
   export type RegionUncheckedUpdateManyWithoutSiteNestedInput = {
     create?: XOR<RegionCreateWithoutSiteInput, RegionUncheckedCreateWithoutSiteInput> | RegionCreateWithoutSiteInput[] | RegionUncheckedCreateWithoutSiteInput[]
     connectOrCreate?: RegionCreateOrConnectWithoutSiteInput | RegionCreateOrConnectWithoutSiteInput[]
@@ -44910,6 +46476,42 @@ export namespace Prisma {
     update?: SitemapExclusionUpdateWithWhereUniqueWithoutSiteInput | SitemapExclusionUpdateWithWhereUniqueWithoutSiteInput[]
     updateMany?: SitemapExclusionUpdateManyWithWhereWithoutSiteInput | SitemapExclusionUpdateManyWithWhereWithoutSiteInput[]
     deleteMany?: SitemapExclusionScalarWhereInput | SitemapExclusionScalarWhereInput[]
+  }
+
+  export type SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<SeoTemplateCreateWithoutSiteInput, SeoTemplateUncheckedCreateWithoutSiteInput> | SeoTemplateCreateWithoutSiteInput[] | SeoTemplateUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SeoTemplateCreateOrConnectWithoutSiteInput | SeoTemplateCreateOrConnectWithoutSiteInput[]
+    upsert?: SeoTemplateUpsertWithWhereUniqueWithoutSiteInput | SeoTemplateUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: SeoTemplateCreateManySiteInputEnvelope
+    set?: SeoTemplateWhereUniqueInput | SeoTemplateWhereUniqueInput[]
+    disconnect?: SeoTemplateWhereUniqueInput | SeoTemplateWhereUniqueInput[]
+    delete?: SeoTemplateWhereUniqueInput | SeoTemplateWhereUniqueInput[]
+    connect?: SeoTemplateWhereUniqueInput | SeoTemplateWhereUniqueInput[]
+    update?: SeoTemplateUpdateWithWhereUniqueWithoutSiteInput | SeoTemplateUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: SeoTemplateUpdateManyWithWhereWithoutSiteInput | SeoTemplateUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: SeoTemplateScalarWhereInput | SeoTemplateScalarWhereInput[]
+  }
+
+  export type SiteCreateNestedOneWithoutSeoTemplatesInput = {
+    create?: XOR<SiteCreateWithoutSeoTemplatesInput, SiteUncheckedCreateWithoutSeoTemplatesInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutSeoTemplatesInput
+    connect?: SiteWhereUniqueInput
+  }
+
+  export type EnumSeoTemplateKindFieldUpdateOperationsInput = {
+    set?: $Enums.SeoTemplateKind
+  }
+
+  export type EnumSeoIndexStateFieldUpdateOperationsInput = {
+    set?: $Enums.SeoIndexState
+  }
+
+  export type SiteUpdateOneRequiredWithoutSeoTemplatesNestedInput = {
+    create?: XOR<SiteCreateWithoutSeoTemplatesInput, SiteUncheckedCreateWithoutSeoTemplatesInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutSeoTemplatesInput
+    upsert?: SiteUpsertWithoutSeoTemplatesInput
+    connect?: SiteWhereUniqueInput
+    update?: XOR<XOR<SiteUpdateToOneWithWhereWithoutSeoTemplatesInput, SiteUpdateWithoutSeoTemplatesInput>, SiteUncheckedUpdateWithoutSeoTemplatesInput>
   }
 
   export type SiteCreateNestedOneWithoutSitemapExclusionsInput = {
@@ -47154,6 +48756,40 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedEnumSeoTemplateKindFilter<$PrismaModel = never> = {
+    equals?: $Enums.SeoTemplateKind | EnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.SeoTemplateKind[] | ListEnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SeoTemplateKind[] | ListEnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeoTemplateKindFilter<$PrismaModel> | $Enums.SeoTemplateKind
+  }
+
+  export type NestedEnumSeoIndexStateFilter<$PrismaModel = never> = {
+    equals?: $Enums.SeoIndexState | EnumSeoIndexStateFieldRefInput<$PrismaModel>
+    in?: $Enums.SeoIndexState[] | ListEnumSeoIndexStateFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SeoIndexState[] | ListEnumSeoIndexStateFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeoIndexStateFilter<$PrismaModel> | $Enums.SeoIndexState
+  }
+
+  export type NestedEnumSeoTemplateKindWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SeoTemplateKind | EnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.SeoTemplateKind[] | ListEnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SeoTemplateKind[] | ListEnumSeoTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeoTemplateKindWithAggregatesFilter<$PrismaModel> | $Enums.SeoTemplateKind
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSeoTemplateKindFilter<$PrismaModel>
+    _max?: NestedEnumSeoTemplateKindFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSeoIndexStateWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SeoIndexState | EnumSeoIndexStateFieldRefInput<$PrismaModel>
+    in?: $Enums.SeoIndexState[] | ListEnumSeoIndexStateFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SeoIndexState[] | ListEnumSeoIndexStateFieldRefInput<$PrismaModel>
+    not?: NestedEnumSeoIndexStateWithAggregatesFilter<$PrismaModel> | $Enums.SeoIndexState
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSeoIndexStateFilter<$PrismaModel>
+    _max?: NestedEnumSeoIndexStateFilter<$PrismaModel>
+  }
+
   export type NestedEnumSiteRebuildStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.SiteRebuildStatus | EnumSiteRebuildStatusFieldRefInput<$PrismaModel>
     in?: $Enums.SiteRebuildStatus[] | ListEnumSiteRebuildStatusFieldRefInput<$PrismaModel>
@@ -47634,6 +49270,7 @@ export namespace Prisma {
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutProviderInput = {
@@ -47661,6 +49298,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutProviderInput = {
@@ -48524,6 +50162,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SeoTemplateCreateWithoutSiteInput = {
+    id?: string
+    kind: $Enums.SeoTemplateKind
+    titleTemplate: string
+    descriptionTemplate: string
+    indexState?: $Enums.SeoIndexState
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SeoTemplateUncheckedCreateWithoutSiteInput = {
+    id?: string
+    kind: $Enums.SeoTemplateKind
+    titleTemplate: string
+    descriptionTemplate: string
+    indexState?: $Enums.SeoIndexState
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SeoTemplateCreateOrConnectWithoutSiteInput = {
+    where: SeoTemplateWhereUniqueInput
+    create: XOR<SeoTemplateCreateWithoutSiteInput, SeoTemplateUncheckedCreateWithoutSiteInput>
+  }
+
+  export type SeoTemplateCreateManySiteInputEnvelope = {
+    data: SeoTemplateCreateManySiteInput | SeoTemplateCreateManySiteInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProviderUpsertWithoutSitesInput = {
     update: XOR<ProviderUpdateWithoutSitesInput, ProviderUncheckedUpdateWithoutSitesInput>
     create: XOR<ProviderCreateWithoutSitesInput, ProviderUncheckedCreateWithoutSitesInput>
@@ -49016,6 +50684,164 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SitemapExclusion"> | Date | string
   }
 
+  export type SeoTemplateUpsertWithWhereUniqueWithoutSiteInput = {
+    where: SeoTemplateWhereUniqueInput
+    update: XOR<SeoTemplateUpdateWithoutSiteInput, SeoTemplateUncheckedUpdateWithoutSiteInput>
+    create: XOR<SeoTemplateCreateWithoutSiteInput, SeoTemplateUncheckedCreateWithoutSiteInput>
+  }
+
+  export type SeoTemplateUpdateWithWhereUniqueWithoutSiteInput = {
+    where: SeoTemplateWhereUniqueInput
+    data: XOR<SeoTemplateUpdateWithoutSiteInput, SeoTemplateUncheckedUpdateWithoutSiteInput>
+  }
+
+  export type SeoTemplateUpdateManyWithWhereWithoutSiteInput = {
+    where: SeoTemplateScalarWhereInput
+    data: XOR<SeoTemplateUpdateManyMutationInput, SeoTemplateUncheckedUpdateManyWithoutSiteInput>
+  }
+
+  export type SeoTemplateScalarWhereInput = {
+    AND?: SeoTemplateScalarWhereInput | SeoTemplateScalarWhereInput[]
+    OR?: SeoTemplateScalarWhereInput[]
+    NOT?: SeoTemplateScalarWhereInput | SeoTemplateScalarWhereInput[]
+    id?: StringFilter<"SeoTemplate"> | string
+    siteId?: StringFilter<"SeoTemplate"> | string
+    kind?: EnumSeoTemplateKindFilter<"SeoTemplate"> | $Enums.SeoTemplateKind
+    titleTemplate?: StringFilter<"SeoTemplate"> | string
+    descriptionTemplate?: StringFilter<"SeoTemplate"> | string
+    indexState?: EnumSeoIndexStateFilter<"SeoTemplate"> | $Enums.SeoIndexState
+    createdAt?: DateTimeFilter<"SeoTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"SeoTemplate"> | Date | string
+  }
+
+  export type SiteCreateWithoutSeoTemplatesInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    provider: ProviderCreateNestedOneWithoutSitesInput
+    regions?: RegionCreateNestedManyWithoutSiteInput
+    cities?: CityCreateNestedManyWithoutSiteInput
+    pages?: PageCreateNestedManyWithoutSiteInput
+    leads?: LeadCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckCreateNestedManyWithoutSiteInput
+    redirects?: RedirectCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteUncheckedCreateWithoutSeoTemplatesInput = {
+    id?: string
+    providerId: string
+    name: string
+    slug: string
+    domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
+    cities?: CityUncheckedCreateNestedManyWithoutSiteInput
+    pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
+    redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteCreateOrConnectWithoutSeoTemplatesInput = {
+    where: SiteWhereUniqueInput
+    create: XOR<SiteCreateWithoutSeoTemplatesInput, SiteUncheckedCreateWithoutSeoTemplatesInput>
+  }
+
+  export type SiteUpsertWithoutSeoTemplatesInput = {
+    update: XOR<SiteUpdateWithoutSeoTemplatesInput, SiteUncheckedUpdateWithoutSeoTemplatesInput>
+    create: XOR<SiteCreateWithoutSeoTemplatesInput, SiteUncheckedCreateWithoutSeoTemplatesInput>
+    where?: SiteWhereInput
+  }
+
+  export type SiteUpdateToOneWithWhereWithoutSeoTemplatesInput = {
+    where?: SiteWhereInput
+    data: XOR<SiteUpdateWithoutSeoTemplatesInput, SiteUncheckedUpdateWithoutSeoTemplatesInput>
+  }
+
+  export type SiteUpdateWithoutSeoTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
+    regions?: RegionUpdateManyWithoutSiteNestedInput
+    cities?: CityUpdateManyWithoutSiteNestedInput
+    pages?: PageUpdateManyWithoutSiteNestedInput
+    leads?: LeadUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+  }
+
+  export type SiteUncheckedUpdateWithoutSeoTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
+    cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
+    pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+  }
+
   export type SiteCreateWithoutSitemapExclusionsInput = {
     id?: string
     name: string
@@ -49041,6 +50867,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutSitemapExclusionsInput = {
@@ -49068,6 +50895,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutSitemapExclusionsInput = {
@@ -49152,6 +50980,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutSitemapExclusionsInput = {
@@ -49179,6 +51008,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type UserUpsertWithoutSitemapExclusionsCreatedInput = {
@@ -49253,6 +51083,7 @@ export namespace Prisma {
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutRebuildsInput = {
@@ -49280,6 +51111,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutRebuildsInput = {
@@ -49464,6 +51296,7 @@ export namespace Prisma {
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutRebuildsInput = {
@@ -49491,6 +51324,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SitePublicationUpsertWithoutRequestedRebuildsInput = {
@@ -49677,6 +51511,7 @@ export namespace Prisma {
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutContentRevisionsInput = {
@@ -49704,6 +51539,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutContentRevisionsInput = {
@@ -49788,6 +51624,7 @@ export namespace Prisma {
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutContentRevisionsInput = {
@@ -49815,6 +51652,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type UserUpsertWithoutContentRevisionsInput = {
@@ -49889,6 +51727,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutPublicationsInput = {
@@ -49916,6 +51755,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutPublicationsInput = {
@@ -50186,6 +52026,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutPublicationsInput = {
@@ -50213,6 +52054,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type UserUpsertWithoutPublicationsInput = {
@@ -50335,6 +52177,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutAuditEventsInput = {
@@ -50362,6 +52205,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutAuditEventsInput = {
@@ -50446,6 +52290,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutAuditEventsInput = {
@@ -50473,6 +52318,7 @@ export namespace Prisma {
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type UserUpsertWithoutAuditEventsInput = {
@@ -50547,6 +52393,7 @@ export namespace Prisma {
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutRegionsInput = {
@@ -50574,6 +52421,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutRegionsInput = {
@@ -50671,6 +52519,7 @@ export namespace Prisma {
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutRegionsInput = {
@@ -50698,6 +52547,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithWhereUniqueWithoutRegionInput = {
@@ -50741,6 +52591,7 @@ export namespace Prisma {
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutCitiesInput = {
@@ -50768,6 +52619,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutCitiesInput = {
@@ -51144,6 +52996,7 @@ export namespace Prisma {
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutCitiesInput = {
@@ -51171,6 +53024,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type RegionUpsertWithoutCitiesInput = {
@@ -51303,6 +53157,7 @@ export namespace Prisma {
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutPagesInput = {
@@ -51330,6 +53185,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutPagesInput = {
@@ -51626,6 +53482,7 @@ export namespace Prisma {
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutPagesInput = {
@@ -51653,6 +53510,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutPagesInput = {
@@ -52609,6 +54467,7 @@ export namespace Prisma {
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutCityImportsInput = {
@@ -52636,6 +54495,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutCityImportsInput = {
@@ -52761,6 +54621,7 @@ export namespace Prisma {
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutCityImportsInput = {
@@ -52788,6 +54649,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type UserUpsertWithoutCityImportsAppliedInput = {
@@ -52909,6 +54771,7 @@ export namespace Prisma {
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutChecksInput = {
@@ -52936,6 +54799,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutChecksInput = {
@@ -53203,6 +55067,7 @@ export namespace Prisma {
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutChecksInput = {
@@ -53230,6 +55095,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutChecksInput = {
@@ -53371,6 +55237,7 @@ export namespace Prisma {
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutLeadsInput = {
@@ -53398,6 +55265,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutLeadsInput = {
@@ -54071,6 +55939,7 @@ export namespace Prisma {
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutLeadsInput = {
@@ -54098,6 +55967,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutLeadsInput = {
@@ -56031,6 +57901,7 @@ export namespace Prisma {
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
 
   export type SiteUncheckedCreateWithoutRedirectsInput = {
@@ -56058,6 +57929,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
 
   export type SiteCreateOrConnectWithoutRedirectsInput = {
@@ -56150,6 +58022,7 @@ export namespace Prisma {
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutRedirectsInput = {
@@ -56177,6 +58050,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type CityUpsertWithoutRedirectsInput = {
@@ -57200,6 +59074,7 @@ export namespace Prisma {
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateWithoutProviderInput = {
@@ -57227,6 +59102,7 @@ export namespace Prisma {
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
 
   export type SiteUncheckedUpdateManyWithoutProviderInput = {
@@ -57590,6 +59466,16 @@ export namespace Prisma {
     path: string
     reason: string
     createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SeoTemplateCreateManySiteInput = {
+    id?: string
+    kind: $Enums.SeoTemplateKind
+    titleTemplate: string
+    descriptionTemplate: string
+    indexState?: $Enums.SeoIndexState
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58281,6 +60167,36 @@ export namespace Prisma {
     path?: StringFieldUpdateOperationsInput | string
     reason?: StringFieldUpdateOperationsInput | string
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeoTemplateUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumSeoTemplateKindFieldUpdateOperationsInput | $Enums.SeoTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    descriptionTemplate?: StringFieldUpdateOperationsInput | string
+    indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeoTemplateUncheckedUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumSeoTemplateKindFieldUpdateOperationsInput | $Enums.SeoTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    descriptionTemplate?: StringFieldUpdateOperationsInput | string
+    indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeoTemplateUncheckedUpdateManyWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumSeoTemplateKindFieldUpdateOperationsInput | $Enums.SeoTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    descriptionTemplate?: StringFieldUpdateOperationsInput | string
+    indexState?: EnumSeoIndexStateFieldUpdateOperationsInput | $Enums.SeoIndexState
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

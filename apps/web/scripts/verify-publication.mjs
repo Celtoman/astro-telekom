@@ -115,17 +115,20 @@ function validateDocumentMetadata(html, label, errors) {
   }
 }
 
-function validateIndexableHtml(html, route, expectedUrl, errors) {
+function validateIndexableHtml(html, route, expectedUrl, includedInSitemap, errors) {
   validateDocumentMetadata(html, route, errors);
 
   const canonicals = tags(html, 'link').filter((tag) => getAttribute(tag, 'rel')?.toLowerCase().split(/\s+/).includes('canonical'));
-  if (canonicals.length !== 1 || getAttribute(canonicals[0], 'href') !== expectedUrl) {
-    errors.push(`${route}: canonical должен быть ровно один и равен ${expectedUrl}`);
-  }
-
   const robots = tags(html, 'meta').filter((tag) => getAttribute(tag, 'name')?.toLowerCase() === 'robots');
-  if (robots.some((tag) => getAttribute(tag, 'content')?.toLowerCase().split(/[\s,]+/).includes('noindex'))) {
+  const noindex = robots.some((tag) => getAttribute(tag, 'content')?.toLowerCase().split(/[\s,]+/).includes('noindex'));
+  if (includedInSitemap && noindex) {
     errors.push(`${route}: публичный HTML Release 1 не может содержать noindex`);
+  }
+  if (noindex) {
+    if (robots.length !== 1 || getAttribute(robots[0], 'content')?.toLowerCase() !== 'noindex, follow') errors.push(`${route}: ожидается ровно один robots noindex, follow`);
+    if (canonicals.length > 0) errors.push(`${route}: noindex URL не должен иметь canonical`);
+  } else if (canonicals.length !== 1 || getAttribute(canonicals[0], 'href') !== expectedUrl) {
+    errors.push(`${route}: canonical должен быть ровно один и равен ${expectedUrl}`);
   }
 
   for (const anchor of tags(html, 'a')) {
@@ -221,7 +224,11 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
     }
   }
 
-  if (!sitemapRoutes.includes('/')) errors.push('sitemap-pages.xml не содержит корневой URL /');
+  if (!sitemapRoutes.includes('/')) {
+    const rootHtml = publicHtml.find(({ route }) => route === '/');
+    const rootContent = rootHtml ? await readFile(rootHtml.path, 'utf8') : '';
+    if (!/<meta\s+name=["']robots["']\s+content=["']noindex, follow["']/i.test(rootContent)) errors.push('sitemap-pages.xml не содержит корневой URL /');
+  }
 
   const htmlRoutes = new Set(publicHtml.map(({ route }) => route));
   const sitemapRouteSet = new Set(sitemapRoutes);
@@ -231,7 +238,7 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
 
   for (const { path, route } of publicHtml) {
     const html = await readFile(path, 'utf8');
-    validateIndexableHtml(html, route, `${origin}${route}`, errors);
+    validateIndexableHtml(html, route, `${origin}${route}`, sitemapRouteSet.has(route), errors);
   }
   validateNotFoundHtml(notFound, errors);
 

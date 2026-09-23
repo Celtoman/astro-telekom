@@ -68,6 +68,8 @@ PII retention scheduler в worker
 
 ## API-модули и их ответственность
 
+SEO-поток: `SeoTemplate` хранит по одному Title/Description/index-state для восьми типов маршрута Release 1. API разрешает шаблоны по конкретным URL при построении рабочего каталога, блокирует пустые/неразрешённые значения и фиксирует `seoByPath` в неизменяемом publication snapshot. Astro читает его для новой публикации; старые JSON Page/Tariff остаются fallback только для исторических снимков. `NOINDEX` автоматически исключает URL из sitemap того же снимка, сохраняя HTML. Ручное sitemap-исключение само по себе не меняет robots.
+
 | Модуль | Реальная ответственность |
 | --- | --- |
 | `auth` и `AdminTokenGuard` | Создание 12-часовой сессии, browser login/me/logout через HttpOnly cookie и совместимый Bearer для технических клиентов. `x-admin-token` — машинный credential; `/internal/*` принимает только его. |

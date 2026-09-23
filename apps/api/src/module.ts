@@ -53,6 +53,8 @@ import { SiteValuesService } from './site-values.service';
 import { CityReadinessService } from './city-readiness.service';
 import { LeadDecisionService } from './lead-decision.service';
 import { LeadDecisionController } from './lead-decision.controller';
+import { SeoTemplateService } from './seo-template.service';
+import { AdminSeoTemplatesController } from './admin-seo-templates.controller';
 
 @Module({
   controllers: [
@@ -86,7 +88,8 @@ import { LeadDecisionController } from './lead-decision.controller';
     AdminSitemapController,
     AdminSiteValuesController,
     AdminVariableCatalogController,
+    AdminSeoTemplatesController,
   ],
-  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

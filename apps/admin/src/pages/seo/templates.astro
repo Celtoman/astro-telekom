@@ -1,0 +1,18 @@
+---
+import '../../styles/global.css';
+import { SeoTemplatesApp } from '../../components/SeoTemplatesApp';
+
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>SEO-шаблоны · Дом.ру Платформа</title>
+  </head>
+  <body>
+    <SeoTemplatesApp apiUrl={apiUrl} client:load />
+  </body>
+</html>

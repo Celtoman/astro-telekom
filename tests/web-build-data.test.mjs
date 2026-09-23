@@ -369,6 +369,24 @@ test('web build is blocked when API is unavailable and demo mode is not explicit
   assert.match(build.output, /ALLOW_DEMO_DATA=true/);
 });
 
+test('web build uses resolved SEO snapshot and omits noindex routes from sitemap', { timeout: 120_000 }, async () => {
+  const fixture = structuredClone(apiFixture);
+  fixture.seoByPath = Object.fromEntries(fixture.routes.map((route) => [route.path, {
+    title: `SEO ${route.path}`,
+    description: `Описание ${route.path}`,
+    indexState: route.path === '/kazan' ? 'NOINDEX' : 'INDEX',
+  }]));
+  fixture.sitemap.excludedPaths.push('/kazan');
+  await withApiFixture(async (apiUrl) => {
+    const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_API_URL: browserApiUrl, PUBLIC_SITE_URL: productionSite, ALLOW_DEMO_DATA: '' });
+    assert.equal(build.code, 0, build.output);
+  }, fixture);
+  assert.match(await readBuilt('index.html'), /<title>SEO \/<\/title>/);
+  assert.match(await readBuilt(join('kazan', 'index.html')), /<meta name="robots" content="noindex, follow">/);
+  assert.match(await readBuilt(join('kazan', 'api-internet-500', 'index.html')), /<title>SEO \/kazan\/api-internet-500<\/title>/);
+  assert.doesNotMatch(await readBuilt('sitemap-cities.xml'), /<loc>https:\/\/partner\.example\.test\/kazan<\/loc>/);
+});
+
 test('web build rejects a published city HOME without the canonical block template', { timeout: 120_000 }, async () => {
   const fixture = structuredClone(apiFixture);
   fixture.cities[1].pages[0].blocks = [];

@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { loadSiteData, pageMeta } from '../data/site';
+import { loadSiteData, pageMeta, seoMeta } from '../data/site';
 import { legalSections } from '../data/legal-pages';
 import CitiesDirectory from './CitiesDirectory.astro';
 import AddressForm from './AddressForm.astro';
@@ -10,7 +10,8 @@ interface Props {
 }
 
 const { type } = Astro.props as Props;
-const { site, cities, globalPages } = await loadSiteData();
+const catalog = await loadSiteData();
+const { site, cities, globalPages } = catalog;
 const page = globalPages.find((candidate) => candidate.type === type);
 if (!page) throw new Error(`Не опубликована обязательная общая страница Release 1: ${type}`);
 
@@ -36,7 +37,7 @@ const defaults = {
     description: 'Правила использования файлов cookie на сайте партнера Дом.ру.',
   },
 }[type];
-const meta = pageMeta(globalPages, page.slug, page.title || defaults.title, defaults.description);
+const meta = seoMeta(catalog, `/${page.slug}`, pageMeta(globalPages, page.slug, page.title || defaults.title, defaults.description));
 const contentText = typeof page.content?.text === 'string' ? page.content.text : '';
 const richTextBlocks = (page.blocks || []).filter((block) => block.blockType === 'rich_text');
 const isCoverage = type === 'COVERAGE';
@@ -48,7 +49,7 @@ const coverageDialogId = 'address-entry-coverage';
 const defaultCoverageCity = cities[0];
 ---
 
-<BaseLayout title={meta.title} description={meta.description} {site}>
+<BaseLayout title={meta.title} description={meta.description} indexable={meta.indexState !== 'NOINDEX'} {site}>
   {type === 'CITIES' ? <CitiesDirectory {cities} intro={contentText} /> : <section class="hero">
     <div class="container">
       <span class="eyebrow">Дом.ру</span>

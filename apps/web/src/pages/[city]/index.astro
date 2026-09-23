@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlockRenderer from '../../components/BlockRenderer.astro';
 import CityHomeFirstScreen from '../../components/CityHomeFirstScreen.astro';
-import { loadSiteData, pageMeta, publicSiteSlug, type CityView, type SiteView } from '../../data/site';
+import { loadSiteData, pageMeta, seoMeta, publicSiteSlug, type CityView, type SiteView } from '../../data/site';
 
 interface Props { city: CityView; site: SiteView }
 
@@ -14,14 +14,14 @@ export async function getStaticPaths() {
 const { city, site } = Astro.props as Props;
 const homePage = city.pages.find((page) => page.type === 'HOME' && page.slug === '');
 if (!homePage) throw new Error(`Не опубликована HOME города «${city.name}»`);
-const meta = pageMeta(city.pages, homePage?.slug || '', `Домашний интернет в ${city.nameIn}`, `Тарифы домашнего интернета, телевидения и подключения в ${city.nameIn}.`);
+const meta = seoMeta(await loadSiteData(), `/${city.slug}`, pageMeta(city.pages, homePage?.slug || '', `Домашний интернет в ${city.nameIn}`, `Тарифы домашнего интернета, телевидения и подключения в ${city.nameIn}.`));
 const heroBlock = homePage?.blocks?.find((block) => block.blockType === 'hero');
 if (!heroBlock) throw new Error(`HOME города «${city.name}» не содержит hero канонического шаблона`);
 const contentBlocks = homePage?.blocks?.filter((block) => block.blockType !== 'hero') || [];
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 ---
 
-<BaseLayout title={meta.title} description={meta.description} city={city} pages={city.pages} {site}>
+<BaseLayout title={meta.title} description={meta.description} indexable={meta.indexState !== 'NOINDEX'} city={city} pages={city.pages} {site}>
   <CityHomeFirstScreen block={heroBlock} {city} {site} tariffs={city.tariffs} {apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage.slug} />
   <BlockRenderer
     blocks={contentBlocks}

@@ -28,6 +28,22 @@ enum PageType {
   COOKIE_POLICY
 }
 
+enum SeoTemplateKind {
+  HOME
+  COVERAGE
+  CITIES
+  PRIVACY
+  PERSONAL_DATA_CONSENT
+  COOKIE_POLICY
+  CITY_HOME
+  CITY_TARIFF_DETAIL
+}
+
+enum SeoIndexState {
+  INDEX
+  NOINDEX
+}
+
 enum ServiceType {
   INTERNET
   INTERNET_TV
@@ -208,8 +224,22 @@ model Site {
   publications SitePublication[]
   auditEvents AuditEvent[]
   sitemapExclusions SitemapExclusion[]
+  seoTemplates SeoTemplate[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model SeoTemplate {
+  id                  String          @id @default(cuid())
+  siteId              String
+  kind                SeoTemplateKind
+  titleTemplate       String
+  descriptionTemplate String
+  indexState          SeoIndexState   @default(INDEX)
+  site                Site            @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  @@unique([siteId, kind])
 }
 
 model SitemapExclusion {

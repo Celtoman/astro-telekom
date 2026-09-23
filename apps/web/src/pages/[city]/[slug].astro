@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TariffDetail from '../../components/TariffDetail.astro';
-import { loadSiteData, publicSiteSlug, type CityView, type SiteView } from '../../data/site';
+import { loadSiteData, seoMeta, publicSiteSlug, type CityView, type SiteView } from '../../data/site';
 import type { TariffView } from '../../data/tariff-view';
 
 interface Props {
@@ -32,10 +32,11 @@ const title = typeof seo.title === 'string' && seo.title.trim()
 const description = typeof seo.description === 'string' && seo.description.trim()
   ? seo.description.trim()
   : `${tariff.name}: ${tariff.speed}, ${tariff.price}. Проверьте возможность подключения по адресу в ${city.nameIn}.`;
+const meta = seoMeta(await loadSiteData(), `/${city.slug}/${tariff.slug}`, { title, description });
 const relatedTariffs = city.tariffs.filter((item) => item.slug !== tariff.slug).slice(0, 3);
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 ---
 
-<BaseLayout {title} {description} {city} pages={city.pages} {site}>
+<BaseLayout title={meta.title} description={meta.description} indexable={meta.indexState !== 'NOINDEX'} {city} pages={city.pages} {site}>
   <TariffDetail {city} {site} {tariff} {relatedTariffs} {apiUrl} siteSlug={publicSiteSlug} />
 </BaseLayout>

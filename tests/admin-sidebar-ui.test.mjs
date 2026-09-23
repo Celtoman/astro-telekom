@@ -20,10 +20,11 @@ test('admin navigation is configuration-driven and opens the active nested group
 
   assert.deepEqual(tariffs.children.map((item) => item.id), ['tariffs', 'tariffs-import']);
   assert.deepEqual(cities.children.map((item) => item.id), ['cities', 'cities-import']);
-  assert.deepEqual(seo.children.map((item) => item.id), ['seo-sitemap']);
+  assert.deepEqual(seo.children.map((item) => item.id), ['seo-templates', 'seo-sitemap']);
   assert.equal(activeNavigationGroup(adminNavigation, 'tariffs-import'), 'tariffs');
   assert.equal(activeNavigationGroup(adminNavigation, 'cities'), 'cities');
   assert.equal(activeNavigationGroup(adminNavigation, 'seo-sitemap'), 'seo');
+  assert.equal(activeNavigationGroup(adminNavigation, 'seo-templates'), 'seo');
   assert.equal(activeNavigationGroup(adminNavigation, 'leads'), null);
 });
 
