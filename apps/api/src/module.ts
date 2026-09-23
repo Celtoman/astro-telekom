@@ -47,6 +47,8 @@ import { AdminTrashController } from './admin-trash.controller';
 import { AdminSitemapController } from './admin-sitemap.controller';
 import { SitemapService } from './sitemap.service';
 import { AdminSiteValuesController } from './admin-site-values.controller';
+import { AdminVariableCatalogController } from './admin-variable-catalog.controller';
+import { WorkingVariableUsagesService } from './working-variable-usages.service';
 import { SiteValuesService } from './site-values.service';
 import { CityReadinessService } from './city-readiness.service';
 import { LeadDecisionService } from './lead-decision.service';
@@ -83,7 +85,8 @@ import { LeadDecisionController } from './lead-decision.controller';
     AdminTrashController,
     AdminSitemapController,
     AdminSiteValuesController,
+    AdminVariableCatalogController,
   ],
-  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, SiteValuesService, CityReadinessService, RebuildQueueService, TariffImportService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

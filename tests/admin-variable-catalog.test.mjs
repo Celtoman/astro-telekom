@@ -1,0 +1,37 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+
+const root = new URL('../', import.meta.url);
+const source = async (file) => readFile(new URL(file, root), 'utf8');
+
+test('variable catalog filters code, name, source, type and status without hiding unused codes', async () => {
+  const { filterVariableCatalogItems } = await import('../apps/admin/src/lib/variable-catalog.mjs');
+  const items = [
+    { code: 'CONNECTION_PHONE', name: 'Телефон подключения', source: 'Site.connectionPhone', type: 'phone', status: 'ACTIVE', workingUsages: [] },
+    { code: 'TARIFF_PRICE', name: 'Цена тарифа', source: 'Tariff.effectivePrice', type: 'number', status: 'ACTIVE', workingUsages: [{ code: 'TARIFF_PRICE' }] },
+    { code: 'OLD_CODE', name: 'Старый код', source: 'Provider.name', type: 'text', status: 'DEPRECATING', workingUsages: [] },
+  ];
+  assert.equal(filterVariableCatalogItems(items, {}).length, 3);
+  assert.deepEqual(filterVariableCatalogItems(items, { q: 'подключ' }).map((item) => item.code), ['CONNECTION_PHONE']);
+  assert.deepEqual(filterVariableCatalogItems(items, { q: 'TARIFF_PRICE' }).map((item) => item.code), ['TARIFF_PRICE']);
+  assert.deepEqual(filterVariableCatalogItems(items, { source: 'Provider', status: 'DEPRECATING', type: 'text' }).map((item) => item.code), ['OLD_CODE']);
+  assert.deepEqual(filterVariableCatalogItems(items, { source: 'Site', type: 'number' }), []);
+});
+
+test('variables workspace exposes two tabs and a read-only contextual catalog', async () => {
+  const app = await source('apps/admin/src/components/VariablesApp.tsx');
+  assert.match(app, /TabsTrigger[^>]*value="values"[^>]*>Значения сайта/);
+  assert.match(app, /TabsTrigger[^>]*value="catalog"[^>]*>Каталог подстановок/);
+  assert.match(app, /variable-catalog/);
+  assert.match(app, /cityId/);
+  assert.match(app, /tariffId/);
+  assert.match(app, /Сбросить фильтры/);
+  assert.match(app, /Рабочее значение/);
+  assert.match(app, /Опубликованное значение/);
+  assert.match(app, /Места использования/);
+  assert.match(app, /Черновик/);
+  assert.match(app, /Скрыт/);
+  assert.match(app, /Редактор пока недоступен/);
+  assert.doesNotMatch(app, /Создать переменн|Удалить код|Переименовать код/);
+});

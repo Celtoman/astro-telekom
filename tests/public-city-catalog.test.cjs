@@ -54,6 +54,19 @@ test('public catalog returns the successful publication snapshot instead of work
   assert.equal(await controller.list('domru-site'), snapshot);
 });
 
+test('public catalog does not expose authored variable templates or operator-only metadata', async () => {
+  const snapshot = {
+    site: { slug: 'domru-site' }, cities: [], routes: [],
+    variableWarnings: [{ code: 'CITY_NAME', path: 'globalPages[0].title', reason: 'OUT_OF_CONTEXT' }],
+    variableUsages: [{ code: 'CITY_NAME', template: 'В {CITY_NAME}', path: 'globalPages[0].title' }],
+    variableSources: { providerName: 'Дом.ру', resolvedAt: '2026-09-23T00:00:00.000Z' },
+  };
+  const controller = new CitiesController({}, { getPublishedCatalog: async () => snapshot });
+  const result = await controller.list('domru-site');
+  assert.deepEqual(result, { site: snapshot.site, cities: [], routes: [] });
+  assert.ok(snapshot.variableUsages.length > 0, 'снимок сохраняет evidence для admin API');
+});
+
 test('Release 1 route policy rejects missing, extra and colliding route sources', () => {
   assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], releaseOneGlobalPages.slice(0, 4)), /Не опубликована обязательная/);
   assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], [...releaseOneGlobalPages, { type: 'FAQ', slug: 'faq' }]), /ровно 5/);

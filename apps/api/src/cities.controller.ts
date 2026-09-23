@@ -12,7 +12,10 @@ export class CitiesController {
 
   @Get()
   async list(@Param('siteSlug') siteSlug: string) {
-    return this.publications.getPublishedCatalog(siteSlug);
+    const catalog = await this.publications.getPublishedCatalog(siteSlug);
+    if (!('variableUsages' in catalog || 'variableSources' in catalog || 'variableWarnings' in catalog)) return catalog;
+    const { variableUsages: _usages, variableSources: _sources, variableWarnings: _warnings, ...publicCatalog } = catalog;
+    return publicCatalog;
   }
 
   @Get(':citySlug')
