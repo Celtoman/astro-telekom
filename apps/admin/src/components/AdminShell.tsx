@@ -14,6 +14,7 @@ import {
 } from "../lib/admin-navigation.mjs"
 import { requestJson } from "../lib/admin-api.mjs"
 import { AdminNavigation } from "./AdminNavigation"
+import { PublicationIndicator } from "./PublicationIndicator"
 import { Button } from "./ui/button"
 
 interface Administrator {
@@ -109,8 +110,8 @@ export function AdminShell({ apiUrl, user, active, children }: {
         </aside>
 
         <div className="min-w-0 flex-1">
-          <header className="flex min-h-16 items-center justify-between gap-4 border-b bg-background px-4 sm:px-6">
-            <div className="flex min-w-0 items-center gap-3">
+          <header className="flex min-h-16 flex-wrap items-center gap-2 border-b bg-background px-4 py-2 sm:gap-4 sm:px-6">
+            <div className="flex min-w-0 flex-1 items-center gap-3">
               <Dialog.Trigger asChild>
                 <Button className="lg:hidden" size="icon" variant="outline" aria-label="Открыть меню" title="Открыть меню (Ctrl+B)">
                   <Menu />
@@ -118,6 +119,7 @@ export function AdminShell({ apiUrl, user, active, children }: {
               </Dialog.Trigger>
               <div className="min-w-0"><p className="text-sm font-medium">Администратор</p><p className="truncate text-xs text-muted-foreground">{user.email}</p></div>
             </div>
+            <div className="order-3 w-full sm:order-none sm:w-auto"><PublicationIndicator apiUrl={apiUrl} /></div>
             <Button variant="outline" onClick={() => void logout()}><LogOut data-icon="inline-start" /><span className="hidden sm:inline">Выйти</span><span className="sr-only sm:hidden">Выйти</span></Button>
           </header>
           <main>{children}</main>

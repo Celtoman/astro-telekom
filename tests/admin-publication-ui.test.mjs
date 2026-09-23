@@ -47,7 +47,7 @@ test('publication state presentation distinguishes published, unpublished, runni
     latestPublication: { id: 'publication-5', status: 'RUNNING', siteRevision: 5 },
     rebuild: { status: 'RUNNING', requestedPublicationId: 'publication-5', processingPublicationId: 'publication-5' },
   }), {
-    kind: 'unpublished', title: 'Есть неопубликованные изменения', description: 'Рабочая версия 6; на сайте версия 4.', canPublish: true,
+    kind: 'publishing', title: 'Публикация версии 5 выполняется', description: 'До успешного завершения сайт показывает версию 4.', canPublish: false,
   });
 });
 

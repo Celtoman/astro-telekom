@@ -34,5 +34,9 @@ export async function requestJson(baseUrl, route, options = {}, fetchImpl = fetc
         : `API вернул ${response.status}`
     throw new AdminApiError(response.status, message, payload)
   }
+  const method = (options.method || "GET").toUpperCase()
+  if (method !== "GET" && /^\/admin\//.test(route) && !/\/import\/validate(?:\?|$)/.test(route) && typeof window !== "undefined") {
+    window.dispatchEvent(new Event("admin:publication-changed"))
+  }
   return /** @type {T} */ (payload)
 }
