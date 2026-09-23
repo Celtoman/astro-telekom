@@ -33,7 +33,7 @@
 | TD-118 | [#150](https://github.com/Celtoman/astro-telekom/issues/150) ✅ | `0032` удалила 206 legacy `HOME`, чистый snapshot ревизии 3 опубликован через strict web-build; live catalog имеет ровно одну каноническую HOME для 207 городов |
 | TD-120 | [#202](https://github.com/Celtoman/astro-telekom/issues/202) ✅ | Forward-only `0039` восстанавливает revision trail без изменения historical snapshot; exact-SHA rollout и live no-op уже восстановленного сайта подтверждены |
 | TD-121 | [#203](https://github.com/Celtoman/astro-telekom/issues/203) ✅ | Публичная форма и API принимают только полный мобильный номер `+7 (9XX) XXX-XX-XX` и отклоняют неполный ввод без повторного добавления `7` |
-| TD-122 | [#204](https://github.com/Celtoman/astro-telekom/issues/204) 🟢 | Повторный EMAIL fallback сохраняется под номером текущего delivery cycle без конфликта уникального индекса |
+| TD-122 | [#204](https://github.com/Celtoman/astro-telekom/issues/204) ✅ | Повторный EMAIL fallback сохраняется под номером текущего delivery cycle без конфликта уникального индекса |
 | TD-123 | [#205](https://github.com/Celtoman/astro-telekom/issues/205) 🟢 | Сбой БД после принятого EMAIL fallback может оставить лид `PENDING` без безопасного пути восстановления |
 | TD-21 | [#12](https://github.com/Celtoman/astro-telekom/issues/12) ✅ | Уязвимый `xlsx@0.18.5` заменен на `read-excel-file`; импорт принимает только ограниченный XLSX |
 | TD-22 | [#37](https://github.com/Celtoman/astro-telekom/issues/37) ✅ | Compose переведен на обязательный для PostgreSQL 18 volume mount `/var/lib/postgresql` |
