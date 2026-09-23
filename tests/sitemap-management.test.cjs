@@ -163,7 +163,7 @@ test('sitemap persistence is normalized and wired into the protected API module'
   })();
   assert.match(schema, /model SitemapExclusion[\s\S]*@@unique\(\[siteId, path\]\)/);
   assert.match(moduleSource, /AdminSitemapController/);
-  assert.match(moduleSource, /SitemapService/);
+  assert.match(moduleSource, /providers:\s*\[[^\]]*\bSitemapService\b/, 'SitemapService must be registered as a Nest provider');
   assert.match(controllerSource, /@UseGuards\(AdminTokenGuard\)/);
   assert.match(controllerSource, /@Get\('sites\/:siteId\/sitemap'\)/);
   assert.match(controllerSource, /@Put\('sites\/:siteId\/sitemap-exclusions'\)/);

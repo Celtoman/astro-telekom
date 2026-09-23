@@ -17,6 +17,7 @@
 | TD-100 | [#129](https://github.com/Celtoman/astro-telekom/issues/129) ✅ | Legacy hero CTA с конечным слэшем нормализован идемпотентной data migration до строгой runtime-публикации |
 | TD-101 | [#130](https://github.com/Celtoman/astro-telekom/issues/130) ✅ | Production HOME/INTERNET Казани сохраняют неполный legacy PageBlock snapshot вместо нового прототипа |
 | TD-115 | [#145](https://github.com/Celtoman/astro-telekom/issues/145) ✅ | Встроенный backup-контур отменен как ненужный: владелец использует внешнее решение вне репозитория |
+| TD-129 | [#211](https://github.com/Celtoman/astro-telekom/issues/211) ✅ | API bootstrap восстановлен после выпадения `SitemapService` из Nest providers; startup и readiness проверены |
 
 ## P1
 
