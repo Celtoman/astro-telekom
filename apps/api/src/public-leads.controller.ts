@@ -36,6 +36,51 @@ export class PublicLeadsController {
       throw new BadRequestException('Введите мобильный номер в формате +7 (9XX) XXX-XX-XX');
     }
 
+    const findSubmission = () => this.prisma.lead.findUnique({
+      where: { submissionKey: body.submissionKey },
+      select: {
+        id: true,
+        status: true,
+        processingStatus: true,
+        siteId: true,
+        cityId: true,
+        addressCheckId: true,
+        pageId: true,
+        tariffId: true,
+        configurationSnapshot: true,
+        serviceType: true,
+        phone: true,
+        address: true,
+        objectType: true,
+        site: { select: { slug: true } },
+        city: { select: { slug: true } },
+        page: { select: { slug: true } },
+        tariff: { select: { slug: true, serviceType: true } },
+      },
+    });
+    const returnExistingSubmission = (existing: Awaited<ReturnType<typeof findSubmission>>) => {
+      if (!existing) return null;
+      const matches = existing.site.slug === (body.siteSlug || 'domru-site')
+        && existing.city.slug === body.citySlug
+        && (existing.page?.slug ?? null) === (body.pageSlug || null)
+        && (existing.tariff?.slug ?? null) === (body.tariffSlug || null)
+        && existing.addressCheckId === (body.addressCheckId ?? null)
+        && (!body.address?.trim() || existing.address === body.address.trim())
+        && (!body.objectType || existing.objectType === body.objectType)
+        && ((existing.configurationSnapshot as { fingerprint?: string } | null)?.fingerprint ?? null) === (body.configuration?.fingerprint ?? null)
+        && (existing.serviceType ?? null) === (body.serviceType || existing.tariff?.serviceType || null)
+        && existing.phone === phone;
+      if (!matches) throw new BadRequestException('Ключ отправки уже использован для другой заявки');
+      return {
+        id: existing.id,
+        status: existing.status,
+        message: 'Заявка принята',
+        subscriberMode: existing.processingStatus === 'ACTIVE_SUBSCRIBER_NOT_SENT',
+      };
+    };
+    const existingSubmission = returnExistingSubmission(await findSubmission());
+    if (existingSubmission) return existingSubmission;
+
     const site = await this.prisma.site.findFirst({
       where: { slug: body.siteSlug || 'domru-site', status: 'PUBLISHED' },
     });
@@ -89,52 +134,6 @@ export class PublicLeadsController {
     if (!addressCheck || addressCheck.status !== 'AVAILABLE' || !coverage?.hasTargetProvider) {
       throw new BadRequestException('Заявку можно отправить только после положительной проверки адреса');
     }
-
-    const submissionBinding = {
-      siteId: site.id,
-      cityId: city.id,
-      addressCheckId: addressCheck.id,
-      pageId: page?.id ?? null,
-      tariffId: tariff?.id ?? null,
-      serviceType: body.serviceType || tariff?.serviceType || null,
-      phone,
-    };
-    const findSubmission = () => this.prisma.lead.findUnique({
-      where: { submissionKey: body.submissionKey },
-      select: {
-        id: true,
-        status: true,
-        processingStatus: true,
-        siteId: true,
-        cityId: true,
-        addressCheckId: true,
-        pageId: true,
-        tariffId: true,
-        configurationSnapshot: true,
-        serviceType: true,
-        phone: true,
-      },
-    });
-    const returnExistingSubmission = (existing: Awaited<ReturnType<typeof findSubmission>>) => {
-      if (!existing) return null;
-      const matches = existing.siteId === submissionBinding.siteId
-        && existing.cityId === submissionBinding.cityId
-        && existing.addressCheckId === submissionBinding.addressCheckId
-        && (existing.pageId ?? null) === submissionBinding.pageId
-        && (existing.tariffId ?? null) === submissionBinding.tariffId
-        && ((existing.configurationSnapshot as { fingerprint?: string } | null)?.fingerprint ?? null) === (body.configuration?.fingerprint ?? null)
-        && (existing.serviceType ?? null) === submissionBinding.serviceType
-        && existing.phone === submissionBinding.phone;
-      if (!matches) throw new BadRequestException('Ключ отправки уже использован для другой заявки');
-      return {
-        id: existing.id,
-        status: existing.status,
-        message: 'Заявка принята',
-        subscriberMode: existing.processingStatus === 'ACTIVE_SUBSCRIBER_NOT_SENT',
-      };
-    };
-    const existingSubmission = returnExistingSubmission(await findSubmission());
-    if (existingSubmission) return existingSubmission;
 
     let storedConfiguration: Prisma.InputJsonValue | undefined;
     if (body.configuration) {

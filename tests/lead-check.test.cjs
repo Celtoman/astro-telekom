@@ -5,6 +5,8 @@ const { join } = require('node:path');
 const { PublicLeadsController } = require('../apps/api/dist/public-leads.controller.js');
 function fixture(check, recentLeads = [], enqueueNotification = async () => true) {
   let saved;
+  let submittedBody;
+  let savedBody;
   let leadCreates = 0;
   let notificationCreated;
   let notificationEnqueues = 0;
@@ -16,6 +18,7 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
     lead: { create: async ({ data }) => {
       leadCreates += 1;
       saved = { ...data, id: 'lead', status: 'NEW' };
+      savedBody = submittedBody;
       return saved;
     } },
     leadNotification: { create: async ({ data }) => {
@@ -34,7 +37,13 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
     } },
     lead: {
       findUnique: async ({ where }) => (
-        saved?.submissionKey === where.submissionKey ? saved : null
+        saved?.submissionKey === where.submissionKey ? {
+          ...saved,
+          site: { slug: savedBody.siteSlug || 'domru-site' },
+          city: { slug: savedBody.citySlug },
+          page: saved.pageId ? { slug: savedBody.pageSlug } : null,
+          tariff: saved.tariffId ? { slug: savedBody.tariffSlug, serviceType: saved.serviceType } : null,
+        } : null
       ),
       findMany: async ({ where }) => {
         assert.equal(where.siteId, 'site');
@@ -71,7 +80,7 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
   const controller = new PublicLeadsController(prisma, contract, delivery, notifications);
   return {
     controller,
-    create: (body) => controller.create(body, { headers: {}, url: '/leads' }),
+    create: (body) => { submittedBody = body; return controller.create(body, { headers: {}, url: '/leads' }); },
     saved: () => saved,
     contractChecks: () => contractChecks,
     contractLocation: () => contractLocation,
@@ -113,6 +122,7 @@ function targetCheck(overrides = {}) {
 
 test('lead rejects a site that is not publicly published', async () => {
   const prisma = {
+    lead: { findUnique: async () => null },
     site: { findFirst: async ({ where }) => { assert.equal(where.status, 'PUBLISHED'); return null; } },
   };
   const controller = new PublicLeadsController(prisma);
@@ -441,6 +451,82 @@ test('replaying the same submission key returns the existing lead without duplic
   const replay = await f.create(body);
 
   assert.equal(replay.id, first.id);
+  assert.equal(f.leadCreates(), 1);
+  assert.equal(f.notificationEnqueues(), 1);
+  assert.equal(f.deliveryEnqueues(), 1);
+});
+
+test('saved tariff lead replays after its publication is replaced', async () => {
+  const { quoteTariffConfiguration, configurationSnapshot, quoteFingerprint } = require('../apps/api/dist/tariff-configuration.service.js');
+  const publishedTariff = {
+    id: 'tariff-1', slug: 'giga-500', name: 'Гига 500', serviceType: 'INTERNET',
+    standardPrice: '1200', promoPrice: '900', connectionFee: '0', attributes: {},
+  };
+  const f = fixture(targetCheck());
+  let currentCatalog = { cities: [{ slug: 'kazan', tariffs: [publishedTariff] }] };
+  f.controller.prisma.tariff = { findFirst: async () => publishedTariff };
+  f.controller.prisma.sitePublication = { findFirst: async () => ({ catalog: currentCatalog }) };
+  const selection = { router: 'NONE', tvbox: 'NONE', services: [] };
+  const fingerprint = quoteFingerprint(configurationSnapshot(quoteTariffConfiguration(publishedTariff, selection)));
+  const body = { ...base, tariffSlug: 'giga-500', addressCheckId: 'check', configuration: { selection, fingerprint } };
+
+  const first = await f.create(body);
+  currentCatalog = { cities: [{ slug: 'kazan', tariffs: [] }] };
+  const replay = await f.create(body);
+
+  assert.equal(replay.id, first.id);
+  assert.equal(f.leadCreates(), 1);
+  assert.equal(f.notificationEnqueues(), 1);
+  assert.equal(f.deliveryEnqueues(), 1);
+});
+
+test('saved page and tariff lead replays after both working rows are archived', async () => {
+  const f = fixture(targetCheck());
+  f.controller.prisma.page = { findFirst: async () => ({ id: 'page-1', slug: 'offer' }) };
+  f.controller.prisma.tariff = { findFirst: async () => ({ id: 'tariff-1', slug: 'giga-500', serviceType: 'INTERNET' }) };
+  const body = { ...base, pageSlug: 'offer', tariffSlug: 'giga-500', addressCheckId: 'check' };
+  const first = await f.create(body);
+  f.controller.prisma.page.findFirst = async () => null;
+  f.controller.prisma.tariff.findFirst = async () => null;
+
+  const replay = await f.create(body);
+
+  assert.equal(replay.id, first.id);
+  assert.equal(f.leadCreates(), 1);
+  assert.equal(f.notificationEnqueues(), 1);
+  assert.equal(f.deliveryEnqueues(), 1);
+});
+
+test('saved submission key rejects changed site, city, address, page, tariff and fingerprint', async () => {
+  const { quoteTariffConfiguration, configurationSnapshot, quoteFingerprint } = require('../apps/api/dist/tariff-configuration.service.js');
+  const publishedTariff = {
+    id: 'tariff-1', slug: 'giga-500', name: 'Гига 500', serviceType: 'INTERNET',
+    standardPrice: '1200', promoPrice: '900', connectionFee: '0', attributes: {},
+  };
+  const f = fixture(targetCheck());
+  f.controller.prisma.page = { findFirst: async () => ({ id: 'page-1', slug: 'offer' }) };
+  f.controller.prisma.tariff = { findFirst: async () => publishedTariff };
+  f.controller.prisma.sitePublication = { findFirst: async () => ({
+    catalog: { cities: [{ slug: 'kazan', tariffs: [publishedTariff] }] },
+  }) };
+  const selection = { router: 'NONE', tvbox: 'NONE', services: [] };
+  const fingerprint = quoteFingerprint(configurationSnapshot(quoteTariffConfiguration(publishedTariff, selection)));
+  const body = { ...base, pageSlug: 'offer', tariffSlug: 'giga-500', addressCheckId: 'check',
+    address: 'Улица, 1', objectType: 'apartment', configuration: { selection, fingerprint } };
+  await f.create(body);
+
+  for (const changed of [
+    { siteSlug: 'other-site' },
+    { citySlug: 'moskva' },
+    { address: 'Улица, 2' },
+    { addressCheckId: 'another-check' },
+    { pageSlug: 'other-page' },
+    { tariffSlug: 'other-tariff' },
+    { configuration: { selection, fingerprint: '0'.repeat(64) } },
+    { phone: '+79010000000' },
+  ]) {
+    await assert.rejects(f.create({ ...body, ...changed }), /Ключ отправки уже использован для другой заявки/);
+  }
   assert.equal(f.leadCreates(), 1);
   assert.equal(f.notificationEnqueues(), 1);
   assert.equal(f.deliveryEnqueues(), 1);
