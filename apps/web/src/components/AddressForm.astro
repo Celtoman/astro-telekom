@@ -142,6 +142,8 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
               placeholder="+7 (___) ___-__-__"
             />
             <p id={`phone-error-${formId}`} class="field-error" data-phone-error role="alert" hidden>Введите мобильный номер в формате +7 (9XX) XXX-XX-XX</p>
+            <label for={`comment-${formId}`}>Комментарий <span class="optional-label">(необязательно)</span></label>
+            <textarea id={`comment-${formId}`} data-lead-comment name="comment" rows="3" maxlength="2000" placeholder="Уточните вопрос, если это поможет оператору"></textarea>
             <button class="button" type="submit" data-lead-submit>
               <span data-lead-submit-label>Оставить заявку</span>
               <span class="submit-spinner" data-lead-spinner aria-hidden="true" hidden></span>
@@ -201,8 +203,10 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
   .address-entry { scroll-margin-top: 24px; }
   .address-form { position: relative; display: grid; max-width: 560px; gap: 12px; }
   .address-form label, .lead-form label { font-weight: 750; }
-  input { width: 100%; min-height: 48px; box-sizing: border-box; border: 1px solid #d6dde6; border-radius: 12px; padding: 12px 14px; background: #fff; color: #18202a; font: inherit; }
-  input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #8fc4ef; outline-offset: 3px; }
+  input, textarea { width: 100%; min-height: 48px; box-sizing: border-box; border: 1px solid #d6dde6; border-radius: 12px; padding: 12px 14px; background: #fff; color: #18202a; font: inherit; }
+  textarea { resize: vertical; }
+  .optional-label { color: #526071; font-weight: 500; }
+  input:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #8fc4ef; outline-offset: 3px; }
   input[data-confirmed='true'] { border-color: #2e8b63; box-shadow: 0 0 0 3px rgb(46 139 99 / 14%); }
   .address-field { position: relative; display: grid; }
   .address-hint, .form-result, .consent-copy, [data-lead-result] { margin: 0; color: #526071; font-size: 14px; line-height: 1.45; }

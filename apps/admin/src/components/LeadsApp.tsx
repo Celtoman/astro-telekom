@@ -35,6 +35,7 @@ interface DeliveryAttempt { id: string; attemptNumber: number; channel: string; 
 interface LeadNotification { id: string; status: string; attempts: number; maxAttempts: number; transport?: string; errorCode?: string; httpStatus?: number; providerMessageId?: string; updatedAt: string }
 interface ActivityEvent { id: string; type: string; createdAt: string }
 interface LeadReasonOption { code: string; label: string; route: "SALES" | "NON_SALES" | "MANUAL"; version: number }
+interface CommentEvidence { category: string; fragment: string; start: number; end: number }
 interface LeadSummary {
   id: string
   name?: string
@@ -72,6 +73,12 @@ interface LeadDetail extends LeadSummary {
   contractResult?: Record<string, unknown>
   apiResult?: Record<string, unknown>
   configurationSnapshot?: ConfigurationSnapshot | null
+  comment?: string | null
+  commentAnalysisVersion?: number | null
+  commentAnalysisOutcome?: string | null
+  commentAnalysisCategory?: string | null
+  commentAnalysisEvidence?: unknown
+  commentAnalysisExplanation?: string | null
 }
 
 function hasUnknownDeliveryOutcome(lead: LeadDetail): boolean {
@@ -125,6 +132,22 @@ function reasonRouteExplanation(route: string | null | undefined, version: numbe
   if (route === "MANUAL") return `Требует ручного решения оператора; автоматическая передача не запускалась.${suffix}`
   if (route === "SALES") return `Причина допускает проверку подключения и последующую передачу при успешных проверках.${suffix}`
   return "Историческая заявка без снимка причины."
+}
+
+const commentCategoryLabels: Record<string, string> = {
+  technical_problem: "Техническая проблема действующего абонента",
+  billing: "Оплата или начисления",
+  cancellation: "Отключение или расторжение",
+  complaint: "Жалоба или претензия",
+  relocation: "Переезд",
+  new_connection: "Новое подключение",
+}
+
+function isCommentEvidence(value: unknown): value is CommentEvidence {
+  if (!value || typeof value !== "object") return false
+  const item = value as Record<string, unknown>
+  return typeof item.category === "string" && typeof item.fragment === "string"
+    && typeof item.start === "number" && typeof item.end === "number"
 }
 
 export function LeadsApp({ apiUrl }: { apiUrl: string }) {
@@ -367,6 +390,7 @@ function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment
   const unknownOutcome = hasUnknownDeliveryOutcome(lead)
   const unknownOutcomeOldEnough = Date.now() - Date.parse(lead.updatedAt) >= 2 * 60_000
   const configuration = lead.configurationSnapshot
+  const commentEvidence = Array.isArray(lead.commentAnalysisEvidence) ? lead.commentAnalysisEvidence.filter(isCommentEvidence) : []
   const rubles = (amount: number) => `${new Intl.NumberFormat("ru-RU").format(amount)} ₽`
   const addressStatus = lead.addressCheck?.status || recordText(lead.apiResult, "status")
   const contractStatus = recordText(lead.contractResult, "status")
@@ -382,6 +406,7 @@ function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment
     <CardHeader><div className="flex flex-wrap items-start justify-between gap-3"><div><CardTitle>{lead.name || lead.phone}</CardTitle><CardDescription>{lead.phone} · {dateFormatter.format(new Date(lead.createdAt))}</CardDescription></div><StatusBadge kind="leadStatus" value={lead.status} /></div></CardHeader>
     <CardContent className="flex flex-col gap-6">
       <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Контакт и контекст</h2><dl className="grid gap-2 text-sm"><DetailRow label="Email" value={lead.email} /><DetailRow label="Город страницы" value={lead.city.name} /><DetailRow label="Адрес подключения" value={lead.address} /><DetailRow label="Страница" value={lead.pageUrl || lead.page?.slug} /><DetailRow label="Тариф" value={configuration?.tariff.name || lead.tariff?.name} /><DetailRow label="Причина обращения" value={lead.reasonLabel || "Не указана"} description={reasonRouteExplanation(lead.reasonRoute, lead.reasonRegistryVersion)} /><DetailRow label="Источник" value={lead.source ? <SourceLabel value={lead.source} /> : undefined} /><DetailRow label="Форма" value={lead.formName} /></dl></section>
+      {lead.comment ? <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Комментарий пользователя</h2><p className="whitespace-pre-wrap break-words text-sm">{lead.comment}</p>{lead.commentAnalysisVersion ? <Alert><CircleAlert /><AlertTitle>{lead.commentAnalysisOutcome === "MANUAL_REVIEW" ? "Нужна ручная проверка" : lead.commentAnalysisOutcome === "WARNING" ? "Есть предупреждение" : "Анализ комментария"}</AlertTitle><AlertDescription>{lead.commentAnalysisExplanation || "Результат анализа сохранён."} Структурированная причина: {lead.reasonLabel || "не указана"}. Правила v{lead.commentAnalysisVersion}.</AlertDescription></Alert> : null}{commentEvidence.length ? <ul className="space-y-2 text-sm">{commentEvidence.map((item, index) => <li className="rounded-md border p-2" key={`${item.start}-${item.end}-${index}`}><span className="font-medium">{commentCategoryLabels[item.category] || "Неизвестная категория"}</span><span className="block break-words text-muted-foreground">Найденный фрагмент: «{item.fragment}»</span></li>)}</ul> : <p className="text-sm text-muted-foreground">Значимых фрагментов не найдено.</p>}</section> : null}
       {configuration ? <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Комплектация при отправке</h2><p className="text-xs text-muted-foreground">Неизменяемый снимок условий заявки{configuration.capturedAt ? ` · ${dateFormatter.format(new Date(configuration.capturedAt))}` : ""}.</p><dl className="grid gap-2 text-sm"><DetailRow label="Тариф" value={configuration.tariff.name} /><DetailRow label="ID тарифа" value={configuration.tariff.id} /></dl>{configuration.components.length ? <ul className="list-disc pl-5 text-sm">{configuration.components.map((item) => <li key={item.code}>{item.title} ({item.code}){item.methodTitle ? ` — ${item.methodTitle}` : ""}</li>)}</ul> : <p className="text-sm text-muted-foreground">Дополнительные опции не выбраны.</p>}<h3 className="text-sm font-medium">Ежемесячно</h3><ul className="list-disc pl-5 text-sm">{configuration.charges.monthly.map((item) => <li key={item.code}>{item.title}: {rubles(item.amount)}</li>)}</ul><strong className="text-sm">{rubles(configuration.totals.monthly)}/мес.</strong><h3 className="text-sm font-medium">Разовые платежи</h3><ul className="list-disc pl-5 text-sm">{configuration.charges.oneTime.map((item) => <li key={item.code}>{item.title}: {item.amount === null ? "стоимость уточняется" : rubles(item.amount)}</li>)}</ul><strong className="text-sm">{configuration.totals.oneTime === null ? `Известная часть: ${rubles(configuration.totals.knownOneTime)}; полная сумма уточняется` : rubles(configuration.totals.oneTime)}</strong></section> : null}
       <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Проверки и доставка</h2><dl className="grid gap-2 text-sm"><DetailRow label="Обработка" value={<StatusBadge kind="leadProcessingStatus" value={lead.processingStatus} />} description={processingPresentation.description} /><DetailRow label="Проверка адреса" value={presentationText("addressCheckStatus", addressStatus, "Результат проверки адреса отсутствует")} /><DetailRow label="Статус договора" value={presentationText("contractStatus", contractStatus, "Результат проверки договора отсутствует")} /><DetailRow label="Внешняя заявка" value={externalLead} /></dl>{unknownOutcome ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Проверьте результат резервного письма</AlertTitle><AlertDescription>Отправка могла состояться, но подтверждение не сохранилось. Проверьте почту или журнал внешнего сервиса до повтора: повторная передача может создать дубль.{!unknownOutcomeOldEnough ? " Обновите карточку через две минуты." : ""}</AlertDescription></Alert> : null}{canRetryDelivery ? <Button variant="outline" disabled={busy} onClick={() => void onRetryDelivery()}><RefreshCw data-icon="inline-start" />{deliveryRetryBusy ? "Ставим в очередь…" : unknownOutcome ? "Проверил результат — повторить" : "Повторить передачу"}</Button> : null}{lead.duplicateOf ? <Alert><CircleAlert /><AlertTitle>Повторная заявка {lead.duplicateOf.id}</AlertTitle><AlertDescription>{statusPresentation("duplicateReason", lead.duplicateReason).description}</AlertDescription></Alert> : null}</section>
       <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Оповещение оператора</h2><dl className="grid gap-2 text-sm"><DetailRow label="Статус" value={lead.notification ? <StatusBadge kind="leadNotificationStatus" value={lead.notification.status} /> : "Нет записи"} /><DetailRow label="Канал" value={presentationText("notificationTransport", lead.notification?.transport, "Еще не выбран")} /><DetailRow label="Попытки" value={lead.notification ? `${lead.notification.attempts} из ${lead.notification.maxAttempts}` : "—"} /></dl>{canRetryNotification ? <Button variant="outline" disabled={busy} onClick={() => void onRetryNotification()}><RefreshCw data-icon="inline-start" />{notificationRetryBusy ? "Ставим в очередь…" : "Повторить оповещение"}</Button> : null}{lead.notification?.errorCode ? <details className="text-sm"><summary className="cursor-pointer text-muted-foreground">Техническая информация</summary><p className="mt-1 break-words text-destructive">Код: {lead.notification.errorCode}{lead.notification.httpStatus ? ` · HTTP ${lead.notification.httpStatus}` : ""}</p></details> : null}</section>

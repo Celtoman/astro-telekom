@@ -183,6 +183,27 @@ test('reason cannot be changed by reusing an existing submission key', async () 
   assert.equal(f.leadCreates(), 1);
 });
 
+test('comment contradiction is snapshotted and short-circuits sales checks without rejecting the lead', async () => {
+  const f = fixture(null);
+  const result = await f.create({ ...base, reasonCode: 'new_connection', comment: 'Списали деньги' });
+  assert.equal(result.id, 'lead');
+  assert.equal(f.saved().processingStatus, 'MANUAL_CHECK');
+  assert.equal(f.saved().comment, 'Списали деньги');
+  assert.equal(f.saved().commentAnalysisVersion, 1);
+  assert.equal(f.saved().commentAnalysisOutcome, 'MANUAL_REVIEW');
+  assert.equal(f.saved().commentAnalysisCategory, 'billing');
+  assert.equal(f.saved().commentAnalysisEvidence[0].fragment, 'Списали деньги');
+  assert.equal(f.contractChecks(), 0);
+  assert.equal(f.deliveryEnqueues(), 0);
+});
+
+test('the comment is immutable for submission-key replay', async () => {
+  const f = fixture(targetCheck());
+  await f.create({ ...base, reasonCode: 'billing', addressCheckId: 'check', comment: 'Вопрос по оплате' });
+  await assert.rejects(f.create({ ...base, reasonCode: 'billing', addressCheckId: 'check', comment: 'Списали деньги' }), /Ключ отправки/);
+  assert.equal(f.leadCreates(), 1);
+});
+
 test('lead and its notification outbox record are created atomically before enqueue', async () => {
   const f = fixture(targetCheck());
   const created = await f.create({ ...base, addressCheckId: 'check' });

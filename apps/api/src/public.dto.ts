@@ -277,6 +277,11 @@ export class CreateLeadDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(2000)
+  comment?: string;
+
+  @IsOptional()
+  @IsString()
   @Matches(slug)
   @MaxLength(120)
   siteSlug?: string;

@@ -167,6 +167,7 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(addressForm, />Изменить адрес</);
   assert.match(addressForm, />Проверить другой адрес</);
   assert.match(addressForm, /data-phone-input/);
+  assert.match(addressForm, /data-lead-comment/);
   assert.match(addressForm, /value="\+7 "/);
   assert.match(addressForm, /Введите мобильный номер в формате \+7 \(9XX\) XXX-XX-XX/);
   assert.match(addressForm, /href="\/politika-konfidencialnosti"/);
@@ -187,6 +188,7 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(addressClient, /phoneInput\.value = '\+7 '/);
   assert.match(addressClient, /submissionKey/);
   assert.match(addressClient, /reasonCode:\s*'new_connection'/);
+  assert.match(addressClient, /comment:\s*commentInput\?\.value\.trim\(\)\s*\|\|\s*undefined/);
   assert.match(addressClient, /consentVersion/);
   assert.match(addressClient, /Попробовать ещё раз/);
 

@@ -11,6 +11,7 @@ import { readTarifnikCoverageSnapshot } from './coverage.service';
 import { LEAD_CONSENT_VERSION } from './lead-consent';
 import { configurationSnapshot, quoteFingerprint, quoteTariffConfiguration } from './tariff-configuration.service';
 import { classifyLeadReason } from './lead-reasons';
+import { analyzeLeadComment } from './lead-comment-analyzer';
 
 @Controller('leads')
 export class PublicLeadsController {
@@ -28,7 +29,9 @@ export class PublicLeadsController {
     if (body.website) throw new BadRequestException('Некорректный запрос');
     const reason = classifyLeadReason(body.reasonCode);
     if (body.reasonCode !== undefined && !reason) throw new BadRequestException('Неизвестная причина обращения');
-    const isSales = !reason || reason.route === 'SALES';
+    const comment = body.comment?.trim() || undefined;
+    const commentAnalysis = analyzeLeadComment(comment, reason?.code);
+    const isSales = (!reason || reason.route === 'SALES') && commentAnalysis?.outcome !== 'MANUAL_REVIEW';
     if (typeof body.phone !== 'string' || !body.phone.trim() || typeof body.citySlug !== 'string' || !body.citySlug.trim()) {
       throw new BadRequestException('Телефон и город обязательны');
     }
@@ -53,6 +56,7 @@ export class PublicLeadsController {
         tariffId: true,
         configurationSnapshot: true,
         reasonCode: true,
+        comment: true,
         serviceType: true,
         phone: true,
         address: true,
@@ -75,7 +79,8 @@ export class PublicLeadsController {
         && ((existing.configurationSnapshot as { fingerprint?: string } | null)?.fingerprint ?? null) === (body.configuration?.fingerprint ?? null)
         && (existing.serviceType ?? null) === (body.serviceType || existing.tariff?.serviceType || null)
         && existing.phone === phone
-        && (existing.reasonCode ?? null) === (reason?.code ?? null);
+        && (existing.reasonCode ?? null) === (reason?.code ?? null)
+        && (existing.comment ?? null) === (comment ?? null);
       if (!matches) throw new BadRequestException('Ключ отправки уже использован для другой заявки');
       return {
         id: existing.id,
@@ -172,7 +177,8 @@ export class PublicLeadsController {
     );
 
     let processingStatus: 'PENDING' | 'DUPLICATE_SUPPRESSED' | 'ACTIVE_SUBSCRIBER_NOT_SENT' | 'MANUAL_CHECK_API' | 'NON_SALES_NOT_SENT' | 'MANUAL_CHECK' = 'PENDING';
-    if (reason?.route === 'NON_SALES') processingStatus = 'NON_SALES_NOT_SENT';
+    if (commentAnalysis?.outcome === 'MANUAL_REVIEW') processingStatus = 'MANUAL_CHECK';
+    else if (reason?.route === 'NON_SALES') processingStatus = 'NON_SALES_NOT_SENT';
     else if (reason?.route === 'MANUAL') processingStatus = 'MANUAL_CHECK';
     else if (duplicate) processingStatus = 'DUPLICATE_SUPPRESSED';
 
@@ -198,6 +204,12 @@ export class PublicLeadsController {
             reasonLabel: reason?.label,
             reasonRoute: reason?.route,
             reasonRegistryVersion: reason?.version,
+            comment,
+            commentAnalysisVersion: commentAnalysis?.version,
+            commentAnalysisOutcome: commentAnalysis?.outcome,
+            commentAnalysisCategory: commentAnalysis?.category,
+            commentAnalysisEvidence: commentAnalysis?.evidence as Prisma.InputJsonValue | undefined,
+            commentAnalysisExplanation: commentAnalysis?.explanation,
             name: body.name?.trim(),
             phone,
             submissionKey: body.submissionKey,

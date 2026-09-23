@@ -90,6 +90,7 @@ function initializeRoot(root) {
   const checkGate = createLatestRequestGate();
   const leadForm = resultDialog.querySelector('[data-lead-form]');
   const phoneInput = leadForm?.querySelector('[data-phone-input]');
+  const commentInput = leadForm?.querySelector('[data-lead-comment]');
   const phoneError = leadForm?.querySelector('[data-phone-error]');
   const leadSubmit = leadForm?.querySelector('[data-lead-submit]');
   const leadSubmitLabel = leadForm?.querySelector('[data-lead-submit-label]');
@@ -201,6 +202,10 @@ function initializeRoot(root) {
     if (phoneInput) {
       phoneInput.disabled = false;
       phoneInput.value = '+7 ';
+    }
+    if (commentInput) {
+      commentInput.disabled = false;
+      commentInput.value = '';
     }
     setPhoneError(false);
     if (leadSubmit) leadSubmit.disabled = false;
@@ -606,6 +611,7 @@ function initializeRoot(root) {
           configuration: configuration || undefined,
           formName: 'address-result-dialog',
           reasonCode: 'new_connection',
+          comment: commentInput?.value.trim() || undefined,
           phone,
           submissionKey,
           consentVersion: leadForm.dataset.consentVersion,
@@ -630,6 +636,7 @@ function initializeRoot(root) {
         window.dispatchEvent(new Event(SUBSCRIBER_MODE_EVENT));
       }
       phoneInput.disabled = true;
+      if (commentInput) commentInput.disabled = true;
       if (leadContent) leadContent.hidden = true;
       if (leadSuccess) leadSuccess.hidden = false;
       resultHeading.textContent = 'Заявка отправлена';

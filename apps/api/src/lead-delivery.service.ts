@@ -107,6 +107,10 @@ export class LeadDeliveryService implements OnModuleDestroy {
     });
     if (!lead) return { skipped: true, reason: 'lead_not_found' };
     if (lead.processingStatus !== 'PENDING') return { skipped: true, reason: lead.processingStatus };
+    if (lead.commentAnalysisOutcome === 'MANUAL_REVIEW') {
+      await this.prisma.lead.update({ where: { id: lead.id }, data: { processingStatus: 'MANUAL_CHECK' } });
+      return { skipped: true, reason: 'comment_manual_review' };
+    }
     if (lead.reasonRoute && lead.reasonRoute !== 'SALES') {
       await this.prisma.lead.update({ where: { id: lead.id }, data: { processingStatus: lead.reasonRoute === 'NON_SALES' ? 'NON_SALES_NOT_SENT' : 'MANUAL_CHECK' } });
       return { skipped: true, reason: 'non_sales_reason' };

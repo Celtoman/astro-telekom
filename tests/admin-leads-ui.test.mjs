@@ -42,6 +42,16 @@ test('lead journal filters and explains the immutable reason without offering to
   assert.doesNotMatch(source, /method:\s*["']PATCH["'][\s\S]{0,120}reasonCode/);
 });
 
+test('lead detail explains versioned comment evidence without automatic rejection', () => {
+  const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
+  assert.match(source, /commentAnalysisVersion/);
+  assert.match(source, /commentAnalysisEvidence/);
+  assert.match(source, /Комментарий пользователя/);
+  assert.match(source, /Найденный фрагмент/);
+  assert.match(source, /commentAnalysisExplanation/);
+  assert.doesNotMatch(source, /dangerouslySetInnerHTML/);
+});
+
 test('lead detail renders the stored tariff snapshot before the mutable tariff relation', () => {
   const source = readFileSync(join(adminRoot, 'components', 'LeadsApp.tsx'), 'utf8');
   assert.match(source, /configurationSnapshot\?: ConfigurationSnapshot/);

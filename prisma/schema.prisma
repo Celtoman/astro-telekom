@@ -511,6 +511,12 @@ model Lead {
   reasonLabel     String?
   reasonRoute     String?
   reasonRegistryVersion Int?
+  comment         String?
+  commentAnalysisVersion Int?
+  commentAnalysisOutcome String?
+  commentAnalysisCategory String?
+  commentAnalysisEvidence Json?
+  commentAnalysisExplanation String?
   addressCheckId  String?
   name            String?
   phone             String

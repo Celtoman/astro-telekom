@@ -141,6 +141,14 @@ test('delivery refuses a non-sales reason even if a stale job sees PENDING', asy
   assert.equal(f.attempts.length, 0);
 });
 
+test('delivery refuses a manual comment outcome even if a stale job sees PENDING', async () => {
+  const f = fixture(lead({ commentAnalysisOutcome: 'MANUAL_REVIEW' }));
+  const result = await f.service.process('lead-1', 1, 1);
+  assert.deepEqual(result, { skipped: true, reason: 'comment_manual_review' });
+  assert.equal(f.updates.at(-1).processingStatus, 'MANUAL_CHECK');
+  assert.equal(f.attempts.length, 0);
+});
+
 async function withDeliveryEnvironment(callback) {
   const names = ['REDIS_URL', 'TARIFNIK_API_URL', 'TARIFNIK_API_KEY', 'TARIFNIK_UTM_CAMPAIGN', 'TARIFNIK_TARGET_PROVIDER_ID'];
   const previous = Object.fromEntries(names.map((name) => [name, process.env[name]]));
