@@ -117,11 +117,12 @@ test('browser contract validates typed responses, complete house suggestions and
   assert.equal(gate.isCurrent(second), false);
 });
 
-test('browser phone contract normalizes Russian numbers and formats the final mask', async () => {
+test('browser phone contract accepts only complete Russian mobile numbers', async () => {
   const moduleUrl = pathToFileURL(join(repositoryRoot, 'apps', 'web', 'src', 'lib', 'address-check-flow.mjs'));
   const {
     createSubmissionKey,
     formatRussianPhone,
+    hasInvalidRussianMobilePrefix,
     normalizeRussianPhone,
   } = await import(moduleUrl.href);
 
@@ -129,7 +130,18 @@ test('browser phone contract normalizes Russian numbers and formats the final ma
   assert.equal(normalizeRussianPhone('8 900 123 45 67'), '79001234567');
   assert.equal(normalizeRussianPhone('9001234567'), '79001234567');
   assert.equal(normalizeRussianPhone('900123456'), null);
+  assert.equal(normalizeRussianPhone('+7927498570'), null);
+  assert.equal(normalizeRussianPhone('7927498570'), null);
+  assert.equal(normalizeRussianPhone('8927498570'), null);
+  assert.equal(normalizeRussianPhone('+7 (800) 123-45-67'), null);
   assert.equal(normalizeRussianPhone('+1 900 123-45-67'), null);
+  assert.equal(hasInvalidRussianMobilePrefix('+7 '), false);
+  assert.equal(hasInvalidRussianMobilePrefix('+7 (9'), false);
+  assert.equal(hasInvalidRussianMobilePrefix('+7 (8'), true);
+  assert.equal(hasInvalidRussianMobilePrefix('+7 (1'), true);
+  assert.equal(formatRussianPhone('7'), '+7 ');
+  assert.equal(formatRussianPhone('8'), '+7 ');
+  assert.equal(formatRussianPhone('+79'), '+7 (9');
   assert.equal(formatRussianPhone('89001234567'), '+7 (900) 123-45-67');
   assert.equal(formatRussianPhone('+1 900 123-45-67'), '+19001234567');
   assert.match(createSubmissionKey(), /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
@@ -155,7 +167,8 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(addressForm, />Изменить адрес</);
   assert.match(addressForm, />Проверить другой адрес</);
   assert.match(addressForm, /data-phone-input/);
-  assert.match(addressForm, /Введите российский номер из 10 цифр/);
+  assert.match(addressForm, /value="\+7 "/);
+  assert.match(addressForm, /Введите мобильный номер в формате \+7 \(9XX\) XXX-XX-XX/);
   assert.match(addressForm, /href="\/politika-konfidencialnosti"/);
   assert.match(addressForm, /href="\/soglasie-na-obrabotku-personalnyh-dannyh"/);
   assert.match(addressForm, /data-lead-success/);
@@ -169,6 +182,9 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(addressClient, /trigger\.dataset\.citySlug/);
   assert.match(addressClient, /form\.dataset\.citySlug.*query\.replace/);
   assert.match(addressClient, /leadSubmitting/);
+  assert.match(addressClient, /hasInvalidRussianMobilePrefix/);
+  assert.match(addressClient, /После \+7 мобильный номер должен начинаться с 9/);
+  assert.match(addressClient, /phoneInput\.value = '\+7 '/);
   assert.match(addressClient, /submissionKey/);
   assert.match(addressClient, /consentVersion/);
   assert.match(addressClient, /Попробовать ещё раз/);

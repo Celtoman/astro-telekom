@@ -27,23 +27,43 @@ function safeHttpUrl(value) {
 }
 
 export function normalizeRussianPhone(value) {
-  const digits = String(value ?? '').replace(/\D/g, '');
-  if (digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8'))) {
-    return `7${digits.slice(1)}`;
+  const raw = String(value ?? '').trim();
+  const digits = raw.replace(/\D/g, '');
+  let normalized = digits;
+
+  if (raw.startsWith('+')) {
+    if (!raw.startsWith('+7') || digits.length !== 11) return null;
+  } else if (digits.startsWith('7') || digits.startsWith('8')) {
+    if (digits.length !== 11) return null;
+    normalized = `7${digits.slice(1)}`;
+  } else if (digits.length === 10 && digits.startsWith('9')) {
+    normalized = `7${digits}`;
+  } else {
+    return null;
   }
-  if (digits.length === 10) return `7${digits}`;
-  return null;
+
+  return /^79\d{9}$/.test(normalized) ? normalized : null;
+}
+
+export function hasInvalidRussianMobilePrefix(value) {
+  const raw = String(value ?? '').trim();
+  let digits = raw.replace(/\D/g, '');
+  if (raw.startsWith('+')) {
+    if (!raw.startsWith('+7')) return digits.length > 0;
+    digits = digits.slice(1);
+  } else if (digits.startsWith('7') || digits.startsWith('8')) {
+    digits = digits.slice(1);
+  }
+  return digits.length > 0 && !digits.startsWith('9');
 }
 
 export function formatRussianPhone(value) {
   const raw = String(value ?? '');
   let digits = raw.replace(/\D/g, '');
-  if (digits.length > 10 && !digits.startsWith('7') && !digits.startsWith('8')) {
+  if (raw.trimStart().startsWith('+') && !raw.trimStart().startsWith('+7')) {
     return `+${digits.slice(0, 11)}`;
   }
-  if ((digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8')))
-    || /^\s*\+7/.test(raw)
-    || (digits.length === 1 && (digits === '7' || digits === '8'))) {
+  if (/^\s*\+7/.test(raw) || digits.startsWith('7') || digits.startsWith('8')) {
     digits = digits.slice(1);
   }
   digits = digits.slice(0, 10);

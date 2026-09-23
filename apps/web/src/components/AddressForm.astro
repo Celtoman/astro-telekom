@@ -137,10 +137,11 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
               inputmode="tel"
               autocomplete="tel"
               maxlength="18"
+              value="+7 "
               aria-describedby={`phone-error-${formId}`}
               placeholder="+7 (___) ___-__-__"
             />
-            <p id={`phone-error-${formId}`} class="field-error" data-phone-error role="alert" hidden>Введите российский номер из 10 цифр</p>
+            <p id={`phone-error-${formId}`} class="field-error" data-phone-error role="alert" hidden>Введите мобильный номер в формате +7 (9XX) XXX-XX-XX</p>
             <button class="button" type="submit" data-lead-submit>
               <span data-lead-submit-label>Оставить заявку</span>
               <span class="submit-spinner" data-lead-spinner aria-hidden="true" hidden></span>

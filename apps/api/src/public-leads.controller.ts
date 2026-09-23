@@ -31,8 +31,8 @@ export class PublicLeadsController {
       throw new BadRequestException('Не удалось подтвердить условия отправки заявки. Обновите страницу');
     }
     const phone = normalizePhone(body.phone);
-    if (!/^7\d{10}$/.test(phone)) {
-      throw new BadRequestException('Введите российский номер из 10 цифр');
+    if (!/^79\d{9}$/.test(phone)) {
+      throw new BadRequestException('Введите мобильный номер в формате +7 (9XX) XXX-XX-XX');
     }
 
     const site = await this.prisma.site.findFirst({

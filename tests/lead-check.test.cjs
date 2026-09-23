@@ -327,13 +327,22 @@ test('positive lead stores normalized phone, immutable consent evidence and tari
   assert.ok(f.saved().consentAcceptedAt instanceof Date);
 });
 
-test('public lead rejects an invalid Russian phone before any persistence', async () => {
-  const f = fixture(targetCheck());
-  await assert.rejects(
-    f.create({ ...base, phone: '+1 900 000-00-00', addressCheckId: 'check' }),
-    /Введите российский номер из 10 цифр/,
-  );
-  assert.equal(f.leadCreates(), 0);
+test('public lead rejects incomplete and non-mobile Russian phones before any persistence', async () => {
+  for (const phone of [
+    '+1 900 000-00-00',
+    '+8 900 000-00-00',
+    '+7927498570',
+    '7927498570',
+    '8927498570',
+    '+7 (800) 123-45-67',
+  ]) {
+    const f = fixture(targetCheck());
+    await assert.rejects(
+      f.create({ ...base, phone, addressCheckId: 'check' }),
+      /Введите мобильный номер в формате \+7 \(9XX\) XXX-XX-XX/,
+    );
+    assert.equal(f.leadCreates(), 0);
+  }
 });
 
 test('public lead rejects every result except confirmed target-provider availability', async () => {

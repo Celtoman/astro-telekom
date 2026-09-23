@@ -52,7 +52,7 @@ export class DomruContractService {
       return { status: 'NOT_CONFIGURED', active: null, message: 'Профиль API проверки договора для города не настроен' };
     }
     const normalizedPhone = normalizePhone(phone);
-    if (!/^7\d{10}$/u.test(normalizedPhone)) {
+    if (!/^79\d{9}$/u.test(normalizedPhone)) {
       return { status: 'ERROR', active: null, message: 'Некорректный формат телефона для проверки договора' };
     }
 

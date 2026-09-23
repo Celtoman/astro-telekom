@@ -136,9 +136,11 @@ test('Dom.ru contract check rejects an invalid phone without calling the externa
     };
     const service = new DomruContractService();
     service.logger = { error() {} };
-    const result = await service.check('123', kazanLocation);
-    assert.equal(result.status, 'ERROR');
-    assert.equal(result.active, null);
+    for (const phone of ['123', '78001234567']) {
+      const result = await service.check(phone, kazanLocation);
+      assert.equal(result.status, 'ERROR');
+      assert.equal(result.active, null);
+    }
     assert.equal(fetchCalls, 0);
   });
 });

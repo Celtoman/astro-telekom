@@ -2,6 +2,7 @@ import {
   createSubmissionKey,
   createLatestRequestGate,
   formatRussianPhone,
+  hasInvalidRussianMobilePrefix,
   hasHouseNumber,
   normalizeRussianPhone,
   readAddressCheckResponse,
@@ -147,9 +148,12 @@ function initializeRoot(root) {
     }));
   };
 
-  const setPhoneError = (invalid) => {
+  const phoneFormatError = 'Введите мобильный номер в формате +7 (9XX) XXX-XX-XX';
+  const phonePrefixError = 'После +7 мобильный номер должен начинаться с 9';
+  const setPhoneError = (invalid, message = phoneFormatError) => {
     if (!phoneInput || !phoneError) return;
     phoneInput.setAttribute('aria-invalid', String(invalid));
+    if (invalid) phoneError.textContent = message;
     phoneError.hidden = !invalid;
   };
 
@@ -160,7 +164,7 @@ function initializeRoot(root) {
     if (leadSuccess) leadSuccess.hidden = true;
     if (phoneInput) {
       phoneInput.disabled = false;
-      phoneInput.value = '';
+      phoneInput.value = '+7 ';
     }
     setPhoneError(false);
     if (leadSubmit) leadSubmit.disabled = false;
@@ -514,7 +518,8 @@ function initializeRoot(root) {
 
   phoneInput?.addEventListener('input', () => {
     phoneInput.value = formatRussianPhone(phoneInput.value);
-    setPhoneError(false);
+    const invalidPrefix = hasInvalidRussianMobilePrefix(phoneInput.value);
+    setPhoneError(invalidPrefix, phonePrefixError);
     if (leadSubmitLabel?.textContent === 'Попробовать ещё раз') leadSubmitLabel.textContent = 'Оставить заявку';
   });
   phoneInput?.addEventListener('blur', () => {
