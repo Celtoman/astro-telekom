@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { validateCityHomeBlocks, validatePublishedBlocks } from './block-validation';
+import { resolveCatalogVariables } from './catalog-variables';
 import { mergeContent, publicContent } from './content-resolution';
 import { PrismaService } from './prisma.service';
 import { buildReleaseOneRoutes } from './public-route-policy';
@@ -24,7 +25,7 @@ export class SiteCatalogService {
   private async build(siteWhere: Prisma.SiteWhereInput, client: CatalogClient) {
     const site = await client.site.findFirst({
       where: siteWhere,
-      include: { provider: { select: { settings: true } } },
+      include: { provider: { select: { name: true, settings: true } } },
     });
     if (!site) throw new NotFoundException('Site not found');
 
@@ -57,7 +58,7 @@ export class SiteCatalogService {
 
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
     const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages);
-    return {
+    return resolveCatalogVariables({
       site: {
         name: site.name,
         slug: site.slug,
@@ -70,7 +71,11 @@ export class SiteCatalogService {
       sitemap: { excludedPaths: sitemapExclusions.map((item) => item.path) },
       redirects: this.effectiveRedirects(routes, redirects),
       cities: cities.map((city: any) => this.cityResponse(city, site)),
-    };
+    }, {
+      site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
+      provider: { name: site.provider.name },
+      now: new Date(),
+    });
   }
 
   async getCity(siteSlug: string, citySlug: string, client: CatalogClient = this.prisma) {

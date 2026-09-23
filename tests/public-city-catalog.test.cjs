@@ -93,7 +93,7 @@ test('public city catalog returns only published entities for one published site
           connectionPhone: '78005553535',
           supportPhone: '78002507777',
           settings: { content: { phone: '8 (800) 555-35-35' } },
-          provider: { settings: { content: { brand: 'Дом.ру' } } },
+          provider: { name: 'Дом.ру', settings: { content: { brand: 'Дом.ру' } } },
         };
       },
     },
@@ -113,7 +113,7 @@ test('public city catalog returns only published entities for one published site
           region: { name: 'Республика Татарстан', slug: 'tatarstan', content: {} },
           pages: [{
             id: 'page-1', slug: 'internet', type: 'INTERNET', status: 'PUBLISHED', content: {}, seo: {},
-            blocks: [{ id: 'block-1', blockType: 'hero', position: 10, visible: true, data: { title: 'Интернет', text: 'Проверьте подключение по адресу.' } }],
+            blocks: [{ id: 'block-1', blockType: 'hero', position: 10, visible: true, data: { title: 'Интернет {CITY_NAME_PREPOSITIONAL}', text: 'Проверьте подключение по адресу.' } }],
           }, canonicalHome()],
           tariffs: [{ id: 'tariff-1', slug: 'giga-500', status: 'PUBLISHED', seo: {} }],
         }];
@@ -123,7 +123,7 @@ test('public city catalog returns only published entities for one published site
       findMany: async (query) => {
         calls.pages = query;
         return [
-          { id: 'coverage', siteId: 'site-1', cityId: null, slug: 'karta-pokrytiya-provaydera', type: 'COVERAGE', title: 'Карта покрытия', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
+          { id: 'coverage', siteId: 'site-1', cityId: null, slug: 'karta-pokrytiya-provaydera', type: 'COVERAGE', title: 'Карта покрытия {PROVIDER_NAME}', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
           { id: 'cities', siteId: 'site-1', cityId: null, slug: 'goroda-obsluzhivaniya', type: 'CITIES', title: 'Города обслуживания', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
           { id: 'privacy', siteId: 'site-1', cityId: null, slug: 'politika-konfidencialnosti', type: 'PRIVACY', title: 'Политика конфиденциальности', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
           { id: 'consent', siteId: 'site-1', cityId: null, slug: 'soglasie-na-obrabotku-personalnyh-dannyh', type: 'PERSONAL_DATA_CONSENT', title: 'Согласие', status: 'PUBLISHED', content: {}, seo: {}, blocks: [] },
@@ -152,6 +152,7 @@ test('public city catalog returns only published entities for one published site
   const result = await controller.list('domru-site');
 
   assert.deepEqual(calls.site.where, { slug: 'domru-site', status: 'PUBLISHED' });
+  assert.deepEqual(calls.site.include.provider.select, { name: true, settings: true });
   assert.deepEqual(calls.cities.where, { siteId: 'site-1', status: 'PUBLISHED' });
   assert.deepEqual(calls.cities.include.pages.where, { status: 'PUBLISHED' });
   assert.deepEqual(calls.cities.include.pages.include.blocks.where, { visible: true, archivedAt: null });
@@ -169,8 +170,10 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(result.cities[0].region, { name: 'Республика Татарстан', slug: 'tatarstan' });
   assert.equal(result.cities[0].pages[0].slug, 'internet');
   assert.equal(result.cities[0].pages[0].blocks[0].blockType, 'hero');
+  assert.equal(result.cities[0].pages[0].blocks[0].data.title, 'Интернет Казани');
   assert.equal(result.cities[0].tariffs[0].slug, 'giga-500');
   assert.deepEqual(result.globalPages.map((page) => page.type), ['COVERAGE', 'CITIES', 'PRIVACY', 'PERSONAL_DATA_CONSENT', 'COOKIE_POLICY']);
+  assert.equal(result.globalPages[0].title, 'Карта покрытия Дом.ру');
   assert.deepEqual(result.routes.map((route) => route.path), [
     '/',
     '/karta-pokrytiya-provaydera',
