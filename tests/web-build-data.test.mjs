@@ -286,9 +286,12 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(tariffDetail, /200 ₽\/мес\./);
   assert.match(tariffDetail, /ТВ не включено/);
   assert.match(tariffDetail, /data-tariff-slug="api-internet-500"/);
+  assert.match(tariffDetail, /data-tariff-block="configurator"/);
+  assert.match(tariffDetail, /Соберите свой тариф/);
+  assert.match(tariffDetail, /Выбор пока не передаётся в заявку/);
   assert.match(tariffDetail, /href="\/kazan\/api-internet-tv-500"/);
   assert.doesNotMatch(tariffDetail, /private_token|secret/);
-  const tariffBlockOrder = ['hero', 'description', 'equipment', 'address', 'related', 'faq']
+  const tariffBlockOrder = ['hero', 'description', 'equipment', 'configurator', 'address', 'related', 'faq']
     .map((block) => tariffDetail.indexOf(`data-tariff-block="${block}"`));
   assert.ok(tariffBlockOrder.every((index) => index >= 0));
   assert.deepEqual(tariffBlockOrder, [...tariffBlockOrder].sort((left, right) => left - right));

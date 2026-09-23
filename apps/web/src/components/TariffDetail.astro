@@ -1,5 +1,6 @@
 ---
 import AddressForm from './AddressForm.astro';
+import TariffConfigurator from './TariffConfigurator';
 import { publicHtmlPath } from '../data/public-url';
 import type { CityView, SiteView } from '../data/site';
 import type { TariffView } from '../data/tariff-view';
@@ -130,6 +131,12 @@ const monthWord = (count: number) => {
     </section>
   )}
 
+  {tariff.pricing.currentAmount !== null && (
+    <section class="section container" data-tariff-block="configurator">
+      <TariffConfigurator client:idle {apiUrl} {siteSlug} citySlug={city.slug} tariffSlug={tariff.slug} />
+    </section>
+  )}
+
   <section class="section address-section" data-tariff-block="address">
     <div class="container address-layout">
       <div>
@@ -223,6 +230,15 @@ const monthWord = (count: number) => {
   .faq-list details { border: 1px solid #dce5ee; border-radius: 18px; padding: 0 22px; background: #fff; }
   .faq-list summary { cursor: pointer; padding: 22px 30px 22px 0; font-size: 18px; font-weight: 750; }
   .faq-list p { margin: 0; padding: 0 0 22px; color: #526071; line-height: 1.55; }
+  .tariff-detail :global(.tariff-configurator) { border: 1px solid #dce5ee; border-radius: 24px; padding: clamp(20px, 3vw, 40px); background: #fff; }
+  .tariff-detail :global(.tariff-configurator h2) { margin: 0 0 10px; font-size: clamp(28px, 3vw, 40px); }
+  .tariff-detail :global(.tariff-configurator h3) { margin: 28px 0 8px; }
+  .tariff-detail :global(.tariff-configurator fieldset) { margin: 20px 0; border: 0; padding: 0; }
+  .tariff-detail :global(.tariff-configurator legend) { margin-bottom: 8px; font-weight: 750; }
+  .tariff-detail :global(.tariff-configurator select) { max-width: 100%; border: 1px solid #aab9c7; border-radius: 10px; padding: 10px 12px; background: #fff; font: inherit; }
+  .tariff-detail :global(.tariff-configurator ul) { padding-left: 22px; line-height: 1.8; }
+  .tariff-detail :global(.service-choice) { display: flex; gap: 10px; align-items: center; margin: 14px 0; }
+  .tariff-detail :global(.configurator-disclaimer) { margin-top: 28px; color: #526071; }
   @media (max-width: 900px) {
     .tariff-hero, .details-section, .address-layout, .faq-layout { grid-template-columns: 1fr; }
     .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }

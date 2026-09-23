@@ -1,6 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { SiteCatalogService } from './site-catalog.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
+import { quoteTariffConfiguration, type TariffSelection } from './tariff-configuration.service';
 
 @Controller('public/sites/:siteSlug/cities')
 export class CitiesController {
@@ -20,6 +21,24 @@ export class CitiesController {
     @Param('citySlug') citySlug: string,
   ) {
     return this.publications.getPublishedCity(siteSlug, citySlug);
+  }
+
+  @Post(':citySlug/tariffs/:tariffSlug/quote')
+  async quoteTariff(
+    @Param('siteSlug') siteSlug: string,
+    @Param('citySlug') citySlug: string,
+    @Param('tariffSlug') tariffSlug: string,
+    @Body() selection: TariffSelection,
+  ) {
+    const city = await this.publications.getPublishedCity(siteSlug, citySlug);
+    const tariffs = Array.isArray(city.tariffs) ? city.tariffs as Array<Record<string, unknown>> : [];
+    const tariff = tariffs.find((item) => item.slug === tariffSlug);
+    if (!tariff) throw new NotFoundException('Published tariff not found');
+    try {
+      return quoteTariffConfiguration(tariff as unknown as Parameters<typeof quoteTariffConfiguration>[0], selection);
+    } catch (error) {
+      throw new BadRequestException(error instanceof Error ? error.message : 'Некорректная комплектация');
+    }
   }
 
   private cityResponse(city: any, site: any) {

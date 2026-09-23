@@ -165,6 +165,19 @@ test('minimal internet tariff hides optional blocks and names the missing TV com
   assert.equal(result.game, null);
 });
 
+test('optional video without a monthly price remains informational and never becomes free', () => {
+  const result = tariffView({
+    slug: 'internet-100', name: 'Интернет 100', serviceType: 'INTERNET',
+    standardPrice: 900, speed: 100,
+    attributes: { srv_video_status: 'OPTIONAL' },
+  });
+  assert.deepEqual(result.services, [{
+    code: 'video', title: 'Видеонаблюдение', status: 'OPTIONAL',
+    statusLabel: 'Доступно, стоимость уточняется',
+    monthlyPriceAmount: null, monthlyPriceLabel: null, oneTimeCharges: [],
+  }]);
+});
+
 test('known legacy fields do not drive rendering while numeric service statuses normalize at the boundary', () => {
   const result = tariffView({
     slug: 'legacy-internet',

@@ -228,13 +228,10 @@ function services(source: Record<string, AttributeValue>): TariffServiceView[] {
   if (videoStatus === 'UNAVAILABLE' && [videoPrice, cameraBuyout, cameraConnection].some((item) => item !== null)) {
     throw new Error('Недоступное видеонаблюдение не может содержать цены');
   }
-  if (videoStatus === 'OPTIONAL' && videoPrice === null) {
-    throw new Error('Опциональное видеонаблюдение требует ежемесячную цену');
-  }
   if (videoStatus !== 'UNAVAILABLE') {
     result.push({
       code: 'video', title: 'Видеонаблюдение', status: videoStatus,
-      statusLabel: statusLabel(videoStatus),
+      statusLabel: statusLabel(videoStatus, videoPrice === null ? 'Доступно, стоимость уточняется' : 'Можно подключить'),
       monthlyPriceAmount: videoStatus === 'OPTIONAL' ? videoPrice : null,
       monthlyPriceLabel: videoStatus === 'OPTIONAL' && videoPrice !== null ? money(videoPrice, '/мес.') : null,
       oneTimeCharges: [
