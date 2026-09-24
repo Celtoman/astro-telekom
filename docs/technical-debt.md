@@ -128,6 +128,7 @@
 | TD-98 | [#127](https://github.com/Celtoman/astro-telekom/issues/127) ✅ | Seed создает demo-тарифы только в пустом каталоге и не возвращает их после полного snapshot-импорта |
 | TD-99 | [#128](https://github.com/Celtoman/astro-telekom/issues/128) ✅ | Ссылка звонка в публичной шапке нормализуется из показанного пользователю номера |
 | TD-132 | [#215](https://github.com/Celtoman/astro-telekom/issues/215) ✅ | Ручной редактор тарифа отклоняет некорректные коды в `promoText` до сохранения |
+| TD-133 | [#216](https://github.com/Celtoman/astro-telekom/issues/216) ✅ | SEO/OG-редактор отклоняет некорректные коды в четырёх текстовых полях до сохранения |
 
 ## P3
 

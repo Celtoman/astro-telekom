@@ -3,6 +3,7 @@ import { Prisma, SeoIndexState, SeoTemplateKind } from '../generated';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { resolveSocialImage } from './seo-templates';
+import { resolveVariableText } from './variable-registry';
 
 export interface UpdateSeoTemplateInput {
   expectedWorkingRevision: number;
@@ -78,6 +79,12 @@ export class SeoTemplateService {
       throw new BadRequestException('OG image URL должен содержать не более 2048 символов');
     }
     if (input.ogImageUrl?.trim()) resolveSocialImage(input.ogImageUrl, 'seo.ogImage');
+    for (const field of ['titleTemplate', 'descriptionTemplate', 'ogTitleTemplate', 'ogDescriptionTemplate'] as const) {
+      const value = input[field];
+      if (typeof value === 'string' && value.trim()) {
+        resolveVariableText(value, { now: new Date() }, { path: `SeoTemplate.${field}`, field: 'TEXT' });
+      }
+    }
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const site = await transaction.site.findUnique({ where: { id: siteId }, select: { id: true, workingRevision: true, publishedRevision: true } });
       if (!site) throw new NotFoundException('Сайт не найден');

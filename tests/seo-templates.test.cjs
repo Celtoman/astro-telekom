@@ -214,6 +214,24 @@ test('SEO template update is guarded by the site revision and creates one attrib
   }, 'admin-1'), /ревизи|верси/i);
 });
 
+test('SEO editor rejects invalid variable codes in every text field before starting a write', async () => {
+  const { SeoTemplateService } = require('../apps/api/dist/seo-template.service.js');
+  let transactions = 0;
+  const service = new SeoTemplateService({ $transaction: async () => { transactions++; throw new Error('unexpected write'); } }, {});
+  const valid = { expectedWorkingRevision: 4, titleTemplate: 'Заголовок', descriptionTemplate: 'Описание', indexState: 'INDEX' };
+  for (const [field, value, pattern] of [
+    ['titleTemplate', 'Тариф {UNKNOWN_TITLE}', /UNKNOWN_TITLE/],
+    ['descriptionTemplate', 'Описание {UNKNOWN_DESCRIPTION}', /UNKNOWN_DESCRIPTION/],
+    ['ogTitleTemplate', 'OG {UNKNOWN_OG_TITLE}', /UNKNOWN_OG_TITLE/],
+    ['ogDescriptionTemplate', 'OG {UNKNOWN_OG_DESCRIPTION}', /UNKNOWN_OG_DESCRIPTION/],
+    ['descriptionTemplate', 'https://example.com/{CITY_NAME}', /ссылк|URL/i],
+    ['ogTitleTemplate', '<b>{CITY_NAME}</b>', /HTML/i],
+  ]) {
+    await assert.rejects(() => service.update('site-1', 'CITY_HOME', { ...valid, [field]: value }), pattern, `${field}: ${value}`);
+  }
+  assert.equal(transactions, 0);
+});
+
 test('SEO editor returns raw templates and both preview snapshots without hiding an invalid draft', async () => {
   const { SeoTemplateService } = require('../apps/api/dist/seo-template.service.js');
   const site = { id: 'site-1', slug: 'domru-site', workingRevision: 5, publishedRevision: 4 };
