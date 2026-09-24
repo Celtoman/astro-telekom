@@ -3,6 +3,7 @@ import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
 import { validateBlock } from './block-validation';
+import { BLOCK_PASSPORTS, BLOCK_PASSPORT_LIFECYCLE } from './block-passports';
 import { PublicationWorkflowService } from './publication-workflow.service';
 
 interface BlockBody {
@@ -24,6 +25,11 @@ export class AdminBlocksController {
     private readonly prisma: PrismaService,
     private readonly publications: PublicationWorkflowService,
   ) {}
+
+  @Get('block-passports')
+  passports() {
+    return { lifecycle: BLOCK_PASSPORT_LIFECYCLE, passports: BLOCK_PASSPORTS };
+  }
 
   @Get('pages/:pageId/blocks')
   list(@Param('pageId') pageId: string) {

@@ -4,6 +4,7 @@ import { tariffView, type TariffView } from "../../../web/src/data/tariff-view"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { tariffPreviewDiff, tariffTemplateBlocks } from "../lib/tariff-template.mjs"
 import { AdminShell } from "./AdminShell"
+import { BlockPassportsPanel } from "./BlockPassportsPanel"
 import { TariffTemplateCanvas } from "./TariffTemplateCanvas"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
@@ -198,6 +199,7 @@ export function TariffTemplateApp({ apiUrl }: { apiUrl: string }) {
   }
   return <AdminShell apiUrl={apiUrl} user={state.user} active="templates"><main className="mx-auto flex w-full max-w-[1680px] flex-col gap-6 p-6 lg:p-8">
     <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Шаблоны страниц</h1><p className="mt-1 text-sm text-muted-foreground">Программные страницы и их данные. Изменение структуры и кода выполняется через разработку и deployment.</p></div><Button variant="outline" onClick={() => setRefresh((current) => current + 1)}><RefreshCw data-icon="inline-start" />Обновить</Button></div>
+    <BlockPassportsPanel apiUrl={apiUrl} />
     {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Не удалось загрузить предпросмотр</AlertTitle><AlertDescription>{error}</AlertDescription></Alert> : null}
     <Card><CardHeader><div className="flex flex-wrap items-center gap-2"><CardTitle>Страница тарифа</CardTitle><Badge variant="secondary">Программный шаблон</Badge></div><CardDescription>Один шаблон для тарифов «Интернет» и «Интернет + ТВ». Порядок блоков фиксирован; видимость зависит от типизированных данных тарифа.</CardDescription></CardHeader><CardContent className="grid gap-5 lg:grid-cols-2">
       <div><h2 className="mb-3 font-semibold">Состав блоков</h2><ol className="space-y-2">{tariffTemplateBlocks.map((block, index) => <li key={block.id} data-template-block-id={block.id} className={`rounded-lg border p-3 text-sm ${markedBlocks.has(block.id) ? "border-red-500 bg-red-50" : ""}`} aria-invalid={markedBlocks.has(block.id) || undefined}><strong>{index + 1}. {block.title}</strong>{markedBlocks.has(block.id) ? <span className="ml-2 font-semibold text-red-700">Ошибка</span> : null}<span className="mt-1 block text-muted-foreground">{block.source}</span></li>)}</ol></div>

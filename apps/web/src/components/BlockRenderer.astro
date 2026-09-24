@@ -54,9 +54,12 @@ const tariffSummary = (tariff: TariffView) => JSON.stringify({
   }
   if (block.blockType === 'service_grid') {
     const items = Array.isArray(block.data.items) ? block.data.items as ServiceItem[] : [];
-    const services = items.map((item) => ({ ...item, serviceType: item.pageType === 'SERVICE_TV' ? 'TV' : item.pageType === 'SERVICE_COMBO' ? 'INTERNET_TV' : 'INTERNET' }));
+    const services = items.map((item) => ({
+      ...item,
+      serviceType: item.pageType === 'INTERNET' || item.pageType === 'INTERNET_TV' || item.pageType === 'TV' ? item.pageType : null,
+    }));
     if (services.length === 0) return null;
-    return <section class="section container" data-block-type="service_grid"><div class="section-heading"><span class="section-kicker">Выберите услугу</span><h2>{title}</h2></div><div class="service-grid">{services.map((item) => <article class="card service-card"><span class="feature-mark" aria-hidden="true">→</span><h3>{item.title}</h3><p>{item.text}</p><button class="card-link link-button" type="button" data-address-dialog-trigger={catalogDialogId} data-service-type={item.serviceType} aria-label={`Проверить подключение услуги ${item.title}`}>Проверить подключение</button></article>)}</div></section>;
+    return <section class="section container" data-block-type="service_grid"><div class="section-heading"><span class="section-kicker">Выберите услугу</span><h2>{title}</h2></div><div class="service-grid">{services.map((item) => <article class="card service-card"><span class="feature-mark" aria-hidden="true">→</span><h3>{item.title}</h3><p>{item.text}</p>{item.serviceType && <button class="card-link link-button" type="button" data-address-dialog-trigger={catalogDialogId} data-service-type={item.serviceType} aria-label={`Проверить подключение услуги ${item.title}`}>Проверить подключение</button>}</article>)}</div></section>;
   }
   if (block.blockType === 'feature_grid') {
     const items = Array.isArray(block.data.items) ? block.data.items as TextItem[] : [];

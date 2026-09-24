@@ -229,7 +229,7 @@ pnpm check
 | V1 | variable registry/parser/resolver | #188 | Нет | реализовано, issue закрыта |
 | V2 | variable catalog/context preview | #189 | Нет | реализовано, issue закрыта |
 | V3 | usage/insertion/deprecation | #190 | Нет | частично: текущие SEO/OG и promo insertion есть; будущие Page/Block editors и deprecation открыты |
-| C1 | `CMS-038–049` | #191 | Нет | draft-only, `OPEN-005` |
+| C1 | `CMS-038–049` | #191 | Нет | черновой реестр подготовлен, финальное утверждение ждёт дизайна и `OPEN-005` |
 | C2 | `CORE-005`, `CMS-001–018`, `CITY-024` | #192 | Нет | не начато |
 | C3 | main-page editors | #193 | Нет | не начато |
 | C4 | functional-page editors | #194 | Нет | не начато |

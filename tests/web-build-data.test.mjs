@@ -30,7 +30,11 @@ const tariff = (slug, name, speed, standardPrice, connectionFee = null, serviceT
 });
 const cityHomeBlocks = (cityIn) => [
   { blockType: 'hero', data: { eyebrow: `Дом.ру в ${cityIn}`, title: `Домашний интернет и телевидение в ${cityIn}`, text: 'Выберите услугу и проверьте подключение.' } },
-  { blockType: 'service_grid', data: { title: 'Услуги для дома', items: [{ pageType: 'INTERNET', title: 'Домашний интернет', text: 'Тарифы для квартиры и дома.' }] } },
+  { blockType: 'service_grid', data: { title: 'Услуги для дома', items: [
+    { pageType: 'INTERNET', title: 'Домашний интернет', text: 'Тарифы для квартиры и дома.' },
+    { pageType: 'INTERNET_TV', title: 'Интернет и ТВ', text: 'Единое предложение для дома.' },
+    { pageType: 'TV', title: 'Телевидение', text: 'Телеканалы для дома.' },
+  ] } },
   { blockType: 'tariff_grid', data: { title: 'Популярные тарифы' } },
   { blockType: 'steps', data: { title: 'Как проходит подключение', items: [{ title: 'Проверка', text: 'Уточняем адрес.' }, { title: 'Заявка', text: 'Связываемся с вами.' }] } },
   { blockType: 'feature_grid', data: { title: 'Оборудование', items: [{ title: 'Wi-Fi', text: 'Условия уточнит оператор.' }] } },
@@ -258,6 +262,16 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.doesNotMatch(kazan, /href="\/kazan\/(?:internet|internet-tv)"/);
   assert.equal((kazan.match(/data-block-type="tariff_grid"/g) || []).length, 1);
   assert.match(kazan, /data-block-type="service_grid"/);
+  const serviceSection = kazan.match(/data-block-type="service_grid"[\s\S]*?<\/section>/)?.[0] || '';
+  const serviceCards = [...serviceSection.matchAll(/<article class="card service-card"[^>]*>([\s\S]*?)<\/article>/g)]
+    .map((match) => ({ title: match[1].match(/<h3[^>]*>(.*?)<\/h3>/)?.[1], type: match[1].match(/data-service-type="(.*?)"/)?.[1] }));
+  assert.deepEqual(serviceCards, [
+    { title: 'Домашний интернет', type: 'INTERNET' },
+    { title: 'Интернет и ТВ', type: 'INTERNET_TV' },
+    { title: 'Телевидение', type: 'TV' },
+  ]);
+  assert.match(addressClientSource, /form\.dataset\.serviceType = trigger\.dataset\.serviceType/);
+  assert.match(addressClientSource, /serviceType: form\.dataset\.serviceType/);
   const homeBlockOrder = ['service_grid', 'tariff_grid', 'steps', 'feature_grid', 'faq'].map((type) => kazan.indexOf(`data-block-type="${type}"`));
   assert.ok(homeBlockOrder.every((index) => index >= 0));
   assert.deepEqual(homeBlockOrder, [...homeBlockOrder].sort((left, right) => left - right));

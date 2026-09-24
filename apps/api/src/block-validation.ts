@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 
-const BLOCK_TYPES = ['hero', 'rich_text', 'tariff_grid', 'service_grid', 'feature_grid', 'steps', 'faq'] as const;
+export const BLOCK_TYPES = ['hero', 'rich_text', 'tariff_grid', 'service_grid', 'feature_grid', 'steps', 'faq'] as const;
 const SERVICE_PAGE_TYPES = ['INTERNET', 'INTERNET_TV', 'TV', 'ADDRESS_CHECK', 'FAQ'] as const;
 const TARIFF_SERVICE_TYPES = ['INTERNET', 'INTERNET_TV', 'TV'] as const;
 const ROOT_FIELDS = ['blockType', 'position', 'visible', 'data', 'source'] as const;
