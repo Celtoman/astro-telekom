@@ -120,6 +120,25 @@ test('validation maps canonical top-level tariff values without price coercion',
   assert.equal(report.diff.changes[0].action, 'create');
 });
 
+test('tariff region validation follows the city import region slug without accepting a different region', async () => {
+  const instance = new TariffImportService({
+    city: { findMany: async () => [{
+      id: 'city-1', name: 'Казань', slug: 'kazan',
+      region: { name: 'Республика Татарстан', slug: 'tatarstan' }, pages: [],
+    }] },
+    tariff: { findMany: async () => [] },
+  });
+
+  const accepted = await instance.validateRows('provider-1', 'tariffs.xlsx', [row({ subekt_rf: 'Татарстан' })]);
+  assert.equal(accepted.errorRows, 0);
+  assert.equal(accepted.validRows, 1);
+
+  const rejected = await instance.validateRows('provider-1', 'tariffs.xlsx', [row({ subekt_rf: 'Самарская область' })]);
+  assert.equal(rejected.errorRows, 1);
+  assert.equal(rejected.validRows, 0);
+  assert.match(rejected.issues[0].message, /subekt_rf не соответствует региону города/);
+});
+
 test('validation preserves tariff description and normalized TV channel counters in attributes', async () => {
   const report = await service().validateRows('provider-1', 'tariffs.xlsx', [row({
     tarif_type: 'Интернет+ТВ',

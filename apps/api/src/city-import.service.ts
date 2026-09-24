@@ -5,6 +5,7 @@ import { cityHomeTemplateBlocks } from './city-home-template';
 import { defaultDomruProfileCatalog } from './domru-profile-catalog';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
+import { regionSlugFromName } from './region-slug';
 import { parseWorkbook } from './tariff-import.service';
 
 export interface CityImportIssue { row: number; level: 'error' | 'warning'; message: string; key?: string }
@@ -235,8 +236,6 @@ const restoreCityData = (city: StoredCity) => ({
 });
 
 const text = (value: unknown) => value === null || value === undefined ? '' : String(value).trim();
-const transliteration: Record<string, string> = { а:'a', б:'b', в:'v', г:'g', д:'d', е:'e', ё:'e', ж:'zh', з:'z', и:'i', й:'y', к:'k', л:'l', м:'m', н:'n', о:'o', п:'p', р:'r', с:'s', т:'t', у:'u', ф:'f', х:'h', ц:'c', ч:'ch', ш:'sh', щ:'sch', ъ:'', ы:'y', ь:'', э:'e', ю:'yu', я:'ya' };
-const slugify = (value: string) => value.toLocaleLowerCase('ru-RU').split('').map((char) => transliteration[char] ?? char).join('').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const normalizeColumn = (value: string) => value.replace(/^\uFEFF/, '').trim().toLocaleLowerCase('ru-RU').replace(/[\s./-]+/g, '_');
 const importActions = new Set<CityImportAction>(['create', 'update', 'skip']);
 
@@ -417,7 +416,7 @@ export class CityImportService {
         } else if (current) {
           throw new BadRequestException(`Город «${candidate.slug}» уже существует; проверьте файл заново`);
         }
-        const regionSlug = slugify(candidate.subject);
+        const regionSlug = regionSlugFromName(candidate.subject);
         let region = regionsByName.get(candidate.subject) || regionsBySlug.get(regionSlug);
         if (!region) {
           region = await tx.region.create({ data: { siteId: candidate.siteId, name: candidate.subject, slug: regionSlug } });

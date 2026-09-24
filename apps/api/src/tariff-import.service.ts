@@ -4,6 +4,7 @@ import { Prisma, PublishStatus, ServiceType, TariffArchiveReason, TariffAvailabi
 import { readSheet, type SheetData } from 'read-excel-file/node';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
+import { regionSlugFromName } from './region-slug';
 
 export const CANONICAL_IMPORT_COLUMNS = [
   'subekt_rf', 'gorod_name', 'gorod_slug', 'tarif_type', 'post_title', 'tariff_slug',
@@ -517,7 +518,7 @@ export class TariffImportService {
         id: true,
         name: true,
         slug: true,
-        region: { select: { name: true } },
+        region: { select: { name: true, slug: true } },
         pages: { where: { status: 'PUBLISHED', type: { notIn: ['HOME', 'TARIFF'] } }, select: { slug: true } },
       },
     });
@@ -571,7 +572,10 @@ export class TariffImportService {
       if (matchedCity?.name && htmlToPlainText(row.gorod_name).toLocaleLowerCase('ru-RU') !== htmlToPlainText(matchedCity.name).toLocaleLowerCase('ru-RU')) {
         add('error', `gorod_name не соответствует городу со slug «${citySlug}»`);
       }
-      if (matchedCity?.region?.name && htmlToPlainText(row.subekt_rf).toLocaleLowerCase('ru-RU') !== htmlToPlainText(matchedCity.region.name).toLocaleLowerCase('ru-RU')) {
+      const sourceRegion = htmlToPlainText(row.subekt_rf);
+      if (matchedCity?.region?.name
+        && sourceRegion.toLocaleLowerCase('ru-RU') !== htmlToPlainText(matchedCity.region.name).toLocaleLowerCase('ru-RU')
+        && regionSlugFromName(sourceRegion) !== matchedCity.region.slug) {
         add('error', `subekt_rf не соответствует региону города «${citySlug}»`);
       }
       if (matchedCity && tariffSlug && publishedPagePaths.has(`${matchedCity.id}:${tariffSlug}`)) {
