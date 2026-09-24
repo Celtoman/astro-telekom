@@ -73,7 +73,7 @@
 - SEO-admin и миграция override S1–S4;
 - representative preview diagnostics P2.
 
-Это не отмена этих задач. Они остаются открытым backlog после получения рабочей версии.
+Это не отмена задач: незавершённые пункты остаются backlog после получения рабочей версии. T9 выполнена позже и по-прежнему не входит в обязательный состав Release 1.
 
 ## Milestone Release 1
 
@@ -216,7 +216,7 @@ pnpm check
 | T6 | typed tariff renderer | #176 | Да | реализовано, issue закрыта; rollout и live HTML подтверждены |
 | T7 | tariff calculator/configurator | #177 | Да | реализовано, issue закрыта; live quote проверен |
 | T8 | `TAR-034` | #178 | Да | реализовано, issue закрыта; live quote проверен без создания заявки |
-| T9 | `CMS-024–037` | #181 | Нет | реализовано: карточка шаблона, рабочий/опубликованный preview, diff, калькулятор, device modes и code/data status; локальный gate, CI 36010495904 и Coolify deployment `s4gzkael3wfiplepsgj5syku` на `7d7995c` прошли, защищённые UI/API и отсутствие изменения ревизий после quote проверены |
+| T9 | `CMS-024–028`, `030`, `032–034` | #181 | Нет | реализовано: карточка шаблона, рабочий/опубликованный preview, diff, калькулятор, device modes и code/data status; локальный gate, CI 36010495904 и Coolify deployment `s4gzkael3wfiplepsgj5syku` на `7d7995c` прошли, защищённые UI/API и отсутствие изменения ревизий после quote проверены |
 | F1 | `FORM-001–015` | #170 | Да | реализовано, issue закрыта; внешний safe smoke проверен |
 | F2 | `FORM-016–023`, `LEAD-014` | #171 | Да | реализовано, issue закрыта; live submit заявки не выполнялся |
 | L1 | `LEAD-001–006`, `011` | #154 | Нет | частично |
@@ -240,7 +240,7 @@ pnpm check
 | S3 | noindex/sitemap | #199 | Нет | реализовано в рабочем контуре, issue закрыта |
 | S4 | local SEO cleanup | #200 | Нет | не начато |
 | P1 | `CORE-006`, `CMS-014`, `036–037`, `ADMIN-043` | #179 | Да | реализовано: отчет и migration `0050`, CI и exact-SHA rollout; issue закрыта |
-| P2 | `CMS-029–035` | #201 | Нет | не начато |
+| P2 | `CMS-029`, `031`, `035` | #201 | Нет | не начато; остальные решения этого диапазона входят в T9 |
 | D1 | publication revision repair | #202 | Да | закрыто; `0039`, CI, exact-SHA rollout и live smoke подтверждены |
 
 ## Родительские программы
