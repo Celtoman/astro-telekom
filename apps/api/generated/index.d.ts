@@ -49,6 +49,11 @@ export type ContentRevision = $Result.DefaultSelection<Prisma.$ContentRevisionPa
  */
 export type SitePublication = $Result.DefaultSelection<Prisma.$SitePublicationPayload>
 /**
+ * Model SitePublicationValidation
+ * 
+ */
+export type SitePublicationValidation = $Result.DefaultSelection<Prisma.$SitePublicationValidationPayload>
+/**
  * Model AuditEvent
  * 
  */
@@ -380,6 +385,15 @@ export const SitePublicationStatus: {
 export type SitePublicationStatus = (typeof SitePublicationStatus)[keyof typeof SitePublicationStatus]
 
 
+export const PublicationValidationOutcome: {
+  BLOCKED: 'BLOCKED',
+  PASSED_WITH_WARNINGS: 'PASSED_WITH_WARNINGS',
+  PASSED: 'PASSED'
+};
+
+export type PublicationValidationOutcome = (typeof PublicationValidationOutcome)[keyof typeof PublicationValidationOutcome]
+
+
 export const LeadNotificationStatus: {
   PENDING: 'PENDING',
   QUEUED: 'QUEUED',
@@ -472,6 +486,10 @@ export const ContentRevisionAction: typeof $Enums.ContentRevisionAction
 export type SitePublicationStatus = $Enums.SitePublicationStatus
 
 export const SitePublicationStatus: typeof $Enums.SitePublicationStatus
+
+export type PublicationValidationOutcome = $Enums.PublicationValidationOutcome
+
+export const PublicationValidationOutcome: typeof $Enums.PublicationValidationOutcome
 
 export type LeadNotificationStatus = $Enums.LeadNotificationStatus
 
@@ -667,6 +685,16 @@ export class PrismaClient<
     * ```
     */
   get sitePublication(): Prisma.SitePublicationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.sitePublicationValidation`: Exposes CRUD operations for the **SitePublicationValidation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SitePublicationValidations
+    * const sitePublicationValidations = await prisma.sitePublicationValidation.findMany()
+    * ```
+    */
+  get sitePublicationValidation(): Prisma.SitePublicationValidationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.auditEvent`: Exposes CRUD operations for the **AuditEvent** model.
@@ -1311,6 +1339,7 @@ export namespace Prisma {
     SiteRebuild: 'SiteRebuild',
     ContentRevision: 'ContentRevision',
     SitePublication: 'SitePublication',
+    SitePublicationValidation: 'SitePublicationValidation',
     AuditEvent: 'AuditEvent',
     Region: 'Region',
     City: 'City',
@@ -1345,7 +1374,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "provider" | "site" | "seoTemplate" | "sitemapExclusion" | "siteRebuild" | "contentRevision" | "sitePublication" | "auditEvent" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadDecisionEvent" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
+      modelProps: "provider" | "site" | "seoTemplate" | "sitemapExclusion" | "siteRebuild" | "contentRevision" | "sitePublication" | "sitePublicationValidation" | "auditEvent" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadDecisionEvent" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1864,6 +1893,80 @@ export namespace Prisma {
           count: {
             args: Prisma.SitePublicationCountArgs<ExtArgs>
             result: $Utils.Optional<SitePublicationCountAggregateOutputType> | number
+          }
+        }
+      }
+      SitePublicationValidation: {
+        payload: Prisma.$SitePublicationValidationPayload<ExtArgs>
+        fields: Prisma.SitePublicationValidationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SitePublicationValidationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationValidationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SitePublicationValidationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationValidationPayload>
+          }
+          findFirst: {
+            args: Prisma.SitePublicationValidationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationValidationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SitePublicationValidationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationValidationPayload>
+          }
+          findMany: {
+            args: Prisma.SitePublicationValidationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationValidationPayload>[]
+          }
+          create: {
+            args: Prisma.SitePublicationValidationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationValidationPayload>
+          }
+          createMany: {
+            args: Prisma.SitePublicationValidationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SitePublicationValidationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationValidationPayload>[]
+          }
+          delete: {
+            args: Prisma.SitePublicationValidationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationValidationPayload>
+          }
+          update: {
+            args: Prisma.SitePublicationValidationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationValidationPayload>
+          }
+          deleteMany: {
+            args: Prisma.SitePublicationValidationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SitePublicationValidationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SitePublicationValidationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationValidationPayload>[]
+          }
+          upsert: {
+            args: Prisma.SitePublicationValidationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SitePublicationValidationPayload>
+          }
+          aggregate: {
+            args: Prisma.SitePublicationValidationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSitePublicationValidation>
+          }
+          groupBy: {
+            args: Prisma.SitePublicationValidationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SitePublicationValidationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SitePublicationValidationCountArgs<ExtArgs>
+            result: $Utils.Optional<SitePublicationValidationCountAggregateOutputType> | number
           }
         }
       }
@@ -3403,6 +3506,7 @@ export namespace Prisma {
     siteRebuild?: SiteRebuildOmit
     contentRevision?: ContentRevisionOmit
     sitePublication?: SitePublicationOmit
+    sitePublicationValidation?: SitePublicationValidationOmit
     auditEvent?: AuditEventOmit
     region?: RegionOmit
     city?: CityOmit
@@ -3561,6 +3665,7 @@ export namespace Prisma {
     rebuilds: number
     contentRevisions: number
     publications: number
+    publicationValidations: number
     auditEvents: number
     sitemapExclusions: number
     seoTemplates: number
@@ -3577,6 +3682,7 @@ export namespace Prisma {
     rebuilds?: boolean | SiteCountOutputTypeCountRebuildsArgs
     contentRevisions?: boolean | SiteCountOutputTypeCountContentRevisionsArgs
     publications?: boolean | SiteCountOutputTypeCountPublicationsArgs
+    publicationValidations?: boolean | SiteCountOutputTypeCountPublicationValidationsArgs
     auditEvents?: boolean | SiteCountOutputTypeCountAuditEventsArgs
     sitemapExclusions?: boolean | SiteCountOutputTypeCountSitemapExclusionsArgs
     seoTemplates?: boolean | SiteCountOutputTypeCountSeoTemplatesArgs
@@ -3661,6 +3767,13 @@ export namespace Prisma {
    */
   export type SiteCountOutputTypeCountPublicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SitePublicationWhereInput
+  }
+
+  /**
+   * SiteCountOutputType without action
+   */
+  export type SiteCountOutputTypeCountPublicationValidationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitePublicationValidationWhereInput
   }
 
   /**
@@ -4058,6 +4171,7 @@ export namespace Prisma {
     sessions: number
     contentRevisions: number
     publications: number
+    publicationValidations: number
     auditEvents: number
     sitemapExclusionsCreated: number
     tariffImportsApplied: number
@@ -4070,6 +4184,7 @@ export namespace Prisma {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     contentRevisions?: boolean | UserCountOutputTypeCountContentRevisionsArgs
     publications?: boolean | UserCountOutputTypeCountPublicationsArgs
+    publicationValidations?: boolean | UserCountOutputTypeCountPublicationValidationsArgs
     auditEvents?: boolean | UserCountOutputTypeCountAuditEventsArgs
     sitemapExclusionsCreated?: boolean | UserCountOutputTypeCountSitemapExclusionsCreatedArgs
     tariffImportsApplied?: boolean | UserCountOutputTypeCountTariffImportsAppliedArgs
@@ -4108,6 +4223,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPublicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SitePublicationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPublicationValidationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitePublicationValidationWhereInput
   }
 
   /**
@@ -5579,6 +5701,7 @@ export namespace Prisma {
     rebuilds?: boolean | Site$rebuildsArgs<ExtArgs>
     contentRevisions?: boolean | Site$contentRevisionsArgs<ExtArgs>
     publications?: boolean | Site$publicationsArgs<ExtArgs>
+    publicationValidations?: boolean | Site$publicationValidationsArgs<ExtArgs>
     auditEvents?: boolean | Site$auditEventsArgs<ExtArgs>
     sitemapExclusions?: boolean | Site$sitemapExclusionsArgs<ExtArgs>
     seoTemplates?: boolean | Site$seoTemplatesArgs<ExtArgs>
@@ -5648,6 +5771,7 @@ export namespace Prisma {
     rebuilds?: boolean | Site$rebuildsArgs<ExtArgs>
     contentRevisions?: boolean | Site$contentRevisionsArgs<ExtArgs>
     publications?: boolean | Site$publicationsArgs<ExtArgs>
+    publicationValidations?: boolean | Site$publicationValidationsArgs<ExtArgs>
     auditEvents?: boolean | Site$auditEventsArgs<ExtArgs>
     sitemapExclusions?: boolean | Site$sitemapExclusionsArgs<ExtArgs>
     seoTemplates?: boolean | Site$seoTemplatesArgs<ExtArgs>
@@ -5674,6 +5798,7 @@ export namespace Prisma {
       rebuilds: Prisma.$SiteRebuildPayload<ExtArgs>[]
       contentRevisions: Prisma.$ContentRevisionPayload<ExtArgs>[]
       publications: Prisma.$SitePublicationPayload<ExtArgs>[]
+      publicationValidations: Prisma.$SitePublicationValidationPayload<ExtArgs>[]
       auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
       sitemapExclusions: Prisma.$SitemapExclusionPayload<ExtArgs>[]
       seoTemplates: Prisma.$SeoTemplatePayload<ExtArgs>[]
@@ -6097,6 +6222,7 @@ export namespace Prisma {
     rebuilds<T extends Site$rebuildsArgs<ExtArgs> = {}>(args?: Subset<T, Site$rebuildsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contentRevisions<T extends Site$contentRevisionsArgs<ExtArgs> = {}>(args?: Subset<T, Site$contentRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     publications<T extends Site$publicationsArgs<ExtArgs> = {}>(args?: Subset<T, Site$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    publicationValidations<T extends Site$publicationValidationsArgs<ExtArgs> = {}>(args?: Subset<T, Site$publicationValidationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     auditEvents<T extends Site$auditEventsArgs<ExtArgs> = {}>(args?: Subset<T, Site$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sitemapExclusions<T extends Site$sitemapExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, Site$sitemapExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     seoTemplates<T extends Site$seoTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, Site$seoTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeoTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6780,6 +6906,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SitePublicationScalarFieldEnum | SitePublicationScalarFieldEnum[]
+  }
+
+  /**
+   * Site.publicationValidations
+   */
+  export type Site$publicationValidationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    where?: SitePublicationValidationWhereInput
+    orderBy?: SitePublicationValidationOrderByWithRelationInput | SitePublicationValidationOrderByWithRelationInput[]
+    cursor?: SitePublicationValidationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SitePublicationValidationScalarFieldEnum | SitePublicationValidationScalarFieldEnum[]
   }
 
   /**
@@ -11830,6 +11980,7 @@ export namespace Prisma {
     triggerEntity: string | null
     triggerEntityId: string | null
     requestedById: string | null
+    validationId: string | null
     lastError: string | null
     providerDeploymentId: string | null
     scheduledFor: Date | null
@@ -11847,6 +11998,7 @@ export namespace Prisma {
     triggerEntity: string | null
     triggerEntityId: string | null
     requestedById: string | null
+    validationId: string | null
     lastError: string | null
     providerDeploymentId: string | null
     scheduledFor: Date | null
@@ -11865,6 +12017,7 @@ export namespace Prisma {
     triggerEntity: number
     triggerEntityId: number
     requestedById: number
+    validationId: number
     lastError: number
     providerDeploymentId: number
     providerResponse: number
@@ -11893,6 +12046,7 @@ export namespace Prisma {
     triggerEntity?: true
     triggerEntityId?: true
     requestedById?: true
+    validationId?: true
     lastError?: true
     providerDeploymentId?: true
     scheduledFor?: true
@@ -11910,6 +12064,7 @@ export namespace Prisma {
     triggerEntity?: true
     triggerEntityId?: true
     requestedById?: true
+    validationId?: true
     lastError?: true
     providerDeploymentId?: true
     scheduledFor?: true
@@ -11928,6 +12083,7 @@ export namespace Prisma {
     triggerEntity?: true
     triggerEntityId?: true
     requestedById?: true
+    validationId?: true
     lastError?: true
     providerDeploymentId?: true
     providerResponse?: true
@@ -12034,6 +12190,7 @@ export namespace Prisma {
     triggerEntity: string
     triggerEntityId: string
     requestedById: string | null
+    validationId: string | null
     lastError: string | null
     providerDeploymentId: string | null
     providerResponse: JsonValue | null
@@ -12072,6 +12229,7 @@ export namespace Prisma {
     triggerEntity?: boolean
     triggerEntityId?: boolean
     requestedById?: boolean
+    validationId?: boolean
     lastError?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
@@ -12082,6 +12240,7 @@ export namespace Prisma {
     publishedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
     requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+    validation?: boolean | SitePublication$validationArgs<ExtArgs>
     requestedRebuilds?: boolean | SitePublication$requestedRebuildsArgs<ExtArgs>
     processingRebuilds?: boolean | SitePublication$processingRebuildsArgs<ExtArgs>
     publishedRebuilds?: boolean | SitePublication$publishedRebuildsArgs<ExtArgs>
@@ -12097,6 +12256,7 @@ export namespace Prisma {
     triggerEntity?: boolean
     triggerEntityId?: boolean
     requestedById?: boolean
+    validationId?: boolean
     lastError?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
@@ -12107,6 +12267,7 @@ export namespace Prisma {
     publishedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
     requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+    validation?: boolean | SitePublication$validationArgs<ExtArgs>
   }, ExtArgs["result"]["sitePublication"]>
 
   export type SitePublicationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12118,6 +12279,7 @@ export namespace Prisma {
     triggerEntity?: boolean
     triggerEntityId?: boolean
     requestedById?: boolean
+    validationId?: boolean
     lastError?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
@@ -12128,6 +12290,7 @@ export namespace Prisma {
     publishedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
     requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+    validation?: boolean | SitePublication$validationArgs<ExtArgs>
   }, ExtArgs["result"]["sitePublication"]>
 
   export type SitePublicationSelectScalar = {
@@ -12139,6 +12302,7 @@ export namespace Prisma {
     triggerEntity?: boolean
     triggerEntityId?: boolean
     requestedById?: boolean
+    validationId?: boolean
     lastError?: boolean
     providerDeploymentId?: boolean
     providerResponse?: boolean
@@ -12149,10 +12313,11 @@ export namespace Prisma {
     publishedAt?: boolean
   }
 
-  export type SitePublicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "siteRevision" | "status" | "catalog" | "triggerEntity" | "triggerEntityId" | "requestedById" | "lastError" | "providerDeploymentId" | "providerResponse" | "scheduledFor" | "cancelledAt" | "createdAt" | "updatedAt" | "publishedAt", ExtArgs["result"]["sitePublication"]>
+  export type SitePublicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "siteRevision" | "status" | "catalog" | "triggerEntity" | "triggerEntityId" | "requestedById" | "validationId" | "lastError" | "providerDeploymentId" | "providerResponse" | "scheduledFor" | "cancelledAt" | "createdAt" | "updatedAt" | "publishedAt", ExtArgs["result"]["sitePublication"]>
   export type SitePublicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+    validation?: boolean | SitePublication$validationArgs<ExtArgs>
     requestedRebuilds?: boolean | SitePublication$requestedRebuildsArgs<ExtArgs>
     processingRebuilds?: boolean | SitePublication$processingRebuildsArgs<ExtArgs>
     publishedRebuilds?: boolean | SitePublication$publishedRebuildsArgs<ExtArgs>
@@ -12161,10 +12326,12 @@ export namespace Prisma {
   export type SitePublicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+    validation?: boolean | SitePublication$validationArgs<ExtArgs>
   }
   export type SitePublicationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     requestedBy?: boolean | SitePublication$requestedByArgs<ExtArgs>
+    validation?: boolean | SitePublication$validationArgs<ExtArgs>
   }
 
   export type $SitePublicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12172,6 +12339,7 @@ export namespace Prisma {
     objects: {
       site: Prisma.$SitePayload<ExtArgs>
       requestedBy: Prisma.$UserPayload<ExtArgs> | null
+      validation: Prisma.$SitePublicationValidationPayload<ExtArgs> | null
       requestedRebuilds: Prisma.$SiteRebuildPayload<ExtArgs>[]
       processingRebuilds: Prisma.$SiteRebuildPayload<ExtArgs>[]
       publishedRebuilds: Prisma.$SiteRebuildPayload<ExtArgs>[]
@@ -12185,6 +12353,7 @@ export namespace Prisma {
       triggerEntity: string
       triggerEntityId: string
       requestedById: string | null
+      validationId: string | null
       lastError: string | null
       providerDeploymentId: string | null
       providerResponse: Prisma.JsonValue | null
@@ -12589,6 +12758,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     site<T extends SiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SiteDefaultArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     requestedBy<T extends SitePublication$requestedByArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$requestedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    validation<T extends SitePublication$validationArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$validationArgs<ExtArgs>>): Prisma__SitePublicationValidationClient<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     requestedRebuilds<T extends SitePublication$requestedRebuildsArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$requestedRebuildsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     processingRebuilds<T extends SitePublication$processingRebuildsArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$processingRebuildsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     publishedRebuilds<T extends SitePublication$publishedRebuildsArgs<ExtArgs> = {}>(args?: Subset<T, SitePublication$publishedRebuildsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SiteRebuildPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -12629,6 +12799,7 @@ export namespace Prisma {
     readonly triggerEntity: FieldRef<"SitePublication", 'String'>
     readonly triggerEntityId: FieldRef<"SitePublication", 'String'>
     readonly requestedById: FieldRef<"SitePublication", 'String'>
+    readonly validationId: FieldRef<"SitePublication", 'String'>
     readonly lastError: FieldRef<"SitePublication", 'String'>
     readonly providerDeploymentId: FieldRef<"SitePublication", 'String'>
     readonly providerResponse: FieldRef<"SitePublication", 'Json'>
@@ -13057,6 +13228,25 @@ export namespace Prisma {
   }
 
   /**
+   * SitePublication.validation
+   */
+  export type SitePublication$validationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    where?: SitePublicationValidationWhereInput
+  }
+
+  /**
    * SitePublication.requestedRebuilds
    */
   export type SitePublication$requestedRebuildsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13144,6 +13334,1214 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SitePublicationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SitePublicationValidation
+   */
+
+  export type AggregateSitePublicationValidation = {
+    _count: SitePublicationValidationCountAggregateOutputType | null
+    _avg: SitePublicationValidationAvgAggregateOutputType | null
+    _sum: SitePublicationValidationSumAggregateOutputType | null
+    _min: SitePublicationValidationMinAggregateOutputType | null
+    _max: SitePublicationValidationMaxAggregateOutputType | null
+  }
+
+  export type SitePublicationValidationAvgAggregateOutputType = {
+    siteRevision: number | null
+    checkedUrlCount: number | null
+  }
+
+  export type SitePublicationValidationSumAggregateOutputType = {
+    siteRevision: number | null
+    checkedUrlCount: number | null
+  }
+
+  export type SitePublicationValidationMinAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    siteRevision: number | null
+    appVersion: string | null
+    outcome: $Enums.PublicationValidationOutcome | null
+    checkedUrlCount: number | null
+    requestedById: string | null
+    validatedAt: Date | null
+  }
+
+  export type SitePublicationValidationMaxAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    siteRevision: number | null
+    appVersion: string | null
+    outcome: $Enums.PublicationValidationOutcome | null
+    checkedUrlCount: number | null
+    requestedById: string | null
+    validatedAt: Date | null
+  }
+
+  export type SitePublicationValidationCountAggregateOutputType = {
+    id: number
+    siteId: number
+    siteRevision: number
+    sourceSnapshot: number
+    report: number
+    appVersion: number
+    outcome: number
+    checkedUrlCount: number
+    requestedById: number
+    validatedAt: number
+    _all: number
+  }
+
+
+  export type SitePublicationValidationAvgAggregateInputType = {
+    siteRevision?: true
+    checkedUrlCount?: true
+  }
+
+  export type SitePublicationValidationSumAggregateInputType = {
+    siteRevision?: true
+    checkedUrlCount?: true
+  }
+
+  export type SitePublicationValidationMinAggregateInputType = {
+    id?: true
+    siteId?: true
+    siteRevision?: true
+    appVersion?: true
+    outcome?: true
+    checkedUrlCount?: true
+    requestedById?: true
+    validatedAt?: true
+  }
+
+  export type SitePublicationValidationMaxAggregateInputType = {
+    id?: true
+    siteId?: true
+    siteRevision?: true
+    appVersion?: true
+    outcome?: true
+    checkedUrlCount?: true
+    requestedById?: true
+    validatedAt?: true
+  }
+
+  export type SitePublicationValidationCountAggregateInputType = {
+    id?: true
+    siteId?: true
+    siteRevision?: true
+    sourceSnapshot?: true
+    report?: true
+    appVersion?: true
+    outcome?: true
+    checkedUrlCount?: true
+    requestedById?: true
+    validatedAt?: true
+    _all?: true
+  }
+
+  export type SitePublicationValidationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SitePublicationValidation to aggregate.
+     */
+    where?: SitePublicationValidationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationValidations to fetch.
+     */
+    orderBy?: SitePublicationValidationOrderByWithRelationInput | SitePublicationValidationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SitePublicationValidationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationValidations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationValidations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SitePublicationValidations
+    **/
+    _count?: true | SitePublicationValidationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SitePublicationValidationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SitePublicationValidationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SitePublicationValidationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SitePublicationValidationMaxAggregateInputType
+  }
+
+  export type GetSitePublicationValidationAggregateType<T extends SitePublicationValidationAggregateArgs> = {
+        [P in keyof T & keyof AggregateSitePublicationValidation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSitePublicationValidation[P]>
+      : GetScalarType<T[P], AggregateSitePublicationValidation[P]>
+  }
+
+
+
+
+  export type SitePublicationValidationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SitePublicationValidationWhereInput
+    orderBy?: SitePublicationValidationOrderByWithAggregationInput | SitePublicationValidationOrderByWithAggregationInput[]
+    by: SitePublicationValidationScalarFieldEnum[] | SitePublicationValidationScalarFieldEnum
+    having?: SitePublicationValidationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SitePublicationValidationCountAggregateInputType | true
+    _avg?: SitePublicationValidationAvgAggregateInputType
+    _sum?: SitePublicationValidationSumAggregateInputType
+    _min?: SitePublicationValidationMinAggregateInputType
+    _max?: SitePublicationValidationMaxAggregateInputType
+  }
+
+  export type SitePublicationValidationGroupByOutputType = {
+    id: string
+    siteId: string
+    siteRevision: number
+    sourceSnapshot: JsonValue
+    report: JsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    requestedById: string | null
+    validatedAt: Date
+    _count: SitePublicationValidationCountAggregateOutputType | null
+    _avg: SitePublicationValidationAvgAggregateOutputType | null
+    _sum: SitePublicationValidationSumAggregateOutputType | null
+    _min: SitePublicationValidationMinAggregateOutputType | null
+    _max: SitePublicationValidationMaxAggregateOutputType | null
+  }
+
+  type GetSitePublicationValidationGroupByPayload<T extends SitePublicationValidationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SitePublicationValidationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SitePublicationValidationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SitePublicationValidationGroupByOutputType[P]>
+            : GetScalarType<T[P], SitePublicationValidationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SitePublicationValidationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    sourceSnapshot?: boolean
+    report?: boolean
+    appVersion?: boolean
+    outcome?: boolean
+    checkedUrlCount?: boolean
+    requestedById?: boolean
+    validatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublicationValidation$requestedByArgs<ExtArgs>
+    publication?: boolean | SitePublicationValidation$publicationArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublicationValidation"]>
+
+  export type SitePublicationValidationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    sourceSnapshot?: boolean
+    report?: boolean
+    appVersion?: boolean
+    outcome?: boolean
+    checkedUrlCount?: boolean
+    requestedById?: boolean
+    validatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublicationValidation$requestedByArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublicationValidation"]>
+
+  export type SitePublicationValidationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    sourceSnapshot?: boolean
+    report?: boolean
+    appVersion?: boolean
+    outcome?: boolean
+    checkedUrlCount?: boolean
+    requestedById?: boolean
+    validatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublicationValidation$requestedByArgs<ExtArgs>
+  }, ExtArgs["result"]["sitePublicationValidation"]>
+
+  export type SitePublicationValidationSelectScalar = {
+    id?: boolean
+    siteId?: boolean
+    siteRevision?: boolean
+    sourceSnapshot?: boolean
+    report?: boolean
+    appVersion?: boolean
+    outcome?: boolean
+    checkedUrlCount?: boolean
+    requestedById?: boolean
+    validatedAt?: boolean
+  }
+
+  export type SitePublicationValidationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "siteRevision" | "sourceSnapshot" | "report" | "appVersion" | "outcome" | "checkedUrlCount" | "requestedById" | "validatedAt", ExtArgs["result"]["sitePublicationValidation"]>
+  export type SitePublicationValidationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublicationValidation$requestedByArgs<ExtArgs>
+    publication?: boolean | SitePublicationValidation$publicationArgs<ExtArgs>
+  }
+  export type SitePublicationValidationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublicationValidation$requestedByArgs<ExtArgs>
+  }
+  export type SitePublicationValidationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    requestedBy?: boolean | SitePublicationValidation$requestedByArgs<ExtArgs>
+  }
+
+  export type $SitePublicationValidationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SitePublicationValidation"
+    objects: {
+      site: Prisma.$SitePayload<ExtArgs>
+      requestedBy: Prisma.$UserPayload<ExtArgs> | null
+      publication: Prisma.$SitePublicationPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      siteId: string
+      siteRevision: number
+      sourceSnapshot: Prisma.JsonValue
+      report: Prisma.JsonValue
+      appVersion: string
+      outcome: $Enums.PublicationValidationOutcome
+      checkedUrlCount: number
+      requestedById: string | null
+      validatedAt: Date
+    }, ExtArgs["result"]["sitePublicationValidation"]>
+    composites: {}
+  }
+
+  type SitePublicationValidationGetPayload<S extends boolean | null | undefined | SitePublicationValidationDefaultArgs> = $Result.GetResult<Prisma.$SitePublicationValidationPayload, S>
+
+  type SitePublicationValidationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SitePublicationValidationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SitePublicationValidationCountAggregateInputType | true
+    }
+
+  export interface SitePublicationValidationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SitePublicationValidation'], meta: { name: 'SitePublicationValidation' } }
+    /**
+     * Find zero or one SitePublicationValidation that matches the filter.
+     * @param {SitePublicationValidationFindUniqueArgs} args - Arguments to find a SitePublicationValidation
+     * @example
+     * // Get one SitePublicationValidation
+     * const sitePublicationValidation = await prisma.sitePublicationValidation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SitePublicationValidationFindUniqueArgs>(args: SelectSubset<T, SitePublicationValidationFindUniqueArgs<ExtArgs>>): Prisma__SitePublicationValidationClient<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SitePublicationValidation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SitePublicationValidationFindUniqueOrThrowArgs} args - Arguments to find a SitePublicationValidation
+     * @example
+     * // Get one SitePublicationValidation
+     * const sitePublicationValidation = await prisma.sitePublicationValidation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SitePublicationValidationFindUniqueOrThrowArgs>(args: SelectSubset<T, SitePublicationValidationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SitePublicationValidationClient<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SitePublicationValidation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationValidationFindFirstArgs} args - Arguments to find a SitePublicationValidation
+     * @example
+     * // Get one SitePublicationValidation
+     * const sitePublicationValidation = await prisma.sitePublicationValidation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SitePublicationValidationFindFirstArgs>(args?: SelectSubset<T, SitePublicationValidationFindFirstArgs<ExtArgs>>): Prisma__SitePublicationValidationClient<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SitePublicationValidation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationValidationFindFirstOrThrowArgs} args - Arguments to find a SitePublicationValidation
+     * @example
+     * // Get one SitePublicationValidation
+     * const sitePublicationValidation = await prisma.sitePublicationValidation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SitePublicationValidationFindFirstOrThrowArgs>(args?: SelectSubset<T, SitePublicationValidationFindFirstOrThrowArgs<ExtArgs>>): Prisma__SitePublicationValidationClient<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SitePublicationValidations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationValidationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SitePublicationValidations
+     * const sitePublicationValidations = await prisma.sitePublicationValidation.findMany()
+     * 
+     * // Get first 10 SitePublicationValidations
+     * const sitePublicationValidations = await prisma.sitePublicationValidation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sitePublicationValidationWithIdOnly = await prisma.sitePublicationValidation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SitePublicationValidationFindManyArgs>(args?: SelectSubset<T, SitePublicationValidationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SitePublicationValidation.
+     * @param {SitePublicationValidationCreateArgs} args - Arguments to create a SitePublicationValidation.
+     * @example
+     * // Create one SitePublicationValidation
+     * const SitePublicationValidation = await prisma.sitePublicationValidation.create({
+     *   data: {
+     *     // ... data to create a SitePublicationValidation
+     *   }
+     * })
+     * 
+     */
+    create<T extends SitePublicationValidationCreateArgs>(args: SelectSubset<T, SitePublicationValidationCreateArgs<ExtArgs>>): Prisma__SitePublicationValidationClient<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SitePublicationValidations.
+     * @param {SitePublicationValidationCreateManyArgs} args - Arguments to create many SitePublicationValidations.
+     * @example
+     * // Create many SitePublicationValidations
+     * const sitePublicationValidation = await prisma.sitePublicationValidation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SitePublicationValidationCreateManyArgs>(args?: SelectSubset<T, SitePublicationValidationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SitePublicationValidations and returns the data saved in the database.
+     * @param {SitePublicationValidationCreateManyAndReturnArgs} args - Arguments to create many SitePublicationValidations.
+     * @example
+     * // Create many SitePublicationValidations
+     * const sitePublicationValidation = await prisma.sitePublicationValidation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SitePublicationValidations and only return the `id`
+     * const sitePublicationValidationWithIdOnly = await prisma.sitePublicationValidation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SitePublicationValidationCreateManyAndReturnArgs>(args?: SelectSubset<T, SitePublicationValidationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SitePublicationValidation.
+     * @param {SitePublicationValidationDeleteArgs} args - Arguments to delete one SitePublicationValidation.
+     * @example
+     * // Delete one SitePublicationValidation
+     * const SitePublicationValidation = await prisma.sitePublicationValidation.delete({
+     *   where: {
+     *     // ... filter to delete one SitePublicationValidation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SitePublicationValidationDeleteArgs>(args: SelectSubset<T, SitePublicationValidationDeleteArgs<ExtArgs>>): Prisma__SitePublicationValidationClient<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SitePublicationValidation.
+     * @param {SitePublicationValidationUpdateArgs} args - Arguments to update one SitePublicationValidation.
+     * @example
+     * // Update one SitePublicationValidation
+     * const sitePublicationValidation = await prisma.sitePublicationValidation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SitePublicationValidationUpdateArgs>(args: SelectSubset<T, SitePublicationValidationUpdateArgs<ExtArgs>>): Prisma__SitePublicationValidationClient<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SitePublicationValidations.
+     * @param {SitePublicationValidationDeleteManyArgs} args - Arguments to filter SitePublicationValidations to delete.
+     * @example
+     * // Delete a few SitePublicationValidations
+     * const { count } = await prisma.sitePublicationValidation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SitePublicationValidationDeleteManyArgs>(args?: SelectSubset<T, SitePublicationValidationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SitePublicationValidations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationValidationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SitePublicationValidations
+     * const sitePublicationValidation = await prisma.sitePublicationValidation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SitePublicationValidationUpdateManyArgs>(args: SelectSubset<T, SitePublicationValidationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SitePublicationValidations and returns the data updated in the database.
+     * @param {SitePublicationValidationUpdateManyAndReturnArgs} args - Arguments to update many SitePublicationValidations.
+     * @example
+     * // Update many SitePublicationValidations
+     * const sitePublicationValidation = await prisma.sitePublicationValidation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SitePublicationValidations and only return the `id`
+     * const sitePublicationValidationWithIdOnly = await prisma.sitePublicationValidation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SitePublicationValidationUpdateManyAndReturnArgs>(args: SelectSubset<T, SitePublicationValidationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SitePublicationValidation.
+     * @param {SitePublicationValidationUpsertArgs} args - Arguments to update or create a SitePublicationValidation.
+     * @example
+     * // Update or create a SitePublicationValidation
+     * const sitePublicationValidation = await prisma.sitePublicationValidation.upsert({
+     *   create: {
+     *     // ... data to create a SitePublicationValidation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SitePublicationValidation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SitePublicationValidationUpsertArgs>(args: SelectSubset<T, SitePublicationValidationUpsertArgs<ExtArgs>>): Prisma__SitePublicationValidationClient<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SitePublicationValidations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationValidationCountArgs} args - Arguments to filter SitePublicationValidations to count.
+     * @example
+     * // Count the number of SitePublicationValidations
+     * const count = await prisma.sitePublicationValidation.count({
+     *   where: {
+     *     // ... the filter for the SitePublicationValidations we want to count
+     *   }
+     * })
+    **/
+    count<T extends SitePublicationValidationCountArgs>(
+      args?: Subset<T, SitePublicationValidationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SitePublicationValidationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SitePublicationValidation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationValidationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SitePublicationValidationAggregateArgs>(args: Subset<T, SitePublicationValidationAggregateArgs>): Prisma.PrismaPromise<GetSitePublicationValidationAggregateType<T>>
+
+    /**
+     * Group by SitePublicationValidation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SitePublicationValidationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SitePublicationValidationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SitePublicationValidationGroupByArgs['orderBy'] }
+        : { orderBy?: SitePublicationValidationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SitePublicationValidationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSitePublicationValidationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SitePublicationValidation model
+   */
+  readonly fields: SitePublicationValidationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SitePublicationValidation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SitePublicationValidationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    site<T extends SiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SiteDefaultArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    requestedBy<T extends SitePublicationValidation$requestedByArgs<ExtArgs> = {}>(args?: Subset<T, SitePublicationValidation$requestedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    publication<T extends SitePublicationValidation$publicationArgs<ExtArgs> = {}>(args?: Subset<T, SitePublicationValidation$publicationArgs<ExtArgs>>): Prisma__SitePublicationClient<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SitePublicationValidation model
+   */
+  interface SitePublicationValidationFieldRefs {
+    readonly id: FieldRef<"SitePublicationValidation", 'String'>
+    readonly siteId: FieldRef<"SitePublicationValidation", 'String'>
+    readonly siteRevision: FieldRef<"SitePublicationValidation", 'Int'>
+    readonly sourceSnapshot: FieldRef<"SitePublicationValidation", 'Json'>
+    readonly report: FieldRef<"SitePublicationValidation", 'Json'>
+    readonly appVersion: FieldRef<"SitePublicationValidation", 'String'>
+    readonly outcome: FieldRef<"SitePublicationValidation", 'PublicationValidationOutcome'>
+    readonly checkedUrlCount: FieldRef<"SitePublicationValidation", 'Int'>
+    readonly requestedById: FieldRef<"SitePublicationValidation", 'String'>
+    readonly validatedAt: FieldRef<"SitePublicationValidation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SitePublicationValidation findUnique
+   */
+  export type SitePublicationValidationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationValidation to fetch.
+     */
+    where: SitePublicationValidationWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationValidation findUniqueOrThrow
+   */
+  export type SitePublicationValidationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationValidation to fetch.
+     */
+    where: SitePublicationValidationWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationValidation findFirst
+   */
+  export type SitePublicationValidationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationValidation to fetch.
+     */
+    where?: SitePublicationValidationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationValidations to fetch.
+     */
+    orderBy?: SitePublicationValidationOrderByWithRelationInput | SitePublicationValidationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SitePublicationValidations.
+     */
+    cursor?: SitePublicationValidationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationValidations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationValidations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublicationValidations.
+     */
+    distinct?: SitePublicationValidationScalarFieldEnum | SitePublicationValidationScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublicationValidation findFirstOrThrow
+   */
+  export type SitePublicationValidationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationValidation to fetch.
+     */
+    where?: SitePublicationValidationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationValidations to fetch.
+     */
+    orderBy?: SitePublicationValidationOrderByWithRelationInput | SitePublicationValidationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SitePublicationValidations.
+     */
+    cursor?: SitePublicationValidationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationValidations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationValidations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublicationValidations.
+     */
+    distinct?: SitePublicationValidationScalarFieldEnum | SitePublicationValidationScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublicationValidation findMany
+   */
+  export type SitePublicationValidationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    /**
+     * Filter, which SitePublicationValidations to fetch.
+     */
+    where?: SitePublicationValidationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SitePublicationValidations to fetch.
+     */
+    orderBy?: SitePublicationValidationOrderByWithRelationInput | SitePublicationValidationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SitePublicationValidations.
+     */
+    cursor?: SitePublicationValidationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SitePublicationValidations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SitePublicationValidations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SitePublicationValidations.
+     */
+    distinct?: SitePublicationValidationScalarFieldEnum | SitePublicationValidationScalarFieldEnum[]
+  }
+
+  /**
+   * SitePublicationValidation create
+   */
+  export type SitePublicationValidationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SitePublicationValidation.
+     */
+    data: XOR<SitePublicationValidationCreateInput, SitePublicationValidationUncheckedCreateInput>
+  }
+
+  /**
+   * SitePublicationValidation createMany
+   */
+  export type SitePublicationValidationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SitePublicationValidations.
+     */
+    data: SitePublicationValidationCreateManyInput | SitePublicationValidationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SitePublicationValidation createManyAndReturn
+   */
+  export type SitePublicationValidationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * The data used to create many SitePublicationValidations.
+     */
+    data: SitePublicationValidationCreateManyInput | SitePublicationValidationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SitePublicationValidation update
+   */
+  export type SitePublicationValidationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SitePublicationValidation.
+     */
+    data: XOR<SitePublicationValidationUpdateInput, SitePublicationValidationUncheckedUpdateInput>
+    /**
+     * Choose, which SitePublicationValidation to update.
+     */
+    where: SitePublicationValidationWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationValidation updateMany
+   */
+  export type SitePublicationValidationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SitePublicationValidations.
+     */
+    data: XOR<SitePublicationValidationUpdateManyMutationInput, SitePublicationValidationUncheckedUpdateManyInput>
+    /**
+     * Filter which SitePublicationValidations to update
+     */
+    where?: SitePublicationValidationWhereInput
+    /**
+     * Limit how many SitePublicationValidations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SitePublicationValidation updateManyAndReturn
+   */
+  export type SitePublicationValidationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * The data used to update SitePublicationValidations.
+     */
+    data: XOR<SitePublicationValidationUpdateManyMutationInput, SitePublicationValidationUncheckedUpdateManyInput>
+    /**
+     * Filter which SitePublicationValidations to update
+     */
+    where?: SitePublicationValidationWhereInput
+    /**
+     * Limit how many SitePublicationValidations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SitePublicationValidation upsert
+   */
+  export type SitePublicationValidationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SitePublicationValidation to update in case it exists.
+     */
+    where: SitePublicationValidationWhereUniqueInput
+    /**
+     * In case the SitePublicationValidation found by the `where` argument doesn't exist, create a new SitePublicationValidation with this data.
+     */
+    create: XOR<SitePublicationValidationCreateInput, SitePublicationValidationUncheckedCreateInput>
+    /**
+     * In case the SitePublicationValidation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SitePublicationValidationUpdateInput, SitePublicationValidationUncheckedUpdateInput>
+  }
+
+  /**
+   * SitePublicationValidation delete
+   */
+  export type SitePublicationValidationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    /**
+     * Filter which SitePublicationValidation to delete.
+     */
+    where: SitePublicationValidationWhereUniqueInput
+  }
+
+  /**
+   * SitePublicationValidation deleteMany
+   */
+  export type SitePublicationValidationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SitePublicationValidations to delete
+     */
+    where?: SitePublicationValidationWhereInput
+    /**
+     * Limit how many SitePublicationValidations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SitePublicationValidation.requestedBy
+   */
+  export type SitePublicationValidation$requestedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * SitePublicationValidation.publication
+   */
+  export type SitePublicationValidation$publicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublication
+     */
+    select?: SitePublicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublication
+     */
+    omit?: SitePublicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationInclude<ExtArgs> | null
+    where?: SitePublicationWhereInput
+  }
+
+  /**
+   * SitePublicationValidation without action
+   */
+  export type SitePublicationValidationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
   }
 
 
@@ -34561,6 +35959,7 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     contentRevisions?: boolean | User$contentRevisionsArgs<ExtArgs>
     publications?: boolean | User$publicationsArgs<ExtArgs>
+    publicationValidations?: boolean | User$publicationValidationsArgs<ExtArgs>
     auditEvents?: boolean | User$auditEventsArgs<ExtArgs>
     sitemapExclusionsCreated?: boolean | User$sitemapExclusionsCreatedArgs<ExtArgs>
     tariffImportsApplied?: boolean | User$tariffImportsAppliedArgs<ExtArgs>
@@ -34605,6 +36004,7 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     contentRevisions?: boolean | User$contentRevisionsArgs<ExtArgs>
     publications?: boolean | User$publicationsArgs<ExtArgs>
+    publicationValidations?: boolean | User$publicationValidationsArgs<ExtArgs>
     auditEvents?: boolean | User$auditEventsArgs<ExtArgs>
     sitemapExclusionsCreated?: boolean | User$sitemapExclusionsCreatedArgs<ExtArgs>
     tariffImportsApplied?: boolean | User$tariffImportsAppliedArgs<ExtArgs>
@@ -34622,6 +36022,7 @@ export namespace Prisma {
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       contentRevisions: Prisma.$ContentRevisionPayload<ExtArgs>[]
       publications: Prisma.$SitePublicationPayload<ExtArgs>[]
+      publicationValidations: Prisma.$SitePublicationValidationPayload<ExtArgs>[]
       auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
       sitemapExclusionsCreated: Prisma.$SitemapExclusionPayload<ExtArgs>[]
       tariffImportsApplied: Prisma.$TariffImportRunPayload<ExtArgs>[]
@@ -35034,6 +36435,7 @@ export namespace Prisma {
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contentRevisions<T extends User$contentRevisionsArgs<ExtArgs> = {}>(args?: Subset<T, User$contentRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     publications<T extends User$publicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    publicationValidations<T extends User$publicationValidationsArgs<ExtArgs> = {}>(args?: Subset<T, User$publicationValidationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitePublicationValidationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     auditEvents<T extends User$auditEventsArgs<ExtArgs> = {}>(args?: Subset<T, User$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sitemapExclusionsCreated<T extends User$sitemapExclusionsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$sitemapExclusionsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SitemapExclusionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tariffImportsApplied<T extends User$tariffImportsAppliedArgs<ExtArgs> = {}>(args?: Subset<T, User$tariffImportsAppliedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TariffImportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -35538,6 +36940,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SitePublicationScalarFieldEnum | SitePublicationScalarFieldEnum[]
+  }
+
+  /**
+   * User.publicationValidations
+   */
+  export type User$publicationValidationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SitePublicationValidation
+     */
+    select?: SitePublicationValidationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SitePublicationValidation
+     */
+    omit?: SitePublicationValidationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SitePublicationValidationInclude<ExtArgs> | null
+    where?: SitePublicationValidationWhereInput
+    orderBy?: SitePublicationValidationOrderByWithRelationInput | SitePublicationValidationOrderByWithRelationInput[]
+    cursor?: SitePublicationValidationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SitePublicationValidationScalarFieldEnum | SitePublicationValidationScalarFieldEnum[]
   }
 
   /**
@@ -36900,6 +38326,7 @@ export namespace Prisma {
     triggerEntity: 'triggerEntity',
     triggerEntityId: 'triggerEntityId',
     requestedById: 'requestedById',
+    validationId: 'validationId',
     lastError: 'lastError',
     providerDeploymentId: 'providerDeploymentId',
     providerResponse: 'providerResponse',
@@ -36911,6 +38338,22 @@ export namespace Prisma {
   };
 
   export type SitePublicationScalarFieldEnum = (typeof SitePublicationScalarFieldEnum)[keyof typeof SitePublicationScalarFieldEnum]
+
+
+  export const SitePublicationValidationScalarFieldEnum: {
+    id: 'id',
+    siteId: 'siteId',
+    siteRevision: 'siteRevision',
+    sourceSnapshot: 'sourceSnapshot',
+    report: 'report',
+    appVersion: 'appVersion',
+    outcome: 'outcome',
+    checkedUrlCount: 'checkedUrlCount',
+    requestedById: 'requestedById',
+    validatedAt: 'validatedAt'
+  };
+
+  export type SitePublicationValidationScalarFieldEnum = (typeof SitePublicationValidationScalarFieldEnum)[keyof typeof SitePublicationValidationScalarFieldEnum]
 
 
   export const AuditEventScalarFieldEnum: {
@@ -37480,6 +38923,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'PublicationValidationOutcome'
+   */
+  export type EnumPublicationValidationOutcomeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PublicationValidationOutcome'>
+    
+
+
+  /**
+   * Reference to a field of type 'PublicationValidationOutcome[]'
+   */
+  export type ListEnumPublicationValidationOutcomeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PublicationValidationOutcome[]'>
+    
+
+
+  /**
    * Reference to a field of type 'CityOfficeState'
    */
   export type EnumCityOfficeStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CityOfficeState'>
@@ -37812,6 +39269,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildListRelationFilter
     contentRevisions?: ContentRevisionListRelationFilter
     publications?: SitePublicationListRelationFilter
+    publicationValidations?: SitePublicationValidationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
     sitemapExclusions?: SitemapExclusionListRelationFilter
     seoTemplates?: SeoTemplateListRelationFilter
@@ -37842,6 +39300,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildOrderByRelationAggregateInput
     contentRevisions?: ContentRevisionOrderByRelationAggregateInput
     publications?: SitePublicationOrderByRelationAggregateInput
+    publicationValidations?: SitePublicationValidationOrderByRelationAggregateInput
     auditEvents?: AuditEventOrderByRelationAggregateInput
     sitemapExclusions?: SitemapExclusionOrderByRelationAggregateInput
     seoTemplates?: SeoTemplateOrderByRelationAggregateInput
@@ -37875,6 +39334,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildListRelationFilter
     contentRevisions?: ContentRevisionListRelationFilter
     publications?: SitePublicationListRelationFilter
+    publicationValidations?: SitePublicationValidationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
     sitemapExclusions?: SitemapExclusionListRelationFilter
     seoTemplates?: SeoTemplateListRelationFilter
@@ -38350,6 +39810,7 @@ export namespace Prisma {
     triggerEntity?: StringFilter<"SitePublication"> | string
     triggerEntityId?: StringFilter<"SitePublication"> | string
     requestedById?: StringNullableFilter<"SitePublication"> | string | null
+    validationId?: StringNullableFilter<"SitePublication"> | string | null
     lastError?: StringNullableFilter<"SitePublication"> | string | null
     providerDeploymentId?: StringNullableFilter<"SitePublication"> | string | null
     providerResponse?: JsonNullableFilter<"SitePublication">
@@ -38360,6 +39821,7 @@ export namespace Prisma {
     publishedAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
     requestedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    validation?: XOR<SitePublicationValidationNullableScalarRelationFilter, SitePublicationValidationWhereInput> | null
     requestedRebuilds?: SiteRebuildListRelationFilter
     processingRebuilds?: SiteRebuildListRelationFilter
     publishedRebuilds?: SiteRebuildListRelationFilter
@@ -38374,6 +39836,7 @@ export namespace Prisma {
     triggerEntity?: SortOrder
     triggerEntityId?: SortOrder
     requestedById?: SortOrderInput | SortOrder
+    validationId?: SortOrderInput | SortOrder
     lastError?: SortOrderInput | SortOrder
     providerDeploymentId?: SortOrderInput | SortOrder
     providerResponse?: SortOrderInput | SortOrder
@@ -38384,6 +39847,7 @@ export namespace Prisma {
     publishedAt?: SortOrderInput | SortOrder
     site?: SiteOrderByWithRelationInput
     requestedBy?: UserOrderByWithRelationInput
+    validation?: SitePublicationValidationOrderByWithRelationInput
     requestedRebuilds?: SiteRebuildOrderByRelationAggregateInput
     processingRebuilds?: SiteRebuildOrderByRelationAggregateInput
     publishedRebuilds?: SiteRebuildOrderByRelationAggregateInput
@@ -38391,6 +39855,7 @@ export namespace Prisma {
 
   export type SitePublicationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    validationId?: string
     siteId_siteRevision?: SitePublicationSiteIdSiteRevisionCompoundUniqueInput
     AND?: SitePublicationWhereInput | SitePublicationWhereInput[]
     OR?: SitePublicationWhereInput[]
@@ -38412,10 +39877,11 @@ export namespace Prisma {
     publishedAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
     requestedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    validation?: XOR<SitePublicationValidationNullableScalarRelationFilter, SitePublicationValidationWhereInput> | null
     requestedRebuilds?: SiteRebuildListRelationFilter
     processingRebuilds?: SiteRebuildListRelationFilter
     publishedRebuilds?: SiteRebuildListRelationFilter
-  }, "id" | "siteId_siteRevision">
+  }, "id" | "validationId" | "siteId_siteRevision">
 
   export type SitePublicationOrderByWithAggregationInput = {
     id?: SortOrder
@@ -38426,6 +39892,7 @@ export namespace Prisma {
     triggerEntity?: SortOrder
     triggerEntityId?: SortOrder
     requestedById?: SortOrderInput | SortOrder
+    validationId?: SortOrderInput | SortOrder
     lastError?: SortOrderInput | SortOrder
     providerDeploymentId?: SortOrderInput | SortOrder
     providerResponse?: SortOrderInput | SortOrder
@@ -38453,6 +39920,7 @@ export namespace Prisma {
     triggerEntity?: StringWithAggregatesFilter<"SitePublication"> | string
     triggerEntityId?: StringWithAggregatesFilter<"SitePublication"> | string
     requestedById?: StringNullableWithAggregatesFilter<"SitePublication"> | string | null
+    validationId?: StringNullableWithAggregatesFilter<"SitePublication"> | string | null
     lastError?: StringNullableWithAggregatesFilter<"SitePublication"> | string | null
     providerDeploymentId?: StringNullableWithAggregatesFilter<"SitePublication"> | string | null
     providerResponse?: JsonNullableWithAggregatesFilter<"SitePublication">
@@ -38461,6 +39929,94 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"SitePublication"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SitePublication"> | Date | string
     publishedAt?: DateTimeNullableWithAggregatesFilter<"SitePublication"> | Date | string | null
+  }
+
+  export type SitePublicationValidationWhereInput = {
+    AND?: SitePublicationValidationWhereInput | SitePublicationValidationWhereInput[]
+    OR?: SitePublicationValidationWhereInput[]
+    NOT?: SitePublicationValidationWhereInput | SitePublicationValidationWhereInput[]
+    id?: StringFilter<"SitePublicationValidation"> | string
+    siteId?: StringFilter<"SitePublicationValidation"> | string
+    siteRevision?: IntFilter<"SitePublicationValidation"> | number
+    sourceSnapshot?: JsonFilter<"SitePublicationValidation">
+    report?: JsonFilter<"SitePublicationValidation">
+    appVersion?: StringFilter<"SitePublicationValidation"> | string
+    outcome?: EnumPublicationValidationOutcomeFilter<"SitePublicationValidation"> | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFilter<"SitePublicationValidation"> | number
+    requestedById?: StringNullableFilter<"SitePublicationValidation"> | string | null
+    validatedAt?: DateTimeFilter<"SitePublicationValidation"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    requestedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    publication?: XOR<SitePublicationNullableScalarRelationFilter, SitePublicationWhereInput> | null
+  }
+
+  export type SitePublicationValidationOrderByWithRelationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    sourceSnapshot?: SortOrder
+    report?: SortOrder
+    appVersion?: SortOrder
+    outcome?: SortOrder
+    checkedUrlCount?: SortOrder
+    requestedById?: SortOrderInput | SortOrder
+    validatedAt?: SortOrder
+    site?: SiteOrderByWithRelationInput
+    requestedBy?: UserOrderByWithRelationInput
+    publication?: SitePublicationOrderByWithRelationInput
+  }
+
+  export type SitePublicationValidationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SitePublicationValidationWhereInput | SitePublicationValidationWhereInput[]
+    OR?: SitePublicationValidationWhereInput[]
+    NOT?: SitePublicationValidationWhereInput | SitePublicationValidationWhereInput[]
+    siteId?: StringFilter<"SitePublicationValidation"> | string
+    siteRevision?: IntFilter<"SitePublicationValidation"> | number
+    sourceSnapshot?: JsonFilter<"SitePublicationValidation">
+    report?: JsonFilter<"SitePublicationValidation">
+    appVersion?: StringFilter<"SitePublicationValidation"> | string
+    outcome?: EnumPublicationValidationOutcomeFilter<"SitePublicationValidation"> | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFilter<"SitePublicationValidation"> | number
+    requestedById?: StringNullableFilter<"SitePublicationValidation"> | string | null
+    validatedAt?: DateTimeFilter<"SitePublicationValidation"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    requestedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    publication?: XOR<SitePublicationNullableScalarRelationFilter, SitePublicationWhereInput> | null
+  }, "id">
+
+  export type SitePublicationValidationOrderByWithAggregationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    sourceSnapshot?: SortOrder
+    report?: SortOrder
+    appVersion?: SortOrder
+    outcome?: SortOrder
+    checkedUrlCount?: SortOrder
+    requestedById?: SortOrderInput | SortOrder
+    validatedAt?: SortOrder
+    _count?: SitePublicationValidationCountOrderByAggregateInput
+    _avg?: SitePublicationValidationAvgOrderByAggregateInput
+    _max?: SitePublicationValidationMaxOrderByAggregateInput
+    _min?: SitePublicationValidationMinOrderByAggregateInput
+    _sum?: SitePublicationValidationSumOrderByAggregateInput
+  }
+
+  export type SitePublicationValidationScalarWhereWithAggregatesInput = {
+    AND?: SitePublicationValidationScalarWhereWithAggregatesInput | SitePublicationValidationScalarWhereWithAggregatesInput[]
+    OR?: SitePublicationValidationScalarWhereWithAggregatesInput[]
+    NOT?: SitePublicationValidationScalarWhereWithAggregatesInput | SitePublicationValidationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SitePublicationValidation"> | string
+    siteId?: StringWithAggregatesFilter<"SitePublicationValidation"> | string
+    siteRevision?: IntWithAggregatesFilter<"SitePublicationValidation"> | number
+    sourceSnapshot?: JsonWithAggregatesFilter<"SitePublicationValidation">
+    report?: JsonWithAggregatesFilter<"SitePublicationValidation">
+    appVersion?: StringWithAggregatesFilter<"SitePublicationValidation"> | string
+    outcome?: EnumPublicationValidationOutcomeWithAggregatesFilter<"SitePublicationValidation"> | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntWithAggregatesFilter<"SitePublicationValidation"> | number
+    requestedById?: StringNullableWithAggregatesFilter<"SitePublicationValidation"> | string | null
+    validatedAt?: DateTimeWithAggregatesFilter<"SitePublicationValidation"> | Date | string
   }
 
   export type AuditEventWhereInput = {
@@ -40287,6 +41843,7 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     contentRevisions?: ContentRevisionListRelationFilter
     publications?: SitePublicationListRelationFilter
+    publicationValidations?: SitePublicationValidationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
     sitemapExclusionsCreated?: SitemapExclusionListRelationFilter
     tariffImportsApplied?: TariffImportRunListRelationFilter
@@ -40306,6 +41863,7 @@ export namespace Prisma {
     sessions?: SessionOrderByRelationAggregateInput
     contentRevisions?: ContentRevisionOrderByRelationAggregateInput
     publications?: SitePublicationOrderByRelationAggregateInput
+    publicationValidations?: SitePublicationValidationOrderByRelationAggregateInput
     auditEvents?: AuditEventOrderByRelationAggregateInput
     sitemapExclusionsCreated?: SitemapExclusionOrderByRelationAggregateInput
     tariffImportsApplied?: TariffImportRunOrderByRelationAggregateInput
@@ -40328,6 +41886,7 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     contentRevisions?: ContentRevisionListRelationFilter
     publications?: SitePublicationListRelationFilter
+    publicationValidations?: SitePublicationValidationListRelationFilter
     auditEvents?: AuditEventListRelationFilter
     sitemapExclusionsCreated?: SitemapExclusionListRelationFilter
     tariffImportsApplied?: TariffImportRunListRelationFilter
@@ -40523,6 +42082,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -40552,6 +42112,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -40581,6 +42142,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -40610,6 +42172,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -41139,6 +42702,7 @@ export namespace Prisma {
     publishedAt?: Date | string | null
     site: SiteCreateNestedOneWithoutPublicationsInput
     requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    validation?: SitePublicationValidationCreateNestedOneWithoutPublicationInput
     requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
@@ -41153,6 +42717,7 @@ export namespace Prisma {
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
+    validationId?: string | null
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -41183,6 +42748,7 @@ export namespace Prisma {
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
     requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    validation?: SitePublicationValidationUpdateOneWithoutPublicationNestedInput
     requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
@@ -41197,6 +42763,7 @@ export namespace Prisma {
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validationId?: NullableStringFieldUpdateOperationsInput | string | null
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -41219,6 +42786,7 @@ export namespace Prisma {
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
+    validationId?: string | null
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -41255,6 +42823,7 @@ export namespace Prisma {
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validationId?: NullableStringFieldUpdateOperationsInput | string | null
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -41263,6 +42832,99 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SitePublicationValidationCreateInput = {
+    id?: string
+    siteRevision: number
+    sourceSnapshot: JsonNullValueInput | InputJsonValue
+    report: JsonNullValueInput | InputJsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    validatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutPublicationValidationsInput
+    requestedBy?: UserCreateNestedOneWithoutPublicationValidationsInput
+    publication?: SitePublicationCreateNestedOneWithoutValidationInput
+  }
+
+  export type SitePublicationValidationUncheckedCreateInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    sourceSnapshot: JsonNullValueInput | InputJsonValue
+    report: JsonNullValueInput | InputJsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    requestedById?: string | null
+    validatedAt?: Date | string
+    publication?: SitePublicationUncheckedCreateNestedOneWithoutValidationInput
+  }
+
+  export type SitePublicationValidationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutPublicationValidationsNestedInput
+    requestedBy?: UserUpdateOneWithoutPublicationValidationsNestedInput
+    publication?: SitePublicationUpdateOneWithoutValidationNestedInput
+  }
+
+  export type SitePublicationValidationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publication?: SitePublicationUncheckedUpdateOneWithoutValidationNestedInput
+  }
+
+  export type SitePublicationValidationCreateManyInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    sourceSnapshot: JsonNullValueInput | InputJsonValue
+    report: JsonNullValueInput | InputJsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    requestedById?: string | null
+    validatedAt?: Date | string
+  }
+
+  export type SitePublicationValidationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SitePublicationValidationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AuditEventCreateInput = {
@@ -43306,6 +44968,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
@@ -43325,6 +44988,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -43344,6 +45008,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
@@ -43363,6 +45028,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -43722,6 +45388,12 @@ export namespace Prisma {
     none?: SitePublicationWhereInput
   }
 
+  export type SitePublicationValidationListRelationFilter = {
+    every?: SitePublicationValidationWhereInput
+    some?: SitePublicationValidationWhereInput
+    none?: SitePublicationValidationWhereInput
+  }
+
   export type AuditEventListRelationFilter = {
     every?: AuditEventWhereInput
     some?: AuditEventWhereInput
@@ -43777,6 +45449,10 @@ export namespace Prisma {
   }
 
   export type SitePublicationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SitePublicationValidationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -44318,6 +45994,11 @@ export namespace Prisma {
     not?: NestedEnumSitePublicationStatusFilter<$PrismaModel> | $Enums.SitePublicationStatus
   }
 
+  export type SitePublicationValidationNullableScalarRelationFilter = {
+    is?: SitePublicationValidationWhereInput | null
+    isNot?: SitePublicationValidationWhereInput | null
+  }
+
   export type SitePublicationSiteIdSiteRevisionCompoundUniqueInput = {
     siteId: string
     siteRevision: number
@@ -44332,6 +46013,7 @@ export namespace Prisma {
     triggerEntity?: SortOrder
     triggerEntityId?: SortOrder
     requestedById?: SortOrder
+    validationId?: SortOrder
     lastError?: SortOrder
     providerDeploymentId?: SortOrder
     providerResponse?: SortOrder
@@ -44354,6 +46036,7 @@ export namespace Prisma {
     triggerEntity?: SortOrder
     triggerEntityId?: SortOrder
     requestedById?: SortOrder
+    validationId?: SortOrder
     lastError?: SortOrder
     providerDeploymentId?: SortOrder
     scheduledFor?: SortOrder
@@ -44371,6 +46054,7 @@ export namespace Prisma {
     triggerEntity?: SortOrder
     triggerEntityId?: SortOrder
     requestedById?: SortOrder
+    validationId?: SortOrder
     lastError?: SortOrder
     providerDeploymentId?: SortOrder
     scheduledFor?: SortOrder
@@ -44392,6 +46076,68 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSitePublicationStatusFilter<$PrismaModel>
     _max?: NestedEnumSitePublicationStatusFilter<$PrismaModel>
+  }
+
+  export type EnumPublicationValidationOutcomeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PublicationValidationOutcome | EnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    in?: $Enums.PublicationValidationOutcome[] | ListEnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PublicationValidationOutcome[] | ListEnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPublicationValidationOutcomeFilter<$PrismaModel> | $Enums.PublicationValidationOutcome
+  }
+
+  export type SitePublicationValidationCountOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    sourceSnapshot?: SortOrder
+    report?: SortOrder
+    appVersion?: SortOrder
+    outcome?: SortOrder
+    checkedUrlCount?: SortOrder
+    requestedById?: SortOrder
+    validatedAt?: SortOrder
+  }
+
+  export type SitePublicationValidationAvgOrderByAggregateInput = {
+    siteRevision?: SortOrder
+    checkedUrlCount?: SortOrder
+  }
+
+  export type SitePublicationValidationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    appVersion?: SortOrder
+    outcome?: SortOrder
+    checkedUrlCount?: SortOrder
+    requestedById?: SortOrder
+    validatedAt?: SortOrder
+  }
+
+  export type SitePublicationValidationMinOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    siteRevision?: SortOrder
+    appVersion?: SortOrder
+    outcome?: SortOrder
+    checkedUrlCount?: SortOrder
+    requestedById?: SortOrder
+    validatedAt?: SortOrder
+  }
+
+  export type SitePublicationValidationSumOrderByAggregateInput = {
+    siteRevision?: SortOrder
+    checkedUrlCount?: SortOrder
+  }
+
+  export type EnumPublicationValidationOutcomeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PublicationValidationOutcome | EnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    in?: $Enums.PublicationValidationOutcome[] | ListEnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PublicationValidationOutcome[] | ListEnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPublicationValidationOutcomeWithAggregatesFilter<$PrismaModel> | $Enums.PublicationValidationOutcome
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPublicationValidationOutcomeFilter<$PrismaModel>
+    _max?: NestedEnumPublicationValidationOutcomeFilter<$PrismaModel>
   }
 
   export type AuditEventCountOrderByAggregateInput = {
@@ -46081,6 +47827,13 @@ export namespace Prisma {
     connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
   }
 
+  export type SitePublicationValidationCreateNestedManyWithoutSiteInput = {
+    create?: XOR<SitePublicationValidationCreateWithoutSiteInput, SitePublicationValidationUncheckedCreateWithoutSiteInput> | SitePublicationValidationCreateWithoutSiteInput[] | SitePublicationValidationUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitePublicationValidationCreateOrConnectWithoutSiteInput | SitePublicationValidationCreateOrConnectWithoutSiteInput[]
+    createMany?: SitePublicationValidationCreateManySiteInputEnvelope
+    connect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+  }
+
   export type AuditEventCreateNestedManyWithoutSiteInput = {
     create?: XOR<AuditEventCreateWithoutSiteInput, AuditEventUncheckedCreateWithoutSiteInput> | AuditEventCreateWithoutSiteInput[] | AuditEventUncheckedCreateWithoutSiteInput[]
     connectOrCreate?: AuditEventCreateOrConnectWithoutSiteInput | AuditEventCreateOrConnectWithoutSiteInput[]
@@ -46170,6 +47923,13 @@ export namespace Prisma {
     connectOrCreate?: SitePublicationCreateOrConnectWithoutSiteInput | SitePublicationCreateOrConnectWithoutSiteInput[]
     createMany?: SitePublicationCreateManySiteInputEnvelope
     connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+  }
+
+  export type SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput = {
+    create?: XOR<SitePublicationValidationCreateWithoutSiteInput, SitePublicationValidationUncheckedCreateWithoutSiteInput> | SitePublicationValidationCreateWithoutSiteInput[] | SitePublicationValidationUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitePublicationValidationCreateOrConnectWithoutSiteInput | SitePublicationValidationCreateOrConnectWithoutSiteInput[]
+    createMany?: SitePublicationValidationCreateManySiteInputEnvelope
+    connect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
   }
 
   export type AuditEventUncheckedCreateNestedManyWithoutSiteInput = {
@@ -46357,6 +48117,20 @@ export namespace Prisma {
     deleteMany?: SitePublicationScalarWhereInput | SitePublicationScalarWhereInput[]
   }
 
+  export type SitePublicationValidationUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<SitePublicationValidationCreateWithoutSiteInput, SitePublicationValidationUncheckedCreateWithoutSiteInput> | SitePublicationValidationCreateWithoutSiteInput[] | SitePublicationValidationUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitePublicationValidationCreateOrConnectWithoutSiteInput | SitePublicationValidationCreateOrConnectWithoutSiteInput[]
+    upsert?: SitePublicationValidationUpsertWithWhereUniqueWithoutSiteInput | SitePublicationValidationUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: SitePublicationValidationCreateManySiteInputEnvelope
+    set?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    disconnect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    delete?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    connect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    update?: SitePublicationValidationUpdateWithWhereUniqueWithoutSiteInput | SitePublicationValidationUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: SitePublicationValidationUpdateManyWithWhereWithoutSiteInput | SitePublicationValidationUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: SitePublicationValidationScalarWhereInput | SitePublicationValidationScalarWhereInput[]
+  }
+
   export type AuditEventUpdateManyWithoutSiteNestedInput = {
     create?: XOR<AuditEventCreateWithoutSiteInput, AuditEventUncheckedCreateWithoutSiteInput> | AuditEventCreateWithoutSiteInput[] | AuditEventUncheckedCreateWithoutSiteInput[]
     connectOrCreate?: AuditEventCreateOrConnectWithoutSiteInput | AuditEventCreateOrConnectWithoutSiteInput[]
@@ -46537,6 +48311,20 @@ export namespace Prisma {
     update?: SitePublicationUpdateWithWhereUniqueWithoutSiteInput | SitePublicationUpdateWithWhereUniqueWithoutSiteInput[]
     updateMany?: SitePublicationUpdateManyWithWhereWithoutSiteInput | SitePublicationUpdateManyWithWhereWithoutSiteInput[]
     deleteMany?: SitePublicationScalarWhereInput | SitePublicationScalarWhereInput[]
+  }
+
+  export type SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<SitePublicationValidationCreateWithoutSiteInput, SitePublicationValidationUncheckedCreateWithoutSiteInput> | SitePublicationValidationCreateWithoutSiteInput[] | SitePublicationValidationUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: SitePublicationValidationCreateOrConnectWithoutSiteInput | SitePublicationValidationCreateOrConnectWithoutSiteInput[]
+    upsert?: SitePublicationValidationUpsertWithWhereUniqueWithoutSiteInput | SitePublicationValidationUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: SitePublicationValidationCreateManySiteInputEnvelope
+    set?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    disconnect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    delete?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    connect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    update?: SitePublicationValidationUpdateWithWhereUniqueWithoutSiteInput | SitePublicationValidationUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: SitePublicationValidationUpdateManyWithWhereWithoutSiteInput | SitePublicationValidationUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: SitePublicationValidationScalarWhereInput | SitePublicationValidationScalarWhereInput[]
   }
 
   export type AuditEventUncheckedUpdateManyWithoutSiteNestedInput = {
@@ -46755,6 +48543,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type SitePublicationValidationCreateNestedOneWithoutPublicationInput = {
+    create?: XOR<SitePublicationValidationCreateWithoutPublicationInput, SitePublicationValidationUncheckedCreateWithoutPublicationInput>
+    connectOrCreate?: SitePublicationValidationCreateOrConnectWithoutPublicationInput
+    connect?: SitePublicationValidationWhereUniqueInput
+  }
+
   export type SiteRebuildCreateNestedManyWithoutRequestedPublicationInput = {
     create?: XOR<SiteRebuildCreateWithoutRequestedPublicationInput, SiteRebuildUncheckedCreateWithoutRequestedPublicationInput> | SiteRebuildCreateWithoutRequestedPublicationInput[] | SiteRebuildUncheckedCreateWithoutRequestedPublicationInput[]
     connectOrCreate?: SiteRebuildCreateOrConnectWithoutRequestedPublicationInput | SiteRebuildCreateOrConnectWithoutRequestedPublicationInput[]
@@ -46817,6 +48611,16 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPublicationsInput, UserUpdateWithoutPublicationsInput>, UserUncheckedUpdateWithoutPublicationsInput>
+  }
+
+  export type SitePublicationValidationUpdateOneWithoutPublicationNestedInput = {
+    create?: XOR<SitePublicationValidationCreateWithoutPublicationInput, SitePublicationValidationUncheckedCreateWithoutPublicationInput>
+    connectOrCreate?: SitePublicationValidationCreateOrConnectWithoutPublicationInput
+    upsert?: SitePublicationValidationUpsertWithoutPublicationInput
+    disconnect?: SitePublicationValidationWhereInput | boolean
+    delete?: SitePublicationValidationWhereInput | boolean
+    connect?: SitePublicationValidationWhereUniqueInput
+    update?: XOR<XOR<SitePublicationValidationUpdateToOneWithWhereWithoutPublicationInput, SitePublicationValidationUpdateWithoutPublicationInput>, SitePublicationValidationUncheckedUpdateWithoutPublicationInput>
   }
 
   export type SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput = {
@@ -46901,6 +48705,72 @@ export namespace Prisma {
     update?: SiteRebuildUpdateWithWhereUniqueWithoutPublishedPublicationInput | SiteRebuildUpdateWithWhereUniqueWithoutPublishedPublicationInput[]
     updateMany?: SiteRebuildUpdateManyWithWhereWithoutPublishedPublicationInput | SiteRebuildUpdateManyWithWhereWithoutPublishedPublicationInput[]
     deleteMany?: SiteRebuildScalarWhereInput | SiteRebuildScalarWhereInput[]
+  }
+
+  export type SiteCreateNestedOneWithoutPublicationValidationsInput = {
+    create?: XOR<SiteCreateWithoutPublicationValidationsInput, SiteUncheckedCreateWithoutPublicationValidationsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutPublicationValidationsInput
+    connect?: SiteWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutPublicationValidationsInput = {
+    create?: XOR<UserCreateWithoutPublicationValidationsInput, UserUncheckedCreateWithoutPublicationValidationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPublicationValidationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SitePublicationCreateNestedOneWithoutValidationInput = {
+    create?: XOR<SitePublicationCreateWithoutValidationInput, SitePublicationUncheckedCreateWithoutValidationInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutValidationInput
+    connect?: SitePublicationWhereUniqueInput
+  }
+
+  export type SitePublicationUncheckedCreateNestedOneWithoutValidationInput = {
+    create?: XOR<SitePublicationCreateWithoutValidationInput, SitePublicationUncheckedCreateWithoutValidationInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutValidationInput
+    connect?: SitePublicationWhereUniqueInput
+  }
+
+  export type EnumPublicationValidationOutcomeFieldUpdateOperationsInput = {
+    set?: $Enums.PublicationValidationOutcome
+  }
+
+  export type SiteUpdateOneRequiredWithoutPublicationValidationsNestedInput = {
+    create?: XOR<SiteCreateWithoutPublicationValidationsInput, SiteUncheckedCreateWithoutPublicationValidationsInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutPublicationValidationsInput
+    upsert?: SiteUpsertWithoutPublicationValidationsInput
+    connect?: SiteWhereUniqueInput
+    update?: XOR<XOR<SiteUpdateToOneWithWhereWithoutPublicationValidationsInput, SiteUpdateWithoutPublicationValidationsInput>, SiteUncheckedUpdateWithoutPublicationValidationsInput>
+  }
+
+  export type UserUpdateOneWithoutPublicationValidationsNestedInput = {
+    create?: XOR<UserCreateWithoutPublicationValidationsInput, UserUncheckedCreateWithoutPublicationValidationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPublicationValidationsInput
+    upsert?: UserUpsertWithoutPublicationValidationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPublicationValidationsInput, UserUpdateWithoutPublicationValidationsInput>, UserUncheckedUpdateWithoutPublicationValidationsInput>
+  }
+
+  export type SitePublicationUpdateOneWithoutValidationNestedInput = {
+    create?: XOR<SitePublicationCreateWithoutValidationInput, SitePublicationUncheckedCreateWithoutValidationInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutValidationInput
+    upsert?: SitePublicationUpsertWithoutValidationInput
+    disconnect?: SitePublicationWhereInput | boolean
+    delete?: SitePublicationWhereInput | boolean
+    connect?: SitePublicationWhereUniqueInput
+    update?: XOR<XOR<SitePublicationUpdateToOneWithWhereWithoutValidationInput, SitePublicationUpdateWithoutValidationInput>, SitePublicationUncheckedUpdateWithoutValidationInput>
+  }
+
+  export type SitePublicationUncheckedUpdateOneWithoutValidationNestedInput = {
+    create?: XOR<SitePublicationCreateWithoutValidationInput, SitePublicationUncheckedCreateWithoutValidationInput>
+    connectOrCreate?: SitePublicationCreateOrConnectWithoutValidationInput
+    upsert?: SitePublicationUpsertWithoutValidationInput
+    disconnect?: SitePublicationWhereInput | boolean
+    delete?: SitePublicationWhereInput | boolean
+    connect?: SitePublicationWhereUniqueInput
+    update?: XOR<XOR<SitePublicationUpdateToOneWithWhereWithoutValidationInput, SitePublicationUpdateWithoutValidationInput>, SitePublicationUncheckedUpdateWithoutValidationInput>
   }
 
   export type SiteCreateNestedOneWithoutAuditEventsInput = {
@@ -48298,6 +50168,13 @@ export namespace Prisma {
     connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
   }
 
+  export type SitePublicationValidationCreateNestedManyWithoutRequestedByInput = {
+    create?: XOR<SitePublicationValidationCreateWithoutRequestedByInput, SitePublicationValidationUncheckedCreateWithoutRequestedByInput> | SitePublicationValidationCreateWithoutRequestedByInput[] | SitePublicationValidationUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: SitePublicationValidationCreateOrConnectWithoutRequestedByInput | SitePublicationValidationCreateOrConnectWithoutRequestedByInput[]
+    createMany?: SitePublicationValidationCreateManyRequestedByInputEnvelope
+    connect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+  }
+
   export type AuditEventCreateNestedManyWithoutActorInput = {
     create?: XOR<AuditEventCreateWithoutActorInput, AuditEventUncheckedCreateWithoutActorInput> | AuditEventCreateWithoutActorInput[] | AuditEventUncheckedCreateWithoutActorInput[]
     connectOrCreate?: AuditEventCreateOrConnectWithoutActorInput | AuditEventCreateOrConnectWithoutActorInput[]
@@ -48359,6 +50236,13 @@ export namespace Prisma {
     connectOrCreate?: SitePublicationCreateOrConnectWithoutRequestedByInput | SitePublicationCreateOrConnectWithoutRequestedByInput[]
     createMany?: SitePublicationCreateManyRequestedByInputEnvelope
     connect?: SitePublicationWhereUniqueInput | SitePublicationWhereUniqueInput[]
+  }
+
+  export type SitePublicationValidationUncheckedCreateNestedManyWithoutRequestedByInput = {
+    create?: XOR<SitePublicationValidationCreateWithoutRequestedByInput, SitePublicationValidationUncheckedCreateWithoutRequestedByInput> | SitePublicationValidationCreateWithoutRequestedByInput[] | SitePublicationValidationUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: SitePublicationValidationCreateOrConnectWithoutRequestedByInput | SitePublicationValidationCreateOrConnectWithoutRequestedByInput[]
+    createMany?: SitePublicationValidationCreateManyRequestedByInputEnvelope
+    connect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
   }
 
   export type AuditEventUncheckedCreateNestedManyWithoutActorInput = {
@@ -48443,6 +50327,20 @@ export namespace Prisma {
     update?: SitePublicationUpdateWithWhereUniqueWithoutRequestedByInput | SitePublicationUpdateWithWhereUniqueWithoutRequestedByInput[]
     updateMany?: SitePublicationUpdateManyWithWhereWithoutRequestedByInput | SitePublicationUpdateManyWithWhereWithoutRequestedByInput[]
     deleteMany?: SitePublicationScalarWhereInput | SitePublicationScalarWhereInput[]
+  }
+
+  export type SitePublicationValidationUpdateManyWithoutRequestedByNestedInput = {
+    create?: XOR<SitePublicationValidationCreateWithoutRequestedByInput, SitePublicationValidationUncheckedCreateWithoutRequestedByInput> | SitePublicationValidationCreateWithoutRequestedByInput[] | SitePublicationValidationUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: SitePublicationValidationCreateOrConnectWithoutRequestedByInput | SitePublicationValidationCreateOrConnectWithoutRequestedByInput[]
+    upsert?: SitePublicationValidationUpsertWithWhereUniqueWithoutRequestedByInput | SitePublicationValidationUpsertWithWhereUniqueWithoutRequestedByInput[]
+    createMany?: SitePublicationValidationCreateManyRequestedByInputEnvelope
+    set?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    disconnect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    delete?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    connect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    update?: SitePublicationValidationUpdateWithWhereUniqueWithoutRequestedByInput | SitePublicationValidationUpdateWithWhereUniqueWithoutRequestedByInput[]
+    updateMany?: SitePublicationValidationUpdateManyWithWhereWithoutRequestedByInput | SitePublicationValidationUpdateManyWithWhereWithoutRequestedByInput[]
+    deleteMany?: SitePublicationValidationScalarWhereInput | SitePublicationValidationScalarWhereInput[]
   }
 
   export type AuditEventUpdateManyWithoutActorNestedInput = {
@@ -48569,6 +50467,20 @@ export namespace Prisma {
     update?: SitePublicationUpdateWithWhereUniqueWithoutRequestedByInput | SitePublicationUpdateWithWhereUniqueWithoutRequestedByInput[]
     updateMany?: SitePublicationUpdateManyWithWhereWithoutRequestedByInput | SitePublicationUpdateManyWithWhereWithoutRequestedByInput[]
     deleteMany?: SitePublicationScalarWhereInput | SitePublicationScalarWhereInput[]
+  }
+
+  export type SitePublicationValidationUncheckedUpdateManyWithoutRequestedByNestedInput = {
+    create?: XOR<SitePublicationValidationCreateWithoutRequestedByInput, SitePublicationValidationUncheckedCreateWithoutRequestedByInput> | SitePublicationValidationCreateWithoutRequestedByInput[] | SitePublicationValidationUncheckedCreateWithoutRequestedByInput[]
+    connectOrCreate?: SitePublicationValidationCreateOrConnectWithoutRequestedByInput | SitePublicationValidationCreateOrConnectWithoutRequestedByInput[]
+    upsert?: SitePublicationValidationUpsertWithWhereUniqueWithoutRequestedByInput | SitePublicationValidationUpsertWithWhereUniqueWithoutRequestedByInput[]
+    createMany?: SitePublicationValidationCreateManyRequestedByInputEnvelope
+    set?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    disconnect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    delete?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    connect?: SitePublicationValidationWhereUniqueInput | SitePublicationValidationWhereUniqueInput[]
+    update?: SitePublicationValidationUpdateWithWhereUniqueWithoutRequestedByInput | SitePublicationValidationUpdateWithWhereUniqueWithoutRequestedByInput[]
+    updateMany?: SitePublicationValidationUpdateManyWithWhereWithoutRequestedByInput | SitePublicationValidationUpdateManyWithWhereWithoutRequestedByInput[]
+    deleteMany?: SitePublicationValidationScalarWhereInput | SitePublicationValidationScalarWhereInput[]
   }
 
   export type AuditEventUncheckedUpdateManyWithoutActorNestedInput = {
@@ -48995,6 +50907,23 @@ export namespace Prisma {
     _max?: NestedEnumSitePublicationStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumPublicationValidationOutcomeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PublicationValidationOutcome | EnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    in?: $Enums.PublicationValidationOutcome[] | ListEnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PublicationValidationOutcome[] | ListEnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPublicationValidationOutcomeFilter<$PrismaModel> | $Enums.PublicationValidationOutcome
+  }
+
+  export type NestedEnumPublicationValidationOutcomeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PublicationValidationOutcome | EnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    in?: $Enums.PublicationValidationOutcome[] | ListEnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PublicationValidationOutcome[] | ListEnumPublicationValidationOutcomeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPublicationValidationOutcomeWithAggregatesFilter<$PrismaModel> | $Enums.PublicationValidationOutcome
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPublicationValidationOutcomeFilter<$PrismaModel>
+    _max?: NestedEnumPublicationValidationOutcomeFilter<$PrismaModel>
+  }
+
   export type NestedEnumCityOfficeStateFilter<$PrismaModel = never> = {
     equals?: $Enums.CityOfficeState | EnumCityOfficeStateFieldRefInput<$PrismaModel>
     in?: $Enums.CityOfficeState[] | ListEnumCityOfficeStateFieldRefInput<$PrismaModel>
@@ -49357,6 +51286,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -49385,6 +51315,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -50151,6 +52082,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    validation?: SitePublicationValidationCreateNestedOneWithoutPublicationInput
     requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
@@ -50164,6 +52096,7 @@ export namespace Prisma {
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
+    validationId?: string | null
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -50184,6 +52117,42 @@ export namespace Prisma {
 
   export type SitePublicationCreateManySiteInputEnvelope = {
     data: SitePublicationCreateManySiteInput | SitePublicationCreateManySiteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SitePublicationValidationCreateWithoutSiteInput = {
+    id?: string
+    siteRevision: number
+    sourceSnapshot: JsonNullValueInput | InputJsonValue
+    report: JsonNullValueInput | InputJsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    validatedAt?: Date | string
+    requestedBy?: UserCreateNestedOneWithoutPublicationValidationsInput
+    publication?: SitePublicationCreateNestedOneWithoutValidationInput
+  }
+
+  export type SitePublicationValidationUncheckedCreateWithoutSiteInput = {
+    id?: string
+    siteRevision: number
+    sourceSnapshot: JsonNullValueInput | InputJsonValue
+    report: JsonNullValueInput | InputJsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    requestedById?: string | null
+    validatedAt?: Date | string
+    publication?: SitePublicationUncheckedCreateNestedOneWithoutValidationInput
+  }
+
+  export type SitePublicationValidationCreateOrConnectWithoutSiteInput = {
+    where: SitePublicationValidationWhereUniqueInput
+    create: XOR<SitePublicationValidationCreateWithoutSiteInput, SitePublicationValidationUncheckedCreateWithoutSiteInput>
+  }
+
+  export type SitePublicationValidationCreateManySiteInputEnvelope = {
+    data: SitePublicationValidationCreateManySiteInput | SitePublicationValidationCreateManySiteInput[]
     skipDuplicates?: boolean
   }
 
@@ -50707,6 +52676,7 @@ export namespace Prisma {
     triggerEntity?: StringFilter<"SitePublication"> | string
     triggerEntityId?: StringFilter<"SitePublication"> | string
     requestedById?: StringNullableFilter<"SitePublication"> | string | null
+    validationId?: StringNullableFilter<"SitePublication"> | string | null
     lastError?: StringNullableFilter<"SitePublication"> | string | null
     providerDeploymentId?: StringNullableFilter<"SitePublication"> | string | null
     providerResponse?: JsonNullableFilter<"SitePublication">
@@ -50715,6 +52685,38 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SitePublication"> | Date | string
     updatedAt?: DateTimeFilter<"SitePublication"> | Date | string
     publishedAt?: DateTimeNullableFilter<"SitePublication"> | Date | string | null
+  }
+
+  export type SitePublicationValidationUpsertWithWhereUniqueWithoutSiteInput = {
+    where: SitePublicationValidationWhereUniqueInput
+    update: XOR<SitePublicationValidationUpdateWithoutSiteInput, SitePublicationValidationUncheckedUpdateWithoutSiteInput>
+    create: XOR<SitePublicationValidationCreateWithoutSiteInput, SitePublicationValidationUncheckedCreateWithoutSiteInput>
+  }
+
+  export type SitePublicationValidationUpdateWithWhereUniqueWithoutSiteInput = {
+    where: SitePublicationValidationWhereUniqueInput
+    data: XOR<SitePublicationValidationUpdateWithoutSiteInput, SitePublicationValidationUncheckedUpdateWithoutSiteInput>
+  }
+
+  export type SitePublicationValidationUpdateManyWithWhereWithoutSiteInput = {
+    where: SitePublicationValidationScalarWhereInput
+    data: XOR<SitePublicationValidationUpdateManyMutationInput, SitePublicationValidationUncheckedUpdateManyWithoutSiteInput>
+  }
+
+  export type SitePublicationValidationScalarWhereInput = {
+    AND?: SitePublicationValidationScalarWhereInput | SitePublicationValidationScalarWhereInput[]
+    OR?: SitePublicationValidationScalarWhereInput[]
+    NOT?: SitePublicationValidationScalarWhereInput | SitePublicationValidationScalarWhereInput[]
+    id?: StringFilter<"SitePublicationValidation"> | string
+    siteId?: StringFilter<"SitePublicationValidation"> | string
+    siteRevision?: IntFilter<"SitePublicationValidation"> | number
+    sourceSnapshot?: JsonFilter<"SitePublicationValidation">
+    report?: JsonFilter<"SitePublicationValidation">
+    appVersion?: StringFilter<"SitePublicationValidation"> | string
+    outcome?: EnumPublicationValidationOutcomeFilter<"SitePublicationValidation"> | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFilter<"SitePublicationValidation"> | number
+    requestedById?: StringNullableFilter<"SitePublicationValidation"> | string | null
+    validatedAt?: DateTimeFilter<"SitePublicationValidation"> | Date | string
   }
 
   export type AuditEventUpsertWithWhereUniqueWithoutSiteInput = {
@@ -50836,6 +52838,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
   }
@@ -50864,6 +52867,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
   }
@@ -50908,6 +52912,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
   }
@@ -50936,6 +52941,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
   }
@@ -50964,6 +52970,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
@@ -50992,6 +52999,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
@@ -51012,6 +53020,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
@@ -51030,6 +53039,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
@@ -51077,6 +53087,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
@@ -51105,6 +53116,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
@@ -51131,6 +53143,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
@@ -51149,6 +53162,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
@@ -51179,6 +53193,7 @@ export namespace Prisma {
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -51207,6 +53222,7 @@ export namespace Prisma {
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -51234,6 +53250,7 @@ export namespace Prisma {
     publishedAt?: Date | string | null
     site: SiteCreateNestedOneWithoutPublicationsInput
     requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    validation?: SitePublicationValidationCreateNestedOneWithoutPublicationInput
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
   }
@@ -51247,6 +53264,7 @@ export namespace Prisma {
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
+    validationId?: string | null
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -51281,6 +53299,7 @@ export namespace Prisma {
     publishedAt?: Date | string | null
     site: SiteCreateNestedOneWithoutPublicationsInput
     requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    validation?: SitePublicationValidationCreateNestedOneWithoutPublicationInput
     requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
   }
@@ -51294,6 +53313,7 @@ export namespace Prisma {
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
+    validationId?: string | null
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -51328,6 +53348,7 @@ export namespace Prisma {
     publishedAt?: Date | string | null
     site: SiteCreateNestedOneWithoutPublicationsInput
     requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    validation?: SitePublicationValidationCreateNestedOneWithoutPublicationInput
     requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
   }
@@ -51341,6 +53362,7 @@ export namespace Prisma {
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
+    validationId?: string | null
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -51392,6 +53414,7 @@ export namespace Prisma {
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -51420,6 +53443,7 @@ export namespace Prisma {
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -51453,6 +53477,7 @@ export namespace Prisma {
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
     requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    validation?: SitePublicationValidationUpdateOneWithoutPublicationNestedInput
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
   }
@@ -51466,6 +53491,7 @@ export namespace Prisma {
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validationId?: NullableStringFieldUpdateOperationsInput | string | null
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -51506,6 +53532,7 @@ export namespace Prisma {
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
     requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    validation?: SitePublicationValidationUpdateOneWithoutPublicationNestedInput
     requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
   }
@@ -51519,6 +53546,7 @@ export namespace Prisma {
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validationId?: NullableStringFieldUpdateOperationsInput | string | null
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -51559,6 +53587,7 @@ export namespace Prisma {
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
     requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    validation?: SitePublicationValidationUpdateOneWithoutPublicationNestedInput
     requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
   }
@@ -51572,6 +53601,7 @@ export namespace Prisma {
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validationId?: NullableStringFieldUpdateOperationsInput | string | null
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -51607,6 +53637,7 @@ export namespace Prisma {
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -51635,6 +53666,7 @@ export namespace Prisma {
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -51655,6 +53687,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionCreateNestedManyWithoutUserInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
@@ -51673,6 +53706,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -51720,6 +53754,7 @@ export namespace Prisma {
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -51748,6 +53783,7 @@ export namespace Prisma {
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -51774,6 +53810,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUpdateManyWithoutUserNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
@@ -51792,6 +53829,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -51823,6 +53861,7 @@ export namespace Prisma {
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -51851,6 +53890,7 @@ export namespace Prisma {
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -51871,6 +53911,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
@@ -51889,6 +53930,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -51900,6 +53942,37 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutPublicationsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutPublicationsInput, UserUncheckedCreateWithoutPublicationsInput>
+  }
+
+  export type SitePublicationValidationCreateWithoutPublicationInput = {
+    id?: string
+    siteRevision: number
+    sourceSnapshot: JsonNullValueInput | InputJsonValue
+    report: JsonNullValueInput | InputJsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    validatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutPublicationValidationsInput
+    requestedBy?: UserCreateNestedOneWithoutPublicationValidationsInput
+  }
+
+  export type SitePublicationValidationUncheckedCreateWithoutPublicationInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    sourceSnapshot: JsonNullValueInput | InputJsonValue
+    report: JsonNullValueInput | InputJsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    requestedById?: string | null
+    validatedAt?: Date | string
+  }
+
+  export type SitePublicationValidationCreateOrConnectWithoutPublicationInput = {
+    where: SitePublicationValidationWhereUniqueInput
+    create: XOR<SitePublicationValidationCreateWithoutPublicationInput, SitePublicationValidationUncheckedCreateWithoutPublicationInput>
   }
 
   export type SiteRebuildCreateWithoutRequestedPublicationInput = {
@@ -52122,6 +54195,7 @@ export namespace Prisma {
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -52150,6 +54224,7 @@ export namespace Prisma {
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -52176,6 +54251,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
@@ -52194,12 +54270,50 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
     cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+  }
+
+  export type SitePublicationValidationUpsertWithoutPublicationInput = {
+    update: XOR<SitePublicationValidationUpdateWithoutPublicationInput, SitePublicationValidationUncheckedUpdateWithoutPublicationInput>
+    create: XOR<SitePublicationValidationCreateWithoutPublicationInput, SitePublicationValidationUncheckedCreateWithoutPublicationInput>
+    where?: SitePublicationValidationWhereInput
+  }
+
+  export type SitePublicationValidationUpdateToOneWithWhereWithoutPublicationInput = {
+    where?: SitePublicationValidationWhereInput
+    data: XOR<SitePublicationValidationUpdateWithoutPublicationInput, SitePublicationValidationUncheckedUpdateWithoutPublicationInput>
+  }
+
+  export type SitePublicationValidationUpdateWithoutPublicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutPublicationValidationsNestedInput
+    requestedBy?: UserUpdateOneWithoutPublicationValidationsNestedInput
+  }
+
+  export type SitePublicationValidationUncheckedUpdateWithoutPublicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SiteRebuildUpsertWithWhereUniqueWithoutRequestedPublicationInput = {
@@ -52250,6 +54364,334 @@ export namespace Prisma {
     data: XOR<SiteRebuildUpdateManyMutationInput, SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationInput>
   }
 
+  export type SiteCreateWithoutPublicationValidationsInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    provider: ProviderCreateNestedOneWithoutSitesInput
+    regions?: RegionCreateNestedManyWithoutSiteInput
+    cities?: CityCreateNestedManyWithoutSiteInput
+    pages?: PageCreateNestedManyWithoutSiteInput
+    leads?: LeadCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckCreateNestedManyWithoutSiteInput
+    redirects?: RedirectCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteUncheckedCreateWithoutPublicationValidationsInput = {
+    id?: string
+    providerId: string
+    name: string
+    slug: string
+    domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
+    cities?: CityUncheckedCreateNestedManyWithoutSiteInput
+    pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
+    redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteCreateOrConnectWithoutPublicationValidationsInput = {
+    where: SiteWhereUniqueInput
+    create: XOR<SiteCreateWithoutPublicationValidationsInput, SiteUncheckedCreateWithoutPublicationValidationsInput>
+  }
+
+  export type UserCreateWithoutPublicationValidationsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
+    publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
+    tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunCreateNestedManyWithoutUndoneByInput
+  }
+
+  export type UserUncheckedCreateWithoutPublicationValidationsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
+    tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+    cityImportsApplied?: CityImportRunUncheckedCreateNestedManyWithoutAppliedByInput
+    cityImportsUndone?: CityImportRunUncheckedCreateNestedManyWithoutUndoneByInput
+  }
+
+  export type UserCreateOrConnectWithoutPublicationValidationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPublicationValidationsInput, UserUncheckedCreateWithoutPublicationValidationsInput>
+  }
+
+  export type SitePublicationCreateWithoutValidationInput = {
+    id?: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    site: SiteCreateNestedOneWithoutPublicationsInput
+    requestedBy?: UserCreateNestedOneWithoutPublicationsInput
+    requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationUncheckedCreateWithoutValidationInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    status?: $Enums.SitePublicationStatus
+    catalog: JsonNullValueInput | InputJsonValue
+    triggerEntity: string
+    triggerEntityId: string
+    requestedById?: string | null
+    lastError?: string | null
+    providerDeploymentId?: string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: Date | string | null
+    cancelledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutRequestedPublicationInput
+    processingRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutProcessingPublicationInput
+    publishedRebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutPublishedPublicationInput
+  }
+
+  export type SitePublicationCreateOrConnectWithoutValidationInput = {
+    where: SitePublicationWhereUniqueInput
+    create: XOR<SitePublicationCreateWithoutValidationInput, SitePublicationUncheckedCreateWithoutValidationInput>
+  }
+
+  export type SiteUpsertWithoutPublicationValidationsInput = {
+    update: XOR<SiteUpdateWithoutPublicationValidationsInput, SiteUncheckedUpdateWithoutPublicationValidationsInput>
+    create: XOR<SiteCreateWithoutPublicationValidationsInput, SiteUncheckedCreateWithoutPublicationValidationsInput>
+    where?: SiteWhereInput
+  }
+
+  export type SiteUpdateToOneWithWhereWithoutPublicationValidationsInput = {
+    where?: SiteWhereInput
+    data: XOR<SiteUpdateWithoutPublicationValidationsInput, SiteUncheckedUpdateWithoutPublicationValidationsInput>
+  }
+
+  export type SiteUpdateWithoutPublicationValidationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
+    regions?: RegionUpdateManyWithoutSiteNestedInput
+    cities?: CityUpdateManyWithoutSiteNestedInput
+    pages?: PageUpdateManyWithoutSiteNestedInput
+    leads?: LeadUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
+  }
+
+  export type SiteUncheckedUpdateWithoutPublicationValidationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
+    cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
+    pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
+  }
+
+  export type UserUpsertWithoutPublicationValidationsInput = {
+    update: XOR<UserUpdateWithoutPublicationValidationsInput, UserUncheckedUpdateWithoutPublicationValidationsInput>
+    create: XOR<UserCreateWithoutPublicationValidationsInput, UserUncheckedCreateWithoutPublicationValidationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPublicationValidationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPublicationValidationsInput, UserUncheckedUpdateWithoutPublicationValidationsInput>
+  }
+
+  export type UserUpdateWithoutPublicationValidationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
+    tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUpdateManyWithoutUndoneByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPublicationValidationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
+    sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
+    tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+    cityImportsApplied?: CityImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
+    cityImportsUndone?: CityImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
+  }
+
+  export type SitePublicationUpsertWithoutValidationInput = {
+    update: XOR<SitePublicationUpdateWithoutValidationInput, SitePublicationUncheckedUpdateWithoutValidationInput>
+    create: XOR<SitePublicationCreateWithoutValidationInput, SitePublicationUncheckedCreateWithoutValidationInput>
+    where?: SitePublicationWhereInput
+  }
+
+  export type SitePublicationUpdateToOneWithWhereWithoutValidationInput = {
+    where?: SitePublicationWhereInput
+    data: XOR<SitePublicationUpdateWithoutValidationInput, SitePublicationUncheckedUpdateWithoutValidationInput>
+  }
+
+  export type SitePublicationUpdateWithoutValidationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
+    requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
+  export type SitePublicationUncheckedUpdateWithoutValidationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    status?: EnumSitePublicationStatusFieldUpdateOperationsInput | $Enums.SitePublicationStatus
+    catalog?: JsonNullValueInput | InputJsonValue
+    triggerEntity?: StringFieldUpdateOperationsInput | string
+    triggerEntityId?: StringFieldUpdateOperationsInput | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerResponse?: NullableJsonNullValueInput | InputJsonValue
+    scheduledFor?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    requestedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutRequestedPublicationNestedInput
+    processingRebuilds?: SiteRebuildUncheckedUpdateManyWithoutProcessingPublicationNestedInput
+    publishedRebuilds?: SiteRebuildUncheckedUpdateManyWithoutPublishedPublicationNestedInput
+  }
+
   export type SiteCreateWithoutAuditEventsInput = {
     id?: string
     name: string
@@ -52274,6 +54716,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
   }
@@ -52302,6 +54745,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
   }
@@ -52322,6 +54766,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutRequestedByInput
     sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
@@ -52340,6 +54785,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutRequestedByInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
     tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
@@ -52387,6 +54833,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
   }
@@ -52415,6 +54862,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
   }
@@ -52441,6 +54889,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutRequestedByNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
@@ -52459,6 +54908,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutRequestedByNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
@@ -52489,6 +54939,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -52517,6 +54968,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -52615,6 +55067,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -52643,6 +55096,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -52687,6 +55141,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -52715,6 +55170,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -53092,6 +55548,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -53120,6 +55577,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -53253,6 +55711,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -53281,6 +55740,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -53578,6 +56038,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -53606,6 +56067,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -54262,6 +56724,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsUndone?: TariffImportRunCreateNestedManyWithoutUndoneByInput
@@ -54280,6 +56743,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsUndone?: TariffImportRunUncheckedCreateNestedManyWithoutUndoneByInput
@@ -54303,6 +56767,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
@@ -54321,6 +56786,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -54452,6 +56918,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsUndone?: TariffImportRunUpdateManyWithoutUndoneByNestedInput
@@ -54470,6 +56937,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsUndone?: TariffImportRunUncheckedUpdateManyWithoutUndoneByNestedInput
@@ -54499,6 +56967,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
@@ -54517,6 +56986,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -54563,6 +57033,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -54591,6 +57062,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -54612,6 +57084,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
@@ -54630,6 +57103,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -54653,6 +57127,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
@@ -54671,6 +57146,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -54717,6 +57193,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -54745,6 +57222,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -54772,6 +57250,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
@@ -54790,6 +57269,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -54819,6 +57299,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
@@ -54837,6 +57318,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -54867,6 +57349,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -54895,6 +57378,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -55163,6 +57647,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -55191,6 +57676,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -55333,6 +57819,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -55361,6 +57848,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -56035,6 +58523,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -56063,6 +58552,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -57997,6 +60487,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
     publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
@@ -58025,6 +60516,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
     sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
     seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
@@ -58118,6 +60610,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -58146,6 +60639,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -58558,6 +61052,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     site: SiteCreateNestedOneWithoutPublicationsInput
+    validation?: SitePublicationValidationCreateNestedOneWithoutPublicationInput
     requestedRebuilds?: SiteRebuildCreateNestedManyWithoutRequestedPublicationInput
     processingRebuilds?: SiteRebuildCreateNestedManyWithoutProcessingPublicationInput
     publishedRebuilds?: SiteRebuildCreateNestedManyWithoutPublishedPublicationInput
@@ -58571,6 +61066,7 @@ export namespace Prisma {
     catalog: JsonNullValueInput | InputJsonValue
     triggerEntity: string
     triggerEntityId: string
+    validationId?: string | null
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -58591,6 +61087,42 @@ export namespace Prisma {
 
   export type SitePublicationCreateManyRequestedByInputEnvelope = {
     data: SitePublicationCreateManyRequestedByInput | SitePublicationCreateManyRequestedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SitePublicationValidationCreateWithoutRequestedByInput = {
+    id?: string
+    siteRevision: number
+    sourceSnapshot: JsonNullValueInput | InputJsonValue
+    report: JsonNullValueInput | InputJsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    validatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutPublicationValidationsInput
+    publication?: SitePublicationCreateNestedOneWithoutValidationInput
+  }
+
+  export type SitePublicationValidationUncheckedCreateWithoutRequestedByInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    sourceSnapshot: JsonNullValueInput | InputJsonValue
+    report: JsonNullValueInput | InputJsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    validatedAt?: Date | string
+    publication?: SitePublicationUncheckedCreateNestedOneWithoutValidationInput
+  }
+
+  export type SitePublicationValidationCreateOrConnectWithoutRequestedByInput = {
+    where: SitePublicationValidationWhereUniqueInput
+    create: XOR<SitePublicationValidationCreateWithoutRequestedByInput, SitePublicationValidationUncheckedCreateWithoutRequestedByInput>
+  }
+
+  export type SitePublicationValidationCreateManyRequestedByInputEnvelope = {
+    data: SitePublicationValidationCreateManyRequestedByInput | SitePublicationValidationCreateManyRequestedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -58905,6 +61437,22 @@ export namespace Prisma {
     data: XOR<SitePublicationUpdateManyMutationInput, SitePublicationUncheckedUpdateManyWithoutRequestedByInput>
   }
 
+  export type SitePublicationValidationUpsertWithWhereUniqueWithoutRequestedByInput = {
+    where: SitePublicationValidationWhereUniqueInput
+    update: XOR<SitePublicationValidationUpdateWithoutRequestedByInput, SitePublicationValidationUncheckedUpdateWithoutRequestedByInput>
+    create: XOR<SitePublicationValidationCreateWithoutRequestedByInput, SitePublicationValidationUncheckedCreateWithoutRequestedByInput>
+  }
+
+  export type SitePublicationValidationUpdateWithWhereUniqueWithoutRequestedByInput = {
+    where: SitePublicationValidationWhereUniqueInput
+    data: XOR<SitePublicationValidationUpdateWithoutRequestedByInput, SitePublicationValidationUncheckedUpdateWithoutRequestedByInput>
+  }
+
+  export type SitePublicationValidationUpdateManyWithWhereWithoutRequestedByInput = {
+    where: SitePublicationValidationScalarWhereInput
+    data: XOR<SitePublicationValidationUpdateManyMutationInput, SitePublicationValidationUncheckedUpdateManyWithoutRequestedByInput>
+  }
+
   export type AuditEventUpsertWithWhereUniqueWithoutActorInput = {
     where: AuditEventWhereUniqueInput
     update: XOR<AuditEventUpdateWithoutActorInput, AuditEventUncheckedUpdateWithoutActorInput>
@@ -59011,6 +61559,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     contentRevisions?: ContentRevisionCreateNestedManyWithoutActorInput
     publications?: SitePublicationCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunCreateNestedManyWithoutAppliedByInput
@@ -59029,6 +61578,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutActorInput
     publications?: SitePublicationUncheckedCreateNestedManyWithoutRequestedByInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutRequestedByInput
     auditEvents?: AuditEventUncheckedCreateNestedManyWithoutActorInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedCreateNestedManyWithoutCreatedByInput
     tariffImportsApplied?: TariffImportRunUncheckedCreateNestedManyWithoutAppliedByInput
@@ -59063,6 +61613,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contentRevisions?: ContentRevisionUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUpdateManyWithoutAppliedByNestedInput
@@ -59081,6 +61632,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutActorNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutRequestedByNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutRequestedByNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutActorNestedInput
     sitemapExclusionsCreated?: SitemapExclusionUncheckedUpdateManyWithoutCreatedByNestedInput
     tariffImportsApplied?: TariffImportRunUncheckedUpdateManyWithoutAppliedByNestedInput
@@ -59170,6 +61722,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
@@ -59198,6 +61751,7 @@ export namespace Prisma {
     rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
     contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
     publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
     auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
     sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
     seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
@@ -59536,6 +62090,7 @@ export namespace Prisma {
     triggerEntity: string
     triggerEntityId: string
     requestedById?: string | null
+    validationId?: string | null
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -59544,6 +62099,18 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
+  }
+
+  export type SitePublicationValidationCreateManySiteInput = {
+    id?: string
+    siteRevision: number
+    sourceSnapshot: JsonNullValueInput | InputJsonValue
+    report: JsonNullValueInput | InputJsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    requestedById?: string | null
+    validatedAt?: Date | string
   }
 
   export type AuditEventCreateManySiteInput = {
@@ -60162,6 +62729,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     requestedBy?: UserUpdateOneWithoutPublicationsNestedInput
+    validation?: SitePublicationValidationUpdateOneWithoutPublicationNestedInput
     requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
@@ -60175,6 +62743,7 @@ export namespace Prisma {
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validationId?: NullableStringFieldUpdateOperationsInput | string | null
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -60196,6 +62765,7 @@ export namespace Prisma {
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
     requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validationId?: NullableStringFieldUpdateOperationsInput | string | null
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -60204,6 +62774,44 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SitePublicationValidationUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    requestedBy?: UserUpdateOneWithoutPublicationValidationsNestedInput
+    publication?: SitePublicationUpdateOneWithoutValidationNestedInput
+  }
+
+  export type SitePublicationValidationUncheckedUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publication?: SitePublicationUncheckedUpdateOneWithoutValidationNestedInput
+  }
+
+  export type SitePublicationValidationUncheckedUpdateManyWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AuditEventUpdateWithoutSiteInput = {
@@ -62587,6 +65195,7 @@ export namespace Prisma {
     catalog: JsonNullValueInput | InputJsonValue
     triggerEntity: string
     triggerEntityId: string
+    validationId?: string | null
     lastError?: string | null
     providerDeploymentId?: string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -62595,6 +65204,18 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
+  }
+
+  export type SitePublicationValidationCreateManyRequestedByInput = {
+    id?: string
+    siteId: string
+    siteRevision: number
+    sourceSnapshot: JsonNullValueInput | InputJsonValue
+    report: JsonNullValueInput | InputJsonValue
+    appVersion: string
+    outcome: $Enums.PublicationValidationOutcome
+    checkedUrlCount: number
+    validatedAt?: Date | string
   }
 
   export type AuditEventCreateManyActorInput = {
@@ -62773,6 +65394,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     site?: SiteUpdateOneRequiredWithoutPublicationsNestedInput
+    validation?: SitePublicationValidationUpdateOneWithoutPublicationNestedInput
     requestedRebuilds?: SiteRebuildUpdateManyWithoutRequestedPublicationNestedInput
     processingRebuilds?: SiteRebuildUpdateManyWithoutProcessingPublicationNestedInput
     publishedRebuilds?: SiteRebuildUpdateManyWithoutPublishedPublicationNestedInput
@@ -62786,6 +65408,7 @@ export namespace Prisma {
     catalog?: JsonNullValueInput | InputJsonValue
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
+    validationId?: NullableStringFieldUpdateOperationsInput | string | null
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -62807,6 +65430,7 @@ export namespace Prisma {
     catalog?: JsonNullValueInput | InputJsonValue
     triggerEntity?: StringFieldUpdateOperationsInput | string
     triggerEntityId?: StringFieldUpdateOperationsInput | string
+    validationId?: NullableStringFieldUpdateOperationsInput | string | null
     lastError?: NullableStringFieldUpdateOperationsInput | string | null
     providerDeploymentId?: NullableStringFieldUpdateOperationsInput | string | null
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
@@ -62815,6 +65439,44 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SitePublicationValidationUpdateWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutPublicationValidationsNestedInput
+    publication?: SitePublicationUpdateOneWithoutValidationNestedInput
+  }
+
+  export type SitePublicationValidationUncheckedUpdateWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publication?: SitePublicationUncheckedUpdateOneWithoutValidationNestedInput
+  }
+
+  export type SitePublicationValidationUncheckedUpdateManyWithoutRequestedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    siteRevision?: IntFieldUpdateOperationsInput | number
+    sourceSnapshot?: JsonNullValueInput | InputJsonValue
+    report?: JsonNullValueInput | InputJsonValue
+    appVersion?: StringFieldUpdateOperationsInput | string
+    outcome?: EnumPublicationValidationOutcomeFieldUpdateOperationsInput | $Enums.PublicationValidationOutcome
+    checkedUrlCount?: IntFieldUpdateOperationsInput | number
+    validatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AuditEventUpdateWithoutActorInput = {

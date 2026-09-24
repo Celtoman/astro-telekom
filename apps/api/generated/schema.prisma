@@ -179,6 +179,12 @@ enum SitePublicationStatus {
   CANCELLED
 }
 
+enum PublicationValidationOutcome {
+  BLOCKED
+  PASSED_WITH_WARNINGS
+  PASSED
+}
+
 enum LeadNotificationStatus {
   PENDING
   QUEUED
@@ -202,33 +208,34 @@ model Provider {
 }
 
 model Site {
-  id                String             @id @default(cuid())
-  providerId        String
-  name              String
-  slug              String             @unique
-  domain            String?
-  connectionPhone   String?
-  supportPhone      String?
-  settings          Json?
-  status            PublishStatus      @default(DRAFT)
-  workingRevision   Int                @default(0)
-  publishedRevision Int                @default(0)
-  provider          Provider           @relation(fields: [providerId], references: [id])
-  regions           Region[]
-  cities            City[]
-  pages             Page[]
-  leads             Lead[]
-  checks            AddressCheck[]
-  redirects         Redirect[]
-  cityImports       CityImportRun[]
-  rebuilds          SiteRebuild[]
-  contentRevisions  ContentRevision[]
-  publications      SitePublication[]
-  auditEvents       AuditEvent[]
-  sitemapExclusions SitemapExclusion[]
-  seoTemplates      SeoTemplate[]
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  id                     String                      @id @default(cuid())
+  providerId             String
+  name                   String
+  slug                   String                      @unique
+  domain                 String?
+  connectionPhone        String?
+  supportPhone           String?
+  settings               Json?
+  status                 PublishStatus               @default(DRAFT)
+  workingRevision        Int                         @default(0)
+  publishedRevision      Int                         @default(0)
+  provider               Provider                    @relation(fields: [providerId], references: [id])
+  regions                Region[]
+  cities                 City[]
+  pages                  Page[]
+  leads                  Lead[]
+  checks                 AddressCheck[]
+  redirects              Redirect[]
+  cityImports            CityImportRun[]
+  rebuilds               SiteRebuild[]
+  contentRevisions       ContentRevision[]
+  publications           SitePublication[]
+  publicationValidations SitePublicationValidation[]
+  auditEvents            AuditEvent[]
+  sitemapExclusions      SitemapExclusion[]
+  seoTemplates           SeoTemplate[]
+  createdAt              DateTime                    @default(now())
+  updatedAt              DateTime                    @updatedAt
 }
 
 model SeoTemplate {
@@ -324,32 +331,53 @@ model ContentRevision {
 }
 
 model SitePublication {
-  id                   String                @id @default(cuid())
+  id                   String                     @id @default(cuid())
   siteId               String
   siteRevision         Int
-  status               SitePublicationStatus @default(PENDING)
+  status               SitePublicationStatus      @default(PENDING)
   catalog              Json
   triggerEntity        String
   triggerEntityId      String
   requestedById        String?
+  validationId         String?                    @unique
   lastError            String?
   providerDeploymentId String?
   providerResponse     Json?
-  scheduledFor         DateTime?             @db.Timestamptz(3)
-  cancelledAt          DateTime?             @db.Timestamptz(3)
-  createdAt            DateTime              @default(now()) @db.Timestamptz(3)
-  updatedAt            DateTime              @updatedAt @db.Timestamptz(3)
-  publishedAt          DateTime?             @db.Timestamptz(3)
-  site                 Site                  @relation(fields: [siteId], references: [id], onDelete: Cascade)
-  requestedBy          User?                 @relation(fields: [requestedById], references: [id], onDelete: SetNull)
-  requestedRebuilds    SiteRebuild[]         @relation("RequestedPublication")
-  processingRebuilds   SiteRebuild[]         @relation("ProcessingPublication")
-  publishedRebuilds    SiteRebuild[]         @relation("PublishedPublication")
+  scheduledFor         DateTime?                  @db.Timestamptz(3)
+  cancelledAt          DateTime?                  @db.Timestamptz(3)
+  createdAt            DateTime                   @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime                   @updatedAt @db.Timestamptz(3)
+  publishedAt          DateTime?                  @db.Timestamptz(3)
+  site                 Site                       @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  requestedBy          User?                      @relation(fields: [requestedById], references: [id], onDelete: SetNull)
+  validation           SitePublicationValidation? @relation(fields: [validationId], references: [id], onDelete: SetNull)
+  requestedRebuilds    SiteRebuild[]              @relation("RequestedPublication")
+  processingRebuilds   SiteRebuild[]              @relation("ProcessingPublication")
+  publishedRebuilds    SiteRebuild[]              @relation("PublishedPublication")
 
   @@unique([siteId, siteRevision])
   @@index([siteId, status, createdAt])
   @@index([status, scheduledFor])
   @@index([requestedById, createdAt])
+}
+
+model SitePublicationValidation {
+  id              String                       @id @default(cuid())
+  siteId          String
+  siteRevision    Int
+  sourceSnapshot  Json
+  report          Json
+  appVersion      String
+  outcome         PublicationValidationOutcome
+  checkedUrlCount Int
+  requestedById   String?
+  validatedAt     DateTime                     @default(now()) @db.Timestamptz(3)
+  site            Site                         @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  requestedBy     User?                        @relation(fields: [requestedById], references: [id], onDelete: SetNull)
+  publication     SitePublication?
+
+  @@index([siteId, validatedAt])
+  @@index([siteId, siteRevision, validatedAt])
 }
 
 model AuditEvent {
@@ -751,22 +779,23 @@ model LeadStatusHistory {
 }
 
 model User {
-  id                       String             @id @default(cuid())
-  email                    String             @unique
+  id                       String                      @id @default(cuid())
+  email                    String                      @unique
   passwordHash             String
   name                     String?
-  active                   Boolean            @default(true)
-  createdAt                DateTime           @default(now())
-  updatedAt                DateTime           @updatedAt
+  active                   Boolean                     @default(true)
+  createdAt                DateTime                    @default(now())
+  updatedAt                DateTime                    @updatedAt
   sessions                 Session[]
   contentRevisions         ContentRevision[]
   publications             SitePublication[]
+  publicationValidations   SitePublicationValidation[]
   auditEvents              AuditEvent[]
   sitemapExclusionsCreated SitemapExclusion[]
-  tariffImportsApplied     TariffImportRun[]  @relation("TariffImportAppliedBy")
-  tariffImportsUndone      TariffImportRun[]  @relation("TariffImportUndoneBy")
-  cityImportsApplied       CityImportRun[]    @relation("CityImportAppliedBy")
-  cityImportsUndone        CityImportRun[]    @relation("CityImportUndoneBy")
+  tariffImportsApplied     TariffImportRun[]           @relation("TariffImportAppliedBy")
+  tariffImportsUndone      TariffImportRun[]           @relation("TariffImportUndoneBy")
+  cityImportsApplied       CityImportRun[]             @relation("CityImportAppliedBy")
+  cityImportsUndone        CityImportRun[]             @relation("CityImportUndoneBy")
 }
 
 model Session {

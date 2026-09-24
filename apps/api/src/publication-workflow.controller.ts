@@ -102,6 +102,16 @@ export class PublicationWorkflowController {
     return this.publications.getState(siteId);
   }
 
+  @Get('admin/sites/:siteId/publication-validations')
+  validations(@Param('siteId') siteId: string) {
+    return this.publications.listValidations(siteId);
+  }
+
+  @Get('admin/sites/:siteId/publication-validations/:validationId')
+  validation(@Param('siteId') siteId: string, @Param('validationId') validationId: string) {
+    return this.publications.getValidation(siteId, validationId);
+  }
+
   @Get('admin/sites/:siteId/preview-catalog')
   preview(@Param('siteId') siteId: string) {
     return this.publications.getWorkingPreview(siteId);

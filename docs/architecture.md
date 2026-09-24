@@ -93,6 +93,8 @@ SEO-поток: `SeoTemplate` хранит по одному Title/Description/i
 
 ## Модель публикации
 
+Перед фиксацией нового или повторного снимка API в одной serializable-транзакции сохраняет `SitePublicationValidation`: точный исходный source snapshot, версию приложения, автора, рабочую ревизию, проверенные URL, адресные blocking/warning issues и итог. Блокирующий результат не создает `SitePublication` и не запускает rebuild; прежний public snapshot остается активным. Успешная публикация ссылается на свой отчет через `validationId`. Админка показывает последний отчет и позволяет скачать полный JSON; история доступна в защищенном API. Первый bootstrap проходит ту же проверку. Исторические публикации до миграции `0050` остаются без ссылки на отчет.
+
 1. Сущности `Site`, `City`, `Page`, `Tariff` имеют статус `DRAFT`, `PUBLISHED` или `ARCHIVED`.
 2. Public API возвращает опубликованные данные, но отдельно применяет release policy к URL.
 3. Astro получает authoritative inventory и выпускает `N + T + 6` indexable HTML для `N` опубликованных городов и `T` опубликованных тарифов этих городов плюс общую 404. Страница тарифа создаётся только из route с `kind = CITY_TARIFF_DETAIL`; service pages остаются вне Release 1.

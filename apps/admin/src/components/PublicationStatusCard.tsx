@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
 import { StatusBadge } from "./StatusBadge"
+import { PublicationValidationPanel } from "./PublicationValidationPanel"
 
 interface PublicationStatusCardProps {
   apiUrl: string
@@ -125,6 +126,7 @@ export function PublicationStatusCard({ apiUrl, siteId, publicationRefreshKey = 
         <AlertDescription>{presentation.description} {presentation.kind !== "published" ? "Предыдущая опубликованная версия остается на сайте до успешного завершения." : ""}</AlertDescription>
       </Alert> : null}
       {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Состояние не обновлено</AlertTitle><AlertDescription>{error}</AlertDescription></Alert> : null}
+      <PublicationValidationPanel apiUrl={apiUrl} siteId={siteId} validation={state?.latestValidation || null} />
       {state?.scheduledPublication ? <Alert>
         <CalendarClock />
         <AlertTitle>Точная версия {state.scheduledPublication.siteRevision} ожидает расписания</AlertTitle>

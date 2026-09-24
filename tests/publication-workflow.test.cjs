@@ -2,6 +2,8 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { PublicationWorkflowService } = require('../apps/api/dist/publication-workflow.service.js');
 const { PublicationWorkflowController } = require('../apps/api/dist/publication-workflow.controller.js');
+const { publicationSource, city } = require('./helpers/publication-source.cjs');
+const { buildReleaseOneRoutes } = require('../apps/api/dist/public-route-policy.js');
 
 function fixture() {
   const sites = new Map([
@@ -15,10 +17,12 @@ function fixture() {
     }],
   ]);
   const publications = new Map();
+  const validations = new Map();
   const contentRevisions = [];
   const auditEvents = [];
   let rebuild = null;
   let publicationSequence = 0;
+  let source = publicationSource();
 
   const prisma = {
     site: {
@@ -102,6 +106,16 @@ function fixture() {
         return { count: 1 };
       },
     },
+    sitePublicationValidation: {
+      create: async ({ data }) => {
+        const row = { id: `validation-${validations.size + 1}`, ...data };
+        validations.set(row.id, row);
+        return row;
+      },
+      findFirst: async ({ where }) => [...validations.values()].filter((row) => row.siteId === where.siteId).at(-1) || null,
+      findMany: async ({ where }) => [...validations.values()].filter((row) => row.siteId === where.siteId).reverse(),
+      findUnique: async ({ where }) => validations.get(where.id) || null,
+    },
     siteRebuild: {
       findUnique: async ({ where }) => {
         if (where.siteId) return rebuild?.siteId === where.siteId ? rebuild : null;
@@ -113,6 +127,8 @@ function fixture() {
 
   const catalogService = {
     listBySiteId: async (siteId) => ({ site: { id: siteId, slug: 'domru-site' }, marker: 'working' }),
+    captureSourceBySiteId: async () => source,
+    renderSource: (source) => ({ site: source.site, routes: buildReleaseOneRoutes(source.cities, source.globalPages), marker: 'working' }),
   };
   const service = new PublicationWorkflowService(prisma, catalogService);
   return {
@@ -120,9 +136,11 @@ function fixture() {
     prisma,
     sites,
     publications,
+    validations,
     contentRevisions,
     auditEvents,
     setRebuild(value) { rebuild = value; },
+    setSource(value) { source = value; },
   };
 }
 
@@ -225,16 +243,54 @@ test('capturing a publication stores the catalog from the same working revision'
     snapshot: { name: 'Гига 300' }, changedFields: ['name'], source: 'admin',
   });
 
-  const publication = await f.service.captureWorkingPublication(f.prisma, {
+  const result = await f.service.captureWorkingPublication(f.prisma, {
     siteId: 'site-1',
     siteRevision: revision.siteRevision,
     triggerEntity: 'tariff',
     triggerEntityId: 'tariff-1',
   });
 
+  assert.equal(result.blocked, false);
+  const publication = result.publication;
   assert.equal(publication.siteRevision, 1);
   assert.equal(publication.catalog.marker, 'working');
   assert.equal(publication.status, 'PENDING');
+  assert.equal(publication.validationId, 'validation-1');
+});
+
+test('a blocked all-URL report persists without replacing the previous public version or enqueueing a publication', async () => {
+  const f = fixture();
+  const current = await f.service.createPublication(f.prisma, {
+    siteId: 'site-1', siteRevision: 0, catalog: { marker: 'published' },
+    triggerEntity: 'bootstrap', triggerEntityId: 'site-1',
+  });
+  await f.service.markSucceeded(current.id, { deploymentId: 'deploy-1' });
+  await f.service.recordWorkingRevision(f.prisma, {
+    siteId: 'site-1', entityType: 'TARIFF', entityId: 'tariff-1', action: 'UPDATE',
+    snapshot: { standardPrice: '0' }, changedFields: ['standardPrice'], source: 'admin',
+  });
+  const broken = publicationSource([city('kazan', ['invalid'])]);
+  broken.cities[0].tariffs[0].standardPrice = '0';
+  f.setSource(broken);
+
+  await assert.rejects(() => f.service.preparePublication({
+    siteId: 'site-1', expectedWorkingRevision: 1, triggerEntity: 'site', triggerEntityId: 'site-1', requestedById: 'user-1',
+  }), /Отчет validation-1/);
+
+  assert.equal(f.validations.size, 1);
+  assert.equal(f.validations.get('validation-1').outcome, 'BLOCKED');
+  assert.ok(f.validations.get('validation-1').report.issues.some((issue) => issue.path === '/kazan/invalid'));
+  assert.equal(f.publications.size, 1);
+  assert.equal(f.sites.get('site-1').publishedRevision, 0);
+  assert.equal((await f.service.getPublishedCatalog('domru-site')).marker, 'published');
+
+  broken.cities[0].tariffs[0].standardPrice = '700';
+  await f.service.preparePublication({
+    siteId: 'site-1', expectedWorkingRevision: 1, triggerEntity: 'site', triggerEntityId: 'site-1', requestedById: 'user-1',
+  });
+  assert.equal(f.validations.size, 2);
+  assert.equal(f.validations.get('validation-1').sourceSnapshot.cities[0].tariffs[0].standardPrice, '0');
+  assert.equal(f.validations.get('validation-2').outcome, 'PASSED');
 });
 
 test('the first build freezes the current catalog as the successful baseline', async () => {

@@ -3,6 +3,8 @@ import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { SiteCatalogService } from './site-catalog.service';
 import { sitePhoneReadinessErrors } from './site-phone';
+import { APP_VERSION } from './app-version';
+import { validatePublicationSource, type PublicationValidationReport } from './publication-validation';
 
 type Transaction = Prisma.TransactionClient | PrismaService;
 type JsonObject = Record<string, unknown>;
@@ -26,6 +28,7 @@ type PublicationInput = {
   triggerEntity: string;
   triggerEntityId: string;
   requestedById?: string | null;
+  validationId?: string | null;
   status?: 'SCHEDULED' | 'PENDING';
   scheduledFor?: Date | null;
 };
@@ -40,6 +43,8 @@ type PrepareScheduledPublicationInput = PreparePublicationInput & {
 
 const DUE_PUBLICATION_LIMIT = 25;
 const SCHEDULE_CLAIM_LEASE_MS = 5 * 60 * 1000;
+
+type BlockedPublication = { blocked: true; validationId: string; report: PublicationValidationReport };
 
 @Injectable()
 export class PublicationWorkflowService {
@@ -122,13 +127,14 @@ export class PublicationWorkflowService {
         triggerEntity: input.triggerEntity,
         triggerEntityId: input.triggerEntityId,
         requestedById: input.requestedById || null,
+        validationId: input.validationId || null,
         status: input.status || 'PENDING',
         scheduledFor: input.scheduledFor || null,
       },
     });
   }
 
-  async captureWorkingPublication(
+  private async validateWorkingSource(
     transaction: Transaction,
     input: Omit<PublicationInput, 'catalog'>,
   ) {
@@ -137,16 +143,45 @@ export class PublicationWorkflowService {
     if (site.workingRevision !== input.siteRevision) {
       throw new ConflictException('Рабочая ревизия сайта изменилась до создания снимка публикации');
     }
-    const missingPhones = sitePhoneReadinessErrors(site);
-    if (missingPhones.length > 0) {
-      throw new ConflictException(`Публикация заблокирована: заполните ${missingPhones.join(' и ')}`);
+    const source = await this.catalog.captureSourceBySiteId(input.siteId, transaction);
+    const snapshot = this.jsonSnapshot(source) as JsonObject;
+    const result = validatePublicationSource(snapshot as Parameters<typeof validatePublicationSource>[0], {
+      appVersion: APP_VERSION,
+      requestedById: input.requestedById,
+      siteRevision: input.siteRevision,
+    }, (candidate, now) => this.catalog.renderSource(candidate, now));
+    const validation = await transaction.sitePublicationValidation.create({
+      data: {
+        siteId: input.siteId,
+        siteRevision: input.siteRevision,
+        sourceSnapshot: snapshot as Prisma.InputJsonValue,
+        report: this.jsonSnapshot(result.report),
+        appVersion: APP_VERSION,
+        outcome: result.report.outcome,
+        checkedUrlCount: result.report.checkedUrlCount,
+        requestedById: input.requestedById || null,
+        validatedAt: new Date(result.report.validatedAt),
+      },
+    });
+    if (!result.catalog) {
+      return { blocked: true as const, validationId: validation.id, report: result.report };
     }
-    const catalog = await this.catalog.listBySiteId(input.siteId, transaction);
-    return this.createPublication(transaction, { ...input, catalog: this.jsonSnapshot(catalog) as JsonObject });
+    return {
+      blocked: false as const,
+      validationId: validation.id,
+      catalog: this.jsonSnapshot(result.catalog) as JsonObject,
+    };
+  }
+
+  async captureWorkingPublication(transaction: Transaction, input: Omit<PublicationInput, 'catalog'>) {
+    const validated = await this.validateWorkingSource(transaction, input);
+    if (validated.blocked) return validated;
+    const publication = await this.createPublication(transaction, { ...input, catalog: validated.catalog, validationId: validated.validationId });
+    return { blocked: false as const, publication };
   }
 
   async preparePublication(input: PreparePublicationInput) {
-    return this.prisma.$transaction(async (transaction) => {
+    const result = await this.prisma.$transaction(async (transaction) => {
       const site = await transaction.site.findUnique({ where: { id: input.siteId } });
       if (!site) throw new NotFoundException('Site not found');
       if (site.workingRevision !== input.expectedWorkingRevision) {
@@ -165,7 +200,7 @@ export class PublicationWorkflowService {
       });
       if (existing) {
         if (existing.status === 'SCHEDULED') {
-          return transaction.sitePublication.update({
+          const publication = await transaction.sitePublication.update({
             where: { id: existing.id },
             data: {
               status: 'PENDING',
@@ -174,11 +209,21 @@ export class PublicationWorkflowService {
               lastError: null,
             },
           });
+          return { blocked: false as const, publication };
         }
-        if (existing.status !== 'FAILED' && existing.status !== 'CANCELLED') return existing;
-        return transaction.sitePublication.update({
+        if (existing.status !== 'FAILED' && existing.status !== 'CANCELLED') return { blocked: false as const, publication: existing };
+        const validated = await this.validateWorkingSource(transaction, {
+          siteId: site.id, siteRevision: site.workingRevision,
+          triggerEntity: input.triggerEntity, triggerEntityId: input.triggerEntityId,
+          requestedById: input.requestedById,
+        });
+        if (validated.blocked) return validated;
+        const publication = await transaction.sitePublication.update({
           where: { id: existing.id },
           data: {
+            catalog: validated.catalog as Prisma.InputJsonValue,
+            validationId: validated.validationId,
+            requestedById: input.requestedById || null,
             status: 'PENDING',
             scheduledFor: null,
             cancelledAt: null,
@@ -188,6 +233,7 @@ export class PublicationWorkflowService {
             publishedAt: null,
           },
         });
+        return { blocked: false as const, publication };
       }
       return this.captureWorkingPublication(transaction, {
         siteId: site.id,
@@ -197,6 +243,11 @@ export class PublicationWorkflowService {
         requestedById: input.requestedById,
       });
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    if (result.blocked) {
+      const first = result.report.issues.find((issue) => issue.severity === 'BLOCKING');
+      throw new ConflictException(`Публикация заблокирована: ${first?.message || 'проверка URL не пройдена'}. Отчет ${result.validationId}`);
+    }
+    return result.publication;
   }
 
   async prepareScheduledPublication(input: PrepareScheduledPublicationInput) {
@@ -206,7 +257,7 @@ export class PublicationWorkflowService {
     if (input.scheduledFor.getTime() <= Date.now()) {
       throw new ConflictException('Дата публикации должна быть в будущем');
     }
-    return this.prisma.$transaction(async (transaction) => {
+    const result = await this.prisma.$transaction(async (transaction) => {
       const site = await transaction.site.findUnique({ where: { id: input.siteId } });
       if (!site) throw new NotFoundException('Site not found');
       if (site.workingRevision !== input.expectedWorkingRevision) {
@@ -227,16 +278,25 @@ export class PublicationWorkflowService {
         throw new ConflictException(`Для сайта уже запланирована версия ${activeSchedule.siteRevision}; сначала отмените ее`);
       }
       if (existing?.status === 'SCHEDULED') {
-        if (existing.scheduledFor?.getTime() === input.scheduledFor.getTime()) return existing;
+        if (existing.scheduledFor?.getTime() === input.scheduledFor.getTime()) return { blocked: false as const, publication: existing };
         throw new ConflictException('Эта рабочая версия уже запланирована на другое время; сначала отмените расписание');
       }
       if (existing && existing.status !== 'FAILED' && existing.status !== 'CANCELLED') {
         throw new ConflictException('Публикация этой рабочей версии уже запущена или завершена');
       }
       if (existing) {
-        return transaction.sitePublication.update({
+        const validated = await this.validateWorkingSource(transaction, {
+          siteId: site.id, siteRevision: site.workingRevision,
+          triggerEntity: input.triggerEntity, triggerEntityId: input.triggerEntityId,
+          requestedById: input.requestedById,
+        });
+        if (validated.blocked) return validated;
+        const publication = await transaction.sitePublication.update({
           where: { id: existing.id },
           data: {
+            catalog: validated.catalog as Prisma.InputJsonValue,
+            validationId: validated.validationId,
+            requestedById: input.requestedById || null,
             status: 'SCHEDULED',
             scheduledFor: input.scheduledFor,
             cancelledAt: null,
@@ -246,6 +306,7 @@ export class PublicationWorkflowService {
             publishedAt: null,
           },
         });
+        return { blocked: false as const, publication };
       }
       return this.captureWorkingPublication(transaction, {
         siteId: site.id,
@@ -257,6 +318,11 @@ export class PublicationWorkflowService {
         scheduledFor: input.scheduledFor,
       });
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    if (result.blocked) {
+      const first = result.report.issues.find((issue) => issue.severity === 'BLOCKING');
+      throw new ConflictException(`Планирование заблокировано: ${first?.message || 'проверка URL не пройдена'}. Отчет ${result.validationId}`);
+    }
+    return result.publication;
   }
 
   async cancelScheduledPublication(siteId: string, publicationId: string) {
@@ -341,7 +407,7 @@ export class PublicationWorkflowService {
   async getState(siteId: string) {
     const site = await this.prisma.site.findUnique({ where: { id: siteId } });
     if (!site) throw new NotFoundException('Site not found');
-    const [latestPublication, scheduledPublication, rebuild] = await Promise.all([
+    const [latestPublication, scheduledPublication, rebuild, latestValidation] = await Promise.all([
       this.prisma.sitePublication.findFirst({
         where: { siteId },
         orderBy: { siteRevision: 'desc' },
@@ -352,6 +418,7 @@ export class PublicationWorkflowService {
           triggerEntity: true,
           triggerEntityId: true,
           requestedById: true,
+          validationId: true,
           lastError: true,
           providerDeploymentId: true,
           scheduledFor: true,
@@ -397,6 +464,11 @@ export class PublicationWorkflowService {
           updatedAt: true,
         },
       }),
+      this.prisma.sitePublicationValidation.findFirst({
+        where: { siteId },
+        orderBy: [{ validatedAt: 'desc' }, { id: 'desc' }],
+        select: { id: true, siteRevision: true, appVersion: true, outcome: true, checkedUrlCount: true, requestedById: true, validatedAt: true },
+      }),
     ]);
     return {
       siteId,
@@ -404,9 +476,27 @@ export class PublicationWorkflowService {
       publishedRevision: site.publishedRevision,
       hasUnpublishedChanges: site.workingRevision > site.publishedRevision,
       latestPublication,
+      latestValidation,
       scheduledPublication,
       rebuild,
     };
+  }
+
+  async listValidations(siteId: string) {
+    const site = await this.prisma.site.findUnique({ where: { id: siteId }, select: { id: true } });
+    if (!site) throw new NotFoundException('Site not found');
+    return this.prisma.sitePublicationValidation.findMany({
+      where: { siteId },
+      orderBy: [{ validatedAt: 'desc' }, { id: 'desc' }],
+      take: 20,
+      select: { id: true, siteRevision: true, appVersion: true, outcome: true, checkedUrlCount: true, requestedById: true, validatedAt: true },
+    });
+  }
+
+  async getValidation(siteId: string, validationId: string) {
+    const validation = await this.prisma.sitePublicationValidation.findUnique({ where: { id: validationId } });
+    if (!validation || validation.siteId !== siteId) throw new NotFoundException('Отчет проверки публикации не найден');
+    return validation;
   }
 
   async getWorkingPreview(siteId: string) {
@@ -444,19 +534,39 @@ export class PublicationWorkflowService {
     });
     if (published) return published.catalog as JsonObject;
 
-    const catalog = this.jsonSnapshot(await this.catalog.listBySiteId(site.id, this.prisma)) as JsonObject;
-    const baseline = await this.prisma.sitePublication.create({
-      data: {
+    const captured = await this.prisma.$transaction(async (transaction) => {
+      const current = await transaction.site.findUnique({ where: { id: site.id } });
+      if (!current) throw new NotFoundException('Site not found');
+      const existing = await transaction.sitePublication.findFirst({
+        where: { siteId: site.id, status: 'SUCCEEDED' },
+        orderBy: { siteRevision: 'desc' },
+      });
+      if (existing) return { blocked: false as const, catalog: existing.catalog as JsonObject };
+      const validated = await this.validateWorkingSource(transaction, {
         siteId: site.id,
-        siteRevision: site.workingRevision,
-        status: 'SUCCEEDED',
-        catalog: catalog as Prisma.InputJsonValue,
+        siteRevision: current.workingRevision,
         triggerEntity: 'bootstrap',
         triggerEntityId: site.id,
-        publishedAt: new Date(),
-      },
-    });
-    return baseline.catalog as JsonObject;
+      });
+      if (validated.blocked) return validated;
+      const baseline = await transaction.sitePublication.create({
+        data: {
+          siteId: site.id,
+          siteRevision: current.workingRevision,
+          status: 'SUCCEEDED',
+          catalog: validated.catalog as Prisma.InputJsonValue,
+          validationId: validated.validationId,
+          triggerEntity: 'bootstrap',
+          triggerEntityId: site.id,
+          publishedAt: new Date(),
+        },
+      });
+      return { blocked: false as const, catalog: baseline.catalog as JsonObject };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    if (captured.blocked) {
+      throw new ConflictException(`Первая сборка заблокирована: отчет ${captured.validationId}`);
+    }
+    return captured.catalog;
   }
 
   async getPublishedCatalog(siteSlug: string): Promise<JsonObject> {

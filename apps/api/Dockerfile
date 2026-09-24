@@ -37,6 +37,7 @@ COPY --from=build /workspace/prisma.config.ts ./prisma.config.ts
 FROM node:22.23.2-alpine AS runtime
 WORKDIR /workspace
 ENV NODE_ENV=production
+COPY --from=build /workspace/package.json ./package.json
 COPY --from=runtime-deps /workspace/node_modules ./node_modules
 COPY --from=runtime-deps /workspace/apps/api/node_modules ./apps/api/node_modules
 COPY --from=build /workspace/apps/api/dist ./apps/api/dist

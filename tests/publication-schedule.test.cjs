@@ -4,12 +4,14 @@ const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 const { PublicationWorkflowService } = require('../apps/api/dist/publication-workflow.service.js');
 const { PublicationWorkflowController } = require('../apps/api/dist/publication-workflow.controller.js');
+const { publicationSource } = require('./helpers/publication-source.cjs');
 
 const repositoryRoot = join(__dirname, '..');
 
 function fixture() {
   const site = { id: 'site-1', slug: 'domru-site', connectionPhone: '78005557244', supportPhone: '78002507777', workingRevision: 3, publishedRevision: 2 };
   const publications = [];
+  const validations = [];
   const prisma = {
     site: { findUnique: async ({ where }) => where.id === site.id ? site : null },
     sitePublication: {
@@ -39,9 +41,20 @@ function fixture() {
         return { count: 1 };
       },
     },
+    sitePublicationValidation: {
+      create: async ({ data }) => {
+        const row = { id: `validation-${validations.length + 1}`, ...data };
+        validations.push(row);
+        return row;
+      },
+    },
     $transaction: async (callback) => callback(prisma),
   };
-  const catalog = { listBySiteId: async () => ({ site: { slug: site.slug }, marker: 'revision-3' }) };
+  const catalog = {
+    listBySiteId: async () => ({ site: { slug: site.slug }, marker: 'revision-3' }),
+    captureSourceBySiteId: async () => publicationSource(),
+    renderSource: (source) => ({ site: source.site, routes: [{ path: '/' }, ...source.globalPages.map((page) => ({ path: `/${page.slug}` }))], marker: 'revision-3' }),
+  };
   return { service: new PublicationWorkflowService(prisma, catalog), publications };
 }
 

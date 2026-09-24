@@ -179,6 +179,12 @@ enum SitePublicationStatus {
   CANCELLED
 }
 
+enum PublicationValidationOutcome {
+  BLOCKED
+  PASSED_WITH_WARNINGS
+  PASSED
+}
+
 enum LeadNotificationStatus {
   PENDING
   QUEUED
@@ -224,6 +230,7 @@ model Site {
   rebuilds     SiteRebuild[]
   contentRevisions ContentRevision[]
   publications SitePublication[]
+  publicationValidations SitePublicationValidation[]
   auditEvents AuditEvent[]
   sitemapExclusions SitemapExclusion[]
   seoTemplates SeoTemplate[]
@@ -331,6 +338,7 @@ model SitePublication {
   triggerEntity        String
   triggerEntityId      String
   requestedById        String?
+  validationId         String?               @unique
   lastError            String?
   providerDeploymentId String?
   providerResponse     Json?
@@ -341,6 +349,7 @@ model SitePublication {
   publishedAt          DateTime?             @db.Timestamptz(3)
   site                 Site                  @relation(fields: [siteId], references: [id], onDelete: Cascade)
   requestedBy          User?                 @relation(fields: [requestedById], references: [id], onDelete: SetNull)
+  validation           SitePublicationValidation? @relation(fields: [validationId], references: [id], onDelete: SetNull)
   requestedRebuilds    SiteRebuild[]         @relation("RequestedPublication")
   processingRebuilds   SiteRebuild[]         @relation("ProcessingPublication")
   publishedRebuilds    SiteRebuild[]         @relation("PublishedPublication")
@@ -349,6 +358,25 @@ model SitePublication {
   @@index([siteId, status, createdAt])
   @@index([status, scheduledFor])
   @@index([requestedById, createdAt])
+}
+
+model SitePublicationValidation {
+  id              String                       @id @default(cuid())
+  siteId          String
+  siteRevision    Int
+  sourceSnapshot  Json
+  report          Json
+  appVersion      String
+  outcome         PublicationValidationOutcome
+  checkedUrlCount Int
+  requestedById   String?
+  validatedAt     DateTime                     @default(now()) @db.Timestamptz(3)
+  site            Site                         @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  requestedBy     User?                        @relation(fields: [requestedById], references: [id], onDelete: SetNull)
+  publication     SitePublication?
+
+  @@index([siteId, validatedAt])
+  @@index([siteId, siteRevision, validatedAt])
 }
 
 model AuditEvent {
@@ -746,6 +774,7 @@ model User {
   sessions    Session[]
   contentRevisions ContentRevision[]
   publications SitePublication[]
+  publicationValidations SitePublicationValidation[]
   auditEvents AuditEvent[]
   sitemapExclusionsCreated SitemapExclusion[]
   tariffImportsApplied TariffImportRun[] @relation("TariffImportAppliedBy")

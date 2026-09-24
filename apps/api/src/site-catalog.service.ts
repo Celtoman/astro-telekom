@@ -11,6 +11,14 @@ import { resolveSeoTemplates } from './seo-templates';
 import { collectSeoTemplateUsages } from './seo-template-usages';
 
 type CatalogClient = Prisma.TransactionClient | PrismaService;
+export type CatalogSource = {
+  site: any;
+  cities: any[];
+  globalPages: any[];
+  redirects: Array<{ id: string; sourcePath: string; targetPath: string; status: string }>;
+  sitemapExclusions: Array<{ path: string }>;
+  seoTemplates: any[];
+};
 
 @Injectable()
 export class SiteCatalogService {
@@ -24,7 +32,15 @@ export class SiteCatalogService {
     return this.build({ id: siteId, status: 'PUBLISHED' }, client);
   }
 
+  captureSourceBySiteId(siteId: string, client: CatalogClient = this.prisma) {
+    return this.loadSource({ id: siteId, status: 'PUBLISHED' }, client);
+  }
+
   private async build(siteWhere: Prisma.SiteWhereInput, client: CatalogClient) {
+    return this.renderSource(await this.loadSource(siteWhere, client));
+  }
+
+  private async loadSource(siteWhere: Prisma.SiteWhereInput, client: CatalogClient): Promise<CatalogSource> {
     const site = await client.site.findFirst({
       where: siteWhere,
       include: { provider: { select: { name: true, settings: true } } },
@@ -62,9 +78,13 @@ export class SiteCatalogService {
       }),
     ]);
 
+    return { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates };
+  }
+
+  renderSource(source: CatalogSource, now = new Date()) {
+    const { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates } = source;
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
     const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages);
-    const now = new Date();
     const resolved = resolveCatalogVariables({
       site: {
         name: site.name,

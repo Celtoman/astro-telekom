@@ -222,6 +222,7 @@ exports.Prisma.SitePublicationScalarFieldEnum = {
   triggerEntity: 'triggerEntity',
   triggerEntityId: 'triggerEntityId',
   requestedById: 'requestedById',
+  validationId: 'validationId',
   lastError: 'lastError',
   providerDeploymentId: 'providerDeploymentId',
   providerResponse: 'providerResponse',
@@ -230,6 +231,19 @@ exports.Prisma.SitePublicationScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   publishedAt: 'publishedAt'
+};
+
+exports.Prisma.SitePublicationValidationScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  siteRevision: 'siteRevision',
+  sourceSnapshot: 'sourceSnapshot',
+  report: 'report',
+  appVersion: 'appVersion',
+  outcome: 'outcome',
+  checkedUrlCount: 'checkedUrlCount',
+  requestedById: 'requestedById',
+  validatedAt: 'validatedAt'
 };
 
 exports.Prisma.AuditEventScalarFieldEnum = {
@@ -622,6 +636,12 @@ exports.SitePublicationStatus = exports.$Enums.SitePublicationStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.PublicationValidationOutcome = exports.$Enums.PublicationValidationOutcome = {
+  BLOCKED: 'BLOCKED',
+  PASSED_WITH_WARNINGS: 'PASSED_WITH_WARNINGS',
+  PASSED: 'PASSED'
+};
+
 exports.CityOfficeState = exports.$Enums.CityOfficeState = {
   HAS_OFFICE: 'HAS_OFFICE',
   NO_OFFICE: 'NO_OFFICE'
@@ -752,6 +772,7 @@ exports.Prisma.ModelName = {
   SiteRebuild: 'SiteRebuild',
   ContentRevision: 'ContentRevision',
   SitePublication: 'SitePublication',
+  SitePublicationValidation: 'SitePublicationValidation',
   AuditEvent: 'AuditEvent',
   Region: 'Region',
   City: 'City',

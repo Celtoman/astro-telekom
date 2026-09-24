@@ -7,9 +7,19 @@ export interface PublicationState {
     id: string
     siteRevision: number
     status: "SCHEDULED" | "PENDING" | "RUNNING" | "SUCCEEDED" | "FAILED" | "CANCELLED"
+    validationId?: string | null
     lastError?: string | null
     scheduledFor?: string | null
     cancelledAt?: string | null
+  }
+  latestValidation: null | {
+    id: string
+    siteRevision: number
+    appVersion: string
+    outcome: "BLOCKED" | "PASSED_WITH_WARNINGS" | "PASSED"
+    checkedUrlCount: number
+    requestedById: string | null
+    validatedAt: string
   }
   scheduledPublication: null | {
     id: string
