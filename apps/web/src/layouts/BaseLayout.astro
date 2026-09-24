@@ -89,18 +89,14 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
         SUBSCRIBER_MODE_STORAGE_KEY,
         isSubscriberModeActive,
       } from '../lib/subscriber-mode.mjs';
+      import { recordSessionPage } from '../lib/session-attribution.mjs';
 
       type MetrikaWindow = Window & {
         __YANDEX_METRIKA_ID__?: number;
         ym?: (...args: unknown[]) => void;
       };
       const metrikaWindow = window as MetrikaWindow;
-      const visitorPagesKey = 'provider_visited_pages';
-      try {
-        const pages = JSON.parse(sessionStorage.getItem(visitorPagesKey) || '[]');
-        if (!pages.includes(location.pathname)) pages.push(location.pathname);
-        sessionStorage.setItem(visitorPagesKey, JSON.stringify(pages.slice(-50)));
-      } catch { /* private browsing can disable sessionStorage */ }
+      try { recordSessionPage(sessionStorage, location.href, document.referrer); } catch { /* Storage may be unavailable. */ }
       const applySubscriberMode = () => {
         document.querySelectorAll('.subscriber-phone').forEach((node) => {
           const support = node.getAttribute('data-support-phone') || 'Официальная поддержка';

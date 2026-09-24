@@ -8,11 +8,13 @@ import {
   IsDefined,
   IsIn,
   IsInt,
+  IsISO8601,
   IsNotEmpty,
   IsObject,
   IsOptional,
   IsString,
   IsUUID,
+  IsUrl,
   Matches,
   Max,
   MaxLength,
@@ -146,6 +148,45 @@ export class LeadUtmDto {
   utm_marketing_tactic?: string;
 }
 
+export class LeadTouchDto {
+  @IsString()
+  @IsNotEmpty()
+  @IsUrl({ protocols: ['http', 'https'], require_protocol: true })
+  @MaxLength(2_048)
+  url!: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2_048)
+  referrer?: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => LeadUtmDto)
+  utm?: LeadUtmDto;
+}
+
+export class LeadSessionDto {
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => LeadTouchDto)
+  firstTouch!: LeadTouchDto;
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => LeadTouchDto)
+  lastTouch!: LeadTouchDto;
+
+  @IsISO8601()
+  startedAt!: string;
+
+  @IsArray()
+  @ArrayMaxSize(50)
+  @IsString({ each: true })
+  @MaxLength(2_048, { each: true })
+  viewedPages!: string[];
+}
+
 export class LeadActivityEventDto {
   @IsString()
   @IsNotEmpty()
@@ -276,6 +317,11 @@ export class LeadDecisionStatusDto {
 }
 
 export class CreateLeadDto {
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => LeadSessionDto)
+  @Validate(MaxJsonBytesConstraint, [20_480])
+  session?: LeadSessionDto;
   @IsOptional()
   @IsIn([...LEAD_REASON_CODES])
   reasonCode?: string;

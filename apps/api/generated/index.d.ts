@@ -25926,6 +25926,7 @@ export namespace Prisma {
     timeOnSiteSeconds: number
     deviceType: number
     viewedPages: number
+    attributionSnapshot: number
     processingStatus: number
     duplicateOfId: number
     duplicateReason: number
@@ -26108,6 +26109,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: true
     deviceType?: true
     viewedPages?: true
+    attributionSnapshot?: true
     processingStatus?: true
     duplicateOfId?: true
     duplicateReason?: true
@@ -26253,6 +26255,7 @@ export namespace Prisma {
     timeOnSiteSeconds: number | null
     deviceType: string | null
     viewedPages: JsonValue | null
+    attributionSnapshot: JsonValue | null
     processingStatus: $Enums.LeadProcessingStatus
     duplicateOfId: string | null
     duplicateReason: string | null
@@ -26330,6 +26333,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: boolean
     deviceType?: boolean
     viewedPages?: boolean
+    attributionSnapshot?: boolean
     processingStatus?: boolean
     duplicateOfId?: boolean
     duplicateReason?: boolean
@@ -26402,6 +26406,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: boolean
     deviceType?: boolean
     viewedPages?: boolean
+    attributionSnapshot?: boolean
     processingStatus?: boolean
     duplicateOfId?: boolean
     duplicateReason?: boolean
@@ -26466,6 +26471,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: boolean
     deviceType?: boolean
     viewedPages?: boolean
+    attributionSnapshot?: boolean
     processingStatus?: boolean
     duplicateOfId?: boolean
     duplicateReason?: boolean
@@ -26530,6 +26536,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: boolean
     deviceType?: boolean
     viewedPages?: boolean
+    attributionSnapshot?: boolean
     processingStatus?: boolean
     duplicateOfId?: boolean
     duplicateReason?: boolean
@@ -26543,7 +26550,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "pageId" | "tariffId" | "configurationSnapshot" | "reasonCode" | "reasonLabel" | "reasonRoute" | "reasonRegistryVersion" | "comment" | "commentAnalysisVersion" | "commentAnalysisOutcome" | "commentAnalysisCategory" | "commentAnalysisEvidence" | "commentAnalysisExplanation" | "phoneCheckStatus" | "phoneCheckQc" | "phoneCheckNormalized" | "phoneCheckCheckedAt" | "phoneCheckAttempt" | "phoneCheckSource" | "phoneCheckErrorCode" | "phoneCheckNextAttemptAt" | "decisionLeaseUntil" | "decisionAttemptNumber" | "addressCheckId" | "name" | "phone" | "submissionKey" | "consentVersion" | "consentAcceptedAt" | "email" | "address" | "objectType" | "serviceType" | "source" | "utm" | "referrer" | "pageUrl" | "formName" | "timeOnSiteSeconds" | "deviceType" | "viewedPages" | "processingStatus" | "duplicateOfId" | "duplicateReason" | "deliveryKey" | "externalLeadId" | "externalStatus" | "contractResult" | "status" | "apiResult" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
+  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "pageId" | "tariffId" | "configurationSnapshot" | "reasonCode" | "reasonLabel" | "reasonRoute" | "reasonRegistryVersion" | "comment" | "commentAnalysisVersion" | "commentAnalysisOutcome" | "commentAnalysisCategory" | "commentAnalysisEvidence" | "commentAnalysisExplanation" | "phoneCheckStatus" | "phoneCheckQc" | "phoneCheckNormalized" | "phoneCheckCheckedAt" | "phoneCheckAttempt" | "phoneCheckSource" | "phoneCheckErrorCode" | "phoneCheckNextAttemptAt" | "decisionLeaseUntil" | "decisionAttemptNumber" | "addressCheckId" | "name" | "phone" | "submissionKey" | "consentVersion" | "consentAcceptedAt" | "email" | "address" | "objectType" | "serviceType" | "source" | "utm" | "referrer" | "pageUrl" | "formName" | "timeOnSiteSeconds" | "deviceType" | "viewedPages" | "attributionSnapshot" | "processingStatus" | "duplicateOfId" | "duplicateReason" | "deliveryKey" | "externalLeadId" | "externalStatus" | "contractResult" | "status" | "apiResult" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
   export type LeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | CityDefaultArgs<ExtArgs>
@@ -26639,6 +26646,7 @@ export namespace Prisma {
       timeOnSiteSeconds: number | null
       deviceType: string | null
       viewedPages: Prisma.JsonValue | null
+      attributionSnapshot: Prisma.JsonValue | null
       processingStatus: $Enums.LeadProcessingStatus
       duplicateOfId: string | null
       duplicateReason: string | null
@@ -27130,6 +27138,7 @@ export namespace Prisma {
     readonly timeOnSiteSeconds: FieldRef<"Lead", 'Int'>
     readonly deviceType: FieldRef<"Lead", 'String'>
     readonly viewedPages: FieldRef<"Lead", 'Json'>
+    readonly attributionSnapshot: FieldRef<"Lead", 'Json'>
     readonly processingStatus: FieldRef<"Lead", 'LeadProcessingStatus'>
     readonly duplicateOfId: FieldRef<"Lead", 'String'>
     readonly duplicateReason: FieldRef<"Lead", 'String'>
@@ -38569,6 +38578,7 @@ export namespace Prisma {
     timeOnSiteSeconds: 'timeOnSiteSeconds',
     deviceType: 'deviceType',
     viewedPages: 'viewedPages',
+    attributionSnapshot: 'attributionSnapshot',
     processingStatus: 'processingStatus',
     duplicateOfId: 'duplicateOfId',
     duplicateReason: 'duplicateReason',
@@ -40991,6 +41001,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: IntNullableFilter<"Lead"> | number | null
     deviceType?: StringNullableFilter<"Lead"> | string | null
     viewedPages?: JsonNullableFilter<"Lead">
+    attributionSnapshot?: JsonNullableFilter<"Lead">
     processingStatus?: EnumLeadProcessingStatusFilter<"Lead"> | $Enums.LeadProcessingStatus
     duplicateOfId?: StringNullableFilter<"Lead"> | string | null
     duplicateReason?: StringNullableFilter<"Lead"> | string | null
@@ -41062,6 +41073,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: SortOrderInput | SortOrder
     deviceType?: SortOrderInput | SortOrder
     viewedPages?: SortOrderInput | SortOrder
+    attributionSnapshot?: SortOrderInput | SortOrder
     processingStatus?: SortOrder
     duplicateOfId?: SortOrderInput | SortOrder
     duplicateReason?: SortOrderInput | SortOrder
@@ -41137,6 +41149,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: IntNullableFilter<"Lead"> | number | null
     deviceType?: StringNullableFilter<"Lead"> | string | null
     viewedPages?: JsonNullableFilter<"Lead">
+    attributionSnapshot?: JsonNullableFilter<"Lead">
     processingStatus?: EnumLeadProcessingStatusFilter<"Lead"> | $Enums.LeadProcessingStatus
     duplicateOfId?: StringNullableFilter<"Lead"> | string | null
     duplicateReason?: StringNullableFilter<"Lead"> | string | null
@@ -41207,6 +41220,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: SortOrderInput | SortOrder
     deviceType?: SortOrderInput | SortOrder
     viewedPages?: SortOrderInput | SortOrder
+    attributionSnapshot?: SortOrderInput | SortOrder
     processingStatus?: SortOrder
     duplicateOfId?: SortOrderInput | SortOrder
     duplicateReason?: SortOrderInput | SortOrder
@@ -41273,6 +41287,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: IntNullableWithAggregatesFilter<"Lead"> | number | null
     deviceType?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     viewedPages?: JsonNullableWithAggregatesFilter<"Lead">
+    attributionSnapshot?: JsonNullableWithAggregatesFilter<"Lead">
     processingStatus?: EnumLeadProcessingStatusWithAggregatesFilter<"Lead"> | $Enums.LeadProcessingStatus
     duplicateOfId?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     duplicateReason?: StringNullableWithAggregatesFilter<"Lead"> | string | null
@@ -43982,6 +43997,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -44052,6 +44068,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -44112,6 +44129,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44182,6 +44200,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44247,6 +44266,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -44300,6 +44320,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44357,6 +44378,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47004,6 +47026,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: SortOrder
     deviceType?: SortOrder
     viewedPages?: SortOrder
+    attributionSnapshot?: SortOrder
     processingStatus?: SortOrder
     duplicateOfId?: SortOrder
     duplicateReason?: SortOrder
@@ -51748,6 +51771,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -51816,6 +51840,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -52451,6 +52476,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: IntNullableFilter<"Lead"> | number | null
     deviceType?: StringNullableFilter<"Lead"> | string | null
     viewedPages?: JsonNullableFilter<"Lead">
+    attributionSnapshot?: JsonNullableFilter<"Lead">
     processingStatus?: EnumLeadProcessingStatusFilter<"Lead"> | $Enums.LeadProcessingStatus
     duplicateOfId?: StringNullableFilter<"Lead"> | string | null
     duplicateReason?: StringNullableFilter<"Lead"> | string | null
@@ -55344,6 +55370,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -55412,6 +55439,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -55870,6 +55898,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -55938,6 +55967,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -56431,6 +56461,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -56499,6 +56530,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -57515,6 +57547,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -57583,6 +57616,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -58258,6 +58292,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -58327,6 +58362,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -58391,6 +58427,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -58460,6 +58497,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -59000,6 +59038,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59069,6 +59108,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59144,6 +59184,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -59213,6 +59254,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -59288,6 +59330,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59357,6 +59400,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59416,6 +59460,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -59485,6 +59530,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -59560,6 +59606,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59629,6 +59676,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59688,6 +59736,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -59757,6 +59806,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -59832,6 +59882,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59901,6 +59952,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59960,6 +60012,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -60029,6 +60082,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -60104,6 +60158,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60173,6 +60228,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60232,6 +60288,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -60301,6 +60358,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -60376,6 +60434,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60445,6 +60504,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60740,6 +60800,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -60809,6 +60870,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -60884,6 +60946,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60953,6 +61016,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61985,6 +62049,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -62314,6 +62379,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -62382,6 +62448,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -62446,6 +62513,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63391,6 +63459,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -63591,6 +63660,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63659,6 +63729,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63723,6 +63794,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63867,6 +63939,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -63962,6 +64035,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64030,6 +64104,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64094,6 +64169,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64189,6 +64265,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -64242,6 +64319,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64310,6 +64388,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64374,6 +64453,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64533,6 +64613,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateOfId?: string | null
     duplicateReason?: string | null
@@ -64586,6 +64667,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64654,6 +64736,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64718,6 +64801,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateOfId?: NullableStringFieldUpdateOperationsInput | string | null
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64824,6 +64908,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: number | null
     deviceType?: string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: $Enums.LeadProcessingStatus
     duplicateReason?: string | null
     deliveryKey?: string | null
@@ -65020,6 +65105,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65089,6 +65175,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65153,6 +65240,7 @@ export namespace Prisma {
     timeOnSiteSeconds?: NullableIntFieldUpdateOperationsInput | number | null
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     viewedPages?: NullableJsonNullValueInput | InputJsonValue
+    attributionSnapshot?: NullableJsonNullValueInput | InputJsonValue
     processingStatus?: EnumLeadProcessingStatusFieldUpdateOperationsInput | $Enums.LeadProcessingStatus
     duplicateReason?: NullableStringFieldUpdateOperationsInput | string | null
     deliveryKey?: NullableStringFieldUpdateOperationsInput | string | null

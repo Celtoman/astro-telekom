@@ -11,6 +11,7 @@ import { LEAD_CONSENT_VERSION } from './lead-consent';
 import { configurationSnapshot, quoteFingerprint, quoteTariffConfiguration } from './tariff-configuration.service';
 import { classifyLeadReason } from './lead-reasons';
 import { analyzeLeadComment } from './lead-comment-analyzer';
+import { buildLeadAttribution } from './lead-attribution';
 
 function premiseKey(data: Record<string, unknown> | undefined): string {
   if (!data) return '';
@@ -42,7 +43,7 @@ export class PublicLeadsController {
   }
 
   @Post()
-  async create(@Body() body: CreateLeadDto, @Req() request: { headers?: Record<string, string | undefined>; url?: string }) {
+  async create(@Body() body: CreateLeadDto, @Req() request: { ip?: string; headers?: Record<string, string | undefined>; url?: string }) {
     if (body.website) throw new BadRequestException('Некорректный запрос');
     const reason = classifyLeadReason(body.reasonCode);
     if (body.reasonCode !== undefined && !reason) throw new BadRequestException('Неизвестная причина обращения');
@@ -163,6 +164,8 @@ export class PublicLeadsController {
       throw new BadRequestException('Заявку можно отправить только после положительной проверки адреса');
     }
 
+    const attribution = buildLeadAttribution(body, request);
+
     let storedConfiguration: Prisma.InputJsonValue | undefined;
     if (body.configuration) {
       if (!tariff || !publishedTariff || !body.tariffSlug) throw new BadRequestException('Условия тарифа изменились. Повторите расчёт');
@@ -238,13 +241,14 @@ export class PublicLeadsController {
             serviceType: body.serviceType || tariff?.serviceType,
             addressCheckId: addressCheck?.id,
             source: body.source || 'website',
-            utm: body.utm ? { ...body.utm } as Prisma.InputJsonValue : undefined,
-            referrer: body.referrer || request.headers?.referer,
-            pageUrl: body.pageUrl || request.url,
-            formName: body.formName || 'lead',
-            timeOnSiteSeconds: typeof body.timeOnSiteSeconds === 'number' && body.timeOnSiteSeconds >= 0 ? Math.round(body.timeOnSiteSeconds) : undefined,
-            deviceType: body.deviceType,
-            viewedPages: Array.isArray(body.viewedPages) ? body.viewedPages.slice(-50) : undefined,
+            attributionSnapshot: attribution.snapshot as Prisma.InputJsonObject,
+            utm: attribution.legacy.utm as Prisma.InputJsonObject,
+            referrer: attribution.legacy.referrer,
+            pageUrl: attribution.legacy.pageUrl,
+            formName: attribution.legacy.formName,
+            timeOnSiteSeconds: attribution.legacy.timeOnSiteSeconds,
+            deviceType: attribution.legacy.deviceType,
+            viewedPages: attribution.legacy.viewedPages,
             processingStatus,
             phoneCheckStatus: processingStatus === 'DECISION_PENDING' ? 'PENDING' : 'SKIPPED',
             duplicateOfId: duplicate?.id,

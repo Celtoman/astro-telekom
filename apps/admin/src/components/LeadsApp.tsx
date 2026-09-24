@@ -37,6 +37,21 @@ interface LeadNotification { id: string; status: string; attempts: number; maxAt
 interface ActivityEvent { id: string; type: string; createdAt: string }
 interface LeadReasonOption { code: string; label: string; route: "SALES" | "NON_SALES" | "MANUAL"; version: number }
 interface CommentEvidence { category: string; fragment: string; start: number; end: number }
+interface AttributionTouch { url: string | null; referrer: string | null; utm: Record<string, string> }
+interface AttributionSnapshot {
+  version: number
+  capture: "browser_session" | "api_fallback"
+  firstTouch: AttributionTouch
+  lastTouch: AttributionTouch
+  sessionStartedAt: string
+  submittedAt: string
+  viewedPages: string[]
+  timeOnSiteSeconds: number
+  formName: string
+  ipAddress: string | null
+  userAgent: string | null
+  deviceType: string
+}
 interface LeadSummary {
   id: string
   name?: string
@@ -69,6 +84,7 @@ interface LeadSummary {
   duplicateReason?: string
 }
 interface LeadDetail extends LeadSummary {
+  attributionSnapshot?: AttributionSnapshot | null
   site: { id: string; name: string; slug: string }
   addressCheck?: { status: string }
   contractResult?: Record<string, unknown>
@@ -483,6 +499,7 @@ function LeadDetailCard({ detail, nextStatus, setNextStatus, comment, setComment
     <CardHeader><div className="flex flex-wrap items-start justify-between gap-3"><div><CardTitle>{lead.name || lead.phone}</CardTitle><CardDescription>{lead.phone} · {dateFormatter.format(new Date(lead.createdAt))}</CardDescription></div><StatusBadge kind="leadStatus" value={lead.status} /></div></CardHeader>
     <CardContent className="flex flex-col gap-6">
       <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Контакт и контекст</h2><dl className="grid gap-2 text-sm"><DetailRow label="Email" value={lead.email} /><DetailRow label="Город страницы" value={lead.city.name} /><DetailRow label="Адрес подключения" value={lead.address} /><DetailRow label="Страница" value={lead.pageUrl || lead.page?.slug} /><DetailRow label="Тариф" value={configuration?.tariff.name || lead.tariff?.name} /><DetailRow label="Причина обращения" value={lead.reasonLabel || "Не указана"} description={reasonRouteExplanation(lead.reasonRoute, lead.reasonRegistryVersion)} /><DetailRow label="Источник" value={lead.source ? <SourceLabel value={lead.source} /> : undefined} /><DetailRow label="Форма" value={lead.formName} /></dl></section>
+      <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Атрибуция сессии</h2>{lead.attributionSnapshot ? <><dl className="grid gap-2 text-sm"><DetailRow label="Первый переход" value={lead.attributionSnapshot.firstTouch.url} /><DetailRow label="Первый referrer" value={lead.attributionSnapshot.firstTouch.referrer} /><DetailRow label="Текущая страница" value={lead.attributionSnapshot.lastTouch.url} /><DetailRow label="Текущий referrer" value={lead.attributionSnapshot.lastTouch.referrer} /><DetailRow label="Начало сессии" value={lead.attributionSnapshot.sessionStartedAt} /><DetailRow label="Отправка" value={lead.attributionSnapshot.submittedAt} /><DetailRow label="Время на сайте" value={`${lead.attributionSnapshot.timeOnSiteSeconds} с`} /><DetailRow label="Страниц" value={String(lead.attributionSnapshot.viewedPages.length)} /><DetailRow label="Устройство" value={lead.attributionSnapshot.deviceType} /></dl><details className="rounded-md border p-3 text-sm"><summary className="cursor-pointer font-medium">Технические данные и маршрут</summary><dl className="mt-3 grid gap-2"><DetailRow label="IP" value={lead.attributionSnapshot.ipAddress} /><DetailRow label="User-Agent" value={lead.attributionSnapshot.userAgent} /><DetailRow label="Первый UTM" value={Object.entries(lead.attributionSnapshot.firstTouch.utm).map(([key, value]) => `${key}=${value}`).join(' · ')} /><DetailRow label="Текущий UTM" value={Object.entries(lead.attributionSnapshot.lastTouch.utm).map(([key, value]) => `${key}=${value}`).join(' · ')} /><DetailRow label="Переходы" value={lead.attributionSnapshot.viewedPages.join(' → ')} /></dl></details></> : <p className="text-sm text-muted-foreground">Для исторической заявки снимок сессии не собирался.</p>}</section>
       {lead.comment ? <section className="flex flex-col gap-3"><h2 className="font-heading text-sm font-medium">Комментарий пользователя</h2><p className="whitespace-pre-wrap break-words text-sm">{lead.comment}</p>{lead.commentAnalysisVersion ? <Alert><CircleAlert /><AlertTitle>{lead.commentAnalysisOutcome === "MANUAL_REVIEW" ? "Нужна ручная проверка" : lead.commentAnalysisOutcome === "WARNING" ? "Есть предупреждение" : "Анализ комментария"}</AlertTitle><AlertDescription>{lead.commentAnalysisExplanation || "Результат анализа сохранён."} Структурированная причина: {lead.reasonLabel || "не указана"}. Правила v{lead.commentAnalysisVersion}.</AlertDescription></Alert> : null}{commentEvidence.length ? <ul className="space-y-2 text-sm">{commentEvidence.map((item, index) => <li className="rounded-md border p-2" key={`${item.start}-${item.end}-${index}`}><span className="font-medium">{commentCategoryLabels[item.category] || "Неизвестная категория"}</span><span className="block break-words text-muted-foreground">Найденный фрагмент: «{item.fragment}»</span></li>)}</ul> : <p className="text-sm text-muted-foreground">Значимых фрагментов не найдено.</p>}</section> : null}
       {canReanalyzeComment ? <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Новая версия анализа</h2><p className="text-sm text-muted-foreground">Правила v{lead.commentAnalysisLatestVersion} доступны для явного повторного анализа. Исходная причина и текущий маршрут не изменятся автоматически.</p><Button variant="outline" disabled={busy} onClick={() => void onReanalyzeComment()}><RefreshCw data-icon="inline-start" />{commentRetryBusy ? "Анализируем…" : "Повторно проанализировать комментарий"}</Button></section> : null}
       {configuration ? <section className="flex flex-col gap-2"><h2 className="font-heading text-sm font-medium">Комплектация при отправке</h2><p className="text-xs text-muted-foreground">Неизменяемый снимок условий заявки{configuration.capturedAt ? ` · ${dateFormatter.format(new Date(configuration.capturedAt))}` : ""}.</p><dl className="grid gap-2 text-sm"><DetailRow label="Тариф" value={configuration.tariff.name} /><DetailRow label="ID тарифа" value={configuration.tariff.id} /></dl>{configuration.components.length ? <ul className="list-disc pl-5 text-sm">{configuration.components.map((item) => <li key={item.code}>{item.title} ({item.code}){item.methodTitle ? ` — ${item.methodTitle}` : ""}</li>)}</ul> : <p className="text-sm text-muted-foreground">Дополнительные опции не выбраны.</p>}<h3 className="text-sm font-medium">Ежемесячно</h3><ul className="list-disc pl-5 text-sm">{configuration.charges.monthly.map((item) => <li key={item.code}>{item.title}: {rubles(item.amount)}</li>)}</ul><strong className="text-sm">{rubles(configuration.totals.monthly)}/мес.</strong><h3 className="text-sm font-medium">Разовые платежи</h3><ul className="list-disc pl-5 text-sm">{configuration.charges.oneTime.map((item) => <li key={item.code}>{item.title}: {item.amount === null ? "стоимость уточняется" : rubles(item.amount)}</li>)}</ul><strong className="text-sm">{configuration.totals.oneTime === null ? `Известная часть: ${rubles(configuration.totals.knownOneTime)}; полная сумма уточняется` : rubles(configuration.totals.oneTime)}</strong></section> : null}

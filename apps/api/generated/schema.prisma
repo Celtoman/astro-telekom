@@ -632,6 +632,7 @@ model Lead {
   timeOnSiteSeconds          Int?
   deviceType                 String?
   viewedPages                Json?
+  attributionSnapshot        Json?
   processingStatus           LeadProcessingStatus  @default(PENDING)
   duplicateOfId              String?
   duplicateReason            String?

@@ -49,6 +49,8 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 
 Hard-delete выбран, чтобы PII не осталось в JSON payloads. Согласованный срок хранения сырых заявок — 180 дней. Перепроверка юридического основания обработки и текста согласия ведётся в [#144](https://github.com/Celtoman/astro-telekom/issues/144) как P3 вне milestone Release 1; решение о допуске реального трафика принимает владелец.
 
+Снимок атрибуции `Lead.attributionSnapshot` содержит серверные IP/User-Agent и удаляется тем же hard-delete всего Lead; отдельной очереди и копии этих полей в notification outbox нет.
+
 Локальная runtime-проверка подтвердила scheduler metadata `key=pii-retention-daily`, `name=pii-retention`, pattern `0 3 * * *`, timezone UTC в отдельной Redis DB; test DB после проверки очищена.
 
 ## Публикация по расписанию

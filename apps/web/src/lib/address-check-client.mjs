@@ -12,6 +12,7 @@ import {
   SUBSCRIBER_MODE_STORAGE_KEY,
   subscriberModeExpiresAt,
 } from './subscriber-mode.mjs';
+import { sessionForLead } from './session-attribution.mjs';
 
 const SUGGESTION_DEBOUNCE_MS = 500;
 const SUGGESTION_CACHE_LIMIT = 20;
@@ -606,8 +607,10 @@ function initializeRoot(root) {
     leadResult.textContent = '';
     delete leadResult.dataset.state;
     try {
-      let viewedPages = [];
-      try { viewedPages = JSON.parse(sessionStorage.getItem('provider_visited_pages') || '[]'); } catch { /* storage may be unavailable */ }
+      let session;
+      try { session = sessionForLead(sessionStorage, location.href, document.referrer); }
+      catch { session = sessionForLead(null, location.href, document.referrer); }
+      const { timeOnSiteSeconds, ...sessionContext } = session;
       const selectedTariffSlug = form.dataset.tariffSlug || '';
       let configuration = quoteTariffSlug === selectedTariffSlug ? quoteConfiguration : null;
       if (selectedTariffSlug && !configuration) {
@@ -636,14 +639,15 @@ function initializeRoot(root) {
           phone,
           submissionKey,
           consentVersion: leadForm.dataset.consentVersion,
+          session: sessionContext,
           address: verifiedCheck.address,
           serviceType: form.dataset.serviceType,
           addressCheckId: verifiedCheck.id,
-          referrer: document.referrer,
-          pageUrl: location.href,
-          timeOnSiteSeconds: Math.max(0, Math.round((Date.now() - performance.timeOrigin) / 1000)),
-          deviceType: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
-          viewedPages,
+          utm: sessionContext.lastTouch.utm,
+          referrer: sessionContext.lastTouch.referrer,
+          pageUrl: sessionContext.lastTouch.url,
+          timeOnSiteSeconds,
+          viewedPages: sessionContext.viewedPages,
           website: '',
         }),
       });

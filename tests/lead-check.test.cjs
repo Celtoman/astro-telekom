@@ -72,7 +72,7 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
   const controller = new PublicLeadsController(prisma, decisions, notifications);
   return {
     controller,
-    create: (body) => { submittedBody = body; return controller.create(body, { headers: {}, url: '/leads' }); },
+    create: (body, request = { headers: {}, url: '/leads' }) => { submittedBody = body; return controller.create(body, request); },
     saved: () => saved,
     contractChecks: () => 0,
     deliveryEnqueues: () => decisionEnqueues,
@@ -143,6 +143,32 @@ test('lead uses persisted status and object details despite forged client status
   assert.deepEqual(f.saved().apiResult, { status: 'AVAILABLE', response: targetCheck().response });
   assert.equal(f.saved().address, 'Улица, 1');
   assert.equal(f.saved().objectType, 'apartment');
+});
+
+test('lead stores bounded session attribution with server IP and User-Agent without changing routing', async () => {
+  const f = fixture(targetCheck());
+  const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)';
+  await f.create({
+    ...base, addressCheckId: 'check', pageUrl: 'https://example.test/kazan?token=hidden',
+    deviceType: 'desktop',
+    session: {
+      firstTouch: { url: 'https://example.test/?utm_source=first&token=hidden', referrer: 'https://search.test/?secret=hidden', utm: { utm_source: 'first' } },
+      lastTouch: { url: 'https://example.test/kazan?utm_source=last&token=hidden', referrer: 'https://example.test/', utm: { utm_source: 'last' } },
+      startedAt: new Date(Date.now() - 120_000).toISOString(),
+      viewedPages: ['/', '/kazan', '/kazan'],
+    },
+  }, { ip: '203.0.113.9', headers: { 'user-agent': userAgent }, url: '/leads' });
+  const lead = f.saved();
+  assert.equal(lead.attributionSnapshot.ipAddress, '203.0.113.9');
+  assert.equal(lead.attributionSnapshot.userAgent, userAgent);
+  assert.equal(lead.attributionSnapshot.deviceType, 'mobile');
+  assert.equal(lead.deviceType, 'mobile');
+  assert.equal(lead.attributionSnapshot.firstTouch.url, 'https://example.test/?utm_source=first');
+  assert.equal(lead.attributionSnapshot.firstTouch.referrer, 'https://search.test/');
+  assert.equal(lead.attributionSnapshot.lastTouch.url, 'https://example.test/kazan?utm_source=last');
+  assert.deepEqual(lead.utm, { utm_source: 'last' });
+  assert.deepEqual(lead.viewedPages, ['/', '/kazan']);
+  assert.equal(lead.processingStatus, 'DECISION_PENDING');
 });
 test('manual lead cannot manufacture a positive coverage result', async () => {
   const f = fixture(null);

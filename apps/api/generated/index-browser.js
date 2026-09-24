@@ -432,6 +432,7 @@ exports.Prisma.LeadScalarFieldEnum = {
   timeOnSiteSeconds: 'timeOnSiteSeconds',
   deviceType: 'deviceType',
   viewedPages: 'viewedPages',
+  attributionSnapshot: 'attributionSnapshot',
   processingStatus: 'processingStatus',
   duplicateOfId: 'duplicateOfId',
   duplicateReason: 'duplicateReason',
