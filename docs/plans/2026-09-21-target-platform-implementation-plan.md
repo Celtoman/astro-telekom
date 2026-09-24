@@ -216,7 +216,7 @@ pnpm check
 | T6 | typed tariff renderer | #176 | Да | реализовано, issue закрыта; rollout и live HTML подтверждены |
 | T7 | tariff calculator/configurator | #177 | Да | реализовано, issue закрыта; live quote проверен |
 | T8 | `TAR-034` | #178 | Да | реализовано, issue закрыта; live quote проверен без создания заявки |
-| T9 | `CMS-024–037` | #181 | Нет | реализация в текущем коде: карточка шаблона, рабочий/опубликованный preview, diff, калькулятор, device modes и code/data status; CI и внешний rollout проверяются отдельно |
+| T9 | `CMS-024–037` | #181 | Нет | реализовано: карточка шаблона, рабочий/опубликованный preview, diff, калькулятор, device modes и code/data status; локальный gate, CI 36010495904 и Coolify deployment `s4gzkael3wfiplepsgj5syku` на `7d7995c` прошли, защищённые UI/API и отсутствие изменения ревизий после quote проверены |
 | F1 | `FORM-001–015` | #170 | Да | реализовано, issue закрыта; внешний safe smoke проверен |
 | F2 | `FORM-016–023`, `LEAD-014` | #171 | Да | реализовано, issue закрыта; live submit заявки не выполнялся |
 | L1 | `LEAD-001–006`, `011` | #154 | Нет | частично |
