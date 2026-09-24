@@ -44,10 +44,11 @@ function fixture(check, recentLeads = [], enqueueNotification = async () => true
           tariff: saved.tariffId ? { slug: savedBody.tariffSlug, serviceType: saved.serviceType } : null,
         } : null
       ),
-      findMany: async ({ where }) => {
+      findMany: async ({ where, orderBy }) => {
         assert.equal(where.siteId, 'site');
         assert.ok(where.createdAt.gte instanceof Date);
-        return recentLeads;
+        assert.deepEqual(orderBy, [{ createdAt: 'desc' }, { id: 'desc' }]);
+        return recentLeads.filter((candidate) => !candidate.createdAt || candidate.createdAt >= where.createdAt.gte);
       },
     },
     $transaction: async (callback) => callback(transaction),
@@ -109,6 +110,13 @@ function targetCheck(overrides = {}) {
     },
     ...overrides,
   };
+}
+
+function premiseCheck(flat) {
+  const check = targetCheck({ address: 'ул. Ленина, д. 1' });
+  check.response.suggestion.data.flat = flat;
+  check.response.suggestion.data.flat_type = 'кв';
+  return check;
 }
 
 test('lead rejects a site that is not publicly published', async () => {
@@ -339,8 +347,9 @@ test('lead with the same normalized phone within 24 hours is suppressed as dupli
   assert.equal(f.deliveryEnqueues(), 0);
 });
 
-test('lead with the same normalized address within 24 hours is suppressed as duplicate', async () => {
-  const f = fixture(targetCheck({ address: 'УЛ ЛЕНИНА Д 1' }), [{ id: 'existing-address', phone: '+79010000000', address: 'ул. Ленина, д. 1' }]);
+test('lead with the same verified apartment within 24 hours is suppressed as duplicate', async () => {
+  const check = premiseCheck('7');
+  const f = fixture(check, [{ id: 'existing-address', phone: '+79010000000', address: 'ул. Ленина, д. 1', apiResult: { response: check.response } }]);
 
   await f.create({ ...base, phone: '+79020000000', addressCheckId: 'check' });
 
@@ -348,8 +357,40 @@ test('lead with the same normalized address within 24 hours is suppressed as dup
   assert.equal(f.saved().duplicateOfId, 'existing-address');
   assert.equal(f.saved().duplicateReason, 'address_24h');
   assert.equal(f.decisionEvents()[0]?.outcome, 'DUPLICATE_SUPPRESSED');
+  assert.equal(f.decisionEvents()[0]?.evidence.duplicateReason, 'address_24h');
+  assert.equal(f.decisionEvents()[0]?.evidence.duplicateOfId, 'existing-address');
   assert.equal(f.contractChecks(), 0);
   assert.equal(f.deliveryEnqueues(), 0);
+});
+
+test('same house without a verified apartment does not suppress another resident', async () => {
+  const check = targetCheck({ address: 'ул. Ленина, д. 1' });
+  const f = fixture(check, [{ id: 'existing-house', phone: '+79010000000', address: check.address, apiResult: { response: check.response } }]);
+  await f.create({ ...base, phone: '+79020000000', addressCheckId: 'check' });
+  assert.equal(f.saved().processingStatus, 'DECISION_PENDING');
+  assert.equal(f.saved().duplicateOfId, undefined);
+});
+
+test('different apartments in the same house do not suppress each other', async () => {
+  const check = premiseCheck('8');
+  const f = fixture(check, [{ id: 'existing-flat', phone: '+79010000000', address: check.address, apiResult: { response: premiseCheck('7').response } }]);
+  await f.create({ ...base, phone: '+79020000000', addressCheckId: 'check' });
+  assert.equal(f.saved().processingStatus, 'DECISION_PENDING');
+  assert.equal(f.saved().duplicateOfId, undefined);
+});
+
+test('phone match takes priority over a newer address match and excludes leads older than 24 hours', async () => {
+  const check = premiseCheck('7');
+  const now = Date.now();
+  const f = fixture(check, [
+    { id: 'expired-phone', phone: '+79020000000', address: 'старый адрес', createdAt: new Date(now - 24 * 60 * 60 * 1000 - 60_000) },
+    { id: 'newer-address', phone: '+79010000000', address: check.address, apiResult: { response: check.response }, createdAt: new Date(now - 60_000) },
+    { id: 'recent-phone', phone: '+79020000000', address: 'другой адрес', createdAt: new Date(now - 23 * 60 * 60 * 1000) },
+  ]);
+  await f.create({ ...base, phone: '+79020000000', addressCheckId: 'check' });
+  assert.equal(f.saved().duplicateOfId, 'recent-phone');
+  assert.equal(f.saved().duplicateReason, 'phone_24h');
+  assert.equal(f.decisionEvents()[0]?.evidence.duplicateReason, 'phone_24h');
 });
 
 test('lead rejects alternative providers before subscriber or delivery work', async () => {

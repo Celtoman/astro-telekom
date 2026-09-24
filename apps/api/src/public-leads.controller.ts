@@ -12,6 +12,14 @@ import { configurationSnapshot, quoteFingerprint, quoteTariffConfiguration } fro
 import { classifyLeadReason } from './lead-reasons';
 import { analyzeLeadComment } from './lead-comment-analyzer';
 
+function premiseKey(data: Record<string, unknown> | undefined): string {
+  if (!data) return '';
+  const flat = typeof data.flat === 'string' ? normalizeAddress(data.flat) : '';
+  if (flat) return `flat:${normalizeAddress(typeof data.flat_type === 'string' ? data.flat_type : '')}:${flat}`;
+  const room = typeof data.room === 'string' ? normalizeAddress(data.room) : '';
+  return room ? `room:${normalizeAddress(typeof data.room_type === 'string' ? data.room_type : '')}:${room}` : '';
+}
+
 @Controller('leads')
 export class PublicLeadsController {
   private readonly logger = new Logger(PublicLeadsController.name);
@@ -175,15 +183,23 @@ export class PublicLeadsController {
     const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentLeads = await this.prisma.lead.findMany({
       where: { siteId: site.id, createdAt: { gte: cutoff } },
-      orderBy: { createdAt: 'desc' },
-      select: { id: true, phone: true, address: true },
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      select: { id: true, phone: true, address: true, apiResult: true },
     });
     const normalizedPhone = phone;
     const normalizedInputAddress = normalizeAddress(address);
-    const duplicate = recentLeads.find((candidate) =>
-      (normalizedPhone && normalizePhone(candidate.phone) === normalizedPhone)
-      || (normalizedInputAddress && normalizeAddress(candidate.address) === normalizedInputAddress),
-    );
+    const phoneDuplicate = recentLeads.find((candidate) => normalizePhone(candidate.phone) === normalizedPhone);
+    const inputPremise = premiseKey(coverage?.suggestion.data);
+    const addressDuplicate = !phoneDuplicate && normalizedInputAddress && inputPremise
+      ? recentLeads.find((candidate) => {
+        const result = candidate.apiResult as { response?: unknown } | null;
+        const candidateCoverage = readTarifnikCoverageSnapshot(result?.response);
+        return normalizeAddress(candidate.address) === normalizedInputAddress
+          && premiseKey(candidateCoverage?.suggestion.data) === inputPremise;
+      })
+      : undefined;
+    const duplicate = phoneDuplicate || addressDuplicate;
+    const duplicateReason = phoneDuplicate ? 'phone_24h' : addressDuplicate ? 'address_24h' : undefined;
 
     let processingStatus: 'DECISION_PENDING' | 'DUPLICATE_SUPPRESSED' | 'NON_SALES_NOT_SENT' | 'MANUAL_CHECK' = 'DECISION_PENDING';
     if (commentAnalysis?.outcome === 'MANUAL_REVIEW') processingStatus = 'MANUAL_CHECK';
@@ -232,7 +248,7 @@ export class PublicLeadsController {
             processingStatus,
             phoneCheckStatus: processingStatus === 'DECISION_PENDING' ? 'PENDING' : 'SKIPPED',
             duplicateOfId: duplicate?.id,
-            duplicateReason: duplicate ? (normalizedPhone && normalizePhone(duplicate.phone) === normalizedPhone ? 'phone_24h' : 'address_24h') : undefined,
+            duplicateReason,
             deliveryKey: randomUUID(),
             apiResult: addressCheck ? { status: addressCheck.status, response: addressCheck.response } : undefined,
           },
@@ -246,6 +262,7 @@ export class PublicLeadsController {
               reasonRoute: reason?.route || 'UNSPECIFIED',
               commentOutcome: commentAnalysis?.outcome || 'NONE',
               duplicate: Boolean(duplicate),
+              ...(duplicate ? { duplicateOfId: duplicate.id, duplicateReason } : {}),
             },
           } });
         }
