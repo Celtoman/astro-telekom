@@ -8,6 +8,7 @@ import { buildReleaseOneRoutes } from './public-route-policy';
 import { normalizeRedirectPath } from './redirect-path';
 import { formatSitePhone } from './site-phone';
 import { resolveSeoTemplates } from './seo-templates';
+import { collectSeoTemplateUsages } from './seo-template-usages';
 
 type CatalogClient = Prisma.TransactionClient | PrismaService;
 
@@ -93,6 +94,8 @@ export class SiteCatalogService {
     const noindexPaths = Object.entries(seo.byPath).filter(([, meta]) => meta.indexState === 'NOINDEX').map(([path]) => path);
     return {
       ...resolved,
+      variableUsages: [...resolved.variableUsages, ...collectSeoTemplateUsages(seoTemplates)],
+      variableUsageVersion: 2,
       sitemap: { excludedPaths: [...new Set([...resolved.sitemap.excludedPaths, ...noindexPaths])].sort() },
       seoByPath: seo.byPath,
       seoWarnings: seo.warnings,

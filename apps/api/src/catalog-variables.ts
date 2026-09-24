@@ -7,7 +7,7 @@ export interface VariableUsage {
   code: string;
   path: string;
   template: string;
-  entityType: 'PAGE' | 'BLOCK' | 'TARIFF';
+  entityType: 'PAGE' | 'BLOCK' | 'TARIFF' | 'SEO_TEMPLATE';
   entityId: string;
   pageType?: string;
   blockType?: string;

@@ -164,6 +164,8 @@ test('working catalog resolves site SEO templates before a publication snapshot 
   assert.deepEqual(queries.seo.where, { siteId: 'site-1' });
   assert.deepEqual(catalog.seoByPath['/'], { title: 'Интернет Дом.ру', description: 'Тарифы для дома.', indexState: 'INDEX', ogTitle: 'Интернет Дом.ру', ogDescription: 'Тарифы для дома.', ogImage: '/images/home-connection-equipment.webp' });
   assert.equal(Object.keys(catalog.seoByPath).length, 6);
+  assert.ok(catalog.variableUsages.some((usage) => usage.entityType === 'SEO_TEMPLATE' && usage.code === 'PROVIDER_NAME' && usage.path === 'seoTemplates[HOME].titleTemplate'));
+  assert.equal(catalog.variableUsageVersion, 2);
   assert.deepEqual(catalog.sitemap.excludedPaths, ['/karta-pokrytiya-provaydera']);
   assert.deepEqual(catalog.seoWarnings, []);
 });

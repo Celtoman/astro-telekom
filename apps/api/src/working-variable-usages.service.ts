@@ -3,6 +3,7 @@ import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import type { VariableUsage } from './catalog-variables';
 import { listVariableDefinitions } from './variable-registry';
+import { collectSeoTemplateUsages } from './seo-template-usages';
 
 const KNOWN_CODES = new Set<string>(listVariableDefinitions().map((definition) => definition.code));
 
@@ -41,7 +42,7 @@ export class WorkingVariableUsagesService {
       const site = await transaction.site.findUnique({ where: { id: siteId }, select: { workingRevision: true } });
       if (!site) throw new NotFoundException('Сайт не найден');
       if (site.workingRevision !== expectedWorkingRevision) throw new ConflictException('Рабочая ревизия изменилась; обновите каталог переменных');
-      const [pages, tariffs] = await Promise.all([
+      const [pages, tariffs, seoTemplates] = await Promise.all([
         transaction.page.findMany({
           where: { siteId },
           orderBy: { id: 'asc' },
@@ -54,6 +55,11 @@ export class WorkingVariableUsagesService {
           where: { city: { siteId } },
           orderBy: { id: 'asc' },
           select: { id: true, cityId: true, status: true, availability: true, promoText: true, seo: true },
+        }),
+        transaction.seoTemplate.findMany({
+          where: { siteId },
+          orderBy: { kind: 'asc' },
+          select: { id: true, kind: true, titleTemplate: true, descriptionTemplate: true, ogTitleTemplate: true, ogDescriptionTemplate: true },
         }),
       ]);
       const usages: VariableUsage[] = [];
@@ -77,6 +83,7 @@ export class WorkingVariableUsagesService {
         recordText(tariff.promoText, `${path}.promoText`, owner, usages);
         recordFields(tariff.seo, ['title', 'description'], `${path}.seo`, owner, usages);
       }
+      usages.push(...collectSeoTemplateUsages(seoTemplates));
       return usages;
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
   }

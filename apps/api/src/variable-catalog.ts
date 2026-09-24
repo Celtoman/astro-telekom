@@ -103,6 +103,7 @@ export function buildVariableCatalogView(input: CatalogViewInput) {
     cities: [...allCities.values()].sort((left, right) => left.name.localeCompare(right.name, 'ru')),
     tariffs: [...allTariffs.values()].sort((left, right) => left.name.localeCompare(right.name, 'ru')),
     publishedUsageAvailable: publishedUsages !== null,
+    publishedTemplateUsageAvailable: publishedUsages !== null && published?.variableUsageVersion === 2,
     items,
   };
 }

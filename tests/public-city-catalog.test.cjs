@@ -61,6 +61,7 @@ test('public catalog does not expose authored variable templates or operator-onl
     seoWarnings: [{ code: 'DUPLICATE_TITLE', path: '/kazan', relatedPath: '/moskva' }],
     variableUsages: [{ code: 'CITY_NAME', template: 'В {CITY_NAME}', path: 'globalPages[0].title' }],
     variableSources: { providerName: 'Дом.ру', resolvedAt: '2026-09-23T00:00:00.000Z' },
+    variableUsageVersion: 2,
   };
   const controller = new CitiesController({}, { getPublishedCatalog: async () => snapshot });
   const result = await controller.list('domru-site');

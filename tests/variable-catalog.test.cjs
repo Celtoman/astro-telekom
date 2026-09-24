@@ -88,6 +88,18 @@ test('missing context is explicit and historical snapshots never fabricate zero 
   assert.throws(() => buildVariableCatalogView({ siteId: 'site-1', workingRevision: 8, publishedRevision: 7, working, published: historical, cityId: 'city-1', tariffId: 'other' }), /тариф/i);
 });
 
+test('published SEO template usage completeness is explicit for old and new snapshots', () => {
+  const { resolveCatalogVariables } = api('catalog-variables');
+  const { buildVariableCatalogView } = api('variable-catalog');
+  const working = resolveCatalogVariables(rawCatalog(), sources);
+  const base = { siteId: 'site-1', workingRevision: 8, publishedRevision: 7, working };
+  const oldView = buildVariableCatalogView({ ...base, published: working });
+  assert.equal(oldView.publishedUsageAvailable, true);
+  assert.equal(oldView.publishedTemplateUsageAvailable, false);
+  const currentView = buildVariableCatalogView({ ...base, published: { ...working, variableUsageVersion: 2 } });
+  assert.equal(currentView.publishedTemplateUsageAvailable, true);
+});
+
 test('admin catalog endpoint is authenticated, read-only and reads working and successful published snapshots', async () => {
   const { resolveCatalogVariables } = api('catalog-variables');
   const { AdminVariableCatalogController } = api('admin-variable-catalog.controller');
@@ -125,6 +137,7 @@ test('read-only working usage scan includes draft pages, hidden blocks and inact
     tariff: { findMany: async (query) => { calls.push(['tariffs', query]); return [{
       id: 'inactive-tariff', cityId: 'city-1', status: 'ARCHIVED', availability: 'ARCHIVED', promoText: 'От {TARIFF_PRICE}', seo: {},
     }]; } },
+    seoTemplate: { findMany: async (query) => { calls.push(['seoTemplates', query]); return []; } },
   };
   const service = new WorkingVariableUsagesService({ $transaction: async (callback) => callback(transaction) });
   const usages = await service.list('site-1', 8);
@@ -132,8 +145,30 @@ test('read-only working usage scan includes draft pages, hidden blocks and inact
   assert.equal(usages[0].lifecycleStatus, 'DRAFT');
   assert.equal(usages[1].visible, false);
   assert.equal(usages[2].lifecycleStatus, 'ARCHIVED');
-  assert.deepEqual(calls.map(([name]) => name), ['site', 'pages', 'tariffs']);
+  assert.deepEqual(calls.map(([name]) => name), ['site', 'pages', 'tariffs', 'seoTemplates']);
   assert.deepEqual(calls[1][1].where, { siteId: 'site-1' });
   assert.deepEqual(calls[2][1].where, { city: { siteId: 'site-1' } });
+  assert.deepEqual(calls[3][1].where, { siteId: 'site-1' });
   await assert.rejects(() => service.list('site-1', 7), /ревизи/i);
+});
+
+test('working usage scan includes authored SEO and OG templates once per field with a direct editor link', async () => {
+  const { WorkingVariableUsagesService } = api('working-variable-usages.service');
+  const transaction = {
+    site: { findUnique: async () => ({ workingRevision: 8 }) },
+    page: { findMany: async () => [] },
+    tariff: { findMany: async () => [] },
+    seoTemplate: { findMany: async () => [
+      { id: 'seo-city', kind: 'CITY_HOME', titleTemplate: 'Интернет {CITY_NAME}', descriptionTemplate: 'Оператор {PROVIDER_NAME}', ogTitleTemplate: '{CITY_NAME}', ogDescriptionTemplate: null },
+      { id: 'seo-home', kind: 'HOME', titleTemplate: 'Дом.ру', descriptionTemplate: 'Без переменных', ogTitleTemplate: '', ogDescriptionTemplate: '{PROVIDER_NAME}' },
+    ] },
+  };
+  const service = new WorkingVariableUsagesService({ $transaction: async (callback) => callback(transaction) });
+  const usages = await service.list('site-1', 8);
+  assert.deepEqual(usages.map(({ code, path, entityType, entityId, editorHref }) => ({ code, path, entityType, entityId, editorHref })), [
+    { code: 'CITY_NAME', path: 'seoTemplates[CITY_HOME].titleTemplate', entityType: 'SEO_TEMPLATE', entityId: 'seo-city', editorHref: '/seo/templates?kind=CITY_HOME' },
+    { code: 'PROVIDER_NAME', path: 'seoTemplates[CITY_HOME].descriptionTemplate', entityType: 'SEO_TEMPLATE', entityId: 'seo-city', editorHref: '/seo/templates?kind=CITY_HOME' },
+    { code: 'CITY_NAME', path: 'seoTemplates[CITY_HOME].ogTitleTemplate', entityType: 'SEO_TEMPLATE', entityId: 'seo-city', editorHref: '/seo/templates?kind=CITY_HOME' },
+    { code: 'PROVIDER_NAME', path: 'seoTemplates[HOME].ogDescriptionTemplate', entityType: 'SEO_TEMPLATE', entityId: 'seo-home', editorHref: '/seo/templates?kind=HOME' },
+  ]);
 });

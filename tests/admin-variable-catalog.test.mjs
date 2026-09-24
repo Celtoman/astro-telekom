@@ -33,5 +33,7 @@ test('variables workspace exposes two tabs and a read-only contextual catalog', 
   assert.match(app, /Черновик/);
   assert.match(app, /Скрыт/);
   assert.match(app, /Редактор пока недоступен/);
+  assert.match(app, /SEO-шаблон/);
+  assert.match(app, /publishedTemplateUsageAvailable/);
   assert.doesNotMatch(app, /Создать переменн|Удалить код|Переименовать код/);
 });

@@ -74,7 +74,12 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
     } finally { setLoading(false) }
   }, [apiUrl, kind])
 
-  useEffect(() => { void load() }, [])
+  useEffect(() => {
+    const requestedKind = new URLSearchParams(window.location.search).get("kind")
+    const nextKind = requestedKind && Object.prototype.hasOwnProperty.call(labels, requestedKind) ? requestedKind as Kind : "HOME"
+    setKind(nextKind)
+    void load(nextKind)
+  }, [])
 
   const template = workspace?.templates.find((item) => item.kind === kind)
   const routes = useMemo(() => workspace?.routes.filter((route) => route.id === kind) || [], [workspace, kind])

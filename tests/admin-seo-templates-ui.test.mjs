@@ -24,5 +24,7 @@ test('SEO templates have a protected admin route and cookie-auth React editor', 
   assert.match(editor, /ogDescriptionTemplate/);
   assert.match(editor, /ogImageUrl/);
   assert.match(editor, /PublicationStatusCard/);
+  assert.match(editor, /URLSearchParams\(window\.location\.search\)/);
+  assert.match(editor, /setKind\(nextKind\)/);
   assert.doesNotMatch(editor, /localStorage|sessionStorage|x-admin-token/);
 });

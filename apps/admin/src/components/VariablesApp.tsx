@@ -38,7 +38,7 @@ interface VariableUsage {
   code: string
   path: string
   template: string
-  entityType: "PAGE" | "BLOCK" | "TARIFF"
+  entityType: "PAGE" | "BLOCK" | "TARIFF" | "SEO_TEMPLATE"
   entityId: string
   pageType?: string
   blockType?: string
@@ -70,6 +70,7 @@ interface VariableCatalog {
   cities: Array<{ id: string; name: string; slug: string }>
   tariffs: Array<{ id: string; name: string; slug: string }>
   publishedUsageAvailable: boolean
+  publishedTemplateUsageAvailable: boolean
   items: VariableItem[]
 }
 
@@ -88,6 +89,7 @@ function valueLabel(value: VariableValue): string {
 }
 
 function usageLabel(usage: VariableUsage): string {
+  if (usage.entityType === "SEO_TEMPLATE") return `SEO-шаблон: ${pageLabels[usage.pageType ?? ""] ?? "тип не определён"}`
   if (usage.entityType === "TARIFF") return "Тариф"
   if (usage.entityType === "BLOCK") return `Блок: ${blockLabels[usage.blockType ?? ""] ?? "тип не определён"}`
   return `Страница: ${pageLabels[usage.pageType ?? ""] ?? "тип не определён"}`
@@ -161,6 +163,7 @@ function VariableCatalogPanel({ apiUrl, siteId }: { apiUrl: string; siteId: stri
       <Card><CardHeader><CardTitle>Каталог подстановок</CardTitle><CardDescription>Все реализованные коды показаны независимо от числа использований. Технический контракт доступен только для просмотра. Рабочая версия {catalog.workingRevision}, опубликована {catalog.publishedRevision}.</CardDescription></CardHeader>
         <CardContent className="space-y-4">
           {!catalog.publishedUsageAvailable ? <Alert><CircleAlert /><AlertTitle>Исторический снимок</AlertTitle><AlertDescription>Места использования старой публикации не сохранены; нулевое число не предполагается. Новая публикация зафиксирует их отдельно.</AlertDescription></Alert> : null}
+          {catalog.publishedUsageAvailable && !catalog.publishedTemplateUsageAvailable ? <Alert><CircleAlert /><AlertTitle>Неполный исторический снимок</AlertTitle><AlertDescription>Опубликованные использования SEO-шаблонов в этом снимке не сохранялись. Показаны только известные места использования; нулевое число не означает, что код не применён в SEO. Новая публикация зафиксирует полный индекс.</AlertDescription></Alert> : null}
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             <Field className="lg:col-span-2"><FieldLabel htmlFor="variable-search">Поиск по коду, названию или источнику</FieldLabel><Input id="variable-search" value={q} onChange={(event) => { setQ(event.target.value); setSelectedCode("") }} placeholder="Например, цена" /></Field>
             <Field><FieldLabel htmlFor="variable-status">Статус</FieldLabel><select id="variable-status" className={selectClass} value={status} onChange={(event) => { setStatus(event.target.value); setSelectedCode("") }}><option value="">Все</option><option value="ACTIVE">Активна</option><option value="DEPRECATING">Устаревает</option></select></Field>
@@ -175,7 +178,7 @@ function VariableCatalogPanel({ apiUrl, siteId }: { apiUrl: string; siteId: stri
               <TableCell className="min-w-40 whitespace-normal"><Badge variant={item.status === "ACTIVE" ? "success" : "warning"}>{item.status === "ACTIVE" ? "Активна" : "Устаревает"}</Badge><div className="mt-2">{typeLabels[item.type] ?? "Неизвестный тип"} · {sourceLabels[item.source.split(".")[0]] ?? "Неизвестный источник"}</div></TableCell>
               <TableCell className="min-w-40 whitespace-normal">{valueLabel(item.working)}</TableCell>
               <TableCell className="min-w-40 whitespace-normal">{valueLabel(item.published)}{item.changed === true ? <Badge variant="warning" className="ml-2">Отличается</Badge> : null}</TableCell>
-              <TableCell>{item.workingUsages.length} / {item.publishedUsages?.length ?? "—"}<span className="sr-only"> рабочих / опубликованных</span></TableCell>
+              <TableCell>{item.workingUsages.length} / {item.publishedUsages?.length ?? "—"}{catalog.publishedUsageAvailable && !catalog.publishedTemplateUsageAvailable ? <span title="Опубликованный индекс не включает SEO-шаблоны">*</span> : null}<span className="sr-only"> рабочих / опубликованных{catalog.publishedUsageAvailable && !catalog.publishedTemplateUsageAvailable ? ", опубликованный индекс неполный" : ""}</span></TableCell>
               <TableCell><Button variant="outline" size="sm" aria-label={`Подробнее о ${item.name}`} onClick={() => setSelectedCode(item.code)}>Подробнее</Button></TableCell>
             </TableRow>)}</TableBody>
           </Table>
