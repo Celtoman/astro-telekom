@@ -35,7 +35,7 @@ export async function requestJson(baseUrl, route, options = {}, fetchImpl = fetc
     throw new AdminApiError(response.status, message, payload)
   }
   const method = (options.method || "GET").toUpperCase()
-  if (method !== "GET" && /^\/admin\//.test(route) && !/\/import\/validate(?:\?|$)/.test(route) && typeof window !== "undefined") {
+  if (method !== "GET" && /^\/admin\//.test(route) && !/\/import\/validate(?:\?|$)|\/tariff-template\/quote(?:\?|$)/.test(route) && typeof window !== "undefined") {
     window.dispatchEvent(new Event("admin:publication-changed"))
   }
   return /** @type {T} */ (payload)
