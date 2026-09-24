@@ -37,6 +37,18 @@ test('one broken tariff blocks the whole snapshot and other URLs are still check
   assert.ok(report.checkedPaths.includes('/moskva/good-price'));
 });
 
+test('renderer errors block publication with URL, template, block and field diagnostics', () => {
+  const source = publicationSource([city('kazan', ['invalid-cinema'])]);
+  source.cities[0].tariffs[0].attributes = { online_cinemas: 'unknown' };
+  const { report, catalog } = validatePublicationSource(source, input, render);
+  const issue = report.issues.find((item) => item.code === 'TARIFF_RENDER');
+  assert.equal(report.outcome, 'BLOCKED');
+  assert.equal(catalog, null);
+  assert.deepEqual({ path: issue.path, template: issue.template, block: issue.block, field: issue.field }, {
+    path: '/kazan/invalid-cinema', template: 'CITY_TARIFF_DETAIL', block: 'cinemas', field: 'attributes.online_cinemas',
+  });
+});
+
 test('route conflicts, missing required page and invalid redirects appear together', () => {
   const source = publicationSource([city('kazan', ['giga', 'giga'])]);
   source.globalPages = source.globalPages.filter((page) => page.type !== 'COOKIE_POLICY');

@@ -5,7 +5,7 @@ import { normalizeRedirectPath } from './redirect-path';
 import type { CatalogSource } from './site-catalog.service';
 import { sitePhoneReadinessErrors } from './site-phone';
 import { resolveSeoTemplates } from './seo-templates';
-import { quoteTariffConfiguration } from './tariff-configuration.service';
+import { tariffPreviewDiagnostics } from './tariff-preview-diagnostics';
 
 export type PublicationValidationIssue = {
   severity: 'BLOCKING' | 'WARNING';
@@ -13,6 +13,9 @@ export type PublicationValidationIssue = {
   path: string;
   message: string;
   relatedPath?: string;
+  template?: string;
+  block?: string;
+  field?: string;
 };
 
 export type PublicationValidationReport = {
@@ -64,9 +67,13 @@ export function validatePublicationSource(
   const now = input.now || new Date();
   const issues: PublicationValidationIssue[] = [];
   const issueKeys = new Set<string>();
-  const add = (severity: PublicationValidationIssue['severity'], code: string, path: string, detail: string, relatedPath?: string) => {
+  const add = (severity: PublicationValidationIssue['severity'], code: string, path: string, detail: string, relatedPath?: string,
+    location?: Pick<PublicationValidationIssue, 'template' | 'block' | 'field'>) => {
     const issue: PublicationValidationIssue = { severity, code, path, message: detail };
     if (relatedPath) issue.relatedPath = relatedPath;
+    if (location?.template) issue.template = location.template;
+    if (location?.block) issue.block = location.block;
+    if (location?.field) issue.field = location.field;
     const key = JSON.stringify(issue);
     if (!issueKeys.has(key)) {
       issueKeys.add(key);
@@ -120,7 +127,10 @@ export function validatePublicationSource(
       }
     }
     if (route.kind === 'CITY_TARIFF_DETAIL') {
-      try { quoteTariffConfiguration(JSON.parse(JSON.stringify(tariff)), {}); } catch (error) { add('BLOCKING', 'TARIFF_CALCULATION', route.path, message(error)); }
+      for (const diagnostic of tariffPreviewDiagnostics(JSON.parse(JSON.stringify(tariff)), route.path)) {
+        add(diagnostic.severity, diagnostic.code, diagnostic.path, diagnostic.message, undefined,
+          { template: diagnostic.template, block: diagnostic.block, field: diagnostic.field });
+      }
     }
     try {
       const mini = {
@@ -140,7 +150,10 @@ export function validatePublicationSource(
         add('WARNING', `VARIABLE_${warning.reason}`, route.path, `Переменная {${warning.code}}: ${warning.reason} (${warning.path})`);
       }
     } catch (error) {
-      add('BLOCKING', 'VARIABLE_RESOLUTION', route.path, message(error));
+      const detail = message(error);
+      const tariffField = route.kind === 'CITY_TARIFF_DETAIL' && /\.promoText\b/.test(detail)
+        ? { template: route.id, block: 'hero', field: 'promoText' } : undefined;
+      add('BLOCKING', 'VARIABLE_RESOLUTION', route.path, detail, undefined, tariffField);
     }
     try {
       const seo = resolveSeoTemplates({

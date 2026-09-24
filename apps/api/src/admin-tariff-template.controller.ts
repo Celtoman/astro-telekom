@@ -3,6 +3,8 @@ import { APP_VERSION } from './app-version';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
 import { quoteTariffConfiguration, type TariffSelection } from './tariff-configuration.service';
+import { tariffPreviewDiagnostics } from './tariff-preview-diagnostics';
+import { selectTariffPreviewScenarios, type PreviewScenarioEntry } from './tariff-preview-scenarios';
 import { resolveVariableText } from './variable-registry';
 
 type TariffVersion = 'working' | 'published';
@@ -97,6 +99,32 @@ export class AdminTariffTemplateController {
     return { citySlug, total: all.length, tariffs: all.slice(0, 100) };
   }
 
+  @Get('scenarios')
+  async scenarios(@Param('siteId') siteId: string, @Query('version') rawVersion?: string) {
+    const version = rawVersion ?? 'working';
+    if (version !== 'working' && version !== 'published') throw new BadRequestException('Некорректная версия тарифа');
+    const { catalog } = await this.context(siteId);
+    let entries: PreviewScenarioEntry[];
+    if (version === 'working') {
+      const tariffs = await this.prisma.tariff.findMany({
+        where: { city: { siteId } },
+        select: {
+          slug: true, name: true, status: true, availability: true, serviceType: true,
+          standardPrice: true, promoPrice: true, connectionFee: true, speed: true, attributes: true,
+          city: { select: { slug: true, status: true } },
+        },
+      });
+      entries = tariffs.map((tariff) => ({
+        citySlug: tariff.city.slug, cityStatus: tariff.city.status, version,
+        tariff: JSON.parse(JSON.stringify(tariff)) as Record<string, unknown>,
+      }));
+    } else {
+      entries = records(catalog?.cities).flatMap((city) => typeof city.slug === 'string'
+        ? records(city.tariffs).map((tariff) => ({ citySlug: city.slug as string, version, tariff })) : []);
+    }
+    return { siteId, version, ...selectTariffPreviewScenarios(entries) };
+  }
+
   @Get('preview')
   async preview(@Param('siteId') siteId: string, @Query('citySlug') rawCitySlug?: string, @Query('tariffSlug') rawTariffSlug?: string) {
     const citySlug = requiredSlug(rawCitySlug, 'slug города');
@@ -111,13 +139,22 @@ export class AdminTariffTemplateController {
     const publishedTariffRow = publishedTariff(published, tariffSlug);
     if (!workingTariff && !publishedTariffRow) throw new NotFoundException('Тариф не найден');
     const workingSnapshot = workingTariff ? JSON.parse(JSON.stringify(workingTariff)) as CatalogTariff : null;
+    const path = `/${citySlug}/${tariffSlug}`;
+    let workingVariableDiagnostic: { severity: 'BLOCKING'; code: string; path: string; template: string; block: string; field: string; message: string } | null = null;
     if (workingSnapshot && typeof workingSnapshot.promoText === 'string') {
-      workingSnapshot.promoText = resolveVariableText(workingSnapshot.promoText, {
-        site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
-        provider: { name: site.provider?.name },
-        city: city ? { name: city.name, nameGenitive: city.nameGenitive, namePrepositional: city.namePrepositional } : undefined,
-        tariff: workingSnapshot, now: new Date(),
-      }, { path: 'Tariff.promoText', field: 'TEXT' }).text;
+      try {
+        workingSnapshot.promoText = resolveVariableText(workingSnapshot.promoText, {
+          site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
+          provider: { name: site.provider?.name },
+          city: city ? { name: city.name, nameGenitive: city.nameGenitive, namePrepositional: city.namePrepositional } : undefined,
+          tariff: workingSnapshot, now: new Date(),
+        }, { path: 'Tariff.promoText', field: 'TEXT' }).text;
+      } catch (error) {
+        workingVariableDiagnostic = {
+          severity: 'BLOCKING', code: 'VARIABLE_RESOLUTION', path, template: 'CITY_TARIFF_DETAIL',
+          block: 'hero', field: 'promoText', message: error instanceof Error ? error.message : 'Не удалось разрешить переменную',
+        };
+      }
     }
     return {
       siteId: site.id, siteSlug: site.slug, siteDomain: site.domain,
@@ -125,10 +162,42 @@ export class AdminTariffTemplateController {
       publishedAt: publication?.publishedAt ?? null,
       city: { slug: citySlug, name: city?.name ?? published?.name ?? citySlug, nameIn: city?.namePrepositional ?? published?.nameIn ?? city?.name ?? published?.name ?? citySlug },
       tariff: { working: workingSnapshot, published: publishedTariffRow },
+      variableDiagnostics: { working: workingVariableDiagnostic, published: null },
       related: {
         working: city?.tariffs.filter((item) => item.slug !== tariffSlug && item.status === 'PUBLISHED' && item.availability === 'ACTIVE').slice(0, 3) ?? [],
         published: records(published?.tariffs).filter((item) => item.slug !== tariffSlug).slice(0, 3),
       },
+    };
+  }
+
+  @Get('diagnostics')
+  async diagnostics(@Param('siteId') siteId: string, @Query('citySlug') rawCitySlug?: string,
+    @Query('tariffSlug') rawTariffSlug?: string, @Query('version') rawVersion?: string) {
+    const version = rawVersion ?? 'working';
+    if (version !== 'working' && version !== 'published') throw new BadRequestException('Некорректная версия тарифа');
+    const citySlug = requiredSlug(rawCitySlug, 'slug города');
+    const tariffSlug = requiredSlug(rawTariffSlug, 'slug тарифа');
+    const preview = await this.preview(siteId, citySlug, tariffSlug);
+    const tariff = preview.tariff[version];
+    if (!tariff) throw new NotFoundException('Тариф этой версии не найден');
+    const path = `/${citySlug}/${tariffSlug}`;
+    const siteRevision = version === 'working' ? preview.workingRevision : preview.publishedRevision;
+    const validation = await this.prisma.sitePublicationValidation.findFirst({
+      where: { siteId, siteRevision }, orderBy: [{ validatedAt: 'desc' }, { id: 'desc' }],
+      select: { id: true, report: true, appVersion: true, validatedAt: true, outcome: true },
+    });
+    const report = validation?.report as { issues?: Array<{ path?: string; severity?: string; code?: string; message?: string; template?: string; block?: string; field?: string }> } | null;
+    return {
+      path, version, siteRevision,
+      current: [
+        ...tariffPreviewDiagnostics(tariff, path),
+        ...(preview.variableDiagnostics[version] ? [preview.variableDiagnostics[version]!] : []),
+      ],
+      publicationReport: validation ? {
+        id: validation.id, appVersion: validation.appVersion, validatedAt: validation.validatedAt,
+        outcome: validation.outcome, staleCode: validation.appVersion !== APP_VERSION,
+        issues: (report?.issues ?? []).filter((issue) => issue.path === path),
+      } : null,
     };
   }
 

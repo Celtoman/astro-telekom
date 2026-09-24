@@ -93,3 +93,18 @@
     @apply m-0 min-h-screen bg-background text-foreground antialiased;
   }
 }
+
+@layer components {
+  [data-tariff-template-preview][data-marked-blocks~="hero"] [data-tariff-block="hero"],
+  [data-tariff-template-preview][data-marked-blocks~="description"] [data-tariff-block="description"],
+  [data-tariff-template-preview][data-marked-blocks~="cinemas"] [data-tariff-block="cinemas"],
+  [data-tariff-template-preview][data-marked-blocks~="equipment"] [data-tariff-block="equipment"],
+  [data-tariff-template-preview][data-marked-blocks~="services"] [data-tariff-block="services"],
+  [data-tariff-template-preview][data-marked-blocks~="configurator"] [data-tariff-block="configurator"],
+  [data-tariff-template-preview][data-marked-blocks~="address"] [data-tariff-block="address"],
+  [data-tariff-template-preview][data-marked-blocks~="related"] [data-tariff-block="related"],
+  [data-tariff-template-preview][data-marked-blocks~="faq"] [data-tariff-block="faq"] {
+    outline: 4px solid #ef4444;
+    outline-offset: 4px;
+  }
+}

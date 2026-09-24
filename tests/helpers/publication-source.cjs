@@ -27,7 +27,7 @@ function city(slug, tariffs = []) {
     region: { name: 'Регион', slug: 'region' },
     pages: [cityHome(slug)],
     tariffs: tariffs.map((tariffSlug) => ({
-      id: `tariff-${slug}-${tariffSlug}`, slug: tariffSlug, name: tariffSlug,
+      id: `tariff-${slug}-${tariffSlug}`, slug: tariffSlug, name: tariffSlug, serviceType: 'INTERNET',
       standardPrice: '700', promoPrice: null, connectionFee: null, attributes: {}, seo: {},
     })),
   };
