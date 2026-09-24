@@ -104,7 +104,7 @@ export class AdminTariffTemplateController {
     const { site, publication, catalog } = await this.context(siteId);
     const city = await this.prisma.city.findFirst({
       where: { siteId, slug: citySlug },
-      select: { id: true, name: true, nameIn: true, nameGenitive: true, namePrepositional: true, slug: true, tariffs: { orderBy: { name: 'asc' } } },
+      select: { id: true, name: true, nameGenitive: true, namePrepositional: true, slug: true, tariffs: { orderBy: { name: 'asc' } } },
     });
     const published = publishedCity(catalog, citySlug);
     const workingTariff = city?.tariffs.find((item) => item.slug === tariffSlug) ?? null;
@@ -123,7 +123,7 @@ export class AdminTariffTemplateController {
       siteId: site.id, siteSlug: site.slug, siteDomain: site.domain,
       workingRevision: site.workingRevision, publishedRevision: site.publishedRevision,
       publishedAt: publication?.publishedAt ?? null,
-      city: { slug: citySlug, name: city?.name ?? published?.name ?? citySlug, nameIn: city?.nameIn ?? published?.nameIn ?? city?.name ?? published?.name ?? citySlug },
+      city: { slug: citySlug, name: city?.name ?? published?.name ?? citySlug, nameIn: city?.namePrepositional ?? published?.nameIn ?? city?.name ?? published?.name ?? citySlug },
       tariff: { working: workingSnapshot, published: publishedTariffRow },
       related: {
         working: city?.tariffs.filter((item) => item.slug !== tariffSlug && item.status === 'PUBLISHED' && item.availability === 'ACTIVE').slice(0, 3) ?? [],

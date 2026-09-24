@@ -14,6 +14,7 @@ const publishedOnly = { ...publishedTariff, id: 'tariff-3', slug: 'old-100', nam
 
 function fixture() {
   const reads = [];
+  const citySelections = [];
   const prisma = {
     site: { findUnique: async () => { reads.push('site'); return { id: 'site-1', slug: 'domru-site', domain: 'example.test', workingRevision: 8, publishedRevision: 7 }; } },
     sitePublication: { findFirst: async () => { reads.push('publication'); return {
@@ -22,14 +23,18 @@ function fixture() {
     }; } },
     city: {
       findMany: async () => { reads.push('cities'); return [{ slug: 'kazan', name: 'Казань', status: 'PUBLISHED' }, { slug: 'draft-city', name: 'Черновой город', status: 'DRAFT' }]; },
-      findFirst: async ({ where }) => { reads.push('city'); return where.slug === 'kazan' ? { id: 'city-1', slug: 'kazan', name: 'Казань', nameIn: 'Казани', tariffs: [workingTariff, draftTariff] } : null; },
+      findFirst: async ({ where, select }) => {
+        reads.push('city');
+        citySelections.push(select);
+        return where.slug === 'kazan' ? { id: 'city-1', slug: 'kazan', name: 'Казань', namePrepositional: 'Казани', tariffs: [workingTariff, draftTariff] } : null;
+      },
     },
     tariff: {
       findMany: async () => { reads.push('tariffs'); return [workingTariff, draftTariff]; },
       findFirst: async ({ where }) => { reads.push('tariff'); return [workingTariff, draftTariff].find((item) => item.slug === where.slug) ?? null; },
     },
   };
-  return { controller: new AdminTariffTemplateController(prisma), reads };
+  return { controller: new AdminTariffTemplateController(prisma), reads, citySelections };
 }
 
 test('tariff template routes require admin authentication and expose only read/quote operations', () => {
@@ -52,12 +57,15 @@ test('city and tariff selectors include drafts and published-only entries, then 
 });
 
 test('preview compares working and last successful published tariff without publishing', async () => {
-  const { controller, reads } = fixture();
+  const { controller, reads, citySelections } = fixture();
   const preview = await controller.preview('site-1', 'kazan', 'giga-300');
   assert.equal(preview.workingRevision, 8);
   assert.equal(preview.publishedRevision, 7);
   assert.equal(preview.tariff.working.standardPrice, '900');
   assert.equal(preview.tariff.working.promoText, 'Цена 900 ₽');
+  assert.equal(preview.city.nameIn, 'Казани');
+  assert.equal(citySelections[0].nameIn, undefined, 'City.nameIn is absent from Prisma schema');
+  assert.equal(citySelections[0].namePrepositional, true);
   assert.equal(preview.tariff.published.standardPrice, '1000');
   assert.equal((await controller.preview('site-1', 'kazan', 'draft-500')).tariff.published, null);
   assert.equal((await controller.preview('site-1', 'kazan', 'old-100')).tariff.working, null);
