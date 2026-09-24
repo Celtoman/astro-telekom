@@ -40,7 +40,7 @@
 | TD-125 | [#207](https://github.com/Celtoman/astro-telekom/issues/207) ✅ | Quote опубликованного тарифа должен принимать канонические целые цены, сериализованные Prisma Decimal как строки |
 | TD-127 | [#209](https://github.com/Celtoman/astro-telekom/issues/209) ✅ | Повтор заявки с прежним `submissionKey` возвращает сохраненный лид после смены публикации или архивации без повторной доставки |
 | TD-128 | [#210](https://github.com/Celtoman/astro-telekom/issues/210) ✅ | Принятый Tarifnik lead при сбое записи БД может ошибочно перейти в failed/fallback вместо неопределённого результата |
-| TD-134 | [#217](https://github.com/Celtoman/astro-telekom/issues/217) 🟢 | Тарифный import отклоняет «Татарстан» после штатного city import, который переиспользует seed-регион «Республика Татарстан» по slug |
+| TD-134 | [#217](https://github.com/Celtoman/astro-telekom/issues/217) ✅ | Тарифный import принимает тот же slug региона, что city import; live preview 3 805 строк прошёл без ошибок |
 | TD-21 | [#12](https://github.com/Celtoman/astro-telekom/issues/12) ✅ | Уязвимый `xlsx@0.18.5` заменен на `read-excel-file`; импорт принимает только ограниченный XLSX |
 | TD-22 | [#37](https://github.com/Celtoman/astro-telekom/issues/37) ✅ | Compose переведен на обязательный для PostgreSQL 18 volume mount `/var/lib/postgresql` |
 | TD-23 | [#38](https://github.com/Celtoman/astro-telekom/issues/38) ✅ | Seed использует явный ESM entrypoint сгенерированного Prisma client и снова запускается на Node 22 |
