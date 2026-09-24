@@ -66,17 +66,24 @@ function fixture(record) {
         return data;
       },
       count: async ({ where }) => attempts.filter((attempt) => attempt.leadId === where.leadId && attempt.channel === where.channel).length,
-      update: async ({ where, data }) => { attemptUpdates.push({ where, data }); return data; },
+      update: async ({ where, data }) => {
+        attemptUpdates.push({ where, data });
+        const key = where.leadId_attemptNumber_channel;
+        const attempt = attempts.find((item) => item.leadId === key.leadId && item.attemptNumber === key.attemptNumber && item.channel === key.channel);
+        if (!attempt) throw new Error('Delivery attempt not found');
+        Object.assign(attempt, data);
+        return attempt;
+      },
     },
     $transaction: async (operations) => {
       if (typeof operations !== 'function') return Promise.all(operations);
       const beforeLead = { ...record };
-      const beforeAttemptCount = attempts.length;
+      const beforeAttempts = attempts.map((attempt) => ({ ...attempt }));
       try {
         return await operations(prisma);
       } catch (error) {
         Object.assign(record, beforeLead);
-        attempts.length = beforeAttemptCount;
+        attempts.splice(0, attempts.length, ...beforeAttempts);
         throw error;
       }
     },
@@ -183,6 +190,7 @@ test('Tarifnik delivery sends only the official appeal/create payload and valida
   await withDeliveryEnvironment(async () => {
     const f = fixture(lead());
     global.fetch = async (url, options) => {
+      assert.equal((await f.prisma.lead.findUnique()).processingStatus, 'DELIVERY_API_OUTCOME_UNKNOWN', 'durable uncertainty marker precedes the external call');
       assert.equal(String(url), process.env.TARIFNIK_API_URL);
       assert.equal(options.headers.authorization, 'Bearer test-token');
       assert.equal(options.headers['idempotency-key'], undefined);
@@ -202,6 +210,32 @@ test('Tarifnik delivery sends only the official appeal/create payload and valida
     assert.equal(f.attempts[0].status, 'SUCCEEDED');
     assert.equal(f.updates.at(-1).processingStatus, 'DELIVERED');
     assert.equal(f.updates.at(-1).externalStatus, 'created');
+  });
+});
+
+test('accepted Tarifnik response followed by a DB failure remains uncertain without fallback or resend', async () => {
+  await withDeliveryEnvironment(async () => {
+    const currentLead = lead();
+    const f = fixture(currentLead);
+    const updateAttempt = f.prisma.leadDeliveryAttempt.update;
+    let fetchCalls = 0;
+    let fallbackCalls = 0;
+    f.prisma.leadDeliveryAttempt.update = async (args) => {
+      if (args.data.status === 'SUCCEEDED') throw new Error('Database unavailable after accepted appeal');
+      return updateAttempt(args);
+    };
+    f.service.notifications.notifyDeliveryFallback = async () => { fallbackCalls += 1; };
+    global.fetch = async () => {
+      fetchCalls += 1;
+      return new Response(JSON.stringify({ result: 'created', appeal_id: 'accepted-appeal' }), { status: 200 });
+    };
+
+    assert.deepEqual(await f.service.process('lead-1', 1), { delivered: false, outcomeUnknown: true });
+    assert.equal(currentLead.processingStatus, 'DELIVERY_API_OUTCOME_UNKNOWN');
+    assert.deepEqual(f.attempts.map((attempt) => [attempt.channel, attempt.status, attempt.attemptNumber]), [['API', 'OUTCOME_UNKNOWN', 1]]);
+    assert.equal(fallbackCalls, 0);
+    assert.deepEqual(await f.service.process('lead-1', 1), { skipped: true, reason: 'DELIVERY_API_OUTCOME_UNKNOWN' });
+    assert.equal(fetchCalls, 1, 'a replay must not submit the accepted appeal again');
   });
 });
 
@@ -400,15 +434,17 @@ test('a failed email outcome write is not reported as a failed email transport',
   });
 });
 
-test('email fallback is not sent when the durable uncertain-outcome marker cannot be written', async () => {
+test('Tarifnik and email are not called when the durable API uncertainty marker cannot be written', async () => {
   await withDeliveryEnvironment(async () => {
     const f = fixture(lead());
     let fallbackCalls = 0;
+    let apiCalls = 0;
     f.service.notifications.notifyDeliveryFallback = async () => { fallbackCalls += 1; };
-    f.prisma.lead.updateMany = async () => { throw new Error('Database unavailable before email send'); };
-    global.fetch = async () => new Response('{}', { status: 403 });
+    f.prisma.lead.updateMany = async () => { throw new Error('Database unavailable before API call'); };
+    global.fetch = async () => { apiCalls += 1; return new Response('{}', { status: 403 }); };
 
-    await assert.rejects(f.service.process('lead-1', 1), /Database unavailable before email send/);
+    await assert.rejects(f.service.process('lead-1', 1), /Database unavailable before API call/);
+    assert.equal(apiCalls, 0);
     assert.equal(fallbackCalls, 0);
   });
 });
@@ -422,9 +458,9 @@ test('failed retry scheduling clears the misleading next-at timestamp', async ()
     const result = await f.service.process('lead-1', 1, 1);
 
     assert.deepEqual(result, { delivered: false, queueError: true });
-    assert.deepEqual(f.attemptUpdates, [{
+    assert.deepEqual(f.attemptUpdates.at(-1), {
       where: { leadId_attemptNumber_channel: { leadId: 'lead-1', attemptNumber: 1, channel: 'API' } },
       data: { nextAttemptAt: null },
-    }]);
+    });
   });
 });

@@ -158,6 +158,28 @@ test('uncertain email outcome requires explicit operator acknowledgement before 
   assert.deepEqual(requested, ['lead', 4, 0, 1]);
 });
 
+test('uncertain Tarifnik outcome requires explicit acknowledgement and a fresh attempt', async () => {
+  let saved;
+  let requested;
+  const controller = new CrmLeadsController({
+    lead: {
+      findUnique: async () => ({
+        id: 'lead', processingStatus: 'DELIVERY_API_OUTCOME_UNKNOWN',
+        updatedAt: new Date('2026-01-01'), deliveryAttempts: [{ attemptNumber: 1, channel: 'API', status: 'OUTCOME_UNKNOWN' }],
+      }),
+      updateMany: async ({ data }) => { saved = data; return { count: 1 }; },
+    },
+  }, {
+    enqueueTracked: async (...args) => { requested = args; return { queued: true, processingStatus: 'PENDING' }; },
+  });
+
+  await assert.rejects(controller.retryDelivery('lead'), (error) => error.getStatus() === 400);
+  assert.equal(requested, undefined);
+  await controller.retryDelivery('lead', { confirmUnknownOutcome: true });
+  assert.equal(saved.processingStatus, 'PENDING');
+  assert.deepEqual(requested, ['lead', 2, 0, 1]);
+});
+
 test('legacy pending lead after terminal API attempt needs the same explicit acknowledgement', async () => {
   let enqueued = 0;
   const controller = new CrmLeadsController({

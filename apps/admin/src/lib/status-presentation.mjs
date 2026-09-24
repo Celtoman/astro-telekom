@@ -67,6 +67,7 @@ const registry = {
     DELIVERY_QUEUE_ERROR: entry("Ошибка очереди", "Задание доставки не создано.", "destructive"),
     DELIVERY_ERROR_EMAIL_SENT: entry("Отправлено резервное письмо", "Основной канал не сработал, оператор уведомлен по email.", "warning"),
     DELIVERY_ERROR_EMAIL_FAILED: entry("Не доставлена", "Основной и резервный каналы завершились ошибкой.", "destructive"),
+    DELIVERY_API_OUTCOME_UNKNOWN: entry("Результат Tarifnik неизвестен", "Tarifnik мог принять заявку, но результат не удалось сохранить. Проверьте заявку во внешнем сервисе перед повтором.", "destructive"),
     DELIVERY_EMAIL_OUTCOME_UNKNOWN: entry("Результат письма неизвестен", "Резервный канал мог принять письмо, но результат не удалось сохранить. Проверьте внешний канал перед повтором.", "destructive"),
   },
   deliveryChannel: {
@@ -78,6 +79,7 @@ const registry = {
     SUCCEEDED: entry("Успешно", "Попытка доставки подтверждена.", "success"),
     FAILED: entry("Ошибка", "Попытка доставки завершилась ошибкой.", "destructive"),
     SKIPPED: entry("Пропущено", "Попытка не выполнялась по правилам обработки.", "neutral"),
+    OUTCOME_UNKNOWN: entry("Исход неизвестен", "Попытка зарегистрирована до вызова внешнего сервиса; ее результат нужно проверить.", "destructive"),
   },
   leadNotificationStatus: {
     PENDING: entry("Ожидает очереди", "Оповещение создано и ожидает постановки в очередь.", "warning"),

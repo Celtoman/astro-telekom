@@ -710,6 +710,7 @@ exports.LeadProcessingStatus = exports.$Enums.LeadProcessingStatus = {
   DELIVERY_QUEUE_ERROR: 'DELIVERY_QUEUE_ERROR',
   DELIVERY_ERROR_EMAIL_SENT: 'DELIVERY_ERROR_EMAIL_SENT',
   DELIVERY_ERROR_EMAIL_FAILED: 'DELIVERY_ERROR_EMAIL_FAILED',
+  DELIVERY_API_OUTCOME_UNKNOWN: 'DELIVERY_API_OUTCOME_UNKNOWN',
   DELIVERY_EMAIL_OUTCOME_UNKNOWN: 'DELIVERY_EMAIL_OUTCOME_UNKNOWN'
 };
 
@@ -739,7 +740,8 @@ exports.DeliveryChannel = exports.$Enums.DeliveryChannel = {
 exports.DeliveryAttemptStatus = exports.$Enums.DeliveryAttemptStatus = {
   SUCCEEDED: 'SUCCEEDED',
   FAILED: 'FAILED',
-  SKIPPED: 'SKIPPED'
+  SKIPPED: 'SKIPPED',
+  OUTCOME_UNKNOWN: 'OUTCOME_UNKNOWN'
 };
 
 exports.Prisma.ModelName = {

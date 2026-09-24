@@ -149,6 +149,18 @@ export class LeadDeliveryService implements OnModuleDestroy {
       ...(lead.name?.trim() ? { name: lead.name.trim() } : {}),
     };
     const attemptUrl = endpoint;
+    const claimed = await this.prisma.$transaction(async (tx) => {
+      const updated = await tx.lead.updateMany({
+        where: { id: leadId, processingStatus: 'PENDING' },
+        data: { processingStatus: 'DELIVERY_API_OUTCOME_UNKNOWN' },
+      });
+      if (updated.count !== 1) return updated;
+      await tx.leadDeliveryAttempt.create({
+        data: { leadId, attemptNumber, channel: 'API', status: 'OUTCOME_UNKNOWN', idempotencyKey: deliveryKey, requestPayload: payload as unknown as Prisma.InputJsonValue },
+      });
+      return updated;
+    });
+    if (claimed.count !== 1) return { skipped: true, reason: 'delivery_state_changed' };
     try {
       let response: Response;
       let raw: string;
@@ -184,12 +196,22 @@ export class LeadDeliveryService implements OnModuleDestroy {
       if ((result !== 'created' && result !== 'created_duplicate') || !externalId) {
         throw new TarifnikDeliveryError('Tarifnik returned an unexpected response', false);
       }
-      await this.prisma.$transaction([
-        this.prisma.leadDeliveryAttempt.create({
-          data: { leadId, attemptNumber, channel: 'API', status: 'SUCCEEDED', idempotencyKey: deliveryKey, requestPayload: payload as unknown as Prisma.InputJsonValue, response: parsed as Prisma.InputJsonValue },
-        }),
-        this.prisma.lead.update({ where: { id: leadId }, data: { processingStatus: 'DELIVERED', externalLeadId: externalId, externalStatus: result } }),
-      ]);
+      try {
+        await this.prisma.$transaction(async (tx) => {
+          const recorded = await tx.lead.updateMany({
+            where: { id: leadId, processingStatus: 'DELIVERY_API_OUTCOME_UNKNOWN' },
+            data: { processingStatus: 'DELIVERED', externalLeadId: externalId, externalStatus: result },
+          });
+          if (recorded.count !== 1) throw new Error('Lead state changed after Tarifnik accepted the appeal');
+          await tx.leadDeliveryAttempt.update({
+            where: { leadId_attemptNumber_channel: { leadId, attemptNumber, channel: 'API' } },
+            data: { status: 'SUCCEEDED', response: parsed as Prisma.InputJsonValue },
+          });
+        });
+      } catch (error) {
+        this.logger.error(`Accepted Tarifnik appeal for lead ${leadId} could not be persisted: ${error instanceof Error ? error.message : String(error)}`);
+        return { delivered: false, outcomeUnknown: true };
+      }
       return { delivered: true, externalId };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown Tarifnik delivery error';
@@ -200,8 +222,16 @@ export class LeadDeliveryService implements OnModuleDestroy {
       const nextAttemptAt = retryable && retryNumber < RETRY_DELAYS.length
         ? new Date(Date.now() + retryDelay)
         : null;
-      await this.prisma.leadDeliveryAttempt.create({
-        data: { leadId, attemptNumber, channel: 'API', status: 'FAILED', idempotencyKey: deliveryKey, requestPayload: payload as unknown as Prisma.InputJsonValue, error: message, nextAttemptAt },
+      await this.prisma.$transaction(async (tx) => {
+        const recorded = await tx.lead.updateMany({
+          where: { id: leadId, processingStatus: 'DELIVERY_API_OUTCOME_UNKNOWN' },
+          data: { processingStatus: nextAttemptAt ? 'PENDING' : 'DELIVERY_EMAIL_OUTCOME_UNKNOWN' },
+        });
+        if (recorded.count !== 1) throw new Error('Lead state changed after Tarifnik delivery failure');
+        await tx.leadDeliveryAttempt.update({
+          where: { leadId_attemptNumber_channel: { leadId, attemptNumber, channel: 'API' } },
+          data: { status: 'FAILED', error: message, nextAttemptAt },
+        });
       });
       if (nextAttemptAt) {
         const queued = await this.enqueueTracked(leadId, attemptNumber + 1, retryDelay, retryNumber + 1);
@@ -214,11 +244,6 @@ export class LeadDeliveryService implements OnModuleDestroy {
         }
         return { delivered: false, retryAt: nextAttemptAt.toISOString() };
       }
-      const claimed = await this.prisma.lead.updateMany({
-        where: { id: leadId, processingStatus: 'PENDING' },
-        data: { processingStatus: 'DELIVERY_EMAIL_OUTCOME_UNKNOWN' },
-      });
-      if (claimed.count !== 1) return { skipped: true, reason: 'delivery_state_changed' };
       let emailError: string | null = null;
       try {
         await this.notifications.notifyDeliveryFallback({ id: lead.id, phone: lead.phone, name: lead.name, city: lead.city.name, address: lead.address, tariff: lead.tariff?.name });

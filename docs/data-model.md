@@ -1,6 +1,6 @@
 # Модель данных текущего прототипа
 
-Источник правды: `prisma/schema.prisma` и 48 последовательных миграций от `0001_initial` до `0048_seo_open_graph` на 24 сентября 2026 года. Этот документ отличает существующие таблицы от объектов, которые фигурируют только в продуктовом плане; примененность конкретной миграции во внешнем контуре подтверждается отдельно, а не выводится из репозитория.
+Источник правды: `prisma/schema.prisma` и 49 последовательных миграций от `0001_initial` до `0049_delivery_api_uncertain_outcome` на 24 сентября 2026 года. Этот документ отличает существующие таблицы от объектов, которые фигурируют только в продуктовом плане; применение `0049` во внешнем контуре еще не подтверждено и не выводится из репозитория.
 
 ## Сущности контента и географии
 
@@ -40,7 +40,7 @@ Forward-only migration `0039` восстанавливает только про
 | --- | --- |
 | `AddressCheck` | Фактический нормализованный адрес, object type, status, raw provider response и site/city/page source-контекст. `cityId` обозначает город страницы и не ограничивает географию адреса. |
 | `Lead` | Контакты, фактический адрес, allowlisted и bounded UTM, URL/form/device/visited pages с лимитом 16 KB JSON, address/contract results, processing status, external lead data, operator status. `cityId` обозначает город страницы-источника; nullable unique `submissionKey`, `consentVersion` и `consentAcceptedAt` сохраняют идемпотентность новой публичной отправки и техническое evidence согласия, оставаясь nullable для исторических лидов. Nullable `configurationSnapshot` хранит неизменяемые выбор, компоненты, цены и итоги новых тарифных заявок. Nullable `reasonCode`, `reasonLabel`, `reasonRoute`, `reasonRegistryVersion` — серверный неизменяемый снимок причины; исторические лиды остаются с `null`. |
-| `LeadDeliveryAttempt` | Каждый queue/API/email attempt, idempotency key, payload/response/error, next retry time. |
+| `LeadDeliveryAttempt` | Каждый queue/API/email attempt, idempotency key, payload/response/error, next retry time. Перед вызовом Tarifnik создается API attempt с `OUTCOME_UNKNOWN`; успешный или ошибочный результат меняет его статус в одной транзакции со статусом лида. `0049` добавляет этот enum и `DELIVERY_API_OUTCOME_UNKNOWN` без backfill исторических заявок. |
 | `LeadNotification` | Одна persistent outbox/status-запись обычного оповещения на лид: revision, attempts, transport, безопасный error code/HTTP status и provider message ID без копии телефона, адреса или текста письма. |
 | `LeadActivityEvent` | События браузера до формы: allowlisted оболочка `type/data`, до 100 событий и 64 KB JSON суммарно; `data` ограничен 4 KB, 20 ключами и глубиной. |
 | `LeadStatusHistory` | Операторские переходы NEW/IN_PROGRESS/CALL_LATER/CONNECTED/REJECTED. |

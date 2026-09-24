@@ -76,7 +76,7 @@ export class CrmLeadsController {
     const where: Prisma.LeadWhereInput = filters.length ? { AND: filters } : {};
     const attentionWhere: Prisma.LeadWhereInput = {
       OR: [
-        { processingStatus: { in: ['MANUAL_CHECK', 'NON_SALES_NOT_SENT', 'ADDRESS_CLARIFICATION', 'MANUAL_CHECK_API', 'PHONE_CHECK_FAILED', 'PHONE_INVALID_NOT_SENT', 'DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED', 'DELIVERY_EMAIL_OUTCOME_UNKNOWN'] } },
+        { processingStatus: { in: ['MANUAL_CHECK', 'NON_SALES_NOT_SENT', 'ADDRESS_CLARIFICATION', 'MANUAL_CHECK_API', 'PHONE_CHECK_FAILED', 'PHONE_INVALID_NOT_SENT', 'DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED', 'DELIVERY_API_OUTCOME_UNKNOWN', 'DELIVERY_EMAIL_OUTCOME_UNKNOWN'] } },
         { processingStatus: 'PENDING', updatedAt: { lt: new Date(Date.now() - 2 * 60_000) }, deliveryAttempts: { some: { channel: 'API', status: 'FAILED', nextAttemptAt: null } } },
         { notification: { is: { OR: [{ status: 'FAILED' }, { errorCode: { not: null } }] } } },
       ],
@@ -212,7 +212,7 @@ export class CrmLeadsController {
     const isRecoverableFailure = ['DELIVERY_QUEUE_ERROR', 'DELIVERY_ERROR_EMAIL_SENT', 'DELIVERY_ERROR_EMAIL_FAILED'].includes(lead.processingStatus);
     const latestApi = apiAttempts[0];
     const oldEnough = lead.updatedAt instanceof Date && Date.now() - lead.updatedAt.getTime() >= 2 * 60_000;
-    const isUnknownOutcome = lead.processingStatus === 'DELIVERY_EMAIL_OUTCOME_UNKNOWN'
+    const isUnknownOutcome = ['DELIVERY_API_OUTCOME_UNKNOWN', 'DELIVERY_EMAIL_OUTCOME_UNKNOWN'].includes(lead.processingStatus)
       || (lead.processingStatus === 'PENDING' && latestApi?.status === 'FAILED' && latestApi.nextAttemptAt === null);
     if (!isOrphanPending && !isRecoverableFailure && !(isUnknownOutcome && oldEnough && body?.confirmUnknownOutcome === true)) {
       throw new BadRequestException('Для этой заявки повторная передача не требуется');
