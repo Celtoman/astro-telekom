@@ -47,7 +47,7 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 4. API в serializable transaction выбирает старые лиды по `createdAt`, отвязывает более свежие duplicates и физически удаляет старые лиды. FK cascade удаляет status history, activity, delivery payloads, notification evidence и access tokens.
 5. Истекшие fallback tokens удаляются независимо, а старые `AddressCheck` — только если на них больше не ссылается ни один лид. Ответ содержит только cutoff и счетчики, без удаленных данных.
 
-Hard-delete выбран, чтобы PII не осталось в JSON payloads. Согласованный срок хранения сырых заявок — 180 дней; юридическое основание обработки и текст согласия остаются отдельным release-блокером.
+Hard-delete выбран, чтобы PII не осталось в JSON payloads. Согласованный срок хранения сырых заявок — 180 дней. Перепроверка юридического основания обработки и текста согласия ведётся в [#144](https://github.com/Celtoman/astro-telekom/issues/144) как P3 вне milestone Release 1; решение о допуске реального трафика принимает владелец.
 
 Локальная runtime-проверка подтвердила scheduler metadata `key=pii-retention-daily`, `name=pii-retention`, pattern `0 3 * * *`, timezone UTC в отдельной Redis DB; test DB после проверки очищена.
 

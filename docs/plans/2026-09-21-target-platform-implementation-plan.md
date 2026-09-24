@@ -224,7 +224,7 @@ pnpm check
 | L3 | comment analyzer | #183 | Нет | реализовано, issue закрыта |
 | L4 | DaData Phone | #184 | Нет | реализовано, issue закрыта; rollout подтверждён |
 | L5 | durable orchestrator | #185 | Нет | реализовано, issue закрыта; rollout подтверждён |
-| L6 | lead deduplication | #186 | Нет | открыта: существующая адресная ветка противоречит `LEAD-015` для дома без квартиры |
+| L6 | lead deduplication | #186 | Нет | исправлено, issue закрыта; телефон за 24 часа имеет приоритет, адресный дубль требует явно совпадающего помещения |
 | L7 | admin evidence/retry | #187 | Нет | issue закрыта; внешний rollout отдельно от механического статуса |
 | V1 | variable registry/parser/resolver | #188 | Нет | реализовано, issue закрыта |
 | V2 | variable catalog/context preview | #189 | Нет | реализовано, issue закрыта |
