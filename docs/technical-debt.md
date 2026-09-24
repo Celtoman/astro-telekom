@@ -95,7 +95,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| TD-135 | [#220](https://github.com/Celtoman/astro-telekom/issues/220) 🟢 | Цепочка Coolify proxy → Caddy → API не подтверждает исходный IP клиента для атрибуции заявки |
+| TD-135 | [#220](https://github.com/Celtoman/astro-telekom/issues/220) ✅ | Цепочка Coolify proxy → Caddy → API не подтверждает исходный IP клиента для атрибуции заявки |
 | TD-130 | [#213](https://github.com/Celtoman/astro-telekom/issues/213) ✅ | Каталог переменных индексирует исходные SEO/OG-шаблоны и отмечает неполноту старых снимков |
 | TD-11 | [#13](https://github.com/Celtoman/astro-telekom/issues/13) ✅ | Нет аудита, версий, schedule публикации, корзины, rollback |
 | TD-12 | [#14](https://github.com/Celtoman/astro-telekom/issues/14) ✅ | Вложенные `content` и SEO разрешаются рекурсивно по явному контракту; массивы, скалярные значения и `null` заменяются атомарно |
