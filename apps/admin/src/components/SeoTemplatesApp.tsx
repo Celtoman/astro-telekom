@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { CircleAlert, Save } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { insertVariableAtSelection } from "../lib/variable-insertion.mjs"
 import { AdminShell } from "./AdminShell"
 import { PublicationStatusCard } from "./PublicationStatusCard"
+import { VariableInsertionPicker } from "./VariableInsertionPicker"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Button } from "./ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
@@ -12,6 +14,7 @@ import { Skeleton } from "./ui/skeleton"
 
 type Kind = "HOME" | "COVERAGE" | "CITIES" | "PRIVACY" | "PERSONAL_DATA_CONSENT" | "COOKIE_POLICY" | "CITY_HOME" | "CITY_TARIFF_DETAIL"
 type IndexState = "INDEX" | "NOINDEX"
+type TextField = "titleTemplate" | "descriptionTemplate" | "ogTitleTemplate" | "ogDescriptionTemplate"
 interface Administrator { id: string; email: string }
 interface Site { id: string; name: string; slug: string }
 interface Template { id: string; kind: Kind; titleTemplate: string; descriptionTemplate: string; indexState: IndexState; ogTitleTemplate?: string | null; ogDescriptionTemplate?: string | null; ogImageUrl?: string | null }
@@ -50,6 +53,9 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
   const [publicationRefreshKey, setPublicationRefreshKey] = useState(0)
+  const [activeField, setActiveField] = useState<TextField | null>(null)
+  const [insertionError, setInsertionError] = useState<string | null>(null)
+  const activeInput = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null)
 
   const load = useCallback(async (selectedKind?: Kind) => {
     setLoading(true); setError(null)
@@ -98,7 +104,26 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
     setKind(nextKind); setTitleTemplate(next.titleTemplate); setDescriptionTemplate(next.descriptionTemplate)
     setOgTitleTemplate(next.ogTitleTemplate || ""); setOgDescriptionTemplate(next.ogDescriptionTemplate || ""); setOgImageUrl(next.ogImageUrl || "")
     setIndexState(next.indexState); setPath(workspace.routes.find((route) => route.id === nextKind)?.path || "")
+    setActiveField(null); activeInput.current = null; setInsertionError(null)
     setConfirmed(false); setMessage(null)
+  }
+
+  function rememberField(field: TextField, element: HTMLInputElement | HTMLTextAreaElement) {
+    activeInput.current = element
+    setActiveField(field)
+  }
+
+  function insertCode(code: string) {
+    const element = activeInput.current
+    if (!activeField || !element) return
+    const values = { titleTemplate, descriptionTemplate, ogTitleTemplate, ogDescriptionTemplate }
+    const setters = { titleTemplate: setTitleTemplate, descriptionTemplate: setDescriptionTemplate, ogTitleTemplate: setOgTitleTemplate, ogDescriptionTemplate: setOgDescriptionTemplate }
+    const value = values[activeField]
+    const insertion = insertVariableAtSelection(value, element.selectionStart ?? value.length, element.selectionEnd ?? value.length, code, 1000)
+    if (!insertion) { setInsertionError("Код не помещается в лимит поля — 1000 символов."); return }
+    setters[activeField](insertion.value)
+    setInsertionError(null)
+    requestAnimationFrame(() => { element.focus(); element.setSelectionRange(insertion.selectionStart, insertion.selectionEnd) })
   }
 
   async function save() {
@@ -133,13 +158,15 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
       <Card><CardHeader><CardTitle>Редактор</CardTitle><CardDescription>Рабочая версия {workspace?.workingRevision ?? "—"}; опубликована {workspace?.publishedRevision ?? "—"}. Title и Description обязательны. Большая длина и совпадения — предупреждения, не запрет.</CardDescription></CardHeader>
         <CardContent className="space-y-5">
           <Field><FieldLabel htmlFor="seo-kind">Тип страницы</FieldLabel><select id="seo-kind" className={selectClass} value={kind} onChange={(event) => selectKind(event.target.value as Kind)}>{(Object.keys(labels) as Kind[]).map((item) => <option key={item} value={item}>{labels[item]}</option>)}</select><FieldDescription>{affectedCount} опубликованных URL этого типа</FieldDescription></Field>
-          <Field><FieldLabel htmlFor="seo-title">Title</FieldLabel><Input id="seo-title" value={titleTemplate} onChange={(event) => setTitleTemplate(event.target.value)} maxLength={1000} /><FieldDescription>{titleTemplate.length} символов · подстановки в фигурных скобках</FieldDescription></Field>
-          <Field><FieldLabel htmlFor="seo-description">Description</FieldLabel><textarea id="seo-description" className={textareaClass} value={descriptionTemplate} onChange={(event) => setDescriptionTemplate(event.target.value)} maxLength={1000} /><FieldDescription>{descriptionTemplate.length} символов</FieldDescription></Field>
+          <Field><FieldLabel htmlFor="seo-title">Title</FieldLabel><Input id="seo-title" value={titleTemplate} onChange={(event) => setTitleTemplate(event.target.value)} onFocus={(event) => rememberField("titleTemplate", event.currentTarget)} onSelect={(event) => rememberField("titleTemplate", event.currentTarget)} maxLength={1000} /><FieldDescription>{titleTemplate.length} символов · подстановки в фигурных скобках</FieldDescription></Field>
+          <Field><FieldLabel htmlFor="seo-description">Description</FieldLabel><textarea id="seo-description" className={textareaClass} value={descriptionTemplate} onChange={(event) => setDescriptionTemplate(event.target.value)} onFocus={(event) => rememberField("descriptionTemplate", event.currentTarget)} onSelect={(event) => rememberField("descriptionTemplate", event.currentTarget)} maxLength={1000} /><FieldDescription>{descriptionTemplate.length} символов</FieldDescription></Field>
           <div className="space-y-4 rounded-lg border p-4"><h2 className="font-semibold">Социальные сети · Open Graph</h2><p className="text-sm text-muted-foreground">Все поля необязательны. Пустые Title и Description возьмут обычные SEO-значения; пустое изображение — изображение сайта.</p>
-            <Field><FieldLabel htmlFor="seo-og-title">OG Title</FieldLabel><Input id="seo-og-title" value={ogTitleTemplate} onChange={(event) => setOgTitleTemplate(event.target.value)} maxLength={1000} /><FieldDescription>Можно использовать разрешённые переменные этого типа страницы.</FieldDescription></Field>
-            <Field><FieldLabel htmlFor="seo-og-description">OG Description</FieldLabel><textarea id="seo-og-description" className={textareaClass} value={ogDescriptionTemplate} onChange={(event) => setOgDescriptionTemplate(event.target.value)} maxLength={1000} /></Field>
+            <Field><FieldLabel htmlFor="seo-og-title">OG Title</FieldLabel><Input id="seo-og-title" value={ogTitleTemplate} onChange={(event) => setOgTitleTemplate(event.target.value)} onFocus={(event) => rememberField("ogTitleTemplate", event.currentTarget)} onSelect={(event) => rememberField("ogTitleTemplate", event.currentTarget)} maxLength={1000} /><FieldDescription>Можно использовать разрешённые переменные этого типа страницы.</FieldDescription></Field>
+            <Field><FieldLabel htmlFor="seo-og-description">OG Description</FieldLabel><textarea id="seo-og-description" className={textareaClass} value={ogDescriptionTemplate} onChange={(event) => setOgDescriptionTemplate(event.target.value)} onFocus={(event) => rememberField("ogDescriptionTemplate", event.currentTarget)} onSelect={(event) => rememberField("ogDescriptionTemplate", event.currentTarget)} maxLength={1000} /></Field>
             <Field><FieldLabel htmlFor="seo-og-image">OG image URL</FieldLabel><Input id="seo-og-image" value={ogImageUrl} onChange={(event) => setOgImageUrl(event.target.value)} maxLength={2048} placeholder="https://…/image.webp" /><FieldDescription>HTTPS-изображение либо доступный локальный asset; подстановки в URL запрещены.</FieldDescription></Field>
           </div>
+          {site ? <VariableInsertionPicker apiUrl={apiUrl} siteId={site.id} field={activeField ? `SeoTemplate.${activeField}` : null} context={kind === "CITY_TARIFF_DETAIL" ? "TARIFF" : kind === "CITY_HOME" ? "CITY" : "SITE"} onInsert={insertCode} /> : null}
+          {insertionError ? <Alert variant="destructive"><CircleAlert /><AlertDescription>{insertionError}</AlertDescription></Alert> : null}
           <Field><FieldLabel htmlFor="seo-index">Индексация</FieldLabel><select id="seo-index" className={selectClass} value={indexState} onChange={(event) => { setIndexState(event.target.value as IndexState); setConfirmed(false) }}><option value="INDEX">index</option><option value="NOINDEX">noindex, follow</option></select><FieldDescription>При noindex URL исключаются из sitemap того же снимка публикации.</FieldDescription></Field>
           {enteringNoindex ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Массовое изменение индексации</AlertTitle><AlertDescription>После публикации {affectedCount} URL получат noindex и исчезнут из sitemap. Подтвердите точное число URL перед сохранением.</AlertDescription><label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={confirmed} onChange={(event) => setConfirmed(event.target.checked)} />Подтверждаю noindex для {affectedCount} URL</label></Alert> : null}
           <div className="flex items-center justify-between gap-4 border-t pt-4"><span className="text-sm text-muted-foreground">Изменения вступят в силу после публикации сайта.</span><Button disabled={!canSave || saving || loading} onClick={() => void save()}><Save data-icon="inline-start" />{saving ? "Сохраняем…" : "Сохранить"}</Button></div>

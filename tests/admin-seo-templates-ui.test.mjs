@@ -9,6 +9,7 @@ const read = (relativePath) => readFileSync(join(root, relativePath), 'utf8');
 test('SEO templates have a protected admin route and cookie-auth React editor', () => {
   const route = read('apps/admin/src/pages/seo/templates.astro');
   const editor = read('apps/admin/src/components/SeoTemplatesApp.tsx');
+  const picker = read('apps/admin/src/components/VariableInsertionPicker.tsx');
   const controller = read('apps/api/src/admin-seo-templates.controller.ts');
   assert.match(route, /<SeoTemplatesApp[^>]*client:load/);
   assert.match(route, /noindex, nofollow/);
@@ -24,6 +25,13 @@ test('SEO templates have a protected admin route and cookie-auth React editor', 
   assert.match(editor, /ogDescriptionTemplate/);
   assert.match(editor, /ogImageUrl/);
   assert.match(editor, /PublicationStatusCard/);
+  assert.match(picker, /variable-catalog\/definitions/);
+  assert.match(picker, /type="button"/);
+  assert.match(editor, /VariableInsertionPicker/);
+  assert.match(editor, /insertVariableAtSelection/);
+  assert.match(editor, /setSelectionRange/);
+  assert.match(editor, /activeField/);
+  assert.doesNotMatch(editor, /id="seo-og-image"[^>]*onSelect/);
   assert.match(editor, /URLSearchParams\(window\.location\.search\)/);
   assert.match(editor, /setKind\(nextKind\)/);
   assert.doesNotMatch(editor, /localStorage|sessionStorage|x-admin-token/);

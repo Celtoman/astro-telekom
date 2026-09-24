@@ -3,6 +3,7 @@ import { AdminTokenGuard } from './admin-token.guard';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { buildVariableCatalogView } from './variable-catalog';
 import { WorkingVariableUsagesService, mergeWorkingVariableUsages } from './working-variable-usages.service';
+import { listVariableDefinitions } from './variable-registry';
 
 @Controller('admin/sites/:siteId/variable-catalog')
 @UseGuards(AdminTokenGuard)
@@ -11,6 +12,11 @@ export class AdminVariableCatalogController {
     private readonly publications: PublicationWorkflowService,
     private readonly usages: WorkingVariableUsagesService,
   ) {}
+
+  @Get('definitions')
+  definitions() {
+    return listVariableDefinitions();
+  }
 
   @Get()
   async list(

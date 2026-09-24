@@ -7,9 +7,15 @@ import { PrismaService } from './prisma.service';
 import { ImportReport, normalizeCanonicalTariffCore, normalizeTariffAttributes, normalizeTariffName, parseWorkbook, TARIFF_ATTRIBUTE_FIELDS, tariffIdentityKey, TariffImportService } from './tariff-import.service';
 import { CreateTariffDto, TariffListQueryDto, UpdateTariffDto } from './tariff.dto';
 import { PublicationWorkflowService } from './publication-workflow.service';
+import { resolveVariableText } from './variable-registry';
 
 interface AdminRequest {
   user?: { id: string };
+}
+
+function validatePromoVariables(value: string | null | undefined) {
+  if (typeof value !== 'string') return;
+  resolveVariableText(value, { now: new Date(0) }, { path: 'Tariff.promoText', field: 'TEXT' });
 }
 
 @Controller('admin/tariffs')
@@ -113,6 +119,7 @@ export class AdminTariffsController {
 
   @Post()
   async create(@Body() body: CreateTariffDto, @Req() request?: AdminRequest) {
+    validatePromoVariables(body.promoText);
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const city = await transaction.city.findUnique({
         where: { id: body.cityId },
@@ -307,6 +314,7 @@ export class AdminTariffsController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() body: UpdateTariffDto, @Req() request?: AdminRequest) {
+    validatePromoVariables(body.promoText);
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const existing = await transaction.tariff.findUnique({ where: { id } });
       if (!existing) throw new NotFoundException('Тариф не найден');

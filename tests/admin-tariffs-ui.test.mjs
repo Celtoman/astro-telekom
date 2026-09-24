@@ -83,6 +83,11 @@ test('tariff workspace provides quick detail and a separate guarded long editor'
   assert.match(editor, /confirmSensitiveChanges/);
   assert.match(editor, /hasUnsavedChanges/);
   assert.match(editor, /PublicationStatusCard/);
+  assert.match(readFileSync(join(adminRoot, 'components', 'VariableInsertionPicker.tsx'), 'utf8'), /variable-catalog\/definitions/);
+  assert.match(readFileSync(join(adminRoot, 'components', 'VariableInsertionPicker.tsx'), 'utf8'), /event\.key === "Enter".*event\.preventDefault\(\)/);
+  assert.match(editor, /VariableInsertionPicker/);
+  assert.match(editor, /insertVariableAtSelection/);
+  assert.match(editor, /setSelectionRange/);
   assert.match(editor, /result\.workingRevision/);
   assert.match(editor, /Рабочая версия/);
   assert.match(editor, /Изменения еще не опубликованы/i);

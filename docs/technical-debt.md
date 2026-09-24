@@ -127,6 +127,7 @@
 | TD-97 | [#124](https://github.com/Celtoman/astro-telekom/issues/124) ✅ | Городская HOME использует только управляемую структуру; после унификации шаблона hardcoded fallback удален полностью |
 | TD-98 | [#127](https://github.com/Celtoman/astro-telekom/issues/127) ✅ | Seed создает demo-тарифы только в пустом каталоге и не возвращает их после полного snapshot-импорта |
 | TD-99 | [#128](https://github.com/Celtoman/astro-telekom/issues/128) ✅ | Ссылка звонка в публичной шапке нормализуется из показанного пользователю номера |
+| TD-132 | [#215](https://github.com/Celtoman/astro-telekom/issues/215) ✅ | Ручной редактор тарифа отклоняет некорректные коды в `promoText` до сохранения |
 
 ## P3
 
@@ -155,6 +156,7 @@
 | TD-119 | [#153](https://github.com/Celtoman/astro-telekom/issues/153) ✅ | Живые документы синхронизируются с 33 локальными миграциями, внешним контуром до `0032`, tariff detail и owner-only решением о трафике |
 | TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) ✅ | `docs/worker.md` синхронизирован с фактическим routing и retry-поведением |
 | TD-70 | [#90](https://github.com/Celtoman/astro-telekom/issues/90) ✅ | DTO ограничивает query официальным максимумом DaData 300 символов |
+| TD-131 | [#214](https://github.com/Celtoman/astro-telekom/issues/214) ✅ | Каталог кодов указывает все четыре допустимых SEO/OG-текстовых поля, исключая URL изображения |
 
 ## Невыполненные, но согласованные возможности
 

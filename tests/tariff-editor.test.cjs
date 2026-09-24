@@ -58,6 +58,15 @@ test('sensitive tariff changes require explicit confirmation before any write', 
   assert.equal(updated, false);
 });
 
+test('manual create and update reject unknown promo variables before starting a write transaction', async () => {
+  let transactions = 0;
+  const controller = new AdminTariffsController({ $transaction: async () => { transactions += 1; assert.fail('invalid variable reached transaction'); } });
+  await assert.rejects(controller.create({ promoText: 'От {UNKNOWN_CODE} ₽' }), /Неизвестный код переменной/);
+  await assert.rejects(controller.update('tariff-1', { promoText: 'От {UNKNOWN_CODE} ₽' }), /Неизвестный код переменной/);
+  await assert.rejects(controller.create({ promoText: 'https://example.test/{YEAR}' }), /Подстановка в ссылки запрещена/);
+  assert.equal(transactions, 0);
+});
+
 test('confirmed manual edit returns the persisted tariff and working revision without publishing', async () => {
   let saved;
   const calls = [];
@@ -82,12 +91,12 @@ test('confirmed manual edit returns the persisted tariff and working revision wi
   );
 
   const result = await controller.update('tariff-1', {
-    expectedUpdatedAt: existingTariff.updatedAt.toISOString(), promoText: 'Новое промо', standardPrice: 950, confirmSensitiveChanges: true,
+    expectedUpdatedAt: existingTariff.updatedAt.toISOString(), promoText: 'Промо в {CITY_NAME}', standardPrice: 950, confirmSensitiveChanges: true,
   });
 
   assert.equal(saved.confirmSensitiveChanges, undefined);
   assert.equal(saved.expectedUpdatedAt, undefined);
-  assert.equal(saved.promoText, 'Новое промо');
+  assert.equal(saved.promoText, 'Промо в {CITY_NAME}');
   assert.equal(result.tariff.standardPrice, 950);
   assert.equal(result.tariff.publicPath, '/kazan/giga-500');
   assert.ok(result.tariff.attributeSchema.some((field) => field.key === 'online_cinemas' && field.kind === 'code-list'));

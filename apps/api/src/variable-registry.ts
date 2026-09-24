@@ -8,7 +8,7 @@ type VariableCode =
   | 'CITY_NAME' | 'CITY_NAME_GENITIVE' | 'CITY_NAME_PREPOSITIONAL'
   | 'TARIFF_NAME' | 'TARIFF_SPEED' | 'TARIFF_PRICE' | 'TARIFF_CHANNELS' | 'YEAR';
 
-interface VariableDefinition {
+export interface VariableDefinition {
   code: VariableCode;
   type: VariableType;
   source: string;
@@ -23,22 +23,23 @@ interface VariableDefinition {
 
 const PAGE_FIELDS = ['Page.title', 'Page.content.text', 'Page.seo.title', 'Page.seo.description', 'PageBlock.data.eyebrow', 'PageBlock.data.title', 'PageBlock.data.text', 'PageBlock.data.ctaText', 'PageBlock.data.items.title', 'PageBlock.data.items.text', 'PageBlock.data.items.question', 'PageBlock.data.items.answer'];
 const TARIFF_FIELDS = ['Tariff.promoText', 'Tariff.seo.title', 'Tariff.seo.description'];
+const SEO_TEMPLATE_FIELDS = ['SeoTemplate.titleTemplate', 'SeoTemplate.descriptionTemplate', 'SeoTemplate.ogTitleTemplate', 'SeoTemplate.ogDescriptionTemplate'];
 const SITE_CONTEXTS = ['Общая страница', 'Городская страница', 'Тариф'];
 const CITY_CONTEXTS = ['Городская страница', 'Тариф'];
 const TARIFF_CONTEXTS = ['Тариф'];
 
 const DEFINITIONS: readonly VariableDefinition[] = [
-  { code: 'CONNECTION_PHONE', type: 'phone', source: 'Site.connectionPhone', scope: 'SITE', name: 'Телефон подключения', description: 'Единый номер для новых подключений.', example: '+7 (800) 555-72-44', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS] },
-  { code: 'SUPPORT_PHONE', type: 'phone', source: 'Site.supportPhone', scope: 'SITE', name: 'Телефон техподдержки', description: 'Единый номер поддержки действующих абонентов.', example: '+7 (800) 250-77-77', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS] },
-  { code: 'PROVIDER_NAME', type: 'text', source: 'Provider.name', scope: 'SITE', name: 'Название провайдера', description: 'Публичное имя провайдера из его карточки.', example: 'Дом.ру', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS] },
-  { code: 'CITY_NAME', type: 'text', source: 'City.name', scope: 'CITY', name: 'Город', description: 'Название выбранного города в именительном падеже.', example: 'Казань', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS] },
-  { code: 'CITY_NAME_GENITIVE', type: 'text', source: 'City.nameGenitive', scope: 'CITY', name: 'Город в родительном падеже', description: 'Форма выбранного города для фраз «жители Казани».', example: 'Казани', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS] },
-  { code: 'CITY_NAME_PREPOSITIONAL', type: 'text', source: 'City.namePrepositional', scope: 'CITY', name: 'Город в предложном падеже', description: 'Форма выбранного города для фраз «в Казани».', example: 'Казани', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS] },
-  { code: 'TARIFF_NAME', type: 'text', source: 'Tariff.name', scope: 'TARIFF', name: 'Название тарифа', description: 'Название выбранного тарифа.', example: 'Гига 500', status: 'ACTIVE', allowedContexts: TARIFF_CONTEXTS, allowedFields: TARIFF_FIELDS },
-  { code: 'TARIFF_SPEED', type: 'number', source: 'Tariff.speed', scope: 'TARIFF', name: 'Скорость тарифа', description: 'Скорость без единицы измерения.', example: '500', status: 'ACTIVE', allowedContexts: TARIFF_CONTEXTS, allowedFields: TARIFF_FIELDS },
-  { code: 'TARIFF_PRICE', type: 'number', source: 'Tariff.effectivePrice', scope: 'TARIFF', name: 'Цена тарифа', description: 'Промо-цена при наличии, иначе стандартная цена; без валюты.', example: '599', status: 'ACTIVE', allowedContexts: TARIFF_CONTEXTS, allowedFields: TARIFF_FIELDS },
-  { code: 'TARIFF_CHANNELS', type: 'number', source: 'Tariff.attributes.tv_channels_total', scope: 'TARIFF', name: 'Телеканалы', description: 'Общее число каналов без единицы измерения.', example: '150', status: 'ACTIVE', allowedContexts: TARIFF_CONTEXTS, allowedFields: TARIFF_FIELDS },
-  { code: 'YEAR', type: 'date', source: 'Catalog.resolvedAt', scope: 'SITE', name: 'Год публикации', description: 'Год формирования снимка каталога.', example: '2026', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS] },
+  { code: 'CONNECTION_PHONE', type: 'phone', source: 'Site.connectionPhone', scope: 'SITE', name: 'Телефон подключения', description: 'Единый номер для новых подключений.', example: '+7 (800) 555-72-44', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'SUPPORT_PHONE', type: 'phone', source: 'Site.supportPhone', scope: 'SITE', name: 'Телефон техподдержки', description: 'Единый номер поддержки действующих абонентов.', example: '+7 (800) 250-77-77', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'PROVIDER_NAME', type: 'text', source: 'Provider.name', scope: 'SITE', name: 'Название провайдера', description: 'Публичное имя провайдера из его карточки.', example: 'Дом.ру', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'CITY_NAME', type: 'text', source: 'City.name', scope: 'CITY', name: 'Город', description: 'Название выбранного города в именительном падеже.', example: 'Казань', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'CITY_NAME_GENITIVE', type: 'text', source: 'City.nameGenitive', scope: 'CITY', name: 'Город в родительном падеже', description: 'Форма выбранного города для фраз «жители Казани».', example: 'Казани', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'CITY_NAME_PREPOSITIONAL', type: 'text', source: 'City.namePrepositional', scope: 'CITY', name: 'Город в предложном падеже', description: 'Форма выбранного города для фраз «в Казани».', example: 'Казани', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'TARIFF_NAME', type: 'text', source: 'Tariff.name', scope: 'TARIFF', name: 'Название тарифа', description: 'Название выбранного тарифа.', example: 'Гига 500', status: 'ACTIVE', allowedContexts: TARIFF_CONTEXTS, allowedFields: [...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'TARIFF_SPEED', type: 'number', source: 'Tariff.speed', scope: 'TARIFF', name: 'Скорость тарифа', description: 'Скорость без единицы измерения.', example: '500', status: 'ACTIVE', allowedContexts: TARIFF_CONTEXTS, allowedFields: [...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'TARIFF_PRICE', type: 'number', source: 'Tariff.effectivePrice', scope: 'TARIFF', name: 'Цена тарифа', description: 'Промо-цена при наличии, иначе стандартная цена; без валюты.', example: '599', status: 'ACTIVE', allowedContexts: TARIFF_CONTEXTS, allowedFields: [...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'TARIFF_CHANNELS', type: 'number', source: 'Tariff.attributes.tv_channels_total', scope: 'TARIFF', name: 'Телеканалы', description: 'Общее число каналов без единицы измерения.', example: '150', status: 'ACTIVE', allowedContexts: TARIFF_CONTEXTS, allowedFields: [...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'YEAR', type: 'date', source: 'Catalog.resolvedAt', scope: 'SITE', name: 'Год публикации', description: 'Год формирования снимка каталога.', example: '2026', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
 ];
 
 const BY_CODE = new Map(DEFINITIONS.map((definition) => [definition.code, definition]));

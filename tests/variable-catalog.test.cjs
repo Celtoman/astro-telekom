@@ -32,7 +32,9 @@ test('registry exposes immutable operator metadata for every implemented code', 
     assert.ok(definition.allowedContexts.length > 0);
     assert.ok(definition.allowedFields.length > 0);
   }
-  assert.deepEqual(definitions.find((item) => item.code === 'TARIFF_PRICE').allowedFields, ['Tariff.promoText', 'Tariff.seo.title', 'Tariff.seo.description']);
+  assert.deepEqual(definitions.find((item) => item.code === 'TARIFF_PRICE').allowedFields, ['Tariff.promoText', 'Tariff.seo.title', 'Tariff.seo.description', 'SeoTemplate.titleTemplate', 'SeoTemplate.descriptionTemplate', 'SeoTemplate.ogTitleTemplate', 'SeoTemplate.ogDescriptionTemplate']);
+  assert.ok(definitions.find((item) => item.code === 'PROVIDER_NAME').allowedFields.includes('SeoTemplate.ogDescriptionTemplate'));
+  assert.ok(definitions.every((item) => !item.allowedFields.includes('SeoTemplate.ogImageUrl')));
 });
 
 test('resolved catalog retains exact raw usage evidence and typed source snapshot without altering public text', () => {
@@ -123,6 +125,16 @@ test('admin catalog endpoint is authenticated, read-only and reads working and s
   assert.ok(Reflect.getMetadata('__guards__', AdminVariableCatalogController)?.length);
   const moduleSource = require('node:fs').readFileSync(require('node:path').resolve(__dirname, '../apps/api/src/module.ts'), 'utf8');
   assert.match(moduleSource, /AdminVariableCatalogController/);
+});
+
+test('admin exposes a lightweight guarded variable definition list without building a site preview', () => {
+  const { AdminVariableCatalogController } = api('admin-variable-catalog.controller');
+  const controller = new AdminVariableCatalogController({ getWorkingPreview: () => assert.fail('preview must not run') }, { list: () => assert.fail('usage scan must not run') });
+  const definitions = controller.definitions();
+  assert.equal(definitions.length, 11);
+  assert.ok(definitions.find((item) => item.code === 'CITY_NAME').allowedFields.includes('SeoTemplate.titleTemplate'));
+  assert.equal(Reflect.getMetadata('path', AdminVariableCatalogController.prototype.definitions), 'definitions');
+  assert.ok(Reflect.getMetadata('__guards__', AdminVariableCatalogController)?.length);
 });
 
 test('read-only working usage scan includes draft pages, hidden blocks and inactive tariffs', async () => {
