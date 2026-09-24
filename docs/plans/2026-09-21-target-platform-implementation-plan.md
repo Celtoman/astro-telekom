@@ -10,19 +10,20 @@
 
 ---
 
-## Состояние исполнения на 22 сентября 2026 года
+## Состояние исполнения на 24 сентября 2026 года
 
-План ниже сохраняет исходную последовательность и обоснование, но GitHub Issues остается единственным механическим источником статуса. После выполнения первых волн:
+План ниже сохраняет исходную последовательность и обоснование. Статусы в этом разделе — датированный срез GitHub Issues, а не замена их живого состояния; доказательства реализации отдельно сопоставлены в [аудите решений и модели](../research/2026-09-24-decision-implementation-reconciliation.md). После выполнения первых волн:
 
-- #158, #160 и #162 закрыты; `0034`–`0036` применены на внешнем test-контуре, publication ревизии 4 успешна;
-- T1–T4 (#172–#175) реализованы и закрыты, parent #163 закрыт после приемочной сверки 3/3 sub-issues;
+- #158, #160, #161 и #162 закрыты; `0034`–`0036` применены на внешнем test-контуре, publication ревизии 4 успешна;
+- T1–T4 (#172–#175), T6–T8 (#176–#178) и F1–F2 (#170–#171) закрыты; родители #157 и #163 также закрыты;
 - `0037`–`0039` развернуты exact-SHA deployment `41odv3auf5vez3nknm0z2gcj` на `96df68594f9955edd7bc7090db03046acae7ea27`;
 - #202 закрыта после зеленого CI, успешного one-shot migrate и live no-op уже восстановленного Site на publication ревизии 5;
-- T6 (#176) закрыт после зеленого CI и exact-SHA deployment `yhjasgyz0mpqzjjnpauyjmsy` на `b4ade905090e9519dcd8ef5974d3d3987768b7d3`;
-- F1 (#170) реализован в текущем рабочем срезе: единый typed address-check contract, три business outcomes, отдельная technical error, embedded/modal entry, a11y и stale-response guard; следующий продуктовый путь: T7/F2 → T8 → P1 → полный gate;
-- внешний генератор Celtoman/tarifs#1 остается отдельной dependency и не входит в завершенный scope #163.
+- L2–L5 и L7 (#182–#185, #187), V1–V2 (#188–#189) и S1–S3 (#197–#199) закрыты после реализации; V3/#190 выполнена частично и остается открытой;
+- P1/#179 остается открытой: текущий route/build gate не хранит требуемый all-URL validation report;
+- L6/#186 остается открытой вне Release 1, хотя текущая проверка адресного дубля расходится с `LEAD-015`; риск основного канала delivery открыт в #210. Их место перед запуском требует явной актуализации приоритета, а не молчаливого закрытия;
+- внешний генератор [Celtoman/tarifs#1](https://github.com/Celtoman/tarifs/issues/1) открыт и не входит в завершенный scope #163.
 
-Старые формулировки «локально», «ожидает CI» и «незавершенный diff» в историческом порядке волн не являются текущим статусом.
+Старые формулировки «локально», «ожидает CI» и «незавершенный diff» в историческом порядке волн не являются текущим статусом. Рабочие SEO/OG-шаблоны еще не влияют на опубликованный snapshot без отдельной публикации CMS; конкретный deployed SHA и сквозная заявка проверяются отдельно.
 
 ## Подтвержденные решения владельца от 2026-09-21
 
@@ -94,9 +95,11 @@
 | P1: all-URL validation report | [#179](https://github.com/Celtoman/astro-telekom/issues/179) | Атомарная безопасная публикация |
 | D1: repair legacy publication revision | [#202](https://github.com/Celtoman/astro-telekom/issues/202) | Закрыто; exact-SHA rollout подтвержден |
 
-Родительская [#157](https://github.com/Celtoman/astro-telekom/issues/157) также остается в milestone. Внешняя [Celtoman/tarifs#1](https://github.com/Celtoman/tarifs/issues/1) не может входить в milestone другого репозитория, но является явной release dependency.
+Родительская [#157](https://github.com/Celtoman/astro-telekom/issues/157) закрыта. Внешняя [Celtoman/tarifs#1](https://github.com/Celtoman/tarifs/issues/1) не может входить в milestone другого репозитория, но остается явной release dependency.
 
-## Критический путь
+## Критический путь — исходная последовательность и остаток на 24 сентября
+
+Ниже сохранена исходная последовательность зависимостей. R1–R3, D1, T1–T4, T6–T8 и F1–F2 уже закрыты. Внешний генератор по-прежнему открыт, а текущий релизный остаток — P1/#179, приемка полного XLSX и сквозные проверки; подтвержденные расхождения #186 и #210 перечислены в [актуальной сверке](../research/2026-09-24-decision-implementation-reconciliation.md).
 
 ```text
 R1 #162 ─┐
@@ -120,7 +123,7 @@ F1 #170 ────────────────────────
                   exact-SHA test deploy
 ```
 
-F1 можно выполнять параллельно с T6–T7. F2 создает базовую успешную отправку; T8 зависит от F2 и T7 и добавляет immutable configuration snapshot. P1 интегрируется последним, когда доменные validators уже существуют. #202 устранена и проверена exact-SHA rollout; dependency больше не блокирует следующие задачи.
+В исходном плане F1 допускалась параллельно с T6–T7, а T8 зависела от F2 и T7. Эти задачи завершены; P1 остается открытой. #202 устранена и проверена exact-SHA rollout.
 
 ## Порядок исполнения Release 1
 
@@ -199,45 +202,45 @@ node --test tests/*.test.cjs tests/*.test.mjs
 
 ## Полный атомарный backlog
 
-| ID | Решения | Issue | Release 1 | Статус на момент планирования |
+| ID | Решения | Issue | Release 1 | Статус на 24 сентября 2026 года; после этой даты смотреть Issue |
 | --- | --- | --- | --- | --- |
 | R1 | `ADMIN-004–005` | #162 | Да | закрыто; rollout подтвержден |
 | R2 | `ADMIN-001`, `008`, `010`, `013`, `037`, `042` | #158 | Да | закрыто; rollout подтвержден |
 | R3 | `CITY-003–006`, `008–010`, `012–018`, `020–023` | #160 | Да | закрыто; rollout подтвержден |
-| R4 | `ADMIN-003` | #161 | Нет | не начато |
-| EXT1 | `TAR-044–096` | Celtoman/tarifs#1 | Dependency | не начато в `main` генератора |
+| R4 | `ADMIN-003` | #161 | Нет | issue закрыта |
+| EXT1 | `TAR-044–096` | Celtoman/tarifs#1 | Dependency | issue открыта; полный coverage report/output не подтверждены |
 | T1 | тарифный value contract | #172 | Да | реализовано, issue закрыта |
 | T2 | `TAR-042–043`, `080–086` | #173 | Да | реализовано, issue закрыта; rollout `0037` подтвержден |
 | T3 | `TAR-001–004`, `014`, `019`, `083` | #174 | Да | реализовано, issue закрыта; rollout `0038` подтвержден |
 | T4 | tariff catalog/editor contract | #175 | Да | реализовано, issue закрыта |
 | T5 | tariff archive/slug lifecycle | #180 | Нет | не начато |
 | T6 | typed tariff renderer | #176 | Да | реализовано, issue закрыта; rollout и live HTML подтверждены |
-| T7 | tariff calculator/configurator | #177 | Да | не начато |
-| T8 | `TAR-034` | #178 | Да | не начато |
+| T7 | tariff calculator/configurator | #177 | Да | реализовано, issue закрыта; live quote проверен |
+| T8 | `TAR-034` | #178 | Да | реализовано, issue закрыта; live quote проверен без создания заявки |
 | T9 | `CMS-024–037` | #181 | Нет | не начато |
-| F1 | `FORM-001–015` | #170 | Да | реализовано; rollout и live acceptance ожидаются |
-| F2 | `FORM-016–023`, `LEAD-014` | #171 | Да | частично |
+| F1 | `FORM-001–015` | #170 | Да | реализовано, issue закрыта; внешний safe smoke проверен |
+| F2 | `FORM-016–023`, `LEAD-014` | #171 | Да | реализовано, issue закрыта; live submit заявки не выполнялся |
 | L1 | `LEAD-001–006`, `011` | #154 | Нет | частично |
 | L2 | reason registry/short-circuit | #182 | Нет | реализовано, issue закрыта |
 | L3 | comment analyzer | #183 | Нет | реализовано, issue закрыта |
 | L4 | DaData Phone | #184 | Нет | реализовано, issue закрыта; rollout подтверждён |
 | L5 | durable orchestrator | #185 | Нет | реализовано, issue закрыта; rollout подтверждён |
-| L6 | lead deduplication | #186 | Нет | не начато |
-| L7 | admin evidence/retry | #187 | Нет | реализовано локально; внешний rollout проверяется отдельно |
-| V1 | variable registry/parser/resolver | #188 | Нет | foundation только для телефонов |
-| V2 | variable catalog/context preview | #189 | Нет | не начато |
-| V3 | usage/insertion/deprecation | #190 | Нет | не начато |
+| L6 | lead deduplication | #186 | Нет | открыта: существующая адресная ветка противоречит `LEAD-015` для дома без квартиры |
+| L7 | admin evidence/retry | #187 | Нет | issue закрыта; внешний rollout отдельно от механического статуса |
+| V1 | variable registry/parser/resolver | #188 | Нет | реализовано, issue закрыта |
+| V2 | variable catalog/context preview | #189 | Нет | реализовано, issue закрыта |
+| V3 | usage/insertion/deprecation | #190 | Нет | частично: текущие SEO/OG и promo insertion есть; будущие Page/Block editors и deprecation открыты |
 | C1 | `CMS-038–049` | #191 | Нет | draft-only, `OPEN-005` |
 | C2 | `CORE-005`, `CMS-001–018`, `CITY-024` | #192 | Нет | не начато |
 | C3 | main-page editors | #193 | Нет | не начато |
 | C4 | functional-page editors | #194 | Нет | не начато |
 | C5 | legal document editor | #195 | Нет | не начато |
 | C6 | legacy content cleanup | #196 | Нет | не начато |
-| S1 | SEO core templates | #197 | Нет | не начато |
-| S2 | Open Graph | #198 | Нет | не начато |
-| S3 | noindex/sitemap | #199 | Нет | foundation частичный |
+| S1 | SEO core templates | #197 | Нет | реализовано в рабочем контуре, issue закрыта |
+| S2 | Open Graph | #198 | Нет | реализовано в рабочем контуре, issue закрыта |
+| S3 | noindex/sitemap | #199 | Нет | реализовано в рабочем контуре, issue закрыта |
 | S4 | local SEO cleanup | #200 | Нет | не начато |
-| P1 | `CORE-006`, `CMS-014`, `036–037`, `ADMIN-043` | #179 | Да | foundation частичный |
+| P1 | `CORE-006`, `CMS-014`, `036–037`, `ADMIN-043` | #179 | Да | открыта: нет сохраненного all-URL validation report |
 | P2 | `CMS-029–035` | #201 | Нет | не начато |
 | D1 | publication revision repair | #202 | Да | закрыто; `0039`, CI, exact-SHA rollout и live smoke подтверждены |
 

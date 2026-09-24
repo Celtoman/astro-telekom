@@ -1,6 +1,6 @@
 # План релизов и статус первого MVP
 
-Этот документ группирует работу по релизным границам. Детальный исполнимый план с файлами и проверками находится в [2026-09-07-platform-stabilization-and-mvp.md](plans/2026-09-07-platform-stabilization-and-mvp.md).
+Этот документ группирует работу по релизным границам. Исполнимый путь к целевой платформе и актуальная сверка решений с реализацией находятся в [плане от 21 сентября](plans/2026-09-21-target-platform-implementation-plan.md) и [аудите от 24 сентября](research/2026-09-24-decision-implementation-reconciliation.md); ранний [стабилизационный план](plans/2026-09-07-platform-stabilization-and-mvp.md) сохранен как исторический.
 
 ## Release 0 — локальный прототип
 
@@ -23,7 +23,7 @@ Release 0 — историческая граница локального пр�
 
 Условия завершения:
 
-1. Публичный output, sitemap, внутренние ссылки и redirects соответствуют exact составу `N + T + 6`; переход на городскую структуру, live-приемка HTTP 404 и возврат тарифных страниц завершены в [#136](https://github.com/Celtoman/astro-telekom/issues/136), [#141](https://github.com/Celtoman/astro-telekom/issues/141) и [#149](https://github.com/Celtoman/astro-telekom/issues/149). Последний live inventory — 207 городов, 3 859 тарифов и 4 072 уникальных URL. Дублированные записи `HOME`, не создающие дополнительных маршрутов, отдельно отслеживаются в [#150](https://github.com/Celtoman/astro-telekom/issues/150).
+1. Публичный output, sitemap, внутренние ссылки и redirects соответствуют exact составу `N + T + 6`; переход на городскую структуру, live-приемка HTTP 404 и возврат тарифных страниц завершены в [#136](https://github.com/Celtoman/astro-telekom/issues/136), [#141](https://github.com/Celtoman/astro-telekom/issues/141) и [#149](https://github.com/Celtoman/astro-telekom/issues/149). Датированный live inventory — 207 городов, 3 859 тарифов и 4 072 уникальных URL. Legacy-дубли `HOME` устранены в закрытой [#150](https://github.com/Celtoman/astro-telekom/issues/150); актуальный deployed SHA проверяется отдельно.
 2. Все automated checks green в чистом окружении.
 3. Production build блокируется, если API-данные отсутствуют, origin не является чистым HTTPS origin или final SEO output не проходит проверку. API/origin fail-fast, post-build sitemap/raw HTML gate и воспроизводимый первый Coolify bootstrap [#55](https://github.com/Celtoman/astro-telekom/issues/55) подтверждены; внешний production CI/CD не должен разрешать demo mode.
 4. Импорт тарифов имеет утвержденную полную семантику и не оставляет устаревшие публичные предложения.
@@ -47,7 +47,7 @@ City HOME, published-only Release 1 sitemap, глобальная навигац
 
 Цель: дать редактору управляемые версии, шаблоны/блоки, аудит, историю импортов и эксплуатационные панели без demo UI.
 
-Рабочие ревизии, audit log, отложенная публикация и корзина уже реализованы раньше этой границы. Остаются media, SEO validation, analytics, раздел «Переменные» с согласованными уровнями наследования, monitoring, универсальный per-entity rollback и автоматизированный deployment pipeline. Backup/restore остается внешней эксплуатационной ответственностью владельца и не планируется как часть Release 1 или Release 3 этого репозитория. Для PII purge срок 180 дней уже согласован; низкоприоритетная перепроверка юридической основы ведется отдельно в #144.
+Рабочие ревизии, audit log, отложенная публикация, корзина, типизированные переменные V1–V2 и SEO/OG-шаблоны S1–S3 уже реализованы раньше этой границы. Остаются редакторы страниц и блоков C1–C6, миграция использованных кодов V3, очистка legacy SEO S4, полный отчет проверки публикации P1, media, analytics, monitoring и универсальный per-entity rollback. Существующий SEO build gate не заменяет отчет P1. Backup/restore остается внешней эксплуатационной ответственностью владельца и не планируется как часть Release 1 или Release 3 этого репозитория. Для PII purge срок 180 дней уже согласован; низкоприоритетная перепроверка юридической основы ведется отдельно в #144.
 
 ## Внешние зависимости
 
