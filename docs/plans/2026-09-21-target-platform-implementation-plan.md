@@ -212,7 +212,7 @@ pnpm check
 | T2 | `TAR-042–043`, `080–086` | #173 | Да | реализовано, issue закрыта; rollout `0037` подтвержден |
 | T3 | `TAR-001–004`, `014`, `019`, `083` | #174 | Да | реализовано, issue закрыта; rollout `0038` подтвержден |
 | T4 | tariff catalog/editor contract | #175 | Да | реализовано, issue закрыта |
-| T5 | tariff archive/slug lifecycle | #180 | Нет | не начато |
+| T5 | tariff archive/slug lifecycle | #180 | Нет | частично: фильтры архива, slug/301 и публичное исключение архива есть; массовая очистка с учётом связей открыта |
 | T6 | typed tariff renderer | #176 | Да | реализовано, issue закрыта; rollout и live HTML подтверждены |
 | T7 | tariff calculator/configurator | #177 | Да | реализовано, issue закрыта; live quote проверен |
 | T8 | `TAR-034` | #178 | Да | реализовано, issue закрыта; live quote проверен без создания заявки |
