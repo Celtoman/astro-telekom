@@ -98,7 +98,7 @@
 | TD-136 | [#221](https://github.com/Celtoman/astro-telekom/issues/221) ✅ | Карточки ТВ и Интернет + ТВ передавали форме тип услуги INTERNET из-за устаревших кодов `service_grid` |
 | TD-139 | [#224](https://github.com/Celtoman/astro-telekom/issues/224) ✅ | Пакетная проверка связей сократила live-предпросмотр 25 архивных тарифов с 14–18 до 6,8–7,3 секунды без изменения блокировок |
 | TD-140 | [#225](https://github.com/Celtoman/astro-telekom/issues/225) ✅ | Поиск каталога тарифов пропускает внутренний `Tariff.id`, требуемый родительской задачей #164 |
-| TD-141 | [#226](https://github.com/Celtoman/astro-telekom/issues/226) 🟢 | Миграция подстановок и рабочий индекс не читают авторитетный `PageTemplate` городской HOME после C2 |
+| TD-141 | [#226](https://github.com/Celtoman/astro-telekom/issues/226) ✅ | Миграция подстановок и рабочий индекс читают авторитетный `PageTemplate` городской HOME после C2 |
 | TD-135 | [#220](https://github.com/Celtoman/astro-telekom/issues/220) ✅ | Цепочка Coolify proxy → Caddy → API не подтверждает исходный IP клиента для атрибуции заявки |
 | TD-130 | [#213](https://github.com/Celtoman/astro-telekom/issues/213) ✅ | Каталог переменных индексирует исходные SEO/OG-шаблоны и отмечает неполноту старых снимков |
 | TD-11 | [#13](https://github.com/Celtoman/astro-telekom/issues/13) ✅ | Нет аудита, версий, schedule публикации, корзины, rollback |
