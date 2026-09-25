@@ -57,6 +57,7 @@ import { LeadDecisionController } from './lead-decision.controller';
 import { SeoTemplateService } from './seo-template.service';
 import { AdminSeoTemplatesController } from './admin-seo-templates.controller';
 import { AdminTariffTemplateController } from './admin-tariff-template.controller';
+import { AdminPageTemplatesController } from './admin-page-templates.controller';
 
 @Module({
   controllers: [
@@ -93,6 +94,7 @@ import { AdminTariffTemplateController } from './admin-tariff-template.controlle
     AdminVariableMigrationController,
     AdminSeoTemplatesController,
     AdminTariffTemplateController,
+    AdminPageTemplatesController,
   ],
   providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })

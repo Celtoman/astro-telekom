@@ -6,6 +6,7 @@ import { mergeContent, publicContent } from './content-resolution';
 import { PrismaService } from './prisma.service';
 import { buildReleaseOneRoutes } from './public-route-policy';
 import { normalizeRedirectPath } from './redirect-path';
+import { materializeCityHomeSource } from './page-template';
 import { formatSitePhone } from './site-phone';
 import { resolveSeoTemplates } from './seo-templates';
 import { collectSeoTemplateUsages } from './seo-template-usages';
@@ -18,6 +19,7 @@ export type CatalogSource = {
   redirects: Array<{ id: string; sourcePath: string; targetPath: string; status: string }>;
   sitemapExclusions: Array<{ path: string }>;
   seoTemplates: any[];
+  pageTemplates?: any[];
 };
 
 @Injectable()
@@ -47,7 +49,7 @@ export class SiteCatalogService {
     });
     if (!site) throw new NotFoundException('Site not found');
 
-    const [cities, globalPages, redirects, sitemapExclusions, seoTemplates] = await Promise.all([
+    const [cities, globalPages, redirects, sitemapExclusions, seoTemplates, pageTemplates] = await Promise.all([
       client.city.findMany({
         where: { siteId: site.id, status: 'PUBLISHED' },
         orderBy: { name: 'asc' },
@@ -76,13 +78,17 @@ export class SiteCatalogService {
         where: { siteId: site.id },
         orderBy: { kind: 'asc' },
       }),
+      client.pageTemplate.findMany({
+        where: { siteId: site.id },
+        include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
+      }),
     ]);
 
-    return { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates };
+    return { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates, pageTemplates };
   }
 
   renderSource(source: CatalogSource, now = new Date()) {
-    const { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates } = source;
+    const { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates } = materializeCityHomeSource(source);
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
     const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages);
     const resolved = resolveCatalogVariables({
@@ -126,14 +132,18 @@ export class SiteCatalogService {
     const city = await client.city.findFirst({
       where: { site: { slug: siteSlug, status: 'PUBLISHED' }, slug: citySlug, status: 'PUBLISHED' },
       include: {
-        site: { select: { settings: true, provider: { select: { settings: true } } } },
+        site: { select: { settings: true, provider: { select: { settings: true } }, pageTemplates: { include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } } } } },
         region: { select: { name: true, slug: true } },
         pages: { where: { status: 'PUBLISHED' }, orderBy: { createdAt: 'asc' }, include: { blocks: { where: { visible: true, archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
         tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE' }, orderBy: { createdAt: 'asc' } },
       },
     });
     if (!city) throw new NotFoundException('City not found');
-    return this.cityResponse(city, city.site);
+    const { pageTemplates, ...site } = city.site;
+    const materialized = materializeCityHomeSource({
+      site, cities: [city], globalPages: [], redirects: [], sitemapExclusions: [], seoTemplates: [], pageTemplates,
+    });
+    return this.cityResponse(materialized.cities[0], site);
   }
 
   cityResponse(city: any, site: any) {

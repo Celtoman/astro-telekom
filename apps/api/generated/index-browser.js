@@ -295,8 +295,31 @@ exports.Prisma.PageScalarFieldEnum = {
   status: 'status',
   seo: 'seo',
   content: 'content',
+  templateId: 'templateId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PageTemplateScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  kind: 'kind',
+  titleTemplate: 'titleTemplate',
+  status: 'status',
+  content: 'content',
+  seo: 'seo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PageTemplateBlockScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  blockType: 'blockType',
+  position: 'position',
+  visible: 'visible',
+  data: 'data',
+  source: 'source'
 };
 
 exports.Prisma.PageBlockScalarFieldEnum = {
@@ -615,6 +638,7 @@ exports.ContentEntityType = exports.$Enums.ContentEntityType = {
   REGION: 'REGION',
   CITY: 'CITY',
   PAGE: 'PAGE',
+  PAGE_TEMPLATE: 'PAGE_TEMPLATE',
   TARIFF: 'TARIFF',
   REDIRECT: 'REDIRECT'
 };
@@ -661,6 +685,17 @@ exports.PageType = exports.$Enums.PageType = {
   PRIVACY: 'PRIVACY',
   PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT',
   COOKIE_POLICY: 'COOKIE_POLICY'
+};
+
+exports.PageTemplateKind = exports.$Enums.PageTemplateKind = {
+  HOME: 'HOME',
+  COVERAGE: 'COVERAGE',
+  CITIES: 'CITIES',
+  PRIVACY: 'PRIVACY',
+  PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT',
+  COOKIE_POLICY: 'COOKIE_POLICY',
+  CITY_HOME: 'CITY_HOME',
+  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL'
 };
 
 exports.ServiceType = exports.$Enums.ServiceType = {
@@ -778,6 +813,8 @@ exports.Prisma.ModelName = {
   Region: 'Region',
   City: 'City',
   Page: 'Page',
+  PageTemplate: 'PageTemplate',
+  PageTemplateBlock: 'PageTemplateBlock',
   PageBlock: 'PageBlock',
   Tariff: 'Tariff',
   TariffImportRun: 'TariffImportRun',

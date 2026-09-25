@@ -1,7 +1,7 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { isDeepStrictEqual } from 'node:util';
 import { Prisma, PublishStatus } from '../generated';
-import { cityHomeTemplateBlocks } from './city-home-template';
+import { ensureCityHomeTemplate } from './page-template';
 import { defaultDomruProfileCatalog } from './domru-profile-catalog';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
@@ -93,6 +93,7 @@ type StoredPage = {
   status: string;
   seo: unknown;
   content: unknown;
+  templateId?: string;
   createdAt: string;
   updatedAt: string;
   blocks: StoredPageBlock[];
@@ -143,7 +144,7 @@ const storedRegion = (region: {
 });
 const storedPage = (page: {
   id: string; siteId: string; cityId: string | null; type: string; title: string; slug: string; status: string;
-  seo: unknown; content: unknown; createdAt: Date; updatedAt: Date; blocks: Array<{
+  seo: unknown; content: unknown; templateId?: string | null; createdAt: Date; updatedAt: Date; blocks: Array<{
     id: string; pageId: string; blockType: string; position: number; visible: boolean; data: unknown; source: string | null;
   }>;
 }): StoredPage => ({
@@ -156,6 +157,7 @@ const storedPage = (page: {
   status: page.status,
   seo: page.seo === null ? null : jsonCopy(page.seo),
   content: page.content === null ? null : jsonCopy(page.content),
+  ...(page.blocks.length === 0 && page.templateId ? { templateId: page.templateId } : {}),
   createdAt: page.createdAt.toISOString(),
   updatedAt: page.updatedAt.toISOString(),
   blocks: page.blocks.map((block) => ({
@@ -199,6 +201,7 @@ const isStoredPage = (value: unknown): value is StoredPage => {
     && hasOwn(value, 'seo')
     && hasOwn(value, 'content')
     && Array.isArray(value.blocks)
+    && (value.blocks.length > 0 || typeof value.templateId === 'string')
     && value.blocks.every(isStoredPageBlock);
 };
 export const isCityImportChangeSet = (value: unknown): value is CityImportChangeSet => {
@@ -445,6 +448,7 @@ export class CityImportService {
           updated += 1;
         } else {
           const city = await tx.city.create({ data: { siteId: candidate.siteId, ...data, status: 'DRAFT' } });
+          const template = await ensureCityHomeTemplate(tx, candidate.siteId, this.publications, actorId);
           const page = await tx.page.create({
             data: {
               siteId: candidate.siteId,
@@ -453,9 +457,7 @@ export class CityImportService {
               slug: '',
               title: `Домашний интернет в ${candidate.namePrepositional}`,
               status: 'PUBLISHED',
-              seo: {},
-              content: {},
-              blocks: { create: cityHomeTemplateBlocks(candidate) },
+              templateId: template.id,
             },
           });
           affectedCityIds.push(city.id);
@@ -573,7 +575,7 @@ export class CityImportService {
           && createdIds.has(page.cityId)
           && page.type === 'HOME'
           && page.slug === ''
-          && page.blocks.length === 7
+          && (page.blocks.length === 7 || (page.blocks.length === 0 && typeof page.templateId === 'string'))
           && page.blocks.every((block) => block.pageId === page.id));
       if (!snapshotIsComplete) throw new BadRequestException('Для этого импорта нет полного безопасного снимка отмены');
 

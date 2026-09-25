@@ -26,7 +26,7 @@ const registry = {
   deliveryChannel: ['QUEUE', 'API', 'EMAIL'],
   deliveryAttemptStatus: ['SUCCEEDED', 'FAILED', 'SKIPPED', 'OUTCOME_UNKNOWN'],
   leadNotificationStatus: ['PENDING', 'QUEUED', 'RUNNING', 'RETRYING', 'SUCCEEDED', 'FAILED'],
-  contentEntityType: ['PROVIDER', 'SITE', 'REGION', 'CITY', 'PAGE', 'TARIFF', 'REDIRECT'],
+  contentEntityType: ['PROVIDER', 'SITE', 'REGION', 'CITY', 'PAGE', 'PAGE_TEMPLATE', 'TARIFF', 'REDIRECT'],
   contentRevisionAction: ['CREATE', 'UPDATE', 'IMPORT', 'UNDO', 'ARCHIVE', 'RESTORE'],
   importIssueLevel: ['error', 'warning'],
   publicationView: ['published', 'unpublished', 'publishing', 'scheduled', 'failed'],

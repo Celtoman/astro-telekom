@@ -74,6 +74,16 @@ export type City = $Result.DefaultSelection<Prisma.$CityPayload>
  */
 export type Page = $Result.DefaultSelection<Prisma.$PagePayload>
 /**
+ * Model PageTemplate
+ *
+ */
+export type PageTemplate = $Result.DefaultSelection<Prisma.$PageTemplatePayload>
+/**
+ * Model PageTemplateBlock
+ *
+ */
+export type PageTemplateBlock = $Result.DefaultSelection<Prisma.$PageTemplateBlockPayload>
+/**
  * Model PageBlock
  * 
  */
@@ -354,11 +364,26 @@ export const ContentEntityType: {
   REGION: 'REGION',
   CITY: 'CITY',
   PAGE: 'PAGE',
+  PAGE_TEMPLATE: 'PAGE_TEMPLATE',
   TARIFF: 'TARIFF',
   REDIRECT: 'REDIRECT'
 };
 
 export type ContentEntityType = (typeof ContentEntityType)[keyof typeof ContentEntityType]
+
+
+export const PageTemplateKind: {
+  HOME: 'HOME',
+  COVERAGE: 'COVERAGE',
+  CITIES: 'CITIES',
+  PRIVACY: 'PRIVACY',
+  PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT',
+  COOKIE_POLICY: 'COOKIE_POLICY',
+  CITY_HOME: 'CITY_HOME',
+  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL'
+};
+
+export type PageTemplateKind = (typeof PageTemplateKind)[keyof typeof PageTemplateKind]
 
 
 export const ContentRevisionAction: {
@@ -478,6 +503,10 @@ export const SiteRebuildStatus: typeof $Enums.SiteRebuildStatus
 export type ContentEntityType = $Enums.ContentEntityType
 
 export const ContentEntityType: typeof $Enums.ContentEntityType
+
+export type PageTemplateKind = $Enums.PageTemplateKind
+
+export const PageTemplateKind: typeof $Enums.PageTemplateKind
 
 export type ContentRevisionAction = $Enums.ContentRevisionAction
 
@@ -735,6 +764,26 @@ export class PrismaClient<
     * ```
     */
   get page(): Prisma.PageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.pageTemplate`: Exposes CRUD operations for the **PageTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PageTemplates
+    * const pageTemplates = await prisma.pageTemplate.findMany()
+    * ```
+    */
+  get pageTemplate(): Prisma.PageTemplateDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.pageTemplateBlock`: Exposes CRUD operations for the **PageTemplateBlock** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PageTemplateBlocks
+    * const pageTemplateBlocks = await prisma.pageTemplateBlock.findMany()
+    * ```
+    */
+  get pageTemplateBlock(): Prisma.PageTemplateBlockDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.pageBlock`: Exposes CRUD operations for the **PageBlock** model.
@@ -1344,6 +1393,8 @@ export namespace Prisma {
     Region: 'Region',
     City: 'City',
     Page: 'Page',
+    PageTemplate: 'PageTemplate',
+    PageTemplateBlock: 'PageTemplateBlock',
     PageBlock: 'PageBlock',
     Tariff: 'Tariff',
     TariffImportRun: 'TariffImportRun',
@@ -1374,7 +1425,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "provider" | "site" | "seoTemplate" | "sitemapExclusion" | "siteRebuild" | "contentRevision" | "sitePublication" | "sitePublicationValidation" | "auditEvent" | "region" | "city" | "page" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadDecisionEvent" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
+      modelProps: "provider" | "site" | "seoTemplate" | "sitemapExclusion" | "siteRebuild" | "contentRevision" | "sitePublication" | "sitePublicationValidation" | "auditEvent" | "region" | "city" | "page" | "pageTemplate" | "pageTemplateBlock" | "pageBlock" | "tariff" | "tariffImportRun" | "cityImportRun" | "addressCheck" | "lead" | "leadDecisionEvent" | "leadNotification" | "leadAccessToken" | "leadDeliveryAttempt" | "leadActivityEvent" | "redirect" | "leadStatusHistory" | "user" | "session"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2263,6 +2314,154 @@ export namespace Prisma {
           count: {
             args: Prisma.PageCountArgs<ExtArgs>
             result: $Utils.Optional<PageCountAggregateOutputType> | number
+          }
+        }
+      }
+      PageTemplate: {
+        payload: Prisma.$PageTemplatePayload<ExtArgs>
+        fields: Prisma.PageTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PageTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PageTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.PageTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PageTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.PageTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.PageTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.PageTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PageTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.PageTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplatePayload>
+          }
+          update: {
+            args: Prisma.PageTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.PageTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PageTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PageTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.PageTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.PageTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePageTemplate>
+          }
+          groupBy: {
+            args: Prisma.PageTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PageTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PageTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<PageTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
+      PageTemplateBlock: {
+        payload: Prisma.$PageTemplateBlockPayload<ExtArgs>
+        fields: Prisma.PageTemplateBlockFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PageTemplateBlockFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplateBlockPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PageTemplateBlockFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplateBlockPayload>
+          }
+          findFirst: {
+            args: Prisma.PageTemplateBlockFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplateBlockPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PageTemplateBlockFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplateBlockPayload>
+          }
+          findMany: {
+            args: Prisma.PageTemplateBlockFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplateBlockPayload>[]
+          }
+          create: {
+            args: Prisma.PageTemplateBlockCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplateBlockPayload>
+          }
+          createMany: {
+            args: Prisma.PageTemplateBlockCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PageTemplateBlockCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplateBlockPayload>[]
+          }
+          delete: {
+            args: Prisma.PageTemplateBlockDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplateBlockPayload>
+          }
+          update: {
+            args: Prisma.PageTemplateBlockUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplateBlockPayload>
+          }
+          deleteMany: {
+            args: Prisma.PageTemplateBlockDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PageTemplateBlockUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PageTemplateBlockUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplateBlockPayload>[]
+          }
+          upsert: {
+            args: Prisma.PageTemplateBlockUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PageTemplateBlockPayload>
+          }
+          aggregate: {
+            args: Prisma.PageTemplateBlockAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePageTemplateBlock>
+          }
+          groupBy: {
+            args: Prisma.PageTemplateBlockGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PageTemplateBlockGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PageTemplateBlockCountArgs<ExtArgs>
+            result: $Utils.Optional<PageTemplateBlockCountAggregateOutputType> | number
           }
         }
       }
@@ -3511,6 +3710,8 @@ export namespace Prisma {
     region?: RegionOmit
     city?: CityOmit
     page?: PageOmit
+    pageTemplate?: PageTemplateOmit
+    pageTemplateBlock?: PageTemplateBlockOmit
     pageBlock?: PageBlockOmit
     tariff?: TariffOmit
     tariffImportRun?: TariffImportRunOmit
@@ -3658,6 +3859,7 @@ export namespace Prisma {
     regions: number
     cities: number
     pages: number
+    pageTemplates: number
     leads: number
     checks: number
     redirects: number
@@ -3675,6 +3877,7 @@ export namespace Prisma {
     regions?: boolean | SiteCountOutputTypeCountRegionsArgs
     cities?: boolean | SiteCountOutputTypeCountCitiesArgs
     pages?: boolean | SiteCountOutputTypeCountPagesArgs
+    pageTemplates?: boolean | SiteCountOutputTypeCountPageTemplatesArgs
     leads?: boolean | SiteCountOutputTypeCountLeadsArgs
     checks?: boolean | SiteCountOutputTypeCountChecksArgs
     redirects?: boolean | SiteCountOutputTypeCountRedirectsArgs
@@ -3718,6 +3921,13 @@ export namespace Prisma {
    */
   export type SiteCountOutputTypeCountPagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PageWhereInput
+  }
+
+  /**
+   * SiteCountOutputType without action
+   */
+  export type SiteCountOutputTypeCountPageTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PageTemplateWhereInput
   }
 
   /**
@@ -3991,6 +4201,46 @@ export namespace Prisma {
    */
   export type PageCountOutputTypeCountChecksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AddressCheckWhereInput
+  }
+
+
+  /**
+   * Count Type PageTemplateCountOutputType
+   */
+
+  export type PageTemplateCountOutputType = {
+    blocks: number
+    pages: number
+  }
+
+  export type PageTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    blocks?: boolean | PageTemplateCountOutputTypeCountBlocksArgs
+    pages?: boolean | PageTemplateCountOutputTypeCountPagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PageTemplateCountOutputType without action
+   */
+  export type PageTemplateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateCountOutputType
+     */
+    select?: PageTemplateCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PageTemplateCountOutputType without action
+   */
+  export type PageTemplateCountOutputTypeCountBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PageTemplateBlockWhereInput
+  }
+
+  /**
+   * PageTemplateCountOutputType without action
+   */
+  export type PageTemplateCountOutputTypeCountPagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PageWhereInput
   }
 
 
@@ -5694,6 +5944,7 @@ export namespace Prisma {
     regions?: boolean | Site$regionsArgs<ExtArgs>
     cities?: boolean | Site$citiesArgs<ExtArgs>
     pages?: boolean | Site$pagesArgs<ExtArgs>
+    pageTemplates?: boolean | Site$pageTemplatesArgs<ExtArgs>
     leads?: boolean | Site$leadsArgs<ExtArgs>
     checks?: boolean | Site$checksArgs<ExtArgs>
     redirects?: boolean | Site$redirectsArgs<ExtArgs>
@@ -5764,6 +6015,7 @@ export namespace Prisma {
     regions?: boolean | Site$regionsArgs<ExtArgs>
     cities?: boolean | Site$citiesArgs<ExtArgs>
     pages?: boolean | Site$pagesArgs<ExtArgs>
+    pageTemplates?: boolean | Site$pageTemplatesArgs<ExtArgs>
     leads?: boolean | Site$leadsArgs<ExtArgs>
     checks?: boolean | Site$checksArgs<ExtArgs>
     redirects?: boolean | Site$redirectsArgs<ExtArgs>
@@ -5791,6 +6043,7 @@ export namespace Prisma {
       regions: Prisma.$RegionPayload<ExtArgs>[]
       cities: Prisma.$CityPayload<ExtArgs>[]
       pages: Prisma.$PagePayload<ExtArgs>[]
+      pageTemplates: Prisma.$PageTemplatePayload<ExtArgs>[]
       leads: Prisma.$LeadPayload<ExtArgs>[]
       checks: Prisma.$AddressCheckPayload<ExtArgs>[]
       redirects: Prisma.$RedirectPayload<ExtArgs>[]
@@ -6215,6 +6468,7 @@ export namespace Prisma {
     regions<T extends Site$regionsArgs<ExtArgs> = {}>(args?: Subset<T, Site$regionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cities<T extends Site$citiesArgs<ExtArgs> = {}>(args?: Subset<T, Site$citiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pages<T extends Site$pagesArgs<ExtArgs> = {}>(args?: Subset<T, Site$pagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pageTemplates<T extends Site$pageTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, Site$pageTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     leads<T extends Site$leadsArgs<ExtArgs> = {}>(args?: Subset<T, Site$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     checks<T extends Site$checksArgs<ExtArgs> = {}>(args?: Subset<T, Site$checksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AddressCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     redirects<T extends Site$redirectsArgs<ExtArgs> = {}>(args?: Subset<T, Site$redirectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RedirectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6738,6 +6992,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
+  }
+
+  /**
+   * Site.pageTemplates
+   */
+  export type Site$pageTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+    where?: PageTemplateWhereInput
+    orderBy?: PageTemplateOrderByWithRelationInput | PageTemplateOrderByWithRelationInput[]
+    cursor?: PageTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PageTemplateScalarFieldEnum | PageTemplateScalarFieldEnum[]
   }
 
   /**
@@ -18180,6 +18458,7 @@ export namespace Prisma {
     title: string | null
     slug: string | null
     status: $Enums.PublishStatus | null
+    templateId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -18192,6 +18471,7 @@ export namespace Prisma {
     title: string | null
     slug: string | null
     status: $Enums.PublishStatus | null
+    templateId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -18206,6 +18486,7 @@ export namespace Prisma {
     status: number
     seo: number
     content: number
+    templateId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -18220,6 +18501,7 @@ export namespace Prisma {
     title?: true
     slug?: true
     status?: true
+    templateId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -18232,6 +18514,7 @@ export namespace Prisma {
     title?: true
     slug?: true
     status?: true
+    templateId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -18246,6 +18529,7 @@ export namespace Prisma {
     status?: true
     seo?: true
     content?: true
+    templateId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -18333,6 +18617,7 @@ export namespace Prisma {
     status: $Enums.PublishStatus
     seo: JsonValue | null
     content: JsonValue | null
+    templateId: string | null
     createdAt: Date
     updatedAt: Date
     _count: PageCountAggregateOutputType | null
@@ -18364,10 +18649,12 @@ export namespace Prisma {
     status?: boolean
     seo?: boolean
     content?: boolean
+    templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | Page$cityArgs<ExtArgs>
+    template?: boolean | Page$templateArgs<ExtArgs>
     blocks?: boolean | Page$blocksArgs<ExtArgs>
     leads?: boolean | Page$leadsArgs<ExtArgs>
     checks?: boolean | Page$checksArgs<ExtArgs>
@@ -18384,10 +18671,12 @@ export namespace Prisma {
     status?: boolean
     seo?: boolean
     content?: boolean
+    templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | Page$cityArgs<ExtArgs>
+    template?: boolean | Page$templateArgs<ExtArgs>
   }, ExtArgs["result"]["page"]>
 
   export type PageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18400,10 +18689,12 @@ export namespace Prisma {
     status?: boolean
     seo?: boolean
     content?: boolean
+    templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | Page$cityArgs<ExtArgs>
+    template?: boolean | Page$templateArgs<ExtArgs>
   }, ExtArgs["result"]["page"]>
 
   export type PageSelectScalar = {
@@ -18416,14 +18707,16 @@ export namespace Prisma {
     status?: boolean
     seo?: boolean
     content?: boolean
+    templateId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "type" | "title" | "slug" | "status" | "seo" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
+  export type PageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "type" | "title" | "slug" | "status" | "seo" | "content" | "templateId" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
   export type PageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | Page$cityArgs<ExtArgs>
+    template?: boolean | Page$templateArgs<ExtArgs>
     blocks?: boolean | Page$blocksArgs<ExtArgs>
     leads?: boolean | Page$leadsArgs<ExtArgs>
     checks?: boolean | Page$checksArgs<ExtArgs>
@@ -18432,10 +18725,12 @@ export namespace Prisma {
   export type PageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | Page$cityArgs<ExtArgs>
+    template?: boolean | Page$templateArgs<ExtArgs>
   }
   export type PageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | Page$cityArgs<ExtArgs>
+    template?: boolean | Page$templateArgs<ExtArgs>
   }
 
   export type $PagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18443,6 +18738,7 @@ export namespace Prisma {
     objects: {
       site: Prisma.$SitePayload<ExtArgs>
       city: Prisma.$CityPayload<ExtArgs> | null
+      template: Prisma.$PageTemplatePayload<ExtArgs> | null
       blocks: Prisma.$PageBlockPayload<ExtArgs>[]
       leads: Prisma.$LeadPayload<ExtArgs>[]
       checks: Prisma.$AddressCheckPayload<ExtArgs>[]
@@ -18457,6 +18753,7 @@ export namespace Prisma {
       status: $Enums.PublishStatus
       seo: Prisma.JsonValue | null
       content: Prisma.JsonValue | null
+      templateId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["page"]>
@@ -18855,6 +19152,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     site<T extends SiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SiteDefaultArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     city<T extends Page$cityArgs<ExtArgs> = {}>(args?: Subset<T, Page$cityArgs<ExtArgs>>): Prisma__CityClient<$Result.GetResult<Prisma.$CityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    template<T extends Page$templateArgs<ExtArgs> = {}>(args?: Subset<T, Page$templateArgs<ExtArgs>>): Prisma__PageTemplateClient<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     blocks<T extends Page$blocksArgs<ExtArgs> = {}>(args?: Subset<T, Page$blocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     leads<T extends Page$leadsArgs<ExtArgs> = {}>(args?: Subset<T, Page$leadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     checks<T extends Page$checksArgs<ExtArgs> = {}>(args?: Subset<T, Page$checksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AddressCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -18896,10 +19194,11 @@ export namespace Prisma {
     readonly status: FieldRef<"Page", 'PublishStatus'>
     readonly seo: FieldRef<"Page", 'Json'>
     readonly content: FieldRef<"Page", 'Json'>
+    readonly templateId: FieldRef<"Page", 'String'>
     readonly createdAt: FieldRef<"Page", 'DateTime'>
     readonly updatedAt: FieldRef<"Page", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -18968,31 +19267,31 @@ export namespace Prisma {
     where?: PageWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Pages to fetch.
      */
     orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for Pages.
      */
     cursor?: PageWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Pages from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Pages.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of Pages.
      */
     distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
@@ -19020,31 +19319,31 @@ export namespace Prisma {
     where?: PageWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Pages to fetch.
      */
     orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for Pages.
      */
     cursor?: PageWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Pages from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Pages.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of Pages.
      */
     distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
@@ -19072,31 +19371,31 @@ export namespace Prisma {
     where?: PageWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Pages to fetch.
      */
     orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing Pages.
      */
     cursor?: PageWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Pages from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Pages.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of Pages.
      */
     distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
@@ -19318,6 +19617,25 @@ export namespace Prisma {
   }
 
   /**
+   * Page.template
+   */
+  export type Page$templateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+    where?: PageTemplateWhereInput
+  }
+
+  /**
    * Page.blocks
    */
   export type Page$blocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19405,6 +19723,2290 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PageTemplate
+   */
+
+  export type AggregatePageTemplate = {
+    _count: PageTemplateCountAggregateOutputType | null
+    _min: PageTemplateMinAggregateOutputType | null
+    _max: PageTemplateMaxAggregateOutputType | null
+  }
+
+  export type PageTemplateMinAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    kind: $Enums.PageTemplateKind | null
+    titleTemplate: string | null
+    status: $Enums.PublishStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PageTemplateMaxAggregateOutputType = {
+    id: string | null
+    siteId: string | null
+    kind: $Enums.PageTemplateKind | null
+    titleTemplate: string | null
+    status: $Enums.PublishStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PageTemplateCountAggregateOutputType = {
+    id: number
+    siteId: number
+    kind: number
+    titleTemplate: number
+    status: number
+    content: number
+    seo: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PageTemplateMinAggregateInputType = {
+    id?: true
+    siteId?: true
+    kind?: true
+    titleTemplate?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PageTemplateMaxAggregateInputType = {
+    id?: true
+    siteId?: true
+    kind?: true
+    titleTemplate?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PageTemplateCountAggregateInputType = {
+    id?: true
+    siteId?: true
+    kind?: true
+    titleTemplate?: true
+    status?: true
+    content?: true
+    seo?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PageTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PageTemplate to aggregate.
+     */
+    where?: PageTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PageTemplates to fetch.
+     */
+    orderBy?: PageTemplateOrderByWithRelationInput | PageTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: PageTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PageTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PageTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned PageTemplates
+    **/
+    _count?: true | PageTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+    **/
+    _min?: PageTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+    **/
+    _max?: PageTemplateMaxAggregateInputType
+  }
+
+  export type GetPageTemplateAggregateType<T extends PageTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregatePageTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePageTemplate[P]>
+      : GetScalarType<T[P], AggregatePageTemplate[P]>
+  }
+
+
+
+
+  export type PageTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PageTemplateWhereInput
+    orderBy?: PageTemplateOrderByWithAggregationInput | PageTemplateOrderByWithAggregationInput[]
+    by: PageTemplateScalarFieldEnum[] | PageTemplateScalarFieldEnum
+    having?: PageTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PageTemplateCountAggregateInputType | true
+    _min?: PageTemplateMinAggregateInputType
+    _max?: PageTemplateMaxAggregateInputType
+  }
+
+  export type PageTemplateGroupByOutputType = {
+    id: string
+    siteId: string
+    kind: $Enums.PageTemplateKind
+    titleTemplate: string
+    status: $Enums.PublishStatus
+    content: JsonValue | null
+    seo: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PageTemplateCountAggregateOutputType | null
+    _min: PageTemplateMinAggregateOutputType | null
+    _max: PageTemplateMaxAggregateOutputType | null
+  }
+
+  type GetPageTemplateGroupByPayload<T extends PageTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PageTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PageTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PageTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], PageTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PageTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    kind?: boolean
+    titleTemplate?: boolean
+    status?: boolean
+    content?: boolean
+    seo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    blocks?: boolean | PageTemplate$blocksArgs<ExtArgs>
+    pages?: boolean | PageTemplate$pagesArgs<ExtArgs>
+    _count?: boolean | PageTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pageTemplate"]>
+
+  export type PageTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    kind?: boolean
+    titleTemplate?: boolean
+    status?: boolean
+    content?: boolean
+    seo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pageTemplate"]>
+
+  export type PageTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    siteId?: boolean
+    kind?: boolean
+    titleTemplate?: boolean
+    status?: boolean
+    content?: boolean
+    seo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pageTemplate"]>
+
+  export type PageTemplateSelectScalar = {
+    id?: boolean
+    siteId?: boolean
+    kind?: boolean
+    titleTemplate?: boolean
+    status?: boolean
+    content?: boolean
+    seo?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PageTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "kind" | "titleTemplate" | "status" | "content" | "seo" | "createdAt" | "updatedAt", ExtArgs["result"]["pageTemplate"]>
+  export type PageTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+    blocks?: boolean | PageTemplate$blocksArgs<ExtArgs>
+    pages?: boolean | PageTemplate$pagesArgs<ExtArgs>
+    _count?: boolean | PageTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PageTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+  }
+  export type PageTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    site?: boolean | SiteDefaultArgs<ExtArgs>
+  }
+
+  export type $PageTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PageTemplate"
+    objects: {
+      site: Prisma.$SitePayload<ExtArgs>
+      blocks: Prisma.$PageTemplateBlockPayload<ExtArgs>[]
+      pages: Prisma.$PagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      siteId: string
+      kind: $Enums.PageTemplateKind
+      titleTemplate: string
+      status: $Enums.PublishStatus
+      content: Prisma.JsonValue | null
+      seo: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["pageTemplate"]>
+    composites: {}
+  }
+
+  type PageTemplateGetPayload<S extends boolean | null | undefined | PageTemplateDefaultArgs> = $Result.GetResult<Prisma.$PageTemplatePayload, S>
+
+  type PageTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PageTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PageTemplateCountAggregateInputType | true
+    }
+
+  export interface PageTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PageTemplate'], meta: { name: 'PageTemplate' } }
+    /**
+     * Find zero or one PageTemplate that matches the filter.
+     * @param {PageTemplateFindUniqueArgs} args - Arguments to find a PageTemplate
+     * @example
+     * // Get one PageTemplate
+     * const pageTemplate = await prisma.pageTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PageTemplateFindUniqueArgs>(args: SelectSubset<T, PageTemplateFindUniqueArgs<ExtArgs>>): Prisma__PageTemplateClient<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PageTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PageTemplateFindUniqueOrThrowArgs} args - Arguments to find a PageTemplate
+     * @example
+     * // Get one PageTemplate
+     * const pageTemplate = await prisma.pageTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PageTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, PageTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PageTemplateClient<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PageTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateFindFirstArgs} args - Arguments to find a PageTemplate
+     * @example
+     * // Get one PageTemplate
+     * const pageTemplate = await prisma.pageTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PageTemplateFindFirstArgs>(args?: SelectSubset<T, PageTemplateFindFirstArgs<ExtArgs>>): Prisma__PageTemplateClient<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PageTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateFindFirstOrThrowArgs} args - Arguments to find a PageTemplate
+     * @example
+     * // Get one PageTemplate
+     * const pageTemplate = await prisma.pageTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PageTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, PageTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__PageTemplateClient<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PageTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PageTemplates
+     * const pageTemplates = await prisma.pageTemplate.findMany()
+     *
+     * // Get first 10 PageTemplates
+     * const pageTemplates = await prisma.pageTemplate.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const pageTemplateWithIdOnly = await prisma.pageTemplate.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends PageTemplateFindManyArgs>(args?: SelectSubset<T, PageTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PageTemplate.
+     * @param {PageTemplateCreateArgs} args - Arguments to create a PageTemplate.
+     * @example
+     * // Create one PageTemplate
+     * const PageTemplate = await prisma.pageTemplate.create({
+     *   data: {
+     *     // ... data to create a PageTemplate
+     *   }
+     * })
+     *
+     */
+    create<T extends PageTemplateCreateArgs>(args: SelectSubset<T, PageTemplateCreateArgs<ExtArgs>>): Prisma__PageTemplateClient<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PageTemplates.
+     * @param {PageTemplateCreateManyArgs} args - Arguments to create many PageTemplates.
+     * @example
+     * // Create many PageTemplates
+     * const pageTemplate = await prisma.pageTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends PageTemplateCreateManyArgs>(args?: SelectSubset<T, PageTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PageTemplates and returns the data saved in the database.
+     * @param {PageTemplateCreateManyAndReturnArgs} args - Arguments to create many PageTemplates.
+     * @example
+     * // Create many PageTemplates
+     * const pageTemplate = await prisma.pageTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many PageTemplates and only return the `id`
+     * const pageTemplateWithIdOnly = await prisma.pageTemplate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends PageTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, PageTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PageTemplate.
+     * @param {PageTemplateDeleteArgs} args - Arguments to delete one PageTemplate.
+     * @example
+     * // Delete one PageTemplate
+     * const PageTemplate = await prisma.pageTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one PageTemplate
+     *   }
+     * })
+     *
+     */
+    delete<T extends PageTemplateDeleteArgs>(args: SelectSubset<T, PageTemplateDeleteArgs<ExtArgs>>): Prisma__PageTemplateClient<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PageTemplate.
+     * @param {PageTemplateUpdateArgs} args - Arguments to update one PageTemplate.
+     * @example
+     * // Update one PageTemplate
+     * const pageTemplate = await prisma.pageTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends PageTemplateUpdateArgs>(args: SelectSubset<T, PageTemplateUpdateArgs<ExtArgs>>): Prisma__PageTemplateClient<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PageTemplates.
+     * @param {PageTemplateDeleteManyArgs} args - Arguments to filter PageTemplates to delete.
+     * @example
+     * // Delete a few PageTemplates
+     * const { count } = await prisma.pageTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends PageTemplateDeleteManyArgs>(args?: SelectSubset<T, PageTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PageTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PageTemplates
+     * const pageTemplate = await prisma.pageTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends PageTemplateUpdateManyArgs>(args: SelectSubset<T, PageTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PageTemplates and returns the data updated in the database.
+     * @param {PageTemplateUpdateManyAndReturnArgs} args - Arguments to update many PageTemplates.
+     * @example
+     * // Update many PageTemplates
+     * const pageTemplate = await prisma.pageTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more PageTemplates and only return the `id`
+     * const pageTemplateWithIdOnly = await prisma.pageTemplate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends PageTemplateUpdateManyAndReturnArgs>(args: SelectSubset<T, PageTemplateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PageTemplate.
+     * @param {PageTemplateUpsertArgs} args - Arguments to update or create a PageTemplate.
+     * @example
+     * // Update or create a PageTemplate
+     * const pageTemplate = await prisma.pageTemplate.upsert({
+     *   create: {
+     *     // ... data to create a PageTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PageTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PageTemplateUpsertArgs>(args: SelectSubset<T, PageTemplateUpsertArgs<ExtArgs>>): Prisma__PageTemplateClient<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PageTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateCountArgs} args - Arguments to filter PageTemplates to count.
+     * @example
+     * // Count the number of PageTemplates
+     * const count = await prisma.pageTemplate.count({
+     *   where: {
+     *     // ... the filter for the PageTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends PageTemplateCountArgs>(
+      args?: Subset<T, PageTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PageTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PageTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PageTemplateAggregateArgs>(args: Subset<T, PageTemplateAggregateArgs>): Prisma.PrismaPromise<GetPageTemplateAggregateType<T>>
+
+    /**
+     * Group by PageTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+    **/
+    groupBy<
+      T extends PageTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PageTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: PageTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PageTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPageTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PageTemplate model
+   */
+  readonly fields: PageTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PageTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PageTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    site<T extends SiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SiteDefaultArgs<ExtArgs>>): Prisma__SiteClient<$Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    blocks<T extends PageTemplate$blocksArgs<ExtArgs> = {}>(args?: Subset<T, PageTemplate$blocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pages<T extends PageTemplate$pagesArgs<ExtArgs> = {}>(args?: Subset<T, PageTemplate$pagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PageTemplate model
+   */
+  interface PageTemplateFieldRefs {
+    readonly id: FieldRef<"PageTemplate", 'String'>
+    readonly siteId: FieldRef<"PageTemplate", 'String'>
+    readonly kind: FieldRef<"PageTemplate", 'PageTemplateKind'>
+    readonly titleTemplate: FieldRef<"PageTemplate", 'String'>
+    readonly status: FieldRef<"PageTemplate", 'PublishStatus'>
+    readonly content: FieldRef<"PageTemplate", 'Json'>
+    readonly seo: FieldRef<"PageTemplate", 'Json'>
+    readonly createdAt: FieldRef<"PageTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"PageTemplate", 'DateTime'>
+  }
+
+
+  // Custom InputTypes
+  /**
+   * PageTemplate findUnique
+   */
+  export type PageTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which PageTemplate to fetch.
+     */
+    where: PageTemplateWhereUniqueInput
+  }
+
+  /**
+   * PageTemplate findUniqueOrThrow
+   */
+  export type PageTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which PageTemplate to fetch.
+     */
+    where: PageTemplateWhereUniqueInput
+  }
+
+  /**
+   * PageTemplate findFirst
+   */
+  export type PageTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which PageTemplate to fetch.
+     */
+    where?: PageTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PageTemplates to fetch.
+     */
+    orderBy?: PageTemplateOrderByWithRelationInput | PageTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for PageTemplates.
+     */
+    cursor?: PageTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PageTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PageTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of PageTemplates.
+     */
+    distinct?: PageTemplateScalarFieldEnum | PageTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * PageTemplate findFirstOrThrow
+   */
+  export type PageTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which PageTemplate to fetch.
+     */
+    where?: PageTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PageTemplates to fetch.
+     */
+    orderBy?: PageTemplateOrderByWithRelationInput | PageTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for PageTemplates.
+     */
+    cursor?: PageTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PageTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PageTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of PageTemplates.
+     */
+    distinct?: PageTemplateScalarFieldEnum | PageTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * PageTemplate findMany
+   */
+  export type PageTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which PageTemplates to fetch.
+     */
+    where?: PageTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PageTemplates to fetch.
+     */
+    orderBy?: PageTemplateOrderByWithRelationInput | PageTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing PageTemplates.
+     */
+    cursor?: PageTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PageTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PageTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of PageTemplates.
+     */
+    distinct?: PageTemplateScalarFieldEnum | PageTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * PageTemplate create
+   */
+  export type PageTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PageTemplate.
+     */
+    data: XOR<PageTemplateCreateInput, PageTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * PageTemplate createMany
+   */
+  export type PageTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PageTemplates.
+     */
+    data: PageTemplateCreateManyInput | PageTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PageTemplate createManyAndReturn
+   */
+  export type PageTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many PageTemplates.
+     */
+    data: PageTemplateCreateManyInput | PageTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PageTemplate update
+   */
+  export type PageTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PageTemplate.
+     */
+    data: XOR<PageTemplateUpdateInput, PageTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which PageTemplate to update.
+     */
+    where: PageTemplateWhereUniqueInput
+  }
+
+  /**
+   * PageTemplate updateMany
+   */
+  export type PageTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PageTemplates.
+     */
+    data: XOR<PageTemplateUpdateManyMutationInput, PageTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which PageTemplates to update
+     */
+    where?: PageTemplateWhereInput
+    /**
+     * Limit how many PageTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PageTemplate updateManyAndReturn
+   */
+  export type PageTemplateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update PageTemplates.
+     */
+    data: XOR<PageTemplateUpdateManyMutationInput, PageTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which PageTemplates to update
+     */
+    where?: PageTemplateWhereInput
+    /**
+     * Limit how many PageTemplates to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PageTemplate upsert
+   */
+  export type PageTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PageTemplate to update in case it exists.
+     */
+    where: PageTemplateWhereUniqueInput
+    /**
+     * In case the PageTemplate found by the `where` argument doesn't exist, create a new PageTemplate with this data.
+     */
+    create: XOR<PageTemplateCreateInput, PageTemplateUncheckedCreateInput>
+    /**
+     * In case the PageTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PageTemplateUpdateInput, PageTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * PageTemplate delete
+   */
+  export type PageTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+    /**
+     * Filter which PageTemplate to delete.
+     */
+    where: PageTemplateWhereUniqueInput
+  }
+
+  /**
+   * PageTemplate deleteMany
+   */
+  export type PageTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PageTemplates to delete
+     */
+    where?: PageTemplateWhereInput
+    /**
+     * Limit how many PageTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PageTemplate.blocks
+   */
+  export type PageTemplate$blocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockInclude<ExtArgs> | null
+    where?: PageTemplateBlockWhereInput
+    orderBy?: PageTemplateBlockOrderByWithRelationInput | PageTemplateBlockOrderByWithRelationInput[]
+    cursor?: PageTemplateBlockWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PageTemplateBlockScalarFieldEnum | PageTemplateBlockScalarFieldEnum[]
+  }
+
+  /**
+   * PageTemplate.pages
+   */
+  export type PageTemplate$pagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Page
+     */
+    omit?: PageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageInclude<ExtArgs> | null
+    where?: PageWhereInput
+    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
+    cursor?: PageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
+  }
+
+  /**
+   * PageTemplate without action
+   */
+  export type PageTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplate
+     */
+    select?: PageTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplate
+     */
+    omit?: PageTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PageTemplateBlock
+   */
+
+  export type AggregatePageTemplateBlock = {
+    _count: PageTemplateBlockCountAggregateOutputType | null
+    _avg: PageTemplateBlockAvgAggregateOutputType | null
+    _sum: PageTemplateBlockSumAggregateOutputType | null
+    _min: PageTemplateBlockMinAggregateOutputType | null
+    _max: PageTemplateBlockMaxAggregateOutputType | null
+  }
+
+  export type PageTemplateBlockAvgAggregateOutputType = {
+    position: number | null
+  }
+
+  export type PageTemplateBlockSumAggregateOutputType = {
+    position: number | null
+  }
+
+  export type PageTemplateBlockMinAggregateOutputType = {
+    id: string | null
+    templateId: string | null
+    blockType: string | null
+    position: number | null
+    visible: boolean | null
+    source: string | null
+  }
+
+  export type PageTemplateBlockMaxAggregateOutputType = {
+    id: string | null
+    templateId: string | null
+    blockType: string | null
+    position: number | null
+    visible: boolean | null
+    source: string | null
+  }
+
+  export type PageTemplateBlockCountAggregateOutputType = {
+    id: number
+    templateId: number
+    blockType: number
+    position: number
+    visible: number
+    data: number
+    source: number
+    _all: number
+  }
+
+
+  export type PageTemplateBlockAvgAggregateInputType = {
+    position?: true
+  }
+
+  export type PageTemplateBlockSumAggregateInputType = {
+    position?: true
+  }
+
+  export type PageTemplateBlockMinAggregateInputType = {
+    id?: true
+    templateId?: true
+    blockType?: true
+    position?: true
+    visible?: true
+    source?: true
+  }
+
+  export type PageTemplateBlockMaxAggregateInputType = {
+    id?: true
+    templateId?: true
+    blockType?: true
+    position?: true
+    visible?: true
+    source?: true
+  }
+
+  export type PageTemplateBlockCountAggregateInputType = {
+    id?: true
+    templateId?: true
+    blockType?: true
+    position?: true
+    visible?: true
+    data?: true
+    source?: true
+    _all?: true
+  }
+
+  export type PageTemplateBlockAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PageTemplateBlock to aggregate.
+     */
+    where?: PageTemplateBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PageTemplateBlocks to fetch.
+     */
+    orderBy?: PageTemplateBlockOrderByWithRelationInput | PageTemplateBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: PageTemplateBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PageTemplateBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PageTemplateBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned PageTemplateBlocks
+    **/
+    _count?: true | PageTemplateBlockCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+    **/
+    _avg?: PageTemplateBlockAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+    **/
+    _sum?: PageTemplateBlockSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+    **/
+    _min?: PageTemplateBlockMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+    **/
+    _max?: PageTemplateBlockMaxAggregateInputType
+  }
+
+  export type GetPageTemplateBlockAggregateType<T extends PageTemplateBlockAggregateArgs> = {
+        [P in keyof T & keyof AggregatePageTemplateBlock]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePageTemplateBlock[P]>
+      : GetScalarType<T[P], AggregatePageTemplateBlock[P]>
+  }
+
+
+
+
+  export type PageTemplateBlockGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PageTemplateBlockWhereInput
+    orderBy?: PageTemplateBlockOrderByWithAggregationInput | PageTemplateBlockOrderByWithAggregationInput[]
+    by: PageTemplateBlockScalarFieldEnum[] | PageTemplateBlockScalarFieldEnum
+    having?: PageTemplateBlockScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PageTemplateBlockCountAggregateInputType | true
+    _avg?: PageTemplateBlockAvgAggregateInputType
+    _sum?: PageTemplateBlockSumAggregateInputType
+    _min?: PageTemplateBlockMinAggregateInputType
+    _max?: PageTemplateBlockMaxAggregateInputType
+  }
+
+  export type PageTemplateBlockGroupByOutputType = {
+    id: string
+    templateId: string
+    blockType: string
+    position: number
+    visible: boolean
+    data: JsonValue
+    source: string | null
+    _count: PageTemplateBlockCountAggregateOutputType | null
+    _avg: PageTemplateBlockAvgAggregateOutputType | null
+    _sum: PageTemplateBlockSumAggregateOutputType | null
+    _min: PageTemplateBlockMinAggregateOutputType | null
+    _max: PageTemplateBlockMaxAggregateOutputType | null
+  }
+
+  type GetPageTemplateBlockGroupByPayload<T extends PageTemplateBlockGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PageTemplateBlockGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PageTemplateBlockGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PageTemplateBlockGroupByOutputType[P]>
+            : GetScalarType<T[P], PageTemplateBlockGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PageTemplateBlockSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    templateId?: boolean
+    blockType?: boolean
+    position?: boolean
+    visible?: boolean
+    data?: boolean
+    source?: boolean
+    template?: boolean | PageTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pageTemplateBlock"]>
+
+  export type PageTemplateBlockSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    templateId?: boolean
+    blockType?: boolean
+    position?: boolean
+    visible?: boolean
+    data?: boolean
+    source?: boolean
+    template?: boolean | PageTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pageTemplateBlock"]>
+
+  export type PageTemplateBlockSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    templateId?: boolean
+    blockType?: boolean
+    position?: boolean
+    visible?: boolean
+    data?: boolean
+    source?: boolean
+    template?: boolean | PageTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pageTemplateBlock"]>
+
+  export type PageTemplateBlockSelectScalar = {
+    id?: boolean
+    templateId?: boolean
+    blockType?: boolean
+    position?: boolean
+    visible?: boolean
+    data?: boolean
+    source?: boolean
+  }
+
+  export type PageTemplateBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "templateId" | "blockType" | "position" | "visible" | "data" | "source", ExtArgs["result"]["pageTemplateBlock"]>
+  export type PageTemplateBlockInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | PageTemplateDefaultArgs<ExtArgs>
+  }
+  export type PageTemplateBlockIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | PageTemplateDefaultArgs<ExtArgs>
+  }
+  export type PageTemplateBlockIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    template?: boolean | PageTemplateDefaultArgs<ExtArgs>
+  }
+
+  export type $PageTemplateBlockPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PageTemplateBlock"
+    objects: {
+      template: Prisma.$PageTemplatePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      templateId: string
+      blockType: string
+      position: number
+      visible: boolean
+      data: Prisma.JsonValue
+      source: string | null
+    }, ExtArgs["result"]["pageTemplateBlock"]>
+    composites: {}
+  }
+
+  type PageTemplateBlockGetPayload<S extends boolean | null | undefined | PageTemplateBlockDefaultArgs> = $Result.GetResult<Prisma.$PageTemplateBlockPayload, S>
+
+  type PageTemplateBlockCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PageTemplateBlockFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PageTemplateBlockCountAggregateInputType | true
+    }
+
+  export interface PageTemplateBlockDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PageTemplateBlock'], meta: { name: 'PageTemplateBlock' } }
+    /**
+     * Find zero or one PageTemplateBlock that matches the filter.
+     * @param {PageTemplateBlockFindUniqueArgs} args - Arguments to find a PageTemplateBlock
+     * @example
+     * // Get one PageTemplateBlock
+     * const pageTemplateBlock = await prisma.pageTemplateBlock.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PageTemplateBlockFindUniqueArgs>(args: SelectSubset<T, PageTemplateBlockFindUniqueArgs<ExtArgs>>): Prisma__PageTemplateBlockClient<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PageTemplateBlock that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PageTemplateBlockFindUniqueOrThrowArgs} args - Arguments to find a PageTemplateBlock
+     * @example
+     * // Get one PageTemplateBlock
+     * const pageTemplateBlock = await prisma.pageTemplateBlock.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PageTemplateBlockFindUniqueOrThrowArgs>(args: SelectSubset<T, PageTemplateBlockFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PageTemplateBlockClient<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PageTemplateBlock that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateBlockFindFirstArgs} args - Arguments to find a PageTemplateBlock
+     * @example
+     * // Get one PageTemplateBlock
+     * const pageTemplateBlock = await prisma.pageTemplateBlock.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PageTemplateBlockFindFirstArgs>(args?: SelectSubset<T, PageTemplateBlockFindFirstArgs<ExtArgs>>): Prisma__PageTemplateBlockClient<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PageTemplateBlock that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateBlockFindFirstOrThrowArgs} args - Arguments to find a PageTemplateBlock
+     * @example
+     * // Get one PageTemplateBlock
+     * const pageTemplateBlock = await prisma.pageTemplateBlock.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PageTemplateBlockFindFirstOrThrowArgs>(args?: SelectSubset<T, PageTemplateBlockFindFirstOrThrowArgs<ExtArgs>>): Prisma__PageTemplateBlockClient<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PageTemplateBlocks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateBlockFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PageTemplateBlocks
+     * const pageTemplateBlocks = await prisma.pageTemplateBlock.findMany()
+     *
+     * // Get first 10 PageTemplateBlocks
+     * const pageTemplateBlocks = await prisma.pageTemplateBlock.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const pageTemplateBlockWithIdOnly = await prisma.pageTemplateBlock.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends PageTemplateBlockFindManyArgs>(args?: SelectSubset<T, PageTemplateBlockFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PageTemplateBlock.
+     * @param {PageTemplateBlockCreateArgs} args - Arguments to create a PageTemplateBlock.
+     * @example
+     * // Create one PageTemplateBlock
+     * const PageTemplateBlock = await prisma.pageTemplateBlock.create({
+     *   data: {
+     *     // ... data to create a PageTemplateBlock
+     *   }
+     * })
+     *
+     */
+    create<T extends PageTemplateBlockCreateArgs>(args: SelectSubset<T, PageTemplateBlockCreateArgs<ExtArgs>>): Prisma__PageTemplateBlockClient<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PageTemplateBlocks.
+     * @param {PageTemplateBlockCreateManyArgs} args - Arguments to create many PageTemplateBlocks.
+     * @example
+     * // Create many PageTemplateBlocks
+     * const pageTemplateBlock = await prisma.pageTemplateBlock.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends PageTemplateBlockCreateManyArgs>(args?: SelectSubset<T, PageTemplateBlockCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PageTemplateBlocks and returns the data saved in the database.
+     * @param {PageTemplateBlockCreateManyAndReturnArgs} args - Arguments to create many PageTemplateBlocks.
+     * @example
+     * // Create many PageTemplateBlocks
+     * const pageTemplateBlock = await prisma.pageTemplateBlock.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many PageTemplateBlocks and only return the `id`
+     * const pageTemplateBlockWithIdOnly = await prisma.pageTemplateBlock.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends PageTemplateBlockCreateManyAndReturnArgs>(args?: SelectSubset<T, PageTemplateBlockCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PageTemplateBlock.
+     * @param {PageTemplateBlockDeleteArgs} args - Arguments to delete one PageTemplateBlock.
+     * @example
+     * // Delete one PageTemplateBlock
+     * const PageTemplateBlock = await prisma.pageTemplateBlock.delete({
+     *   where: {
+     *     // ... filter to delete one PageTemplateBlock
+     *   }
+     * })
+     *
+     */
+    delete<T extends PageTemplateBlockDeleteArgs>(args: SelectSubset<T, PageTemplateBlockDeleteArgs<ExtArgs>>): Prisma__PageTemplateBlockClient<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PageTemplateBlock.
+     * @param {PageTemplateBlockUpdateArgs} args - Arguments to update one PageTemplateBlock.
+     * @example
+     * // Update one PageTemplateBlock
+     * const pageTemplateBlock = await prisma.pageTemplateBlock.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends PageTemplateBlockUpdateArgs>(args: SelectSubset<T, PageTemplateBlockUpdateArgs<ExtArgs>>): Prisma__PageTemplateBlockClient<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PageTemplateBlocks.
+     * @param {PageTemplateBlockDeleteManyArgs} args - Arguments to filter PageTemplateBlocks to delete.
+     * @example
+     * // Delete a few PageTemplateBlocks
+     * const { count } = await prisma.pageTemplateBlock.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends PageTemplateBlockDeleteManyArgs>(args?: SelectSubset<T, PageTemplateBlockDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PageTemplateBlocks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateBlockUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PageTemplateBlocks
+     * const pageTemplateBlock = await prisma.pageTemplateBlock.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends PageTemplateBlockUpdateManyArgs>(args: SelectSubset<T, PageTemplateBlockUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PageTemplateBlocks and returns the data updated in the database.
+     * @param {PageTemplateBlockUpdateManyAndReturnArgs} args - Arguments to update many PageTemplateBlocks.
+     * @example
+     * // Update many PageTemplateBlocks
+     * const pageTemplateBlock = await prisma.pageTemplateBlock.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more PageTemplateBlocks and only return the `id`
+     * const pageTemplateBlockWithIdOnly = await prisma.pageTemplateBlock.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends PageTemplateBlockUpdateManyAndReturnArgs>(args: SelectSubset<T, PageTemplateBlockUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PageTemplateBlock.
+     * @param {PageTemplateBlockUpsertArgs} args - Arguments to update or create a PageTemplateBlock.
+     * @example
+     * // Update or create a PageTemplateBlock
+     * const pageTemplateBlock = await prisma.pageTemplateBlock.upsert({
+     *   create: {
+     *     // ... data to create a PageTemplateBlock
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PageTemplateBlock we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PageTemplateBlockUpsertArgs>(args: SelectSubset<T, PageTemplateBlockUpsertArgs<ExtArgs>>): Prisma__PageTemplateBlockClient<$Result.GetResult<Prisma.$PageTemplateBlockPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PageTemplateBlocks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateBlockCountArgs} args - Arguments to filter PageTemplateBlocks to count.
+     * @example
+     * // Count the number of PageTemplateBlocks
+     * const count = await prisma.pageTemplateBlock.count({
+     *   where: {
+     *     // ... the filter for the PageTemplateBlocks we want to count
+     *   }
+     * })
+    **/
+    count<T extends PageTemplateBlockCountArgs>(
+      args?: Subset<T, PageTemplateBlockCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PageTemplateBlockCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PageTemplateBlock.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateBlockAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PageTemplateBlockAggregateArgs>(args: Subset<T, PageTemplateBlockAggregateArgs>): Prisma.PrismaPromise<GetPageTemplateBlockAggregateType<T>>
+
+    /**
+     * Group by PageTemplateBlock.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageTemplateBlockGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+    **/
+    groupBy<
+      T extends PageTemplateBlockGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PageTemplateBlockGroupByArgs['orderBy'] }
+        : { orderBy?: PageTemplateBlockGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PageTemplateBlockGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPageTemplateBlockGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PageTemplateBlock model
+   */
+  readonly fields: PageTemplateBlockFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PageTemplateBlock.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PageTemplateBlockClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    template<T extends PageTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PageTemplateDefaultArgs<ExtArgs>>): Prisma__PageTemplateClient<$Result.GetResult<Prisma.$PageTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PageTemplateBlock model
+   */
+  interface PageTemplateBlockFieldRefs {
+    readonly id: FieldRef<"PageTemplateBlock", 'String'>
+    readonly templateId: FieldRef<"PageTemplateBlock", 'String'>
+    readonly blockType: FieldRef<"PageTemplateBlock", 'String'>
+    readonly position: FieldRef<"PageTemplateBlock", 'Int'>
+    readonly visible: FieldRef<"PageTemplateBlock", 'Boolean'>
+    readonly data: FieldRef<"PageTemplateBlock", 'Json'>
+    readonly source: FieldRef<"PageTemplateBlock", 'String'>
+  }
+
+
+  // Custom InputTypes
+  /**
+   * PageTemplateBlock findUnique
+   */
+  export type PageTemplateBlockFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which PageTemplateBlock to fetch.
+     */
+    where: PageTemplateBlockWhereUniqueInput
+  }
+
+  /**
+   * PageTemplateBlock findUniqueOrThrow
+   */
+  export type PageTemplateBlockFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which PageTemplateBlock to fetch.
+     */
+    where: PageTemplateBlockWhereUniqueInput
+  }
+
+  /**
+   * PageTemplateBlock findFirst
+   */
+  export type PageTemplateBlockFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which PageTemplateBlock to fetch.
+     */
+    where?: PageTemplateBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PageTemplateBlocks to fetch.
+     */
+    orderBy?: PageTemplateBlockOrderByWithRelationInput | PageTemplateBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for PageTemplateBlocks.
+     */
+    cursor?: PageTemplateBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PageTemplateBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PageTemplateBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of PageTemplateBlocks.
+     */
+    distinct?: PageTemplateBlockScalarFieldEnum | PageTemplateBlockScalarFieldEnum[]
+  }
+
+  /**
+   * PageTemplateBlock findFirstOrThrow
+   */
+  export type PageTemplateBlockFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which PageTemplateBlock to fetch.
+     */
+    where?: PageTemplateBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PageTemplateBlocks to fetch.
+     */
+    orderBy?: PageTemplateBlockOrderByWithRelationInput | PageTemplateBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for PageTemplateBlocks.
+     */
+    cursor?: PageTemplateBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PageTemplateBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PageTemplateBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of PageTemplateBlocks.
+     */
+    distinct?: PageTemplateBlockScalarFieldEnum | PageTemplateBlockScalarFieldEnum[]
+  }
+
+  /**
+   * PageTemplateBlock findMany
+   */
+  export type PageTemplateBlockFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which PageTemplateBlocks to fetch.
+     */
+    where?: PageTemplateBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of PageTemplateBlocks to fetch.
+     */
+    orderBy?: PageTemplateBlockOrderByWithRelationInput | PageTemplateBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing PageTemplateBlocks.
+     */
+    cursor?: PageTemplateBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` PageTemplateBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` PageTemplateBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of PageTemplateBlocks.
+     */
+    distinct?: PageTemplateBlockScalarFieldEnum | PageTemplateBlockScalarFieldEnum[]
+  }
+
+  /**
+   * PageTemplateBlock create
+   */
+  export type PageTemplateBlockCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PageTemplateBlock.
+     */
+    data: XOR<PageTemplateBlockCreateInput, PageTemplateBlockUncheckedCreateInput>
+  }
+
+  /**
+   * PageTemplateBlock createMany
+   */
+  export type PageTemplateBlockCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PageTemplateBlocks.
+     */
+    data: PageTemplateBlockCreateManyInput | PageTemplateBlockCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PageTemplateBlock createManyAndReturn
+   */
+  export type PageTemplateBlockCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * The data used to create many PageTemplateBlocks.
+     */
+    data: PageTemplateBlockCreateManyInput | PageTemplateBlockCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PageTemplateBlock update
+   */
+  export type PageTemplateBlockUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PageTemplateBlock.
+     */
+    data: XOR<PageTemplateBlockUpdateInput, PageTemplateBlockUncheckedUpdateInput>
+    /**
+     * Choose, which PageTemplateBlock to update.
+     */
+    where: PageTemplateBlockWhereUniqueInput
+  }
+
+  /**
+   * PageTemplateBlock updateMany
+   */
+  export type PageTemplateBlockUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PageTemplateBlocks.
+     */
+    data: XOR<PageTemplateBlockUpdateManyMutationInput, PageTemplateBlockUncheckedUpdateManyInput>
+    /**
+     * Filter which PageTemplateBlocks to update
+     */
+    where?: PageTemplateBlockWhereInput
+    /**
+     * Limit how many PageTemplateBlocks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PageTemplateBlock updateManyAndReturn
+   */
+  export type PageTemplateBlockUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * The data used to update PageTemplateBlocks.
+     */
+    data: XOR<PageTemplateBlockUpdateManyMutationInput, PageTemplateBlockUncheckedUpdateManyInput>
+    /**
+     * Filter which PageTemplateBlocks to update
+     */
+    where?: PageTemplateBlockWhereInput
+    /**
+     * Limit how many PageTemplateBlocks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PageTemplateBlock upsert
+   */
+  export type PageTemplateBlockUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PageTemplateBlock to update in case it exists.
+     */
+    where: PageTemplateBlockWhereUniqueInput
+    /**
+     * In case the PageTemplateBlock found by the `where` argument doesn't exist, create a new PageTemplateBlock with this data.
+     */
+    create: XOR<PageTemplateBlockCreateInput, PageTemplateBlockUncheckedCreateInput>
+    /**
+     * In case the PageTemplateBlock was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PageTemplateBlockUpdateInput, PageTemplateBlockUncheckedUpdateInput>
+  }
+
+  /**
+   * PageTemplateBlock delete
+   */
+  export type PageTemplateBlockDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockInclude<ExtArgs> | null
+    /**
+     * Filter which PageTemplateBlock to delete.
+     */
+    where: PageTemplateBlockWhereUniqueInput
+  }
+
+  /**
+   * PageTemplateBlock deleteMany
+   */
+  export type PageTemplateBlockDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PageTemplateBlocks to delete
+     */
+    where?: PageTemplateBlockWhereInput
+    /**
+     * Limit how many PageTemplateBlocks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PageTemplateBlock without action
+   */
+  export type PageTemplateBlockDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageTemplateBlock
+     */
+    select?: PageTemplateBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PageTemplateBlock
+     */
+    omit?: PageTemplateBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PageTemplateBlockInclude<ExtArgs> | null
   }
 
 
@@ -38423,11 +41025,40 @@ export namespace Prisma {
     status: 'status',
     seo: 'seo',
     content: 'content',
+    templateId: 'templateId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
+
+
+  export const PageTemplateScalarFieldEnum: {
+    id: 'id',
+    siteId: 'siteId',
+    kind: 'kind',
+    titleTemplate: 'titleTemplate',
+    status: 'status',
+    content: 'content',
+    seo: 'seo',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PageTemplateScalarFieldEnum = (typeof PageTemplateScalarFieldEnum)[keyof typeof PageTemplateScalarFieldEnum]
+
+
+  export const PageTemplateBlockScalarFieldEnum: {
+    id: 'id',
+    templateId: 'templateId',
+    blockType: 'blockType',
+    position: 'position',
+    visible: 'visible',
+    data: 'data',
+    source: 'source'
+  };
+
+  export type PageTemplateBlockScalarFieldEnum = (typeof PageTemplateBlockScalarFieldEnum)[keyof typeof PageTemplateBlockScalarFieldEnum]
 
 
   export const PageBlockScalarFieldEnum: {
@@ -38975,6 +41606,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'PageTemplateKind'
+   */
+  export type EnumPageTemplateKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PageTemplateKind'>
+
+
+
+  /**
+   * Reference to a field of type 'PageTemplateKind[]'
+   */
+  export type ListEnumPageTemplateKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PageTemplateKind[]'>
+
+
+
+  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -39272,6 +41917,7 @@ export namespace Prisma {
     regions?: RegionListRelationFilter
     cities?: CityListRelationFilter
     pages?: PageListRelationFilter
+    pageTemplates?: PageTemplateListRelationFilter
     leads?: LeadListRelationFilter
     checks?: AddressCheckListRelationFilter
     redirects?: RedirectListRelationFilter
@@ -39303,6 +41949,7 @@ export namespace Prisma {
     regions?: RegionOrderByRelationAggregateInput
     cities?: CityOrderByRelationAggregateInput
     pages?: PageOrderByRelationAggregateInput
+    pageTemplates?: PageTemplateOrderByRelationAggregateInput
     leads?: LeadOrderByRelationAggregateInput
     checks?: AddressCheckOrderByRelationAggregateInput
     redirects?: RedirectOrderByRelationAggregateInput
@@ -39337,6 +41984,7 @@ export namespace Prisma {
     regions?: RegionListRelationFilter
     cities?: CityListRelationFilter
     pages?: PageListRelationFilter
+    pageTemplates?: PageTemplateListRelationFilter
     leads?: LeadListRelationFilter
     checks?: AddressCheckListRelationFilter
     redirects?: RedirectListRelationFilter
@@ -40310,10 +42958,12 @@ export namespace Prisma {
     status?: EnumPublishStatusFilter<"Page"> | $Enums.PublishStatus
     seo?: JsonNullableFilter<"Page">
     content?: JsonNullableFilter<"Page">
+    templateId?: StringNullableFilter<"Page"> | string | null
     createdAt?: DateTimeFilter<"Page"> | Date | string
     updatedAt?: DateTimeFilter<"Page"> | Date | string
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
     city?: XOR<CityNullableScalarRelationFilter, CityWhereInput> | null
+    template?: XOR<PageTemplateNullableScalarRelationFilter, PageTemplateWhereInput> | null
     blocks?: PageBlockListRelationFilter
     leads?: LeadListRelationFilter
     checks?: AddressCheckListRelationFilter
@@ -40329,10 +42979,12 @@ export namespace Prisma {
     status?: SortOrder
     seo?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
+    templateId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     site?: SiteOrderByWithRelationInput
     city?: CityOrderByWithRelationInput
+    template?: PageTemplateOrderByWithRelationInput
     blocks?: PageBlockOrderByRelationAggregateInput
     leads?: LeadOrderByRelationAggregateInput
     checks?: AddressCheckOrderByRelationAggregateInput
@@ -40352,10 +43004,12 @@ export namespace Prisma {
     status?: EnumPublishStatusFilter<"Page"> | $Enums.PublishStatus
     seo?: JsonNullableFilter<"Page">
     content?: JsonNullableFilter<"Page">
+    templateId?: StringNullableFilter<"Page"> | string | null
     createdAt?: DateTimeFilter<"Page"> | Date | string
     updatedAt?: DateTimeFilter<"Page"> | Date | string
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
     city?: XOR<CityNullableScalarRelationFilter, CityWhereInput> | null
+    template?: XOR<PageTemplateNullableScalarRelationFilter, PageTemplateWhereInput> | null
     blocks?: PageBlockListRelationFilter
     leads?: LeadListRelationFilter
     checks?: AddressCheckListRelationFilter
@@ -40371,6 +43025,7 @@ export namespace Prisma {
     status?: SortOrder
     seo?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
+    templateId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PageCountOrderByAggregateInput
@@ -40391,8 +43046,159 @@ export namespace Prisma {
     status?: EnumPublishStatusWithAggregatesFilter<"Page"> | $Enums.PublishStatus
     seo?: JsonNullableWithAggregatesFilter<"Page">
     content?: JsonNullableWithAggregatesFilter<"Page">
+    templateId?: StringNullableWithAggregatesFilter<"Page"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Page"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Page"> | Date | string
+  }
+
+  export type PageTemplateWhereInput = {
+    AND?: PageTemplateWhereInput | PageTemplateWhereInput[]
+    OR?: PageTemplateWhereInput[]
+    NOT?: PageTemplateWhereInput | PageTemplateWhereInput[]
+    id?: StringFilter<"PageTemplate"> | string
+    siteId?: StringFilter<"PageTemplate"> | string
+    kind?: EnumPageTemplateKindFilter<"PageTemplate"> | $Enums.PageTemplateKind
+    titleTemplate?: StringFilter<"PageTemplate"> | string
+    status?: EnumPublishStatusFilter<"PageTemplate"> | $Enums.PublishStatus
+    content?: JsonNullableFilter<"PageTemplate">
+    seo?: JsonNullableFilter<"PageTemplate">
+    createdAt?: DateTimeFilter<"PageTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"PageTemplate"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    blocks?: PageTemplateBlockListRelationFilter
+    pages?: PageListRelationFilter
+  }
+
+  export type PageTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    kind?: SortOrder
+    titleTemplate?: SortOrder
+    status?: SortOrder
+    content?: SortOrderInput | SortOrder
+    seo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    site?: SiteOrderByWithRelationInput
+    blocks?: PageTemplateBlockOrderByRelationAggregateInput
+    pages?: PageOrderByRelationAggregateInput
+  }
+
+  export type PageTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    siteId_kind?: PageTemplateSiteIdKindCompoundUniqueInput
+    AND?: PageTemplateWhereInput | PageTemplateWhereInput[]
+    OR?: PageTemplateWhereInput[]
+    NOT?: PageTemplateWhereInput | PageTemplateWhereInput[]
+    siteId?: StringFilter<"PageTemplate"> | string
+    kind?: EnumPageTemplateKindFilter<"PageTemplate"> | $Enums.PageTemplateKind
+    titleTemplate?: StringFilter<"PageTemplate"> | string
+    status?: EnumPublishStatusFilter<"PageTemplate"> | $Enums.PublishStatus
+    content?: JsonNullableFilter<"PageTemplate">
+    seo?: JsonNullableFilter<"PageTemplate">
+    createdAt?: DateTimeFilter<"PageTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"PageTemplate"> | Date | string
+    site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
+    blocks?: PageTemplateBlockListRelationFilter
+    pages?: PageListRelationFilter
+  }, "id" | "siteId_kind">
+
+  export type PageTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    kind?: SortOrder
+    titleTemplate?: SortOrder
+    status?: SortOrder
+    content?: SortOrderInput | SortOrder
+    seo?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PageTemplateCountOrderByAggregateInput
+    _max?: PageTemplateMaxOrderByAggregateInput
+    _min?: PageTemplateMinOrderByAggregateInput
+  }
+
+  export type PageTemplateScalarWhereWithAggregatesInput = {
+    AND?: PageTemplateScalarWhereWithAggregatesInput | PageTemplateScalarWhereWithAggregatesInput[]
+    OR?: PageTemplateScalarWhereWithAggregatesInput[]
+    NOT?: PageTemplateScalarWhereWithAggregatesInput | PageTemplateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PageTemplate"> | string
+    siteId?: StringWithAggregatesFilter<"PageTemplate"> | string
+    kind?: EnumPageTemplateKindWithAggregatesFilter<"PageTemplate"> | $Enums.PageTemplateKind
+    titleTemplate?: StringWithAggregatesFilter<"PageTemplate"> | string
+    status?: EnumPublishStatusWithAggregatesFilter<"PageTemplate"> | $Enums.PublishStatus
+    content?: JsonNullableWithAggregatesFilter<"PageTemplate">
+    seo?: JsonNullableWithAggregatesFilter<"PageTemplate">
+    createdAt?: DateTimeWithAggregatesFilter<"PageTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PageTemplate"> | Date | string
+  }
+
+  export type PageTemplateBlockWhereInput = {
+    AND?: PageTemplateBlockWhereInput | PageTemplateBlockWhereInput[]
+    OR?: PageTemplateBlockWhereInput[]
+    NOT?: PageTemplateBlockWhereInput | PageTemplateBlockWhereInput[]
+    id?: StringFilter<"PageTemplateBlock"> | string
+    templateId?: StringFilter<"PageTemplateBlock"> | string
+    blockType?: StringFilter<"PageTemplateBlock"> | string
+    position?: IntFilter<"PageTemplateBlock"> | number
+    visible?: BoolFilter<"PageTemplateBlock"> | boolean
+    data?: JsonFilter<"PageTemplateBlock">
+    source?: StringNullableFilter<"PageTemplateBlock"> | string | null
+    template?: XOR<PageTemplateScalarRelationFilter, PageTemplateWhereInput>
+  }
+
+  export type PageTemplateBlockOrderByWithRelationInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    blockType?: SortOrder
+    position?: SortOrder
+    visible?: SortOrder
+    data?: SortOrder
+    source?: SortOrderInput | SortOrder
+    template?: PageTemplateOrderByWithRelationInput
+  }
+
+  export type PageTemplateBlockWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    templateId_position?: PageTemplateBlockTemplateIdPositionCompoundUniqueInput
+    AND?: PageTemplateBlockWhereInput | PageTemplateBlockWhereInput[]
+    OR?: PageTemplateBlockWhereInput[]
+    NOT?: PageTemplateBlockWhereInput | PageTemplateBlockWhereInput[]
+    templateId?: StringFilter<"PageTemplateBlock"> | string
+    blockType?: StringFilter<"PageTemplateBlock"> | string
+    position?: IntFilter<"PageTemplateBlock"> | number
+    visible?: BoolFilter<"PageTemplateBlock"> | boolean
+    data?: JsonFilter<"PageTemplateBlock">
+    source?: StringNullableFilter<"PageTemplateBlock"> | string | null
+    template?: XOR<PageTemplateScalarRelationFilter, PageTemplateWhereInput>
+  }, "id" | "templateId_position">
+
+  export type PageTemplateBlockOrderByWithAggregationInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    blockType?: SortOrder
+    position?: SortOrder
+    visible?: SortOrder
+    data?: SortOrder
+    source?: SortOrderInput | SortOrder
+    _count?: PageTemplateBlockCountOrderByAggregateInput
+    _avg?: PageTemplateBlockAvgOrderByAggregateInput
+    _max?: PageTemplateBlockMaxOrderByAggregateInput
+    _min?: PageTemplateBlockMinOrderByAggregateInput
+    _sum?: PageTemplateBlockSumOrderByAggregateInput
+  }
+
+  export type PageTemplateBlockScalarWhereWithAggregatesInput = {
+    AND?: PageTemplateBlockScalarWhereWithAggregatesInput | PageTemplateBlockScalarWhereWithAggregatesInput[]
+    OR?: PageTemplateBlockScalarWhereWithAggregatesInput[]
+    NOT?: PageTemplateBlockScalarWhereWithAggregatesInput | PageTemplateBlockScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PageTemplateBlock"> | string
+    templateId?: StringWithAggregatesFilter<"PageTemplateBlock"> | string
+    blockType?: StringWithAggregatesFilter<"PageTemplateBlock"> | string
+    position?: IntWithAggregatesFilter<"PageTemplateBlock"> | number
+    visible?: BoolWithAggregatesFilter<"PageTemplateBlock"> | boolean
+    data?: JsonWithAggregatesFilter<"PageTemplateBlock">
+    source?: StringNullableWithAggregatesFilter<"PageTemplateBlock"> | string | null
   }
 
   export type PageBlockWhereInput = {
@@ -42090,6 +44896,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -42120,6 +44927,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -42150,6 +44958,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -42180,6 +44989,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -43246,6 +46056,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutPagesInput
     city?: CityCreateNestedOneWithoutPagesInput
+    template?: PageTemplateCreateNestedOneWithoutPagesInput
     blocks?: PageBlockCreateNestedManyWithoutPageInput
     leads?: LeadCreateNestedManyWithoutPageInput
     checks?: AddressCheckCreateNestedManyWithoutPageInput
@@ -43261,6 +46072,7 @@ export namespace Prisma {
     status?: $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     blocks?: PageBlockUncheckedCreateNestedManyWithoutPageInput
@@ -43280,6 +46092,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutPagesNestedInput
     city?: CityUpdateOneWithoutPagesNestedInput
+    template?: PageTemplateUpdateOneWithoutPagesNestedInput
     blocks?: PageBlockUpdateManyWithoutPageNestedInput
     leads?: LeadUpdateManyWithoutPageNestedInput
     checks?: AddressCheckUpdateManyWithoutPageNestedInput
@@ -43295,6 +46108,7 @@ export namespace Prisma {
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     blocks?: PageBlockUncheckedUpdateManyWithoutPageNestedInput
@@ -43312,6 +46126,7 @@ export namespace Prisma {
     status?: $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -43338,8 +46153,169 @@ export namespace Prisma {
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PageTemplateCreateInput = {
+    id?: string
+    kind: $Enums.PageTemplateKind
+    titleTemplate: string
+    status?: $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutPageTemplatesInput
+    blocks?: PageTemplateBlockCreateNestedManyWithoutTemplateInput
+    pages?: PageCreateNestedManyWithoutTemplateInput
+  }
+
+  export type PageTemplateUncheckedCreateInput = {
+    id?: string
+    siteId: string
+    kind: $Enums.PageTemplateKind
+    titleTemplate: string
+    status?: $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    blocks?: PageTemplateBlockUncheckedCreateNestedManyWithoutTemplateInput
+    pages?: PageUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type PageTemplateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumPageTemplateKindFieldUpdateOperationsInput | $Enums.PageTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutPageTemplatesNestedInput
+    blocks?: PageTemplateBlockUpdateManyWithoutTemplateNestedInput
+    pages?: PageUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type PageTemplateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    kind?: EnumPageTemplateKindFieldUpdateOperationsInput | $Enums.PageTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    blocks?: PageTemplateBlockUncheckedUpdateManyWithoutTemplateNestedInput
+    pages?: PageUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type PageTemplateCreateManyInput = {
+    id?: string
+    siteId: string
+    kind: $Enums.PageTemplateKind
+    titleTemplate: string
+    status?: $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PageTemplateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumPageTemplateKindFieldUpdateOperationsInput | $Enums.PageTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PageTemplateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    kind?: EnumPageTemplateKindFieldUpdateOperationsInput | $Enums.PageTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PageTemplateBlockCreateInput = {
+    id?: string
+    blockType: string
+    position: number
+    visible?: boolean
+    data: JsonNullValueInput | InputJsonValue
+    source?: string | null
+    template: PageTemplateCreateNestedOneWithoutBlocksInput
+  }
+
+  export type PageTemplateBlockUncheckedCreateInput = {
+    id?: string
+    templateId: string
+    blockType: string
+    position: number
+    visible?: boolean
+    data: JsonNullValueInput | InputJsonValue
+    source?: string | null
+  }
+
+  export type PageTemplateBlockUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    blockType?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    data?: JsonNullValueInput | InputJsonValue
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    template?: PageTemplateUpdateOneRequiredWithoutBlocksNestedInput
+  }
+
+  export type PageTemplateBlockUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateId?: StringFieldUpdateOperationsInput | string
+    blockType?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    data?: JsonNullValueInput | InputJsonValue
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PageTemplateBlockCreateManyInput = {
+    id?: string
+    templateId: string
+    blockType: string
+    position: number
+    visible?: boolean
+    data: JsonNullValueInput | InputJsonValue
+    source?: string | null
+  }
+
+  export type PageTemplateBlockUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    blockType?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    data?: JsonNullValueInput | InputJsonValue
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PageTemplateBlockUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    templateId?: StringFieldUpdateOperationsInput | string
+    blockType?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    data?: JsonNullValueInput | InputJsonValue
+    source?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PageBlockCreateInput = {
@@ -45368,6 +48344,12 @@ export namespace Prisma {
     none?: PageWhereInput
   }
 
+  export type PageTemplateListRelationFilter = {
+    every?: PageTemplateWhereInput
+    some?: PageTemplateWhereInput
+    none?: PageTemplateWhereInput
+  }
+
   export type LeadListRelationFilter = {
     every?: LeadWhereInput
     some?: LeadWhereInput
@@ -45443,6 +48425,10 @@ export namespace Prisma {
   }
 
   export type PageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PageTemplateOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -46327,6 +49313,11 @@ export namespace Prisma {
     isNot?: CityWhereInput | null
   }
 
+  export type PageTemplateNullableScalarRelationFilter = {
+    is?: PageTemplateWhereInput | null
+    isNot?: PageTemplateWhereInput | null
+  }
+
   export type PageBlockListRelationFilter = {
     every?: PageBlockWhereInput
     some?: PageBlockWhereInput
@@ -46352,6 +49343,7 @@ export namespace Prisma {
     status?: SortOrder
     seo?: SortOrder
     content?: SortOrder
+    templateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -46364,6 +49356,7 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     status?: SortOrder
+    templateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -46376,6 +49369,7 @@ export namespace Prisma {
     title?: SortOrder
     slug?: SortOrder
     status?: SortOrder
+    templateId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -46390,9 +49384,127 @@ export namespace Prisma {
     _max?: NestedEnumPageTypeFilter<$PrismaModel>
   }
 
+  export type EnumPageTemplateKindFilter<$PrismaModel = never> = {
+    equals?: $Enums.PageTemplateKind | EnumPageTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.PageTemplateKind[] | ListEnumPageTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PageTemplateKind[] | ListEnumPageTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumPageTemplateKindFilter<$PrismaModel> | $Enums.PageTemplateKind
+  }
+
+  export type PageTemplateBlockListRelationFilter = {
+    every?: PageTemplateBlockWhereInput
+    some?: PageTemplateBlockWhereInput
+    none?: PageTemplateBlockWhereInput
+  }
+
+  export type PageTemplateBlockOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PageTemplateSiteIdKindCompoundUniqueInput = {
+    siteId: string
+    kind: $Enums.PageTemplateKind
+  }
+
+  export type PageTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    kind?: SortOrder
+    titleTemplate?: SortOrder
+    status?: SortOrder
+    content?: SortOrder
+    seo?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PageTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    kind?: SortOrder
+    titleTemplate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PageTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    siteId?: SortOrder
+    kind?: SortOrder
+    titleTemplate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumPageTemplateKindWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PageTemplateKind | EnumPageTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.PageTemplateKind[] | ListEnumPageTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PageTemplateKind[] | ListEnumPageTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumPageTemplateKindWithAggregatesFilter<$PrismaModel> | $Enums.PageTemplateKind
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPageTemplateKindFilter<$PrismaModel>
+    _max?: NestedEnumPageTemplateKindFilter<$PrismaModel>
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type PageTemplateScalarRelationFilter = {
+    is?: PageTemplateWhereInput
+    isNot?: PageTemplateWhereInput
+  }
+
+  export type PageTemplateBlockTemplateIdPositionCompoundUniqueInput = {
+    templateId: string
+    position: number
+  }
+
+  export type PageTemplateBlockCountOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    blockType?: SortOrder
+    position?: SortOrder
+    visible?: SortOrder
+    data?: SortOrder
+    source?: SortOrder
+  }
+
+  export type PageTemplateBlockAvgOrderByAggregateInput = {
+    position?: SortOrder
+  }
+
+  export type PageTemplateBlockMaxOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    blockType?: SortOrder
+    position?: SortOrder
+    visible?: SortOrder
+    source?: SortOrder
+  }
+
+  export type PageTemplateBlockMinOrderByAggregateInput = {
+    id?: SortOrder
+    templateId?: SortOrder
+    blockType?: SortOrder
+    position?: SortOrder
+    visible?: SortOrder
+    source?: SortOrder
+  }
+
+  export type PageTemplateBlockSumOrderByAggregateInput = {
+    position?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type PageScalarRelationFilter = {
@@ -46437,14 +49549,6 @@ export namespace Prisma {
 
   export type PageBlockSumOrderByAggregateInput = {
     position?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumServiceTypeFilter<$PrismaModel = never> = {
@@ -47801,6 +50905,13 @@ export namespace Prisma {
     connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
   }
 
+  export type PageTemplateCreateNestedManyWithoutSiteInput = {
+    create?: XOR<PageTemplateCreateWithoutSiteInput, PageTemplateUncheckedCreateWithoutSiteInput> | PageTemplateCreateWithoutSiteInput[] | PageTemplateUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: PageTemplateCreateOrConnectWithoutSiteInput | PageTemplateCreateOrConnectWithoutSiteInput[]
+    createMany?: PageTemplateCreateManySiteInputEnvelope
+    connect?: PageTemplateWhereUniqueInput | PageTemplateWhereUniqueInput[]
+  }
+
   export type LeadCreateNestedManyWithoutSiteInput = {
     create?: XOR<LeadCreateWithoutSiteInput, LeadUncheckedCreateWithoutSiteInput> | LeadCreateWithoutSiteInput[] | LeadUncheckedCreateWithoutSiteInput[]
     connectOrCreate?: LeadCreateOrConnectWithoutSiteInput | LeadCreateOrConnectWithoutSiteInput[]
@@ -47897,6 +51008,13 @@ export namespace Prisma {
     connectOrCreate?: PageCreateOrConnectWithoutSiteInput | PageCreateOrConnectWithoutSiteInput[]
     createMany?: PageCreateManySiteInputEnvelope
     connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+  }
+
+  export type PageTemplateUncheckedCreateNestedManyWithoutSiteInput = {
+    create?: XOR<PageTemplateCreateWithoutSiteInput, PageTemplateUncheckedCreateWithoutSiteInput> | PageTemplateCreateWithoutSiteInput[] | PageTemplateUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: PageTemplateCreateOrConnectWithoutSiteInput | PageTemplateCreateOrConnectWithoutSiteInput[]
+    createMany?: PageTemplateCreateManySiteInputEnvelope
+    connect?: PageTemplateWhereUniqueInput | PageTemplateWhereUniqueInput[]
   }
 
   export type LeadUncheckedCreateNestedManyWithoutSiteInput = {
@@ -48040,6 +51158,20 @@ export namespace Prisma {
     update?: PageUpdateWithWhereUniqueWithoutSiteInput | PageUpdateWithWhereUniqueWithoutSiteInput[]
     updateMany?: PageUpdateManyWithWhereWithoutSiteInput | PageUpdateManyWithWhereWithoutSiteInput[]
     deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
+  }
+
+  export type PageTemplateUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<PageTemplateCreateWithoutSiteInput, PageTemplateUncheckedCreateWithoutSiteInput> | PageTemplateCreateWithoutSiteInput[] | PageTemplateUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: PageTemplateCreateOrConnectWithoutSiteInput | PageTemplateCreateOrConnectWithoutSiteInput[]
+    upsert?: PageTemplateUpsertWithWhereUniqueWithoutSiteInput | PageTemplateUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: PageTemplateCreateManySiteInputEnvelope
+    set?: PageTemplateWhereUniqueInput | PageTemplateWhereUniqueInput[]
+    disconnect?: PageTemplateWhereUniqueInput | PageTemplateWhereUniqueInput[]
+    delete?: PageTemplateWhereUniqueInput | PageTemplateWhereUniqueInput[]
+    connect?: PageTemplateWhereUniqueInput | PageTemplateWhereUniqueInput[]
+    update?: PageTemplateUpdateWithWhereUniqueWithoutSiteInput | PageTemplateUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: PageTemplateUpdateManyWithWhereWithoutSiteInput | PageTemplateUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: PageTemplateScalarWhereInput | PageTemplateScalarWhereInput[]
   }
 
   export type LeadUpdateManyWithoutSiteNestedInput = {
@@ -48236,6 +51368,20 @@ export namespace Prisma {
     update?: PageUpdateWithWhereUniqueWithoutSiteInput | PageUpdateWithWhereUniqueWithoutSiteInput[]
     updateMany?: PageUpdateManyWithWhereWithoutSiteInput | PageUpdateManyWithWhereWithoutSiteInput[]
     deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
+  }
+
+  export type PageTemplateUncheckedUpdateManyWithoutSiteNestedInput = {
+    create?: XOR<PageTemplateCreateWithoutSiteInput, PageTemplateUncheckedCreateWithoutSiteInput> | PageTemplateCreateWithoutSiteInput[] | PageTemplateUncheckedCreateWithoutSiteInput[]
+    connectOrCreate?: PageTemplateCreateOrConnectWithoutSiteInput | PageTemplateCreateOrConnectWithoutSiteInput[]
+    upsert?: PageTemplateUpsertWithWhereUniqueWithoutSiteInput | PageTemplateUpsertWithWhereUniqueWithoutSiteInput[]
+    createMany?: PageTemplateCreateManySiteInputEnvelope
+    set?: PageTemplateWhereUniqueInput | PageTemplateWhereUniqueInput[]
+    disconnect?: PageTemplateWhereUniqueInput | PageTemplateWhereUniqueInput[]
+    delete?: PageTemplateWhereUniqueInput | PageTemplateWhereUniqueInput[]
+    connect?: PageTemplateWhereUniqueInput | PageTemplateWhereUniqueInput[]
+    update?: PageTemplateUpdateWithWhereUniqueWithoutSiteInput | PageTemplateUpdateWithWhereUniqueWithoutSiteInput[]
+    updateMany?: PageTemplateUpdateManyWithWhereWithoutSiteInput | PageTemplateUpdateManyWithWhereWithoutSiteInput[]
+    deleteMany?: PageTemplateScalarWhereInput | PageTemplateScalarWhereInput[]
   }
 
   export type LeadUncheckedUpdateManyWithoutSiteNestedInput = {
@@ -49136,6 +52282,12 @@ export namespace Prisma {
     connect?: CityWhereUniqueInput
   }
 
+  export type PageTemplateCreateNestedOneWithoutPagesInput = {
+    create?: XOR<PageTemplateCreateWithoutPagesInput, PageTemplateUncheckedCreateWithoutPagesInput>
+    connectOrCreate?: PageTemplateCreateOrConnectWithoutPagesInput
+    connect?: PageTemplateWhereUniqueInput
+  }
+
   export type PageBlockCreateNestedManyWithoutPageInput = {
     create?: XOR<PageBlockCreateWithoutPageInput, PageBlockUncheckedCreateWithoutPageInput> | PageBlockCreateWithoutPageInput[] | PageBlockUncheckedCreateWithoutPageInput[]
     connectOrCreate?: PageBlockCreateOrConnectWithoutPageInput | PageBlockCreateOrConnectWithoutPageInput[]
@@ -49198,6 +52350,16 @@ export namespace Prisma {
     delete?: CityWhereInput | boolean
     connect?: CityWhereUniqueInput
     update?: XOR<XOR<CityUpdateToOneWithWhereWithoutPagesInput, CityUpdateWithoutPagesInput>, CityUncheckedUpdateWithoutPagesInput>
+  }
+
+  export type PageTemplateUpdateOneWithoutPagesNestedInput = {
+    create?: XOR<PageTemplateCreateWithoutPagesInput, PageTemplateUncheckedCreateWithoutPagesInput>
+    connectOrCreate?: PageTemplateCreateOrConnectWithoutPagesInput
+    upsert?: PageTemplateUpsertWithoutPagesInput
+    disconnect?: PageTemplateWhereInput | boolean
+    delete?: PageTemplateWhereInput | boolean
+    connect?: PageTemplateWhereUniqueInput
+    update?: XOR<XOR<PageTemplateUpdateToOneWithWhereWithoutPagesInput, PageTemplateUpdateWithoutPagesInput>, PageTemplateUncheckedUpdateWithoutPagesInput>
   }
 
   export type PageBlockUpdateManyWithoutPageNestedInput = {
@@ -49284,14 +52446,130 @@ export namespace Prisma {
     deleteMany?: AddressCheckScalarWhereInput | AddressCheckScalarWhereInput[]
   }
 
-  export type PageCreateNestedOneWithoutBlocksInput = {
-    create?: XOR<PageCreateWithoutBlocksInput, PageUncheckedCreateWithoutBlocksInput>
-    connectOrCreate?: PageCreateOrConnectWithoutBlocksInput
-    connect?: PageWhereUniqueInput
+  export type SiteCreateNestedOneWithoutPageTemplatesInput = {
+    create?: XOR<SiteCreateWithoutPageTemplatesInput, SiteUncheckedCreateWithoutPageTemplatesInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutPageTemplatesInput
+    connect?: SiteWhereUniqueInput
+  }
+
+  export type PageTemplateBlockCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<PageTemplateBlockCreateWithoutTemplateInput, PageTemplateBlockUncheckedCreateWithoutTemplateInput> | PageTemplateBlockCreateWithoutTemplateInput[] | PageTemplateBlockUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: PageTemplateBlockCreateOrConnectWithoutTemplateInput | PageTemplateBlockCreateOrConnectWithoutTemplateInput[]
+    createMany?: PageTemplateBlockCreateManyTemplateInputEnvelope
+    connect?: PageTemplateBlockWhereUniqueInput | PageTemplateBlockWhereUniqueInput[]
+  }
+
+  export type PageCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<PageCreateWithoutTemplateInput, PageUncheckedCreateWithoutTemplateInput> | PageCreateWithoutTemplateInput[] | PageUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutTemplateInput | PageCreateOrConnectWithoutTemplateInput[]
+    createMany?: PageCreateManyTemplateInputEnvelope
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+  }
+
+  export type PageTemplateBlockUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<PageTemplateBlockCreateWithoutTemplateInput, PageTemplateBlockUncheckedCreateWithoutTemplateInput> | PageTemplateBlockCreateWithoutTemplateInput[] | PageTemplateBlockUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: PageTemplateBlockCreateOrConnectWithoutTemplateInput | PageTemplateBlockCreateOrConnectWithoutTemplateInput[]
+    createMany?: PageTemplateBlockCreateManyTemplateInputEnvelope
+    connect?: PageTemplateBlockWhereUniqueInput | PageTemplateBlockWhereUniqueInput[]
+  }
+
+  export type PageUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<PageCreateWithoutTemplateInput, PageUncheckedCreateWithoutTemplateInput> | PageCreateWithoutTemplateInput[] | PageUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutTemplateInput | PageCreateOrConnectWithoutTemplateInput[]
+    createMany?: PageCreateManyTemplateInputEnvelope
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+  }
+
+  export type EnumPageTemplateKindFieldUpdateOperationsInput = {
+    set?: $Enums.PageTemplateKind
+  }
+
+  export type SiteUpdateOneRequiredWithoutPageTemplatesNestedInput = {
+    create?: XOR<SiteCreateWithoutPageTemplatesInput, SiteUncheckedCreateWithoutPageTemplatesInput>
+    connectOrCreate?: SiteCreateOrConnectWithoutPageTemplatesInput
+    upsert?: SiteUpsertWithoutPageTemplatesInput
+    connect?: SiteWhereUniqueInput
+    update?: XOR<XOR<SiteUpdateToOneWithWhereWithoutPageTemplatesInput, SiteUpdateWithoutPageTemplatesInput>, SiteUncheckedUpdateWithoutPageTemplatesInput>
+  }
+
+  export type PageTemplateBlockUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<PageTemplateBlockCreateWithoutTemplateInput, PageTemplateBlockUncheckedCreateWithoutTemplateInput> | PageTemplateBlockCreateWithoutTemplateInput[] | PageTemplateBlockUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: PageTemplateBlockCreateOrConnectWithoutTemplateInput | PageTemplateBlockCreateOrConnectWithoutTemplateInput[]
+    upsert?: PageTemplateBlockUpsertWithWhereUniqueWithoutTemplateInput | PageTemplateBlockUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: PageTemplateBlockCreateManyTemplateInputEnvelope
+    set?: PageTemplateBlockWhereUniqueInput | PageTemplateBlockWhereUniqueInput[]
+    disconnect?: PageTemplateBlockWhereUniqueInput | PageTemplateBlockWhereUniqueInput[]
+    delete?: PageTemplateBlockWhereUniqueInput | PageTemplateBlockWhereUniqueInput[]
+    connect?: PageTemplateBlockWhereUniqueInput | PageTemplateBlockWhereUniqueInput[]
+    update?: PageTemplateBlockUpdateWithWhereUniqueWithoutTemplateInput | PageTemplateBlockUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: PageTemplateBlockUpdateManyWithWhereWithoutTemplateInput | PageTemplateBlockUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: PageTemplateBlockScalarWhereInput | PageTemplateBlockScalarWhereInput[]
+  }
+
+  export type PageUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<PageCreateWithoutTemplateInput, PageUncheckedCreateWithoutTemplateInput> | PageCreateWithoutTemplateInput[] | PageUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutTemplateInput | PageCreateOrConnectWithoutTemplateInput[]
+    upsert?: PageUpsertWithWhereUniqueWithoutTemplateInput | PageUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: PageCreateManyTemplateInputEnvelope
+    set?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    disconnect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    delete?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    update?: PageUpdateWithWhereUniqueWithoutTemplateInput | PageUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: PageUpdateManyWithWhereWithoutTemplateInput | PageUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
+  }
+
+  export type PageTemplateBlockUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<PageTemplateBlockCreateWithoutTemplateInput, PageTemplateBlockUncheckedCreateWithoutTemplateInput> | PageTemplateBlockCreateWithoutTemplateInput[] | PageTemplateBlockUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: PageTemplateBlockCreateOrConnectWithoutTemplateInput | PageTemplateBlockCreateOrConnectWithoutTemplateInput[]
+    upsert?: PageTemplateBlockUpsertWithWhereUniqueWithoutTemplateInput | PageTemplateBlockUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: PageTemplateBlockCreateManyTemplateInputEnvelope
+    set?: PageTemplateBlockWhereUniqueInput | PageTemplateBlockWhereUniqueInput[]
+    disconnect?: PageTemplateBlockWhereUniqueInput | PageTemplateBlockWhereUniqueInput[]
+    delete?: PageTemplateBlockWhereUniqueInput | PageTemplateBlockWhereUniqueInput[]
+    connect?: PageTemplateBlockWhereUniqueInput | PageTemplateBlockWhereUniqueInput[]
+    update?: PageTemplateBlockUpdateWithWhereUniqueWithoutTemplateInput | PageTemplateBlockUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: PageTemplateBlockUpdateManyWithWhereWithoutTemplateInput | PageTemplateBlockUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: PageTemplateBlockScalarWhereInput | PageTemplateBlockScalarWhereInput[]
+  }
+
+  export type PageUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<PageCreateWithoutTemplateInput, PageUncheckedCreateWithoutTemplateInput> | PageCreateWithoutTemplateInput[] | PageUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutTemplateInput | PageCreateOrConnectWithoutTemplateInput[]
+    upsert?: PageUpsertWithWhereUniqueWithoutTemplateInput | PageUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: PageCreateManyTemplateInputEnvelope
+    set?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    disconnect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    delete?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    update?: PageUpdateWithWhereUniqueWithoutTemplateInput | PageUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: PageUpdateManyWithWhereWithoutTemplateInput | PageUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
+  }
+
+  export type PageTemplateCreateNestedOneWithoutBlocksInput = {
+    create?: XOR<PageTemplateCreateWithoutBlocksInput, PageTemplateUncheckedCreateWithoutBlocksInput>
+    connectOrCreate?: PageTemplateCreateOrConnectWithoutBlocksInput
+    connect?: PageTemplateWhereUniqueInput
   }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type PageTemplateUpdateOneRequiredWithoutBlocksNestedInput = {
+    create?: XOR<PageTemplateCreateWithoutBlocksInput, PageTemplateUncheckedCreateWithoutBlocksInput>
+    connectOrCreate?: PageTemplateCreateOrConnectWithoutBlocksInput
+    upsert?: PageTemplateUpsertWithoutBlocksInput
+    connect?: PageTemplateWhereUniqueInput
+    update?: XOR<XOR<PageTemplateUpdateToOneWithWhereWithoutBlocksInput, PageTemplateUpdateWithoutBlocksInput>, PageTemplateUncheckedUpdateWithoutBlocksInput>
+  }
+
+  export type PageCreateNestedOneWithoutBlocksInput = {
+    create?: XOR<PageCreateWithoutBlocksInput, PageUncheckedCreateWithoutBlocksInput>
+    connectOrCreate?: PageCreateOrConnectWithoutBlocksInput
+    connect?: PageWhereUniqueInput
   }
 
   export type PageUpdateOneRequiredWithoutBlocksNestedInput = {
@@ -50981,6 +54259,23 @@ export namespace Prisma {
     _max?: NestedEnumPageTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumPageTemplateKindFilter<$PrismaModel = never> = {
+    equals?: $Enums.PageTemplateKind | EnumPageTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.PageTemplateKind[] | ListEnumPageTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PageTemplateKind[] | ListEnumPageTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumPageTemplateKindFilter<$PrismaModel> | $Enums.PageTemplateKind
+  }
+
+  export type NestedEnumPageTemplateKindWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PageTemplateKind | EnumPageTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.PageTemplateKind[] | ListEnumPageTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PageTemplateKind[] | ListEnumPageTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumPageTemplateKindWithAggregatesFilter<$PrismaModel> | $Enums.PageTemplateKind
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPageTemplateKindFilter<$PrismaModel>
+    _max?: NestedEnumPageTemplateKindFilter<$PrismaModel>
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -51302,6 +54597,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -51331,6 +54627,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -51700,6 +54997,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     city?: CityCreateNestedOneWithoutPagesInput
+    template?: PageTemplateCreateNestedOneWithoutPagesInput
     blocks?: PageBlockCreateNestedManyWithoutPageInput
     leads?: LeadCreateNestedManyWithoutPageInput
     checks?: AddressCheckCreateNestedManyWithoutPageInput
@@ -51714,6 +55012,7 @@ export namespace Prisma {
     status?: $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     blocks?: PageBlockUncheckedCreateNestedManyWithoutPageInput
@@ -51728,6 +55027,42 @@ export namespace Prisma {
 
   export type PageCreateManySiteInputEnvelope = {
     data: PageCreateManySiteInput | PageCreateManySiteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PageTemplateCreateWithoutSiteInput = {
+    id?: string
+    kind: $Enums.PageTemplateKind
+    titleTemplate: string
+    status?: $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    blocks?: PageTemplateBlockCreateNestedManyWithoutTemplateInput
+    pages?: PageCreateNestedManyWithoutTemplateInput
+  }
+
+  export type PageTemplateUncheckedCreateWithoutSiteInput = {
+    id?: string
+    kind: $Enums.PageTemplateKind
+    titleTemplate: string
+    status?: $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    blocks?: PageTemplateBlockUncheckedCreateNestedManyWithoutTemplateInput
+    pages?: PageUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type PageTemplateCreateOrConnectWithoutSiteInput = {
+    where: PageTemplateWhereUniqueInput
+    create: XOR<PageTemplateCreateWithoutSiteInput, PageTemplateUncheckedCreateWithoutSiteInput>
+  }
+
+  export type PageTemplateCreateManySiteInputEnvelope = {
+    data: PageTemplateCreateManySiteInput | PageTemplateCreateManySiteInput[]
     skipDuplicates?: boolean
   }
 
@@ -52408,8 +55743,40 @@ export namespace Prisma {
     status?: EnumPublishStatusFilter<"Page"> | $Enums.PublishStatus
     seo?: JsonNullableFilter<"Page">
     content?: JsonNullableFilter<"Page">
+    templateId?: StringNullableFilter<"Page"> | string | null
     createdAt?: DateTimeFilter<"Page"> | Date | string
     updatedAt?: DateTimeFilter<"Page"> | Date | string
+  }
+
+  export type PageTemplateUpsertWithWhereUniqueWithoutSiteInput = {
+    where: PageTemplateWhereUniqueInput
+    update: XOR<PageTemplateUpdateWithoutSiteInput, PageTemplateUncheckedUpdateWithoutSiteInput>
+    create: XOR<PageTemplateCreateWithoutSiteInput, PageTemplateUncheckedCreateWithoutSiteInput>
+  }
+
+  export type PageTemplateUpdateWithWhereUniqueWithoutSiteInput = {
+    where: PageTemplateWhereUniqueInput
+    data: XOR<PageTemplateUpdateWithoutSiteInput, PageTemplateUncheckedUpdateWithoutSiteInput>
+  }
+
+  export type PageTemplateUpdateManyWithWhereWithoutSiteInput = {
+    where: PageTemplateScalarWhereInput
+    data: XOR<PageTemplateUpdateManyMutationInput, PageTemplateUncheckedUpdateManyWithoutSiteInput>
+  }
+
+  export type PageTemplateScalarWhereInput = {
+    AND?: PageTemplateScalarWhereInput | PageTemplateScalarWhereInput[]
+    OR?: PageTemplateScalarWhereInput[]
+    NOT?: PageTemplateScalarWhereInput | PageTemplateScalarWhereInput[]
+    id?: StringFilter<"PageTemplate"> | string
+    siteId?: StringFilter<"PageTemplate"> | string
+    kind?: EnumPageTemplateKindFilter<"PageTemplate"> | $Enums.PageTemplateKind
+    titleTemplate?: StringFilter<"PageTemplate"> | string
+    status?: EnumPublishStatusFilter<"PageTemplate"> | $Enums.PublishStatus
+    content?: JsonNullableFilter<"PageTemplate">
+    seo?: JsonNullableFilter<"PageTemplate">
+    createdAt?: DateTimeFilter<"PageTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"PageTemplate"> | Date | string
   }
 
   export type LeadUpsertWithWhereUniqueWithoutSiteInput = {
@@ -52857,6 +56224,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -52886,6 +56254,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -52931,6 +56300,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -52960,6 +56330,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -52989,6 +56360,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -53018,6 +56390,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -53106,6 +56479,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -53135,6 +56509,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -53213,6 +56588,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -53242,6 +56618,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -53434,6 +56811,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -53463,6 +56841,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -53657,6 +57036,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -53686,6 +57066,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -53774,6 +57155,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -53803,6 +57185,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -53881,6 +57264,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -53910,6 +57294,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -54215,6 +57600,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -54244,6 +57630,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -54407,6 +57794,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -54436,6 +57824,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -54573,6 +57962,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -54602,6 +57992,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -54735,6 +58126,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -54764,6 +58156,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -54852,6 +58245,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -54881,6 +58275,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -54958,6 +58353,7 @@ export namespace Prisma {
     provider: ProviderCreateNestedOneWithoutSitesInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -54987,6 +58383,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -55086,6 +58483,7 @@ export namespace Prisma {
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -55115,6 +58513,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -55160,6 +58559,7 @@ export namespace Prisma {
     provider: ProviderCreateNestedOneWithoutSitesInput
     regions?: RegionCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -55189,6 +58589,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -55237,6 +58638,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutPagesInput
+    template?: PageTemplateCreateNestedOneWithoutPagesInput
     blocks?: PageBlockCreateNestedManyWithoutPageInput
     leads?: LeadCreateNestedManyWithoutPageInput
     checks?: AddressCheckCreateNestedManyWithoutPageInput
@@ -55251,6 +58653,7 @@ export namespace Prisma {
     status?: $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     blocks?: PageBlockUncheckedCreateNestedManyWithoutPageInput
@@ -55569,6 +58972,7 @@ export namespace Prisma {
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
     regions?: RegionUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -55598,6 +59002,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -55732,6 +59137,7 @@ export namespace Prisma {
     provider: ProviderCreateNestedOneWithoutSitesInput
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -55761,6 +59167,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -55826,6 +59233,37 @@ export namespace Prisma {
   export type CityCreateOrConnectWithoutPagesInput = {
     where: CityWhereUniqueInput
     create: XOR<CityCreateWithoutPagesInput, CityUncheckedCreateWithoutPagesInput>
+  }
+
+  export type PageTemplateCreateWithoutPagesInput = {
+    id?: string
+    kind: $Enums.PageTemplateKind
+    titleTemplate: string
+    status?: $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutPageTemplatesInput
+    blocks?: PageTemplateBlockCreateNestedManyWithoutTemplateInput
+  }
+
+  export type PageTemplateUncheckedCreateWithoutPagesInput = {
+    id?: string
+    siteId: string
+    kind: $Enums.PageTemplateKind
+    titleTemplate: string
+    status?: $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    blocks?: PageTemplateBlockUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type PageTemplateCreateOrConnectWithoutPagesInput = {
+    where: PageTemplateWhereUniqueInput
+    create: XOR<PageTemplateCreateWithoutPagesInput, PageTemplateUncheckedCreateWithoutPagesInput>
   }
 
   export type PageBlockCreateWithoutPageInput = {
@@ -56061,6 +59499,7 @@ export namespace Prisma {
     provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -56090,6 +59529,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -56158,6 +59598,43 @@ export namespace Prisma {
     redirects?: RedirectUncheckedUpdateManyWithoutCityNestedInput
   }
 
+  export type PageTemplateUpsertWithoutPagesInput = {
+    update: XOR<PageTemplateUpdateWithoutPagesInput, PageTemplateUncheckedUpdateWithoutPagesInput>
+    create: XOR<PageTemplateCreateWithoutPagesInput, PageTemplateUncheckedCreateWithoutPagesInput>
+    where?: PageTemplateWhereInput
+  }
+
+  export type PageTemplateUpdateToOneWithWhereWithoutPagesInput = {
+    where?: PageTemplateWhereInput
+    data: XOR<PageTemplateUpdateWithoutPagesInput, PageTemplateUncheckedUpdateWithoutPagesInput>
+  }
+
+  export type PageTemplateUpdateWithoutPagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumPageTemplateKindFieldUpdateOperationsInput | $Enums.PageTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutPageTemplatesNestedInput
+    blocks?: PageTemplateBlockUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type PageTemplateUncheckedUpdateWithoutPagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    kind?: EnumPageTemplateKindFieldUpdateOperationsInput | $Enums.PageTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    blocks?: PageTemplateBlockUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
   export type PageBlockUpsertWithWhereUniqueWithoutPageInput = {
     where: PageBlockWhereUniqueInput
     update: XOR<PageBlockUpdateWithoutPageInput, PageBlockUncheckedUpdateWithoutPageInput>
@@ -56220,6 +59697,327 @@ export namespace Prisma {
     data: XOR<AddressCheckUpdateManyMutationInput, AddressCheckUncheckedUpdateManyWithoutPageInput>
   }
 
+  export type SiteCreateWithoutPageTemplatesInput = {
+    id?: string
+    name: string
+    slug: string
+    domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    provider: ProviderCreateNestedOneWithoutSitesInput
+    regions?: RegionCreateNestedManyWithoutSiteInput
+    cities?: CityCreateNestedManyWithoutSiteInput
+    pages?: PageCreateNestedManyWithoutSiteInput
+    leads?: LeadCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckCreateNestedManyWithoutSiteInput
+    redirects?: RedirectCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteUncheckedCreateWithoutPageTemplatesInput = {
+    id?: string
+    providerId: string
+    name: string
+    slug: string
+    domain?: string | null
+    connectionPhone?: string | null
+    supportPhone?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.PublishStatus
+    workingRevision?: number
+    publishedRevision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
+    cities?: CityUncheckedCreateNestedManyWithoutSiteInput
+    pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
+    checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
+    redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
+    cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
+    rebuilds?: SiteRebuildUncheckedCreateNestedManyWithoutSiteInput
+    contentRevisions?: ContentRevisionUncheckedCreateNestedManyWithoutSiteInput
+    publications?: SitePublicationUncheckedCreateNestedManyWithoutSiteInput
+    publicationValidations?: SitePublicationValidationUncheckedCreateNestedManyWithoutSiteInput
+    auditEvents?: AuditEventUncheckedCreateNestedManyWithoutSiteInput
+    sitemapExclusions?: SitemapExclusionUncheckedCreateNestedManyWithoutSiteInput
+    seoTemplates?: SeoTemplateUncheckedCreateNestedManyWithoutSiteInput
+  }
+
+  export type SiteCreateOrConnectWithoutPageTemplatesInput = {
+    where: SiteWhereUniqueInput
+    create: XOR<SiteCreateWithoutPageTemplatesInput, SiteUncheckedCreateWithoutPageTemplatesInput>
+  }
+
+  export type PageTemplateBlockCreateWithoutTemplateInput = {
+    id?: string
+    blockType: string
+    position: number
+    visible?: boolean
+    data: JsonNullValueInput | InputJsonValue
+    source?: string | null
+  }
+
+  export type PageTemplateBlockUncheckedCreateWithoutTemplateInput = {
+    id?: string
+    blockType: string
+    position: number
+    visible?: boolean
+    data: JsonNullValueInput | InputJsonValue
+    source?: string | null
+  }
+
+  export type PageTemplateBlockCreateOrConnectWithoutTemplateInput = {
+    where: PageTemplateBlockWhereUniqueInput
+    create: XOR<PageTemplateBlockCreateWithoutTemplateInput, PageTemplateBlockUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type PageTemplateBlockCreateManyTemplateInputEnvelope = {
+    data: PageTemplateBlockCreateManyTemplateInput | PageTemplateBlockCreateManyTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PageCreateWithoutTemplateInput = {
+    id?: string
+    type: $Enums.PageType
+    title: string
+    slug: string
+    status?: $Enums.PublishStatus
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutPagesInput
+    city?: CityCreateNestedOneWithoutPagesInput
+    blocks?: PageBlockCreateNestedManyWithoutPageInput
+    leads?: LeadCreateNestedManyWithoutPageInput
+    checks?: AddressCheckCreateNestedManyWithoutPageInput
+  }
+
+  export type PageUncheckedCreateWithoutTemplateInput = {
+    id?: string
+    siteId: string
+    cityId?: string | null
+    type: $Enums.PageType
+    title: string
+    slug: string
+    status?: $Enums.PublishStatus
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    blocks?: PageBlockUncheckedCreateNestedManyWithoutPageInput
+    leads?: LeadUncheckedCreateNestedManyWithoutPageInput
+    checks?: AddressCheckUncheckedCreateNestedManyWithoutPageInput
+  }
+
+  export type PageCreateOrConnectWithoutTemplateInput = {
+    where: PageWhereUniqueInput
+    create: XOR<PageCreateWithoutTemplateInput, PageUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type PageCreateManyTemplateInputEnvelope = {
+    data: PageCreateManyTemplateInput | PageCreateManyTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SiteUpsertWithoutPageTemplatesInput = {
+    update: XOR<SiteUpdateWithoutPageTemplatesInput, SiteUncheckedUpdateWithoutPageTemplatesInput>
+    create: XOR<SiteCreateWithoutPageTemplatesInput, SiteUncheckedCreateWithoutPageTemplatesInput>
+    where?: SiteWhereInput
+  }
+
+  export type SiteUpdateToOneWithWhereWithoutPageTemplatesInput = {
+    where?: SiteWhereInput
+    data: XOR<SiteUpdateWithoutPageTemplatesInput, SiteUncheckedUpdateWithoutPageTemplatesInput>
+  }
+
+  export type SiteUpdateWithoutPageTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    provider?: ProviderUpdateOneRequiredWithoutSitesNestedInput
+    regions?: RegionUpdateManyWithoutSiteNestedInput
+    cities?: CityUpdateManyWithoutSiteNestedInput
+    pages?: PageUpdateManyWithoutSiteNestedInput
+    leads?: LeadUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUpdateManyWithoutSiteNestedInput
+  }
+
+  export type SiteUncheckedUpdateWithoutPageTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    connectionPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    supportPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    workingRevision?: IntFieldUpdateOperationsInput | number
+    publishedRevision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
+    cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
+    pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
+    checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
+    redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
+    cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
+    rebuilds?: SiteRebuildUncheckedUpdateManyWithoutSiteNestedInput
+    contentRevisions?: ContentRevisionUncheckedUpdateManyWithoutSiteNestedInput
+    publications?: SitePublicationUncheckedUpdateManyWithoutSiteNestedInput
+    publicationValidations?: SitePublicationValidationUncheckedUpdateManyWithoutSiteNestedInput
+    auditEvents?: AuditEventUncheckedUpdateManyWithoutSiteNestedInput
+    sitemapExclusions?: SitemapExclusionUncheckedUpdateManyWithoutSiteNestedInput
+    seoTemplates?: SeoTemplateUncheckedUpdateManyWithoutSiteNestedInput
+  }
+
+  export type PageTemplateBlockUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: PageTemplateBlockWhereUniqueInput
+    update: XOR<PageTemplateBlockUpdateWithoutTemplateInput, PageTemplateBlockUncheckedUpdateWithoutTemplateInput>
+    create: XOR<PageTemplateBlockCreateWithoutTemplateInput, PageTemplateBlockUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type PageTemplateBlockUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: PageTemplateBlockWhereUniqueInput
+    data: XOR<PageTemplateBlockUpdateWithoutTemplateInput, PageTemplateBlockUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type PageTemplateBlockUpdateManyWithWhereWithoutTemplateInput = {
+    where: PageTemplateBlockScalarWhereInput
+    data: XOR<PageTemplateBlockUpdateManyMutationInput, PageTemplateBlockUncheckedUpdateManyWithoutTemplateInput>
+  }
+
+  export type PageTemplateBlockScalarWhereInput = {
+    AND?: PageTemplateBlockScalarWhereInput | PageTemplateBlockScalarWhereInput[]
+    OR?: PageTemplateBlockScalarWhereInput[]
+    NOT?: PageTemplateBlockScalarWhereInput | PageTemplateBlockScalarWhereInput[]
+    id?: StringFilter<"PageTemplateBlock"> | string
+    templateId?: StringFilter<"PageTemplateBlock"> | string
+    blockType?: StringFilter<"PageTemplateBlock"> | string
+    position?: IntFilter<"PageTemplateBlock"> | number
+    visible?: BoolFilter<"PageTemplateBlock"> | boolean
+    data?: JsonFilter<"PageTemplateBlock">
+    source?: StringNullableFilter<"PageTemplateBlock"> | string | null
+  }
+
+  export type PageUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: PageWhereUniqueInput
+    update: XOR<PageUpdateWithoutTemplateInput, PageUncheckedUpdateWithoutTemplateInput>
+    create: XOR<PageCreateWithoutTemplateInput, PageUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type PageUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: PageWhereUniqueInput
+    data: XOR<PageUpdateWithoutTemplateInput, PageUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type PageUpdateManyWithWhereWithoutTemplateInput = {
+    where: PageScalarWhereInput
+    data: XOR<PageUpdateManyMutationInput, PageUncheckedUpdateManyWithoutTemplateInput>
+  }
+
+  export type PageTemplateCreateWithoutBlocksInput = {
+    id?: string
+    kind: $Enums.PageTemplateKind
+    titleTemplate: string
+    status?: $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    site: SiteCreateNestedOneWithoutPageTemplatesInput
+    pages?: PageCreateNestedManyWithoutTemplateInput
+  }
+
+  export type PageTemplateUncheckedCreateWithoutBlocksInput = {
+    id?: string
+    siteId: string
+    kind: $Enums.PageTemplateKind
+    titleTemplate: string
+    status?: $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    pages?: PageUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type PageTemplateCreateOrConnectWithoutBlocksInput = {
+    where: PageTemplateWhereUniqueInput
+    create: XOR<PageTemplateCreateWithoutBlocksInput, PageTemplateUncheckedCreateWithoutBlocksInput>
+  }
+
+  export type PageTemplateUpsertWithoutBlocksInput = {
+    update: XOR<PageTemplateUpdateWithoutBlocksInput, PageTemplateUncheckedUpdateWithoutBlocksInput>
+    create: XOR<PageTemplateCreateWithoutBlocksInput, PageTemplateUncheckedCreateWithoutBlocksInput>
+    where?: PageTemplateWhereInput
+  }
+
+  export type PageTemplateUpdateToOneWithWhereWithoutBlocksInput = {
+    where?: PageTemplateWhereInput
+    data: XOR<PageTemplateUpdateWithoutBlocksInput, PageTemplateUncheckedUpdateWithoutBlocksInput>
+  }
+
+  export type PageTemplateUpdateWithoutBlocksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumPageTemplateKindFieldUpdateOperationsInput | $Enums.PageTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutPageTemplatesNestedInput
+    pages?: PageUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type PageTemplateUncheckedUpdateWithoutBlocksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    kind?: EnumPageTemplateKindFieldUpdateOperationsInput | $Enums.PageTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pages?: PageUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
   export type PageCreateWithoutBlocksInput = {
     id?: string
     type: $Enums.PageType
@@ -56232,6 +60030,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutPagesInput
     city?: CityCreateNestedOneWithoutPagesInput
+    template?: PageTemplateCreateNestedOneWithoutPagesInput
     leads?: LeadCreateNestedManyWithoutPageInput
     checks?: AddressCheckCreateNestedManyWithoutPageInput
   }
@@ -56246,6 +60045,7 @@ export namespace Prisma {
     status?: $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     leads?: LeadUncheckedCreateNestedManyWithoutPageInput
@@ -56280,6 +60080,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutPagesNestedInput
     city?: CityUpdateOneWithoutPagesNestedInput
+    template?: PageTemplateUpdateOneWithoutPagesNestedInput
     leads?: LeadUpdateManyWithoutPageNestedInput
     checks?: AddressCheckUpdateManyWithoutPageNestedInput
   }
@@ -56294,6 +60095,7 @@ export namespace Prisma {
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     leads?: LeadUncheckedUpdateManyWithoutPageNestedInput
@@ -57059,6 +60861,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
@@ -57088,6 +60891,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
@@ -57219,6 +61023,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -57248,6 +61053,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -57375,6 +61181,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
@@ -57404,6 +61211,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
@@ -57482,6 +61290,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutPagesInput
     city?: CityCreateNestedOneWithoutPagesInput
+    template?: PageTemplateCreateNestedOneWithoutPagesInput
     blocks?: PageBlockCreateNestedManyWithoutPageInput
     leads?: LeadCreateNestedManyWithoutPageInput
   }
@@ -57496,6 +61305,7 @@ export namespace Prisma {
     status?: $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     blocks?: PageBlockUncheckedCreateNestedManyWithoutPageInput
@@ -57675,6 +61485,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
@@ -57704,6 +61515,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
@@ -57794,6 +61606,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutPagesNestedInput
     city?: CityUpdateOneWithoutPagesNestedInput
+    template?: PageTemplateUpdateOneWithoutPagesNestedInput
     blocks?: PageBlockUpdateManyWithoutPageNestedInput
     leads?: LeadUpdateManyWithoutPageNestedInput
   }
@@ -57808,6 +61621,7 @@ export namespace Prisma {
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     blocks?: PageBlockUncheckedUpdateManyWithoutPageNestedInput
@@ -57847,6 +61661,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     redirects?: RedirectCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
@@ -57876,6 +61691,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     redirects?: RedirectUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
@@ -57954,6 +61770,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutPagesInput
     city?: CityCreateNestedOneWithoutPagesInput
+    template?: PageTemplateCreateNestedOneWithoutPagesInput
     blocks?: PageBlockCreateNestedManyWithoutPageInput
     checks?: AddressCheckCreateNestedManyWithoutPageInput
   }
@@ -57968,6 +61785,7 @@ export namespace Prisma {
     status?: $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     blocks?: PageBlockUncheckedCreateNestedManyWithoutPageInput
@@ -58555,6 +62373,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
@@ -58584,6 +62403,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
@@ -58674,6 +62494,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutPagesNestedInput
     city?: CityUpdateOneWithoutPagesNestedInput
+    template?: PageTemplateUpdateOneWithoutPagesNestedInput
     blocks?: PageBlockUpdateManyWithoutPageNestedInput
     checks?: AddressCheckUpdateManyWithoutPageNestedInput
   }
@@ -58688,6 +62509,7 @@ export namespace Prisma {
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     blocks?: PageBlockUncheckedUpdateManyWithoutPageNestedInput
@@ -60541,6 +64363,7 @@ export namespace Prisma {
     regions?: RegionCreateNestedManyWithoutSiteInput
     cities?: CityCreateNestedManyWithoutSiteInput
     pages?: PageCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateCreateNestedManyWithoutSiteInput
     leads?: LeadCreateNestedManyWithoutSiteInput
     checks?: AddressCheckCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunCreateNestedManyWithoutSiteInput
@@ -60570,6 +64393,7 @@ export namespace Prisma {
     regions?: RegionUncheckedCreateNestedManyWithoutSiteInput
     cities?: CityUncheckedCreateNestedManyWithoutSiteInput
     pages?: PageUncheckedCreateNestedManyWithoutSiteInput
+    pageTemplates?: PageTemplateUncheckedCreateNestedManyWithoutSiteInput
     leads?: LeadUncheckedCreateNestedManyWithoutSiteInput
     checks?: AddressCheckUncheckedCreateNestedManyWithoutSiteInput
     cityImports?: CityImportRunUncheckedCreateNestedManyWithoutSiteInput
@@ -60664,6 +64488,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUpdateManyWithoutSiteNestedInput
@@ -60693,6 +64518,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     cityImports?: CityImportRunUncheckedUpdateManyWithoutSiteNestedInput
@@ -61779,6 +65605,7 @@ export namespace Prisma {
     regions?: RegionUpdateManyWithoutSiteNestedInput
     cities?: CityUpdateManyWithoutSiteNestedInput
     pages?: PageUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUpdateManyWithoutSiteNestedInput
     leads?: LeadUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUpdateManyWithoutSiteNestedInput
@@ -61808,6 +65635,7 @@ export namespace Prisma {
     regions?: RegionUncheckedUpdateManyWithoutSiteNestedInput
     cities?: CityUncheckedUpdateManyWithoutSiteNestedInput
     pages?: PageUncheckedUpdateManyWithoutSiteNestedInput
+    pageTemplates?: PageTemplateUncheckedUpdateManyWithoutSiteNestedInput
     leads?: LeadUncheckedUpdateManyWithoutSiteNestedInput
     checks?: AddressCheckUncheckedUpdateManyWithoutSiteNestedInput
     redirects?: RedirectUncheckedUpdateManyWithoutSiteNestedInput
@@ -62001,6 +65829,18 @@ export namespace Prisma {
     status?: $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PageTemplateCreateManySiteInput = {
+    id?: string
+    kind: $Enums.PageTemplateKind
+    titleTemplate: string
+    status?: $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -62305,6 +66145,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     city?: CityUpdateOneWithoutPagesNestedInput
+    template?: PageTemplateUpdateOneWithoutPagesNestedInput
     blocks?: PageBlockUpdateManyWithoutPageNestedInput
     leads?: LeadUpdateManyWithoutPageNestedInput
     checks?: AddressCheckUpdateManyWithoutPageNestedInput
@@ -62319,6 +66160,7 @@ export namespace Prisma {
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     blocks?: PageBlockUncheckedUpdateManyWithoutPageNestedInput
@@ -62335,6 +66177,44 @@ export namespace Prisma {
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PageTemplateUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumPageTemplateKindFieldUpdateOperationsInput | $Enums.PageTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    blocks?: PageTemplateBlockUpdateManyWithoutTemplateNestedInput
+    pages?: PageUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type PageTemplateUncheckedUpdateWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumPageTemplateKindFieldUpdateOperationsInput | $Enums.PageTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    blocks?: PageTemplateBlockUncheckedUpdateManyWithoutTemplateNestedInput
+    pages?: PageUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type PageTemplateUncheckedUpdateManyWithoutSiteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumPageTemplateKindFieldUpdateOperationsInput | $Enums.PageTemplateKind
+    titleTemplate?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    content?: NullableJsonNullValueInput | InputJsonValue
+    seo?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -63386,6 +67266,7 @@ export namespace Prisma {
     status?: $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -63509,6 +67390,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutPagesNestedInput
+    template?: PageTemplateUpdateOneWithoutPagesNestedInput
     blocks?: PageBlockUpdateManyWithoutPageNestedInput
     leads?: LeadUpdateManyWithoutPageNestedInput
     checks?: AddressCheckUpdateManyWithoutPageNestedInput
@@ -63523,6 +67405,7 @@ export namespace Prisma {
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     blocks?: PageBlockUncheckedUpdateManyWithoutPageNestedInput
@@ -63539,6 +67422,7 @@ export namespace Prisma {
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     seo?: NullableJsonNullValueInput | InputJsonValue
     content?: NullableJsonNullValueInput | InputJsonValue
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -64219,6 +68103,104 @@ export namespace Prisma {
     providerRef?: NullableStringFieldUpdateOperationsInput | string | null
     response?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PageTemplateBlockCreateManyTemplateInput = {
+    id?: string
+    blockType: string
+    position: number
+    visible?: boolean
+    data: JsonNullValueInput | InputJsonValue
+    source?: string | null
+  }
+
+  export type PageCreateManyTemplateInput = {
+    id?: string
+    siteId: string
+    cityId?: string | null
+    type: $Enums.PageType
+    title: string
+    slug: string
+    status?: $Enums.PublishStatus
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PageTemplateBlockUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    blockType?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    data?: JsonNullValueInput | InputJsonValue
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PageTemplateBlockUncheckedUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    blockType?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    data?: JsonNullValueInput | InputJsonValue
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PageTemplateBlockUncheckedUpdateManyWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    blockType?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    visible?: BoolFieldUpdateOperationsInput | boolean
+    data?: JsonNullValueInput | InputJsonValue
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PageUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumPageTypeFieldUpdateOperationsInput | $Enums.PageType
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    site?: SiteUpdateOneRequiredWithoutPagesNestedInput
+    city?: CityUpdateOneWithoutPagesNestedInput
+    blocks?: PageBlockUpdateManyWithoutPageNestedInput
+    leads?: LeadUpdateManyWithoutPageNestedInput
+    checks?: AddressCheckUpdateManyWithoutPageNestedInput
+  }
+
+  export type PageUncheckedUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    cityId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumPageTypeFieldUpdateOperationsInput | $Enums.PageType
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    blocks?: PageBlockUncheckedUpdateManyWithoutPageNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutPageNestedInput
+    checks?: AddressCheckUncheckedUpdateManyWithoutPageNestedInput
+  }
+
+  export type PageUncheckedUpdateManyWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    siteId?: StringFieldUpdateOperationsInput | string
+    cityId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumPageTypeFieldUpdateOperationsInput | $Enums.PageType
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
+    seo?: NullableJsonNullValueInput | InputJsonValue
+    content?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LeadCreateManyTariffInput = {

@@ -74,6 +74,10 @@ test('audit query validates required site and allowlisted filters', async () => 
   assert.deepEqual({ siteId: valid.siteId, limit: valid.limit, entityType: valid.entityType, action: valid.action }, {
     siteId: 'site-1', limit: 100, entityType: 'PAGE', action: 'ARCHIVE',
   });
+  const templateFilter = await pipe.transform(
+    { siteId: 'site-1', entityType: 'PAGE_TEMPLATE' }, queryMetadata(AuditEventListQueryDto),
+  );
+  assert.equal(templateFilter.entityType, 'PAGE_TEMPLATE');
   await assert.rejects(
     pipe.transform({ limit: '25' }, queryMetadata(AuditEventListQueryDto)),
     (error) => error.getStatus() === 400,

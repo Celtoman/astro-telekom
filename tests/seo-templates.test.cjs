@@ -159,6 +159,7 @@ test('working catalog resolves site SEO templates before a publication snapshot 
     redirect: { findMany: async () => [] },
     sitemapExclusion: { findMany: async () => [] },
     seoTemplate: { findMany: async (query) => { queries.seo = query; return templates().map((item) => item.kind === 'COVERAGE' ? { ...item, indexState: 'NOINDEX' } : item); } },
+    pageTemplate: { findMany: async () => [] },
   };
   const catalog = await new SiteCatalogService(prisma).listBySiteId('site-1');
   assert.deepEqual(queries.seo.where, { siteId: 'site-1' });

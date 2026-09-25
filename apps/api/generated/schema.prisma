@@ -157,8 +157,20 @@ enum ContentEntityType {
   REGION
   CITY
   PAGE
+  PAGE_TEMPLATE
   TARIFF
   REDIRECT
+}
+
+enum PageTemplateKind {
+  HOME
+  COVERAGE
+  CITIES
+  PRIVACY
+  PERSONAL_DATA_CONSENT
+  COOKIE_POLICY
+  CITY_HOME
+  CITY_TARIFF_DETAIL
 }
 
 enum ContentRevisionAction {
@@ -223,6 +235,7 @@ model Site {
   regions                Region[]
   cities                 City[]
   pages                  Page[]
+  pageTemplates          PageTemplate[]
   leads                  Lead[]
   checks                 AddressCheck[]
   redirects              Redirect[]
@@ -441,24 +454,56 @@ model City {
 }
 
 model Page {
-  id        String         @id @default(cuid())
-  siteId    String
-  cityId    String?
-  type      PageType
-  title     String
-  slug      String
-  status    PublishStatus  @default(DRAFT)
-  seo       Json?
-  content   Json?
-  site      Site           @relation(fields: [siteId], references: [id])
-  city      City?          @relation(fields: [cityId], references: [id])
-  blocks    PageBlock[]
-  leads     Lead[]
-  checks    AddressCheck[]
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  id         String         @id @default(cuid())
+  siteId     String
+  cityId     String?
+  type       PageType
+  title      String
+  slug       String
+  status     PublishStatus  @default(DRAFT)
+  seo        Json?
+  content    Json?
+  templateId String?
+  site       Site           @relation(fields: [siteId], references: [id])
+  city       City?          @relation(fields: [cityId], references: [id])
+  template   PageTemplate?  @relation(fields: [templateId], references: [id])
+  blocks     PageBlock[]
+  leads      Lead[]
+  checks     AddressCheck[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
 
   @@unique([cityId, slug])
+}
+
+model PageTemplate {
+  id            String              @id @default(cuid())
+  siteId        String
+  kind          PageTemplateKind
+  titleTemplate String
+  status        PublishStatus       @default(DRAFT)
+  content       Json?
+  seo           Json?
+  site          Site                @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  blocks        PageTemplateBlock[]
+  pages         Page[]
+  createdAt     DateTime            @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime            @updatedAt @db.Timestamptz(3)
+
+  @@unique([siteId, kind])
+}
+
+model PageTemplateBlock {
+  id         String       @id @default(cuid())
+  templateId String
+  blockType  String
+  position   Int
+  visible    Boolean      @default(true)
+  data       Json
+  source     String?
+  template   PageTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, position])
 }
 
 model PageBlock {

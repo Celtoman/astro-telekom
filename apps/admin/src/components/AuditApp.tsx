@@ -15,7 +15,7 @@ import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 
-type EntityType = "PROVIDER" | "SITE" | "REGION" | "CITY" | "PAGE" | "TARIFF" | "REDIRECT"
+type EntityType = "PROVIDER" | "SITE" | "REGION" | "CITY" | "PAGE" | "PAGE_TEMPLATE" | "TARIFF" | "REDIRECT"
 type AuditAction = "CREATE" | "UPDATE" | "IMPORT" | "UNDO" | "ARCHIVE" | "RESTORE"
 
 interface Administrator { id: string; email: string }
@@ -53,7 +53,7 @@ type DetailState =
   | { status: "error"; message: string }
   | { status: "ready"; event: AuditEventDetail }
 
-const entityValues: EntityType[] = ["PROVIDER", "SITE", "REGION", "CITY", "PAGE", "TARIFF", "REDIRECT"]
+const entityValues: EntityType[] = ["PROVIDER", "SITE", "REGION", "CITY", "PAGE", "PAGE_TEMPLATE", "TARIFF", "REDIRECT"]
 const actionValues: AuditAction[] = ["CREATE", "UPDATE", "IMPORT", "UNDO", "ARCHIVE", "RESTORE"]
 const entityLabels = Object.fromEntries(entityValues.map((value) => [value, statusPresentation("contentEntityType", value).label])) as Record<EntityType, string>
 const actionLabels = Object.fromEntries(actionValues.map((value) => [value, statusPresentation("contentRevisionAction", value).label])) as Record<AuditAction, string>
@@ -65,6 +65,7 @@ const fieldLabels: Record<string, string> = {
   tariffs: "Тарифы",
   cities: "Города",
   blocks: "Блоки страницы",
+  titleTemplate: "Заголовок шаблона",
   redirects: "Редиректы",
   leadAssignments: "Связи с заявками",
   phone: "Телефон подключения",

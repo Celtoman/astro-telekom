@@ -2,6 +2,7 @@ import { validateCityHomeBlocks, validatePublishedBlocks } from './block-validat
 import { resolveCatalogVariables } from './catalog-variables';
 import { RELEASE_ONE_GLOBAL_PAGES, type PublicRoute } from './public-route-policy';
 import { normalizeRedirectPath } from './redirect-path';
+import { materializeCityHomeSource } from './page-template';
 import type { CatalogSource } from './site-catalog.service';
 import { sitePhoneReadinessErrors } from './site-phone';
 import { resolveSeoTemplates } from './seo-templates';
@@ -60,7 +61,7 @@ function routeSources(source: CatalogSource): RouteSource[] {
 }
 
 export function validatePublicationSource(
-  source: CatalogSource,
+  rawSource: CatalogSource,
   input: { appVersion: string; requestedById?: string | null; siteRevision: number; now?: Date },
   renderSource: (source: CatalogSource, now: Date) => unknown,
 ): { report: PublicationValidationReport; catalog: unknown | null } {
@@ -80,6 +81,9 @@ export function validatePublicationSource(
       issues.push(issue);
     }
   };
+  let source = rawSource;
+  try { source = materializeCityHomeSource(rawSource); }
+  catch (error) { add('BLOCKING', 'CITY_HOME_TEMPLATE', '/', message(error)); }
   const routes = routeSources(source);
   const seen = new Map<string, string>();
   const checkedPaths: string[] = [];
@@ -185,7 +189,7 @@ export function validatePublicationSource(
   let catalog: unknown | null = null;
   if (!issues.some((issue) => issue.severity === 'BLOCKING')) {
     try {
-      catalog = renderSource(source, now);
+      catalog = renderSource(rawSource, now);
       const rendered = catalog as { routes?: PublicRoute[]; variableWarnings?: Array<{ code: string; path: string; reason: string }>; seoWarnings?: Array<{ code: string; path: string; relatedPath?: string; length?: number }> };
       if (!Array.isArray(rendered.routes) || rendered.routes.length !== routes.length) {
         add('BLOCKING', 'CATALOG_ROUTE_COUNT', '/', 'Состав собранных маршрутов отличается от проверенного inventory');

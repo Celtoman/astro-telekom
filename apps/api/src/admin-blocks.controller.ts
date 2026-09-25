@@ -18,6 +18,10 @@ interface AdminRequest {
   user?: { id: string };
 }
 
+function assertEditablePage(page: { type: string }) {
+  if (page.type === 'HOME') throw new BadRequestException('Блоки городской HOME редактируются через общий шаблон');
+}
+
 @Controller('admin')
 @UseGuards(AdminTokenGuard)
 export class AdminBlocksController {
@@ -45,6 +49,7 @@ export class AdminBlocksController {
         include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
       });
       if (!pageBefore) throw new NotFoundException('Страница не найдена');
+      assertEditablePage(pageBefore);
       const block = await transaction.pageBlock.create({ data: { ...body, pageId } });
       const page = await transaction.page.findUnique({
         where: { id: pageId },
@@ -78,6 +83,7 @@ export class AdminBlocksController {
         include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
       });
       if (!pageBefore) throw new NotFoundException('Страница не найдена');
+      assertEditablePage(pageBefore);
       let block;
       if ('blockType' in body || 'data' in body) {
         const stored = await transaction.pageBlock.findUnique({
@@ -136,6 +142,7 @@ export class AdminBlocksController {
         include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
       });
       if (!pageBefore) throw new NotFoundException('Страница не найдена');
+      assertEditablePage(pageBefore);
       const archivedAt = new Date();
       const result = await transaction.pageBlock.updateMany({
         where: { id, archivedAt: null },
@@ -175,6 +182,7 @@ export class AdminBlocksController {
         include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
       });
       if (!pageBefore) throw new NotFoundException('Страница не найдена');
+      assertEditablePage(pageBefore);
       const result = await transaction.pageBlock.updateMany({
         where: { id, archivedAt: { not: null } },
         data: { archivedAt: null },

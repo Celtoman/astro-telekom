@@ -11,7 +11,7 @@ type JsonObject = Record<string, unknown>;
 
 type WorkingRevisionInput = {
   siteId: string;
-  entityType: 'PROVIDER' | 'SITE' | 'REGION' | 'CITY' | 'PAGE' | 'TARIFF' | 'REDIRECT';
+  entityType: 'PROVIDER' | 'SITE' | 'REGION' | 'CITY' | 'PAGE' | 'PAGE_TEMPLATE' | 'TARIFF' | 'REDIRECT';
   entityId: string;
   action: 'CREATE' | 'UPDATE' | 'IMPORT' | 'UNDO' | 'ARCHIVE' | 'RESTORE';
   previousSnapshot?: JsonObject | null;

@@ -91,10 +91,21 @@ async function main() {
     { type: HOME, title: 'Домашний интернет в Казани', slug: '' },
   ] as const;
 
+  const homeTemplate = await prisma.pageTemplate.upsert({
+    where: { siteId_kind: { siteId: site.id, kind: 'CITY_HOME' } },
+    update: {},
+    create: {
+      siteId: site.id, kind: 'CITY_HOME', status: PUBLISHED,
+      titleTemplate: 'Домашний интернет в {CITY_NAME_PREPOSITIONAL}',
+      content: {}, seo: {},
+      blocks: { create: cityHomeTemplateBlocks({ name: '{CITY_NAME_PREPOSITIONAL}', namePrepositional: '{CITY_NAME_PREPOSITIONAL}' }) },
+    },
+  });
+
   for (const page of pages) {
     await prisma.page.upsert({
       where: { cityId_slug: { cityId: city.id, slug: page.slug } },
-      update: { title: page.title, type: page.type, status: PUBLISHED },
+      update: { title: page.title, type: page.type, status: PUBLISHED, templateId: homeTemplate.id },
       create: {
         siteId: site.id,
         cityId: city.id,
@@ -102,18 +113,9 @@ async function main() {
         title: page.title,
         slug: page.slug,
         status: PUBLISHED,
+        templateId: homeTemplate.id,
       },
     });
-  }
-
-  const homePage = await prisma.page.findUnique({ where: { cityId_slug: { cityId: city.id, slug: '' } } });
-  if (homePage) {
-    const blocksCount = await prisma.pageBlock.count({ where: { pageId: homePage.id } });
-    if (blocksCount === 0) {
-      await prisma.pageBlock.createMany({
-        data: cityHomeTemplateBlocks(city).map((block) => ({ ...block, pageId: homePage.id })),
-      });
-    }
   }
 
   const tariffs = [

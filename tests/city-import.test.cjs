@@ -122,6 +122,7 @@ test('new city remains a draft and creates one canonical city home', async () =>
     $transaction: async (callback, options) => {
       assert.deepEqual(options, { timeout: 30_000, isolationLevel: 'Serializable' });
       return callback({
+        pageTemplate: { findUnique: async () => ({ id: 'template-city-home' }) },
         region: { findMany: async () => [], create: async ({ data }) => ({ id: 'region-1', ...data }) },
         city: { findMany: async () => [], create: async ({ data }) => { cities.push(data); return { id: 'city-1', ...data }; }, update: async () => ({}) },
         page: {
@@ -141,14 +142,8 @@ test('new city remains a draft and creates one canonical city home', async () =>
   assert.deepEqual(createdPages.map((page) => ({ type: page.type, slug: page.slug, status: page.status })), [
     { type: 'HOME', slug: '', status: 'PUBLISHED' },
   ]);
-  const blocks = pageCreates[0]?.blocks?.create || [];
-  assert.deepEqual(blocks.map((block) => block.blockType), [
-    'hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'feature_grid', 'faq',
-  ]);
-  assert.deepEqual(blocks.map((block) => block.position), [10, 20, 30, 40, 50, 60, 70]);
-  assert.ok(blocks.every((block) => block.source === 'template:city-home:v1'));
-  assert.match(blocks[0].data.title, /Алейске/);
-  assert.doesNotMatch(JSON.stringify(blocks), /Казан/);
+  assert.equal(pageCreates[0].templateId, 'template-city-home');
+  assert.equal(pageCreates[0].blocks, undefined);
   assert.equal(cities[0].status, 'DRAFT');
 });
 
@@ -157,6 +152,7 @@ test('city import reuses a seed region with the same normalized slug', async () 
   const prisma = {
     ...validationPrisma(),
     $transaction: async (callback) => callback({
+      pageTemplate: { findUnique: async () => ({ id: 'template-city-home' }) },
       region: {
         findMany: async () => [{ id: 'seed-region', name: 'Республика Татарстан', slug: 'tatarstan' }],
         create: async () => { regionCreated = true; },
@@ -235,6 +231,7 @@ test('city import applies an explicit create, update and skip action map atomica
     $transaction: async (callback, options) => {
       transactionOptions = options;
       return callback({
+        pageTemplate: { findUnique: async () => ({ id: 'template-city-home' }) },
         region: { findMany: async () => [{ id: 'region-1', siteId: 'site-1', name: 'Республика Татарстан', slug: 'respublika-tatarstan' }] },
         city: {
           findMany: async () => [currentUpdate, currentSkip],
@@ -282,6 +279,7 @@ test('city import apply records an attributed working snapshot without publishin
   };
   const prisma = {
     $transaction: async (callback) => callback({
+      pageTemplate: { findUnique: async () => ({ id: 'template-city-home' }) },
       region: {
         findMany: async () => [{ id: 'region-1', siteId: 'site-1', name: 'Республика Татарстан', slug: 'respublika-tatarstan', phone: null, content: null }],
       },
@@ -339,6 +337,7 @@ test('city import apply captures a complete undo snapshot for a newly created ci
   };
   const prisma = {
     $transaction: async (callback) => callback({
+      pageTemplate: { findUnique: async () => ({ id: 'template-city-home' }) },
       region: {
         findMany: async () => [],
         create: async ({ data }) => ({ id: 'region-created', ...data, phone: null, content: null }),
@@ -355,8 +354,8 @@ test('city import apply captures a complete undo snapshot for a newly created ci
           const createdAt = new Date('2026-09-14T12:00:00.000Z');
           page = {
             id: 'page-created', siteId: data.siteId, cityId: data.cityId, type: data.type, title: data.title,
-            slug: data.slug, status: data.status, seo: data.seo, content: data.content, createdAt, updatedAt: createdAt,
-            blocks: data.blocks.create.map((block, index) => ({ id: `block-${index + 1}`, pageId: 'page-created', ...block })),
+            slug: data.slug, status: data.status, seo: null, content: null, templateId: data.templateId,
+            createdAt, updatedAt: createdAt, blocks: [],
           };
           return { id: page.id };
         },
@@ -377,7 +376,8 @@ test('city import apply captures a complete undo snapshot for a newly created ci
   assert.deepEqual(runUpdate.changeSet.createdCityIds, ['city-created']);
   assert.deepEqual(runUpdate.changeSet.createdRegions.map((region) => region.id), ['region-created']);
   assert.equal(runUpdate.changeSet.createdPages[0].id, 'page-created');
-  assert.equal(runUpdate.changeSet.createdPages[0].blocks.length, 7);
+  assert.equal(runUpdate.changeSet.createdPages[0].blocks.length, 0);
+  assert.equal(runUpdate.changeSet.createdPages[0].templateId, 'template-city-home');
 });
 
 test('safe city import undo restores updated cities and removes only captured new records', async () => {

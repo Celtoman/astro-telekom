@@ -3,7 +3,7 @@ import { Prisma } from '../generated';
 import { pageSize, searchQuery } from './admin-pagination';
 import { AdminTokenGuard } from './admin-token.guard';
 import { CityReadinessService, cityHomeTemplateReady, evaluateCityReadiness } from './city-readiness.service';
-import { cityHomeTemplateBlocks } from './city-home-template';
+import { ensureCityHomeTemplate } from './page-template';
 import { PrismaService } from './prisma.service';
 import { defaultDomruProfileCatalog } from './domru-profile-catalog';
 import { CityImportReport, CityImportService, isCityImportChangeSet } from './city-import.service';
@@ -69,7 +69,7 @@ export class AdminCitiesController {
         region: { select: { id: true, name: true, slug: true } },
         site: { select: { id: true, name: true, slug: true, domain: true, workingRevision: true, publishedRevision: true, publications: { where: { status: 'SUCCEEDED' }, orderBy: { publishedAt: 'desc' }, take: 1, select: { publishedAt: true } } } },
         tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE' }, select: { id: true } },
-        pages: { where: { type: 'HOME' }, select: { type: true, slug: true, status: true, blocks: { where: { archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } },
+        pages: { where: { type: 'HOME' }, select: { type: true, slug: true, status: true, blocks: { where: { archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] }, template: { select: { status: true, blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } } } } },
       },
     });
     const revisions = rows.length ? await this.prisma.contentRevision.findMany({
@@ -144,7 +144,8 @@ export class AdminCitiesController {
       const data = await this.cityData(transaction, body, null);
       if (body.status === 'PUBLISHED') throw new BadRequestException('Новый город сначала сохраняется как черновик');
       const city = await transaction.city.create({ data: { ...data, siteId: body.siteId, status: 'DRAFT' } });
-      await transaction.page.create({ data: { siteId: city.siteId, cityId: city.id, type: 'HOME', title: `Домашний интернет в ${city.namePrepositional}`, slug: '', status: 'PUBLISHED', seo: {}, content: {}, blocks: { create: cityHomeTemplateBlocks(city) } } });
+      const template = await ensureCityHomeTemplate(transaction, city.siteId, this.publications, request?.user?.id);
+      await transaction.page.create({ data: { siteId: city.siteId, cityId: city.id, type: 'HOME', title: `Домашний интернет в ${city.namePrepositional}`, slug: '', status: 'PUBLISHED', templateId: template.id } });
       const revision = await this.publications.recordWorkingRevision(transaction, {
         siteId: city.siteId,
         entityType: 'CITY',
@@ -176,7 +177,7 @@ export class AdminCitiesController {
       if (nextStatus === 'PUBLISHED') {
         const [tariffCount, pages] = await Promise.all([
           transaction.tariff.count({ where: { cityId: id, status: 'PUBLISHED' } }),
-          transaction.page.findMany({ where: { cityId: id, type: 'HOME' }, include: { blocks: { where: { archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] } } }),
+          transaction.page.findMany({ where: { cityId: id, type: 'HOME' }, include: { blocks: { where: { archivedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }] }, template: { include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } } } } }),
         ]);
         this.readiness.assertPublishable(evaluateCityReadiness({ ...data, publishedTariffCount: tariffCount, homeTemplateReady: cityHomeTemplateReady(data.name, pages) }), body.confirmMissingSubscriberProfile === true);
       }

@@ -100,7 +100,7 @@ test('admin pages reject incompatible global and city page scopes before writing
   assert.equal(writes, 0);
 });
 
-test('admin pages reject a noncanonical or second city HOME before writing', async () => {
+test('admin pages reject local city HOME edits before writing', async () => {
   let writes = 0;
   const current = {
     id: 'page-1', siteId: 'site-1', cityId: 'city-1', type: 'INTERNET', title: 'Интернет',
@@ -119,11 +119,11 @@ test('admin pages reject a noncanonical or second city HOME before writing', asy
 
   await assert.rejects(controller.create({
     siteId: 'site-1', cityId: 'city-1', type: 'HOME', title: 'Главная', slug: 'home', status: 'DRAFT',
-  }), /пустой slug/i);
+  }), /общего шаблона/i);
   await assert.rejects(controller.create({
     siteId: 'site-1', cityId: 'city-1', type: 'HOME', title: 'Главная', slug: '', status: 'DRAFT',
-  }), /уже существует/i);
-  await assert.rejects(controller.update('page-1', { type: 'HOME', slug: '' }), /уже существует/i);
+  }), /общего шаблона/i);
+  await assert.rejects(controller.update('page-1', { type: 'HOME', slug: '' }), /общий шаблон/i);
   assert.equal(writes, 0);
 
   const racingPrisma = {
@@ -138,7 +138,7 @@ test('admin pages reject a noncanonical or second city HOME before writing', asy
     { recordWorkingRevision: async () => ({ siteRevision: 1 }) },
   );
   await assert.rejects(racingController.create({
-    siteId: 'site-1', cityId: 'city-1', type: 'HOME', title: 'Главная', slug: '', status: 'DRAFT',
+    siteId: 'site-1', cityId: null, type: 'COVERAGE', title: 'Карта', slug: 'karta-pokrytiya-provaydera', status: 'DRAFT',
   }), (error) => error?.status === 409 && /уже существует/i.test(error.message));
 });
 

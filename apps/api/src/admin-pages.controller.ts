@@ -80,11 +80,12 @@ export class AdminPagesController {
 
   @Get()
   list() {
-    return this.prisma.page.findMany({ orderBy: { updatedAt: 'desc' }, include: { city: true } });
+    return this.prisma.page.findMany({ where: { type: { not: 'HOME' } }, orderBy: { updatedAt: 'desc' }, include: { city: true } });
   }
 
   @Post()
   async create(@Body() body: PageBody, @Req() request?: AdminRequest) {
+    if (body.type === 'HOME') throw new BadRequestException('Городская HOME создается из общего шаблона вместе с городом');
     assertPageScope(body);
     try {
       return await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
@@ -113,6 +114,7 @@ export class AdminPagesController {
       return await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
         const current = await transaction.page.findUnique({ where: { id } });
         if (!current) throw new NotFoundException('Page not found');
+        if (current.type === 'HOME' || body.type === 'HOME') throw new BadRequestException('Городская HOME редактируется через общий шаблон');
         const nextScope = {
           type: body.type ?? current.type,
           cityId: body.cityId === undefined ? current.cityId : body.cityId,

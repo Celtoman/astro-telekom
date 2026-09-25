@@ -45,11 +45,12 @@ export function evaluateCityReadiness(city: CityReadinessInput): CityReadiness {
   };
 }
 
-export function cityHomeTemplateReady(cityName: string, pages: Array<{ type: string; slug: string; status: string; blocks?: unknown[] }>): boolean {
+export function cityHomeTemplateReady(cityName: string, pages: Array<{ type: string; slug: string; status: string; blocks?: unknown[]; template?: { status: string; blocks: unknown[] } | null }>): boolean {
   const homes = pages.filter((page) => page.type === 'HOME' && page.status === 'PUBLISHED' && page.slug === '');
   if (homes.length !== 1) return false;
   try {
-    validateCityHomeBlocks(homes[0].blocks || [], cityName);
+    if (homes[0].template?.status && homes[0].template.status !== 'PUBLISHED') return false;
+    validateCityHomeBlocks(homes[0].template?.blocks || homes[0].blocks || [], cityName);
     return true;
   } catch {
     return false;

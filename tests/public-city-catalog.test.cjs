@@ -169,6 +169,7 @@ test('public city catalog returns only published entities for one published site
           .map((kind) => ({ kind, titleTemplate: `Заголовок ${kind}`, descriptionTemplate: `Описание ${kind}`, indexState: 'INDEX' }));
       },
     },
+    pageTemplate: { findMany: async () => [] },
   });
 
   const result = await controller.list('domru-site');
