@@ -40,6 +40,7 @@ test('207 city HOME pages render the same public catalog through one site templa
   const templateBlocks = cityHomeTemplateBlocks({ name: '{CITY_NAME_PREPOSITIONAL}', namePrepositional: '{CITY_NAME_PREPOSITIONAL}' })
     .map((block, index) => ({ ...block, id: `template-block-${index}`, templateId: 'template-1' }));
   const migrated = structuredClone(legacy);
+  migrated.globalPages = migrated.globalPages.map((page) => ({ ...page, templateId: null }));
   migrated.pageTemplates = [{
     id: 'template-1', siteId: 'site-1', kind: 'CITY_HOME', status: 'PUBLISHED',
     titleTemplate: 'Домашний интернет в {CITY_NAME_PREPOSITIONAL}', content: {}, seo: {}, blocks: templateBlocks,

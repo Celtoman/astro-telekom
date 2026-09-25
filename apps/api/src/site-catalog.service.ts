@@ -173,8 +173,9 @@ export class SiteCatalogService {
   pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string) {
     if (page.type === 'HOME' && cityName) validateCityHomeBlocks(page.blocks, cityName);
     else validatePublishedBlocks(page.blocks);
+    const { templateId: _templateId, ...publicPage } = page;
     return {
-      ...page,
+      ...publicPage,
       content: mergeContent(inheritedContent, page.content),
       seo: mergeContent(inheritedSeo, page.seo),
     };
