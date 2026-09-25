@@ -230,7 +230,7 @@ pnpm check
 | V2 | variable catalog/context preview | #189 | Нет | реализовано, issue закрыта |
 | V3 | usage/insertion/deprecation | #190 | Нет | частично: текущие SEO/OG и promo insertion есть; будущие Page/Block editors и deprecation открыты |
 | C1 | `CMS-038–049` | #191 | Нет | черновой реестр подготовлен, финальное утверждение ждёт дизайна и `OPEN-005` |
-| C2 | `CORE-005`, `CMS-001–018`, `CITY-024` | #192 | Нет | модель, backfill и 207-route equivalence локально проверены; CI/deployment smoke и решение о закрытии issue ещё впереди |
+| C2 | `CORE-005`, `CMS-001–018`, `CITY-024` | #192 | Нет | шаблон и backfill 207 HOME развернуты; полный публичный каталог эквивалентен, CI и exact-SHA smoke прошли; issue закрывается после синхронизации документов |
 | C3 | main-page editors | #193 | Нет | не начато |
 | C4 | functional-page editors | #194 | Нет | не начато |
 | C5 | legal document editor | #195 | Нет | не начато |
