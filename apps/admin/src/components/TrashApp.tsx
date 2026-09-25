@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { ArchiveRestore, CircleAlert, RefreshCw, Trash2 } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
@@ -29,6 +29,15 @@ interface TrashGroup {
   items: TrashItem[]
 }
 interface TrashResponse { siteId: string; groups: TrashGroup[] }
+interface TariffPurgePreview {
+  siteId: string
+  offset: number
+  limit: number
+  total: number
+  nextOffset: number | null
+  fingerprint: string
+  items: Array<{ id: string; name: string; path: string; archivedAt: string | null; blockers: string[] }>
+}
 
 type ScreenState =
   | { status: "loading" }
@@ -55,6 +64,11 @@ export function TrashApp({ apiUrl }: { apiUrl: string }) {
   const [pendingRestore, setPendingRestore] = useState<{ group: TrashGroup; item: TrashItem } | null>(null)
   const [restoring, setRestoring] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
+  const [purgePreview, setPurgePreview] = useState<TariffPurgePreview | null>(null)
+  const [purgeBusy, setPurgeBusy] = useState(false)
+  const [pendingPurge, setPendingPurge] = useState(false)
+  const [purging, setPurging] = useState(false)
+  const purgeGeneration = useRef(0)
 
   const handleError = useCallback((caught: unknown, fallback: string) => {
     if (caught instanceof AdminApiError && caught.status === 401) {
@@ -132,12 +146,58 @@ export function TrashApp({ apiUrl }: { apiUrl: string }) {
         ? `${entityLabels[group.entityType]} восстановлен. Рабочая версия ${result.workingRevision} сохранена; опубликуйте ее отдельно.`
         : `${entityLabels[group.entityType]} восстановлен в рабочей версии.`)
       setPendingRestore(null)
+      setPendingPurge(false)
+      setPurgePreview(null)
       setRefreshKey((value) => value + 1)
     } catch (caught: unknown) {
       const nextError = handleError(caught, "Восстановление не выполнено")
       if (nextError) setError(nextError)
     } finally {
       setRestoring(false)
+    }
+  }
+
+  async function loadPurgePreview(offset = 0) {
+    if (!selectedSiteId) return
+    const generation = ++purgeGeneration.current
+    setPurgeBusy(true)
+    setPendingPurge(false)
+    setError(null)
+    try {
+      const params = new URLSearchParams({ siteId: selectedSiteId, offset: String(offset) })
+      const preview = await requestJson<TariffPurgePreview>(apiUrl, `/admin/tariffs/purge-preview?${params.toString()}`)
+      if (purgeGeneration.current === generation) setPurgePreview(preview)
+    } catch (caught: unknown) {
+      if (purgeGeneration.current === generation) {
+        const nextError = handleError(caught, "Предпросмотр очистки не загружен")
+        if (nextError) setError(nextError)
+      }
+    } finally {
+      if (purgeGeneration.current === generation) setPurgeBusy(false)
+    }
+  }
+
+  async function purgeTariffs() {
+    if (!purgePreview) return
+    const ids = purgePreview.items.filter((item) => item.blockers.length === 0).map((item) => item.id)
+    if (!ids.length) return
+    setPurging(true)
+    setError(null)
+    try {
+      const result = await requestJson<{ removed: number; workingRevision: number }>(apiUrl, "/admin/tariffs/purge", {
+        method: "POST",
+        body: { siteId: purgePreview.siteId, offset: purgePreview.offset, ids, fingerprint: purgePreview.fingerprint, confirm: true },
+      })
+      setMessage(`Удалено ${result.removed} архивных тарифов. Рабочая версия ${result.workingRevision} сохранена; публикация выполняется отдельно.`)
+      setPendingPurge(false)
+      setPurgePreview(null)
+      setRefreshKey((value) => value + 1)
+    } catch (caught: unknown) {
+      const nextError = handleError(caught, "Очистка не выполнена")
+      if (nextError) setError(nextError)
+      setPendingPurge(false)
+    } finally {
+      setPurging(false)
     }
   }
 
@@ -151,21 +211,28 @@ export function TrashApp({ apiUrl }: { apiUrl: string }) {
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-6 lg:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div><h1 className="font-heading text-2xl font-semibold">Корзина</h1><p className="mt-1 text-sm text-muted-foreground">Архивные сущности не попадают в следующую публикацию, но остаются доступными для восстановления.</p></div>
-          <Button variant="outline" disabled={busy} onClick={() => setRefreshKey((value) => value + 1)}><RefreshCw data-icon="inline-start" />Обновить</Button>
+          <div className="flex flex-wrap gap-2"><Button variant="outline" disabled={!selectedSiteId || purgeBusy || purging} onClick={() => void loadPurgePreview()}><Trash2 data-icon="inline-start" />Проверить очистку тарифов</Button><Button variant="outline" disabled={busy} onClick={() => { setPurgePreview(null); setPendingPurge(false); setRefreshKey((value) => value + 1) }}><RefreshCw data-icon="inline-start" />Обновить</Button></div>
         </div>
 
         {!state.sites.length ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Сайты не найдены</AlertTitle><AlertDescription>Корзина всегда принадлежит конкретному сайту.</AlertDescription></Alert> : null}
-        {message ? <Alert><ArchiveRestore /><AlertTitle>Восстановление завершено</AlertTitle><AlertDescription>{message}</AlertDescription></Alert> : null}
+        {message ? <Alert><ArchiveRestore /><AlertTitle>Операция завершена</AlertTitle><AlertDescription>{message}</AlertDescription></Alert> : null}
         {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Операция не выполнена</AlertTitle><AlertDescription>{error}</AlertDescription></Alert> : null}
 
         <Card>
           <CardHeader><CardTitle>Область корзины</CardTitle><CardDescription>{trash ? `Всего архивных записей: ${total.toLocaleString("ru-RU")}.` : "Выберите сайт."}</CardDescription></CardHeader>
           <CardContent className="max-w-md">
-            <Field><FieldLabel htmlFor="trash-site">Сайт</FieldLabel><select id="trash-site" className="h-9 w-full rounded-lg border border-input bg-background px-3 text-sm" value={selectedSiteId} onChange={(event) => { setSelectedSiteId(event.target.value); setPendingRestore(null); setMessage(null) }}><option value="">Выберите сайт</option>{state.sites.map((site) => <option key={site.id} value={site.id}>{site.name}</option>)}</select></Field>
+            <Field><FieldLabel htmlFor="trash-site">Сайт</FieldLabel><select id="trash-site" className="h-9 w-full rounded-lg border border-input bg-background px-3 text-sm" value={selectedSiteId} disabled={purging} onChange={(event) => { purgeGeneration.current += 1; setSelectedSiteId(event.target.value); setPendingRestore(null); setPendingPurge(false); setPurgePreview(null); setPurgeBusy(false); setMessage(null) }}><option value="">Выберите сайт</option>{state.sites.map((site) => <option key={site.id} value={site.id}>{site.name}</option>)}</select></Field>
           </CardContent>
         </Card>
 
         {pendingRestore ? <Alert><ArchiveRestore /><AlertTitle>Подтвердить восстановление</AlertTitle><AlertDescription><span className="block">«{pendingRestore.item.label}» будет возвращен в рабочую версию. Город, страница, тариф или редирект вернется как черновик; блок страницы — с прежней настройкой видимости. На публичном сайте ничего не изменится до отдельной успешной публикации.</span><span className="mt-3 flex flex-wrap gap-2"><Button disabled={restoring} onClick={() => void restore(pendingRestore.group, pendingRestore.item)}>{restoring ? "Восстанавливаем…" : "Подтвердить восстановление"}</Button><Button variant="outline" disabled={restoring} onClick={() => setPendingRestore(null)}>Отмена</Button></span></AlertDescription></Alert> : null}
+
+        {purgeBusy ? <Card aria-busy="true"><CardContent className="p-6"><Skeleton className="h-32 w-full" /></CardContent></Card> : null}
+        {purgePreview && !purgeBusy ? <Card><CardHeader><CardTitle>Предпросмотр очистки тарифов</CardTitle><CardDescription>Архив: {purgePreview.total.toLocaleString("ru-RU")}. Показаны записи {purgePreview.items.length ? purgePreview.offset + 1 : 0}–{purgePreview.offset + purgePreview.items.length}; удаляются только записи без связей.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4">
+          {purgePreview.items.length ? <div className="overflow-x-auto"><Table><TableHeader><TableRow><TableHead>Тариф</TableHead><TableHead>Путь</TableHead><TableHead>Проверка связей</TableHead></TableRow></TableHeader><TableBody>{purgePreview.items.map((item) => <TableRow key={item.id}><TableCell className="font-medium">{item.name}</TableCell><TableCell className="break-all font-mono text-xs">{item.path}</TableCell><TableCell>{item.blockers.length ? item.blockers.join("; ") : <Badge variant="success">Можно удалить</Badge>}</TableCell></TableRow>)}</TableBody></Table></div> : <p className="text-sm text-muted-foreground">Архивных тарифов нет.</p>}
+          <div className="flex flex-wrap gap-2"><Button variant="outline" disabled={purging || purgePreview.offset === 0} onClick={() => void loadPurgePreview(Math.max(0, purgePreview.offset - purgePreview.limit))}>Предыдущие</Button><Button variant="outline" disabled={purging || purgePreview.nextOffset === null} onClick={() => void loadPurgePreview(purgePreview.nextOffset!)}>Следующие</Button><Button variant="outline" disabled={purging} onClick={() => void loadPurgePreview(purgePreview.offset)}><RefreshCw data-icon="inline-start" />Проверить снова</Button></div>
+          {pendingPurge ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Подтвердить необратимую очистку</AlertTitle><AlertDescription><p>Будут физически удалены {purgePreview.items.filter((item) => item.blockers.length === 0).length} тарифов из показанного пакета. Сервер повторно проверит связи; опубликованный сайт не изменится до отдельной публикации.</p><div className="mt-3 flex flex-wrap gap-2"><Button variant="destructive" disabled={purging} onClick={() => void purgeTariffs()}>{purging ? "Удаляем…" : "Удалить безвозвратно"}</Button><Button variant="outline" disabled={purging} onClick={() => setPendingPurge(false)}>Отмена</Button></div></AlertDescription></Alert> : <Button variant="destructive" className="self-start" disabled={purging || !purgePreview.items.some((item) => item.blockers.length === 0)} onClick={() => setPendingPurge(true)}>Очистить доступные в этом пакете</Button>}
+        </CardContent></Card> : null}
 
         {busy ? <div aria-busy="true" className="grid gap-4 md:grid-cols-2"><Skeleton className="h-56 w-full" /><Skeleton className="h-56 w-full" /></div> : null}
         {!busy && selectedSiteId && trash && total === 0 ? <Alert><Trash2 /><AlertTitle>Корзина пуста</AlertTitle><AlertDescription>Архивных городов, страниц, тарифов, редиректов и блоков нет.</AlertDescription></Alert> : null}

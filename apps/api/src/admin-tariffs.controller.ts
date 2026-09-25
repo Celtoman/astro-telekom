@@ -1,4 +1,5 @@
 import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { ArrayMaxSize, ArrayMinSize, ArrayUnique, IsArray, IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Max, MaxLength, Min } from 'class-validator';
 import { Prisma, ServiceType, TariffArchiveReason, TariffAvailability } from '../generated';
 import { decodeCursor, encodeCursor, pageSize, searchQuery } from './admin-pagination';
 import { AdminTokenGuard } from './admin-token.guard';
@@ -7,9 +8,47 @@ import { ImportReport, normalizeCanonicalTariffCore, normalizeTariffAttributes, 
 import { CreateTariffDto, TariffListQueryDto, UpdateTariffDto } from './tariff.dto';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { resolveVariableText } from './variable-registry';
+import { TariffPurgeService } from './tariff-purge.service';
 
 interface AdminRequest {
   user?: { id: string };
+}
+
+export class TariffPurgePreviewQueryDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(200)
+  siteId!: string;
+
+  @IsOptional()
+  @Matches(/^(0|[1-9]\d{0,6})$/)
+  offset?: string;
+}
+
+export class TariffPurgeDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(200)
+  siteId!: string;
+
+  @IsInt()
+  @Min(0)
+  @Max(1_000_000)
+  offset!: number;
+
+  @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(25)
+  @ArrayUnique()
+  @IsString({ each: true })
+  @MaxLength(200, { each: true })
+  ids!: string[];
+
+  @Matches(/^[a-f0-9]{64}$/)
+  fingerprint!: string;
+
+  @IsBoolean()
+  confirm!: boolean;
 }
 
 function validatePromoVariables(value: string | null | undefined) {
@@ -24,7 +63,18 @@ export class AdminTariffsController {
     private readonly prisma: PrismaService,
     private readonly imports: TariffImportService,
     private readonly publications: PublicationWorkflowService,
+    private readonly purgeService: TariffPurgeService,
   ) {}
+
+  @Get('purge-preview')
+  purgePreview(@Query() query: TariffPurgePreviewQueryDto) {
+    return this.purgeService.preview(query.siteId, Number(query.offset ?? 0));
+  }
+
+  @Post('purge')
+  purgeArchive(@Body() body: TariffPurgeDto, @Req() request?: AdminRequest) {
+    return this.purgeService.purge(body, request?.user?.id);
+  }
 
   @Get()
   async list(@Query() query: TariffListQueryDto = {}) {

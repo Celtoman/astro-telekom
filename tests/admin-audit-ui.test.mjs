@@ -36,7 +36,7 @@ test('audit workspace translates entities and actions and explains before and af
   for (const value of ['PROVIDER', 'SITE', 'REGION', 'CITY', 'PAGE', 'PAGE_TEMPLATE', 'TARIFF', 'REDIRECT']) {
     assert.equal(statusPresentation('contentEntityType', value).known, true, `missing entity label: ${value}`);
   }
-  for (const value of ['CREATE', 'UPDATE', 'IMPORT', 'UNDO', 'ARCHIVE', 'RESTORE']) {
+  for (const value of ['CREATE', 'UPDATE', 'IMPORT', 'UNDO', 'ARCHIVE', 'RESTORE', 'PURGE']) {
     assert.equal(statusPresentation('contentRevisionAction', value).known, true, `missing action label: ${value}`);
   }
   assert.match(source, /statusPresentation/);

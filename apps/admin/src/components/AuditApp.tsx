@@ -16,7 +16,7 @@ import { Skeleton } from "./ui/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 
 type EntityType = "PROVIDER" | "SITE" | "REGION" | "CITY" | "PAGE" | "PAGE_TEMPLATE" | "TARIFF" | "REDIRECT"
-type AuditAction = "CREATE" | "UPDATE" | "IMPORT" | "UNDO" | "ARCHIVE" | "RESTORE"
+type AuditAction = "CREATE" | "UPDATE" | "IMPORT" | "UNDO" | "ARCHIVE" | "RESTORE" | "PURGE"
 
 interface Administrator { id: string; email: string }
 interface Site { id: string; name: string; slug: string }
@@ -54,7 +54,7 @@ type DetailState =
   | { status: "ready"; event: AuditEventDetail }
 
 const entityValues: EntityType[] = ["PROVIDER", "SITE", "REGION", "CITY", "PAGE", "PAGE_TEMPLATE", "TARIFF", "REDIRECT"]
-const actionValues: AuditAction[] = ["CREATE", "UPDATE", "IMPORT", "UNDO", "ARCHIVE", "RESTORE"]
+const actionValues: AuditAction[] = ["CREATE", "UPDATE", "IMPORT", "UNDO", "ARCHIVE", "RESTORE", "PURGE"]
 const entityLabels = Object.fromEntries(entityValues.map((value) => [value, statusPresentation("contentEntityType", value).label])) as Record<EntityType, string>
 const actionLabels = Object.fromEntries(actionValues.map((value) => [value, statusPresentation("contentRevisionAction", value).label])) as Record<AuditAction, string>
 

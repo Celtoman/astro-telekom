@@ -15,7 +15,7 @@ test('trash route mounts an authenticated React workspace and is linked from the
   assert.deepEqual({ href: item?.href, label: item?.label }, { href: '/trash', label: 'Корзина' });
 });
 
-test('trash workspace reuses safe entity restore contracts and never hard-deletes content', () => {
+test('trash workspace reuses safe entity restore contracts without a DELETE request', () => {
   const componentPath = join(adminRoot, 'components', 'TrashApp.tsx');
   assert.equal(existsSync(componentPath), true, 'trash workspace must exist');
   const source = readFileSync(componentPath, 'utf8');
@@ -27,6 +27,8 @@ test('trash workspace reuses safe entity restore contracts and never hard-delete
   assert.match(source, /\/admin\/tariffs\//);
   assert.match(source, /\/admin\/redirects\//);
   assert.doesNotMatch(source, /method:\s*["']DELETE["']|dangerouslySetInnerHTML|\.innerHTML|localStorage|sessionStorage|x-admin-token/i);
+  assert.match(source, /\/admin\/tariffs\/purge-preview\?/);
+  assert.match(source, /\/admin\/tariffs\/purge"/);
 });
 
 test('trash workspace explains draft restoration and requires an explicit confirmation', () => {
@@ -38,4 +40,5 @@ test('trash workspace explains draft restoration and requires an explicit confir
   assert.match(source, /Восстановить из корзины/);
   assert.match(source, /вернется как черновик/i);
   assert.match(source, /Подтвердить восстановление/);
+  assert.match(source, /Подтвердить необратимую очистку/);
 });

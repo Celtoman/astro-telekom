@@ -646,7 +646,8 @@ exports.ContentRevisionAction = exports.$Enums.ContentRevisionAction = {
   IMPORT: 'IMPORT',
   UNDO: 'UNDO',
   ARCHIVE: 'ARCHIVE',
-  RESTORE: 'RESTORE'
+  RESTORE: 'RESTORE',
+  PURGE: 'PURGE'
 };
 
 exports.SitePublicationStatus = exports.$Enums.SitePublicationStatus = {

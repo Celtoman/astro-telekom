@@ -58,6 +58,7 @@ import { SeoTemplateService } from './seo-template.service';
 import { AdminSeoTemplatesController } from './admin-seo-templates.controller';
 import { AdminTariffTemplateController } from './admin-tariff-template.controller';
 import { AdminPageTemplatesController } from './admin-page-templates.controller';
+import { TariffPurgeService } from './tariff-purge.service';
 
 @Module({
   controllers: [
@@ -96,6 +97,6 @@ import { AdminPageTemplatesController } from './admin-page-templates.controller'
     AdminTariffTemplateController,
     AdminPageTemplatesController,
   ],
-  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, TariffPurgeService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

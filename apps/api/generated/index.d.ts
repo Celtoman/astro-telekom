@@ -392,7 +392,8 @@ export const ContentRevisionAction: {
   IMPORT: 'IMPORT',
   UNDO: 'UNDO',
   ARCHIVE: 'ARCHIVE',
-  RESTORE: 'RESTORE'
+  RESTORE: 'RESTORE',
+  PURGE: 'PURGE'
 };
 
 export type ContentRevisionAction = (typeof ContentRevisionAction)[keyof typeof ContentRevisionAction]

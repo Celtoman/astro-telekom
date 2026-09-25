@@ -6,7 +6,7 @@ import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
 
 const AUDIT_ENTITY_TYPES = ['PROVIDER', 'SITE', 'REGION', 'CITY', 'PAGE', 'PAGE_TEMPLATE', 'TARIFF', 'REDIRECT'] as const;
-const AUDIT_ACTIONS = ['CREATE', 'UPDATE', 'IMPORT', 'UNDO', 'ARCHIVE', 'RESTORE'] as const;
+const AUDIT_ACTIONS = ['CREATE', 'UPDATE', 'IMPORT', 'UNDO', 'ARCHIVE', 'RESTORE', 'PURGE'] as const;
 
 type AuditEntityType = typeof AUDIT_ENTITY_TYPES[number];
 type AuditAction = typeof AUDIT_ACTIONS[number];

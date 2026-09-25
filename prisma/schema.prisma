@@ -180,6 +180,7 @@ enum ContentRevisionAction {
   UNDO
   ARCHIVE
   RESTORE
+  PURGE
 }
 
 enum SitePublicationStatus {
@@ -678,7 +679,7 @@ model Lead {
   site            Site     @relation(fields: [siteId], references: [id])
   city            City     @relation(fields: [cityId], references: [id])
   page            Page?    @relation(fields: [pageId], references: [id])
-  tariff          Tariff?  @relation(fields: [tariffId], references: [id])
+  tariff          Tariff?  @relation(fields: [tariffId], references: [id], onDelete: Restrict)
   addressCheck    AddressCheck? @relation(fields: [addressCheckId], references: [id])
   history         LeadStatusHistory[]
   decisionEvents  LeadDecisionEvent[]
