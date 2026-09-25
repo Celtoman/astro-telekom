@@ -9,5 +9,5 @@ test('tariff purge uses real PostgreSQL 18 migrations and relational guards', { 
     timeout: 300_000,
   });
   assert.equal(result.status, 0, result.stderr || result.stdout);
-  assert.match(result.stdout, /linked history blocked, free archive purged with audit/);
+  assert.match(result.stdout, /linked history blocked, free archive batch purged with audit/);
 });

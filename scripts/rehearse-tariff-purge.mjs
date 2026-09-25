@@ -51,6 +51,7 @@ try {
     },
   });
   const free = await createTariff('free');
+  const freeSecond = await createTariff('free-second');
   const lead = await createTariff('lead');
   const redirect = await createTariff('redirect');
   const publication = await createTariff('publication');
@@ -76,18 +77,20 @@ try {
   const workflow = Object.create(PublicationWorkflowService.prototype);
   const service = new TariffPurgeService(db, workflow);
   const preview = await service.preview(site.id);
-  assert.equal(preview.total, 6);
-  assert.deepEqual(preview.items.filter((item) => item.blockers.length === 0).map((item) => item.id), [free.id]);
+  assert.equal(preview.total, 7);
+  assert.deepEqual(preview.items.filter((item) => item.blockers.length === 0).map((item) => item.id), [free.id, freeSecond.id]);
   for (const tariff of [lead, redirect, publication, validation, imported]) {
     assert.ok(preview.items.find((item) => item.id === tariff.id)?.blockers.length, `${tariff.slug} must be blocked`);
   }
-  const result = await service.purge({ siteId: site.id, offset: 0, ids: [free.id], fingerprint: preview.fingerprint, confirm: true });
-  assert.equal(result.removed, 1);
+  const result = await service.purge({ siteId: site.id, offset: 0, ids: [free.id, freeSecond.id], fingerprint: preview.fingerprint, confirm: true });
+  assert.equal(result.removed, 2);
   assert.equal(await db.tariff.findUnique({ where: { id: free.id } }), null);
+  assert.equal(await db.tariff.findUnique({ where: { id: freeSecond.id } }), null);
   assert.equal(await db.tariff.count({ where: { id: { in: [lead.id, redirect.id, publication.id, validation.id, imported.id] } } }), 5);
-  const audit = await db.auditEvent.findFirst({ where: { entityType: 'TARIFF', entityId: free.id } });
-  assert.equal(audit?.action, 'PURGE');
-  process.stdout.write('PostgreSQL 18: linked history blocked, free archive purged with audit\n');
+  const audit = await db.auditEvent.findMany({ where: { entityType: 'TARIFF', entityId: { in: [free.id, freeSecond.id] } } });
+  assert.equal(audit.length, 2);
+  assert.ok(audit.every((event) => event.action === 'PURGE'));
+  process.stdout.write('PostgreSQL 18: linked history blocked, free archive batch purged with audit\n');
 } finally {
   if (db) await db.onModuleDestroy();
   spawnSync('docker', ['rm', '-f', container], { encoding: 'utf8', timeout: 30_000 });
