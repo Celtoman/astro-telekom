@@ -54,7 +54,7 @@ test('sensitive tariff changes require explicit confirmation before any write', 
 
   await assert.rejects(controller.update('tariff-1', { expectedUpdatedAt, standardPrice: 950 }), /подтверждение.*цен/i);
   await assert.rejects(controller.update('tariff-1', { expectedUpdatedAt, status: 'DRAFT' }), /подтверждение.*статус/i);
-  await assert.rejects(controller.update('tariff-1', { expectedUpdatedAt, seo: { title: 'Новое SEO' } }), /подтверждение.*SEO/i);
+  await assert.rejects(controller.update('tariff-1', { expectedUpdatedAt, seo: { title: 'Новое SEO' } }), /SEO.*шаблон/i);
   assert.equal(updated, false);
 });
 
@@ -157,9 +157,10 @@ test('tariff update DTO rejects unknown, empty and malformed edit fields at runt
     await rejectsWith({ expectedUpdatedAt: existingTariff.updatedAt.toISOString(), [field]: null }, new RegExp(field, 'i'));
   }
   await rejectsWith({ expectedUpdatedAt: existingTariff.updatedAt.toISOString(), availability: true }, /availability/i);
+  await rejectsWith({ expectedUpdatedAt: existingTariff.updatedAt.toISOString(), seo: null }, /property seo should not exist/i);
   const nullable = await pipe.transform({
     expectedUpdatedAt: existingTariff.updatedAt.toISOString(), standardPrice: null, promoPrice: null, speed: null,
-    promoText: null, connectionFee: null, attributes: null, seo: null,
+    promoText: null, connectionFee: null, attributes: null,
   }, metadata);
   assert.equal(nullable.standardPrice, null);
   assert.equal(nullable.promoPrice, null);
@@ -167,7 +168,7 @@ test('tariff update DTO rejects unknown, empty and malformed edit fields at runt
   assert.equal(nullable.promoText, null);
   assert.equal(nullable.connectionFee, null);
   assert.equal(nullable.attributes, null);
-  assert.equal(nullable.seo, null);
+  assert.equal(Object.hasOwn(nullable, 'seo'), false);
 });
 
 test('manual create DTO uses the same integer price and required core contract as import', async () => {

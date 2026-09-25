@@ -9,7 +9,6 @@ type Change = { entityType: 'PAGE' | 'TARIFF' | 'SEO_TEMPLATE'; entityId: string
 
 const BLOCK_TEXT = ['eyebrow', 'title', 'text', 'ctaText'] as const;
 const ITEM_TEXT = ['title', 'text', 'question', 'answer'] as const;
-const SEO_TEXT = ['title', 'description'] as const;
 const TEMPLATE_TEXT = ['titleTemplate', 'descriptionTemplate', 'ogTitleTemplate', 'ogDescriptionTemplate'] as const;
 
 export function planVariableMigration(definitions: readonly VariableDefinition[], sourceCode: string, targetCode: string, rows: MigrationRows) {
@@ -52,7 +51,6 @@ export function planVariableMigration(definitions: readonly VariableDefinition[]
       ...page,
       title: replace(page.title),
       content: fields(page.content, ['text']),
-      seo: fields(page.seo, SEO_TEXT),
       blocks: Array.isArray(page.blocks) ? page.blocks.map((block: Row) => {
         const data = fields(block.data, BLOCK_TEXT) as Row;
         return { ...block, data: data && Array.isArray(data.items)
@@ -62,14 +60,14 @@ export function planVariableMigration(definitions: readonly VariableDefinition[]
     };
     if (JSON.stringify(next).includes(token)) throw new BadRequestException('Исходный код остался в поле вне разрешённой области миграции');
     const changedFields = [page.title !== next.title && 'title', JSON.stringify(page.content) !== JSON.stringify(next.content) && 'content',
-      JSON.stringify(page.seo) !== JSON.stringify(next.seo) && 'seo', JSON.stringify(page.blocks) !== JSON.stringify(next.blocks) && 'blocks'].filter(Boolean) as string[];
+      JSON.stringify(page.blocks) !== JSON.stringify(next.blocks) && 'blocks'].filter(Boolean) as string[];
     add('PAGE', page, next, changedFields, countBefore);
   }
   for (const tariff of rows.tariffs) {
     const countBefore = replacementCount;
-    const next = { ...tariff, promoText: replace(tariff.promoText), seo: fields(tariff.seo, SEO_TEXT) };
+    const next = { ...tariff, promoText: replace(tariff.promoText) };
     if (JSON.stringify(next).includes(token)) throw new BadRequestException('Исходный код остался в поле вне разрешённой области миграции');
-    const changedFields = [tariff.promoText !== next.promoText && 'promoText', JSON.stringify(tariff.seo) !== JSON.stringify(next.seo) && 'seo'].filter(Boolean) as string[];
+    const changedFields = [tariff.promoText !== next.promoText && 'promoText'].filter(Boolean) as string[];
     add('TARIFF', tariff, next, changedFields, countBefore);
   }
   for (const template of rows.seoTemplates) {
@@ -116,7 +114,6 @@ export async function applyVariableMigration(
       const data: Prisma.PageUpdateInput = {};
       if (change.changedFields.includes('title')) data.title = change.next.title;
       if (change.changedFields.includes('content')) data.content = change.next.content as Prisma.InputJsonValue;
-      if (change.changedFields.includes('seo')) data.seo = change.next.seo as Prisma.InputJsonValue;
       if (Object.keys(data).length) await transaction.page.update({ where: { id: change.entityId }, data });
       if (change.changedFields.includes('blocks')) {
         for (const [index, block] of change.before.blocks.entries()) {
@@ -129,7 +126,6 @@ export async function applyVariableMigration(
     } else if (change.entityType === 'TARIFF') {
       const data: Prisma.TariffUpdateInput = {};
       if (change.changedFields.includes('promoText')) data.promoText = change.next.promoText;
-      if (change.changedFields.includes('seo')) data.seo = change.next.seo as Prisma.InputJsonValue;
       await transaction.tariff.update({ where: { id: change.entityId }, data });
     } else {
       await transaction.seoTemplate.update({

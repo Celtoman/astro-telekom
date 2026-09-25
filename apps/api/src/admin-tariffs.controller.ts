@@ -1,5 +1,4 @@
 import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { isDeepStrictEqual } from 'node:util';
 import { Prisma, ServiceType, TariffArchiveReason, TariffAvailability } from '../generated';
 import { decodeCursor, encodeCursor, pageSize, searchQuery } from './admin-pagination';
 import { AdminTokenGuard } from './admin-token.guard';
@@ -119,6 +118,7 @@ export class AdminTariffsController {
 
   @Post()
   async create(@Body() body: CreateTariffDto, @Req() request?: AdminRequest) {
+    if (Object.hasOwn(body, 'seo')) throw new BadRequestException('SEO меняется только через SEO-шаблон');
     validatePromoVariables(body.promoText);
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const city = await transaction.city.findUnique({
@@ -127,8 +127,8 @@ export class AdminTariffsController {
       });
       if (!city) throw new BadRequestException('Город тарифа не найден');
       if (body.status === 'PUBLISHED' && body.confirmSensitiveChanges !== true) throw new BadRequestException('Требуется подтверждение статуса публикации');
-      for (const [field, value] of [['attributes', body.attributes], ['seo', body.seo]] as const) {
-        if (value !== undefined && JSON.stringify(value).length > 262_144) throw new BadRequestException(`${field} превышает допустимый размер`);
+      if (body.attributes !== undefined && JSON.stringify(body.attributes).length > 262_144) {
+        throw new BadRequestException('attributes превышает допустимый размер');
       }
       const canonical = normalizeCanonicalTariffCore(body);
       const identityKey = tariffIdentityKey(body.cityId, canonical.name, body.serviceType);
@@ -151,7 +151,6 @@ export class AdminTariffsController {
         identityKey,
         dataSource: 'manual',
         attributes: canonical.attributes,
-        seo: body.seo === null || body.seo === undefined ? Prisma.JsonNull : body.seo as Prisma.InputJsonValue,
         availability: TariffAvailability.ACTIVE,
         status: body.status ?? 'DRAFT',
         archiveReason: null,
@@ -314,6 +313,7 @@ export class AdminTariffsController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() body: UpdateTariffDto, @Req() request?: AdminRequest) {
+    if (Object.hasOwn(body, 'seo')) throw new BadRequestException('SEO меняется только через SEO-шаблон');
     validatePromoVariables(body.promoText);
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const existing = await transaction.tariff.findUnique({ where: { id } });
@@ -322,10 +322,8 @@ export class AdminTariffsController {
         throw new ConflictException('Тариф изменился после открытия формы; обновите данные');
       }
 
-      for (const [field, value] of [['attributes', body.attributes], ['seo', body.seo]] as const) {
-        if (value !== undefined && JSON.stringify(value).length > 262_144) {
-          throw new BadRequestException(`${field} превышает допустимый размер`);
-        }
+      if (body.attributes !== undefined && JSON.stringify(body.attributes).length > 262_144) {
+        throw new BadRequestException('attributes превышает допустимый размер');
       }
       const normalizedAttributes = body.attributes === undefined || body.attributes === null
         ? body.attributes
@@ -335,7 +333,6 @@ export class AdminTariffsController {
       if (body.slug !== undefined && body.slug !== existing.slug) sensitive.add('URL');
       if (body.status !== undefined && body.status !== existing.status) sensitive.add('статус публикации');
       if (body.availability !== undefined && body.availability !== existing.availability) sensitive.add('доступность');
-      if (body.seo !== undefined && !isDeepStrictEqual(body.seo, existing.seo)) sensitive.add('SEO');
       if (normalizedAttributes !== undefined && normalizedAttributes !== null) {
         const currentAttributes = existing.attributes && typeof existing.attributes === 'object' && !Array.isArray(existing.attributes)
           ? existing.attributes as Record<string, unknown>
@@ -466,7 +463,6 @@ export class AdminTariffsController {
       if (body.speed !== undefined) data.speed = canonical.speed;
       if (body.connectionFee !== undefined) data.connectionFee = canonical.connectionFee;
       if (normalizedAttributes !== undefined) data.attributes = normalizedAttributes === null ? Prisma.JsonNull : normalizedAttributes;
-      if (body.seo !== undefined) data.seo = body.seo === null ? Prisma.JsonNull : body.seo as Prisma.InputJsonValue;
       const tariff = await transaction.tariff.update({
         where: { id },
         data,

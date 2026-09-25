@@ -38,7 +38,6 @@ interface TariffDetail {
   identityKey: string | null
   dataSource: string | null
   attributes: Record<string, unknown> | null
-  seo: Record<string, unknown> | null
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED"
   publicPath?: string
   provider: { id: string; name: string }
@@ -61,14 +60,12 @@ interface FormState {
   connectionFee: string
   status: TariffDetail["status"]
   attributes: Record<string, string>
-  seo: string
 }
 
 const inputClass = "flex min-h-24 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50"
 const selectClass = "h-8 w-full rounded-lg border border-input bg-background px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
 const serviceTypeOptions = statusOptions("serviceType", ["INTERNET", "INTERNET_TV", "TV", "OTHER"])
 const publishStatusOptions = statusOptions("publishStatus", ["DRAFT", "PUBLISHED", "ARCHIVED"])
-const jsonText = (value: Record<string, unknown> | null) => value ? JSON.stringify(value, null, 2) : ""
 const formFromTariff = (tariff: TariffDetail): FormState => ({
   cityId: tariff.cityId,
   name: tariff.name,
@@ -84,15 +81,7 @@ const formFromTariff = (tariff: TariffDetail): FormState => ({
     const value = tariff.attributes?.[field.key]
     return [field.key, value === null || value === undefined ? "" : String(value)]
   })),
-  seo: jsonText(tariff.seo),
 })
-
-function parseObject(value: string, label: string) {
-  if (!value.trim()) return null
-  const parsed: unknown = JSON.parse(value)
-  if (!parsed || Array.isArray(parsed) || typeof parsed !== "object") throw new Error(`${label}: требуется JSON-объект`)
-  return parsed as Record<string, unknown>
-}
 
 function attributesPayload(form: FormState, schema: AttributeField[]) {
   const result: Record<string, string | number | boolean> = {}
@@ -129,7 +118,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
   const needsConfirmation = useMemo(() => Boolean(form && initialForm && (isCreate ? form.status === "PUBLISHED" : (
     form.cityId !== initialForm.cityId || form.slug !== initialForm.slug || form.status !== initialForm.status ||
     form.standardPrice !== initialForm.standardPrice || form.promoPrice !== initialForm.promoPrice ||
-    form.connectionFee !== initialForm.connectionFee || form.seo !== initialForm.seo ||
+    form.connectionFee !== initialForm.connectionFee ||
     tariff?.attributeSchema.some((field) => field.kind === "integer" && field.key.includes("price") && form.attributes[field.key] !== initialForm.attributes[field.key])
   ))), [form, initialForm, isCreate, tariff])
 
@@ -148,7 +137,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
             id: "", providerId: city.site.provider.id, cityId: city.id, name: "", slug: "", serviceType: "INTERNET" as const,
             standardPrice: null, promoPrice: null, speed: null, promoText: null, connectionFee: null, availability: "ACTIVE" as const,
             archiveReason: null, archivedAt: null, archivedByImportRunId: null, externalId: null, identityKey: null, dataSource: "manual",
-            attributes: {}, seo: null, status: "DRAFT" as const, provider: city.site.provider, city, createdAt: "", updatedAt: "",
+            attributes: {}, status: "DRAFT" as const, provider: city.site.provider, city, createdAt: "", updatedAt: "",
             attributeSchema: metadata.attributeSchema,
           }
         })()
@@ -213,7 +202,6 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
     }
     if (current.promoPrice && current.standardPrice && Number(current.promoPrice) >= Number(current.standardPrice)) errors.promoPrice = "Промо-цена должна быть меньше базовой"
     if (current.speed && (!Number.isInteger(Number(current.speed)) || Number(current.speed) < 1)) errors.speed = "Целое число не меньше 1"
-    try { parseObject(current.seo, "SEO") } catch (caught) { errors.seo = caught instanceof Error ? caught.message : "Некорректный JSON" }
     for (const field of tariff?.attributeSchema || []) {
       const value = current.attributes[field.key]
       if (!value) continue
@@ -232,7 +220,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
   async function save(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!form || !tariff || !hasUnsavedChanges || !validate(form)) return
-    if (needsConfirmation && !confirmed) { setError("Подтвердите изменения цены, URL, статуса публикации или SEO"); return }
+    if (needsConfirmation && !confirmed) { setError("Подтвердите изменения цены, URL или статуса публикации"); return }
     setSaving(true)
     setError(null)
     try {
@@ -250,7 +238,6 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
           promoText: form.promoText.trim() || null,
           connectionFee: form.connectionFee ? Number(form.connectionFee) : null,
           attributes: attributesPayload(form, tariff.attributeSchema),
-          seo: parseObject(form.seo, "SEO"),
           status: form.status,
           confirmSensitiveChanges: needsConfirmation && confirmed,
         },
@@ -299,10 +286,10 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
           <Card id="conditions"><CardHeader><CardTitle>Условия тарифа</CardTitle><CardDescription>Целые цены и скорость проходят тот же базовый контракт, что XLSX-импорт.</CardDescription></CardHeader><CardContent><FieldGroup><div className="grid gap-4 md:grid-cols-3">{([["standardPrice", "Базовая цена"], ["promoPrice", "Промо-цена"], ["connectionFee", "Подключение"]] as const).map(([field, label]) => <Field key={field} data-invalid={Boolean(fieldErrors[field])}><FieldLabel htmlFor={field}>{label}, ₽</FieldLabel><Input id={field} name={field} type="number" min={field === "standardPrice" || field === "promoPrice" ? "1" : "0"} step="1" value={form[field]} onChange={(event) => update(field, event.target.value)} aria-invalid={Boolean(fieldErrors[field])} /><FieldError>{fieldErrors[field]}</FieldError></Field>)}<Field data-invalid={Boolean(fieldErrors.speed)}><FieldLabel htmlFor="speed">Скорость, Мбит/с</FieldLabel><Input id="speed" name="speed" type="number" min="1" step="1" value={form.speed} onChange={(event) => update("speed", event.target.value)} aria-invalid={Boolean(fieldErrors.speed)} /><FieldError>{fieldErrors.speed}</FieldError></Field></div><Field><FieldLabel htmlFor="promoText">Промо-текст</FieldLabel><textarea ref={promoInput} id="promoText" name="promoText" className={inputClass} value={form.promoText} onChange={(event) => update("promoText", event.target.value)} /></Field></FieldGroup><div className="mt-4"><VariableInsertionPicker apiUrl={apiUrl} siteId={cities.find((city) => city.id === form.cityId)?.siteId ?? tariff.city.siteId} field="Tariff.promoText" context="TARIFF" onInsert={insertPromoCode} /></div>{insertionError ? <Alert variant="destructive"><CircleAlert /><AlertDescription>{insertionError}</AlertDescription></Alert> : null}</CardContent></Card>
 
           {attributeGroups.map(([group, fields], groupIndex) => <details id={`attributes-${groupIndex}`} open className="rounded-xl border bg-card" key={group}><summary className="cursor-pointer px-6 py-5 font-heading font-semibold">{group}</summary><div className="border-t px-6 py-5"><FieldGroup><div className="grid gap-4 md:grid-cols-2">{fields.map((field) => { const errorKey = `attribute-${field.key}`; const value = form.attributes[field.key] ?? ""; return <Field key={field.key} data-invalid={Boolean(fieldErrors[errorKey])}><FieldLabel htmlFor={errorKey}>{field.label}</FieldLabel>{field.kind === "boolean" ? <select id={errorKey} name={errorKey} className={selectClass} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)}><option value="">Не задано</option><option value="true">Да</option><option value="false">Нет</option></select> : field.kind === "service-status" ? <select id={errorKey} name={errorKey} className={selectClass} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)}><option value="">Не задано</option><option value="UNAVAILABLE">Недоступно</option><option value="OPTIONAL">Доступно как опция</option><option value="INCLUDED">Включено в тариф</option></select> : field.multiline ? <textarea id={errorKey} name={errorKey} className={inputClass} maxLength={field.maxLength} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)} /> : <Input id={errorKey} name={errorKey} type={field.kind === "number" || field.kind === "integer" ? "number" : "text"} min={field.kind === "number" || field.kind === "integer" ? "0" : undefined} step={field.kind === "integer" ? "1" : field.kind === "number" ? "0.01" : undefined} maxLength={field.maxLength} value={value} onChange={(event) => updateAttribute(field.key, event.target.value)} />}<FieldError>{fieldErrors[errorKey]}</FieldError></Field>})}</div></FieldGroup></div></details>)}
-          <Card id="seo"><CardHeader><CardTitle>SEO</CardTitle><CardDescription>Структурированные SEO-переопределения тарифа.</CardDescription></CardHeader><CardContent><Field data-invalid={Boolean(fieldErrors.seo)}><FieldLabel htmlFor="seo-json">SEO JSON</FieldLabel><textarea id="seo-json" name="seo" spellCheck={false} className={`${inputClass} min-h-40 font-mono`} value={form.seo} onChange={(event) => update("seo", event.target.value)} aria-invalid={Boolean(fieldErrors.seo)} /><FieldError>{fieldErrors.seo}</FieldError></Field></CardContent></Card>
+          <Card><CardHeader><CardTitle>SEO</CardTitle><CardDescription>Метаданные управляются шаблонами сайта.</CardDescription></CardHeader><CardContent><a href="/seo/templates" className="text-sm text-primary underline-offset-4 hover:underline">Открыть SEO-шаблоны</a></CardContent></Card>
         </div>
 
-        <aside className="flex flex-col gap-6 xl:sticky xl:top-6 xl:self-start"><Card><CardHeader><CardTitle>Разделы формы</CardTitle></CardHeader><CardContent><nav className="flex flex-col gap-1 text-sm" aria-label="Разделы редактора"><a className="rounded-md px-2 py-1 hover:bg-muted" href="#main">Основные данные</a><a className="rounded-md px-2 py-1 hover:bg-muted" href="#conditions">Условия</a>{attributeGroups.map(([group], index) => <a className="rounded-md px-2 py-1 hover:bg-muted" href={`#attributes-${index}`} key={group}>{group}</a>)}<a className="rounded-md px-2 py-1 hover:bg-muted" href="#seo">SEO</a></nav></CardContent></Card><Card><CardHeader><CardTitle>Системные данные</CardTitle><CardDescription>Только для чтения.</CardDescription></CardHeader><CardContent><dl className="flex flex-col gap-3 text-sm"><div><dt className="text-muted-foreground">Источник</dt><dd className="break-all"><SourceLabel value={tariff.dataSource} /></dd></div><div><dt className="text-muted-foreground">Внешний ID</dt><dd className="break-all">{tariff.externalId || "—"}</dd></div><div><dt className="text-muted-foreground">Identity key</dt><dd className="break-all font-mono text-xs">{tariff.identityKey || "—"}</dd></div><div><dt className="text-muted-foreground">Доступность</dt><dd>{tariff.availability === "ACTIVE" ? "Активен" : "Архив"}</dd></div>{tariff.availability === "ARCHIVED" ? <><div><dt className="text-muted-foreground">Причина архива</dt><dd>{tariff.archiveReason === "ABSENT_FROM_IMPORT" ? "Отсутствует в полном импорте" : "Архивирован вручную"}</dd></div><div><dt className="text-muted-foreground">Дата архива</dt><dd>{tariff.archivedAt ? new Date(tariff.archivedAt).toLocaleString("ru-RU") : "—"}</dd></div><div><dt className="text-muted-foreground">Импорт-источник</dt><dd className="break-all font-mono text-xs">{tariff.archivedByImportRunId || "—"}</dd></div></> : null}<div><dt className="text-muted-foreground">Обновлен</dt><dd>{new Date(tariff.updatedAt).toLocaleString("ru-RU")}</dd></div></dl></CardContent></Card>{needsConfirmation ? <Card><CardHeader><CardTitle>Подтверждение</CardTitle><CardDescription>Изменены цена, URL, статус публикации или SEO.</CardDescription></CardHeader><CardContent><label className="flex items-start gap-2 text-sm"><Checkbox checked={confirmed} onCheckedChange={(checked) => setConfirmed(checked === true)} /><span>Проверил изменения и подтверждаю сохранение</span></label></CardContent></Card> : null}</aside>
+        <aside className="flex flex-col gap-6 xl:sticky xl:top-6 xl:self-start"><Card><CardHeader><CardTitle>Разделы формы</CardTitle></CardHeader><CardContent><nav className="flex flex-col gap-1 text-sm" aria-label="Разделы редактора"><a className="rounded-md px-2 py-1 hover:bg-muted" href="#main">Основные данные</a><a className="rounded-md px-2 py-1 hover:bg-muted" href="#conditions">Условия</a>{attributeGroups.map(([group], index) => <a className="rounded-md px-2 py-1 hover:bg-muted" href={`#attributes-${index}`} key={group}>{group}</a>)}<a className="rounded-md px-2 py-1 hover:bg-muted" href="/seo/templates">SEO-шаблоны</a></nav></CardContent></Card><Card><CardHeader><CardTitle>Системные данные</CardTitle><CardDescription>Только для чтения.</CardDescription></CardHeader><CardContent><dl className="flex flex-col gap-3 text-sm"><div><dt className="text-muted-foreground">Источник</dt><dd className="break-all"><SourceLabel value={tariff.dataSource} /></dd></div><div><dt className="text-muted-foreground">Внешний ID</dt><dd className="break-all">{tariff.externalId || "—"}</dd></div><div><dt className="text-muted-foreground">Identity key</dt><dd className="break-all font-mono text-xs">{tariff.identityKey || "—"}</dd></div><div><dt className="text-muted-foreground">Доступность</dt><dd>{tariff.availability === "ACTIVE" ? "Активен" : "Архив"}</dd></div>{tariff.availability === "ARCHIVED" ? <><div><dt className="text-muted-foreground">Причина архива</dt><dd>{tariff.archiveReason === "ABSENT_FROM_IMPORT" ? "Отсутствует в полном импорте" : "Архивирован вручную"}</dd></div><div><dt className="text-muted-foreground">Дата архива</dt><dd>{tariff.archivedAt ? new Date(tariff.archivedAt).toLocaleString("ru-RU") : "—"}</dd></div><div><dt className="text-muted-foreground">Импорт-источник</dt><dd className="break-all font-mono text-xs">{tariff.archivedByImportRunId || "—"}</dd></div></> : null}<div><dt className="text-muted-foreground">Обновлен</dt><dd>{new Date(tariff.updatedAt).toLocaleString("ru-RU")}</dd></div></dl></CardContent></Card>{needsConfirmation ? <Card><CardHeader><CardTitle>Подтверждение</CardTitle><CardDescription>Изменены цена, URL или статус публикации.</CardDescription></CardHeader><CardContent><label className="flex items-start gap-2 text-sm"><Checkbox checked={confirmed} onCheckedChange={(checked) => setConfirmed(checked === true)} /><span>Проверил изменения и подтверждаю сохранение</span></label></CardContent></Card> : null}</aside>
       </div>
       <div className="flex justify-end gap-2 border-t pt-6"><Button type="button" variant="outline" onClick={leaveEditor}>Отмена</Button>{renderSaveButton()}</div>
     </form>

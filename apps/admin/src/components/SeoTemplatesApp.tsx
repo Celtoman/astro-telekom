@@ -21,7 +21,7 @@ interface Template { id: string; kind: Kind; titleTemplate: string; descriptionT
 interface Meta { title: string; description: string; indexState: IndexState; ogTitle?: string; ogDescription?: string; ogImage?: string }
 interface Diagnostic { code: string; path: string; relatedPath?: string; length?: number }
 interface Workspace {
-  id: string; slug: string; workingRevision: number; publishedRevision: number; legacySeoCount: number | null
+  id: string; slug: string; workingRevision: number; publishedRevision: number
   templates: Template[]; routes: Array<{ id: Kind; path: string; citySlug?: string; tariffSlug?: string }>
   workingByPath: Record<string, Meta> | null; publishedByPath: Record<string, Meta> | null
   workingWarnings: Diagnostic[]; workingError: string | null
@@ -153,7 +153,6 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
       {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка</AlertTitle><AlertDescription>{error}</AlertDescription><Button variant="outline" size="sm" onClick={() => void load(kind)}>Обновить</Button></Alert> : null}
       {message ? <Alert><Save /><AlertTitle>Сохранено</AlertTitle><AlertDescription>{message}</AlertDescription></Alert> : null}
       {workspace?.workingError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Публикация заблокирована</AlertTitle><AlertDescription>{workspace.workingError}. Исправьте шаблон или исходные данные; сохранённые поля остаются доступны.</AlertDescription></Alert> : null}
-      {workspace?.legacySeoCount ? <Alert><CircleAlert /><AlertTitle>Есть старые индивидуальные SEO-значения</AlertTitle><AlertDescription>У {workspace.legacySeoCount} опубликованных записей сохранены прежние Title или Description. Они останутся в базе, но новая публикация возьмёт SEO из шаблонов. Сверьте рабочий и опубликованный preview перед публикацией; очистка старых полей ведётся отдельно.</AlertDescription></Alert> : null}
       {site ? <PublicationStatusCard apiUrl={apiUrl} siteId={site.id} publicationRefreshKey={publicationRefreshKey} /> : null}
       <Card><CardHeader><CardTitle>Редактор</CardTitle><CardDescription>Рабочая версия {workspace?.workingRevision ?? "—"}; опубликована {workspace?.publishedRevision ?? "—"}. Title и Description обязательны. Большая длина и совпадения — предупреждения, не запрет.</CardDescription></CardHeader>
         <CardContent className="space-y-5">

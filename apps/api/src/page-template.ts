@@ -19,7 +19,7 @@ export async function ensureCityHomeTemplate(
     data: {
       siteId, kind: 'CITY_HOME', status: 'PUBLISHED',
       titleTemplate: `Домашний интернет в ${CITY_TOKEN}`,
-      content: {}, seo: {},
+      content: {},
       blocks: { create: blocks.map(({ blockType, position, visible, data, source }) => ({
         blockType, position, visible, data, source,
       })) },
@@ -29,7 +29,7 @@ export async function ensureCityHomeTemplate(
   if (publications) await publications.recordWorkingRevision(tx, {
     siteId, entityType: 'PAGE_TEMPLATE', entityId: template.id, action: 'CREATE',
     snapshot: template as unknown as Record<string, unknown>,
-    changedFields: ['titleTemplate', 'content', 'seo', 'blocks'], actorId,
+    changedFields: ['titleTemplate', 'content', 'blocks'], actorId,
     source: 'city-home-template:init',
   });
   return template;
@@ -70,7 +70,7 @@ export function materializeCityHomeSource<T extends CatalogSource>(source: T): T
         });
         const { templateId: _templateId, ...pageData } = page;
         return { ...pageData, title: template.titleTemplate, content: template.content,
-          seo: template.seo, blocks };
+          seo: {}, blocks };
       }),
     })),
   };

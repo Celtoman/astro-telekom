@@ -2,7 +2,7 @@ const comparedFields = [
   ['name', 'Название'], ['slug', 'URL'], ['serviceType', 'Тип услуги'],
   ['standardPrice', 'Базовая цена'], ['promoPrice', 'Акционная цена'],
   ['speed', 'Скорость'], ['promoText', 'Текст акции'], ['connectionFee', 'Подключение'],
-  ['availability', 'Доступность'], ['status', 'Статус'], ['attributes', 'Характеристики'], ['seo', 'SEO'],
+  ['availability', 'Доступность'], ['status', 'Статус'], ['attributes', 'Характеристики'],
 ]
 
 function comparable(value) {

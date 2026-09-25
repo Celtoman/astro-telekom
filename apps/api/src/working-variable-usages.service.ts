@@ -47,14 +47,14 @@ export class WorkingVariableUsagesService {
           where: { siteId },
           orderBy: { id: 'asc' },
           select: {
-            id: true, cityId: true, type: true, status: true, title: true, content: true, seo: true,
+            id: true, cityId: true, type: true, status: true, title: true, content: true,
             blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }], select: { id: true, blockType: true, data: true, visible: true, archivedAt: true } },
           },
         }),
         transaction.tariff.findMany({
           where: { city: { siteId } },
           orderBy: { id: 'asc' },
-          select: { id: true, cityId: true, status: true, availability: true, promoText: true, seo: true },
+          select: { id: true, cityId: true, status: true, availability: true, promoText: true },
         }),
         transaction.seoTemplate.findMany({
           where: { siteId },
@@ -68,7 +68,6 @@ export class WorkingVariableUsagesService {
         const owner = { entityType: 'PAGE' as const, entityId: page.id, pageType: page.type, cityId: page.cityId ?? undefined, lifecycleStatus: page.status, editorHref: null };
         recordText(page.title, `${path}.title`, owner, usages);
         recordFields(page.content, ['text'], `${path}.content`, owner, usages);
-        recordFields(page.seo, ['title', 'description'], `${path}.seo`, owner, usages);
         for (const [blockIndex, block] of page.blocks.entries()) {
           const blockPath = `${path}.blocks[${blockIndex}]`;
           const blockOwner = { entityType: 'BLOCK' as const, entityId: block.id, pageType: page.type, blockType: block.blockType, cityId: page.cityId ?? undefined, lifecycleStatus: block.archivedAt ? 'ARCHIVED' : page.status, visible: block.visible && !block.archivedAt, editorHref: null };
@@ -81,7 +80,6 @@ export class WorkingVariableUsagesService {
         const path = `workingTariffs[${index}]`;
         const owner = { entityType: 'TARIFF' as const, entityId: tariff.id, cityId: tariff.cityId, lifecycleStatus: tariff.availability === 'ACTIVE' ? tariff.status : 'ARCHIVED', editorHref: `/tariffs/edit?id=${encodeURIComponent(tariff.id)}` };
         recordText(tariff.promoText, `${path}.promoText`, owner, usages);
-        recordFields(tariff.seo, ['title', 'description'], `${path}.seo`, owner, usages);
       }
       usages.push(...collectSeoTemplateUsages(seoTemplates));
       return usages;

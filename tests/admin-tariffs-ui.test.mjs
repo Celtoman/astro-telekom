@@ -102,9 +102,11 @@ test('tariff workspace provides quick detail and a separate guarded long editor'
   assert.match(editor, /Создание тарифа/);
   assert.match(editor, /disabled=\{!isCreate\}/);
   assert.match(editor, /form\.attributes\[field\.key\] \?\? ""/);
-  for (const field of ['name', 'serviceType', 'standardPrice', 'promoPrice', 'speed', 'promoText', 'connectionFee', 'availability', 'externalId', 'dataSource', 'attributes', 'seo']) {
+  for (const field of ['name', 'serviceType', 'standardPrice', 'promoPrice', 'speed', 'promoText', 'connectionFee', 'availability', 'externalId', 'dataSource', 'attributes']) {
     assert.ok(editor.includes(field), `editor is missing ${field}`);
   }
+  assert.doesNotMatch(editor, /name="seo"|id="seo-json"|seo: parseObject/);
+  assert.match(editor, /href="\/seo\/templates"/);
   assert.doesNotMatch(editor, /x-admin-token|Authorization|sessionStorage|localStorage/);
 
   assert.match(listSource, /const detailGeneration = useRef\(0\)/);

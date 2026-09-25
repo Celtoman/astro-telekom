@@ -48,9 +48,6 @@ export class CreateTariffDto {
   @IsOptional() @IsObject()
   attributes?: Record<string, unknown> | null;
 
-  @IsOptional() @IsObject()
-  seo?: Record<string, unknown> | null;
-
   @IsOptional() @IsIn(['DRAFT', 'PUBLISHED'])
   status?: 'DRAFT' | 'PUBLISHED';
 
@@ -117,10 +114,6 @@ export class UpdateTariffDto {
   @IsOptional()
   @IsObject()
   attributes?: Record<string, unknown> | null;
-
-  @IsOptional()
-  @IsObject()
-  seo?: Record<string, unknown> | null;
 
   @ValidateIf((_object, value) => value !== undefined)
   @IsIn(['DRAFT', 'PUBLISHED', 'ARCHIVED'])

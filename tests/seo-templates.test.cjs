@@ -251,21 +251,6 @@ test('SEO editor returns raw templates and both preview snapshots without hiding
   assert.equal(result.publishedByPath['/'].title, 'Опубликовано');
 });
 
-test('SEO editor reports legacy row-level metadata that may differ from new templates', async () => {
-  const { SeoTemplateService } = require('../apps/api/dist/seo-template.service.js');
-  const site = { id: 'site-1', slug: 'domru-site', workingRevision: 5, publishedRevision: 4 };
-  const catalog = {
-    routes: [{ id: 'HOME', path: '/' }], seoByPath: { '/': { title: 'New', description: 'New', indexState: 'INDEX' } },
-    globalPages: [{ seo: { title: 'Старый title' } }],
-    cities: [{ pages: [{ seo: {} }], tariffs: [{ seo: { description: 'Старый description' } }] }],
-  };
-  const service = new SeoTemplateService(
-    { site: { findUnique: async () => site }, seoTemplate: { findMany: async () => templates() } },
-    { getWorkingPreview: async () => ({ catalog }), getPublishedCatalog: async () => catalog },
-  );
-  assert.equal((await service.get('site-1')).legacySeoCount, 2);
-});
-
 test('transition to noindex requires confirmation of exact affected route count', async () => {
   const { SeoTemplateService } = require('../apps/api/dist/seo-template.service.js');
   const current = { id: 'template-1', siteId: 'site-1', kind: 'CITY_HOME', titleTemplate: 'До', descriptionTemplate: 'Текст', indexState: 'INDEX' };

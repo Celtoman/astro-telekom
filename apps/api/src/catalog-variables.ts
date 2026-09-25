@@ -47,7 +47,7 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
     ...page,
     title: resolveField(page.title, `${path}.title`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, cityId, editorHref: null }),
     content: resolveNamedFields(page.content, ['text'], `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, cityId, editorHref: null }),
-    seo: resolveNamedFields(page.seo, ['title', 'description'], `${path}.seo`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, cityId, editorHref: null }),
+    seo: {},
     blocks: Array.isArray(page.blocks) ? page.blocks.map((block: JsonObject, index: number) => {
       const blockPath = `${path}.blocks[${index}]`;
       const owner: UsageOwner = { entityType: 'BLOCK', entityId: String(block.id), pageType: page.type, blockType: block.blockType, cityId, editorHref: null };
@@ -79,7 +79,7 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
           return {
             ...tariff,
             promoText: resolveField(tariff.promoText, `${path}.promoText`, context, owner),
-            seo: resolveNamedFields(tariff.seo, ['title', 'description'], `${path}.seo`, context, owner),
+            seo: {},
           };
         }) : city.tariffs,
       };

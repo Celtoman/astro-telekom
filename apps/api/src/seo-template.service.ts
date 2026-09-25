@@ -16,14 +16,6 @@ export interface UpdateSeoTemplateInput {
   confirmNoindexCount?: number;
 }
 
-function countLegacySeo(catalog: Record<string, unknown>): number {
-  const pages = Array.isArray(catalog.globalPages) ? catalog.globalPages : [];
-  const cities = Array.isArray(catalog.cities) ? catalog.cities : [];
-  const rows = [...pages, ...cities.flatMap((city: any) => [...(Array.isArray(city.pages) ? city.pages : []), ...(Array.isArray(city.tariffs) ? city.tariffs : [])])];
-  return rows.filter((row: any) => row?.seo && typeof row.seo === 'object' &&
-    ['title', 'description'].some((field) => typeof row.seo[field] === 'string' && row.seo[field].trim())).length;
-}
-
 @Injectable()
 export class SeoTemplateService {
   constructor(
@@ -41,14 +33,12 @@ export class SeoTemplateService {
     let workingByPath: Record<string, unknown> | null = null;
     let workingWarnings: unknown[] = [];
     let routes: unknown[] = [];
-    let legacySeoCount: number | null = null;
     let workingError: string | null = null;
     try {
       const preview = await this.publications.getWorkingPreview(siteId);
       workingByPath = preview.catalog.seoByPath as Record<string, unknown> || null;
       workingWarnings = preview.catalog.seoWarnings as unknown[] || [];
       routes = preview.catalog.routes as unknown[] || [];
-      legacySeoCount = countLegacySeo(preview.catalog);
     } catch (error) {
       workingError = error instanceof Error ? error.message : 'Рабочий просмотр недоступен';
     }
@@ -59,7 +49,7 @@ export class SeoTemplateService {
     } catch (error) {
       if (!(error instanceof NotFoundException)) throw error;
     }
-    return { ...site, templates, routes, legacySeoCount, workingByPath, workingWarnings, workingError, publishedByPath };
+    return { ...site, templates, routes, workingByPath, workingWarnings, workingError, publishedByPath };
   }
 
   async update(siteId: string, kind: string, input: UpdateSeoTemplateInput, actorId?: string | null) {

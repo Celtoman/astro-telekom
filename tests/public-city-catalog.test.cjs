@@ -267,14 +267,8 @@ test('public city catalog does not apply removed city or region content and SEO 
     legalNote: 'Условия провайдера',
     cards: [],
   });
-  assert.deepEqual(internet.seo, {
-    openGraph: { title: 'Домашний интернет' },
-    robots: null,
-  });
-  assert.deepEqual(result.tariffs[0].seo, {
-    openGraph: { title: 'Гига 500' },
-    robots: { follow: false },
-  });
+  assert.deepEqual(internet.seo, {});
+  assert.deepEqual(result.tariffs[0].seo, {});
 });
 
 test('public city catalog fails closed when a stored visible block violates its type contract', () => {

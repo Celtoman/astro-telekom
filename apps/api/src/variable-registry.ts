@@ -22,8 +22,8 @@ export interface VariableDefinition {
   allowedFields: string[];
 }
 
-const PAGE_FIELDS = ['Page.title', 'Page.content.text', 'Page.seo.title', 'Page.seo.description', 'PageBlock.data.eyebrow', 'PageBlock.data.title', 'PageBlock.data.text', 'PageBlock.data.ctaText', 'PageBlock.data.items.title', 'PageBlock.data.items.text', 'PageBlock.data.items.question', 'PageBlock.data.items.answer'];
-const TARIFF_FIELDS = ['Tariff.promoText', 'Tariff.seo.title', 'Tariff.seo.description'];
+const PAGE_FIELDS = ['Page.title', 'Page.content.text', 'PageBlock.data.eyebrow', 'PageBlock.data.title', 'PageBlock.data.text', 'PageBlock.data.ctaText', 'PageBlock.data.items.title', 'PageBlock.data.items.text', 'PageBlock.data.items.question', 'PageBlock.data.items.answer'];
+const TARIFF_FIELDS = ['Tariff.promoText'];
 const SEO_TEMPLATE_FIELDS = ['SeoTemplate.titleTemplate', 'SeoTemplate.descriptionTemplate', 'SeoTemplate.ogTitleTemplate', 'SeoTemplate.ogDescriptionTemplate'];
 const SITE_CONTEXTS = ['Общая страница', 'Городская страница', 'Тариф'];
 const CITY_CONTEXTS = ['Городская страница', 'Тариф'];

@@ -32,7 +32,7 @@ test('registry exposes immutable operator metadata for every implemented code', 
     assert.ok(definition.allowedContexts.length > 0);
     assert.ok(definition.allowedFields.length > 0);
   }
-  assert.deepEqual(definitions.find((item) => item.code === 'TARIFF_PRICE').allowedFields, ['Tariff.promoText', 'Tariff.seo.title', 'Tariff.seo.description', 'SeoTemplate.titleTemplate', 'SeoTemplate.descriptionTemplate', 'SeoTemplate.ogTitleTemplate', 'SeoTemplate.ogDescriptionTemplate']);
+  assert.deepEqual(definitions.find((item) => item.code === 'TARIFF_PRICE').allowedFields, ['Tariff.promoText', 'SeoTemplate.titleTemplate', 'SeoTemplate.descriptionTemplate', 'SeoTemplate.ogTitleTemplate', 'SeoTemplate.ogDescriptionTemplate']);
   assert.ok(definitions.find((item) => item.code === 'PROVIDER_NAME').allowedFields.includes('SeoTemplate.ogDescriptionTemplate'));
   assert.ok(definitions.every((item) => !item.allowedFields.includes('SeoTemplate.ogImageUrl')));
 });

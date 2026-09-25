@@ -165,7 +165,7 @@ export class SiteCatalogService {
       pages: pages.map((page: any) => this.pageResponse(page, inheritedContent, inheritedSeo, city.name)),
       tariffs: tariffs.map((tariff: any) => ({
         ...tariff,
-        seo: mergeContent(inheritedSeo, tariff.seo),
+        seo: inheritedSeo,
       })),
     };
   }
@@ -177,7 +177,7 @@ export class SiteCatalogService {
     return {
       ...publicPage,
       content: mergeContent(inheritedContent, page.content),
-      seo: mergeContent(inheritedSeo, page.seo),
+      seo: inheritedSeo,
     };
   }
 

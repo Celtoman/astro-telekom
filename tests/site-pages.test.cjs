@@ -158,7 +158,7 @@ test('admin pages save a canonical site-global page as a working revision withou
 
   const page = await controller.create({
     siteId: 'site-1', cityId: null, type: 'COVERAGE', title: 'Карта покрытия',
-    slug: 'karta-pokrytiya-provaydera', status: 'DRAFT', seo: {}, content: {},
+    slug: 'karta-pokrytiya-provaydera', status: 'DRAFT', content: {},
   });
 
   assert.equal(page.cityId, null);

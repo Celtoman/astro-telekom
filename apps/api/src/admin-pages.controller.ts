@@ -16,7 +16,6 @@ interface PageBody {
   title: string;
   slug: string;
   status?: PublishStatus;
-  seo?: object;
   content?: object;
 }
 
@@ -85,6 +84,7 @@ export class AdminPagesController {
 
   @Post()
   async create(@Body() body: PageBody, @Req() request?: AdminRequest) {
+    if (Object.hasOwn(body, 'seo')) throw new BadRequestException('SEO меняется только через SEO-шаблон');
     if (body.type === 'HOME') throw new BadRequestException('Городская HOME создается из общего шаблона вместе с городом');
     assertPageScope(body);
     try {
@@ -110,6 +110,7 @@ export class AdminPagesController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() body: Partial<PageBody>, @Req() request?: AdminRequest) {
+    if (Object.hasOwn(body, 'seo')) throw new BadRequestException('SEO меняется только через SEO-шаблон');
     try {
       return await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
         const current = await transaction.page.findUnique({ where: { id } });

@@ -97,7 +97,7 @@ async function main() {
     create: {
       siteId: site.id, kind: 'CITY_HOME', status: PUBLISHED,
       titleTemplate: 'Домашний интернет в {CITY_NAME_PREPOSITIONAL}',
-      content: {}, seo: {},
+      content: {},
       blocks: { create: cityHomeTemplateBlocks({ name: '{CITY_NAME_PREPOSITIONAL}', namePrepositional: '{CITY_NAME_PREPOSITIONAL}' }) },
     },
   });

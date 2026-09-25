@@ -33,13 +33,12 @@ test('catalog resolves only editorial fields with city and tariff context, prese
   const result = resolve(input, sources());
   assert.equal(result.globalPages[0].title, 'Карта Дом.ру');
   assert.equal(result.globalPages[0].content.text, 'Звоните +7 (800) 555-72-44');
-  assert.equal(result.globalPages[0].seo.title, 'Карта 2026');
-  assert.equal(result.globalPages[0].seo.description, 'Для ');
+  assert.deepEqual(result.globalPages[0].seo, {});
   assert.equal(result.cities[0].pages[0].blocks[0].data.title, 'Тарифы в Казани');
   assert.equal(result.cities[0].tariffs[0].promoText, 'От 599,5 ₽');
-  assert.equal(result.cities[0].tariffs[0].seo.title, 'Гига: 500 Мбит/с');
-  assert.equal(result.cities[0].tariffs[0].seo.description, '150 каналов');
-  assert.deepEqual(result.variableWarnings, [{ code: 'CITY_NAME', path: 'globalPages[0].seo.description', reason: 'OUT_OF_CONTEXT' }]);
+  assert.deepEqual(result.cities[0].pages[0].seo, {});
+  assert.deepEqual(result.cities[0].tariffs[0].seo, {});
+  assert.deepEqual(result.variableWarnings, []);
   assert.deepEqual(result.routes, input.routes);
   assert.equal(input.globalPages[0].title, 'Карта {PROVIDER_NAME}');
 });

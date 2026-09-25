@@ -261,7 +261,6 @@ const restoreTariffData = (tariff: StoredTariff) => ({
   identityKey: tariff.identityKey,
   dataSource: tariff.dataSource,
   attributes: tariff.attributes === null ? Prisma.JsonNull : tariff.attributes as Prisma.InputJsonValue,
-  seo: tariff.seo === null ? Prisma.JsonNull : tariff.seo as Prisma.InputJsonValue,
   status: tariff.status as PublishStatus,
   archiveReason: (tariff.archiveReason ?? null) as TariffArchiveReason | null,
   archivedAt: tariff.archivedAt ? new Date(tariff.archivedAt) : null,
