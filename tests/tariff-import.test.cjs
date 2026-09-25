@@ -591,7 +591,12 @@ test('version 3 undo restores an imported archive when no later change exists', 
     }),
   };
 
-  const result = await new TariffImportService(prisma, { recordWorkingRevision: async () => ({ siteRevision: 13 }) }).undoImport('run-1', 'user-1');
+  const service = new TariffImportService(prisma, { recordWorkingRevision: async () => ({ siteRevision: 13 }) });
+  changeSet.beforeTariffs[0].seo = { title: 'Исторический title' };
+  await assert.rejects(service.undoImport('run-1', 'user-1'), /SEO override/);
+  assert.equal(runUpdate, undefined);
+  changeSet.beforeTariffs[0].seo = null;
+  const result = await service.undoImport('run-1', 'user-1');
 
   assert.equal(current.availability, 'ACTIVE');
   assert.equal(current.status, 'PUBLISHED');

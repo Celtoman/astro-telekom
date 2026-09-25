@@ -7,7 +7,6 @@ export interface PageView {
   title?: string;
   status: string;
   content?: Record<string, unknown> | null;
-  seo?: Record<string, unknown> | null;
   blocks?: Array<{ blockType: string; data: Record<string, unknown> }>;
 }
 
@@ -74,13 +73,13 @@ export const releaseOneGlobalPages = [
 ] as const;
 
 function normalizePage(item: Record<string, any>): PageView {
+  const { seo: _legacySeo, ...page } = item;
   return {
-    ...item,
+    ...page,
     type: String(item.type || ''),
     slug: String(item.slug || ''),
     status: 'PUBLISHED',
     content: item.content && typeof item.content === 'object' ? item.content : {},
-    seo: item.seo && typeof item.seo === 'object' ? item.seo : {},
     blocks: Array.isArray(item.blocks) ? item.blocks : [],
   };
 }
@@ -243,7 +242,7 @@ const demoCities: CityView[] = [{
   region: { name: 'Республика Татарстан', slug: 'respublika-tatarstan' },
   status: 'PUBLISHED',
   pages: [{
-    type: 'HOME', slug: '', title: 'Домашний интернет в Казани', status: 'PUBLISHED', seo: {}, blocks: [
+    type: 'HOME', slug: '', title: 'Домашний интернет в Казани', status: 'PUBLISHED', blocks: [
       { blockType: 'hero', data: { eyebrow: 'Дом.ру в Казани', title: 'Домашний интернет и телевидение в Казани', text: 'Выберите услугу и проверьте подключение по адресу.' } },
       { blockType: 'service_grid', data: { title: 'Услуги для дома', items: [{ pageType: 'INTERNET', title: 'Домашний интернет', text: 'Тарифы для квартиры и дома.' }] } },
       { blockType: 'tariff_grid', data: { title: 'Популярные тарифы' } },
@@ -371,15 +370,9 @@ export function loadSiteData(): Promise<SiteCatalog> {
   return catalogPromise;
 }
 
-export function pageMeta(
-  pages: PageView[],
-  slug: string,
-  fallbackTitle: string,
-  fallbackDescription: string,
-) {
-  const seo = pages.find((page) => page.slug === slug)?.seo;
+export function pageMeta(fallbackTitle: string, fallbackDescription: string) {
   return {
-    title: typeof seo?.title === 'string' && seo.title ? seo.title : fallbackTitle,
-    description: typeof seo?.description === 'string' && seo.description ? seo.description : fallbackDescription,
+    title: fallbackTitle,
+    description: fallbackDescription,
   };
 }

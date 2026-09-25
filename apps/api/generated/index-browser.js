@@ -293,7 +293,6 @@ exports.Prisma.PageScalarFieldEnum = {
   title: 'title',
   slug: 'slug',
   status: 'status',
-  seo: 'seo',
   content: 'content',
   templateId: 'templateId',
   createdAt: 'createdAt',
@@ -307,7 +306,6 @@ exports.Prisma.PageTemplateScalarFieldEnum = {
   titleTemplate: 'titleTemplate',
   status: 'status',
   content: 'content',
-  seo: 'seo',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -350,7 +348,6 @@ exports.Prisma.TariffScalarFieldEnum = {
   identityKey: 'identityKey',
   dataSource: 'dataSource',
   attributes: 'attributes',
-  seo: 'seo',
   status: 'status',
   archiveReason: 'archiveReason',
   archivedAt: 'archivedAt',

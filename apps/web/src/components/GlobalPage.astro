@@ -37,7 +37,7 @@ const defaults = {
     description: 'Правила использования файлов cookie на сайте партнера Дом.ру.',
   },
 }[type];
-const meta = seoMeta(catalog, `/${page.slug}`, pageMeta(globalPages, page.slug, page.title || defaults.title, defaults.description));
+const meta = seoMeta(catalog, `/${page.slug}`, pageMeta(page.title || defaults.title, defaults.description));
 const contentText = typeof page.content?.text === 'string' ? page.content.text : '';
 const richTextBlocks = (page.blocks || []).filter((block) => block.blockType === 'rich_text');
 const isCoverage = type === 'COVERAGE';

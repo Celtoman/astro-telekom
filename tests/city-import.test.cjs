@@ -461,7 +461,12 @@ test('safe city import undo restores updated cities and removes only captured ne
     },
   };
 
-  const result = await new CityImportService(prisma, publications).undoImport('run-1', 'user-1');
+  const service = new CityImportService(prisma, publications);
+  changeSet.createdPages[0].seo = { title: 'Исторический title' };
+  await assert.rejects(service.undoImport('run-1', 'user-1'), /SEO override/);
+  assert.equal(runUpdate, undefined);
+  changeSet.createdPages[0].seo = {};
+  const result = await service.undoImport('run-1', 'user-1');
 
   assert.deepEqual(result, {
     runId: 'run-1', restored: 1, removedCities: 1, removedPages: 1, removedRegions: 1, workingRevision: 19,

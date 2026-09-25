@@ -128,7 +128,6 @@ export interface TariffView {
   equipment: TariffEquipmentView[];
   services: TariffServiceView[];
   game: { code: keyof typeof gameLabels; title: string; status: ServiceStatus; statusLabel: string } | null;
-  seo: Record<string, unknown> | null;
 }
 
 function requiredText(value: unknown, field: string): string {
@@ -375,8 +374,5 @@ export function tariffView(tariff: Record<string, unknown>): TariffView {
     equipment: tariffEquipment,
     services: services(source),
     game: game(source),
-    seo: tariff.seo && typeof tariff.seo === 'object' && !Array.isArray(tariff.seo)
-      ? tariff.seo as Record<string, unknown>
-      : null,
   };
 }

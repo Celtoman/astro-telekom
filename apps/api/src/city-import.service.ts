@@ -91,7 +91,6 @@ type StoredPage = {
   title: string;
   slug: string;
   status: string;
-  seo: unknown;
   content: unknown;
   templateId?: string;
   createdAt: string;
@@ -144,7 +143,7 @@ const storedRegion = (region: {
 });
 const storedPage = (page: {
   id: string; siteId: string; cityId: string | null; type: string; title: string; slug: string; status: string;
-  seo: unknown; content: unknown; templateId?: string | null; createdAt: Date; updatedAt: Date; blocks: Array<{
+  content: unknown; templateId?: string | null; createdAt: Date; updatedAt: Date; blocks: Array<{
     id: string; pageId: string; blockType: string; position: number; visible: boolean; data: unknown; source: string | null;
   }>;
 }): StoredPage => ({
@@ -155,7 +154,6 @@ const storedPage = (page: {
   title: page.title,
   slug: page.slug,
   status: page.status,
-  seo: page.seo === null ? null : jsonCopy(page.seo),
   content: page.content === null ? null : jsonCopy(page.content),
   ...(page.blocks.length === 0 && page.templateId ? { templateId: page.templateId } : {}),
   createdAt: page.createdAt.toISOString(),
@@ -198,7 +196,6 @@ const isStoredPage = (value: unknown): value is StoredPage => {
   if (!isRecord(value)) return false;
   return ['id', 'siteId', 'type', 'title', 'slug', 'status', 'createdAt', 'updatedAt'].every((key) => typeof value[key] === 'string')
     && nullableString(value.cityId)
-    && hasOwn(value, 'seo')
     && hasOwn(value, 'content')
     && Array.isArray(value.blocks)
     && (value.blocks.length > 0 || typeof value.templateId === 'string')
@@ -593,7 +590,16 @@ export class CityImportService {
           orderBy: { id: 'asc' },
         })).map(storedPage)
         : [];
-      if (!isDeepStrictEqual(currentPages, createdPages)) {
+      // Older immutable import change sets still contain the removed SEO field.
+      const comparableCreatedPages = createdPages.map((entry) => {
+        const { seo: _legacySeo, ...page } = entry as StoredPage & { seo?: unknown };
+        if (_legacySeo !== null && _legacySeo !== undefined &&
+            (typeof _legacySeo !== 'object' || Array.isArray(_legacySeo) || Object.keys(_legacySeo).length > 0)) {
+          throw new ConflictException('Исторический снимок страницы содержит SEO override; безопасная отмена заблокирована');
+        }
+        return page;
+      });
+      if (!isDeepStrictEqual(currentPages, comparableCreatedPages)) {
         throw new ConflictException('Созданные страницы изменены после импорта; безопасная отмена заблокирована');
       }
       const currentRegions = createdRegionIds.length

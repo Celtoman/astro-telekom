@@ -25,13 +25,8 @@ export async function getStaticPaths() {
 }
 
 const { city, tariff, site } = Astro.props as Props;
-const seo = tariff.seo || {};
-const title = typeof seo.title === 'string' && seo.title.trim()
-  ? seo.title.trim()
-  : `${tariff.name} в ${city.nameIn} — подключить Дом.ру`;
-const description = typeof seo.description === 'string' && seo.description.trim()
-  ? seo.description.trim()
-  : `${tariff.name}: ${tariff.speed}, ${tariff.price}. Проверьте возможность подключения по адресу в ${city.nameIn}.`;
+const title = `${tariff.name} в ${city.nameIn} — подключить Дом.ру`;
+const description = `${tariff.name}: ${tariff.speed}, ${tariff.price}. Проверьте возможность подключения по адресу в ${city.nameIn}.`;
 const meta = seoMeta(await loadSiteData(), `/${city.slug}/${tariff.slug}`, { title, description });
 const relatedTariffs = city.tariffs.filter((item) => item.slug !== tariff.slug).slice(0, 3);
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';

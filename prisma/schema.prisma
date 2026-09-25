@@ -458,7 +458,6 @@ model Page {
   title       String
   slug        String
   status      PublishStatus @default(DRAFT)
-  seo         Json?
   content     Json?
   templateId  String?
   site        Site     @relation(fields: [siteId], references: [id])
@@ -479,7 +478,6 @@ model PageTemplate {
   titleTemplate String
   status        PublishStatus    @default(DRAFT)
   content       Json?
-  seo           Json?
   site          Site             @relation(fields: [siteId], references: [id], onDelete: Cascade)
   blocks        PageTemplateBlock[]
   pages         Page[]
@@ -531,7 +529,6 @@ model Tariff {
   identityKey     String
   dataSource      String?
   attributes      Json?
-  seo             Json?
   status          PublishStatus @default(DRAFT)
   archiveReason   TariffArchiveReason?
   archivedAt      DateTime? @db.Timestamptz(3)

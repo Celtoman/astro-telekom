@@ -143,7 +143,6 @@ type StoredTariff = {
   identityKey: string;
   dataSource: string | null;
   attributes: Prisma.JsonValue | null;
-  seo: Prisma.JsonValue | null;
   status: string;
   archiveReason?: string | null;
   archivedAt?: string | null;
@@ -204,7 +203,6 @@ const snapshotTariff = (tariff: Tariff): StoredTariff => ({
   identityKey: tariff.identityKey,
   dataSource: tariff.dataSource,
   attributes: tariff.attributes === null ? null : jsonCopy(tariff.attributes),
-  seo: tariff.seo === null ? null : jsonCopy(tariff.seo),
   status: tariff.status,
   archiveReason: tariff.archiveReason,
   archivedAt: dateText(tariff.archivedAt),
@@ -213,9 +211,14 @@ const snapshotTariff = (tariff: Tariff): StoredTariff => ({
   updatedAt: tariff.updatedAt.toISOString(),
 });
 const normalizeStoredTariff = (tariff: StoredTariff): StoredTariff => {
+  const { seo: _legacySeo, ...stored } = tariff as StoredTariff & { seo?: Prisma.JsonValue | null };
+  if (_legacySeo !== null && _legacySeo !== undefined &&
+      (typeof _legacySeo !== 'object' || Array.isArray(_legacySeo) || Object.keys(_legacySeo).length > 0)) {
+    throw new ConflictException('Исторический снимок тарифа содержит SEO override; безопасная отмена заблокирована');
+  }
   const archived = tariff.availability === false || tariff.availability === 'ARCHIVED' || tariff.status === 'ARCHIVED';
   return {
-    ...tariff,
+    ...stored,
     availability: archived ? 'ARCHIVED' : 'ACTIVE',
     status: archived ? 'ARCHIVED' : tariff.status,
     archiveReason: tariff.archiveReason ?? (archived ? 'MANUAL' : null),
