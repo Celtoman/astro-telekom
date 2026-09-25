@@ -34,30 +34,65 @@ export class TariffPurgeService {
     private readonly publications: PublicationWorkflowService,
   ) {}
 
-  private async dependencies(transaction: Prisma.TransactionClient, tariff: TariffRow): Promise<DependencyCounts> {
-    const path = `/${tariff.city.slug}/${tariff.slug}`;
-    const rows = await transaction.$queryRaw<DependencyCounts[]>`
-      SELECT
-        (SELECT count(*) FROM "Lead" WHERE "tariffId" = ${tariff.id}) AS "leads",
-        (SELECT count(*) FROM "Redirect" WHERE "siteId" = ${tariff.city.siteId}
-          AND ("managedTariffId" = ${tariff.id} OR "sourcePath" = ${path} OR "targetPath" = ${path})) AS "redirects",
-        (SELECT count(*) FROM "SitePublication" WHERE "siteId" = ${tariff.city.siteId}
-          AND ("triggerEntityId" = ${tariff.id} OR jsonb_path_exists("catalog",
-            '$.** ? (@.id == $tariffId)', jsonb_build_object('tariffId', ${tariff.id}::text)))) AS "publications",
-        (SELECT count(*) FROM "SitePublicationValidation" WHERE "siteId" = ${tariff.city.siteId}
-          AND jsonb_path_exists("sourceSnapshot",
-            '$.** ? (@.id == $tariffId)', jsonb_build_object('tariffId', ${tariff.id}::text))) AS "validations",
-        (SELECT count(*) FROM "TariffImportRun" WHERE "providerId" = ${tariff.providerId}
-          AND "changeSet" IS NOT NULL AND jsonb_path_exists("changeSet",
-            '$.** ? (@.id == $tariffId)', jsonb_build_object('tariffId', ${tariff.id}::text))) AS "imports"
+  private async dependencies(transaction: Prisma.TransactionClient, tariffs: TariffRow[], siteId: string) {
+    if (!tariffs.length) return new Map<string, DependencyCounts>();
+    const targets = tariffs.map((tariff) => ({
+      id: tariff.id,
+      providerId: tariff.providerId,
+      path: `/${tariff.city.slug}/${tariff.slug}`,
+    }));
+    const rows = await transaction.$queryRaw<Array<DependencyCounts & { id: string }>>`
+      WITH targets AS MATERIALIZED (
+        SELECT id, "providerId", path
+        FROM jsonb_to_recordset(${JSON.stringify(targets)}::jsonb) AS target(id text, "providerId" text, path text)
+      ), candidate_ids AS MATERIALIZED (
+        SELECT jsonb_agg(id) AS list FROM targets
+      ), publication_refs AS MATERIALIZED (
+        SELECT publication.id AS document_id, to_jsonb(publication."triggerEntityId") AS tariff_id
+        FROM "SitePublication" publication
+        WHERE publication."siteId" = ${siteId} AND publication."triggerEntityId" IS NOT NULL
+        UNION ALL
+        SELECT publication.id, matched.value
+        FROM "SitePublication" publication
+        CROSS JOIN candidate_ids ids
+        CROSS JOIN LATERAL jsonb_path_query(publication."catalog",
+          '$.** ? (@.id == $ids[*]).id', jsonb_build_object('ids', ids.list)) AS matched(value)
+        WHERE publication."siteId" = ${siteId}
+      ), validation_refs AS MATERIALIZED (
+        SELECT validation.id AS document_id, matched.value AS tariff_id
+        FROM "SitePublicationValidation" validation
+        CROSS JOIN candidate_ids ids
+        CROSS JOIN LATERAL jsonb_path_query(validation."sourceSnapshot",
+          '$.** ? (@.id == $ids[*]).id', jsonb_build_object('ids', ids.list)) AS matched(value)
+        WHERE validation."siteId" = ${siteId}
+      ), import_refs AS MATERIALIZED (
+        SELECT import_run.id AS document_id, import_run."providerId" AS provider_id, matched.value AS tariff_id
+        FROM "TariffImportRun" import_run
+        CROSS JOIN candidate_ids ids
+        CROSS JOIN LATERAL jsonb_path_query(import_run."changeSet",
+          '$.** ? (@.id == $ids[*]).id', jsonb_build_object('ids', ids.list)) AS matched(value)
+        WHERE import_run."providerId" IN (SELECT DISTINCT "providerId" FROM targets)
+          AND import_run."changeSet" IS NOT NULL
+      )
+      SELECT target.id,
+        (SELECT count(*) FROM "Lead" lead WHERE lead."tariffId" = target.id) AS leads,
+        (SELECT count(*) FROM "Redirect" redirect WHERE redirect."siteId" = ${siteId}
+          AND (redirect."managedTariffId" = target.id OR redirect."sourcePath" = target.path
+            OR redirect."targetPath" = target.path)) AS redirects,
+        (SELECT count(DISTINCT ref.document_id) FROM publication_refs ref
+          WHERE ref.tariff_id = to_jsonb(target.id)) AS publications,
+        (SELECT count(DISTINCT ref.document_id) FROM validation_refs ref
+          WHERE ref.tariff_id = to_jsonb(target.id)) AS validations,
+        (SELECT count(DISTINCT ref.document_id) FROM import_refs ref
+          WHERE ref.provider_id = target."providerId" AND ref.tariff_id = to_jsonb(target.id)) AS imports
+      FROM targets target
     `;
-    return rows[0];
+    return new Map(rows.map(({ id, ...counts }) => [id, counts]));
   }
 
-  private async describe(transaction: Prisma.TransactionClient, tariff: TariffRow): Promise<PurgeItem> {
+  private describe(tariff: TariffRow, counts: DependencyCounts): PurgeItem {
     const blockers: string[] = [];
     if (tariff.status !== 'ARCHIVED' || tariff.availability !== 'ARCHIVED') blockers.push('Тариф не архивирован');
-    const counts = await this.dependencies(transaction, tariff);
     if (counts.leads > 0n) blockers.push(`Связан с заявками: ${counts.leads}`);
     if (counts.redirects > 0n) blockers.push(`Связан с редиректами: ${counts.redirects}`);
     if (counts.publications > 0n) blockers.push(`Упоминается в публикациях: ${counts.publications}`);
@@ -91,8 +126,12 @@ export class TariffPurgeService {
       }),
       transaction.tariff.count({ where }),
     ]);
-    const items: PurgeItem[] = [];
-    for (const tariff of tariffs) items.push(await this.describe(transaction, tariff));
+    const dependencyCounts = await this.dependencies(transaction, tariffs, siteId);
+    const items = tariffs.map((tariff) => {
+      const counts = dependencyCounts.get(tariff.id);
+      if (!counts) throw new Error(`Не получена проверка связей тарифа ${tariff.id}`);
+      return this.describe(tariff, counts);
+    });
     return {
       siteId,
       offset,

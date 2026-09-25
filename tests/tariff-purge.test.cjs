@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 const { TariffPurgeService } = require('../apps/api/dist/tariff-purge.service.js');
 
-function fixture() {
+function fixture(extraTariffs = []) {
   const tariff = {
     id: 'tariff-1', providerId: 'provider-1', cityId: 'city-1',
     city: { name: 'Казань', slug: 'kazan', siteId: 'site-1' },
@@ -12,17 +12,19 @@ function fixture() {
     archivedByImportRunId: null,
   };
   const counts = { leads: 0n, redirects: 0n, publications: 0n, validations: 0n, imports: 0n };
-  const calls = { deleted: [], revisions: [], locked: 0 };
+  const tariffs = [tariff, ...extraTariffs];
+  const calls = { deleted: [], revisions: [], locked: 0, dependencyQueries: 0 };
   const transaction = {
     site: { findUnique: async () => ({ id: 'site-1' }) },
     tariff: {
-      findMany: async (query) => query.include ? [tariff] : [tariff],
-      count: async () => 1,
+      findMany: async () => tariffs,
+      count: async () => tariffs.length,
       deleteMany: async (query) => { calls.deleted.push(query); return { count: 1 }; },
     },
     $queryRaw: async (strings) => {
       if (strings.join('?').includes('FOR UPDATE')) { calls.locked += 1; return [{ id: 'site-1' }]; }
-      return [{ ...counts }];
+      calls.dependencyQueries += 1;
+      return tariffs.map((item) => ({ id: item.id, ...counts }));
     },
   };
   const prisma = { $transaction: async (callback) => callback(transaction) };
@@ -48,6 +50,20 @@ test('purge preview explains dependent history and never offers a linked tariff'
   assert.equal(preview.items[0].blockers.length, 5);
   assert.match(preview.items[0].blockers.join(' '), /заявками: 2/);
   assert.match(preview.fingerprint, /^[a-f0-9]{64}$/);
+});
+
+test('purge preview checks a full archive page with one dependency query', async () => {
+  const extraTariffs = Array.from({ length: 24 }, (_, index) => ({
+    id: `tariff-${index + 2}`, providerId: 'provider-1', cityId: 'city-1',
+    city: { name: 'Казань', slug: 'kazan', siteId: 'site-1' },
+    name: `Архивный ${index + 2}`, slug: `archive-${index + 2}`,
+    status: 'ARCHIVED', availability: 'ARCHIVED', archivedByImportRunId: null,
+    archivedAt: new Date('2026-09-01T00:00:00.000Z'), updatedAt: new Date('2026-09-02T00:00:00.000Z'),
+  }));
+  const { service, calls } = fixture(extraTariffs);
+  const preview = await service.preview('site-1');
+  assert.equal(preview.items.length, 25);
+  assert.equal(calls.dependencyQueries, 1);
 });
 
 test('purge requires exact confirmation and rechecks dependencies before deletion', async () => {

@@ -55,12 +55,16 @@ try {
   const lead = await createTariff('lead');
   const redirect = await createTariff('redirect');
   const publication = await createTariff('publication');
+  const publicationTrigger = await createTariff('publication-trigger');
   const validation = await createTariff('validation');
   const imported = await createTariff('imported');
   await db.lead.create({ data: { siteId: site.id, cityId: city.id, tariffId: lead.id, phone: '79990000000' } });
   await db.redirect.create({ data: { siteId: site.id, sourcePath: '/old', targetPath: '/kazan/redirect', managedTariffId: redirect.id } });
   await db.sitePublication.create({
-    data: { siteId: site.id, siteRevision: 1, catalog: { cities: [{ tariffs: [{ id: publication.id }] }] }, triggerEntity: 'SITE', triggerEntityId: site.id },
+    data: { siteId: site.id, siteRevision: 1, catalog: { cities: [{ tariffs: [{ id: publication.id }, { id: publication.id }] }] }, triggerEntity: 'SITE', triggerEntityId: site.id },
+  });
+  await db.sitePublication.create({
+    data: { siteId: site.id, siteRevision: 3, catalog: {}, triggerEntity: 'TARIFF', triggerEntityId: publicationTrigger.id },
   });
   await db.sitePublicationValidation.create({
     data: { siteId: site.id, siteRevision: 2, sourceSnapshot: { cities: [{ tariffs: [{ id: validation.id }] }] },
@@ -77,16 +81,18 @@ try {
   const workflow = Object.create(PublicationWorkflowService.prototype);
   const service = new TariffPurgeService(db, workflow);
   const preview = await service.preview(site.id);
-  assert.equal(preview.total, 7);
+  assert.equal(preview.total, 8);
   assert.deepEqual(preview.items.filter((item) => item.blockers.length === 0).map((item) => item.id), [free.id, freeSecond.id]);
-  for (const tariff of [lead, redirect, publication, validation, imported]) {
+  for (const tariff of [lead, redirect, publication, publicationTrigger, validation, imported]) {
     assert.ok(preview.items.find((item) => item.id === tariff.id)?.blockers.length, `${tariff.slug} must be blocked`);
   }
+  assert.ok(preview.items.find((item) => item.id === publication.id)?.blockers.includes('Упоминается в публикациях: 1'));
+  assert.ok(preview.items.find((item) => item.id === publicationTrigger.id)?.blockers.includes('Упоминается в публикациях: 1'));
   const result = await service.purge({ siteId: site.id, offset: 0, ids: [free.id, freeSecond.id], fingerprint: preview.fingerprint, confirm: true });
   assert.equal(result.removed, 2);
   assert.equal(await db.tariff.findUnique({ where: { id: free.id } }), null);
   assert.equal(await db.tariff.findUnique({ where: { id: freeSecond.id } }), null);
-  assert.equal(await db.tariff.count({ where: { id: { in: [lead.id, redirect.id, publication.id, validation.id, imported.id] } } }), 5);
+  assert.equal(await db.tariff.count({ where: { id: { in: [lead.id, redirect.id, publication.id, publicationTrigger.id, validation.id, imported.id] } } }), 6);
   const audit = await db.auditEvent.findMany({ where: { entityType: 'TARIFF', entityId: { in: [free.id, freeSecond.id] } } });
   assert.equal(audit.length, 2);
   assert.ok(audit.every((event) => event.action === 'PURGE'));
