@@ -48,6 +48,7 @@ import { AdminSitemapController } from './admin-sitemap.controller';
 import { SitemapService } from './sitemap.service';
 import { AdminSiteValuesController } from './admin-site-values.controller';
 import { AdminVariableCatalogController } from './admin-variable-catalog.controller';
+import { AdminVariableMigrationController } from './admin-variable-migration.controller';
 import { WorkingVariableUsagesService } from './working-variable-usages.service';
 import { SiteValuesService } from './site-values.service';
 import { CityReadinessService } from './city-readiness.service';
@@ -89,6 +90,7 @@ import { AdminTariffTemplateController } from './admin-tariff-template.controlle
     AdminSitemapController,
     AdminSiteValuesController,
     AdminVariableCatalogController,
+    AdminVariableMigrationController,
     AdminSeoTemplatesController,
     AdminTariffTemplateController,
   ],

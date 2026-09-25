@@ -17,6 +17,7 @@ export interface VariableDefinition {
   description: string;
   example: string;
   status: 'ACTIVE' | 'DEPRECATING';
+  replacementCode?: VariableCode;
   allowedContexts: string[];
   allowedFields: string[];
 }
