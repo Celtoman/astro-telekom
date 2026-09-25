@@ -32,6 +32,27 @@ test('migration refuses a source token left in a non-editable URL field', () => 
   assert.throws(() => planVariableMigration([definition('OLD_CODE', 'DEPRECATING', undefined, 'NEW_CODE'), definition('NEW_CODE', 'ACTIVE')], 'OLD_CODE', 'NEW_CODE', rows), /остал/i);
 });
 
+test('migration plans the authoritative city HOME template once and ignores linked legacy copies', () => {
+  const { planVariableMigration } = api('variable-migration');
+  const rows = {
+    pages: [1, 2].map((index) => ({
+      id: `city-home-${index}`, templateId: 'template-1', title: 'Старая копия {OLD_CODE}', content: {},
+      blocks: [{ id: `legacy-block-${index}`, data: { title: 'Устаревшая копия {OLD_CODE}' } }],
+    })),
+    pageTemplates: [{ id: 'template-1', kind: 'CITY_HOME', titleTemplate: 'Интернет в {OLD_CODE}', content: {},
+      blocks: [{ id: 'template-block-1', data: { title: 'Тарифы в {OLD_CODE}' } }] }],
+    tariffs: [], seoTemplates: [],
+  };
+  const definitions = [definition('OLD_CODE', 'DEPRECATING', undefined, 'NEW_CODE'), definition('NEW_CODE', 'ACTIVE')];
+  assert.throws(() => planVariableMigration(definitions, 'OLD_CODE', 'NEW_CODE', { ...rows, pageTemplates: [] }), /шаблон/i);
+  const plan = planVariableMigration(definitions, 'OLD_CODE', 'NEW_CODE', rows);
+  assert.equal(plan.replacementCount, 2);
+  assert.deepEqual(plan.changes.map(({ entityType, entityId }) => [entityType, entityId]), [['PAGE_TEMPLATE', 'template-1']]);
+  assert.equal(plan.changes[0].next.titleTemplate, 'Интернет в {NEW_CODE}');
+  assert.equal(plan.changes[0].next.blocks[0].data.title, 'Тарифы в {NEW_CODE}');
+  assert.equal(rows.pages[0].title, 'Старая копия {OLD_CODE}');
+});
+
 test('migration rejects incompatible target and unknown or active source', () => {
   const { planVariableMigration } = api('variable-migration');
   const rows = { pages: [], tariffs: [], seoTemplates: [] };
@@ -47,6 +68,7 @@ test('apply migrates a synthetic pair in one transaction and records working rev
   const writes = [];
   const tx = {
     site: { findUnique: async () => ({ id: 'site-1', workingRevision: revision, publishedRevision: 7 }) },
+    pageTemplate: { findMany: async () => [] },
     page: {
       findMany: async () => [{ id: 'page-1', title: '{OLD_CODE}', content: null, seo: null,
         blocks: [{ id: 'block-1', data: { title: '{OLD_CODE}' } }] }],
@@ -69,11 +91,41 @@ test('apply migrates a synthetic pair in one transaction and records working rev
   assert.equal(writes.some(([kind]) => kind === 'publication'), false);
 });
 
+test('apply migrates a site template without writing obsolete linked HOME copies', async () => {
+  const { applyVariableMigration } = api('variable-migration');
+  const writes = [];
+  const template = { id: 'template-1', kind: 'CITY_HOME', titleTemplate: 'Интернет в {OLD_CODE}', content: {},
+    blocks: [{ id: 'template-block-1', data: { title: 'Тарифы в {OLD_CODE}' } }] };
+  const tx = {
+    site: { findUnique: async () => ({ id: 'site-1', workingRevision: 8, publishedRevision: 7 }) },
+    page: { findMany: async () => [{ id: 'home-1', templateId: 'template-1', title: 'Старая копия {OLD_CODE}', content: {}, blocks: [] }],
+      update: () => assert.fail('linked HOME must not be updated') },
+    pageBlock: { update: () => assert.fail('legacy block must not be updated') },
+    pageTemplate: { findMany: async () => [template], update: async ({ where, data }) => writes.push(['template', where.id, data]) },
+    pageTemplateBlock: { update: async ({ where, data }) => writes.push(['template-block', where.id, data]) },
+    tariff: { findMany: async () => [] },
+    seoTemplate: { findMany: async () => [] },
+  };
+  const publications = { recordWorkingRevision: async (_tx, input) => { writes.push(['revision', input.entityType, input.changedFields]); return { siteRevision: 9 }; } };
+  const definitions = [definition('OLD_CODE', 'DEPRECATING', undefined, 'NEW_CODE'), definition('NEW_CODE', 'ACTIVE')];
+  const result = await applyVariableMigration(tx, publications, definitions, {
+    siteId: 'site-1', expectedWorkingRevision: 8, expectedReplacementCount: 2, sourceCode: 'OLD_CODE', targetCode: 'NEW_CODE',
+  });
+  assert.equal(result.replacementCount, 2);
+  assert.equal(result.workingRevision, 9);
+  assert.deepEqual(writes, [
+    ['template', 'template-1', { titleTemplate: 'Интернет в {NEW_CODE}' }],
+    ['template-block', 'template-block-1', { data: { title: 'Тарифы в {NEW_CODE}' } }],
+    ['revision', 'PAGE_TEMPLATE', ['titleTemplate', 'blocks']],
+  ]);
+});
+
 test('apply rejects stale revision or changed replacement count before any write', async () => {
   const { applyVariableMigration } = api('variable-migration');
   let revision = 9;
   const tx = {
     site: { findUnique: async () => ({ id: 'site-1', workingRevision: revision, publishedRevision: 7 }) },
+    pageTemplate: { findMany: async () => [] },
     page: { findMany: async () => [{ id: 'page-1', title: '{OLD_CODE}', content: null, seo: null, blocks: [] }], update: () => assert.fail('no write') },
     tariff: { findMany: async () => [], update: () => assert.fail('no write') },
     seoTemplate: { findMany: async () => [], update: () => assert.fail('no write') },

@@ -4,8 +4,8 @@ import type { PublicationWorkflowService } from './publication-workflow.service'
 import type { VariableDefinition } from './variable-registry';
 
 type Row = Record<string, any>;
-type MigrationRows = { pages: Row[]; tariffs: Row[]; seoTemplates: Row[] };
-type Change = { entityType: 'PAGE' | 'TARIFF' | 'SEO_TEMPLATE'; entityId: string; before: Row; next: Row; changedFields: string[]; replacementCount: number };
+type MigrationRows = { pages: Row[]; pageTemplates?: Row[]; tariffs: Row[]; seoTemplates: Row[] };
+type Change = { entityType: 'PAGE' | 'PAGE_TEMPLATE' | 'TARIFF' | 'SEO_TEMPLATE'; entityId: string; before: Row; next: Row; changedFields: string[]; replacementCount: number };
 
 const BLOCK_TEXT = ['eyebrow', 'title', 'text', 'ctaText'] as const;
 const ITEM_TEXT = ['title', 'text', 'question', 'answer'] as const;
@@ -44,24 +44,41 @@ export function planVariableMigration(definitions: readonly VariableDefinition[]
     const count = replacementCount - countBefore;
     if (count) changes.push({ entityType, entityId: String(before.id), before, next, changedFields, replacementCount: count });
   };
+  const blocks = (rows: unknown): unknown => Array.isArray(rows) ? rows.map((block: Row) => {
+    const data = fields(block.data, BLOCK_TEXT) as Row;
+    return { ...block, data: data && Array.isArray(data.items)
+      ? { ...data, items: data.items.map((item: unknown) => fields(item, ITEM_TEXT)) }
+      : data };
+  }) : rows;
+  const templates = rows.pageTemplates ?? [];
+  const templateIds = new Set(templates.map((template) => template.id));
 
   for (const page of rows.pages) {
+    if (page.templateId) {
+      if (!templateIds.has(page.templateId)) throw new BadRequestException('Не найден шаблон связанной страницы');
+      continue;
+    }
     const countBefore = replacementCount;
     const next = {
       ...page,
       title: replace(page.title),
       content: fields(page.content, ['text']),
-      blocks: Array.isArray(page.blocks) ? page.blocks.map((block: Row) => {
-        const data = fields(block.data, BLOCK_TEXT) as Row;
-        return { ...block, data: data && Array.isArray(data.items)
-          ? { ...data, items: data.items.map((item: unknown) => fields(item, ITEM_TEXT)) }
-          : data };
-      }) : page.blocks,
+      blocks: blocks(page.blocks),
     };
     if (JSON.stringify(next).includes(token)) throw new BadRequestException('Исходный код остался в поле вне разрешённой области миграции');
     const changedFields = [page.title !== next.title && 'title', JSON.stringify(page.content) !== JSON.stringify(next.content) && 'content',
       JSON.stringify(page.blocks) !== JSON.stringify(next.blocks) && 'blocks'].filter(Boolean) as string[];
     add('PAGE', page, next, changedFields, countBefore);
+  }
+  for (const template of templates) {
+    const countBefore = replacementCount;
+    const next = { ...template, titleTemplate: replace(template.titleTemplate),
+      content: fields(template.content, ['text']), blocks: blocks(template.blocks) };
+    if (JSON.stringify(next).includes(token)) throw new BadRequestException('Исходный код остался в поле вне разрешённой области миграции');
+    const changedFields = [template.titleTemplate !== next.titleTemplate && 'titleTemplate',
+      JSON.stringify(template.content) !== JSON.stringify(next.content) && 'content',
+      JSON.stringify(template.blocks) !== JSON.stringify(next.blocks) && 'blocks'].filter(Boolean) as string[];
+    add('PAGE_TEMPLATE', template, next, changedFields, countBefore);
   }
   for (const tariff of rows.tariffs) {
     const countBefore = replacementCount;
@@ -101,12 +118,13 @@ export async function applyVariableMigration(
   const site = await transaction.site.findUnique({ where: { id: input.siteId }, select: { id: true, workingRevision: true, publishedRevision: true } });
   if (!site) throw new NotFoundException('Сайт не найден');
   if (site.workingRevision !== input.expectedWorkingRevision) throw new ConflictException('Рабочая ревизия изменилась; обновите просмотр миграции');
-  const [pages, tariffs, seoTemplates] = await Promise.all([
+  const [pages, pageTemplates, tariffs, seoTemplates] = await Promise.all([
     transaction.page.findMany({ where: { siteId: input.siteId }, include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } }, orderBy: { id: 'asc' } }),
+    transaction.pageTemplate.findMany({ where: { siteId: input.siteId }, include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } }, orderBy: { id: 'asc' } }),
     transaction.tariff.findMany({ where: { city: { siteId: input.siteId } }, orderBy: { id: 'asc' } }),
     transaction.seoTemplate.findMany({ where: { siteId: input.siteId }, orderBy: { id: 'asc' } }),
   ]);
-  const plan = planVariableMigration(definitions, input.sourceCode, input.targetCode, { pages, tariffs, seoTemplates });
+  const plan = planVariableMigration(definitions, input.sourceCode, input.targetCode, { pages, pageTemplates, tariffs, seoTemplates });
   if (plan.replacementCount !== input.expectedReplacementCount) throw new ConflictException('Число замен изменилось; обновите просмотр миграции');
   let workingRevision = site.workingRevision;
   for (const change of plan.changes) {
@@ -120,6 +138,19 @@ export async function applyVariableMigration(
           const nextBlock = change.next.blocks[index];
           if (JSON.stringify(block.data) !== JSON.stringify(nextBlock.data)) {
             await transaction.pageBlock.update({ where: { id: block.id }, data: { data: nextBlock.data as Prisma.InputJsonValue } });
+          }
+        }
+      }
+    } else if (change.entityType === 'PAGE_TEMPLATE') {
+      const data: Prisma.PageTemplateUpdateInput = {};
+      if (change.changedFields.includes('titleTemplate')) data.titleTemplate = change.next.titleTemplate;
+      if (change.changedFields.includes('content')) data.content = change.next.content as Prisma.InputJsonValue;
+      if (Object.keys(data).length) await transaction.pageTemplate.update({ where: { id: change.entityId }, data });
+      if (change.changedFields.includes('blocks')) {
+        for (const [index, block] of change.before.blocks.entries()) {
+          const nextBlock = change.next.blocks[index];
+          if (JSON.stringify(block.data) !== JSON.stringify(nextBlock.data)) {
+            await transaction.pageTemplateBlock.update({ where: { id: block.id }, data: { data: nextBlock.data as Prisma.InputJsonValue } });
           }
         }
       }

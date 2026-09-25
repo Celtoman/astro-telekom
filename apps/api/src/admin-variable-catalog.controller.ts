@@ -2,7 +2,7 @@ import { Controller, Get, NotFoundException, Param, Query, UseGuards } from '@ne
 import { AdminTokenGuard } from './admin-token.guard';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { buildVariableCatalogView } from './variable-catalog';
-import { WorkingVariableUsagesService, mergeWorkingVariableUsages } from './working-variable-usages.service';
+import { WorkingVariableUsagesService } from './working-variable-usages.service';
 import { listVariableDefinitions } from './variable-registry';
 
 @Controller('admin/sites/:siteId/variable-catalog')
@@ -27,7 +27,7 @@ export class AdminVariableCatalogController {
     const preview = await this.publications.getWorkingPreview(siteId);
     const rowUsages = await this.usages.list(siteId, preview.workingRevision);
     const rawWorking = preview.catalog as Record<string, any>;
-    const working = { ...rawWorking, variableUsages: mergeWorkingVariableUsages(rawWorking.variableUsages ?? [], rowUsages) };
+    const working = { ...rawWorking, variableUsages: rowUsages };
     let published: Record<string, any> | null = null;
     try {
       published = await this.publications.getPublishedCatalog(rawWorking.site.slug);

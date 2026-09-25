@@ -106,6 +106,8 @@ test('admin catalog endpoint is authenticated, read-only and reads working and s
   const { resolveCatalogVariables } = api('catalog-variables');
   const { AdminVariableCatalogController } = api('admin-variable-catalog.controller');
   const working = resolveCatalogVariables(rawCatalog(), sources);
+  const templateUsage = { code: 'CONNECTION_PHONE', entityType: 'PAGE_TEMPLATE_BLOCK', entityId: 'template-block-1',
+    path: 'pageTemplates[CITY_HOME].blocks[0].data.title', template: 'Звоните {CONNECTION_PHONE}', editorHref: null };
   const calls = [];
   const controller = new AdminVariableCatalogController({
     getWorkingPreview: async (siteId) => {
@@ -116,10 +118,12 @@ test('admin catalog endpoint is authenticated, read-only and reads working and s
       calls.push(['published', slug]);
       return working;
     },
-  }, { list: async (siteId, revision) => { calls.push(['usages', siteId, revision]); return []; } });
+  }, { list: async (siteId, revision) => { calls.push(['usages', siteId, revision]); return [templateUsage]; } });
   const response = await controller.list('site-1', 'city-1', 'tariff-1');
   assert.deepEqual(calls, [['working', 'site-1'], ['usages', 'site-1', 8], ['published', 'domru-site']]);
   assert.equal(response.items.find((item) => item.code === 'TARIFF_PRICE').working.value, '599');
+  assert.deepEqual(response.items.find((item) => item.code === 'CONNECTION_PHONE').workingUsages, [templateUsage]);
+  assert.equal(response.items.find((item) => item.code === 'CONNECTION_PHONE').publishedUsages.length, 1);
   assert.equal(Reflect.getMetadata('path', AdminVariableCatalogController), 'admin/sites/:siteId/variable-catalog');
   assert.equal(Reflect.getMetadata('method', AdminVariableCatalogController.prototype.list), 0);
   assert.ok(Reflect.getMetadata('__guards__', AdminVariableCatalogController)?.length);
@@ -146,6 +150,7 @@ test('read-only working usage scan includes draft pages, hidden blocks and inact
       id: 'draft-page', cityId: 'city-1', type: 'HOME', status: 'DRAFT', title: 'В {CITY_NAME}', content: {}, seo: {},
       blocks: [{ id: 'hidden-block', blockType: 'hero', visible: false, archivedAt: null, data: { title: 'Звоните {CONNECTION_PHONE}' } }],
     }]; } },
+    pageTemplate: { findMany: async (query) => { calls.push(['pageTemplates', query]); return []; } },
     tariff: { findMany: async (query) => { calls.push(['tariffs', query]); return [{
       id: 'inactive-tariff', cityId: 'city-1', status: 'ARCHIVED', availability: 'ARCHIVED', promoText: 'От {TARIFF_PRICE}', seo: {},
     }]; } },
@@ -157,11 +162,35 @@ test('read-only working usage scan includes draft pages, hidden blocks and inact
   assert.equal(usages[0].lifecycleStatus, 'DRAFT');
   assert.equal(usages[1].visible, false);
   assert.equal(usages[2].lifecycleStatus, 'ARCHIVED');
-  assert.deepEqual(calls.map(([name]) => name), ['site', 'pages', 'tariffs', 'seoTemplates']);
+  assert.deepEqual(calls.map(([name]) => name), ['site', 'pages', 'pageTemplates', 'tariffs', 'seoTemplates']);
   assert.deepEqual(calls[1][1].where, { siteId: 'site-1' });
-  assert.deepEqual(calls[2][1].where, { city: { siteId: 'site-1' } });
-  assert.deepEqual(calls[3][1].where, { siteId: 'site-1' });
+  assert.deepEqual(calls[2][1].where, { siteId: 'site-1' });
+  assert.deepEqual(calls[3][1].where, { city: { siteId: 'site-1' } });
+  assert.deepEqual(calls[4][1].where, { siteId: 'site-1' });
   await assert.rejects(() => service.list('site-1', 7), /ревизи/i);
+});
+
+test('working usage scan reads a linked HOME template once and skips obsolete city copies', async () => {
+  const { WorkingVariableUsagesService } = api('working-variable-usages.service');
+  const transaction = {
+    site: { findUnique: async () => ({ workingRevision: 8 }) },
+    page: { findMany: async () => [1, 2].map((index) => ({
+      id: `home-${index}`, templateId: 'template-1', cityId: `city-${index}`, type: 'HOME', status: 'PUBLISHED',
+      title: 'Старая копия {CITY_NAME}', content: {}, blocks: [],
+    })) },
+    pageTemplate: { findMany: async () => [{
+      id: 'template-1', kind: 'CITY_HOME', status: 'PUBLISHED', titleTemplate: 'Интернет в {CITY_NAME_PREPOSITIONAL}', content: {},
+      blocks: [{ id: 'template-block-1', blockType: 'hero', visible: false, data: { title: 'Звоните {CONNECTION_PHONE}' } }],
+    }] },
+    tariff: { findMany: async () => [] },
+    seoTemplate: { findMany: async () => [] },
+  };
+  const service = new WorkingVariableUsagesService({ $transaction: async (callback) => callback(transaction) });
+  const usages = await service.list('site-1', 8);
+  assert.deepEqual(usages.map(({ code, entityType, entityId, visible }) => ({ code, entityType, entityId, visible })), [
+    { code: 'CITY_NAME_PREPOSITIONAL', entityType: 'PAGE_TEMPLATE', entityId: 'template-1', visible: undefined },
+    { code: 'CONNECTION_PHONE', entityType: 'PAGE_TEMPLATE_BLOCK', entityId: 'template-block-1', visible: false },
+  ]);
 });
 
 test('working usage scan includes authored SEO and OG templates once per field with a direct editor link', async () => {
@@ -169,6 +198,7 @@ test('working usage scan includes authored SEO and OG templates once per field w
   const transaction = {
     site: { findUnique: async () => ({ workingRevision: 8 }) },
     page: { findMany: async () => [] },
+    pageTemplate: { findMany: async () => [] },
     tariff: { findMany: async () => [] },
     seoTemplate: { findMany: async () => [
       { id: 'seo-city', kind: 'CITY_HOME', titleTemplate: 'Интернет {CITY_NAME}', descriptionTemplate: 'Оператор {PROVIDER_NAME}', ogTitleTemplate: '{CITY_NAME}', ogDescriptionTemplate: null },

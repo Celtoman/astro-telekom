@@ -38,7 +38,7 @@ interface VariableUsage {
   code: string
   path: string
   template: string
-  entityType: "PAGE" | "BLOCK" | "TARIFF" | "SEO_TEMPLATE"
+  entityType: "PAGE" | "BLOCK" | "PAGE_TEMPLATE" | "PAGE_TEMPLATE_BLOCK" | "TARIFF" | "SEO_TEMPLATE"
   entityId: string
   pageType?: string
   blockType?: string
@@ -90,6 +90,8 @@ function valueLabel(value: VariableValue): string {
 
 function usageLabel(usage: VariableUsage): string {
   if (usage.entityType === "SEO_TEMPLATE") return `SEO-шаблон: ${pageLabels[usage.pageType ?? ""] ?? "тип не определён"}`
+  if (usage.entityType === "PAGE_TEMPLATE") return `Шаблон: ${pageLabels[usage.pageType ?? ""] ?? "тип не определён"}`
+  if (usage.entityType === "PAGE_TEMPLATE_BLOCK") return `Блок шаблона: ${blockLabels[usage.blockType ?? ""] ?? "тип не определён"}`
   if (usage.entityType === "TARIFF") return "Тариф"
   if (usage.entityType === "BLOCK") return `Блок: ${blockLabels[usage.blockType ?? ""] ?? "тип не определён"}`
   return `Страница: ${pageLabels[usage.pageType ?? ""] ?? "тип не определён"}`

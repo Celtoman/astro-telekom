@@ -21,6 +21,7 @@ const context = () => ({
 test('registry has unique fixed codes, explicit types and one authoritative source per code', () => {
   const { listVariableDefinitions } = variables();
   const definitions = listVariableDefinitions();
+  assert.ok(definitions.find((item) => item.code === 'CITY_NAME_PREPOSITIONAL').allowedFields.includes('PageTemplate.titleTemplate'));
   const codes = definitions.map((item) => item.code);
   assert.equal(new Set(codes).size, codes.length);
   assert.ok(codes.every((code) => /^[A-Z0-9_]+$/.test(code)));

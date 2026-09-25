@@ -31,12 +31,13 @@ export class AdminVariableMigrationController {
       const site = await transaction.site.findUnique({ where: { id: siteId }, select: { id: true, workingRevision: true, publishedRevision: true } });
       if (!site) throw new NotFoundException('Сайт не найден');
       if (site.workingRevision !== expectedWorkingRevision) throw new ConflictException('Рабочая ревизия изменилась; обновите просмотр миграции');
-      const [pages, tariffs, seoTemplates] = await Promise.all([
+      const [pages, pageTemplates, tariffs, seoTemplates] = await Promise.all([
         transaction.page.findMany({ where: { siteId }, include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } }, orderBy: { id: 'asc' } }),
+        transaction.pageTemplate.findMany({ where: { siteId }, include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } }, orderBy: { id: 'asc' } }),
         transaction.tariff.findMany({ where: { city: { siteId } }, orderBy: { id: 'asc' } }),
         transaction.seoTemplate.findMany({ where: { siteId }, orderBy: { id: 'asc' } }),
       ]);
-      const plan = planVariableMigration(definitions, sourceCode, targetCode, { pages, tariffs, seoTemplates });
+      const plan = planVariableMigration(definitions, sourceCode, targetCode, { pages, pageTemplates, tariffs, seoTemplates });
       return {
         sourceCode, targetCode, workingRevision: site.workingRevision, publishedRevision: site.publishedRevision,
         replacementCount: plan.replacementCount,
