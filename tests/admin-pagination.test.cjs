@@ -94,8 +94,17 @@ test('tariff catalog applies server search and enforces the page-size upper boun
   assert.equal(result.pageInfo.hasNextPage, true);
   assert.equal(prisma.calls.findMany[0].take, 101);
   assert.deepEqual(prisma.calls.findMany[0].orderBy, [{ updatedAt: 'desc' }, { id: 'desc' }]);
-  assert.equal(prisma.calls.findMany[0].where.AND[0].OR.length, 3);
-  assert.deepEqual(prisma.calls.findMany[0].where.AND[0].OR.map((item) => Object.keys(item)[0]), ['name', 'slug', 'externalId']);
+  assert.equal(prisma.calls.findMany[0].where.AND[0].OR.length, 4);
+  assert.deepEqual(prisma.calls.findMany[0].where.AND[0].OR.map((item) => Object.keys(item)[0]), ['id', 'name', 'slug', 'externalId']);
+});
+
+test('tariff catalog finds an exact internal ID without dropping existing search fields', async () => {
+  const prisma = transactionPrisma('tariff', [], [0]);
+  await new AdminTariffsController(prisma.client, {}, {}).list({ q: '  tariff-123  ' });
+  const search = prisma.calls.findMany[0].where.AND[0].OR;
+  assert.deepEqual(search[0], { id: 'tariff-123' });
+  assert.deepEqual(search.slice(1).map((item) => Object.keys(item)[0]), ['name', 'slug', 'externalId']);
+  assert.deepEqual(prisma.calls.count[0].where.AND[0].OR, search);
 });
 
 test('tariff catalog applies all Release 1 filters on the server and separates site publication state', async () => {

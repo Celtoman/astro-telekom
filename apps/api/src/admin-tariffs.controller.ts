@@ -85,6 +85,7 @@ export class AdminTariffsController {
     const unpublishedSiteIds = sites.filter((site) => site.workingRevision > site.publishedRevision).map((site) => site.id);
     const searchWhere: Prisma.TariffWhereInput | undefined = q ? {
       OR: [
+        { id: q },
         { name: { contains: q, mode: 'insensitive' } },
         { slug: { contains: q, mode: 'insensitive' } },
         { externalId: { contains: q, mode: 'insensitive' } },
