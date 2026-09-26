@@ -71,7 +71,7 @@ const managedPassports: Record<ManagedBlockType, BlockPassport> = {
   ], 'Для будущего типа пустой title/text должен блокировать сохранение; этот блок не входит в каноническую HOME Release 1.',
   ['Длинный текст и переносы', 'Отсутствие обязательного поля'], ['Заголовок H2 и читаемый порядок текста']),
   tariff_grid: managed('tariff_grid', 'Сетка тарифов', 'Показывает все опубликованные тарифы выбранного города в Release 1.', ['HOME'], [
-    field('title', 'text', true, 'PageTemplateBlock.data.title', 'Непустая строка до 120 символов; текущий renderer использует фиксированный заголовок.', 'input'),
+    field('title', 'text', true, 'PageTemplateBlock.data.title', 'Непустая строка до 120 символов; выводится как H2 секции.', 'input'),
     field('serviceType', 'enum', false, 'PageTemplateBlock.data.serviceType', 'Только INTERNET, INTERNET_TV или TV; текущий renderer не фильтрует по полю.', 'select'),
     field('limit', 'integer', false, 'PageTemplateBlock.data.limit', 'Целое число от 1 до 12; текущий renderer не ограничивает каталог.', 'number'),
     field('morePageType', 'enum', false, 'PageTemplateBlock.data.morePageType', 'Только INTERNET, INTERNET_TV или TV; текущий renderer не использует поле.', 'select'),

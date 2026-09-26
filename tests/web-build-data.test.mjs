@@ -255,7 +255,9 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(kazan, /API Интернет и ТВ 500/);
   assert.match(kazan, /777 ₽\/мес\./);
   assert.match(kazan, /999 ₽\/мес\./);
-  assert.match(kazan, /<h2[^>]*>Все тарифы Дом\.ру<\/h2>/);
+  const tariffSection = kazan.match(/<section[^>]*data-block-type="tariff_grid"[^>]*>[\s\S]*?<\/section>/)?.[0] || '';
+  assert.match(tariffSection, /<h2[^>]*>Популярные тарифы<\/h2>/);
+  assert.doesNotMatch(tariffSection, /Все тарифы Дом\.ру/);
   assert.match(kazan, /Бесплатное подключение/);
   assert.match(kazan, /data-address-dialog-trigger="address-entry-kazan-catalog"[^>]*>Проверить подключение/);
   assert.match(kazan, /href="\/kazan\/api-internet-500"[^>]*>Подробнее о тарифе/);
