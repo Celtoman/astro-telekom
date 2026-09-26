@@ -1,23 +1,27 @@
-"use client"
-
 import * as React from "react"
 import { cn } from "cn"
-import { Tabs as TabsPrimitive } from "radix-ui"
+import { Tab, TabList, TabPanel, TabPanels, Tabs as AriaTabs } from "react-aria-components"
 
-function Tabs(props: React.ComponentProps<typeof TabsPrimitive.Root>) {
-  return <TabsPrimitive.Root data-slot="tabs" {...props} />
+type TabsProps = Omit<React.ComponentProps<typeof AriaTabs>, "selectedKey" | "defaultSelectedKey" | "onSelectionChange"> & {
+  value?: string
+  defaultValue?: string
+  onValueChange?: (value: string) => void
 }
 
-function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) {
-  return <TabsPrimitive.List data-slot="tabs-list" className={cn("inline-flex h-9 items-center gap-1 rounded-lg bg-muted p-1 text-muted-foreground", className)} {...props} />
+function Tabs({ value, defaultValue, onValueChange, ...props }: TabsProps) {
+  return <AriaTabs data-slot="tabs" selectedKey={value} defaultSelectedKey={defaultValue} onSelectionChange={(key) => onValueChange?.(String(key))} {...props} />
 }
 
-function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
-  return <TabsPrimitive.Trigger data-slot="tabs-trigger" className={cn("inline-flex h-7 items-center justify-center rounded-md px-3 text-sm font-medium outline-none transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm", className)} {...props} />
+function TabsList({ className, ...props }: React.ComponentProps<typeof TabList>) {
+  return <TabList data-slot="tabs-list" className={cn("inline-flex h-9 items-center gap-1 rounded-lg bg-muted p-1 text-muted-foreground", className)} {...props} />
 }
 
-function TabsContent({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Content>) {
-  return <TabsPrimitive.Content data-slot="tabs-content" className={cn("mt-4 outline-none", className)} {...props} />
+function TabsTrigger({ className, value, ...props }: Omit<React.ComponentProps<typeof Tab>, "id"> & { value: string }) {
+  return <Tab data-slot="tabs-trigger" id={value} className={cn("inline-flex h-7 items-center justify-center rounded-md px-3 text-sm font-medium outline-none transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-[selected]:bg-background data-[selected]:text-foreground data-[selected]:shadow-sm", className)} {...props} />
 }
 
-export { Tabs, TabsContent, TabsList, TabsTrigger }
+function TabsContent({ className, value, ...props }: Omit<React.ComponentProps<typeof TabPanel>, "id"> & { value: string }) {
+  return <TabPanel data-slot="tabs-content" id={value} className={cn("mt-4 outline-none", className)} {...props} />
+}
+
+export { Tabs, TabsContent, TabsList, TabPanels as TabsPanels, TabsTrigger }

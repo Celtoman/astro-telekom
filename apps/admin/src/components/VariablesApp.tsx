@@ -11,7 +11,7 @@ import { Field, FieldDescription, FieldLabel } from "./ui/field"
 import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsPanels, TabsTrigger } from "./ui/tabs"
 
 interface Administrator { id: string; email: string }
 interface SiteSummary { id: string; name: string; slug: string }
@@ -259,7 +259,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
       <div><h1 className="font-heading text-2xl font-semibold">Переменные</h1><p className="mt-1 text-sm text-muted-foreground">Глобальные значения сайта {state.site.name} и доступный только для просмотра каталог системных подстановок.</p></div>
       <Tabs defaultValue="values" className="w-full">
         <TabsList aria-label="Разделы переменных"><TabsTrigger value="values">Значения сайта</TabsTrigger><TabsTrigger value="catalog">Каталог подстановок</TabsTrigger></TabsList>
-        <TabsContent value="values" className="space-y-5">
+        <TabsPanels><TabsContent value="values" className="space-y-5">
           {message ? <Alert variant={message.kind === "error" ? "destructive" : "default"}>{message.kind === "error" ? <CircleAlert /> : <Save />}<AlertTitle>{message.kind === "error" ? "Не удалось сохранить" : "Изменения приняты"}</AlertTitle><AlertDescription>{message.text}</AlertDescription></Alert> : null}
           {state.values.readinessErrors.length > 0 ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Публикация заблокирована</AlertTitle><AlertDescription>Заполните: {state.values.readinessErrors.join(", ")}.</AlertDescription></Alert> : null}
           <Card>
@@ -271,7 +271,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="catalog"><VariableCatalogPanel apiUrl={apiUrl} siteId={state.site.id} /></TabsContent>
+        <TabsContent value="catalog"><VariableCatalogPanel apiUrl={apiUrl} siteId={state.site.id} /></TabsContent></TabsPanels>
       </Tabs>
     </div>
   </AdminShell>
