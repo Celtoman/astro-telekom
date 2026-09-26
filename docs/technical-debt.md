@@ -139,8 +139,8 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| TD-137 | [#222](https://github.com/Celtoman/astro-telekom/issues/222) 🟢 | `tariff_grid.title` сохраняется, но городской renderer выводит фиксированный заголовок |
-| TD-142 | [#227](https://github.com/Celtoman/astro-telekom/issues/227) 🟢 | Read-only реестр паспортов блоков указывает устаревший источник `PageBlock.data` после C2 |
+| TD-137 | [#222](https://github.com/Celtoman/astro-telekom/issues/222) ✅ | Городской renderer выводит сохранённый `tariff_grid.title` в H2 |
+| TD-142 | [#227](https://github.com/Celtoman/astro-telekom/issues/227) ✅ | Паспорта городской HOME называют действующий `PageTemplateBlock.data` авторитетным источником |
 | TD-138 | [#223](https://github.com/Celtoman/astro-telekom/issues/223) ✅ | Статус миграции `0054` в текущем состоянии и admin-документе синхронизирован с подтверждённым rollout |
 | TD-126 | [#208](https://github.com/Celtoman/astro-telekom/issues/208) ✅ | Read-only публичный POST quote отвечает HTTP 200 после локального и live smoke |
 | TD-18 | [#20](https://github.com/Celtoman/astro-telekom/issues/20) ✅ | Admin входит в общий Astro check; отдельный CRM-workspace удален 9 сентября 2026 года |
@@ -158,7 +158,7 @@
 | TD-43 | [#63](https://github.com/Celtoman/astro-telekom/issues/63) ✅ | Filtered runtime, общий API/seed image и кешированный migration path сократили повторный live deployment до 85 секунд |
 | TD-50 | [#70](https://github.com/Celtoman/astro-telekom/issues/70) ✅ | Release readiness документы и Task #31 синхронизированы с live test-контуром и актуальными блокерами |
 | TD-53 | [#73](https://github.com/Celtoman/astro-telekom/issues/73) ✅ | `decisions.md` синхронизирован с финальными ответами Q89 и Q118 |
-| TD-75 | [#97](https://github.com/Celtoman/astro-telekom/issues/97) 🟢 | Миграция admin-примитивов на React Aria выполнена локально; issue остаётся открытой до публикации изменений |
+| TD-75 | [#97](https://github.com/Celtoman/astro-telekom/issues/97) ✅ | Admin-примитивы переведены на React Aria, `radix-ui` удалён, CI прошёл |
 | TD-76 | [#98](https://github.com/Celtoman/astro-telekom/issues/98) ✅ | Актуальный Astro check обрабатывает inline `formId` без warnings и hints |
 | TD-84 | [#107](https://github.com/Celtoman/astro-telekom/issues/107) ✅ | Ручное число Task issues удалено; milestone читается из GitHub, возврат фиксированного baseline блокирует тест |
 | TD-102 | [#131](https://github.com/Celtoman/astro-telekom/issues/131) ✅ | Живые документы согласованы с 20 миграциями, а исторические production-проверки явно привязаны к exact SHA |

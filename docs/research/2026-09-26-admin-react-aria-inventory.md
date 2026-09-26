@@ -12,4 +12,4 @@
 | `Dialog` | `AdminShell`, `CitiesApp` | React Aria | Сохраняется dirty warning; проверить focus trap, Escape и возврат фокуса |
 | `Popover` | `PublicationIndicator` | React Aria | Проверить клавиатуру и возврат фокуса |
 
-Проверка в локальном headless Chrome: раскрытие группы, tooltip, меню по клику и Enter, Escape с возвратом фокуса, переход вкладки стрелкой, выбор checkbox пробелом, открытие/закрытие мобильного Modal и Popover с возвратом фокуса. Временные QA-маршруты удалены. Полный `pnpm check` пройден; для закрытия #97 требуется публикация коммита. Это инвентарь исполнения #97, а не новый backlog.
+Проверка в локальном headless Chrome: раскрытие группы, tooltip, меню по клику и Enter, Escape с возвратом фокуса, переход вкладки стрелкой, выбор checkbox пробелом, открытие/закрытие мобильного Modal и Popover с возвратом фокуса. Временные QA-маршруты удалены. Локальный `pnpm check` прошёл; [CI 36252288593](https://github.com/Celtoman/astro-telekom/actions/runs/36252288593) завершился успешно на `fffa40b4cc4b3c48f1513429a4f4f9f0d86e4422`, #97 закрыта. Это инвентарь исполнения #97, а не новый backlog.
