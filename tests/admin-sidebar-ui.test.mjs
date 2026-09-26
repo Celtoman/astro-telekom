@@ -44,8 +44,9 @@ test('admin shell uses accessible collapsible desktop and modal mobile navigatio
   const navigationConfig = readFileSync(navigationPath, 'utf8');
   const source = `${shell}\n${navigation}\n${navigationConfig}`;
 
-  assert.match(source, /Collapsible/);
-  assert.match(source, /Tooltip/);
+  assert.match(source, /Disclosure isExpanded/);
+  assert.match(source, /TooltipTrigger/);
+  assert.match(source, /MenuTrigger/);
   assert.match(source, /ModalOverlay isDismissable isOpen=\{mobileOpen\}/);
   assert.match(source, /Heading slot="title"/);
   assert.match(source, /aria-label="Разделы админки"/);

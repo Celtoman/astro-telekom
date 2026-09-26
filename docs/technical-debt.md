@@ -158,7 +158,7 @@
 | TD-43 | [#63](https://github.com/Celtoman/astro-telekom/issues/63) ✅ | Filtered runtime, общий API/seed image и кешированный migration path сократили повторный live deployment до 85 секунд |
 | TD-50 | [#70](https://github.com/Celtoman/astro-telekom/issues/70) ✅ | Release readiness документы и Task #31 синхронизированы с live test-контуром и актуальными блокерами |
 | TD-53 | [#73](https://github.com/Celtoman/astro-telekom/issues/73) ✅ | `decisions.md` синхронизирован с финальными ответами Q89 и Q118 |
-| TD-75 | [#97](https://github.com/Celtoman/astro-telekom/issues/97) 🟢 | Текущие Radix-примитивы admin расходятся с новым обязательным React Aria-референсом |
+| TD-75 | [#97](https://github.com/Celtoman/astro-telekom/issues/97) 🟢 | Миграция admin-примитивов на React Aria выполнена локально; issue остаётся открытой до публикации изменений |
 | TD-76 | [#98](https://github.com/Celtoman/astro-telekom/issues/98) ✅ | Актуальный Astro check обрабатывает inline `formId` без warnings и hints |
 | TD-84 | [#107](https://github.com/Celtoman/astro-telekom/issues/107) ✅ | Ручное число Task issues удалено; milestone читается из GitHub, возврат фиксированного baseline блокирует тест |
 | TD-102 | [#131](https://github.com/Celtoman/astro-telekom/issues/131) ✅ | Живые документы согласованы с 20 миграциями, а исторические production-проверки явно привязаны к exact SHA |

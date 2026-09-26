@@ -17,7 +17,7 @@
 - [Runbook миграции данных Release 1](docs/runbooks/release-one-data-migration.md) — backup, read-only pre/post audit и production-like приемка внешней БД.
 - [Архитектура](docs/architecture.md) — приложения, потоки данных и границы модулей.
 - [Технологическая база](docs/technology-baseline.md) — версии, инфраструктура и правила сборки.
-- [Дизайн-система admin](docs/admin-design-system.md) — обязательный React Aria-референс и текущая граница Radix-реализации.
+- [Дизайн-система admin](docs/admin-design-system.md) — обязательный React Aria-референс и проверка миграции примитивов.
 - [Дизайн-система public web](docs/web-design-system.md) — обязательный визуальный и UX-референс официального dom.ru.
 - [API-контракты](docs/api-contracts.md) — реализованные HTTP-маршруты и их ограничения.
 - [Модель данных](docs/data-model.md) — Prisma-схема и отличие модели от продуктового замысла.
