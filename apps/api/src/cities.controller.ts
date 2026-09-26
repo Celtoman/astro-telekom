@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpCode, NotFoundException, Param, Post } from '@nestjs/common';
 import { SiteCatalogService } from './site-catalog.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { configurationSnapshot, quoteFingerprint, quoteTariffConfiguration, type TariffSelection } from './tariff-configuration.service';
@@ -27,6 +27,7 @@ export class CitiesController {
   }
 
   @Post(':citySlug/tariffs/:tariffSlug/quote')
+  @HttpCode(200)
   async quoteTariff(
     @Param('siteSlug') siteSlug: string,
     @Param('citySlug') citySlug: string,

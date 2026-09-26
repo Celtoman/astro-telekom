@@ -118,6 +118,32 @@ test('public quote uses only the published city snapshot and rejects another tar
   await assert.rejects(() => controller.quoteTariff('domru', 'kazan', 'giga-500', { services: ['ont'] }), /нельзя выбрать/);
 });
 
+test('read-only public quote responds with HTTP 200 and does not create a resource', async () => {
+  const { CitiesController } = require('../apps/api/dist/cities.controller.js');
+  const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
+  const { PublicationWorkflowService } = require('../apps/api/dist/publication-workflow.service.js');
+  const { Module } = require('../apps/api/node_modules/@nestjs/common');
+  const { NestFactory } = require('../apps/api/node_modules/@nestjs/core');
+  const { FastifyAdapter } = require('../apps/api/node_modules/@nestjs/platform-fastify');
+  class QuoteTestModule {}
+  Module({ controllers: [CitiesController], providers: [
+    { provide: SiteCatalogService, useValue: {} },
+    { provide: PublicationWorkflowService, useValue: { getPublishedCity: async () => ({ tariffs: [tariff] }) } },
+  ] })(QuoteTestModule);
+  const app = await NestFactory.create(QuoteTestModule, new FastifyAdapter(), { logger: false });
+  try {
+    app.setGlobalPrefix('api/v1');
+    await app.init();
+    const response = await app.getHttpAdapter().getInstance().inject({
+      method: 'POST', url: '/api/v1/public/sites/domru/cities/kazan/tariffs/giga-500/quote', payload: {},
+    });
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.json().totals.monthly, 900);
+  } finally {
+    await app.close();
+  }
+});
+
 test('quote fingerprint binds displayed tariff, selection and price lines without retaining mutable source', () => {
   const { configurationSnapshot, quoteFingerprint } = require('../apps/api/dist/tariff-configuration.service.js');
   assert.equal(typeof configurationSnapshot, 'function');
