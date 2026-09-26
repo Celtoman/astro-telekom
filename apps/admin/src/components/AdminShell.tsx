@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react"
 import { cn } from "cn"
-import { Dialog } from "radix-ui"
+import { Dialog, Heading, Modal, ModalOverlay, Text } from "react-aria-components"
 import {
   activeNavigationGroup,
   adminNavigation,
@@ -92,7 +92,7 @@ export function AdminShell({ apiUrl, user, active, children }: {
   }
 
   return (
-    <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
+    <>
       <div className="min-h-screen bg-muted/30 lg:flex">
         <aside className={cn("hidden shrink-0 flex-col border-r bg-background transition-[width] duration-200 lg:flex", sidebarExpanded ? "w-60" : "w-12")}>
           <div className={cn("flex items-center gap-2 p-2", !sidebarExpanded && "flex-col")}>
@@ -112,11 +112,9 @@ export function AdminShell({ apiUrl, user, active, children }: {
         <div className="min-w-0 flex-1">
           <header className="flex min-h-16 flex-wrap items-center gap-2 border-b bg-background px-4 py-2 sm:gap-4 sm:px-6">
             <div className="flex min-w-0 flex-1 items-center gap-3">
-              <Dialog.Trigger asChild>
-                <Button className="lg:hidden" size="icon" variant="outline" aria-label="Открыть меню" title="Открыть меню (Ctrl+B)">
+                <Button className="lg:hidden" size="icon" variant="outline" aria-label="Открыть меню" title="Открыть меню (Ctrl+B)" onClick={() => setMobileOpen(true)}>
                   <Menu />
                 </Button>
-              </Dialog.Trigger>
               <div className="min-w-0"><p className="text-sm font-medium">Администратор</p><p className="truncate text-xs text-muted-foreground">{user.email}</p></div>
             </div>
             <div className="order-3 w-full sm:order-none sm:w-auto"><PublicationIndicator apiUrl={apiUrl} /></div>
@@ -126,23 +124,22 @@ export function AdminShell({ apiUrl, user, active, children }: {
         </div>
       </div>
 
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-foreground/35 backdrop-blur-xs lg:hidden" />
-        <Dialog.Content className="fixed inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col border-r bg-background p-2 shadow-xl outline-none lg:hidden">
-          <Dialog.Title className="sr-only">Навигация админки</Dialog.Title>
-          <Dialog.Description className="sr-only">Выберите раздел административного интерфейса.</Dialog.Description>
+      <ModalOverlay isDismissable isOpen={mobileOpen} onOpenChange={setMobileOpen} className="fixed inset-0 bg-foreground/35 backdrop-blur-xs lg:hidden">
+        <Modal className="fixed inset-y-0 left-0 w-72 max-w-[85vw] border-r bg-background p-2 shadow-xl lg:hidden">
+        <Dialog className="flex h-full flex-col outline-none">
+          <Heading slot="title" className="sr-only">Навигация админки</Heading>
+          <Text slot="description" className="sr-only">Выберите раздел административного интерфейса.</Text>
           <div className="flex items-center gap-3 px-2 py-2">
             <span className="flex size-8 items-center justify-center rounded-lg bg-primary font-heading font-semibold text-primary-foreground">д</span>
             <div className="min-w-0 flex-1"><p className="font-heading font-semibold">Дом.ру</p><p className="text-xs text-muted-foreground">Платформа</p></div>
-            <Dialog.Close asChild>
-              <Button size="icon" variant="ghost" aria-label="Закрыть меню"><X /></Button>
-            </Dialog.Close>
+              <Button size="icon" variant="ghost" aria-label="Закрыть меню" onClick={() => setMobileOpen(false)}><X /></Button>
           </div>
           <div className="flex-1 overflow-y-auto px-2 py-4">
             <AdminNavigation active={active} expandedGroups={expandedGroups} onGroupOpenChange={setGroupOpen} onNavigate={() => setMobileOpen(false)} />
           </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+        </Dialog>
+        </Modal>
+      </ModalOverlay>
+    </>
   )
 }

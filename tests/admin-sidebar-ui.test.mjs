@@ -46,8 +46,8 @@ test('admin shell uses accessible collapsible desktop and modal mobile navigatio
 
   assert.match(source, /Collapsible/);
   assert.match(source, /Tooltip/);
-  assert.match(source, /Dialog\.Root/);
-  assert.match(source, /Dialog\.Title/);
+  assert.match(source, /ModalOverlay isDismissable isOpen=\{mobileOpen\}/);
+  assert.match(source, /Heading slot="title"/);
   assert.match(source, /aria-label="Разделы админки"/);
   assert.match(source, /Свернуть боковую панель/);
   assert.match(source, /Открыть меню/);

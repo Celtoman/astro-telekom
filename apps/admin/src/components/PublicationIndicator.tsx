@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { CalendarClock, CheckCircle2, CircleAlert, CloudUpload, LoaderCircle, RefreshCw } from "lucide-react"
-import { Popover } from "radix-ui"
+import { Button as AriaButton, Dialog, DialogTrigger, Popover } from "react-aria-components"
 import { requestJson } from "../lib/admin-api.mjs"
 import { describePublicationState, type PublicationState } from "../lib/publication-display.mjs"
 import { publicationRefreshDelay, resolvePublicationSite } from "../lib/publication-indicator.mjs"
 import { statusPresentation } from "../lib/status-presentation.mjs"
 import { StatusBadge } from "./StatusBadge"
 import { Badge } from "./ui/badge"
-import { Button } from "./ui/button"
+import { Button, buttonVariants } from "./ui/button"
 
 interface SiteSummary { id: string; name: string }
 type IndicatorState =
@@ -76,16 +76,14 @@ export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
       : presentation?.kind === "publishing" ? LoaderCircle
         : presentation?.kind === "scheduled" ? CalendarClock : presentation?.kind === "unpublished" ? CloudUpload : CircleAlert
 
-  return <Popover.Root>
-    <Popover.Trigger asChild>
-      <Button type="button" size="sm" variant="outline" aria-label={`Публикация сайта: ${status?.label ?? (state.status === "loading" ? "проверяем" : "статус недоступен")}. Открыть подробности`}>
+  return <DialogTrigger>
+      <AriaButton className={buttonVariants({ size: "sm", variant: "outline" })} aria-label={`Публикация сайта: ${status?.label ?? (state.status === "loading" ? "проверяем" : "статус недоступен")}. Открыть подробности`}>
         <Icon className={state.status === "loading" || presentation?.kind === "publishing" ? "animate-spin" : undefined} data-icon="inline-start" />
         <span className="hidden sm:inline">Сайт:</span>
         {status ? <Badge variant={status.tone}>{status.label}</Badge> : <Badge variant={state.status === "loading" ? "neutral" : "destructive"}>{state.status === "loading" ? "Проверяем…" : "Недоступен"}</Badge>}
-      </Button>
-    </Popover.Trigger>
-    <Popover.Portal>
-      <Popover.Content align="end" sideOffset={8} className="z-50 w-80 max-w-[calc(100vw-2rem)] rounded-lg border bg-background p-4 text-foreground shadow-lg outline-none" aria-label="Состояние публикации сайта">
+      </AriaButton>
+      <Popover placement="bottom end" offset={8} className="z-50 w-80 max-w-[calc(100vw-2rem)] rounded-lg border bg-background p-4 text-foreground shadow-lg outline-none">
+        <Dialog aria-label="Состояние публикации сайта" className="outline-none">
         <div className="space-y-3 text-sm">
           <div><p className="font-heading font-semibold">{presentation?.title ?? "Статус публикации недоступен"}</p><p className="mt-1 text-muted-foreground">{presentation?.description ?? (state.status === "unavailable" ? state.reason : "Получаем состояние сайта.")}</p></div>
           {state.status === "ready" ? <>
@@ -99,7 +97,7 @@ export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
           </> : null}
           <Button type="button" size="sm" variant="outline" onClick={() => void (site ? loadState(site) : loadSite())}><RefreshCw data-icon="inline-start" />Обновить</Button>
         </div>
-      </Popover.Content>
-    </Popover.Portal>
-  </Popover.Root>
+        </Dialog>
+      </Popover>
+  </DialogTrigger>
 }

@@ -25,7 +25,7 @@ test('city catalog uses server controls, an overlay drawer and a guarded publish
   assert.ok(source.includes('/admin/cities'));
   assert.match(source, /href=["']\/cities\/import["']/);
   assert.match(source, /method:\s*form\.id\s*\?\s*["']PATCH["']\s*:\s*["']POST["']/);
-  assert.match(source, /Dialog\.Content/);
+  assert.match(source, /ModalOverlay isDismissable isOpen=\{open\}/);
   assert.match(source, /Новый город/);
   assert.match(source, /change-slug/);
   assert.match(source, /301-редиректы/);

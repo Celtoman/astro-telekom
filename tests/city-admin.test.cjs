@@ -45,7 +45,7 @@ test('city admin uses server pagination and an overlay dialog drawer', () => {
   assert.match(controller, /publishedTariffCount/);
   assert.match(controller, /hasUnpublishedChanges/);
   assert.match(ui, /ServerPagination/);
-  assert.match(ui, /Dialog\.Content/);
+  assert.match(ui, /ModalOverlay isDismissable isOpen=\{open\}/);
   assert.match(ui, /Добавить город/);
   assert.match(ui, /beforeunload/);
 });
