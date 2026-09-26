@@ -43,6 +43,26 @@ test('every passport is complete, draft-only and exposes no approval or editor m
   }
 });
 
+test('current city HOME passports name the shared template as the editable source', () => {
+  const { BLOCK_PASSPORTS } = require('../apps/api/dist/block-passports.js');
+  const homeTypes = new Set(['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'faq']);
+  for (const passport of BLOCK_PASSPORTS.filter((item) => homeTypes.has(item.id))) {
+    assert.match(passport.implementation, /PageTemplate\(CITY_HOME\).*PageTemplateBlock\.data/, passport.id);
+    assert.match(passport.implementation, /PageBlock.*legacy/, passport.id);
+    assert.doesNotMatch(passport.implementation, /предложение для C2|данные пока хранятся в PageBlock/, passport.id);
+    for (const field of passport.fields.filter((item) => item.control !== 'read_only')) {
+      assert.match(field.source, /^PageTemplateBlock\.data\./, `${passport.id}.${field.key}`);
+    }
+  }
+
+  const futureText = BLOCK_PASSPORTS.find((item) => item.id === 'rich_text');
+  assert.match(futureText.implementation, /не реализован/);
+  assert.doesNotMatch(futureText.implementation, /PageBlock\.data|PageTemplateBlock\.data/);
+  for (const field of futureText.fields) {
+    assert.doesNotMatch(field.source, /PageBlock\.data|PageTemplateBlock\.data/, field.key);
+  }
+});
+
 test('passport API is read-only behind admin authentication and the templates screen displays it', () => {
   const { AdminBlocksController } = require('../apps/api/dist/admin-blocks.controller.js');
   const controller = new AdminBlocksController({}, {});
