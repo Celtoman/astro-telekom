@@ -141,7 +141,7 @@
 | --- | --- | --- |
 | TD-137 | [#222](https://github.com/Celtoman/astro-telekom/issues/222) 🟢 | `tariff_grid.title` сохраняется, но городской renderer выводит фиксированный заголовок |
 | TD-138 | [#223](https://github.com/Celtoman/astro-telekom/issues/223) ✅ | Статус миграции `0054` в текущем состоянии и admin-документе синхронизирован с подтверждённым rollout |
-| TD-126 | [#208](https://github.com/Celtoman/astro-telekom/issues/208) 🟢 | Read-only публичный POST quote возвращает NestJS default `201` вместо семантически точного `200` |
+| TD-126 | [#208](https://github.com/Celtoman/astro-telekom/issues/208) ✅ | Read-only публичный POST quote отвечает HTTP 200 после локального и live smoke |
 | TD-18 | [#20](https://github.com/Celtoman/astro-telekom/issues/20) ✅ | Admin входит в общий Astro check; отдельный CRM-workspace удален 9 сентября 2026 года |
 | TD-19 | [#21](https://github.com/Celtoman/astro-telekom/issues/21) ✅ | Устаревший tracked JS рядом с TS в `apps/api/src` — закрыто 7 сентября 2026 |
 | TD-20 | [#22](https://github.com/Celtoman/astro-telekom/issues/22) ✅ | Открытые вопросы получили стабильные `OQ-*` ID, закрытые пункты удалены и добавлены roadmap-ссылки |
