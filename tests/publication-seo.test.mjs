@@ -1,24 +1,26 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { copyFile, mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { fileURLToPath } from 'node:url';
 
 import { verifyPublication } from '../apps/web/scripts/verify-publication.mjs';
 
 const publicSiteUrl = 'https://partner.example.ru';
 
 function indexableHtml(url, overrides = {}) {
-  return `<!doctype html><html lang="ru"><head><title>${overrides.title ?? 'Заголовок'}</title><meta name="description" content="${overrides.description ?? 'Описание страницы'}">${overrides.head ?? ''}<link rel="canonical" href="${overrides.canonical ?? url}"></head><body>${overrides.body ?? '<h1>Заголовок страницы</h1>'}</body></html>`;
+  return `<!doctype html><html lang="ru"><head>${overrides.favicon ?? '<link rel="icon" href="/favicon.ico">'}<title>${overrides.title ?? 'Заголовок'}</title><meta name="description" content="${overrides.description ?? 'Описание страницы'}">${overrides.head ?? ''}<link rel="canonical" href="${overrides.canonical ?? url}"></head><body>${overrides.body ?? '<h1>Заголовок страницы</h1>'}</body></html>`;
 }
 
 function notFoundHtml(overrides = {}) {
-  return `<!doctype html><html lang="ru"><head><title>Страница не найдена</title><meta name="description" content="Запрошенная страница не найдена.">${overrides.robots ?? '<meta name="robots" content="noindex, follow">'}${overrides.canonical ?? ''}</head><body><h1>Страница не найдена</h1></body></html>`;
+  return `<!doctype html><html lang="ru"><head><link rel="icon" href="/favicon.ico"><title>Страница не найдена</title><meta name="description" content="Запрошенная страница не найдена.">${overrides.robots ?? '<meta name="robots" content="noindex, follow">'}${overrides.canonical ?? ''}</head><body><h1>Страница не найдена</h1></body></html>`;
 }
 
 async function createFixture(overrides = {}) {
   const directory = await mkdtemp(join(tmpdir(), 'publication-seo-'));
   await mkdir(join(directory, 'kazan'), { recursive: true });
+  if (overrides.faviconAsset !== false) await copyFile(fileURLToPath(new URL('../apps/web/public/favicon.ico', import.meta.url)), join(directory, 'favicon.ico'));
   await writeFile(join(directory, 'index.html'), overrides.root ?? indexableHtml(`${publicSiteUrl}/`));
   await writeFile(join(directory, 'kazan', 'index.html'), overrides.kazan ?? indexableHtml(`${publicSiteUrl}/kazan`));
   if (overrides.extra !== undefined) {
@@ -59,6 +61,26 @@ test('publication SEO verifier accepts a complete sitemap and valid raw HTML', a
     assert.deepEqual(
       await verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
       { indexablePages: 2, htmlPages: 3 },
+    );
+  });
+});
+
+test('publication SEO verifier rejects a build without a root favicon asset', async () => {
+  await withFixture({ faviconAsset: false }, async (distDirectory) => {
+    await assert.rejects(
+      verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
+      /favicon\.ico/i,
+    );
+  });
+});
+
+test('publication SEO verifier rejects an icon link that points to a city route', async () => {
+  await withFixture({
+    root: indexableHtml(`${publicSiteUrl}/`, { favicon: '<link rel="icon" href="/kazan">' }),
+  }, async (distDirectory) => {
+    await assert.rejects(
+      verifyPublication({ distDirectory, publicSiteUrl, allowDemoData: false }),
+      /favicon\.ico/i,
     );
   });
 });

@@ -99,6 +99,11 @@ function findLoopbackReference(content) {
 }
 
 function validateDocumentMetadata(html, label, errors) {
+  const icons = tags(html, 'link').filter((tag) => getAttribute(tag, 'rel')?.toLowerCase().split(/\s+/).includes('icon'));
+  if (icons.length !== 1 || getAttribute(icons[0], 'href') !== '/favicon.ico') {
+    errors.push(`${label}: нужен ровно один favicon.ico из корня сайта`);
+  }
+
   const titleTags = tags(html, 'title', true);
   if (titleTags.length !== 1 || !textContent(titleTags[0])) {
     errors.push(`${label}: нужен ровно один непустой title`);
@@ -167,6 +172,15 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
   const origin = new URL(publicSiteUrl).origin;
   const errors = [];
   const files = await collectFiles(distDirectory);
+  const faviconPath = files.find((path) => displayPath(distDirectory, path) === 'favicon.ico');
+  if (!faviconPath) {
+    errors.push('favicon.ico: файл отсутствует в корне сборки');
+  } else {
+    const icon = await readFile(faviconPath);
+    if (icon.length < 22 || icon.readUInt16LE(0) !== 0 || icon.readUInt16LE(2) !== 1 || icon.readUInt16LE(4) < 1) {
+      errors.push('favicon.ico: файл не содержит корректный ICO-заголовок');
+    }
+  }
   const htmlFiles = files.filter((path) => path.toLowerCase().endsWith('.html'));
   const htmlInventory = htmlFiles.map((path) => ({ path, route: routeForHtml(distDirectory, path) }));
   const publicHtml = htmlInventory.filter(({ route }) => route !== null);

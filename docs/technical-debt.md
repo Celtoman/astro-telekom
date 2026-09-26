@@ -84,7 +84,7 @@
 | TD-105 | [#134](https://github.com/Celtoman/astro-telekom/issues/134) ✅ | `Page` поддерживает пять обязательных общих страниц сайта Release 1 |
 | TD-106 | [#135](https://github.com/Celtoman/astro-telekom/issues/135) ✅ | Импорт публикует полный каталог городов с одной канонической HOME на город |
 | TD-107 | [#137](https://github.com/Celtoman/astro-telekom/issues/137) ✅ | Seed заполняет предложный и родительный падежи Казани для корректных локальных заголовков |
-| TD-108 | [#138](https://github.com/Celtoman/astro-telekom/issues/138) 🟢 | Public site не задает favicon и получает лишний 404 |
+| TD-108 | [#138](https://github.com/Celtoman/astro-telekom/issues/138) ✅ | Согласованный корневой favicon подключён ко всем HTML-страницам и проверяется при сборке |
 | TD-109 | [#139](https://github.com/Celtoman/astro-telekom/issues/139) ✅ | Городская HOME Release 1 выводит полный тарифный snapshot без legacy-фильтра и лимита |
 | TD-110 | [#140](https://github.com/Celtoman/astro-telekom/issues/140) ✅ | `pull_policy: never` запрещает Coolify 4.3.19 скачивать локальный API image для `bootstrap-seed`; exact-SHA deployment подтвержден |
 | TD-111 | [#141](https://github.com/Celtoman/astro-telekom/issues/141) ✅ | Public Caddy отдает общую noindex-404 с HTTP 404; exact-SHA live-smoke подтвержден |
