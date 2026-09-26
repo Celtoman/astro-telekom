@@ -1,31 +1,33 @@
-"use client"
-
 import * as React from "react"
 import { cn } from "cn"
-import { Checkbox as CheckboxPrimitive } from "radix-ui"
 import { CheckIcon } from "lucide-react"
+import { CheckboxButton, CheckboxField } from "react-aria-components"
 
-function Checkbox({
-  className,
-  ...props
-}: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
+type CheckboxProps = Omit<React.ComponentProps<typeof CheckboxField>, "isSelected" | "isDisabled" | "onChange" | "className" | "children"> & {
+  checked?: boolean
+  disabled?: boolean
+  onCheckedChange?: (checked: boolean) => void
+  className?: string
+  children?: React.ReactNode
+}
+
+function Checkbox({ className, checked, disabled, onCheckedChange, children, ...props }: CheckboxProps) {
   return (
-    <CheckboxPrimitive.Root
+    <CheckboxField
       data-slot="checkbox"
-      className={cn(
-        "peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-colors outline-none group-has-disabled/field:opacity-50 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground group-has-[:focus-visible]/field-label:data-checked:border-primary dark:data-checked:bg-primary",
-        className
-      )}
+      className={cn("group/checkbox inline-flex text-sm data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50", className)}
+      isSelected={checked}
+      isDisabled={disabled}
+      onChange={onCheckedChange}
       {...props}
     >
-      <CheckboxPrimitive.Indicator
-        data-slot="checkbox-indicator"
-        className="grid place-content-center text-current transition-none [&>svg]:size-3.5"
-      >
-        <CheckIcon
-        />
-      </CheckboxPrimitive.Indicator>
-    </CheckboxPrimitive.Root>
+      <CheckboxButton className="inline-flex cursor-pointer items-center gap-2 rounded-sm outline-none data-[focus-visible]:ring-3 data-[focus-visible]:ring-ring/50 group-data-[disabled]/checkbox:cursor-not-allowed">
+        <span aria-hidden="true" className="grid size-4 shrink-0 place-items-center rounded-[4px] border border-input transition-colors group-data-[selected]/checkbox:border-primary group-data-[selected]/checkbox:bg-primary group-data-[selected]/checkbox:text-primary-foreground">
+          <CheckIcon className="size-3.5 opacity-0 group-data-[selected]/checkbox:opacity-100" />
+        </span>
+        {children}
+      </CheckboxButton>
+    </CheckboxField>
   )
 }
 

@@ -240,7 +240,7 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
                   </Table>
                 </div>
               </div>
-              {report.warningRows > 0 ? <Field orientation="horizontal"><Checkbox id="confirm-city-warnings" checked={confirmWarnings} onCheckedChange={(checked) => setConfirmWarnings(checked === true)} /><FieldLabel htmlFor="confirm-city-warnings">Подтверждаю предупреждения</FieldLabel></Field> : null}
+              {report.warningRows > 0 ? <Field orientation="horizontal"><Checkbox checked={confirmWarnings} onCheckedChange={setConfirmWarnings}>Подтверждаю предупреждения</Checkbox></Field> : null}
               <Button disabled={busy !== null || report.errorRows > 0 || unresolvedActionCount > 0 || (report.warningRows > 0 && !confirmWarnings)} onClick={() => void applyImport()}>{busy === "apply" ? "Применяем…" : "Применить выбранные действия"}</Button>
             </div> : null}
           </CardContent>

@@ -149,7 +149,7 @@ test('Coolify and direct Caddy edges apply browser security headers before authe
   assert.match(directEdge, /\{\$API_DOMAIN\}[\s\S]*?import strict_security_headers/);
 });
 
-test('admin production build emits hash-based CSP while allowing only Radix style attributes inline', { timeout: 120_000 }, async () => {
+test('admin production build emits hash-based CSP while allowing only checkbox style attributes inline', { timeout: 120_000 }, async () => {
   const build = await runAdminBuild();
   assert.equal(build.code, 0, build.output);
 
