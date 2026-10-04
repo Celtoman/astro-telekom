@@ -15,6 +15,7 @@ interface Props {
   dialogId?: string;
   serviceType?: ServiceType;
   tariff?: TariffView;
+  variant?: 'standard' | 'hero';
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   dialogId,
   serviceType = 'INTERNET',
   tariff,
+  variant = 'standard',
 } = Astro.props as Props;
 const suffix = tariff?.slug || pageSlug || 'catalog';
 const formId = `address-form-${city.slug}-${presentation}-${suffix}`;
@@ -46,7 +48,7 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
 ---
 
 <div
-  class:list={['address-check-root', { embedded: presentation === 'embedded', modal: presentation === 'dialog' }]}
+  class:list={['address-check-root', { embedded: presentation === 'embedded', modal: presentation === 'dialog', 'hero-address': variant === 'hero' }]}
   data-address-check-root
   data-presentation={presentation}
   data-entry-dialog-id={presentation === 'dialog' ? entryDialogId : ''}
@@ -81,6 +83,7 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
         </div>
         <label for={`address-${formId}`}>Адрес</label>
         <div class="address-field">
+          {variant === 'hero' && <img class="address-icon" src="/images/figma/map-pin.svg" width="20" height="20" alt="" />}
           <input
             id={`address-${formId}`}
             type="text"
@@ -92,7 +95,7 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
             aria-haspopup="listbox"
             aria-expanded="false"
             aria-controls={`address-suggestions-${formId}`}
-            placeholder="Город, улица, дом, квартира"
+            placeholder={variant === 'hero' ? 'Введите ваш адрес' : 'Город, улица, дом, квартира'}
           />
           <div
             id={`address-suggestions-${formId}`}
@@ -104,7 +107,7 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
           ></div>
         </div>
         <p class="address-hint" data-address-hint aria-live="polite">Начните вводить город и адрес, затем выберите подходящий вариант.</p>
-        <button class="button" type="submit" data-submit disabled>Проверить адрес</button>
+        <button class="button" type="submit" data-submit data-submit-label={variant === 'hero' ? 'Проверить' : 'Проверить адрес'} disabled>{variant === 'hero' ? 'Проверить' : 'Проверить адрес'}</button>
         <p class="form-result" data-form-result role="status"></p>
       </form>
     </div>
@@ -256,10 +259,22 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
   .embedded .address-field { grid-column: 1; }
   .embedded .address-hint, .embedded .form-result { grid-column: 1 / -1; }
   .embedded [data-submit] { grid-column: 2; grid-row: 2; min-width: 178px; }
+  .hero-address.embedded { margin-top: 0; }
+  .hero-address .address-form { gap: 16px; }
+  .hero-address .address-form > label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .hero-address .address-field { grid-row: 1; }
+  .hero-address .address-icon { position: absolute; left: 16px; top: 14px; pointer-events: none; }
+  .hero-address .address-field input { height: 48px; border-color: #f0f3f6; border-radius: 14px; padding-left: 46px; font-size: 16px; }
+  .hero-address .address-field input::placeholder { color: #5c6b7d; opacity: 1; }
+  .hero-address .address-hint:not([data-state]) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .hero-address .form-result:empty { display: none; }
+  .hero-address [data-submit] { grid-row: 1; width: 200px; min-width: 0; padding: 14px 24px; font-size: 14px; font-weight: 600; line-height: 20px; background: #e0231e; }
+  .hero-address [data-submit]:hover { background: #c61e1a; }
   @media (max-width: 620px) {
     .embedded .address-form { grid-template-columns: 1fr; }
     .embedded .address-field, .embedded [data-submit] { grid-column: 1; grid-row: auto; }
     .embedded [data-submit], .result-card .button, .result-card .secondary-button { width: 100%; }
+    .hero-address [data-submit] { grid-row: auto; }
     dialog { width: min(100% - 16px, 620px); border-radius: 22px; }
     .dialog-card { padding: 28px 20px 24px; }
   }

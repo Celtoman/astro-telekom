@@ -192,7 +192,7 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(addressClient, /consentVersion/);
   assert.match(addressClient, /Попробовать ещё раз/);
 
-  assert.match(cityFirstScreen, /presentation="embedded"/);
+  assert.match(cityFirstScreen, /<HomeHero variant="city"/);
   assert.match(blockRenderer, /data-address-dialog-trigger/);
   assert.match(tariffDetail, /data-address-dialog-trigger/);
   assert.match(globalPage, /data-address-dialog-trigger/);

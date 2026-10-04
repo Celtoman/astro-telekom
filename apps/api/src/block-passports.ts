@@ -57,13 +57,13 @@ function managed(id: ManagedBlockType, title: string, purpose: string, proposedA
 
 const managedPassports: Record<ManagedBlockType, BlockPassport> = {
   hero: managed('hero', 'Первый экран', 'Один заголовок H1 и основной вход в сценарий страницы.', ['HOME'], [
-    field('eyebrow', 'text', false, 'PageTemplateBlock.data.eyebrow', 'Непустая строка до 80 символов; HTML запрещён.', 'input'),
+    field('eyebrow', 'text', false, 'PageTemplateBlock.data.eyebrow', 'Legacy: хранится, но не выводится городским V3. Непустая строка до 80 символов; HTML запрещён.', 'input'),
     field('title', 'text', true, 'PageTemplateBlock.data.title', 'Непустая строка до 120 символов; HTML запрещён.', 'input'),
     field('text', 'text', true, 'PageTemplateBlock.data.text', 'Непустая строка до 1000 символов; HTML запрещён.', 'textarea'),
-    field('ctaText', 'text', false, 'PageTemplateBlock.data.ctaText', 'До 80 символов; задаётся только вместе с ctaHref.', 'input'),
-    field('ctaHref', 'url', false, 'PageTemplateBlock.data.ctaHref', 'Безопасный внутренний путь, якорь или HTTPS URL до 2048 символов; только вместе с ctaText.', 'input'),
-  ], 'Отсутствие обязательного title/text блокирует сохранение и публикацию; без CTA кнопка не выводится.',
-  ['Короткий и длинный заголовок', 'Пара CTA и отсутствие CTA', 'Компьютер, планшет, телефон'],
+    field('ctaText', 'text', false, 'PageTemplateBlock.data.ctaText', 'Legacy: хранится, но не управляет системной CTA V3. До 80 символов; задаётся только вместе с ctaHref.', 'input'),
+    field('ctaHref', 'url', false, 'PageTemplateBlock.data.ctaHref', 'Legacy: хранится, но не управляет системной CTA V3. Безопасный внутренний путь, якорь или HTTPS URL до 2048 символов; только вместе с ctaText.', 'input'),
+  ], 'Отсутствие обязательного title/text блокирует сохранение и публикацию; городской V3 использует системную форму и CTA #tariffs независимо от legacy CTA.',
+  ['Короткий и длинный заголовок', 'Известные и отсутствующие факты опубликованных доступных тарифов', 'Компьютер, планшет, телефон'],
   ['Ровно один H1 на странице', 'Декоративная графика скрыта от скринридера', 'CTA доступна с клавиатуры и имеет понятный текст']),
   rich_text: managed('rich_text', 'Текстовый блок', 'Краткий редакционный текст без HTML.', ['INTERNET', 'INTERNET_TV', 'TV', 'FAQ'], [
     field('title', 'text', true, 'Будущий тип страницы: поле title; источник не реализован', 'Непустая строка до 120 символов; HTML запрещён.', 'input'),

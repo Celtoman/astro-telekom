@@ -1,0 +1,95 @@
+---
+import AddressForm from './AddressForm.astro';
+import type { CityView, SiteView } from '../data/site';
+import type { TariffView } from '../data/tariff-view';
+interface Props {
+  title: string; text: string; variant: 'general' | 'city'; city?: CityView;
+  site: SiteView; apiUrl: string; siteSlug: string; pageSlug?: string; tariffs?: TariffView[];
+}
+const { title, text, variant, city, site, apiUrl, siteSlug, pageSlug = '', tariffs = [] } = Astro.props as Props;
+const available = tariffs.filter((tariff) => tariff.availability);
+const prices = available.flatMap((tariff) => tariff.priceAmount === null ? [] : [tariff.priceAmount]);
+const speeds = available.flatMap((tariff) => tariff.speedMbps === null ? [] : [tariff.speedMbps]);
+const channels = available.flatMap((tariff) => tariff.tvChannelsTotal === null ? [] : [tariff.tvChannelsTotal]);
+const money = (value: number) => new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(value).replace(/[\u00a0\u202f]/g, ' ');
+const facts = [
+  { id: 'price', label: 'Минимальная стоимость', value: prices.length ? `от ${money(Math.min(...prices))} ₽/мес.` : 'Стоимость уточняется', icon: 'tag' },
+  { id: 'speed', label: 'Максимальная скорость', value: speeds.length ? `до ${Math.max(...speeds)} Мбит/с` : 'Скорость уточняется', icon: 'wifi' },
+  { id: 'channels', label: 'Каналов цифрового ТВ', value: channels.length ? `до ${Math.max(...channels)}` : 'Уточняется', icon: 'tv' },
+];
+const chips = [
+  { text: 'Бесплатная проверка', icon: 'shield-check' },
+  { text: 'Точные результаты', icon: 'check' },
+  { text: 'Поможем с подключением', icon: 'headphones' },
+];
+---
+<section class="home-hero" data-home-hero={variant} data-block-type={variant === 'city' ? 'hero' : undefined} data-city-first-screen={variant === 'city' ? '' : undefined}>
+  <div class="hero-container"><div class="hero-card">
+    <div class="hero-copy">
+      <h1>{title}</h1>
+      <p class="hero-body">{text}</p>
+      {variant === 'city' && <dl class="service-facts" aria-label="Параметры опубликованных доступных тарифов">
+        {facts.map((fact) => <div class="service-fact" data-hero-fact={fact.id}>
+          <dt><span class="fact-icon"><picture><source media="(min-width: 621px) and (max-width: 1100px)" srcset={`/images/figma/${fact.icon}.svg`} /><img src={`/images/figma/${fact.icon}-blue.svg`} width="22" height="22" alt="" /></picture></span><span class="fact-label">{fact.label}</span></dt>
+          <dd>{fact.value}</dd>
+        </div>)}
+      </dl>}
+      {city ? <AddressForm {apiUrl} {siteSlug} {pageSlug} {city} {site} presentation="embedded" variant="hero" /> : <div class="city-first-check" id="address-check">
+        <button type="button" class="address-choice" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog"><img src="/images/figma/map-pin.svg" width="20" height="20" alt="" /><span>Введите ваш адрес</span></button>
+        <button type="button" class="check-choice" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog">Проверить</button>
+        <noscript><a href="/goroda-obsluzhivaniya">Выберите город для проверки адреса</a></noscript>
+      </div>}
+      {variant === 'general' && <ul class="info-chips" aria-label="О проверке подключения">{chips.map((chip) => <li><img src={`/images/figma/${chip.icon}.svg`} width="20" height="20" alt="" /><span>{chip.text}</span></li>)}</ul>}
+      {variant === 'city' && <a class="tariffs-cta" href="#tariffs">Посмотреть тарифы</a>}
+    </div>
+    <figure class="hero-media"><img src="/images/figma/home-hero.png" width="1448" height="1086" alt="Wi-Fi-роутер, ТВ-приставка и пульт для домашнего подключения" loading="eager" decoding="async" fetchpriority="high" /></figure>
+  </div></div>
+</section>
+<style>
+  .home-hero { padding: 24px 0 32px; }
+  .hero-container { width: min(1360px, calc(100% - 32px)); margin: 0 auto; }
+  .hero-card { display: flex; align-items: flex-start; gap: 40px; padding: 48px; border-radius: 26px; background: #eaf7ff; }
+  .hero-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; width: 680px; min-width: 0; flex-shrink: 0; }
+  h1 { width: 100%; max-width: none; margin: 0; font-size: 48px; font-weight: 800; line-height: 50px; letter-spacing: -2.4px; overflow-wrap: anywhere; }
+  .hero-body { margin: 0; color: #526071; font-size: 16px; line-height: 24px; }
+  .hero-media { position: relative; flex: 1; min-width: 0; align-self: stretch; margin: 0; border-radius: 130px 36px; overflow: hidden; }
+  .hero-media img { position: absolute; display: block; width: 100%; height: 100%; object-fit: cover; }
+  .service-facts { display: flex; width: 100%; gap: 12px; margin: 0; }
+  .service-fact { display: grid; grid-template-columns: 40px minmax(0, 1fr); align-content: center; column-gap: 10px; row-gap: 2px; min-height: 60px; padding: 9px 12px; border: 1px solid #dcecf7; border-radius: 14px; background: #fff; min-width: 0; }
+  .fact-icon { display: flex; align-items: center; justify-content: center; grid-column: 1; grid-row: 1 / span 2; width: 40px; height: 40px; background: #eaf7ff; border-radius: 10px; }
+  .fact-icon img { display: block; }
+  dt { display: contents; }
+  .fact-label { grid-column: 2; color: #5c6b7d; font-size: 11px; font-weight: 600; }
+  dd { grid-column: 2; margin: 0; font-size: 15px; font-weight: 700; }
+  .info-chips { display: flex; flex-wrap: wrap; gap: 12px; padding: 0; margin: 0; list-style: none; }
+  .info-chips li { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #fff; border: 1px solid #dcecf7; border-radius: 999px; font-size: 14px; line-height: 20px; color: #526071; }
+  .tariffs-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; border: 1px solid #1769aa; border-radius: 14px; padding: 13px 24px; background: #fff; color: #1769aa; font-size: 14px; font-weight: 600; line-height: 20px; text-decoration: none; }
+  .tariffs-cta:hover { background: #f5fbff; }
+  .city-first-check { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 16px; width: 100%; }
+  .address-choice, .check-choice { display: flex; min-height: 48px; align-items: center; justify-content: center; gap: 10px; border: 1px solid #f0f3f6; border-radius: 14px; padding: 13px 16px; font: inherit; cursor: pointer; }
+  .address-choice { justify-content: flex-start; background: #fff; color: #5c6b7d; font-size: 16px; }
+  .check-choice { background: #e0231e; color: #fff; font-size: 14px; font-weight: 600; }
+  @media (max-width: 1300px) and (min-width: 1101px) { .hero-copy { width: 60%; } .service-facts { flex-wrap: wrap; } }
+  @media (max-width: 1100px) {
+    .hero-container { width: min(720px, calc(100% - 32px)); }
+    .hero-card { flex-direction: column; gap: 28px; padding: 32px; }
+    .hero-copy { width: 100%; }
+    h1 { font-size: 40px; font-weight: 700; line-height: 43px; letter-spacing: -1.6px; }
+    .hero-media { width: 100%; flex: none; height: 270px; border-radius: 113px 30px; }
+    .service-fact { flex: 1; grid-template-columns: 22px minmax(0, 1fr); }
+    .fact-icon { width: 22px; height: 22px; background: transparent; }
+  }
+  @media (max-width: 620px) {
+    .home-hero { padding-top: 16px; }
+    .hero-card { padding: 16px; }
+    .hero-copy { gap: 16px; }
+    h1 { font-size: 28px; line-height: 33px; letter-spacing: -1.5px; }
+    .hero-media { display: none; }
+    .service-facts { flex-direction: column; }
+    .service-fact { min-height: 66px; width: 100%; grid-template-columns: 40px minmax(0, 1fr); column-gap: 12px; }
+    .fact-icon { width: 40px; height: 40px; background: #eaf7ff; }
+    .info-chips { gap: 8px; }
+    .tariffs-cta { width: 100%; }
+    .city-first-check { grid-template-columns: 1fr; }
+  }
+</style>

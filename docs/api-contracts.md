@@ -70,6 +70,8 @@ Browser-форма сначала создает `AddressCheck` без теле�
 
 `POST /leads` теперь возвращает `subscriberMode: false`, поскольку договор проверяется после ответа формы. Browser до 30 секунд опрашивает `POST /leads/:id/decision-status` с UUID `submissionKey` в JSON-теле; ответ содержит только `complete` и `subscriberMode`, без PII и внутренних результатов проверок. `subscriberMode: true` возможен лишь после persisted-решения `ACTIVE_SUBSCRIBER_NOT_SENT` и включает некритичную UI-персонализацию. Это не credential: API не принимает browser-флаг в решении о доставке.
 
+Общая программная `TariffView` (не новое поле HTTP catalog) содержит числовое `tvChannelsTotal: number | null`: для `INTERNET_TV` используется уже проверенный `tv_channels_total`, для `INTERNET` — `null`. Городской Hero агрегирует цену, скорость и каналы только доступных предложений; форматированный `baseComponents[].value` не парсится обратно в число.
+
 ## Auth и административные routes
 
 | Method | Route | Назначение |

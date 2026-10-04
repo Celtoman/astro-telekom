@@ -107,6 +107,7 @@ export interface TariffView {
   service: string;
   speed: string;
   speedMbps: number | null;
+  tvChannelsTotal: number | null;
   price: string;
   priceAmount: number | null;
   pricing: {
@@ -356,6 +357,7 @@ export function tariffView(tariff: Record<string, unknown>): TariffView {
     service: serviceLabels[serviceType],
     speed: speedMbps === null ? 'Условия уточняются' : `до ${speedMbps} Мбит/с`,
     speedMbps,
+    tvChannelsTotal: tvChannels,
     price: tariffPricing.currentLabel,
     priceAmount: tariffPricing.currentAmount,
     pricing: tariffPricing,

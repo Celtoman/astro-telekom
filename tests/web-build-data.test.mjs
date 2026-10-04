@@ -242,7 +242,12 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.deepEqual(getDirectiveSources(csp, 'frame-src', 'public root'), ['blob:', ...yandexFrameOrigins]);
 
   assert.match(root, /<link rel="canonical" href="https:\/\/partner\.example\.test\/">/);
-  assert.match(root, /<h1>Домашний интернет и телевидение Дом\.ру<\/h1>/);
+  assert.match(root, /data-home-hero="general"/);
+  assert.match(root, /data-city-picker/);
+  assert.doesNotMatch(root, /data-block-type="tariff_grid"/);
+  assert.doesNotMatch(root, /href="\/moskva(?:#|\")/);
+  assert.match(root, /data-city-choice-trigger/);
+  assert.match(root, /<h1[^>]*>Подключение домашнего интернета и телевидения Дом\.ру<\/h1>/);
   assert.match(root, /href="\/goroda-obsluzhivaniya"/);
   assert.match(root, /href="\/kazan"/);
   assert.match(root, /href="\/almetyevsk"/);
@@ -250,6 +255,12 @@ test('web build emits city and tariff detail inventory for every published city'
 
   assert.match(kazan, /<h1[^>]*>Домашний интернет и телевидение в Казани<\/h1>/);
   assert.match(kazan, /data-city-first-screen/);
+  assert.match(kazan, /data-home-hero="city"/);
+  assert.match(kazan, /id="tariffs"/);
+  assert.match(kazan, /href="#tariffs"[^>]*>Посмотреть тарифы/);
+  assert.match(kazan, /Каналов цифрового ТВ/);
+  assert.match(kazan, /data-hero-fact="channels"[^>]*>[\s\S]*?до 190/);
+  assert.doesNotMatch(kazan, /от 850 руб|до 1000 Мбит|до 220/);
   assert.match(kazan, /data-address-check-root data-presentation="embedded"/);
   assert.match(kazan, /API Интернет 500/);
   assert.match(kazan, /API Интернет и ТВ 500/);
@@ -279,7 +290,8 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.deepEqual(homeBlockOrder, [...homeBlockOrder].sort((left, right) => left - right));
   assert.equal((kazan.match(/<h1\b/g) || []).length, 1);
   assert.match(kazan, /data-api-url="https:\/\/api\.partner\.example\.test\/api\/v1"/);
-  assert.match(kazan, /href="tel:\+78005553535"[^>]*>\+7 \(800\) 555-35-35<\/a>/);
+  assert.match(kazan, /href="tel:\+78005553535"/);
+  assert.match(kazan, /data-phone-value[^>]*>\+7 \(800\) 555-35-35<\/span>/);
   assert.match(kazan, /data-support-phone="\+7 \(800\) 250-77-77"/);
   assert.match(almetyevsk, /<link rel="canonical" href="https:\/\/partner\.example\.test\/almetyevsk">/);
   assert.match(almetyevsk, /<h1[^>]*>Домашний интернет и телевидение в Альметьевске<\/h1>/);
@@ -288,7 +300,7 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(almetyevsk, /data-block-type="service_grid"/);
   assert.match(almetyevsk, /data-block-type="tariff_grid"/);
   assert.match(almetyevsk, /data-block-type="faq"/);
-  assert.doesNotMatch(almetyevsk, /Казан/);
+  assert.doesNotMatch(almetyevsk.match(/<main>[\s\S]*?<\/main>/)?.[0] || '', /Казан/);
 
   assert.match(tariffDetail, /<link rel="canonical" href="https:\/\/partner\.example\.test\/kazan\/api-internet-500">/);
   assert.match(tariffDetail, /<h1[^>]*>API Интернет 500<\/h1>/);
@@ -324,7 +336,7 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(coverage, /<h1>Карта покрытия<\/h1>/);
   assert.match(coverage, /data-address-dialog-trigger="address-entry-coverage"[^>]*data-city-slug="kazan"/);
   assert.equal((coverage.match(/data-address-check-root data-presentation="dialog"/g) || []).length, 1);
-  assert.doesNotMatch(coverage, /#address-check/);
+  assert.doesNotMatch(coverage, /href="#address-check"/);
   assert.match(cities, /<h1[^>]*>Города подключения Дом\.\u0440у<\/h1>/);
   assert.match(cities, /Казань/);
   assert.match(cities, /Альметьевск/);
@@ -387,6 +399,8 @@ test('web build is blocked when API is unavailable and demo mode is not explicit
 
 test('web build uses resolved SEO snapshot and omits noindex routes from sitemap', { timeout: 120_000 }, async () => {
   const fixture = structuredClone(apiFixture);
+  fixture.cities.push({ name: 'Москва', namePrepositional: 'Москве', slug: 'moskva', status: 'PUBLISHED', region: { name: 'Москва', slug: 'moskva' }, pages: [{ ...page('HOME', '', 'Домашний интернет в Москве'), blocks: cityHomeBlocks('Москве') }], tariffs: [] });
+  fixture.routes.push({ id: 'CITY_HOME', kind: 'CITY_HOME', path: '/moskva', citySlug: 'moskva' });
   fixture.seoByPath = Object.fromEntries(fixture.routes.map((route) => [route.path, {
     title: `SEO ${route.path}`,
     description: `Описание ${route.path}`,
@@ -399,6 +413,13 @@ test('web build uses resolved SEO snapshot and omits noindex routes from sitemap
     assert.equal(build.code, 0, build.output);
   }, fixture);
   const homeHtml = await readBuilt('index.html');
+  assert.match(homeHtml, /data-city-slug="moskva"/);
+  assert.match(homeHtml, /href="\/moskva#tariffs"/);
+  assert.doesNotMatch(homeHtml, /data-block-type="tariff_grid"/);
+  const moscowHtml = await readBuilt(join('moskva', 'index.html'));
+  assert.match(moscowHtml, /Стоимость уточняется/);
+  assert.match(moscowHtml, /Скорость уточняется/);
+  assert.doesNotMatch(moscowHtml, /от 0 ₽|до 0 Мбит|до 220/);
   assert.match(homeHtml, /<title>SEO \/<\/title>/);
   assert.match(homeHtml, /<meta property="og:title" content="Дом &amp; интернет &quot;вместе&quot;">/);
   assert.match(homeHtml, /<meta property="og:description" content="Скидка <только> &amp; &quot;ТВ&quot;">/);

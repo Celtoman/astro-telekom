@@ -529,7 +529,7 @@ function initializeRoot(root) {
     } finally {
       if (checkGate.isCurrent(requestVersion)) {
         submitButton.disabled = false;
-        submitButton.textContent = 'Проверить адрес';
+        submitButton.textContent = submitButton.dataset.submitLabel || 'Проверить адрес';
       }
       if (checkController === controller) checkController = null;
     }

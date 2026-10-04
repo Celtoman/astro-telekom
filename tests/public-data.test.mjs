@@ -59,6 +59,8 @@ test('API tariffs enter the two supported service categories used by public page
   ];
   assert.equal(tariffs.filter(t => t.service === 'Домашний интернет').length, 1);
   assert.equal(tariffs.filter(t => t.service === 'Интернет и телевидение').length, 1);
+  assert.equal(tariffs[0].tvChannelsTotal, null);
+  assert.equal(tariffs[1].tvChannelsTotal, 100);
   assert.throws(
     () => tariffView({ slug: 'tv', name: 'ТВ', serviceType: 'TV' }),
     /Неподдерживаемый тип тарифа TV/,
