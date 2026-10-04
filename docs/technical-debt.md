@@ -96,7 +96,7 @@
 | ID | Issue | Суть |
 | --- | --- | --- |
 | TD-143 | [#229](https://github.com/Celtoman/astro-telekom/issues/229) ✅ | Описание публичной формы синхронизировано с действующим адресным сценарием API и канона |
-| TD-144 | [#230](https://github.com/Celtoman/astro-telekom/issues/230) 🟢 | Паспорта не описывают внедрённые Header, Hero 1b и полный контракт городского Hero V3 |
+| TD-144 | [#230](https://github.com/Celtoman/astro-telekom/issues/230) ✅ | DRAFT-паспорта Header, Hero 1b и городского Hero V3 описывают внедрённые источники, варианты и поведение |
 | TD-136 | [#221](https://github.com/Celtoman/astro-telekom/issues/221) ✅ | Карточки ТВ и Интернет + ТВ передавали форме тип услуги INTERNET из-за устаревших кодов `service_grid` |
 | TD-139 | [#224](https://github.com/Celtoman/astro-telekom/issues/224) ✅ | Пакетная проверка связей сократила live-предпросмотр 25 архивных тарифов с 14–18 до 6,8–7,3 секунды без изменения блокировок |
 | TD-140 | [#225](https://github.com/Celtoman/astro-telekom/issues/225) ✅ | Поиск по внутреннему `Tariff.id` добавлен в каталог тарифов |
