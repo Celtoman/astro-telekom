@@ -62,9 +62,11 @@ BOOTSTRAP допустим только для явно пустого serving. 
 
 ## Следующие обязательные шаги
 
+Владелец 6 октября разрешил commit, push, deployment и проверки в рамках этой задачи. Текущий этап review/удаления расписания выпущен на exact SHA `d440ec4`; [внешняя приёмка](../research/2026-10-06-manual-publication-rollout.md) не подтверждает ещё не подключённый pipeline этого плана.
+
 1. Long-running builder с exact snapshot endpoint, собственной immutable renderer identity, native versioned Astro assets и реальным final-HTML gate.
 2. Закрытый HTTP controller для build/activation/state/receipt и wiring worker, который сохраняет неопределённый activation outcome для восстановления.
 3. API принимает доверенный snapshot контекст от Caddy, а для прямого API-запроса получает active ID у controller; чтение остаётся fail-closed. SQL-статусы publication/rebuild и publishedRevision подтверждаются атомарно после receipt.
 4. PostgreSQL/Caddy/volume rehearsal с настоящей Astro-сборкой: ошибка сборки, недоступность SQL после активации, retry/restart, устаревший callback, GC и сохранность прежних assets.
 5. Проверенный baseline перехода, CODE-release после финального deployment, профильные документы и полный `pnpm check`.
-6. После разрешения владельца — push, CI exact SHA, внешний rollout и live сохранение → публикация → raw HTML/SEO/assets/API/redirects. Только после этой приёмки закрываются #234/#238.
+6. В рамках полученного разрешения — push, CI exact SHA, внешний rollout новой механики и live сохранение → публикация → raw HTML/SEO/assets/API/redirects. Только после этой приёмки закрываются #234/#238.
