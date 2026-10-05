@@ -12,6 +12,7 @@ import { Button } from "./ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
+import { Tabs, TabsContent, TabsList, TabsPanels, TabsTrigger } from "./ui/tabs"
 
 interface Administrator { id: string; email: string }
 interface Site { id: string; name: string; slug: string }
@@ -74,6 +75,13 @@ export function TariffTemplateApp({ apiUrl }: { apiUrl: string }) {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [refresh, setRefresh] = useState(0)
+  const [tab, setTab] = useState("templates")
+
+  useEffect(() => {
+    const sync = () => setTab(window.location.hash === "#block-passports" ? "passports" : "templates")
+    sync(); window.addEventListener("hashchange", sync)
+    return () => window.removeEventListener("hashchange", sync)
+  }, [])
 
   const handleError = useCallback((caught: unknown) => {
     if (caught instanceof AdminApiError && caught.status === 401) { window.location.replace("/login"); return null }
@@ -198,8 +206,15 @@ export function TariffTemplateApp({ apiUrl }: { apiUrl: string }) {
     ;(canvas ?? schema)?.scrollIntoView({ behavior: "smooth", block: "center" })
   }
   return <AdminShell apiUrl={apiUrl} user={state.user} active="templates"><main className="mx-auto flex w-full max-w-[1680px] flex-col gap-6 p-6 lg:p-8">
-    <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Шаблоны страниц</h1><p className="mt-1 text-sm text-muted-foreground">Программные страницы и их данные. Изменение структуры и кода выполняется через разработку и deployment.</p></div><Button variant="outline" onClick={() => setRefresh((current) => current + 1)}><RefreshCw data-icon="inline-start" />Обновить</Button></div>
-    <BlockPassportsPanel apiUrl={apiUrl} />
+    <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Шаблоны страниц</h1><p className="mt-1 text-sm text-muted-foreground">Просмотр шаблонов страниц и паспортов блоков сайта.</p></div><Button variant="outline" onClick={() => setRefresh((current) => current + 1)}><RefreshCw data-icon="inline-start" />Обновить</Button></div>
+    <Tabs value={tab} onValueChange={value => { setTab(value); window.history.replaceState(null, "", value === "passports" ? "#block-passports" : window.location.pathname + window.location.search) }}>
+      <TabsList aria-label="Раздел шаблонов" className="h-auto flex-wrap">
+        <TabsTrigger value="templates" className="min-h-11">Шаблоны страниц</TabsTrigger>
+        <TabsTrigger value="passports" className="min-h-11">Паспорта блоков</TabsTrigger>
+      </TabsList>
+      <TabsPanels>
+        <TabsContent value="passports"><BlockPassportsPanel apiUrl={apiUrl} refreshKey={refresh} /></TabsContent>
+        <TabsContent value="templates" className="space-y-6">
     {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Не удалось загрузить предпросмотр</AlertTitle><AlertDescription>{error}</AlertDescription></Alert> : null}
     <Card><CardHeader><div className="flex flex-wrap items-center gap-2"><CardTitle>Страница тарифа</CardTitle><Badge variant="secondary">Программный шаблон</Badge></div><CardDescription>Один шаблон для тарифов «Интернет» и «Интернет + ТВ». Порядок блоков фиксирован; видимость зависит от типизированных данных тарифа.</CardDescription></CardHeader><CardContent className="grid gap-5 lg:grid-cols-2">
       <div><h2 className="mb-3 font-semibold">Состав блоков</h2><ol className="space-y-2">{tariffTemplateBlocks.map((block, index) => <li key={block.id} data-template-block-id={block.id} className={`rounded-lg border p-3 text-sm ${markedBlocks.has(block.id) ? "border-red-500 bg-red-50" : ""}`} aria-invalid={markedBlocks.has(block.id) || undefined}><strong>{index + 1}. {block.title}</strong>{markedBlocks.has(block.id) ? <span className="ml-2 font-semibold text-red-700">Ошибка</span> : null}<span className="mt-1 block text-muted-foreground">{block.source}</span></li>)}</ol></div>
@@ -238,5 +253,8 @@ export function TariffTemplateApp({ apiUrl }: { apiUrl: string }) {
     {loading ? <Card aria-busy="true"><CardContent className="p-6"><Skeleton className="h-[700px] w-full" /></CardContent></Card> : null}
     {rendered.error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Рабочие данные требуют исправления</AlertTitle><AlertDescription>{rendered.error}. Редактирование доступно в карточке тарифа; просмотр не меняет данные.</AlertDescription></Alert> : null}
     {preview && rendered.view ? <Card className="overflow-hidden"><CardHeader className="border-b"><CardTitle>Предпросмотр: {rendered.view.name}</CardTitle><CardDescription>{selectedSite?.name} · {frame.label}{frame.width ? ` ${frame.width}px` : ""}. Структура соответствует программным блокам текущей версии приложения.</CardDescription></CardHeader><CardContent className="overflow-auto bg-muted p-4"><div className="mx-auto overflow-hidden rounded-lg border bg-white shadow-sm" style={{ width: frame.width ?? "100%", maxWidth: frame.width ? "none" : "100%" }}><TariffTemplateCanvas apiUrl={apiUrl} siteId={siteId} city={preview.city} tariff={rendered.view} related={related} version={version} compact={viewport === "mobile" || viewport === "tablet"} markedBlocks={markedBlocks} /></div></CardContent></Card> : null}
+        </TabsContent>
+      </TabsPanels>
+    </Tabs>
   </main></AdminShell>
 }

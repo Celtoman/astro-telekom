@@ -73,11 +73,11 @@ test('passport API is read-only behind admin authentication and the templates sc
   assert.equal(controller.passports().passports.length, 18);
   const screen = readFileSync(join(root, 'apps/admin/src/components/BlockPassportsPanel.tsx'), 'utf8');
   assert.match(screen, /requestJson<Registry>\(apiUrl, "\/admin\/block-passports"\)/);
-  assert.match(screen, /Только черновики/);
+  assert.match(screen, /Черновики ожидают утверждения владельцем/);
   assert.doesNotMatch(screen, /method:\s*["'](?:POST|PATCH|DELETE)["']/);
   assert.match(screen, /passport\.design/);
   assert.match(screen, /passport\.runtimeRules/);
-  assert.match(screen, /Программные блоки/);
+  assert.match(screen, /Технические подробности/);
 });
 
 test('implemented home passports identify exact Figma component sets and device variants', () => {
