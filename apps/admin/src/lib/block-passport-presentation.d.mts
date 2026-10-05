@@ -8,6 +8,7 @@ export interface Passport {
   status: string; passportVersion: string; approvedBy: string | null; implementation: string
   design?: { fileKey: string; nodeId: string; name: string; variants: { device: string; nodeId: string }[] }
   runtimeRules?: string[]
+  editorReadiness?: "PENDING" | "READY"
 }
 export const passportGroups: { id: string; label: string }[]
 export function passportGroup(passport: Passport): string

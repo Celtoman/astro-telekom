@@ -34,8 +34,8 @@ test('placement filter distinguishes root, shared city template, tariff and futu
 test('content sources lead to existing editors and never offer a missing city editor or schema mutation', () => {
   assert.equal(passportSource(byId('header')).href, '/variables');
   assert.deepEqual(passportContent(byId('header')).map(field => field.label), ['Телефон подключения', 'Телефон поддержки']);
-  assert.deepEqual(passportContent(byId('hero')).map(field => field.key), ['title', 'text']);
-  assert.deepEqual(passportContent(byId('home.hero')), []);
+  assert.deepEqual(passportContent(byId('hero')).map(field => field.key), ['title', 'text', 'image', 'imageAlt', 'addressPlaceholder', 'checkButtonText', 'tariffsCtaText']);
+  assert.deepEqual(passportContent(byId('home.hero')).map(field => field.key), ['title', 'text', 'image', 'imageAlt', 'addressPlaceholder', 'checkButtonText', 'chips']);
   for (const passport of filterPassports(passports, '', 'tariff')) assert.equal(passportSource(passport).href, '/tariffs');
   for (const passport of filterPassports(passports, '', 'city')) {
     assert.equal(passportSource(passport).href, null);

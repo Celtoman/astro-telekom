@@ -7,6 +7,8 @@ const names = {
 const fieldNames = {
   title: 'Заголовок', text: 'Описание', items: 'Элементы блока', serviceType: 'Тип услуги',
   limit: 'Число карточек', morePageType: 'Переход к списку',
+  image: 'Изображение', imageAlt: 'Описание изображения', addressPlaceholder: 'Подсказка адреса',
+  checkButtonText: 'Текст кнопки проверки', chips: 'Три пояснения под формой', tariffsCtaText: 'Текст перехода к тарифам',
   connectionPhone: 'Телефон подключения', supportPhone: 'Телефон поддержки',
 };
 export const passportGroups = [
@@ -42,6 +44,7 @@ export function passportContent(passport) {
   return fields.map(field => ({ key: field.key, label: fieldNames[field.key] ?? 'Дополнительное поле', required: field.required }));
 }
 export function passportSource(passport) {
+  if (passport.id === 'home.hero') return { href: null, label: null, note: 'Паспорт утверждён. Редактор первого экрана общей главной ещё не подключён.' };
   if (passport.id === 'header') return { href: '/variables', label: 'Открыть переменные сайта', note: null };
   if (passportGroup(passport) === 'tariff') return { href: '/tariffs', label: 'Открыть каталог тарифов', note: 'Данные тарифа доступны в каталоге. Структура и поведение блока задаются программно.' };
   if (passportGroup(passport) === 'city') return { href: null, label: null, note: 'Редактор общего шаблона ещё не подключён.' };

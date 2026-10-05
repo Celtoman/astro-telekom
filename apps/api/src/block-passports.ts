@@ -41,11 +41,12 @@ export interface BlockPassport {
   accessibility: string[];
   status: PassportStatus;
   passportVersion: string;
-  approvedBy: null;
+  approvedBy: string | null;
   replacementId: null;
   implementation: string;
   design?: BlockPassportDesign;
   runtimeRules?: string[];
+  editorReadiness?: 'PENDING' | 'READY';
 }
 
 const field = (key: string, type: FieldType, required: boolean, source: string, validation: string, control: Control): BlockPassportField =>
@@ -254,8 +255,37 @@ const sitePassports: BlockPassport[] = [
   },
 ];
 
+function approvedFirstScreen(passport: BlockPassport): BlockPassport {
+  if (passport.id !== 'hero' && passport.id !== 'home.hero') return passport;
+  const root = passport.id === 'home.hero';
+  const contentSource = 'PageTemplateBlock.data.';
+  const editable = [
+    field('title', 'text', true, `${contentSource}title`, 'Непустой H1 до 120 символов, без HTML; разрешённые переменные контекста шаблона.', 'input'),
+    field('text', 'text', true, `${contentSource}text`, 'Непустое описание до 1000 символов, без HTML; разрешённые переменные контекста шаблона.', 'textarea'),
+    field('image', 'url', true, `${contentSource}image`, 'Изображение блока: безопасный локальный путь либо HTTPS URL до 2048 символов; без credentials, JavaScript или data URL.', 'input'),
+    field('imageAlt', 'text', true, `${contentSource}imageAlt`, 'Описание изображения до 250 символов, без HTML.', 'input'),
+    field('addressPlaceholder', 'text', true, `${contentSource}addressPlaceholder`, 'Подсказка адреса до 120 символов, без HTML. Собственное значение первого экрана; не глобальный текст AddressForm.', 'input'),
+    field('checkButtonText', 'text', true, `${contentSource}checkButtonText`, 'Подпись проверки до 80 символов, без HTML. Собственное значение первого экрана; действие проверки фиксировано.', 'input'),
+    ...(root ? [field('chips', 'list', true, `${contentSource}chips`, 'Ровно три непустые текстовые подписи до 80 символов каждая. Позиции и иконки фиксированы дизайном.', 'list')]
+      : [field('tariffsCtaText', 'text', true, `${contentSource}tariffsCtaText`, 'Текст перехода к тарифам до 80 символов; назначение ссылки #tariffs фиксировано.', 'input')]),
+  ];
+  const systems = passport.fields.filter(item => ['city', 'addressForm', 'minimumPrice', 'maximumSpeed', 'maximumTvChannels', 'tariffsCta'].includes(item.key));
+  return {
+    ...passport, kind: 'MANAGED', proposedContentScope: 'TEMPLATE', fields: [...editable, ...systems],
+    status: 'APPROVED', passportVersion: '1.0.0',
+    approvedBy: 'Владелец проекта; согласование 2026-10-05', editorReadiness: 'PENDING',
+    editorForm: 'Утверждённая форма контента первого экрана: заголовок, описание, изображение/alt, собственные подсказка адреса и подпись проверки; три пояснения для HOME либо подпись перехода к тарифам для CITY_HOME. Редактор и миграция новых полей ещё не реализованы (#193).',
+    implementation: root
+      ? 'Целевой источник: PageTemplate(HOME)/PageTemplateBlock.data. Сейчас title/text и остальные элементы читаются из index.astro/HomeHero.astro; редактор, миграция и подключение новых полей не реализованы (#193).'
+      : 'PageTemplate(CITY_HOME)/PageTemplateBlock.data: сейчас renderer использует только title/text. Остальные утверждённые поля, редактор и миграция ещё не реализованы (#193). PageBlock остаются read-only legacy.',
+    emptyBehavior: `${passport.emptyBehavior} Целевая форма допускает неполный рабочий черновик со статусом «Не готово», но обязательные поля блокируют публикацию; это поведение предстоит реализовать в #193.`,
+    previewScenarios: [...passport.previewScenarios, 'Независимые addressPlaceholder/checkButtonText у HOME и CITY_HOME', 'Редактирование изображения/alt и всех утверждённых текстов; рабочая/опубликованная версии'],
+    runtimeRules: [...(passport.runtimeRules ?? []), 'Согласование владельца 2026-10-05: контент принадлежит своему общему шаблону; адресная подсказка и подпись проверки независимы у двух первых экранов. Локальные копии контента города запрещены.', 'Статус APPROVED относится к контракту полей; ACTIVE, редактор, миграция данных и deployment не подтверждены.'],
+  };
+}
+
 export const BLOCK_PASSPORTS: readonly BlockPassport[] = [
   ...BLOCK_TYPES.map((type) => managedPassports[type]),
   ...sitePassports,
   ...programmaticPassports,
-];
+].map(approvedFirstScreen);

@@ -103,7 +103,7 @@ export function BlockPassportsPanel({ apiUrl, refreshKey = 0 }: { apiUrl: string
   const selected = filtered.find(passport => passport.id === selectedId) ?? filtered[0] ?? null
 
   return <section id="block-passports" aria-label="Паспорта блоков" className="space-y-4">
-    <p className="text-sm text-muted-foreground">Выберите блок, чтобы посмотреть его назначение и доступный контент. Черновики ожидают утверждения владельцем.</p>
+    <p className="text-sm text-muted-foreground">Выберите блок, чтобы посмотреть его назначение и доступный контент. Паспорта показывают разрешённый контент блока.</p>
     {state.status === "loading" ? <p role="status" className="text-sm text-muted-foreground">Загружаем реестр…</p> : null}
     {state.status === "error" ? <Alert variant="destructive"><AlertTitle>Не удалось загрузить паспорта</AlertTitle><AlertDescription><p>{state.message}</p><Button variant="outline" className="mt-3 min-h-11" onClick={() => setRefresh(value => value + 1)}>Повторить загрузку</Button></AlertDescription></Alert> : null}
     {state.status === "ready" ? <div className="grid items-start gap-5 lg:grid-cols-[minmax(240px,340px)_minmax(0,1fr)]">
