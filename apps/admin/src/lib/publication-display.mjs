@@ -19,7 +19,7 @@ export function describePublicationState(state) {
     return {
       kind: "failed",
       title: `Публикация версии ${latestPublication?.siteRevision ?? state.workingRevision} завершилась ошибкой`,
-      description: `На сайте осталась версия ${state.publishedRevision}.${error ? ` ${error}` : ""}`,
+      description: `Последняя подтверждённая версия — ${state.publishedRevision}.${error ? ` ${error}` : ""}`,
       canPublish: state.hasUnpublishedChanges,
     }
   }
@@ -28,16 +28,8 @@ export function describePublicationState(state) {
     return {
       kind: "publishing",
       title: `Публикация версии ${latestPublication?.siteRevision ?? state.workingRevision} выполняется`,
-      description: `До успешного завершения сайт показывает версию ${state.publishedRevision}.`,
+      description: `Последняя подтверждённая версия — ${state.publishedRevision}. Ожидаем завершения публикации.`,
       canPublish: false,
-    }
-  }
-  if (state.scheduledPublication || latestPublication?.status === "SCHEDULED") {
-    return {
-      kind: "scheduled",
-      title: `Публикация версии ${state.scheduledPublication?.siteRevision ?? latestPublication?.siteRevision ?? state.workingRevision} запланирована`,
-      description: "Снимок уже зафиксирован и будет передан в сборку в указанное время.",
-      canPublish: true,
     }
   }
   if (state.hasUnpublishedChanges) {

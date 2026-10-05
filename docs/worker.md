@@ -1,6 +1,6 @@
 # Фоновые задачи
 
-Worker запускается из `services/worker/src/index.mjs`. Он требует `REDIS_URL`, подключается через `ioredis` и создает шесть BullMQ consumers и одну maintenance queue с тремя Job Scheduler.
+Worker запускается из `services/worker/src/index.mjs`. Он требует `REDIS_URL`, подключается через `ioredis` и создает шесть BullMQ consumers и одну maintenance queue с двумя Job Scheduler.
 
 В Coolify worker имеет отдельный container healthcheck `services/worker/src/healthcheck.mjs`. Проверка создает короткоживущее Redis-соединение с отключенными бесконечными retry и требует ответ `PONG`; она не выполняет business job и не зависит от очереди, но не позволяет считать worker здоровым при потере Redis.
 
@@ -11,7 +11,7 @@ Worker запускается из `services/worker/src/index.mjs`. Он тре�
 | `lead-notifications` | POST `/api/v1/internal/lead-notifications/:id` с `ADMIN_API_TOKEN` | `LeadNotificationOutboxService` в API | Persistent outbox: три DB-accounted попытки с exponential backoff 30 секунд, periodic recovery и revision/attempt job ID. |
 | `tariff-imports` | Legacy route удален | В коде не найден | Listener остался без producer и не используется; админка вызывает versioned validate/apply напрямую. |
 | `site-rebuilds` | POST deployment provider, затем `/api/v1/internal/site-rebuilds/:id/result` | `RebuildQueueService` в API | Persistent job в PostgreSQL, три попытки BullMQ с exponential backoff 30 секунд. |
-| `maintenance` | POST `/api/v1/internal/pii-retention`, `/api/v1/internal/site-publications/release-due` и `/api/v1/internal/lead-decisions/reconcile` с `ADMIN_API_TOKEN` | Job Scheduler `pii-retention-daily`, `publication-schedules-every-minute` и `lead-decision-reconcile-every-minute` | PII job регистрируется только при валидном `PII_RETENTION_DAYS`; оба reconciler регистрируются всегда и запускаются каждую минуту. |
+| `maintenance` | POST `/api/v1/internal/pii-retention` и `/api/v1/internal/lead-decisions/reconcile` с `ADMIN_API_TOKEN` | Job Scheduler `pii-retention-daily` и `lead-decision-reconcile-every-minute` | PII job регистрируется только при валидном `PII_RETENTION_DAYS`; reconciler заявок запускается каждую минуту. |
 
 ## Доставка заявок
 
@@ -53,20 +53,13 @@ Hard-delete выбран, чтобы PII не осталось в JSON payloads.
 
 Локальная runtime-проверка подтвердила scheduler metadata `key=pii-retention-daily`, `name=pii-retention`, pattern `0 3 * * *`, timezone UTC в отдельной Redis DB; test DB после проверки очищена.
 
-## Публикация по расписанию
+## Переход к ручной публикации
 
-1. Admin передает будущий ISO timestamp и точный `expectedWorkingRevision`. API сразу сохраняет неизменяемый `SitePublication` со статусом `SCHEDULED`; более поздние рабочие правки его каталог не меняют.
-2. До наступления срока оператор может отменить расписание. Снимок физически не удаляется: получает `CANCELLED` и `cancelledAt`.
-3. BullMQ Job Scheduler `publication-schedules-every-minute` каждую минуту вызывает worker-only endpoint. API в serializable-транзакции bounded-пакетом до 25 записей переводит наступившие snapshots в `PENDING`.
-4. Если для сайта уже активна или опубликована более новая ревизия, старый наступивший snapshot отменяется автоматически и не попадает в deployment.
-5. Каждый захваченный snapshot передается в обычный `RebuildQueueService`; повторная постановка того же publication ID идемпотентна. Если enqueue падает, API возвращает запись в `SCHEDULED`, а maintenance job получает ошибку и повторяется по BullMQ retry policy.
-6. Пятиминутный lease позволяет следующему reconciler вернуть в работу `PENDING` snapshot, если API остановился после DB-claim, но до создания rebuild. Только финальный успех обычного rebuild продвигает опубликованную ревизию.
-
-Время хранится как `TIMESTAMPTZ`; browser переводит выбранное локальное время в ISO UTC. Текущая точность запуска — до одной минуты плюс фактическое ожидание очереди и длительность полной статической сборки.
+Публикации запускаются только явным действием администратора. Worker при запуске удаляет legacy scheduler публикаций из Redis до создания consumers. Остаточные maintenance jobs прежней функции завершаются без обращения к API публикации; lead reconciler и PII scheduler продолжают работу. Миграция `0057` отменяет ожидавшие снимки, сохраняет их историю и удаляет поля расписания. Уже переданный в сборку отложенный снимок должен завершиться до применения миграции.
 
 ## Поведение без Redis
 
-Если API запущен без `REDIS_URL`, lead decision, delivery и lead notification выполняются в памяти процесса через `queueMicrotask` или `setTimeout`. Это удобно для локального прототипа; restart может потерять in-memory job, но состояние решения и notification остаются в PostgreSQL. При следующем запуске полноценного worker минутный reconciler восстанавливает pending/retry решения. Rebuild без Redis не вызывает deployment напрямую: запись остается в PostgreSQL со статусом `PENDING`; отложенный snapshot остается `SCHEDULED`, пока отдельный worker не вызовет due reconciler. Worker без `REDIS_URL` не стартует корректно как полноценный async consumer, поэтому production обязательно должен использовать Redis.
+Если API запущен без `REDIS_URL`, lead decision, delivery и lead notification выполняются в памяти процесса через `queueMicrotask` или `setTimeout`. Это удобно для локального прототипа; restart может потерять in-memory job, но состояние решения и notification остаются в PostgreSQL. При следующем запуске полноценного worker минутный reconciler восстанавливает pending/retry решения. Rebuild без Redis не вызывает deployment напрямую: запись остается в PostgreSQL со статусом `PENDING`. Worker без `REDIS_URL` не стартует корректно как полноценный async consumer, поэтому production обязательно должен использовать Redis.
 
 ## Пересборка статического сайта
 

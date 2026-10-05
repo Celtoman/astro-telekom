@@ -23,6 +23,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| TD-145 | [#240](https://github.com/Celtoman/astro-telekom/issues/240) 🟢 | Первый seed падает на удалённом Region.phone; свежий bootstrap требует отдельной проверки |
 | TD-04 | [#5](https://github.com/Celtoman/astro-telekom/issues/5) ✅ | Базовый public catalog и multi-city static paths; текущая Release 1 policy дополнительно ограничивает маршруты |
 | TD-05 | [#6](https://github.com/Celtoman/astro-telekom/issues/6) ✅ | Persistent rebuild-job: dedupe, BullMQ retry/backoff, API-статус и финальный результат provider |
 | TD-06 | [#7](https://github.com/Celtoman/astro-telekom/issues/7) ✅ | Full-snapshot import атомарно удаляет отсутствующие тарифы, требует подтверждения warnings и создает redirects при ручной смене URL |

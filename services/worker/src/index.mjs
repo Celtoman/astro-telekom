@@ -1,3 +1,4 @@
+import { retirePublicationScheduler, isRetiredPublicationJob } from "./retired-publication-jobs.mjs";
 import { Queue, Worker } from 'bullmq';
 import IORedis from 'ioredis';
 import { runRebuildJob } from './rebuild-job.mjs';
@@ -9,6 +10,7 @@ const piiRetentionDays = Number(process.env.PII_RETENTION_DAYS);
 const hasValidPiiRetention = Number.isSafeInteger(piiRetentionDays) && piiRetentionDays > 0 && piiRetentionDays <= 3_650;
 const connection = new IORedis(redisUrl, { maxRetriesPerRequest: null });
 const maintenanceQueue = new Queue('maintenance', { connection });
+await retirePublicationScheduler(maintenanceQueue);
 
 const jsonRequest = async (url, options = {}) => {
   const response = await fetch(url, {
@@ -96,14 +98,8 @@ const leadNotificationWorker = new Worker(
 const maintenanceWorker = new Worker(
   'maintenance',
   async (job) => {
+    if (isRetiredPublicationJob(job)) return { retired: true };
     if (!adminToken) throw new Error('ADMIN_API_TOKEN is not configured');
-    if (job.name === 'publication-schedules') {
-      return jsonRequest(`${apiUrl}/internal/site-publications/release-due`, {
-        method: 'POST',
-        headers: { 'x-admin-token': adminToken },
-        body: '{}',
-      });
-    }
     if (job.name === 'lead-decision-reconcile') {
       return jsonRequest(`${apiUrl}/internal/lead-decisions/reconcile`, {
         method: 'POST',
@@ -129,12 +125,6 @@ const maintenanceWorker = new Worker(
     throw new Error('PII retention exceeded 100 batches; retrying the remaining backlog');
   },
   { connection, concurrency: 1 },
-);
-
-await maintenanceQueue.upsertJobScheduler(
-  'publication-schedules-every-minute',
-  { pattern: '* * * * *', tz: 'UTC' },
-  { name: 'publication-schedules', data: {}, opts: { attempts: 3, backoff: { type: 'exponential', delay: 30_000 }, removeOnComplete: 100, removeOnFail: 100 } },
 );
 
 await maintenanceQueue.upsertJobScheduler(

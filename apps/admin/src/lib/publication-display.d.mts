@@ -6,11 +6,9 @@ export interface PublicationState {
   latestPublication: null | {
     id: string
     siteRevision: number
-    status: "SCHEDULED" | "PENDING" | "RUNNING" | "SUCCEEDED" | "FAILED" | "CANCELLED"
+    status: "PENDING" | "RUNNING" | "SUCCEEDED" | "FAILED" | "CANCELLED"
     validationId?: string | null
     lastError?: string | null
-    scheduledFor?: string | null
-    cancelledAt?: string | null
   }
   latestValidation: null | {
     id: string
@@ -20,13 +18,6 @@ export interface PublicationState {
     checkedUrlCount: number
     requestedById: string | null
     validatedAt: string
-  }
-  scheduledPublication: null | {
-    id: string
-    siteRevision: number
-    status: "SCHEDULED"
-    scheduledFor: string
-    lastError?: string | null
   }
   rebuild: null | {
     id: string
@@ -40,7 +31,7 @@ export interface PublicationState {
 }
 
 export interface PublicationPresentation {
-  kind: "published" | "unpublished" | "publishing" | "scheduled" | "failed"
+  kind: "published" | "unpublished" | "publishing" | "failed"
   title: string
   description: string
   canPublish: boolean

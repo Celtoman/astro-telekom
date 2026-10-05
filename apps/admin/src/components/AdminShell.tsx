@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react"
-import { LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react"
+import { CloudUpload, LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react"
 import { cn } from "cn"
 import { Dialog, Heading, Modal, ModalOverlay, Text } from "react-aria-components"
 import {
@@ -93,6 +93,7 @@ export function AdminShell({ apiUrl, user, active, children }: {
 
   return (
     <>
+      <a href="#admin-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-background focus:p-3 focus:ring-3 focus:ring-ring">Перейти к содержимому</a>
       <div className="min-h-screen bg-muted/30 lg:flex">
         <aside className={cn("hidden shrink-0 flex-col border-r bg-background transition-[width] duration-200 lg:flex", sidebarExpanded ? "w-60" : "w-12")}>
           <div className={cn("flex items-center gap-2 p-2", !sidebarExpanded && "flex-col")}>
@@ -112,15 +113,18 @@ export function AdminShell({ apiUrl, user, active, children }: {
         <div className="min-w-0 flex-1">
           <header className="flex min-h-16 flex-wrap items-center gap-2 border-b bg-background px-4 py-2 sm:gap-4 sm:px-6">
             <div className="flex min-w-0 flex-1 items-center gap-3">
-                <Button className="lg:hidden" size="icon" variant="outline" aria-label="Открыть меню" title="Открыть меню (Ctrl+B)" onClick={() => setMobileOpen(true)}>
+                <Button className="min-h-11 min-w-11 lg:hidden" size="icon" variant="outline" aria-label="Открыть меню" title="Открыть меню (Ctrl+B)" onClick={() => setMobileOpen(true)}>
                   <Menu />
                 </Button>
               <div className="min-w-0"><p className="text-sm font-medium">Администратор</p><p className="truncate text-xs text-muted-foreground">{user.email}</p></div>
             </div>
-            <div className="order-3 w-full sm:order-none sm:w-auto"><PublicationIndicator apiUrl={apiUrl} /></div>
+            <div className="order-3 flex w-full flex-wrap items-center gap-2 sm:order-none sm:w-auto">
+              <PublicationIndicator apiUrl={apiUrl} />
+              <Button asChild className="min-h-11"><a href={active === "publication" ? "#publication-launch" : "/publication"}><CloudUpload data-icon="inline-start" />Опубликовать изменения</a></Button>
+            </div>
             <Button variant="outline" onClick={() => void logout()}><LogOut data-icon="inline-start" /><span className="hidden sm:inline">Выйти</span><span className="sr-only sm:hidden">Выйти</span></Button>
           </header>
-          <main>{children}</main>
+          <main id="admin-content" tabIndex={-1}>{children}</main>
         </div>
       </div>
 
@@ -132,7 +136,7 @@ export function AdminShell({ apiUrl, user, active, children }: {
           <div className="flex items-center gap-3 px-2 py-2">
             <span className="flex size-8 items-center justify-center rounded-lg bg-primary font-heading font-semibold text-primary-foreground">д</span>
             <div className="min-w-0 flex-1"><p className="font-heading font-semibold">Дом.ру</p><p className="text-xs text-muted-foreground">Платформа</p></div>
-              <Button size="icon" variant="ghost" aria-label="Закрыть меню" onClick={() => setMobileOpen(false)}><X /></Button>
+              <Button className="min-h-11 min-w-11" size="icon" variant="ghost" aria-label="Закрыть меню" onClick={() => setMobileOpen(false)}><X /></Button>
           </div>
           <div className="flex-1 overflow-y-auto px-2 py-4">
             <AdminNavigation active={active} expandedGroups={expandedGroups} onGroupOpenChange={setGroupOpen} onNavigate={() => setMobileOpen(false)} />

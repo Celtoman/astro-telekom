@@ -8,12 +8,13 @@ function request(path, headers = { authorization: 'Bearer session' }) {
   return guard.canActivate({ switchToHttp: () => ({ getRequest: () => req }) });
 }
 test('one authenticated administrator can access every administrative area', async () => {
-  for (const path of ['/api/v1/admin/providers', '/api/v1/admin/pages', '/api/v1/admin/tariffs', '/api/v1/admin/tariffs/purge-preview', '/api/v1/admin/tariffs/purge', '/api/v1/admin/sites/site-1/publication-schedules', '/api/v1/admin/sites/site-1/preview-catalog', '/api/v1/admin/sites/site-1/tariff-template/preview', '/api/v1/admin/audit-events', '/api/v1/admin/trash', '/api/v1/crm/leads']) {
+  for (const path of ['/api/v1/admin/providers', '/api/v1/admin/pages', '/api/v1/admin/tariffs', '/api/v1/admin/tariffs/purge-preview', '/api/v1/admin/tariffs/purge', '/api/v1/admin/sites/site-1/publication-review', '/api/v1/admin/sites/site-1/preview-catalog', '/api/v1/admin/sites/site-1/tariff-template/preview', '/api/v1/admin/audit-events', '/api/v1/admin/trash', '/api/v1/crm/leads']) {
     assert.equal(await request(path), true);
   }
 });
 test('missing credentials yield 401 regardless of service token configuration', async () => {
   await assert.rejects(request('/api/v1/admin/pages', {}), error => error.getStatus() === 401);
+  await assert.rejects(request('/api/v1/admin/sites/site-1/publication-review', {}), error => error.getStatus() === 401);
 });
 
 test('service token remains machine authentication independent of administrator accounts', async () => {

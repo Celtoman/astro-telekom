@@ -28,17 +28,12 @@ test('publication state presentation distinguishes published, unpublished, runni
   assert.deepEqual(describePublicationState({
     workingRevision: 5, publishedRevision: 4, hasUnpublishedChanges: true, latestPublication: { status: 'RUNNING', siteRevision: 5 }, rebuild: { status: 'RUNNING' },
   }), {
-    kind: 'publishing', title: 'Публикация версии 5 выполняется', description: 'До успешного завершения сайт показывает версию 4.', canPublish: false,
-  });
-  assert.deepEqual(describePublicationState({
-    workingRevision: 5, publishedRevision: 4, hasUnpublishedChanges: true, latestPublication: { status: 'SCHEDULED', siteRevision: 5 }, scheduledPublication: { id: 'publication-5', status: 'SCHEDULED', siteRevision: 5, scheduledFor: '2026-09-15T12:00:00.000Z' }, rebuild: null,
-  }), {
-    kind: 'scheduled', title: 'Публикация версии 5 запланирована', description: 'Снимок уже зафиксирован и будет передан в сборку в указанное время.', canPublish: true,
+    kind: 'publishing', title: 'Публикация версии 5 выполняется', description: 'Последняя подтверждённая версия — 4. Ожидаем завершения публикации.', canPublish: false,
   });
   assert.deepEqual(describePublicationState({
     workingRevision: 5, publishedRevision: 4, hasUnpublishedChanges: true, latestPublication: { status: 'FAILED', siteRevision: 5, lastError: 'Coolify failed' }, rebuild: { status: 'FAILED' },
   }), {
-    kind: 'failed', title: 'Публикация версии 5 завершилась ошибкой', description: 'На сайте осталась версия 4. Coolify failed', canPublish: true,
+    kind: 'failed', title: 'Публикация версии 5 завершилась ошибкой', description: 'Последняя подтверждённая версия — 4. Coolify failed', canPublish: true,
   });
   assert.deepEqual(describePublicationState({
     workingRevision: 6,
@@ -47,7 +42,7 @@ test('publication state presentation distinguishes published, unpublished, runni
     latestPublication: { id: 'publication-5', status: 'RUNNING', siteRevision: 5 },
     rebuild: { status: 'RUNNING', requestedPublicationId: 'publication-5', processingPublicationId: 'publication-5' },
   }), {
-    kind: 'publishing', title: 'Публикация версии 5 выполняется', description: 'До успешного завершения сайт показывает версию 4.', canPublish: false,
+    kind: 'publishing', title: 'Публикация версии 5 выполняется', description: 'Последняя подтверждённая версия — 4. Ожидаем завершения публикации.', canPublish: false,
   });
 });
 
@@ -56,10 +51,11 @@ test('publication card loads state, publishes the exact working revision and pol
 
   assert.match(component, /\/admin\/sites\/\$\{siteId\}\/publication-state/);
   assert.match(component, /\/admin\/sites\/\$\{siteId\}\/publications/);
-  assert.match(component, /expectedWorkingRevision:\s*state\.workingRevision/);
+  assert.match(component, /expectedWorkingRevision:\s*review\.workingRevision/);
   assert.match(component, /setTimeout/);
-  assert.match(component, /Публиковать версию/);
-  assert.match(component, /Предыдущая опубликованная версия остается на сайте/);
+  assert.match(component, /Опубликовать изменения/);
+  assert.match(component, /canPublishReviewedRevision/);
+  assert.doesNotMatch(component, /Предыдущая опубликованная версия остается на сайте/);
   assert.match(component, /const message = caught instanceof Error[\s\S]*await loadState\(\)[\s\S]*setError\(message\)/);
 });
 

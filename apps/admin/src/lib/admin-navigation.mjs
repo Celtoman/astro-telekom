@@ -3,6 +3,7 @@ export const ADMIN_GROUPS_STORAGE_KEY = "admin:navigation-groups"
 
 export const adminNavigation = [
   { id: "overview", label: "Обзор", href: "/", icon: "home" },
+  { id: "publication", label: "Публикация сайта", href: "/publication", icon: "publication" },
   { id: "preview", label: "Предпросмотр", href: "/preview", icon: "preview" },
   { id: "templates", label: "Шаблоны страниц", href: "/templates", icon: "catalog" },
   {

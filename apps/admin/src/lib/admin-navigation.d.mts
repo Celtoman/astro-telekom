@@ -1,5 +1,5 @@
-export type AdminSection = "overview" | "preview" | "templates" | "tariffs" | "tariffs-import" | "cities" | "cities-import" | "leads" | "redirects" | "variables" | "seo-templates" | "seo-sitemap" | "audit" | "trash"
-export type AdminNavigationIcon = "home" | "preview" | "tariffs" | "cities" | "catalog" | "import" | "leads" | "redirects" | "variables" | "seo" | "sitemap" | "audit" | "trash"
+export type AdminSection = "overview" | "publication" | "preview" | "templates" | "tariffs" | "tariffs-import" | "cities" | "cities-import" | "leads" | "redirects" | "variables" | "seo-templates" | "seo-sitemap" | "audit" | "trash"
+export type AdminNavigationIcon = "home" | "publication" | "preview" | "tariffs" | "cities" | "catalog" | "import" | "leads" | "redirects" | "variables" | "seo" | "sitemap" | "audit" | "trash"
 
 export interface AdminNavigationItem {
   id: AdminSection | "tariffs" | "cities" | "seo"

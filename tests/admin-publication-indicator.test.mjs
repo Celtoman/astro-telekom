@@ -15,19 +15,18 @@ test('global indicator resolves only an unambiguous site and bounds active polli
   assert.equal(resolvePublicationSite([]), null);
   assert.equal(resolvePublicationSite([site, { id: 'site-2' }]), null);
   assert.equal(publicationRefreshDelay(null), null);
-  assert.equal(publicationRefreshDelay({ latestPublication: null, scheduledPublication: null }), null);
-  assert.equal(publicationRefreshDelay({ latestPublication: { status: 'PENDING' }, scheduledPublication: null }), 3000);
-  assert.equal(publicationRefreshDelay({ latestPublication: { status: 'RUNNING' }, scheduledPublication: null }), 3000);
-  assert.equal(publicationRefreshDelay({ latestPublication: { status: 'SUCCEEDED' }, scheduledPublication: { id: 'scheduled' } }), 15000);
-  assert.equal(publicationRefreshDelay({ latestPublication: { status: 'FAILED' }, scheduledPublication: null }), null);
+  assert.equal(publicationRefreshDelay({ latestPublication: null }), null);
+  assert.equal(publicationRefreshDelay({ latestPublication: { status: 'PENDING' } }), 3000);
+  assert.equal(publicationRefreshDelay({ latestPublication: { status: 'RUNNING' } }), 3000);
+  assert.equal(publicationRefreshDelay({ latestPublication: { status: 'SUCCEEDED' } }), null);
+  assert.equal(publicationRefreshDelay({ latestPublication: { status: 'FAILED' } }), null);
 });
 
-test('publication presentation prioritizes failure, active work and schedule over unsaved publication gap', async () => {
+test('publication presentation prioritizes failure and active work over unsaved publication gap', async () => {
   const { describePublicationState } = await import(moduleUrl('publication-display.mjs'));
-  const base = { workingRevision: 8, publishedRevision: 5, hasUnpublishedChanges: true, scheduledPublication: null, rebuild: null };
+  const base = { workingRevision: 8, publishedRevision: 5, hasUnpublishedChanges: true, rebuild: null };
   assert.equal(describePublicationState({ ...base, latestPublication: { id: 'old', siteRevision: 7, status: 'RUNNING' } }).kind, 'publishing');
   assert.equal(describePublicationState({ ...base, latestPublication: { id: 'old', siteRevision: 7, status: 'FAILED' }, rebuild: { status: 'RUNNING', requestedPublicationId: 'old' } }).kind, 'failed');
-  assert.equal(describePublicationState({ ...base, latestPublication: { id: 'old', siteRevision: 7, status: 'SCHEDULED' }, scheduledPublication: { id: 'old', siteRevision: 7, scheduledFor: '2026-09-23T12:00:00.000Z' } }).kind, 'scheduled');
 });
 
 test('successful content mutations notify the shell; reads, validation, leads and failed requests do not', async () => {

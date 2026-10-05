@@ -145,7 +145,7 @@ test('re-enqueueing the same publication snapshot is idempotent', async () => {
   const f = fixture();
 
   await f.service.enqueue({ entity: 'site-publication', id: 'publication-1', siteId: 'site-1', publicationId: 'publication-1' });
-  await f.service.enqueue({ entity: 'site-publication-schedule', id: 'publication-1', siteId: 'site-1', publicationId: 'publication-1' });
+  await f.service.enqueue({ entity: 'site-publication', id: 'publication-1', siteId: 'site-1', publicationId: 'publication-1' });
 
   assert.equal(f.getRecord().requestedRevision, 1);
   assert.equal(f.getRecord().requestedPublicationId, 'publication-1');
@@ -161,7 +161,7 @@ test('a pending rebuild for the same publication is requeued without incrementin
     },
   });
 
-  await f.service.enqueue({ entity: 'site-publication-schedule', id: 'publication-4', siteId: 'site-1', publicationId: 'publication-4' });
+  await f.service.enqueue({ entity: 'site-publication', id: 'publication-4', siteId: 'site-1', publicationId: 'publication-4' });
 
   assert.equal(f.getRecord().requestedRevision, 4);
   assert.equal(f.getRecord().status, 'QUEUED');

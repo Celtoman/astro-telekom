@@ -12,7 +12,7 @@ const registry = {
   serviceType: ['INTERNET', 'INTERNET_TV', 'TV', 'OTHER'],
   importStatus: ['VALIDATED', 'APPLIED', 'UNDONE', 'FAILED'],
   siteRebuildStatus: ['PENDING', 'QUEUED', 'RUNNING', 'RETRYING', 'SUCCEEDED', 'FAILED'],
-  sitePublicationStatus: ['SCHEDULED', 'PENDING', 'RUNNING', 'SUCCEEDED', 'FAILED', 'CANCELLED'],
+  sitePublicationStatus: ['PENDING', 'RUNNING', 'SUCCEEDED', 'FAILED', 'CANCELLED'],
   leadStatus: ['NEW', 'IN_PROGRESS', 'CALL_LATER', 'CONNECTED', 'REJECTED'],
   addressCheckStatus: ['AVAILABLE', 'UNAVAILABLE', 'AMBIGUOUS', 'MANUAL_CHECK', 'ERROR'],
   leadProcessingStatus: [
@@ -29,7 +29,7 @@ const registry = {
   contentEntityType: ['PROVIDER', 'SITE', 'REGION', 'CITY', 'PAGE', 'PAGE_TEMPLATE', 'TARIFF', 'REDIRECT'],
   contentRevisionAction: ['CREATE', 'UPDATE', 'IMPORT', 'UNDO', 'ARCHIVE', 'RESTORE', 'PURGE'],
   importIssueLevel: ['error', 'warning'],
-  publicationView: ['published', 'unpublished', 'publishing', 'scheduled', 'failed'],
+  publicationView: ['published', 'unpublished', 'publishing', 'failed'],
 };
 
 test('admin status presentation covers every user-facing enum with Russian semantic metadata', () => {

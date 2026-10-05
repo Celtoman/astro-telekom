@@ -48,8 +48,7 @@ Production Compose запускает one-shot `migrate` из API image посл
 
 Ручное изменение города/страницы/блока/тарифа/редиректа в API
   -> рабочая ревизия + before/after audit в PostgreSQL
-  -> публикация сразу или по расписанию ожидаемой ревизии -> неизменяемый SitePublication
-  -> минутный maintenance scheduler передает наступивший snapshot в обычную очередь
+  -> ручная публикация проверенной ожидаемой ревизии -> неизменяемый SitePublication
   -> PostgreSQL SiteRebuild -> Redis/BullMQ -> worker
   -> internal start/progress/result API -> webhook или Coolify start/poll -> финальный результат deployment
 
@@ -96,7 +95,7 @@ CMS-поток городской HOME: `PageTemplate(CITY_HOME)` принадл
 
 `apps/api` — единственный слой, который пишет доменные данные. Admin, worker и web не обращаются к PostgreSQL напрямую. `CoverageService`, `DomruContractService`, `LeadDeliveryService` и `NotificationsService` выступают адаптерами внешних интеграций; их URLs и ключи задаются окружением. Префикс `/crm/leads` сохранен только в HTTP-контракте API; отдельного CRM-приложения или домена больше нет.
 
-`LeadDeliveryService`, `LeadNotificationOutboxService` и `RebuildQueueService` создают доменные очереди в API; worker владеет maintenance scheduler и вызывает защищенные внутренние endpoints. Только API пишет в PostgreSQL. Для обычного оповещения worker передает номер попытки и revision, а API отправляет сообщение и сохраняет outcome; для расписания каждую минуту просит API атомарно захватить наступившие snapshots и поставить их в существующий rebuild; для rebuild worker отдельно вызывает deployment provider и возвращает его success/error в API; для retention повторяет bounded batches до полного результата. `tariff-imports` остается listener без producer и не участвует в текущем import-flow.
+`LeadDeliveryService`, `LeadNotificationOutboxService` и `RebuildQueueService` создают доменные очереди в API; worker владеет maintenance scheduler и вызывает защищенные внутренние endpoints. Только API пишет в PostgreSQL. Для обычного оповещения worker передает номер попытки и revision, а API отправляет сообщение и сохраняет outcome; для rebuild worker отдельно вызывает deployment provider и возвращает его success/error в API; для retention повторяет bounded batches до полного результата. `tariff-imports` остается listener без producer и не участвует в текущем import-flow.
 
 ## Модель публикации
 
@@ -105,18 +104,18 @@ CMS-поток городской HOME: `PageTemplate(CITY_HOME)` принадл
 1. Сущности `Site`, `City`, `Page`, `Tariff` имеют статус `DRAFT`, `PUBLISHED` или `ARCHIVED`.
 2. Public API возвращает опубликованные данные, но отдельно применяет release policy к URL.
 3. Astro получает authoritative inventory и выпускает `N + T + 6` indexable HTML для `N` опубликованных городов и `T` опубликованных тарифов этих городов плюс общую 404. Страница тарифа создаётся только из route с `kind = CITY_TARIFF_DETAIL`; service pages остаются вне Release 1.
-4. Ручные изменения cities/pages/blocks/tariffs/redirects и full-snapshot импорт тарифов сохраняют рабочую ревизию и before/after audit в одной транзакции; явные publication endpoints проверяют ожидаемый номер и фиксируют неизменяемый полный снимок для немедленного либо отложенного запуска.
-5. `SCHEDULED` snapshot хранит точный `scheduledFor`; его можно отменить до запуска. Минутный worker reconciler передает наступившую версию в обычную очередь, а более старую версию не выпускает поверх более новой активной или опубликованной.
+4. Ручные изменения cities/pages/blocks/tariffs/redirects и full-snapshot импорт тарифов сохраняют рабочую ревизию и before/after audit в одной транзакции; явные publication endpoints проверяют ожидаемый номер и фиксируют неизменяемый полный снимок для ручного запуска.
+5. Общий `/publication` через read-only review показывает все сохранения и проверку URL; только актуальная успешная проверка разрешает явный запуск. Публикации по времени отсутствуют.
 6. `SiteRebuild` получает ID именно этого снимка и ставит BullMQ job; изменения одного сайта дедуплицируются, но запрошенный и обрабатываемый snapshots не подменяют друг друга.
 7. Worker получает попытку через internal API, вызывает deployment provider и сохраняет результат через API; только явный `{ status: "SUCCEEDED" }` обновляет `publishedRevision`.
 
-Статус rebuild доступен через admin API. Отдельный компактный publication state API возвращает рабочую/опубликованную ревизии, последний snapshot, активное расписание и rebuild; общий UI-блок использует его на ручных экранах тарифов, городов и редиректов и после применения/отмены обоих XLSX-импортов. Он запускает публикацию точной рабочей ревизии сразу либо планирует неизменяемый snapshot на выбранное время и позволяет отменить его до передачи в rebuild. Защищенный preview API в serializable-транзакции строит текущий рабочий catalog без записи snapshot, а admin отрисовывает его локально в sandbox по каждому маршруту inventory. Coolify provider, production rebuild и расписание точного snapshot подтверждены датированными внешними проверками в `current-state.md`; постоянного browser E2E для preview и расписания нет. Guarded undo реализован для новых change set тарифного и городского импортов; корзина объединяет status-архивы и мягко удаленные PageBlock.
+Статус rebuild доступен через admin API. Отдельный компактный publication state API возвращает рабочую/опубликованную ревизии, последний snapshot и rebuild; общий UI-блок использует его на ручных экранах тарифов, городов и редиректов и после применения/отмены обоих XLSX-импортов. Карточки редакторов ведут на общий `/publication`, доступный также из шапки и меню; запуск требует актуального review той же ревизии. Защищенный preview API в serializable-транзакции строит текущий рабочий catalog без записи snapshot, а admin отрисовывает его локально в sandbox по каждому маршруту inventory. Исторические Coolify provider/production rebuild проверки приведены в `current-state.md`. Новый review UI проверен локально; внешняя приёмка новой механики статики остаётся в #238. Guarded undo реализован для новых change set тарифного и городского импортов; корзина объединяет status-архивы и мягко удаленные PageBlock.
 
 ## Что не является частью текущей реализации
 
 - Одновременная эксплуатационная публикация нескольких сайтов: route policy поддерживает любое число опубликованных городов одного выбранного сайта, но импорт пока односайтовый. Общие страницы одного сайта включены в датированный live inventory из `current-state.md`.
 - SSR и runtime data fetching на публичных SEO-страницах.
-- Полная CMS с глубоким наследованием блоков и восстановлением произвольной версии; immutable revisions, личный preview рабочей версии, audit, расписание точного snapshot, общий read-only журнал и корзина уже есть.
+- Полная CMS с глубоким наследованием блоков и восстановлением произвольной версии; immutable revisions, личный preview рабочей версии, audit, ручная общая публикация, общий read-only журнал и корзина уже есть.
 - Универсальный undo остальных массовых операций и аналитический контур; для двух XLSX-импортов реализован guarded undo, а для ручного удаления — архив и восстановление в новую рабочую ревизию.
 - Сертифицированный production-контур с реальным трафиком: внешний защищенный test deployment и sandbox/test-контракты уже подтверждены, но legal и эксплуатационные блокеры Release 1 остаются.
 

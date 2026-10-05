@@ -184,7 +184,6 @@ enum ContentRevisionAction {
 }
 
 enum SitePublicationStatus {
-  SCHEDULED
   PENDING
   RUNNING
   SUCCEEDED
@@ -356,8 +355,6 @@ model SitePublication {
   lastError            String?
   providerDeploymentId String?
   providerResponse     Json?
-  scheduledFor         DateTime?             @db.Timestamptz(3)
-  cancelledAt          DateTime?             @db.Timestamptz(3)
   createdAt            DateTime              @default(now()) @db.Timestamptz(3)
   updatedAt            DateTime              @updatedAt @db.Timestamptz(3)
   publishedAt          DateTime?             @db.Timestamptz(3)
@@ -370,7 +367,6 @@ model SitePublication {
 
   @@unique([siteId, siteRevision])
   @@index([siteId, status, createdAt])
-  @@index([status, scheduledFor])
   @@index([requestedById, createdAt])
 }
 

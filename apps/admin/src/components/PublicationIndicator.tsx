@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { CalendarClock, CheckCircle2, CircleAlert, CloudUpload, LoaderCircle, RefreshCw } from "lucide-react"
+import { CheckCircle2, CircleAlert, CloudUpload, LoaderCircle, RefreshCw } from "lucide-react"
 import { Button as AriaButton, Dialog, DialogTrigger, Popover } from "react-aria-components"
 import { requestJson } from "../lib/admin-api.mjs"
 import { describePublicationState, type PublicationState } from "../lib/publication-display.mjs"
@@ -54,9 +54,11 @@ export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
     const refresh = () => { void loadState(site) }
     window.addEventListener("focus", refresh)
     window.addEventListener("admin:publication-changed", refresh)
+    window.addEventListener("admin:publication-refresh", refresh)
     return () => {
       window.removeEventListener("focus", refresh)
       window.removeEventListener("admin:publication-changed", refresh)
+      window.removeEventListener("admin:publication-refresh", refresh)
     }
   }, [site, loadState])
 
@@ -74,11 +76,11 @@ export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
     : presentation?.kind === "published" ? CheckCircle2
     : presentation?.kind === "failed" ? CircleAlert
       : presentation?.kind === "publishing" ? LoaderCircle
-        : presentation?.kind === "scheduled" ? CalendarClock : presentation?.kind === "unpublished" ? CloudUpload : CircleAlert
+        : presentation?.kind === "unpublished" ? CloudUpload : CircleAlert
 
   return <DialogTrigger>
-      <AriaButton className={buttonVariants({ size: "sm", variant: "outline" })} aria-label={`Публикация сайта: ${status?.label ?? (state.status === "loading" ? "проверяем" : "статус недоступен")}. Открыть подробности`}>
-        <Icon className={state.status === "loading" || presentation?.kind === "publishing" ? "animate-spin" : undefined} data-icon="inline-start" />
+      <AriaButton className={`${buttonVariants({ size: "sm", variant: "outline" })} min-h-11`} aria-label={`Публикация сайта: ${status?.label ?? (state.status === "loading" ? "проверяем" : "статус недоступен")}. Открыть подробности`}>
+        <Icon className={state.status === "loading" || presentation?.kind === "publishing" ? "animate-spin motion-reduce:animate-none" : undefined} data-icon="inline-start" />
         <span className="hidden sm:inline">Сайт:</span>
         {status ? <Badge variant={status.tone}>{status.label}</Badge> : <Badge variant={state.status === "loading" ? "neutral" : "destructive"}>{state.status === "loading" ? "Проверяем…" : "Недоступен"}</Badge>}
       </AriaButton>
@@ -92,10 +94,10 @@ export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
               <div><p className="text-xs text-muted-foreground">На сайте</p><p className="font-medium">{state.publication.publishedRevision}</p></div>
             </div>
             {state.publication.latestPublication ? <div className="flex flex-wrap items-center gap-2"><span className="text-muted-foreground">Последняя публикация · версия {state.publication.latestPublication.siteRevision}</span><StatusBadge kind="sitePublicationStatus" value={state.publication.latestPublication.status} /></div> : null}
-            {state.publication.scheduledPublication ? <p>Запланирована версия {state.publication.scheduledPublication.siteRevision}: {new Date(state.publication.scheduledPublication.scheduledFor).toLocaleString("ru-RU")}</p> : null}
             {state.publication.latestPublication?.lastError || state.publication.rebuild?.lastError ? <p className="break-words text-destructive">Последняя ошибка: {state.publication.latestPublication?.lastError || state.publication.rebuild?.lastError}</p> : null}
           </> : null}
           <Button type="button" size="sm" variant="outline" onClick={() => void (site ? loadState(site) : loadSite())}><RefreshCw data-icon="inline-start" />Обновить</Button>
+          <Button asChild className="min-h-11 w-full"><a href={site ? `/publication?site=${encodeURIComponent(site.id)}` : "/publication"}>Проверить и опубликовать изменения</a></Button>
         </div>
         </Dialog>
       </Popover>

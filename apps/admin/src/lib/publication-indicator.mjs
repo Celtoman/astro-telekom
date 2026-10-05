@@ -5,6 +5,5 @@ export function resolvePublicationSite(sites) {
 export function publicationRefreshDelay(state) {
   if (!state) return null
   if (["PENDING", "RUNNING"].includes(state.latestPublication?.status)) return 3000
-  if (state.scheduledPublication) return 15000
   return null
 }
