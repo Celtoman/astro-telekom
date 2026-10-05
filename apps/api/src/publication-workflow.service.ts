@@ -442,8 +442,8 @@ export class PublicationWorkflowService {
     return city;
   }
 
-  async markSucceeded(publicationId: string, result: { deploymentId?: string; [key: string]: unknown }) {
-    return this.prisma.$transaction(async (transaction) => {
+  async markSucceeded(publicationId: string, result: { deploymentId?: string; [key: string]: unknown }, existingTransaction?: Prisma.TransactionClient) {
+    const acknowledge = async (transaction: Prisma.TransactionClient) => {
       const publication = await transaction.sitePublication.findUnique({ where: { id: publicationId } });
       if (!publication) throw new NotFoundException('Publication not found');
       const publishedAt = new Date();
@@ -466,7 +466,8 @@ export class PublicationWorkflowService {
         });
       }
       return updated;
-    });
+    };
+    return existingTransaction ? acknowledge(existingTransaction) : this.prisma.$transaction(acknowledge);
   }
 
   async markRunning(publicationId: string) {

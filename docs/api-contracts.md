@@ -1,5 +1,7 @@
 # API-контракты текущего прототипа
 
+Для нового static provider API независимо подтверждает receipt у private controller по exact rebuild ID/revision и сверяет его со снимком в SQL. Rebuild, SitePublication и Site.publishedRevision подтверждаются одной serializable-транзакцией; сбой обновления публикации откатывает rebuild success. Восстановление незавершённой QUEUED/RUNNING/RETRYING job удерживает processing snapshot, даже если requested snapshot уже новее. Это реализованный opt-in контракт, пока без production Compose wiring.
+
 Базовый prefix: `/api/v1`. Документ сверен 15 сентября 2026 года с маршрутами, зарегистрированными в `apps/api/src/module.ts`. Он не обещает endpoints из продукта, если их нет в коде.
 
 ## Общие правила

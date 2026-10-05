@@ -1,5 +1,7 @@
 # Фоновые задачи
 
+Для #238 добавлен opt-in `REBUILD_PROVIDER=static` с закрытым `STATIC_PUBLICATION_URL`. Он сначала читает immutable receipt по rebuild ID/revision, затем при необходимости вызывает controller `/publish` с exact publication/site identity. Coolify этим provider не вызывается. Неопределённый ответ, недоступный start или SQL acknowledgment переносят ту же job через BullMQ `moveToDelayed`/`DelayedError`, не расходуя bounded failure attempts и не сообщая SQL FAILED; это восстановление уже запрошенной публикации, без планирования новых публикаций. Доказанный отказ сборки/активации использует обычную retry-политику. Default и production Compose пока прежние — новый путь ещё не подключён.
+
 Worker запускается из `services/worker/src/index.mjs`. Он требует `REDIS_URL`, подключается через `ioredis` и создает шесть BullMQ consumers и одну maintenance queue с двумя Job Scheduler.
 
 В Coolify worker имеет отдельный container healthcheck `services/worker/src/healthcheck.mjs`. Проверка создает короткоживущее Redis-соединение с отключенными бесконечными retry и требует ответ `PONG`; она не выполняет business job и не зависит от очереди, но не позволяет считать worker здоровым при потере Redis.

@@ -49,7 +49,12 @@ function fixture(initial = {}) {
     markSucceeded: async (publicationId, result) => publicationCalls.push(['succeeded', publicationId, result]),
     markFailed: async (publicationId, error) => publicationCalls.push(['failed', publicationId, error]),
   };
-  const service = new RebuildQueueService({ siteRebuild }, publicationWorkflow);
+  const prisma = { siteRebuild };
+  prisma.$transaction = async callback => {
+    const previous = record ? { ...record } : null;
+    try { return await callback(prisma); } catch (error) { record = previous; throw error; }
+  };
+  const service = new RebuildQueueService(prisma, publicationWorkflow);
   service.queue = {
     add: async (...args) => {
       queueCalls.push(args);
@@ -72,6 +77,41 @@ test('rebuild keeps requested and processing publication snapshots separate', as
   assert.equal(f.getRecord().processingPublicationId, 'publication-1');
   assert.equal(f.getRecord().requestedPublicationId, 'publication-2');
   assert.deepEqual(f.publicationCalls, [['running', 'publication-1']]);
+});
+
+test('running recovery retains its exact processing snapshot while newer work is pending', async () => {
+  const f = fixture();
+  await f.service.enqueue({ entity: 'site', id: 'site-1', siteId: 'site-1', publicationId: 'pub-a' });
+  await f.service.startAttempt('rebuild-1', 1, 3, 1);
+  await f.service.enqueue({ entity: 'site', id: 'site-1', siteId: 'site-1', publicationId: 'pub-b' });
+  await f.service.onModuleInit();
+  await f.service.onModuleInit();
+  assert.equal(f.queueCalls.at(-1)[1].revision, 1);
+  const resumed = await f.service.startAttempt('rebuild-1', 1, 3, 1);
+  assert.equal(resumed.publicationId, 'pub-a'); assert.equal(resumed.revision, 1);
+  assert.equal(f.getRecord().requestedPublicationId, 'pub-b');
+});
+
+test('a new explicit publication after proven failure does not resume the retired processing snapshot', async () => {
+  const f = fixture();
+  await f.service.enqueue({ entity: 'site', id: 'site-1', siteId: 'site-1', publicationId: 'pub-a' });
+  await f.service.startAttempt('rebuild-1', 1, 1, 1);
+  await f.service.reportResult('rebuild-1', { attemptNumber: 1, maxAttempts: 1, revision: 1, error: 'Build rejected' });
+  await f.service.enqueue({ entity: 'site', id: 'site-1', siteId: 'site-1', publicationId: 'pub-b' });
+  const started = await f.service.startAttempt('rebuild-1', 1, 3, 2);
+  assert.equal(started.publicationId, 'pub-b'); assert.equal(started.revision, 2);
+});
+
+test('SQL acknowledgment rolls back rebuild success if publication update fails', async () => {
+  const f = fixture();
+  await f.service.enqueue({ entity: 'site', id: 'site-1', siteId: 'site-1', publicationId: 'pub-a' });
+  await f.service.startAttempt('rebuild-1', 1, 3, 1);
+  f.service.publicationWorkflow.markSucceeded = async (_publicationId, _result, transaction) => {
+    assert.ok(transaction, 'Publication and rebuild must share one SQL transaction');
+    throw new Error('Publication SQL unavailable');
+  };
+  await assert.rejects(f.service.finishSuccessfulRevision('rebuild-1', 1, { status: 'SUCCEEDED' }), /SQL unavailable/);
+  assert.equal(f.getRecord().status, 'RUNNING'); assert.equal(f.getRecord().publishedRevision, 0);
 });
 
 test('a legacy rebuild clears stale publication pointers from an earlier snapshot build', async () => {

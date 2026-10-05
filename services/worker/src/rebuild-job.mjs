@@ -1,4 +1,6 @@
 import { runCoolifyDeployment } from './coolify-deployment.mjs';
+import { DelayedError } from 'bullmq';
+import { runStaticPublication, StaticPublicationUncertainError } from './static-publication.mjs';
 
 const parseProviderResponse = async (response) => {
   const raw = await response.text();
@@ -11,6 +13,14 @@ const parseProviderResponse = async (response) => {
   return parsed;
 };
 
+async function deferStaticRecovery(job, error) {
+  if (typeof job.moveToDelayed === 'function' && job.token) {
+    await job.moveToDelayed(Date.now() + 30000, job.token);
+    throw new DelayedError();
+  }
+  throw error;
+}
+
 export async function runRebuildJob(job, options) {
   const { apiUrl, adminToken, rebuildUrl, jsonRequest, fetchImpl = fetch } = options;
   if (!adminToken) throw new Error('ADMIN_API_TOKEN is not configured');
@@ -18,17 +28,23 @@ export async function runRebuildJob(job, options) {
   const attemptNumber = job.attemptsMade + 1;
   const headers = { 'x-admin-token': adminToken };
   const endpoint = `${apiUrl}/internal/site-rebuilds/${encodeURIComponent(job.data.rebuildId)}`;
-  const rebuild = await jsonRequest(`${endpoint}/start`, {
+  let rebuild;
+  try { rebuild = await jsonRequest(`${endpoint}/start`, {
     method: 'POST',
     headers,
     body: JSON.stringify({ attemptNumber, maxAttempts, revision: job.data.revision }),
-  });
+  }); } catch (error) {
+    if (options.provider === 'static') return deferStaticRecovery(job, error);
+    throw error;
+  }
   if (rebuild.skipped) return rebuild;
 
   let result;
   try {
     const provider = options.provider || 'webhook';
-    if (provider === 'coolify') {
+    if (provider === 'static') {
+      result = await runStaticPublication(rebuild, { ...options, fetchImpl });
+    } else if (provider === 'coolify') {
       result = await runCoolifyDeployment(rebuild, {
         ...options,
         fetchImpl,
@@ -53,6 +69,14 @@ export async function runRebuildJob(job, options) {
       throw new Error(`Unsupported REBUILD_PROVIDER: ${provider}`);
     }
   } catch (error) {
+    if (error instanceof StaticPublicationUncertainError) {
+      // A lost reply can follow a committed activation. Keep SQL unfinished and
+      // recover this same job without exhausting BullMQ's bounded failure attempts.
+      await jsonRequest(`${endpoint}/provider-progress`, { method: 'POST', headers, body: JSON.stringify({
+        revision: rebuild.revision, deploymentId: `static-${rebuild.rebuildId}-${rebuild.revision}`, providerStatus: 'UNCERTAIN',
+      }) }).catch(() => undefined);
+      return deferStaticRecovery(job, error);
+    }
     const message = error instanceof Error ? error.message : String(error);
     const providerFailure = error && typeof error === 'object' ? error : {};
     await jsonRequest(`${endpoint}/result`, {
@@ -71,9 +95,13 @@ export async function runRebuildJob(job, options) {
     throw error;
   }
 
-  return jsonRequest(`${endpoint}/result`, {
+  try { return await jsonRequest(`${endpoint}/result`, {
     method: 'POST',
     headers,
     body: JSON.stringify({ attemptNumber, maxAttempts, revision: rebuild.revision, result }),
-  });
+  }); } catch (error) {
+    // Durable serving success remains recoverable if SQL acknowledgment is down.
+    if (options.provider === 'static') return deferStaticRecovery(job, error);
+    throw error;
+  }
 }

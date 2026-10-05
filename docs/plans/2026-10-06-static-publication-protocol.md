@@ -64,6 +64,8 @@ BOOTSTRAP допустим только для явно пустого serving. 
 
 ## Следующие обязательные шаги
 
+Отдельно реализованы private `PublicationController` и opt-in static worker provider. Controller сохраняет write-once intent с hash до активации, проверяет его и sealed manifest при восстановлении; HTTP принимает только CMS job identity, не CODE/BOOTSTRAP. Worker восстанавливает ту же BullMQ job при неопределённом исходе и недоступном SQL acknowledgment. API самостоятельно проверяет durable receipt и SQL catalog digest; rebuild/publication/site acknowledgment теперь одна serializable-транзакция. Исправление processing snapshot и транзакционной границы отслеживается в [#243](https://github.com/Celtoman/astro-telekom/issues/243). Production Compose/default provider ещё не изменены. SQL-транзакции пока проверены test-double; реальный PostgreSQL/Caddy/HTTP rehearsal, public API serving context, CODE/baseline wiring и retention остаются обязательными.
+
 Владелец 6 октября разрешил commit, push, deployment и проверки в рамках этой задачи. Текущий этап review/удаления расписания выпущен на exact SHA `d440ec4`; [внешняя приёмка](../research/2026-10-06-manual-publication-rollout.md) не подтверждает ещё не подключённый pipeline этого плана.
 
 1. Long-running builder с exact snapshot endpoint, собственной immutable renderer identity, native versioned Astro assets и реальным final-HTML gate.

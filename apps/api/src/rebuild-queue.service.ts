@@ -4,6 +4,7 @@ import IORedis from 'ioredis';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
+import { confirmStaticReceipt, assertReceiptSnapshot } from './static-publication-receipt';
 
 const QUEUE_NAME = 'site-rebuilds';
 const DEFAULT_MAX_ATTEMPTS = 3;
@@ -60,8 +61,7 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
       orderBy: { updatedAt: 'asc' },
     });
     for (const rebuild of unfinished) {
-      const revision = (rebuild.status === 'RUNNING' || rebuild.status === 'RETRYING')
-        && rebuild.processingRevision > rebuild.publishedRevision
+      const revision = rebuild.processingRevision > rebuild.publishedRevision
         ? rebuild.processingRevision
         : rebuild.requestedRevision;
       await this.schedule(rebuild.id, revision, rebuild.maxAttempts, true);
@@ -104,6 +104,8 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
         requestedPublicationId: data.publicationId || null,
         ...(terminal ? {
           status: 'PENDING' as const,
+          processingRevision: 0,
+          processingPublicationId: null,
           attempts: 0,
           lastError: null,
           providerStatus: null,
@@ -142,10 +144,11 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
     }
     const attempt = Math.max(1, Math.floor(attemptNumber || 1));
     const attemptLimit = Math.max(1, Math.floor(maxAttempts || rebuild.maxAttempts));
-    const revision = rebuild.status === 'RETRYING' && rebuild.processingRevision > 0
+    const resumeProcessing = ACTIVE_STATUSES.includes(rebuild.status as typeof ACTIVE_STATUSES[number]) && rebuild.processingRevision > rebuild.publishedRevision;
+    const revision = resumeProcessing
       ? rebuild.processingRevision
       : rebuild.requestedRevision;
-    const publicationId = rebuild.status === 'RETRYING' && rebuild.processingPublicationId
+    const publicationId = resumeProcessing && rebuild.processingPublicationId
       ? rebuild.processingPublicationId
       : rebuild.requestedPublicationId;
 
@@ -165,8 +168,12 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
 
     if (publicationId) await this.publicationWorkflow.markRunning(publicationId);
 
+    const site = process.env.REBUILD_PROVIDER === 'static' && running.siteId
+      ? await this.prisma.site.findUnique({ where: { id: running.siteId }, select: { slug: true } })
+      : null;
     return {
       rebuildId: running.id,
+      ...(site ? { siteSlug: site.slug } : {}),
       siteId: running.siteId,
       dedupeKey: running.dedupeKey,
       affectedPaths: running.affectedPaths,
@@ -234,50 +241,67 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
   }
 
   async finishSuccessfulRevision(id: string, revision: number, result: ProviderResult) {
-    const current = await this.get(id);
-    const processingPublicationId = current.processingRevision === revision
-      ? current.processingPublicationId
+    const receipt = process.env.REBUILD_PROVIDER === 'static' || typeof result.artifactId === 'string'
+      ? await confirmStaticReceipt(id, revision, result)
       : null;
-    const providerData = {
-      processingRevision: revision,
-      publishedRevision: revision,
-      providerStatus: result.status,
-      providerDeploymentId: typeof result.deploymentId === 'string' ? result.deploymentId : null,
-      providerResponse: result as Prisma.InputJsonValue,
-      lastError: null,
-    };
-    const completed = await this.prisma.siteRebuild.updateMany({
-      where: { id, requestedRevision: revision, processingRevision: revision, publishedRevision: { lt: revision } },
-      data: {
-        ...providerData,
-        ...(processingPublicationId ? { publishedPublicationId: processingPublicationId } : {}),
-        status: 'SUCCEEDED',
-        completedAt: new Date(),
-      },
-    });
-    if (completed.count === 1) {
-      if (processingPublicationId) await this.publicationWorkflow.markSucceeded(processingPublicationId, result);
-      const updated = await this.get(id);
-      return { published: true, revision, pendingRevision: null, rebuild: updated };
-    }
+    const acknowledged = await this.prisma.$transaction(async (transaction) => {
+      const current = await transaction.siteRebuild.findUnique({ where: { id } });
+      if (!current) throw new NotFoundException('Rebuild job not found');
+      if (current.processingRevision !== revision || current.publishedRevision >= revision) {
+        return { published: false, skipped: true, reason: 'stale_attempt', rebuild: current };
+      }
+      if (receipt) {
+        const publication = current.processingPublicationId
+          ? await transaction.sitePublication.findUnique({ where: { id: current.processingPublicationId } }) : null;
+        assertReceiptSnapshot(receipt, current, publication);
+      }
+      const processingPublicationId = current.processingRevision === revision
+        ? current.processingPublicationId
+        : null;
+      const providerData = {
+        processingRevision: revision,
+        publishedRevision: revision,
+        providerStatus: result.status,
+        providerDeploymentId: typeof result.deploymentId === 'string' ? result.deploymentId : null,
+        providerResponse: result as Prisma.InputJsonValue,
+        lastError: null,
+      };
+      const completed = await transaction.siteRebuild.updateMany({
+        where: { id, requestedRevision: revision, processingRevision: revision, publishedRevision: { lt: revision } },
+        data: {
+          ...providerData,
+          ...(processingPublicationId ? { publishedPublicationId: processingPublicationId } : {}),
+          status: 'SUCCEEDED',
+          completedAt: new Date(),
+        },
+      });
+      if (completed.count === 1) {
+        if (processingPublicationId) await this.publicationWorkflow.markSucceeded(processingPublicationId, result, transaction);
+        const updated = await transaction.siteRebuild.findUnique({ where: { id } });
+        return { published: true, revision, pendingRevision: null, rebuild: updated };
+      }
 
-    const pending = await this.prisma.siteRebuild.updateMany({
-      where: { id, requestedRevision: { gt: revision }, processingRevision: revision, publishedRevision: { lt: revision } },
-      data: {
-        ...providerData,
-        ...(processingPublicationId ? { publishedPublicationId: processingPublicationId } : {}),
-        status: 'PENDING',
-        completedAt: null,
-      },
-    });
-    if (pending.count === 0) {
-      return { published: false, skipped: true, reason: 'stale_attempt', rebuild: await this.get(id) };
+      const pending = await transaction.siteRebuild.updateMany({
+        where: { id, requestedRevision: { gt: revision }, processingRevision: revision, publishedRevision: { lt: revision } },
+        data: {
+          ...providerData,
+          ...(processingPublicationId ? { publishedPublicationId: processingPublicationId } : {}),
+          status: 'PENDING',
+          completedAt: null,
+        },
+      });
+      if (pending.count === 0) {
+        return { published: false, skipped: true, reason: 'stale_attempt', rebuild: current };
+      }
+      if (processingPublicationId) await this.publicationWorkflow.markSucceeded(processingPublicationId, result, transaction);
+      const latest = await transaction.siteRebuild.findUnique({ where: { id } });
+      return { published: true, revision, pendingRevision: latest!.requestedRevision, rebuild: latest };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    if (acknowledged.published && acknowledged.pendingRevision && acknowledged.rebuild) {
+      await this.schedule(id, acknowledged.pendingRevision, acknowledged.rebuild.maxAttempts);
+      return { ...acknowledged, rebuild: await this.get(id) };
     }
-    if (processingPublicationId) await this.publicationWorkflow.markSucceeded(processingPublicationId, result);
-    const latest = await this.get(id);
-    await this.schedule(id, latest.requestedRevision, latest.maxAttempts);
-    const updated = await this.get(id);
-    return { published: true, revision, pendingRevision: latest.requestedRevision, rebuild: updated };
+    return acknowledged;
   }
 
   private async schedule(id: string, revision: number, maxAttempts: number, recovery = false) {

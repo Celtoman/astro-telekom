@@ -7,6 +7,9 @@ export class ActivationUncertainError extends Error {
 export class ActivationConflictError extends Error {
   constructor(message) { super(message); this.name = 'ActivationConflictError'; }
 }
+export class ActivationRejectedError extends Error {
+  constructor(message) { super(message); this.name = 'ActivationRejectedError'; }
+}
 
 export class CaddyActivation {
   constructor({ publicationRoot, adminUrl = 'http://127.0.0.1:2019', fetchImpl = fetch, servingOptions }) {
@@ -90,7 +93,7 @@ export class CaddyActivation {
     if (observed.active?.artifactId === artifactId) return this.reconcile(observed.active);
     if (response.status === 412) throw new ActivationConflictError('Concurrent serving change rejected the stale configuration');
     if (!response.ok && (observed.active?.artifactId || null) === expectedActiveArtifactId) {
-      throw new Error(`Caddy rejected activation (${response.status}); previous configuration is still active`);
+      throw new ActivationRejectedError(`Caddy rejected activation (${response.status}); previous configuration is still active`);
     }
     throw new ActivationUncertainError('Serving did not confirm the requested artifact');
   }

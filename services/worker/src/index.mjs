@@ -41,6 +41,7 @@ const rebuildWorker = new Worker(
     adminToken,
     provider: process.env.REBUILD_PROVIDER,
     rebuildUrl: process.env.REBUILD_WEBHOOK_URL,
+    publicationUrl: process.env.STATIC_PUBLICATION_URL,
     coolifyApiUrl: process.env.COOLIFY_API_URL,
     coolifyApiToken: process.env.COOLIFY_API_TOKEN,
     coolifyResourceUuid: process.env.COOLIFY_RESOURCE_UUID,
