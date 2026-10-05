@@ -1,5 +1,7 @@
 # Архитектура платформы
 
+Для #238 отдельно реализуется [протокол CMS-публикации без redeploy](plans/2026-10-06-static-publication-protocol.md). Локальные модули `apps/web/scripts/publication/` уже проверены на настоящем Caddy: одна конфигурация определяет HTML root, redirects и snapshot context для API; manifests/receipts сохраняются вне публичного дерева, versioned assets не исчезают при следующей активации. Это пока отдельное проверенное ядро: builder, worker, HTTP controller, SQL-согласование и Compose wiring ещё не подключены. Описанные ниже действующие runtime-потоки продолжают использовать deployment-provider.
+
 ## Статус архитектуры
 
 В репозитории реализован прототип статической витрины Дом.ру с защищенным внешним test-контуром в Coolify. Архитектура разделяет public web, admin, backoffice API и worker. Публичная маршрутизация строит static paths из отдельного Release 1 route inventory: корень, пять site-global страниц, HOME каждого опубликованного города и detail каждого опубликованного тарифа такого города. Канонический импорт переводит весь входящий каталог городов в `PUBLISHED` и создает новым городам единую композицию HOME.
