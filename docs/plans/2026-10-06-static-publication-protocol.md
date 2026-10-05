@@ -58,6 +58,8 @@ BOOTSTRAP допустим только для явно пустого serving. 
 
 В этом rehearsal HTML — синтетические fixtures, а upstream API — контролируемый HTTP-сервер. Это доказательство serving-протокола, а не full Astro/PostgreSQL или внешнего save→publish сценария.
 
+Первый Linux CI на `d57baf0` выявил проблему прав тестовой изоляции [#242](https://github.com/Celtoman/astro-telekom/issues/242): root-контейнер создавал закрытый state, и cleanup runner скрывал исходную ошибку. Rehearsal теперь запускает Caddy на Linux с UID/GID владельца временного каталога, хранит config/data в этом каталоге, явно ожидает готовности API fixture и выводит исходную ошибку перед cleanup. Windows не меняет container user. Production Compose этим исправлением не меняется; отдельный зелёный Linux CI остаётся обязательным перед deployment.
+
 ## Следующие обязательные шаги
 
 1. Long-running builder с exact snapshot endpoint, собственной immutable renderer identity, native versioned Astro assets и реальным final-HTML gate.

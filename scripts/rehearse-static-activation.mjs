@@ -15,6 +15,8 @@ const network = `astro-activation-${suffix}`;
 const root = await mkdtemp(join(tmpdir(), 'astro-static-activation-'));
 const safeRoot = await realpath(root);
 const token = 'synthetic-publication-proxy-token-for-rehearsal';
+// A Linux runner must own Caddy's persisted files as well as its test directory.
+const caddyUser = process.platform === 'linux' ? ['--user', `${process.getuid()}:${process.getgid()}`] : [];
 function command(args, optional = false) {
   const result = spawnSync('docker', args, { encoding: 'utf8', timeout: 90000 });
   if (!optional && result.status !== 0) throw new Error(result.stderr || result.stdout || String(result.error));
@@ -60,9 +62,16 @@ try {
   command(['network', 'create', network]);
   const mockApi = `const http=require('node:http'); http.createServer((q,s)=>{const trusted=q.headers['x-site-publication-token']===${JSON.stringify(token)};if(q.url.includes('/redirects/')){s.writeHead(trusted?301:403,{location:'/city'+(q.url.includes('?')?q.url.slice(q.url.indexOf('?')):'')});s.end();return;}s.setHeader('content-type','application/json');s.end(JSON.stringify({publicationId:q.headers['x-site-publication-id'],trusted}));}).listen(3000,'0.0.0.0');`;
   command(['run', '--rm', '-d', '--name', api, '--network', network, 'node:22.23.2-alpine', 'node', '-e', mockApi]);
+  let apiReady = false;
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    const probe = spawnSync('docker', ['exec', api, 'node', '-e', "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"], { encoding: 'utf8', timeout: 5000 });
+    if (probe.status === 0) { apiReady = true; break; }
+    await new Promise((done) => setTimeout(done, 250));
+  }
+  assert.ok(apiReady, 'Synthetic API did not become ready');
   await writeFile(join(root, 'boot.json'), JSON.stringify(createServingConfig(null, options())));
-  command(['run', '-d', '--name', server, '--network', network,
-    '-v', `${resolve(root)}:/publication`, '-e', 'XDG_CONFIG_HOME=/publication/state',
+  command(['run', '-d', '--name', server, '--network', network, ...caddyUser,
+    '-v', `${resolve(root)}:/publication`, '-e', 'XDG_CONFIG_HOME=/publication/state', '-e', 'XDG_DATA_HOME=/publication/data',
     '-p', '127.0.0.1::80', '-p', '127.0.0.1::2019', 'caddy:2.11.4-alpine',
     'caddy', 'run', '--config', '/publication/boot.json']);
   base = `http://127.0.0.1:${port(server, '80/tcp')}`;
@@ -111,8 +120,8 @@ try {
   // A process restarts from Caddy's own durable autosave, not a second independent pointer.
   command(['exec', server, 'test', '-f', '/publication/state/caddy/autosave.json']);
   command(['rm', '-f', server]);
-  command(['run', '-d', '--name', server, '--network', network,
-    '-v', `${resolve(root)}:/publication`, '-e', 'XDG_CONFIG_HOME=/publication/state',
+  command(['run', '-d', '--name', server, '--network', network, ...caddyUser,
+    '-v', `${resolve(root)}:/publication`, '-e', 'XDG_CONFIG_HOME=/publication/state', '-e', 'XDG_DATA_HOME=/publication/data',
     '-p', '127.0.0.1::80', '-p', '127.0.0.1::2019', 'caddy:2.11.4-alpine', 'caddy', 'run', '--resume']);
   base = `http://127.0.0.1:${port(server, '80/tcp')}`; adminUrl = `http://127.0.0.1:${port(server, '2019/tcp')}`;
   await waitReady(); await visible('b');
@@ -142,6 +151,7 @@ try {
   assert.match(await fetch(`${base}/__publication_assets/${a.artifactId}/_astro/client.js`).then((response) => response.text()), /"a"/);
   process.stdout.write('Caddy: atomic serving, lost response reconciled, stale writer rejected, restart resumed, previous assets retained; HTML remains autonomous without API\n');
 } catch (error) {
+  process.stderr.write(`Rehearsal failed: ${error instanceof Error ? error.stack : error}\n`);
   const logs = command(['logs', server], true);
   if (logs) process.stderr.write(`${logs.slice(-5000)}\n`);
   const diagnostic = command(['inspect', server, '--format', '{{json .State}} {{json .NetworkSettings.Ports}} {{json .HostConfig.PortBindings}}'], true);
