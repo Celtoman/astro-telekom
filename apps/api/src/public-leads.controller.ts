@@ -12,6 +12,7 @@ import { configurationSnapshot, quoteFingerprint, quoteTariffConfiguration } fro
 import { classifyLeadReason } from './lead-reasons';
 import { analyzeLeadComment } from './lead-comment-analyzer';
 import { buildLeadAttribution } from './lead-attribution';
+import { servingEntities } from './serving-publication-context';
 
 function premiseKey(data: Record<string, unknown> | undefined): string {
   if (!data) return '';
@@ -110,20 +111,21 @@ export class PublicLeadsController {
     const existingSubmission = returnExistingSubmission(await findSubmission());
     if (existingSubmission) return existingSubmission;
 
-    const site = await this.prisma.site.findFirst({
+    const serving = await servingEntities(this.prisma, body.siteSlug || 'domru-site', body.citySlug, body.pageSlug);
+    const site = serving?.site ?? await this.prisma.site.findFirst({
       where: { slug: body.siteSlug || 'domru-site', status: 'PUBLISHED' },
     });
     if (!site) throw new BadRequestException('Сайт не найден');
 
-    const city = await this.prisma.city.findFirst({
+    const city = serving?.city ?? await this.prisma.city.findFirst({
       where: { siteId: site.id, slug: body.citySlug, status: 'PUBLISHED' },
     });
     if (!city) throw new BadRequestException('Город не найден');
 
-    const page = body.pageSlug
+    const page = serving ? serving.page : body.pageSlug
       ? await this.prisma.page.findFirst({ where: { cityId: city.id, slug: body.pageSlug, status: 'PUBLISHED' } })
       : null;
-    const publication = body.configuration
+    const publication = serving ? serving.publication : body.configuration
       ? await this.prisma.sitePublication.findFirst({
         where: { siteId: site.id, status: 'SUCCEEDED' },
         orderBy: { siteRevision: 'desc' },
@@ -133,11 +135,12 @@ export class PublicLeadsController {
     const catalog = publication?.catalog as { cities?: Array<{ slug?: string; tariffs?: Array<Record<string, unknown>> }> } | null;
     const publishedCity = catalog?.cities?.find((item) => item.slug === city.slug);
     const publishedTariff = publishedCity?.tariffs?.find((item) => item.slug === body.tariffSlug);
-    const tariff = body.tariffSlug && (!body.configuration || typeof publishedTariff?.id === 'string')
-      ? await this.prisma.tariff.findFirst({ where: body.configuration
+    const tariffRow = body.tariffSlug && (!(body.configuration || serving) || typeof publishedTariff?.id === 'string')
+      ? await this.prisma.tariff.findFirst({ where: body.configuration || serving
         ? { id: publishedTariff!.id as string, cityId: city.id }
         : { cityId: city.id, slug: body.tariffSlug, status: 'PUBLISHED', availability: 'ACTIVE' } })
       : null;
+    const tariff = serving && tariffRow && publishedTariff ? { ...tariffRow, ...publishedTariff, id: tariffRow.id, cityId: city.id } : tariffRow;
     const addressCheck = body.addressCheckId
       ? await this.prisma.addressCheck.findFirst({ where: { id: body.addressCheckId, cityId: city.id, siteId: site.id } })
       : null;

@@ -1,6 +1,6 @@
 # Технический долг — индекс
 
-Дата последнего обновления индекса: 26 сентября 2026 года. **Полное описание каждой проблемы (доказательство, влияние, следующее действие) живёт в GitHub Issue, не здесь** — эта таблица дублировала текст до 8 сентября 2026, что и было источником рассинхронизации; теперь она только индекс. Как устроена вся система — [docs/task-management.md](task-management.md).
+Дата последнего обновления индекса: 6 октября 2026 года. **Полное описание каждой проблемы (доказательство, влияние, следующее действие) живёт в GitHub Issue, не здесь** — эта таблица дублировала текст до 8 сентября 2026, что и было источником рассинхронизации; теперь она только индекс. Как устроена вся система — [docs/task-management.md](task-management.md).
 
 Приоритеты: P0 — блокирует безопасный запуск или ведет к недостоверным данным; P1 — нарушает ключевой путь первого релиза; P2 — существенно ограничивает эксплуатацию; P3 — улучшение качества и поддерживаемости.
 
@@ -26,6 +26,7 @@
 | TD-145 | [#240](https://github.com/Celtoman/astro-telekom/issues/240) 🟢 | Первый seed падает на удалённом Region.phone; свежий bootstrap требует отдельной проверки |
 | TD-146 | [#242](https://github.com/Celtoman/astro-telekom/issues/242) ✅ | Caddy fixture использует Linux runner UID/GID; CI прошёл без пропусков |
 | TD-147 | [#243](https://github.com/Celtoman/astro-telekom/issues/243) ✅ | Повторные перезапуски удерживают processing snapshot; SQL acknowledgment атомарен, полный gate прошёл |
+| TD-148 | [#244](https://github.com/Celtoman/astro-telekom/issues/244) 🟢 | Serving snapshot context и публичные address/lead чтения реализованы opt-in; приёмка и production wiring продолжаются |
 | TD-04 | [#5](https://github.com/Celtoman/astro-telekom/issues/5) ✅ | Базовый public catalog и multi-city static paths; текущая Release 1 policy дополнительно ограничивает маршруты |
 | TD-05 | [#6](https://github.com/Celtoman/astro-telekom/issues/6) ✅ | Persistent rebuild-job: dedupe, BullMQ retry/backoff, API-статус и финальный результат provider |
 | TD-06 | [#7](https://github.com/Celtoman/astro-telekom/issues/7) ✅ | Full-snapshot import атомарно удаляет отсутствующие тарифы, требует подтверждения warnings и создает redirects при ручной смене URL |

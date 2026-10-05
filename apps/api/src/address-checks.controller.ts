@@ -5,6 +5,7 @@ import { AddressCheckDto } from './public.dto';
 import { DadataService } from './dadata.service';
 import { readDadataSuggestion } from './coverage.service';
 import { mapAddressCheckPublicResult } from './address-check-result';
+import { servingEntities } from './serving-publication-context';
 
 @Controller('address-checks')
 export class AddressChecksController {
@@ -21,13 +22,16 @@ export class AddressChecksController {
       throw new BadRequestException('Адрес обязателен');
     }
 
-    const site = await this.prisma.site.findUnique({ where: { slug: body.siteSlug || 'domru-site' } });
-    if (!site || site.status !== 'PUBLISHED') throw new BadRequestException('Сайт недоступен');
-    const city = await this.prisma.city.findFirst({
+    const serving = await servingEntities(this.prisma, body.siteSlug || 'domru-site', body.citySlug ?? 'kazan', body.pageSlug);
+    const workingSite = serving ? null : await this.prisma.site.findUnique({ where: { slug: body.siteSlug || 'domru-site' } });
+    if (!serving && workingSite?.status !== 'PUBLISHED') throw new BadRequestException('Сайт недоступен');
+    const site = serving?.site ?? workingSite;
+    if (!site) throw new BadRequestException('Сайт недоступен');
+    const city = serving?.city ?? await this.prisma.city.findFirst({
       where: { siteId: site.id, slug: body.citySlug ?? 'kazan', status: 'PUBLISHED' },
     });
     if (!city) throw new BadRequestException('Город недоступен');
-    const page = body.pageSlug ? await this.prisma.page.findFirst({ where: { cityId: city.id, slug: body.pageSlug, status: 'PUBLISHED' } }) : null;
+    const page = serving ? serving.page : body.pageSlug ? await this.prisma.page.findFirst({ where: { cityId: city.id, slug: body.pageSlug, status: 'PUBLISHED' } }) : null;
     if (body.pageSlug && !page) throw new BadRequestException('Страница недоступна');
     const selectedSuggestion = readDadataSuggestion(body.suggestion);
     const normalizedSuggestion = selectedSuggestion ? await this.dadata.clean(selectedSuggestion) : null;

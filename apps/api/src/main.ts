@@ -6,6 +6,7 @@ import IORedis from 'ioredis';
 import { AppModule } from './module';
 import { ADMIN_CORS_METHODS } from './cors-options';
 import { createGlobalValidationPipe, rateLimitForPath, rateLimitKeyForRequest, rateLimitWindow } from './security-options';
+import { ServingPublicationInterceptor } from './serving-publication-context';
 
 async function bootstrap() {
   const trustProxy = process.env.TRUST_PROXY === 'true';
@@ -34,6 +35,7 @@ async function bootstrap() {
     });
   }
   app.useGlobalPipes(createGlobalValidationPipe());
+  app.useGlobalInterceptors(new ServingPublicationInterceptor());
   app.enableShutdownHooks();
   app.setGlobalPrefix('api/v1');
   app.enableCors({

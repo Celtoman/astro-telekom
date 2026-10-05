@@ -1,5 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { createHash } from 'node:crypto';
+import { servingPublication } from './serving-publication-context';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { SiteCatalogService } from './site-catalog.service';
@@ -424,6 +425,8 @@ export class PublicationWorkflowService {
   }
 
   async getPublishedCatalog(siteSlug: string): Promise<JsonObject> {
+    const serving = await servingPublication(this.prisma, siteSlug);
+    if (serving) return serving.catalog as JsonObject;
     const site = await this.prisma.site.findUnique({ where: { slug: siteSlug } });
     if (!site) throw new NotFoundException('Site not found');
     const publication = await this.prisma.sitePublication.findFirst({

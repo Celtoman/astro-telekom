@@ -2,6 +2,7 @@ import { BadRequestException, Body, Controller, Post, Req, Res } from '@nestjs/c
 import { DadataLocationBoost, DadataService } from './dadata.service';
 import { PrismaService } from './prisma.service';
 import { AddressSuggestionsDto } from './public.dto';
+import { servingEntities } from './serving-publication-context';
 
 const ADDRESS_CITY_KLADR_COOKIE = 'address_city_kladr';
 const ADDRESS_CITY_KLADR_NONE = 'none';
@@ -27,9 +28,12 @@ export class AddressSuggestionsController {
     @Res({ passthrough: true }) response: AddressSuggestionReply,
   ) {
     if (body.website) throw new BadRequestException('Некорректный запрос');
-    const site = await this.prisma.site.findUnique({ where: { slug: body.siteSlug || 'domru-site' } });
-    if (!site || site.status !== 'PUBLISHED') throw new BadRequestException('Сайт недоступен');
-    const city = await this.prisma.city.findFirst({
+    const serving = await servingEntities(this.prisma, body.siteSlug || 'domru-site', body.citySlug ?? 'kazan');
+    const workingSite = serving ? null : await this.prisma.site.findUnique({ where: { slug: body.siteSlug || 'domru-site' } });
+    if (!serving && workingSite?.status !== 'PUBLISHED') throw new BadRequestException('Сайт недоступен');
+    const site = serving?.site ?? workingSite;
+    if (!site) throw new BadRequestException('Сайт недоступен');
+    const city = serving?.city ?? await this.prisma.city.findFirst({
       where: { siteId: site.id, slug: body.citySlug ?? 'kazan', status: 'PUBLISHED' },
       include: { region: { select: { name: true } } },
     });
