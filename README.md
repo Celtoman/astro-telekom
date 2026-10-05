@@ -1,6 +1,6 @@
 # Платформа партнерских сайтов провайдеров
 
-Для публикации CMS без redeploy в #238 добавлен отдельно проверенный builder конкретного сохранённого снимка с versioned assets и final-HTML gate. Он пока не подключён к production Compose: текущий production pipeline продолжает использовать Coolify. Реализация и границы проверки описаны в [протоколе публикации](docs/plans/2026-10-06-static-publication-protocol.md).
+Для публикации CMS без redeploy в #238 добавлены exact snapshot builder и отдельный Docker target `publication-runtime` с Node controller и Caddy. Реальный контейнер проверен: выпуск CODE сохраняет обслуживаемый снимок, CMS переключает контент без обращения к deployment provider, restart восстанавливает HTML/assets при выключенном API. Production Compose пока использует прежний Coolify pipeline; переход существующего baseline и внешний save→publish ещё не выполнены. Реализация и границы проверки описаны в [протоколе публикации](docs/plans/2026-10-06-static-publication-protocol.md).
 
 Новый private controller и opt-in static worker уже проверены отдельно, включая восстановление BullMQ job на настоящем Redis. SQL acknowledgment объединён в одну транзакцию. Для opt-in static provider API читает обслуживаемый снимок: каталог, расчёт тарифа, редиректы, адрес и заявки используют доверенный контекст Caddy либо подтверждённое состояние private controller. Запуск нового serving в production Compose ещё не подключён; внешний save→publish пока не подтверждён.
 

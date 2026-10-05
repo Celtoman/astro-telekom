@@ -35,6 +35,11 @@ RUN pnpm --filter @provider/web run build
 FROM caddy:2.11.4-alpine AS coolify-server
 COPY deploy/coolify-web.Caddyfile /etc/caddy/Caddyfile
 
+FROM web-deps AS publication-runtime
+COPY --from=coolify-server /usr/bin/caddy /usr/bin/caddy
+EXPOSE 80
+CMD ["node", "apps/web/scripts/publication/runtime.mjs"]
+
 FROM caddy:2.11.4-alpine
 COPY --from=build /workspace/apps/web/dist /srv
 RUN mv /srv/redirects.caddy /etc/caddy/redirects.caddy

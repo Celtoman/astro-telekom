@@ -12,6 +12,10 @@ const sha = value => createHash('sha256').update(value).digest('hex');
 const id = /^[a-zA-Z0-9_-]{1,200}$/;
 const publicKeys = ['PUBLIC_SITE_URL', 'PUBLIC_API_URL', 'PUBLIC_SITE_SLUG', 'PUBLIC_YANDEX_METRIKA_ID', 'PUBLIC_CONNECTION_PHONE', 'PUBLIC_SUPPORT_PHONE'];
 
+export class SnapshotUnavailableError extends Error {
+  constructor(status) { super(`Exact snapshot unavailable (${status})`); this.httpStatus = status; }
+}
+
 async function sourceIdentity(publicEnv) {
   const hash = createHash('sha256').update(JSON.stringify({ node: process.version, publicEnv }));
   async function visit(path) {
@@ -80,19 +84,24 @@ export class StaticArtifactBuilder {
     return operation;
   }
 
-  async buildSerial(job) {
+  async fetchSnapshot(job) {
     for (const field of ['publicationId', 'siteId', 'rebuildId']) if (!id.test(job[field] || '')) throw new Error(`Invalid ${field}`);
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(job.siteSlug || '') || job.siteSlug !== this.publicEnv.PUBLIC_SITE_SLUG) throw new Error('Invalid snapshot site slug');
     if (!Number.isSafeInteger(job.rebuildRevision) || job.rebuildRevision < 1) throw new Error('Invalid rebuild revision');
     const response = await this.fetchImpl(`${this.apiUrl}/internal/site-publications/${job.siteSlug}/snapshots/${job.publicationId}`, {
       headers: { 'x-admin-token': this.adminToken }, signal: AbortSignal.timeout(30000),
     });
-    if (!response.ok) throw new Error(`Exact snapshot unavailable (${response.status})`);
+    if (!response.ok) throw new SnapshotUnavailableError(response.status);
     const snapshot = await response.json();
     if (['publicationId', 'siteId', 'siteSlug'].some(field => snapshot[field] !== job[field])
       || !Number.isSafeInteger(snapshot.siteRevision) || snapshot.siteRevision < 0
       || !snapshot.catalog || snapshot.catalog.site?.slug !== job.siteSlug
       || sha(JSON.stringify(snapshot.catalog)) !== snapshot.catalogDigest) throw new Error('Exact snapshot identity/digest mismatch');
+    return snapshot;
+  }
+
+  async buildSerial(job) {
+    const snapshot = await this.fetchSnapshot(job);
     const rendererId = await this.renderer;
     if (await sourceIdentity(this.publicEnv) !== rendererId) throw new Error('Released renderer source changed');
     const identity = { publicationId: job.publicationId, siteId: job.siteId, siteSlug: job.siteSlug,

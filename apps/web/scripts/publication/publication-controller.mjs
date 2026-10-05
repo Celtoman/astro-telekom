@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
-import { createHash, timingSafeEqual } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
+import { createHash, timingSafeEqual, randomUUID } from 'node:crypto';
+import { readFile, readdir } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { readArtifact, readReceipt, writeImmutableJson } from './artifact-store.mjs';
 import { ActivationConflictError, ActivationUncertainError, ActivationRejectedError } from './caddy-activation.mjs';
@@ -21,13 +21,29 @@ function operationName(rebuildId, revision) {
   return `${createHash('sha256').update(JSON.stringify([rebuildId, revision])).digest('hex')}.json`;
 }
 
+const codeFields = ['deploymentId', 'expectedCommit', 'rendererId', 'instanceId'];
+function codeIdentity(input) {
+  if (!input || typeof input !== 'object' || Array.isArray(input) || Object.keys(input).some(key => !codeFields.includes(key))) throw new InputError('Unsupported code release fields');
+  if (!validId(input.deploymentId) || !/^[a-f0-9]{40}$/.test(input.expectedCommit || '')
+    || !/^[a-f0-9]{64}$/.test(input.rendererId || '') || !/^[a-f0-9-]{36}$/.test(input.instanceId || '')) throw new InputError('Invalid code release identity');
+  return Object.fromEntries(codeFields.map(field => [field, input[field]]));
+}
+
 export class PublicationController {
-  constructor({ publicationRoot, builder, activation }) {
+  constructor({ publicationRoot, builder, activation, verifyCodeRelease }) {
     this.root = resolve(publicationRoot); this.builder = builder; this.activation = activation;
+    this.verifyCodeRelease = verifyCodeRelease; this.instanceId = randomUUID();
     this.pending = Promise.resolve();
   }
 
   async active() { return (await this.activation.current()).active; }
+
+  async rendererIdentity() { return { rendererId: await this.builder.renderer, instanceId: this.instanceId }; }
+
+  async eligible(artifact, job) {
+    const snapshot = await this.builder.fetchSnapshot(job);
+    if (['publicationId', 'siteId', 'siteSlug', 'siteRevision', 'catalogDigest'].some(field => snapshot[field] !== artifact[field])) throw new Error('Persisted snapshot identity/digest mismatch');
+  }
 
   async operation(rebuildId, revision) {
     const operation = await readFile(join(this.root, 'operations', operationName(rebuildId, revision)), 'utf8')
@@ -76,9 +92,15 @@ export class PublicationController {
       try { receipt = await this.receipt(job.rebuildId, job.rebuildRevision); }
       catch (error) { throw new ActivationUncertainError('Publication receipt could not be verified', { cause: error }); }
       if (receipt.status === 'SUCCEEDED') return receipt;
+      try { await this.eligible(operation.artifact, job); }
+      catch (error) {
+        if ([404, 409].includes(error.httpStatus)) throw new BuildFailedError(error.message, { cause: error });
+        throw new ActivationUncertainError('Persisted snapshot eligibility could not be verified', { cause: error });
+      }
     } else {
       const state = await this.activation.current();
       if (!state.active) throw new ActivationConflictError('CMS publication requires an initialized serving baseline');
+      if (await this.builder.renderer !== state.active.rendererId) throw new ActivationUncertainError('CMS publication is waiting for the code release to finish');
       let artifact;
       try { artifact = await this.builder.build(job); }
       catch (error) { throw new BuildFailedError(error.message, { cause: error }); }
@@ -95,6 +117,72 @@ export class PublicationController {
       if (error instanceof ActivationConflictError || error instanceof ActivationRejectedError || error instanceof ActivationUncertainError) throw error;
       throw new ActivationUncertainError('Activation result could not be verified', { cause: error });
     }
+  }
+
+  releaseCode(input) {
+    const release = codeIdentity(input);
+    const operation = this.pending.then(() => this.releaseCodeSerial(release));
+    this.pending = operation.catch(() => undefined);
+    return operation;
+  }
+
+  async authorizeCode(release) {
+    if (release.instanceId !== this.instanceId || release.rendererId !== await this.builder.renderer) throw new InputError('Code release renderer/instance changed', 409);
+    if (!this.verifyCodeRelease) throw new ActivationUncertainError('Code deployment verification is not configured');
+    await this.verifyCodeRelease(release);
+  }
+
+  async pendingCms(active) {
+    const names = await readdir(join(this.root, 'operations')).catch(error => { if (error.code !== 'ENOENT') throw error; return []; });
+    for (const name of names) {
+      if (!/^[a-f0-9]{64}\.json$/.test(name)) continue;
+      const record = JSON.parse(await readFile(join(this.root, 'operations', name), 'utf8'));
+      const operation = await this.operation(record.job.rebuildId, record.job.rebuildRevision);
+      if (operation.artifact.siteId !== active.siteId || operation.artifact.siteRevision <= active.siteRevision) continue;
+      if ((await this.receipt(record.job.rebuildId, record.job.rebuildRevision)).status === 'SUCCEEDED') continue;
+      try { await this.eligible(operation.artifact, operation.job); }
+      catch (error) { if ([404, 409].includes(error.httpStatus)) continue; throw error; }
+      throw new ActivationUncertainError('Code release is waiting for an unresolved CMS activation');
+    }
+  }
+
+  async releaseCodeSerial(release) {
+    await this.authorizeCode(release);
+    const { instanceId: _instanceId, ...identity } = release;
+    const name = `${digest(identity)}.json`;
+    const directory = join(this.root, 'code-operations');
+    let record = await readFile(join(directory, name), 'utf8').then(JSON.parse)
+      .catch(error => { if (error.code !== 'ENOENT') throw error; return null; });
+    let artifact;
+    if (record) {
+      const { operationDigest, ...content } = record;
+      if (digest(content) !== operationDigest || digest(record.release) !== digest(identity)) throw new ActivationUncertainError('Code intent integrity mismatch');
+      artifact = await readArtifact(this.root, record.artifactId);
+      if (artifact.rendererId !== release.rendererId || fields.some(field => artifact[field] !== record.job[field])) throw new ActivationUncertainError('Code artifact identity mismatch');
+      const current = await this.activation.current();
+      if (current.active) await this.activation.reconcile(current.active);
+      const receipt = await readReceipt(this.root, record.artifactId).catch(error => { if (error.code !== 'ENOENT') throw error; return null; });
+      if (receipt) return this.verifyReceipt(artifact, receipt);
+      await this.eligible(artifact, record.job);
+    } else {
+      const { active } = await this.activation.current();
+      if (!active) throw new ActivationConflictError('Code release requires an initialized serving baseline');
+      await this.activation.reconcile(active);
+      await this.pendingCms(active);
+      if (active.rendererId === release.rendererId) return this.activation.reconcile(active);
+      const job = { publicationId: active.publicationId, siteId: active.siteId, siteSlug: active.siteSlug,
+        rebuildId: `code-${digest(identity)}`, rebuildRevision: 1 };
+      artifact = await this.builder.build(job);
+      if (fields.some(field => artifact[field] !== job[field]) || artifact.rendererId !== release.rendererId
+        || artifact.siteRevision !== active.siteRevision || artifact.catalogDigest !== active.catalogDigest) throw new ActivationConflictError('Code builder changed the serving snapshot');
+      const content = { release: identity, job, artifactId: artifact.artifactId, expectedActiveArtifactId: active.artifactId };
+      record = { ...content, operationDigest: digest(content) };
+      await writeImmutableJson(directory, name, record);
+    }
+    // A deployment may change while Astro is building. Never activate on the earlier observation alone.
+    await this.authorizeCode(release);
+    return this.verifyReceipt(artifact, await this.activation.activate({ artifactId: record.artifactId,
+      expectedActiveArtifactId: record.expectedActiveArtifactId, kind: 'CODE' }));
   }
 }
 
@@ -126,6 +214,8 @@ export function createPublicationServer({ adminToken, controller }) {
       const supplied = Buffer.from(String(request.headers['x-admin-token'] || ''));
       if (supplied.length !== token.length || !timingSafeEqual(supplied, token)) { request.resume(); send(401, { error: 'Unauthorized' }); return; }
       if (request.method === 'GET' && request.url === '/active') { send(200, await controller.active()); return; }
+      if (request.method === 'GET' && request.url === '/renderer') { send(200, await controller.rendererIdentity()); return; }
+      if (request.method === 'POST' && request.url === '/release-code') { send(200, await controller.releaseCode(codeIdentity(await requestBody(request)))); return; }
       if (request.method === 'POST' && request.url === '/publish') { send(200, await controller.publish(jobIdentity(await requestBody(request)))); return; }
       const receipt = request.url?.match(/^\/receipts\/([a-zA-Z0-9_-]{1,200})\/([1-9][0-9]{0,14})$/);
       if (request.method === 'GET' && receipt) { send(200, await controller.receipt(receipt[1], Number(receipt[2]))); return; }

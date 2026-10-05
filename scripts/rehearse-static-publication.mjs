@@ -142,7 +142,8 @@ try {
   manager = new CaddyActivation({ publicationRoot: root, adminUrl, servingOptions: options });
   builder = new StaticArtifactBuilder({ publicationRoot: root, apiUrl, adminToken: token,
     publicEnv: { PUBLIC_SITE_URL: 'https://partner.example.test', PUBLIC_API_URL: 'https://partner.example.test/api/v1', PUBLIC_SITE_SLUG: source.site.slug } });
-  const countedBuilder = { build: job => { builds++; return builder.build(job); } };
+  const countedBuilder = { renderer: builder.renderer, fetchSnapshot: job => builder.fetchSnapshot(job),
+    build: job => { builds++; return builder.build(job); } };
   const artifactA = await countedBuilder.build({ publicationId: baseline.id, siteId: baseline.siteId, siteSlug: source.site.slug, rebuildId: 'bootstrap-a', rebuildRevision: 1 });
   await manager.activate({ artifactId: artifactA.artifactId, expectedActiveArtifactId: null, kind: 'BOOTSTRAP' });
   const startController = async () => {
