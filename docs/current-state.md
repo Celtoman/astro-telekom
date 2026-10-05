@@ -1,5 +1,7 @@
 # Текущее состояние проекта
 
+Локально добавлен exact snapshot API и настоящий Astro builder для #238: восемь HTML-страниц из API renderer fixture, versioned CSS/images/favicon, сохранные inline CSP и idempotent seal. Это отдельный модуль, пока без подключения к очереди и внешнему CMS save→publish. Действующий runtime продолжает использовать Coolify.
+
 6 октября 2026 года exact SHA `d440ec4` развёрнут на защищённом test-контуре: Linux CI зелёный, Coolify deployment `dmuhed9mjs1gnuozbo2g5nvt` завершён, ресурс healthy. Общий `/publication` и read-only review доступны; прежние API расписания дают 404. Cookie/API/HTML/assets smoke сохранил working revision 11 и published revision 7, hash публичного каталога до и после совпал. Browser E2E и CMS save→publish не выполнялись. См. [приёмку rollout](research/2026-10-06-manual-publication-rollout.md).
 
 Локальный этап #238 на 6 октября 2026 года: проверено ядро будущей публикации без redeploy — неизменяемые artifacts/manifests/receipts и единое переключение Caddy с защищённым snapshot контекстом. Настоящий Caddy rehearsal подтвердил отказ конфигурации, lost-response/recovery, stale ETag, `--resume`, прежние assets и автономный HTML без upstream API. HTML и API в этом rehearsal синтетические. Модули ещё не подключены к действующим worker/API/Compose; текущая CMS-публикация всё ещё вызывает Coolify, #234/#238 остаются открыты. Точные границы и следующие шаги: [протокол](plans/2026-10-06-static-publication-protocol.md).

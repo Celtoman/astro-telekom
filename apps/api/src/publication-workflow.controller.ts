@@ -80,4 +80,9 @@ export class PublicationWorkflowController {
   buildCatalog(@Param('siteSlug') siteSlug: string) {
     return this.publications.getBuildCatalog(siteSlug);
   }
+
+  @Get('internal/site-publications/:siteSlug/snapshots/:publicationId')
+  exactBuildSnapshot(@Param('siteSlug') siteSlug: string, @Param('publicationId') publicationId: string) {
+    return this.publications.getExactBuildSnapshot(siteSlug, publicationId);
+  }
 }

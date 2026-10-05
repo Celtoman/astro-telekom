@@ -98,9 +98,9 @@ function findLoopbackReference(content) {
   return candidate ? `loopback host ${candidate}` : undefined;
 }
 
-function validateDocumentMetadata(html, label, errors) {
+function validateDocumentMetadata(html, label, errors, faviconUrl) {
   const icons = tags(html, 'link').filter((tag) => getAttribute(tag, 'rel')?.toLowerCase().split(/\s+/).includes('icon'));
-  if (icons.length !== 1 || getAttribute(icons[0], 'href') !== '/favicon.ico') {
+  if (icons.length !== 1 || getAttribute(icons[0], 'href') !== faviconUrl) {
     errors.push(`${label}: нужен ровно один favicon.ico из корня сайта`);
   }
 
@@ -120,8 +120,8 @@ function validateDocumentMetadata(html, label, errors) {
   }
 }
 
-function validateIndexableHtml(html, route, expectedUrl, includedInSitemap, errors) {
-  validateDocumentMetadata(html, route, errors);
+function validateIndexableHtml(html, route, expectedUrl, includedInSitemap, errors, faviconUrl) {
+  validateDocumentMetadata(html, route, errors, faviconUrl);
 
   const canonicals = tags(html, 'link').filter((tag) => getAttribute(tag, 'rel')?.toLowerCase().split(/\s+/).includes('canonical'));
   const robots = tags(html, 'meta').filter((tag) => getAttribute(tag, 'name')?.toLowerCase() === 'robots');
@@ -155,8 +155,8 @@ function validateIndexableHtml(html, route, expectedUrl, includedInSitemap, erro
   }
 }
 
-function validateNotFoundHtml(html, errors) {
-  validateDocumentMetadata(html, '404.html', errors);
+function validateNotFoundHtml(html, errors, faviconUrl) {
+  validateDocumentMetadata(html, '404.html', errors, faviconUrl);
 
   const robots = tags(html, 'meta').filter((tag) => getAttribute(tag, 'name')?.toLowerCase() === 'robots');
   const hasNoindex = robots.length === 1
@@ -168,7 +168,9 @@ function validateNotFoundHtml(html, errors) {
 
 }
 
-export async function verifyPublication({ distDirectory, publicSiteUrl, allowDemoData = false }) {
+export async function verifyPublication({ distDirectory, publicSiteUrl, allowDemoData = false, artifactId }) {
+  if (artifactId && !/^[a-f0-9]{64}$/.test(artifactId)) throw new Error('Invalid static artifact identity');
+  const faviconUrl = artifactId ? `/__publication_assets/${artifactId}/favicon.ico` : '/favicon.ico';
   const origin = new URL(publicSiteUrl).origin;
   const errors = [];
   const files = await collectFiles(distDirectory);
@@ -252,9 +254,9 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
 
   for (const { path, route } of publicHtml) {
     const html = await readFile(path, 'utf8');
-    validateIndexableHtml(html, route, `${origin}${route}`, sitemapRouteSet.has(route), errors);
+    validateIndexableHtml(html, route, `${origin}${route}`, sitemapRouteSet.has(route), errors, faviconUrl);
   }
-  validateNotFoundHtml(notFound, errors);
+  validateNotFoundHtml(notFound, errors, faviconUrl);
 
   const sitemapDirectives = robots.split(/\r?\n/).filter((line) => /^\s*Sitemap\s*:/i.test(line));
   if (sitemapDirectives.length !== 1 || sitemapDirectives[0].trim() !== `Sitemap: ${origin}/sitemap.xml`) {

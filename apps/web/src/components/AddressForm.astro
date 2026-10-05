@@ -1,4 +1,5 @@
 ---
+import { publicAsset } from '../data/public-asset';
 import type { CityView, SiteView } from '../data/site';
 import type { TariffView } from '../data/tariff-view';
 
@@ -87,7 +88,7 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
         </div>
         <label for={`address-${formId}`}>Адрес</label>
         <div class="address-field">
-          {variant === 'hero' && <img class="address-icon" src="/images/figma/map-pin.svg" width="20" height="20" alt="" />}
+          {variant === 'hero' && <img class="address-icon" src={publicAsset('/images/figma/map-pin.svg')} width="20" height="20" alt="" />}
           <input
             id={`address-${formId}`}
             type="text"

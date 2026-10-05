@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import '@fontsource-variable/geist';
 import type { CityView, PageView, SiteView } from '../data/site';
 import { defaultSiteImagePath } from '../data/site';
+import { publicAsset } from '../data/public-asset';
 import SiteHeader from '../components/SiteHeader.astro';
 import { normalizePublicHtmlPath } from '../data/public-url';
 
@@ -26,7 +27,7 @@ if (typeof Astro.props.firstScreenImage === 'string' && Astro.props.firstScreenI
 }
 const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
 const canonicalUrl = new URL(normalizePublicHtmlPath(Astro.url.pathname), Astro.site);
-const socialImageUrl = new URL(ogImage, Astro.site);
+const socialImageUrl = new URL(publicAsset(ogImage), Astro.site);
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -48,7 +49,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href={publicAsset('/favicon.ico')} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta property="og:type" content="website" />

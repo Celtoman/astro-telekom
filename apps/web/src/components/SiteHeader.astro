@@ -1,4 +1,5 @@
 ---
+import { publicAsset } from '../data/public-asset';
 import { loadSiteData } from '../data/site';
 import type { CityView, SiteView } from '../data/site';
 import { publicHtmlPath } from '../data/public-url';
@@ -22,24 +23,24 @@ const navigation = [
 ---
 <header class="site-header" data-site-header>
   <div class="utility-line"><div class="header-container utility-inner">
-    <button class="utility-link city-trigger" type="button" data-city-choice-trigger aria-haspopup="dialog" aria-controls="site-city-picker"><img src="/images/figma/map-pin.svg" width="16" height="16" alt="" /><span>{activeCity?.name || 'Москва'}</span><img class="chevron" src="/images/figma/chevron-down.svg" width="14" height="14" alt="" /><span class="sr-only"> — выбрать город</span></button>
+    <button class="utility-link city-trigger" type="button" data-city-choice-trigger aria-haspopup="dialog" aria-controls="site-city-picker"><img src={publicAsset('/images/figma/map-pin.svg')} width="16" height="16" alt="" /><span>{activeCity?.name || 'Москва'}</span><img class="chevron" src={publicAsset('/images/figma/chevron-down.svg')} width="14" height="14" alt="" /><span class="sr-only"> — выбрать город</span></button>
     <div class="utility-actions">
-      {addressHref ? <a class="utility-link" href={addressHref} data-address-focus><img src="/images/figma/search.svg" width="16" height="16" alt="" />Проверить адрес</a> : <button type="button" class="utility-link" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog"><img src="/images/figma/search.svg" width="16" height="16" alt="" />Проверить адрес</button>}
-      <a class="utility-link support-link" href={supportHref}><img src="/images/figma/headphones.svg" width="16" height="16" alt="" />Техподдержка</a>
+      {addressHref ? <a class="utility-link" href={addressHref} data-address-focus><img src={publicAsset('/images/figma/search.svg')} width="16" height="16" alt="" />Проверить адрес</a> : <button type="button" class="utility-link" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog"><img src={publicAsset('/images/figma/search.svg')} width="16" height="16" alt="" />Проверить адрес</button>}
+      <a class="utility-link support-link" href={supportHref}><img src={publicAsset('/images/figma/headphones.svg')} width="16" height="16" alt="" />Техподдержка</a>
     </div>
   </div></div>
   <div class="header-container main-line">
-    <a class="brand" href="/" aria-label="Дом.ру — главная"><img src="/images/figma/domru-logo.png" width="2071" height="682" alt="Дом.ру" /></a>
+    <a class="brand" href="/" aria-label="Дом.ру — главная"><img src={publicAsset('/images/figma/domru-logo.png')} width="2071" height="682" alt="Дом.ру" /></a>
     <nav class="header-nav" aria-label="Основная навигация">
       {navigation.map((item) => item.href ? <a href={item.href}>{item.label}</a> : <button type="button" data-city-choice-trigger data-city-choice-anchor={item.anchor} aria-haspopup="dialog">{item.label}</button>)}
     </nav>
     <div class="header-actions">
       <a class="header-phone subscriber-phone" href={connectionHref} data-support-phone={site.supportPhone} data-support-phone-href={supportHref}>
-        <img src="/images/figma/phone.svg" width="22" height="22" alt="" />
+        <img src={publicAsset('/images/figma/phone.svg')} width="22" height="22" alt="" />
         <span class="phone-copy"><span data-phone-value>{site.connectionPhone}</span><span class="phone-caption" data-phone-caption>Подключение</span></span>
       </a>
       {callbackHref ? <a class="callback-button" href={callbackHref} data-address-focus data-callback-intent>Заказать звонок</a> : <button type="button" class="callback-button" data-city-choice-trigger data-city-choice-anchor="address-check" data-callback-intent aria-haspopup="dialog">Заказать звонок</button>}
-      <button type="button" class="menu-trigger" data-menu-trigger aria-haspopup="dialog" aria-controls="site-menu" aria-label="Открыть меню"><img src="/images/figma/menu.svg" width="24" height="24" alt="" /></button>
+      <button type="button" class="menu-trigger" data-menu-trigger aria-haspopup="dialog" aria-controls="site-menu" aria-label="Открыть меню"><img src={publicAsset('/images/figma/menu.svg')} width="24" height="24" alt="" /></button>
     </div>
   </div>
 </header>

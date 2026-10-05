@@ -1,4 +1,6 @@
 import { tariffView, type TariffView } from './tariff-view';
+import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { normalizePublicHtmlPath, publicHtmlPath } from './public-url';
 
 export interface PageView {
@@ -343,6 +345,14 @@ let catalogPromise: Promise<SiteCatalog> | undefined;
 
 export function loadSiteData(): Promise<SiteCatalog> {
   catalogPromise ??= (async () => {
+    if (process.env.SITE_DATA_SNAPSHOT_FILE) {
+      const snapshot = JSON.parse(await readFile(process.env.SITE_DATA_SNAPSHOT_FILE, 'utf8'));
+      if (snapshot.publicationId !== process.env.SITE_DATA_PUBLICATION_ID || snapshot.siteSlug !== publicSiteSlug
+        || createHash('sha256').update(JSON.stringify(snapshot.catalog)).digest('hex') !== snapshot.catalogDigest) {
+        throw new Error('Exact publication snapshot integrity mismatch');
+      }
+      return normalizedCatalog(snapshot.catalog);
+    }
     const apiUrl = import.meta.env.SITE_DATA_API_URL
       || import.meta.env.PUBLIC_API_URL
       || 'http://localhost:3000/api/v1';

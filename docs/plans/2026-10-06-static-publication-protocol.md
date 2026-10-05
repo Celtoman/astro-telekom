@@ -43,6 +43,8 @@ BOOTSTRAP допустим только для явно пустого serving. 
 
 ## Фактическое состояние на 6 октября 2026 года
 
+Следующий этап добавляет `static-builder.mjs` и закрытый exact snapshot endpoint. Builder получает конкретный publication ID, проверяет site/revision/catalog SHA-256, фиксирует renderer identity по исходникам, lockfile, Node runtime и разрешённому публичному окружению. Каждая реальная Astro-сборка выполняется в отдельной копии выпущенных исходников с уже установленными зависимостями; private snapshot, cache и промежуточные файлы остаются вне public tree. Native assetsPrefix и `publicAsset()` задают versioned URLs до рендера, поэтому inline CSP-хеши не меняются после сборки. Final-HTML/SEO gate проверяет favicon именно этого артефакта; публичные versioned ссылки проверяются на существование файлов. Реальный тест собирает восемь HTML-страниц из каталога API renderer, но использует HTTP fixture: SQL/worker/controller и внешний save→publish этим этапом не подтверждены.
+
 Локально реализованы модули `apps/web/scripts/publication/artifact-store.mjs`, `serving-config.mjs`, `caddy-activation.mjs` и standalone rehearsal `scripts/rehearse-static-activation.mjs`. Они пока не подключены к действующим Compose, worker и API; прежняя CMS-публикация всё ещё вызывает Coolify. Issue #234 остаётся открытой.
 
 На настоящем Caddy с отдельными контейнерами, сетью и каталогом доказаны:

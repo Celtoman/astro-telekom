@@ -1,4 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { createHash } from 'node:crypto';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { SiteCatalogService } from './site-catalog.service';
@@ -408,6 +409,18 @@ export class PublicationWorkflowService {
       throw new ConflictException(`Первая сборка заблокирована: отчет ${captured.validationId}`);
     }
     return captured.catalog;
+  }
+
+  async getExactBuildSnapshot(siteSlug: string, publicationId: string) {
+    const site = await this.prisma.site.findUnique({ where: { slug: siteSlug }, select: { id: true, slug: true } });
+    const publication = await this.prisma.sitePublication.findUnique({ where: { id: publicationId } });
+    if (!site || !publication || publication.siteId !== site.id) throw new NotFoundException('Publication snapshot not found');
+    if (!['PENDING', 'RUNNING', 'SUCCEEDED'].includes(publication.status)) throw new ConflictException('Publication snapshot is not eligible for a build');
+    return {
+      publicationId: publication.id, siteId: site.id, siteSlug: site.slug, siteRevision: publication.siteRevision,
+      catalogDigest: createHash('sha256').update(JSON.stringify(publication.catalog)).digest('hex'),
+      catalog: publication.catalog as JsonObject,
+    };
   }
 
   async getPublishedCatalog(siteSlug: string): Promise<JsonObject> {

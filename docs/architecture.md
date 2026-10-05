@@ -1,5 +1,7 @@
 # Архитектура платформы
 
+Exact snapshot endpoint и `StaticArtifactBuilder` теперь реализованы отдельно от действующего pipeline. Builder собирает настоящий Astro из private frozen catalog в изолированной копии выпущенных исходников, использует установленные зависимости и выполняет SEO/asset gates до sealing. Worker, закрытый controller, SQL-согласование и Compose wiring этого пути ещё впереди.
+
 Для #238 отдельно реализуется [протокол CMS-публикации без redeploy](plans/2026-10-06-static-publication-protocol.md). Локальные модули `apps/web/scripts/publication/` уже проверены на настоящем Caddy: одна конфигурация определяет HTML root, redirects и snapshot context для API; manifests/receipts сохраняются вне публичного дерева, versioned assets не исчезают при следующей активации. Это пока отдельное проверенное ядро: builder, worker, HTTP controller, SQL-согласование и Compose wiring ещё не подключены. Описанные ниже действующие runtime-потоки продолжают использовать deployment-provider.
 
 ## Статус архитектуры
