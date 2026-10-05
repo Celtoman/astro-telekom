@@ -3,6 +3,7 @@ import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
+import { FIRST_SCREEN_IMPLEMENTATION, FIRST_SCREEN_VERSION, firstScreenDefaults, validateFirstScreen } from './first-screen';
 
 type PublishStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
@@ -34,8 +35,14 @@ export class AdminSitesController {
 
   @Post()
   create(@Body() body: SiteBody, @Req() request?: AdminRequest) {
+    const hero = firstScreenDefaults('HOME', body.name);
+    validateFirstScreen('HOME', hero);
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
-      const site = await transaction.site.create({ data: body });
+      const site = await transaction.site.create({ data: { ...body, pageTemplates: { create: {
+        kind: 'HOME', titleTemplate: hero.title, status: 'PUBLISHED',
+        content: { firstScreenPassportVersion: FIRST_SCREEN_VERSION, firstScreenImplementationVersion: FIRST_SCREEN_IMPLEMENTATION },
+        blocks: { create: { blockType: 'home.hero', position: 10, visible: true, data: hero, source: 'first-screen:init' } },
+      } } } });
       const revision = await this.publications.recordWorkingRevision(transaction, {
         siteId: site.id,
         entityType: 'SITE',

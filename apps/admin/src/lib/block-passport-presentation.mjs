@@ -44,6 +44,7 @@ export function passportContent(passport) {
   return fields.map(field => ({ key: field.key, label: fieldNames[field.key] ?? 'Дополнительное поле', required: field.required }));
 }
 export function passportSource(passport) {
+  if (['home.hero', 'hero'].includes(passport.id) && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=${passport.id === 'home.hero' ? 'HOME' : 'CITY_HOME'}`, label: 'Открыть редактор', note: 'Редактируется контент своего общего шаблона. Сохранение меняет только рабочую версию.' };
   if (passport.id === 'home.hero') return { href: null, label: null, note: 'Паспорт утверждён. Редактор первого экрана общей главной ещё не подключён.' };
   if (passport.id === 'header') return { href: '/variables', label: 'Открыть переменные сайта', note: null };
   if (passportGroup(passport) === 'tariff') return { href: '/tariffs', label: 'Открыть каталог тарифов', note: 'Данные тарифа доступны в каталоге. Структура и поведение блока задаются программно.' };
@@ -54,7 +55,7 @@ export function passportSource(passport) {
 export function passportSummary(passport) {
   if (passport.id === 'hero') return 'Стоимость, скорость и число каналов берутся из доступных тарифов города. Форма проверки и переход к тарифам задаются системой.';
   if (passport.id === 'header') return 'Город определяется страницей. Пункты меню и действия проверки адреса заданы системой.';
-  if (passport.id === 'home.hero') return 'Название сайта берётся из глобальных настроек. Текст, изображение и адресный сценарий сейчас задаются программно.';
+  if (passport.id === 'home.hero') return 'Москва остаётся контекстом проверки адреса. Иконки пояснений и логика адресной формы задаются системой.';
   if (passportGroup(passport) === 'tariff') return 'Состав и видимость блока определяются данными тарифа и программным шаблоном.';
   if (passport.id === 'tariff_grid') return 'Список предложений формируется из опубликованных тарифов города.';
   return null;

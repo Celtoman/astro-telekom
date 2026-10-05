@@ -510,3 +510,27 @@ test('web build rejects redirect chains instead of publishing multiple hops', { 
     assert.match(build.output, /цепочк/i);
   }, fixture);
 });
+
+
+test('approved first screens render independent content and permit only their HTTPS image origins', async () => {
+  const fixture = structuredClone(apiFixture);
+  const shared = { title: 'Редактируемый экран', text: 'Редактируемое описание', imageAlt: 'Иллюстрация экрана' };
+  fixture.homeHero = { ...shared, image: 'https://home-images.example.test/hero.png', addressPlaceholder: 'Адрес главной', checkButtonText: 'Проверить главную', chips: ['Первое', 'Второе', 'Третье'] };
+  fixture.cities[0].pages[0].blocks[0].data = { ...shared, image: 'https://city-images.example.test/hero.png', addressPlaceholder: 'Адрес города', checkButtonText: 'Проверить город', tariffsCtaText: 'Тарифы города' };
+  await withApiFixture(async apiUrl => {
+    const build = await runWebBuild({ SITE_DATA_API_URL: apiUrl, PUBLIC_SITE_SLUG: 'domru-site', PUBLIC_SITE_URL: productionSite, PUBLIC_API_URL: browserApiUrl, ALLOW_DEMO_DATA: 'false', PUBLIC_YANDEX_METRIKA_ID: '' });
+    assert.equal(build.code, 0, build.output);
+  }, fixture);
+  const root = await readBuilt('index.html');
+  const city = await readBuilt(join('kazan', 'index.html'));
+  for (const [html, origin, other] of [[root, 'https://home-images.example.test', 'https://city-images.example.test'], [city, 'https://city-images.example.test', 'https://home-images.example.test']]) {
+    const csp = extractCsp(html, origin);
+    assert.deepEqual(getDirectiveSources(csp, 'img-src', origin), ["'self'", 'data:', origin]);
+    assert.ok(!csp.includes(other));
+    assert.ok(!getDirective(csp, 'script-src', origin).includes(origin));
+    assert.match(html, /alt="Иллюстрация экрана"/);
+  }
+  assert.match(root, /Адрес главной/); assert.match(root, /Проверить главную/); assert.match(root, /Первое/);
+  assert.match(city, /placeholder="Адрес города"/); assert.match(city, /data-submit-label="Проверить город"/); assert.match(city, /Тарифы города/);
+  assert.doesNotMatch(root, /Проверить город/); assert.doesNotMatch(city, /Проверить главную/);
+});

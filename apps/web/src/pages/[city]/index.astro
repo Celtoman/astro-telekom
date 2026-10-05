@@ -21,7 +21,7 @@ const contentBlocks = homePage?.blocks?.filter((block) => block.blockType !== 'h
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 ---
 
-<BaseLayout title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} indexable={meta.indexState !== 'NOINDEX'} city={city} pages={city.pages} {site}>
+<BaseLayout title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} firstScreenImage={heroBlock.data.image} indexable={meta.indexState !== 'NOINDEX'} city={city} pages={city.pages} {site}>
   <CityHomeFirstScreen block={heroBlock} {city} {site} tariffs={city.tariffs} {apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage.slug} />
   <BlockRenderer
     blocks={contentBlocks}

@@ -1,4 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
+import { validateFirstScreen } from './first-screen';
 
 export const BLOCK_TYPES = ['hero', 'rich_text', 'tariff_grid', 'service_grid', 'feature_grid', 'steps', 'faq'] as const;
 const SERVICE_PAGE_TYPES = ['INTERNET', 'INTERNET_TV', 'TV', 'ADDRESS_CHECK', 'FAQ'] as const;
@@ -84,6 +85,7 @@ function validateData(blockType: BlockType, rawData: unknown): void {
 
   switch (blockType) {
     case 'hero':
+      if ('image' in data || 'addressPlaceholder' in data) { validateFirstScreen('CITY_HOME', data); return; }
       exactKeys(data, ['eyebrow', 'title', 'text', 'ctaText', 'ctaHref'], 'Данные hero');
       optionalText(data, 'eyebrow', 80);
       requiredText(data, 'title', 120);

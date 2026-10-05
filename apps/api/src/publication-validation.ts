@@ -7,6 +7,7 @@ import type { CatalogSource } from './site-catalog.service';
 import { sitePhoneReadinessErrors } from './site-phone';
 import { resolveSeoTemplates } from './seo-templates';
 import { tariffPreviewDiagnostics } from './tariff-preview-diagnostics';
+import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
 
 export type PublicationValidationIssue = {
   severity: 'BLOCKING' | 'WARNING';
@@ -89,6 +90,15 @@ export function validatePublicationSource(
   const checkedPaths: string[] = [];
   const site = source.site;
   const provider = site.provider;
+  for (const template of rawSource.pageTemplates ?? []) {
+    if (template.kind === 'HOME' || template.kind === 'CITY_HOME') {
+      const screen = firstScreenFromTemplate(template);
+      if (template.kind === 'HOME' || template.content?.firstScreenPassportVersion) {
+        try { validateFirstScreen(screen.kind, screen.data); }
+        catch (error) { add('BLOCKING', 'FIRST_SCREEN_NOT_READY', template.kind === 'HOME' ? '/' : '/{city}', message(error), undefined, { template: template.kind, block: template.kind === 'HOME' ? 'home.hero' : 'hero' }); }
+      }
+    }
+  }
 
   for (const missing of sitePhoneReadinessErrors(site)) {
     add('BLOCKING', 'SITE_PHONE_MISSING', '/', `Не заполнено обязательное поле ${missing}`);

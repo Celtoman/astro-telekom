@@ -10,6 +10,7 @@ import { materializeCityHomeSource } from './page-template';
 import { formatSitePhone } from './site-phone';
 import { resolveSeoTemplates } from './seo-templates';
 import { collectSeoTemplateUsages } from './seo-template-usages';
+import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
 
 type CatalogClient = Prisma.TransactionClient | PrismaService;
 export type CatalogSource = {
@@ -89,9 +90,13 @@ export class SiteCatalogService {
 
   renderSource(source: CatalogSource, now = new Date()) {
     const { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates } = materializeCityHomeSource(source);
+    const homeTemplate = source.pageTemplates?.find(template => template.kind === 'HOME');
+    const homeHero = homeTemplate ? firstScreenFromTemplate(homeTemplate).data : undefined;
+    if (homeTemplate) validateFirstScreen('HOME', homeHero);
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
     const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages);
     const resolved = resolveCatalogVariables({
+      ...(homeHero ? { homeHero, homeHeroBlockId: homeTemplate.blocks.find((block: any) => block.blockType === 'home.hero').id } : {}),
       site: {
         name: site.name,
         slug: site.slug,

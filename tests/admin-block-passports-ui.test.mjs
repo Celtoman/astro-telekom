@@ -38,9 +38,14 @@ test('content sources lead to existing editors and never offer a missing city ed
   assert.deepEqual(passportContent(byId('home.hero')).map(field => field.key), ['title', 'text', 'image', 'imageAlt', 'addressPlaceholder', 'checkButtonText', 'chips']);
   for (const passport of filterPassports(passports, '', 'tariff')) assert.equal(passportSource(passport).href, '/tariffs');
   for (const passport of filterPassports(passports, '', 'city')) {
+    if (passport.id === 'hero') {
+      assert.equal(passportSource(passport).href, '/templates/home?kind=CITY_HOME');
+      continue;
+    }
     assert.equal(passportSource(passport).href, null);
     assert.match(passportSource(passport).note, /ещё не подключён/);
   }
+  assert.equal(passportSource(byId('home.hero')).href, '/templates/home?kind=HOME');
   for (const id of ['tariff.faq', 'tariff.address']) assert.doesNotMatch(passportSource(byId(id)).note, /Контент меняется|редакторе/);
   assert.equal(passportSource(byId('rich_text')).href, null);
   assert.match(passportSource(byId('rich_text')).note, /не используется/);

@@ -273,14 +273,14 @@ function approvedFirstScreen(passport: BlockPassport): BlockPassport {
   return {
     ...passport, kind: 'MANAGED', proposedContentScope: 'TEMPLATE', fields: [...editable, ...systems],
     status: 'APPROVED', passportVersion: '1.0.0',
-    approvedBy: 'Владелец проекта; согласование 2026-10-05', editorReadiness: 'PENDING',
-    editorForm: 'Утверждённая форма контента первого экрана: заголовок, описание, изображение/alt, собственные подсказка адреса и подпись проверки; три пояснения для HOME либо подпись перехода к тарифам для CITY_HOME. Редактор и миграция новых полей ещё не реализованы (#193).',
+    approvedBy: 'Владелец проекта; согласование 2026-10-05', editorReadiness: 'READY',
+    editorForm: '/templates/home: заголовок, описание, изображение/alt, собственные подсказка адреса и подпись проверки; три пояснения для HOME либо подпись перехода к тарифам для CITY_HOME. Сохранение изменяет рабочую версию; неполный черновик сохраняется как «Не готово».',
     implementation: root
-      ? 'Целевой источник: PageTemplate(HOME)/PageTemplateBlock.data. Сейчас title/text и остальные элементы читаются из index.astro/HomeHero.astro; редактор, миграция и подключение новых полей не реализованы (#193).'
-      : 'PageTemplate(CITY_HOME)/PageTemplateBlock.data: сейчас renderer использует только title/text. Остальные утверждённые поля, редактор и миграция ещё не реализованы (#193). PageBlock остаются read-only legacy.',
-    emptyBehavior: `${passport.emptyBehavior} Целевая форма допускает неполный рабочий черновик со статусом «Не готово», но обязательные поля блокируют публикацию; это поведение предстоит реализовать в #193.`,
+      ? 'PageTemplate(HOME)/PageTemplateBlock.data → catalog.homeHero → HomeHero.astro. Контент редактируется через /templates/home; миграция 0056 переносит исходные значения. Исторические опубликованные snapshots без homeHero сохраняют прежний программный рендеринг.'
+      : 'PageTemplate(CITY_HOME)/PageTemplateBlock.data → CityHomeFirstScreen.astro → HomeHero.astro. Все семь полей редактируются через /templates/home. Миграция 0056 сохраняет title/text и удаляет неиспользуемые legacy eyebrow/ctaText/ctaHref из рабочего шаблона; исторические snapshots не меняются. PageBlock остаются read-only legacy.',
+    emptyBehavior: `${passport.emptyBehavior} Неполный безопасный контент можно сохранить как «Не готово»; публикация блокируется обязательными полями.`,
     previewScenarios: [...passport.previewScenarios, 'Независимые addressPlaceholder/checkButtonText у HOME и CITY_HOME', 'Редактирование изображения/alt и всех утверждённых текстов; рабочая/опубликованная версии'],
-    runtimeRules: [...(passport.runtimeRules ?? []), 'Согласование владельца 2026-10-05: контент принадлежит своему общему шаблону; адресная подсказка и подпись проверки независимы у двух первых экранов. Локальные копии контента города запрещены.', 'Статус APPROVED относится к контракту полей; ACTIVE, редактор, миграция данных и deployment не подтверждены.'],
+    runtimeRules: [...(passport.runtimeRules ?? []).filter(rule => !/^(title\/text проходят|Legacy eyebrow|Информационные chips)/.test(rule)), 'Согласование владельца 2026-10-05: контент принадлежит своему общему шаблону; адресная подсказка и подпись проверки независимы у двух первых экранов. Локальные копии контента города запрещены.', 'first-screen.ts валидирует утверждённые поля. Заголовок/описание поддерживают переменные контекста; остальные поля — простой текст и безопасный URL. Иконки и порядок chips фиксированы.', 'Редактор меняет только данные hero, сохраняет состав/порядок шаблона и проверяет expectedWorkingRevision. Snapshot включает firstScreenPassportVersion=1.0.0 и firstScreenImplementationVersion=first-screen-editor-v1.', 'Статус APPROVED относится к контракту; READY подтверждает наличие редактора в этой версии кода. ACTIVE и применение миграции на внешнем контуре требуют отдельной приёмки deployment.'],
   };
 }
 

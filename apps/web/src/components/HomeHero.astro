@@ -5,8 +5,12 @@ import type { TariffView } from '../data/tariff-view';
 interface Props {
   title: string; text: string; variant: 'general' | 'city'; city?: CityView;
   site: SiteView; apiUrl: string; siteSlug: string; pageSlug?: string; tariffs?: TariffView[];
+  content?: Record<string, unknown>;
 }
 const { title, text, variant, city, site, apiUrl, siteSlug, pageSlug = '', tariffs = [] } = Astro.props as Props;
+const content = Astro.props.content ?? {};
+const addressPlaceholder = typeof content.addressPlaceholder === 'string' ? content.addressPlaceholder : 'Введите ваш адрес';
+const checkButtonText = typeof content.checkButtonText === 'string' ? content.checkButtonText : 'Проверить';
 const available = tariffs.filter((tariff) => tariff.availability);
 const prices = available.flatMap((tariff) => tariff.priceAmount === null ? [] : [tariff.priceAmount]);
 const speeds = available.flatMap((tariff) => tariff.speedMbps === null ? [] : [tariff.speedMbps]);
@@ -17,11 +21,12 @@ const facts = [
   { id: 'speed', label: 'Максимальная скорость', value: speeds.length ? `до ${Math.max(...speeds)} Мбит/с` : 'Скорость уточняется', icon: 'wifi' },
   { id: 'channels', label: 'Каналов цифрового ТВ', value: channels.length ? `до ${Math.max(...channels)}` : 'Уточняется', icon: 'tv' },
 ];
-const chips = [
+const chipDefaults = [
   { text: 'Бесплатная проверка', icon: 'shield-check' },
   { text: 'Точные результаты', icon: 'check' },
   { text: 'Поможем с подключением', icon: 'headphones' },
 ];
+const chips = chipDefaults.map((chip, index) => ({ ...chip, text: Array.isArray(content.chips) ? String(content.chips[index]) : chip.text }));
 ---
 <section class="home-hero" data-home-hero={variant} data-block-type={variant === 'city' ? 'hero' : undefined} data-city-first-screen={variant === 'city' ? '' : undefined}>
   <div class="hero-container"><div class="hero-card">
@@ -34,15 +39,15 @@ const chips = [
           <dd>{fact.value}</dd>
         </div>)}
       </dl>}
-      {city ? <AddressForm {apiUrl} {siteSlug} {pageSlug} {city} {site} presentation="embedded" variant="hero" /> : <div class="city-first-check" id="address-check">
-        <button type="button" class="address-choice" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog"><img src="/images/figma/map-pin.svg" width="20" height="20" alt="" /><span>Введите ваш адрес</span></button>
-        <button type="button" class="check-choice" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog">Проверить</button>
+      {city ? <AddressForm {apiUrl} {siteSlug} {pageSlug} {city} {site} {addressPlaceholder} {checkButtonText} presentation="embedded" variant="hero" /> : <div class="city-first-check" id="address-check">
+        <button type="button" class="address-choice" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog"><img src="/images/figma/map-pin.svg" width="20" height="20" alt="" /><span>{addressPlaceholder}</span></button>
+        <button type="button" class="check-choice" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog">{checkButtonText}</button>
         <noscript><a href="/goroda-obsluzhivaniya">Выберите город для проверки адреса</a></noscript>
       </div>}
       {variant === 'general' && <ul class="info-chips" aria-label="О проверке подключения">{chips.map((chip) => <li><img src={`/images/figma/${chip.icon}.svg`} width="20" height="20" alt="" /><span>{chip.text}</span></li>)}</ul>}
-      {variant === 'city' && <a class="tariffs-cta" href="#tariffs">Посмотреть тарифы</a>}
+      {variant === 'city' && <a class="tariffs-cta" href="#tariffs">{typeof content.tariffsCtaText === 'string' ? content.tariffsCtaText : 'Посмотреть тарифы'}</a>}
     </div>
-    <figure class="hero-media"><img src="/images/figma/home-hero.png" width="1448" height="1086" alt="Wi-Fi-роутер, ТВ-приставка и пульт для домашнего подключения" loading="eager" decoding="async" fetchpriority="high" /></figure>
+    <figure class="hero-media"><img src={typeof content.image === 'string' ? content.image : '/images/figma/home-hero.png'} width="1448" height="1086" alt={typeof content.imageAlt === 'string' ? content.imageAlt : 'Wi-Fi-роутер, ТВ-приставка и пульт для домашнего подключения'} loading="eager" decoding="async" fetchpriority="high" /></figure>
   </div></div>
 </section>
 <style>

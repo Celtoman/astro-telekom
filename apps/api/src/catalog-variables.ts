@@ -62,6 +62,8 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
   });
   const result: JsonObject = {
     ...catalog,
+    ...(catalog.homeHero ? { homeHero: resolveNamedFields(catalog.homeHero, ['title', 'text'], 'homeHero', sources,
+      { entityType: 'PAGE_TEMPLATE_BLOCK', entityId: String(catalog.homeHeroBlockId), pageType: 'HOME', blockType: 'home.hero', editorHref: '/templates/home?kind=HOME' }) } : {}),
     globalPages: Array.isArray(catalog.globalPages)
       ? catalog.globalPages.map((page: JsonObject, index: number) => resolvePage(page, `globalPages[${index}]`, sources))
       : catalog.globalPages,

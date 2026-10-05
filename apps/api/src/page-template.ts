@@ -3,6 +3,7 @@ import { Prisma } from '../generated';
 import { cityHomeTemplateBlocks } from './city-home-template';
 import type { CatalogSource } from './site-catalog.service';
 import type { PublicationWorkflowService } from './publication-workflow.service';
+import { FIRST_SCREEN_IMPLEMENTATION, FIRST_SCREEN_VERSION, firstScreenDefaults } from './first-screen';
 
 const CITY_TOKEN = '{CITY_NAME_PREPOSITIONAL}';
 
@@ -19,9 +20,9 @@ export async function ensureCityHomeTemplate(
     data: {
       siteId, kind: 'CITY_HOME', status: 'PUBLISHED',
       titleTemplate: `Домашний интернет в ${CITY_TOKEN}`,
-      content: {},
+      content: { firstScreenPassportVersion: FIRST_SCREEN_VERSION, firstScreenImplementationVersion: FIRST_SCREEN_IMPLEMENTATION },
       blocks: { create: blocks.map(({ blockType, position, visible, data, source }) => ({
-        blockType, position, visible, data, source,
+        blockType, position, visible, data: blockType === 'hero' ? firstScreenDefaults('CITY_HOME') : data, source,
       })) },
     },
     include: { blocks: true },

@@ -4,6 +4,7 @@ import { AdminTokenGuard } from './admin-token.guard';
 import { validateCityHomeBlocks } from './block-validation';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
+import { FIRST_SCREEN_IMPLEMENTATION, FIRST_SCREEN_VERSION, firstScreenFromTemplate, validateFirstScreen, type FirstScreenKind } from './first-screen';
 
 type TemplateBlockInput = {
   blockType: string;
@@ -33,6 +34,56 @@ export class AdminPageTemplatesController {
       where: { siteId }, orderBy: { kind: 'asc' },
       include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
     });
+  }
+
+  @Get('first-screens')
+  async firstScreens(@Param('siteId') siteId: string) {
+    const site = await this.prisma.site.findUnique({ where: { id: siteId }, select: { workingRevision: true, publishedRevision: true } });
+    if (!site) throw new NotFoundException('Сайт не найден');
+    const [templates, publication] = await Promise.all([
+      this.prisma.pageTemplate.findMany({ where: { siteId, kind: { in: ['HOME', 'CITY_HOME'] } }, include: { blocks: { orderBy: { position: 'asc' } } } }),
+      this.prisma.sitePublication.findFirst({ where: { siteId, status: 'SUCCEEDED' }, orderBy: { siteRevision: 'desc' }, select: { catalog: true, validation: { select: { sourceSnapshot: true } } } }),
+    ]);
+    const catalog = publication?.catalog as Record<string, any> | null;
+    const publishedSource = publication?.validation?.sourceSnapshot as Record<string, any> | null;
+    return { ...site, screens: templates.map(template => {
+      const screen = firstScreenFromTemplate(template);
+      const publishedTemplate = publishedSource?.pageTemplates?.find((item: any) => item.kind === template.kind);
+      const published = publishedTemplate?.content?.firstScreenPassportVersion === FIRST_SCREEN_VERSION ? firstScreenFromTemplate(publishedTemplate).data : template.kind === 'HOME' ? catalog?.homeHero : null;
+      return { ...screen, missingFields: screen.data ? validateFirstScreen(screen.kind, screen.data, true) : ['title'], published: published ?? null };
+    }) };
+  }
+
+  @Patch('first-screens/:kind')
+  async updateFirstScreen(@Param('siteId') siteId: string, @Param('kind') rawKind: string,
+    @Body() body: { expectedWorkingRevision: number; data: Record<string, unknown> }, @Req() request?: { user?: { id: string } }) {
+    if (rawKind !== 'HOME' && rawKind !== 'CITY_HOME') throw new BadRequestException('Неизвестный первый экран');
+    const kind: FirstScreenKind = rawKind;
+    if (!body || Object.keys(body).some(key => !['expectedWorkingRevision', 'data'].includes(key)) || !Number.isSafeInteger(body.expectedWorkingRevision) || body.expectedWorkingRevision < 0) throw new BadRequestException('Передайте контент и актуальную рабочую ревизию');
+    const missingFields = validateFirstScreen(kind, body.data, true);
+    try {
+      return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+        const site = await tx.site.findUnique({ where: { id: siteId }, select: { workingRevision: true } });
+        if (!site) throw new NotFoundException('Сайт не найден');
+        if (site.workingRevision !== body.expectedWorkingRevision) throw new ConflictException('Рабочая ревизия изменилась. Обновите данные перед сохранением.');
+        const before = await tx.pageTemplate.findUnique({ where: { siteId_kind: { siteId, kind } }, include: { blocks: true } });
+        if (!before) throw new NotFoundException('Шаблон первого экрана не найден; требуется миграция данных');
+        const block = before.blocks.find(item => item.blockType === (kind === 'HOME' ? 'home.hero' : 'hero'));
+        if (!block) throw new NotFoundException('Первый экран шаблона не найден');
+        await tx.pageTemplateBlock.update({ where: { id: block.id }, data: { data: body.data as Prisma.InputJsonObject, source: 'admin:first-screen' } });
+        await tx.pageTemplate.update({ where: { id: before.id }, data: { content: { ...(before.content as object ?? {}), firstScreenPassportVersion: FIRST_SCREEN_VERSION, firstScreenImplementationVersion: FIRST_SCREEN_IMPLEMENTATION } } });
+        const after = await tx.pageTemplate.findUniqueOrThrow({ where: { id: before.id }, include: { blocks: true } });
+        const revision = await this.publications.recordWorkingRevision(tx, {
+          siteId, entityType: 'PAGE_TEMPLATE', entityId: before.id, action: 'UPDATE',
+          previousSnapshot: before as unknown as Record<string, unknown>, snapshot: after as unknown as Record<string, unknown>,
+          changedFields: ['blocks.data', 'content.firstScreenPassportVersion', 'content.firstScreenImplementationVersion'], actorId: request?.user?.id, source: 'admin:first-screen',
+        });
+        return { ...firstScreenFromTemplate(after), missingFields, workingRevision: revision.siteRevision };
+      }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    } catch (error) {
+      if (error && typeof error === 'object' && 'code' in error && error.code === 'P2034') throw new ConflictException('Шаблон изменился параллельно; обновите данные');
+      throw error;
+    }
   }
 
   @Patch('city-home')

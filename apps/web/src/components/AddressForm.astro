@@ -16,6 +16,8 @@ interface Props {
   serviceType?: ServiceType;
   tariff?: TariffView;
   variant?: 'standard' | 'hero';
+  addressPlaceholder?: string;
+  checkButtonText?: string;
 }
 
 const {
@@ -29,6 +31,8 @@ const {
   serviceType = 'INTERNET',
   tariff,
   variant = 'standard',
+  addressPlaceholder,
+  checkButtonText,
 } = Astro.props as Props;
 const suffix = tariff?.slug || pageSlug || 'catalog';
 const formId = `address-form-${city.slug}-${presentation}-${suffix}`;
@@ -95,7 +99,7 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
             aria-haspopup="listbox"
             aria-expanded="false"
             aria-controls={`address-suggestions-${formId}`}
-            placeholder={variant === 'hero' ? 'Введите ваш адрес' : 'Город, улица, дом, квартира'}
+            placeholder={addressPlaceholder ?? (variant === 'hero' ? 'Введите ваш адрес' : 'Город, улица, дом, квартира')}
           />
           <div
             id={`address-suggestions-${formId}`}
@@ -107,7 +111,7 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
           ></div>
         </div>
         <p class="address-hint" data-address-hint aria-live="polite">Начните вводить город и адрес, затем выберите подходящий вариант.</p>
-        <button class="button" type="submit" data-submit data-submit-label={variant === 'hero' ? 'Проверить' : 'Проверить адрес'} disabled>{variant === 'hero' ? 'Проверить' : 'Проверить адрес'}</button>
+        <button class="button" type="submit" data-submit data-submit-label={checkButtonText ?? (variant === 'hero' ? 'Проверить' : 'Проверить адрес')} disabled>{checkButtonText ?? (variant === 'hero' ? 'Проверить' : 'Проверить адрес')}</button>
         <p class="form-result" data-form-result role="status"></p>
       </form>
     </div>

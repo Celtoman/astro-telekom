@@ -16,9 +16,14 @@ interface Props {
   ogTitle?: string;
   ogDescription?: string;
   ogImage?: string;
+  firstScreenImage?: unknown;
 }
 
 const { title, description, city, site, indexable = true, ogTitle = title, ogDescription = description, ogImage = defaultSiteImagePath } = Astro.props as Props;
+if (typeof Astro.props.firstScreenImage === 'string' && Astro.props.firstScreenImage.startsWith('https://')) {
+  const imageUrl = new URL(Astro.props.firstScreenImage);
+  Astro.csp.insertDirective(`img-src ${imageUrl.origin}`);
+}
 const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
 const canonicalUrl = new URL(normalizePublicHtmlPath(Astro.url.pathname), Astro.site);
 const socialImageUrl = new URL(ogImage, Astro.site);

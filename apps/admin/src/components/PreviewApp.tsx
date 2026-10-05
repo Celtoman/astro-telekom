@@ -58,7 +58,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
         requestJson<Site[]>(apiUrl, "/admin/sites"),
       ])
       setState({ status: "ready", user: session.user, sites })
-      setSelectedSiteId((current) => sites.some((site) => site.id === current) ? current : sites.length === 1 ? sites[0].id : "")
+      setSelectedSiteId((current) => sites.some((site) => site.id === current) ? current : sites.find(site => site.id === new URLSearchParams(window.location.search).get("siteId"))?.id ?? (sites.length === 1 ? sites[0].id : ""))
     } catch (caught: unknown) {
       const message = handleError(caught, "API недоступен")
       if (message) setState({ status: "error", message })
@@ -84,7 +84,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
         setPreview(result)
         setSelectedPath((current) => options.some((option) => option.path === current)
           ? current
-          : options.find((option) => option.kind === "CITY_HOME")?.path || options[0]?.path || "")
+          : options.find((option) => option.path === new URLSearchParams(window.location.search).get("path"))?.path || options.find((option) => option.kind === "CITY_HOME")?.path || options[0]?.path || "")
       })
       .catch((caught: unknown) => {
         if (!active) return

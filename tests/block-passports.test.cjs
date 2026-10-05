@@ -129,8 +129,8 @@ test('approved root Hero 1b defines template content and a published Moscow form
   assert.match(fields.get('city').source, /moskva/);
   assert.match(fields.get('addressForm').validation, /INTERNET/);
   assert.equal(fields.get('chips').type, 'list');
-  assert.equal(rootHero.editorReadiness, 'PENDING');
-  assert.match(rootHero.implementation, /PageTemplate\(HOME\).*не реализованы/);
+  assert.equal(rootHero.editorReadiness, 'READY');
+  assert.match(rootHero.implementation, /PageTemplate\(HOME\).*catalog.homeHero/);
 });
 
 test('city Hero V3 separates template content, computed catalog facts and legacy fields', () => {
@@ -140,7 +140,7 @@ test('city Hero V3 separates template content, computed catalog facts and legacy
   const fields = new Map(hero.fields.map((item) => [item.key, item]));
   assert.deepEqual(hero.fields.filter((item) => item.control !== 'read_only').map((item) => item.key), ['title', 'text', 'image', 'imageAlt', 'addressPlaceholder', 'checkButtonText', 'tariffsCtaText']);
   for (const key of ['eyebrow', 'ctaText', 'ctaHref']) assert.equal(fields.has(key), false);
-  assert.equal(hero.editorReadiness, 'PENDING');
+  assert.equal(hero.editorReadiness, 'READY');
   for (const [key, source] of [['minimumPrice', 'priceAmount'], ['maximumSpeed', 'speedMbps'], ['maximumTvChannels', 'tvChannelsTotal']]) {
     assert.match(fields.get(key).source, new RegExp(`TariffView\\.${source}`));
     assert.equal(fields.get(key).required, false);
@@ -163,7 +163,7 @@ test('city Hero V3 separates template content, computed catalog facts and legacy
       assert.equal(item.source, `PageTemplateBlock.data.${key}`);
     }
     assert.equal(passport.proposedContentScope, 'TEMPLATE');
-    assert.equal(passport.editorReadiness, 'PENDING');
+    assert.equal(passport.editorReadiness, 'READY');
     assert.match(passport.fields.find(f => f.key === 'addressPlaceholder').validation, /не глобальный/);
   }
 });

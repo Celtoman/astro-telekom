@@ -59,13 +59,30 @@ test('preview does not turn unknown numeric tariff facts into zero', () => {
 
   const document = buildPreviewDocument(withoutNumbers, '/kazan');
 
-  assert.match(document, /Скорость<\/dt><dd>Уточняется/);
-  assert.match(document, /Стоимость<\/dt><dd>Уточняется/);
+  assert.match(document, /Максимальная скорость<\/dt><dd>Скорость уточняется/);
+  assert.match(document, /Минимальная стоимость<\/dt><dd>Стоимость уточняется/);
   assert.doesNotMatch(document, /до 0 Мбит\/с|от 0 ₽\/мес\./);
 });
 
 test('preview renderer rejects a route outside the working release inventory', () => {
   assert.throws(() => buildPreviewDocument(catalog, '/missing'), /маршрут/i);
+});
+
+test('approved hero preview reads independent labels and computes facts through the public tariff model', () => {
+  const source = structuredClone(catalog);
+  source.homeHero = { title: 'Новая главная', text: 'Текст общей главной', addressPlaceholder: 'Адрес главной', checkButtonText: 'Проверка главной', chips: ['Один', 'Два', 'Три'] };
+  source.cities[0].pages[0].blocks[0].data = { title: 'Городской экран', text: 'Описание города', addressPlaceholder: 'Адрес города', checkButtonText: 'Проверка города', tariffsCtaText: 'Тарифы моего города' };
+  source.cities[0].tariffs = [
+    { slug: 'active', name: 'Доступный', serviceType: 'INTERNET', standardPrice: '900', speed: '100', availability: 'ACTIVE', attributes: {} },
+    { slug: 'archived', name: 'Недоступный', serviceType: 'INTERNET', standardPrice: '1', speed: '9999', availability: 'ARCHIVED', attributes: {} },
+  ];
+  const root = buildPreviewDocument(source, '/');
+  const city = buildPreviewDocument(source, '/kazan');
+  assert.match(root, /Новая главная/); assert.match(root, /Адрес главной/); assert.match(root, /Проверка главной/);
+  assert.doesNotMatch(root, /Адрес города|Параметры тарифа/);
+  assert.match(city, /Адрес города/); assert.match(city, /Проверка города/); assert.match(city, /Тарифы моего города/);
+  assert.match(city, /от 900 ₽\/мес\./); assert.match(city, /до 100 Мбит\/с/);
+  assert.doesNotMatch(city, /от 1 ₽\/мес\.|до 9999 Мбит\/с|<form|<script/);
 });
 
 test('admin preview is a private sandboxed screen with three canonical viewport sizes', async () => {

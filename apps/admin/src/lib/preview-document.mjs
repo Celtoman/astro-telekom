@@ -1,3 +1,5 @@
+import { tariffView } from '../../../api/src/tariff-view.ts'
+
 function record(value) {
   return value && typeof value === "object" && !Array.isArray(value) ? value : {}
 }
@@ -73,10 +75,21 @@ function renderFooter(catalog) {
   return `<footer><div class="container"><strong>${escapeHtml(text(catalog.site?.name, "Дом.ру"))}</strong><p>Сайт партнера. Предпросмотр рабочей версии.</p></div></footer>`
 }
 
+function renderFirstScreen(catalog, data, city) {
+  const image = text(data.image)
+  const domain = text(catalog.site?.domain)
+  const source = image.startsWith("https://") ? image : /^\/[\w/.-]+$/.test(image) && /^[a-z0-9.-]+$/i.test(domain) ? `https://${domain}${image}` : ""
+  const tariffs = city ? list(city.tariffs).map(tariff => tariff.serviceType ? tariffView(tariff) : tariff).filter(tariff => tariff.availability === true || tariff.availability === 'ACTIVE') : []
+  const { maximumSpeed, minimumPrice } = tariffStats(tariffs)
+  const channels = tariffs.map(tariff => tariff.tvChannelsTotal ?? tariff.attributes?.tv_channels_total).filter(value => typeof value === "number" && Number.isFinite(value))
+  const facts = city ? `<dl class="proof"><div><dt>Минимальная стоимость</dt><dd>${minimumPrice === null ? "Стоимость уточняется" : `от ${escapeHtml(minimumPrice)} ₽/мес.`}</dd></div><div><dt>Максимальная скорость</dt><dd>${maximumSpeed === null ? "Скорость уточняется" : `до ${escapeHtml(maximumSpeed)} Мбит/с`}</dd></div><div><dt>Каналов цифрового ТВ</dt><dd>${channels.length ? `до ${escapeHtml(Math.max(...channels))}` : "Уточняется"}</dd></div></dl>` : ""
+  return `<section class="editor-hero"><div class="container editor-hero-card"><div class="editor-hero-copy"><h1>${escapeHtml(text(data.title))}</h1><p class="lead">${escapeHtml(text(data.text))}</p>${facts}<div class="fake-form"><span>${escapeHtml(text(data.addressPlaceholder, "Введите ваш адрес"))}</span><b>${escapeHtml(text(data.checkButtonText, "Проверить"))}</b></div>${city ? `<span class="button">${escapeHtml(text(data.tariffsCtaText, "Посмотреть тарифы"))}</span>` : `<ul class="editor-chips">${list(data.chips).map(chip => `<li>${escapeHtml(chip)}</li>`).join("")}</ul>`}</div>${source ? `<img class="editor-image" src="${escapeHtml(source)}" alt="${escapeHtml(text(data.imageAlt))}" referrerpolicy="no-referrer">` : `<p class="editor-image-note">${escapeHtml(text(data.imageAlt))}</p>`}</div></section>`
+}
 function renderSiteHome(catalog) {
   const siteName = text(catalog.site?.name, "Дом.ру")
   const cities = list(catalog.cities).slice(0, 6)
-  return `<section class="hero"><div class="container"><span class="kicker">${escapeHtml(siteName)}</span><h1>Домашний интернет и телевидение ${escapeHtml(siteName)}</h1><p class="lead">Выберите город, чтобы посмотреть доступные услуги, тарифы и проверку подключения по адресу.</p><span class="button">Выбрать город</span></div></section><section class="section container"><h2>Популярные города</h2>${cities.length ? `<div class="cards">${cities.map((city) => card(text(city.name, city.slug), "Домашний интернет, телевидение и актуальные предложения.", '<span class="mark">→</span>')).join("")}</div>` : '<p class="empty">Опубликованных городов пока нет.</p>'}</section>`
+  const data = catalog.homeHero ?? { title: `Подключение домашнего интернета и телевидения ${siteName}`, text: "Укажите адрес, чтобы проверить возможность подключения Дом.ру в вашем доме и узнать о доступных услугах.", chips: ["Бесплатная проверка", "Точные результаты", "Поможем с подключением"] }
+  return renderFirstScreen(catalog, data) + `<section class="section container"><h2>Популярные города</h2>${cities.length ? `<div class="cards">${cities.map(city => card(text(city.name, city.slug), "Домашний интернет, телевидение и актуальные предложения.")).join("")}</div>` : '<p class="empty">Опубликованных городов пока нет.</p>'}</section>`
 }
 
 function tariffStats(tariffs) {
@@ -90,9 +103,7 @@ function tariffStats(tariffs) {
 
 function renderCityHero(catalog, city, page, hero) {
   const data = record(hero?.data)
-  const tariffs = list(city.tariffs)
-  const { maximumSpeed, minimumPrice } = tariffStats(tariffs)
-  return `<section class="city-first"><div class="container stack"><div class="city-hero"><div class="city-copy"><span class="kicker">${escapeHtml(text(data.eyebrow, `Дом.ру в ${text(city.nameIn, city.name)}`))}</span><h1>${escapeHtml(text(data.title, page?.title || `Домашний интернет в ${text(city.nameIn, city.name)}`))}</h1><p class="lead">${escapeHtml(text(data.text, "Сравните тарифы и проверьте возможность подключения по вашему адресу."))}</p><dl class="proof"><div><dt>Опубликовано</dt><dd>${tariffs.length} тарифов</dd></div><div><dt>Скорость</dt><dd>${maximumSpeed === null ? "Уточняется" : `до ${escapeHtml(maximumSpeed)} Мбит/с`}</dd></div><div><dt>Стоимость</dt><dd>${minimumPrice === null ? "Уточняется" : `от ${escapeHtml(minimumPrice)} ₽/мес.`}</dd></div></dl></div><div class="hero-visual" aria-hidden="true"><span>Wi-Fi</span></div></div><div class="actions"><article class="panel"><span class="kicker">Проверка доступности</span><h2>Проверим возможность подключения по вашему адресу</h2><p>Введите город, улицу и дом. В предпросмотре форма отключена.</p><div class="fake-form"><span>Город, улица, дом</span><b>Проверить адрес</b></div></article><aside class="panel"><span class="kicker">Помощь с выбором</span><h2>Получить консультацию</h2><p>Оператор уточнит условия тарифов и ответит на вопросы.</p><strong class="phone">${escapeHtml(text(catalog.site?.connectionPhone, "Телефон уточняется"))}</strong></aside></div></div></section>`
+  return renderFirstScreen(catalog, { ...data, title: text(data.title, page?.title) }, city)
 }
 
 function renderTariffGrid(city) {
@@ -180,5 +191,5 @@ export function buildPreviewDocument(catalog, routePath) {
   else if (route.kind === "GLOBAL_PAGE") content = renderGlobalPage(catalog, route)
   else throw new Error("Тип маршрута не поддерживается предпросмотром")
   const title = `${routeLabel(catalog, route)} — предпросмотр`
-  return `<!doctype html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:"><title>${escapeHtml(title)}</title><style>${styles}</style></head><body>${renderHeader(catalog, city)}<main>${content}</main>${renderFooter(catalog)}</body></html>`
+  return `<!doctype html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https:"><title>${escapeHtml(title)}</title><style>${styles}.editor-hero{padding:24px 0 32px}.editor-hero-card{display:flex;gap:40px;padding:48px;background:#eaf7ff;border-radius:26px}.editor-hero-copy{width:60%;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:18px}.editor-hero-copy h1{font-size:48px;line-height:1.05;letter-spacing:-.05em}.editor-image{width:36%;object-fit:cover;border-radius:130px 36px}.editor-chips{display:flex;flex-wrap:wrap;gap:12px;padding:0;list-style:none}.editor-chips li{background:white;padding:8px 12px;border-radius:99px}.editor-hero .fake-form{width:100%}@media(max-width:1100px){.editor-hero-card{flex-direction:column;padding:32px}.editor-hero-copy{width:100%}.editor-hero-copy h1{font-size:40px}.editor-image{width:100%;height:270px}}@media(max-width:620px){.editor-hero-card{padding:16px}.editor-hero-copy h1{font-size:28px}.editor-image,.editor-image-note{display:none}.editor-hero .fake-form{flex-direction:column;align-items:stretch}} </style></head><body>${renderHeader(catalog, city)}<main>${content}</main>${renderFooter(catalog)}</body></html>`
 }

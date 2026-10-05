@@ -15,4 +15,4 @@ const { block, city, site, tariffs, apiUrl, siteSlug, pageSlug } = Astro.props a
 const title = typeof block.data.title === 'string' ? block.data.title : `Домашний интернет и телевидение в ${city.nameIn}`;
 const text = typeof block.data.text === 'string' ? block.data.text : 'Сравните опубликованные тарифы и проверьте возможность подключения по вашему адресу.';
 ---
-<HomeHero variant="city" {title} {text} {city} {site} {tariffs} {apiUrl} {siteSlug} {pageSlug} />
+<HomeHero variant="city" {title} {text} content={block.data} {city} {site} {tariffs} {apiUrl} {siteSlug} {pageSlug} />

@@ -45,6 +45,7 @@ export interface PublicRouteView {
 }
 
 export interface SiteCatalog {
+  homeHero?: Record<string, unknown>;
   site: SiteView;
   globalPages: PageView[];
   routes: PublicRouteView[];
@@ -322,6 +323,7 @@ function normalizedCatalog(value: unknown): SiteCatalog {
       connectionPhone,
       supportPhone,
     },
+    ...(payload.homeHero ? { homeHero: payload.homeHero } : {}),
     globalPages,
     routes,
     cities,
