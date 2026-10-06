@@ -5,6 +5,21 @@ import { StaticArtifactBuilder } from '../apps/web/scripts/publication/static-bu
 import { htmlInventoryDigest } from '../apps/web/scripts/publication/legacy-baseline.mjs';
 
 const sha = value => createHash('sha256').update(value).digest('hex');
+const catalogDigest = value => sha(JSON.stringify(value));
+const snapshotKeys = ['publicationId', 'siteId', 'siteSlug', 'siteRevision', 'catalogDigest'];
+
+// The public controller omits diagnostics. Its response cannot stand in for
+// the immutable SQL snapshot used by the runtime's migration proof.
+export function bindMigrationSnapshot({ publication, snapshot, publicCatalog }) {
+  for (const key of ['publicationId', 'siteId', 'siteSlug', 'siteRevision']) {
+    if (snapshot?.[key] !== publication?.[key]) throw new Error('Migration snapshot identity mismatch');
+  }
+  if (!snapshot.catalog || snapshot.catalog.site?.slug !== publication.siteSlug
+    || snapshot.catalogDigest !== catalogDigest(snapshot.catalog)) throw new Error('Migration snapshot digest mismatch');
+  const { variableUsages: _usages, variableSources: _sources, variableWarnings: _warnings, seoWarnings: _seoWarnings, variableUsageVersion: _version, ...projection } = snapshot.catalog;
+  if (catalogDigest(projection) !== catalogDigest(publicCatalog)) throw new Error('Public catalog differs from the exact migration snapshot');
+  return { snapshot, publicCatalogDigest: catalogDigest(publicCatalog) };
+}
 const decode = value => value.replace(/&#(x[0-9a-f]+|\d+);/gi, (_, code) => String.fromCodePoint(code[0].toLowerCase() === 'x' ? parseInt(code.slice(1), 16) : Number(code)))
   .replace(/&(amp|quot|apos|lt|gt|nbsp);/g, (_, name) => ({ amp: '&', quot: '"', apos: "'", lt: '<', gt: '>', nbsp: ' ' })[name]);
 const text = value => decode(value.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
@@ -33,6 +48,9 @@ export function migrationHtmlContract(html) {
 
 export async function verifyLegacyMigration({ snapshot, publicationRoot, publicEnv, origin, headers, readState, onProgress = () => {}, fetchImpl = fetch }) {
   const before = await readState();
+  if (snapshot.catalogDigest !== catalogDigest(snapshot.catalog) || snapshotKeys.some(key => before[key] !== snapshot[key])) {
+    throw new Error('Migration state must identify the full immutable snapshot');
+  }
   const builder = new StaticArtifactBuilder({ publicationRoot, apiUrl: 'http://verified-snapshot.invalid/api/v1', adminToken: 'preflight-fixture-only', publicEnv,
     fetchImpl: async () => ({ ok: true, json: async () => structuredClone(snapshot) }) });
   onProgress({ stage: 'build', routes: snapshot.catalog.routes.length });
@@ -59,6 +77,9 @@ export async function verifyLegacyMigration({ snapshot, publicationRoot, publicE
   if (mismatches.length) throw new Error(`Legacy HTML differs from the published snapshot: ${JSON.stringify(mismatches.slice(0, 10))} (${mismatches.length} routes)`);
   const after = await readState();
   if (JSON.stringify(before) !== JSON.stringify(after)) throw new Error('Publication/provider state changed during migration preflight');
-  return { checkedAt: new Date().toISOString(), state: before, routes: routes.length, htmlDigest: htmlInventoryDigest(files), artifactId: artifact.artifactId,
+  const htmlDigest = htmlInventoryDigest(files);
+  const proof = Object.fromEntries(snapshotKeys.map(key => [key, snapshot[key]]));
+  Object.assign(proof, { htmlDigest, codeCommit: before.codeCommit, deploymentId: before.deploymentId });
+  return { checkedAt: new Date().toISOString(), state: before, proof, routes: routes.length, htmlDigest, artifactId: artifact.artifactId,
     files: files.sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0) };
 }

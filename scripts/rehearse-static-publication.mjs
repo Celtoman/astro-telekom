@@ -161,8 +161,11 @@ try {
   const oldCatalog = await jsonRequest(`${publicUrl}/api/v1/public/sites/${source.site.slug}/cities`);
   assert.equal(oldCatalog.seoByPath['/kazan'].title, baseline.catalog.seoByPath['/kazan'].title);
   // Force the second SQL write to fail after rebuild success was written inside the transaction.
+  // Sequence increments survive rollback and prove the trigger actually ran;
+  // an earlier HTTP/Caddy uncertainty can also defer the BullMQ job.
+  await db.$executeRawUnsafe('CREATE SEQUENCE publication_ack_attempts');
   await db.$executeRawUnsafe(`CREATE FUNCTION reject_publication_ack() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN
-    IF NEW.status = 'SUCCEEDED' THEN RAISE EXCEPTION 'synthetic SQL acknowledgment failure'; END IF; RETURN NEW; END $$`);
+    IF NEW.status = 'SUCCEEDED' THEN PERFORM nextval('publication_ack_attempts'); RAISE EXCEPTION 'synthetic SQL acknowledgment failure'; END IF; RETURN NEW; END $$`);
   await db.$executeRawUnsafe(`CREATE TRIGGER reject_publication_ack BEFORE UPDATE ON "SitePublication" FOR EACH ROW EXECUTE FUNCTION reject_publication_ack()`);
   const pending = await jsonRequest(`${apiUrl}/admin/sites/${source.site.id}/publications`, { method: 'POST', body: JSON.stringify({ expectedWorkingRevision: 1 }) });
   assert.equal(pending.publication.status, 'PENDING'); assert.ok(pending.rebuild.id);
@@ -171,10 +174,14 @@ try {
     publicationUrl: process.env.STATIC_PUBLICATION_URL, jsonRequest }), { connection: { url: process.env.REDIS_URL }, concurrency: 1 });
   worker.on('failed', () => failed++); worker.on('error', error => { process.stderr.write(`Worker error: ${error.message}\n`); });
   const job = await queue.getJob(`${pending.rebuild.id}-1`); assert.ok(job);
-  await until(async () => await job.getState() === 'delayed', 'Acknowledgment failure did not defer the same job');
+  await until(async () => {
+    const [attempt] = await db.$queryRawUnsafe('SELECT is_called FROM publication_ack_attempts');
+    return attempt.is_called && await job.getState() === 'delayed'
+      && (await manager.current()).active?.publicationId === pending.publication.id;
+  }, 'Actual SQL acknowledgment failure did not defer the same active publication');
   await worker.pause();
   let rebuild = await db.siteRebuild.findUnique({ where: { id: pending.rebuild.id } });
-  assert.equal(rebuild.publishedRevision, 0); assert.equal(rebuild.status, 'RUNNING');
+  assert.equal(rebuild.publishedRevision, 0); assert.ok(['RUNNING', 'RETRYING'].includes(rebuild.status));
   assert.equal((await db.site.findUnique({ where: { id: source.site.id } })).publishedRevision, 0);
   assert.equal((await db.sitePublication.findUnique({ where: { id: pending.publication.id } })).status, 'RUNNING');
   const active = await manager.current(); assert.equal(active.active.publicationId, pending.publication.id);

@@ -221,7 +221,13 @@ export class PublicationWorkflowService {
         triggerEntityId: input.triggerEntityId,
         requestedById: input.requestedById,
       });
-    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    }, {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+      // Capturing/validating a whole published city/tariff catalog and storing
+      // its JSON can exceed Prisma's default 5-second interactive transaction.
+      // Keep one consistent snapshot and a bounded publication-only budget.
+      timeout: 60_000,
+    });
     if (result.blocked) {
       const first = result.report.issues.find((issue) => issue.severity === 'BLOCKING');
       throw new ConflictException(`Публикация заблокирована: ${first?.message || 'проверка URL не пройдена'}. Отчет ${result.validationId}`);
