@@ -31,17 +31,32 @@ async function sourceIdentity(publicEnv, servingContextDigest) {
   return hash.digest('hex');
 }
 
-function buildAstro(environment, project) {
+function buildAstro(environment, project, report, totalPages) {
   return new Promise((accept, reject) => {
     const child = spawn(process.execPath, [join(workspace, 'apps/web/node_modules/astro/bin/astro.mjs'), 'build'], {
       cwd: project, env: environment, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true,
     });
     let output = '';
-    const collect = chunk => { output = (output + chunk.toString()).slice(-16000); };
+    let pending = ''; const pages = new Set(); let lastReport = 0;
+    const collect = chunk => {
+      output = (output + chunk.toString()).slice(-16000);
+      pending += chunk.toString().replace(/\u001b\[[0-9;]*m/g, '');
+      const lines = pending.split(/\r?\n/); pending = lines.pop();
+      for (const line of lines) { const page = line.match(/[├└]─\s+(\/[^\s]+\.html)\s/); if (page) pages.add(page[1]); }
+      if (Date.now() - lastReport > 1500) {
+        lastReport = Date.now(); void report({ stage: 'BUILDING', completedPages: Math.min(pages.size, totalPages), totalPages });
+      }
+    };
     child.stdout.on('data', collect); child.stderr.on('data', collect);
     const timeout = setTimeout(() => child.kill(), 15 * 60 * 1000);
     child.on('error', error => { clearTimeout(timeout); reject(error); });
-    child.on('close', code => { clearTimeout(timeout); code === 0 ? accept(output) : reject(new Error(`Static Astro build failed (${code}): ${output}`)); });
+    const heartbeat = setInterval(() => { void report({ stage: 'BUILDING', completedPages: Math.min(pages.size, totalPages), totalPages }); }, 5000);
+    child.on('error', () => clearInterval(heartbeat));
+    child.on('close', async code => {
+      clearTimeout(timeout); clearInterval(heartbeat);
+      await report({ stage: 'BUILDING', completedPages: Math.min(pages.size, totalPages), totalPages });
+      code === 0 ? accept(output) : reject(new Error(`Static Astro build failed (${code}): ${output}`));
+    });
   });
 }
 
@@ -80,8 +95,26 @@ export class StaticArtifactBuilder {
     this.pending = Promise.resolve();
   }
 
-  build(job) {
-    const operation = this.pending.then(() => this.buildSerial(job));
+  progressReporter(job) {
+    let sequence = 0; let pending = Promise.resolve();
+    return event => {
+      if (!job.progressRunId) return Promise.resolve();
+      const body = { ...event, runId: job.progressRunId, sequence: ++sequence, publicationId: job.publicationId, revision: job.rebuildRevision };
+      pending = pending.then(async () => {
+        try {
+          await this.fetchImpl(`${this.apiUrl}/internal/site-rebuilds/${encodeURIComponent(job.rebuildId)}/publication-progress`, {
+            method: 'POST', headers: { 'content-type': 'application/json', 'x-admin-token': this.adminToken },
+            body: JSON.stringify(body), signal: AbortSignal.timeout(1500),
+          });
+        } catch { /* Telemetry cannot change a publication's activation outcome. */ }
+      });
+      return pending;
+    };
+  }
+
+  build(job, report = async () => {}) {
+    const safeReport = async event => { try { await report(event); } catch { /* Observability is advisory. */ } };
+    const operation = this.pending.then(() => this.buildSerial(job, safeReport));
     this.pending = operation.catch(() => undefined);
     return operation;
   }
@@ -102,9 +135,11 @@ export class StaticArtifactBuilder {
     return snapshot;
   }
 
-  async buildSerial(job) {
+  async buildSerial(job, report) {
     const snapshot = await this.fetchSnapshot(job);
     const rendererId = await this.renderer;
+    const totalPages = snapshot.catalog.routes.length + 1;
+    await report({ stage: 'PREPARING', rendererId, totalPages });
     if (await sourceIdentity(this.publicEnv, this.servingContextDigest) !== rendererId) throw new Error('Released renderer source changed');
     const identity = { publicationId: job.publicationId, siteId: job.siteId, siteSlug: job.siteSlug,
       siteRevision: snapshot.siteRevision, rebuildId: job.rebuildId, rebuildRevision: job.rebuildRevision,
@@ -134,13 +169,20 @@ export class StaticArtifactBuilder {
       for (const key of ['PATH', 'Path', 'HOME', 'USERPROFILE', 'TEMP', 'TMP', 'SYSTEMROOT', 'SystemRoot', 'APPDATA', 'LOCALAPPDATA', 'LANG']) {
         if (process.env[key]) environment[key] = process.env[key];
       }
+      await report({ stage: 'BUILDING', completedPages: 0, totalPages });
       const buildLog = await buildAstro({ ...environment, ...this.publicEnv, ALLOW_DEMO_DATA: 'false', NODE_ENV: 'production',
         ASTRO_TELEMETRY_DISABLED: '1', XDG_CONFIG_HOME: join(operationRoot, 'config'),
         XDG_CACHE_HOME: join(operationRoot, 'cache'), APPDATA: join(operationRoot, 'appdata'),
         PUBLIC_STATIC_ARTIFACT_ID: identity.artifactId, PUBLICATION_BUILD_OUT_DIR: output,
         PUBLICATION_BUILD_CACHE_DIR: join(operationRoot, 'cache'),
-        SITE_DATA_SNAPSHOT_FILE: snapshotPath, SITE_DATA_PUBLICATION_ID: job.publicationId }, join(projectRoot, 'apps/web'));
-      try { await verifyPublication({ distDirectory: output, publicSiteUrl: this.publicEnv.PUBLIC_SITE_URL, allowDemoData: false, artifactId: identity.artifactId }); }
+        SITE_DATA_SNAPSHOT_FILE: snapshotPath, SITE_DATA_PUBLICATION_ID: job.publicationId }, join(projectRoot, 'apps/web'), report, totalPages);
+      await report({ stage: 'CHECKING', completedPages: 0, totalPages });
+      let lastCheck = 0;
+      try { await verifyPublication({ distDirectory: output, publicSiteUrl: this.publicEnv.PUBLIC_SITE_URL, allowDemoData: false, artifactId: identity.artifactId,
+        onProgress: async count => { if (Date.now() - lastCheck > 1500 || count.completedPages === count.totalPages) {
+          lastCheck = Date.now(); await report({ stage: 'CHECKING', ...count });
+        } },
+      }); }
       catch (error) { throw new Error(`Static publication validation failed: ${error.message}\n${buildLog}`, { cause: error }); }
       await validateAssets(output, identity.artifactId);
       if (await sourceIdentity(this.publicEnv, this.servingContextDigest) !== rendererId) throw new Error('Released renderer changed during build');

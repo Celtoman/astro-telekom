@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { CheckCircle2, CircleAlert, CloudUpload, LoaderCircle, RefreshCw } from "lucide-react"
 import { describePublicationState, type PublicationState } from "../lib/publication-display.mjs"
 import { requestJson } from "../lib/admin-api.mjs"
@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Skeleton } from "./ui/skeleton"
 import { StatusBadge } from "./StatusBadge"
 import { PublicationValidationPanel } from "./PublicationValidationPanel"
+import { PublicationProgress } from "./PublicationProgress"
 
 interface PublicationStatusCardProps {
   apiUrl: string
@@ -25,32 +26,34 @@ export function PublicationStatusCard({ apiUrl, siteId, publicationRefreshKey = 
   const [publishing, setPublishing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [stateUnavailable, setStateUnavailable] = useState(false)
+  const requestSequence = useRef(0)
 
   const loadState = useCallback(async (showLoading = false) => {
+    const sequence = ++requestSequence.current
     if (showLoading) setLoading(true)
     try {
       const next = await requestJson<PublicationState>(apiUrl, `/admin/sites/${siteId}/publication-state`)
+      if (sequence !== requestSequence.current) return
       setState(next)
       setStateUnavailable(false)
       setError(null)
     } catch (caught: unknown) {
+      if (sequence !== requestSequence.current) return
       setStateUnavailable(true)
       setError(caught instanceof Error ? caught.message : "Состояние публикации недоступно")
     } finally {
-      setLoading(false)
+      if (sequence === requestSequence.current) setLoading(false)
     }
   }, [apiUrl, siteId])
 
-  useEffect(() => { void loadState(true) }, [loadState, publicationRefreshKey])
+  useEffect(() => { setState(null); void loadState(true); return () => { requestSequence.current++ } }, [loadState, publicationRefreshKey])
   useEffect(() => { if (state) onStateChange?.(state) }, [state, onStateChange])
 
   useEffect(() => {
-    if (!state) return
-    const presentation = describePublicationState(state)
-    if (presentation.kind !== "publishing") return
-    const timer = window.setTimeout(() => { void loadState() }, 3000)
-    return () => window.clearTimeout(timer)
-  }, [loadState, state])
+    if (!stateUnavailable && (!state || describePublicationState(state).kind !== "publishing")) return
+    const timer = window.setInterval(() => { void loadState() }, 3000)
+    return () => window.clearInterval(timer)
+  }, [loadState, state?.latestPublication?.status, state?.rebuild?.status, stateUnavailable])
 
   async function publish() {
     if (!canPublishReviewedRevision(state, review ?? null, { unavailable: stateUnavailable || reviewUnavailable || loading, busy: publishing }) || !review) return
@@ -84,10 +87,11 @@ export function PublicationStatusCard({ apiUrl, siteId, publicationRefreshKey = 
     <CardContent className="flex flex-col gap-4">
       {loading && !state ? <div className="flex flex-col gap-2" aria-busy="true"><Skeleton className="h-5 w-64" /><Skeleton className="h-4 w-full max-w-xl" /></div> : null}
       {presentation ? <Alert role="status" aria-live="polite" variant={presentation.kind === "failed" ? "destructive" : "default"}>
-        {presentation.kind === "published" ? <CheckCircle2 /> : presentation.kind === "failed" ? <CircleAlert /> : presentation.kind === "publishing" ? <LoaderCircle className="animate-spin" /> : <CloudUpload />}
+        {presentation.kind === "published" ? <CheckCircle2 /> : presentation.kind === "failed" ? <CircleAlert /> : presentation.kind === "publishing" ? <LoaderCircle className="animate-spin motion-reduce:animate-none" /> : <CloudUpload />}
         <AlertTitle>{presentation.title}</AlertTitle>
         <AlertDescription>{presentation.description}</AlertDescription>
       </Alert> : null}
+      {state ? <PublicationProgress state={state} unavailable={stateUnavailable} /> : null}
       {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Состояние не обновлено</AlertTitle><AlertDescription>{error}</AlertDescription></Alert> : null}
       {review === undefined ? <>
         <Button asChild className="min-h-11"><a href={`/publication?site=${encodeURIComponent(siteId)}`}><CloudUpload data-icon="inline-start" />Проверить и опубликовать изменения</a></Button>

@@ -11,10 +11,11 @@ const fields = ['publicationId', 'siteId', 'siteSlug', 'rebuildId', 'rebuildRevi
 const validId = value => typeof value === 'string' && /^[a-zA-Z0-9_-]{1,200}$/.test(value);
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 function jobIdentity(input) {
-  if (!input || typeof input !== 'object' || Array.isArray(input) || Object.keys(input).some(key => !fields.includes(key))) throw new InputError('Unsupported publication request fields');
+  if (!input || typeof input !== 'object' || Array.isArray(input) || Object.keys(input).some(key => !fields.includes(key) && key !== 'progressRunId')) throw new InputError('Unsupported publication request fields');
   for (const field of ['publicationId', 'siteId', 'rebuildId']) if (!validId(input[field])) throw new InputError(`Invalid ${field}`);
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(input.siteSlug || '') || !Number.isSafeInteger(input.rebuildRevision) || input.rebuildRevision < 1) throw new InputError('Invalid site/rebuild revision');
-  return Object.fromEntries(fields.map(field => [field, input[field]]));
+  if (input.progressRunId !== undefined && !/^[a-f0-9-]{36}$/.test(input.progressRunId)) throw new InputError('Invalid progress run identity');
+  return { ...Object.fromEntries(fields.map(field => [field, input[field]])), ...(input.progressRunId ? { progressRunId: input.progressRunId } : {}) };
 }
 function operationName(rebuildId, revision) {
   if (!validId(rebuildId) || !Number.isSafeInteger(revision) || revision < 1) throw new InputError('Invalid rebuild identity');
@@ -77,12 +78,21 @@ export class PublicationController {
 
   publish(input) {
     const job = jobIdentity(input);
-    const operation = this.pending.then(() => this.publishSerial(job));
+    const callback = this.builder.progressReporter?.(job);
+    let lastEvent = { stage: 'PREPARING' }; let started = false;
+    const report = async event => { lastEvent = event; try { await callback?.(event); } catch { /* Progress is advisory. */ } };
+    const waiting = async () => {
+      if (this.automaticCode && this.automaticCode.state !== 'READY') await report({ stage: 'PREPARING', waitingReason: this.automaticCode.state });
+    };
+    void waiting();
+    const heartbeat = setInterval(() => { if (started) void report(lastEvent); else void waiting(); }, 5000);
+    const operation = this.pending.then(() => { started = true; return this.publishSerial(job, report); }).finally(() => clearInterval(heartbeat));
     this.pending = operation.catch(() => undefined);
     return operation;
   }
 
-  async publishSerial(job) {
+  async publishSerial(job, report = async () => {}) {
+    await report({ stage: 'PREPARING' });
     let operation;
     try { operation = await this.operation(job.rebuildId, job.rebuildRevision); }
     catch (error) { throw new ActivationUncertainError('Persisted publication operation could not be verified', { cause: error }); }
@@ -91,7 +101,7 @@ export class PublicationController {
       let receipt;
       try { receipt = await this.receipt(job.rebuildId, job.rebuildRevision); }
       catch (error) { throw new ActivationUncertainError('Publication receipt could not be verified', { cause: error }); }
-      if (receipt.status === 'SUCCEEDED') return receipt;
+      if (receipt.status === 'SUCCEEDED') { await report({ stage: 'CONFIRMING' }); return receipt; }
       try { await this.eligible(operation.artifact, job); }
       catch (error) {
         if ([404, 409].includes(error.httpStatus)) throw new BuildFailedError(error.message, { cause: error });
@@ -100,9 +110,19 @@ export class PublicationController {
     } else {
       const state = await this.activation.current();
       if (!state.active) throw new ActivationConflictError('CMS publication requires an initialized serving baseline');
-      if (await this.builder.renderer !== state.active.rendererId) throw new ActivationUncertainError('CMS publication is waiting for the code release to finish');
+      if (await this.builder.renderer !== state.active.rendererId) {
+        if (!this.automaticCode) throw new ActivationUncertainError('CMS publication is waiting for the code release to finish');
+        await report({ stage: 'PREPARING', waitingReason: this.automaticCode.state === 'READY' ? undefined : this.automaticCode.state });
+        const waiting = setInterval(() => { void report({ stage: 'PREPARING', waitingReason: this.automaticCode.state === 'READY' ? undefined : this.automaticCode.state }); }, 5000);
+        try { await this.automaticCode.run({ insideSerial: true }); }
+        finally { clearInterval(waiting); }
+        // CODE changes the serving artifact; CMS must activate against the new baseline.
+        state.active = (await this.activation.current()).active;
+        if (!state.active || await this.builder.renderer !== state.active.rendererId) throw new ActivationUncertainError('Code release has not been confirmed');
+        await report({ stage: 'PREPARING' });
+      }
       let artifact;
-      try { artifact = await this.builder.build(job); }
+      try { artifact = await this.builder.build(job, report); }
       catch (error) { throw new BuildFailedError(error.message, { cause: error }); }
       if (fields.some(field => artifact[field] !== job[field])) throw new Error('Builder returned a foreign artifact');
       const content = { job, artifactId: artifact.artifactId, expectedActiveArtifactId: state.active.artifactId };
@@ -111,8 +131,11 @@ export class PublicationController {
       operation = { ...record, artifact };
     }
     try {
+      await report({ stage: 'ACTIVATING' });
       const receipt = await this.activation.activate({ artifactId: operation.artifactId, expectedActiveArtifactId: operation.expectedActiveArtifactId, kind: 'CMS' });
-      return this.verifyReceipt(operation.artifact, receipt);
+      const confirmed = this.verifyReceipt(operation.artifact, receipt);
+      await report({ stage: 'CONFIRMING' });
+      return confirmed;
     } catch (error) {
       if (error instanceof ActivationConflictError || error instanceof ActivationRejectedError || error instanceof ActivationUncertainError) throw error;
       throw new ActivationUncertainError('Activation result could not be verified', { cause: error });

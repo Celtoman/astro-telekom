@@ -5,6 +5,8 @@ import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
 import { confirmStaticReceipt, assertReceiptSnapshot } from './static-publication-receipt';
+import { randomUUID } from 'node:crypto';
+import { advanceCmsProgress, readCmsProgress, type CmsProgress } from './publication-progress';
 
 const QUEUE_NAME = 'site-rebuilds';
 const DEFAULT_MAX_ATTEMPTS = 3;
@@ -152,6 +154,15 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
       ? rebuild.processingPublicationId
       : rebuild.requestedPublicationId;
 
+    const previousProgress = readCmsProgress(rebuild.providerResponse);
+    const continuing = Boolean(previousProgress && previousProgress.publicationId === publicationId && previousProgress.revision === revision);
+    const at = new Date().toISOString();
+    const cmsProgress: CmsProgress | null = publicationId && process.env.REBUILD_PROVIDER === 'static' ? {
+      version: 1, runId: randomUUID(), publicationId, revision, sequence: 0, stage: 'PREPARING',
+      startedAt: continuing ? previousProgress!.startedAt : at, updatedAt: at,
+      sampleEligible: !resumeProcessing && attempt === 1, stages: { PREPARING: { startedAt: at } },
+    } : null;
+
     const running = await this.prisma.siteRebuild.update({
       where: { id },
       data: {
@@ -163,6 +174,7 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
         startedAt: new Date(),
         completedAt: null,
         lastError: null,
+        ...(cmsProgress ? { providerStatus: 'RUNNING', providerResponse: { cmsProgress } as unknown as Prisma.InputJsonValue } : {}),
       },
     });
 
@@ -181,7 +193,30 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
       providerDeploymentId: running.providerDeploymentId,
       providerStatus: running.providerStatus,
       publicationId,
+      ...(cmsProgress ? { progressRunId: cmsProgress.runId } : {}),
     };
+  }
+
+  async recordPublicationProgress(id: string, body: Record<string, unknown>) {
+    const rebuild = await this.get(id);
+    const current = readCmsProgress(rebuild.providerResponse);
+    if (!current || rebuild.status !== 'RUNNING' || body.runId !== current.runId
+      || body.publicationId !== rebuild.processingPublicationId || body.publicationId !== current.publicationId
+      || body.revision !== rebuild.processingRevision || body.revision !== current.revision) return { saved: false, reason: 'stale_attempt' };
+    let next: CmsProgress | null;
+    try { next = advanceCmsProgress(current, body); }
+    catch (error) { throw new BadRequestException(error instanceof Error ? error.message : 'Invalid publication progress'); }
+    if (!next) return { saved: false, reason: 'stale_event' };
+    const result = await this.prisma.siteRebuild.updateMany({
+      where: { id, status: 'RUNNING', processingRevision: current.revision, processingPublicationId: current.publicationId,
+        publishedRevision: { lt: current.revision },
+        AND: [
+          { providerResponse: { path: ['cmsProgress', 'runId'], equals: current.runId } },
+          { providerResponse: { path: ['cmsProgress', 'sequence'], equals: current.sequence } },
+        ] },
+      data: { providerResponse: { cmsProgress: next } as unknown as Prisma.InputJsonValue },
+    });
+    return { saved: result.count === 1 };
   }
 
   async recordProviderProgress(id: string, body: ProviderProgress) {
@@ -266,6 +301,11 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
         providerResponse: result as Prisma.InputJsonValue,
         lastError: null,
       };
+      const progress = readCmsProgress(current.providerResponse);
+      const enrichedResult = progress && progress.publicationId === processingPublicationId && progress.revision === revision
+        ? { ...result, cmsProgress: { ...progress, completedAt: new Date().toISOString(),
+          stages: { ...progress.stages, CONFIRMING: { ...progress.stages.CONFIRMING, completedAt: new Date().toISOString() } } } } : result;
+      providerData.providerResponse = enrichedResult as Prisma.InputJsonValue;
       const completed = await transaction.siteRebuild.updateMany({
         where: { id, requestedRevision: revision, processingRevision: revision, publishedRevision: { lt: revision } },
         data: {
@@ -276,7 +316,7 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
         },
       });
       if (completed.count === 1) {
-        if (processingPublicationId) await this.publicationWorkflow.markSucceeded(processingPublicationId, result, transaction);
+        if (processingPublicationId) await this.publicationWorkflow.markSucceeded(processingPublicationId, enrichedResult, transaction);
         const updated = await transaction.siteRebuild.findUnique({ where: { id } });
         return { published: true, revision, pendingRevision: null, rebuild: updated };
       }
@@ -293,7 +333,7 @@ export class RebuildQueueService implements OnModuleInit, OnModuleDestroy {
       if (pending.count === 0) {
         return { published: false, skipped: true, reason: 'stale_attempt', rebuild: current };
       }
-      if (processingPublicationId) await this.publicationWorkflow.markSucceeded(processingPublicationId, result, transaction);
+      if (processingPublicationId) await this.publicationWorkflow.markSucceeded(processingPublicationId, enrichedResult, transaction);
       const latest = await transaction.siteRebuild.findUnique({ where: { id } });
       return { published: true, revision, pendingRevision: latest!.requestedRevision, rebuild: latest };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });

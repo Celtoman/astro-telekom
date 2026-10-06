@@ -28,6 +28,7 @@ export async function runStaticPublication(rebuild, { publicationUrl, adminToken
     const response = await fetchImpl(`${url}/publish`, { method: 'POST', headers, signal: AbortSignal.timeout(16 * 60 * 1000), body: JSON.stringify({
       publicationId: rebuild.publicationId, siteId: rebuild.siteId, siteSlug: rebuild.siteSlug,
       rebuildId: rebuild.rebuildId, rebuildRevision: rebuild.revision,
+      ...(rebuild.progressRunId ? { progressRunId: rebuild.progressRunId } : {}),
     }) });
     const result = await response.json();
     if ([400, 409, 422].includes(response.status) && result.status === 'FAILED') throw new StaticPublicationFailedError(String(result.error || 'Static build rejected').slice(0, 2000));

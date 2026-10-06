@@ -47,4 +47,9 @@ export class RebuildQueueController {
   ) {
     return this.rebuilds.recordProviderProgress(id, body);
   }
+
+  @Post('internal/site-rebuilds/:id/publication-progress')
+  publicationProgress(@Param('id') id: string, @Body() body: Record<string, unknown>) {
+    return this.rebuilds.recordPublicationProgress(id, body);
+  }
 }

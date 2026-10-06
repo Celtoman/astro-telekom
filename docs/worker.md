@@ -66,7 +66,7 @@ Hard-delete выбран, чтобы PII не осталось в JSON payloads.
 ## Пересборка статического сайта
 
 1. После ручного сохранения тарифа API в одной serializable-транзакции создает только рабочую ревизию и audit event. Явная ручная публикация отдельно фиксирует неизменяемый `SitePublication` и передаёт его ID в `SiteRebuild`. Ответ CRUD означает, что рабочая версия сохранена, но не что сайт опубликован.
-2. Дедупликация идет по `site:<siteId>`. Поскольку текущий deployment выпускает весь static artifact, `affectedPaths` честно равен `["/*"]`; точечная пересборка не вводилась.
+2. Дедупликация идет по `site:<siteId>`. Поскольку текущая публикация выпускает весь static artifact, `affectedPaths` честно равен `["/*"]`; точечная пересборка не вводилась.
 3. `requestedPublicationId` может обновиться во время сборки, но `/start` фиксирует его как `processingPublicationId`. Static builder читает только этот exact снимок; legacy `web-publish` использует его processing catalog; следующий job получает более новый requested snapshot. Совместимый rebuild без snapshot по-прежнему явно очищает stale IDs и временно собирает текущий каталог, но текущие content mutators такие jobs не создают.
 4. API ставит BullMQ job с тремя попытками и exponential backoff 30 секунд. Worker получает через внутренний `/start` endpoint номер ревизии и payload, затем сам вызывает deployment provider.
 5. При `REBUILD_PROVIDER=webhook` worker отправляет в `REBUILD_WEBHOOK_URL` поля `rebuildId`, `siteId`, `dedupeKey`, `affectedPaths`, `revision` и idempotency header `<rebuildId>:<revision>`; HTTP 2xx без финального `SUCCEEDED` считается ошибкой. При `REBUILD_PROVIDER=coolify` worker делает авторизованный `POST /api/v1/deploy` по resource UUID, сразу сохраняет полученный `deployment_uuid` через `/provider-progress`, затем ограниченно опрашивает `GET /api/v1/deployments/{uuid}`.
@@ -82,3 +82,10 @@ Worker перехватывает `SIGINT`/`SIGTERM`: закрывает все 
 ## Оставшийся неиспользуемый listener
 
 У `tariff-imports` по-прежнему нет producer: admin вызывает validate/apply через API напрямую. До отдельного решения этот listener не является частью надежного import-процесса.
+
+
+## Фактический ход static CMS-публикации
+
+`/start` выдаёт новый `progressRunId`, связанный с точными publication/revision; recovery сохраняет исходный elapsed, но не используется для ETA. Worker передаёт ID private controller. Builder сообщает PREPARING/BUILDING/CHECKING, реальные уникальные HTML-счётчики Astro и проверок; controller сообщает ACTIVATING/CONFIRMING и heartbeat. Machine-only `/publication-progress` сохраняет whitelisted JSON с серверными timestamps и CAS. Сбой telemetry не меняет исход публикации. История успешных timing сохраняется вместе с receipt в SitePublication; SUCCEEDED появляется после независимой сверки receipt/SQL acknowledgment.
+
+После code deployment runtime автоматически завершает CODE для обслуживаемого snapshot, используя deployed `SOURCE_COMMIT` и provider checks. Ожидающая CMS job продолжает работу; WAITING_DEPLOYMENT/CODE_BUILDING/CODE_UNAVAILABLE объясняют подготовку. Недоступный provider и потерянный activation ответ сохраняют предыдущую выдачу/ту же job для восстановления, не создавая новую CMS-публикацию.

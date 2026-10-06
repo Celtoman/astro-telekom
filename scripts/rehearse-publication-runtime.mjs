@@ -34,7 +34,7 @@ async function until(predicate, message, timeout = 30000) {
   throw new Error(message);
 }
 let api, nextApi; let providerReads = 0; let originalError;
-let currentToken = token; let deploymentId = 'deployment-1'; let deploymentStatus = 'finished';
+let currentToken = token; let deploymentId = 'deployment-1'; let deploymentStatus = 'in_progress';
 try {
   docker(['build', '--file', 'apps/web/Dockerfile', '--target', 'publication-runtime', '--tag', image, '.'], false, 600000);
   const source = publicationSource([city('kazan')]);
@@ -77,6 +77,7 @@ try {
     '-e', `PUBLICATION_LEGACY_CATALOG_DIGEST=${sha(catalog)}`, '-e', `PUBLICATION_LEGACY_HTML_DIGEST=${legacyDigest}`,
     '-e', `PUBLICATION_LEGACY_CODE_COMMIT=${'d'.repeat(40)}`, '-e', 'PUBLICATION_LEGACY_DEPLOYMENT_ID=legacy-deployment',
     '-e', `PUBLIC_TEST_MODE=${testMode}`,
+    '-e', `SOURCE_COMMIT=${commit}`,
     '-e', 'PUBLIC_SITE_URL=https://partner.example.test', '-e', 'PUBLIC_API_URL=https://partner.example.test/api/v1', '-e', `PUBLIC_SITE_SLUG=${source.site.slug}`,
     '-e', `SITE_DATA_API_URL=http://host.docker.internal:${apiPort}/api/v1`, '-e', `API_UPSTREAM=host.docker.internal:${upstreamPort}`,
     '-e', `COOLIFY_API_URL=http://host.docker.internal:${apiPort}/api/v1`, '-e', 'COOLIFY_API_TOKEN=fixture-provider', '-e', 'COOLIFY_RESOURCE_UUID=application-1', image]);
@@ -97,9 +98,11 @@ try {
   const job = { publicationId: 'publication-b', siteId: 'site-1', siteSlug: source.site.slug, rebuildId: 'cms-b', rebuildRevision: 1 };
   assert.equal((await request('/publish', job)).status, 202, 'CMS used the unreleased renderer');
   const renderer = (await request('/renderer')).body;
-  const release = await request('/release-code', { ...renderer, deploymentId: 'deployment-1', expectedCommit: commit });
-  assert.equal(release.status, 200, JSON.stringify(release.body)); assert.equal(release.body.publicationId, 'publication-a');
-  assert.equal(release.body.catalogDigest, baseline.catalogDigest); assert.equal(release.body.rendererId, renderer.rendererId);
+  deploymentStatus = 'finished';
+  await until(async () => (await request('/active')).body.rendererId === renderer.rendererId, 'Automatic CODE did not finish', 120000);
+  const release = (await request('/active')).body;
+  assert.equal(release.publicationId, 'publication-a');
+  assert.equal(release.catalogDigest, baseline.catalogDigest); assert.equal(release.rendererId, renderer.rendererId);
   assert.ok(providerReads >= 4); const beforeCms = providerReads;
   assert.equal((await fetch(`${publicUrl}/old.js`)).status, 200, 'CODE dropped a legacy unversioned asset');
   const published = await request('/publish', job);
@@ -135,10 +138,10 @@ try {
   assert.equal((await request('/release-code', contextInput)).status, 202, 'Nonterminal deployment released new context');
   assert.deepEqual(await probe(), { backend: 'original', publicationId: 'publication-b', tokenDigest: proxyDigest(token) });
   deploymentStatus = 'finished';
-  const contextRelease = await request('/release-code', contextInput);
-  assert.equal(contextRelease.status, 200, JSON.stringify(contextRelease.body));
-  assert.equal(contextRelease.body.publicationId, 'publication-b'); assert.equal(contextRelease.body.siteRevision, 8);
-  assert.equal(contextRelease.body.catalogDigest, candidate.catalogDigest); assert.equal(contextRelease.body.rendererId, contextRenderer.rendererId);
+  await until(async () => (await request('/active')).body.rendererId === contextRenderer.rendererId, 'Automatic context CODE did not finish', 120000);
+  const contextRelease = (await request('/active')).body;
+  assert.equal(contextRelease.publicationId, 'publication-b'); assert.equal(contextRelease.siteRevision, 8);
+  assert.equal(contextRelease.catalogDigest, candidate.catalogDigest); assert.equal(contextRelease.rendererId, contextRenderer.rendererId);
   assert.deepEqual(await probe(), { backend: 'updated', publicationId: 'publication-b', tokenDigest: proxyDigest(rotatedToken) });
   assert.equal((await fetch(`${publicUrl}/kazan`)).headers.get('x-robots-tag'), null);
   assert.equal((await fetch(`${publicUrl}${oldAsset}`)).status, 200);

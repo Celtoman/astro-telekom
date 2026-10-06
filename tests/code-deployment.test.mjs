@@ -15,6 +15,7 @@ test('CODE verifier requires the latest exact finished deployment and a healthy 
     } });
   const input = { deploymentId: 'deployment-1', expectedCommit };
   await verifier(input);
+  assert.deepEqual(await verifier.latest(expectedCommit), input);
   for (const change of [{ status: 'in_progress' }, { status: 'failed' }, { commit: 'd'.repeat(40) }, { deployment_uuid: 'deployment-newer' }]) {
     const previous = latest; latest = { ...latest, ...change };
     await assert.rejects(verifier(input), ActivationUncertainError); latest = previous;

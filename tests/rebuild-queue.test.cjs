@@ -39,6 +39,16 @@ function fixture(initial = {}) {
       if (where.requestedRevision?.gt !== undefined && record.requestedRevision <= where.requestedRevision.gt) return { count: 0 };
       if (typeof where.processingRevision === 'number' && record.processingRevision !== where.processingRevision) return { count: 0 };
       if (where.publishedRevision?.lt !== undefined && record.publishedRevision >= where.publishedRevision.lt) return { count: 0 };
+      if (where.processingPublicationId && record.processingPublicationId !== where.processingPublicationId) return { count: 0 };
+      if (where.providerResponse?.path) {
+        const actual = where.providerResponse.path.reduce((value, key) => value?.[key], record.providerResponse);
+        if (actual !== where.providerResponse.equals) return { count: 0 };
+      }
+      for (const condition of where.AND || []) {
+        const filter = condition.providerResponse;
+        const actual = filter.path.reduce((value, key) => value?.[key], record.providerResponse);
+        if (actual !== filter.equals) return { count: 0 };
+      }
       updates.push(data);
       record = { ...record, ...data };
       return { count: 1 };
@@ -49,7 +59,7 @@ function fixture(initial = {}) {
     markSucceeded: async (publicationId, result) => publicationCalls.push(['succeeded', publicationId, result]),
     markFailed: async (publicationId, error) => publicationCalls.push(['failed', publicationId, error]),
   };
-  const prisma = { siteRebuild };
+  const prisma = { siteRebuild, site: { findUnique: async () => ({ slug: 'domru-site' }) } };
   prisma.$transaction = async callback => {
     const previous = record ? { ...record } : null;
     try { return await callback(prisma); } catch (error) { record = previous; throw error; }
@@ -65,6 +75,27 @@ function fixture(initial = {}) {
   service.redis = { quit: async () => {} };
   return { service, queueCalls, updates, publicationCalls, getRecord: () => record };
 }
+
+test('CMS telemetry rejects a previous run, foreign snapshot and regressing stages without changing publication', async (t) => {
+  const previousProvider = process.env.REBUILD_PROVIDER;
+  process.env.REBUILD_PROVIDER = 'static';
+  t.after(() => { if (previousProvider === undefined) delete process.env.REBUILD_PROVIDER; else process.env.REBUILD_PROVIDER = previousProvider; });
+  const f = fixture();
+  await f.service.enqueue({ entity: 'site', id: 'site-1', siteId: 'site-1', publicationId: 'pub-a' });
+  const first = await f.service.startAttempt('rebuild-1', 1, 3, 1);
+  assert.match(first.progressRunId, /^[a-f0-9-]{36}$/);
+  const second = await f.service.startAttempt('rebuild-1', 1, 3, 1);
+  assert.notEqual(second.progressRunId, first.progressRunId);
+  const event = { publicationId: 'pub-a', revision: 1, runId: second.progressRunId, sequence: 1,
+    stage: 'BUILDING', completedPages: 2, totalPages: 10, rendererId: 'f'.repeat(64) };
+  assert.equal((await f.service.recordPublicationProgress('rebuild-1', { ...event, runId: first.progressRunId })).saved, false);
+  assert.equal((await f.service.recordPublicationProgress('rebuild-1', { ...event, publicationId: 'pub-other' })).saved, false);
+  assert.equal((await f.service.recordPublicationProgress('rebuild-1', event)).saved, true);
+  assert.equal((await f.service.recordPublicationProgress('rebuild-1', { ...event, sequence: 2, stage: 'PREPARING' })).saved, false);
+  assert.equal((await f.service.recordPublicationProgress('rebuild-1', { ...event, sequence: 1, completedPages: 3 })).saved, false);
+  assert.equal(f.getRecord().providerResponse.cmsProgress.completedPages, 2);
+  assert.equal(f.getRecord().status, 'RUNNING'); assert.equal(f.getRecord().publishedRevision, 0);
+});
 
 test('rebuild keeps requested and processing publication snapshots separate', async () => {
   const f = fixture();

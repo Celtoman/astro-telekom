@@ -41,7 +41,11 @@ test('real Astro builder seals the exact saved catalog with versioned assets and
       publicEnv: { PUBLIC_SITE_URL: 'https://partner.example.test', PUBLIC_API_URL: 'https://partner.example.test/api/v1', PUBLIC_SITE_SLUG: 'domru-site' },
       fetchImpl: async (url, options) => { calls++; assert.equal(url, 'http://api.internal/api/v1/internal/site-publications/domru-site/snapshots/pub-a'); assert.equal(options.headers['x-admin-token'], 'synthetic'); return Response.json(bundle); } });
     const job = { publicationId: 'pub-a', siteSlug: 'domru-site', siteId: 'site-1', rebuildId: 'rebuild-1', rebuildRevision: 1 };
-    const artifact = await builder.build(job);
+    const progress = [];
+    const artifact = await builder.build(job, async event => { progress.push(event); });
+    assert.ok(progress.some(event => event.stage === 'BUILDING' && event.completedPages > 0));
+    assert.ok(progress.some(event => event.stage === 'CHECKING' && event.completedPages > 0));
+    assert.equal(progress.filter(event => event.stage === 'CHECKING').at(-1).completedPages, catalog.routes.length + 1);
     assert.equal(artifact.siteRevision, 7); assert.equal(artifact.catalogDigest, bundle.catalogDigest);
     const html = await readFile(join(root, 'releases', artifact.artifactId, 'index.html'), 'utf8');
     const prefix = `/__publication_assets/${artifact.artifactId}`;

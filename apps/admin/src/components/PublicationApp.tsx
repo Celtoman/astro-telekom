@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { CheckCircle2, CircleAlert, FileCheck2, History, RefreshCw } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { publicationChangeLabel, type PublicationReview } from "../lib/publication-review.mjs"
-import type { PublicationState } from "../lib/publication-display.mjs"
+import { describePublicationState, type PublicationState } from "../lib/publication-display.mjs"
 import { statusPresentation } from "../lib/status-presentation.mjs"
 import { AdminShell } from "./AdminShell"
 import { PublicationStatusCard } from "./PublicationStatusCard"
@@ -74,6 +74,7 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
   const issues = review?.validation.issues || []
   const blocking = issues.filter((item) => item.severity === "BLOCKING").length
   const warnings = issues.filter((item) => item.severity === "WARNING").length
+  const publicationActive = state && describePublicationState(state).kind === "publishing"
   return <AdminShell apiUrl={apiUrl} user={user} active="publication">
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-4 sm:p-6 lg:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -100,7 +101,7 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
           <Card><CardHeader><CardTitle role="heading" aria-level={2}>Проверка перед публикацией</CardTitle><CardDescription>Проверяется сохранённая версия: страницы, обязательные блоки, URL и SEO.</CardDescription></CardHeader><CardContent className="space-y-4">
             {!review ? <Skeleton className="h-20 w-full" /> : <>
               <Alert variant={blocking ? "destructive" : "default"}>
-                {blocking ? <CircleAlert /> : <FileCheck2 />}<AlertTitle>{blocking ? "Исправьте ошибки перед публикацией" : !review.hasUnpublishedChanges ? "Проверка пройдена" : warnings ? "Можно публиковать · есть предупреждения" : "Можно публиковать · проверка пройдена"}</AlertTitle>
+                {blocking ? <CircleAlert /> : <FileCheck2 />}<AlertTitle>{blocking ? "Исправьте ошибки перед публикацией" : publicationActive ? "Проверка пройдена · публикация выполняется" : !review.hasUnpublishedChanges ? "Проверка пройдена" : warnings ? "Можно публиковать · есть предупреждения" : "Можно публиковать · проверка пройдена"}</AlertTitle>
                 <AlertDescription>Проверено страниц: {review.validation.checkedUrlCount}. Ошибок: {blocking}. Предупреждений: {warnings}.</AlertDescription>
               </Alert>
               {issues.length ? <ul className="space-y-3">{issues.slice(0, visibleIssues).map((issue, index) => <li className="rounded-lg border p-3 text-sm" key={`${issue.path}-${issue.code}-${index}`}><p className="font-medium">{issue.severity === "BLOCKING" ? "Ошибка" : "Предупреждение"} · <span className="break-all">{issue.path}</span></p><p className="mt-1 break-words text-muted-foreground">{issue.message}</p>{issue.relatedPath ? <p className="mt-1 break-all text-xs text-muted-foreground">Связано с {issue.relatedPath}</p> : null}</li>)}</ul> : null}

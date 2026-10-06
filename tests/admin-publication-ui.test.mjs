@@ -52,7 +52,7 @@ test('publication card loads state, publishes the exact working revision and pol
   assert.match(component, /\/admin\/sites\/\$\{siteId\}\/publication-state/);
   assert.match(component, /\/admin\/sites\/\$\{siteId\}\/publications/);
   assert.match(component, /expectedWorkingRevision:\s*review\.workingRevision/);
-  assert.match(component, /setTimeout/);
+  assert.match(component, /setInterval/);
   assert.match(component, /Опубликовать изменения/);
   assert.match(component, /canPublishReviewedRevision/);
   assert.doesNotMatch(component, /Предыдущая опубликованная версия остается на сайте/);

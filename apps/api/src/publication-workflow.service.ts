@@ -8,6 +8,7 @@ import { sitePhoneReadinessErrors } from './site-phone';
 import { APP_VERSION } from './app-version';
 import { validatePublicationSource, type PublicationValidationReport } from './publication-validation';
 import { publicationChangeSummary } from './publication-change-summary';
+import { readCmsProgress, estimatePublicationRemaining, type CmsProgress } from './publication-progress';
 
 type Transaction = Prisma.TransactionClient | PrismaService;
 type JsonObject = Record<string, unknown>;
@@ -277,6 +278,7 @@ export class PublicationWorkflowService {
           startedAt: true,
           completedAt: true,
           updatedAt: true,
+          providerResponse: true,
         },
       }),
       this.prisma.sitePublicationValidation.findFirst({
@@ -285,6 +287,15 @@ export class PublicationWorkflowService {
         select: { id: true, siteRevision: true, appVersion: true, outcome: true, checkedUrlCount: true, requestedById: true, validatedAt: true },
       }),
     ]);
+    const currentProgress = readCmsProgress(rebuild?.providerResponse);
+    const matchingProgress = currentProgress && latestPublication?.id === currentProgress.publicationId
+      && currentProgress.revision === rebuild?.processingRevision ? currentProgress : null;
+    const now = Date.now();
+    const history = matchingProgress?.rendererId && matchingProgress.sampleEligible && !matchingProgress.completedAt
+      ? await this.prisma.sitePublication.findMany({ where: { siteId, status: 'SUCCEEDED' },
+        orderBy: { publishedAt: 'desc' }, take: 20, select: { providerResponse: true } }) : [];
+    const samples = history.map(row => readCmsProgress(row.providerResponse)).filter((sample): sample is CmsProgress => Boolean(sample));
+    const { providerResponse: _privateResponse, ...publicRebuild } = rebuild || {};
     return {
       siteId,
       workingRevision: site.workingRevision,
@@ -292,7 +303,11 @@ export class PublicationWorkflowService {
       hasUnpublishedChanges: site.workingRevision > site.publishedRevision,
       latestPublication,
       latestValidation,
-      rebuild,
+      rebuild: rebuild ? publicRebuild : null,
+      progress: matchingProgress ? { ...matchingProgress, ...estimatePublicationRemaining(matchingProgress, samples, now),
+        elapsedSeconds: Math.max(0, Math.floor(((matchingProgress.completedAt ? Date.parse(matchingProgress.completedAt) : now) - Date.parse(matchingProgress.startedAt)) / 1000)),
+        stale: !matchingProgress.completedAt && now - Date.parse(matchingProgress.updatedAt) > 45_000,
+      } : null,
     };
   }
 

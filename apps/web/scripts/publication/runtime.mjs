@@ -9,6 +9,7 @@ import { CaddyActivation } from './caddy-activation.mjs';
 import { StaticArtifactBuilder } from './static-builder.mjs';
 import { PublicationController, createPublicationServer } from './publication-controller.mjs';
 import { createCodeDeploymentVerifier } from './code-deployment.mjs';
+import { AutomaticCodeRelease } from './automatic-code-release.mjs';
 import { adoptLegacyBaseline, readLegacyBaseline } from './legacy-baseline.mjs';
 
 const missing = error => { if (error.code !== 'ENOENT') throw error; return null; };
@@ -72,10 +73,12 @@ export async function startPublicationRuntime(environment = process.env) {
   const verifier = environment.COOLIFY_API_URL && environment.COOLIFY_API_TOKEN && environment.COOLIFY_RESOURCE_UUID
     ? createCodeDeploymentVerifier({ apiUrl: environment.COOLIFY_API_URL, token: environment.COOLIFY_API_TOKEN, resourceId: environment.COOLIFY_RESOURCE_UUID }) : undefined;
   const controller = new PublicationController({ publicationRoot: root, builder, activation, verifyCodeRelease: verifier });
+  const automaticCode = new AutomaticCodeRelease({ controller, verifier, expectedCommit: environment.SOURCE_COMMIT });
+  controller.automaticCode = automaticCode;
   const child = spawn('caddy', ['run', ...(initial.resume ? ['--resume'] : ['--config', initial.path])], {
     stdio: ['ignore', 'inherit', 'inherit'], env: { PATH: environment.PATH, XDG_CONFIG_HOME: join(root, 'state'), XDG_DATA_HOME: join(root, 'data') },
   });
-  let stopped = false; let server;
+  let stopped = false; let server; let stopReconciliation;
   const exited = new Promise(resolveExit => {
     child.once('error', error => resolveExit({ error }));
     child.once('close', (code, signal) => resolveExit({ code, signal }));
@@ -83,6 +86,7 @@ export async function startPublicationRuntime(environment = process.env) {
   const stop = async () => {
     if (stopped) return;
     stopped = true;
+    stopReconciliation?.();
     if (server) { server.closeAllConnections(); server.close(); }
     child.kill('SIGTERM');
     const deadline = setTimeout(() => child.kill('SIGKILL'), 5000);
@@ -105,6 +109,7 @@ export async function startPublicationRuntime(environment = process.env) {
     } });
     await new Promise((accept, reject) => { server.once('error', reject); server.listen(8081, '0.0.0.0', accept); });
     console.log('Publication runtime ready; Caddy control API is loopback-only');
+    stopReconciliation = automaticCode.start();
     return { controller, stop, exited };
   } catch (error) { await stop(); throw error; }
 }

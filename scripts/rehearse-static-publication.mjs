@@ -143,7 +143,8 @@ try {
   builder = new StaticArtifactBuilder({ publicationRoot: root, apiUrl, adminToken: token,
     publicEnv: { PUBLIC_SITE_URL: 'https://partner.example.test', PUBLIC_API_URL: 'https://partner.example.test/api/v1', PUBLIC_SITE_SLUG: source.site.slug } });
   const countedBuilder = { renderer: builder.renderer, fetchSnapshot: job => builder.fetchSnapshot(job),
-    build: job => { builds++; return builder.build(job); } };
+    progressReporter: job => builder.progressReporter(job),
+    build: (job, report) => { builds++; return builder.build(job, report); } };
   const artifactA = await countedBuilder.build({ publicationId: baseline.id, siteId: baseline.siteId, siteSlug: source.site.slug, rebuildId: 'bootstrap-a', rebuildRevision: 1 });
   await manager.activate({ artifactId: artifactA.artifactId, expectedActiveArtifactId: null, kind: 'BOOTSTRAP' });
   const startController = async () => {
@@ -184,6 +185,14 @@ try {
   assert.equal(rebuild.publishedRevision, 0); assert.ok(['RUNNING', 'RETRYING'].includes(rebuild.status));
   assert.equal((await db.site.findUnique({ where: { id: source.site.id } })).publishedRevision, 0);
   assert.equal((await db.sitePublication.findUnique({ where: { id: pending.publication.id } })).status, 'RUNNING');
+  const progressState = await jsonRequest(`${apiUrl}/admin/sites/${source.site.id}/publication-state`);
+  assert.equal(progressState.progress.publicationId, pending.publication.id);
+  assert.equal(progressState.progress.stage, 'CONFIRMING');
+  assert.equal(progressState.publishedRevision, 0, 'Progress falsely acknowledged SQL');
+  assert.equal('providerResponse' in progressState.rebuild, false);
+  const staleProgress = await jsonRequest(`${apiUrl}/internal/site-rebuilds/${rebuild.id}/publication-progress`, { method: 'POST',
+    body: JSON.stringify({ runId: progressState.progress.runId, publicationId: pending.publication.id, revision: 1, sequence: 10000, stage: 'BUILDING', completedPages: 99999, totalPages: 99999 }) });
+  assert.equal(staleProgress.saved, false, 'Regressive progress overwrote the current phase');
   const active = await manager.current(); assert.equal(active.active.publicationId, pending.publication.id);
   const nextHtml = await fetch(`${publicUrl}/kazan`).then(response => response.text()); assert.match(nextHtml, /<title>Новый Title города/);
   const activeCatalog = await jsonRequest(`${publicUrl}/api/v1/public/sites/${source.site.slug}/cities`, { headers: { 'x-site-publication-id': 'spoofed', 'x-site-publication-token': 'spoofed' } });

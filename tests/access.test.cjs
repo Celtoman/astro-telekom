@@ -35,4 +35,5 @@ test('administrator sessions cannot call worker-only internal routes', async () 
     request('/api/v1/internal/site-rebuilds/id/start'),
     error => error.getStatus() === 401,
   );
+  await assert.rejects(request('/api/v1/internal/site-rebuilds/id/publication-progress'), error => error.getStatus() === 401);
 });

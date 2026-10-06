@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { CheckCircle2, CircleAlert, CloudUpload, LoaderCircle, RefreshCw } from "lucide-react"
 import { Button as AriaButton, Dialog, DialogTrigger, Popover } from "react-aria-components"
 import { requestJson } from "../lib/admin-api.mjs"
-import { describePublicationState, type PublicationState } from "../lib/publication-display.mjs"
+import { describePublicationState, describePublicationProgress, type PublicationState } from "../lib/publication-display.mjs"
 import { publicationRefreshDelay, resolvePublicationSite } from "../lib/publication-indicator.mjs"
 import { statusPresentation } from "../lib/status-presentation.mjs"
 import { StatusBadge } from "./StatusBadge"
@@ -63,15 +63,20 @@ export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
   }, [site, loadState])
 
   useEffect(() => {
+    if (state.status === "unavailable" && site) {
+      const retry = window.setTimeout(() => { void loadState(site) }, 5000)
+      return () => window.clearTimeout(retry)
+    }
     if (state.status !== "ready") return
     const delay = publicationRefreshDelay(state.publication)
     if (delay === null) return
     const timer = window.setTimeout(() => { void loadState(state.site) }, delay)
     return () => window.clearTimeout(timer)
-  }, [state, loadState])
+  }, [state, site, loadState])
 
   const presentation = state.status === "ready" ? describePublicationState(state.publication) : null
   const status = presentation ? statusPresentation("publicationView", presentation.kind) : null
+  const progress = state.status === "ready" ? describePublicationProgress(state.publication) : null
   const Icon = state.status === "loading" ? LoaderCircle
     : presentation?.kind === "published" ? CheckCircle2
     : presentation?.kind === "failed" ? CircleAlert
@@ -94,6 +99,7 @@ export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
               <div><p className="text-xs text-muted-foreground">На сайте</p><p className="font-medium">{state.publication.publishedRevision}</p></div>
             </div>
             {state.publication.latestPublication ? <div className="flex flex-wrap items-center gap-2"><span className="text-muted-foreground">Последняя публикация · версия {state.publication.latestPublication.siteRevision}</span><StatusBadge kind="sitePublicationStatus" value={state.publication.latestPublication.status} /></div> : null}
+            {progress ? <div className="space-y-1"><p className="font-medium">{progress.stageLabel}</p>{progress.counterLabel ? <p className="text-muted-foreground">{progress.counterLabel}</p> : null}<p className="text-muted-foreground">Прошло: {progress.elapsedLabel}</p><p className="text-muted-foreground">{progress.remainingLabel}</p></div> : null}
             {state.publication.latestPublication?.lastError || state.publication.rebuild?.lastError ? <p className="break-words text-destructive">Последняя ошибка: {state.publication.latestPublication?.lastError || state.publication.rebuild?.lastError}</p> : null}
           </> : null}
           <Button type="button" size="sm" variant="outline" onClick={() => void (site ? loadState(site) : loadSite())}><RefreshCw data-icon="inline-start" />Обновить</Button>

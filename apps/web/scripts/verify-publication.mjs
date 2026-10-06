@@ -168,7 +168,7 @@ function validateNotFoundHtml(html, errors, faviconUrl) {
 
 }
 
-export async function verifyPublication({ distDirectory, publicSiteUrl, allowDemoData = false, artifactId }) {
+export async function verifyPublication({ distDirectory, publicSiteUrl, allowDemoData = false, artifactId, onProgress = async () => {} }) {
   if (artifactId && !/^[a-f0-9]{64}$/.test(artifactId)) throw new Error('Invalid static artifact identity');
   const faviconUrl = artifactId ? `/__publication_assets/${artifactId}/favicon.ico` : '/favicon.ico';
   const origin = new URL(publicSiteUrl).origin;
@@ -252,11 +252,15 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
     if (!htmlRoutes.has(route)) errors.push(`Дочерний sitemap содержит ${route}, но соответствующий HTML отсутствует`);
   }
 
+  let checkedPages = 0;
+  const notify = async () => { try { await onProgress({ completedPages: checkedPages, totalPages: publicHtml.length + 1 }); } catch { /* Progress is not a validation result. */ } };
   for (const { path, route } of publicHtml) {
     const html = await readFile(path, 'utf8');
     validateIndexableHtml(html, route, `${origin}${route}`, sitemapRouteSet.has(route), errors, faviconUrl);
+    checkedPages++; await notify();
   }
   validateNotFoundHtml(notFound, errors, faviconUrl);
+  checkedPages++; await notify();
 
   const sitemapDirectives = robots.split(/\r?\n/).filter((line) => /^\s*Sitemap\s*:/i.test(line));
   if (sitemapDirectives.length !== 1 || sitemapDirectives[0].trim() !== `Sitemap: ${origin}/sitemap.xml`) {
