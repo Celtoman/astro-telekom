@@ -28,6 +28,8 @@ const integrationVariables = [
   'COOLIFY_API_URL',
   'COOLIFY_API_TOKEN',
   'COOLIFY_RESOURCE_UUID',
+  'STATIC_PUBLICATION_URL',
+  'ADMIN_API_TOKEN',
   'PII_RETENTION_DAYS',
 ];
 
@@ -158,4 +160,16 @@ test('admin readiness endpoint is authenticated and delegates sanitized configur
   assert.equal(controller.getReadiness(), expected);
   const source = readFileSync(join(__dirname, '..', 'apps', 'api', 'src', 'admin-readiness.controller.ts'), 'utf8');
   assert.match(source, /@UseGuards\(AdminTokenGuard\)/);
+});
+
+test('static readiness requires a safe private controller URL and machine key without a deployment provider', async () => {
+  await withEnvironment({ REBUILD_PROVIDER: 'static', STATIC_PUBLICATION_URL: 'http://web:8081', ADMIN_API_TOKEN: 's'.repeat(32) }, async () => {
+    assert.deepEqual(new ReleaseReadinessService().configuration().checks.rebuild, { status: 'configured', missing: [] });
+    for (const url of ['', 'file:///publication', 'http://user:secret@web:8081', 'http://web:8081/?token=secret', 'http://web:8081/private']) {
+      process.env.STATIC_PUBLICATION_URL = url;
+      assert.deepEqual(new ReleaseReadinessService().configuration().checks.rebuild, { status: 'missing', missing: ['STATIC_PUBLICATION_URL'] });
+    }
+    process.env.STATIC_PUBLICATION_URL = 'http://web:8081'; process.env.ADMIN_API_TOKEN = 'short';
+    assert.deepEqual(new ReleaseReadinessService().configuration().checks.rebuild, { status: 'missing', missing: ['ADMIN_API_TOKEN'] });
+  });
 });

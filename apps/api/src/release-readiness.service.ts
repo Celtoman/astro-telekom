@@ -64,7 +64,16 @@ export class ReleaseReadinessService {
     if (provider === 'coolify') {
       return this.required(['COOLIFY_API_URL', 'COOLIFY_API_TOKEN', 'COOLIFY_RESOURCE_UUID']);
     }
-    return { status: 'missing', missing: ['REBUILD_PROVIDER(webhook|coolify)'] };
+    if (provider === 'static') {
+      const missing: string[] = [];
+      try {
+        const base = new URL(process.env.STATIC_PUBLICATION_URL || '');
+        if (!['http:', 'https:'].includes(base.protocol) || base.username || base.password || base.search || base.hash || base.pathname !== '/') throw new Error('Invalid controller URL');
+      } catch { missing.push('STATIC_PUBLICATION_URL'); }
+      if (!process.env.ADMIN_API_TOKEN || process.env.ADMIN_API_TOKEN.length < 32) missing.push('ADMIN_API_TOKEN');
+      return { status: missing.length ? 'missing' : 'configured', missing };
+    }
+    return { status: 'missing', missing: ['REBUILD_PROVIDER(webhook|coolify|static)'] };
   }
 
   private positiveInteger(name: string, maximum: number): ConfigurationCheck {

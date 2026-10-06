@@ -1,15 +1,27 @@
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { requireArtifactId } from './artifact-store.mjs';
 
 const framePolicy = readFileSync(new URL('../../../../deploy/coolify-web.Caddyfile', import.meta.url), 'utf8')
   .match(/>Content-Security-Policy "([^"]+)"/)?.[1];
 if (!framePolicy) throw new Error('Public frame policy is missing');
 
-export function createServingConfig(artifact, {
-  apiUpstream = 'api:3000', publicationToken, adminListen = '127.0.0.1:2019', httpListen = ':80', testMode = true,
+function normalizeServingOptions({
+  apiUpstream = 'api:3000', publicationToken, adminListen = '127.0.0.1:2019', httpListen = ':80', testMode = true, legacyAssetsArtifactId = null,
 } = {}) {
   if (!/^[a-zA-Z0-9.-]+:\d{1,5}$/.test(apiUpstream)) throw new Error('Invalid API upstream');
   if (typeof publicationToken !== 'string' || publicationToken.length < 32 || publicationToken.length > 256) throw new Error('Publication proxy token is required');
+  if (typeof testMode !== 'boolean') throw new Error('Serving test mode must be boolean');
+  if (legacyAssetsArtifactId !== null) requireArtifactId(legacyAssetsArtifactId);
+  return { apiUpstream, publicationToken, adminListen, httpListen, testMode, legacyAssetsArtifactId };
+}
+
+export function servingOptionsDigest(options) {
+  return createHash('sha256').update(JSON.stringify(normalizeServingOptions(options))).digest('hex');
+}
+
+export function createServingConfig(artifact, options) {
+  const { apiUpstream, publicationToken, adminListen, httpListen, testMode, legacyAssetsArtifactId } = normalizeServingOptions(options);
   const root = artifact ? `/publication/releases/${requireArtifactId(artifact.artifactId)}` : null;
   const marker = artifact ? {
     protocol: '1', state: 'ACTIVE', artifactId: artifact.artifactId,
@@ -38,6 +50,8 @@ export function createServingConfig(artifact, {
       { handler: 'file_server', root: '/publication/releases' },
     ], terminal: true },
     { match: [{ path: ['/__publication_assets/*'] }], handle: [{ handler: 'static_response', status_code: 404 }], terminal: true },
+    ...(legacyAssetsArtifactId ? [{ match: [{ path_regexp: { pattern: '(?i)\\.(css|js|woff2?|png|jpe?g|webp|avif|gif|ico|svg|ttf|otf)$' } }],
+      handle: [{ handler: 'file_server', root: `/publication/releases/${legacyAssetsArtifactId}`, pass_thru: true }] }] : []),
     ...artifact.redirects.map(({ id, sourcePath }) => ({ match: [{ path: [sourcePath, `${sourcePath}/`] }], handle: [
       { handler: 'rewrite', uri: `/api/v1/public/sites/${artifact.siteSlug}/redirects/${id}` }, proxy(),
     ], terminal: true })),

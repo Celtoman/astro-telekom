@@ -70,32 +70,30 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   assert.doesNotMatch(coolifyCompose, /(?:^|\n)\s+ports:\s*\n\s+- ["']?(?:80|443):/);
   assert.match(coolifyCompose, /bootstrap-seed:[\s\S]*RUN_BOOTSTRAP_SEED:\s*\$\{RUN_BOOTSTRAP_SEED:\?[^}]+\}[\s\S]*node \/workspace\/apps\/api\/dist\/seed\.js/);
   assert.match(coolifyCompose, /bootstrap-seed:\s+condition:\s*service_completed_successfully/);
-  assert.match(coolifyCompose, /web-publish:[\s\S]*target:\s*publisher[\s\S]*SITE_DATA_API_URL:\s*http:\/\/api:3000\/api\/v1/);
-  assert.match(coolifyCompose, /web-publish:[\s\S]*SITE_DATA_PUBLICATION_MODE:\s*"processing"/);
-  assert.match(coolifyCompose, /web-publish:[\s\S]*SITE_DATA_API_TOKEN:\s*\$\{ADMIN_API_TOKEN:\?Set ADMIN_API_TOKEN in Coolify\}/);
+  assert.doesNotMatch(coolifyCompose, /web-publish:|SITE_DATA_PUBLICATION_MODE:/);
+  assert.match(coolifyCompose, /web:[\s\S]*target:\s*publication-runtime[\s\S]*SITE_DATA_API_URL:\s*http:\/\/api:3000\/api\/v1/);
+  assert.match(coolifyCompose, /web:[\s\S]*ADMIN_API_TOKEN:\s*\$\{ADMIN_API_TOKEN:\?Set ADMIN_API_TOKEN in Coolify\}/);
+  assert.match(coolifyCompose, /web_publication:\/publication\r?\n/);
+  assert.doesNotMatch(coolifyCompose, /web_publication:\/publication:ro/);
   assert.match(siteDataSource, /internal\/site-publications\/\$\{publicSiteSlug\}\/catalog/);
   assert.match(siteDataSource, /'x-admin-token'/);
-  assert.match(coolifyCompose, /web-publish:\s+condition:\s*service_completed_successfully/);
-  for (const service of ['migrate', 'bootstrap-seed', 'web-publish']) {
+  for (const service of ['migrate', 'bootstrap-seed']) {
     assert.match(
       coolifyCompose,
       new RegExp(`${service}:[\\s\\S]*?exclude_from_hc:\\s*true[\\s\\S]*?restart:\\s*["']no["']`),
       `${service} must be explicitly excluded from Coolify application health`,
     );
   }
-  assert.equal((coolifyCompose.match(/exclude_from_hc:\s*true/g) || []).length, 3);
-  for (const service of ['web', 'admin']) {
-    assert.match(
-      coolifyCompose,
-      new RegExp(`${service}:[\\s\\S]*?healthcheck:[\\s\\S]*?wget[\\s\\S]*?http://127\\.0\\.0\\.1/`),
-      `${service} must verify its local Caddy response`,
-    );
-  }
+  assert.equal((coolifyCompose.match(/exclude_from_hc:\s*true/g) || []).length, 2);
+  assert.match(coolifyCompose, /web:[\s\S]*?healthcheck:[\s\S]*?node[\s\S]*?http:\/\/127\.0\.0\.1:8081\/active/);
+  assert.match(coolifyCompose, /admin:[\s\S]*?healthcheck:[\s\S]*?wget[\s\S]*?http:\/\/127\.0\.0\.1\//);
   assert.match(coolifyCompose, /worker:[\s\S]*?healthcheck:[\s\S]*?node[\s\S]*?services\/worker\/src\/healthcheck\.mjs/);
   assert.match(workerHealthcheck, /new IORedis\(redisUrl/);
   assert.match(workerHealthcheck, /await redis\.ping\(\)/);
-  assert.match(coolifyCompose, /REBUILD_PROVIDER:\s*\$\{REBUILD_PROVIDER:-coolify\}/);
+  assert.equal((coolifyCompose.match(/REBUILD_PROVIDER:\s*"static"/g) || []).length, 2);
+  assert.equal((coolifyCompose.match(/STATIC_PUBLICATION_URL:\s*http:\/\/web:8081/g) || []).length, 2);
   assert.match(coolifyCompose, /worker:[\s\S]*?env_file:\s*\$\{ENV_FILE:-\.env\}/);
+  assert.match(coolifyCompose, /web:[\s\S]*?env_file:\s*\$\{ENV_FILE:-\.env\}/);
   assert.doesNotMatch(coolifyCompose, /COOLIFY_API_TOKEN:\s*\$\{COOLIFY_API_TOKEN/);
   assert.match(coolifyCompose, /PUBLIC_API_URL:\s*https:\/\/\$\{PUBLIC_DOMAIN[^}]*\}\/api\/v1/);
   assert.match(coolifyCompose, /PUBLIC_API_URL:\s*https:\/\/\$\{ADMIN_DOMAIN[^}]*\}\/api\/v1/);

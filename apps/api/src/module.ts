@@ -59,6 +59,8 @@ import { AdminSeoTemplatesController } from './admin-seo-templates.controller';
 import { AdminTariffTemplateController } from './admin-tariff-template.controller';
 import { AdminPageTemplatesController } from './admin-page-templates.controller';
 import { TariffPurgeService } from './tariff-purge.service';
+import { CodeReleaseController } from './code-release.controller';
+import { CodeReleaseService } from './code-release.service';
 
 @Module({
   controllers: [
@@ -87,6 +89,7 @@ import { TariffPurgeService } from './tariff-purge.service';
     PublicRedirectsController,
     LeadNotificationController,
     PublicationWorkflowController,
+    CodeReleaseController,
     AdminAuditEventsController,
     AdminTrashController,
     AdminSitemapController,
@@ -97,6 +100,6 @@ import { TariffPurgeService } from './tariff-purge.service';
     AdminTariffTemplateController,
     AdminPageTemplatesController,
   ],
-  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, TariffPurgeService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, CodeReleaseService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, TariffPurgeService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

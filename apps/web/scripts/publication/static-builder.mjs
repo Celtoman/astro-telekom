@@ -16,8 +16,8 @@ export class SnapshotUnavailableError extends Error {
   constructor(status) { super(`Exact snapshot unavailable (${status})`); this.httpStatus = status; }
 }
 
-async function sourceIdentity(publicEnv) {
-  const hash = createHash('sha256').update(JSON.stringify({ node: process.version, publicEnv }));
+async function sourceIdentity(publicEnv, servingContextDigest) {
+  const hash = createHash('sha256').update(JSON.stringify({ node: process.version, publicEnv, servingContextDigest }));
   async function visit(path) {
     const stat = await lstat(path);
     if (stat.isSymbolicLink()) throw new Error('Renderer source cannot contain symlinks');
@@ -66,7 +66,7 @@ async function validateAssets(directory, artifactId) {
 }
 
 export class StaticArtifactBuilder {
-  constructor({ publicationRoot, apiUrl, adminToken, publicEnv, fetchImpl = fetch }) {
+  constructor({ publicationRoot, apiUrl, adminToken, publicEnv, servingContextDigest = null, fetchImpl = fetch }) {
     if (!adminToken) throw new Error('Builder requires a private API token');
     this.root = resolve(publicationRoot);
     this.apiUrl = new URL(apiUrl).href.replace(/\/$/, '');
@@ -74,7 +74,9 @@ export class StaticArtifactBuilder {
     this.publicEnv = Object.fromEntries(publicKeys.map(key => [key, String(publicEnv[key] || '')]));
     this.publicEnv.PUBLIC_SITE_URL = resolvePublicSiteUrl(this.publicEnv);
     this.publicEnv.PUBLIC_API_URL = resolvePublicApiUrl(this.publicEnv);
-    this.renderer = sourceIdentity(this.publicEnv);
+    if (servingContextDigest !== null && !/^[a-f0-9]{64}$/.test(servingContextDigest)) throw new Error('Invalid serving context digest');
+    this.servingContextDigest = servingContextDigest;
+    this.renderer = sourceIdentity(this.publicEnv, this.servingContextDigest);
     this.pending = Promise.resolve();
   }
 
@@ -103,7 +105,7 @@ export class StaticArtifactBuilder {
   async buildSerial(job) {
     const snapshot = await this.fetchSnapshot(job);
     const rendererId = await this.renderer;
-    if (await sourceIdentity(this.publicEnv) !== rendererId) throw new Error('Released renderer source changed');
+    if (await sourceIdentity(this.publicEnv, this.servingContextDigest) !== rendererId) throw new Error('Released renderer source changed');
     const identity = { publicationId: job.publicationId, siteId: job.siteId, siteSlug: job.siteSlug,
       siteRevision: snapshot.siteRevision, rebuildId: job.rebuildId, rebuildRevision: job.rebuildRevision,
       rendererId, catalogDigest: snapshot.catalogDigest,
@@ -141,7 +143,7 @@ export class StaticArtifactBuilder {
       try { await verifyPublication({ distDirectory: output, publicSiteUrl: this.publicEnv.PUBLIC_SITE_URL, allowDemoData: false, artifactId: identity.artifactId }); }
       catch (error) { throw new Error(`Static publication validation failed: ${error.message}\n${buildLog}`, { cause: error }); }
       await validateAssets(output, identity.artifactId);
-      if (await sourceIdentity(this.publicEnv) !== rendererId) throw new Error('Released renderer changed during build');
+      if (await sourceIdentity(this.publicEnv, this.servingContextDigest) !== rendererId) throw new Error('Released renderer changed during build');
       return await sealArtifact({ publicationRoot: this.root, sourceDirectory: output, identity });
     } finally {
       if (resolve(operationRoot, '..') !== resolve(builds)) throw new Error('Unsafe private build cleanup');

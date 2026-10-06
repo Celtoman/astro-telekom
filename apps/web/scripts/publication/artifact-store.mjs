@@ -67,6 +67,8 @@ async function inventory(root, directory = root) {
   return files.sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
 }
 
+export { inventory as artifactInventory };
+
 async function syncDirectory(directory) {
   // Windows cannot fsync directory handles; production publication runs on Linux.
   if (process.platform === 'win32') return;

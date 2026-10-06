@@ -102,6 +102,7 @@
 | --- | --- | --- |
 | TD-149 | [#245](https://github.com/Celtoman/astro-telekom/issues/245) ✅ | Private publication fixtures исключены из Docker context; image rehearsal прошёл |
 | TD-151 | [#247](https://github.com/Celtoman/astro-telekom/issues/247) ✅ | Redis rehearsal ожидает PONG и сразу обрабатывает ранний reject без сокрытия failure |
+| TD-152 | [#248](https://github.com/Celtoman/astro-telekom/issues/248) ✅ | CODE identity учитывает закрытые serving options; non-root image proof подтверждает смену контекста после terminal deployment |
 | TD-143 | [#229](https://github.com/Celtoman/astro-telekom/issues/229) ✅ | Описание публичной формы синхронизировано с действующим адресным сценарием API и канона |
 | TD-144 | [#230](https://github.com/Celtoman/astro-telekom/issues/230) ✅ | DRAFT-паспорта Header, Hero 1b и городского Hero V3 описывают внедрённые источники, варианты и поведение |
 | TD-136 | [#221](https://github.com/Celtoman/astro-telekom/issues/221) ✅ | Карточки ТВ и Интернет + ТВ передавали форме тип услуги INTERNET из-за устаревших кодов `service_grid` |

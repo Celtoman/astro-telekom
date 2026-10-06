@@ -4,13 +4,30 @@ import { mkdir, readFile, writeFile, readdir, lstat } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { readArtifact } from './artifact-store.mjs';
-import { createServingConfig, activePublication } from './serving-config.mjs';
+import { createServingConfig, activePublication, servingOptionsDigest } from './serving-config.mjs';
 import { CaddyActivation } from './caddy-activation.mjs';
 import { StaticArtifactBuilder } from './static-builder.mjs';
 import { PublicationController, createPublicationServer } from './publication-controller.mjs';
 import { createCodeDeploymentVerifier } from './code-deployment.mjs';
+import { adoptLegacyBaseline, readLegacyBaseline } from './legacy-baseline.mjs';
 
 const missing = error => { if (error.code !== 'ENOENT') throw error; return null; };
+
+export async function prepareLegacyBaseline(root, environment) {
+  const existing = await readLegacyBaseline(root);
+  if (existing || !environment.PUBLICATION_LEGACY_PUBLICATION_ID) return existing;
+  const proof = { publicationId: environment.PUBLICATION_LEGACY_PUBLICATION_ID, siteId: environment.PUBLICATION_LEGACY_SITE_ID,
+    siteSlug: environment.PUBLIC_SITE_SLUG, siteRevision: Number(environment.PUBLICATION_LEGACY_SITE_REVISION),
+    catalogDigest: environment.PUBLICATION_LEGACY_CATALOG_DIGEST, htmlDigest: environment.PUBLICATION_LEGACY_HTML_DIGEST,
+    codeCommit: environment.PUBLICATION_LEGACY_CODE_COMMIT, deploymentId: environment.PUBLICATION_LEGACY_DEPLOYMENT_ID };
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(proof.siteSlug || '') || !/^[a-zA-Z0-9_-]{1,200}$/.test(proof.publicationId || '')) throw new Error('Invalid legacy snapshot lookup identity');
+  const base = new URL(environment.SITE_DATA_API_URL || 'http://api:3000/api/v1').href.replace(/\/$/, '');
+  const response = await fetch(`${base}/internal/site-publications/${proof.siteSlug}/snapshots/${proof.publicationId}`, {
+    headers: { 'x-admin-token': environment.ADMIN_API_TOKEN }, signal: AbortSignal.timeout(30000),
+  });
+  if (!response.ok) throw new Error('Verified legacy publication snapshot is unavailable');
+  return adoptLegacyBaseline({ publicationRoot: root, snapshot: await response.json(), proof });
+}
 
 export async function initialServing({ root, environment, options }) {
   const autosave = join(root, 'state', 'caddy', 'autosave.json');
@@ -43,10 +60,13 @@ export async function startPublicationRuntime(environment = process.env) {
   if (root !== '/publication') throw new Error('Runtime PUBLICATION_ROOT must be /publication');
   const token = environment.ADMIN_API_TOKEN;
   if (!token || token.length < 32) throw new Error('Runtime requires a machine token');
+  const legacy = await prepareLegacyBaseline(root, environment);
   const options = { apiUpstream: environment.API_UPSTREAM || 'api:3000',
-    publicationToken: createHmac('sha256', token).update('serving-publication:v1').digest('hex'), testMode: environment.PUBLIC_TEST_MODE !== 'false' };
-  const initial = await initialServing({ root, environment, options });
-  const builder = new StaticArtifactBuilder({ publicationRoot: root, apiUrl: environment.SITE_DATA_API_URL || 'http://api:3000/api/v1', adminToken: token, publicEnv: environment });
+    publicationToken: createHmac('sha256', token).update('serving-publication:v1').digest('hex'), testMode: environment.PUBLIC_TEST_MODE !== 'false',
+    legacyAssetsArtifactId: legacy?.artifactId || null };
+  const initial = await initialServing({ root, environment: legacy ? { ...environment, PUBLICATION_BASELINE_ARTIFACT_ID: legacy.artifactId } : environment, options });
+  const builder = new StaticArtifactBuilder({ publicationRoot: root, apiUrl: environment.SITE_DATA_API_URL || 'http://api:3000/api/v1', adminToken: token,
+    publicEnv: environment, servingContextDigest: servingOptionsDigest(options) });
   await builder.renderer;
   const activation = new CaddyActivation({ publicationRoot: root, servingOptions: options });
   const verifier = environment.COOLIFY_API_URL && environment.COOLIFY_API_TOKEN && environment.COOLIFY_RESOURCE_UUID

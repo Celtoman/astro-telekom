@@ -7,6 +7,20 @@ import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 
+test('renderer identity binds normalized serving settings without exposing proxy tokens', async () => {
+  const { StaticArtifactBuilder } = await import('../apps/web/scripts/publication/static-builder.mjs');
+  const { servingOptionsDigest } = await import('../apps/web/scripts/publication/serving-config.mjs');
+  const publicEnv = { PUBLIC_SITE_URL: 'https://partner.example.test', PUBLIC_API_URL: 'https://partner.example.test/api/v1', PUBLIC_SITE_SLUG: 'domru-site' };
+  const options = { publicationToken: 'private-proxy-token-'.repeat(3) };
+  const identities = await Promise.all([options, { ...options, testMode: true, apiUpstream: 'api:3000' },
+    { ...options, testMode: false }, { ...options, apiUpstream: 'api-next:3000' }, { ...options, publicationToken: 'rotated-proxy-token-'.repeat(3) }]
+    .map(settings => new StaticArtifactBuilder({ publicationRoot: '.', apiUrl: 'http://api/api/v1', adminToken: 'fixture', publicEnv,
+      servingContextDigest: servingOptionsDigest(settings) }).renderer));
+  assert.equal(identities[0], identities[1], 'Equivalent defaults changed renderer identity');
+  for (const identity of identities.slice(2)) assert.notEqual(identity, identities[0]);
+  assert.ok(identities.every(identity => /^[a-f0-9]{64}$/.test(identity)));
+});
+
 test('real Astro builder seals the exact saved catalog with versioned assets and intact inline CSP', { timeout: 180000 }, async () => {
   const { StaticArtifactBuilder } = await import('../apps/web/scripts/publication/static-builder.mjs');
   const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');

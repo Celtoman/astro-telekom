@@ -49,6 +49,8 @@ services:
     env_file: ${ENV_FILE:-.env}
     environment:
       TRUST_PROXY: "true"
+      REBUILD_PROVIDER: "static"
+      STATIC_PUBLICATION_URL: http://web:8081
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -67,11 +69,8 @@ services:
     restart: unless-stopped
     env_file: ${ENV_FILE:-.env}
     environment:
-      REBUILD_PROVIDER: ${REBUILD_PROVIDER:-coolify}
-      COOLIFY_API_URL: ${COOLIFY_API_URL:?Set COOLIFY_API_URL in Coolify}
-      COOLIFY_RESOURCE_UUID: ${COOLIFY_RESOURCE_UUID:?Set COOLIFY_RESOURCE_UUID in Coolify}
-      COOLIFY_POLL_INTERVAL_MS: ${COOLIFY_POLL_INTERVAL_MS:-5000}
-      COOLIFY_DEPLOY_TIMEOUT_MS: ${COOLIFY_DEPLOY_TIMEOUT_MS:-900000}
+      REBUILD_PROVIDER: "static"
+      STATIC_PUBLICATION_URL: http://web:8081
     depends_on:
       api:
         condition: service_healthy
@@ -105,51 +104,39 @@ services:
           *) echo "RUN_BOOTSTRAP_SEED must be true or false" >&2; exit 1 ;;
         esac
 
-  web-publish:
-    exclude_from_hc: true
+  web:
     build:
       context: .
       dockerfile: apps/web/Dockerfile
-      target: publisher
-    restart: "no"
+      target: publication-runtime
+    restart: unless-stopped
+    env_file: ${ENV_FILE:-.env}
     environment:
-      ALLOW_DEMO_DATA: "false"
+      API_UPSTREAM: api:3000
+      ADMIN_API_TOKEN: ${ADMIN_API_TOKEN:?Set ADMIN_API_TOKEN in Coolify}
       SITE_DATA_API_URL: http://api:3000/api/v1
-      SITE_DATA_PUBLICATION_MODE: "processing"
-      SITE_DATA_API_TOKEN: ${ADMIN_API_TOKEN:?Set ADMIN_API_TOKEN in Coolify}
       PUBLIC_API_URL: https://${PUBLIC_DOMAIN:?Set PUBLIC_DOMAIN in Coolify}/api/v1
       PUBLIC_SITE_URL: https://${PUBLIC_DOMAIN:?Set PUBLIC_DOMAIN in Coolify}
       PUBLIC_SITE_SLUG: ${PUBLIC_SITE_SLUG:-domru-site}
       PUBLIC_YANDEX_METRIKA_ID: ${PUBLIC_YANDEX_METRIKA_ID:-}
       PUBLIC_CONNECTION_PHONE: ${PUBLIC_CONNECTION_PHONE:-}
       PUBLIC_SUPPORT_PHONE: ${PUBLIC_SUPPORT_PHONE:-}
+      PUBLIC_TEST_MODE: "true"
+      COOLIFY_API_URL: ${COOLIFY_API_URL:?Set COOLIFY_API_URL in Coolify}
+      COOLIFY_RESOURCE_UUID: ${COOLIFY_RESOURCE_UUID:?Set COOLIFY_RESOURCE_UUID in Coolify}
+    expose:
+      - "80"
     volumes:
       - web_publication:/publication
     depends_on:
       bootstrap-seed:
         condition: service_completed_successfully
-
-  web:
-    build:
-      context: .
-      dockerfile: apps/web/Dockerfile
-      target: coolify-server
-    restart: unless-stopped
-    environment:
-      API_UPSTREAM: api:3000
-    expose:
-      - "80"
-    volumes:
-      - web_publication:/publication:ro
-    depends_on:
-      web-publish:
-        condition: service_completed_successfully
     healthcheck:
-      test: ["CMD", "wget", "--spider", "--quiet", "http://127.0.0.1/"]
+      test: ["CMD", "node", "-e", "Promise.all([fetch('http://127.0.0.1/'), fetch('http://127.0.0.1:8081/active', {headers:{'x-admin-token':process.env.ADMIN_API_TOKEN}})]).then(rs => process.exit(rs.every(r => r.ok) ? 0 : 1)).catch(() => process.exit(1))"]
       interval: 15s
       timeout: 5s
-      retries: 5
-      start_period: 10s
+      retries: 10
+      start_period: 60s
     labels:
       - "traefik.http.middlewares.public-security-headers.headers.stsseconds=31536000"
       - "traefik.http.middlewares.public-security-headers.headers.contenttypenosniff=true"
