@@ -24,7 +24,8 @@
 | ID | Issue | Суть |
 | --- | --- | --- |
 | #235 | [#235](https://github.com/Celtoman/astro-telekom/issues/235) ✅ | Общие tariffView/heroFacts/legal и публичные CSS/assets; состав preview сверяется с Astro HTML |
-| #258 | [#258](https://github.com/Celtoman/astro-telekom/issues/258) 🟢 | Security baseline устарел: актуальный audit содержит 15 high, требуется оценка применимости |
+| #258 | [#258](https://github.com/Celtoman/astro-telekom/issues/258) ✅ | Точечные security dependency updates; audit без advisory entries, regression middleware/deepmerge |
+| TD-163 | [#259](https://github.com/Celtoman/astro-telekom/issues/259) 🟢 | Absolute request target получает общий rate limit вместо специализированного bucket |
 | TD-145 | [#240](https://github.com/Celtoman/astro-telekom/issues/240) ✅ | Атомарный seed текущей schema; свежая PostgreSQL, preflight и сохранность повторного запуска проверены |
 | TD-150 | [#246](https://github.com/Celtoman/astro-telekom/issues/246) ✅ | Non-root runtime: private Astro config и redacted диагностика; повтор Linux CI обязателен |
 | TD-146 | [#242](https://github.com/Celtoman/astro-telekom/issues/242) ✅ | Caddy fixture использует Linux runner UID/GID; CI прошёл без пропусков |
@@ -106,7 +107,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| #236 | [#236](https://github.com/Celtoman/astro-telekom/issues/236) 🟢 | Direct Compose migrate выбирает runtime target без Prisma CLI/schema |
+| #236 | [#236](https://github.com/Celtoman/astro-telekom/issues/236) ✅ | Direct Compose использует migration target; реальный Docker/PG rehearsal и идемпотентность |
 | TD-149 | [#245](https://github.com/Celtoman/astro-telekom/issues/245) ✅ | Private publication fixtures исключены из Docker context; image rehearsal прошёл |
 | TD-151 | [#247](https://github.com/Celtoman/astro-telekom/issues/247) ✅ | Redis rehearsal ожидает PONG и сразу обрабатывает ранний reject без сокрытия failure |
 | TD-152 | [#248](https://github.com/Celtoman/astro-telekom/issues/248) ✅ | CODE identity учитывает закрытые serving options; non-root image proof подтверждает смену контекста после terminal deployment |

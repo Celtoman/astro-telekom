@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { insertVariableAtSelection } from "../lib/variable-insertion.mjs"
+import { editorSiteId } from "../lib/editor-context.mjs"
 import { AdminShell } from "./AdminShell"
 import { VariableInsertionPicker } from "./VariableInsertionPicker"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
@@ -52,7 +53,7 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
         if (!active) return
         setUser(session.user); setSites(list)
         setKind(new URLSearchParams(window.location.search).get("kind") === "CITY_HOME" ? "CITY_HOME" : "HOME")
-        setSiteId(list.length === 1 ? list[0].id : ""); setLoading(false)
+        setSiteId(editorSiteId(list, window.location.search)); setLoading(false)
       }).catch(caught => { if (active) { handleError(caught); setLoading(false) } })
     return () => { active = false }
   }, [apiUrl])

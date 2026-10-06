@@ -61,6 +61,19 @@ function usagesOf(catalog?: CatalogRecord | null): VariableUsage[] | null {
   return Array.isArray(catalog?.variableUsages) ? catalog.variableUsages as VariableUsage[] : null;
 }
 
+function withEditorLink(usage: VariableUsage, siteId: string, published = false): VariableUsage {
+  // Navigation metadata belongs to this view, never to immutable snapshot evidence.
+  const editableText = /\.data\.(title|text)$/.test(usage.path) || /^homeHero\.(title|text)$/.test(usage.path);
+  let kind: 'HOME' | 'CITY_HOME' | null = null;
+  if (editableText && usage.entityType === 'PAGE_TEMPLATE_BLOCK') {
+    if (usage.pageType === 'HOME' && usage.blockType === 'home.hero') kind = 'HOME';
+    if (usage.pageType === 'CITY_HOME' && usage.blockType === 'hero') kind = 'CITY_HOME';
+  }
+  // Historical published city pages materialize the shared template as BLOCK.
+  if (published && editableText && usage.entityType === 'BLOCK' && usage.pageType === 'HOME' && usage.blockType === 'hero' && usage.cityId) kind = 'CITY_HOME';
+  return kind ? { ...usage, editorHref: `/templates/home?kind=${kind}&siteId=${encodeURIComponent(siteId)}` } : usage;
+}
+
 export function buildVariableCatalogView(input: CatalogViewInput) {
   const { siteId, workingRevision, publishedRevision, working, published } = input;
   const allCities = new Map<string, { id: string; name: string; slug: string }>();
@@ -79,8 +92,8 @@ export function buildVariableCatalogView(input: CatalogViewInput) {
   }
   if (input.tariffId && !allTariffs.has(input.tariffId)) throw new BadRequestException('Выбранный тариф не принадлежит выбранному городу');
 
-  const workingUsages = usagesOf(working) ?? [];
-  const publishedUsages = usagesOf(published);
+  const workingUsages = (usagesOf(working) ?? []).map(usage => withEditorLink(usage, siteId));
+  const publishedUsages = usagesOf(published)?.map(usage => withEditorLink(usage, siteId, true)) ?? null;
   const items = listVariableDefinitions().map((definition) => {
     const workingValue = selectedValue(definition.code, definition.scope, working, input.cityId, input.tariffId);
     const publishedValue = selectedValue(definition.code, definition.scope, published, input.cityId, input.tariffId);

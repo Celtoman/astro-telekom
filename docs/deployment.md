@@ -2,7 +2,7 @@
 
 Сверка процедур: 6 октября 2026 года. Coolify использует постоянный publication runtime; CMS publish не запускает redeploy, code deployment выпускает renderer обслуживаемого snapshot. Контракт и восстановление — в [publication.md](publication.md), доказательства — в [research/README.md](research/README.md).
 
-Известное ограничение: direct prod Compose выбирает неверный migration image/CLI (#236); этот путь не подтверждён зелёным общим gate. Seed соответствует текущей schema и прошёл отдельный свежий PostgreSQL rehearsal. Действующий Coolify-контур использует RUN_BOOTSTRAP_SEED=false. Только владелец определяет готовность к реальному трафику.
+Direct prod Compose использует migration target с Prisma CLI; отдельный Docker/PostgreSQL 18 rehearsal (#236) проверяет применение всех миграций и точную идемпотентность. Запуск: `node scripts/rehearse-direct-migration.mjs`. Эта проверка не подтверждает полный запуск direct stack: web по-прежнему требует уже доступный `SITE_DATA_API_URL`. Seed соответствует текущей schema и прошёл отдельный свежий PostgreSQL rehearsal. Действующий Coolify-контур использует RUN_BOOTSTRAP_SEED=false. Только владелец определяет готовность к реальному трафику.
 
 ## Контуры
 
@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | Локальная инфраструктура | `docker compose up -d postgres redis` | Только PostgreSQL и Redis с опубликованными портами 5432/6379. |
 | Локальные приложения | pnpm-команды из README | API, web, admin, worker в процессах хоста. |
-| Альтернативный direct-контур; ограничен #236 | `docker compose -f docker-compose.prod.yml up -d --build` | Повторное развертывание при уже доступном `SITE_DATA_API_URL`: PostgreSQL, Redis, one-shot Prisma migrate, API, worker, web, admin, внешний Caddy. |
+| Альтернативный direct-контур | `docker compose -f docker-compose.prod.yml up -d --build` | Повторное развертывание при уже доступном `SITE_DATA_API_URL`: PostgreSQL, Redis, one-shot Prisma migrate, API, worker, web, admin, внешний Caddy. |
 | Coolify test, действующий внешний контур | Git-based Docker Compose resource, docker-compose.coolify.yml | Защищённые public/admin origins, внутренний API, отдельный migration target, постоянный publication runtime и атомарная Caddy activation. Точные rollout-доказательства — в research/README.md. |
 
 PostgreSQL 18 хранит major-specific data directory внутри volume, смонтированного в `/var/lib/postgresql`. Не возвращать старый mount `/var/lib/postgresql/data`: официальный PG18 image отказывается запускаться с таким layout.

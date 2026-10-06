@@ -20,6 +20,25 @@ const rawCatalog = () => ({
   routes: [], redirects: [], sitemap: { excludedPaths: [] },
 });
 
+test('usage navigation opens only editable Hero fields, keeps site context and preserves immutable evidence', () => {
+  const { buildVariableCatalogView } = api('variable-catalog');
+  const usage = (overrides) => ({ code: 'PROVIDER_NAME', entityType: 'PAGE_TEMPLATE_BLOCK', entityId: 'hero-1',
+    pageType: 'CITY_HOME', blockType: 'hero', path: 'pageTemplates[CITY_HOME].blocks[0].data.title', template: '{PROVIDER_NAME}', editorHref: null, ...overrides });
+  const working = { ...rawCatalog(), variableUsages: [usage({}), usage({ pageType: 'HOME', blockType: 'home.hero', path: 'pageTemplates[HOME].blocks[0].data.text' }),
+    usage({ path: 'pageTemplates[CITY_HOME].blocks[0].data.ctaText' }), usage({ blockType: 'faq' }), usage({ entityType: 'PAGE_TEMPLATE', path: 'pageTemplates[CITY_HOME].titleTemplate' }),
+    usage({ entityType: 'BLOCK', pageType: 'HOME', cityId: 'city-1' })] };
+  const published = { ...rawCatalog(), variableUsages: [usage({ entityType: 'BLOCK', pageType: 'HOME', cityId: 'city-1', path: 'cities[0].pages[0].blocks[0].data.title' })], variableUsageVersion: 2 };
+  const before = JSON.stringify({ working, published });
+  const view = buildVariableCatalogView({ siteId: 'site & 2', workingRevision: 8, publishedRevision: 7, working, published });
+  const item = view.items.find(item => item.code === 'PROVIDER_NAME');
+  assert.deepEqual(item.workingUsages.map(usage => usage.editorHref), ['/templates/home?kind=CITY_HOME&siteId=site%20%26%202', '/templates/home?kind=HOME&siteId=site%20%26%202', null, null, null, null]);
+  assert.equal(item.publishedUsages[0].editorHref, '/templates/home?kind=CITY_HOME&siteId=site%20%26%202');
+  assert.equal(JSON.stringify({ working, published }), before);
+  const legacy = buildVariableCatalogView({ siteId: 'site-1', workingRevision: 8, publishedRevision: 7, working, published: rawCatalog() });
+  assert.equal(legacy.publishedUsageAvailable, false);
+  assert.equal(legacy.items[0].publishedUsages, null);
+});
+
 test('registry exposes immutable operator metadata for every implemented code', () => {
   const { listVariableDefinitions } = api('variable-registry');
   const definitions = listVariableDefinitions();

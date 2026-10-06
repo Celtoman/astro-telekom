@@ -60,6 +60,9 @@ test('deployment Compose applies migrations and preserves a reproducible Coolify
   const workerHealthcheck = readFileSync(join(repositoryRoot, 'services', 'worker', 'src', 'healthcheck.mjs'), 'utf8');
   const siteDataSource = readFileSync(join(repositoryRoot, 'apps', 'web', 'src', 'data', 'site.ts'), 'utf8');
   assert.match(compose, /^  migrate:\r?$/m);
+  const migrationService = compose.split('  migrate:')[1].split('\n  api:')[0];
+  assert.match(migrationService, /target:\s*migration/);
+  assert.match(migrationService, /"apps\/api\/node_modules\/prisma\/build\/index\.js"/);
   assert.match(compose, /migrate:\s+condition: service_completed_successfully/);
   assert.match(compose, /fetch\('http:\/\/localhost:3000\/api\/v1\/health\/ready'\)/);
   assert.match(compose, /node_modules\/prisma\/build\/index\.js["']?,\s*["']migrate["']?,\s*["']deploy/);

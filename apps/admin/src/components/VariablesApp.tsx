@@ -111,7 +111,7 @@ function UsageList({ usages }: { usages: VariableUsage[] | null }) {
   return <ul className="space-y-3">{usages.map((usage, index) => <li key={`${usage.path}-${index}`} className="rounded-lg border p-3 text-sm">
     <div className="font-medium">{usageLabel(usage)} {usageStatuses(usage).map((status) => <Badge key={status} variant="outline" className="ml-1">{status}</Badge>)} · <span className="font-mono text-xs text-muted-foreground">{usage.path}</span></div>
     <p className="mt-1 break-words text-muted-foreground">Шаблон: <code>{usage.template}</code></p>
-    {usage.editorHref ? <a className="mt-2 inline-block font-medium text-primary underline-offset-4 hover:underline" href={usage.editorHref}>Открыть редактор</a> : <p className="mt-2 text-xs text-muted-foreground">Редактор пока недоступен</p>}
+    {usage.editorHref ? <a className="mt-2 inline-block font-medium text-primary underline-offset-4 hover:underline" href={usage.editorHref}>Открыть рабочий редактор</a> : <p className="mt-2 text-xs text-muted-foreground">Редактор пока недоступен</p>}
   </li>)}</ul>
 }
 
@@ -191,6 +191,7 @@ function VariableCatalogPanel({ apiUrl, siteId }: { apiUrl: string; siteId: stri
         <div className="grid gap-3 sm:grid-cols-2"><div><span className="text-muted-foreground">Авторитетный источник</span><p className="font-mono">{selected.source}</p></div><div><span className="text-muted-foreground">Пример результата</span><p>{selected.example}</p></div></div>
         <div><span className="text-muted-foreground">Допустимые страницы</span><p>{selected.allowedContexts.join(", ")}</p></div>
         <div><span className="text-muted-foreground">Допустимые поля</span><p className="break-words font-mono text-xs">{selected.allowedFields.join(", ")}</p></div>
+        <p className="text-sm text-muted-foreground">Ссылки открывают текущую рабочую версию. Опубликованные места использования относятся к сохранённому снимку.</p>
         <div className="grid gap-5 lg:grid-cols-2"><section><h3 className="mb-2 font-semibold">Места использования · рабочие ({selected.workingUsages.length})</h3><UsageList usages={selected.workingUsages} /></section><section><h3 className="mb-2 font-semibold">Места использования · опубликованные ({selected.publishedUsages?.length ?? "—"})</h3><UsageList usages={selected.publishedUsages} /></section></div>
       </CardContent></Card> : null}
     </> : null}
