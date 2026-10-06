@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -179,6 +180,16 @@ test('admin production build emits hash-based CSP while allowing only checkbox s
     assert.match(styles, /'self'/);
     assert.match(styles, /'sha256-[A-Za-z0-9+/=]+'/);
     assert.doesNotMatch(styles, /'unsafe-inline'/);
+    const { readPreviewPublicStyles } = await import('../scripts/preview-public-styles.mjs');
+    const { previewStyleText } = await import('../apps/admin/src/lib/preview-document.mjs');
+    const previewHash = createHash('sha256').update(previewStyleText(readPreviewPublicStyles())).digest('base64');
+    if (path.endsWith(`${process.platform === 'win32' ? '\\' : '/'}preview${process.platform === 'win32' ? '\\' : '/'}index.html`)) {
+      assert.ok(styles.includes(`'sha256-${previewHash}'`), 'srcdoc stylesheet must be authorized by the inherited parent CSP');
+      assert.match(getDirective(csp, 'img-src', path), /https:/);
+    } else {
+      assert.ok(!styles.includes(`'sha256-${previewHash}'`), 'preview stylesheet authorization stays on /preview');
+      assert.doesNotMatch(getDirective(csp, 'img-src', path), /https:/);
+    }
     assert.equal(getDirective(csp, 'style-src-attr', path), "style-src-attr 'unsafe-inline'");
     assert.equal((csp.match(/'unsafe-inline'/g) || []).length, 1);
     assert.doesNotMatch(csp, /yandex|webvisor/);

@@ -5,4 +5,5 @@ export interface PreviewRouteOption {
 }
 
 export function previewRouteOptions(catalog: Record<string, any>): PreviewRouteOption[]
-export function buildPreviewDocument(catalog: Record<string, any>, routePath: string): string
+export function previewStyleText(publicStyles: string): string
+export function buildPreviewDocument(catalog: Record<string, any>, routePath: string, publicStyles?: string, assets?: Record<string, string>): string

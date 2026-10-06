@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { CircleAlert, Monitor, RefreshCw, Smartphone, Tablet } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { buildPreviewDocument, previewRouteOptions, type PreviewRouteOption } from "../lib/preview-document.mjs"
+import publicPreviewStyles, { assets as publicPreviewAssets } from "virtual:preview-public-styles"
 import { AdminShell } from "./AdminShell"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
@@ -103,7 +104,8 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
   const documentResult = useMemo(() => {
     if (!preview || !selectedPath) return { html: "", error: null }
     try {
-      return { html: buildPreviewDocument(preview.catalog, selectedPath), error: null }
+      const assets = Object.fromEntries(Object.entries(publicPreviewAssets).map(([path, url]) => [path, new URL(url, window.location.origin).href]))
+      return { html: buildPreviewDocument(preview.catalog, selectedPath, publicPreviewStyles, assets), error: null }
     } catch (caught: unknown) {
       return { html: "", error: caught instanceof Error ? caught.message : "Страница не может быть показана" }
     }

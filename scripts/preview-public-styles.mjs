@@ -1,0 +1,52 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+const sources = [
+  ['base', 'layouts/BaseLayout.astro'],
+  ['header', 'components/SiteHeader.astro'],
+  ['hero', 'components/HomeHero.astro'],
+  ['address', 'components/AddressForm.astro'],
+  ['blocks', 'components/BlockRenderer.astro'],
+  ['tariff', 'components/TariffDetail.astro'],
+  ['global', 'components/GlobalPage.astro'],
+  ['cities', 'components/CitiesDirectory.astro'],
+].map(([name, path]) => [name, fileURLToPath(new URL(`../apps/web/src/${path}`, import.meta.url))]);
+const assetPaths = ['home-hero.png', 'domru-logo.png', 'map-pin.svg', 'chevron-down.svg', 'search.svg', 'headphones.svg', 'phone.svg', 'menu.svg', 'tag.svg', 'wifi.svg', 'tv.svg', 'tag-blue.svg', 'wifi-blue.svg', 'tv-blue.svg', 'shield-check.svg', 'check.svg']
+  .map(name => `/images/figma/${name}`);
+
+// Only trusted repository CSS is embedded. Catalog data never reaches this loader.
+// Native CSS nesting isolates Astro's local selectors from other preview components.
+export function readPreviewPublicStyles() {
+  const fontRoot = new URL('../apps/admin/node_modules/@fontsource-variable/geist/', import.meta.url);
+  const fonts = readFileSync(new URL('wght.css', fontRoot), 'utf8').replace(/url\(\.\/([^)]*)\)/g, (_, path) => `url(data:font/woff2;base64,${readFileSync(new URL(path, fontRoot)).toString('base64')})`);
+  return (fonts + sources.map(([name, path]) => {
+    const styles = [...readFileSync(path, 'utf8').matchAll(/<style(?:\s[^>]*)?>([\s\S]*?)<\/style>/g)];
+    if (!styles.length) throw new Error(`No public styles in ${path}`);
+    const css = styles.map((match) => match[1].replace(/:global\(([^)]+)\)/g, '$1')).join('\n');
+    return name === 'base' || name === 'global' ? css : `.preview-${name} { ${css} }`;
+  }).join('\n')).replace(/\r\n?/g, '\n');
+}
+
+export function previewPublicStylesPlugin() {
+  const id = 'virtual:preview-public-styles';
+  const resolved = `\0${id}`;
+  return {
+    name: 'preview-public-styles',
+    resolveId(source) { if (source === id) return resolved; },
+    load(source) {
+      if (source !== resolved) return;
+      for (const [, path] of sources) this.addWatchFile(path);
+      const imports = assetPaths.map((path, index) => {
+        const file = fileURLToPath(new URL(`../apps/web/public${path}`, import.meta.url));
+        this.addWatchFile(file);
+        return `import asset${index} from ${JSON.stringify(`${file}?url`)};`;
+      }).join('\n');
+      return `${imports}\nexport const assets = {${assetPaths.map((path, index) => `${JSON.stringify(path)}: asset${index}`).join(',')}};\nexport default ${JSON.stringify(readPreviewPublicStyles())};`;
+    },
+    handleHotUpdate(context) {
+      if (!sources.some(([, path]) => path === context.file)) return;
+      const module = context.server.moduleGraph.getModuleById(resolved);
+      if (module) { context.server.moduleGraph.invalidateModule(module); return [module]; }
+    },
+  };
+}

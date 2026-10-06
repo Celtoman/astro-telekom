@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import { createAdminCsp } from '../../scripts/browser-security-policy.mjs';
+import { previewPublicStylesPlugin } from '../../scripts/preview-public-styles.mjs';
 
 const adminUrl = process.env.ADMIN_URL || 'http://localhost:3001';
 
@@ -15,5 +16,5 @@ export default defineConfig({
       adminUrl,
     }),
   },
-  vite: { plugins: [tailwindcss()] },
+  vite: { plugins: [tailwindcss(), previewPublicStylesPlugin()] },
 });

@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { readFile, readdir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildPreviewDocument } from '../apps/admin/src/lib/preview-document.mjs';
 
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
 const webDist = join(repositoryRoot, 'apps', 'web', 'dist');
@@ -199,6 +200,18 @@ test('web build emits city and tariff detail inventory for every published city'
     assert.equal(build.code, 0, build.output);
     assert.match(build.output, /Pre-publication SEO gate passed: 10 indexable URL\(s\), 12 HTML file\(s\)\./);
   });
+
+  // Compare actual Astro output with the private preview. Closed dialogs and
+  // script-only content do not belong to the initial visual composition.
+  const headings = (document) => [...document.replace(/<dialog\b[^>]*>[\s\S]*?<\/dialog>|<script\b[^>]*>[\s\S]*?<\/script>/gi, '').matchAll(/<h([123])\b[^>]*>([\s\S]*?)<\/h\1>/gi)]
+    .map((match) => match[2].replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim());
+  for (const route of apiFixture.routes) {
+    const built = await readBuilt(route.path === '/' ? 'index.html' : `${route.path.slice(1)}/index.html`);
+    const visibleMain = built.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1];
+    assert.ok(visibleMain, route.path);
+    const preview = buildPreviewDocument(apiFixture, route.path);
+    assert.deepEqual(headings(preview), headings(visibleMain), `preview heading composition: ${route.path}`);
+  }
 
   const htmlFiles = (await collectTextFiles(webDist)).filter((path) => path.endsWith('.html'))
     .map((path) => relative(webDist, path).replaceAll('\\', '/')).sort();

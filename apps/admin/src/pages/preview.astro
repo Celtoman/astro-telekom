@@ -1,8 +1,15 @@
 ---
 import '../styles/global.css';
 import { PreviewApp } from '../components/PreviewApp';
+import { createHash } from 'node:crypto';
+import publicPreviewStyles from 'virtual:preview-public-styles';
+import { previewStyleText } from '../lib/preview-document.mjs';
 
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+// srcdoc inherits this page's CSP. Authorize its exact build-owned stylesheet;
+// do not enable arbitrary inline styles or scripts in the parent document.
+Astro.csp?.insertStyleHash(`sha256-${createHash('sha256').update(previewStyleText(publicPreviewStyles)).digest('base64')}`);
+Astro.csp?.insertDirective("img-src https:");
 ---
 <!doctype html>
 <html lang="ru">
