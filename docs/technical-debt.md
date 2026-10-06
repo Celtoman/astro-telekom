@@ -155,6 +155,7 @@
 | ID | Issue | Суть |
 | --- | --- | --- |
 | TD-155 | [#251](https://github.com/Celtoman/astro-telekom/issues/251) 🟢 | Windows Docker CLI иногда не читает context meta.json из-за блокировки другим процессом |
+| TD-159 | [#253](https://github.com/Celtoman/astro-telekom/issues/253) ✅ | Caddy restart rehearsal использует новые HTTP-соединения и повторно занимает прежние порты |
 | TD-137 | [#222](https://github.com/Celtoman/astro-telekom/issues/222) ✅ | Городской renderer выводит сохранённый `tariff_grid.title` в H2 |
 | TD-142 | [#227](https://github.com/Celtoman/astro-telekom/issues/227) ✅ | Паспорта городской HOME называют действующий `PageTemplateBlock.data` авторитетным источником |
 | TD-138 | [#223](https://github.com/Celtoman/astro-telekom/issues/223) ✅ | Статус миграции `0054` в текущем состоянии и admin-документе синхронизирован с подтверждённым rollout |

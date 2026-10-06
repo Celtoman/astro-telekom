@@ -24,6 +24,10 @@ function command(args, optional = false) {
 }
 const port = (name, value) => Number(command(['port', name, value]).match(/:(\d+)\s*$/)[1]);
 let base, adminUrl, upstream;
+// Deliberate container restarts must not reuse a socket from the previous process.
+const publicFetch = (path, request = {}) => fetch(`${base}${path}`, {
+  ...request, headers: { ...request.headers, connection: 'close' },
+});
 const options = () => ({ publicationToken: token, apiUpstream: `${api}:3000`, adminListen: ':2019' });
 async function waitReady() {
   for (let attempt = 0; attempt < 80; attempt += 1) {
@@ -48,9 +52,9 @@ async function artifact(letter, revision, renderer = 'f'.repeat(64), publication
 }
 async function visible(letter, revision = letter === 'a' ? 1 : 2) {
   const [page, catalog, redirect] = await Promise.all([
-    fetch(`${base}/`).then((response) => response.text()),
-    fetch(`${base}/api/v1/catalog`, { headers: { 'x-site-publication-id': 'spoofed', 'x-site-publication-token': 'spoofed' } }).then((response) => response.json()),
-    fetch(`${base}/old-city?campaign=preserved`, { redirect: 'manual' }),
+    publicFetch('/').then((response) => response.text()),
+    publicFetch('/api/v1/catalog', { headers: { 'x-site-publication-id': 'spoofed', 'x-site-publication-token': 'spoofed' } }).then((response) => response.json()),
+    publicFetch('/old-city?campaign=preserved', { redirect: 'manual' }),
   ]);
   assert.match(page, new RegExp(`<h1>${letter}</h1>`));
   assert.equal(catalog.publicationId, `publication-${revision}`);
@@ -81,11 +85,11 @@ try {
   const a = await artifact('a', 1); const b = await artifact('b', 2);
   await manager.activate({ artifactId: a.artifactId, expectedActiveArtifactId: null, kind: 'BOOTSTRAP' });
   await visible('a');
-  const slash = await fetch(`${base}/city/?x=1`, { redirect: 'manual' });
+  const slash = await publicFetch('/city/?x=1', { redirect: 'manual' });
   assert.equal(slash.status, 301); assert.equal(slash.headers.get('location'), '/city?x=1');
-  const missing = await fetch(`${base}/unknown`); assert.equal(missing.status, 404); assert.match(await missing.text(), /404 a/);
-  assert.equal((await fetch(`${base}/__publication_assets/${a.artifactId}/index.html`)).status, 404);
-  assert.equal((await fetch(`${base}/manifests/${a.artifactId}.json`)).status, 404);
+  const missing = await publicFetch('/unknown'); assert.equal(missing.status, 404); assert.match(await missing.text(), /404 a/);
+  assert.equal((await publicFetch(`/__publication_assets/${a.artifactId}/index.html`)).status, 404);
+  assert.equal((await publicFetch(`/manifests/${a.artifactId}.json`)).status, 404);
 
   // A genuine rejected whole-config update preserves A (including active API identity).
   const state = await manager.current();
@@ -105,7 +109,7 @@ try {
   const receipt = await lostReply.activate({ artifactId: b.artifactId, expectedActiveArtifactId: a.artifactId });
   assert.equal(receipt.status, 'SUCCEEDED'); await visible('b');
   assert.deepEqual(await manager.activate({ artifactId: b.artifactId, expectedActiveArtifactId: a.artifactId }), receipt);
-  assert.match(await fetch(`${base}/__publication_assets/${a.artifactId}/_astro/client.js`).then((response) => response.text()), /"a"/);
+  assert.match(await publicFetch(`/__publication_assets/${a.artifactId}/_astro/client.js`).then((response) => response.text()), /"a"/);
   await rm(join(root, 'receipts', `${b.artifactId}.json`));
 
   // Old code/candidate and an outdated compare-and-swap cannot roll serving back.
@@ -119,10 +123,11 @@ try {
 
   // A process restarts from Caddy's own durable autosave, not a second independent pointer.
   command(['exec', server, 'test', '-f', '/publication/state/caddy/autosave.json']);
+  const publicPort = port(server, '80/tcp'); const adminPort = port(server, '2019/tcp');
   command(['rm', '-f', server]);
   command(['run', '-d', '--name', server, '--network', network, ...caddyUser,
     '-v', `${resolve(root)}:/publication`, '-e', 'XDG_CONFIG_HOME=/publication/state', '-e', 'XDG_DATA_HOME=/publication/data',
-    '-p', '127.0.0.1::80', '-p', '127.0.0.1::2019', 'caddy:2.11.4-alpine', 'caddy', 'run', '--resume']);
+    '-p', `127.0.0.1:${publicPort}:80`, '-p', `127.0.0.1:${adminPort}:2019`, 'caddy:2.11.4-alpine', 'caddy', 'run', '--resume']);
   base = `http://127.0.0.1:${port(server, '80/tcp')}`; adminUrl = `http://127.0.0.1:${port(server, '2019/tcp')}`;
   await waitReady(); await visible('b');
   const restarted = new CaddyActivation({ publicationRoot: root, adminUrl, servingOptions: options() });
@@ -147,8 +152,8 @@ try {
   await restarted.activate({ artifactId: code.artifactId, expectedActiveArtifactId: newer.artifactId, kind: 'CODE' });
   await visible('f', 3);
   command(['rm', '-f', api]);
-  assert.match(await fetch(`${base}/`).then((response) => response.text()), /<h1>f<\/h1>/);
-  assert.match(await fetch(`${base}/__publication_assets/${a.artifactId}/_astro/client.js`).then((response) => response.text()), /"a"/);
+  assert.match(await publicFetch('/').then((response) => response.text()), /<h1>f<\/h1>/);
+  assert.match(await publicFetch(`/__publication_assets/${a.artifactId}/_astro/client.js`).then((response) => response.text()), /"a"/);
   process.stdout.write('Caddy: atomic serving, lost response reconciled, stale writer rejected, restart resumed, previous assets retained; HTML remains autonomous without API\n');
 } catch (error) {
   process.stderr.write(`Rehearsal failed: ${error instanceof Error ? error.stack : error}\n`);
