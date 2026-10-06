@@ -24,6 +24,7 @@
 | ID | Issue | Суть |
 | --- | --- | --- |
 | TD-145 | [#240](https://github.com/Celtoman/astro-telekom/issues/240) 🟢 | Первый seed падает на удалённом Region.phone; свежий bootstrap требует отдельной проверки |
+| TD-150 | [#246](https://github.com/Celtoman/astro-telekom/issues/246) ✅ | Non-root runtime: private Astro config и redacted диагностика; повтор Linux CI обязателен |
 | TD-146 | [#242](https://github.com/Celtoman/astro-telekom/issues/242) ✅ | Caddy fixture использует Linux runner UID/GID; CI прошёл без пропусков |
 | TD-147 | [#243](https://github.com/Celtoman/astro-telekom/issues/243) ✅ | Повторные перезапуски удерживают processing snapshot; SQL acknowledgment атомарен, полный gate прошёл |
 | TD-148 | [#244](https://github.com/Celtoman/astro-telekom/issues/244) 🟢 | Serving snapshot context и публичные address/lead чтения реализованы opt-in; приёмка и production wiring продолжаются |
@@ -100,6 +101,7 @@
 | ID | Issue | Суть |
 | --- | --- | --- |
 | TD-149 | [#245](https://github.com/Celtoman/astro-telekom/issues/245) ✅ | Private publication fixtures исключены из Docker context; image rehearsal прошёл |
+| TD-151 | [#247](https://github.com/Celtoman/astro-telekom/issues/247) ✅ | Redis rehearsal ожидает PONG и сразу обрабатывает ранний reject без сокрытия failure |
 | TD-143 | [#229](https://github.com/Celtoman/astro-telekom/issues/229) ✅ | Описание публичной формы синхронизировано с действующим адресным сценарием API и канона |
 | TD-144 | [#230](https://github.com/Celtoman/astro-telekom/issues/230) ✅ | DRAFT-паспорта Header, Hero 1b и городского Hero V3 описывают внедрённые источники, варианты и поведение |
 | TD-136 | [#221](https://github.com/Celtoman/astro-telekom/issues/221) ✅ | Карточки ТВ и Интернет + ТВ передавали форме тип услуги INTERNET из-за устаревших кодов `service_grid` |

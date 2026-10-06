@@ -62,7 +62,8 @@ try {
     publicationId: 'publication-a', siteId: 'site-1', siteSlug: source.site.slug, siteRevision: 7,
     catalogDigest: sha(catalog), rendererId: 'd'.repeat(64), artifactId: 'a'.repeat(64), rebuildId: 'legacy-baseline', rebuildRevision: 1, redirects: [],
   } });
-  const user = process.platform === 'linux' ? ['--user', `${process.getuid()}:${process.getgid()}`] : [];
+  const user = process.platform === 'linux' ? ['--user', `${process.getuid()}:${process.getgid()}`]
+    : process.argv.includes('--non-root') ? ['--user', '1001:1001'] : [];
   docker(['run', '-d', '--name', name, ...user, '--add-host', 'host.docker.internal:host-gateway', '-v', `${resolve(root)}:/publication`,
     '-p', '127.0.0.1::80', '-p', '127.0.0.1::8081', '-e', `ADMIN_API_TOKEN=${token}`, '-e', `PUBLICATION_BASELINE_ARTIFACT_ID=${baseline.artifactId}`,
     '-e', 'PUBLIC_SITE_URL=https://partner.example.test', '-e', 'PUBLIC_API_URL=https://partner.example.test/api/v1', '-e', `PUBLIC_SITE_SLUG=${source.site.slug}`,
@@ -105,7 +106,15 @@ try {
   await until(async () => docker(['inspect', '--format', '{{.State.Running}}', name]) === 'false', 'Caddy exit did not stop its supervisor');
   assert.equal(docker(['inspect', '--format', '{{.State.ExitCode}}', name]), '1');
   console.log('Runtime proof passed: CODE preserves serving A; CMS publishes B without provider; restart retains B/assets without API; Caddy exit stops supervisor');
-} catch (error) { originalError = error; console.error(error.message); process.exitCode = 1; }
+} catch (error) {
+  originalError = error; console.error(error.stack || error.message);
+  let logs = docker(['logs', '--tail', '60', name], true) || '';
+  // Docker writes Caddy/Node diagnostics to stderr as well as stdout.
+  const observed = spawnSync('docker', ['logs', '--tail', '60', name], { encoding: 'utf8', timeout: 10000 });
+  logs += observed.stderr || '';
+  console.error(logs.split(token).join('[redacted]').split('fixture-provider').join('[redacted]'));
+  process.exitCode = 1;
+}
 finally {
   const failures = [];
   if (api) { api.closeAllConnections(); await new Promise(done => api.close(done)); }

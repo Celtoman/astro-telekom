@@ -17,6 +17,14 @@ test('real Redis and BullMQ recover uncertain activation beyond failure-attempt 
   let connection; let queue; let worker; let timer;
   try {
     docker(['run', '-d', '--name', container, '-p', '127.0.0.1::6379', 'redis:8.10.1-alpine']);
+    const readyDeadline = Date.now() + 30000;
+    let ready = false;
+    while (Date.now() < readyDeadline) {
+      const ping = spawnSync('docker', ['exec', container, 'redis-cli', 'ping'], { encoding: 'utf8', timeout: 5000 });
+      if (ping.status === 0 && ping.stdout.trim() === 'PONG') { ready = true; break; }
+      await new Promise(done => setTimeout(done, 100));
+    }
+    assert.equal(ready, true, 'Owned Redis did not return PONG before BullMQ startup');
     const port = JSON.parse(docker(['inspect', container]))[0].NetworkSettings.Ports['6379/tcp'][0].HostPort;
     connection = new IORedis(`redis://127.0.0.1:${port}`, { maxRetriesPerRequest: null });
     connection.on('error', () => undefined);
@@ -41,6 +49,9 @@ test('real Redis and BullMQ recover uncertain activation beyond failure-attempt 
       worker.once('completed', accept); worker.once('error', reject);
       timer = setTimeout(() => reject(new Error('Static recovery did not complete')), 60000);
     });
+    // Attach rejection handling now; awaiting the same promise below still reports
+    // an early worker error instead of an unhandled rejection during startup.
+    void completed.catch(() => undefined);
     await worker.waitUntilReady();
     const job = await queue.add('rebuild', { rebuildId: 'rebuild-1', revision: 2 }, { attempts: 1 });
     await completed;

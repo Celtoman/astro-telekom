@@ -205,7 +205,7 @@ function requestBody(request) {
   });
 }
 
-export function createPublicationServer({ adminToken, controller }) {
+export function createPublicationServer({ adminToken, controller, onError = () => {} }) {
   if (typeof adminToken !== 'string' || adminToken.length < 32) throw new Error('Private controller requires a machine token');
   const token = Buffer.from(adminToken);
   const server = createServer(async (request, response) => {
@@ -221,6 +221,10 @@ export function createPublicationServer({ adminToken, controller }) {
       if (request.method === 'GET' && receipt) { send(200, await controller.receipt(receipt[1], Number(receipt[2]))); return; }
       request.resume(); send(404, { error: 'Not found' });
     } catch (error) {
+      if (!(error instanceof ActivationUncertainError || error instanceof InputError || error instanceof ActivationConflictError
+        || error instanceof ActivationRejectedError || error instanceof BuildFailedError)) {
+        try { onError(error); } catch { /* A diagnostic failure must not change the operation result. */ }
+      }
       if (error instanceof ActivationUncertainError) send(202, { status: 'UNCERTAIN', error: error.message });
       else if (error instanceof InputError || error instanceof ActivationConflictError || error instanceof ActivationRejectedError || error instanceof BuildFailedError) send(error instanceof InputError ? error.status : error instanceof ActivationConflictError ? 409 : 422, { status: 'FAILED', error: error.message });
       else send(202, { status: 'UNCERTAIN', error: 'Publication outcome could not be verified' });

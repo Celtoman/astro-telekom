@@ -21,7 +21,7 @@ test('runtime cannot turn unknown legacy serving into EMPTY or resume an unrecog
 });
 
 test('real Node/Caddy image separates CODE/CMS and resumes static HTML/assets without API', { timeout: 900000 }, async () => {
-  const child = spawn(process.execPath, [fileURLToPath(new URL('../scripts/rehearse-publication-runtime.mjs', import.meta.url))], { windowsHide: true });
+  const child = spawn(process.execPath, [fileURLToPath(new URL('../scripts/rehearse-publication-runtime.mjs', import.meta.url)), '--non-root'], { windowsHide: true });
   let output = ''; child.stdout.on('data', chunk => { output += chunk; }); child.stderr.on('data', chunk => { output += chunk; });
   const code = await new Promise((accept, reject) => { child.once('error', reject); child.once('close', accept); });
   assert.equal(code, 0, output);

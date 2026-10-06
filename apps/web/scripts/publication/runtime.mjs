@@ -78,7 +78,11 @@ export async function startPublicationRuntime(environment = process.env) {
     await Promise.race([ready(), exited.then(() => { throw new Error('Caddy exited before readiness'); })]);
     const { active } = await activation.current();
     if (active) await activation.reconcile(active);
-    server = createPublicationServer({ adminToken: token, controller });
+    server = createPublicationServer({ adminToken: token, controller, onError: error => {
+      let diagnostic = [error, error.cause].filter(Boolean).map(value => value.stack || value.message || String(value)).join('\n');
+      for (const secret of [token, environment.COOLIFY_API_TOKEN].filter(Boolean)) diagnostic = diagnostic.split(secret).join('[redacted]');
+      console.error(diagnostic);
+    } });
     await new Promise((accept, reject) => { server.once('error', reject); server.listen(8081, '0.0.0.0', accept); });
     console.log('Publication runtime ready; Caddy control API is loopback-only');
     return { controller, stop, exited };

@@ -133,6 +133,8 @@ export class StaticArtifactBuilder {
         if (process.env[key]) environment[key] = process.env[key];
       }
       const buildLog = await buildAstro({ ...environment, ...this.publicEnv, ALLOW_DEMO_DATA: 'false', NODE_ENV: 'production',
+        ASTRO_TELEMETRY_DISABLED: '1', XDG_CONFIG_HOME: join(operationRoot, 'config'),
+        XDG_CACHE_HOME: join(operationRoot, 'cache'), APPDATA: join(operationRoot, 'appdata'),
         PUBLIC_STATIC_ARTIFACT_ID: identity.artifactId, PUBLICATION_BUILD_OUT_DIR: output,
         PUBLICATION_BUILD_CACHE_DIR: join(operationRoot, 'cache'),
         SITE_DATA_SNAPSHOT_FILE: snapshotPath, SITE_DATA_PUBLICATION_ID: job.publicationId }, join(projectRoot, 'apps/web'));
