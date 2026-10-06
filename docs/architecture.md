@@ -1,5 +1,7 @@
 # Архитектура платформы
 
+После доработки #256 exact deployment `215cf65` подтвердил automatic CODE для обслуживаемого snapshot; две CMS-публикации завершились без нового deployment, с фактическими фазами/счётчиками и восстановлением исходного Title. Текущие working/published 16. [Подробная приёмка](research/2026-10-06-publication-progress-and-recovery.md). Приведённый ниже `fbf2fb4` — предыдущий проверенный rollout.
+
 Exact snapshot endpoint, StaticArtifactBuilder, private controller, static worker и атомарный SQL acknowledgment реализованы; Coolify Compose подключает постоянный publication runtime на прежнем volume. Локальные SQL/HTTP/Astro/Caddy rehearsals подтвердили сохранение, сборку кандидата, обслуживаемый контекст и восстановление. Внешний test-контур на `fbf2fb4` подтвердил verified baseline, CODE и две CMS-публикации без redeploy; working/published revision 13. [Приёмка](research/2026-10-06-static-publication-live-acceptance.md).
 
 [Протокол CMS-публикации без redeploy](plans/2026-10-06-static-publication-protocol.md) связывает HTML root, redirects и exact snapshot context одной атомарной конфигурацией Caddy. Manifests/receipts находятся вне public tree; versioned assets и исходные legacy assets сохраняются. Первый переход принимает только проверенный HTML/catalog baseline; CODE отдельно ждёт terminal exact deployment и сохраняет опубликованный снимок. Описанная конфигурация кода не является доказательством внешнего rollout.
