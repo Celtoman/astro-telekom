@@ -6,6 +6,10 @@
 
 ## Последняя подтверждённая приёмка
 
+Код f70cc16 (#259/#260) прошёл локальный gate, Linux CI и exact deployment; контур running:healthy. Рабочая ревизия 18 и опубликованный snapshot 16 сохранены, Title всех 207 городских HOME и новые API проверены внешним read-only HTTP smoke. Интерактивная навигация проверена локально; внешний browser E2E недоступен. [Доказательства](research/2026-10-06-admin-navigation-and-rate-limits.md).
+
+## Датированные приёмки публикации
+
 На защищённом test-контуре код `215cf652315cc27c2eb0ab20e4594828628237a8` прошёл Linux CI и exact deployment. Автоматический CODE-release сохранил обслуживаемую версию; две ручные CMS-публикации завершились без redeploy за 141 и 117 секунд. По итогам проверки рабочая и опубликованная ревизии равны 16, исходный Title восстановлен на всех 207 городских HOME. Это датированное измерение, а не SLA или постоянное значение каталога. [Доказательства и границы](research/2026-10-06-publication-progress-and-recovery.md).
 
 Отдельно подтверждены [одна синтетическая sales-заявка](research/2026-09-25-release-one-synthetic-lead-acceptance.md), [снимок атрибуции](research/2026-09-25-lead-attribution-acceptance.md), [первые экраны и ручной review](research/2026-10-06-manual-publication-rollout.md). Внешняя интерактивная приёмка в браузере не заменяется HTTP smoke или локальным browser smoke на fixtures.

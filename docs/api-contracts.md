@@ -219,6 +219,6 @@ Retention endpoint физически удаляет весь `Lead`, чтобы
 
 ## Чтения и защита после #259/#260
 
-- GET `/admin/sites/values` защищён AdminTokenGuard и возвращает список с теми же нормализованными/форматированными телефонами, ревизиями и readiness errors, что одиночный GET values. Пустой/множественный список не выбирает сайт автоматически. PATCH unchanged: точная expectedWorkingRevision, отдельное сохранение и публикация.
+- GET `/admin/sites/values` защищён AdminTokenGuard и возвращает список с теми же нормализованными/форматированными телефонами, ревизиями и readiness errors, что одиночный GET values. Пустой/множественный список не выбирает сайт автоматически. PATCH сохраняет прежний контракт: точная expectedWorkingRevision, отдельное сохранение и публикация.
 - Variable-catalog получает serializable typed source context без рендера всего public catalog. Authoritative usage scan сверяет workingRevision; варианты тарифов ограничены выбранным опубликованным городом и ACTIVE/PUBLISHED статусом. Published evidence берётся из immutable snapshot; отсутствие evidence сохраняет null/UNKNOWN.
 - Rate-limit max и key используют единый raw path classifier для origin-form и HTTP(S) absolute-form target: login 5/min, suggestions 60/min, address-check/lead/lead-access 10/min. Dot/percent segments не нормализуются в другой route; AuthGuard и CORS остаются обязательными.
