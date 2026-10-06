@@ -25,7 +25,7 @@
 | --- | --- | --- |
 | #235 | [#235](https://github.com/Celtoman/astro-telekom/issues/235) ✅ | Общие tariffView/heroFacts/legal и публичные CSS/assets; состав preview сверяется с Astro HTML |
 | #258 | [#258](https://github.com/Celtoman/astro-telekom/issues/258) 🟢 | Security baseline устарел: актуальный audit содержит 15 high, требуется оценка применимости |
-| TD-145 | [#240](https://github.com/Celtoman/astro-telekom/issues/240) 🟢 | Первый seed падает на удалённом Region.phone; свежий bootstrap требует отдельной проверки |
+| TD-145 | [#240](https://github.com/Celtoman/astro-telekom/issues/240) ✅ | Атомарный seed текущей schema; свежая PostgreSQL, preflight и сохранность повторного запуска проверены |
 | TD-150 | [#246](https://github.com/Celtoman/astro-telekom/issues/246) ✅ | Non-root runtime: private Astro config и redacted диагностика; повтор Linux CI обязателен |
 | TD-146 | [#242](https://github.com/Celtoman/astro-telekom/issues/242) ✅ | Caddy fixture использует Linux runner UID/GID; CI прошёл без пропусков |
 | TD-147 | [#243](https://github.com/Celtoman/astro-telekom/issues/243) ✅ | Повторные перезапуски удерживают processing snapshot; SQL acknowledgment атомарен, полный gate прошёл |

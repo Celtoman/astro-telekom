@@ -1,0 +1,102 @@
+import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const { PrismaService } = require('../apps/api/dist/prisma.service.js');
+const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
+const { validatePublicationSource } = require('../apps/api/dist/publication-validation.js');
+const { AuthService } = require('../apps/api/dist/auth.service.js');
+const container = `astro-seed-rehearsal-${randomUUID().slice(0, 8)}`;
+const email = 'seed-rehearsal@example.test', password = 'synthetic-seed-rehearsal-password';
+function docker(args, allowFailure = false) {
+  const result = spawnSync('docker', args, { encoding: 'utf8', timeout: 120000 });
+  if (!allowFailure) assert.equal(result.status, 0, result.stderr || result.stdout || result.error?.message);
+  return result.stdout.trim();
+}
+function seed(overrides = {}) {
+  return spawnSync(process.execPath, ['apps/api/dist/seed.js'], {
+    env: { ...process.env, ADMIN_EMAIL: email, ADMIN_PASSWORD: password, ...overrides }, encoding: 'utf8', timeout: 30000, windowsHide: true,
+  });
+}
+let db;
+try {
+  docker(['run', '--rm', '-d', '--name', container, '-p', '127.0.0.1::5432', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=provider', 'postgres:18.6-alpine']);
+  let ready = false;
+  for (let attempt = 0; attempt < 60; attempt++) {
+    const probe = spawnSync('docker', ['exec', container, 'pg_isready', '-U', 'postgres', '-d', 'provider'], { encoding: 'utf8', timeout: 5000, windowsHide: true });
+    if (probe.status === 0) { ready = true; break; }
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200);
+  }
+  assert.ok(ready, 'isolated PostgreSQL 18 must become ready');
+  const port = docker(['port', container, '5432/tcp']).match(/:(\d+)\s*$/)[1];
+  process.env.DATABASE_URL = `postgresql://postgres:postgres@127.0.0.1:${port}/provider`;
+  const migrations = spawnSync('pnpm', ['--filter', '@provider/database', 'migrate:deploy'], {
+    shell: process.platform === 'win32', env: process.env, encoding: 'utf8', timeout: 120000, windowsHide: true,
+  });
+  assert.equal(migrations.status, 0, migrations.stderr || migrations.stdout);
+  db = new PrismaService(); await db.onModuleInit();
+
+  // The first assertion is the original regression: an actual migrated schema,
+  // compiled seed and valid credentials must work together.
+  const first = seed();
+  assert.equal(first.status, 0, first.stderr || first.stdout);
+  const site = await db.site.findUniqueOrThrow({ where: { slug: 'domru-site' } });
+  const catalogService = new SiteCatalogService(db);
+  const source = await catalogService.captureSourceBySiteId(site.id);
+  const validation = validatePublicationSource(source, { appVersion: 'seed-rehearsal', siteRevision: site.workingRevision }, (candidate, now) => catalogService.renderSource(candidate, now));
+  assert.notEqual(validation.report.outcome, 'BLOCKED', JSON.stringify(validation.report.issues));
+  assert.equal(validation.catalog.routes.length, 7, 'root, five globals and the single city HOME; unpriced demo tariffs remain drafts');
+  assert.equal(source.seoTemplates.length, 8);
+  assert.equal(source.pageTemplates.length, 2);
+  assert.equal(source.cities[0].pages[0].templateId, source.pageTemplates.find(template => template.kind === 'CITY_HOME').id);
+  assert.equal(validation.catalog.homeHero.checkButtonText, 'Проверить');
+  assert.deepEqual(validation.catalog.cities[0].pages[0].blocks.map(block => block.blockType), ['hero','service_grid','tariff_grid','steps','feature_grid','feature_grid','faq']);
+  assert.equal(await db.tariff.count({ where: { status: 'DRAFT', dataSource: 'seed' } }), 2);
+  assert.equal(await db.sitePublication.count(), 0);
+  assert.equal(await db.siteRebuild.count(), 0);
+  const user = await db.user.findUniqueOrThrow({ where: { email } });
+  assert.ok(new AuthService(db).verifyPassword(password, user.passwordHash));
+
+  const snapshot = async () => JSON.parse(JSON.stringify(await Promise.all([
+    db.provider.findMany({ orderBy: { id: 'asc' } }), db.site.findMany({ orderBy: { id: 'asc' } }), db.region.findMany({ orderBy: { id: 'asc' } }),
+    db.city.findMany({ orderBy: { id: 'asc' } }), db.page.findMany({ orderBy: { id: 'asc' } }),
+    db.pageTemplate.findMany({ orderBy: { id: 'asc' }, include: { blocks: { orderBy: { position: 'asc' } } } }),
+    db.seoTemplate.findMany({ orderBy: { id: 'asc' } }), db.tariff.findMany({ orderBy: { id: 'asc' } }), db.user.findMany({ orderBy: { id: 'asc' } }),
+  ])));
+  const initial = await snapshot();
+  const repeat = seed(); assert.equal(repeat.status, 0, repeat.stderr);
+  assert.deepEqual(await snapshot(), initial, 'repeat must preserve IDs, timestamps, content and account credentials');
+
+  const hero = source.pageTemplates.find(template => template.kind === 'CITY_HOME').blocks.find(block => block.blockType === 'hero');
+  await db.pageTemplateBlock.update({ where: { id: hero.id }, data: { data: { ...hero.data, title: 'Редакционный заголовок' } } });
+  await db.page.update({ where: { id: source.globalPages[0].id }, data: { content: { text: 'Редакционный текст' } } });
+  await db.seoTemplate.update({ where: { siteId_kind: { siteId: site.id, kind: 'CITY_HOME' } }, data: { titleTemplate: 'Мой заголовок в {CITY_NAME_PREPOSITIONAL}' } });
+  await db.site.update({ where: { id: site.id }, data: { connectionPhone: '78001234567' } });
+  const edited = await snapshot();
+  const preserved = seed({ ADMIN_PASSWORD: 'different-synthetic-password' }); assert.equal(preserved.status, 0, preserved.stderr);
+  assert.deepEqual(await snapshot(), edited, 'seed must not overwrite owner content, phones, SEO or password');
+
+  await db.tariff.deleteMany({ where: { dataSource: 'seed' } });
+  await db.tariff.create({ data: { providerId: source.site.providerId, cityId: source.cities[0].id, name: 'Импортированный тариф', slug: 'imported', identityKey: 'synthetic-imported', serviceType: 'INTERNET', speed: 300, standardPrice: 700, status: 'PUBLISHED', dataSource: 'import' } });
+  const imported = await snapshot();
+  const withCatalog = seed(); assert.equal(withCatalog.status, 0, withCatalog.stderr);
+  assert.deepEqual(await snapshot(), imported, 'nonempty imported catalog must not receive seed tariffs');
+
+  const credentialsMissing = seed({ ADMIN_EMAIL: '', ADMIN_PASSWORD: '' });
+  assert.notEqual(credentialsMissing.status, 0);
+  assert.match(credentialsMissing.stderr, /ADMIN_EMAIL|ADMIN_PASSWORD/);
+  assert.deepEqual(await snapshot(), imported, 'missing credentials must fail before any writes');
+
+  // Prove rollback after resetting only this owned isolated database.
+  await db.$executeRawUnsafe('TRUNCATE TABLE "Provider", "User" CASCADE');
+  await db.$executeRawUnsafe(`ALTER TABLE "Region" ADD CONSTRAINT "seed_rehearsal_failure" CHECK ("slug" <> 'tatarstan')`);
+  const blocked = seed(); assert.notEqual(blocked.status, 0);
+  assert.equal(await db.provider.count(), 0, 'a mid-bootstrap error must roll back the provider and all related rows');
+  assert.equal(await db.site.count(), 0);
+  assert.equal(await db.user.count(), 0);
+  process.stdout.write('seed rehearsal: fresh bootstrap, publication preflight, exact idempotence, preserved edits, imported catalog, credentials and atomic rollback passed\n');
+} finally {
+  if (db) await db.onModuleDestroy();
+  docker(['rm', '-f', container], true);
+}

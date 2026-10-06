@@ -25,7 +25,7 @@ Release 0 — историческая граница локального пр�
 
 1. Публичный output, sitemap, внутренние ссылки и redirects соответствуют exact составу `N + T + 6`; переход на городскую структуру, live-приемка HTTP 404 и возврат тарифных страниц завершены в [#136](https://github.com/Celtoman/astro-telekom/issues/136), [#141](https://github.com/Celtoman/astro-telekom/issues/141) и [#149](https://github.com/Celtoman/astro-telekom/issues/149). Live inventory после публикации ревизии 7 24 сентября — 207 городов, 3 805 тарифов и 4 018 уникальных URL. Legacy-дубли `HOME` устранены в закрытой [#150](https://github.com/Celtoman/astro-telekom/issues/150); актуальный deployed SHA проверяется отдельно.
 2. Все automated checks green в чистом окружении.
-3. Production build блокируется, если API-данные отсутствуют, origin не является чистым HTTPS origin или final SEO output не проходит проверку. API/origin fail-fast, post-build sitemap/raw HTML gate и исторический первый Coolify bootstrap [#55](https://github.com/Celtoman/astro-telekom/issues/55) подтверждены; текущий seed требует исправления #240 и нового rehearsal; внешний production CI/CD не должен разрешать demo mode.
+3. Production build блокируется, если API-данные отсутствуют, origin не является чистым HTTPS origin или final SEO output не проходит проверку. API/origin fail-fast, post-build sitemap/raw HTML gate и исторический первый Coolify bootstrap [#55](https://github.com/Celtoman/astro-telekom/issues/55) подтверждены; текущий seed прошёл новый PostgreSQL 18 rehearsal, повторный запуск и publication preflight; внешний production CI/CD не должен разрешать demo mode.
 4. Импорт тарифов имеет утвержденную полную семантику и не оставляет устаревшие публичные предложения.
 5. Rebuild job имеет status/retry и подтвержденный результат HTML.
 6. Fallback link безопасно открывает нужную заявку либо удалена из письма.
@@ -61,6 +61,6 @@ City HOME, published-only Release 1 sitemap, глобальная навигац
 
 1. Документация актуализирована (#237): планы 7 и 14 сентября архивированы, план 21 сентября сохранён действующим.
 2. Общий preview исправлен (#235): общий typed model, публичные CSS/assets и сравнение композиции с Astro HTML; внешняя визуальная приёмка фиксируется отдельно от локального gate.
-3. Исправить seed и доказать свежий bootstrap/idempotence/publication preflight (#240).
+3. Seed исправлен (#240): свежий bootstrap/idempotence/publication preflight и атомарный rollback проверены на PostgreSQL 18.
 
 Дальнейший CMS scope остаётся в #193–196, variables — в #190 и родителях #166/#167. Direct Compose (#236), локальный Docker-инцидент (#251), дополнительная legal-проверка (#144) и diagnostics API (#34) имеют собственные границы. Их наличие не даёт разрешения расширять текущую работу; предложения изменить приоритеты из аудита ещё не применены.
