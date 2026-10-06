@@ -43,3 +43,5 @@ GitHub #259 и #260 закрыты коммитом. Внешний browser E2E 
 Astro contract: [ClientRouter и persistence](https://docs.astro.build/en/guides/view-transitions/); также проверен установленный router/swap implementation.
 
 Повторное открытие подробностей publication indicator после перехода проверено в локальном браузере; временные порталы меню/индикатора закрываются на astro:after-swap без перезапуска polling.
+
+При проверке документационного коммита `aa2387f` первый [CI attempt](https://github.com/Celtoman/astro-telekom/actions/runs/37473616379/attempts/1) упал в ранее существовавшем Caddy pipeline rehearsal. Найденная проблема зарегистрирована отдельно как [#262, P2](https://github.com/Celtoman/astro-telekom/issues/262); полный текст доказательства и дальнейшая диагностика находятся в issue. Повтор CI запрошен на том же SHA; этот факт не заменяет успешный результат проверки. Код выпуска `f70cc16` имеет собственный успешный CI, указанный выше.
