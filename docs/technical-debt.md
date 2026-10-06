@@ -27,7 +27,11 @@
 | TD-150 | [#246](https://github.com/Celtoman/astro-telekom/issues/246) ✅ | Non-root runtime: private Astro config и redacted диагностика; повтор Linux CI обязателен |
 | TD-146 | [#242](https://github.com/Celtoman/astro-telekom/issues/242) ✅ | Caddy fixture использует Linux runner UID/GID; CI прошёл без пропусков |
 | TD-147 | [#243](https://github.com/Celtoman/astro-telekom/issues/243) ✅ | Повторные перезапуски удерживают processing snapshot; SQL acknowledgment атомарен, полный gate прошёл |
-| TD-148 | [#244](https://github.com/Celtoman/astro-telekom/issues/244) 🟢 | Serving snapshot context и публичные address/lead чтения реализованы opt-in; приёмка и production wiring продолжаются |
+| TD-148 | [#244](https://github.com/Celtoman/astro-telekom/issues/244) ✅ | Serving snapshot context, SQL/Caddy negative cases и внешний catalog/quote подтверждены; Coolify wiring включён |
+| TD-153 | [#249](https://github.com/Celtoman/astro-telekom/issues/249) ✅ | Migration proof связывает полный immutable snapshot; baseline/CODE подтверждены на внешнем runtime |
+| TD-154 | [#250](https://github.com/Celtoman/astro-telekom/issues/250) ✅ | Bounded transaction budget устранил отказ подготовки полного snapshot; две внешние CMS-публикации успешны |
+| TD-157 | [#234](https://github.com/Celtoman/astro-telekom/issues/234) ✅ | Атомарный static serving и durable recovery сохраняют согласованный snapshot и прежние assets |
+| TD-158 | [#239](https://github.com/Celtoman/astro-telekom/issues/239) ✅ | Глобальное действие/review публикации доступны; responsive browser и реальный cookie save→publish подтверждены |
 | TD-04 | [#5](https://github.com/Celtoman/astro-telekom/issues/5) ✅ | Базовый public catalog и multi-city static paths; текущая Release 1 policy дополнительно ограничивает маршруты |
 | TD-05 | [#6](https://github.com/Celtoman/astro-telekom/issues/6) ✅ | Persistent rebuild-job: dedupe, BullMQ retry/backoff, API-статус и финальный результат provider |
 | TD-06 | [#7](https://github.com/Celtoman/astro-telekom/issues/7) ✅ | Full-snapshot import атомарно удаляет отсутствующие тарифы, требует подтверждения warnings и создает redirects при ручной смене URL |
@@ -103,9 +107,6 @@
 | TD-149 | [#245](https://github.com/Celtoman/astro-telekom/issues/245) ✅ | Private publication fixtures исключены из Docker context; image rehearsal прошёл |
 | TD-151 | [#247](https://github.com/Celtoman/astro-telekom/issues/247) ✅ | Redis rehearsal ожидает PONG и сразу обрабатывает ранний reject без сокрытия failure |
 | TD-152 | [#248](https://github.com/Celtoman/astro-telekom/issues/248) ✅ | CODE identity учитывает закрытые serving options; non-root image proof подтверждает смену контекста после terminal deployment |
-| TD-153 | [#249](https://github.com/Celtoman/astro-telekom/issues/249) ✅ | Migration proof связывает полный immutable snapshot; baseline/CODE подтверждены на внешнем runtime |
-| TD-154 | [#250](https://github.com/Celtoman/astro-telekom/issues/250) 🟢 | Ручная публикация полного каталога возвращает HTTP 500 при подготовке snapshot; проверяется transaction budget |
-| TD-155 | [#251](https://github.com/Celtoman/astro-telekom/issues/251) 🟢 | Windows Docker CLI иногда не читает context meta.json из-за блокировки другим процессом |
 | TD-156 | [#252](https://github.com/Celtoman/astro-telekom/issues/252) ✅ | SQL rehearsal должен подтверждать реальную попытку acknowledgment перед проверкой rollback |
 | TD-143 | [#229](https://github.com/Celtoman/astro-telekom/issues/229) ✅ | Описание публичной формы синхронизировано с действующим адресным сценарием API и канона |
 | TD-144 | [#230](https://github.com/Celtoman/astro-telekom/issues/230) ✅ | DRAFT-паспорта Header, Hero 1b и городского Hero V3 описывают внедрённые источники, варианты и поведение |
@@ -153,6 +154,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| TD-155 | [#251](https://github.com/Celtoman/astro-telekom/issues/251) 🟢 | Windows Docker CLI иногда не читает context meta.json из-за блокировки другим процессом |
 | TD-137 | [#222](https://github.com/Celtoman/astro-telekom/issues/222) ✅ | Городской renderer выводит сохранённый `tariff_grid.title` в H2 |
 | TD-142 | [#227](https://github.com/Celtoman/astro-telekom/issues/227) ✅ | Паспорта городской HOME называют действующий `PageTemplateBlock.data` авторитетным источником |
 | TD-138 | [#223](https://github.com/Celtoman/astro-telekom/issues/223) ✅ | Статус миграции `0054` в текущем состоянии и admin-документе синхронизирован с подтверждённым rollout |

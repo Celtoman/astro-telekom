@@ -1,6 +1,6 @@
 # Архитектура платформы
 
-Exact snapshot endpoint, StaticArtifactBuilder, private controller, static worker и атомарный SQL acknowledgment реализованы; Coolify Compose подключает постоянный publication runtime на прежнем volume. Локальные SQL/HTTP/Astro/Caddy rehearsals подтвердили сохранение, сборку кандидата, обслуживаемый контекст и восстановление. Внешний test-контур на `eb56d7c` подтвердил verified legacy baseline и CODE-release; ручной CMS smoke продолжается.
+Exact snapshot endpoint, StaticArtifactBuilder, private controller, static worker и атомарный SQL acknowledgment реализованы; Coolify Compose подключает постоянный publication runtime на прежнем volume. Локальные SQL/HTTP/Astro/Caddy rehearsals подтвердили сохранение, сборку кандидата, обслуживаемый контекст и восстановление. Внешний test-контур на `fbf2fb4` подтвердил verified baseline, CODE и две CMS-публикации без redeploy; working/published revision 13. [Приёмка](research/2026-10-06-static-publication-live-acceptance.md).
 
 [Протокол CMS-публикации без redeploy](plans/2026-10-06-static-publication-protocol.md) связывает HTML root, redirects и exact snapshot context одной атомарной конфигурацией Caddy. Manifests/receipts находятся вне public tree; versioned assets и исходные legacy assets сохраняются. Первый переход принимает только проверенный HTML/catalog baseline; CODE отдельно ждёт terminal exact deployment и сохраняет опубликованный снимок. Описанная конфигурация кода не является доказательством внешнего rollout.
 

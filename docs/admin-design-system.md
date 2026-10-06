@@ -1,6 +1,6 @@
 # Дизайн-система админки
 
-Общий экран ручной публикации развёрнут 6 октября на exact SHA `d440ec4`: cookie/API и выдача HTML/JS проверены; внешний browser E2E не выполнен. Функция расписания удалена. Доказательства и границы — [приёмка rollout](research/2026-10-06-manual-publication-rollout.md).
+Общий экран ручной публикации развёрнут 6 октября на exact SHA `d440ec4`: cookie/API и выдача HTML/JS проверены; внешний browser E2E не выполнен. На `fbf2fb4` [внешний cookie save→review→publish smoke](research/2026-10-06-static-publication-live-acceptance.md) завершён без redeploy; интерактивный внешний browser E2E не выполнялся. Функция расписания удалена. Доказательства и границы — [приёмка rollout](research/2026-10-06-manual-publication-rollout.md).
 
 Актуализировано: 5 октября 2026 года. Это обязательный источник истины для интерфейса `apps/admin` — не рекомендация, а жёсткое ограничение.
 
