@@ -1,0 +1,13 @@
+---
+import { ClientRouter } from 'astro:transitions';
+---
+<script is:inline transition:persist="admin-history-guard">
+  // Register before the router's module runs: listeners on window itself follow
+  // registration order even when capture is requested. The mounted editor
+  // decides synchronously whether Astro may handle this history traversal.
+  window.addEventListener('popstate', event => {
+    const check = new CustomEvent('admin:history-navigation', { cancelable: true, detail: { state: event.state } });
+    if (!document.dispatchEvent(check)) event.stopImmediatePropagation();
+  }, true);
+</script>
+<ClientRouter fallback="swap" />

@@ -10,7 +10,7 @@ const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 test('leads route mounts the authenticated React workspace and is linked from the shell', () => {
   const routePath = join(adminRoot, 'pages', 'leads.astro');
   assert.equal(existsSync(routePath), true, 'leads route must exist');
-  assert.match(readFileSync(routePath, 'utf8'), /<LeadsApp[^>]+client:load/);
+  assert.match(readFileSync(routePath, 'utf8'), /<AdminWorkspace[^>]+client:load/);
 
   const leadNavigation = adminNavigation.find((item) => item.id === 'leads');
   assert.deepEqual({ href: leadNavigation?.href, label: leadNavigation?.label }, { href: '/leads', label: 'Заявки' });

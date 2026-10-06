@@ -4,7 +4,7 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [AGENTS.md](../AGENTS.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 684/684 passing на 6 октября 2026 года** (`pnpm check`, включая свежий атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
+**Baseline: 695/695 passing на 6 октября 2026 года** (`pnpm check`, включая свежий атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
 
 | Файл | Что проверяет |
 | --- | --- |
@@ -137,3 +137,11 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 `web-build-data` также проверяет реальный HTML двух первых экранов: независимые подписи/контент, alt и раздельные HTTPS origins только в img-src, включая восстановление подписи адресной кнопки.
 
 Браузерный smoke `/templates/home` на локальном fixture API 5 октября подтвердил обе формы, независимые подписи, revision conflict без потери ввода, сохранение неполного черновика, отказ небезопасного image URL, вставку переменной в позицию курсора, защиту несохранённого ввода, сравнение опубликованного контента, loading/empty/error/retry/401, клавиатуру и светлую/тёмную темы на 320–1440 px без overflow. Внешний каталог этим smoke не изменялся.
+
+## Дополнительные проверки #259/#260
+
+| Файл | Что проверяет |
+| --- | --- |
+| `tests/rate-limit-request-target.test.cjs` | Реальный установленный Fastify/@fastify/rate-limit и raw TCP POST: origin/absolute targets делят строгие лимиты, excess 429 не достигает handler, buckets изолированы; dot/percent raw path сохраняется. |
+| `tests/admin-navigation-performance.test.mjs` | Совпадающие одновременные GET объединяются, завершённые/после mutation/401 остаются свежими; dirty click и async history cancel/accept сохраняют editor/history; каждая shared route имеет persistence, preview сохраняет CSP boundary. |
+| `tests/variable-context-performance.test.cjs` | Serializable typed context без рендера Page/SEO graph, published city/ACTIVE tariff filters, Decimal и нулевая цена; summary без graph сохраняет legacy GET, guarded bulk values соответствует одиночному formatter. |

@@ -10,7 +10,7 @@ test('admin routes use React authentication roots instead of the legacy prompt U
   const loginPath = join(root, 'pages', 'login.astro');
   assert.equal(existsSync(loginPath), true, 'login route must exist');
   const index = readFileSync(indexPath, 'utf8');
-  assert.match(index, /<AdminApp[^>]+client:load/);
+  assert.match(index, /<AdminWorkspace[^>]+client:load/);
   assert.doesNotMatch(index, /window\.prompt|sessionStorage|x-admin-token/);
   const login = readFileSync(loginPath, 'utf8');
   assert.match(login, /<AdminLogin[^>]+client:load/);

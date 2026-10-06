@@ -11,7 +11,11 @@ export function rateLimitWindow() {
 }
 
 export function rateLimitBucketForPath(url: string) {
-  const path = url.split('?')[0];
+  // Fastify accepts absolute-form request targets and keeps that form in request.url.
+  // Extract the raw path, without URL's dot-segment/percent normalization, so the
+  // limiter classifies the same path as the router and shares counters across hosts.
+  const absolute = /^https?:\/\/[^/?#]+(\/[^?#]*)?(?:\?[^#]*)?$/i.exec(url);
+  const path = absolute ? absolute[1] || '/' : url.split('?')[0];
   if (path === '/api/v1/auth/login') return 'login';
   if (path === '/api/v1/address-suggestions') return 'address-suggestions';
   if (path === '/api/v1/address-checks') return 'address-checks';

@@ -63,13 +63,13 @@ function NavigationLink({ item, active, collapsed, onNavigate }: {
   const Icon = navigationIcons[item.icon]
   const isActive = item.id === active
   const link = collapsed ? (
-    <AriaLink className={cn(buttonVariants({ variant: isActive ? "secondary" : "ghost" }), "w-full justify-center px-0")} href={item.href} aria-current={isActive ? "page" : undefined} onPress={onNavigate}>
+    <AriaLink className={cn(buttonVariants({ variant: isActive ? "secondary" : "ghost" }), "w-full justify-center px-0")} href={item.href} data-astro-reload={item.href === "/preview" || undefined} aria-current={isActive ? "page" : undefined} onPress={onNavigate}>
       <Icon data-icon="inline-start" />
       <span className="sr-only">{item.label}</span>
     </AriaLink>
   ) : (
     <Button className="w-full justify-start" variant={isActive ? "secondary" : "ghost"} asChild>
-      <a href={item.href} aria-current={isActive ? "page" : undefined} onClick={onNavigate}>
+      <a href={item.href} data-astro-reload={item.href === "/preview" || undefined} aria-current={isActive ? "page" : undefined} onClick={onNavigate}>
         <Icon data-icon="inline-start" />
         <span>{item.label}</span>
       </a>

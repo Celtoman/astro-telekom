@@ -31,7 +31,7 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
     try {
       const [session, sites] = await Promise.all([
         requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
-        requestJson<Site[]>(apiUrl, "/admin/sites"),
+        requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
       ])
       if (request !== sequence.current) return
       setUser(session.user)
@@ -66,9 +66,9 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
     if (state && review && state.publishedRevision !== review.publishedRevision && !loading && !error) void load()
   }, [state?.publishedRevision, review?.publishedRevision, load, loading, error])
 
-  if (!user) return <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 p-6" aria-busy={loading}>
+  if (!user) return <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 p-6" aria-busy={loading}>
     {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Публикация недоступна</AlertTitle><AlertDescription>{error}</AlertDescription><Button className="min-h-11" onClick={() => void load()}>Повторить</Button></Alert> : <><Skeleton className="h-10 w-64" /><Skeleton className="h-80 w-full" /></>}
-  </main>
+  </div>
 
   const stale = Boolean(state && review && (state.workingRevision !== review.workingRevision || state.publishedRevision !== review.publishedRevision))
   const issues = review?.validation.issues || []

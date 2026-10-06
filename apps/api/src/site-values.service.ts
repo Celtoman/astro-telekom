@@ -30,6 +30,14 @@ export class SiteValuesService {
     return this.response(site);
   }
 
+  async list() {
+    const sites = await this.prisma.site.findMany({ orderBy: { name: 'asc' }, select: {
+      id: true, name: true, slug: true, connectionPhone: true, supportPhone: true,
+      workingRevision: true, publishedRevision: true,
+    } });
+    return sites.map(site => this.response(site));
+  }
+
   async update(input: {
     siteId: string;
     expectedWorkingRevision: number;

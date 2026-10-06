@@ -132,7 +132,7 @@ export function AuditApp({ apiUrl }: { apiUrl: string }) {
     try {
       const [session, sites] = await Promise.all([
         requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
-        requestJson<Site[]>(apiUrl, "/admin/sites"),
+        requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
       ])
       setState({ status: "ready", user: session.user, sites })
       setSelectedSiteId((current) => sites.some((site) => site.id === current) ? current : sites.length === 1 ? sites[0].id : "")
@@ -211,8 +211,8 @@ export function AuditApp({ apiUrl }: { apiUrl: string }) {
     resetDetail()
   }
 
-  if (state.status === "loading") return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></main>
-  if (state.status === "error") return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>История недоступна</CardTitle><CardDescription>Не удалось загрузить рабочий экран.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void loadWorkspace()}>Повторить</Button></CardContent></Card></main>
+  if (state.status === "loading") return <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></div>
+  if (state.status === "error") return <div className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>История недоступна</CardTitle><CardDescription>Не удалось загрузить рабочий экран.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void loadWorkspace()}>Повторить</Button></CardContent></Card></div>
 
   const filtersActive = Boolean(search || entityType !== "ALL" || action !== "ALL")
   const changeEntries = detail.status === "ready" && detail.event.changes && typeof detail.event.changes === "object"

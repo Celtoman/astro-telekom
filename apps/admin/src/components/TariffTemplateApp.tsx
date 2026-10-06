@@ -91,7 +91,7 @@ export function TariffTemplateApp({ apiUrl }: { apiUrl: string }) {
   useEffect(() => {
     void Promise.all([
       requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
-      requestJson<Site[]>(apiUrl, "/admin/sites"),
+      requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
     ]).then(([session, sites]) => {
       setState({ status: "ready", user: session.user, sites })
       const params = new URLSearchParams(window.location.search)
@@ -185,8 +185,8 @@ export function TariffTemplateApp({ apiUrl }: { apiUrl: string }) {
   }), [preview, version])
   const differences = useMemo(() => tariffPreviewDiff(preview?.tariff.working ?? null, preview?.tariff.published ?? null), [preview])
 
-  if (state.status === "loading") return <main className="mx-auto max-w-7xl space-y-5 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-96" /></main>
-  if (state.status === "error") return <main className="mx-auto max-w-xl p-8"><Alert variant="destructive"><CircleAlert /><AlertTitle>Шаблоны недоступны</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert></main>
+  if (state.status === "loading") return <div className="mx-auto max-w-7xl space-y-5 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-96" /></div>
+  if (state.status === "error") return <div className="mx-auto max-w-xl p-8"><Alert variant="destructive"><CircleAlert /><AlertTitle>Шаблоны недоступны</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert></div>
 
   const selectedSite = state.sites.find((item) => item.id === siteId)
   const frame = sizes[viewport]
@@ -205,7 +205,7 @@ export function TariffTemplateApp({ apiUrl }: { apiUrl: string }) {
     const schema = [...document.querySelectorAll<HTMLElement>("[data-template-block-id]")].find((item) => item.dataset.templateBlockId === block)
     ;(canvas ?? schema)?.scrollIntoView({ behavior: "smooth", block: "center" })
   }
-  return <AdminShell apiUrl={apiUrl} user={state.user} active="templates"><main className="mx-auto flex w-full max-w-[1680px] flex-col gap-6 p-6 lg:p-8">
+  return <AdminShell apiUrl={apiUrl} user={state.user} active="templates"><div className="mx-auto flex w-full max-w-[1680px] flex-col gap-6 p-6 lg:p-8">
     <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Шаблоны страниц</h1><p className="mt-1 text-sm text-muted-foreground">Просмотр шаблонов страниц и паспортов блоков сайта.</p></div><Button variant="outline" onClick={() => setRefresh((current) => current + 1)}><RefreshCw data-icon="inline-start" />Обновить</Button></div>
     <Tabs value={tab} onValueChange={value => { setTab(value); window.history.replaceState(null, "", value === "passports" ? "#block-passports" : window.location.pathname + window.location.search) }}>
       <TabsList aria-label="Раздел шаблонов" className="h-auto flex-wrap">
@@ -256,5 +256,5 @@ export function TariffTemplateApp({ apiUrl }: { apiUrl: string }) {
         </TabsContent>
       </TabsPanels>
     </Tabs>
-  </main></AdminShell>
+  </div></AdminShell>
 }

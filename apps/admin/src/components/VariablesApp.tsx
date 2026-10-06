@@ -3,6 +3,7 @@ import { CircleAlert, Save } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { filterVariableCatalogItems } from "../lib/variable-catalog.mjs"
 import { AdminShell } from "./AdminShell"
+import { useUnsavedChanges } from "./useUnsavedChanges"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
@@ -210,10 +211,10 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
     try {
       const [session, sites] = await Promise.all([
         requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
-        requestJson<SiteSummary[]>(apiUrl, "/admin/sites"),
+        requestJson<SiteValues[]>(apiUrl, "/admin/sites/values"),
       ])
       if (sites.length !== 1) throw new Error("Раздел значений сайта ожидает единственный сайт Дом.ру")
-      const values = await requestJson<SiteValues>(apiUrl, `/admin/sites/${sites[0].id}/values`)
+      const values = sites[0]
       setConnectionPhone(values.connectionPhoneFormatted || values.connectionPhone || "")
       setSupportPhone(values.supportPhoneFormatted || values.supportPhone || "")
       setState({ status: "ready", user: session.user, site: sites[0], values })
@@ -252,8 +253,9 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
     }
   }
 
-  if (state.status === "loading") return <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-80 w-full" /></main>
-  if (state.status === "error") return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Переменные недоступны</CardTitle><CardDescription>Не удалось загрузить значения сайта.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void load()}>Повторить</Button></CardContent></Card></main>
+  useUnsavedChanges(state.status === "ready" && (connectionPhone !== (state.values.connectionPhoneFormatted || state.values.connectionPhone || "") || supportPhone !== (state.values.supportPhoneFormatted || state.values.supportPhone || "")))
+  if (state.status === "loading") return <div className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-80 w-full" /></div>
+  if (state.status === "error") return <div className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Переменные недоступны</CardTitle><CardDescription>Не удалось загрузить значения сайта.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void load()}>Повторить</Button></CardContent></Card></div>
 
   return <AdminShell apiUrl={apiUrl} user={state.user} active="variables">
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-6 lg:p-8">

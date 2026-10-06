@@ -56,7 +56,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
     try {
       const [session, sites] = await Promise.all([
         requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
-        requestJson<Site[]>(apiUrl, "/admin/sites"),
+        requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
       ])
       setState({ status: "ready", user: session.user, sites })
       setSelectedSiteId((current) => sites.some((site) => site.id === current) ? current : sites.find(site => site.id === new URLSearchParams(window.location.search).get("siteId"))?.id ?? (sites.length === 1 ? sites[0].id : ""))

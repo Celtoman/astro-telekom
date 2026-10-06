@@ -328,6 +328,27 @@ export class PublicationWorkflowService {
     return validation;
   }
 
+  async getVariableContext(siteId: string, cityId?: string) {
+    return this.prisma.$transaction(async transaction => {
+      const site = await transaction.site.findUnique({ where: { id: siteId }, select: {
+        id: true, slug: true, status: true, connectionPhone: true, supportPhone: true, workingRevision: true, publishedRevision: true,
+        provider: { select: { name: true } },
+      } });
+      if (!site || site.status !== 'PUBLISHED') throw new NotFoundException('Site not found');
+      const cities = await transaction.city.findMany({
+        where: { siteId, status: 'PUBLISHED' }, orderBy: { name: 'asc' },
+        select: { id: true, name: true, slug: true, nameGenitive: true, namePrepositional: true,
+          tariffs: { where: { status: 'PUBLISHED', availability: 'ACTIVE', ...(cityId ? { cityId } : { id: { in: [] } }) }, orderBy: { createdAt: 'asc' },
+            select: { id: true, name: true, slug: true, speed: true, standardPrice: true, promoPrice: true, attributes: true } },
+        },
+      });
+      return { siteId, workingRevision: site.workingRevision, publishedRevision: site.publishedRevision,
+        catalog: this.jsonSnapshot({ site, cities,
+          variableSources: { providerName: site.provider.name, resolvedAt: new Date().toISOString() },
+        }) as JsonObject };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+  }
+
   async getWorkingPreview(siteId: string) {
     return this.prisma.$transaction(async (transaction) => {
       const site = await transaction.site.findUnique({ where: { id: siteId } });

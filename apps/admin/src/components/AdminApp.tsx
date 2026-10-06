@@ -48,16 +48,16 @@ export function AdminApp({ apiUrl }: { apiUrl: string }) {
 
   if (state.status === "loading") {
     return (
-      <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-6 py-8" aria-busy="true" aria-label="Проверка сессии администратора">
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-6 py-8" aria-busy="true" aria-label="Проверка сессии администратора">
         <Skeleton className="h-10 w-64" />
         <Skeleton className="h-40 w-full" />
-      </main>
+      </div>
     )
   }
 
   if (state.status === "error") {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
+      <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
         <Card className="w-full max-w-lg">
           <CardHeader><CardTitle>Админка временно недоступна</CardTitle><CardDescription>Не удалось проверить административную сессию.</CardDescription></CardHeader>
           <CardContent className="flex flex-col gap-4">
@@ -65,7 +65,7 @@ export function AdminApp({ apiUrl }: { apiUrl: string }) {
             <Button onClick={() => void verifySession()}>Повторить проверку</Button>
           </CardContent>
         </Card>
-      </main>
+      </div>
     )
   }
 

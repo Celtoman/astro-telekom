@@ -18,6 +18,12 @@ type IndicatorState =
 export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
   const [state, setState] = useState<IndicatorState>({ status: "loading" })
   const [site, setSite] = useState<SiteSummary | null>(null)
+  const [open, setOpen] = useState(false)
+  useEffect(() => {
+    const close = () => setOpen(false)
+    document.addEventListener("astro:after-swap", close)
+    return () => document.removeEventListener("astro:after-swap", close)
+  }, [])
   const requestSequence = useRef(0)
 
   const loadState = useCallback(async (currentSite: SiteSummary) => {
@@ -32,7 +38,7 @@ export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
 
   const loadSite = useCallback(async () => {
     try {
-      const sites = await requestJson<SiteSummary[]>(apiUrl, "/admin/sites")
+      const sites = await requestJson<SiteSummary[]>(apiUrl, "/admin/sites?summary=true")
       const selected = resolvePublicationSite(sites)
       if (!selected) {
         setSite(null)
@@ -83,7 +89,7 @@ export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
       : presentation?.kind === "publishing" ? LoaderCircle
         : presentation?.kind === "unpublished" ? CloudUpload : CircleAlert
 
-  return <DialogTrigger>
+  return <DialogTrigger isOpen={open} onOpenChange={setOpen}>
       <AriaButton className={`${buttonVariants({ size: "sm", variant: "outline" })} min-h-11`} aria-label={`Публикация сайта: ${status?.label ?? (state.status === "loading" ? "проверяем" : "статус недоступен")}. Открыть подробности`}>
         <Icon className={state.status === "loading" || presentation?.kind === "publishing" ? "animate-spin motion-reduce:animate-none" : undefined} data-icon="inline-start" />
         <span className="hidden sm:inline">Сайт:</span>

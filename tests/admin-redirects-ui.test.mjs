@@ -9,7 +9,7 @@ const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 test('redirects route mounts an authenticated React workspace and is linked from the shell', () => {
   const routePath = join(adminRoot, 'pages', 'redirects.astro');
   assert.equal(existsSync(routePath), true);
-  assert.match(readFileSync(routePath, 'utf8'), /<RedirectsApp[^>]+client:load/);
+  assert.match(readFileSync(routePath, 'utf8'), /<AdminWorkspace[^>]+client:load/);
 
   const item = adminNavigation.find((entry) => entry.id === 'redirects');
   assert.deepEqual({ href: item?.href, label: item?.label }, { href: '/redirects', label: 'Редиректы' });

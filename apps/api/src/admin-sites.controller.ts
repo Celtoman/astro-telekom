@@ -1,8 +1,9 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
+import { SiteValuesService } from './site-values.service';
 import { FIRST_SCREEN_IMPLEMENTATION, FIRST_SCREEN_VERSION, firstScreenDefaults, validateFirstScreen } from './first-screen';
 
 type PublishStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
@@ -26,12 +27,17 @@ export class AdminSitesController {
   constructor(
     private readonly prisma: PrismaService,
     private readonly publications: PublicationWorkflowService,
+    private readonly values: SiteValuesService,
   ) {}
 
   @Get()
-  list() {
+  list(@Query('summary') summary?: string) {
+    if (summary === 'true') return this.prisma.site.findMany({ orderBy: { name: 'asc' }, select: { id: true, name: true, slug: true, status: true, workingRevision: true, publishedRevision: true } });
     return this.prisma.site.findMany({ orderBy: { name: 'asc' }, include: { provider: true, regions: true, cities: { select: { id: true, name: true, slug: true, status: true } } } });
   }
+
+  @Get('values')
+  listValues() { return this.values.list(); }
 
   @Post()
   create(@Body() body: SiteBody, @Req() request?: AdminRequest) {

@@ -124,3 +124,11 @@ CMS-поток городской HOME: `PageTemplate(CITY_HOME)` принадл
 - Сертифицированный production-контур с реальным трафиком: внешний защищенный test deployment и sandbox/test-контракты уже подтверждены, но успешный test deployment сам по себе не означает допуск реального трафика. Только владелец определяет готовность к реальному трафику. Дополнительная legal-проверка #144 имеет P3, вне milestone Release 1 и не является gate.
 
 Детальный статус находится в [current-state.md](current-state.md). Стабилизационный план прототипа сохранен в [плане от 7 сентября](archive/plans/2026-09-07-platform-stabilization-and-mvp.md), целевая модель — в [product-contract.md](product-contract.md), а переход к ней — в [плане от 21 сентября](plans/2026-09-21-target-platform-implementation-plan.md).
+
+## Общая оболочка админки
+
+Разделы админки используют Astro ClientRouter и общий сохраняемый AdminWorkspace React-root. Меню, шапка и publication polling сохраняются, а каждый lazy экран монтируется заново по pathname/query и проверяет свежую сессию и рабочие данные. Совпадающие одновременные GET объединяются; завершённые ответы не кешируются, мутация/401 прекращает объединение старых чтений. Смена пользователя перемонтирует индикатор; изменение component URL после code deployment снимает persistence. Login, lead-access и sandboxed preview сохраняют отдельные документы.
+
+Early history bridge регистрируется до Astro router: window popstate listeners на самом target выполняются в порядке регистрации. При отмене Back/Forward editor останавливает router и восстанавливает history index до выбора пользователя. Полная перезагрузка сохраняет beforeunload.
+
+GET sites?summary=true исключает provider/regions/cities graph. GET sites/values объединяет выбор сайта и чтение телефонов. Variable-catalog читает serializable typed context без рендера Page/SEO/блоков: опубликованные города и ACTIVE/PUBLISHED тарифы только выбранного города. Authoritative usage scan проверяет ту же workingRevision; published evidence читается из прежнего immutable snapshot. UNKNOWN/null сохраняются.

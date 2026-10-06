@@ -1,4 +1,5 @@
-import { useEffect, useState, type ReactNode } from "react"
+import { useContext, useEffect, useState, type ReactNode } from "react"
+import { AdminWorkspaceContext } from "./AdminWorkspaceContext"
 import { CloudUpload, LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react"
 import { cn } from "cn"
 import { Dialog, Heading, Modal, ModalOverlay, Text } from "react-aria-components"
@@ -28,6 +29,15 @@ export function AdminShell({ apiUrl, user, active, children }: {
   active: AdminSection
   children: ReactNode
 }) {
+  const sessionReady = useContext(AdminWorkspaceContext)
+  useEffect(() => { sessionReady?.(user) }, [sessionReady, user.id, user.email])
+  if (sessionReady) return <>{children}</>
+  return <AdminShellLayout apiUrl={apiUrl} user={user} active={active}>{children}</AdminShellLayout>
+}
+
+export function AdminShellLayout({ apiUrl, user, active, children }: {
+  apiUrl: string; user: Administrator | null; active: AdminSection; children: ReactNode
+}) {
   const activeGroup = activeNavigationGroup(adminNavigation, active)
   const [sidebarExpanded, setSidebarExpanded] = useState(true)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set(activeGroup ? [activeGroup] : []))
@@ -41,6 +51,13 @@ export function AdminShell({ apiUrl, user, active, children }: {
     const storedGroups = readStoredGroups(window.localStorage.getItem(ADMIN_GROUPS_STORAGE_KEY), groupIds)
     setExpandedGroups(new Set(activeGroup ? [...storedGroups, activeGroup] : storedGroups))
   }, [activeGroup])
+
+  useEffect(() => { setMobileOpen(false) }, [active])
+  useEffect(() => {
+    const close = () => setMobileOpen(false)
+    document.addEventListener("astro:after-swap", close)
+    return () => document.removeEventListener("astro:after-swap", close)
+  }, [])
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -116,10 +133,10 @@ export function AdminShell({ apiUrl, user, active, children }: {
                 <Button className="min-h-11 min-w-11 lg:hidden" size="icon" variant="outline" aria-label="Открыть меню" title="Открыть меню (Ctrl+B)" onClick={() => setMobileOpen(true)}>
                   <Menu />
                 </Button>
-              <div className="min-w-0"><p className="text-sm font-medium">Администратор</p><p className="truncate text-xs text-muted-foreground">{user.email}</p></div>
+              <div className="min-w-0"><p className="text-sm font-medium">Администратор</p><p className="truncate text-xs text-muted-foreground">{user?.email ?? "Проверяем доступ…"}</p></div>
             </div>
             <div className="order-3 flex w-full flex-wrap items-center gap-2 sm:order-none sm:w-auto">
-              <PublicationIndicator apiUrl={apiUrl} />
+              {user ? <PublicationIndicator key={user.id} apiUrl={apiUrl} /> : null}
               <Button asChild className="min-h-11"><a href={active === "publication" ? "#publication-launch" : "/publication"}><CloudUpload data-icon="inline-start" />Опубликовать изменения</a></Button>
             </div>
             <Button variant="outline" onClick={() => void logout()}><LogOut data-icon="inline-start" /><span className="hidden sm:inline">Выйти</span><span className="sr-only sm:hidden">Выйти</span></Button>

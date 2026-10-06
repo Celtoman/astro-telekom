@@ -85,7 +85,9 @@ test('админка выделяет телефоны в раздел Пере�
   const cities = read('apps/admin/src/components/CitiesApp.tsx');
   const navigation = read('apps/admin/src/lib/admin-navigation.mjs');
 
-  assert.match(variables, /\/admin\/sites\/\$\{sites\[0\]\.id\}\/values/);
+  assert.match(variables, /requestJson<SiteValues\[\]>\(apiUrl, "\/admin\/sites\/values"\)/);
+  assert.match(variables, /sites\.length !== 1/);
+  assert.match(variables, /\/admin\/sites\/\$\{state\.site\.id\}\/values/);
   assert.match(variables, /expectedWorkingRevision/);
   assert.match(variables, /Телефон подключения/);
   assert.match(variables, /Телефон техподдержки/);

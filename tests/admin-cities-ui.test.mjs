@@ -9,11 +9,11 @@ const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 test('city catalog and import have separate static routes', () => {
   const routePath = join(adminRoot, 'pages', 'cities.astro');
   assert.equal(existsSync(routePath), true, 'cities route must exist');
-  assert.match(readFileSync(routePath, 'utf8'), /<CitiesApp[^>]+client:load/);
+  assert.match(readFileSync(routePath, 'utf8'), /<AdminWorkspace[^>]+client:load/);
 
   const importRoutePath = join(adminRoot, 'pages', 'cities', 'import.astro');
   assert.equal(existsSync(importRoutePath), true, 'city import route must exist');
-  assert.match(readFileSync(importRoutePath, 'utf8'), /<CityImportApp[^>]+client:load/);
+  assert.match(readFileSync(importRoutePath, 'utf8'), /<AdminWorkspace[^>]+client:load/);
 
   const cityNavigation = adminNavigation.find((item) => item.id === 'cities');
   assert.equal(cityNavigation?.href, '/cities');
@@ -29,7 +29,7 @@ test('city catalog uses server controls, an overlay drawer and a guarded publish
   assert.match(source, /Новый город/);
   assert.match(source, /change-slug/);
   assert.match(source, /301-редиректы/);
-  assert.match(source, /beforeunload/);
+  assert.match(source, /useUnsavedChanges\(dirty\)/);
   assert.doesNotMatch(source, /city-phone|city-support-phone|supportPhone:\s*cityForm/);
   assert.doesNotMatch(source, /\/admin\/cities\/imports|\/admin\/cities\/import\/validate|\/admin\/cities\/import\/apply|accept=["']\.xlsx["']/);
 });

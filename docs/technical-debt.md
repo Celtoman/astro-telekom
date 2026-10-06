@@ -25,7 +25,7 @@
 | --- | --- | --- |
 | #235 | [#235](https://github.com/Celtoman/astro-telekom/issues/235) ✅ | Общие tariffView/heroFacts/legal и публичные CSS/assets; состав preview сверяется с Astro HTML |
 | #258 | [#258](https://github.com/Celtoman/astro-telekom/issues/258) ✅ | Точечные security dependency updates; audit без advisory entries, regression middleware/deepmerge |
-| TD-163 | [#259](https://github.com/Celtoman/astro-telekom/issues/259) 🟢 | Absolute request target получает общий rate limit вместо специализированного bucket |
+| TD-163 | [#259](https://github.com/Celtoman/astro-telekom/issues/259) ✅ | Origin/absolute request targets используют один специализированный rate-limit classifier |
 | TD-145 | [#240](https://github.com/Celtoman/astro-telekom/issues/240) ✅ | Атомарный seed текущей schema; свежая PostgreSQL, preflight и сохранность повторного запуска проверены |
 | TD-150 | [#246](https://github.com/Celtoman/astro-telekom/issues/246) ✅ | Non-root runtime: private Astro config и redacted диагностика; повтор Linux CI обязателен |
 | TD-146 | [#242](https://github.com/Celtoman/astro-telekom/issues/242) ✅ | Caddy fixture использует Linux runner UID/GID; CI прошёл без пропусков |

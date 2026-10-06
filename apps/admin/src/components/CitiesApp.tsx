@@ -1,3 +1,4 @@
+import { useUnsavedChanges } from "./useUnsavedChanges"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { Dialog, Heading, Modal, ModalOverlay, Text } from "react-aria-components"
 import { CircleAlert, FileUp, Pencil, Plus, RefreshCw, Save, X } from "lucide-react"
@@ -65,7 +66,7 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
     try {
       const [session, sites, regions, profiles] = await Promise.all([
         requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
-        requestJson<SiteSummary[]>(apiUrl, "/admin/sites"),
+        requestJson<SiteSummary[]>(apiUrl, "/admin/sites?summary=true"),
         requestJson<Region[]>(apiUrl, "/admin/regions"),
         requestJson<Profile[]>(apiUrl, "/admin/cities/profiles"),
       ])
@@ -78,16 +79,10 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
   }, [apiUrl])
   useEffect(() => { void loadWorkspace() }, [loadWorkspace])
   useEffect(() => { const timer = window.setTimeout(() => { setQuery(search.trim()); setCursorStack([""]) }, 300); return () => window.clearTimeout(timer) }, [search])
-  useEffect(() => {
-    if (!dirty) return
-    const warn = (event: BeforeUnloadEvent) => { event.preventDefault() }
-    window.addEventListener("beforeunload", warn)
-    return () => window.removeEventListener("beforeunload", warn)
-  }, [dirty])
+  useUnsavedChanges(dirty)
 
   const currentCursor = cursorStack[cursorStack.length - 1]
   useEffect(() => {
-    if (state.status !== "ready") return
     let active = true
     const params = new URLSearchParams({ limit: String(pageSize), sort: filters.sort, direction: filters.direction })
     if (query) params.set("q", query)
@@ -99,7 +94,7 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
       .catch((caught: unknown) => { if (active) setListError(caught instanceof Error ? caught.message : "Каталог не загружен") })
       .finally(() => { if (active) setListBusy(false) })
     return () => { active = false }
-  }, [apiUrl, currentCursor, filters, listRevision, pageSize, query, state.status])
+  }, [apiUrl, currentCursor, filters, listRevision, pageSize, query])
 
   function openCreate() { const next = emptyForm(); setForm(next); setInitialForm(next); setSlugImpactCount(0); setMessage(null); setDrawerOpen(true) }
   function openEdit(city: City) {
@@ -136,8 +131,8 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
     finally { setSaving(false) }
   }
 
-  if (state.status === "loading" || (!page && listBusy)) return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></main>
-  if (state.status === "error" || !page) { const error = state.status === "error" ? state.message : listError || "Каталог не загружен"; return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Города недоступны</CardTitle></CardHeader><CardContent><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{error}</AlertDescription></Alert></CardContent></Card></main> }
+  if (state.status === "loading" || (!page && listBusy)) return <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></div>
+  if (state.status === "error" || !page) { const error = state.status === "error" ? state.message : listError || "Каталог не загружен"; return <div className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Города недоступны</CardTitle></CardHeader><CardContent><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{error}</AlertDescription></Alert></CardContent></Card></div> }
   const filterActive = Boolean(search || query || filters.regionId || filters.status || filters.readiness || filters.profile || filters.tariffs || filters.unpublished || filters.sort !== "city" || filters.direction !== "asc")
 
   return <AdminShell apiUrl={apiUrl} user={state.user} active="cities">

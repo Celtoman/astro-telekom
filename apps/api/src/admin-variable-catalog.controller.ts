@@ -24,7 +24,7 @@ export class AdminVariableCatalogController {
     @Query('cityId') cityId?: string,
     @Query('tariffId') tariffId?: string,
   ) {
-    const preview = await this.publications.getWorkingPreview(siteId);
+    const preview = await this.publications.getVariableContext(siteId, cityId);
     const rowUsages = await this.usages.list(siteId, preview.workingRevision);
     const rawWorking = preview.catalog as Record<string, any>;
     const working = { ...rawWorking, variableUsages: rowUsages };

@@ -3,6 +3,7 @@ import { CircleAlert, Save } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { insertVariableAtSelection } from "../lib/variable-insertion.mjs"
 import { AdminShell } from "./AdminShell"
+import { useUnsavedChanges } from "./useUnsavedChanges"
 import { PublicationStatusCard } from "./PublicationStatusCard"
 import { VariableInsertionPicker } from "./VariableInsertionPicker"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
@@ -62,7 +63,7 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
     try {
       const [session, sites] = await Promise.all([
         requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
-        requestJson<Site[]>(apiUrl, "/admin/sites"),
+        requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
       ])
       if (sites.length !== 1) throw new Error("Редактор SEO ожидает единственный сайт Дом.ру")
       const data = await requestJson<Workspace>(apiUrl, `/admin/sites/${sites[0].id}/seo-templates`)
@@ -92,6 +93,7 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
   const affectedCount = routes.length
   const enteringNoindex = template?.indexState !== "NOINDEX" && indexState === "NOINDEX"
   const changed = Boolean(template && (titleTemplate !== template.titleTemplate || descriptionTemplate !== template.descriptionTemplate || indexState !== template.indexState || ogTitleTemplate !== (template.ogTitleTemplate || "") || ogDescriptionTemplate !== (template.ogDescriptionTemplate || "") || ogImageUrl !== (template.ogImageUrl || "")))
+  useUnsavedChanges(changed)
   const canSave = Boolean(changed && titleTemplate.trim() && descriptionTemplate.trim() && (!enteringNoindex || (confirmed && affectedCount > 0)))
   const working = path ? workspace?.workingByPath?.[path] : null
   const published = path ? workspace?.publishedByPath?.[path] : null
@@ -144,8 +146,8 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
     finally { setSaving(false) }
   }
 
-  if (loading && !user) return <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-64" /><Skeleton className="h-96 w-full" /></main>
-  if (!user) return <main className="flex min-h-screen items-center justify-center p-6"><Alert variant="destructive"><CircleAlert /><AlertTitle>SEO-шаблоны недоступны</AlertTitle><AlertDescription>{error || "Не удалось загрузить данные"}</AlertDescription><Button onClick={() => void load()}>Повторить</Button></Alert></main>
+  if (loading && !user) return <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-64" /><Skeleton className="h-96 w-full" /></div>
+  if (!user) return <div className="flex min-h-screen items-center justify-center p-6"><Alert variant="destructive"><CircleAlert /><AlertTitle>SEO-шаблоны недоступны</AlertTitle><AlertDescription>{error || "Не удалось загрузить данные"}</AlertDescription><Button onClick={() => void load()}>Повторить</Button></Alert></div>
 
   return <AdminShell apiUrl={apiUrl} user={user} active="seo-templates">
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-6 lg:p-8">

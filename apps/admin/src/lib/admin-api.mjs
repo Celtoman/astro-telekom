@@ -7,6 +7,9 @@ export class AdminApiError extends Error {
   }
 }
 
+const pendingReads = new Map()
+let readGeneration = 0
+
 /**
  * @template T
  * @param {string} baseUrl
@@ -15,7 +18,31 @@ export class AdminApiError extends Error {
  * @param {typeof fetch} [fetchImpl]
  * @returns {Promise<T>}
  */
-export async function requestJson(baseUrl, route, options = {}, fetchImpl = fetch) {
+export function requestJson(baseUrl, route, options = {}, fetchImpl = fetch) {
+  const method = (options.method || "GET").toUpperCase()
+  if (method !== "GET") { readGeneration++; pendingReads.clear() }
+  // Coalesce only identical default reads that overlap in time. No settled data,
+  // credentials, custom headers or abort signals are cached across navigation.
+  const canShare = method === "GET" && Object.keys(options).length === 0 && fetchImpl === fetch
+  const key = `${readGeneration}:${baseUrl}:${route}`
+  if (canShare && pendingReads.has(key)) return pendingReads.get(key)
+  const pending = performRequest(baseUrl, route, options, fetchImpl)
+  if (canShare) {
+    pendingReads.set(key, pending)
+    pending.then(() => { if (pendingReads.get(key) === pending) pendingReads.delete(key) }, () => { if (pendingReads.get(key) === pending) pendingReads.delete(key) })
+  }
+  return pending
+}
+
+/**
+ * @template T
+ * @param {string} baseUrl
+ * @param {string} route
+ * @param {Omit<RequestInit, "body"> & { body?: unknown }} options
+ * @param {typeof fetch} fetchImpl
+ * @returns {Promise<T>}
+ */
+async function performRequest(baseUrl, route, options, fetchImpl) {
   const url = `${baseUrl.replace(/\/$/, "")}/${route.replace(/^\//, "")}`
   const headers = new Headers(options.headers || {})
   let body = options.body
@@ -27,6 +54,10 @@ export async function requestJson(baseUrl, route, options = {}, fetchImpl = fetc
   const response = await fetchImpl(url, { ...options, credentials: "include", headers, body })
   const payload = await response.json().catch(() => null)
   if (!response.ok) {
+    if (response.status === 401 && typeof window !== "undefined") {
+      readGeneration++; pendingReads.clear()
+      window.dispatchEvent(new Event("admin:session-expired"))
+    }
     const message = typeof payload?.message === "string"
       ? payload.message
       : Array.isArray(payload?.message)

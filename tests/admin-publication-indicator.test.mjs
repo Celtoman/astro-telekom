@@ -55,7 +55,7 @@ test('successful content mutations notify the shell; reads, validation, leads an
 test('indicator lives in the common shell and exposes read-only desktop/mobile details', () => {
   const shell = source('AdminShell.tsx');
   const indicator = source('PublicationIndicator.tsx');
-  assert.match(shell, /<PublicationIndicator apiUrl=\{apiUrl\}/);
+  assert.match(shell, /<PublicationIndicator[^>]*apiUrl=\{apiUrl\}/);
   assert.match(indicator, /\/admin\/sites/);
   assert.match(indicator, /publication-state/);
   assert.match(indicator, /describePublicationState/);

@@ -1,3 +1,4 @@
+import { useUnsavedChanges } from "./useUnsavedChanges"
 import { type SyntheticEvent, useEffect, useMemo, useRef, useState } from "react"
 import { ArrowLeft, CircleAlert, LoaderCircle, Save } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
@@ -159,14 +160,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
     return () => { active = false }
   }, [apiUrl])
 
-  useEffect(() => {
-    const warn = (event: BeforeUnloadEvent) => {
-      if (!hasUnsavedChanges) return
-      event.preventDefault()
-    }
-    window.addEventListener("beforeunload", warn)
-    return () => window.removeEventListener("beforeunload", warn)
-  }, [hasUnsavedChanges])
+  useUnsavedChanges(hasUnsavedChanges)
 
   function update<K extends keyof FormState>(field: K, value: FormState[K]) {
     setForm((current) => current ? { ...current, [field]: value } : current)
@@ -262,8 +256,8 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
     if (!hasUnsavedChanges || window.confirm("Отменить несохраненные изменения?")) window.location.assign("/tariffs")
   }
 
-  if (loading) return <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-96 w-full" /></main>
-  if (error && (!user || !tariff || !form)) return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Редактор недоступен</CardTitle></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка</AlertTitle><AlertDescription>{error}</AlertDescription></Alert><Button asChild><a href="/tariffs">Вернуться к тарифам</a></Button></CardContent></Card></main>
+  if (loading) return <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-96 w-full" /></div>
+  if (error && (!user || !tariff || !form)) return <div className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Редактор недоступен</CardTitle></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка</AlertTitle><AlertDescription>{error}</AlertDescription></Alert><Button asChild><a href="/tariffs">Вернуться к тарифам</a></Button></CardContent></Card></div>
   if (!user || !tariff || !form) return null
 
   const renderSaveButton = () => <Button type="submit" disabled={!hasUnsavedChanges || saving}>{saving ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <Save data-icon="inline-start" />}{saving ? "Сохраняем…" : "Сохранить"}</Button>

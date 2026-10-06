@@ -11,7 +11,7 @@ test('SEO templates have a protected admin route and cookie-auth React editor', 
   const editor = read('apps/admin/src/components/SeoTemplatesApp.tsx');
   const picker = read('apps/admin/src/components/VariableInsertionPicker.tsx');
   const controller = read('apps/api/src/admin-seo-templates.controller.ts');
-  assert.match(route, /<SeoTemplatesApp[^>]*client:load/);
+  assert.match(route, /<AdminWorkspace[^>]*client:load/);
   assert.match(route, /noindex, nofollow/);
   assert.match(controller, /@UseGuards\(AdminTokenGuard\)/);
   assert.match(controller, /@Get\(\)/);

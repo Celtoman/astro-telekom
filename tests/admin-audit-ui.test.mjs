@@ -10,7 +10,7 @@ const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 test('audit route mounts an authenticated React workspace and is linked from the shell', () => {
   const routePath = join(adminRoot, 'pages', 'audit.astro');
   assert.equal(existsSync(routePath), true, 'audit route must exist');
-  assert.match(readFileSync(routePath, 'utf8'), /<AuditApp[^>]+client:load/);
+  assert.match(readFileSync(routePath, 'utf8'), /<AdminWorkspace[^>]+client:load/);
 
   const item = adminNavigation.find((entry) => entry.id === 'audit');
   assert.deepEqual({ href: item?.href, label: item?.label }, { href: '/audit', label: 'История изменений' });

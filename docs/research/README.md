@@ -73,3 +73,5 @@
 - [Завершённый и заменённый route transition, 14 сентября](../archive/plans/2026-09-14-release-1-site-structure-transition.md).
 
 Действующий [план целевой платформы](../plans/2026-09-21-target-platform-implementation-plan.md) содержит незавершённые CMS/variables задачи и остаётся вне архива.
+
+- [Навигация админки и rate-limit request targets, 6 октября](2026-10-06-admin-navigation-and-rate-limits.md)

@@ -10,7 +10,7 @@ const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 test('tariffs route mounts the authenticated React workspace and is linked from the shell', () => {
   const routePath = join(adminRoot, 'pages', 'tariffs.astro');
   assert.equal(existsSync(routePath), true, 'tariffs route must exist');
-  assert.match(readFileSync(routePath, 'utf8'), /<TariffsApp[^>]+client:load/);
+  assert.match(readFileSync(routePath, 'utf8'), /<AdminWorkspace[^>]+client:load/);
 
   const tariffNavigation = adminNavigation.find((item) => item.id === 'tariffs');
   assert.equal(tariffNavigation?.href, '/tariffs');
@@ -23,7 +23,7 @@ test('tariff catalog and full-snapshot import are separate nested workspaces', (
   const importRoute = join(adminRoot, 'pages', 'tariffs', 'import.astro');
   assert.equal(existsSync(importPath), true);
   assert.equal(existsSync(importRoute), true);
-  assert.match(readFileSync(importRoute, 'utf8'), /<TariffImportApp[^>]+client:load/);
+  assert.match(readFileSync(importRoute, 'utf8'), /<AdminWorkspace[^>]+client:load/);
   assert.match(catalog, /URLSearchParams/);
   assert.match(catalog, /nextCursor/);
   assert.match(catalog, /ServerPagination/);
@@ -65,7 +65,7 @@ test('tariff workspace provides quick detail and a separate guarded long editor'
   const editorPath = join(adminRoot, 'components', 'TariffEditorApp.tsx');
   assert.equal(existsSync(editorRoute), true, 'tariff editor route must exist');
   assert.equal(existsSync(editorPath), true, 'tariff editor component must exist');
-  assert.match(readFileSync(editorRoute, 'utf8'), /<TariffEditorApp[^>]+client:load/);
+  assert.match(readFileSync(editorRoute, 'utf8'), /<AdminWorkspace[^>]+client:load/);
   assert.match(listSource, /\/admin\/tariffs\/\$\{id\}/);
   assert.match(listSource, /Быстрый просмотр/);
   assert.match(listSource, /Рекомендация/);

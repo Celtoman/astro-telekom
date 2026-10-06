@@ -129,7 +129,7 @@ test('admin catalog endpoint is authenticated, read-only and reads working and s
     path: 'pageTemplates[CITY_HOME].blocks[0].data.title', template: 'Звоните {CONNECTION_PHONE}', editorHref: null };
   const calls = [];
   const controller = new AdminVariableCatalogController({
-    getWorkingPreview: async (siteId) => {
+    getVariableContext: async (siteId) => {
       calls.push(['working', siteId]);
       return { siteId, workingRevision: 8, publishedRevision: 7, catalog: working };
     },
@@ -152,7 +152,7 @@ test('admin catalog endpoint is authenticated, read-only and reads working and s
 
 test('admin exposes a lightweight guarded variable definition list without building a site preview', () => {
   const { AdminVariableCatalogController } = api('admin-variable-catalog.controller');
-  const controller = new AdminVariableCatalogController({ getWorkingPreview: () => assert.fail('preview must not run') }, { list: () => assert.fail('usage scan must not run') });
+  const controller = new AdminVariableCatalogController({ getVariableContext: () => assert.fail('preview must not run') }, { list: () => assert.fail('usage scan must not run') });
   const definitions = controller.definitions();
   assert.equal(definitions.length, 11);
   assert.ok(definitions.find((item) => item.code === 'CITY_NAME').allowedFields.includes('SeoTemplate.titleTemplate'));

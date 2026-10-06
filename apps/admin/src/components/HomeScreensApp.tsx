@@ -1,3 +1,4 @@
+import { useUnsavedChanges } from "./useUnsavedChanges"
 import { useEffect, useRef, useState } from "react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { insertVariableAtSelection } from "../lib/variable-insertion.mjs"
@@ -48,7 +49,7 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
 
   useEffect(() => {
     let active = true
-    Promise.all([requestJson<{ user: { id: string; email: string } }>(apiUrl, "/auth/me"), requestJson<Site[]>(apiUrl, "/admin/sites")])
+    Promise.all([requestJson<{ user: { id: string; email: string } }>(apiUrl, "/auth/me"), requestJson<Site[]>(apiUrl, "/admin/sites?summary=true")])
       .then(([session, list]) => {
         if (!active) return
         setUser(session.user); setSites(list)
@@ -68,12 +69,7 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
       .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
   }, [apiUrl, siteId, refresh])
-  useEffect(() => {
-    if (!dirty) return
-    const warn = (event: BeforeUnloadEvent) => { event.preventDefault() }
-    window.addEventListener("beforeunload", warn)
-    return () => window.removeEventListener("beforeunload", warn)
-  }, [dirty])
+  useUnsavedChanges(dirty)
   function discard() { return !dirty || window.confirm("Отменить несохранённые изменения?") }
   function changeKind(next: Kind) {
     if (!discard()) return
@@ -113,7 +109,7 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
       <FieldDescription id={descriptionId}>{invalid ? "Обязательное поле. Пустое значение можно сохранить в черновике." : key === "image" ? "Локальный путь /images/… или HTTPS URL." : key === "imageAlt" ? "Кратко опишите изображение для доступности." : `${String(data[key] ?? "").length} из ${fields[key].limit} символов`}</FieldDescription>
     </Field>
   }
-  if (!user) return <main className="mx-auto flex max-w-xl flex-col gap-4 p-6"><h1 className="text-xl font-semibold">Первые экраны</h1>{loading ? <p role="status">Загружаем…</p> : <Alert variant="destructive"><AlertDescription>{error ?? "Сессия недоступна"}<Button variant="outline" onClick={() => window.location.reload()}>Повторить загрузку</Button></AlertDescription></Alert>}</main>
+  if (!user) return <div className="mx-auto flex max-w-xl flex-col gap-4 p-6"><h1 className="text-xl font-semibold">Первые экраны</h1>{loading ? <p role="status">Загружаем…</p> : <Alert variant="destructive"><AlertDescription>{error ?? "Сессия недоступна"}<Button variant="outline" onClick={() => window.location.reload()}>Повторить загрузку</Button></AlertDescription></Alert>}</div>
   return <AdminShell apiUrl={apiUrl} user={user} active="templates"><div className="mx-auto flex max-w-7xl flex-col gap-6 p-4 lg:p-8">
     <div><h1 className="font-heading text-2xl font-semibold">Первые экраны</h1><p className="mt-2 text-sm text-muted-foreground">Изменения сохраняются в рабочую версию. Публикация сайта выполняется отдельно.</p></div>
     <div className="grid gap-4 sm:grid-cols-2"><Field><FieldLabel htmlFor="home-site">Сайт</FieldLabel><select id="home-site" className="min-h-11 rounded-lg border bg-background px-3 text-sm" value={siteId} disabled={saving} onChange={event => { if (discard()) setSiteId(event.target.value) }}><option value="">Выберите сайт</option>{sites.map(site => <option key={site.id} value={site.id}>{site.name}</option>)}</select></Field>

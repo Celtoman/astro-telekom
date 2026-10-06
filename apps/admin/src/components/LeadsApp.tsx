@@ -393,11 +393,11 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
   }
 
   if (state.status === "loading" || (!leadPage && listBusy)) {
-    return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></main>
+    return <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-64 w-full" /></div>
   }
   if (state.status === "error" || !leadPage) {
     const message = state.status === "error" ? state.message : listError || "Журнал заявок не загружен"
-    return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Заявки недоступны</CardTitle><CardDescription>Не удалось загрузить рабочий журнал.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{message}</AlertDescription></Alert><Button onClick={() => { void loadWorkspace(); setListRevision((value) => value + 1) }}>Повторить</Button></CardContent></Card></main>
+    return <div className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Заявки недоступны</CardTitle><CardDescription>Не удалось загрузить рабочий журнал.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{message}</AlertDescription></Alert><Button onClick={() => { void loadWorkspace(); setListRevision((value) => value + 1) }}>Повторить</Button></CardContent></Card></div>
   }
 
   const newCount = leadPage.summary.new

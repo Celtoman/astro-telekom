@@ -9,7 +9,7 @@ const adminRoot = join(import.meta.dirname, '..', 'apps', 'admin', 'src');
 test('trash route mounts an authenticated React workspace and is linked from the shell', () => {
   const routePath = join(adminRoot, 'pages', 'trash.astro');
   assert.equal(existsSync(routePath), true, 'trash route must exist');
-  assert.match(readFileSync(routePath, 'utf8'), /<TrashApp[^>]+client:load/);
+  assert.match(readFileSync(routePath, 'utf8'), /<AdminWorkspace[^>]+client:load/);
 
   const item = adminNavigation.find((entry) => entry.id === 'trash');
   assert.deepEqual({ href: item?.href, label: item?.label }, { href: '/trash', label: 'Корзина' });

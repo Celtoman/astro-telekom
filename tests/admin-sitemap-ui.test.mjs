@@ -12,7 +12,7 @@ test('SEO sitemap route is a protected React workspace reachable from shared nav
   assert.equal(existsSync(componentPath), true, 'SitemapApp React workspace must exist');
   const page = readFileSync(pagePath, 'utf8');
   const navigation = readFileSync(join(root, 'lib', 'admin-navigation.mjs'), 'utf8');
-  assert.match(page, /SitemapApp/);
+  assert.match(page, /AdminWorkspace/);
   assert.match(page, /client:load/);
   assert.match(navigation, /label:\s*["']SEO["']/);
   assert.match(navigation, /href:\s*["']\/seo\/sitemap["']/);

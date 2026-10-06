@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { CheckCircle2, CircleAlert, FileSearch, RefreshCw, Save } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
+import { useUnsavedChanges } from "./useUnsavedChanges"
 import { PublicationStatusCard } from "./PublicationStatusCard"
 import { StatusBadge } from "./StatusBadge"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
@@ -48,7 +49,7 @@ export function SitemapApp({ apiUrl }: { apiUrl: string }) {
     setLoading(true); setError(null)
     try {
       const session = await requestJson<{ user: Administrator }>(apiUrl, "/auth/me")
-      const availableSites = await requestJson<Site[]>(apiUrl, "/admin/sites")
+      const availableSites = await requestJson<Site[]>(apiUrl, "/admin/sites?summary=true")
       const nextSiteId = selectedSiteId || siteId || availableSites[0]?.id || ""
       const data = nextSiteId ? await requestJson<Workspace>(apiUrl, `/admin/sites/${nextSiteId}/sitemap`) : null
       setUser(session.user); setSites(availableSites); setSiteId(nextSiteId); setWorkspace(data)
@@ -72,6 +73,7 @@ export function SitemapApp({ apiUrl }: { apiUrl: string }) {
   const pages = Math.max(1, Math.ceil(entries.length / PAGE_SIZE))
   const invalidReasons = Object.entries(draft).filter(([, reason]) => !reason.trim())
   const changed = workspace ? JSON.stringify(Object.fromEntries(workspace.exclusions.map((item) => [item.path, item.reason]))) !== JSON.stringify(draft) : false
+  useUnsavedChanges(changed)
   const previewXml = workspace ? `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${workspace.entries.filter((item) => item.group === group && item.eligible && !(item.path in draft)).map((item) => `<url><loc>${xmlEscape(`${workspace.origin}${item.path}`)}</loc></url>`).join("")}</urlset>` : ""
 
   function toggle(entry: Entry, include: boolean) {
@@ -97,8 +99,8 @@ export function SitemapApp({ apiUrl }: { apiUrl: string }) {
     finally { setBusy(false) }
   }
 
-  if (loading && !user) return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8"><Skeleton className="h-10 w-72" /><Skeleton className="h-72 w-full" /></main>
-  if (!user) return <main className="flex min-h-screen items-center justify-center p-6"><Alert variant="destructive"><CircleAlert /><AlertTitle>Sitemap недоступен</AlertTitle><AlertDescription>{error || "Не удалось загрузить данные"}</AlertDescription></Alert></main>
+  if (loading && !user) return <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8"><Skeleton className="h-10 w-72" /><Skeleton className="h-72 w-full" /></div>
+  if (!user) return <div className="flex min-h-screen items-center justify-center p-6"><Alert variant="destructive"><CircleAlert /><AlertTitle>Sitemap недоступен</AlertTitle><AlertDescription>{error || "Не удалось загрузить данные"}</AlertDescription></Alert></div>
 
   return <AdminShell apiUrl={apiUrl} user={user} active="seo-sitemap"><div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-6 lg:p-8">
     <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Sitemap</h1><p className="mt-1 text-sm text-muted-foreground">Управление индексом и отдельными картами страниц, городов и тарифов.</p></div><Button variant="outline" disabled={loading || busy} onClick={() => void loadWorkspace(siteId)}><RefreshCw data-icon="inline-start" />Обновить</Button></div>

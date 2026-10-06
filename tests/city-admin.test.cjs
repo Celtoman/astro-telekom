@@ -47,7 +47,7 @@ test('city admin uses server pagination and an overlay dialog drawer', () => {
   assert.match(ui, /ServerPagination/);
   assert.match(ui, /ModalOverlay isDismissable isOpen=\{open\}/);
   assert.match(ui, /Добавить город/);
-  assert.match(ui, /beforeunload/);
+  assert.match(ui, /useUnsavedChanges\(dirty\)/);
 });
 
 test('published city slug change creates city and tariff redirects in one working revision', async () => {
