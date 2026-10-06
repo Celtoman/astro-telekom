@@ -6,7 +6,7 @@
 
 Статус: read-only снимок реализации до перехода. В рамках аудита код, схема БД и production-данные не менялись.
 
-Канон: [site-structure.md](../site-structure.md). Исполнимый план: [2026-09-14-release-1-site-structure-transition.md](../plans/2026-09-14-release-1-site-structure-transition.md). Главная задача: [#136](https://github.com/Celtoman/astro-telekom/issues/136).
+Канон: [site-structure.md](../site-structure.md). Исполнимый план: [2026-09-14-release-1-site-structure-transition.md](../archive/plans/2026-09-14-release-1-site-structure-transition.md). Главная задача: [#136](https://github.com/Celtoman/astro-telekom/issues/136).
 
 ## Итог
 

@@ -23,6 +23,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| #235 | [#235](https://github.com/Celtoman/astro-telekom/issues/235) 🟢 | Общий preview: Hero-факты исправлены; renderer и tariff_grid title ещё расходятся с public |
 | TD-145 | [#240](https://github.com/Celtoman/astro-telekom/issues/240) 🟢 | Первый seed падает на удалённом Region.phone; свежий bootstrap требует отдельной проверки |
 | TD-150 | [#246](https://github.com/Celtoman/astro-telekom/issues/246) ✅ | Non-root runtime: private Astro config и redacted диагностика; повтор Linux CI обязателен |
 | TD-146 | [#242](https://github.com/Celtoman/astro-telekom/issues/242) ✅ | Caddy fixture использует Linux runner UID/GID; CI прошёл без пропусков |
@@ -104,6 +105,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| #236 | [#236](https://github.com/Celtoman/astro-telekom/issues/236) 🟢 | Direct Compose migrate выбирает runtime target без Prisma CLI/schema |
 | TD-149 | [#245](https://github.com/Celtoman/astro-telekom/issues/245) ✅ | Private publication fixtures исключены из Docker context; image rehearsal прошёл |
 | TD-151 | [#247](https://github.com/Celtoman/astro-telekom/issues/247) ✅ | Redis rehearsal ожидает PONG и сразу обрабатывает ранний reject без сокрытия failure |
 | TD-152 | [#248](https://github.com/Celtoman/astro-telekom/issues/248) ✅ | CODE identity учитывает закрытые serving options; non-root image proof подтверждает смену контекста после terminal deployment |
@@ -154,6 +156,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| #237 | [#237](https://github.com/Celtoman/astro-telekom/issues/237) ✅ | Действующие документы и CMS/variables Issues синхронизированы; исторические планы отделены |
 | TD-155 | [#251](https://github.com/Celtoman/astro-telekom/issues/251) 🟢 | Windows Docker CLI иногда не читает context meta.json из-за блокировки другим процессом |
 | TD-159 | [#253](https://github.com/Celtoman/astro-telekom/issues/253) ✅ | Caddy restart rehearsal использует новые HTTP-соединения и повторно занимает прежние порты |
 | TD-160 | [#254](https://github.com/Celtoman/astro-telekom/issues/254) ✅ | Устаревшие утверждения architecture о provider, приёмке static и React Aria требуют синхронизации |

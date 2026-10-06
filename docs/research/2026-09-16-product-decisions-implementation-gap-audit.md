@@ -129,7 +129,7 @@ GitHub Issue в состоянии `open` считается незаверше�
 5. **Пустые ячейки тарифа:** описан интерактивный merge-rule, которого нет и который конфликтует с принятым full-snapshot importer.
 6. **Переменные:** `OQ-01` помечен отложенным до Release 3, но #158 уже выделяет узкий этап с двумя глобальными телефонами, а #159 — отдельное исследование модели.
 7. **Города:** канон обещает массовые действия на основном экране, а согласованный первый этап #160 сознательно их исключает. Это не дефект #160, а необходимость разделить целевой интерфейс и этап реализации.
-8. **Исторический route plan:** `docs/plans/2026-09-14-release-1-site-structure-transition.md` содержит 240 строк старого контракта без tariff detail. Предупреждение в шапке снижает риск, но файл продолжает занимать активное пространство и находится рядом с исполнимыми планами.
+8. **Исторический route plan:** `docs/archive/plans/2026-09-14-release-1-site-structure-transition.md` содержит 240 строк старого контракта без tariff detail. Предупреждение в шапке снижает риск, но файл продолжает занимать активное пространство и находится рядом с исполнимыми планами.
 
 ## Что уже реализовано правильно и должно уйти из активного пространства
 
@@ -196,7 +196,7 @@ PF-001, PF-004, PF-005, PF-006, PF-007, PF-010, PF-011, PF-012, PF-013, PF-014, 
 4. `docs/release-plan.md`
    - оставить только открытые условия релизов и реальные внешние зависимости;
    - завершенные доказательства заменить короткими ссылками на `current-state.md`, закрытые Issues и deployment audit.
-5. `docs/plans/2026-09-14-release-1-site-structure-transition.md`
+5. `docs/archive/plans/2026-09-14-release-1-site-structure-transition.md`
    - переместить в `docs/archive/plans/` либо удалить из активной навигации;
    - не использовать его как текущий контракт даже с предупреждением в шапке.
 6. GitHub Issues
@@ -218,7 +218,7 @@ PF-001, PF-004, PF-005, PF-006, PF-007, PF-010, PF-011, PF-012, PF-013, PF-014, 
 - продуктовый канон: `docs/decisions.md`, `docs/site-structure.md`;
 - фактический статус: `docs/current-state.md`, `docs/release-plan.md`;
 - активный реестр идей: `docs/product-findings.md`;
-- исторический план: `docs/plans/2026-09-14-release-1-site-structure-transition.md`;
+- исторический план: `docs/archive/plans/2026-09-14-release-1-site-structure-transition.md`;
 - модели и контракты: `prisma/schema.prisma`, `apps/api/src/public-route-policy.ts`, `apps/api/src/content-resolution.ts`, `apps/api/src/public-leads.controller.ts`, `apps/api/src/public.dto.ts`, `apps/api/src/notifications.service.ts`;
 - интерфейсы: `apps/web/src/components/AddressForm.astro`, `apps/admin/src/components/AdminApp.tsx`, `CitiesApp.tsx`, `TariffsApp.tsx`, `LeadsApp.tsx`, `SitemapApp.tsx`;
 - проверки: `tests/public-city-catalog.test.cjs`, `tests/publication-workflow.test.cjs`, `tests/city-import.test.cjs`, `tests/tariff-import.test.cjs`, `tests/lead-check.test.cjs` и связанные suites из `docs/TEST_COVERAGE.md`;

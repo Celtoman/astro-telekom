@@ -1,6 +1,6 @@
 # План релизов и статус первого MVP
 
-Этот документ группирует работу по релизным границам. [План от 21 сентября](plans/2026-09-21-target-platform-implementation-plan.md) сохраняет последовательность реализации, а [аудит от 24 сентября](research/2026-09-24-decision-implementation-reconciliation.md) — состояние на дату проверки. Текущие факты реализации описаны в [current-state.md](current-state.md), механические статусы задач — в GitHub Issues. Ранний [стабилизационный план](plans/2026-09-07-platform-stabilization-and-mvp.md) сохранен как исторический.
+Этот документ группирует работу по релизным границам. [План от 21 сентября](plans/2026-09-21-target-platform-implementation-plan.md) сохраняет последовательность реализации, а [аудит от 24 сентября](research/2026-09-24-decision-implementation-reconciliation.md) — состояние на дату проверки. Текущие факты реализации описаны в [current-state.md](current-state.md), механические статусы задач — в GitHub Issues. Ранний [стабилизационный план](archive/plans/2026-09-07-platform-stabilization-and-mvp.md) сохранен как исторический.
 
 ## Release 0 — локальный прототип
 
@@ -25,11 +25,11 @@ Release 0 — историческая граница локального пр�
 
 1. Публичный output, sitemap, внутренние ссылки и redirects соответствуют exact составу `N + T + 6`; переход на городскую структуру, live-приемка HTTP 404 и возврат тарифных страниц завершены в [#136](https://github.com/Celtoman/astro-telekom/issues/136), [#141](https://github.com/Celtoman/astro-telekom/issues/141) и [#149](https://github.com/Celtoman/astro-telekom/issues/149). Live inventory после публикации ревизии 7 24 сентября — 207 городов, 3 805 тарифов и 4 018 уникальных URL. Legacy-дубли `HOME` устранены в закрытой [#150](https://github.com/Celtoman/astro-telekom/issues/150); актуальный deployed SHA проверяется отдельно.
 2. Все automated checks green в чистом окружении.
-3. Production build блокируется, если API-данные отсутствуют, origin не является чистым HTTPS origin или final SEO output не проходит проверку. API/origin fail-fast, post-build sitemap/raw HTML gate и воспроизводимый первый Coolify bootstrap [#55](https://github.com/Celtoman/astro-telekom/issues/55) подтверждены; внешний production CI/CD не должен разрешать demo mode.
+3. Production build блокируется, если API-данные отсутствуют, origin не является чистым HTTPS origin или final SEO output не проходит проверку. API/origin fail-fast, post-build sitemap/raw HTML gate и исторический первый Coolify bootstrap [#55](https://github.com/Celtoman/astro-telekom/issues/55) подтверждены; текущий seed требует исправления #240 и нового rehearsal; внешний production CI/CD не должен разрешать demo mode.
 4. Импорт тарифов имеет утвержденную полную семантику и не оставляет устаревшие публичные предложения.
 5. Rebuild job имеет status/retry и подтвержденный результат HTML.
 6. Fallback link безопасно открывает нужную заявку либо удалена из письма.
-7. Админский вертикальный поток import -> apply в рабочую версию -> явная публикация -> deployment status показывает реальные данные.
+7. Админский вертикальный поток import → apply в рабочую версию → review → ручная публикация → progress/receipt/SQL status показывает реальные данные. CMS в Coolify не запускает deployment приложений.
 8. Real/sandbox contracts DaData, Tarifnik `address/check`, Dom.ru `contract-asterisked`, Tarifnik `appeal/create` и email согласованы и проверены. Обычная форма и видимая проверка подключения разделены; delivery невозможен без обязательной проверки провайдеров и однозначного `contacts: []`.
 9. Срок хранения сырых заявок 180 дней согласован и обеспечивается policy-driven purge.
 10. `TARIFNIK_UTM_CAMPAIGN` переведен с test-метки на подтвержденное production-значение.
@@ -49,8 +49,18 @@ City HOME, published-only Release 1 sitemap, глобальная навигац
 
 Цель: дать редактору управляемые версии, шаблоны/блоки, аудит, историю импортов и эксплуатационные панели без demo UI.
 
-Рабочие ревизии, audit log, ручная публикация снимков, корзина, типизированные переменные V1–V2 и SEO/OG-шаблоны S1–S4 уже реализованы раньше этой границы. C1 завершена в границах черновых паспортов без утверждения владельцем; C2 перевела городские HOME на общий шаблон. Остаются редакторы страниц и блоков C3–C5, очистка legacy-контента C6, финальное утверждение паспортов, завершение V3, media, analytics, monitoring и универсальный per-entity rollback. Проверка всех URL перед публикацией P1 реализована и развернута на внешнем test-контуре deployment `tuszecyovtkywimzjebxajwo`; 24 сентября первый реальный отчет `cmufiu1dl001q01uf4a33hqdb` проверил 4 018 URL без issues перед успешной публикацией ревизии 7. Backup/restore остается внешней эксплуатационной ответственностью владельца и не планируется как часть Release 1 или Release 3 этого репозитория. Для PII purge срок 180 дней уже согласован; низкоприоритетная перепроверка юридической основы ведется отдельно в #144.
+Рабочие ревизии, audit log, ручная публикация снимков, корзина, типизированные переменные V1–V2 и SEO/OG-шаблоны S1–S4 уже реализованы раньше этой границы. C1 подготовила read-only реестр; два Hero утверждены владельцем в версии 1.0.0, остальные 16 паспортов DRAFT. C2 перевела городские HOME на общий шаблон; C3 частично реализована редакторами двух Hero. Остаются редакторы страниц и блоков C3–C5, очистка legacy-контента C6, финальное утверждение паспортов, завершение V3, media, analytics, monitoring и универсальный per-entity rollback. Проверка всех URL перед публикацией P1 реализована и развернута на внешнем test-контуре deployment `tuszecyovtkywimzjebxajwo`; 24 сентября первый реальный отчет `cmufiu1dl001q01uf4a33hqdb` проверил 4 018 URL без issues перед успешной публикацией ревизии 7. Backup/restore остается внешней эксплуатационной ответственностью владельца и не планируется как часть Release 1 или Release 3 этого репозитория. Для PII purge срок 180 дней уже согласован; низкоприоритетная перепроверка юридической основы ведется отдельно в #144.
 
 ## Внешние зависимости
 
 Живые test-контракты DaData, обоих API Tarifnik, положительная/отрицательная семантика `contacts` Дом.ру и фактическая доставка синтетического письма Resend подтверждены; полный городской справочник, безопасная retry-политика, HTTP/contract-проверка и persistent outbox обычного уведомления реализованы. Миграция `0015`, worker и ручной retry outbox подтверждены на production-контуре: сохраненное уведомление перешло из `revision 1 / FAILED / HTTP 403` в `revision 2 / SUCCEEDED` с provider ID. Перепроверка реквизитов и legal basis остается низкоприоритетной задачей [#144](https://github.com/Celtoman/astro-telekom/issues/144), но не gate; [#31](https://github.com/Celtoman/astro-telekom/issues/31) закрыта решением владельца. [#145](https://github.com/Celtoman/astro-telekom/issues/145) отменена как ненужная для репозитория: backup/restore обеспечивает внешнее решение владельца. Изменение production campaign Tarifnik не входит в автономную работу агента и требует отдельного решения владельца. Дополнительных правил Tarifnik по rate limit и SLA владелец не получал; callback отсутствует.
+
+## Следующая согласованная очередь
+
+Сверка 6 октября 2026 года. Статусы задач определяются GitHub, а не этой очередью.
+
+1. Актуализировать действующую документацию и описания CMS/variables Issues (#237); архивировать планы 7 и 14 сентября, сохранить действующий план 21 сентября.
+2. Исправить недостоверный общий preview (#235); это единственная оставшаяся open issue в milestone Release 1 на дату сверки.
+3. Исправить seed и доказать свежий bootstrap/idempotence/publication preflight (#240).
+
+Дальнейший CMS scope остаётся в #193–196, variables — в #190 и родителях #166/#167. Direct Compose (#236), локальный Docker-инцидент (#251), дополнительная legal-проверка (#144) и diagnostics API (#34) имеют собственные границы. Их наличие не даёт разрешения расширять текущую работу; предложения изменить приоритеты из аудита ещё не применены.

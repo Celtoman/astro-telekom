@@ -1,30 +1,24 @@
-# Target Platform Implementation Plan
+# План реализации целевой платформы
 
-> Исторический исполнимый план: порядок работ и статусы ниже зафиксированы на указанные даты. Текущую реализацию сверять с [current-state.md](../current-state.md), механические статусы и чекбоксы — с GitHub Issues.
+Действующий план, сверка 6 октября 2026 года. Точное целевое ТЗ — [product-contract.md](../product-contract.md), реализованные возможности — [current-state.md](../current-state.md), следующая очередь — [release-plan.md](../release-plan.md). GitHub Issues являются единственным механическим источником статуса. Планы 7 и 14 сентября сохранены в docs/archive/plans.
 
-**Goal:** Быстрее получить рабочую Release 1-версию с полным публичным путем «города и тарифы → импорт → тарифная страница и расчет → заявка → атомарная публикация», не задерживая запуск полным CMS и эксплуатационными улучшениями следующих этапов.
+## Текущее состояние и ближайшая очередь
 
-**Architecture:** GitHub Issues являются единственным механическим источником статуса. Этот документ фиксирует последовательность, зависимости и границу Release 1; точные scope, файлы, миграции, тесты и критерии приемки находятся в атомарных task issues. Реализация продолжает существующую модель `workingRevision → SitePublication → SiteRebuild`; legacy-источники удаляются только отдельными задачами после доказанной миграции.
+Тарифный импорт/редактор/renderer/конфигуратор, адресные формы, lead pipeline/атрибуция, переменные V1–V2, SEO/OG S1–S4 и all-URL preflight реализованы; связанные атомарные Issues закрыты. CMS C2 использует общий CITY_HOME template, C1 подготовила реестр 18 паспортов. Два первых экрана утверждены и имеют специализированные редакторы; остальные паспорта DRAFT. V3 реализована частично, CMS C3–C6 не завершена.
 
-**Tech Stack:** Astro 7, React, Tailwind/shadcn, NestJS 12, Fastify 5, Prisma 7, PostgreSQL 18, BullMQ/Redis, Node test runner, Docker/Coolify.
+Согласованная текущая последовательность: актуализация документации #237 → достоверный общий preview #235 → исправление seed #240. На дату сверки #235 — единственная open issue milestone Release 1. Это не объявление о готовности к трафику: только владелец определяет готовность к реальному трафику.
 
----
+## Оставшиеся задачи целевой CMS
 
-## Состояние исполнения на 24 сентября 2026 года
+| Задача | Уже есть | Остаток и зависимость |
+| --- | --- | --- |
+| V3/#190 | Usage, вставка в SEO/promo/Hero, guarded migration API. | Переходы к editors и интеграция будущих CMS-полей; реальная migration только при согласованной DEPRECATING → ACTIVE паре. Сейчас все 11 кодов ACTIVE. |
+| C3/#193 | HOME/CITY_HOME Hero editor, draft/validation/audit, 0056 migration, версия паспорта в snapshot. | Остальные блоки и отдельный режим структуры/impact confirmation. Зависит от утверждения паспортов остальных блоков; read-only внешний rollout двух Hero подтверждён, внешний save/browser E2E отдельно не выполнен. |
+| C4/#194 | Общие функциональные страницы и их программная логика. | Allowlisted текстовые редакторы coverage/cities; фиксированные карта/поиск/список; нужны согласованные контракты. |
+| C5/#195 | Три публичные legal-страницы. | Constrained document editor, допустимые переменные, audit/preview/publication validation. Юридическая оценка #144 остаётся отдельно. |
+| C6/#196 | Общие templates и удалённые legacy SEO-колонки. | Inventory/mapping всех непустых content, equivalence, rollback proof и только затем destructive cleanup. Зависит от полной миграции C2–C5. |
 
-План ниже сохраняет исходную последовательность и обоснование. Статусы в этом разделе и таблице backlog — срез на 24 сентября, а не замена живого состояния Issues; доказательства того периода отдельно сопоставлены в [аудите решений и модели](../research/2026-09-24-decision-implementation-reconciliation.md). Позднейшие результаты, включая синтетическую заявку 25 сентября и завершение T5, L1, C2 и S4, приведены в [current-state.md](../current-state.md). После выполнения первых волн:
-
-- #158, #160, #161 и #162 закрыты; `0034`–`0036` применены на внешнем test-контуре, publication ревизии 4 успешна;
-- T1–T4 (#172–#175), T6–T8 (#176–#178) и F1–F2 (#170–#171) закрыты; родители #157 и #163 также закрыты;
-- `0037`–`0039` развернуты exact-SHA deployment `41odv3auf5vez3nknm0z2gcj` на `96df68594f9955edd7bc7090db03046acae7ea27`;
-- #202 закрыта после зеленого CI, успешного one-shot migrate и live no-op уже восстановленного Site на publication ревизии 5;
-- L2–L5 и L7 (#182–#185, #187), V1–V2 (#188–#189) и S1–S3 (#197–#199) закрыты после реализации; V3/#190 выполнена частично и остается открытой;
-- P1/#179 реализована: all-URL report прошел локальный PostgreSQL 18 rehearsal, CI и exact-SHA rollout `tuszecyovtkywimzjebxajwo`; 24 сентября внешний preflight `cmufiu1dl001q01uf4a33hqdb` проверил 4 018 URL без issues;
-- L6/#186 и риск основного канала delivery #210 закрыты после исправлений, CI и exact-SHA rollout на внешнем test-контуре; реальная доставка остается отдельной live-проверкой;
-- внешний генератор [Celtoman/tarifs#1](https://github.com/Celtoman/tarifs/issues/1) закрыт коммитом [`b9a51ed`](https://github.com/Celtoman/tarifs/commit/b9a51ed83fd3ab9e05c5e84a93aff54ba8d05bd2): 37 колонок и отчет покрытия 104 полей проверены на реальном исходнике; задача остается вне scope #163.
-- Платформенная приемка [#218](https://github.com/Celtoman/astro-telekom/issues/218) закрыта: XLSX с 3 805 тарифами дал 0 ошибок/предупреждений, был применён как полный snapshot, publication ревизии 7 и exact-SHA Coolify deployment `nsrkgjikko7ftp8tchbbkryi` завершились успешно; live каталог содержит 207 городов и 4 018 маршрутов.
-
-Старые формулировки «локально», «ожидает CI» и «незавершенный diff» в историческом порядке волн не являются текущим статусом. SEO/OG-шаблоны вошли в успешный опубликованный snapshot ревизии 7: live public API вернул `seoByPath` и `ogTitle` для `/`. Следующие рабочие правки снова потребуют отдельной публикации. На дату этого среза сквозная синтетическая заявка не выполнялась; её последующая приёмка описана в [отчёте от 25 сентября](../research/2026-09-25-release-one-synthetic-lead-acceptance.md).
+Родительские #166 и #167 агрегируют дочерние задачи и не являются дополнительными единицами работы. Direct Compose #236, Windows Docker-инцидент #251 и diagnostics API #34 имеют собственные границы и не входят автоматически в эту CMS-последовательность. Предложения изменить P1/P2 из аудита ещё не применены.
 
 ## Подтвержденные решения владельца от 2026-09-21
 
@@ -75,133 +69,10 @@
 
 Это не отмена задач: незавершённые пункты остаются backlog после получения рабочей версии. T9 выполнена позже и по-прежнему не входит в обязательный состав Release 1.
 
-## Milestone Release 1
-
-Фактический состав всегда проверяется через GitHub milestone. Актуализированный состав включает как открытые, так и уже закрытые элементы Release 1:
-
-| Срез | Issue | Причина включения |
-| --- | --- | --- |
-| R1: единая идентичность Дом.ру | [#162](https://github.com/Celtoman/astro-telekom/issues/162) | Закрыто; внешний rollout подтвержден |
-| R2: глобальные телефоны | [#158](https://github.com/Celtoman/astro-telekom/issues/158) | Закрыто; внешний rollout подтвержден |
-| R3: канонический каталог городов | [#160](https://github.com/Celtoman/astro-telekom/issues/160) | Закрыто; внешний rollout подтвержден |
-| F1: три результата адресной проверки | [#170](https://github.com/Celtoman/astro-telekom/issues/170) | Основной публичный flow |
-| F2: положительная ветка заявки | [#171](https://github.com/Celtoman/astro-telekom/issues/171) | Конверсионное завершение flow |
-| T1: parser XLSX | [#172](https://github.com/Celtoman/astro-telekom/issues/172) | Канонический вход каталога |
-| T2: identity и URL | [#173](https://github.com/Celtoman/astro-telekom/issues/173) | Запрещает скрытые дубли и смену URL |
-| T3: snapshot archive/undo | [#174](https://github.com/Celtoman/astro-telekom/issues/174) | Безопасный полный импорт |
-| T4: каталог и редактор | [#175](https://github.com/Celtoman/astro-telekom/issues/175) | Минимальная эксплуатация данных |
-| T6: renderer страницы тарифа | [#176](https://github.com/Celtoman/astro-telekom/issues/176) | Публичная тарифная URL-страница |
-| T7: конфигуратор | [#177](https://github.com/Celtoman/astro-telekom/issues/177) | Расчет выбранной комплектации |
-| T8: configuration snapshot | [#178](https://github.com/Celtoman/astro-telekom/issues/178) | Доказуемая заявка |
-| P1: all-URL validation report | [#179](https://github.com/Celtoman/astro-telekom/issues/179) | Атомарная безопасная публикация |
-| D1: repair legacy publication revision | [#202](https://github.com/Celtoman/astro-telekom/issues/202) | Закрыто; exact-SHA rollout подтвержден |
-
-Родительская [#157](https://github.com/Celtoman/astro-telekom/issues/157) закрыта. Внешняя [Celtoman/tarifs#1](https://github.com/Celtoman/tarifs/issues/1) не может входить в milestone другого репозитория; её результат принят платформой в отдельной закрытой задаче [#218](https://github.com/Celtoman/astro-telekom/issues/218).
-
-## Критический путь — исходная последовательность и остаток на 24 сентября
-
-Ниже сохранена исходная последовательность зависимостей. R1–R3, D1, T1–T4, T6–T8, F1–F2, внешний генератор и платформенная приемка XLSX закрыты. Release 1 опубликован на защищённом test-контуре; следующие шаги относятся к открытому backlog и отдельной проверке реальной заявки/операционного допуска владельцем. Исправления #186 и #210 перечислены в [актуальной сверке](../research/2026-09-24-decision-implementation-reconciliation.md).
-
-```text
-R1 #162 ─┐
-R2 #158 ─┼─> foundation rollout подтвержден
-R3 #160 ─┘
-        ↓
-D1 #202 → безопасный upgrade существующего publication snapshot
-
-Celtoman/tarifs#1
-        ↓
-T1 #172 → T2 #173 → T3 #174 → T4 #175  (закрыты)
-                                  ↓
-                               T6 #176 → T7 #177 ─┐
-                                                  ├→ T8 #178
-F1 #170 ─────────────────────────→ F2 #171 ───────┘
-                                                  ↓
-                                               P1 #179
-                                                  ↓
-             full gate + migration rehearsal
-                                                  ↓
-                  exact-SHA test deploy
-```
-
-В исходном плане F1 допускалась параллельно с T6–T7, а T8 зависела от F2 и T7. Эти задачи завершены; P1 прошла локальные проверки, CI и exact-SHA rollout. #202 устранена и проверена exact-SHA rollout.
-
-## Порядок исполнения Release 1
-
-### Волна 0. Зафиксировать foundation rollout — выполнено
-
-1. Проверить точные SHA `3842d5c`, `0e3ee43`, `027bf97` и отсутствие смешения с незакоммиченным тарифным diff.
-2. Подготовить согласованный exact-SHA deployment миграций `0034`, `0035`, `0036`.
-3. Не закрывать #162, #158 и #160 до внешнего применения, общей публикации и live smoke.
-
-### Волна 1. Завершить внешний XLSX — выполнено
-
-Исполнить [Celtoman/tarifs#1](https://github.com/Celtoman/tarifs/issues/1):
-
-- прочитать все фактические файлы `D:\01 vibecode\Tarifs\Input`;
-- сравнить все исходные столбцы с output;
-- присвоить каждому столбцу статус `transferred`, `transformed`, `audit-only` или `intentional exclusion`;
-- остановить output, если ранее пустой неподдерживаемый столбец получил содержательные значения;
-- доказать баланс строк и отсутствие silent loss;
-- получить канонический XLSX из 37 колонок.
-
-Проверено 24 сентября: 1 818 исходных строк = 1 175 активных + 109 ТВ + 534 исключенных; после размножения 3 805 строк, 37 колонок, 0 новых содержательных полей и неизвестных услуг. Отчет отражает 1 147 активных строк с намеренно исключенными камерами. Код генератора прошел 57 тестов; [issue закрыта](https://github.com/Celtoman/tarifs/issues/1). Полученный XLSX затем принят платформой, применён и опубликован в рамках [#218](https://github.com/Celtoman/astro-telekom/issues/218).
-
-### Волна 2. Разложить незавершенный тарифный diff — выполнено
-
-Перед реализацией:
-
-1. Снять read-only inventory текущего diff по файлам и hunks.
-2. Сопоставить каждый hunk с T1, T2 или T3.
-3. Не использовать `git reset --hard`, `git checkout --`, очистку `.codex-tmp` или потерю незакоммиченных изменений.
-4. Завершать и stage-ить только один атомарный срез за раз.
-5. Для каждого среза сначала добавить failing tests, затем реализацию и профильные документы; проверки выполнять по действующим [правилам AGENTS.md](../../AGENTS.md#тестирование-и-проверки). На момент составления плана полный gate предполагался для каждого среза.
-
-Последовательность: T1 [#172](https://github.com/Celtoman/astro-telekom/issues/172) → T2 [#173](https://github.com/Celtoman/astro-telekom/issues/173) → T3 [#174](https://github.com/Celtoman/astro-telekom/issues/174).
-
-### Волна 3. Минимальная эксплуатация и публичный renderer
-
-1. T4 [#175](https://github.com/Celtoman/astro-telekom/issues/175) дает оператору поиск, фильтры, quick card и shared manual/import validator.
-2. T6 [#176](https://github.com/Celtoman/astro-telekom/issues/176) переводит публичную страницу на типизированные данные и фиксированный порядок блоков.
-3. Dangerous purge и расширенный slug lifecycle остаются в T5 [#180](https://github.com/Celtoman/astro-telekom/issues/180) после Release 1.
-
-### Волна 4. Конфигуратор и форма
-
-1. T7 [#177](https://github.com/Celtoman/astro-telekom/issues/177) реализует чистый calculator и UI без скрытых платежей.
-2. F1 [#170](https://github.com/Celtoman/astro-telekom/issues/170) фиксирует typed result DTO и accessible modal states.
-3. F2 [#171](https://github.com/Celtoman/astro-telekom/issues/171) соединяет положительный результат с телефоном и базовым сохранением заявки.
-4. T8 [#178](https://github.com/Celtoman/astro-telekom/issues/178) после F2 и T7 сохраняет неизменяемый снимок комплектации.
-
-### Волна 5. Publication gate
-
-P1 [#179](https://github.com/Celtoman/astro-telekom/issues/179) должен:
-
-- проверять все затронутые URL одного snapshot;
-- считать ошибки и предупреждения по единому severity registry;
-- отменять публикацию целиком при одной блокирующей ошибке;
-- сохранять app version, автора, время, URL count, ошибки, предупреждения и итог;
-- оставлять предыдущую опубликованную версию доступной при неуспехе.
-
-### Волна 6. Приемка Release 1
-
-Перед итоговой приемкой Release 1 выполнить полный локальный gate одной командой; он уже включает сборку API до тестов:
-
-```powershell
-pnpm check
-```
-
-После успешного локального gate:
-
-1. migration rehearsal на production-like копии;
-2. exact-SHA test deployment;
-3. smoke городского каталога, tariff import preview/apply, тарифной страницы, calculator, трех результатов формы и сохраненной заявки;
-4. проверка route inventory, sitemap и publication report;
-5. только после этого закрытие release issues;
-6. push/deploy — только по отдельному разрешению владельца.
 
 ## Полный атомарный backlog
 
-| ID | Решения | Issue | Release 1 | Статус на 24 сентября 2026 года; после этой даты смотреть Issue |
+| ID | Решения | Issue | Release 1 | Статус на 6 октября 2026 года; live-статус смотреть в Issue |
 | --- | --- | --- | --- | --- |
 | R1 | `ADMIN-004–005` | #162 | Да | закрыто; rollout подтвержден |
 | R2 | `ADMIN-001`, `008`, `010`, `013`, `037`, `042` | #158 | Да | закрыто; rollout подтвержден |
@@ -212,14 +83,14 @@ pnpm check
 | T2 | `TAR-042–043`, `080–086` | #173 | Да | реализовано, issue закрыта; rollout `0037` подтвержден |
 | T3 | `TAR-001–004`, `014`, `019`, `083` | #174 | Да | реализовано, issue закрыта; rollout `0038` подтвержден |
 | T4 | tariff catalog/editor contract | #175 | Да | реализовано, issue закрыта |
-| T5 | tariff archive/slug lifecycle | #180 | Нет | частично: фильтры архива, slug/301 и публичное исключение архива есть; массовая очистка с учётом связей открыта |
+| T5 | tariff archive/slug lifecycle | #180 | Нет | завершено: archive/slug/301 и guarded purge; issue закрыта |
 | T6 | typed tariff renderer | #176 | Да | реализовано, issue закрыта; rollout и live HTML подтверждены |
 | T7 | tariff calculator/configurator | #177 | Да | реализовано, issue закрыта; live quote проверен |
 | T8 | `TAR-034` | #178 | Да | реализовано, issue закрыта; live quote проверен без создания заявки |
 | T9 | `CMS-024–028`, `030`, `032–034` | #181 | Нет | реализовано: карточка шаблона, рабочий/опубликованный preview, diff, калькулятор, device modes и code/data status; локальный gate, CI 36010495904 и Coolify deployment `s4gzkael3wfiplepsgj5syku` на `7d7995c` прошли, защищённые UI/API и отсутствие изменения ревизий после quote проверены |
 | F1 | `FORM-001–015` | #170 | Да | реализовано, issue закрыта; внешний safe smoke проверен |
 | F2 | `FORM-016–023`, `LEAD-014` | #171 | Да | реализовано, issue закрыта; live submit заявки не выполнялся |
-| L1 | `LEAD-001–006`, `011` | #154 | Нет | частично |
+| L1 | `LEAD-001–006`, `011` | #154 | Нет | реализована атрибуция; issue закрыта, приёмка 25 сентября |
 | L2 | reason registry/short-circuit | #182 | Нет | реализовано, issue закрыта |
 | L3 | comment analyzer | #183 | Нет | реализовано, issue закрыта |
 | L4 | DaData Phone | #184 | Нет | реализовано, issue закрыта; rollout подтверждён |
@@ -228,17 +99,17 @@ pnpm check
 | L7 | admin evidence/retry | #187 | Нет | issue закрыта; внешний rollout отдельно от механического статуса |
 | V1 | variable registry/parser/resolver | #188 | Нет | реализовано, issue закрыта |
 | V2 | variable catalog/context preview | #189 | Нет | реализовано, issue закрыта |
-| V3 | usage/insertion/deprecation | #190 | Нет | частично: текущие SEO/OG и promo insertion есть; будущие Page/Block editors и deprecation открыты |
-| C1 | `CMS-038–049` | #191 | Нет | черновой реестр подготовлен, финальное утверждение ждёт дизайна и `OPEN-005` |
+| V3 | usage/insertion/deprecation | #190 | Нет | частично: usage, SEO/promo/Hero insertion и guarded migration API есть; editor links/будущие поля и реальная согласованная пара замены остаются |
+| C1 | `CMS-038–049` | #191 | Нет | issue закрыта в scope реестра; два Hero APPROVED/1.0.0 и READY, остальные 16 DRAFT |
 | C2 | `CORE-005`, `CMS-001–018`, `CITY-024` | #192 | Нет | шаблон и backfill 207 HOME развернуты; полный публичный каталог эквивалентен, CI и exact-SHA smoke прошли; issue закрыта |
-| C3 | main-page editors | #193 | Нет | не начато |
+| C3 | main-page editors | #193 | Нет | частично: два Hero editor/validation/migration/preview реализованы; остальные блоки и режим структуры остаются |
 | C4 | functional-page editors | #194 | Нет | не начато |
 | C5 | legal document editor | #195 | Нет | не начато |
 | C6 | legacy content cleanup | #196 | Нет | не начато |
 | S1 | SEO core templates | #197 | Нет | реализовано в рабочем контуре, issue закрыта |
 | S2 | Open Graph | #198 | Нет | реализовано в рабочем контуре, issue закрыта |
 | S3 | noindex/sitemap | #199 | Нет | реализовано в рабочем контуре, issue закрыта |
-| S4 | local SEO cleanup | #200 | Нет | не начато |
+| S4 | local SEO cleanup | #200 | Нет | завершено: migration 0054 удаляет пустые legacy SEO; issue закрыта |
 | P1 | `CORE-006`, `CMS-014`, `036–037`, `ADMIN-043` | #179 | Да | реализовано: отчет и migration `0050`, CI и exact-SHA rollout; issue закрыта |
 | P2 | `CMS-029`, `031`, `035` | #201 | Нет | закрыто: шесть реальных сценариев, структурная диагностика и подсветка, общий renderer в preflight; локальный gate 569/569, CI 36017713767 и Coolify API deployment `i318nsifmcz836g4hszpugbs` на `08a73cf` прошли; live API показал пять покрытых сценариев и предупреждение для отсутствующей минимальной комплектации |
 | D1 | publication revision repair | #202 | Да | закрыто; `0039`, CI, exact-SHA rollout и live smoke подтверждены |

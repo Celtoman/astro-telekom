@@ -94,14 +94,15 @@ pnpm test:build                           # пересобрать apps/api, з�
 | [docs/api-contracts.md](docs/api-contracts.md) | Реализованные HTTP-маршруты и их ограничения |
 | [docs/data-model.md](docs/data-model.md) | Prisma-схема и её отличие от продуктового замысла |
 | [docs/deployment.md](docs/deployment.md) | Локальный/production контур, переменные, обязательные проверки |
+| [docs/publication.md](docs/publication.md) | Действующий контракт save/review/publish, atomic activation, CODE и progress |
 | [docs/worker.md](docs/worker.md) | Очереди, producer/consumer, поведение без Redis, graceful shutdown |
 | [docs/task-management.md](docs/task-management.md) | Как ведутся проблемы/задачи в GitHub Issues — обязательно перед работой с TD/issues |
 | [docs/product-findings.md](docs/product-findings.md) | Входящий реестр продуктовых, UX/UI и дизайн-находок для отдельного обсуждения |
 | [docs/technical-debt.md](docs/technical-debt.md) | Индекс приоритизированного долга (P0–P3), полный текст — в issues |
 | [docs/TEST_COVERAGE.md](docs/TEST_COVERAGE.md) | Что именно проверяет каждый файл в `tests/` — живой документ |
 | [docs/decisions.md](docs/decisions.md) | Согласованный продуктовый замысел — не подтверждает наличие в коде |
-| [docs/plans/2026-09-07-platform-stabilization-and-mvp.md](docs/plans/2026-09-07-platform-stabilization-and-mvp.md) | Исполнимый план задач до MVP |
-| [docs/research/](docs/research/) | Точечные read-only аудиты (переходные костыли, возможности стека) |
+| [docs/archive/plans/2026-09-07-platform-stabilization-and-mvp.md](docs/archive/plans/2026-09-07-platform-stabilization-and-mvp.md) | Архив исходного этапа MVP; текущий порядок — в docs/release-plan.md |
+| [docs/research/](docs/research) | Точечные read-only аудиты (переходные костыли, возможности стека) |
 
 Не откладывать doc-update «на потом», если код уже изменён.
 
