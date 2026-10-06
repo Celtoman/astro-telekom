@@ -107,7 +107,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| TD-165 | [#262](https://github.com/Celtoman/astro-telekom/issues/262) 🟢 | CI rehearsal теряет admin HTTP-соединение при проверке состояния после Caddy config reload |
+| TD-165 | [#262](https://github.com/Celtoman/astro-telekom/issues/262) ✅ | Control GET/POST не переносят pooled соединения через Caddy reload; readback и UNCERTAIN сохраняются |
 | #236 | [#236](https://github.com/Celtoman/astro-telekom/issues/236) ✅ | Direct Compose использует migration target; реальный Docker/PG rehearsal и идемпотентность |
 | TD-149 | [#245](https://github.com/Celtoman/astro-telekom/issues/245) ✅ | Private publication fixtures исключены из Docker context; image rehearsal прошёл |
 | TD-151 | [#247](https://github.com/Celtoman/astro-telekom/issues/247) ✅ | Redis rehearsal ожидает PONG и сразу обрабатывает ранний reject без сокрытия failure |
@@ -159,6 +159,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| TD-166 | [#263](https://github.com/Celtoman/astro-telekom/issues/263) ✅ | Publication/architecture синхронизированы с подтверждёнными rollout и direct migration target |
 | TD-164 | [#261](https://github.com/Celtoman/astro-telekom/issues/261) ✅ | API contract ссылается на выполненную внешнюю приёмку private static controller |
 | #237 | [#237](https://github.com/Celtoman/astro-telekom/issues/237) ✅ | Действующие документы и CMS/variables Issues синхронизированы; исторические планы отделены |
 | TD-155 | [#251](https://github.com/Celtoman/astro-telekom/issues/251) 🟢 | Windows Docker CLI иногда не читает context meta.json из-за блокировки другим процессом |

@@ -19,6 +19,8 @@
 
 Control API Caddy в конечном контейнере слушает loopback. Его порт не публикуется и не проксируется наружу. Включена проверка Origin; private controller выполняет запросы с допустимым Origin. Только controller формирует полную конфигурацию. Публичный endpoint состояния должен возвращать разрешённую metadata, а не конфигурацию с закрытым token.
 
+GET и POST к control API передают `Connection: close`: каждое соединение завершается после запроса и не переносится через config reload. Caddy заменяет admin HTTP-сервер и асинхронно закрывает старые idle-соединения; их повторное использование могло прервать readback (#262). `If-Match`, Origin, проверка фактически обслуживаемого артефакта и receipt остаются обязательными. POST автоматически не повторяется; недоступное чтение сохраняет `ActivationUncertainError` и существующее восстановление. [Исходник Caddy 2.11.4](https://github.com/caddyserver/caddy/blob/v2.11.4/admin.go#L345).
+
 HTML, favicon, CSS, JS и изображения выдаются с диска. При отказе API обычные страницы и assets продолжают открываться; API-функции честно сообщают недоступность.
 
 ## Артефакт и подтверждение
@@ -37,7 +39,7 @@ Versioned URL `/__publication_assets/<artifactId>/...` сохраняет точ
 
 CMS-активация допускает только более новую site revision с тем же renderer ID. Она не меняет контейнеры API/admin/worker и не обращается к Coolify deployment.
 
-CODE-активация может изменить renderer, но обязана сохранить publication ID, site revision и hash уже обслуживаемого каталога. Сам deployment не публикует сохранённую рабочую версию CMS. Private `/release-code` принимает exact deployment/commit вместе с renderer hash и nonce текущего controller. Проверяются latest finished deployment и healthy настроенный ресурс; проверка повторяется после Astro build. Старый nonce, другой hash или чужой каталог не разрешают переключение. Durable CODE intent/receipt восстанавливаются без отката к уже сменённой публикации. Закрытый machine-only Nest bridge получает текущий nonce/renderer и передаёт exact deployment/commit controller, сверяя active site/snapshot. Verified legacy adoption подключён в runtime и Coolify Compose; внешний rollout ещё не выполнен.
+CODE-активация может изменить renderer, но обязана сохранить publication ID, site revision и hash уже обслуживаемого каталога. Сам deployment не публикует сохранённую рабочую версию CMS. Private `/release-code` принимает exact deployment/commit вместе с renderer hash и nonce текущего controller. Проверяются latest finished deployment и healthy настроенный ресурс; проверка повторяется после Astro build. Старый nonce, другой hash или чужой каталог не разрешают переключение. Durable CODE intent/receipt восстанавливаются без отката к уже сменённой публикации. Закрытый machine-only Nest bridge получает текущий nonce/renderer и передаёт exact deployment/commit controller, сверяя active site/snapshot. Verified legacy adoption подключён в runtime и Coolify Compose; внешний CODE/CMS rollout подтверждён [приёмкой 6 октября](research/2026-10-06-publication-progress-and-recovery.md).
 
 Новый CMS job ждёт, пока renderer runtime совпадёт с обслуживаемым renderer, возвращая UNCERTAIN вместо финального FAILED. Уже сохранённый старый intent может восстановить активацию прежним выпущенным renderer; exact snapshot eligibility/digest проверяются повторно. CODE ждёт незавершённые более новые CMS intents; доказанно FAILED/CANCELLED snapshot не активируется и не блокирует выпуск кода.
 

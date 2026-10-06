@@ -22,7 +22,9 @@ export class CaddyActivation {
 
   async current() {
     try {
-      const response = await this.fetchImpl(`${this.adminUrl}/config/`, { headers: { origin: 'http://127.0.0.1:2019' }, signal: AbortSignal.timeout(10000) });
+      // Reload replaces Caddy's admin HTTP server and asynchronously closes its
+      // idle sockets. Never carry a control connection across configurations.
+      const response = await this.fetchImpl(`${this.adminUrl}/config/`, { headers: { origin: 'http://127.0.0.1:2019', connection: 'close' }, signal: AbortSignal.timeout(10000) });
       if (!response.ok) throw new ActivationUncertainError(`Serving state unavailable (${response.status})`);
       const config = await response.json();
       const etag = response.headers.get('etag');
@@ -78,7 +80,7 @@ export class CaddyActivation {
     let response;
     try {
       response = await this.fetchImpl(`${this.adminUrl}/config/`, {
-        method: 'POST', headers: { origin: 'http://127.0.0.1:2019', 'content-type': 'application/json', 'if-match': state.etag },
+        method: 'POST', headers: { origin: 'http://127.0.0.1:2019', connection: 'close', 'content-type': 'application/json', 'if-match': state.etag },
         body: JSON.stringify(config), signal: AbortSignal.timeout(30000),
       });
     } catch (error) {

@@ -43,6 +43,8 @@ Public content общих страниц ещё разрешается Provider 
 
 ## Проверки и окружение
 
+Control GET/POST публикации используют отдельные HTTP-соединения через `Connection: close`, чтобы config reload Caddy не оставлял readback на прежнем admin socket (#262). ETag CAS, проверка serving/manifest, durable receipt и восстановление UNCERTAIN сохранены; подробности в [контракте публикации](publication.md).
+
 Точный baseline и назначение suites находятся только в [TEST_COVERAGE.md](TEST_COVERAGE.md). Зелёный demo build доказывает сборку кода, но не доступность живого каталога, правильность seed или внешний browser E2E. Проверки публикации используют настоящие PostgreSQL/Redis/Nest HTTP/Astro/Caddy; внешние отправки проверяются отдельно с синтетическими данными.
 
 Переменные и операционные команды ведутся в [deployment.md](deployment.md), структура — в [site-structure.md](site-structure.md), HTTP — в [api-contracts.md](api-contracts.md), worker — в [worker.md](worker.md). Отсутствующая конфигурация, ошибка или недоступное evidence не означают нулевые данные или успешную проверку.

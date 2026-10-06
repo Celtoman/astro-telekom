@@ -19,7 +19,7 @@
 
 ## Контуры и потоки
 
-Coolify Compose запускает one-shot `migrate` из отдельного migration target после PostgreSQL healthcheck. Direct prod Compose пока содержит ошибку выбора runtime target (#236). `api` стартует только после успешного `prisma migrate deploy` и готового Redis; его `/health/ready` проверяет обе зависимости, а `/health/live` — только процесс. Seed остается отдельной операторской операцией, поскольку создает или обновляет продуктовые данные и администратора.
+Coolify Compose и direct prod Compose запускают one-shot `migrate` из отдельного migration target после PostgreSQL healthcheck. Packaging direct Compose исправлен в #236 и проверен migration rehearsal; полный direct stack отдельно не проверен. `api` стартует только после успешного `prisma migrate deploy` и готового Redis; его `/health/ready` проверяет обе зависимости, а `/health/live` — только процесс. Seed остается отдельной операторской операцией, поскольку создает или обновляет продуктовые данные и администратора.
 
 Целевой внешний deployment provider — Coolify с Git-based `docker-compose.coolify.yml` из GitHub. Первый rehearsal использует `tv-internet-dom.ru` и `admin.tv-internet-dom.ru` без дополнительного stage-контура; Coolify edge применяет один password middleware к обоим human-facing сервисам. API не получает внешний hostname: внутренние Caddy в web/admin проксируют same-origin `/api/*` в `api:3000`, поэтому Basic Auth не ломает browser fetch. Прямой `docker-compose.prod.yml` с внешним Caddy и портами 80/443 остается только локальной production-like конфигурацией.
 

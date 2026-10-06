@@ -4,6 +4,8 @@
 
 ## Технические и эксплуатационные аудиты
 
+- [Caddy control transport после config reload, 6 октября](2026-10-06-caddy-control-transport.md)
+
 - [Возможности и ограничения выбранного стека на 7 сентября](2026-09-07-stack-capability-audit.md)
 - [Переходные решения и legacy-остатки на 7 сентября](2026-09-07-workaround-audit.md)
 - [Coolify deployment и backup-границы на 9 сентября](2026-09-09-coolify-deployment.md)
