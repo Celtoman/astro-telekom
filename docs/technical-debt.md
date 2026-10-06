@@ -158,6 +158,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| TD-164 | [#261](https://github.com/Celtoman/astro-telekom/issues/261) ✅ | API contract ссылается на выполненную внешнюю приёмку private static controller |
 | #237 | [#237](https://github.com/Celtoman/astro-telekom/issues/237) ✅ | Действующие документы и CMS/variables Issues синхронизированы; исторические планы отделены |
 | TD-155 | [#251](https://github.com/Celtoman/astro-telekom/issues/251) 🟢 | Windows Docker CLI иногда не читает context meta.json из-за блокировки другим процессом |
 | TD-159 | [#253](https://github.com/Celtoman/astro-telekom/issues/253) ✅ | Caddy restart rehearsal использует новые HTTP-соединения и повторно занимает прежние порты |
