@@ -1,19 +1,19 @@
 # План реализации целевой платформы
 
-Действующий план, сверка 6 октября 2026 года. Точное целевое ТЗ — [product-contract.md](../product-contract.md), реализованные возможности — [current-state.md](../current-state.md), следующая очередь — [release-plan.md](../release-plan.md). GitHub Issues являются единственным механическим источником статуса. Планы 7 и 14 сентября сохранены в docs/archive/plans.
+Действующий план, сверка 7 октября 2026 года. Точное целевое ТЗ — [product-contract.md](../product-contract.md), реализованные возможности — [current-state.md](../current-state.md), следующая очередь — [release-plan.md](../release-plan.md). GitHub Issues являются единственным механическим источником статуса. Планы 7 и 14 сентября сохранены в docs/archive/plans.
 
 ## Текущее состояние и ближайшая очередь
 
-Тарифный импорт/редактор/renderer/конфигуратор, адресные формы, lead pipeline/атрибуция, переменные V1–V2, SEO/OG S1–S4 и all-URL preflight реализованы; связанные атомарные Issues закрыты. CMS C2 использует общий CITY_HOME template, C1 подготовила реестр 18 паспортов. Два первых экрана утверждены и имеют специализированные редакторы; остальные паспорта DRAFT. V3 реализована частично, CMS C3–C6 не завершена.
+Тарифный импорт/редактор/renderer/конфигуратор, адресные формы, lead pipeline/атрибуция, переменные V1–V2, SEO/OG S1–S4 и all-URL preflight реализованы; связанные атомарные Issues закрыты. CMS C2 использует общий CITY_HOME template, Текущий реестр содержит 13 паспортов: два первых экрана и тарифный блок APPROVED/1.0.0 с редакторами, остальные десять DRAFT. Согласованный scope C3 реализован в коде; внешний rollout подтверждается отдельно. V3 реализована частично, CMS C4–C6 не завершена.
 
-Согласованная очередь #237 → #235 → #240 завершена; после неё выполнены #258/#236 и доступный Hero usage slice #190 (#261). Текущая согласованная работа — #259/#260; оставшаяся часть #190 открыта. Документация и preview завершены; seed прошёл свежую PostgreSQL, повторный запуск и publication preflight. Остаток целевой CMS перечислен ниже. Это не объявление о готовности к трафику: только владелец определяет готовность к реальному трафику.
+Согласованная очередь #237 → #235 → #240 завершена; после неё выполнены #258/#236 и доступный Hero usage slice #190 (#261). После #259/#260 реализован новый согласованный scope #193; оставшаяся часть #190 открыта. Документация и preview завершены; seed прошёл свежую PostgreSQL, повторный запуск и publication preflight. Остаток целевой CMS перечислен ниже. Это не объявление о готовности к трафику: только владелец определяет готовность к реальному трафику.
 
 ## Оставшиеся задачи целевой CMS
 
 | Задача | Уже есть | Остаток и зависимость |
 | --- | --- | --- |
-| V3/#190 | Usage, вставка в SEO/promo/Hero, guarded migration API. | Переходы к editors и интеграция будущих CMS-полей; реальная migration только при согласованной DEPRECATING → ACTIVE паре. Сейчас все 11 кодов ACTIVE. |
-| C3/#193 | HOME/CITY_HOME Hero editor, draft/validation/audit, 0056 migration, версия паспорта в snapshot. | Остальные блоки и отдельный режим структуры/impact confirmation. Зависит от утверждения паспортов остальных блоков; read-only внешний rollout двух Hero подтверждён, внешний save/browser E2E отдельно не выполнен. |
+| V3/#190 | Usage, вставка в SEO/promo/Hero/тарифный блок, ссылки текущих редакторов, guarded migration API. | Переходы к editors и интеграция будущих CMS-полей; реальная migration только при согласованной DEPRECATING → ACTIVE паре. Сейчас все 11 кодов ACTIVE. |
+| C3/#193 | Два Hero и Figma B04, редакторы/preview/validation/audit, 0056/0058, два блока CITY_HOME, меню «Страницы» и отдельные паспорта. | Согласованный scope реализован; внешняя приёмка — в issue. Будущие блоки добавляются отдельно, старые редакторы и режим произвольной структуры исключены. |
 | C4/#194 | Общие функциональные страницы и их программная логика. | Allowlisted текстовые редакторы coverage/cities; фиксированные карта/поиск/список; нужны согласованные контракты. |
 | C5/#195 | Три публичные legal-страницы. | Constrained document editor, допустимые переменные, audit/preview/publication validation. Юридическая оценка #144 остаётся отдельно. |
 | C6/#196 | Общие templates и удалённые legacy SEO-колонки. | Inventory/mapping всех непустых content, equivalence, rollback proof и только затем destructive cleanup. Зависит от полной миграции C2–C5. |
@@ -99,10 +99,10 @@
 | L7 | admin evidence/retry | #187 | Нет | issue закрыта; внешний rollout отдельно от механического статуса |
 | V1 | variable registry/parser/resolver | #188 | Нет | реализовано, issue закрыта |
 | V2 | variable catalog/context preview | #189 | Нет | реализовано, issue закрыта |
-| V3 | usage/insertion/deprecation | #190 | Нет | частично: usage, SEO/promo/Hero insertion и guarded migration API есть; editor links/будущие поля и реальная согласованная пара замены остаются |
-| C1 | `CMS-038–049` | #191 | Нет | issue закрыта в scope реестра; два Hero APPROVED/1.0.0 и READY, остальные 16 DRAFT |
+| V3 | usage/insertion/deprecation | #190 | Нет | частично: usage, SEO/promo/Hero/тарифный блок insertion и guarded migration API есть; editor links/будущие поля и реальная согласованная пара замены остаются |
+| C1 | `CMS-038–049` | #191 | Нет | issue закрыта в scope реестра; два Hero и tariff_grid APPROVED/1.0.0 и READY, остальные десять DRAFT |
 | C2 | `CORE-005`, `CMS-001–018`, `CITY-024` | #192 | Нет | шаблон и backfill 207 HOME развернуты; полный публичный каталог эквивалентен, CI и exact-SHA smoke прошли; issue закрыта |
-| C3 | main-page editors | #193 | Нет | частично: два Hero editor/validation/migration/preview реализованы; остальные блоки и режим структуры остаются |
+| C3 | main-page editors | #193 | Нет | согласованный scope реализован: два Hero, B04, новые редакторы и меню; прежние блоки/режим структуры исключены, внешний rollout проверяется отдельно |
 | C4 | functional-page editors | #194 | Нет | не начато |
 | C5 | legal document editor | #195 | Нет | не начато |
 | C6 | legacy content cleanup | #196 | Нет | не начато |
