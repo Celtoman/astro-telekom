@@ -178,7 +178,7 @@ export class SiteCatalogService {
 
   pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string) {
     if (page.type === 'HOME' && cityName) { page = { ...page, blocks: projectCityHomeBlocks(page.blocks || []) }; validateCityHomeBlocks(page.blocks, cityName); }
-    else validatePublishedBlocks(page.blocks);
+    else validatePublishedBlocks(page.blocks, { pageType: cityName ? page.type : undefined });
     const { templateId: _templateId, ...publicPage } = page;
     return {
       ...publicPage,

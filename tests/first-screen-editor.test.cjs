@@ -46,6 +46,11 @@ test('incomplete safe content saves as a working draft but cannot pass publicati
   assert.equal(result.report.outcome, 'BLOCKED');
   assert.equal(result.catalog, null);
   assert.ok(result.report.issues.some(issue => issue.code === 'FIRST_SCREEN_NOT_READY'));
+  const issue = result.report.issues.find(issue => issue.code === 'FIRST_SCREEN_NOT_READY');
+  assert.equal(issue.template, 'HOME');
+  assert.equal(issue.block, 'home.hero');
+  assert.equal(issue.field, 'title');
+  assert.equal(issue.reason, 'REQUIRED');
 });
 
 test('catalog resolves template titles but preserves separate root and city form labels', () => {

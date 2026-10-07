@@ -4,7 +4,7 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [AGENTS.md](../AGENTS.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 707/707 passing на 7 октября 2026 года** (`pnpm check`, включая свежий атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
+**Baseline: 715/715 passing на 7 октября 2026 года** (`pnpm check`, включая свежий атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
 
 | Файл | Что проверяет |
 | --- | --- |
@@ -154,3 +154,10 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 - `web-build-data.test.mjs`: реальная Astro-сборка прежнего каталога показывает только Hero + новые тарифы, сохраняет #tariffs/адресные действия/details и исключает старые блоки. `admin-block-passports-ui`, `block-passports`, `admin-navigation-performance`, `browser-security`, `tariff-template-ui` проверяют отдельные маршруты/реестр и сохраняемую диагностику tariff detail.
 
 `variable-catalog.test.cjs` дополнительно проверяет переход из title/text тарифного блока в `/templates/tariffs` с site context для рабочей и исторической опубликованной колонки, сохраняя immutable evidence.
+
+
+- `publication-validation.test.cjs`: старые тарифные коллекции служебных страниц включены в каталог без появления detail URL и изменения source; некорректный limit возвращает город/тип страницы/блок/поле до рендера; новый CITY_HOME передаёт причину и длину текстового поля.
+- `tariff-collection.test.cjs`: legacy-совместимость ограничена служебными типами, неизвестные поля/enum и неверный limit отклоняются; новый CITY_HOME остаётся строгим; текстовые ошибки различают формат, длину и HTML с metadata HTTP-ответа.
+- `publication-issue-presentation.test.mjs`: русские названия, site/kind/field deep links, реальные tariff IDs, честные системные и исторические сообщения, служебные данные без выдуманного URL/редактора.
+- `block-validation.test.cjs`: PATCH прежнего service tariff_grid сохраняет полный контракт и одну attributed revision; неверный limit отклоняется до записи. `first-screen-editor.test.cjs` проверяет точное поле и причину незаполненного заголовка HOME в publication preflight.
+- `public-city-catalog.test.cjs`: неполный legacy hero отклоняется с HTTP 400 и структурированными блоком/полем/причиной вместо поиска имени поля в сообщении.

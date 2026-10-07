@@ -1,3 +1,4 @@
+import { usePublicationFieldFocus } from "./usePublicationFieldFocus"
 import { useUnsavedChanges } from "./useUnsavedChanges"
 import { useEffect, useRef, useState } from "react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
@@ -41,6 +42,7 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
   const [activeField, setActiveField] = useState<"title" | "text" | null>(null)
   const input = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null)
   const selected = workspace?.screens.find(screen => screen.kind === kind)
+  const publicationFocus = usePublicationFieldFocus(!loading && !!selected, siteId + kind, "home")
   const dirty = !!selected && JSON.stringify(data) !== JSON.stringify(selected.data)
   const handleError = (caught: unknown) => {
     if (caught instanceof AdminApiError && caught.status === 401) { window.location.replace("/login"); return }
@@ -104,7 +106,7 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
       onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setData({ ...data, [key]: event.target.value }),
       onFocus: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { if (key === "title" || key === "text") { setActiveField(key); input.current = event.currentTarget } },
     }
-    return <Field key={key} data-invalid={invalid}><FieldLabel htmlFor={props.id}>{fields[key].label}</FieldLabel>
+    return <Field key={key} data-invalid={invalid} className={publicationFocus.field === key ? "rounded-lg bg-muted p-3 ring-2 ring-primary" : undefined}><FieldLabel htmlFor={props.id}>{fields[key].label}</FieldLabel>
       {key === "text" ? <textarea {...props} rows={4} className="w-full rounded-lg border border-input bg-background p-3 text-base outline-none focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive md:text-sm" /> : <Input {...props} className="min-h-11" />}
       <FieldDescription id={descriptionId}>{invalid ? "Обязательное поле. Пустое значение можно сохранить в черновике." : key === "image" ? "Локальный путь /images/… или HTTPS URL." : key === "imageAlt" ? "Кратко опишите изображение для доступности." : `${String(data[key] ?? "").length} из ${fields[key].limit} символов`}</FieldDescription>
     </Field>
@@ -114,6 +116,7 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
     <div><h1 className="font-heading text-2xl font-semibold">Первые экраны</h1><p className="mt-2 text-sm text-muted-foreground">Изменения сохраняются в рабочую версию. Публикация сайта выполняется отдельно.</p></div>
     <div className="grid gap-4 sm:grid-cols-2"><Field><FieldLabel htmlFor="home-site">Сайт</FieldLabel><select id="home-site" className="min-h-11 rounded-lg border bg-background px-3 text-sm" value={siteId} disabled={saving} onChange={event => { if (discard()) setSiteId(event.target.value) }}><option value="">Выберите сайт</option>{sites.map(site => <option key={site.id} value={site.id}>{site.name}</option>)}</select></Field>
       <Field><FieldLabel htmlFor="home-kind">Первый экран</FieldLabel><select id="home-kind" className="min-h-11 rounded-lg border bg-background px-3 text-sm" value={kind} disabled={saving || loading} onChange={event => changeKind(event.target.value as Kind)}>{Object.entries(names).map(([key, name]) => <option key={key} value={key}>{name}</option>)}</select></Field></div>
+    {publicationFocus.label && <Alert><AlertTitle>Поле из проверки публикации: «{publicationFocus.label}»</AlertTitle><AlertDescription>Проверьте выделенное поле, сохраните исправление и повторите проверку публикации.</AlertDescription></Alert>}
     {error ? <Alert variant="destructive"><AlertTitle>Не удалось выполнить действие</AlertTitle><AlertDescription>{error}<Button variant="outline" disabled={saving || loading} onClick={() => { if (discard()) setRefresh(value => value + 1) }}>Повторить загрузку</Button></AlertDescription></Alert> : null}
     {message ? <p role="status" className="text-sm">{message}</p> : null}
     {loading ? <p role="status">Загружаем контент…</p> : siteId && !selected ? <Alert><AlertDescription>Шаблон не найден. Проверьте применение миграции данных.</AlertDescription></Alert> : null}
@@ -123,7 +126,7 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
           <FieldSet disabled={saving}><FieldLegend>Текст первого экрана</FieldLegend><FieldGroup>{field("title")}{field("text")}</FieldGroup></FieldSet>
           <FieldSet disabled={saving}><FieldLegend>Изображение</FieldLegend><FieldGroup>{field("image")}{field("imageAlt")}</FieldGroup></FieldSet>
           <FieldSet disabled={saving}><FieldLegend>Проверка адреса</FieldLegend><FieldGroup>{field("addressPlaceholder")}{field("checkButtonText")}</FieldGroup></FieldSet>
-          {kind === "CITY_HOME" ? field("tariffsCtaText") : <FieldSet disabled={saving}><FieldLegend>Три пояснения под формой</FieldLegend><FieldGroup>{[0, 1, 2].map(index => <Field key={index}><FieldLabel htmlFor={`home-chip-${index}`}>Пояснение {index + 1}</FieldLabel><Input id={`home-chip-${index}`} value={data.chips?.[index] ?? ""} maxLength={80} aria-required="true" className="min-h-11" onChange={event => { const chips = [...(data.chips ?? ["", "", ""])]; chips[index] = event.target.value; setData({ ...data, chips }) }} /></Field>)}</FieldGroup></FieldSet>}
+          {kind === "CITY_HOME" ? field("tariffsCtaText") : <FieldSet disabled={saving}><FieldLegend>Три пояснения под формой</FieldLegend><FieldGroup>{[0, 1, 2].map(index => <Field key={index} className={publicationFocus.field === `chips.${index}` || publicationFocus.field === "chips" && index === 0 ? "rounded-lg bg-muted p-3 ring-2 ring-primary" : undefined}><FieldLabel htmlFor={`home-chip-${index}`}>Пояснение {index + 1}</FieldLabel><Input id={`home-chip-${index}`} value={data.chips?.[index] ?? ""} maxLength={80} aria-required="true" className="min-h-11" onChange={event => { const chips = [...(data.chips ?? ["", "", ""])]; chips[index] = event.target.value; setData({ ...data, chips }) }} /></Field>)}</FieldGroup></FieldSet>}
         </FieldGroup><div className="flex flex-wrap gap-3"><Button type="submit" className="min-h-11" disabled={saving || !dirty}>{saving ? "Сохраняем…" : "Сохранить рабочую версию"}</Button><Button type="button" variant="outline" className="min-h-11" disabled={saving} onClick={() => { if (discard()) setRefresh(value => value + 1) }}>Обновить данные</Button></div></form></CardContent>
       </Card>
       <aside className="flex min-w-0 flex-col gap-4"><Card><CardHeader><CardTitle>Проверить изменения</CardTitle><CardDescription>Рабочая ревизия {workspace?.workingRevision}. На сайте — {workspace?.publishedRevision}.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><p className="text-sm text-muted-foreground">{kind === "CITY_HOME" ? "Стоимость, скорость и каналы берутся из тарифов города. Переход к тарифам всегда ведёт к #tariffs." : "Порядок и иконки пояснений закреплены в дизайне."} Логика адресной формы общая.</p><Button asChild variant="outline" className="min-h-11"><a href={`/preview?siteId=${encodeURIComponent(siteId)}&path=${kind === "HOME" ? "%2F" : "CITY_HOME"}`} target="_blank" rel="noreferrer">Открыть сохранённую версию</a></Button><Button asChild variant="outline" className="min-h-11"><a href="/templates/passports">Открыть паспорт блока</a></Button><p className="text-xs text-muted-foreground">В предпросмотре формы и переходы отключены. Несохранённые значения туда не попадают.</p></CardContent></Card>

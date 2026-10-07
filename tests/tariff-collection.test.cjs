@@ -36,6 +36,22 @@ test('only exact legacy HOME composition is projected; snapshots are not mutated
   assert.deepEqual(projectCityHomeBlocks(blocks.slice(0, 3)).map(b => b.blockType), ['hero','service_grid','tariff_grid']);
 });
 
+test('legacy compatibility is scoped and content diagnostics distinguish type, length and markup', () => {
+  const { validatePublishedBlocks, validateCityHomeBlocks } = require('../apps/api/dist/block-validation.js');
+  const legacy = [
+    { blockType: 'hero', position: 0, visible: true, data: { title: 'Hero', text: 'Text' } },
+    { blockType: 'tariff_grid', position: 1, visible: true, data: { title: 'Tariffs', limit: 6, serviceType: 'INTERNET' } },
+  ];
+  assert.doesNotThrow(() => validatePublishedBlocks(legacy, { pageType: 'INTERNET' }));
+  assert.throws(() => validateCityHomeBlocks(legacy, 'Казань'));
+  for (const extra of [{ limit: 0 }, { serviceType: 'HOME' }, { unexpected: true }]) {
+    assert.throws(() => validatePublishedBlocks([legacy[0], { ...legacy[1], data: { ...legacy[1].data, ...extra } }], { pageType: 'INTERNET' }));
+  }
+  for (const [value, reason] of [[null, 'TYPE'], ['x'.repeat(1001), 'TOO_LONG'], ['<b>text</b>', 'UNSAFE_TEXT']]) {
+    assert.throws(() => validateTariffCollection({ ...tariffCollectionDefaults(), text: value }), error => error.field === 'text' && error.reason === reason && error.getResponse().field === 'text');
+  }
+});
+
 test('collection HTML escapes catalog/editor content and preview cannot execute buttons or links', () => {
   const data = { ...tariffCollectionDefaults(), title: '<script>alert(1)</script>' };
   const tariffs = Array.from({ length: 8 }, (_, i) => ({ slug: `t-${i}`, name: `Tariff ${i} <img>`, price: `${i + 1} ₽/мес`, priceAmount: i + 1, serviceType: 'INTERNET', speed: '100 Мбит/с', baseComponents: [], cinemas: [], equipment: [], attributes: {} }));

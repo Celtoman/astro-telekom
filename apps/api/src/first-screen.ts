@@ -1,4 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
+import { ContentValidationError, validateContentText } from './content-validation-error';
 import { listVariableDefinitions, resolveVariableText } from './variable-registry';
 
 export type FirstScreenKind = 'HOME' | 'CITY_HOME';
@@ -24,31 +25,32 @@ export function validateFirstScreen(kind: FirstScreenKind, raw: unknown, draft =
   const missing: string[] = [];
   for (const [key, limit] of Object.entries(limits)) {
     const value = data[key];
-    if (typeof value !== 'string' || value.length > limit || /[<>\u0000-\u0008]/.test(value)) throw new BadRequestException(`Некорректное поле ${key}: текст до ${limit} символов без HTML`);
+    validateContentText(value, key, limit);
     if (!value.trim()) missing.push(key);
     if (key === 'title' || key === 'text') {
-      resolveVariableText(value, { now: new Date() }, { path: key, field: 'TEXT' });
+      try { resolveVariableText(value, { now: new Date() }, { path: key, field: 'TEXT' }); }
+      catch (error) { throw new ContentValidationError(key, 'VARIABLE', error instanceof Error ? error.message : String(error)); }
       for (const token of value.matchAll(/\{([^{}]+)\}/g)) {
         const definition = listVariableDefinitions().find(item => item.code === token[1]);
-        if (!definition || definition.scope === 'TARIFF' || (kind === 'HOME' && definition.scope === 'CITY')) throw new BadRequestException(`Переменная {${token[1]}} недоступна для ${kind}`);
+        if (!definition || definition.scope === 'TARIFF' || (kind === 'HOME' && definition.scope === 'CITY')) throw new ContentValidationError(key, 'VARIABLE', `Переменная {${token[1]}} недоступна для этого первого экрана. Выберите переменную из списка редактора.`);
       }
-    } else if (/[{}]/.test(value)) throw new BadRequestException(`Переменные разрешены только в заголовке и описании: ${key}`);
+    } else if (/[{}]/.test(value)) throw new ContentValidationError(key, 'VARIABLE', 'Переменные разрешены только в заголовке и описании.');
   }
   if (data.image) {
     const image = data.image as string;
-    if (/\s|\\/.test(image) || image.startsWith('//')) throw new BadRequestException('Некорректная ссылка изображения');
+    if (/\s|\\/.test(image) || image.startsWith('//')) throw new ContentValidationError('image', 'URL', 'Некорректная ссылка изображения');
     if (image.startsWith('/')) {
-      if (!/^\/(?:[\w.-]+\/)*[\w.-]+$/.test(image) || image.split('/').some(part => part === '.' || part === '..')) throw new BadRequestException('Некорректный локальный путь изображения');
+      if (!/^\/(?:[\w.-]+\/)*[\w.-]+$/.test(image) || image.split('/').some(part => part === '.' || part === '..')) throw new ContentValidationError('image', 'URL', 'Некорректный локальный путь изображения');
     } else {
       try { const url = new URL(image); if (url.protocol !== 'https:' || url.username || url.password) throw new Error(); }
-      catch { throw new BadRequestException('Изображение должно иметь локальный путь или HTTPS URL'); }
+      catch { throw new ContentValidationError('image', 'URL', 'Изображение должно иметь локальный путь или HTTPS URL'); }
     }
   }
   if (kind === 'HOME') {
-    if (!Array.isArray(data.chips) || data.chips.length !== 3 || data.chips.some(value => typeof value !== 'string' || value.length > 80 || /[<>{}]/.test(value))) throw new BadRequestException('Нужны ровно три текстовых пояснения до 80 символов');
+    if (!Array.isArray(data.chips) || data.chips.length !== 3 || data.chips.some(value => typeof value !== 'string' || value.length > 80 || /[<>{}]/.test(value))) throw new ContentValidationError('chips', 'FORMAT', 'Нужны ровно три текстовых пояснения до 80 символов');
     data.chips.forEach((value, index) => { if (!(value as string).trim()) missing.push(`chips.${index}`); });
   }
-  if (!draft && missing.length) throw new BadRequestException(`Первый экран не готов: ${missing.join(', ')}`);
+  if (!draft && missing.length) throw new ContentValidationError(missing[0], 'REQUIRED', 'Первый экран не готов: обязательное поле пустое. Заполните его и повторите проверку.');
   return missing;
 }
 

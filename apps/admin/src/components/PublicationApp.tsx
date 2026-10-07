@@ -1,3 +1,4 @@
+import { PublicationIssueCard } from "./PublicationIssueCard"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { CheckCircle2, CircleAlert, FileCheck2, History, RefreshCw } from "lucide-react"
 import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
@@ -104,7 +105,7 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
                 {blocking ? <CircleAlert /> : <FileCheck2 />}<AlertTitle>{blocking ? "Исправьте ошибки перед публикацией" : publicationActive ? "Проверка пройдена · публикация выполняется" : !review.hasUnpublishedChanges ? "Проверка пройдена" : warnings ? "Можно публиковать · есть предупреждения" : "Можно публиковать · проверка пройдена"}</AlertTitle>
                 <AlertDescription>Проверено страниц: {review.validation.checkedUrlCount}. Ошибок: {blocking}. Предупреждений: {warnings}.</AlertDescription>
               </Alert>
-              {issues.length ? <ul className="space-y-3">{issues.slice(0, visibleIssues).map((issue, index) => <li className="rounded-lg border p-3 text-sm" key={`${issue.path}-${issue.code}-${index}`}><p className="font-medium">{issue.severity === "BLOCKING" ? "Ошибка" : "Предупреждение"} · <span className="break-all">{issue.path}</span></p><p className="mt-1 break-words text-muted-foreground">{issue.message}</p>{issue.relatedPath ? <p className="mt-1 break-all text-xs text-muted-foreground">Связано с {issue.relatedPath}</p> : null}</li>)}</ul> : null}
+              {issues.length ? <ul className="space-y-3">{issues.slice(0, visibleIssues).map((issue, index) => <PublicationIssueCard key={`${issue.path}-${issue.code}-${index}`} issue={issue} siteId={site?.id ?? ""} />)}</ul> : null}
               {issues.length > visibleIssues ? <Button className="min-h-11" variant="outline" onClick={() => setVisibleIssues((count) => count + 20)}>Показать ещё 20</Button> : null}
               <details className="text-sm"><summary className="cursor-pointer rounded py-2 outline-none focus-visible:ring-3 focus-visible:ring-ring/50">Проверенные страницы ({review.validation.checkedUrlCount})</summary><ul className="mt-2 max-h-64 overflow-auto rounded-lg border p-3">{review.validation.checkedPaths.map((path) => <li className="break-all py-1" key={path}>{path}</li>)}</ul></details>
             </>}

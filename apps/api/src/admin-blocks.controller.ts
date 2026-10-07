@@ -42,7 +42,7 @@ export class AdminBlocksController {
 
   @Post('pages/:pageId/blocks')
   async create(@Param('pageId') pageId: string, @Body() body: BlockBody, @Req() request?: AdminRequest) {
-    validateBlock(body);
+    validateBlock(body, false, { deferData: true });
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const pageBefore = await transaction.page.findUnique({
         where: { id: pageId },
@@ -50,6 +50,7 @@ export class AdminBlocksController {
       });
       if (!pageBefore) throw new NotFoundException('Страница не найдена');
       assertEditablePage(pageBefore);
+      validateBlock(body, false, { pageType: pageBefore.type });
       const block = await transaction.pageBlock.create({ data: { ...body, pageId } });
       const page = await transaction.page.findUnique({
         where: { id: pageId },
@@ -73,7 +74,7 @@ export class AdminBlocksController {
 
   @Patch('blocks/:id')
   async update(@Param('id') id: string, @Body() body: Partial<BlockBody>, @Req() request?: AdminRequest) {
-    validateBlock(body, true);
+    validateBlock(body, true, { deferData: true });
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const initialBlock = await transaction.pageBlock.findUnique({ where: { id } });
       if (!initialBlock) throw new NotFoundException('Блок не найден');
@@ -100,7 +101,7 @@ export class AdminBlocksController {
           visible: body.visible ?? stored.visible,
           data: body.data ?? stored.data,
           source: 'source' in body ? body.source : stored.source,
-        });
+        }, false, { pageType: pageBefore.type });
         const result = await transaction.pageBlock.updateMany({
           where: { id, blockType: stored.blockType },
           data: body,

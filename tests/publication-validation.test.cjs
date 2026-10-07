@@ -8,6 +8,44 @@ const fixedNow = new Date('2026-09-24T08:00:00.000Z');
 const render = (source, now) => new SiteCatalogService({}).renderSource(source, now);
 const input = { appVersion: '0.1.0', requestedById: 'user-1', siteRevision: 7, now: fixedNow };
 
+test('legacy service collections remain valid without relaxing the CITY_HOME passport', () => {
+  const source = publicationSource([city('kazan', ['giga'])]);
+  const service = { id: 'service-internet', type: 'INTERNET', slug: 'internet', content: {}, seo: {}, blocks: [
+    { blockType: 'hero', position: 0, visible: true, data: { title: 'Интернет', text: 'Подключение' } },
+    { blockType: 'tariff_grid', position: 1, visible: true, data: { title: 'Тарифы' } },
+  ] };
+  source.cities[0].pages.push(service);
+  const before = structuredClone(source);
+  const valid = validatePublicationSource(source, input, render);
+  assert.notEqual(valid.report.outcome, 'BLOCKED');
+  assert.deepEqual(source, before);
+  assert.equal(valid.catalog.routes.some(route => route.path === '/kazan/internet'), false);
+  service.blocks[1].data.limit = 99;
+  const invalid = validatePublicationSource(source, input, render).report;
+  const issue = invalid.issues.find(issue => issue.code === 'SERVICE_PAGE_BLOCKS');
+  assert.equal(issue.pageType, 'INTERNET');
+  assert.equal(issue.block, 'tariff_grid');
+  assert.equal(issue.field, 'limit');
+  assert.equal(issue.context, 'SERVICE_DATA');
+  assert.equal(issue.path, '/kazan');
+  assert.equal(invalid.issues.some(issue => issue.code === 'CATALOG_RENDER'), false);
+});
+
+test('collection errors carry the exact field and cause before rendering', () => {
+  const { tariffCollectionDefaults } = require('../apps/api/dist/tariff-collection-model.js');
+  const source = publicationSource([]);
+  source.pageTemplates = [{ kind: 'CITY_HOME', content: { tariffCollectionPassportVersion: '1.0.0' }, blocks: [
+    { blockType: 'tariff_grid', visible: true, data: { ...tariffCollectionDefaults(), text: 'a'.repeat(1001) } },
+  ] }];
+  const result = validatePublicationSource(source, input, () => { throw Error('must not render'); });
+  const issue = result.report.issues.find(issue => issue.code === 'TARIFF_COLLECTION_NOT_READY');
+  assert.equal(issue.template, 'CITY_HOME');
+  assert.equal(issue.block, 'tariff_grid');
+  assert.equal(issue.field, 'text');
+  assert.equal(issue.reason, 'TOO_LONG');
+  assert.match(issue.message, /1001.*1000/);
+});
+
 test('validation covers every Release 1 URL and keeps warnings non-blocking', () => {
   const source = publicationSource([city('kazan', ['giga-300', 'giga-500']), city('moskva', ['giga-800'])]);
   const { report, catalog } = validatePublicationSource(source, input, render);

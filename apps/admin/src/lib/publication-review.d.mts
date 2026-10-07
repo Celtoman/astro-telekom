@@ -10,8 +10,13 @@ export interface PublicationReview {
   validation: {
     outcome: 'BLOCKED' | 'PASSED_WITH_WARNINGS' | 'PASSED'; checkedUrlCount: number;
     checkedPaths: string[]; validatedAt: string;
-    issues: Array<{ severity: 'BLOCKING' | 'WARNING'; path: string; message: string; code: string; relatedPath?: string }>;
+    issues: PublicationIssue[];
   };
+}
+export interface PublicationIssue {
+  severity: 'BLOCKING' | 'WARNING'; path: string; message: string; code: string; relatedPath?: string;
+  template?: string; block?: string; field?: string; reason?: string;
+  context?: 'SERVICE_DATA'; pageType?: string; entityId?: string;
 }
 export function canPublishReviewedRevision(state: PublicationState | null, review: PublicationReview | null,
   options?: { unavailable?: boolean; busy?: boolean }): boolean;

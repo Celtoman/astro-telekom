@@ -9,6 +9,7 @@ import { sitePhoneReadinessErrors } from './site-phone';
 import { resolveSeoTemplates } from './seo-templates';
 import { tariffPreviewDiagnostics } from './tariff-preview-diagnostics';
 import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
+import { contentErrorLocation } from './content-validation-error';
 
 export type PublicationValidationIssue = {
   severity: 'BLOCKING' | 'WARNING';
@@ -19,6 +20,10 @@ export type PublicationValidationIssue = {
   template?: string;
   block?: string;
   field?: string;
+  reason?: string;
+  context?: 'SERVICE_DATA';
+  pageType?: string;
+  entityId?: string;
 };
 
 export type PublicationValidationReport = {
@@ -71,12 +76,16 @@ export function validatePublicationSource(
   const issues: PublicationValidationIssue[] = [];
   const issueKeys = new Set<string>();
   const add = (severity: PublicationValidationIssue['severity'], code: string, path: string, detail: string, relatedPath?: string,
-    location?: Pick<PublicationValidationIssue, 'template' | 'block' | 'field'>) => {
+    location?: Partial<Pick<PublicationValidationIssue, 'template' | 'block' | 'field' | 'reason' | 'context' | 'pageType' | 'entityId'>>) => {
     const issue: PublicationValidationIssue = { severity, code, path, message: detail };
     if (relatedPath) issue.relatedPath = relatedPath;
     if (location?.template) issue.template = location.template;
     if (location?.block) issue.block = location.block;
     if (location?.field) issue.field = location.field;
+    if (location?.reason) issue.reason = location.reason;
+    if (location?.context) issue.context = location.context;
+    if (location?.pageType) issue.pageType = location.pageType;
+    if (location?.entityId) issue.entityId = location.entityId;
     const key = JSON.stringify(issue);
     if (!issueKeys.has(key)) {
       issueKeys.add(key);
@@ -94,15 +103,24 @@ export function validatePublicationSource(
   for (const template of rawSource.pageTemplates ?? []) {
     if (template.kind === 'CITY_HOME' && template.content?.tariffCollectionPassportVersion) {
       try { validateTariffCollection(template.blocks.find((block: any) => block.blockType === 'tariff_grid' && block.visible)?.data); }
-      catch (error) { add('BLOCKING', 'TARIFF_COLLECTION_NOT_READY', '/{city}', message(error), undefined, { template: 'CITY_HOME', block: 'tariff_grid' }); }
+      catch (error) { add('BLOCKING', 'TARIFF_COLLECTION_NOT_READY', '/{city}', message(error), undefined, { template: 'CITY_HOME', block: 'tariff_grid', ...contentErrorLocation(error) }); }
     }
 
     if (template.kind === 'HOME' || template.kind === 'CITY_HOME') {
       const screen = firstScreenFromTemplate(template);
       if (template.kind === 'HOME' || template.content?.firstScreenPassportVersion) {
         try { validateFirstScreen(screen.kind, screen.data); }
-        catch (error) { add('BLOCKING', 'FIRST_SCREEN_NOT_READY', template.kind === 'HOME' ? '/' : '/{city}', message(error), undefined, { template: template.kind, block: template.kind === 'HOME' ? 'home.hero' : 'hero' }); }
+        catch (error) { add('BLOCKING', 'FIRST_SCREEN_NOT_READY', template.kind === 'HOME' ? '/' : '/{city}', message(error), undefined, { template: template.kind, block: template.kind === 'HOME' ? 'home.hero' : 'hero', ...contentErrorLocation(error) }); }
       }
+    }
+  }
+
+  // Service-page data participates in catalog rendering even though Release 1 gives it no detail URL.
+  for (const city of source.cities) {
+    for (const page of (city.pages || []).filter((page: any) => page.type !== 'HOME')) {
+      try { validatePublishedBlocks(page.blocks, { pageType: page.type }); }
+      catch (error) { add('BLOCKING', 'SERVICE_PAGE_BLOCKS', `/${city.slug}`, message(error), undefined,
+        { context: 'SERVICE_DATA', pageType: page.type, entityId: page.id, ...contentErrorLocation(error) }); }
     }
   }
 
@@ -135,7 +153,7 @@ export function validatePublicationSource(
     if (route.kind === 'GLOBAL_PAGE') {
       if (!page) add('BLOCKING', 'GLOBAL_PAGE_MISSING', route.path, `Не опубликована обязательная страница ${route.pageType}`);
       else {
-        try { validatePublishedBlocks(page.blocks); } catch (error) { add('BLOCKING', 'PAGE_BLOCKS', route.path, message(error)); }
+        try { validatePublishedBlocks(page.blocks); } catch (error) { add('BLOCKING', 'PAGE_BLOCKS', route.path, message(error), undefined, contentErrorLocation(error)); }
       }
     }
     if (route.kind === 'CITY_HOME') {
@@ -143,13 +161,13 @@ export function validatePublicationSource(
       if (homes.length !== 1) add('BLOCKING', 'CITY_HOME_COUNT', route.path, `У города «${city.name}» должна быть ровно одна HOME`);
       else {
         if (homes[0].slug !== '') add('BLOCKING', 'CITY_HOME_SLUG', route.path, 'Городская HOME должна иметь пустой slug');
-        try { validateCityHomeBlocks(homes[0].blocks, city.name); } catch (error) { add('BLOCKING', 'CITY_HOME_BLOCKS', route.path, message(error)); }
+        try { validateCityHomeBlocks(homes[0].blocks, city.name); } catch (error) { add('BLOCKING', 'CITY_HOME_BLOCKS', route.path, message(error), undefined, { template: 'CITY_HOME', ...contentErrorLocation(error) }); }
       }
     }
     if (route.kind === 'CITY_TARIFF_DETAIL') {
       for (const diagnostic of tariffPreviewDiagnostics(JSON.parse(JSON.stringify(tariff)), route.path)) {
         add(diagnostic.severity, diagnostic.code, diagnostic.path, diagnostic.message, undefined,
-          { template: diagnostic.template, block: diagnostic.block, field: diagnostic.field });
+          { template: diagnostic.template, block: diagnostic.block, field: diagnostic.field, entityId: tariff.id });
       }
     }
     try {

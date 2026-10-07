@@ -298,7 +298,7 @@ test('public city catalog fails closed when a stored visible block violates its 
 
   assert.throws(
     () => controller.cityResponse(city, site),
-    error => error.getStatus() === 400 && /text/.test(error.message),
+    error => error.getStatus() === 400 && error.field === 'text' && error.reason === 'TYPE' && error.block === 'hero',
   );
 });
 

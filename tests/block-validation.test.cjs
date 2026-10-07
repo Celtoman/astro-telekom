@@ -162,6 +162,20 @@ test('valid data and type replacements use a guarded write and create a working 
   assert.deepEqual(revisions[0].changedFields, ['blocks']);
 });
 
+test('legacy service collection edits retain their scoped contract and reject bad data before writes', async () => {
+  let current = { id: 'grid', pageId: 'page', blockType: 'tariff_grid', position: 10, visible: true, data: { title: 'Тарифы' }, source: null };
+  const revisions = [], writes = [];
+  const tx = { page: { findUnique: async () => ({ id: 'page', siteId: 'site', type: 'INTERNET', blocks: [structuredClone(current)] }) },
+    pageBlock: { findUnique: async () => structuredClone(current), updateMany: async ({ data }) => { writes.push(data); current = { ...current, ...data }; return { count: 1 }; } } };
+  const controller = new AdminBlocksController({ $transaction: async callback => callback(tx) }, { recordWorkingRevision: async (_tx, record) => { revisions.push(record); return { siteRevision: 2 }; } });
+  await assert.rejects(controller.update('grid', { data: { title: 'Тарифы', limit: 99 } }), error => error.field === 'limit');
+  assert.equal(writes.length, 0);
+  const result = await controller.update('grid', { blockType: 'tariff_grid', data: { title: 'Обновлено', limit: 6 } });
+  assert.equal(result.workingRevision, 2);
+  assert.equal(revisions.length, 1);
+  assert.equal(revisions[0].previousSnapshot.blocks[0].data.title, 'Тарифы');
+});
+
 test('a concurrent discriminator change rejects a stale data write', async () => {
   const stored = {
     id: 'block-1', pageId: 'page-1', blockType: 'rich_text', position: 10, visible: true,
