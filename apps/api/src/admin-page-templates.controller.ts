@@ -4,6 +4,8 @@ import { AdminTokenGuard } from './admin-token.guard';
 import { validateCityHomeBlocks } from './block-validation';
 import { PrismaService } from './prisma.service';
 import { PublicationWorkflowService } from './publication-workflow.service';
+import { validateTariffCollection } from './tariff-collection';
+import { TARIFF_COLLECTION_VERSION, TARIFF_COLLECTION_IMPLEMENTATION } from './tariff-collection-model';
 import { FIRST_SCREEN_IMPLEMENTATION, FIRST_SCREEN_VERSION, firstScreenFromTemplate, validateFirstScreen, type FirstScreenKind } from './first-screen';
 
 type TemplateBlockInput = {
@@ -86,6 +88,50 @@ export class AdminPageTemplatesController {
     }
   }
 
+  @Get('tariff-collection')
+  async tariffCollection(@Param('siteId') siteId: string) {
+    const site = await this.prisma.site.findUnique({ where: { id: siteId }, select: { workingRevision: true, publishedRevision: true } });
+    if (!site) throw new NotFoundException('Сайт не найден');
+    const template = await this.prisma.pageTemplate.findUnique({ where: { siteId_kind: { siteId, kind: 'CITY_HOME' } }, include: { blocks: true } });
+    const block = template?.blocks.find(item => item.blockType === 'tariff_grid' && item.visible);
+    if (!block) throw new NotFoundException('Тарифный блок не найден; требуется миграция данных');
+    const publication = await this.prisma.sitePublication.findFirst({ where: { siteId, status: 'SUCCEEDED' }, orderBy: { siteRevision: 'desc' }, select: { validation: { select: { sourceSnapshot: true } } } });
+    const publishedSource = publication?.validation?.sourceSnapshot as Record<string, any> | null;
+    const publishedTemplate = publishedSource?.pageTemplates?.find((item: any) => item.kind === 'CITY_HOME');
+    const published = publishedTemplate?.content?.tariffCollectionPassportVersion === TARIFF_COLLECTION_VERSION
+      ? publishedTemplate.blocks.find((item: any) => item.blockType === 'tariff_grid' && item.visible)?.data : null;
+    return { ...site, data: block.data, missingFields: validateTariffCollection(block.data, true), published: published ?? null };
+  }
+
+  @Patch('tariff-collection')
+  async updateTariffCollection(@Param('siteId') siteId: string,
+    @Body() body: { expectedWorkingRevision: number; data: Record<string, unknown> }, @Req() request?: { user?: { id: string } }) {
+    if (!body || Object.keys(body).some(key => !['expectedWorkingRevision', 'data'].includes(key)) || !Number.isSafeInteger(body.expectedWorkingRevision) || body.expectedWorkingRevision < 0) throw new BadRequestException('Передайте контент и актуальную рабочую ревизию');
+    const missingFields = validateTariffCollection(body.data, true);
+    try {
+      return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+        const site = await tx.site.findUnique({ where: { id: siteId }, select: { workingRevision: true } });
+        if (!site) throw new NotFoundException('Сайт не найден');
+        if (site.workingRevision !== body.expectedWorkingRevision) throw new ConflictException('Рабочая ревизия изменилась. Обновите данные перед сохранением.');
+        const before = await tx.pageTemplate.findUnique({ where: { siteId_kind: { siteId, kind: 'CITY_HOME' } }, include: { blocks: true } });
+        const block = before?.blocks.find(item => item.blockType === 'tariff_grid' && item.visible);
+        if (!before || !block) throw new NotFoundException('Тарифный блок не найден; требуется миграция данных');
+        await tx.pageTemplateBlock.update({ where: { id: block.id }, data: { data: body.data as Prisma.InputJsonObject, source: 'admin:tariff-collection' } });
+        await tx.pageTemplate.update({ where: { id: before.id }, data: { content: { ...(before.content as object ?? {}), tariffCollectionPassportVersion: TARIFF_COLLECTION_VERSION, tariffCollectionImplementationVersion: TARIFF_COLLECTION_IMPLEMENTATION } } });
+        const after = await tx.pageTemplate.findUniqueOrThrow({ where: { id: before.id }, include: { blocks: true } });
+        const revision = await this.publications.recordWorkingRevision(tx, {
+          siteId, entityType: 'PAGE_TEMPLATE', entityId: before.id, action: 'UPDATE',
+          previousSnapshot: before as unknown as Record<string, unknown>, snapshot: after as unknown as Record<string, unknown>,
+          changedFields: ['blocks.data', 'content.tariffCollectionPassportVersion', 'content.tariffCollectionImplementationVersion'], actorId: request?.user?.id, source: 'admin:tariff-collection',
+        });
+        return { data: body.data, missingFields, workingRevision: revision.siteRevision };
+      }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    } catch (error) {
+      if (error && typeof error === 'object' && 'code' in error && error.code === 'P2034') throw new ConflictException('Шаблон изменился параллельно; обновите данные');
+      throw error;
+    }
+  }
+
   @Patch('city-home')
   async updateCityHome(
     @Param('siteId') siteId: string,
@@ -100,7 +146,7 @@ export class AdminPageTemplatesController {
     }
     if (!Array.isArray(body.blocks)) throw new BadRequestException('Передайте полную композицию блоков');
     const blocks = [...body.blocks].sort((left, right) => left.position - right.position);
-    if (blocks.some((block) => block.visible !== true)) throw new BadRequestException('Все семь блоков городской HOME должны быть видимыми');
+    if (blocks.some((block) => block.visible !== true)) throw new BadRequestException('Оба блока городской HOME должны быть видимыми');
     validateCityHomeBlocks(blocks, 'шаблон');
     if (new Set(blocks.map((block) => block.position)).size !== blocks.length) {
       throw new BadRequestException('Позиции блоков шаблона должны быть уникальными');

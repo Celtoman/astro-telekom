@@ -7,6 +7,7 @@ const sources = [
   ['hero', 'components/HomeHero.astro'],
   ['address', 'components/AddressForm.astro'],
   ['blocks', 'components/BlockRenderer.astro'],
+  ['collection', 'components/TariffCollection.astro'],
   ['tariff', 'components/TariffDetail.astro'],
   ['global', 'components/GlobalPage.astro'],
   ['cities', 'components/CitiesDirectory.astro'],

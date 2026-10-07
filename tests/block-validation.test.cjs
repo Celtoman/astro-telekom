@@ -17,7 +17,7 @@ const validBlocks = [
     ctaHref: '#request',
   }),
   block('rich_text', { title: 'Условия подключения', text: 'Оператор уточнит детали после проверки адреса.' }),
-  block('tariff_grid', { title: 'Тарифы домашнего интернета', serviceType: 'INTERNET', limit: 6, morePageType: 'INTERNET' }),
+  block('tariff_grid', require('../apps/api/dist/tariff-collection-model.js').tariffCollectionDefaults()),
   block('service_grid', {
     title: 'Услуги для дома',
     items: [{ pageType: 'INTERNET_TV', title: 'Интернет и ТВ', text: 'Две услуги в одном подключении.' }],

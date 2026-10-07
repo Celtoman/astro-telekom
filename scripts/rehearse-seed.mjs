@@ -51,7 +51,7 @@ try {
   assert.equal(source.pageTemplates.length, 2);
   assert.equal(source.cities[0].pages[0].templateId, source.pageTemplates.find(template => template.kind === 'CITY_HOME').id);
   assert.equal(validation.catalog.homeHero.checkButtonText, 'Проверить');
-  assert.deepEqual(validation.catalog.cities[0].pages[0].blocks.map(block => block.blockType), ['hero','service_grid','tariff_grid','steps','feature_grid','feature_grid','faq']);
+  assert.deepEqual(validation.catalog.cities[0].pages[0].blocks.map(block => block.blockType), ['hero','tariff_grid']);
   assert.equal(await db.tariff.count({ where: { status: 'DRAFT', dataSource: 'seed' } }), 2);
   assert.equal(await db.sitePublication.count(), 0);
   assert.equal(await db.siteRebuild.count(), 0);

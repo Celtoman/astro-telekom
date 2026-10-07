@@ -1,3 +1,4 @@
+import { projectCityHomeBlocks } from './tariff-collection-model';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { validateCityHomeBlocks, validatePublishedBlocks } from './block-validation';
@@ -176,7 +177,7 @@ export class SiteCatalogService {
   }
 
   pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string) {
-    if (page.type === 'HOME' && cityName) validateCityHomeBlocks(page.blocks, cityName);
+    if (page.type === 'HOME' && cityName) { page = { ...page, blocks: projectCityHomeBlocks(page.blocks || []) }; validateCityHomeBlocks(page.blocks, cityName); }
     else validatePublishedBlocks(page.blocks);
     const { templateId: _templateId, ...publicPage } = page;
     return {

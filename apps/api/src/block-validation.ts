@@ -1,9 +1,9 @@
 import { BadRequestException } from '@nestjs/common';
 import { validateFirstScreen } from './first-screen';
+import { validateTariffCollection } from './tariff-collection';
 
 export const BLOCK_TYPES = ['hero', 'rich_text', 'tariff_grid', 'service_grid', 'feature_grid', 'steps', 'faq'] as const;
 const SERVICE_PAGE_TYPES = ['INTERNET', 'INTERNET_TV', 'TV', 'ADDRESS_CHECK', 'FAQ'] as const;
-const TARIFF_SERVICE_TYPES = ['INTERNET', 'INTERNET_TV', 'TV'] as const;
 const ROOT_FIELDS = ['blockType', 'position', 'visible', 'data', 'source'] as const;
 
 type BlockType = (typeof BLOCK_TYPES)[number];
@@ -100,17 +100,7 @@ function validateData(blockType: BlockType, rawData: unknown): void {
       requiredText(data, 'text', 4000);
       return;
     case 'tariff_grid':
-      exactKeys(data, ['title', 'serviceType', 'limit', 'morePageType'], 'Данные tariff_grid');
-      requiredText(data, 'title', 120);
-      if ('serviceType' in data && (typeof data.serviceType !== 'string' || !TARIFF_SERVICE_TYPES.includes(data.serviceType as (typeof TARIFF_SERVICE_TYPES)[number]))) {
-        fail('Поле serviceType содержит неизвестный тип услуги');
-      }
-      if ('limit' in data && (typeof data.limit !== 'number' || !Number.isInteger(data.limit) || data.limit < 1 || data.limit > 12)) {
-        fail('Поле limit должно быть целым числом от 1 до 12');
-      }
-      if ('morePageType' in data && (typeof data.morePageType !== 'string' || !TARIFF_SERVICE_TYPES.includes(data.morePageType as (typeof TARIFF_SERVICE_TYPES)[number]))) {
-        fail('Поле morePageType содержит неизвестный тип страницы тарифа');
-      }
+      validateTariffCollection(data);
       return;
     case 'service_grid':
       exactKeys(data, ['title', 'items'], 'Данные service_grid');
@@ -192,13 +182,14 @@ export function validatePublishedBlocks(rawBlocks: unknown): void {
   if (heroCount !== 1) fail('Опубликованная страница с блоками должна содержать ровно один видимый hero');
 }
 
-const CITY_HOME_BLOCK_SEQUENCE = ['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'feature_grid', 'faq'];
+const CITY_HOME_BLOCK_SEQUENCE = ['hero', 'tariff_grid'];
 
 export function validateCityHomeBlocks(rawBlocks: unknown, cityName: string): void {
-  validatePublishedBlocks(rawBlocks);
-  const blocks = rawBlocks as Array<Record<string, unknown>>;
+  if (!Array.isArray(rawBlocks)) fail('Блоки городской HOME должны быть массивом');
+  const blocks = rawBlocks.filter(block => block.visible !== false) as Array<Record<string, unknown>>;
+  validatePublishedBlocks(blocks);
   const actualSequence = blocks.map((block) => block.blockType);
   if (JSON.stringify(actualSequence) !== JSON.stringify(CITY_HOME_BLOCK_SEQUENCE)) {
-    fail(`Городская HOME «${cityName}» должна содержать каноническую последовательность из 7 видимых блоков`);
+    fail(`Городская HOME «${cityName}» должна содержать каноническую последовательность из 2 видимых блоков`);
   }
 }

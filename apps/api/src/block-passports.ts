@@ -76,7 +76,7 @@ function managed(id: ManagedBlockType, title: string, purpose: string, proposedA
   };
 }
 
-const managedPassports: Record<ManagedBlockType, BlockPassport> = {
+const managedPassports: Record<'hero', BlockPassport> = {
   hero: managed('hero', 'Первый экран', 'Один заголовок H1 и основной вход в сценарий страницы.', ['HOME'], [
     field('eyebrow', 'text', false, 'PageTemplateBlock.data.eyebrow', 'Legacy: хранится, но не выводится городским V3. Непустая строка до 80 символов; HTML запрещён.', 'read_only'),
     field('title', 'text', true, 'PageTemplateBlock.data.title', 'Непустая строка до 120 символов; HTML запрещён.', 'input'),
@@ -93,42 +93,7 @@ const managedPassports: Record<ManagedBlockType, BlockPassport> = {
   ], 'Отсутствие обязательного title/text блокирует сохранение и публикацию; городской V3 использует системную форму и CTA #tariffs независимо от legacy CTA.',
   ['Короткий и длинный заголовок', 'Известные и отсутствующие факты опубликованных доступных тарифов', 'Компьютер, планшет, телефон'],
   ['Ровно один H1 на странице', 'Декоративная графика скрыта от скринридера', 'CTA доступна с клавиатуры и имеет понятный текст']),
-  rich_text: managed('rich_text', 'Текстовый блок', 'Краткий редакционный текст без HTML.', ['INTERNET', 'INTERNET_TV', 'TV', 'FAQ'], [
-    field('title', 'text', true, 'Будущий тип страницы: поле title; источник не реализован', 'Непустая строка до 120 символов; HTML запрещён.', 'input'),
-    field('text', 'text', true, 'Будущий тип страницы: поле text; источник не реализован', 'Непустая строка до 4000 символов; HTML запрещён.', 'textarea'),
-  ], 'Для будущего типа пустой title/text должен блокировать сохранение; этот блок не входит в каноническую HOME Release 1.',
-  ['Длинный текст и переносы', 'Отсутствие обязательного поля'], ['Заголовок H2 и читаемый порядок текста']),
-  tariff_grid: managed('tariff_grid', 'Сетка тарифов', 'Показывает все опубликованные тарифы выбранного города в Release 1.', ['HOME'], [
-    field('title', 'text', true, 'PageTemplateBlock.data.title', 'Непустая строка до 120 символов; выводится как H2 секции.', 'input'),
-    field('serviceType', 'enum', false, 'PageTemplateBlock.data.serviceType', 'Только INTERNET, INTERNET_TV или TV; текущий renderer не фильтрует по полю.', 'select'),
-    field('limit', 'integer', false, 'PageTemplateBlock.data.limit', 'Целое число от 1 до 12; текущий renderer не ограничивает каталог.', 'number'),
-    field('morePageType', 'enum', false, 'PageTemplateBlock.data.morePageType', 'Только INTERNET, INTERNET_TV или TV; текущий renderer не использует поле.', 'select'),
-    field('tariffs', 'list', true, 'Опубликованный каталог тарифов города', 'Только опубликованные предложения и допустимые типы услуги.', 'read_only'),
-  ], 'При отсутствии опубликованных тарифов текущий renderer показывает объясняющее пустое состояние; фиктивные тарифы не создаются.',
-  ['Есть тарифы', 'Нет опубликованных тарифов', 'Разные цены и типы услуги'],
-  ['Заголовок H2 и названия карточек H3', 'Кнопки проверки адреса имеют метки тарифа', 'Клавиатурный доступ к ссылкам и кнопкам']),
-  service_grid: managed('service_grid', 'Сетка услуг', 'Предлагает варианты услуги и вход в проверку адреса.', ['HOME'], [
-    field('title', 'text', true, 'PageTemplateBlock.data.title', 'Непустая строка до 120 символов.', 'input'),
-    field('items', 'list', true, 'PageTemplateBlock.data.items', 'От 1 до 8 элементов; pageType из закрытого списка, title до 120 и text до 1000 символов.', 'list'),
-  ], 'Пустой список отклоняется валидатором; в renderer нет фиктивных услуг.',
-  ['Одна и несколько услуг', 'Отсутствующий тип страницы в каталоге'],
-  ['Заголовки карточек H3', 'Действия проверки адреса доступны с клавиатуры и подписаны']),
-  feature_grid: managed('feature_grid', 'Преимущества', 'Группирует редакционные свойства услуги.', ['HOME'], [
-    field('title', 'text', true, 'PageTemplateBlock.data.title', 'Непустая строка до 120 символов.', 'input'),
-    field('items', 'list', true, 'PageTemplateBlock.data.items', 'От 1 до 8 пар title до 120 и text до 1000 символов.', 'list'),
-  ], 'Пустой список отклоняется; блок без обязательных данных не публикуется.',
-  ['Одна, четыре и восемь карточек', 'Длинные подписи'], ['H2 секции и H3 карточек', 'Декоративные номера скрыты от скринридера']),
-  steps: managed('steps', 'Этапы подключения', 'Показывает последовательность действий.', ['HOME'], [
-    field('title', 'text', true, 'PageTemplateBlock.data.title', 'Непустая строка до 120 символов.', 'input'),
-    field('items', 'list', true, 'PageTemplateBlock.data.items', 'От 2 до 8 пар title до 120 и text до 1000 символов.', 'list'),
-  ], 'Менее двух этапов отклоняется валидатором.',
-  ['Два и восемь этапов', 'Перенос длинного текста'], ['Семантический упорядоченный список', 'H2 секции и H3 этапов']),
-  faq: managed('faq', 'Вопросы и ответы', 'Отвечает на частые вопросы в раскрываемом списке.', ['HOME'], [
-    field('title', 'text', true, 'PageTemplateBlock.data.title', 'Непустая строка до 120 символов.', 'input'),
-    field('items', 'list', true, 'PageTemplateBlock.data.items', 'От 1 до 12 пар question до 240 и answer до 4000 символов.', 'list'),
-  ], 'Пустой список отклоняется; пустые вопросы или ответы не публикуются.',
-  ['Один и двенадцать вопросов', 'Длинный ответ', 'Открытие с клавиатуры'],
-  ['Нативные details/summary', 'Вопрос раскрывается с клавиатуры', 'Заголовок секции H2']),
+
 };
 
 function programmatic(id: string, title: string, purpose: string, fields: BlockPassportField[], emptyBehavior: string,
@@ -284,8 +249,31 @@ function approvedFirstScreen(passport: BlockPassport): BlockPassport {
   };
 }
 
+const tariffCollectionPassport: BlockPassport = {
+  id: 'tariff_grid', title: 'Тарифы города', kind: 'MANAGED', purpose: 'Полный опубликованный каталог города без фильтров и ручного выбора карточек.',
+  proposedAllowedPages: ['CITY_HOME'], proposedContentScope: 'TEMPLATE',
+  visualVariants: ['Desktop: три колонки', 'Tablet: две колонки', 'Mobile: горизонтальная лента'],
+  design: figmaDesign('93:569', 'Block/B04 Tariff Collection', ['93:3', '93:195', '93:382']),
+  fields: [
+    field('title', 'text', true, 'PageTemplateBlock.data.title', 'Простой текст до 120 символов; переменные города/сайта.', 'input'),
+    field('text', 'text', false, 'PageTemplateBlock.data.text', 'Необязательное описание до 1000 символов; переменные города/сайта.', 'textarea'),
+    ...['connectButtonText', 'detailsButtonText', 'moreButtonText'].map(key => field(key, 'text', true, `PageTemplateBlock.data.${key}`, 'Непустой текст до 80 символов. Действие фиксировано, переменные запрещены.', 'input')),
+    field('initialCount', 'integer', true, 'PageTemplateBlock.data.initialCount', 'Целое число от 1 до 100; по умолчанию 6. Не ограничивает весь каталог.', 'number'),
+    field('sort', 'enum', true, 'PageTemplateBlock.data.sort', 'PRICE_ASC (по умолчанию) / PRICE_DESC внутри групп приоритета.', 'select'),
+    field('catalog', 'computed', true, 'Опубликованные Tariff города', 'Все доступные предложения города, совместимые с действующим TariffView. Цены и состав не редактируются в блоке.', 'read_only'),
+    field('priority', 'computed', true, 'Tariff.attributes.is_sticky', 'Закреплённые тарифы первыми. Затем promoPrice ?? standardPrice; неизвестная цена последней; равные сохраняют порядок каталога.', 'read_only'),
+  ],
+  emptyBehavior: 'Пустой каталог показывает пояснение. Без обязательных подписей черновик сохраняется как «Не готово», публикация блокируется.',
+  editorForm: '/templates/tariffs: заголовок, описание, подписи трёх кнопок, количество первых карточек и направление сортировки.',
+  previewScenarios: ['Меньше/ровно/больше первоначального числа', 'Закреплённые и обычные тарифы', 'Разные цены и длинные подписи', 'Полный каталог без JavaScript', 'Пустой каталог'],
+  accessibility: ['H2 секции и H3 карточек', 'Нативная кнопка раскрытия с клавиатуры и объявление полного количества', 'Клавиатурный фокус переходит к первой открытой карточке', 'В preview действия отключены'],
+  status: 'APPROVED', passportVersion: '1.0.0', approvedBy: 'Владелец проекта; согласование 2026-10-06/07', replacementId: null,
+  editorReadiness: 'READY', implementation: 'PageTemplate(CITY_HOME) → PageTemplateBlock.data → tariff-collection-model.ts → TariffCollection.astro; общий renderer для сайта и sandbox preview. Миграция 0058 скрывает старые блоки; опубликованные snapshots неизменны.',
+  runtimeRules: ['#tariffs сохраняется для шапки и первого экрана.', 'Один клик «Показать ещё» раскрывает весь остаток; рядом системное количество. При отсутствии остатка кнопки нет.', 'Сортировка задаётся в админке, приоритет важнее цены. Нет фильтров и отдельной страницы «Все тарифы».', 'Сохранение меняет только рабочую ревизию; публикация выполняется вручную в разделе «Публикация сайта».'],
+};
 export const BLOCK_PASSPORTS: readonly BlockPassport[] = [
-  ...BLOCK_TYPES.map((type) => managedPassports[type]),
+  managedPassports.hero,
+  tariffCollectionPassport,
   ...sitePassports,
   ...programmaticPassports,
 ].map(approvedFirstScreen);

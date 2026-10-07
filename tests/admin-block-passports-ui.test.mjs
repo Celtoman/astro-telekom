@@ -25,8 +25,8 @@ test('placement filter distinguishes root, shared city template, tariff and futu
   assert.deepEqual(filterPassports(passports, '', 'root').map(passport => passport.id), ['home.hero']);
   assert.deepEqual(filterPassports(passports, '', 'global').map(passport => passport.id), ['header']);
   assert.equal(filterPassports(passports, '', 'tariff').length, 9);
-  assert.equal(filterPassports(passports, '', 'city').length, 6);
-  assert.deepEqual(filterPassports(passports, '', 'future').map(passport => passport.id), ['rich_text']);
+  assert.equal(filterPassports(passports, '', 'city').length, 2);
+  assert.deepEqual(filterPassports(passports, '', 'future').map(passport => passport.id), []);
   assert.equal(filterPassports(passports, 'Первый экран', 'tariff').length, 1);
   assert.equal(passportPlacement(byId('tariff_grid')), 'Общий шаблон города');
 });
@@ -42,13 +42,11 @@ test('content sources lead to existing editors and never offer a missing city ed
       assert.equal(passportSource(passport).href, '/templates/home?kind=CITY_HOME');
       continue;
     }
-    assert.equal(passportSource(passport).href, null);
-    assert.match(passportSource(passport).note, /ещё не подключён/);
+    assert.equal(passportSource(passport).href, '/templates/tariffs');
   }
   assert.equal(passportSource(byId('home.hero')).href, '/templates/home?kind=HOME');
   for (const id of ['tariff.faq', 'tariff.address']) assert.doesNotMatch(passportSource(byId(id)).note, /Контент меняется|редакторе/);
-  assert.equal(passportSource(byId('rich_text')).href, null);
-  assert.match(passportSource(byId('rich_text')).note, /не используется/);
+  assert.equal(byId('rich_text'), undefined);
 });
 
 test('normal presentation translates statuses and Figma references preserve the exact nodes', () => {
@@ -58,17 +56,16 @@ test('normal presentation translates statuses and Figma references preserve the 
   assert.equal(passportStatus('APPROVED'), 'Утверждён');
   assert.equal(passportDesignLink(byId('hero')), 'https://www.figma.com/design/PiSCXYR88uqqcS6tKVfd8T?node-id=991-2');
   assert.match(passportDesignLink(byId('hero'), '991:31'), /node-id=991-31$/);
-  assert.equal(passportDesignLink(byId('faq')), null);
+  assert.equal(passportDesignLink(byId('tariff.faq')), null);
 });
 
 test('passport tab retains the old anchor and uses dismissable React Aria modal with full read-only details', async () => {
   const [screen, templates] = await Promise.all([
     readFile(new URL('../apps/admin/src/components/BlockPassportsPanel.tsx', import.meta.url), 'utf8'),
-    readFile(new URL('../apps/admin/src/components/TariffTemplateApp.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../apps/admin/src/components/PageTemplatesApp.tsx', import.meta.url), 'utf8'),
   ]);
   assert.match(templates, /window\.location\.hash === "#block-passports"/);
-  assert.match(templates, /<TabsTrigger value="passports"/);
-  assert.match(templates, /<TabsContent value="templates"/);
+  assert.match(templates, /window\.location\.replace\("\/templates\/passports"\)/);
   assert.match(screen, /<ModalOverlay isDismissable/);
   assert.match(screen, /<Dialog aria-label=/);
   assert.match(screen, /aria-pressed=/);

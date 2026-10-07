@@ -6,7 +6,7 @@ const names = {
 };
 const fieldNames = {
   title: 'Заголовок', text: 'Описание', items: 'Элементы блока', serviceType: 'Тип услуги',
-  limit: 'Число карточек', morePageType: 'Переход к списку',
+  initialCount: 'Тарифов до раскрытия', sort: 'Сортировка по цене', connectButtonText: 'Кнопка подключения', detailsButtonText: 'Кнопка подробностей', moreButtonText: 'Кнопка раскрытия',
   image: 'Изображение', imageAlt: 'Описание изображения', addressPlaceholder: 'Подсказка адреса',
   checkButtonText: 'Текст кнопки проверки', chips: 'Три пояснения под формой', tariffsCtaText: 'Текст перехода к тарифам',
   connectionPhone: 'Телефон подключения', supportPhone: 'Телефон поддержки',
@@ -14,7 +14,7 @@ const fieldNames = {
 export const passportGroups = [
   { id: 'all', label: 'Все блоки' }, { id: 'global', label: 'Все публичные страницы' },
   { id: 'root', label: 'Общая главная' }, { id: 'city', label: 'Общий шаблон города' },
-  { id: 'tariff', label: 'Шаблон страницы тарифа' }, { id: 'future', label: 'Пока не используется' },
+  { id: 'tariff', label: 'Шаблон страницы тарифа' },
 ];
 export function passportGroup(passport) {
   if (passport.id === 'header') return 'global';
@@ -44,6 +44,7 @@ export function passportContent(passport) {
   return fields.map(field => ({ key: field.key, label: fieldNames[field.key] ?? 'Дополнительное поле', required: field.required }));
 }
 export function passportSource(passport) {
+  if (passport.id === 'tariff_grid' && passport.editorReadiness === 'READY') return { href: '/templates/tariffs', label: 'Открыть редактор', note: 'Общий тарифный блок городов. Цены и закрепление меняются в каталоге тарифов.' };
   if (['home.hero', 'hero'].includes(passport.id) && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=${passport.id === 'home.hero' ? 'HOME' : 'CITY_HOME'}`, label: 'Открыть редактор', note: 'Редактируется контент своего общего шаблона. Сохранение меняет только рабочую версию.' };
   if (passport.id === 'home.hero') return { href: null, label: null, note: 'Паспорт утверждён. Редактор первого экрана общей главной ещё не подключён.' };
   if (passport.id === 'header') return { href: '/variables', label: 'Открыть переменные сайта', note: null };

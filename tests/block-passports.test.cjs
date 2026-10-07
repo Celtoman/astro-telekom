@@ -11,7 +11,7 @@ test('registry covers implemented block types and the approved root first screen
   const { tariffTemplateBlocks } = await import('../apps/admin/src/lib/tariff-template.mjs');
   const renderer = readFileSync(join(root, 'apps/web/src/components/TariffDetail.astro'), 'utf8');
   const renderedIds = [...renderer.matchAll(/data-tariff-block="([a-z]+)"/g)].map((match) => match[1]);
-  assert.deepEqual(BLOCK_PASSPORTS.filter((item) => item.kind === 'MANAGED' && item.id !== 'home.hero').map((item) => item.id), BLOCK_TYPES);
+  assert.deepEqual(BLOCK_PASSPORTS.filter((item) => item.kind === 'MANAGED' && item.id !== 'home.hero').map((item) => item.id), ['hero', 'tariff_grid']);
   assert.deepEqual(BLOCK_PASSPORTS.filter((item) => item.id.startsWith('tariff.')).map((item) => item.id),
     tariffTemplateBlocks.map((item) => `tariff.${item.id}`));
   assert.deepEqual(BLOCK_PASSPORTS.filter((item) => !BLOCK_TYPES.includes(item.id) && !item.id.startsWith('tariff.')).map((item) => item.id),
@@ -26,9 +26,9 @@ test('every passport is complete and only the two owner-approved first screens l
   assert.deepEqual(BLOCK_PASSPORT_TRANSITIONS.ARCHIVED, []);
   assert.equal(new Set(BLOCK_PASSPORTS.map((item) => item.id)).size, BLOCK_PASSPORTS.length);
   for (const passport of BLOCK_PASSPORTS) {
-    assert.equal(passport.status, ['hero', 'home.hero'].includes(passport.id) ? 'APPROVED' : 'DRAFT', passport.id);
-    assert.equal(passport.passportVersion, ['hero', 'home.hero'].includes(passport.id) ? '1.0.0' : '0-draft', passport.id);
-    if (passport.status === 'APPROVED') assert.match(passport.approvedBy, /Владелец.*2026-10-05/); else assert.equal(passport.approvedBy, null, passport.id);
+    assert.equal(passport.status, ['hero', 'home.hero', 'tariff_grid'].includes(passport.id) ? 'APPROVED' : 'DRAFT', passport.id);
+    assert.equal(passport.passportVersion, ['hero', 'home.hero', 'tariff_grid'].includes(passport.id) ? '1.0.0' : '0-draft', passport.id);
+    if (passport.status === 'APPROVED') assert.match(passport.approvedBy, /Владелец.*2026-10-0[567]/); else assert.equal(passport.approvedBy, null, passport.id);
     assert.equal(passport.replacementId, null, passport.id);
     for (const key of ['title', 'purpose', 'emptyBehavior', 'editorForm', 'implementation']) {
       assert.ok(passport[key]?.trim(), `${passport.id}: ${key}`);
@@ -50,19 +50,14 @@ test('current city HOME passports name the shared template as the editable sourc
   const homeTypes = new Set(['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'faq']);
   for (const passport of BLOCK_PASSPORTS.filter((item) => homeTypes.has(item.id))) {
     assert.match(passport.implementation, /PageTemplate\(CITY_HOME\).*PageTemplateBlock\.data/, passport.id);
-    assert.match(passport.implementation, /PageBlock.*legacy/, passport.id);
+    if (passport.id === 'hero') assert.match(passport.implementation, /PageBlock.*legacy/, passport.id);
     assert.doesNotMatch(passport.implementation, /предложение для C2|данные пока хранятся в PageBlock/, passport.id);
     for (const field of passport.fields.filter((item) => item.control !== 'read_only')) {
       assert.match(field.source, /^PageTemplateBlock\.data\./, `${passport.id}.${field.key}`);
     }
   }
 
-  const futureText = BLOCK_PASSPORTS.find((item) => item.id === 'rich_text');
-  assert.match(futureText.implementation, /не реализован/);
-  assert.doesNotMatch(futureText.implementation, /PageBlock\.data|PageTemplateBlock\.data/);
-  for (const field of futureText.fields) {
-    assert.doesNotMatch(field.source, /PageBlock\.data|PageTemplateBlock\.data/, field.key);
-  }
+  for (const id of ['rich_text', 'service_grid', 'feature_grid', 'steps', 'faq']) assert.equal(BLOCK_PASSPORTS.find(item => item.id === id), undefined);
 });
 
 test('passport API is read-only behind admin authentication and the templates screen displays it', () => {
@@ -70,7 +65,7 @@ test('passport API is read-only behind admin authentication and the templates sc
   const controller = new AdminBlocksController({}, {});
   assert.equal(Reflect.getMetadata('path', AdminBlocksController.prototype.passports), 'block-passports');
   assert.ok(Reflect.getMetadata('__guards__', AdminBlocksController)?.some((guard) => guard.name === 'AdminTokenGuard'));
-  assert.equal(controller.passports().passports.length, 18);
+  assert.equal(controller.passports().passports.length, 13);
   const screen = readFileSync(join(root, 'apps/admin/src/components/BlockPassportsPanel.tsx'), 'utf8');
   assert.match(screen, /requestJson<Registry>\(apiUrl, "\/admin\/block-passports"\)/);
   assert.match(screen, /Паспорта показывают разрешённый контент блока/);
@@ -154,8 +149,8 @@ test('city Hero V3 separates template content, computed catalog facts and legacy
 
  test('only the two owner-approved first screens define independent editable address copy', () => {
   const { BLOCK_PASSPORTS } = require('../apps/api/dist/block-passports.js');
-  assert.deepEqual(BLOCK_PASSPORTS.filter(p => p.status === 'APPROVED').map(p => p.id), ['hero', 'home.hero']);
-  for (const passport of BLOCK_PASSPORTS.filter(p => p.status === 'APPROVED')) {
+  assert.deepEqual(BLOCK_PASSPORTS.filter(p => p.status === 'APPROVED').map(p => p.id), ['hero', 'tariff_grid', 'home.hero']);
+  for (const passport of BLOCK_PASSPORTS.filter(p => ['hero', 'home.hero'].includes(p.id))) {
     for (const key of ['addressPlaceholder', 'checkButtonText', 'image', 'imageAlt']) {
       const item = passport.fields.find(f => f.key === key);
       assert.equal(item.control, 'input');

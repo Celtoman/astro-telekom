@@ -5,7 +5,10 @@ export const adminNavigation = [
   { id: "overview", label: "Обзор", href: "/", icon: "home" },
   { id: "publication", label: "Публикация сайта", href: "/publication", icon: "publication" },
   { id: "preview", label: "Предпросмотр", href: "/preview", icon: "preview" },
-  { id: "templates", label: "Шаблоны страниц", href: "/templates", icon: "catalog" },
+  { id: "pages", label: "Страницы", href: "/templates", icon: "catalog", children: [
+    { id: "templates", label: "Шаблоны страниц", href: "/templates", icon: "catalog" },
+    { id: "block-passports", label: "Паспорта блоков", href: "/templates/passports", icon: "catalog" },
+  ] },
   {
     id: "tariffs",
     label: "Тарифы",

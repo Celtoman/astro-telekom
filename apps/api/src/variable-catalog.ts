@@ -64,6 +64,9 @@ function usagesOf(catalog?: CatalogRecord | null): VariableUsage[] | null {
 function withEditorLink(usage: VariableUsage, siteId: string, published = false): VariableUsage {
   // Navigation metadata belongs to this view, never to immutable snapshot evidence.
   const editableText = /\.data\.(title|text)$/.test(usage.path) || /^homeHero\.(title|text)$/.test(usage.path);
+  if (editableText && usage.blockType === 'tariff_grid' && ((usage.entityType === 'PAGE_TEMPLATE_BLOCK' && usage.pageType === 'CITY_HOME') || (published && usage.entityType === 'BLOCK' && usage.pageType === 'HOME' && usage.cityId))) {
+    return { ...usage, editorHref: `/templates/tariffs?siteId=${encodeURIComponent(siteId)}` };
+  }
   let kind: 'HOME' | 'CITY_HOME' | null = null;
   if (editableText && usage.entityType === 'PAGE_TEMPLATE_BLOCK') {
     if (usage.pageType === 'HOME' && usage.blockType === 'home.hero') kind = 'HOME';

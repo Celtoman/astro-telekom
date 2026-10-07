@@ -181,7 +181,11 @@ WITH published_city_homes AS (
   FROM "Page" AS page
   JOIN "City" AS city ON city."id" = page."cityId" AND city."siteId" = page."siteId"
   JOIN "Site" AS site ON site."id" = page."siteId"
-  LEFT JOIN "PageBlock" AS page_block ON page_block."pageId" = page."id"
+  LEFT JOIN LATERAL (
+    SELECT b."blockType", b."position", b."id", b."visible" FROM "PageTemplateBlock" b
+    JOIN "PageTemplate" t ON t."id"=b."templateId" AND t."siteId"=page."siteId" AND t."kind"='CITY_HOME' AND t."status"::text='PUBLISHED'
+    WHERE b."templateId"=page."templateId"
+  ) AS page_block ON true
   WHERE page."type"::text = 'HOME'
     AND page."status"::text = 'PUBLISHED'
     AND city."status"::text = 'PUBLISHED'
@@ -189,7 +193,7 @@ WITH published_city_homes AS (
 ), invalid_homes AS (
   SELECT *
   FROM published_city_homes
-  WHERE visible_block_types <> ARRAY['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'feature_grid', 'faq']::text[]
+  WHERE visible_block_types <> ARRAY['hero', 'tariff_grid']::text[]
 )
 SELECT
   'invalid_published_city_home_templates' AS check_name,

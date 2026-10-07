@@ -16,10 +16,10 @@ test('template screen has four viewport controls and no submit or external trans
   const [screen, canvas, route, api] = await Promise.all([
     readFile(new URL('../apps/admin/src/components/TariffTemplateApp.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../apps/admin/src/components/TariffTemplateCanvas.tsx', import.meta.url), 'utf8'),
-    readFile(new URL('../apps/admin/src/pages/templates.astro', import.meta.url), 'utf8'),
+    readFile(new URL('../apps/admin/src/pages/templates/tariff.astro', import.meta.url), 'utf8'),
     readFile(new URL('../apps/admin/src/lib/admin-api.mjs', import.meta.url), 'utf8'),
   ]);
-  assert.equal(adminNavigation.find((item) => item.id === 'templates')?.href, '/templates');
+  assert.equal(adminNavigation.find((item) => item.id === 'pages')?.children.find(child => child.id === 'templates')?.href, '/templates');
   assert.match(route, /noindex, nofollow/);
   assert.match(screen, /\/auth\/me/);
   assert.match(screen, /desktop:.*1440/);

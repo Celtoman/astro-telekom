@@ -283,24 +283,14 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(tariffSection, /<h2[^>]*>Популярные тарифы<\/h2>/);
   assert.doesNotMatch(tariffSection, /Все тарифы Дом\.ру/);
   assert.match(kazan, /Бесплатное подключение/);
-  assert.match(kazan, /data-address-dialog-trigger="address-entry-kazan-catalog"[^>]*>Проверить подключение/);
-  assert.match(kazan, /href="\/kazan\/api-internet-500"[^>]*>Подробнее о тарифе/);
+  assert.match(kazan, /data-address-dialog-trigger="address-entry-kazan-catalog"[^>]*>Подключить/);
+  assert.match(kazan, /href="\/kazan\/api-internet-500"[^>]*>Подробнее/);
   assert.doesNotMatch(kazan, /href="\/kazan\/(?:internet|internet-tv)"/);
   assert.equal((kazan.match(/data-block-type="tariff_grid"/g) || []).length, 1);
-  assert.match(kazan, /data-block-type="service_grid"/);
-  const serviceSection = kazan.match(/data-block-type="service_grid"[\s\S]*?<\/section>/)?.[0] || '';
-  const serviceCards = [...serviceSection.matchAll(/<article class="card service-card"[^>]*>([\s\S]*?)<\/article>/g)]
-    .map((match) => ({ title: match[1].match(/<h3[^>]*>(.*?)<\/h3>/)?.[1], type: match[1].match(/data-service-type="(.*?)"/)?.[1] }));
-  assert.deepEqual(serviceCards, [
-    { title: 'Домашний интернет', type: 'INTERNET' },
-    { title: 'Интернет и ТВ', type: 'INTERNET_TV' },
-    { title: 'Телевидение', type: 'TV' },
-  ]);
+  for (const type of ['service_grid', 'steps', 'feature_grid', 'faq']) assert.doesNotMatch(kazan, new RegExp(`data-block-type="${type}"`));
   assert.match(addressClientSource, /form\.dataset\.serviceType = trigger\.dataset\.serviceType/);
   assert.match(addressClientSource, /serviceType: form\.dataset\.serviceType/);
-  const homeBlockOrder = ['service_grid', 'tariff_grid', 'steps', 'feature_grid', 'faq'].map((type) => kazan.indexOf(`data-block-type="${type}"`));
-  assert.ok(homeBlockOrder.every((index) => index >= 0));
-  assert.deepEqual(homeBlockOrder, [...homeBlockOrder].sort((left, right) => left - right));
+  assert.ok(kazan.indexOf('data-home-hero="city"') < kazan.indexOf('data-block-type="tariff_grid"'));
   assert.equal((kazan.match(/<h1\b/g) || []).length, 1);
   assert.match(kazan, /data-api-url="https:\/\/api\.partner\.example\.test\/api\/v1"/);
   assert.match(kazan, /href="tel:\+78005553535"/);
@@ -310,9 +300,9 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(almetyevsk, /<h1[^>]*>Домашний интернет и телевидение в Альметьевске<\/h1>/);
   assert.match(almetyevsk, /data-address-check-root data-presentation="embedded"/);
   assert.match(almetyevsk, /data-city-first-screen/);
-  assert.match(almetyevsk, /data-block-type="service_grid"/);
+  assert.doesNotMatch(almetyevsk, /data-block-type="service_grid"/);
   assert.match(almetyevsk, /data-block-type="tariff_grid"/);
-  assert.match(almetyevsk, /data-block-type="faq"/);
+  assert.doesNotMatch(almetyevsk, /data-block-type="faq"/);
   assert.doesNotMatch(almetyevsk.match(/<main>[\s\S]*?<\/main>/)?.[0] || '', /Казан/);
 
   assert.match(tariffDetail, /<link rel="canonical" href="https:\/\/partner\.example\.test\/kazan\/api-internet-500">/);

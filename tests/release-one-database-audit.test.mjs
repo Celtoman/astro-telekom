@@ -61,7 +61,7 @@ test('Release 1 database audit reports counts, route blockers and relation integ
   assert.match(sql, /politika-konfidencialnosti/);
   assert.match(sql, /soglasie-na-obrabotku-personalnyh-dannyh/);
   assert.match(sql, /politika-obrabotki-faylov-kuki/);
-  assert.match(sql, /ARRAY\['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'feature_grid', 'faq'\]::text\[\]/);
+  assert.match(sql, /ARRAY\['hero', 'tariff_grid'\]::text\[\]/);
   assert.match(sql, /FILTER \(WHERE page_block\."visible"\)/);
   assert.match(sql, /ORDER BY page_block\."position", page_block\."id"/);
   assert.match(sql, /'\/' \|\| city\."slug" \|\| '\/' \|\| tariff\."slug"/);

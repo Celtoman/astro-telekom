@@ -16,7 +16,7 @@ interface Registry { lifecycle: string[]; passports: Passport[] }
 type State = { status: "loading" } | { status: "ready"; registry: Registry } | { status: "error"; message: string }
 
 function PassportExample({ passport }: { passport: Passport }) {
-  const schematic = ["header", "hero", "home.hero"].includes(passport.id)
+  const schematic = ["header", "hero", "home.hero", "tariff_grid"].includes(passport.id)
   return <figure className="overflow-hidden rounded-lg border">
     <div className="border-b bg-muted/40 px-4 py-2 text-xs text-muted-foreground">Визуальный пример</div>
     <div className="bg-muted/20 p-4" aria-hidden="true">

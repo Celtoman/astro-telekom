@@ -1,3 +1,4 @@
+import { projectCityHomeBlocks } from '../../../api/src/tariff-collection-model';
 import { tariffView, type TariffView } from './tariff-view';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -65,7 +66,7 @@ const fallbackSupportPhone = import.meta.env.PUBLIC_SUPPORT_PHONE || fallbackCon
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const redirectIdPattern = /^[a-zA-Z0-9_-]+$/;
 const redirectPathPattern = /^\/[a-z0-9._~/-]*$/;
-const cityHomeBlockSequence = ['hero', 'service_grid', 'tariff_grid', 'steps', 'feature_grid', 'feature_grid', 'faq'];
+const cityHomeBlockSequence = ['hero', 'tariff_grid'];
 
 export const releaseOneGlobalPages = [
   { type: 'COVERAGE', slug: 'karta-pokrytiya-provaydera' },
@@ -83,7 +84,7 @@ function normalizePage(item: Record<string, any>): PageView {
     slug: String(item.slug || ''),
     status: 'PUBLISHED',
     content: item.content && typeof item.content === 'object' ? item.content : {},
-    blocks: Array.isArray(item.blocks) ? item.blocks : [],
+    blocks: Array.isArray(item.blocks) ? item.type === 'HOME' ? projectCityHomeBlocks(item.blocks) : item.blocks : [],
   };
 }
 
@@ -94,7 +95,7 @@ function assertCityHomeTemplate(city: CityView): void {
   }
   const sequence = homePages[0].blocks?.map((block) => block.blockType) || [];
   if (JSON.stringify(sequence) !== JSON.stringify(cityHomeBlockSequence)) {
-    throw new Error(`Город «${city.name}»: опубликованная HOME не соответствует каноническому шаблону из 7 блоков`);
+    throw new Error(`Город «${city.name}»: опубликованная HOME не соответствует каноническому шаблону из 2 блоков`);
   }
 }
 

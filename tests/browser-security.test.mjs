@@ -157,7 +157,7 @@ test('admin production build emits hash-based CSP while allowing only checkbox s
   const htmlFiles = await collectHtmlFiles(adminDist);
   assert.deepEqual(htmlFiles.map((path) => path.slice(adminDist.length + 1).replaceAll('\\', '/')).sort(), [
     'audit/index.html', 'cities/import/index.html', 'cities/index.html', 'index.html', 'lead-access/index.html', 'leads/index.html',
-    'login/index.html', 'preview/index.html', 'publication/index.html', 'redirects/index.html', 'seo/sitemap/index.html', 'seo/templates/index.html', 'tariffs/edit/index.html', 'tariffs/import/index.html', 'tariffs/index.html', 'templates/home/index.html', 'templates/index.html', 'trash/index.html', 'variables/index.html',
+    'login/index.html', 'preview/index.html', 'publication/index.html', 'redirects/index.html', 'seo/sitemap/index.html', 'seo/templates/index.html', 'tariffs/edit/index.html', 'tariffs/import/index.html', 'tariffs/index.html', 'templates/home/index.html', 'templates/index.html', 'templates/passports/index.html', 'templates/tariff/index.html', 'templates/tariffs/index.html', 'trash/index.html', 'variables/index.html',
   ]);
   for (const path of htmlFiles) {
     const html = await readFile(path, 'utf8');

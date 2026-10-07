@@ -78,7 +78,7 @@ test('publication preflight validates effective HOME and renders the original so
     appVersion: 'test', siteRevision: 2, now: new Date('2026-09-25T00:00:00.000Z'),
   }, (candidate, now) => catalog.renderSource(candidate, now));
   assert.notEqual(result.report.outcome, 'BLOCKED', JSON.stringify(result.report.issues));
-  assert.equal(result.catalog.cities[0].pages[0].blocks.length, 7);
+  assert.equal(result.catalog.cities[0].pages[0].blocks.length, 2);
 });
 
 test('template edit creates one attributed working revision and rejects stale edits', async () => {
@@ -110,7 +110,7 @@ test('template edit creates one attributed working revision and rejects stale ed
   assert.equal(writes, 0);
   const result = await controller.updateCityHome('site-1', body, { user: { id: 'editor-1' } });
   assert.equal(result.workingRevision, 11);
-  assert.equal(result.blocks.length, 7);
+  assert.equal(result.blocks.length, 2);
   assert.equal(revisions[0].entityType, 'PAGE_TEMPLATE');
   assert.equal(revisions[0].entityId, 'template-1');
   assert.equal(revisions[0].actorId, 'editor-1');

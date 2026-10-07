@@ -1,3 +1,4 @@
+import { validateTariffCollection } from './tariff-collection';
 import { validateCityHomeBlocks, validatePublishedBlocks } from './block-validation';
 import { resolveCatalogVariables } from './catalog-variables';
 import { RELEASE_ONE_GLOBAL_PAGES, type PublicRoute } from './public-route-policy';
@@ -91,6 +92,11 @@ export function validatePublicationSource(
   const site = source.site;
   const provider = site.provider;
   for (const template of rawSource.pageTemplates ?? []) {
+    if (template.kind === 'CITY_HOME' && template.content?.tariffCollectionPassportVersion) {
+      try { validateTariffCollection(template.blocks.find((block: any) => block.blockType === 'tariff_grid' && block.visible)?.data); }
+      catch (error) { add('BLOCKING', 'TARIFF_COLLECTION_NOT_READY', '/{city}', message(error), undefined, { template: 'CITY_HOME', block: 'tariff_grid' }); }
+    }
+
     if (template.kind === 'HOME' || template.kind === 'CITY_HOME') {
       const screen = firstScreenFromTemplate(template);
       if (template.kind === 'HOME' || template.content?.firstScreenPassportVersion) {

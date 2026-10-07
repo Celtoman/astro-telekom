@@ -1,3 +1,4 @@
+import { projectCityHomeBlocks } from './tariff-collection-model';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { validateCityHomeBlocks } from './block-validation';
 
@@ -50,7 +51,8 @@ export function cityHomeTemplateReady(cityName: string, pages: Array<{ type: str
   if (homes.length !== 1) return false;
   try {
     if (homes[0].template?.status && homes[0].template.status !== 'PUBLISHED') return false;
-    validateCityHomeBlocks(homes[0].template?.blocks || homes[0].blocks || [], cityName);
+    const blocks = homes[0].template?.blocks || projectCityHomeBlocks((homes[0].blocks || []) as any[]);
+    validateCityHomeBlocks(blocks, cityName);
     return true;
   } catch {
     return false;

@@ -1,3 +1,4 @@
+import { renderTariffCollection, projectCityHomeBlocks } from '../../../api/src/tariff-collection-model.ts'
 import { tariffView } from '../../../api/src/tariff-view.ts'
 import { heroFacts } from '../../../web/src/data/hero-facts.ts'
 import { legalSections } from '../../../web/src/data/legal-pages.ts'
@@ -62,16 +63,14 @@ function renderHero(catalog, data, city, variant) {
 }
 function renderHome(catalog) {
   const data = catalog.homeHero || { title: `Подключение домашнего интернета и телевидения ${text(catalog.site?.name, 'Дом.ру')}`, text: 'Укажите адрес, чтобы проверить возможность подключения Дом.ру в вашем доме и узнать о доступных услугах.' }
-  const cities = list(catalog.cities).slice(0, 6)
-  return renderHero(catalog, data, list(catalog.cities).find(city => city.slug === 'moskva'), 'general') + `<section class="section container" id="cities"><h2>Популярные города</h2>${cities.length ? `<div class="grid">${cities.map(city => `<article class="card"><h3>${html(city.name)}</h3><p>Домашний интернет, телевидение и актуальные предложения.</p>${inactiveLink('Открыть страницу города →', 'card-link')}</article>`).join('')}</div><p>${inactiveLink('Все города обслуживания →', 'card-link')}</p>` : '<p class="lead">Опубликованных городов пока нет.</p>'}</section>`
+  return renderHero(catalog, data, list(catalog.cities).find(city => city.slug === 'moskva'), 'general')
 }
 function renderBlock(block, city) {
   const data = record(block.data), title = html(text(data.title)), items = list(data.items)
   const heading = label => `<div class="section-heading"><span class="section-kicker">${label}</span><h2>${title}</h2></div>`
   const cards = (className, kind) => items.map((item, index) => `<article class="card ${className}"><span class="feature-mark">${kind === 'service' ? '→' : String(index + 1).padStart(2, '0')}</span><h3>${html(item.title)}</h3><p>${html(item.text)}</p>${kind === 'service' && ['INTERNET', 'INTERNET_TV', 'TV'].includes(item.pageType) ? button('Проверить подключение', 'card-link link-button') : ''}</article>`).join('')
   if (block.blockType === 'tariff_grid') {
-    const tariffs = tariffsOf(city)
-    return `<section class="section container" id="tariffs" data-block-type="tariff_grid">${heading('Доступные варианты')}${tariffs.length ? `<div class="tariff-grid">${tariffs.map(tariff => `<article class="card tariff-card"><div><span class="tariff-service">${html(tariff.service)}</span><h3>${html(tariff.name)}</h3><p class="tariff-speed">${html(tariff.speed)}</p></div><div><div class="tariff-price">${html(tariff.price)}</div>${tariff.connection ? `<p class="tariff-connection">${html(tariff.connection)}</p>` : ''}${inactiveLink('Подробнее о тарифе →', 'card-link tariff-detail-link')}${button('Проверить подключение', 'button button-secondary')}</div></article>`).join('')}</div>` : '<p class="empty-copy">Опубликованные тарифы пока не добавлены.</p>'}</section>`
+    return wrap('collection', renderTariffCollection(data, tariffsOf(city), { interactive: false }))
   }
   if (block.blockType === 'service_grid') return items.length ? `<section class="section container" data-block-type="service_grid">${heading('Выберите услугу')}<div class="service-grid">${cards('service-card', 'service')}</div></section>` : ''
   if (block.blockType === 'feature_grid') return `<section class="section feature-section" data-block-type="feature_grid"><div class="container">${heading('Главное')}<div class="feature-grid feature-grid-count-${Math.min(items.length, 4)}">${cards('feature-card')}</div></div></section>`
@@ -84,7 +83,7 @@ function renderCity(catalog, route) {
   const city = cityBySlug(catalog, route.citySlug)
   const page = list(city?.pages).find(page => page.type === 'HOME' && page.slug === '')
   if (!page) throw new Error('HOME маршрута предпросмотра не найдена')
-  const blocks = list(page.blocks), hero = blocks.find(block => block.blockType === 'hero')
+  const blocks = projectCityHomeBlocks(list(page.blocks)), hero = blocks.find(block => block.blockType === 'hero')
   if (!hero) throw new Error('HOME маршрута предпросмотра не содержит hero')
   return renderHero(catalog, record(hero.data), city, 'city') + wrap('blocks', blocks.filter(block => block.blockType !== 'hero').map(block => renderBlock(block, city)).join(''))
 }

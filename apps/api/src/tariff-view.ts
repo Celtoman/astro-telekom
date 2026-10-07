@@ -108,6 +108,8 @@ export interface TariffView {
   speed: string;
   speedMbps: number | null;
   tvChannelsTotal: number | null;
+  tvChannelsHd: number | null;
+  isSticky: boolean;
   price: string;
   priceAmount: number | null;
   pricing: {
@@ -358,6 +360,8 @@ export function tariffView(tariff: Record<string, unknown>): TariffView {
     speed: speedMbps === null ? 'Условия уточняются' : `до ${speedMbps} Мбит/с`,
     speedMbps,
     tvChannelsTotal: tvChannels,
+    tvChannelsHd: hdChannels,
+    isSticky: source.is_sticky === true,
     price: tariffPricing.currentLabel,
     priceAmount: tariffPricing.currentAmount,
     pricing: tariffPricing,

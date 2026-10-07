@@ -2,10 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HomeHero from '../components/HomeHero.astro';
 import { loadSiteData, seoMeta, publicSiteSlug } from '../data/site';
-import { publicHtmlPath } from '../data/public-url';
 const catalog = await loadSiteData();
 const { site, cities } = catalog;
-const featuredCities = cities.slice(0, 6);
 const title = `Домашний интернет и телевидение ${site.name}`;
 const description = 'Выберите город, чтобы посмотреть тарифы домашнего интернета и телевидения.';
 const meta = seoMeta(catalog, '/', { title, description });
@@ -15,5 +13,4 @@ const hero = catalog.homeHero;
 
 <BaseLayout title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} firstScreenImage={hero?.image} indexable={meta.indexState !== 'NOINDEX'} {site}>
   <HomeHero variant="general" title={hero ? String(hero.title) : `Подключение домашнего интернета и телевидения ${site.name}`} text={hero ? String(hero.text) : 'Укажите адрес, чтобы проверить возможность подключения Дом.ру в вашем доме и узнать о доступных услугах.'} content={hero} city={defaultCity} {site} siteSlug={publicSiteSlug} apiUrl={import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1'} />
-  <section class="section container" id="cities"><h2>Популярные города</h2>{featuredCities.length > 0 ? <><div class="grid">{featuredCities.map((city) => <article class="card"><h3>{city.name}</h3><p>Домашний интернет, телевидение и актуальные предложения.</p><a class="card-link" href={publicHtmlPath(city.slug)}>Открыть страницу города →</a></article>)}</div><p><a class="card-link" href="/goroda-obsluzhivaniya">Все города обслуживания →</a></p></> : <p class="lead">Опубликованных городов пока нет.</p>}</section>
 </BaseLayout>
