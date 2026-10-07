@@ -108,6 +108,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| TD-168 | [#266](https://github.com/Celtoman/astro-telekom/issues/266) 🟢 | Параллельные чтения полного каталога иногда дают HTTP 500 в preflight/preview |
 | TD-165 | [#262](https://github.com/Celtoman/astro-telekom/issues/262) ✅ | Control GET/POST не переносят pooled соединения через Caddy reload; readback и UNCERTAIN сохраняются |
 | #236 | [#236](https://github.com/Celtoman/astro-telekom/issues/236) ✅ | Direct Compose использует migration target; реальный Docker/PG rehearsal и идемпотентность |
 | TD-149 | [#245](https://github.com/Celtoman/astro-telekom/issues/245) ✅ | Private publication fixtures исключены из Docker context; image rehearsal прошёл |
