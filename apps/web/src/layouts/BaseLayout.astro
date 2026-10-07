@@ -5,6 +5,9 @@ import type { CityView, PageView, SiteView } from '../data/site';
 import { defaultSiteImagePath } from '../data/site';
 import { publicAsset } from '../data/public-asset';
 import SiteHeader from '../components/SiteHeader.astro';
+import CallbackDialog from '../components/CallbackDialog.astro';
+import LegalDocuments from '../components/LegalDocuments.astro';
+import '../styles/public-ui.css';
 import { normalizePublicHtmlPath } from '../data/public-url';
 
 interface Props {
@@ -75,6 +78,8 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
         <a href="/politika-obrabotki-faylov-kuki">Политика cookie</a>
       </div>
     </footer>
+    <CallbackDialog {site} {city} />
+    <LegalDocuments />
     <script>
       import {
         SUBSCRIBER_MODE_EVENT,

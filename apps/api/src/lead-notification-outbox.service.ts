@@ -179,7 +179,7 @@ export class LeadNotificationOutboxService implements OnModuleInit, OnModuleDest
         notificationRevision: notification.revision,
         phone: notification.lead.phone,
         name: notification.lead.name,
-        city: notification.lead.city.name,
+        city: notification.lead.city?.name || 'Город не выбран — уточнить при звонке',
         address: notification.lead.address,
         tariff: notification.lead.tariff?.name,
       });

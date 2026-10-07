@@ -1,4 +1,5 @@
 export const LEAD_REASONS = Object.freeze([
+  Object.freeze({ code: 'callback_consultation', label: 'Консультация — обратный звонок', route: 'MANUAL', version: 1 }),
   Object.freeze({ code: 'new_connection', label: 'Новое подключение', route: 'SALES', version: 1 }),
   Object.freeze({ code: 'existing_subscriber_support', label: 'Поддержка действующего абонента', route: 'NON_SALES', version: 1 }),
   Object.freeze({ code: 'billing', label: 'Оплата', route: 'NON_SALES', version: 1 }),

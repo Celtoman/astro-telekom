@@ -112,7 +112,14 @@ function initializeRoot(root) {
   const checkGate = createLatestRequestGate();
   const leadForm = resultDialog.querySelector('[data-lead-form]');
   const phoneInput = leadForm?.querySelector('[data-phone-input]');
-  const commentInput = leadForm?.querySelector('[data-lead-comment]');
+  const consentInput = leadForm?.querySelector('[data-lead-consent]');
+  const resultIcon = resultDialog.querySelector('[data-result-icon]');
+  const updateLeadReady = () => {
+    if (leadSubmit) leadSubmit.disabled = leadSubmitting || !consentInput?.checked || !normalizeRussianPhone(phoneInput?.value || '');
+    const consentHint = root.querySelector('[data-consent-hint]');
+    if (consentHint) consentHint.hidden = !!consentInput?.checked;
+  };
+  const setResultIcon = mode => { resultIcon.querySelector('img').src = resultIcon.dataset[`icon${mode[0].toUpperCase()}${mode.slice(1)}`]; resultIcon.classList.toggle('flow-icon-success', ['available','success'].includes(mode)); resultIcon.classList.toggle('flow-icon-error', mode === 'unavailable'); };
   const phoneError = leadForm?.querySelector('[data-phone-error]');
   const leadSubmit = leadForm?.querySelector('[data-lead-submit]');
   const leadSubmitLabel = leadForm?.querySelector('[data-lead-submit-label]');
@@ -225,12 +232,9 @@ function initializeRoot(root) {
       phoneInput.disabled = false;
       phoneInput.value = '+7 ';
     }
-    if (commentInput) {
-      commentInput.disabled = false;
-      commentInput.value = '';
-    }
+    if (consentInput) { consentInput.disabled = false; consentInput.checked = false; }
     setPhoneError(false);
-    if (leadSubmit) leadSubmit.disabled = false;
+    updateLeadReady();
     if (leadSubmitLabel) leadSubmitLabel.textContent = 'Оставить заявку';
     if (leadSpinner) leadSpinner.hidden = true;
     if (leadResult) {
@@ -250,6 +254,7 @@ function initializeRoot(root) {
       resetLeadState();
       populateTariff();
       resultHeading.textContent = 'Дом.ру доступен';
+      setResultIcon('available');
     } else if (check.outcome === 'ALTERNATIVES_AVAILABLE') {
       const list = panel.querySelector('[data-provider-list]');
       list.replaceChildren(...check.providers.map((provider) => {
@@ -258,9 +263,11 @@ function initializeRoot(root) {
         return item;
       }));
       panel.querySelector('[data-provider-action]').href = check.actionUrl;
-      resultHeading.textContent = 'Доступны другие провайдеры';
+      resultHeading.textContent = 'Дом.ру по адресу не найден';
+      setResultIcon('alternatives');
     } else {
-      resultHeading.textContent = 'Провайдеры не найдены';
+      resultHeading.textContent = 'Доступных предложений пока нет';
+      setResultIcon('unavailable');
     }
     showResultDialog();
   };
@@ -271,6 +278,7 @@ function initializeRoot(root) {
     panel.hidden = false;
     panel.querySelector('[data-technical-message]').textContent = message;
     resultHeading.textContent = 'Проверка временно недоступна';
+    setResultIcon('unavailable');
     showResultDialog();
   };
 
@@ -584,15 +592,17 @@ function initializeRoot(root) {
     phoneInput.value = formatRussianPhone(phoneInput.value);
     const invalidPrefix = hasInvalidRussianMobilePrefix(phoneInput.value);
     setPhoneError(invalidPrefix, phonePrefixError);
+    updateLeadReady();
     if (leadSubmitLabel?.textContent === 'Попробовать ещё раз') leadSubmitLabel.textContent = 'Оставить заявку';
   });
   phoneInput?.addEventListener('blur', () => {
     if (phoneInput.value && !normalizeRussianPhone(phoneInput.value)) setPhoneError(true);
   });
 
+  consentInput?.addEventListener('change', updateLeadReady);
   leadForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (!verifiedCheck || leadSubmitting || !phoneInput || !leadSubmit || !leadResult) return;
+    if (!verifiedCheck || leadSubmitting || !phoneInput || !leadSubmit || !leadResult || !consentInput?.checked) return;
     const phone = normalizeRussianPhone(phoneInput.value);
     if (!phone) {
       setPhoneError(true);
@@ -602,6 +612,7 @@ function initializeRoot(root) {
     setPhoneError(false);
     leadSubmitting = true;
     leadSubmit.disabled = true;
+    phoneInput.disabled = consentInput.disabled = true;
     if (leadSubmitLabel) leadSubmitLabel.textContent = 'Отправляем…';
     if (leadSpinner) leadSpinner.hidden = false;
     leadResult.textContent = '';
@@ -626,6 +637,7 @@ function initializeRoot(root) {
       }
       const response = await fetch(`${apiUrl}/leads`, {
         method: 'POST',
+        signal: AbortSignal.timeout(20000),
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           siteSlug,
@@ -635,7 +647,7 @@ function initializeRoot(root) {
           configuration: configuration || undefined,
           formName: 'address-result-dialog',
           reasonCode: 'new_connection',
-          comment: commentInput?.value.trim() || undefined,
+          consentAccepted: true,
           phone,
           submissionKey,
           consentVersion: leadForm.dataset.consentVersion,
@@ -652,7 +664,7 @@ function initializeRoot(root) {
         }),
       });
       const lead = await response.json().catch(() => null);
-      if (!response.ok) {
+      if (!response.ok || typeof lead?.id !== 'string' || !lead.id) {
         const responseMessage = Array.isArray(lead?.message) ? lead.message[0] : lead?.message;
         throw new Error(typeof responseMessage === 'string' && responseMessage ? responseMessage : 'Не удалось сохранить заявку');
       }
@@ -661,18 +673,20 @@ function initializeRoot(root) {
         window.dispatchEvent(new Event(SUBSCRIBER_MODE_EVENT));
       } else void watchSubscriberDecision(apiUrl, lead?.id, submissionKey);
       phoneInput.disabled = true;
-      if (commentInput) commentInput.disabled = true;
+      consentInput.disabled = true;
       if (leadContent) leadContent.hidden = true;
       if (leadSuccess) leadSuccess.hidden = false;
       resultHeading.textContent = 'Заявка отправлена';
+      setResultIcon('success');
       resultDialog.querySelector('[data-lead-success-close]')?.focus();
     } catch (error) {
-      leadResult.textContent = error instanceof Error ? error.message : 'Произошла ошибка. Попробуйте еще раз.';
+      leadResult.textContent = error?.name === 'TimeoutError' ? 'Подтверждение не получено. Повторите отправку — повторная заявка не создастся.' : error instanceof Error ? error.message : 'Произошла ошибка. Попробуйте еще раз.';
       leadResult.dataset.state = 'error';
       leadSubmit.disabled = false;
       if (leadSubmitLabel) leadSubmitLabel.textContent = 'Попробовать ещё раз';
     } finally {
       leadSubmitting = false;
+      if (!leadSuccess || leadSuccess.hidden) { phoneInput.disabled = consentInput.disabled = false; updateLeadReady(); }
       if (leadSpinner) leadSpinner.hidden = true;
     }
   });

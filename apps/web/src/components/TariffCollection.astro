@@ -11,59 +11,86 @@ const { data, tariffs, citySlug, dialogId } = Astro.props;
   document.addEventListener('astro:page-load', () => initializeTariffCollections(document));
 </script>
 <style is:global>
-  .tariff-collection { width: min(1360px, calc(100% - 64px)); margin: 32px auto 64px; border-radius: 28px; background: #eef8ff; color: #18202a; }
+  .tariff-collection { width: min(1360px, calc(100% - 64px)); margin: 32px auto 64px; border-radius: 26px; background: #eef8ff; color: #18202a; }
   .tariff-collection * { box-sizing: border-box; }
   .tariff-collection [hidden] { display: none !important; }
   .collection-container { padding: 32px; }
-  .tariff-collection h2 { margin: 0; font-size: 32px; line-height: 38px; letter-spacing: -1.1px; font-weight: 700; }
-  .collection-intro { max-width: 850px; margin: 12px 0 28px; color: #526071; font-size: 16px; line-height: 24px; }
-  .collection-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
-  .collection-card { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 550px; padding: 58px 20px 24px; border: 1px solid #dcecf7; border-radius: 18px; background: #fff; box-shadow: 0 8px 24px #1528420d; }
-  .collection-badge { position: absolute; top: 20px; left: 20px; max-width: calc(100% - 40px); border-radius: 6px; padding: 3px 8px; background: #eaf4ff; color: #0872c9; font-size: 11px; line-height: 15px; }
-  .collection-heading h3 { margin: 0; font-size: 22px; line-height: 27px; letter-spacing: -.4px; font-weight: 700; overflow-wrap: anywhere; }
-  .collection-heading p { margin: 8px 0 0; color: #526071; font-size: 13px; line-height: 18px; }
-  .collection-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 22px; }
-  .collection-metrics span, .collection-metrics small { display: block; color: #697789; font-size: 10px; line-height: 14px; }
-  .collection-metrics strong { display: block; margin-top: 3px; font-size: 19px; line-height: 25px; }
-  .collection-metrics div + div strong { font-size: 17px; line-height: 22px; }
-  .collection-subscriptions { margin-top: 18px; }
-  .collection-subscriptions p { margin: 0 0 8px; color: #697789; font-size: 11px; line-height: 15px; }
+  .tariff-collection h2 { margin: 0; max-width: 850px; font-size: 32px; line-height: 38px; letter-spacing: -1.1px; font-weight: 700; }
+  .collection-intro { max-width: 100%; margin: 16px 0; color: #526071; font-size: 15px; line-height: 22px; }
+  .collection-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+  .collection-card { position: relative; display: flex; flex-direction: column; gap: 14px; min-width: 0; min-height: 550px; padding: 20px 20px 24px; border: 1px solid #dcecf7; border-radius: 18px; background: #fff; box-shadow: 0 8px 24px #1528420d; }
+  .collection-card:nth-child(-n+3), .collection-card:has(.collection-badge) { padding-top: 58px; }
+  .collection-card:hover, .collection-card:focus-within { box-shadow: 0 14px 40px rgb(21 40 66 / 7%); }
+  .collection-badge { position: absolute; top: 20px; left: 20px; max-width: calc(100% - 40px); border-radius: 9999px; padding: 4px 10px; background: #e0231e; color: #fff; font-size: 12px; font-weight: 600; line-height: 16px; overflow-wrap: anywhere; }
+  .collection-card:has(.collection-badge) { padding-top: 20px; }
+  .collection-card:has(.collection-badge) .collection-heading { margin-top: 0; }
+  .collection-badge { position: static; align-self: flex-start; max-width: 100%; }
+  .collection-heading h3 { margin: 0; font-size: 22px; line-height: 27px; font-weight: 700; overflow-wrap: anywhere; }
+  .collection-heading p { margin: 4px 0 0; color: #526071; font-size: 13px; line-height: 18px; }
+  .collection-metrics { display: flex; gap: 8px; }
+  .collection-metrics > div { flex: 1; min-width: 0; min-height: 62px; border-radius: 10px; background: #eef8ff; padding: 7px 12px 5px; }
+  .collection-metrics span { display: block; color: #5c6b7d; font-size: 10px; line-height: 14px; font-weight: 600; text-transform: uppercase; }
+  .collection-metrics small { display: block; color: #176b45; font-size: 10px; line-height: 13px; font-weight: 600; }
+  .collection-metrics strong { display: block; margin-top: 2px; margin-right: -20px; font-size: 19px; line-height: 25px; overflow-wrap: anywhere; }
+  .collection-metrics > div:not([data-tv-metric]) { padding-top: 9px; }
+  .collection-metrics > div:not([data-tv-metric]) strong { margin-top: 5px; }
+  .collection-metrics [data-tv-metric] strong { font-size: 17px; line-height: 22px; }
+  .collection-subscriptions { display: flex; flex-direction: column; gap: 6px; padding: 8px 12px; border-radius: 12px; background: #eef8ff; }
+  .collection-subscriptions p { margin: 0; color: #526071; font-size: 11px; line-height: 15px; font-weight: 500; }
   .collection-subscriptions > div { display: flex; flex-wrap: wrap; gap: 6px; }
-  .collection-subscription { padding: 3px 7px; border-radius: 6px; background: #eef3fa; color: #18202a; font-size: 10px; line-height: 15px; font-weight: 600; }
-  .collection-subscription[data-cinema="ivi"] { background: #ea1647; color: #fff; }
-  .collection-subscription[data-cinema="start"] { background: #000; color: #fff; }
-  .collection-subscription[data-cinema="kion"] { background: #fff0ec; color: #b63315; }
-  .collection-features { display: grid; gap: 8px; margin: 18px 0 22px; padding: 0; list-style: none; font-size: 12px; line-height: 17px; color: #526071; }
-  .collection-features li { display: flex; gap: 8px; }
-  .collection-features li::before { content: '✓'; color: #15803d; }
-  .collection-price { margin-top: auto; padding: 20px 0 18px; border-top: 1px solid #e4edf5; }
-  .collection-price > div { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-  .collection-price strong { font-size: 26px; line-height: 32px; letter-spacing: -.6px; }
-  .collection-price p { margin: 6px 0 0; color: #697789; font-size: 11px; line-height: 15px; }
-  .collection-promo { padding: 3px 7px; border-radius: 6px; background: #e7f5eb; color: #217442; font-size: 11px; line-height: 15px; }
-  .collection-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .collection-connect, .collection-details, [data-collection-more] { display: flex; justify-content: center; align-items: center; min-height: 48px; padding: 10px 12px; border: 1px solid #dce6ee; border-radius: 14px; color: #18202a; background: #fff; font: inherit; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; text-align: center; overflow-wrap: anywhere; }
-  .collection-connect { background: #eb3976; border-color: #eb3976; color: #fff; }
-  .collection-actions :focus-visible, [data-collection-more]:focus-visible { outline: 3px solid #0872c9; outline-offset: 3px; }
-  .collection-connect:hover { background: #ce2460; }
-  .collection-details:hover, [data-collection-more]:hover { background: #edf5fc; }
+  .collection-subscription { padding: 3px 12px; border-radius: 6px; background: #eef3fa; color: #18202a; font-size: 10px; line-height: 15px; font-weight: 700; }
+  .collection-subscription[data-cinema=ivi] { background: #ea1647; color: #fff; }
+  .collection-subscription[data-cinema=start] { background: #000; color: #fff; }
+  .collection-subscription[data-cinema=kinopoisk] { background: #ff5c00; color: #fff; }
+  .collection-subscription[data-cinema=wink] { background: #6d3bea; color: #fff; }
+  .collection-subscription[data-cinema=premier] { background: #131313; color: #fbce05; }
+  .collection-subscription[data-cinema=amediateka] { background: #181818; color: #fff; }
+  .collection-subscription[data-cinema=dorama] { background: #ff4d88; color: #fff; }
+  .collection-subscription[data-cinema=viju] { background: #b2ff00; color: #000; }
+  .collection-features { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; font-size: 14px; line-height: 22px; color: #526071; }
+  .collection-features li { display: flex; gap: 4px; overflow-wrap: anywhere; }
+  .collection-features li::before { content: '✓'; flex-shrink: 0; }
+  .collection-price { display: flex; flex-direction: column; gap: 6px; margin-top: auto; padding-top: 14px; border-top: 1px solid #dcecf7; }
+  .collection-price > div { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .collection-price strong { font-size: 26px; line-height: 32px; font-weight: 700; }
+  .collection-price p { margin: 0; color: #5c6b7d; font-size: 12px; line-height: 18px; }
+  .collection-promo { padding: 5px 9px; border-radius: 7px; background: #ffeae9; color: #e0231e; font-size: 11px; line-height: 15px; font-weight: 600; }
+  .collection-actions { display: flex; gap: 8px; }
+  .collection-connect, .collection-details, [data-collection-more] { display: flex; justify-content: center; align-items: center; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; color: #1769aa; background: #eef8ff; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; text-decoration: none; cursor: pointer; text-align: center; overflow-wrap: anywhere; }
+  .collection-connect { flex: 1; min-width: 0; background: #e0231e; color: #fff; }
+  .collection-details { flex-shrink: 0; max-width: 60%; }
+  .collection-actions :focus-visible, [data-collection-more]:focus-visible { outline: 2px solid #1769aa; outline-offset: 3px; }
+  .collection-connect:hover { background: #c61f1a; }
+  .collection-connect:active { background: #ad1916; }
+  .collection-details:hover, [data-collection-more]:hover { background: #eaf7ff; }
   .collection-card-gaming { background: #18202a; color: #fff; border-color: #334155; }
-  .collection-card-gaming .collection-heading p, .collection-card-gaming .collection-features, .collection-card-gaming .collection-price p, .collection-card-gaming .collection-metrics span, .collection-card-gaming .collection-metrics small, .collection-card-gaming .collection-subscriptions p { color: #b6c2d0; }
+  .collection-card-gaming .collection-metrics > div { background: rgb(255 255 255 / 8%); }
+  .collection-card-gaming .collection-subscriptions { background: #334155; }
+  .collection-card-gaming .collection-heading p, .collection-card-gaming .collection-features, .collection-card-gaming .collection-price p, .collection-card-gaming .collection-metrics span, .collection-card-gaming .collection-subscriptions p { color: #94a3b8; }
+  .collection-card-gaming .collection-promo { background: #e0231e; color: #fff; }
   .collection-card-gaming .collection-price { border-color: #334155; }
   .collection-more { display: flex; justify-content: center; margin-top: 24px; }
   [data-collection-more] { gap: 6px; min-width: 220px; }
-  .collection-empty { margin: 28px 0 0; color: #526071; }
+  .collection-empty { margin: 16px 0 0; color: #526071; }
   .collection-mobile-guide { display: none; }
   .collection-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  @media (max-width: 1100px) { .tariff-collection { width: calc(100% - 48px); } .collection-container { padding: 24px; } .collection-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 1100px) { .tariff-collection { width: min(720px, calc(100% - 48px)); } .collection-container { padding: 24px; } .collection-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .collection-card { min-height: 523px; } .collection-card:nth-child(3):not(:has(.collection-badge)) { padding-top: 20px; } .collection-card-gaming { min-height: 485px; } }
   @media (max-width: 620px) {
-    .tariff-collection { width: calc(100% - 32px); margin: 24px auto 40px; border-radius: 24px; }
-    .collection-container { padding: 24px 16px; }
+    .tariff-collection { width: calc(100% - 32px); margin: 24px auto 40px; border-radius: 20px; }
+    .collection-container { padding: 16px; }
     .tariff-collection h2 { font-size: 24px; line-height: 29px; letter-spacing: -.8px; }
-    .collection-intro { font-size: 15px; line-height: 22px; margin-bottom: 20px; }
-    .collection-mobile-guide { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; line-height: 16px; color: #697789; margin-top: 20px; }
-    .collection-grid { display: flex; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; gap: 12px; margin-top: 12px; padding-bottom: 12px; }
-    .collection-card { flex: 0 0 100%; scroll-snap-align: start; }
+    .collection-intro { margin: 24px 0; }
+    .collection-mobile-guide { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; line-height: 16px; color: #526071; margin-top: 24px; }
+    .collection-grid { display: flex; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; gap: 16px; margin-top: 16px; padding-bottom: 0; }
+    .collection-card { flex: 0 0 100%; min-height: 539px; scroll-snap-align: start; }
+    .collection-card:nth-child(-n+3):not(:has(.collection-badge)) { padding-top: 20px; }
+    .collection-connect, .collection-details { padding-inline: 20px; }
     [data-collection-more] { width: 100%; }
+  }
+  @media (max-width: 360px) {
+    .collection-metrics { flex-direction: column; }
+    .collection-metrics strong { margin-right: 0; }
+    .collection-actions { flex-direction: column; }
+    .collection-details { max-width: none; }
   }
 </style>

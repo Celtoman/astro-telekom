@@ -1,0 +1,61 @@
+---
+import { publicAsset } from '../data/public-asset';
+import { publicHtmlPath } from '../data/public-url';
+import type { CityView } from '../data/site';
+interface Props { cities: CityView[]; current?: CityView }
+const { cities, current } = Astro.props as Props;
+const popularNames = ['Москва', 'Санкт-Петербург', 'Екатеринбург', 'Иркутск', 'Казань', 'Самара', 'Саратов'];
+const popular = popularNames.map(name => cities.find(city => city.name === name)).filter((city): city is CityView => !!city);
+const regional = current ? cities.filter(city => city.region.slug === current.region.slug && city.slug !== current.slug) : [];
+const ordered = [...cities].sort((a,b) => a.name.localeCompare(b.name,'ru'));
+---
+<dialog id="site-city-picker" class="public-dialog city-picker" data-city-picker aria-labelledby="city-picker-title">
+  <div class="city-picker-card" data-modal-content>
+    <div class="city-picker-header">
+      <div class="flow-header"><img src={publicAsset('/images/figma/city-pin.svg')} width="24" height="24" alt="" /><h2 id="city-picker-title">Выберите город</h2><button type="button" class="flow-close" data-modal-close aria-label="Закрыть выбор города"><img src={publicAsset('/images/figma/close.svg')} width="24" height="24" alt="" /></button></div>
+      <p class="city-picker-current">Текущий город: <strong>{current?.name || 'Не выбран'}</strong></p>
+      <p data-city-choice-message hidden></p>
+      <div class="city-search-group"><label for="site-city-search">Название города</label><div class="city-search-field"><img src={publicAsset('/images/figma/city-search.svg')} width="24" height="24" alt="" /><input id="site-city-search" type="search" placeholder="Введите название города" data-city-search autocomplete="off" /><button type="button" class="city-clear" data-city-clear aria-label="Очистить поиск" hidden><img src={publicAsset('/images/figma/close.svg')} width="24" height="24" alt="" /></button></div></div>
+    </div>
+    <div class="city-picker-scroll">
+      <div class="city-quick-groups" data-city-quick>
+        {regional.length > 0 && <section><h3>Города региона: {current?.region.name}</h3><div class="city-chips">{regional.map(item => <a href={publicHtmlPath(item.slug)} data-city-choice-link>{item.name}</a>)}</div></section>}
+        {popular.length > 0 && <section><h3>Популярные города</h3><div class="city-chips">{popular.map(item => <a href={publicHtmlPath(item.slug)} data-city-choice-link aria-current={item.slug === current?.slug ? 'location' : undefined}>{item.name}{item.slug === current?.slug && <img src={publicAsset('/images/figma/city-selected.svg')} width="24" height="24" alt="Выбран" />}</a>)}</div></section>}
+      </div>
+      <section data-city-all><h3 data-city-list-title>Все города</h3><ul class="city-options">{ordered.map(item => <li data-city-option data-city-search-text={`${item.name} ${item.region.name}`}><a href={publicHtmlPath(item.slug)} data-city-choice-link aria-current={item.slug === current?.slug ? 'location' : undefined}>{item.name}{item.slug === current?.slug && <img src={publicAsset('/images/figma/city-selected.svg')} width="24" height="24" alt="Выбран" />}</a></li>)}</ul></section>
+      <section class="city-no-results" data-city-empty hidden><h3>Город не найден</h3><p>Проверьте название или выберите город из общего списка.</p><button type="button" class="flow-text-action" data-city-reset>Показать все города</button></section>
+      <p class="city-result-status" data-city-result-status role="status" aria-live="polite"></p>
+      {cities.length === 0 && <p>Опубликованных городов пока нет.</p>}
+    </div>
+  </div>
+</dialog>
+<style>
+  .city-picker { width: min(960px, calc(100% - 64px)); max-height: calc(100dvh - 64px); }
+  .city-picker-card { display: flex; flex-direction: column; max-height: min(calc(100dvh - 64px), var(--dialog-viewport-height, 100dvh)); }
+  .city-picker-header { display: flex; flex-direction: column; gap: 16px; padding: 20px 24px; flex-shrink: 0; }
+  .city-picker-current { margin: 0; color: #526071; font-size: 14px; line-height: 20px; }
+  .city-picker-current strong { color: #18202a; font-weight: 400; }
+  .city-search-group { display: flex; flex-direction: column; gap: 8px; }
+  .city-search-group label { font-size: 14px; line-height: 20px; color: #526071; }
+  .city-search-field { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 12px; border: 1px solid #dcecf7; border-radius: 10px; }
+  .city-search-field:focus-within { outline: 2px solid #1769aa; }
+  .city-search-field input { width: 100%; min-width: 0; min-height: 46px; padding: 10px 0; border: 0; outline: none; background: none; color: #18202a; font: inherit; font-size: 16px; line-height: 24px; }
+  .city-search-field input::-webkit-search-cancel-button { display: none; }
+  .city-clear { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; flex-shrink: 0; border: 0; background: none; cursor: pointer; }
+  .city-picker-scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 24px 24px; }
+  .city-picker h3 { margin: 0 0 8px; font-size: 16px; line-height: 24px; font-weight: 600; }
+  .city-quick-groups, .city-quick-groups section { margin-bottom: 24px; }
+  .city-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .city-chips a { min-height: 48px; padding: 12px; background: #eef8ff; font-size: 14px; line-height: 20px; }
+  .city-picker a { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-radius: 10px; text-decoration: none; }
+  .city-picker a[aria-current] { background: #eaf7ff; }
+  .city-picker a:hover { background: #eef8ff; }
+  .city-options { columns: 3; column-gap: 24px; margin: 0; padding: 0; list-style: none; }
+  .city-options li { break-inside: avoid; }
+  .city-options a { min-height: 48px; padding: 12px; font-size: 16px; line-height: 24px; }
+  .city-no-results p { color: #526071; font-size: 16px; line-height: 24px; }
+  .city-result-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  [hidden] { display: none !important; }
+  @media (max-width: 1100px) { .city-picker { width: min(680px, calc(100% - 64px)); } .city-options { columns: 2; } }
+  @media (max-width: 620px) { .city-picker { width: 100%; max-height: calc(100dvh - 24px); } .city-picker-card { max-height: min(calc(100dvh - 24px), var(--dialog-viewport-height, 100dvh)); } .city-picker-header { padding: 20px; } .city-picker-scroll { padding: 0 20px 20px; } .city-picker .flow-header h2 { font-size: 20px; line-height: 25px; } .city-options { columns: 1; } }
+</style>

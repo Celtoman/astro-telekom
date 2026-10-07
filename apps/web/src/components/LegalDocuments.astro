@@ -1,0 +1,22 @@
+---
+import { loadSiteData } from '../data/site';
+import { legalSections } from '../data/legal-pages';
+const { globalPages } = await loadSiteData();
+const domain = Astro.site?.hostname || 'tv-internet-dom.ru';
+const types = ['PRIVACY', 'PERSONAL_DATA_CONSENT'] as const;
+---
+{types.map(type => {
+  const page = globalPages.find(item => item.type === type);
+  const sections = legalSections(type, domain);
+  const text = typeof page?.content?.text === 'string' ? page.content.text : '';
+  return <template data-legal-template={type}><div class="flow-documents" tabindex="0">
+    {text && !sections.length && <p>{text}</p>}
+    {sections.map(section => <section><h3>{section.title}</h3>{section.paragraphs.map(paragraph => <p>{paragraph}</p>)}</section>)}
+    {(page?.blocks || []).filter(block => block.blockType === 'rich_text').map(block => <section>{typeof block.data.title === 'string' && <h3>{block.data.title}</h3>}{typeof block.data.text === 'string' && <p>{block.data.text}</p>}</section>)}
+    {!page && <p>Документ недоступен. Закройте окно и обновите страницу.</p>}
+  </div></template>;
+})}
+<script>
+  import { initializePublicDialogs } from '../lib/public-dialogs.mjs';
+  initializePublicDialogs();
+</script>

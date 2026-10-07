@@ -12,7 +12,7 @@ import { configurationSnapshot, quoteFingerprint, quoteTariffConfiguration } fro
 import { classifyLeadReason } from './lead-reasons';
 import { analyzeLeadComment } from './lead-comment-analyzer';
 import { buildLeadAttribution } from './lead-attribution';
-import { servingEntities } from './serving-publication-context';
+import { servingEntities, servingPublication } from './serving-publication-context';
 
 function premiseKey(data: Record<string, unknown> | undefined): string {
   if (!data) return '';
@@ -47,11 +47,15 @@ export class PublicLeadsController {
   async create(@Body() body: CreateLeadDto, @Req() request: { ip?: string; headers?: Record<string, string | undefined>; url?: string }) {
     if (body.website) throw new BadRequestException('Некорректный запрос');
     const reason = classifyLeadReason(body.reasonCode);
+    const callback = reason?.code === 'callback_consultation';
+    if (callback && (body.consentAccepted !== true || body.addressCheckId || body.address || body.tariffSlug || body.configuration || body.pageSlug || body.objectType || body.serviceType)) {
+      throw new BadRequestException('Для обратного звонка подтвердите согласие; адрес и тариф оформляются после проверки подключения');
+    }
     if (body.reasonCode !== undefined && !reason) throw new BadRequestException('Неизвестная причина обращения');
     const comment = body.comment?.trim() || undefined;
     const commentAnalysis = analyzeLeadComment(comment, reason?.code);
     const isSales = (!reason || reason.route === 'SALES') && commentAnalysis?.outcome !== 'MANUAL_REVIEW';
-    if (typeof body.phone !== 'string' || !body.phone.trim() || typeof body.citySlug !== 'string' || !body.citySlug.trim()) {
+    if (typeof body.phone !== 'string' || !body.phone.trim() || (!callback && (typeof body.citySlug !== 'string' || !body.citySlug.trim()))) {
       throw new BadRequestException('Телефон и город обязательны');
     }
     if (!body.submissionKey || body.consentVersion !== LEAD_CONSENT_VERSION) {
@@ -89,7 +93,7 @@ export class PublicLeadsController {
     const returnExistingSubmission = (existing: Awaited<ReturnType<typeof findSubmission>>) => {
       if (!existing) return null;
       const matches = existing.site.slug === (body.siteSlug || 'domru-site')
-        && existing.city.slug === body.citySlug
+        && (existing.city?.slug ?? null) === (body.citySlug ?? null)
         && (existing.page?.slug ?? null) === (body.pageSlug || null)
         && (existing.tariff?.slug ?? null) === (body.tariffSlug || null)
         && existing.addressCheckId === (body.addressCheckId ?? null)
@@ -111,18 +115,19 @@ export class PublicLeadsController {
     const existingSubmission = returnExistingSubmission(await findSubmission());
     if (existingSubmission) return existingSubmission;
 
-    const serving = await servingEntities(this.prisma, body.siteSlug || 'domru-site', body.citySlug, body.pageSlug);
-    const site = serving?.site ?? await this.prisma.site.findFirst({
+    const serving = body.citySlug ? await servingEntities(this.prisma, body.siteSlug || 'domru-site', body.citySlug, body.pageSlug) : null;
+    const rootPublication = callback && !body.citySlug ? await servingPublication(this.prisma, body.siteSlug || 'domru-site') : null;
+    const site = serving?.site ?? (rootPublication ? { id: rootPublication.siteId } : null) ?? await this.prisma.site.findFirst({
       where: { slug: body.siteSlug || 'domru-site', status: 'PUBLISHED' },
     });
     if (!site) throw new BadRequestException('Сайт не найден');
 
-    const city = serving?.city ?? await this.prisma.city.findFirst({
+    const city = serving?.city ?? (body.citySlug ? await this.prisma.city.findFirst({
       where: { siteId: site.id, slug: body.citySlug, status: 'PUBLISHED' },
-    });
-    if (!city) throw new BadRequestException('Город не найден');
+    }) : null);
+    if (!city && (!callback || body.citySlug)) throw new BadRequestException('Город не найден');
 
-    const page = serving ? serving.page : body.pageSlug
+    const page = serving ? serving.page : body.pageSlug && city
       ? await this.prisma.page.findFirst({ where: { cityId: city.id, slug: body.pageSlug, status: 'PUBLISHED' } })
       : null;
     const publication = serving ? serving.publication : body.configuration
@@ -133,15 +138,15 @@ export class PublicLeadsController {
       })
       : null;
     const catalog = publication?.catalog as { cities?: Array<{ slug?: string; tariffs?: Array<Record<string, unknown>> }> } | null;
-    const publishedCity = catalog?.cities?.find((item) => item.slug === city.slug);
+    const publishedCity = catalog?.cities?.find((item) => item.slug === city?.slug);
     const publishedTariff = publishedCity?.tariffs?.find((item) => item.slug === body.tariffSlug);
-    const tariffRow = body.tariffSlug && (!(body.configuration || serving) || typeof publishedTariff?.id === 'string')
+    const tariffRow = body.tariffSlug && city && (!(body.configuration || serving) || typeof publishedTariff?.id === 'string')
       ? await this.prisma.tariff.findFirst({ where: body.configuration || serving
         ? { id: publishedTariff!.id as string, cityId: city.id }
         : { cityId: city.id, slug: body.tariffSlug, status: 'PUBLISHED', availability: 'ACTIVE' } })
       : null;
-    const tariff = serving && tariffRow && publishedTariff ? { ...tariffRow, ...publishedTariff, id: tariffRow.id, cityId: city.id } : tariffRow;
-    const addressCheck = body.addressCheckId
+    const tariff = serving && city && tariffRow && publishedTariff ? { ...tariffRow, ...publishedTariff, id: tariffRow.id, cityId: city.id } : tariffRow;
+    const addressCheck = body.addressCheckId && city
       ? await this.prisma.addressCheck.findFirst({ where: { id: body.addressCheckId, cityId: city.id, siteId: site.id } })
       : null;
 
@@ -219,7 +224,7 @@ export class PublicLeadsController {
         const created = await tx.lead.create({
           data: {
             siteId: site.id,
-            cityId: city.id,
+            cityId: city?.id,
             pageId: page?.id,
             tariffId: tariff?.id,
             configurationSnapshot: storedConfiguration,

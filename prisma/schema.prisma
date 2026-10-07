@@ -618,7 +618,7 @@ model AddressCheck {
 model Lead {
   id              String   @id @default(cuid())
   siteId          String
-  cityId          String
+  cityId          String?
   pageId          String?
   tariffId        String?
   configurationSnapshot Json?
@@ -673,7 +673,7 @@ model Lead {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   site            Site     @relation(fields: [siteId], references: [id])
-  city            City     @relation(fields: [cityId], references: [id])
+  city            City?    @relation(fields: [cityId], references: [id])
   page            Page?    @relation(fields: [pageId], references: [id])
   tariff          Tariff?  @relation(fields: [tariffId], references: [id], onDelete: Restrict)
   addressCheck    AddressCheck? @relation(fields: [addressCheckId], references: [id])

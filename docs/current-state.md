@@ -1,6 +1,6 @@
 # Текущее состояние проекта
 
-Сверка: 6 октября 2026 года. Статус — **прототип с защищённым внешним test-контуром**. Только владелец определяет готовность к реальному трафику. Наличие кода, успешная локальная проверка и внешняя приёмка — разные виды доказательств.
+Сверка: 7 октября 2026 года. Статус — **прототип с защищённым внешним test-контуром**. Только владелец определяет готовность к реальному трафику. Наличие кода, успешная локальная проверка и внешняя приёмка — разные виды доказательств.
 
 Этот документ описывает действующую реализацию и её ограничения. Целевое поведение задаёт [продуктовый контракт](product-contract.md), следующую очередь — [план релизов](release-plan.md), механические статусы работ — [GitHub Issues](https://github.com/Celtoman/astro-telekom/issues). Датированные SHA, deployment IDs и измерения сохраняются в [исследованиях и приёмках](research/README.md).
 
@@ -19,7 +19,7 @@
 | Область | Текущая реализация | Ограничения и следующий объём |
 | --- | --- | --- |
 | Инфраструктура | pnpm monorepo; PostgreSQL/Redis; API readiness; Coolify Compose; separate migration/runtime images; CI запускает `pnpm check`. | Migration target прямого prod Compose исправлен и проверен на отдельной PostgreSQL 18: все миграции и точный повтор (#236). Полный direct stack не проверен. Локальная transient-блокировка Docker context — [#251](https://github.com/Celtoman/astro-telekom/issues/251). |
-| Данные и запуск | Единственная Prisma schema и клиент `apps/api/generated`; 58 миграций до `0058_home_composition_tariff_collection`. Миграции выполняются до API. | Seed проходит свежую PostgreSQL 18 и publication preflight; атомарен, повторный запуск сохраняет данные и credentials. Примеры тарифов — DRAFT без цен. На действующем test-контуре seed выключен. |
+| Данные и запуск | Единственная Prisma schema и клиент `apps/api/generated`; 59 миграций до `0059_callback_optional_city`. Миграции выполняются до API. | Seed проходит свежую PostgreSQL 18 и publication preflight; атомарен, повторный запуск сохраняет данные и credentials. Примеры тарифов — DRAFT без цен. На действующем test-контуре seed выключен. |
 | Доступ | HttpOnly-cookie admin session; защищённые admin/machine/worker routes; login rate limit, CORS и noindex; внешний test-контур закрыт Basic Auth. | Dependency audit после #258 — без advisory entries; origin/absolute HTTP request targets используют одинаковые специализированные buckets (#259). Нет scoped service accounts и полного read-only Agent diagnostics API: [#34](https://github.com/Celtoman/astro-telekom/issues/34). |
 | Города | Канонический XLSX-справочник; формы топонимов, office state, subscriber profile; поиск, фильтры, cursor-list, create/edit, readiness, slug/301, архив и восстановление в DRAFT. HOME связана с общим CITY_HOME template. | Индивидуальные city content/SEO override не используются. Координат и географической карты нет; coverage проверяется по адресу. |
 | Тарифы | Строгий 37-колоночный full-snapshot XLSX; validate/apply/guarded undo; серверная business identity; ручной редактор, цены, комплектация, availability, archive/purge/slug/301. | Новые тарифные/сервисные листинги находятся за пределами Release 1. |
@@ -66,3 +66,7 @@ Bootstrap нового контура проверен на свежей БД и
 
 
 Внешняя приёмка #265 на code commit ed6a415e2b0b2fdc4b4d62118e2bd4e267975976 подтверждена 7 октября: CI зелёный, Coolify deployment kdalqnben5mouvxqsjcbi24u finished/healthy, новый CODE-артефакт активен. Последовательная проверка рабочей ревизии 20 прошла 4018 URL без ошибок/предупреждений; preview доступен, все настройки блоков и immutable publication ревизии 16 сохранены. CMS-публикация рабочих изменений не выполнялась. Отдельный нерешённый отказ HTTP 500 при параллельных чтениях зарегистрирован в [#266](https://github.com/Celtoman/astro-telekom/issues/266); устойчивость этого режима приёмкой не подтверждена.
+
+## Figma: B04, O01, FLOW 1 / FLOW 2
+
+В коде перенесены семантические токены и связанные состояния всей выбранной библиотеки для тарифных карточек, выбора города и двух сценариев. B04 сохраняет опубликованный каталог и паспорт; O01 использует опубликованные города, региональную и популярную группы. FLOW 1 сохраняет консультацию оператору без адреса и, на общей главной, без города. FLOW 2 сохраняет положительный адресный gate, явное согласие и не содержит комментария. Документы открываются внутри модалки с возвратом к форме. Реальный телефон поддержки и обещание 15 минут сохранены. Заявки без города честно подписаны в журнале, карточке и оповещении. Протокол локальной проверки и внешнего rollout — [приёмка Figma](research/2026-10-07-figma-flows-acceptance.md); статус исполнения — [#268](https://github.com/Celtoman/astro-telekom/issues/268).

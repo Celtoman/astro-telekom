@@ -6,7 +6,7 @@ const { join } = require('node:path');
 test('closed reason registry returns immutable v1 code, label and routing snapshots', () => {
   const { LEAD_REASONS, classifyLeadReason } = require('../apps/api/dist/lead-reasons.js');
   assert.deepEqual(LEAD_REASONS.map(({ code }) => code), [
-    'new_connection', 'existing_subscriber_support', 'billing', 'relocation', 'other',
+    'callback_consultation', 'new_connection', 'existing_subscriber_support', 'billing', 'relocation', 'other',
   ]);
   assert.equal(classifyLeadReason(undefined), null);
   assert.equal(classifyLeadReason('new_connection').route, 'SALES');

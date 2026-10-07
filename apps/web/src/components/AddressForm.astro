@@ -26,7 +26,6 @@ const {
   siteSlug,
   pageSlug,
   city,
-  site,
   presentation = 'embedded',
   dialogId,
   serviceType = 'INTERNET',
@@ -41,7 +40,6 @@ const entryDialogId = dialogId || `address-entry-${city.slug}-${suffix}`;
 const resultDialogId = `address-result-${city.slug}-${presentation}-${suffix}`;
 const resultHeadingId = `${resultDialogId}-heading`;
 const consentVersion = 'lead-form-v1-2026-09-22';
-const supportPhoneHref = `tel:${site.supportPhone.replace(/[^+\d]/g, '')}`;
 const tariffSummary = tariff ? JSON.stringify({
   slug: tariff.slug,
   name: tariff.name,
@@ -60,15 +58,12 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
 >
   <EntryContainer
     id={presentation === 'dialog' ? entryDialogId : 'address-check'}
-    class:list={['address-entry', { 'entry-dialog': presentation === 'dialog' }]}
+    class:list={['address-entry', { 'entry-dialog': presentation === 'dialog', 'public-dialog': presentation === 'dialog' }]}
     data-address-entry-dialog={presentation === 'dialog' ? '' : undefined}
     aria-labelledby={presentation === 'dialog' ? `${formId}-title` : undefined}
   >
-    <div class:list={{ 'dialog-card': presentation === 'dialog' }}>
-      {presentation === 'dialog' && (
-        <button type="button" class="dialog-close" data-entry-close aria-label="Закрыть проверку адреса">×</button>
-      )}
-      {presentation === 'dialog' && <h2 id={`${formId}-title`}>Проверить адрес</h2>}
+    <div class:list={{ 'flow-card': presentation === 'dialog' }} data-modal-content>
+      {presentation === 'dialog' && <div class="flow-header"><span class="flow-icon"><img src={publicAsset('/images/figma/status-address.svg')} width="24" height="24" alt="" /></span><h2 id={`${formId}-title`}>Проверить адрес</h2><button type="button" class="flow-close" data-entry-close aria-label="Закрыть проверку адреса"><img src={publicAsset('/images/figma/close.svg')} width="24" height="24" alt="" /></button></div>}
       <form
         class="address-form"
         id={formId}
@@ -118,23 +113,23 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
     </div>
   </EntryContainer>
 
-  <dialog id={resultDialogId} class="result-dialog" data-address-result-dialog aria-labelledby={resultHeadingId}>
-    <div class="dialog-card result-card">
-      <button type="button" class="dialog-close" data-result-close aria-label="Закрыть результат проверки">×</button>
-      <h2 id={resultHeadingId} data-result-heading tabindex="-1">Результат проверки</h2>
+  <dialog id={resultDialogId} class="result-dialog public-dialog" data-address-result-dialog aria-labelledby={resultHeadingId}>
+    <div class="flow-card result-card" data-modal-content>
+      <div class="flow-header"><span class="flow-icon flow-icon-success" data-result-icon data-icon-available={publicAsset('/images/figma/status-available.svg')} data-icon-alternatives={publicAsset('/images/figma/status-alternatives.svg')} data-icon-unavailable={publicAsset('/images/figma/status-unavailable.svg')} data-icon-success={publicAsset('/images/figma/status-success.svg')}><img src={publicAsset('/images/figma/status-available.svg')} width="24" height="24" alt="" /></span><h2 id={resultHeadingId} data-result-heading tabindex="-1">Результат проверки</h2><button type="button" class="flow-close" data-result-close aria-label="Закрыть результат проверки"><img src={publicAsset('/images/figma/close.svg')} width="24" height="24" alt="" /></button></div>
 
       <section data-business-outcome="TARGET_AVAILABLE" hidden>
         <div class="lead-content" data-lead-content>
-          <span class="result-mark success" aria-hidden="true">✓</span>
-          <h3>Дом.ру доступен</h3>
-          <p>Подключение доступно по адресу <strong data-result-address></strong>.</p>
+          <form class="lead-form" data-lead-form data-consent-version={consentVersion} novalidate>
+          <div class="flow-body">
+          <p>Подключение доступно по вашему адресу. Оставьте телефон — специалист позвонит и поможет выбрать тариф.</p>
+          <div class="result-address-summary"><p data-result-address></p><button class="flow-text-action" type="button" data-change-address>Изменить адрес</button></div>
           <div class="tariff-summary" data-result-tariff hidden>
             <span>Выбранный тариф</span>
             <strong data-result-tariff-name></strong>
             <span data-result-tariff-price></span>
             <ul data-result-tariff-components></ul>
           </div>
-          <form class="lead-form" data-lead-form data-consent-version={consentVersion}>
+          <div class="flow-field">
             <label for={`phone-${formId}`}>Телефон</label>
             <input
               id={`phone-${formId}`}
@@ -150,51 +145,39 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
               placeholder="+7 (___) ___-__-__"
             />
             <p id={`phone-error-${formId}`} class="field-error" data-phone-error role="alert" hidden>Введите мобильный номер в формате +7 (9XX) XXX-XX-XX</p>
-            <label for={`comment-${formId}`}>Комментарий <span class="optional-label">(необязательно)</span></label>
-            <textarea id={`comment-${formId}`} data-lead-comment name="comment" rows="3" maxlength="2000" placeholder="Уточните вопрос, если это поможет оператору"></textarea>
-            <button class="button" type="submit" data-lead-submit>
-              <span data-lead-submit-label>Оставить заявку</span>
-              <span class="submit-spinner" data-lead-spinner aria-hidden="true" hidden></span>
-            </button>
-            <p class="consent-copy">
-              Нажимая кнопку, вы соглашаетесь с <a href="/politika-konfidencialnosti">политикой конфиденциальности</a>
-              и даёте <a href="/soglasie-na-obrabotku-personalnyh-dannyh">согласие на обработку персональных данных</a>.
-            </p>
+          </div>
+          </div>
+          <div class="flow-footer">
+            <div class="flow-consent"><label><input type="checkbox" data-lead-consent aria-label="Даю согласие на обработку персональных данных" required /></label><p>Даю <a href="/soglasie-na-obrabotku-personalnyh-dannyh" data-legal-document="PERSONAL_DATA_CONSENT">согласие на обработку персональных данных</a> и подтверждаю ознакомление с <a href="/politika-konfidencialnosti" data-legal-document="PRIVACY">политикой конфиденциальности</a>.</p></div>
+            <p class="flow-small" data-consent-hint>Для отправки заявки подтвердите согласие.</p>
+            <button class="flow-button" type="submit" data-lead-submit disabled><span data-lead-submit-label>Оставить заявку</span><span class="flow-spinner" data-lead-spinner aria-hidden="true" hidden></span></button>
             <p data-lead-result role="status" aria-live="polite"></p>
+          </div>
           </form>
         </div>
-        <section class="lead-success" data-lead-success hidden>
-          <span class="result-mark success" aria-hidden="true">✓</span>
-          <h3>Спасибо! Заявка отправлена</h3>
-          <p>Оператор свяжется с вами, чтобы подтвердить детали подключения.</p>
+        <section class="lead-success flow-body" data-lead-success hidden>
+          <p class="flow-small">Специалист позвонит на указанный номер и уточнит детали подключения.</p>
           <button class="button" type="button" data-lead-success-close>Закрыть</button>
         </section>
       </section>
 
-      <section data-business-outcome="ALTERNATIVES_AVAILABLE" hidden>
-        <span class="result-mark neutral" aria-hidden="true">→</span>
-        <h3>Дом.ру по этому адресу не найден</h3>
-        <p>По адресу <strong data-result-address></strong> доступны другие провайдеры:</p>
+      <section data-business-outcome="ALTERNATIVES_AVAILABLE" class="flow-body" hidden>
+        <div class="result-address-summary"><p data-result-address></p><button class="flow-text-action" type="button" data-change-address>Изменить адрес</button></div><p>По этому адресу доступны другие провайдеры. Вы можете сравнить их тарифы на Tarifnik.ru.</p>
         <ul class="provider-list" data-provider-list></ul>
-        <a class="button" data-provider-action target="_blank" rel="noopener noreferrer sponsored">Посмотреть тарифы на Tarifnik.ru</a>
-        <button class="secondary-button" type="button" data-change-address>Проверить другой адрес</button>
+        <a class="button" data-provider-action target="_blank" rel="noopener noreferrer sponsored">Посмотреть тарифы</a><p class="flow-small">Откроется сайт Tarifnik.ru</p>
+        <button class="flow-text-action" type="button" data-change-address>Проверить другой адрес</button>
       </section>
 
-      <section data-business-outcome="NO_PROVIDERS" hidden>
-        <span class="result-mark neutral" aria-hidden="true">i</span>
-        <h3>Провайдеры не найдены</h3>
-        <p>По адресу <strong data-result-address></strong> пока нет доступных предложений.</p>
-        <p>Уточнить возможность подключения можно по телефону <a href={supportPhoneHref}>{site.supportPhone}</a>.</p>
-        <button class="secondary-button" type="button" data-change-address>Проверить другой адрес</button>
+      <section data-business-outcome="NO_PROVIDERS" class="flow-body" hidden>
+        <div class="result-address-summary"><p data-result-address></p><button class="flow-text-action" type="button" data-change-address>Изменить адрес</button></div><p>По этому адресу пока нет доступных предложений. Проверьте другой адрес или повторите проверку позже.</p>
+        <button class="flow-text-action" type="button" data-change-address>Проверить другой адрес</button>
       </section>
 
-      <section data-technical-error hidden>
-        <span class="result-mark error" aria-hidden="true">!</span>
-        <h3>Не удалось выполнить проверку</h3>
+      <section data-technical-error class="flow-body" hidden>
         <p data-technical-message>Попробуйте еще раз.</p>
         <div class="dialog-actions">
           <button class="button" type="button" data-retry-check>Повторить</button>
-          <button class="secondary-button" type="button" data-change-address>Изменить адрес</button>
+          <button class="flow-text-action" type="button" data-change-address>Изменить адрес</button>
         </div>
       </section>
     </div>
@@ -210,8 +193,8 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
   .address-check-root { width: 100%; }
   .address-entry { scroll-margin-top: 24px; }
   .address-form { position: relative; display: grid; max-width: 560px; gap: 12px; }
-  .address-form label, .lead-form label { font-weight: 750; }
-  input, textarea { width: 100%; min-height: 48px; box-sizing: border-box; border: 1px solid #d6dde6; border-radius: 12px; padding: 12px 14px; background: #fff; color: #18202a; font: inherit; }
+  .address-form label, .lead-form label { font-weight: 600; }
+  .address-form input, .lead-form input[type=tel] { width: 100%; min-height: 48px; box-sizing: border-box; border: 1px solid #d6dde6; border-radius: 12px; padding: 12px 14px; background: #fff; color: #18202a; font: inherit; }
   textarea { resize: vertical; }
   .optional-label { color: #526071; font-weight: 500; }
   input:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #8fc4ef; outline-offset: 3px; }
@@ -230,33 +213,35 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
   .address-suggestions :global(.address-option-primary) { font-size: 15px; font-weight: 700; line-height: 1.35; }
   .address-suggestions :global(.address-option-secondary) { color: #526071; font-size: 13px; line-height: 1.35; }
   .address-suggestions :global(mark) { padding: 0; background: transparent; color: inherit; font-weight: 850; }
-  .button, .secondary-button { display: inline-flex; min-height: 48px; width: fit-content; align-items: center; justify-content: center; border: 0; border-radius: 14px; padding: 12px 22px; font: inherit; font-weight: 800; cursor: pointer; text-decoration: none; }
-  .button { color: #fff; background: #c91f5c; }
-  .button:hover { background: #ad174d; }
+  .button, .secondary-button { display: inline-flex; min-height: 48px; width: fit-content; align-items: center; justify-content: center; border: 0; border-radius: 14px; padding: 14px 24px; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; cursor: pointer; text-decoration: none; }
+  .button { color: #fff; background: #e0231e; }
+  .button:hover { background: #c61f1a; }
   .secondary-button { color: #18202a; background: #eef2f6; }
-  button:disabled { cursor: not-allowed; opacity: .55; }
+  button:disabled { cursor: not-allowed; opacity: .45; }
   .bot-field { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  dialog { width: min(620px, calc(100% - 24px)); max-height: min(88vh, 760px); overflow: auto; border: 0; border-radius: 26px; padding: 0; color: #18202a; background: transparent; box-shadow: 0 28px 90px rgb(21 40 66 / 30%); }
-  dialog::backdrop { background: rgb(15 23 42 / 62%); backdrop-filter: blur(3px); }
-  .dialog-card { position: relative; display: grid; gap: 16px; padding: clamp(24px, 5vw, 42px); background: #fff; }
-  .dialog-card h2, .dialog-card h3, .dialog-card p { margin: 0; }
-  .dialog-card h2 { padding-right: 36px; font-size: clamp(28px, 5vw, 38px); line-height: 1.05; letter-spacing: -.035em; }
-  .dialog-card h3 { margin: 10px 0 8px; font-size: clamp(24px, 4vw, 32px); }
-  .dialog-close { position: absolute; z-index: 2; inset: 14px 14px auto auto; display: grid; width: 42px; height: 42px; place-items: center; border: 0; border-radius: 50%; background: #eef2f6; color: #18202a; font-size: 26px; cursor: pointer; }
-  .result-card > section { display: grid; gap: 16px; }
-  .result-mark { display: grid; width: 52px; height: 52px; place-items: center; border-radius: 17px; font-size: 24px; font-weight: 900; }
-  .result-mark.success { color: #176b45; background: #e8f7ef; }
-  .result-mark.neutral { color: #1769aa; background: #eaf4ff; }
-  .result-mark.error { color: #b42318; background: #fff0ed; }
-  .tariff-summary { display: grid; gap: 5px; border: 1px solid #dce5ee; border-radius: 18px; padding: 18px; background: #f8fafc; }
-  .tariff-summary > span:first-child { color: #697789; font-size: 13px; font-weight: 700; }
-  .tariff-summary ul, .provider-list { display: grid; gap: 8px; margin: 6px 0 0; padding-left: 20px; }
-  .lead-content, .lead-success { display: grid; gap: 16px; }
-  .lead-form { display: grid; gap: 12px; border-top: 1px solid #e3e8ef; padding-top: 18px; }
-  .submit-spinner { width: 16px; height: 16px; margin-left: 8px; border: 2px solid rgb(255 255 255 / 50%); border-top-color: #fff; border-radius: 50%; animation: submit-spin .8s linear infinite; }
-  @keyframes submit-spin { to { transform: rotate(360deg); } }
-  .provider-list { color: #334155; }
-  .dialog-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .result-card > section { min-height: 0; }
+  .result-card > section[data-business-outcome="TARGET_AVAILABLE"], .lead-content, .lead-form { display: flex; flex-direction: column; min-height: 0; }
+  .lead-form { gap: 16px; }
+  .result-card > section[data-business-outcome="TARGET_AVAILABLE"], .lead-content, .lead-form { flex: 1; }
+  .lead-form > .flow-body { flex: 1; }
+  .lead-form > .flow-body > * { flex-shrink: 0; }
+  .result-dialog .button, .entry-dialog .button { width: 100%; }
+  .lead-form input[type=tel] { min-height: 48px; padding: 12px; border: 1px solid #dcecf7; border-radius: 10px; font: inherit; font-size: 16px; line-height: 24px; }
+  .lead-form .field-error, [data-lead-result][data-state=error] { color: #b42318; font-size: 14px; line-height: 20px; }
+  .tariff-summary { display: grid; gap: 4px; padding: 12px; border-radius: 10px; background: #eef8ff; }
+  .tariff-summary ul { display: grid; gap: 4px; margin: 0; padding-left: 20px; font-size: 14px; line-height: 20px; }
+  .result-address-summary p { color: #18202a; }
+  .provider-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .provider-list :global(li) { padding: 12px 16px; border-radius: 10px; background: #eef8ff; font-size: 16px; line-height: 24px; }
+  .dialog-actions { display: flex; flex-direction: column; gap: 12px; }
+  .entry-dialog .address-form { display: flex; flex-direction: column; min-height: 0; overflow-y: auto; gap: 12px; border: 0; padding: 0; margin: 0; box-shadow: none; background: none; }
+  .entry-dialog .address-form input { border: 1px solid #dcecf7; border-radius: 10px; min-height: 48px; padding: 12px; font-size: 16px; line-height: 24px; }
+  .entry-dialog .address-suggestions { position: static; border: 0; box-shadow: none; padding: 0; margin-top: 12px; max-height: 240px; }
+  .entry-dialog .address-suggestions :global(.address-option) { padding: 12px 16px; min-height: 72px; border-radius: 10px; }
+  .entry-dialog .address-suggestions :global(.address-option-primary) { font-size: 16px; line-height: 24px; font-weight: 400; }
+  .entry-dialog .address-suggestions :global(.address-option-secondary) { font-size: 14px; line-height: 20px; }
+  .entry-dialog .address-form .address-hint { font-size: 14px; line-height: 20px; margin: 0; }
+  .entry-dialog .address-form .form-result:empty { display: none; }
   .embedded { margin-top: 20px; }
   .embedded .address-entry { width: 100%; }
   .embedded .address-form { grid-template-columns: minmax(0, 1fr) auto; max-width: none; border: 0; padding: 0; background: transparent; box-shadow: none; }
@@ -280,7 +265,5 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
     .embedded .address-field, .embedded [data-submit] { grid-column: 1; grid-row: auto; }
     .embedded [data-submit], .result-card .button, .result-card .secondary-button { width: 100%; }
     .hero-address [data-submit] { grid-row: auto; }
-    dialog { width: min(100% - 16px, 620px); border-radius: 22px; }
-    .dialog-card { padding: 28px 20px 24px; }
   }
 </style>

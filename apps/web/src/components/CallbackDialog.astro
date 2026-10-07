@@ -1,0 +1,68 @@
+---
+import { publicAsset } from '../data/public-asset';
+import type { CityView, SiteView } from '../data/site';
+interface Props { site: SiteView; city?: CityView }
+const { site, city } = Astro.props;
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+---
+<dialog id="site-callback" class="public-dialog callback-dialog" data-callback-dialog aria-labelledby="callback-title" data-api-url={apiUrl} data-site-slug={site.slug} data-city-slug={city?.slug || ''} data-support-icon={publicAsset('/images/figma/callback-support.svg')} data-success-icon={publicAsset('/images/figma/callback-success.svg')} data-call-icon={publicAsset('/images/figma/phone-incoming.svg')}>
+  <div class="flow-card callback-card" data-modal-content>
+    <div class="flow-header">
+      <span class="flow-icon callback-icon" data-callback-icon><img src={publicAsset('/images/figma/phone-incoming.svg')} width="24" height="24" alt="" /></span>
+      <h2 id="callback-title">Заказать звонок</h2>
+      <button class="flow-close" type="button" data-modal-close aria-label="Закрыть"><img src={publicAsset('/images/figma/close.svg')} width="24" height="24" alt="" /></button>
+    </div>
+    <div class="callback-audience" role="group" aria-label="Причина обращения" data-callback-audience>
+      <button type="button" data-callback-mode="new" aria-pressed="true">Новое подключение</button>
+      <button type="button" data-callback-mode="existing" aria-pressed="false">Я уже абонент Дом.ру</button>
+    </div>
+    <form data-callback-form class="callback-form" data-consent-version="lead-form-v1-2026-09-22" novalidate>
+      <div class="flow-body">
+        <p class="flow-small">Оставьте номер телефона. Специалист перезвонит в течение 15 минут и ответит на вопросы о подключении.</p>
+        <div class="flow-field"><label for="callback-phone">Телефон *</label><input id="callback-phone" type="tel" name="phone" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" maxlength="18" required aria-describedby="callback-phone-error" /><p id="callback-phone-error" class="flow-error" data-callback-phone-error role="alert" hidden>Введите мобильный номер в формате +7 (9XX) XXX-XX-XX</p></div>
+        <div class="flow-field"><label for="callback-question">Ваш вопрос (необязательно)</label><textarea id="callback-question" name="comment" rows="2" maxlength="2000" placeholder="Например: можно ли подключить интернет и ТВ?"></textarea></div>
+        <div class="callback-bot" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off" aria-label="Ваш сайт" /></div>
+        <p class="flow-error" data-callback-error role="alert" tabindex="-1" hidden></p>
+      </div>
+      <div class="flow-footer">
+        <div class="flow-consent"><label><input type="checkbox" name="consent" aria-label="Даю согласие на обработку персональных данных" required /></label><p>Даю <a href="/soglasie-na-obrabotku-personalnyh-dannyh" data-legal-document="PERSONAL_DATA_CONSENT">согласие на обработку персональных данных</a> и подтверждаю ознакомление с <a href="/politika-konfidencialnosti" data-legal-document="PRIVACY">политикой конфиденциальности</a>.</p></div>
+        <button class="flow-button" type="submit" disabled><span data-callback-submit-label>Заказать звонок</span><span class="flow-spinner" data-callback-spinner hidden aria-hidden="true"></span></button>
+      </div>
+    </form>
+    <div class="flow-body" data-callback-support hidden><p class="flow-small">По вопросам вашего подключения, управления услугами и технических неполадок позвоните в поддержку Дом.ру по номеру ниже.</p><p class="flow-small callback-support-label">Телефон техподдержки</p><a class="callback-support-phone" href={`tel:${site.supportPhone.replace(/[^+\d]/g, '')}`}>{site.supportPhone}</a></div>
+    <div data-callback-success hidden><p class="flow-small">Специалист позвонит на указанный номер и ответит на вопросы</p><button type="button" class="flow-button flow-button-secondary" data-modal-close>Закрыть</button></div>
+  </div>
+</dialog>
+<script>
+  import { initializeCallbackDialog } from '../lib/callback-client.mjs';
+  initializeCallbackDialog();
+</script>
+<style>
+  .callback-card { height: min(544px, calc(var(--dialog-viewport-height, 100dvh) - 48px)); }
+  .callback-card:has([data-callback-phone-error]:not([hidden])) { height: min(572px, calc(var(--dialog-viewport-height, 100dvh) - 48px)); }
+  .callback-card:has([data-callback-error]:not([hidden])) { height: min(600px, calc(var(--dialog-viewport-height, 100dvh) - 48px)); }
+  .callback-card:has([data-callback-support]:not([hidden])) { height: min(356px, calc(var(--dialog-viewport-height, 100dvh) - 48px)); }
+  .callback-card:has([data-callback-success]:not([hidden])) { height: min(204px, calc(var(--dialog-viewport-height, 100dvh) - 48px)); }
+  .callback-card .flow-header { min-height: 56px; }
+  .callback-card .flow-header h2 { font-size: 20px; line-height: 25px; letter-spacing: -.2px; }
+  .callback-icon { width: 56px; height: 56px; background: #ffeae9; }
+  .callback-icon[data-mode=existing] { background: #eef8ff; }
+  .callback-icon[data-mode=success] { background: #e8f7ef; }
+  .callback-audience { display: flex; flex-shrink: 0; gap: 4px; min-height: 56px; padding: 4px; border: 1px solid #dcecf7; border-radius: 14px; background: #eef8ff; }
+  .callback-audience button { flex: 1; min-width: 0; min-height: 48px; padding: 4px; border: 1px solid transparent; border-radius: 10px; background: none; font: inherit; font-size: 13px; line-height: 18px; color: #526071; cursor: pointer; }
+  .callback-audience button[aria-pressed=true] { background: #fff; border-color: #dcecf7; color: #18202a; font-weight: 600; }
+  .callback-form { display: flex; flex-direction: column; flex: 1; gap: 16px; min-height: 0; }
+  .callback-form .flow-body { flex: 1; }
+  .callback-form .flow-body > * { flex-shrink: 0; }
+  .callback-form .flow-consent p { font-size: 12px; line-height: 18px; }
+  .callback-support-phone { font-size: 28px; line-height: 36px; text-decoration: none; }
+  [data-callback-success] { display: grid; gap: 16px; }
+  .callback-bot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  @media (max-width: 620px) {
+    .callback-card { height: min(566px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
+    .callback-card:has([data-callback-phone-error]:not([hidden])) { height: min(594px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
+    .callback-card:has([data-callback-error]:not([hidden])) { height: min(622px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
+    .callback-card:has([data-callback-support]:not([hidden])) { height: min(368px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
+    .callback-card:has([data-callback-success]:not([hidden])) { height: min(216px, calc(var(--dialog-viewport-height, 100dvh) - 24px)); }
+  }
+</style>

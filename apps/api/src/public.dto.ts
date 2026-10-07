@@ -21,6 +21,7 @@ import {
   Min,
   MinLength,
   Validate,
+  ValidateIf,
   ValidateNested,
   ValidationArguments,
   ValidatorConstraint,
@@ -318,6 +319,9 @@ export class LeadDecisionStatusDto {
 
 export class CreateLeadDto {
   @IsOptional()
+  @Equals(true)
+  consentAccepted?: true;
+  @IsOptional()
   @ValidateNested()
   @Type(() => LeadSessionDto)
   @Validate(MaxJsonBytesConstraint, [20_480])
@@ -337,10 +341,11 @@ export class CreateLeadDto {
   @MaxLength(120)
   siteSlug?: string;
 
+  @ValidateIf((body, value) => body.reasonCode !== 'callback_consultation' || value !== undefined)
   @IsString()
   @Matches(slug)
   @MaxLength(120)
-  citySlug!: string;
+  citySlug?: string;
 
   @IsOptional()
   @IsString()

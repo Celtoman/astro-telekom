@@ -11,7 +11,7 @@ interface LeadCard {
   name: string | null
   address: string | null
   processingStatus: string
-  city: { name: string; slug: string }
+  city: { name: string; slug: string } | null
   tariff: { name: string } | null
 }
 
@@ -117,7 +117,7 @@ export function LeadAccessCard({ apiUrl }: { apiUrl: string }) {
           </div>
           <div className="flex gap-3">
             <MapPin className="mt-0.5 text-muted-foreground" />
-            <div><dt className="text-xs text-muted-foreground">Город страницы</dt><dd className="font-medium">{lead.city.name}</dd></div>
+            <div><dt className="text-xs text-muted-foreground">Город страницы</dt><dd className="font-medium">{(lead.city?.name || "Не выбран — уточнить при звонке")}</dd></div>
           </div>
           <div className="flex gap-3 sm:col-span-2">
             <Clock3 className="mt-0.5 text-muted-foreground" />

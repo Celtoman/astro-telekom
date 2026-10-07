@@ -161,19 +161,20 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(addressForm, /role="listbox"/);
   assert.match(addressForm, /data-submit[\s\S]*disabled/);
   assert.match(addressForm, /<dialog[\s\S]*aria-labelledby=/);
-  assert.equal((addressForm.match(/data-business-outcome=/g) || []).length, 3);
+  assert.equal((addressForm.match(/<section[^>]*data-business-outcome=/g) || []).length, 3);
   assert.equal((addressForm.match(/data-technical-error/g) || []).length, 1);
   assert.match(addressForm, />Повторить</);
   assert.match(addressForm, />Изменить адрес</);
   assert.match(addressForm, />Проверить другой адрес</);
   assert.match(addressForm, /data-phone-input/);
-  assert.match(addressForm, /data-lead-comment/);
+  assert.doesNotMatch(addressForm, /data-lead-comment/);
+  assert.match(addressForm, /data-lead-consent/);
   assert.match(addressForm, /value="\+7 "/);
   assert.match(addressForm, /Введите мобильный номер в формате \+7 \(9XX\) XXX-XX-XX/);
   assert.match(addressForm, /href="\/politika-konfidencialnosti"/);
   assert.match(addressForm, /href="\/soglasie-na-obrabotku-personalnyh-dannyh"/);
   assert.match(addressForm, /data-lead-success/);
-  assert.match(addressForm, />Спасибо! Заявка отправлена</);
+  assert.match(addressClient, /resultHeading.textContent = 'Заявка отправлена'/);
   assert.match(addressForm, /data-lead-success-close/);
   assert.match(addressClient, /aria-activedescendant/);
   for (const key of ['ArrowDown', 'ArrowUp', 'Enter', 'Escape']) assert.match(addressClient, new RegExp(key));
@@ -188,7 +189,7 @@ test('address component exposes one accessible autocomplete and separates busine
   assert.match(addressClient, /phoneInput\.value = '\+7 '/);
   assert.match(addressClient, /submissionKey/);
   assert.match(addressClient, /reasonCode:\s*'new_connection'/);
-  assert.match(addressClient, /comment:\s*commentInput\?\.value\.trim\(\)\s*\|\|\s*undefined/);
+  assert.match(addressClient, /consentAccepted:\s*true/);
   assert.match(addressClient, /consentVersion/);
   assert.match(addressClient, /Попробовать ещё раз/);
 

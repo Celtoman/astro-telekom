@@ -131,7 +131,7 @@ export class LeadDecisionService implements OnModuleDestroy {
     }
 
     const coverage = readTarifnikCoverageSnapshot(lead.addressCheck?.response);
-    if (!coverage?.hasTargetProvider) {
+    if (!coverage?.hasTargetProvider || !lead.city) {
       await this.saveDecision(leadId, { processingStatus: 'MANUAL_CHECK_API', phoneCheckStatus: 'SKIPPED', decisionLeaseUntil: null, decisionAttemptNumber: null },
         'ROUTE_DECISION', 'MANUAL_CHECK_API', { coverageVerified: false });
       return { skipped: true, reason: 'coverage_not_verified' };

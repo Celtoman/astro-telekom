@@ -1,4 +1,5 @@
 ---
+import CityPicker from './CityPicker.astro';
 import { publicAsset } from '../data/public-asset';
 import { loadSiteData } from '../data/site';
 import type { CityView, SiteView } from '../data/site';
@@ -12,7 +13,6 @@ const localCheck = Astro.url.pathname === '/' || currentCityHome;
 const cityPath = activeCity ? publicHtmlPath(activeCity.slug) : null;
 const addressHref = localCheck && activeCity ? '#address-check' : cityPath ? `${cityPath}#address-check` : null;
 const tariffHref = currentCityHome ? '#tariffs' : cityPath ? `${cityPath}#tariffs` : null;
-const callbackHref = addressHref?.startsWith('#') ? addressHref : addressHref?.replace('#address-check', '?callback=1#address-check');
 const supportHref = `tel:${site.supportPhone.replace(/[^+\d]/g, '')}`;
 const connectionHref = `tel:${site.connectionPhone.replace(/[^+\d]/g, '')}`;
 const navigation = [
@@ -39,22 +39,12 @@ const navigation = [
         <img src={publicAsset('/images/figma/phone.svg')} width="22" height="22" alt="" />
         <span class="phone-copy"><span data-phone-value>{site.connectionPhone}</span><span class="phone-caption" data-phone-caption>Подключение</span></span>
       </a>
-      {callbackHref ? <a class="callback-button" href={callbackHref} data-address-focus data-callback-intent>Заказать звонок</a> : <button type="button" class="callback-button" data-city-choice-trigger data-city-choice-anchor="address-check" data-callback-intent aria-haspopup="dialog">Заказать звонок</button>}
+      <button type="button" class="callback-button" data-callback-trigger aria-haspopup="dialog" aria-controls="site-callback">Заказать звонок</button>
       <button type="button" class="menu-trigger" data-menu-trigger aria-haspopup="dialog" aria-controls="site-menu" aria-label="Открыть меню"><img src={publicAsset('/images/figma/menu.svg')} width="24" height="24" alt="" /></button>
     </div>
   </div>
 </header>
-<dialog id="site-city-picker" class="header-dialog" data-city-picker aria-labelledby="city-picker-title">
-  <button type="button" class="dialog-close" data-header-dialog-close aria-label="Закрыть выбор города">×</button>
-  <h2 id="city-picker-title">Выберите город</h2>
-  <p data-city-choice-message>Тарифы и проверка подключения доступны на странице выбранного города.</p>
-  <label for="site-city-search">Название города или региона</label>
-  <input id="site-city-search" type="search" placeholder="Начните вводить название" data-city-search autocomplete="off" />
-  <ul class="city-options">{cities.map((item) => <li data-city-option data-city-search-text={`${item.name} ${item.region.name}`}><a href={publicHtmlPath(item.slug)} data-city-choice-link>{item.name}<span>{item.region.name}</span></a></li>)}</ul>
-  <p class="empty-cities" data-city-empty hidden>Город не найден. Попробуйте другое название.</p>
-  {cities.length === 0 && <p>Опубликованных городов пока нет.</p>}
-  <a class="directory-link" href="/goroda-obsluzhivaniya">Все города обслуживания</a>
-</dialog>
+<CityPicker {cities} current={activeCity} />
 <dialog id="site-menu" class="header-dialog menu-dialog" data-header-menu aria-labelledby="site-menu-title">
   <button type="button" class="dialog-close" data-header-dialog-close aria-label="Закрыть меню">×</button>
   <h2 id="site-menu-title">Меню</h2>
@@ -62,7 +52,7 @@ const navigation = [
     {navigation.map((item) => item.href ? <a href={item.href}>{item.label}</a> : <button type="button" data-city-choice-trigger data-city-choice-anchor={item.anchor} aria-haspopup="dialog">{item.label}</button>)}
     {addressHref ? <a href={addressHref} data-address-focus>Проверить адрес</a> : <button type="button" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog">Проверить адрес</button>}
     <a href={supportHref}>Техподдержка: {site.supportPhone}</a>
-    {callbackHref ? <a class="callback-button" href={callbackHref} data-address-focus data-callback-intent>Заказать звонок</a> : <button type="button" class="callback-button" data-city-choice-trigger data-city-choice-anchor="address-check" data-callback-intent aria-haspopup="dialog">Заказать звонок</button>}
+    <button type="button" class="callback-button" data-callback-trigger aria-haspopup="dialog" aria-controls="site-callback">Заказать звонок</button>
   </nav>
 </dialog>
 <script>

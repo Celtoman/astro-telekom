@@ -68,7 +68,7 @@ test('lead journal filters by immutable reason snapshot and exposes the closed r
   const prisma = transactionPrisma('lead', [], [0, 0, 0, 0, 0, 0]);
   const controller = new CrmLeadsController(prisma.client);
   const reasons = controller.reasons();
-  assert.deepEqual(reasons.map((item) => item.code), ['new_connection', 'existing_subscriber_support', 'billing', 'relocation', 'other']);
+  assert.deepEqual(reasons.map((item) => item.code), ['callback_consultation', 'new_connection', 'existing_subscriber_support', 'billing', 'relocation', 'other']);
   await controller.list({ reasonCode: 'billing' });
   assert.deepEqual(prisma.calls.findMany[0].where.AND[0], { reasonCode: 'billing' });
   assert.equal(prisma.calls.findMany[0].select.reasonLabel, true);

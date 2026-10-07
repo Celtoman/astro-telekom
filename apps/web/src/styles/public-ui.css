@@ -1,0 +1,52 @@
+/* Figma Foundations + linked Button / Field / O01 / O03 / O04 variants. */
+:root { --ui-accent: #e0231e; --ui-accent-hover: #c61f1a; --ui-accent-pressed: #ad1916; --ui-text: #18202a; --ui-secondary: #526071; --ui-muted: #5c6b7d; --ui-subtle: #eef8ff; --ui-border: #dcecf7; --ui-link: #1769aa; --ui-error: #b42318; }
+.public-dialog { width: min(488px, calc(100% - 48px)); max-width: none; max-height: min(calc(100dvh - 48px), var(--dialog-viewport-height, 100dvh)); margin: auto; padding: 0; overflow: hidden; border: 0; border-radius: 24px; background: #fff; color: var(--ui-text); box-shadow: 0 12px 28px rgb(21 40 66 / 14%); font-family: inherit; }
+.public-dialog::backdrop { background: rgb(8 14 22 / 60%); }
+.public-dialog [hidden] { display: none !important; }
+.flow-card { display: flex; flex-direction: column; gap: 16px; padding: 24px; max-height: min(calc(100dvh - 48px), var(--dialog-viewport-height, 100dvh)); min-height: 0; }
+.flow-header { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.flow-header h2 { flex: 1; min-width: 0; margin: 0; font-size: 24px; line-height: 29px; letter-spacing: -.5px; font-weight: 700; }
+.flow-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 16px; background: var(--ui-subtle); flex-shrink: 0; }
+.flow-icon img { display: block; }
+.flow-icon-success { background: #e8f7ef; }
+.flow-icon-error { background: #ffeae9; }
+.flow-close { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 44px; height: 44px; border: 0; border-radius: 22px; padding: 0; background: var(--ui-subtle); cursor: pointer; }
+.flow-body { display: flex; flex-direction: column; gap: 16px; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.flow-footer { display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; }
+.flow-card p { margin: 0; color: var(--ui-secondary); font-size: 16px; line-height: 24px; }
+.flow-card .flow-small { font-size: 14px; line-height: 20px; }
+.flow-field { display: flex; flex-direction: column; gap: 8px; }
+.flow-field > label { font-size: 14px; line-height: 20px; font-weight: 600; }
+.flow-field input, .flow-field textarea { width: 100%; min-width: 0; min-height: 48px; padding: 12px; border: 1px solid var(--ui-border); border-radius: 10px; color: var(--ui-text); background: #fff; font: inherit; font-size: 16px; line-height: 24px; }
+.flow-field textarea { min-height: 72px; max-height: 122px; resize: vertical; }
+.flow-field input:focus, .flow-field textarea:focus { outline: 2px solid var(--ui-link); outline-offset: 0; }
+.flow-field input[aria-invalid=true] { border-color: var(--ui-error); }
+.flow-card .flow-error { color: var(--ui-error); font-size: 14px; line-height: 20px; }
+.flow-button, .public-dialog .button, .public-dialog .secondary-button { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; background: var(--ui-accent); color: #fff; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; }
+.flow-button:hover, .public-dialog .button:hover { background: var(--ui-accent-hover); }
+.flow-button:active, .public-dialog .button:active { background: var(--ui-accent-pressed); }
+.flow-button-secondary, .public-dialog .secondary-button { background: var(--ui-subtle); color: var(--ui-link); }
+.flow-button-secondary:hover, .public-dialog .secondary-button:hover { background: #eaf7ff; }
+.flow-button:disabled, .public-dialog .button:disabled { opacity: .45; cursor: not-allowed; }
+.flow-consent { display: flex; gap: 8px; align-items: flex-start; }
+.flow-consent label { display: flex; align-items: flex-start; justify-content: flex-start; flex: 0 0 20px; min-height: 44px; padding-top: 2px; position: relative; cursor: pointer; }
+.flow-consent input { appearance: none; flex-shrink: 0; width: 20px; height: 20px; min-height: 20px; padding: 0; margin: 0; border: 1px solid var(--ui-border); border-radius: 4px; background: #fff; cursor: pointer; }
+.flow-consent input:checked { background: var(--ui-accent); border-color: var(--ui-accent); }
+.flow-consent input:checked::before { content: '✓'; display: block; color: #fff; font-size: 16px; font-weight: 600; line-height: 18px; text-align: center; }
+.flow-consent label::after { content: ''; position: absolute; inset: 0 auto auto 0; width: 44px; height: 44px; }
+.flow-consent p { min-width: 0; font-size: 14px; line-height: 20px; }
+.flow-consent a, .flow-text-action { color: var(--ui-link); }
+.flow-text-action { display: flex; align-items: center; min-height: 44px; padding: 0; border: 0; border-radius: 10px; background: none; font: inherit; font-size: 14px; line-height: 20px; text-decoration: none; cursor: pointer; text-align: left; }
+.flow-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgb(255 255 255 / 45%); border-top-color: #fff; border-radius: 50%; animation: flow-spin .8s linear infinite; }
+.flow-documents { overflow-y: auto; min-height: 0; white-space: pre-line; }
+.flow-documents h3 { font-size: 18px; line-height: 24px; margin: 20px 0 12px; }
+.flow-documents p + p { margin-top: 12px; }
+body:has(dialog.public-dialog[open]) { overflow: hidden; }
+.public-dialog :focus-visible { outline: 2px solid var(--ui-link); outline-offset: 2px; }
+@keyframes flow-spin { to { transform: rotate(360deg); } }
+@media (min-width: 621px) and (max-width: 1100px) { .public-dialog.address-entry, .public-dialog.result-dialog { width: min(560px, calc(100% - 48px)); } }
+@media (max-width: 620px) {
+  .public-dialog { position: fixed; inset: auto 0 0; width: 100%; margin: 0; max-height: min(calc(100dvh - 24px), var(--dialog-viewport-height, 100dvh)); border-radius: 24px 24px 0 0; }
+  .flow-card { padding: 20px 20px max(20px, env(safe-area-inset-bottom)); max-height: min(calc(100dvh - 24px), var(--dialog-viewport-height, 100dvh)); }
+}
+@media (prefers-reduced-motion: reduce) { .flow-spinner { animation: none; } }

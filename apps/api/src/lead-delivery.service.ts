@@ -246,7 +246,7 @@ export class LeadDeliveryService implements OnModuleDestroy {
       }
       let emailError: string | null = null;
       try {
-        await this.notifications.notifyDeliveryFallback({ id: lead.id, phone: lead.phone, name: lead.name, city: lead.city.name, address: lead.address, tariff: lead.tariff?.name });
+        await this.notifications.notifyDeliveryFallback({ id: lead.id, phone: lead.phone, name: lead.name, city: lead.city?.name || 'Город не выбран', address: lead.address, tariff: lead.tariff?.name });
       } catch (error) {
         emailError = error instanceof Error ? error.message : String(error);
       }
