@@ -162,6 +162,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| TD-170 | [#269](https://github.com/Celtoman/astro-telekom/issues/269) 🟢 | Dev-конфигуратор: ошибка JSX runtime после параллельных production-сборок; отдельная production-сборка исправна |
 | TD-166 | [#263](https://github.com/Celtoman/astro-telekom/issues/263) ✅ | Publication/architecture синхронизированы с подтверждёнными rollout и direct migration target |
 | TD-164 | [#261](https://github.com/Celtoman/astro-telekom/issues/261) ✅ | API contract ссылается на выполненную внешнюю приёмку private static controller |
 | #237 | [#237](https://github.com/Celtoman/astro-telekom/issues/237) ✅ | Действующие документы и CMS/variables Issues синхронизированы; исторические планы отделены |
