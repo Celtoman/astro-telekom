@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { ArrowLeft, ChevronRight, ExternalLink, Layers } from "lucide-react"
 import { Dialog, Modal, ModalOverlay } from "react-aria-components"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { useNavigationQuery } from "./useNavigationQuery"
 import {
   filterPassports, passportContent, passportDesignLink, passportGroups, passportName,
   passportPlacement, passportSource, passportStatus, passportSummary, type Passport,
@@ -73,7 +73,6 @@ function PassportDetails({ passport }: { passport: Passport }) {
 }
 
 export function BlockPassportsPanel({ apiUrl, refreshKey = 0 }: { apiUrl: string; refreshKey?: number }) {
-  const [state, setState] = useState<State>({ status: "loading" })
   const [query, setQuery] = useState("")
   const [group, setGroup] = useState("all")
   const [selectedId, setSelectedId] = useState("hero")
@@ -86,24 +85,16 @@ export function BlockPassportsPanel({ apiUrl, refreshKey = 0 }: { apiUrl: string
     update(); media.addEventListener("change", update)
     return () => media.removeEventListener("change", update)
   }, [])
-  useEffect(() => {
-    let active = true
-    setState({ status: "loading" })
-    void requestJson<Registry>(apiUrl, "/admin/block-passports")
-      .then((registry) => { if (active) setState({ status: "ready", registry }) })
-      .catch((caught: unknown) => {
-        if (!active) return
-        if (caught instanceof AdminApiError && caught.status === 401) { window.location.replace("/login"); return }
-        setState({ status: "error", message: caught instanceof Error ? caught.message : "Реестр недоступен" })
-      })
-    return () => { active = false }
-  }, [apiUrl, refresh, refreshKey])
+  const { data: registry, error, refreshing } = useNavigationQuery<Registry>(apiUrl, "/admin/block-passports", refresh + refreshKey)
+  const state: State = registry ? { status: "ready", registry } : error ? { status: "error", message: error } : { status: "loading" }
   const passports = state.status === "ready" ? state.registry.passports : []
   const filtered = useMemo(() => filterPassports(passports, query, group), [passports, query, group])
   const selected = filtered.find(passport => passport.id === selectedId) ?? filtered[0] ?? null
 
   return <section id="block-passports" aria-label="Паспорта блоков" className="space-y-4">
     <p className="text-sm text-muted-foreground">Выберите блок, чтобы посмотреть его назначение и доступный контент. Паспорта показывают разрешённый контент блока.</p>
+    {registry ? <p role="status" className="text-xs text-muted-foreground">{refreshing ? "Обновляем реестр…" : error ? "Показаны ранее загруженные паспорта" : "Данные обновлены"}</p> : null}
+    {registry && error ? <Alert variant="destructive"><AlertTitle>Реестр не обновлён</AlertTitle><AlertDescription>{error}<Button variant="outline" onClick={() => setRefresh(value => value + 1)}>Повторить</Button></AlertDescription></Alert> : null}
     {state.status === "loading" ? <p role="status" className="text-sm text-muted-foreground">Загружаем реестр…</p> : null}
     {state.status === "error" ? <Alert variant="destructive"><AlertTitle>Не удалось загрузить паспорта</AlertTitle><AlertDescription><p>{state.message}</p><Button variant="outline" className="mt-3 min-h-11" onClick={() => setRefresh(value => value + 1)}>Повторить загрузку</Button></AlertDescription></Alert> : null}
     {state.status === "ready" ? <div className="grid items-start gap-5 lg:grid-cols-[minmax(240px,340px)_minmax(0,1fr)]">

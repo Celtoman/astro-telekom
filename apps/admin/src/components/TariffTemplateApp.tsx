@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CircleAlert, Maximize2, Monitor, RefreshCw, Smartphone, Tablet } from "lucide-react"
 import { tariffView, type TariffView } from "../../../web/src/data/tariff-view"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { tariffPreviewDiff, tariffTemplateBlocks } from "../lib/tariff-template.mjs"
 import { AdminShell } from "./AdminShell"
 import { TariffTemplateCanvas } from "./TariffTemplateCanvas"
@@ -83,7 +83,7 @@ export function TariffTemplateApp({ apiUrl }: { apiUrl: string }) {
 
   useEffect(() => {
     void Promise.all([
-      requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
+      requestSession<{ user: Administrator }>(apiUrl),
       requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
     ]).then(([session, sites]) => {
       setState({ status: "ready", user: session.user, sites })

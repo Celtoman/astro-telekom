@@ -4,7 +4,7 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [AGENTS.md](../AGENTS.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 719/719 passing на 7 октября 2026 года** (`pnpm check`, включая свежий атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
+**Baseline: 728/728 passing на 8 октября 2026 года** (`pnpm check`, включая свежий атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
 
 | Файл | Что проверяет |
 | --- | --- |
@@ -163,3 +163,18 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 - `publication-issue-presentation.test.mjs`: русские названия, site/kind/field deep links, реальные tariff IDs, честные системные и исторические сообщения, служебные данные без выдуманного URL/редактора.
 - `block-validation.test.cjs`: PATCH прежнего service tariff_grid сохраняет полный контракт и одну attributed revision; неверный limit отклоняется до записи. `first-screen-editor.test.cjs` проверяет точное поле и причину незаполненного заголовка HOME в publication preflight.
 - `public-city-catalog.test.cjs`: неполный legacy hero отклоняется с HTTP 400 и структурированными блоком/полем/причиной вместо поиска имени поля в сообщении.
+
+## Навигация и опубликованные проекции #271
+
+| Файл | Что проверяет |
+| --- | --- |
+| `tests/admin-navigation-cache.test.mjs` | Быстрый повторный read с обязательной revalidation; исключение editorial/PII DTO; сброс на начало/конец write и publishedRevision; logout/401/смена пользователя, поздние ответы, явная ошибка проверки в фоне, независимые display copies, TTL 30 секунд и предел 32 ответов. |
+| `tests/admin-read-projections.test.cjs` | Настоящий PostgreSQL 18 в отдельном временном контейнере через `scripts/rehearse-admin-read-projections.mjs`: эквивалентность пяти variable contexts, latest SUCCEEDED вместо PENDING, HOME/CITY_HOME из immutable source, legacy unavailable evidence и hero fallback, site/status и параметризованная граница, отсутствие других городских тарифов и полного snapshot в результате. |
+| `tests/first-screen-editor.test.cjs` | Published reader дополнительно проверяет новую SQL-проекцию immutable pageTemplates; optimistic write и миграционный rehearsal сохраняются. |
+| `tests/variable-catalog.test.cjs` | Controller использует published variable context выбранного города, сохраняет DTO, usage evidence и ошибки контекста. |
+| `tests/admin-publication-indicator.test.mjs` | Publication events остаются только для успешных CMS-мутаций; отдельная navigation invalidation происходит после каждой завершённой мутации, включая ошибку/неопределённый исход. |
+| `tests/admin-redirects-ui.test.mjs`, `tests/admin-seo-templates-ui.test.mjs` | Cookie-auth экраны используют общий requestSession; API/editor/unsaved guard контракты сохраняются. |
+| `tests/block-passports.test.cjs` | Read-only guarded registry подключён через useNavigationQuery; состав паспортов и запрет записи в реестре сохраняются. |
+| `tests/tariff-template-ui.test.mjs` | Общий requestSession используется для cookie-auth; read-only quote не вызывает publication-change или сброс каталога. |
+
+Контролируемые browser-переходы описаны в [приёмке](research/2026-10-08-admin-navigation-cache.md). Ошибка revalidation, истечение сессии и поздние ответы проверены автоматическими fixtures; повторная browser-проверка unsaved guard остановилась на недоступном инструменту нативном диалоге. Это не внешний browser E2E.

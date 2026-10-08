@@ -16,7 +16,7 @@ test('SEO templates have a protected admin route and cookie-auth React editor', 
   assert.match(controller, /@UseGuards\(AdminTokenGuard\)/);
   assert.match(controller, /@Get\(\)/);
   assert.match(controller, /@Patch\(':kind'\)/);
-  assert.match(editor, /\/auth\/me/);
+  assert.match(editor, /requestSession/);
   assert.match(editor, /workingByPath/);
   assert.match(editor, /publishedByPath/);
   assert.match(editor, /confirmNoindexCount/);

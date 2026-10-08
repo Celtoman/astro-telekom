@@ -134,7 +134,8 @@ test('admin catalog endpoint is authenticated, read-only and reads working and s
       calls.push(['working', siteId]);
       return { siteId, workingRevision: 8, publishedRevision: 7, catalog: working };
     },
-    getPublishedCatalog: async (slug) => {
+    getPublishedVariableContext: async (slug, cityId) => {
+      assert.equal(cityId, "city-1");
       calls.push(['published', slug]);
       return working;
     },

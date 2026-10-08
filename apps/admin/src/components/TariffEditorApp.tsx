@@ -1,7 +1,7 @@
 import { useUnsavedChanges } from "./useUnsavedChanges"
 import { type SyntheticEvent, useEffect, useMemo, useRef, useState } from "react"
 import { ArrowLeft, CircleAlert, LoaderCircle, Save } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { statusOptions } from "../lib/status-presentation.mjs"
 import { insertVariableAtSelection } from "../lib/variable-insertion.mjs"
 import { AdminShell } from "./AdminShell"
@@ -128,7 +128,7 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
     async function load() {
       const tariffId = new URLSearchParams(window.location.search).get("id") || ""
       try {
-        const session = await requestJson<{ user: Administrator }>(apiUrl, "/auth/me")
+        const session = await requestSession<{ user: Administrator }>(apiUrl)
         const metadata = await requestJson<FilterOptions>(apiUrl, "/admin/tariffs/filter-options")
         if (!active) return
         if (!metadata.cities.length) throw new Error("Сначала создайте город")

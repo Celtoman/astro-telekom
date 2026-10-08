@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { CircleAlert, FileClock, RefreshCw, Search } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { statusPresentation } from "../lib/status-presentation.mjs"
 import { AdminShell } from "./AdminShell"
 import { FilterResetButton } from "./FilterResetButton"
@@ -131,7 +131,7 @@ export function AuditApp({ apiUrl }: { apiUrl: string }) {
     setState({ status: "loading" })
     try {
       const [session, sites] = await Promise.all([
-        requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
+        requestSession<{ user: Administrator }>(apiUrl),
         requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
       ])
       setState({ status: "ready", user: session.user, sites })

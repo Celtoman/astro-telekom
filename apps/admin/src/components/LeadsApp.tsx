@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react"
 import { CircleAlert, Inbox, RefreshCw, Save, Search } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { sourcePresentation, statusOptions, statusPresentation, type StatusKind } from "../lib/status-presentation.mjs"
 import { AdminShell } from "./AdminShell"
 import { FilterResetButton } from "./FilterResetButton"
@@ -235,7 +235,7 @@ export function LeadsApp({ apiUrl }: { apiUrl: string }) {
     setState({ status: "loading" })
     try {
       const [session, reasons] = await Promise.all([
-        requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
+        requestSession<{ user: Administrator }>(apiUrl),
         requestJson<LeadReasonOption[]>(apiUrl, "/crm/leads/reasons"),
       ])
       setState({ status: "ready", user: session.user, reasons })

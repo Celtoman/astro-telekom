@@ -25,15 +25,13 @@ export class AdminVariableCatalogController {
     @Query('tariffId') tariffId?: string,
   ) {
     const preview = await this.publications.getVariableContext(siteId, cityId);
-    const rowUsages = await this.usages.list(siteId, preview.workingRevision);
+    const [rowUsages, published] = await Promise.all([
+      this.usages.list(siteId, preview.workingRevision),
+      this.publications.getPublishedVariableContext((preview.catalog as Record<string, any>).site.slug, cityId)
+        .catch(error => { if (error instanceof NotFoundException) return null; throw error; }),
+    ]);
     const rawWorking = preview.catalog as Record<string, any>;
     const working = { ...rawWorking, variableUsages: rowUsages };
-    let published: Record<string, any> | null = null;
-    try {
-      published = await this.publications.getPublishedCatalog(rawWorking.site.slug);
-    } catch (error) {
-      if (!(error instanceof NotFoundException)) throw error;
-    }
     return buildVariableCatalogView({
       siteId,
       workingRevision: preview.workingRevision,

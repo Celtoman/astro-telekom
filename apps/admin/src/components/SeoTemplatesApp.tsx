@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { CircleAlert, Save } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { insertVariableAtSelection } from "../lib/variable-insertion.mjs"
 import { AdminShell } from "./AdminShell"
 import { useUnsavedChanges } from "./useUnsavedChanges"
@@ -62,7 +62,7 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
     setLoading(true); setError(null)
     try {
       const [session, sites] = await Promise.all([
-        requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
+        requestSession<{ user: Administrator }>(apiUrl),
         requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
       ])
       if (sites.length !== 1) throw new Error("Редактор SEO ожидает единственный сайт Дом.ру")

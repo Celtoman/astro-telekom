@@ -95,11 +95,11 @@ test('editor reads published content from immutable validation source instead of
   const controller = new AdminPageTemplatesController({
     site: { findUnique: async () => ({ workingRevision: 10, publishedRevision: 4 }) },
     pageTemplate: { findMany: async () => [{ kind: 'HOME', blocks: [{ blockType: 'home.hero', data: working }] }] },
-    sitePublication: { findFirst: async () => ({ validation: { sourceSnapshot: { pageTemplates: [{ kind: 'HOME', content: { firstScreenPassportVersion: '1.0.0' }, blocks: [{ blockType: 'home.hero', data: published }] }] } } }) },
+    $queryRaw: async query => { assert.deepEqual(query.values, ['site']); return [{ homeHero: null, pageTemplates: [{ kind: 'HOME', content: { firstScreenPassportVersion: '1.0.0' }, blocks: [{ blockType: 'home.hero', data: published }] }] }]; },
   }, {});
   const result = await controller.firstScreens('site');
   assert.equal(result.screens[0].data.checkButtonText, 'Проверить');
   assert.equal(result.screens[0].published.checkButtonText, 'Старая подпись');
-  controller.prisma.sitePublication.findFirst = async () => ({ validation: { sourceSnapshot: { pageTemplates: [{ kind: 'HOME', content: {}, blocks: [{ blockType: 'home.hero', data: published }] }] } } });
+  controller.prisma.$queryRaw = async () => [{ homeHero: null, pageTemplates: [{ kind: 'HOME', content: {}, blocks: [{ blockType: 'home.hero', data: published }] }] }];
   assert.equal((await controller.firstScreens('site')).screens[0].published, null);
 });

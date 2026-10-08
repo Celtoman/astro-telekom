@@ -88,6 +88,7 @@ export class AdminCitiesController {
       return {
         id: city.id,
         siteId: city.siteId,
+        workingRevision: city.site.workingRevision,
         regionId: city.regionId,
         name: city.name,
         slug: city.slug,

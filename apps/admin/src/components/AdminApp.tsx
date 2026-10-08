@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Button } from "./ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Skeleton } from "./ui/skeleton"
+import { requestSession } from "../lib/admin-api.mjs"
 
 interface Administrator {
   id: string
@@ -31,13 +32,7 @@ export function AdminApp({ apiUrl }: { apiUrl: string }) {
   const verifySession = useCallback(async () => {
     setState({ status: "loading" })
     try {
-      const response = await fetch(`${endpoint}/auth/me`, { credentials: "include" })
-      if (response.status === 401) {
-        window.location.replace("/login")
-        return
-      }
-      if (!response.ok) throw new Error(`API вернул ${response.status}`)
-      const payload = await response.json() as { user: Administrator }
+      const payload = await requestSession<{ user: Administrator }>(endpoint)
       setState({ status: "ready", user: payload.user })
     } catch (caught: unknown) {
       setState({ status: "error", message: caught instanceof Error ? caught.message : "API недоступен" })

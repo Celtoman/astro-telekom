@@ -1,6 +1,6 @@
 import { usePublicationFieldFocus } from "./usePublicationFieldFocus"
 import { useEffect, useRef, useState } from "react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession, peekNavigationJson } from "../lib/admin-api.mjs"
 import { editorSiteId } from "../lib/editor-context.mjs"
 import { insertVariableAtSelection } from "../lib/variable-insertion.mjs"
 import { AdminShell } from "./AdminShell"
@@ -19,8 +19,8 @@ const textFields = [{ key: "title", label: "Заголовок", limit: 120 }, {
 
 export function TariffCollectionApp({ apiUrl }: { apiUrl: string }) {
   const [user, setUser] = useState<{ id: string; email: string } | null>(null)
-  const [sites, setSites] = useState<{ id: string; name: string }[]>([])
-  const [siteId, setSiteId] = useState("")
+  const [sites, setSites] = useState<{ id: string; name: string }[]>(() => peekNavigationJson(apiUrl, "/admin/sites?summary=true") ?? [])
+  const [siteId, setSiteId] = useState(() => editorSiteId(sites, typeof window === "undefined" ? "" : window.location.search))
   const [workspace, setWorkspace] = useState<Workspace | null>(null)
   const [data, setData] = useState<Content | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -39,7 +39,7 @@ export function TariffCollectionApp({ apiUrl }: { apiUrl: string }) {
   }
   useEffect(() => {
     let active = true
-    Promise.all([requestJson<{ user: { id: string; email: string } }>(apiUrl, "/auth/me"), requestJson<{ id: string; name: string }[]>(apiUrl, "/admin/sites?summary=true")]).then(([session, list]) => {
+    Promise.all([requestSession<{ user: { id: string; email: string } }>(apiUrl), requestJson<{ id: string; name: string }[]>(apiUrl, "/admin/sites?summary=true")]).then(([session, list]) => {
       if (active) { setUser(session.user); setSites(list); setSiteId(editorSiteId(list, window.location.search)); if (!editorSiteId(list, window.location.search)) setLoading(false) }
     }).catch(caught => { if (active) { handleError(caught); setLoading(false) } })
     return () => { active = false }

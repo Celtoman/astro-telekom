@@ -18,7 +18,7 @@ test('redirects route mounts an authenticated React workspace and is linked from
 test('redirects workspace uses real CRUD endpoints and shadcn primitives', () => {
   const source = readFileSync(join(adminRoot, 'components', 'RedirectsApp.tsx'), 'utf8');
 
-  assert.match(source, /\/auth\/me/);
+  assert.match(source, /requestSession/);
   assert.match(source, /\/admin\/sites/);
   assert.match(source, /\/admin\/redirects/);
   assert.match(source, /method:\s*editingId\s*\?\s*["']PATCH["']\s*:\s*["']POST["']/);

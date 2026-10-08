@@ -7,6 +7,7 @@ import { PublicationWorkflowService } from './publication-workflow.service';
 import { validateTariffCollection } from './tariff-collection';
 import { TARIFF_COLLECTION_VERSION, TARIFF_COLLECTION_IMPLEMENTATION } from './tariff-collection-model';
 import { FIRST_SCREEN_IMPLEMENTATION, FIRST_SCREEN_VERSION, firstScreenFromTemplate, validateFirstScreen, type FirstScreenKind } from './first-screen';
+import { publishedPageTemplateView } from './published-page-template-view';
 
 type TemplateBlockInput = {
   blockType: string;
@@ -44,14 +45,12 @@ export class AdminPageTemplatesController {
     if (!site) throw new NotFoundException('Сайт не найден');
     const [templates, publication] = await Promise.all([
       this.prisma.pageTemplate.findMany({ where: { siteId, kind: { in: ['HOME', 'CITY_HOME'] } }, include: { blocks: { orderBy: { position: 'asc' } } } }),
-      this.prisma.sitePublication.findFirst({ where: { siteId, status: 'SUCCEEDED' }, orderBy: { siteRevision: 'desc' }, select: { catalog: true, validation: { select: { sourceSnapshot: true } } } }),
+      publishedPageTemplateView(this.prisma, siteId),
     ]);
-    const catalog = publication?.catalog as Record<string, any> | null;
-    const publishedSource = publication?.validation?.sourceSnapshot as Record<string, any> | null;
     return { ...site, screens: templates.map(template => {
       const screen = firstScreenFromTemplate(template);
-      const publishedTemplate = publishedSource?.pageTemplates?.find((item: any) => item.kind === template.kind);
-      const published = publishedTemplate?.content?.firstScreenPassportVersion === FIRST_SCREEN_VERSION ? firstScreenFromTemplate(publishedTemplate).data : template.kind === 'HOME' ? catalog?.homeHero : null;
+      const publishedTemplate = publication?.pageTemplates?.find((item: any) => item.kind === template.kind);
+      const published = publishedTemplate?.content?.firstScreenPassportVersion === FIRST_SCREEN_VERSION ? firstScreenFromTemplate(publishedTemplate).data : template.kind === 'HOME' ? publication?.homeHero : null;
       return { ...screen, missingFields: screen.data ? validateFirstScreen(screen.kind, screen.data, true) : ['title'], published: published ?? null };
     }) };
   }
@@ -95,9 +94,8 @@ export class AdminPageTemplatesController {
     const template = await this.prisma.pageTemplate.findUnique({ where: { siteId_kind: { siteId, kind: 'CITY_HOME' } }, include: { blocks: true } });
     const block = template?.blocks.find(item => item.blockType === 'tariff_grid' && item.visible);
     if (!block) throw new NotFoundException('Тарифный блок не найден; требуется миграция данных');
-    const publication = await this.prisma.sitePublication.findFirst({ where: { siteId, status: 'SUCCEEDED' }, orderBy: { siteRevision: 'desc' }, select: { validation: { select: { sourceSnapshot: true } } } });
-    const publishedSource = publication?.validation?.sourceSnapshot as Record<string, any> | null;
-    const publishedTemplate = publishedSource?.pageTemplates?.find((item: any) => item.kind === 'CITY_HOME');
+    const publication = await publishedPageTemplateView(this.prisma, siteId);
+    const publishedTemplate = publication?.pageTemplates?.find((item: any) => item.kind === 'CITY_HOME');
     const published = publishedTemplate?.content?.tariffCollectionPassportVersion === TARIFF_COLLECTION_VERSION
       ? publishedTemplate.blocks.find((item: any) => item.blockType === 'tariff_grid' && item.visible)?.data : null;
     return { ...site, data: block.data, missingFields: validateTariffCollection(block.data, true), published: published ?? null };

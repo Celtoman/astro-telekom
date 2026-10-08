@@ -45,7 +45,8 @@ test('successful content mutations notify the shell; reads, validation, leads an
     await requestJson('https://api.example', '/admin/cities/import/validate', { method: 'POST', body: {} }, ok);
     await requestJson('https://api.example', '/crm/leads/one/status', { method: 'PATCH', body: {} }, ok);
     await assert.rejects(requestJson('https://api.example', '/admin/tariffs/one', { method: 'PATCH', body: {} }, failed));
-    assert.deepEqual(events, ['admin:publication-changed', 'admin:publication-changed']);
+    assert.deepEqual(events.filter(type => type === 'admin:publication-changed'), ['admin:publication-changed', 'admin:publication-changed']);
+    assert.equal(events.filter(type => type === 'admin:navigation-invalidated').length, 5, 'every completed mutation, including a failed/uncertain write, invalidates display data');
   } finally {
     globalThis.window = previousWindow;
     globalThis.Event = previousEvent;

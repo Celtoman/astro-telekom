@@ -1,4 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { publishedVariableContext } from './published-variable-context';
 import { createHash } from 'node:crypto';
 import { servingPublication } from './serving-publication-context';
 import { Prisma } from '../generated';
@@ -464,6 +465,12 @@ export class PublicationWorkflowService {
       catalogDigest: createHash('sha256').update(JSON.stringify(publication.catalog)).digest('hex'),
       catalog: publication.catalog as JsonObject,
     };
+  }
+
+  async getPublishedVariableContext(siteSlug: string, cityId?: string): Promise<JsonObject> {
+    const context = await publishedVariableContext(this.prisma, siteSlug, cityId);
+    if (!context) throw new NotFoundException('Published variable context not found');
+    return context as JsonObject;
   }
 
   async getPublishedCatalog(siteSlug: string): Promise<JsonObject> {

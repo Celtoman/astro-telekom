@@ -2,7 +2,8 @@ import { useUnsavedChanges } from "./useUnsavedChanges"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { Dialog, Heading, Modal, ModalOverlay, Text } from "react-aria-components"
 import { CircleAlert, FileUp, Pencil, Plus, RefreshCw, Save, X } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession, readNavigationJson, peekNavigationJson } from "../lib/admin-api.mjs"
+import { useNavigationRefresh } from "./useNavigationRefresh"
 import { statusOptions } from "../lib/status-presentation.mjs"
 import { AdminShell } from "./AdminShell"
 import { FilterResetButton } from "./FilterResetButton"
@@ -24,6 +25,7 @@ interface Region { id: string; name: string; slug: string; siteId: string }
 interface Profile { key: string; city: string; region: string }
 interface CityReadiness { ready: boolean; blockers: string[]; warnings: string[] }
 interface City {
+  workingRevision: number;
   id: string; siteId: string; regionId: string; name: string; slug: string; namePrepositional: string | null; nameGenitive: string | null;
   legacyUrl: string | null; officeState: "HAS_OFFICE" | "NO_OFFICE"; officeAddress: string | null; officeHours: string | null;
   subscriberProfileKey: string | null; status: string; publicUrl: string; readiness: CityReadiness; publishedTariffCount: number;
@@ -41,10 +43,23 @@ const emptyForm = (): CityForm => ({ id: null, regionId: "", name: "", slug: "",
 const publishStatusOptions = statusOptions("publishStatus", ["DRAFT", "PUBLISHED", "ARCHIVED"])
 const selectClass = "h-8 w-full rounded-lg border border-input bg-background px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
 const initialFilters = { regionId: "", status: "", readiness: "", profile: "", tariffs: "", unpublished: "", sort: "city", direction: "asc" }
+const initialListRoute = "/admin/cities?limit=25&sort=city&direction=asc"
+
+function cachedWorkspace(apiUrl: string): ScreenState {
+  const session = peekNavigationJson<{ user: Administrator }>(apiUrl, "/auth/me")
+  const sites = peekNavigationJson<SiteSummary[]>(apiUrl, "/admin/sites?summary=true")
+  const regions = peekNavigationJson<Region[]>(apiUrl, "/admin/regions")
+  const profiles = peekNavigationJson<Profile[]>(apiUrl, "/admin/cities/profiles")
+  return session && sites?.length === 1 && regions && profiles
+    ? { status: "ready", user: session.user, site: sites[0], regions: regions.filter(region => region.siteId === sites[0].id), profiles }
+    : { status: "loading" }
+}
 
 export function CitiesApp({ apiUrl }: { apiUrl: string }) {
-  const [state, setState] = useState<ScreenState>({ status: "loading" })
-  const [page, setPage] = useState<CityPage | null>(null)
+  const [state, setState] = useState<ScreenState>(() => cachedWorkspace(apiUrl))
+  const [page, setPage] = useState<CityPage | null>(() => peekNavigationJson(apiUrl, initialListRoute))
+  const [metadataBusy, setMetadataBusy] = useState(true)
+  const [formRevision, setFormRevision] = useState<number | null>(null)
   const [search, setSearch] = useState("")
   const [query, setQuery] = useState("")
   const [filters, setFilters] = useState(initialFilters)
@@ -62,10 +77,10 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
   const dirty = useMemo(() => JSON.stringify(form) !== JSON.stringify(initialForm), [form, initialForm])
 
   const loadWorkspace = useCallback(async () => {
-    setState({ status: "loading" })
+    setMetadataBusy(true)
     try {
       const [session, sites, regions, profiles] = await Promise.all([
-        requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
+        requestSession<{ user: Administrator }>(apiUrl),
         requestJson<SiteSummary[]>(apiUrl, "/admin/sites?summary=true"),
         requestJson<Region[]>(apiUrl, "/admin/regions"),
         requestJson<Profile[]>(apiUrl, "/admin/cities/profiles"),
@@ -75,9 +90,10 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
     } catch (caught: unknown) {
       if (caught instanceof AdminApiError && caught.status === 401) { window.location.replace("/login"); return }
       setState({ status: "error", message: caught instanceof Error ? caught.message : "API недоступен" })
-    }
+    } finally { setMetadataBusy(false) }
   }, [apiUrl])
   useEffect(() => { void loadWorkspace() }, [loadWorkspace])
+  useNavigationRefresh(() => { void loadWorkspace(); setListRevision(value => value + 1) })
   useEffect(() => { const timer = window.setTimeout(() => { setQuery(search.trim()); setCursorStack([""]) }, 300); return () => window.clearTimeout(timer) }, [search])
   useUnsavedChanges(dirty)
 
@@ -89,28 +105,31 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
     if (currentCursor) params.set("cursor", currentCursor)
     for (const key of ["regionId", "status", "readiness", "profile", "tariffs", "unpublished"] as const) if (filters[key]) params.set(key, filters[key])
     setListBusy(true); setListError(null)
-    void requestJson<CityPage>(apiUrl, `/admin/cities?${params.toString()}`)
+    const accept = (result: CityPage) => { if (active) setPage(result) }
+    const fail = (caught: unknown) => { if (active) setListError(caught instanceof Error ? caught.message : "Каталог не загружен") }
+    void readNavigationJson<CityPage>(apiUrl, `/admin/cities?${params.toString()}`, { onUpdate: accept, onError: fail, onSettled: () => { if (active) setListBusy(false) } })
       .then((result) => { if (active) setPage(result) })
-      .catch((caught: unknown) => { if (active) setListError(caught instanceof Error ? caught.message : "Каталог не загружен") })
-      .finally(() => { if (active) setListBusy(false) })
+      .catch(fail)
     return () => { active = false }
   }, [apiUrl, currentCursor, filters, listRevision, pageSize, query])
 
-  function openCreate() { const next = emptyForm(); setForm(next); setInitialForm(next); setSlugImpactCount(0); setMessage(null); setDrawerOpen(true) }
+  function openCreate() { if (metadataBusy || listBusy || state.status !== "ready") return; setFormRevision(state.site.workingRevision); const next = emptyForm(); setForm(next); setInitialForm(next); setSlugImpactCount(0); setMessage(null); setDrawerOpen(true) }
   function openEdit(city: City) {
+    if (metadataBusy || listBusy) return
+    setFormRevision(city.workingRevision)
     const next: CityForm = { id: city.id, regionId: city.regionId, name: city.name, slug: city.slug, namePrepositional: city.namePrepositional || "", nameGenitive: city.nameGenitive || "", legacyUrl: city.legacyUrl || "", officeState: city.officeState, officeAddress: city.officeAddress || "", officeHours: city.officeHours || "", subscriberProfileKey: city.subscriberProfileKey || "", status: city.status }
     setForm(next); setInitialForm(next); setSlugImpactCount(city.publishedTariffCount + 1); setMessage(null); setDrawerOpen(true)
   }
   function requestClose() { if (dirty && !window.confirm("Закрыть форму и потерять несохраненные изменения?")) return; setDrawerOpen(false) }
   function resetFilters() { setSearch(""); setQuery(""); setFilters(initialFilters); setCursorStack([""]) }
   async function saveCity() {
-    if (state.status !== "ready" || !form.name.trim() || !form.slug.trim() || !form.regionId) return
+    if (state.status !== "ready" || formRevision === null || !form.name.trim() || !form.slug.trim() || !form.regionId) return
     setSaving(true); setMessage(null)
     try {
       const confirmMissingSubscriberProfile = form.status === "PUBLISHED" && !form.subscriberProfileKey
         ? window.confirm("Профиль проверки абонента не выбран. Все равно включить город в рабочую версию?") : false
       if (form.status === "PUBLISHED" && !form.subscriberProfileKey && !confirmMissingSubscriberProfile) return
-      const body = { siteId: state.site.id, regionId: form.regionId, name: form.name, slug: form.slug, namePrepositional: form.namePrepositional || null, nameGenitive: form.nameGenitive || null, legacyUrl: form.legacyUrl || null, officeState: form.officeState, officeAddress: form.officeState === "HAS_OFFICE" ? form.officeAddress : null, officeHours: form.officeState === "HAS_OFFICE" ? form.officeHours : null, subscriberProfileKey: form.subscriberProfileKey || null, status: form.status, expectedWorkingRevision: state.site.workingRevision, confirmMissingSubscriberProfile }
+      const body = { siteId: state.site.id, regionId: form.regionId, name: form.name, slug: form.slug, namePrepositional: form.namePrepositional || null, nameGenitive: form.nameGenitive || null, legacyUrl: form.legacyUrl || null, officeState: form.officeState, officeAddress: form.officeState === "HAS_OFFICE" ? form.officeAddress : null, officeHours: form.officeState === "HAS_OFFICE" ? form.officeHours : null, subscriberProfileKey: form.subscriberProfileKey || null, status: form.status, expectedWorkingRevision: formRevision, confirmMissingSubscriberProfile }
       const result = await requestJson<{ workingRevision: number }>(apiUrl, form.id ? `/admin/cities/${form.id}` : "/admin/cities", { method: form.id ? "PATCH" : "POST", body })
       setMessage({ kind: "success", text: `Рабочая версия ${result.workingRevision} сохранена. Изменения нужно опубликовать отдельно.` })
       setDrawerOpen(false); setListRevision((value) => value + 1); await loadWorkspace()
@@ -124,7 +143,7 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
     if (!window.confirm(`Изменить публичный URL /${initialForm.slug} на /${normalized}? Будет затронуто ${slugImpactCount} URL; для прежних адресов будут подготовлены 301-редиректы.`)) return
     setSaving(true); setMessage(null)
     try {
-      const result = await requestJson<{ affectedUrls: number; workingRevision: number }>(apiUrl, `/admin/cities/${form.id}/change-slug`, { method: "POST", body: { slug: normalized, confirm: true, expectedWorkingRevision: state.site.workingRevision } })
+      const result = await requestJson<{ affectedUrls: number; workingRevision: number }>(apiUrl, `/admin/cities/${form.id}/change-slug`, { method: "POST", body: { slug: normalized, confirm: true, expectedWorkingRevision: formRevision } })
       setMessage({ kind: "success", text: `Slug изменен в рабочей версии ${result.workingRevision}; подготовлено редиректов: ${result.affectedUrls}. Изменения нужно опубликовать отдельно.` })
       setDrawerOpen(false); setListRevision((value) => value + 1); await loadWorkspace()
     } catch (caught: unknown) { setMessage({ kind: "error", text: caught instanceof Error ? caught.message : "Slug не изменен" }) }
@@ -137,7 +156,7 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
 
   return <AdminShell apiUrl={apiUrl} user={state.user} active="cities">
     <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6 p-6 lg:p-8">
-      <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Города</h1><p className="mt-1 text-sm text-muted-foreground">Эксплуатационный каталог городов Дом.ру.</p></div><div className="flex gap-2"><Button onClick={openCreate}><Plus data-icon="inline-start" />Добавить город</Button><Button variant="outline" asChild><a href="/cities/import"><FileUp data-icon="inline-start" />Импорт</a></Button><Button variant="outline" disabled={listBusy} onClick={() => setListRevision((value) => value + 1)}><RefreshCw data-icon="inline-start" />Обновить</Button></div></div>
+      <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Города</h1><p className="mt-1 text-sm text-muted-foreground">Эксплуатационный каталог городов Дом.ру.</p></div><div className="flex gap-2"><Button disabled={metadataBusy || listBusy} onClick={openCreate}><Plus data-icon="inline-start" />Добавить город</Button><Button variant="outline" asChild><a href="/cities/import"><FileUp data-icon="inline-start" />Импорт</a></Button><Button variant="outline" disabled={metadataBusy || listBusy} onClick={() => { void loadWorkspace(); setListRevision((value) => value + 1) }}><RefreshCw data-icon="inline-start" />Обновить</Button></div></div>
       {message ? <Alert variant={message.kind === "error" ? "destructive" : "default"}><AlertTitle>{message.kind === "error" ? "Не удалось сохранить" : "Изменения приняты"}</AlertTitle><AlertDescription>{message.text}</AlertDescription></Alert> : null}
       <PublicationStatusCard apiUrl={apiUrl} siteId={state.site.id} publicationRefreshKey={listRevision} />
       <Card><CardHeader><CardTitle>Справочник</CardTitle><CardDescription>{page.pageInfo.total.toLocaleString("ru-RU")} городов соответствует фильтрам.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4">
@@ -151,8 +170,9 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
           <Select value={filters.sort} onChange={(value) => { setFilters((current) => ({ ...current, sort: value })); setCursorStack([""]) }} label="Сортировка: город" options={[{ value: "region", label: "Регион" }, { value: "status", label: "Статус" }, { value: "tariffs", label: "Число тарифов" }, { value: "lastPublication", label: "Последняя публикация" }]} />
           <div className="flex gap-2"><Select value={filters.direction} onChange={(value) => { setFilters((current) => ({ ...current, direction: value })); setCursorStack([""]) }} label="По возрастанию" options={[{ value: "desc", label: "По убыванию" }]} /><FilterResetButton active={filterActive} onReset={resetFilters} /></div>
         </div>
-        {listError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Каталог не обновлен</AlertTitle><AlertDescription>{listError}</AlertDescription></Alert> : null}
-        <div className="min-w-0 overflow-x-auto" aria-busy={listBusy}><Table><TableHeader><TableRow><TableHead>Город</TableHead><TableHead>Регион</TableHead><TableHead>Публичный URL</TableHead><TableHead>Статус</TableHead><TableHead>Полнота</TableHead><TableHead>Тарифы</TableHead><TableHead>Профиль</TableHead><TableHead>Версия</TableHead><TableHead>Публикация</TableHead><TableHead className="text-right">Действия</TableHead></TableRow></TableHeader><TableBody>{page.items.map((city) => <TableRow key={city.id}><TableCell><div className="font-medium">{city.name}</div><div className="text-xs text-muted-foreground">{city.slug}</div></TableCell><TableCell>{city.region.name}</TableCell><TableCell><a className="text-xs underline" href={city.publicUrl} target="_blank" rel="noreferrer">{city.publicUrl}</a></TableCell><TableCell><StatusBadge kind="publishStatus" value={city.status} /></TableCell><TableCell><Badge variant={city.readiness.ready ? "secondary" : "destructive"} title={city.readiness.blockers.join("; ")}>{city.readiness.ready ? "Готово" : "Не готово"}</Badge></TableCell><TableCell>{city.publishedTariffCount}</TableCell><TableCell><Badge variant={city.subscriberProfileReady ? "secondary" : "outline"}>{city.subscriberProfileReady ? "Готов" : "Не выбран"}</Badge></TableCell><TableCell>{city.hasUnpublishedChanges ? "Есть изменения" : "Опубликовано"}</TableCell><TableCell>{city.lastSuccessfulPublicationAt ? new Date(city.lastSuccessfulPublicationAt).toLocaleString("ru-RU") : "—"}</TableCell><TableCell className="text-right"><Button size="icon-sm" variant="ghost" aria-label={`Редактировать: ${city.name}`} onClick={() => openEdit(city)}><Pencil /></Button></TableCell></TableRow>)}</TableBody></Table></div>
+        <p role="status" className="text-xs text-muted-foreground">{metadataBusy || listBusy ? "Обновляем данные…" : listError ? "Показаны ранее загруженные данные" : "Данные обновлены"}</p>
+      {listError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Каталог не обновлен</AlertTitle><AlertDescription>{listError}</AlertDescription></Alert> : null}
+        <div className="min-w-0 overflow-x-auto" aria-busy={listBusy}><Table><TableHeader><TableRow><TableHead>Город</TableHead><TableHead>Регион</TableHead><TableHead>Публичный URL</TableHead><TableHead>Статус</TableHead><TableHead>Полнота</TableHead><TableHead>Тарифы</TableHead><TableHead>Профиль</TableHead><TableHead>Версия</TableHead><TableHead>Публикация</TableHead><TableHead className="text-right">Действия</TableHead></TableRow></TableHeader><TableBody>{page.items.map((city) => <TableRow key={city.id}><TableCell><div className="font-medium">{city.name}</div><div className="text-xs text-muted-foreground">{city.slug}</div></TableCell><TableCell>{city.region.name}</TableCell><TableCell><a className="text-xs underline" href={city.publicUrl} target="_blank" rel="noreferrer">{city.publicUrl}</a></TableCell><TableCell><StatusBadge kind="publishStatus" value={city.status} /></TableCell><TableCell><Badge variant={city.readiness.ready ? "secondary" : "destructive"} title={city.readiness.blockers.join("; ")}>{city.readiness.ready ? "Готово" : "Не готово"}</Badge></TableCell><TableCell>{city.publishedTariffCount}</TableCell><TableCell><Badge variant={city.subscriberProfileReady ? "secondary" : "outline"}>{city.subscriberProfileReady ? "Готов" : "Не выбран"}</Badge></TableCell><TableCell>{city.hasUnpublishedChanges ? "Есть изменения" : "Опубликовано"}</TableCell><TableCell>{city.lastSuccessfulPublicationAt ? new Date(city.lastSuccessfulPublicationAt).toLocaleString("ru-RU") : "—"}</TableCell><TableCell className="text-right"><Button size="icon-sm" variant="ghost" disabled={metadataBusy || listBusy} aria-label={`Редактировать: ${city.name}`} onClick={() => openEdit(city)}><Pencil /></Button></TableCell></TableRow>)}</TableBody></Table></div>
         <ServerPagination page={cursorStack.length} pageSize={pageSize} itemCount={page.items.length} total={page.pageInfo.total} hasNextPage={page.pageInfo.hasNextPage} busy={listBusy} onPageSizeChange={(value) => { setPageSize(value); setCursorStack([""]) }} onPrevious={() => setCursorStack((current) => current.length > 1 ? current.slice(0, -1) : current)} onNext={() => setCursorStack((current) => page.pageInfo.nextCursor ? [...current, page.pageInfo.nextCursor] : current)} />
       </CardContent></Card>
     </div>

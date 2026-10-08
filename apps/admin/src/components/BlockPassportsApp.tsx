@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { requestJson } from "../lib/admin-api.mjs"
+import { requestSession } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { BlockPassportsPanel } from "./BlockPassportsPanel"
 export function BlockPassportsApp({ apiUrl }: { apiUrl: string }) {
@@ -7,7 +7,7 @@ export function BlockPassportsApp({ apiUrl }: { apiUrl: string }) {
   const [error, setError] = useState<string | null>(null)
   useEffect(() => {
     let active = true
-    requestJson<{ user: { id: string; email: string } }>(apiUrl, "/auth/me").then(result => { if (active) setUser(result.user) }).catch(caught => { if (active) setError(caught.message) })
+    requestSession<{ user: { id: string; email: string } }>(apiUrl).then(result => { if (active) setUser(result.user) }).catch(caught => { if (active) setError(caught.message) })
     return () => { active = false }
   }, [apiUrl])
   if (!user) return <div className="p-6" role="status">{error ?? "Загружаем паспорта…"}</div>

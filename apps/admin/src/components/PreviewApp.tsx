@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CircleAlert, Monitor, RefreshCw, Smartphone, Tablet } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { buildPreviewDocument, previewRouteOptions, type PreviewRouteOption } from "../lib/preview-document.mjs"
 import publicPreviewStyles, { assets as publicPreviewAssets } from "virtual:preview-public-styles"
 import { AdminShell } from "./AdminShell"
@@ -55,7 +55,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
     setState({ status: "loading" })
     try {
       const [session, sites] = await Promise.all([
-        requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
+        requestSession<{ user: Administrator }>(apiUrl),
         requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
       ])
       setState({ status: "ready", user: session.user, sites })

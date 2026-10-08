@@ -67,7 +67,7 @@ test('passport API is read-only behind admin authentication and the templates sc
   assert.ok(Reflect.getMetadata('__guards__', AdminBlocksController)?.some((guard) => guard.name === 'AdminTokenGuard'));
   assert.equal(controller.passports().passports.length, 13);
   const screen = readFileSync(join(root, 'apps/admin/src/components/BlockPassportsPanel.tsx'), 'utf8');
-  assert.match(screen, /requestJson<Registry>\(apiUrl, "\/admin\/block-passports"\)/);
+  assert.match(screen, /useNavigationQuery<Registry>\(apiUrl, "\/admin\/block-passports"/);
   assert.match(screen, /Паспорта показывают разрешённый контент блока/);
   assert.doesNotMatch(screen, /method:\s*["'](?:POST|PATCH|DELETE)["']/);
   assert.match(screen, /passport\.design/);

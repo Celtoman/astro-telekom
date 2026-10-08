@@ -1,6 +1,7 @@
+import { useNavigationQuery } from "./useNavigationQuery"
 import { useCallback, useEffect, useState } from "react"
 import { CircleAlert, Save } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { filterVariableCatalogItems } from "../lib/variable-catalog.mjs"
 import { AdminShell } from "./AdminShell"
 import { useUnsavedChanges } from "./useUnsavedChanges"
@@ -119,9 +120,6 @@ function UsageList({ usages }: { usages: VariableUsage[] | null }) {
 function VariableCatalogPanel({ apiUrl, siteId }: { apiUrl: string; siteId: string }) {
   const [cityId, setCityId] = useState("")
   const [tariffId, setTariffId] = useState("")
-  const [catalog, setCatalog] = useState<VariableCatalog | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [retry, setRetry] = useState(0)
   const [q, setQ] = useState("")
   const [status, setStatus] = useState("")
@@ -129,23 +127,12 @@ function VariableCatalogPanel({ apiUrl, siteId }: { apiUrl: string; siteId: stri
   const [source, setSource] = useState("")
   const [selectedCode, setSelectedCode] = useState("")
 
-  useEffect(() => {
-    let active = true
-    setLoading(true)
-    setError(null)
-    const params = new URLSearchParams()
-    if (cityId) params.set("cityId", cityId)
-    if (tariffId) params.set("tariffId", tariffId)
-    const path = `/admin/sites/${siteId}/variable-catalog${params.size ? `?${params}` : ""}`
-    void requestJson<VariableCatalog>(apiUrl, path).then((result) => {
-      if (active) setCatalog(result)
-    }).catch((caught: unknown) => {
-      if (!active) return
-      if (caught instanceof AdminApiError && caught.status === 401) { window.location.replace("/login"); return }
-      setError(caught instanceof Error ? caught.message : "Каталог недоступен")
-    }).finally(() => { if (active) setLoading(false) })
-    return () => { active = false }
-  }, [apiUrl, siteId, cityId, tariffId, retry])
+  const params = new URLSearchParams()
+  if (cityId) params.set("cityId", cityId)
+  if (tariffId) params.set("tariffId", tariffId)
+  const path = `/admin/sites/${siteId}/variable-catalog${params.size ? `?${params}` : ""}`
+  const { data: catalog, error, refreshing } = useNavigationQuery<VariableCatalog>(apiUrl, path, retry)
+  const loading = !catalog && refreshing
 
   const filters = { q, status, type, source }
   const filtered = filterVariableCatalogItems(catalog?.items ?? [], filters) as VariableItem[]
@@ -160,9 +147,10 @@ function VariableCatalogPanel({ apiUrl, siteId }: { apiUrl: string; siteId: stri
         <Field><FieldLabel htmlFor="variable-tariff">Тариф</FieldLabel><select id="variable-tariff" className={selectClass} value={tariffId} disabled={!cityId} onChange={(event) => setTariffId(event.target.value)}><option value="">Выберите тариф</option>{catalog?.tariffs.map((tariff) => <option key={tariff.id} value={tariff.id}>{tariff.name}</option>)}</select></Field>
       </CardContent>
     </Card>
-    {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Каталог недоступен</AlertTitle><AlertDescription>{error}</AlertDescription><Button variant="outline" size="sm" onClick={() => setRetry((value) => value + 1)}>Повторить</Button></Alert> : null}
+    <p role="status" className="text-xs text-muted-foreground">{refreshing ? "Обновляем каталог…" : error ? "Показаны ранее загруженные данные" : "Данные обновлены"}</p>
+    {error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Каталог не обновлён</AlertTitle><AlertDescription>{error}</AlertDescription><Button variant="outline" size="sm" onClick={() => setRetry((value) => value + 1)}>Повторить</Button></Alert> : null}
     {loading ? <Card aria-busy="true"><CardContent className="space-y-3 py-6"><Skeleton className="h-9 w-full" /><Skeleton className="h-64 w-full" /></CardContent></Card> : null}
-    {!loading && catalog && !error ? <>
+    {!loading && catalog ? <>
       <Card><CardHeader><CardTitle>Каталог подстановок</CardTitle><CardDescription>Все реализованные коды показаны независимо от числа использований. Технический контракт доступен только для просмотра. Рабочая версия {catalog.workingRevision}, опубликована {catalog.publishedRevision}.</CardDescription></CardHeader>
         <CardContent className="space-y-4">
           {!catalog.publishedUsageAvailable ? <Alert><CircleAlert /><AlertTitle>Исторический снимок</AlertTitle><AlertDescription>Места использования старой публикации не сохранены; нулевое число не предполагается. Новая публикация зафиксирует их отдельно.</AlertDescription></Alert> : null}
@@ -210,7 +198,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
     setState({ status: "loading" })
     try {
       const [session, sites] = await Promise.all([
-        requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
+        requestSession<{ user: Administrator }>(apiUrl),
         requestJson<SiteValues[]>(apiUrl, "/admin/sites/values"),
       ])
       if (sites.length !== 1) throw new Error("Раздел значений сайта ожидает единственный сайт Дом.ру")

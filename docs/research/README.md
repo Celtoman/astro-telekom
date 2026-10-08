@@ -4,6 +4,8 @@
 
 ## Технические и эксплуатационные аудиты
 
+- [Ускорение повторных переходов админки и облегчение опубликованных чтений, 8 октября](2026-10-08-admin-navigation-cache.md)
+
 - [Изучение Figma и приёмка B04/O01/FLOW 1/FLOW 2, 7 октября](2026-10-07-figma-flows-acceptance.md)
 
 - [Caddy control transport после config reload, 6 октября](2026-10-06-caddy-control-transport.md)

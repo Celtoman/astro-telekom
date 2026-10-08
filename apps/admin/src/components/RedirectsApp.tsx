@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { Archive, CircleAlert, Pencil, Plus, RefreshCw, RotateCcw, Route } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { FilterResetButton } from "./FilterResetButton"
 import { PublicationStatusCard } from "./PublicationStatusCard"
@@ -49,7 +49,7 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
     if (mode === "refresh") setBusy("refresh")
     else setState({ status: "loading" })
     try {
-      const session = await requestJson<{ user: Administrator }>(apiUrl, "/auth/me")
+      const session = await requestSession<{ user: Administrator }>(apiUrl)
       const [sites, redirects] = await Promise.all([
         requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
         requestJson<RedirectRecord[]>(apiUrl, "/admin/redirects"),

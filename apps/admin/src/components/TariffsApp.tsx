@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { CircleAlert, Eye, FileUp, Pencil, Plus, RefreshCw, X } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession, readNavigationJson, peekNavigationJson } from "../lib/admin-api.mjs"
+import { useNavigationRefresh } from "./useNavigationRefresh"
 import { sourcePublicationRecommendation, tariffConnectionLabel } from "../lib/tariff-display"
 import { AdminShell } from "./AdminShell"
 import { FilterResetButton } from "./FilterResetButton"
@@ -29,12 +30,16 @@ const selectClass = "h-9 min-w-0 rounded-lg border border-input bg-background px
 const money = (value: Tariff["standardPrice"]) => value === null ? "—" : `${Number(value).toLocaleString("ru-RU")} ₽`
 
 export function TariffsApp({ apiUrl }: { apiUrl: string }) {
-  const [state, setState] = useState<ScreenState>({ status: "loading" })
+  const [state, setState] = useState<ScreenState>(() => {
+    const session = peekNavigationJson<{ user: Administrator }>(apiUrl, "/auth/me")
+    const filters = peekNavigationJson<FilterOptions>(apiUrl, "/admin/tariffs/filter-options")
+    return session && filters ? { status: "ready", user: session.user } : { status: "loading" }
+  })
   const [search, setSearch] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
   const [filters, setFilters] = useState<Filters>(emptyFilters)
-  const [options, setOptions] = useState<FilterOptions>({ cities: [], regions: [], sources: [] })
-  const [tariffPage, setTariffPage] = useState<TariffPage | null>(null)
+  const [options, setOptions] = useState<FilterOptions>(() => peekNavigationJson(apiUrl, "/admin/tariffs/filter-options") ?? { cities: [], regions: [], sources: [] })
+  const [tariffPage, setTariffPage] = useState<TariffPage | null>(() => peekNavigationJson(apiUrl, "/admin/tariffs?limit=25"))
   const [cursorStack, setCursorStack] = useState([""])
   const [pageSize, setPageSize] = useState(25)
   const [listRevision, setListRevision] = useState(0)
@@ -46,11 +51,11 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
   const [refreshing, setRefreshing] = useState(false)
   const detailGeneration = useRef(0)
 
-  const loadWorkspace = useCallback(async (mode: "initial" | "refresh" = "initial") => {
-    if (mode === "refresh") setRefreshing(true); else setState({ status: "loading" })
+  const loadWorkspace = useCallback(async () => {
+    setRefreshing(true)
     try {
       const [session, filterOptions] = await Promise.all([
-        requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
+        requestSession<{ user: Administrator }>(apiUrl),
         requestJson<FilterOptions>(apiUrl, "/admin/tariffs/filter-options"),
       ])
       setOptions(filterOptions); setState({ status: "ready", user: session.user })
@@ -61,6 +66,7 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
   }, [apiUrl])
 
   useEffect(() => { void loadWorkspace() }, [loadWorkspace])
+  useNavigationRefresh(() => { void loadWorkspace(); setListRevision(value => value + 1) })
   useEffect(() => { const timer = window.setTimeout(() => { setSearchQuery(search.trim()); setCursorStack([""]) }, 300); return () => window.clearTimeout(timer) }, [search])
   const currentCursor = cursorStack[cursorStack.length - 1]
   const filterKey = JSON.stringify(filters)
@@ -71,11 +77,13 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
     if (currentCursor) params.set("cursor", currentCursor)
     for (const [key, value] of Object.entries(filters)) if (value) params.set(key, value)
     setListBusy(true); setListError(null)
-    void requestJson<TariffPage>(apiUrl, `/admin/tariffs?${params.toString()}`).then((page) => { if (active) setTariffPage(page) }).catch((caught: unknown) => {
+    const accept = (page: TariffPage) => { if (active) setTariffPage(page) }
+    const fail = (caught: unknown) => {
       if (!active) return
       if (caught instanceof AdminApiError && caught.status === 401) { window.location.replace("/login"); return }
       setListError(caught instanceof Error ? caught.message : "Каталог тарифов не загружен")
-    }).finally(() => { if (active) setListBusy(false) })
+    }
+    void readNavigationJson<TariffPage>(apiUrl, `/admin/tariffs?${params.toString()}`, { onUpdate: accept, onError: fail, onSettled: () => { if (active) setListBusy(false) } }).then(accept).catch(fail)
     return () => { active = false }
   }, [apiUrl, currentCursor, filterKey, listRevision, pageSize, searchQuery])
 
@@ -95,10 +103,11 @@ export function TariffsApp({ apiUrl }: { apiUrl: string }) {
   if (state.status === "error" || !tariffPage) { const message = state.status === "error" ? state.message : listError || "Каталог тарифов не загружен"; return <div className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Тарифы недоступны</CardTitle></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{message}</AlertDescription></Alert><Button onClick={() => { void loadWorkspace(); setListRevision((value) => value + 1) }}>Повторить</Button></CardContent></Card></div> }
 
   return <AdminShell apiUrl={apiUrl} user={state.user} active="tariffs"><div className="mx-auto flex w-full max-w-[100rem] flex-col gap-6 p-6 lg:p-8">
-    <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Тарифы</h1><p className="mt-1 text-sm text-muted-foreground">Найдите, проверьте и исправьте тариф до отдельной публикации сайта.</p></div><div className="flex flex-wrap gap-2"><Button asChild><a href="/tariffs/edit"><Plus data-icon="inline-start" />Создать тариф</a></Button><Button variant="outline" asChild><a href="/tariffs/import"><FileUp data-icon="inline-start" />Импорт тарифов</a></Button><Button variant="outline" disabled={refreshing || listBusy} onClick={() => { void loadWorkspace("refresh"); setListRevision((value) => value + 1) }}><RefreshCw data-icon="inline-start" />Обновить</Button></div></div>
+    <div className="flex flex-wrap items-start justify-between gap-4"><div><h1 className="font-heading text-2xl font-semibold">Тарифы</h1><p className="mt-1 text-sm text-muted-foreground">Найдите, проверьте и исправьте тариф до отдельной публикации сайта.</p></div><div className="flex flex-wrap gap-2"><Button asChild><a href="/tariffs/edit"><Plus data-icon="inline-start" />Создать тариф</a></Button><Button variant="outline" asChild><a href="/tariffs/import"><FileUp data-icon="inline-start" />Импорт тарифов</a></Button><Button variant="outline" disabled={refreshing || listBusy} onClick={() => { void loadWorkspace(); setListRevision((value) => value + 1) }}><RefreshCw data-icon="inline-start" />Обновить</Button></div></div>
     <Card><CardHeader><CardTitle>Каталог</CardTitle><CardDescription>{tariffPage.pageInfo.total.toLocaleString("ru-RU")} тарифов соответствует фильтрам.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4">
       <div className="grid gap-3 lg:grid-cols-4"><Input className="lg:col-span-2" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Название, slug, внутренний или внешний ID" aria-label="Поиск тарифа" /><select className={selectClass} aria-label="Город" value={filters.cityId} onChange={(event) => setFilter("cityId", event.target.value)}><option value="">Все города</option>{options.cities.map((city) => <option value={city.id} key={city.id}>{city.name}</option>)}</select><select className={selectClass} aria-label="Регион" value={filters.regionId} onChange={(event) => setFilter("regionId", event.target.value)}><option value="">Все регионы</option>{options.regions.map((region) => <option value={region.id} key={region.id}>{region.name}</option>)}</select>
         <select className={selectClass} aria-label="Тип услуги" value={filters.serviceType} onChange={(event) => setFilter("serviceType", event.target.value)}><option value="">Все типы</option><option value="INTERNET">Интернет</option><option value="INTERNET_TV">Интернет + ТВ</option><option value="TV">ТВ</option><option value="OTHER">Другое</option></select><select className={selectClass} aria-label="Рабочий статус" value={filters.status} onChange={(event) => setFilter("status", event.target.value)}><option value="">Все рабочие статусы</option><option value="DRAFT">Черновик</option><option value="PUBLISHED">К публикации</option><option value="ARCHIVED">Архив</option></select><select className={selectClass} aria-label="Источник" value={filters.source} onChange={(event) => setFilter("source", event.target.value)}><option value="">Все источники</option>{options.sources.map((source) => <option value={source} key={source}>{source}</option>)}</select><select className={selectClass} aria-label="Промо" value={filters.promotion} onChange={(event) => setFilter("promotion", event.target.value)}><option value="">С промо и без</option><option value="WITH">Есть промо</option><option value="WITHOUT">Без промо</option></select><select className={selectClass} aria-label="Причина архива" value={filters.archiveReason} onChange={(event) => setFilter("archiveReason", event.target.value)}><option value="">Все причины архива</option><option value="ABSENT_FROM_IMPORT">Нет в импорте</option><option value="MANUAL">Вручную</option><option value="NONE">Не архивирован</option></select><select className={selectClass} aria-label="Состояние публикации" value={filters.unpublished} onChange={(event) => setFilter("unpublished", event.target.value)}><option value="">Любое состояние сайта</option><option value="true">Есть неопубликованные изменения</option><option value="false">Опубликовано без изменений</option></select><div className="lg:col-span-2 lg:justify-self-end"><FilterResetButton active={activeFilters} onReset={resetFilters} /></div></div>
+      <p role="status" className="text-xs text-muted-foreground">{refreshing || listBusy ? "Обновляем данные…" : listError ? "Показаны ранее загруженные данные" : "Данные обновлены"}</p>
       {listError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Каталог не обновлен</AlertTitle><AlertDescription>{listError}</AlertDescription></Alert> : null}
       <div className={selectedTariff || detailBusy || detailError ? "grid min-w-0 gap-4 2xl:grid-cols-[minmax(0,1fr)_26rem]" : "min-w-0"}><div aria-busy={listBusy} className="min-w-0 overflow-x-auto">{tariffPage.items.length ? <Table><TableHeader><TableRow><TableHead>Тариф</TableHead><TableHead>Город</TableHead><TableHead>Тип</TableHead><TableHead>Базовая</TableHead><TableHead>Промо</TableHead><TableHead>Характеристика</TableHead><TableHead>Рабочий статус</TableHead><TableHead>Сайт</TableHead><TableHead>Источник</TableHead><TableHead>Обновлен</TableHead><TableHead className="text-right">Действия</TableHead></TableRow></TableHeader><TableBody>{tariffPage.items.map((tariff) => <TableRow key={tariff.id} className="cursor-pointer" onClick={() => void showDetail(tariff.id)}><TableCell><div className="font-medium">{tariff.name}</div><div className="text-xs text-muted-foreground">{tariff.slug}</div></TableCell><TableCell><div>{tariff.city.name}</div><div className="text-xs text-muted-foreground">{tariff.city.region.name}</div></TableCell><TableCell><StatusBadge kind="serviceType" value={tariff.serviceType} /></TableCell><TableCell>{money(tariff.standardPrice)}</TableCell><TableCell>{money(tariff.promoPrice)}</TableCell><TableCell>{tariff.speed ? `${tariff.speed} Мбит/с` : "—"}</TableCell><TableCell><StatusBadge kind="publishStatus" value={tariff.status} /></TableCell><TableCell><Badge variant={tariff.publicationState === "UNPUBLISHED" ? "warning" : "success"}>{tariff.publicationState === "UNPUBLISHED" ? "Есть изменения" : "Опубликовано"}</Badge></TableCell><TableCell><SourceLabel value={tariff.dataSource} /></TableCell><TableCell className="whitespace-nowrap">{new Date(tariff.updatedAt).toLocaleDateString("ru-RU")}</TableCell><TableCell onClick={(event) => event.stopPropagation()}><div className="flex justify-end gap-1"><Button variant="ghost" size="icon-sm" aria-label={`Быстрый просмотр: ${tariff.name}`} onClick={() => void showDetail(tariff.id)}><Eye /></Button><Button variant="ghost" size="icon-sm" aria-label={`Редактировать: ${tariff.name}`} asChild><a href={`/tariffs/edit?id=${encodeURIComponent(tariff.id)}`}><Pencil /></a></Button></div></TableCell></TableRow>)}</TableBody></Table> : <div className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center"><p className="font-medium">Тарифы не найдены</p><p className="text-sm text-muted-foreground">Измените фильтры или поисковый запрос.</p></div>}</div>
         {selectedTariff || detailBusy || detailError ? <aside aria-label="Быстрый просмотр"><Card size="sm"><CardHeader><div className="flex items-start justify-between gap-3"><div><CardTitle>Быстрый просмотр</CardTitle><CardDescription>Полный набор параметров без ухода из каталога.</CardDescription></div><Button variant="ghost" size="icon-sm" aria-label="Закрыть быстрый просмотр" onClick={() => { detailGeneration.current += 1; setSelectedTariff(null); setDetailBusy(false); setDetailError(null) }}><X /></Button></div></CardHeader><CardContent className="flex max-h-[70vh] flex-col gap-4 overflow-y-auto">{detailBusy ? <Skeleton className="h-52 w-full" /> : detailError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Тариф не загружен</AlertTitle><AlertDescription>{detailError}</AlertDescription></Alert> : selectedTariff ? <>

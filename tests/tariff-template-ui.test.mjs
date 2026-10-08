@@ -21,7 +21,7 @@ test('template screen has four viewport controls and no submit or external trans
   ]);
   assert.equal(adminNavigation.find((item) => item.id === 'pages')?.children.find(child => child.id === 'templates')?.href, '/templates');
   assert.match(route, /noindex, nofollow/);
-  assert.match(screen, /\/auth\/me/);
+  assert.match(screen, /requestSession/);
   assert.match(screen, /desktop:.*1440/);
   assert.match(screen, /tablet:.*834/);
   assert.match(screen, /mobile:.*390/);

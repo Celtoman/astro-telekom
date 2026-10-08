@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { ArrowRight, Layers } from "lucide-react"
-import { requestJson } from "../lib/admin-api.mjs"
+import { requestSession } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { Badge } from "./ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
@@ -12,7 +12,7 @@ export function PageTemplatesApp({ apiUrl }: { apiUrl: string }) {
   useEffect(() => {
     if (window.location.hash === "#block-passports") { window.location.replace("/templates/passports"); return }
     let active = true
-    requestJson<{ user: { id: string; email: string } }>(apiUrl, "/auth/me").then(result => { if (active) setUser(result.user) }).catch(caught => { if (active) setError(caught.message) })
+    requestSession<{ user: { id: string; email: string } }>(apiUrl).then(result => { if (active) setUser(result.user) }).catch(caught => { if (active) setError(caught.message) })
     return () => { active = false }
   }, [apiUrl])
   if (!user) return <div className="p-6" role="status">{error ?? "Загружаем шаблоны…"}</div>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { ArrowLeft, Building2, CircleAlert, FileCheck2, FileUp, RefreshCw } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { PublicationStatusCard } from "./PublicationStatusCard"
 import { StatusBadge } from "./StatusBadge"
@@ -73,7 +73,7 @@ export function CityImportApp({ apiUrl }: { apiUrl: string }) {
     if (mode === "refresh") setBusy("refresh")
     else setState({ status: "loading" })
     try {
-      const session = await requestJson<{ user: Administrator }>(apiUrl, "/auth/me")
+      const session = await requestSession<{ user: Administrator }>(apiUrl)
       const [sites, imports] = await Promise.all([
         requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
         requestJson<ImportRun[]>(apiUrl, "/admin/cities/imports"),

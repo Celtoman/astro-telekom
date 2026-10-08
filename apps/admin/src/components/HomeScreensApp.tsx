@@ -1,7 +1,7 @@
 import { usePublicationFieldFocus } from "./usePublicationFieldFocus"
 import { useUnsavedChanges } from "./useUnsavedChanges"
 import { useEffect, useRef, useState } from "react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession, peekNavigationJson } from "../lib/admin-api.mjs"
 import { insertVariableAtSelection } from "../lib/variable-insertion.mjs"
 import { editorSiteId } from "../lib/editor-context.mjs"
 import { AdminShell } from "./AdminShell"
@@ -29,8 +29,8 @@ const clone = (data: Record<string, any>) => JSON.parse(JSON.stringify(data))
 
 export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
   const [user, setUser] = useState<{ id: string; email: string } | null>(null)
-  const [sites, setSites] = useState<Site[]>([])
-  const [siteId, setSiteId] = useState("")
+  const [sites, setSites] = useState<Site[]>(() => peekNavigationJson(apiUrl, "/admin/sites?summary=true") ?? [])
+  const [siteId, setSiteId] = useState(() => editorSiteId(sites, typeof window === "undefined" ? "" : window.location.search))
   const [kind, setKind] = useState<Kind>("HOME")
   const [workspace, setWorkspace] = useState<Workspace | null>(null)
   const [data, setData] = useState<Record<string, any>>({})
@@ -51,7 +51,7 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
 
   useEffect(() => {
     let active = true
-    Promise.all([requestJson<{ user: { id: string; email: string } }>(apiUrl, "/auth/me"), requestJson<Site[]>(apiUrl, "/admin/sites?summary=true")])
+    Promise.all([requestSession<{ user: { id: string; email: string } }>(apiUrl), requestJson<Site[]>(apiUrl, "/admin/sites?summary=true")])
       .then(([session, list]) => {
         if (!active) return
         setUser(session.user); setSites(list)

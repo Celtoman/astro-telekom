@@ -8,40 +8,56 @@ import { navigate as navigatePage } from "astro:transitions/client"
 import { Dialog, Heading, Modal, ModalOverlay, Text } from "react-aria-components"
 import { Button } from "./ui/button"
 import { WorkspaceBoundary } from "./WorkspaceBoundary"
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 
 // Keep the shared chrome alive; each workspace is a separate lazy chunk and is
-// mounted afresh on navigation, so editorial data never comes from a page cache.
-const screens = {
-  overview: lazy(() => import("./AdminApp").then(m => ({ default: m.AdminApp }))),
-  tariffs: lazy(() => import("./TariffsApp").then(m => ({ default: m.TariffsApp }))),
-  "tariffs-edit": lazy(() => import("./TariffEditorApp").then(m => ({ default: m.TariffEditorApp }))),
-  "tariffs-import": lazy(() => import("./TariffImportApp").then(m => ({ default: m.TariffImportApp }))),
-  cities: lazy(() => import("./CitiesApp").then(m => ({ default: m.CitiesApp }))),
-  "cities-import": lazy(() => import("./CityImportApp").then(m => ({ default: m.CityImportApp }))),
-  leads: lazy(() => import("./LeadsApp").then(m => ({ default: m.LeadsApp }))),
-  redirects: lazy(() => import("./RedirectsApp").then(m => ({ default: m.RedirectsApp }))),
-  variables: lazy(() => import("./VariablesApp").then(m => ({ default: m.VariablesApp }))),
-  publication: lazy(() => import("./PublicationApp").then(m => ({ default: m.PublicationApp }))),
-  preview: lazy(() => import("./PreviewApp").then(m => ({ default: m.PreviewApp }))),
-  templates: lazy(() => import("./PageTemplatesApp").then(m => ({ default: m.PageTemplatesApp }))),
-  "block-passports": lazy(() => import("./BlockPassportsApp").then(m => ({ default: m.BlockPassportsApp }))),
-  "tariff-collection": lazy(() => import("./TariffCollectionApp").then(m => ({ default: m.TariffCollectionApp }))),
-  "tariff-template": lazy(() => import("./TariffTemplateApp").then(m => ({ default: m.TariffTemplateApp }))),
-  "home-screens": lazy(() => import("./HomeScreensApp").then(m => ({ default: m.HomeScreensApp }))),
-  "seo-templates": lazy(() => import("./SeoTemplatesApp").then(m => ({ default: m.SeoTemplatesApp }))),
-  "seo-sitemap": lazy(() => import("./SitemapApp").then(m => ({ default: m.SitemapApp }))),
-  audit: lazy(() => import("./AuditApp").then(m => ({ default: m.AuditApp }))),
-  trash: lazy(() => import("./TrashApp").then(m => ({ default: m.TrashApp }))),
+// mounted afresh on navigation. Only display lists reuse session memory;
+// editorial reads remain fresh and preserve their optimistic revision checks.
+const screenLoaders = {
+  overview: () => import("./AdminApp").then(m => ({ default: m.AdminApp })),
+  tariffs: () => import("./TariffsApp").then(m => ({ default: m.TariffsApp })),
+  "tariffs-edit": () => import("./TariffEditorApp").then(m => ({ default: m.TariffEditorApp })),
+  "tariffs-import": () => import("./TariffImportApp").then(m => ({ default: m.TariffImportApp })),
+  cities: () => import("./CitiesApp").then(m => ({ default: m.CitiesApp })),
+  "cities-import": () => import("./CityImportApp").then(m => ({ default: m.CityImportApp })),
+  leads: () => import("./LeadsApp").then(m => ({ default: m.LeadsApp })),
+  redirects: () => import("./RedirectsApp").then(m => ({ default: m.RedirectsApp })),
+  variables: () => import("./VariablesApp").then(m => ({ default: m.VariablesApp })),
+  publication: () => import("./PublicationApp").then(m => ({ default: m.PublicationApp })),
+  preview: () => import("./PreviewApp").then(m => ({ default: m.PreviewApp })),
+  templates: () => import("./PageTemplatesApp").then(m => ({ default: m.PageTemplatesApp })),
+  "block-passports": () => import("./BlockPassportsApp").then(m => ({ default: m.BlockPassportsApp })),
+  "tariff-collection": () => import("./TariffCollectionApp").then(m => ({ default: m.TariffCollectionApp })),
+  "tariff-template": () => import("./TariffTemplateApp").then(m => ({ default: m.TariffTemplateApp })),
+  "home-screens": () => import("./HomeScreensApp").then(m => ({ default: m.HomeScreensApp })),
+  "seo-templates": () => import("./SeoTemplatesApp").then(m => ({ default: m.SeoTemplatesApp })),
+  "seo-sitemap": () => import("./SitemapApp").then(m => ({ default: m.SitemapApp })),
+  audit: () => import("./AuditApp").then(m => ({ default: m.AuditApp })),
+  trash: () => import("./TrashApp").then(m => ({ default: m.TrashApp })),
 }
+
+const screens = Object.fromEntries(Object.entries(screenLoaders).map(([key, loader]) => [key, lazy(loader)])) as Record<keyof typeof screenLoaders, ReturnType<typeof lazy>>
 
 export function AdminWorkspace({ apiUrl, initialPath }: { apiUrl: string; initialPath: string }) {
   const [path, setPath] = useState(initialPath)
   const [mounted, setMounted] = useState(false)
   const [user, setUser] = useState<Administrator | null>(null)
+  const [sessionError, setSessionError] = useState(false)
   const [confirmation, setConfirmation] = useState<{ resolve: (approved: boolean) => void } | null>(null)
   useEffect(() => {
     const navigate = () => setPath(window.location.pathname + window.location.search)
     const expired = () => { setUser(null); window.location.replace("/login") }
+    const verified = () => setSessionError(false)
+    const verificationFailed = () => setSessionError(true)
+    const preload = (event: Event) => {
+      const anchor = event.target instanceof Element ? event.target.closest('a[href]') : null
+      if (!anchor || anchor.hasAttribute('download')) return
+      const url = new URL(anchor.getAttribute('href') || '', window.location.href)
+      if (url.origin !== window.location.origin) return
+      const loader = screenLoaders[workspaceRoute(url.pathname).screen]
+      // Chunk preloading never reads API data or full publication catalogs.
+      if (loader) void loader().catch(() => undefined)
+    }
     navigate()
     setMounted(true)
     document.addEventListener("astro:after-swap", navigate)
@@ -56,6 +72,11 @@ export function AdminWorkspace({ apiUrl, initialPath }: { apiUrl: string; initia
     }
     document.addEventListener("astro:before-swap", versionBoundary)
     window.addEventListener("admin:session-expired", expired)
+    window.addEventListener("admin:session-changed", expired)
+    window.addEventListener("admin:session-verified", verified)
+    window.addEventListener("admin:session-verification-failed", verificationFailed)
+    document.addEventListener("pointerover", preload)
+    document.addEventListener("focusin", preload)
     const removeGuards = installNavigationGuards(window, document, {
       confirm: () => new Promise<boolean>(resolve => setConfirmation({ resolve })),
       navigate: href => { void navigatePage(href) },
@@ -64,6 +85,11 @@ export function AdminWorkspace({ apiUrl, initialPath }: { apiUrl: string; initia
       document.removeEventListener("astro:after-swap", navigate)
       document.removeEventListener("astro:before-swap", versionBoundary)
       window.removeEventListener("admin:session-expired", expired)
+      window.removeEventListener("admin:session-changed", expired)
+      window.removeEventListener("admin:session-verified", verified)
+      window.removeEventListener("admin:session-verification-failed", verificationFailed)
+      document.removeEventListener("pointerover", preload)
+      document.removeEventListener("focusin", preload)
       removeGuards()
     }
   }, [])
@@ -75,6 +101,7 @@ export function AdminWorkspace({ apiUrl, initialPath }: { apiUrl: string; initia
   const Screen = screens[route.screen]
   return <AdminWorkspaceContext.Provider value={sessionReady}>
     <AdminShellLayout apiUrl={apiUrl} user={user} active={route.active}>
+      {sessionError ? <Alert variant="destructive" className="m-6 w-auto"><AlertTitle>Не удалось проверить доступ</AlertTitle><AlertDescription>Проверка сессии временно недоступна. При следующем переходе доступ будет проверен заново.</AlertDescription></Alert> : null}
       <WorkspaceBoundary key={path}><Suspense fallback={<div className="mx-auto flex max-w-7xl flex-col gap-6 p-6" aria-busy="true" aria-label="Загружаем раздел"><Skeleton className="h-10 w-72" /><Skeleton className="h-80 w-full" /></div>}>
         {mounted ? <Screen key={path} apiUrl={apiUrl} /> : <div aria-busy="true" aria-label="Загружаем раздел" className="p-6"><Skeleton className="h-80 w-full" /></div>}
       </Suspense></WorkspaceBoundary>

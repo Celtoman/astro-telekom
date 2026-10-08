@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CheckCircle2, CircleAlert, FileSearch, RefreshCw, Save } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { useUnsavedChanges } from "./useUnsavedChanges"
 import { PublicationStatusCard } from "./PublicationStatusCard"
@@ -48,7 +48,7 @@ export function SitemapApp({ apiUrl }: { apiUrl: string }) {
   const loadWorkspace = useCallback(async (selectedSiteId?: string) => {
     setLoading(true); setError(null)
     try {
-      const session = await requestJson<{ user: Administrator }>(apiUrl, "/auth/me")
+      const session = await requestSession<{ user: Administrator }>(apiUrl)
       const availableSites = await requestJson<Site[]>(apiUrl, "/admin/sites?summary=true")
       const nextSiteId = selectedSiteId || siteId || availableSites[0]?.id || ""
       const data = nextSiteId ? await requestJson<Workspace>(apiUrl, `/admin/sites/${nextSiteId}/sitemap`) : null

@@ -1,7 +1,7 @@
 import { PublicationIssueCard } from "./PublicationIssueCard"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { CheckCircle2, CircleAlert, FileCheck2, History, RefreshCw } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { publicationChangeLabel, type PublicationReview } from "../lib/publication-review.mjs"
 import { describePublicationState, type PublicationState } from "../lib/publication-display.mjs"
 import { statusPresentation } from "../lib/status-presentation.mjs"
@@ -31,7 +31,7 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
     setLoading(true)
     try {
       const [session, sites] = await Promise.all([
-        requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
+        requestSession<{ user: Administrator }>(apiUrl),
         requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
       ])
       if (request !== sequence.current) return

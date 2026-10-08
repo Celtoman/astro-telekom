@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { ArchiveRestore, CircleAlert, RefreshCw, Trash2 } from "lucide-react"
-import { AdminApiError, requestJson } from "../lib/admin-api.mjs"
+import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { AdminShell } from "./AdminShell"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { Badge } from "./ui/badge"
@@ -82,7 +82,7 @@ export function TrashApp({ apiUrl }: { apiUrl: string }) {
     setState({ status: "loading" })
     try {
       const [session, sites] = await Promise.all([
-        requestJson<{ user: Administrator }>(apiUrl, "/auth/me"),
+        requestSession<{ user: Administrator }>(apiUrl),
         requestJson<Site[]>(apiUrl, "/admin/sites?summary=true"),
       ])
       setState({ status: "ready", user: session.user, sites })
