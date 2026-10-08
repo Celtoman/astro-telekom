@@ -120,7 +120,11 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
     const next: CityForm = { id: city.id, regionId: city.regionId, name: city.name, slug: city.slug, namePrepositional: city.namePrepositional || "", nameGenitive: city.nameGenitive || "", legacyUrl: city.legacyUrl || "", officeState: city.officeState, officeAddress: city.officeAddress || "", officeHours: city.officeHours || "", subscriberProfileKey: city.subscriberProfileKey || "", status: city.status }
     setForm(next); setInitialForm(next); setSlugImpactCount(city.publishedTariffCount + 1); setMessage(null); setDrawerOpen(true)
   }
-  function requestClose() { if (dirty && !window.confirm("Закрыть форму и потерять несохраненные изменения?")) return; setDrawerOpen(false) }
+  function finishEditing() {
+    const next = emptyForm()
+    setForm(next); setInitialForm(next); setFormRevision(null); setDrawerOpen(false)
+  }
+  function requestClose() { if (dirty && !window.confirm("Закрыть форму и потерять несохраненные изменения?")) return; finishEditing() }
   function resetFilters() { setSearch(""); setQuery(""); setFilters(initialFilters); setCursorStack([""]) }
   async function saveCity() {
     if (state.status !== "ready" || formRevision === null || !form.name.trim() || !form.slug.trim() || !form.regionId) return
@@ -132,7 +136,7 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
       const body = { siteId: state.site.id, regionId: form.regionId, name: form.name, slug: form.slug, namePrepositional: form.namePrepositional || null, nameGenitive: form.nameGenitive || null, legacyUrl: form.legacyUrl || null, officeState: form.officeState, officeAddress: form.officeState === "HAS_OFFICE" ? form.officeAddress : null, officeHours: form.officeState === "HAS_OFFICE" ? form.officeHours : null, subscriberProfileKey: form.subscriberProfileKey || null, status: form.status, expectedWorkingRevision: formRevision, confirmMissingSubscriberProfile }
       const result = await requestJson<{ workingRevision: number }>(apiUrl, form.id ? `/admin/cities/${form.id}` : "/admin/cities", { method: form.id ? "PATCH" : "POST", body })
       setMessage({ kind: "success", text: `Рабочая версия ${result.workingRevision} сохранена. Изменения нужно опубликовать отдельно.` })
-      setDrawerOpen(false); setListRevision((value) => value + 1); await loadWorkspace()
+      finishEditing(); setListRevision((value) => value + 1); await loadWorkspace()
     } catch (caught: unknown) { setMessage({ kind: "error", text: caught instanceof Error ? caught.message : "Город не сохранен" }) }
     finally { setSaving(false) }
   }
@@ -145,7 +149,7 @@ export function CitiesApp({ apiUrl }: { apiUrl: string }) {
     try {
       const result = await requestJson<{ affectedUrls: number; workingRevision: number }>(apiUrl, `/admin/cities/${form.id}/change-slug`, { method: "POST", body: { slug: normalized, confirm: true, expectedWorkingRevision: formRevision } })
       setMessage({ kind: "success", text: `Slug изменен в рабочей версии ${result.workingRevision}; подготовлено редиректов: ${result.affectedUrls}. Изменения нужно опубликовать отдельно.` })
-      setDrawerOpen(false); setListRevision((value) => value + 1); await loadWorkspace()
+      finishEditing(); setListRevision((value) => value + 1); await loadWorkspace()
     } catch (caught: unknown) { setMessage({ kind: "error", text: caught instanceof Error ? caught.message : "Slug не изменен" }) }
     finally { setSaving(false) }
   }
