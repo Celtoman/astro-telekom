@@ -177,4 +177,4 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 | `tests/block-passports.test.cjs` | Read-only guarded registry подключён через useNavigationQuery; состав паспортов и запрет записи в реестре сохраняются. |
 | `tests/tariff-template-ui.test.mjs` | Общий requestSession используется для cookie-auth; read-only quote не вызывает publication-change или сброс каталога. |
 
-Контролируемые browser-переходы описаны в [приёмке](research/2026-10-08-admin-navigation-cache.md). Ошибка revalidation, истечение сессии и поздние ответы проверены автоматическими fixtures; повторная browser-проверка unsaved guard остановилась на недоступном инструменту нативном диалоге. Это не внешний browser E2E.
+Контролируемые browser-переходы описаны в [приёмке](research/2026-10-08-admin-navigation-cache.md). Ошибка revalidation, истечение сессии и поздние ответы проверены автоматическими fixtures; локальный browser fixture подтвердил save, сохранность формы/ревизии на 409 и cached rows/восстановление при 503 и переход к входу после 401; нативный discard остановился на недоступном инструменту диалоге. Прежний ложный guard после save — отдельная #272. Это не внешний browser E2E.
