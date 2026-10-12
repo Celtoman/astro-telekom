@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-12",
+  "url": "https://tarify-dom.ru/",
+  "status": 200,
+  "sourceCityLinks": 207,
+  "uniqueHrefs": 207,
+  "examples": [
+    {
+      "text": "Абинск",
+      "href": "https://tarify-dom.ru/abinsk"
+    },
+    {
+      "text": "Аксай",
+      "href": "https://tarify-dom.ru/aksay"
+    },
+    {
+      "text": "Алейск",
+      "href": "https://tarify-dom.ru/aleysk"
+    }
+  ],
+  "search": "Найти город или регион",
+  "buttons": [
+    "Все",
+    "А",
+    "Б",
+    "В",
+    "Г",
+    "Д",
+    "Е",
+    "Ж",
+    "З",
+    "И",
+    "Й",
+    "К",
+    "Л",
+    "М",
+    "Н",
+    "О",
+    "П",
+    "Р",
+    "С",
+    "Т",
+    "У",
+    "Х",
+    "Ч",
+    "Ш",
+    "Э",
+    "Ю",
+    "Я",
+    "Показать ещё"
+  ],
+  "method": "Playwright navigation response status and original response body parsed with DOMParser; live DOM inspected separately.",
+  "limitations": "Standalone Python requests GET returned HTTP 403. Browser navigation returned HTTP 200. Destination availability and indexing of all city URLs were not checked."
+}
