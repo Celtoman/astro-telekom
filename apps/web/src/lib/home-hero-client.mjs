@@ -22,8 +22,7 @@ export function initializeHomeHero() {
   input.disabled = false; form.querySelector('button[type="submit"]').disabled = false;
   input.addEventListener('input', filter); input.addEventListener('focus', () => { if (!selected && !input.value && error.hidden) root.dataset.state = 'Focus'; });
   clear.addEventListener('click', () => { input.value = ''; filter(); input.focus(); });
-  root.addEventListener('click', event => { const link = event.target instanceof Element ? event.target.closest('[data-hero-city-choice], [data-hero-city-option] a') : null; if (!link) return; event.preventDefault(); const city = selectCity(link.dataset.cityId); if (city) { showSelected(city); input.focus(); } });
-  document.addEventListener('provider:hero-city-selected', event => { showSelected(event.detail); input.focus(); });
+  root.addEventListener('click', event => { const link = event.target instanceof Element ? event.target.closest('[data-hero-city-choice], [data-hero-city-option] a') : null; if (!link) return; const city = selectCity(link.dataset.cityId); if (city) showSelected(city); });
   form.addEventListener('submit', event => {
     event.preventDefault(); if (selected) { window.location.assign(selected.href); return; }
     if (!input.value.trim()) { hideResults(); root.dataset.state = 'InputError'; message(root.querySelector('[data-hero-input-error-message]').textContent); input.focus(); return; }

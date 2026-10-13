@@ -1,4 +1,9 @@
 export const normalizeCityQuery = value => String(value || '').trim().toLocaleLowerCase('ru-RU').replaceAll('ё', 'е');
+/** @template {{ name?: string }} T @param {T[]} cities @returns {T | null} */
+export function publishedMoscow(cities) {
+  const matches = cities.filter(city => city.name?.trim() === 'Москва');
+  return matches.length === 1 ? matches[0] : null;
+}
 export function publishedCityChoices(document) {
   return [...new Map([...document.querySelectorAll('[data-city-choice-link][data-city-id]')].map(link => [link.dataset.cityId, { id: link.dataset.cityId, slug: link.dataset.citySlug || link.dataset.cityId, name: link.dataset.cityName, href: new URL(link.href).pathname }])).values()];
 }
@@ -10,7 +15,7 @@ export function cityContext() {
   const cities = publishedCityChoices(document), key = `provider:${header?.dataset.siteSlug || ''}:selected-city`;
   let storage; try { storage = window.sessionStorage; } catch { /* optional storage */ }
   const confirmed = cities.find(city => city.id === header?.dataset.selectedCity) || storedCity(cities, storage, key);
-  const active = cities.find(city => city.slug === header?.dataset.routeCity) || confirmed || cities.find(city => city.slug === 'moskva') || null;
+  const active = cities.find(city => city.slug === header?.dataset.routeCity) || confirmed || publishedMoscow(cities);
   return { cities, key, storage, confirmed, active };
 }
 export function applyCityContext() {

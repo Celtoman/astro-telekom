@@ -3,12 +3,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import HomeHero from '../components/HomeHero.astro';
 import GeneralHomeHero from '../components/GeneralHomeHero.astro';
 import { loadSiteData, seoMeta, publicSiteSlug } from '../data/site';
+import { publishedMoscow } from '../lib/city-context.mjs';
 const catalog = await loadSiteData();
 const { site, cities } = catalog;
 const title = `Домашний интернет и телевидение ${site.name}`;
 const description = 'Выберите город, чтобы посмотреть тарифы домашнего интернета и телевидения.';
 const meta = seoMeta(catalog, '/', { title, description });
-const defaultCity = cities.find((city) => city.slug === 'moskva');
+const defaultCity = publishedMoscow(cities) ?? undefined;
 const hero = catalog.homeHero;
 ---
 

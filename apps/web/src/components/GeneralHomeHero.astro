@@ -20,17 +20,17 @@ const ambiguousNames = new Set(ordered.filter((city, index) => ordered.some((oth
       <form class="city-form" data-hero-city-form novalidate>
         <noscript><p>Выберите город по ссылкам ниже или откройте полный список городов.</p></noscript>
         <div class="city-search-row"><div class="city-field-stack">
-          <div class="city-search-field"><img src={publicAsset('/images/figma/hero1d-desktop-imglocationicon.svg')} width="24" height="24" alt="" /><input type="search" role="combobox" aria-autocomplete="list" aria-label="Поиск города" disabled placeholder={data.cityPlaceholder} maxlength="120" autocomplete="off" data-hero-city-input aria-controls="hero-city-results" aria-expanded="false" /><button type="button" class="city-clear" data-hero-city-clear aria-label="Очистить поиск" hidden><img src={publicAsset('/images/figma/close.svg')} width="24" height="24" alt="" /></button></div>
+          <div class="city-search-field"><img src={publicAsset('/images/figma/hero1d-desktop-imglocationicon.svg')} width="24" height="24" alt="" /><input type="search" role="combobox" aria-autocomplete="list" aria-label="Поиск города" disabled placeholder={data.cityPlaceholder} maxlength="120" autocomplete="off" data-hero-city-input aria-controls="hero-city-results" aria-expanded="false" /><button type="button" class="city-clear" data-hero-city-clear aria-label="Очистить поиск" hidden><img src={publicAsset('/images/figma/search-clear.svg')} width="16" height="16" alt="" /></button></div>
           <p class="city-feedback" data-hero-city-error role="status" hidden></p>
           <div class="city-results" id="hero-city-results" role="listbox" data-hero-city-results hidden>
             <p class="result-count" data-hero-city-count role="status"></p>
             <ul>{ordered.map(city => <li data-hero-city-option data-search-text={`${city.name} ${city.region.name}`} hidden><a href={publicHtmlPath(city.slug)} data-city-id={city.id || city.slug} data-city-slug={city.slug} data-city-name={city.name} role="option">{city.name}{ambiguousNames.has(city.name) && <small>{city.region.name}</small>}</a></li>)}</ul>
-            <a href="/goroda-obsluzhivaniya" data-city-choice-trigger data-city-choice-select-only aria-haspopup="dialog" aria-controls="site-city-picker">{data.allCitiesText}</a>
+            <a href="/goroda-obsluzhivaniya" data-city-choice-trigger aria-haspopup="dialog" aria-controls="site-city-picker">{data.allCitiesText}</a>
           </div>
         </div><button class="search-button" type="submit" disabled>{data.searchButtonText}</button></div>
         <span data-hero-empty-message hidden>{data.emptyMessage}</span><span data-hero-input-error-message hidden>{data.inputErrorMessage}</span>
       </form>
-      <div class="popular-cities">{[popular.slice(0, 4), popular.slice(4)].map((row, rowIndex) => <div class="popular-row">{row.map(city => <a class="popular-city" href={publicHtmlPath(city.slug)} data-hero-city-choice data-city-id={city.id || city.slug} data-city-slug={city.slug} data-city-name={city.name}><span class="chip-surface">{city.name}<img src={publicAsset('/images/figma/hero1d-desktop-imgselectedcheck.svg')} width="16" height="16" alt="" hidden /></span></a>)}{rowIndex === 1 && <a class="all-cities-link" href="/goroda-obsluzhivaniya" data-city-choice-trigger data-city-choice-select-only aria-haspopup="dialog" aria-controls="site-city-picker">{data.allCitiesText}</a>}</div>)}</div>
+      <div class="popular-cities">{[popular.slice(0, 4), popular.slice(4)].map((row, rowIndex) => <div class="popular-row">{row.map(city => <a class="popular-city" href={publicHtmlPath(city.slug)} data-hero-city-choice data-city-id={city.id || city.slug} data-city-slug={city.slug} data-city-name={city.name}><span class="chip-surface">{city.name}<img src={publicAsset('/images/figma/hero1d-desktop-imgselectedcheck.svg')} width="16" height="16" alt="" hidden /></span></a>)}{rowIndex === 1 && <a class="all-cities-link" href="/goroda-obsluzhivaniya" data-city-choice-trigger aria-haspopup="dialog" aria-controls="site-city-picker">{data.allCitiesText}</a>}</div>)}</div>
     </div>
     <ol class="city-steps">{data.steps.map((step: { title: string; text: string }, index: number) => <li><div class="icon-circle"><picture><source media="(max-width: 620px)" srcset={publicAsset(`/images/figma/hero1d-mobile-imgicon${index || ''}.svg`)} /><source media="(max-width: 1100px)" srcset={publicAsset(`/images/figma/hero1d-tablet-imgicon${index || ''}.svg`)} /><img src={publicAsset(`/images/figma/hero1d-desktop-imgicon${index || ''}.svg`)} alt="" /></picture></div><div class="step-copy"><span class="step-number">0{index + 1}</span><h2>{step.title}</h2><p>{step.text}</p></div></li>)}</ol>
   </div></div>
@@ -58,6 +58,7 @@ const ambiguousNames = new Set(ordered.filter((city, index) => ordered.some((oth
   input::placeholder { color: #526071; opacity: 1; }
   input::-webkit-search-cancel-button { display: none; }
   .city-clear { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; flex-shrink: 0; cursor: pointer; }
+  .city-clear img { width: 16px; height: 16px; }
   .search-button { min-height: 48px; border: 0; border-radius: 14px; padding: 14px 24px; background: #e0231e; color: white; font: inherit; font-size: 14px; font-weight: 600; line-height: 20px; cursor: pointer; }
   .search-button:hover { background: #c81d19; }
   .city-feedback { margin: 8px 0 0; color: #526071; font-size: 14px; line-height: 20px; }

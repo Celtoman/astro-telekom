@@ -4,10 +4,11 @@ import { publicAsset } from '../data/public-asset';
 import { loadSiteData } from '../data/site';
 import type { CityView, SiteView } from '../data/site';
 import { publicHtmlPath } from '../data/public-url';
+import { publishedMoscow } from '../lib/city-context.mjs';
 interface Props { city?: CityView; site: SiteView }
 const { city, site } = Astro.props as Props;
 const { cities } = await loadSiteData();
-const activeCity = city || cities.find((item) => item.slug === 'moskva');
+const activeCity = city || publishedMoscow(cities) || undefined;
 const currentCityHome = city && Astro.url.pathname === publicHtmlPath(city.slug);
 const localCheck = currentCityHome;
 const cityPath = activeCity ? publicHtmlPath(activeCity.slug) : null;

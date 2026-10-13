@@ -15,7 +15,7 @@ const ordered = [...cities].sort((a,b) => a.name.localeCompare(b.name,'ru'));
       <div class="flow-header"><img src={publicAsset('/images/figma/city-pin.svg')} width="24" height="24" alt="" /><h2 id="city-picker-title">Выберите город</h2><button type="button" class="flow-close" data-modal-close aria-label="Закрыть выбор города"><img src={publicAsset('/images/figma/close.svg')} width="24" height="24" alt="" /></button></div>
       <p class="city-picker-current">Текущий город: <strong data-current-city-label>{current?.name || 'Не выбран'}</strong></p>
       <p data-city-choice-message hidden></p>
-      <div class="city-search-group"><label for="site-city-search">Название города</label><div class="city-search-field"><img src={publicAsset('/images/figma/city-search.svg')} width="24" height="24" alt="" /><input id="site-city-search" type="search" placeholder="Введите название города" data-city-search autocomplete="off" /><button type="button" class="city-clear" data-city-clear aria-label="Очистить поиск" hidden><img src={publicAsset('/images/figma/close.svg')} width="24" height="24" alt="" /></button></div></div>
+      <div class="city-search-group"><label for="site-city-search">Название города</label><div class="city-search-field"><img src={publicAsset('/images/figma/city-search.svg')} width="24" height="24" alt="" /><input id="site-city-search" type="search" placeholder="Введите название города" data-city-search autocomplete="off" /><button type="button" class="city-clear" data-city-clear aria-label="Очистить поиск" hidden><img src={publicAsset('/images/figma/search-clear.svg')} width="16" height="16" alt="" /></button></div></div>
     </div>
     <div class="city-picker-scroll">
       <div class="city-quick-groups" data-city-quick>

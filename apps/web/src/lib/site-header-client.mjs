@@ -11,7 +11,6 @@ export function initializeSiteHeader() {
   let menuOpener;
   let restoreMenuFocus = true;
   let anchor = '';
-  let selectOnly = false;
   const closeMenu = () => {
     if (menu?.open) { restoreMenuFocus = false; menu.close(); }
   };
@@ -46,7 +45,6 @@ export function initializeSiteHeader() {
       pickerOpener = menu?.contains(target) ? menuOpener : target;
       closeMenu();
       anchor = target.dataset.cityChoiceAnchor || '';
-      selectOnly = target.hasAttribute('data-city-choice-select-only');
       picker.querySelector('[data-city-choice-message]').textContent = anchor === 'address-check'
         ? 'Выберите город, затем проверьте адрес на его странице.'
         : 'Тарифы и проверка подключения доступны на странице выбранного города.';
@@ -63,8 +61,7 @@ export function initializeSiteHeader() {
       picker.showModal();
       search.focus();
     } else if (target.hasAttribute('data-city-choice-link')) {
-      const city = selectCity(target.dataset.cityId);
-      if (city && selectOnly) { event.preventDefault(); picker.close(); document.dispatchEvent(new CustomEvent('provider:hero-city-selected', { detail: city })); }
+      selectCity(target.dataset.cityId);
     } else if (target.hasAttribute('data-menu-trigger') && menu) {
       menuOpener = target;
       restoreMenuFocus = true;

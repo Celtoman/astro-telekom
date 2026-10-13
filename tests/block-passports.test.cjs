@@ -103,7 +103,7 @@ test('header passport records global contacts and contextual navigation without 
   const fields = new Map(header.fields.map((item) => [item.key, item]));
   assert.equal(fields.get('connectionPhone').source, 'Site.connectionPhone');
   assert.equal(fields.get('supportPhone').source, 'Site.supportPhone');
-  assert.match(fields.get('activeCity').source, /City.*moskva/);
+  assert.match(fields.get('activeCity').source, /City.*Москва/);
   assert.match(fields.get('publishedCities').source, /loadSiteData/);
   assert.match(fields.get('callback').validation, /проверки.*телефон/);
   assert.ok(header.runtimeRules.some((rule) => /закрытия вкладки/.test(rule)));

@@ -166,7 +166,7 @@ const sitePassports: BlockPassport[] = [
     design: figmaDesign('79:69', 'Block/B01 Header', ['79:3', '79:28', '79:50']),
     fields: [
       field('logo', 'url', true, 'SiteHeader.astro; /images/figma/domru-logo.png', 'Фиксированный Дом.ру-logo, подпись и ссылка /; не вычисляется из Site.name и не настраивается в паспорте.', 'read_only'),
-      field('activeCity', 'computed', false, 'City из URL-контекста BaseLayout или опубликованный City.slug=moskva из loadSiteData()', 'Контекст страницы имеет приоритет над Москвой. Без опубликованной Москвы видна подпись «Москва», но переходы требуют выбора опубликованного города.', 'read_only'),
+      field('activeCity', 'computed', false, 'City из URL-контекста BaseLayout или единственная опубликованная Москва из loadSiteData(); href из записи City', 'Контекст страницы имеет приоритет над Москвой. Без опубликованной Москвы видна подпись «Москва», но переходы требуют выбора опубликованного города.', 'read_only'),
       field('publishedCities', 'list', false, 'loadSiteData().cities: City.name, City.slug, City.region.name', 'Только опубликованный snapshot; поиск по городу/региону без учёта регистра, ё/е; пустой каталог имеет объяснение.', 'read_only'),
       field('connectionPhone', 'text', true, 'Site.connectionPhone', 'Непустой глобальный телефон из snapshot; tel: очищается от форматирования. normalizedCatalog отклоняет отсутствие телефона.', 'read_only'),
       field('supportPhone', 'text', true, 'Site.supportPhone', 'Непустой глобальный телефон из snapshot; отдельная поддержка и телефон в режиме абонента. normalizedCatalog отклоняет отсутствие телефона.', 'read_only'),
@@ -238,7 +238,7 @@ function approvedFirstScreen(passport: BlockPassport): BlockPassport {
     editorForm: '/templates/home?kind=HOME: один заголовок с инструментом выделения <red>, описание, подписи и сообщения поиска, тексты трёх шагов. Нет cityLabel, titleAccent, изображения или старых chips.',
     implementation: 'PageTemplate(HOME) 2.0.0 → catalog.homeHero/homeHeroVersion → GeneralHomeHero.astro. Миграция 0060 меняет только working HOME с before/after; legacy snapshots 1.0.0 используют HomeHero.',
     previewScenarios: ['Desktop/Tablet/Mobile', 'Шесть состояний поиска', 'Длинные тексты и заголовок с <red>', 'Московский контекст и явный выбор города', 'working/published и старый snapshot'],
-    runtimeRules: ['Результаты при вводе; выбор → Selected → кнопка «Найти город» открывает CITY_HOME.', 'До выбора городские ссылки общей главной используют Москву; затем выбранный город до закрытия вкладки.', 'Один общий шаблон; CITY_HOME остаётся 1.0.0.'],
+    runtimeRules: ['Результаты при вводе; выбор строки, быстрого города или O01 сразу открывает CITY_HOME и сохраняет город в текущей вкладке. Selected показывает сохранённый город при возврате.', 'До выбора городские ссылки общей главной используют Москву; затем выбранный город до закрытия вкладки.', 'Один общий шаблон; CITY_HOME остаётся 1.0.0.'],
   };
   const editable = [
     field('title', 'text', true, `${contentSource}title`, 'Непустой H1 до 120 символов, без HTML; разрешённые переменные контекста шаблона.', 'input'),

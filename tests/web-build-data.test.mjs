@@ -402,8 +402,8 @@ test('web build is blocked when API is unavailable and demo mode is not explicit
 
 test('web build uses resolved SEO snapshot and omits noindex routes from sitemap', { timeout: 120_000 }, async () => {
   const fixture = structuredClone(apiFixture);
-  fixture.cities.push({ name: 'Москва', namePrepositional: 'Москве', slug: 'moskva', status: 'PUBLISHED', region: { name: 'Москва', slug: 'moskva' }, pages: [{ ...page('HOME', '', 'Домашний интернет в Москве'), blocks: cityHomeBlocks('Москве') }], tariffs: [] });
-  fixture.routes.push({ id: 'CITY_HOME', kind: 'CITY_HOME', path: '/moskva', citySlug: 'moskva' });
+  fixture.cities.push({ name: 'Москва', namePrepositional: 'Москве', slug: 'moscow', status: 'PUBLISHED', region: { name: 'Москва', slug: 'moskva' }, pages: [{ ...page('HOME', '', 'Домашний интернет в Москве'), blocks: cityHomeBlocks('Москве') }], tariffs: [] });
+  fixture.routes.push({ id: 'CITY_HOME', kind: 'CITY_HOME', path: '/moscow', citySlug: 'moscow' });
   fixture.seoByPath = Object.fromEntries(fixture.routes.map((route) => [route.path, {
     title: `SEO ${route.path}`,
     description: `Описание ${route.path}`,
@@ -416,10 +416,11 @@ test('web build uses resolved SEO snapshot and omits noindex routes from sitemap
     assert.equal(build.code, 0, build.output);
   }, fixture);
   const homeHtml = await readBuilt('index.html');
-  assert.match(homeHtml, /data-city-slug="moskva"/);
-  assert.match(homeHtml, /href="\/moskva#tariffs"/);
+  assert.match(homeHtml, /data-city-slug="moscow"/);
+  assert.ok(homeHtml.includes('href="/moscow#tariffs"'), 'Default tariffs action must use the published Moscow URL');
+  assert.ok(homeHtml.includes('href="/moscow#address-check"'), 'Default address action must use the published Moscow URL');
   assert.doesNotMatch(homeHtml, /data-block-type="tariff_grid"/);
-  const moscowHtml = await readBuilt(join('moskva', 'index.html'));
+  const moscowHtml = await readBuilt(join('moscow', 'index.html'));
   assert.match(moscowHtml, /Стоимость уточняется/);
   assert.match(moscowHtml, /Скорость уточняется/);
   assert.doesNotMatch(moscowHtml, /от 0 ₽|до 0 Мбит|до 220/);
