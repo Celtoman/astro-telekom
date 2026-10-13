@@ -1,0 +1,91 @@
+{
+  "release": {
+    "checkedAt": "2026-10-13T13:47:02.532Z",
+    "commit": "1c34c52182afab05d42cbda10ebf6ff66837f8ed",
+    "ciRun": 38405371393,
+    "deploymentId": "0o2bln7oweal9jjdo1enlsce",
+    "status": "finished",
+    "health": "running:healthy",
+    "workingRevision": 21,
+    "publishedRevision": 21,
+    "publicationId": "cmv6o4jfp000101nwmg9d5exe",
+    "artifactId": "41cd513379551bdfd8757cecc5089f1724a4e0367766f968b56a86868d09710f",
+    "rendererId": "02afdef67b8c8d144f9dd8752ed8a54d7ab367834d21b10af1ba059884ec015b",
+    "previousArtifactId": "d57133aebc3cc1c8ba1e3696394a412bf925b548aa713158f1c616bb401c773a",
+    "homeVersion": "2.0.0",
+    "cityCount": 207,
+    "routeCount": 4018,
+    "seoPreserved": true,
+    "cityHomePreserved": true,
+    "cmsSnapshotPreserved": true,
+    "oldAssetsAvailable": true,
+    "reviewOutcome": "PASSED",
+    "reviewChanges": 0
+  },
+  "browser": {
+    "checkedAt": "2026-10-13T13:52:54.555Z",
+    "origin": "https://tv-internet-dom.ru",
+    "states": [
+      "Default",
+      "Focus",
+      "InputError",
+      "NoResults",
+      "Results",
+      "Selected"
+    ],
+    "sizes": [
+      {
+        "width": 834,
+        "overflow": false,
+        "clearWidth": 16,
+        "directSelection": true
+      },
+      {
+        "width": 390,
+        "overflow": false,
+        "clearWidth": 16,
+        "directSelection": true
+      },
+      {
+        "width": 320,
+        "overflow": false,
+        "clearWidth": 16,
+        "directSelection": true
+      }
+    ],
+    "pageErrors": [],
+    "defaultAddress": "/moscow#address-check",
+    "title": "Домашний интернет и телевидение Дом.ру",
+    "h1": "Домашний интернет и ТВ Дом.ру в вашем городе",
+    "defaultMoscowAddressTargetExists": true,
+    "clearControl": {
+      "button": {
+        "x": 495,
+        "y": 386,
+        "width": 44,
+        "height": 44
+      },
+      "icon": {
+        "x": 509,
+        "y": 400,
+        "width": 16,
+        "height": 16
+      }
+    },
+    "keyboardSelectNavigatesImmediately": true,
+    "returnPreservesCity": true,
+    "chipNavigatesImmediately": true,
+    "clearPreservesCityContext": true,
+    "allCitiesNavigatesImmediately": true,
+    "mouseResultNavigatesImmediately": true,
+    "addressTargetExists": true,
+    "noJsLinksAvailable": true
+  },
+  "figma": {
+    "fileKey": "PiSCXYR88uqqcS6tKVfd8T",
+    "heroNode": "1163:64",
+    "searchClearNode": "1330:4556",
+    "clearIconSize": 16,
+    "touchTarget": 44
+  }
+}
