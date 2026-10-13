@@ -74,6 +74,8 @@ pnpm test:build                           # пересобрать apps/api, з�
 
 ### `apps/web`
 
+Перед проектированием, изменением, сборкой или проверкой публичных блоков и страниц в Figma обязательно прочитать [docs/figma-design-rules.md](docs/figma-design-rules.md): источники, библиотека, поверхности, адаптивность и критерии приёмки.
+
 Публичная витрина `apps/web` визуально и по UX ориентируется на официальный сайт [dom.ru](https://dom.ru) — но это референс структуры/тона/визуального языка, **не код** (сайт не open-source) и **не источник контента для копирования** (`apps/web` — сайт партнёра/дилера, не сам Дом.ру; copyright-ограничения обязательны). При конфликте с [docs/decisions.md](docs/decisions.md) — приоритет у decisions.md. Полный DoD-чек — [docs/web-design-system.md](docs/web-design-system.md).
 
 Перед изменением публичных маршрутов, sitemap, генерации городских страниц или релизного состава обязательно прочитать [docs/site-structure.md](docs/site-structure.md). Этот документ — канон целевой структуры и границы Release 1; фактическая реализация по-прежнему фиксируется в [docs/current-state.md](docs/current-state.md).
@@ -89,6 +91,7 @@ pnpm test:build                           # пересобрать apps/api, з�
 | [docs/site-structure.md](docs/site-structure.md) | Канонические URL, иерархия страниц и минимальный состав Release 1 |
 | [docs/admin-design-system.md](docs/admin-design-system.md) | Обязательный источник дизайна/компонентов для `apps/admin` — next-shadcn-admin-dashboard-aria |
 | [docs/web-design-system.md](docs/web-design-system.md) | Обязательный визуальный/UX-референс для `apps/web` — официальный dom.ru |
+| [docs/figma-design-rules.md](docs/figma-design-rules.md) | Обязательный регламент проектирования и проверки публичных блоков и страниц в Figma |
 | [docs/architecture.md](docs/architecture.md) | Приложения, потоки данных, границы модулей |
 | [docs/technology-baseline.md](docs/technology-baseline.md) | Версии, инфраструктура, правила сборки |
 | [docs/api-contracts.md](docs/api-contracts.md) | Реализованные HTTP-маршруты и их ограничения |
