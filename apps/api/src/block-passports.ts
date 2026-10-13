@@ -171,7 +171,7 @@ const sitePassports: BlockPassport[] = [
       field('connectionPhone', 'text', true, 'Site.connectionPhone', 'Непустой глобальный телефон из snapshot; tel: очищается от форматирования. normalizedCatalog отклоняет отсутствие телефона.', 'read_only'),
       field('supportPhone', 'text', true, 'Site.supportPhone', 'Непустой глобальный телефон из snapshot; отдельная поддержка и телефон в режиме абонента. normalizedCatalog отклоняет отсутствие телефона.', 'read_only'),
       field('navigation', 'list', true, 'SiteHeader.astro; publicHtmlPath(activeCity.slug), Astro.url.pathname', 'Тарифы → текущая CITY_HOME #tariffs или /{city}#tariffs; Города → /goroda-obsluzhivaniya; Карта → /karta-pokrytiya-provaydera. Без city тарифы открывают picker.', 'read_only'),
-      field('addressAction', 'url', true, 'SiteHeader.astro; Astro.url.pathname и activeCity', 'На HOME с Москвой / CITY_HOME фокус локальной #address-check; иначе /{city}#address-check. Без city — выбор города; выдуманный /moskva не создаётся.', 'read_only'),
+      field('addressAction', 'url', true, 'SiteHeader.astro; Astro.url.pathname и activeCity', 'На общей HOME переход /{city}#address-check; на CITY_HOME фокус локальной #address-check. Без city — выбор города; выдуманный /moskva не создаётся.', 'read_only'),
       field('callback', 'computed', true, 'SiteHeader.astro → site-header-client.mjs → AddressForm.astro', '«Заказать звонок» включает пояснение и ведёт в сценарий проверки адреса; телефон только после положительного результата. Межстраничный переход: ?callback=1#address-check.', 'read_only'),
       field('subscriberMode', 'computed', false, 'BaseLayout.astro; subscriber-mode.mjs и событие режима абонента', 'В активном режиме абонента основной телефон/подпись заменяются на Site.supportPhone/«Техподдержка», tel: и aria-label обновляются, иконка сохраняется.', 'read_only'),
     ],
@@ -179,7 +179,7 @@ const sitePassports: BlockPassport[] = [
     editorForm: 'Только просмотр контракта. Телефоны редактируются как глобальные настройки Site, города — в каталоге City. Логотип, подписи, меню и поведение меняются в коде; отдельных CMS-полей Header и локальных копий для города нет.',
     runtimeRules: [
       'Общее размещение через BaseLayout.astro; глобальные Site-телефоны и опубликованный список City читаются из snapshot. URL-контекст определяет город, а не локальный контент Header.',
-      'Выбор города переводит на его HOME с якорем исходного действия; выбор не сохраняется в браузере и не переключает скрытый контекст другой страницы.',
+      'Выбор города сохраняется до закрытия вкладки; контекст URL имеет приоритет. На общей HOME ссылки используют выбранный город либо опубликованную Москву. O01 сохраняет назначение инициатора.',
       'Desktop utility/main: 40/88 px; tablet 40/80 px; mobile 36/72 px. При ≤360 px скрывается иконка телефона. Неподтверждённые часы работы не показываются.',
       'Активный режим действующего абонента переключает основной контакт на поддержку. Он не превращает callback в отдельный API или обход адресной проверки.',
       'Диалоги выбора города/меню нативные: Escape закрывает, поиск получает фокус, после закрытия фокус возвращается к opener; переход меню → picker/адрес не перехватывает конечный фокус.',
@@ -224,6 +224,22 @@ function approvedFirstScreen(passport: BlockPassport): BlockPassport {
   if (passport.id !== 'hero' && passport.id !== 'home.hero') return passport;
   const root = passport.id === 'home.hero';
   const contentSource = 'PageTemplateBlock.data.';
+  if (root) return {
+    ...passport, title: 'Hero 1d: поиск города', kind: 'MANAGED', proposedContentScope: 'TEMPLATE', status: 'APPROVED', passportVersion: '2.0.0', approvedBy: 'Владелец проекта; согласование 2026-10-13', editorReadiness: 'READY',
+    design: { fileKey: 'PiSCXYR88uqqcS6tKVfd8T', nodeId: '1163:64', name: 'B02 / Home Hero / 1d', variants: [{ device: 'Desktop', nodeId: '1163:65' }, { device: 'Tablet', nodeId: '1163:79' }, { device: 'Mobile', nodeId: '1163:93' }] },
+    fields: [
+      field('title', 'text', true, `${contentSource}title`, 'Один H1 до 120 видимых символов; только парные невложенные <red>…</red> и SITE-переменные. Маркеры не являются произвольным HTML.', 'textarea'),
+      field('text', 'text', true, `${contentSource}text`, 'Описание до 1000 символов; SITE-переменные, без HTML.', 'textarea'),
+      ...['cityPlaceholder', 'searchButtonText', 'allCitiesText', 'emptyMessage', 'inputErrorMessage'].map(key => field(key, 'text', true, `${contentSource}${key}`, 'Непустой обычный текст; лимиты 120/80/80/250/250. Действие не изменяется подписью.', 'input')),
+      field('steps', 'list', true, `${contentSource}steps`, 'Ровно три шага: title до 80 и text до 250; номера, иконки и порядок системные.', 'list'),
+      field('cities', 'computed', true, 'Опубликованный каталог', 'Имена, регионы, slug, реальные URL и количество результатов системные.', 'read_only'),
+    ],
+    emptyBehavior: 'Пустой запрос показывает InputError; непустой без совпадений — NoResults. Только опубликованные города; отсутствие Москвы не создаёт фиктивный URL.',
+    editorForm: '/templates/home?kind=HOME: один заголовок с инструментом выделения <red>, описание, подписи и сообщения поиска, тексты трёх шагов. Нет cityLabel, titleAccent, изображения или старых chips.',
+    implementation: 'PageTemplate(HOME) 2.0.0 → catalog.homeHero/homeHeroVersion → GeneralHomeHero.astro. Миграция 0060 меняет только working HOME с before/after; legacy snapshots 1.0.0 используют HomeHero.',
+    previewScenarios: ['Desktop/Tablet/Mobile', 'Шесть состояний поиска', 'Длинные тексты и заголовок с <red>', 'Московский контекст и явный выбор города', 'working/published и старый snapshot'],
+    runtimeRules: ['Результаты при вводе; выбор → Selected → кнопка «Найти город» открывает CITY_HOME.', 'До выбора городские ссылки общей главной используют Москву; затем выбранный город до закрытия вкладки.', 'Один общий шаблон; CITY_HOME остаётся 1.0.0.'],
+  };
   const editable = [
     field('title', 'text', true, `${contentSource}title`, 'Непустой H1 до 120 символов, без HTML; разрешённые переменные контекста шаблона.', 'input'),
     field('text', 'text', true, `${contentSource}text`, 'Непустое описание до 1000 символов, без HTML; разрешённые переменные контекста шаблона.', 'textarea'),

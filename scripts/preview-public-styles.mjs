@@ -5,6 +5,7 @@ const sources = [
   ['base', 'layouts/BaseLayout.astro'],
   ['header', 'components/SiteHeader.astro'],
   ['hero', 'components/HomeHero.astro'],
+  ['generalhero', 'components/GeneralHomeHero.astro'],
   ['address', 'components/AddressForm.astro'],
   ['blocks', 'components/BlockRenderer.astro'],
   ['collection', 'components/TariffCollection.astro'],
@@ -13,7 +14,7 @@ const sources = [
   ['cities', 'components/CitiesDirectory.astro'],
 ].map(([name, path]) => [name, fileURLToPath(new URL(`../apps/web/src/${path}`, import.meta.url))]);
 const assetPaths = ['home-hero.png', 'domru-logo.png', 'map-pin.svg', 'chevron-down.svg', 'search.svg', 'headphones.svg', 'phone.svg', 'menu.svg', 'tag.svg', 'wifi.svg', 'tv.svg', 'tag-blue.svg', 'wifi-blue.svg', 'tv-blue.svg', 'shield-check.svg', 'check.svg']
-  .map(name => `/images/figma/${name}`);
+  .map(name => `/images/figma/${name}`).concat(['/images/figma/hero1d-desktop-imglocationicon.svg', ...['desktop', 'tablet', 'mobile'].flatMap(device => [0, 1, 2].map(index => `/images/figma/hero1d-${device}-imgicon${index || ''}.svg`))]);
 
 // Only trusted repository CSS is embedded. Catalog data never reaches this loader.
 // Native CSS nesting isolates Astro's local selectors from other preview components.

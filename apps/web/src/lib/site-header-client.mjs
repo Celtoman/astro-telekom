@@ -1,7 +1,9 @@
+import { applyCityContext, selectCity, normalizeCityQuery } from './city-context.mjs';
 export function initializeSiteHeader() {
   const header = document.querySelector('[data-site-header]');
   if (!header || header.dataset.ready === 'true') return;
   header.dataset.ready = 'true';
+  applyCityContext();
   const picker = document.querySelector('[data-city-picker]');
   const menu = document.querySelector('[data-header-menu]');
   const search = picker?.querySelector('[data-city-search]');
@@ -9,6 +11,7 @@ export function initializeSiteHeader() {
   let menuOpener;
   let restoreMenuFocus = true;
   let anchor = '';
+  let selectOnly = false;
   const closeMenu = () => {
     if (menu?.open) { restoreMenuFocus = false; menu.close(); }
   };
@@ -18,7 +21,7 @@ export function initializeSiteHeader() {
     input.focus();
   };
   const filterCities = () => {
-    const query = (search?.value || '').trim().toLocaleLowerCase('ru-RU').replaceAll('ё', 'е');
+    const query = normalizeCityQuery(search?.value);
     let count = 0;
     for (const item of picker.querySelectorAll('[data-city-option]')) {
       item.hidden = !item.dataset.citySearchText.toLocaleLowerCase('ru-RU').replaceAll('ё', 'е').includes(query);
@@ -43,6 +46,7 @@ export function initializeSiteHeader() {
       pickerOpener = menu?.contains(target) ? menuOpener : target;
       closeMenu();
       anchor = target.dataset.cityChoiceAnchor || '';
+      selectOnly = target.hasAttribute('data-city-choice-select-only');
       picker.querySelector('[data-city-choice-message]').textContent = anchor === 'address-check'
         ? 'Выберите город, затем проверьте адрес на его странице.'
         : 'Тарифы и проверка подключения доступны на странице выбранного города.';
@@ -58,6 +62,9 @@ export function initializeSiteHeader() {
       filterCities();
       picker.showModal();
       search.focus();
+    } else if (target.hasAttribute('data-city-choice-link')) {
+      const city = selectCity(target.dataset.cityId);
+      if (city && selectOnly) { event.preventDefault(); picker.close(); document.dispatchEvent(new CustomEvent('provider:hero-city-selected', { detail: city })); }
     } else if (target.hasAttribute('data-menu-trigger') && menu) {
       menuOpener = target;
       restoreMenuFocus = true;

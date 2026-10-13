@@ -9,7 +9,7 @@ const { city, site } = Astro.props as Props;
 const { cities } = await loadSiteData();
 const activeCity = city || cities.find((item) => item.slug === 'moskva');
 const currentCityHome = city && Astro.url.pathname === publicHtmlPath(city.slug);
-const localCheck = Astro.url.pathname === '/' || currentCityHome;
+const localCheck = currentCityHome;
 const cityPath = activeCity ? publicHtmlPath(activeCity.slug) : null;
 const addressHref = localCheck && activeCity ? '#address-check' : cityPath ? `${cityPath}#address-check` : null;
 const tariffHref = currentCityHome ? '#tariffs' : cityPath ? `${cityPath}#tariffs` : null;
@@ -21,18 +21,18 @@ const navigation = [
   { label: 'Карта покрытия', href: '/karta-pokrytiya-provaydera', anchor: '' },
 ];
 ---
-<header class="site-header" data-site-header>
+<header class="site-header" data-site-header data-route-city={city?.slug || ''} data-site-slug={site.slug}>
   <div class="utility-line"><div class="header-container utility-inner">
-    <button class="utility-link city-trigger" type="button" data-city-choice-trigger aria-haspopup="dialog" aria-controls="site-city-picker"><img src={publicAsset('/images/figma/map-pin.svg')} width="16" height="16" alt="" /><span>{activeCity?.name || 'Москва'}</span><img class="chevron" src={publicAsset('/images/figma/chevron-down.svg')} width="14" height="14" alt="" /><span class="sr-only"> — выбрать город</span></button>
+    <button class="utility-link city-trigger" type="button" data-city-choice-trigger aria-haspopup="dialog" aria-controls="site-city-picker"><img src={publicAsset('/images/figma/map-pin.svg')} width="16" height="16" alt="" /><span data-current-city-label>{activeCity?.name || 'Москва'}</span><img class="chevron" src={publicAsset('/images/figma/chevron-down.svg')} width="14" height="14" alt="" /><span class="sr-only"> — выбрать город</span></button>
     <div class="utility-actions">
-      {addressHref ? <a class="utility-link" href={addressHref} data-address-focus><img src={publicAsset('/images/figma/search.svg')} width="16" height="16" alt="" />Проверить адрес</a> : <button type="button" class="utility-link" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog"><img src={publicAsset('/images/figma/search.svg')} width="16" height="16" alt="" />Проверить адрес</button>}
+      {addressHref ? <a class="utility-link" href={addressHref} data-address-focus data-city-context-anchor="address-check"><img src={publicAsset('/images/figma/search.svg')} width="16" height="16" alt="" />Проверить адрес</a> : <button type="button" class="utility-link" data-city-choice-trigger data-city-choice-anchor="address-check" data-city-context-anchor="address-check" aria-haspopup="dialog"><img src={publicAsset('/images/figma/search.svg')} width="16" height="16" alt="" />Проверить адрес</button>}
       <a class="utility-link support-link" href={supportHref}><img src={publicAsset('/images/figma/headphones.svg')} width="16" height="16" alt="" />Техподдержка</a>
     </div>
   </div></div>
   <div class="header-container main-line">
     <a class="brand" href="/" aria-label="Дом.ру — главная"><img src={publicAsset('/images/figma/domru-logo.png')} width="2071" height="682" alt="Дом.ру" /></a>
     <nav class="header-nav" aria-label="Основная навигация">
-      {navigation.map((item) => item.href ? <a href={item.href}>{item.label}</a> : <button type="button" data-city-choice-trigger data-city-choice-anchor={item.anchor} aria-haspopup="dialog">{item.label}</button>)}
+      {navigation.map((item) => item.href ? <a href={item.href} data-city-context-anchor={item.anchor || undefined}>{item.label}</a> : <button type="button" data-city-choice-trigger data-city-choice-anchor={item.anchor} data-city-context-anchor={item.anchor || undefined} aria-haspopup="dialog">{item.label}</button>)}
     </nav>
     <div class="header-actions">
       <a class="header-phone subscriber-phone" href={connectionHref} data-support-phone={site.supportPhone} data-support-phone-href={supportHref}>
@@ -49,8 +49,8 @@ const navigation = [
   <button type="button" class="dialog-close" data-header-dialog-close aria-label="Закрыть меню">×</button>
   <h2 id="site-menu-title">Меню</h2>
   <nav class="menu-nav" aria-label="Мобильная навигация">
-    {navigation.map((item) => item.href ? <a href={item.href}>{item.label}</a> : <button type="button" data-city-choice-trigger data-city-choice-anchor={item.anchor} aria-haspopup="dialog">{item.label}</button>)}
-    {addressHref ? <a href={addressHref} data-address-focus>Проверить адрес</a> : <button type="button" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog">Проверить адрес</button>}
+    {navigation.map((item) => item.href ? <a href={item.href} data-city-context-anchor={item.anchor || undefined}>{item.label}</a> : <button type="button" data-city-choice-trigger data-city-choice-anchor={item.anchor} data-city-context-anchor={item.anchor || undefined} aria-haspopup="dialog">{item.label}</button>)}
+    {addressHref ? <a href={addressHref} data-address-focus data-city-context-anchor="address-check">Проверить адрес</a> : <button type="button" data-city-choice-trigger data-city-choice-anchor="address-check" data-city-context-anchor="address-check" aria-haspopup="dialog">Проверить адрес</button>}
     <a href={supportHref}>Техподдержка: {site.supportPhone}</a>
     <button type="button" class="callback-button" data-callback-trigger aria-haspopup="dialog" aria-controls="site-callback">Заказать звонок</button>
   </nav>

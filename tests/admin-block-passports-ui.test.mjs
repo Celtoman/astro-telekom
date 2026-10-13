@@ -35,7 +35,7 @@ test('content sources lead to existing editors and never offer a missing city ed
   assert.equal(passportSource(byId('header')).href, '/variables');
   assert.deepEqual(passportContent(byId('header')).map(field => field.label), ['Телефон подключения', 'Телефон поддержки']);
   assert.deepEqual(passportContent(byId('hero')).map(field => field.key), ['title', 'text', 'image', 'imageAlt', 'addressPlaceholder', 'checkButtonText', 'tariffsCtaText']);
-  assert.deepEqual(passportContent(byId('home.hero')).map(field => field.key), ['title', 'text', 'image', 'imageAlt', 'addressPlaceholder', 'checkButtonText', 'chips']);
+  assert.deepEqual(passportContent(byId('home.hero')).map(field => field.key), ['title', 'text', 'cityPlaceholder', 'searchButtonText', 'allCitiesText', 'emptyMessage', 'inputErrorMessage', 'steps']);
   for (const passport of filterPassports(passports, '', 'tariff')) assert.equal(passportSource(passport).href, '/tariffs');
   for (const passport of filterPassports(passports, '', 'city')) {
     if (passport.id === 'hero') {

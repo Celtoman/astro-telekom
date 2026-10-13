@@ -5,6 +5,7 @@ const names = {
   'tariff.faq': 'Вопросы о тарифе',
 };
 const fieldNames = {
+  cityPlaceholder: 'Подсказка поиска города', searchButtonText: 'Текст основной кнопки', allCitiesText: 'Список городов', emptyMessage: 'Город не найден', inputErrorMessage: 'Сообщение при пустом поиске', steps: 'Три шага',
   title: 'Заголовок', text: 'Описание', items: 'Элементы блока', serviceType: 'Тип услуги',
   initialCount: 'Тарифов до раскрытия', sort: 'Сортировка по цене', connectButtonText: 'Кнопка подключения', detailsButtonText: 'Кнопка подробностей', moreButtonText: 'Кнопка раскрытия',
   image: 'Изображение', imageAlt: 'Описание изображения', addressPlaceholder: 'Подсказка адреса',

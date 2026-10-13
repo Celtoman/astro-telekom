@@ -50,7 +50,9 @@ try {
   assert.equal(source.seoTemplates.length, 8);
   assert.equal(source.pageTemplates.length, 2);
   assert.equal(source.cities[0].pages[0].templateId, source.pageTemplates.find(template => template.kind === 'CITY_HOME').id);
-  assert.equal(validation.catalog.homeHero.checkButtonText, 'Проверить');
+  assert.equal(validation.catalog.homeHero.searchButtonText, 'Найти город');
+  assert.equal(validation.catalog.homeHeroVersion, '2.0.0');
+  assert.match(validation.catalog.homeHero.title, /<red>в вашем городе<\/red>/);
   assert.deepEqual(validation.catalog.cities[0].pages[0].blocks.map(block => block.blockType), ['hero','tariff_grid']);
   assert.equal(await db.tariff.count({ where: { status: 'DRAFT', dataSource: 'seed' } }), 2);
   assert.equal(await db.sitePublication.count(), 0);

@@ -1,0 +1,114 @@
+---
+import { publicAsset } from '../data/public-asset';
+import { publicHtmlPath } from '../data/public-url';
+import type { CityView } from '../data/site';
+import { assertRenderedHomeHero, parseRedTitle } from '../../../api/src/home-hero-model';
+interface Props { content: Record<string, any>; cities: CityView[] }
+const { content, cities } = Astro.props as Props;
+const data = assertRenderedHomeHero(content);
+const title = parseRedTitle(data.title);
+const names = ['Москва', 'Санкт-Петербург', 'Екатеринбург', 'Иркутск', 'Казань', 'Самара', 'Саратов'];
+const popular = names.map(name => cities.find(city => city.name === name)).filter((city): city is CityView => !!city);
+const ordered = [...cities].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+const ambiguousNames = new Set(ordered.filter((city, index) => ordered.some((other, position) => position !== index && other.name === city.name)).map(city => city.name));
+---
+<section class="general-home-hero" data-home-hero="city-search" data-general-home-hero>
+  <div class="hero-container"><div class="hero-card">
+    <div class="hero-copy">
+      <h1>{title.map(segment => segment.red ? <span class="title-red">{segment.text}</span> : segment.text)}</h1>
+      <p class="hero-body">{data.text}</p>
+      <form class="city-form" data-hero-city-form novalidate>
+        <noscript><p>Выберите город по ссылкам ниже или откройте полный список городов.</p></noscript>
+        <div class="city-search-row"><div class="city-field-stack">
+          <div class="city-search-field"><img src={publicAsset('/images/figma/hero1d-desktop-imglocationicon.svg')} width="24" height="24" alt="" /><input type="search" role="combobox" aria-autocomplete="list" aria-label="Поиск города" disabled placeholder={data.cityPlaceholder} maxlength="120" autocomplete="off" data-hero-city-input aria-controls="hero-city-results" aria-expanded="false" /><button type="button" class="city-clear" data-hero-city-clear aria-label="Очистить поиск" hidden><img src={publicAsset('/images/figma/close.svg')} width="24" height="24" alt="" /></button></div>
+          <p class="city-feedback" data-hero-city-error role="status" hidden></p>
+          <div class="city-results" id="hero-city-results" role="listbox" data-hero-city-results hidden>
+            <p class="result-count" data-hero-city-count role="status"></p>
+            <ul>{ordered.map(city => <li data-hero-city-option data-search-text={`${city.name} ${city.region.name}`} hidden><a href={publicHtmlPath(city.slug)} data-city-id={city.id || city.slug} data-city-slug={city.slug} data-city-name={city.name} role="option">{city.name}{ambiguousNames.has(city.name) && <small>{city.region.name}</small>}</a></li>)}</ul>
+            <a href="/goroda-obsluzhivaniya" data-city-choice-trigger data-city-choice-select-only aria-haspopup="dialog" aria-controls="site-city-picker">{data.allCitiesText}</a>
+          </div>
+        </div><button class="search-button" type="submit" disabled>{data.searchButtonText}</button></div>
+        <span data-hero-empty-message hidden>{data.emptyMessage}</span><span data-hero-input-error-message hidden>{data.inputErrorMessage}</span>
+      </form>
+      <div class="popular-cities">{[popular.slice(0, 4), popular.slice(4)].map((row, rowIndex) => <div class="popular-row">{row.map(city => <a class="popular-city" href={publicHtmlPath(city.slug)} data-hero-city-choice data-city-id={city.id || city.slug} data-city-slug={city.slug} data-city-name={city.name}><span class="chip-surface">{city.name}<img src={publicAsset('/images/figma/hero1d-desktop-imgselectedcheck.svg')} width="16" height="16" alt="" hidden /></span></a>)}{rowIndex === 1 && <a class="all-cities-link" href="/goroda-obsluzhivaniya" data-city-choice-trigger data-city-choice-select-only aria-haspopup="dialog" aria-controls="site-city-picker">{data.allCitiesText}</a>}</div>)}</div>
+    </div>
+    <ol class="city-steps">{data.steps.map((step: { title: string; text: string }, index: number) => <li><div class="icon-circle"><picture><source media="(max-width: 620px)" srcset={publicAsset(`/images/figma/hero1d-mobile-imgicon${index || ''}.svg`)} /><source media="(max-width: 1100px)" srcset={publicAsset(`/images/figma/hero1d-tablet-imgicon${index || ''}.svg`)} /><img src={publicAsset(`/images/figma/hero1d-desktop-imgicon${index || ''}.svg`)} alt="" /></picture></div><div class="step-copy"><span class="step-number">0{index + 1}</span><h2>{step.title}</h2><p>{step.text}</p></div></li>)}</ol>
+  </div></div>
+</section>
+<script>
+  import { initializeHomeHero } from '../lib/home-hero-client.mjs';
+  initializeHomeHero();
+</script>
+<style>
+  .general-home-hero { padding: 24px 0 32px; }
+  .hero-container { width: min(1360px, calc(100% - 32px)); margin: 0 auto; }
+  .hero-card { display: flex; align-items: flex-start; gap: 40px; padding: 48px; border-radius: 26px; background: #eaf7ff; }
+  .hero-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; width: 680px; min-width: 0; flex-shrink: 0; }
+  h1 { width: 100%; margin: 0; font-size: 48px; font-weight: 800; line-height: 50px; letter-spacing: -2.4px; overflow-wrap: anywhere; }
+  .title-red { color: #e0231e; }
+  .hero-body { margin: 0; color: #526071; font-size: 16px; line-height: 24px; }
+  .city-form { width: 100%; margin: 0; }
+  .city-search-row { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 16px; align-items: start; }
+  .city-field-stack { position: relative; min-width: 0; }
+  .city-search-field { display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 12px; border: 1px solid #dcecf7; border-radius: 10px; background: #fff; }
+  .city-search-field:focus-within { border-color: #1769aa; outline: 1px solid #1769aa; }
+  .city-search-field:has([aria-invalid="true"]) { border-color: #e0231e; }
+  .city-search-field > img { flex-shrink: 0; }
+  .city-search-field input { width: 100%; min-width: 0; border: 0; outline: 0; padding: 10px 0; background: transparent; font: inherit; font-size: 16px; line-height: 24px; color: #18202a; }
+  input::placeholder { color: #526071; opacity: 1; }
+  input::-webkit-search-cancel-button { display: none; }
+  .city-clear { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; flex-shrink: 0; cursor: pointer; }
+  .search-button { min-height: 48px; border: 0; border-radius: 14px; padding: 14px 24px; background: #e0231e; color: white; font: inherit; font-size: 14px; font-weight: 600; line-height: 20px; cursor: pointer; }
+  .search-button:hover { background: #c81d19; }
+  .city-feedback { margin: 8px 0 0; color: #526071; font-size: 14px; line-height: 20px; }
+  .popular-cities { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+  .popular-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .popular-city { display: flex; min-height: 44px; align-items: center; padding: 4px 0; text-decoration: none; color: #18202a; }
+  .chip-surface { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 7px 12px; border: 1px solid #1769aa; border-radius: 10px; background: #fff; font-size: 14px; line-height: 20px; white-space: nowrap; }
+  .popular-city:hover .chip-surface, .popular-city[aria-current] .chip-surface { background: #eaf7ff; }
+  .all-cities-link { display: flex; align-items: center; min-height: 44px; padding: 0 8px; color: #1769aa; text-decoration: underline; font-size: 14px; line-height: 20px; }
+  button:focus-visible, a:focus-visible { outline: 2px solid #1769aa; outline-offset: 2px; }
+  .city-results { position: absolute; top: 56px; left: 0; width: 100%; padding: 8px 12px 12px; background: #fff; border: 1px solid #dcecf7; border-radius: 10px; z-index: 10; box-shadow: 0 8px 24px #18202a12; }
+  .result-count { margin: 0 0 8px; color: #526071; font-size: 14px; line-height: 20px; }
+  .city-results ul { max-height: 240px; overflow-y: auto; overscroll-behavior: contain; padding: 0; margin: 0; list-style: none; }
+  .city-results li a { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; min-height: 48px; padding: 8px 0; color: #18202a; text-decoration: none; font-size: 16px; line-height: 24px; }
+  .city-results small { color: #526071; font-size: 12px; }
+  .city-results > a { display: inline-flex; align-items: center; min-height: 44px; color: #1769aa; font-size: 14px; }
+  .city-steps { display: flex; flex: 1; flex-direction: column; min-width: 0; align-self: flex-start; margin: 0; padding: 0 0 0 32px; border-left: 1px solid #dcecf7; list-style: none; }
+  .city-steps li { position: relative; display: flex; gap: 28px; }
+  .city-steps li + li { margin-top: 28px; }
+  .city-steps li:not(:last-child)::after { content: ''; position: absolute; left: 39.5px; top: 100%; width: 1px; height: 28px; background: #1769aa; }
+  .icon-circle { display: flex; align-items: center; justify-content: center; width: 80px; height: 80px; border-radius: 50%; background: #fff; flex-shrink: 0; }
+  .icon-circle img { display: block; }
+  .step-copy { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .step-number { color: #1769aa; font-size: 14px; line-height: 20px; font-weight: 600; }
+  h2 { margin: 0; color: #18202a; font-size: 20px; line-height: 25px; letter-spacing: -.2px; font-weight: 700; }
+  .step-copy p { white-space: pre-line; margin: 0; color: #526071; font-size: 16px; line-height: 24px; }
+  [hidden] { display: none !important; }
+  @media (min-width: 1101px) and (max-width: 1300px) { .hero-copy { width: 58%; } .city-steps { padding-left: 24px; } .city-steps li { gap: 16px; } }
+  @media (max-width: 1100px) {
+    .hero-container { width: min(720px, calc(100% - 32px)); }
+    .hero-card { flex-direction: column; gap: 28px; padding: 32px; }
+    .hero-copy { width: 100%; }
+    h1 { font-size: 40px; font-weight: 700; line-height: 43px; letter-spacing: -1.6px; }
+    .city-steps { width: 100%; flex: none; border-left: 0; border-top: 1px solid #dcecf7; padding: 24px 0 0; }
+    .icon-circle { width: 64px; height: 64px; }
+    .city-steps li:not(:last-child)::after { left: 31.5px; top: 100%; height: 28px; }
+  }
+  @media (max-width: 620px) {
+    .general-home-hero { padding-top: 16px; }
+    .hero-card { padding: 16px; }
+    .hero-copy { gap: 16px; }
+    .popular-cities { flex-direction: row; flex-wrap: wrap; gap: 4px 8px; }
+    .popular-row { display: contents; }
+    h1 { font-size: 28px; line-height: 33px; letter-spacing: -1.5px; }
+    .city-search-row { grid-template-columns: 1fr; }
+    .city-steps { padding-top: 20px; }
+    .city-steps li { gap: 16px; }
+    .city-steps li + li { margin-top: 24px; }
+    .icon-circle { width: 48px; height: 48px; }
+    .step-copy { gap: 4px; }
+    .step-copy p { font-size: 14px; line-height: 20px; }
+    .city-steps li:not(:last-child)::after { left: 23.5px; top: 100%; height: 24px; }
+  }
+</style>

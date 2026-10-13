@@ -92,12 +92,13 @@ export class SiteCatalogService {
   renderSource(source: CatalogSource, now = new Date()) {
     const { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates } = materializeCityHomeSource(source);
     const homeTemplate = source.pageTemplates?.find(template => template.kind === 'HOME');
-    const homeHero = homeTemplate ? firstScreenFromTemplate(homeTemplate).data : undefined;
-    if (homeTemplate) validateFirstScreen('HOME', homeHero);
+    const homeScreen = homeTemplate ? firstScreenFromTemplate(homeTemplate) : undefined;
+    const homeHero = homeScreen?.data;
+    if (homeScreen) validateFirstScreen('HOME', homeHero, false, homeScreen.passportVersion);
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
     const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages);
     const resolved = resolveCatalogVariables({
-      ...(homeHero ? { homeHero, homeHeroBlockId: homeTemplate.blocks.find((block: any) => block.blockType === 'home.hero').id } : {}),
+      ...(homeHero ? { homeHero, homeHeroVersion: homeScreen!.passportVersion, homeHeroBlockId: homeTemplate.blocks.find((block: any) => block.blockType === 'home.hero').id } : {}),
       site: {
         name: site.name,
         slug: site.slug,

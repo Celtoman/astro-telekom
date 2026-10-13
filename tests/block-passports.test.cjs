@@ -27,8 +27,8 @@ test('every passport is complete and only the two owner-approved first screens l
   assert.equal(new Set(BLOCK_PASSPORTS.map((item) => item.id)).size, BLOCK_PASSPORTS.length);
   for (const passport of BLOCK_PASSPORTS) {
     assert.equal(passport.status, ['hero', 'home.hero', 'tariff_grid'].includes(passport.id) ? 'APPROVED' : 'DRAFT', passport.id);
-    assert.equal(passport.passportVersion, ['hero', 'home.hero', 'tariff_grid'].includes(passport.id) ? '1.0.0' : '0-draft', passport.id);
-    if (passport.status === 'APPROVED') assert.match(passport.approvedBy, /Владелец.*2026-10-0[567]/); else assert.equal(passport.approvedBy, null, passport.id);
+    assert.equal(passport.passportVersion, passport.id === 'home.hero' ? '2.0.0' : ['hero', 'tariff_grid'].includes(passport.id) ? '1.0.0' : '0-draft', passport.id);
+    if (passport.status === 'APPROVED') assert.match(passport.approvedBy, /Владелец.*2026-10-(?:0[567]|13)/); else assert.equal(passport.approvedBy, null, passport.id);
     assert.equal(passport.replacementId, null, passport.id);
     for (const key of ['title', 'purpose', 'emptyBehavior', 'editorForm', 'implementation']) {
       assert.ok(passport[key]?.trim(), `${passport.id}: ${key}`);
@@ -79,7 +79,7 @@ test('implemented home passports identify exact Figma component sets and device 
   const { BLOCK_PASSPORTS } = require('../apps/api/dist/block-passports.js');
   const references = {
     header: ['79:69', ['79:3', '79:28', '79:50']],
-    'home.hero': ['873:30', ['873:31', '873:57', '873:80']],
+    'home.hero': ['1163:64', ['1163:65', '1163:79', '1163:93']],
     hero: ['991:2', ['991:3', '991:17', '991:31']],
   };
   for (const [id, [nodeId, variantIds]] of Object.entries(references)) {
@@ -106,24 +106,24 @@ test('header passport records global contacts and contextual navigation without 
   assert.match(fields.get('activeCity').source, /City.*moskva/);
   assert.match(fields.get('publishedCities').source, /loadSiteData/);
   assert.match(fields.get('callback').validation, /проверки.*телефон/);
-  assert.ok(header.runtimeRules.some((rule) => /не сохраняется/.test(rule)));
+  assert.ok(header.runtimeRules.some((rule) => /закрытия вкладки/.test(rule)));
   assert.ok(header.runtimeRules.some((rule) => /режим.*абонента/.test(rule)));
   for (const field of header.fields) assert.equal(field.control, 'read_only');
 });
 
-test('approved root Hero 1b defines template content and a published Moscow form context, without tariff fields', () => {
+test('approved root Hero 1d defines city search content without address or tariff fields', () => {
   const { BLOCK_PASSPORTS } = require('../apps/api/dist/block-passports.js');
   const rootHero = BLOCK_PASSPORTS.find((item) => item.id === 'home.hero');
   assert.ok(rootHero);
   assert.deepEqual(rootHero.proposedAllowedPages, ['HOME']);
   assert.equal(rootHero.proposedContentScope, 'TEMPLATE');
-  assert.match(rootHero.emptyBehavior, /Москв.*выбора? города/);
-  assert.ok(rootHero.runtimeRules.some((rule) => /не показывает тарифы/.test(rule)));
+  assert.match(rootHero.emptyBehavior, /Москвы.*фиктивный URL/);
+  assert.ok(rootHero.runtimeRules.some((rule) => /Москву.*выбранный город/.test(rule)));
   const fields = new Map(rootHero.fields.map((item) => [item.key, item]));
   assert.equal(fields.get('title').source, 'PageTemplateBlock.data.title');
-  assert.match(fields.get('city').source, /moskva/);
-  assert.match(fields.get('addressForm').validation, /INTERNET/);
-  assert.equal(fields.get('chips').type, 'list');
+  assert.equal(fields.get('cities').control, 'read_only');
+  assert.equal(fields.has('addressForm'), false);
+  assert.equal(fields.get('steps').type, 'list');
   assert.equal(rootHero.editorReadiness, 'READY');
   assert.match(rootHero.implementation, /PageTemplate\(HOME\).*catalog.homeHero/);
 });
@@ -147,10 +147,10 @@ test('city Hero V3 separates template content, computed catalog facts and legacy
   assert.ok(hero.runtimeRules.some((rule) => /TARGET_AVAILABLE/.test(rule)));
 });
 
- test('only the two owner-approved first screens define independent editable address copy', () => {
+ test('only the city first screen retains editable address copy', () => {
   const { BLOCK_PASSPORTS } = require('../apps/api/dist/block-passports.js');
   assert.deepEqual(BLOCK_PASSPORTS.filter(p => p.status === 'APPROVED').map(p => p.id), ['hero', 'tariff_grid', 'home.hero']);
-  for (const passport of BLOCK_PASSPORTS.filter(p => ['hero', 'home.hero'].includes(p.id))) {
+  for (const passport of BLOCK_PASSPORTS.filter(p => p.id === 'hero')) {
     for (const key of ['addressPlaceholder', 'checkButtonText', 'image', 'imageAlt']) {
       const item = passport.fields.find(f => f.key === key);
       assert.equal(item.control, 'input');

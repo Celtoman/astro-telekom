@@ -2,6 +2,7 @@ import { renderTariffCollection, projectCityHomeBlocks } from '../../../api/src/
 import { tariffView } from '../../../api/src/tariff-view.ts'
 import { heroFacts } from '../../../web/src/data/hero-facts.ts'
 import { legalSections } from '../../../web/src/data/legal-pages.ts'
+import { parseRedTitle } from '../../../api/src/home-hero-model.ts'
 
 const list = value => Array.isArray(value) ? value : []
 const record = value => value && typeof value === 'object' && !Array.isArray(value) ? value : {}
@@ -63,7 +64,12 @@ function renderHero(catalog, data, city, variant) {
 }
 function renderHome(catalog) {
   const data = catalog.homeHero || { title: `Подключение домашнего интернета и телевидения ${text(catalog.site?.name, 'Дом.ру')}`, text: 'Укажите адрес, чтобы проверить возможность подключения Дом.ру в вашем доме и узнать о доступных услугах.' }
+  if (catalog.homeHeroVersion === '2.0.0') return renderHomeHero1d(catalog, data)
   return renderHero(catalog, data, list(catalog.cities).find(city => city.slug === 'moskva'), 'general')
+}
+function renderHomeHero1d(catalog, data) {
+  const popular = ['Москва', 'Санкт-Петербург', 'Екатеринбург', 'Иркутск', 'Казань', 'Самара', 'Саратов'].map(name => list(catalog.cities).find(city => city.name === name)).filter(Boolean)
+  return wrap('generalhero', `<section class="general-home-hero" data-home-hero="city-search"><div class="hero-container"><div class="hero-card"><div class="hero-copy"><h1>${parseRedTitle(data.title).map(part => part.red ? `<span class="title-red">${html(part.text)}</span>` : html(part.text)).join('')}</h1><p class="hero-body">${html(data.text)}</p><div class="city-form"><div class="city-search-row"><div class="city-field-stack"><div class="city-search-field">${image(catalog, '/images/figma/hero1d-desktop-imglocationicon.svg', '', 'width="24" height="24"')}<input type="search" disabled aria-label="Поиск города" placeholder="${html(data.cityPlaceholder)}"></div></div>${button(data.searchButtonText, 'search-button')}</div></div><div class="popular-cities">${[popular.slice(0,4),popular.slice(4)].map((row,index)=>`<div class="popular-row">${row.map(city => `<a class="popular-city" aria-disabled="true"><span class="chip-surface">${html(city.name)}</span></a>`).join('')}${index===1?inactiveLink(data.allCitiesText,'all-cities-link'):''}</div>`).join('')}</div></div><ol class="city-steps">${data.steps.map((step, index) => `<li><div class="icon-circle"><picture><source media="(max-width:620px)" srcset="${html(asset(catalog, `/images/figma/hero1d-mobile-imgicon${index || ''}.svg`))}"><source media="(max-width:1100px)" srcset="${html(asset(catalog, `/images/figma/hero1d-tablet-imgicon${index || ''}.svg`))}">${image(catalog, `/images/figma/hero1d-desktop-imgicon${index || ''}.svg`)}</picture></div><div class="step-copy"><span class="step-number">0${index + 1}</span><h2>${html(step.title)}</h2><p>${html(step.text)}</p></div></li>`).join('')}</ol></div></div></section>`)
 }
 function renderBlock(block, city) {
   const data = record(block.data), title = html(text(data.title)), items = list(data.items)

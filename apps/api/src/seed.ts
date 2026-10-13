@@ -3,7 +3,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { randomBytes, scryptSync } from 'node:crypto';
 import { ensureCityHomeTemplate } from './page-template';
-import { FIRST_SCREEN_IMPLEMENTATION, FIRST_SCREEN_VERSION, firstScreenDefaults } from './first-screen';
+import { homeHeroDefaults, HOME_HERO_VERSION, HOME_HERO_IMPLEMENTATION } from './home-hero-model';
 import { defaultDomruProfileCatalog } from './domru-profile-catalog';
 
 const PUBLISHED = 'PUBLISHED' as const;
@@ -104,8 +104,8 @@ async function main() {
       create: {
         siteId: site.id, kind: 'HOME', status: PUBLISHED,
         titleTemplate: `Подключение домашнего интернета и телевидения ${site.name}`,
-        content: { firstScreenPassportVersion: FIRST_SCREEN_VERSION, firstScreenImplementationVersion: FIRST_SCREEN_IMPLEMENTATION },
-        blocks: { create: [{ blockType: 'home.hero', position: 10, visible: true, data: firstScreenDefaults('HOME', site.name), source: 'seed:first-screen' }] },
+        content: { firstScreenPassportVersion: HOME_HERO_VERSION, firstScreenImplementationVersion: HOME_HERO_IMPLEMENTATION },
+        blocks: { create: [{ blockType: 'home.hero', position: 10, visible: true, data: homeHeroDefaults(site.name), source: 'seed:first-screen' }] },
       },
     });
 

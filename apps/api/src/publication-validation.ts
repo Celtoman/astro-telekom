@@ -107,9 +107,8 @@ export function validatePublicationSource(
     }
 
     if (template.kind === 'HOME' || template.kind === 'CITY_HOME') {
-      const screen = firstScreenFromTemplate(template);
       if (template.kind === 'HOME' || template.content?.firstScreenPassportVersion) {
-        try { validateFirstScreen(screen.kind, screen.data); }
+        try { const screen = firstScreenFromTemplate(template); validateFirstScreen(screen.kind, screen.data, false, screen.passportVersion); }
         catch (error) { add('BLOCKING', 'FIRST_SCREEN_NOT_READY', template.kind === 'HOME' ? '/' : '/{city}', message(error), undefined, { template: template.kind, block: template.kind === 'HOME' ? 'home.hero' : 'hero', ...contentErrorLocation(error) }); }
       }
     }

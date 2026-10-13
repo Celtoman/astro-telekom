@@ -2,6 +2,8 @@ import { tariffTemplateBlocks } from './tariff-template.mjs'
 const templates = { HOME: 'Главная сайта', CITY_HOME: 'Главная города', CITY_TARIFF_DETAIL: 'Страница тарифа' }
 const blocks = { ...Object.fromEntries(tariffTemplateBlocks.map(block => [block.id, block.title])), hero: 'Первый экран', 'home.hero': 'Первый экран', tariff_grid: 'Тарифы города', rich_text: 'Текстовый блок', service_grid: 'Услуги', feature_grid: 'Преимущества', steps: 'Этапы подключения' }
 export const publicationFieldLabels = {
+  cityPlaceholder: 'Подсказка поиска города', searchButtonText: 'Текст основной кнопки', allCitiesText: 'Список городов', emptyMessage: 'Город не найден', inputErrorMessage: 'Сообщение при пустом поиске', steps: 'Три шага',
+  ...Object.fromEntries([0, 1, 2].flatMap(index => [['title', 'Заголовок'], ['text', 'Описание']].map(([key, label]) => [`steps.${index}.${key}`, `Шаг ${index + 1}: ${label.toLocaleLowerCase('ru-RU')}`]))),
   title: 'Заголовок', text: 'Описание', connectButtonText: 'Кнопка подключения', detailsButtonText: 'Кнопка подробностей', moreButtonText: 'Кнопка раскрытия',
   initialCount: 'Тарифов до кнопки «Показать ещё»', sort: 'Сортировка по цене', image: 'Изображение', imageAlt: 'Описание изображения',
   addressPlaceholder: 'Подсказка адреса', checkButtonText: 'Текст кнопки проверки', tariffsCtaText: 'Текст перехода к тарифам',

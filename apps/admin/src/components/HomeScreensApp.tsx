@@ -12,9 +12,10 @@ import { Button } from "./ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "./ui/field"
 import { Input } from "./ui/input"
+import { editRedTitle, parseRedTitle } from "../../../api/src/home-hero-model"
 
 type Kind = "HOME" | "CITY_HOME"
-interface Screen { kind: Kind; data: Record<string, any>; missingFields: string[]; published: Record<string, any> | null }
+interface Screen { kind: Kind; passportVersion?: string; data: Record<string, any>; missingFields: string[]; published: Record<string, any> | null }
 interface Workspace { workingRevision: number; publishedRevision: number; screens: Screen[] }
 interface Site { id: string; name: string }
 const names: Record<Kind, string> = { HOME: "Первый экран главной", CITY_HOME: "Первый экран города" }
@@ -23,6 +24,8 @@ const fields = {
   image: { label: "Изображение", limit: 2048 }, imageAlt: { label: "Описание изображения", limit: 250 },
   addressPlaceholder: { label: "Подсказка адреса", limit: 120 }, checkButtonText: { label: "Текст кнопки проверки", limit: 80 },
   tariffsCtaText: { label: "Текст перехода к тарифам", limit: 80 },
+  cityPlaceholder: { label: "Подсказка поиска города", limit: 120 }, searchButtonText: { label: "Текст основной кнопки", limit: 80 },
+  allCitiesText: { label: "Текст открытия списка городов", limit: 80 }, emptyMessage: { label: "Город не найден", limit: 250 }, inputErrorMessage: { label: "Сообщение при пустом поиске", limit: 250 },
 }
 type FieldKey = keyof typeof fields
 const clone = (data: Record<string, any>) => JSON.parse(JSON.stringify(data))
@@ -42,6 +45,7 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
   const [activeField, setActiveField] = useState<"title" | "text" | null>(null)
   const input = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null)
   const selected = workspace?.screens.find(screen => screen.kind === kind)
+  const citySearch = kind === "HOME" && selected?.passportVersion === "2.0.0"
   const publicationFocus = usePublicationFieldFocus(!loading && !!selected, siteId + kind, "home")
   const dirty = !!selected && JSON.stringify(data) !== JSON.stringify(selected.data)
   const handleError = (caught: unknown) => {
@@ -94,20 +98,40 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
     const element = input.current
     if (!activeField || !element) return
     const value = String(data[activeField] ?? "")
-    const result = insertVariableAtSelection(value, element.selectionStart ?? value.length, element.selectionEnd ?? value.length, code, fields[activeField].limit)
+    const result = insertVariableAtSelection(value, element.selectionStart ?? value.length, element.selectionEnd ?? value.length, code, citySearch && activeField === "title" ? 2048 : fields[activeField].limit)
     if (!result) { setError("Переменная не помещается в лимит поля"); return }
     setData({ ...data, [activeField]: result.value })
     requestAnimationFrame(() => { element.focus(); element.setSelectionRange(result.selectionStart, result.selectionEnd) })
   }
+  function colorTitle(remove = false) {
+    const element = input.current
+    if (!element || activeField !== "title") { setError("Выделите часть заголовка."); return }
+    try {
+      const value = editRedTitle(String(data.title ?? ""), element.selectionStart ?? 0, element.selectionEnd ?? 0, remove)
+      setData({ ...data, title: value }); setError(null)
+      requestAnimationFrame(() => { element.focus(); element.setSelectionRange(value.length, value.length) })
+    } catch (caught) { setError((caught as Error).message) }
+  }
+  function titlePreview() {
+    try { return parseRedTitle(String(data.title ?? "")).map((part, index) => <span key={index} className={part.red ? "text-[#e0231e]" : undefined}>{part.text}</span>) }
+    catch { return "Завершите парный маркер <red>…</red> для предпросмотра." }
+  }
+  function stepField(index: number, key: "title" | "text") {
+    const id = `home-steps.${index}.${key}`, value = String(data.steps?.[index]?.[key] ?? "")
+    const props = { id, value, maxLength: key === "title" ? 80 : 250, disabled: saving, "aria-required": true as const, onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => { const steps = (data.steps ?? []).map((step: Record<string, string>, position: number) => position === index ? { ...step, [key]: event.target.value } : step); setData({ ...data, steps }) } }
+    return <Field key={id} className={publicationFocus.field === `steps.${index}.${key}` ? "rounded-lg bg-muted p-3 ring-2 ring-primary" : undefined}><FieldLabel htmlFor={id}>{key === "title" ? "Заголовок" : "Описание"}</FieldLabel>{key === "text" ? <textarea {...props} rows={2} className="w-full rounded-lg border border-input bg-background p-3 text-base outline-none focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm" /> : <Input {...props} />}<FieldDescription>{value.length} из {props.maxLength} символов</FieldDescription></Field>
+  }
   function field(key: FieldKey) {
+    const limit = citySearch && key === "title" ? 2048 : fields[key].limit
     const descriptionId = `home-${key}-help`
     const invalid = !String(data[key] ?? "").trim()
-    const props = { id: `home-${key}`, value: String(data[key] ?? ""), maxLength: fields[key].limit, disabled: saving, "aria-required": true as const, "aria-invalid": invalid, "aria-describedby": descriptionId,
+    const props = { id: `home-${key}`, value: String(data[key] ?? ""), maxLength: limit, disabled: saving, "aria-required": true as const, "aria-invalid": invalid, "aria-describedby": descriptionId,
       onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setData({ ...data, [key]: event.target.value }),
       onFocus: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { if (key === "title" || key === "text") { setActiveField(key); input.current = event.currentTarget } },
     }
     return <Field key={key} data-invalid={invalid} className={publicationFocus.field === key ? "rounded-lg bg-muted p-3 ring-2 ring-primary" : undefined}><FieldLabel htmlFor={props.id}>{fields[key].label}</FieldLabel>
-      {key === "text" ? <textarea {...props} rows={4} className="w-full rounded-lg border border-input bg-background p-3 text-base outline-none focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive md:text-sm" /> : <Input {...props} className="min-h-11" />}
+      {key === "text" || citySearch && key === "title" ? <textarea {...props} rows={4} className="w-full rounded-lg border border-input bg-background p-3 text-base outline-none focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive md:text-sm" /> : <Input {...props} className="min-h-11" />}
+      {citySearch && key === "title" && <><div className="flex flex-wrap gap-2"><Button type="button" variant="outline" disabled={saving} onMouseDown={event => event.preventDefault()} onClick={() => colorTitle()}>Выделить красным</Button><Button type="button" variant="outline" disabled={saving} onMouseDown={event => event.preventDefault()} onClick={() => colorTitle(true)}>Снять выделение</Button></div><p className="text-sm text-muted-foreground">Выделите текст в заголовке. Цвет хранится маркером &lt;red&gt;…&lt;/red&gt;; до 120 видимых символов.</p><p className="rounded-lg border p-3 text-xl font-semibold" aria-label="Предпросмотр заголовка">{titlePreview()}</p></>}
       <FieldDescription id={descriptionId}>{invalid ? "Обязательное поле. Пустое значение можно сохранить в черновике." : key === "image" ? "Локальный путь /images/… или HTTPS URL." : key === "imageAlt" ? "Кратко опишите изображение для доступности." : `${String(data[key] ?? "").length} из ${fields[key].limit} символов`}</FieldDescription>
     </Field>
   }
@@ -124,13 +148,14 @@ export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
       <Card><CardHeader><div className="flex flex-wrap items-center gap-2"><CardTitle>{names[kind]}</CardTitle><Badge variant={selected.missingFields.length ? "warning" : "success"}>{selected.missingFields.length ? "Не готово" : "Готов к проверке"}</Badge>{dirty ? <Badge variant="warning">Есть несохранённые изменения</Badge> : null}</div><CardDescription>{kind === "CITY_HOME" ? "Один шаблон для всех городов. Название города подставляется автоматически." : "Контент общей главной страницы."}</CardDescription></CardHeader>
         <CardContent><form noValidate onSubmit={event => { event.preventDefault(); void save() }} className="flex flex-col gap-6"><FieldGroup>
           <FieldSet disabled={saving}><FieldLegend>Текст первого экрана</FieldLegend><FieldGroup>{field("title")}{field("text")}</FieldGroup></FieldSet>
-          <FieldSet disabled={saving}><FieldLegend>Изображение</FieldLegend><FieldGroup>{field("image")}{field("imageAlt")}</FieldGroup></FieldSet>
-          <FieldSet disabled={saving}><FieldLegend>Проверка адреса</FieldLegend><FieldGroup>{field("addressPlaceholder")}{field("checkButtonText")}</FieldGroup></FieldSet>
-          {kind === "CITY_HOME" ? field("tariffsCtaText") : <FieldSet disabled={saving}><FieldLegend>Три пояснения под формой</FieldLegend><FieldGroup>{[0, 1, 2].map(index => <Field key={index} className={publicationFocus.field === `chips.${index}` || publicationFocus.field === "chips" && index === 0 ? "rounded-lg bg-muted p-3 ring-2 ring-primary" : undefined}><FieldLabel htmlFor={`home-chip-${index}`}>Пояснение {index + 1}</FieldLabel><Input id={`home-chip-${index}`} value={data.chips?.[index] ?? ""} maxLength={80} aria-required="true" className="min-h-11" onChange={event => { const chips = [...(data.chips ?? ["", "", ""])]; chips[index] = event.target.value; setData({ ...data, chips }) }} /></Field>)}</FieldGroup></FieldSet>}
+          {!citySearch && <><FieldSet disabled={saving}><FieldLegend>Изображение</FieldLegend><FieldGroup>{field("image")}{field("imageAlt")}</FieldGroup></FieldSet>
+          <FieldSet disabled={saving}><FieldLegend>Проверка адреса</FieldLegend><FieldGroup>{field("addressPlaceholder")}{field("checkButtonText")}</FieldGroup></FieldSet></>}
+          {citySearch && <><FieldSet disabled={saving}><FieldLegend>Поиск города</FieldLegend><FieldGroup>{field("cityPlaceholder")}{field("searchButtonText")}{field("allCitiesText")}</FieldGroup></FieldSet><FieldSet disabled={saving}><FieldLegend>Сообщения поиска</FieldLegend><FieldGroup>{field("emptyMessage")}{field("inputErrorMessage")}</FieldGroup></FieldSet>{[0, 1, 2].map(index => <FieldSet key={index} disabled={saving}><FieldLegend>Шаг 0{index + 1}</FieldLegend><FieldGroup>{stepField(index, "title")}{stepField(index, "text")}</FieldGroup></FieldSet>)}</>}
+          {kind === "CITY_HOME" ? field("tariffsCtaText") : !citySearch && <FieldSet disabled={saving}><FieldLegend>Три пояснения под формой</FieldLegend><FieldGroup>{[0, 1, 2].map(index => <Field key={index} className={publicationFocus.field === `chips.${index}` || publicationFocus.field === "chips" && index === 0 ? "rounded-lg bg-muted p-3 ring-2 ring-primary" : undefined}><FieldLabel htmlFor={`home-chip-${index}`}>Пояснение {index + 1}</FieldLabel><Input id={`home-chip-${index}`} value={data.chips?.[index] ?? ""} maxLength={80} aria-required="true" className="min-h-11" onChange={event => { const chips = [...(data.chips ?? ["", "", ""])]; chips[index] = event.target.value; setData({ ...data, chips }) }} /></Field>)}</FieldGroup></FieldSet>}
         </FieldGroup><div className="flex flex-wrap gap-3"><Button type="submit" className="min-h-11" disabled={saving || !dirty}>{saving ? "Сохраняем…" : "Сохранить рабочую версию"}</Button><Button type="button" variant="outline" className="min-h-11" disabled={saving} onClick={() => { if (discard()) setRefresh(value => value + 1) }}>Обновить данные</Button></div></form></CardContent>
       </Card>
-      <aside className="flex min-w-0 flex-col gap-4"><Card><CardHeader><CardTitle>Проверить изменения</CardTitle><CardDescription>Рабочая ревизия {workspace?.workingRevision}. На сайте — {workspace?.publishedRevision}.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><p className="text-sm text-muted-foreground">{kind === "CITY_HOME" ? "Стоимость, скорость и каналы берутся из тарифов города. Переход к тарифам всегда ведёт к #tariffs." : "Порядок и иконки пояснений закреплены в дизайне."} Логика адресной формы общая.</p><Button asChild variant="outline" className="min-h-11"><a href={`/preview?siteId=${encodeURIComponent(siteId)}&path=${kind === "HOME" ? "%2F" : "CITY_HOME"}`} target="_blank" rel="noreferrer">Открыть сохранённую версию</a></Button><Button asChild variant="outline" className="min-h-11"><a href="/templates/passports">Открыть паспорт блока</a></Button><p className="text-xs text-muted-foreground">В предпросмотре формы и переходы отключены. Несохранённые значения туда не попадают.</p></CardContent></Card>
-        <details className="rounded-lg border p-4 text-sm"><summary className="cursor-pointer font-medium">Контент опубликованного снимка</summary>{selected.published ? <dl className="mt-4 flex flex-col gap-3">{Object.entries(selected.published).map(([key, value]) => <div key={key}><dt className="text-muted-foreground">{key === "chips" ? "Три пояснения" : fields[key as FieldKey]?.label ?? key}</dt><dd className="break-words">{Array.isArray(value) ? value.join(" · ") : String(value)}</dd></div>)}</dl> : <p className="mt-3 text-muted-foreground">В опубликованном снимке нет контента этого утверждённого паспорта. Рабочие данные не подставляются вместо него.</p>}</details>
+      <aside className="flex min-w-0 flex-col gap-4"><Card><CardHeader><CardTitle>Проверить изменения</CardTitle><CardDescription>Рабочая ревизия {workspace?.workingRevision}. На сайте — {workspace?.publishedRevision}.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><p className="text-sm text-muted-foreground">{kind === "CITY_HOME" ? "Стоимость, скорость и каналы берутся из тарифов города. Переход к тарифам всегда ведёт к #tariffs." : citySearch ? "Поиск использует опубликованные города. Порядок и иконки трёх шагов закреплены в дизайне." : "Порядок и иконки пояснений закреплены в дизайне."}</p><Button asChild variant="outline" className="min-h-11"><a href={`/preview?siteId=${encodeURIComponent(siteId)}&path=${kind === "HOME" ? "%2F" : "CITY_HOME"}`} target="_blank" rel="noreferrer">Открыть сохранённую версию</a></Button><Button asChild variant="outline" className="min-h-11"><a href="/templates/passports">Открыть паспорт блока</a></Button><p className="text-xs text-muted-foreground">В предпросмотре формы и переходы отключены. Несохранённые значения туда не попадают.</p></CardContent></Card>
+        <details className="rounded-lg border p-4 text-sm"><summary className="cursor-pointer font-medium">Контент опубликованного снимка</summary>{selected.published ? <dl className="mt-4 flex flex-col gap-3">{Object.entries(selected.published).map(([key, value]) => <div key={key}><dt className="text-muted-foreground">{key === "chips" ? "Три пояснения" : fields[key as FieldKey]?.label ?? key}</dt><dd className="break-words">{Array.isArray(value) ? value.map(item => typeof item === "object" ? `${item.title}: ${item.text}` : String(item)).join(" · ") : String(value)}</dd></div>)}</dl> : <p className="mt-3 text-muted-foreground">В опубликованном снимке нет контента этого утверждённого паспорта. Рабочие данные не подставляются вместо него.</p>}</details>
         <VariableInsertionPicker apiUrl={apiUrl} siteId={siteId} field={activeField ? `PageTemplateBlock.data.${activeField}` : null} context={kind === "HOME" ? "SITE" : "CITY"} onInsert={insertCode} />
       </aside>
     </div> : null}

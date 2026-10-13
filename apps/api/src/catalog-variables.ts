@@ -1,5 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { resolveVariableText, type VariableContext, type VariableWarning } from './variable-registry';
+import { HOME_HERO_VERSION, parseRedTitle } from './home-hero-model';
+import { validateFirstScreen } from './first-screen';
 
 type JsonObject = Record<string, any>;
 
@@ -28,7 +30,9 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
   const usages: VariableUsage[] = [];
   const resolveField = (value: unknown, path: string, context: VariableContext, owner: UsageOwner): unknown => {
     if (typeof value !== 'string') return value;
-    const result = resolveVariableText(value, context, { path, field: 'TEXT' });
+    const segments = path === 'homeHero.title' && catalog.homeHeroVersion === HOME_HERO_VERSION ? parseRedTitle(value) : null;
+    const parts = segments?.map(segment => ({ ...segment, resolved: resolveVariableText(segment.text, context, { path, field: 'TEXT' }) }));
+    const result = parts ? { text: parts.map(part => part.red ? `<red>${part.resolved.text}</red>` : part.resolved.text).join(''), warnings: parts.flatMap(part => part.resolved.warnings) } : resolveVariableText(value, context, { path, field: 'TEXT' });
     warnings.push(...result.warnings);
     for (const match of value.matchAll(/\{([A-Z][A-Z0-9_]*)\}/g)) {
       usages.push({ code: match[1], path, template: value, ...owner });
@@ -109,5 +113,6 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
     }
   };
   assertNoSkippedTokens(result, '');
+  if (result.homeHeroVersion === HOME_HERO_VERSION) validateFirstScreen('HOME', result.homeHero, false, HOME_HERO_VERSION);
   return result as T & { variableWarnings: VariableWarning[]; variableUsages: VariableUsage[]; variableSources: { providerName: string | null; resolvedAt: string } };
 }

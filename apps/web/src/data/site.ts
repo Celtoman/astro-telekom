@@ -3,6 +3,7 @@ import { tariffView, type TariffView } from './tariff-view';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { normalizePublicHtmlPath, publicHtmlPath } from './public-url';
+import { homeHeroDefaults } from '../../../api/src/home-hero-model';
 
 export interface PageView {
   type: string;
@@ -14,6 +15,7 @@ export interface PageView {
 }
 
 export interface CityView {
+  id?: string;
   name: string;
   nameIn: string;
   slug: string;
@@ -49,6 +51,7 @@ export interface PublicRouteView {
 
 export interface SiteCatalog {
   homeHero?: Record<string, unknown>;
+  homeHeroVersion?: '1.0.0' | '2.0.0';
   site: SiteView;
   globalPages: PageView[];
   routes: PublicRouteView[];
@@ -78,7 +81,7 @@ export const releaseOneGlobalPages = [
 
 function normalizePage(item: Record<string, any>): PageView {
   const { seo: _legacySeo, ...page } = item;
-  return {
+      return {
     ...page,
     type: String(item.type || ''),
     slug: String(item.slug || ''),
@@ -269,6 +272,7 @@ const demoCities: CityView[] = [{
 }];
 const demoRoutes = expectedReleaseOneRoutes(demoCities, demoGlobalPages);
 const demoCatalog: SiteCatalog = {
+  homeHero: homeHeroDefaults(), homeHeroVersion: '2.0.0',
   site: { name: 'Дом.ру', slug: publicSiteSlug, connectionPhone: fallbackConnectionPhone, supportPhone: fallbackSupportPhone },
   globalPages: demoGlobalPages,
   routes: demoRoutes,
@@ -277,6 +281,11 @@ const demoCatalog: SiteCatalog = {
   cities: demoCities,
 };
 
+function normalizeHomeHeroVersion(value: unknown): '1.0.0' | '2.0.0' {
+  if (value === undefined || value === '1.0.0') return '1.0.0';
+  if (value === '2.0.0') return value;
+  throw new Error('Неизвестная версия первого экрана HOME');
+}
 function normalizedCatalog(value: unknown): SiteCatalog {
   if (!value || typeof value !== 'object') throw new Error('API вернул некорректный каталог');
   const payload = value as Record<string, any>;
@@ -292,6 +301,7 @@ function normalizedCatalog(value: unknown): SiteCatalog {
       const regionSlug = String(item.region?.slug || '').trim();
       if (!regionName || !slugPattern.test(regionSlug)) throw new Error(`Город «${item.name || slug}»: API не вернул корректный регион`);
       const city = {
+        id: typeof item.id === 'string' && item.id ? item.id : slug,
         name: String(item.name || slug),
         nameIn: String(item.namePrepositional || item.name || slug),
         slug,
@@ -326,7 +336,7 @@ function normalizedCatalog(value: unknown): SiteCatalog {
       connectionPhone,
       supportPhone,
     },
-    ...(payload.homeHero ? { homeHero: payload.homeHero } : {}),
+    ...(payload.homeHero ? { homeHero: payload.homeHero, homeHeroVersion: normalizeHomeHeroVersion(payload.homeHeroVersion) } : {}),
     globalPages,
     routes,
     cities,

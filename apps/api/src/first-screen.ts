@@ -1,6 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { ContentValidationError, validateContentText } from './content-validation-error';
 import { listVariableDefinitions, resolveVariableText } from './variable-registry';
+import { HOME_HERO_VERSION, HOME_HERO_IMPLEMENTATION, HOME_HERO_TEXT_LIMITS, parseRedTitle } from './home-hero-model';
 
 export type FirstScreenKind = 'HOME' | 'CITY_HOME';
 export const FIRST_SCREEN_VERSION = '1.0.0';
@@ -16,7 +17,9 @@ export function firstScreenDefaults(kind: FirstScreenKind, siteName = 'Дом.р
   };
 }
 
-export function validateFirstScreen(kind: FirstScreenKind, raw: unknown, draft = false): string[] {
+export function validateFirstScreen(kind: FirstScreenKind, raw: unknown, draft = false, version = FIRST_SCREEN_VERSION): string[] {
+  if (version === HOME_HERO_VERSION && kind === 'HOME') return validateHomeHero(raw, draft);
+  if (version !== FIRST_SCREEN_VERSION) throw new ContentValidationError('passportVersion', 'VERSION', 'Неизвестная версия первого экрана.');
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new BadRequestException('Контент первого экрана должен быть объектом');
   const data = raw as Record<string, unknown>;
   const limits: Record<string, number> = { title: 120, text: 1000, image: 2048, imageAlt: 250, addressPlaceholder: 120, checkButtonText: 80, ...(kind === 'CITY_HOME' ? { tariffsCtaText: 80 } : {}) };
@@ -57,5 +60,50 @@ export function validateFirstScreen(kind: FirstScreenKind, raw: unknown, draft =
 export function firstScreenFromTemplate(template: any) {
   const kind = template.kind as FirstScreenKind;
   const block = template.blocks?.find((item: any) => item.blockType === (kind === 'HOME' ? 'home.hero' : 'hero'));
-  return { kind, data: block?.data ?? null, passportVersion: FIRST_SCREEN_VERSION, implementationVersion: FIRST_SCREEN_IMPLEMENTATION };
+  const passportVersion = template.content?.firstScreenPassportVersion ?? FIRST_SCREEN_VERSION;
+  if (passportVersion !== FIRST_SCREEN_VERSION && !(kind === 'HOME' && passportVersion === HOME_HERO_VERSION)) throw new ContentValidationError('passportVersion', 'VERSION', 'Неизвестная версия первого экрана.');
+  return { kind, data: block?.data ?? null, passportVersion, implementationVersion: passportVersion === HOME_HERO_VERSION ? HOME_HERO_IMPLEMENTATION : FIRST_SCREEN_IMPLEMENTATION };
+}
+
+function validateHomeHero(raw: unknown, draft: boolean): string[] {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new BadRequestException('Контент первого экрана должен быть объектом');
+  const data = raw as Record<string, unknown>;
+  const limits = HOME_HERO_TEXT_LIMITS;
+  if (Object.keys(data).some(key => !Object.hasOwn(limits, key) && key !== 'steps')) throw new BadRequestException('Первый экран содержит неизвестные или системные поля');
+  const missing: string[] = [];
+  for (const [key, limit] of Object.entries(limits)) {
+    const value = data[key];
+    if (key !== 'title') validateContentText(value, key, limit);
+    else if (typeof value !== 'string') throw new ContentValidationError(key, 'TYPE', 'Заголовок должен быть текстом.');
+    const input = value as string;
+    let segments;
+    try { segments = key === 'title' ? parseRedTitle(input) : [{ text: input, red: false }]; }
+    catch (error) { throw new ContentValidationError(key, 'FORMAT', (error as Error).message); }
+    if (!segments.map(segment => segment.text).join('').trim()) missing.push(key);
+    if (key === 'title' || key === 'text') {
+      let plain = '';
+      for (const segment of segments) {
+        try { plain += resolveVariableText(segment.text, { now: new Date() }, { path: key, field: 'TEXT' }).text; }
+        catch (error) { throw new ContentValidationError(key, 'VARIABLE', (error as Error).message); }
+        for (const token of segment.text.matchAll(/\{([^{}]+)\}/g)) {
+          const definition = listVariableDefinitions().find(item => item.code === token[1]);
+          if (!definition || definition.scope !== 'SITE') throw new ContentValidationError(key, 'VARIABLE', 'Переменная недоступна для общей главной.');
+        }
+      }
+      if (key === 'title' && segments.map(segment => segment.text).join('').length > 120) throw new ContentValidationError(key, 'TOO_LONG', 'Заголовок без маркеров должен быть не длиннее 120 символов.');
+      if (key === 'title' && plain.length > 120) throw new ContentValidationError(key, 'TOO_LONG', 'Заголовок после подстановки должен быть не длиннее 120 символов.');
+    } else if (/[{}]/.test(input)) throw new ContentValidationError(key, 'VARIABLE', 'Переменные разрешены только в заголовке и описании.');
+  }
+  if (!Array.isArray(data.steps) || data.steps.length !== 3) throw new ContentValidationError('steps', 'FORMAT', 'Нужны ровно три шага.');
+  data.steps.forEach((step, index) => {
+    if (!step || typeof step !== 'object' || Array.isArray(step) || Object.keys(step).some(key => !['title', 'text'].includes(key))) throw new ContentValidationError(`steps.${index}`, 'FORMAT', 'Шаг содержит неизвестные поля.');
+    for (const key of ['title', 'text']) {
+      const field = `steps.${index}.${key}`, value = step[key];
+      validateContentText(value, field, key === 'title' ? 80 : 250);
+      if (/[{}]/.test(value)) throw new ContentValidationError(field, 'VARIABLE', 'Шаг содержит обычный текст без переменных.');
+      if (!value.trim()) missing.push(field);
+    }
+  });
+  if (!draft && missing.length) throw new ContentValidationError(missing[0], 'REQUIRED', 'Первый экран не готов: обязательное поле пустое.');
+  return missing;
 }
