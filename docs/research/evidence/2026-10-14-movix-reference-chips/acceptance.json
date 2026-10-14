@@ -1,0 +1,671 @@
+{
+  "date": "2026-10-14",
+  "task": 307,
+  "views": [
+    {
+      "id": "1623:59291",
+      "name": "White page / Desktop / Links",
+      "master": "1592:2",
+      "w": 1440,
+      "h": 708
+    },
+    {
+      "id": "1623:59411",
+      "name": "White page / Desktop / Info",
+      "master": "1592:81",
+      "w": 1440,
+      "h": 661.1046752929688
+    },
+    {
+      "id": "1623:59521",
+      "name": "White page / Tablet / Links",
+      "master": "1592:145",
+      "w": 768,
+      "h": 1174.3101806640625
+    },
+    {
+      "id": "1623:59641",
+      "name": "White page / Tablet / Info",
+      "master": "1592:219",
+      "w": 768,
+      "h": 1110.3101806640625
+    },
+    {
+      "id": "1623:59751",
+      "name": "White page / Mobile / Links",
+      "master": "1592:283",
+      "w": 390,
+      "h": 1327.8966064453125
+    },
+    {
+      "id": "1623:59875",
+      "name": "White page / Mobile / Info",
+      "master": "1592:362",
+      "w": 390,
+      "h": 1191.8966064453125
+    },
+    {
+      "id": "1623:59989",
+      "name": "White page / Mobile320 / Links",
+      "master": "1592:426",
+      "w": 320,
+      "h": 1432.1173095703125
+    },
+    {
+      "id": "1623:60114",
+      "name": "White page / Mobile320 / Info",
+      "master": "1592:500",
+      "w": 320,
+      "h": 1296.1173095703125
+    }
+  ],
+  "familyId": "1592:564",
+  "variants": [
+    {
+      "id": "1592:2",
+      "name": "Device=Desktop, Action=Links",
+      "w": 1360,
+      "h": 628,
+      "chips": [
+        {
+          "name": "Cinema chip / Кинопоиск",
+          "w": 104,
+          "h": 40,
+          "x": 244,
+          "y": 564,
+          "linked": "1619:59064"
+        },
+        {
+          "name": "Cinema chip / Иви",
+          "w": 104,
+          "h": 40,
+          "x": 356,
+          "y": 564,
+          "linked": "1619:59070"
+        },
+        {
+          "name": "Cinema chip / Okko",
+          "w": 104,
+          "h": 40,
+          "x": 468,
+          "y": 564,
+          "linked": "1619:59086"
+        },
+        {
+          "name": "Cinema chip / PREMIER",
+          "w": 104,
+          "h": 40,
+          "x": 580,
+          "y": 564,
+          "linked": "1619:59114"
+        },
+        {
+          "name": "Cinema chip / START",
+          "w": 104,
+          "h": 40,
+          "x": 692,
+          "y": 564,
+          "linked": "1619:59136"
+        },
+        {
+          "name": "Cinema chip / Amediateka",
+          "w": 104,
+          "h": 40,
+          "x": 804,
+          "y": 564,
+          "linked": "1619:59142"
+        }
+      ],
+      "chipOverflow": [],
+      "outside": [],
+      "broken": [],
+      "actions": [
+        "Выбрать тариф",
+        "О Movix"
+      ],
+      "imageGapToBenefits": 6,
+      "note": {
+        "fontSize": 12,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+        },
+        "align": "RIGHT",
+        "style": "S:b3b5c237f33b7f0b309cdaeaf3e1849952f46aa7,"
+      }
+    },
+    {
+      "id": "1592:81",
+      "name": "Device=Desktop, Action=None",
+      "w": 1360,
+      "h": 581.1046752929688,
+      "chips": [
+        {
+          "name": "Cinema chip / Кинопоиск",
+          "w": 104,
+          "h": 40,
+          "x": 244,
+          "y": 517.1046752929688,
+          "linked": "1619:59064"
+        },
+        {
+          "name": "Cinema chip / Иви",
+          "w": 104,
+          "h": 40,
+          "x": 356,
+          "y": 517.1046752929688,
+          "linked": "1619:59070"
+        },
+        {
+          "name": "Cinema chip / Okko",
+          "w": 104,
+          "h": 40,
+          "x": 468,
+          "y": 517.1046752929688,
+          "linked": "1619:59086"
+        },
+        {
+          "name": "Cinema chip / PREMIER",
+          "w": 104,
+          "h": 40,
+          "x": 580,
+          "y": 517.1046752929688,
+          "linked": "1619:59114"
+        },
+        {
+          "name": "Cinema chip / START",
+          "w": 104,
+          "h": 40,
+          "x": 692,
+          "y": 517.1046752929688,
+          "linked": "1619:59136"
+        },
+        {
+          "name": "Cinema chip / Amediateka",
+          "w": 104,
+          "h": 40,
+          "x": 804,
+          "y": 517.1046752929688,
+          "linked": "1619:59142"
+        }
+      ],
+      "chipOverflow": [],
+      "outside": [],
+      "broken": [],
+      "actions": [],
+      "imageGapToBenefits": 6,
+      "note": {
+        "fontSize": 12,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+        },
+        "align": "RIGHT",
+        "style": "S:b3b5c237f33b7f0b309cdaeaf3e1849952f46aa7,"
+      }
+    },
+    {
+      "id": "1592:145",
+      "name": "Device=Tablet, Action=Links",
+      "w": 720,
+      "h": 1094.3101806640625,
+      "chips": [
+        {
+          "name": "Cinema chip / Кинопоиск",
+          "w": 96,
+          "h": 40,
+          "x": 32,
+          "y": 1002.31005859375,
+          "linked": "1619:59067"
+        },
+        {
+          "name": "Cinema chip / Иви",
+          "w": 96,
+          "h": 40,
+          "x": 136,
+          "y": 1002.31005859375,
+          "linked": "1619:59078"
+        },
+        {
+          "name": "Cinema chip / Okko",
+          "w": 96,
+          "h": 40,
+          "x": 240,
+          "y": 1002.31005859375,
+          "linked": "1619:59100"
+        },
+        {
+          "name": "Cinema chip / PREMIER",
+          "w": 96,
+          "h": 40,
+          "x": 344,
+          "y": 1002.31005859375,
+          "linked": "1619:59125"
+        },
+        {
+          "name": "Cinema chip / START",
+          "w": 96,
+          "h": 40,
+          "x": 448,
+          "y": 1002.31005859375,
+          "linked": "1619:59139"
+        },
+        {
+          "name": "Cinema chip / Amediateka",
+          "w": 96,
+          "h": 40,
+          "x": 552,
+          "y": 1002.31005859375,
+          "linked": "1619:59159"
+        }
+      ],
+      "chipOverflow": [],
+      "outside": [],
+      "broken": [],
+      "actions": [
+        "Выбрать тариф",
+        "О Movix"
+      ],
+      "imageGapToBenefits": null,
+      "note": {
+        "fontSize": 12,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+        },
+        "align": "RIGHT",
+        "style": "S:b3b5c237f33b7f0b309cdaeaf3e1849952f46aa7,"
+      }
+    },
+    {
+      "id": "1592:219",
+      "name": "Device=Tablet, Action=None",
+      "w": 720,
+      "h": 1030.3101806640625,
+      "chips": [
+        {
+          "name": "Cinema chip / Кинопоиск",
+          "w": 96,
+          "h": 40,
+          "x": 32,
+          "y": 938.31005859375,
+          "linked": "1619:59067"
+        },
+        {
+          "name": "Cinema chip / Иви",
+          "w": 96,
+          "h": 40,
+          "x": 136,
+          "y": 938.31005859375,
+          "linked": "1619:59078"
+        },
+        {
+          "name": "Cinema chip / Okko",
+          "w": 96,
+          "h": 40,
+          "x": 240,
+          "y": 938.31005859375,
+          "linked": "1619:59100"
+        },
+        {
+          "name": "Cinema chip / PREMIER",
+          "w": 96,
+          "h": 40,
+          "x": 344,
+          "y": 938.31005859375,
+          "linked": "1619:59125"
+        },
+        {
+          "name": "Cinema chip / START",
+          "w": 96,
+          "h": 40,
+          "x": 448,
+          "y": 938.31005859375,
+          "linked": "1619:59139"
+        },
+        {
+          "name": "Cinema chip / Amediateka",
+          "w": 96,
+          "h": 40,
+          "x": 552,
+          "y": 938.31005859375,
+          "linked": "1619:59159"
+        }
+      ],
+      "chipOverflow": [],
+      "outside": [],
+      "broken": [],
+      "actions": [],
+      "imageGapToBenefits": null,
+      "note": {
+        "fontSize": 12,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+        },
+        "align": "RIGHT",
+        "style": "S:b3b5c237f33b7f0b309cdaeaf3e1849952f46aa7,"
+      }
+    },
+    {
+      "id": "1592:283",
+      "name": "Device=Mobile, Action=Links",
+      "w": 358,
+      "h": 1247.8966064453125,
+      "chips": [
+        {
+          "name": "Cinema chip / Кинопоиск",
+          "w": 96,
+          "h": 40,
+          "x": 24,
+          "y": 1091.896484375,
+          "linked": "1619:59067"
+        },
+        {
+          "name": "Cinema chip / Иви",
+          "w": 96,
+          "h": 40,
+          "x": 128,
+          "y": 1091.896484375,
+          "linked": "1619:59078"
+        },
+        {
+          "name": "Cinema chip / Okko",
+          "w": 96,
+          "h": 40,
+          "x": 232,
+          "y": 1091.896484375,
+          "linked": "1619:59100"
+        },
+        {
+          "name": "Cinema chip / PREMIER",
+          "w": 96,
+          "h": 40,
+          "x": 24,
+          "y": 1139.896484375,
+          "linked": "1619:59125"
+        },
+        {
+          "name": "Cinema chip / START",
+          "w": 96,
+          "h": 40,
+          "x": 128,
+          "y": 1139.896484375,
+          "linked": "1619:59139"
+        },
+        {
+          "name": "Cinema chip / Amediateka",
+          "w": 96,
+          "h": 40,
+          "x": 232,
+          "y": 1139.896484375,
+          "linked": "1619:59159"
+        }
+      ],
+      "chipOverflow": [],
+      "outside": [],
+      "broken": [],
+      "actions": [
+        "Выбрать тариф",
+        "О Movix"
+      ],
+      "imageGapToBenefits": null,
+      "note": {
+        "fontSize": 12,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+        },
+        "align": "RIGHT",
+        "style": "S:b3b5c237f33b7f0b309cdaeaf3e1849952f46aa7,"
+      }
+    },
+    {
+      "id": "1592:362",
+      "name": "Device=Mobile, Action=None",
+      "w": 358,
+      "h": 1111.8966064453125,
+      "chips": [
+        {
+          "name": "Cinema chip / Кинопоиск",
+          "w": 96,
+          "h": 40,
+          "x": 24,
+          "y": 955.896484375,
+          "linked": "1619:59067"
+        },
+        {
+          "name": "Cinema chip / Иви",
+          "w": 96,
+          "h": 40,
+          "x": 128,
+          "y": 955.896484375,
+          "linked": "1619:59078"
+        },
+        {
+          "name": "Cinema chip / Okko",
+          "w": 96,
+          "h": 40,
+          "x": 232,
+          "y": 955.896484375,
+          "linked": "1619:59100"
+        },
+        {
+          "name": "Cinema chip / PREMIER",
+          "w": 96,
+          "h": 40,
+          "x": 24,
+          "y": 1003.896484375,
+          "linked": "1619:59125"
+        },
+        {
+          "name": "Cinema chip / START",
+          "w": 96,
+          "h": 40,
+          "x": 128,
+          "y": 1003.896484375,
+          "linked": "1619:59139"
+        },
+        {
+          "name": "Cinema chip / Amediateka",
+          "w": 96,
+          "h": 40,
+          "x": 232,
+          "y": 1003.896484375,
+          "linked": "1619:59159"
+        }
+      ],
+      "chipOverflow": [],
+      "outside": [],
+      "broken": [],
+      "actions": [],
+      "imageGapToBenefits": null,
+      "note": {
+        "fontSize": 12,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+        },
+        "align": "RIGHT",
+        "style": "S:b3b5c237f33b7f0b309cdaeaf3e1849952f46aa7,"
+      }
+    },
+    {
+      "id": "1592:426",
+      "name": "Device=Mobile320, Action=Links",
+      "w": 288,
+      "h": 1352.1173095703125,
+      "chips": [
+        {
+          "name": "Cinema chip / Кинопоиск",
+          "w": 104,
+          "h": 40,
+          "x": 20,
+          "y": 1148.117431640625,
+          "linked": "1619:59064"
+        },
+        {
+          "name": "Cinema chip / Иви",
+          "w": 104,
+          "h": 40,
+          "x": 132,
+          "y": 1148.117431640625,
+          "linked": "1619:59070"
+        },
+        {
+          "name": "Cinema chip / Okko",
+          "w": 104,
+          "h": 40,
+          "x": 20,
+          "y": 1196.117431640625,
+          "linked": "1619:59086"
+        },
+        {
+          "name": "Cinema chip / PREMIER",
+          "w": 104,
+          "h": 40,
+          "x": 132,
+          "y": 1196.117431640625,
+          "linked": "1619:59114"
+        },
+        {
+          "name": "Cinema chip / START",
+          "w": 104,
+          "h": 40,
+          "x": 20,
+          "y": 1244.117431640625,
+          "linked": "1619:59136"
+        },
+        {
+          "name": "Cinema chip / Amediateka",
+          "w": 104,
+          "h": 40,
+          "x": 132,
+          "y": 1244.117431640625,
+          "linked": "1619:59142"
+        }
+      ],
+      "chipOverflow": [],
+      "outside": [],
+      "broken": [],
+      "actions": [
+        "Выбрать тариф",
+        "О Movix"
+      ],
+      "imageGapToBenefits": null,
+      "note": {
+        "fontSize": 12,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+        },
+        "align": "RIGHT",
+        "style": "S:b3b5c237f33b7f0b309cdaeaf3e1849952f46aa7,"
+      }
+    },
+    {
+      "id": "1592:500",
+      "name": "Device=Mobile320, Action=None",
+      "w": 288,
+      "h": 1216.1173095703125,
+      "chips": [
+        {
+          "name": "Cinema chip / Кинопоиск",
+          "w": 104,
+          "h": 40,
+          "x": 20,
+          "y": 1012.117431640625,
+          "linked": "1619:59064"
+        },
+        {
+          "name": "Cinema chip / Иви",
+          "w": 104,
+          "h": 40,
+          "x": 132,
+          "y": 1012.117431640625,
+          "linked": "1619:59070"
+        },
+        {
+          "name": "Cinema chip / Okko",
+          "w": 104,
+          "h": 40,
+          "x": 20,
+          "y": 1060.117431640625,
+          "linked": "1619:59086"
+        },
+        {
+          "name": "Cinema chip / PREMIER",
+          "w": 104,
+          "h": 40,
+          "x": 132,
+          "y": 1060.117431640625,
+          "linked": "1619:59114"
+        },
+        {
+          "name": "Cinema chip / START",
+          "w": 104,
+          "h": 40,
+          "x": 20,
+          "y": 1108.117431640625,
+          "linked": "1619:59136"
+        },
+        {
+          "name": "Cinema chip / Amediateka",
+          "w": 104,
+          "h": 40,
+          "x": 132,
+          "y": 1108.117431640625,
+          "linked": "1619:59142"
+        }
+      ],
+      "chipOverflow": [],
+      "outside": [],
+      "broken": [],
+      "actions": [],
+      "imageGapToBenefits": null,
+      "note": {
+        "fontSize": 12,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+        },
+        "align": "RIGHT",
+        "style": "S:b3b5c237f33b7f0b309cdaeaf3e1849952f46aa7,"
+      }
+    }
+  ],
+  "chipFamily": "1619:59176",
+  "startFill": [
+    {
+      "type": "IMAGE",
+      "visible": true,
+      "opacity": 1,
+      "blendMode": "NORMAL",
+      "scaleMode": "FIT",
+      "scalingFactor": 0.5,
+      "rotation": 0,
+      "filters": {
+        "exposure": 0,
+        "contrast": 0,
+        "saturation": 0,
+        "temperature": 0,
+        "tint": 0,
+        "highlights": 0,
+        "shadows": 0
+      },
+      "imageTransform": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "imageHash": "d984d2b8d6012cd29f5f592bd87c3be4bc485e9d"
+    }
+  ]
+}

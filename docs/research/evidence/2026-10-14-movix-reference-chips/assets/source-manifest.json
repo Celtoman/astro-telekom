@@ -1,0 +1,45 @@
+[
+  {
+    "id": "1598:620",
+    "brand": "Кинопоиск",
+    "file": "kinopoisk-logo-colored-on-whitebackground-rus.png",
+    "source": "C:\\Users\\Александр\\Desktop\\Кинотеатры\\kinopoisk-logo-colored-on-whitebackground-rus.png",
+    "sha256": "80597bc0722eb13e1f2e064ca8bb1346b5a42a482acf3ab0ed31cd34e19d6981"
+  },
+  {
+    "id": "1598:622",
+    "brand": "Иви",
+    "file": "ivi.svg",
+    "source": "C:\\Users\\Александр\\Desktop\\Кинотеатры\\ivi.svg",
+    "sha256": "7c1d6138f0b1ca4cfe5864ee6a1e693dcb468d3c369ff667d3940f0d7c136110"
+  },
+  {
+    "id": "1598:624",
+    "brand": "Okko",
+    "file": "Okko - Белый.svg",
+    "source": "C:\\Users\\Александр\\Desktop\\Кинотеатры\\Okko - Белый.svg",
+    "sha256": "051bcb7c7777d196df6dfe68f4f7aaea53aab5801623fcdda4b4ad43ada522ba"
+  },
+  {
+    "id": "1598:626",
+    "brand": "PREMIER",
+    "file": "premier-horizontal-logo.svg",
+    "source": "C:\\Users\\Александр\\Desktop\\Кинотеатры\\premier-horizontal-logo.svg",
+    "sha256": "f43110d641e5cabac280fb8d629fba652b08f1078f863dab47148450e5dcbf35"
+  },
+  {
+    "id": "1598:628",
+    "brand": "START",
+    "file": "START_logo_2025.svg.webp",
+    "source": "C:\\Users\\Александр\\Desktop\\Кинотеатры\\START_logo_2025.svg.webp",
+    "sha256": "5c87e845ac7298db3d5f3a293e50387a9eca345fac643c45ffe6972080ca006f",
+    "figmaDerivative": "start-lossless.png"
+  },
+  {
+    "id": "1598:630",
+    "brand": "Amediateka",
+    "file": "Full Logotype White.svg",
+    "source": "C:\\Users\\Александр\\Desktop\\Кинотеатры\\Full Logotype White.svg",
+    "sha256": "802330dc719b1a0743c1d3a511332d84cbbaecb3761423bdb6658fe62196eccc"
+  }
+]
