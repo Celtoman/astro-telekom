@@ -52,7 +52,7 @@ export function createCitySearch({ input, list, options, allowEmpty = false, onC
   const filter = () => {
     const query = normalizeCityQuery(input.value); matches = query || allowEmpty ? searchCities(records, query) : [];
     const visible = new Set(matches.map(result => result.city.item));
-    for (const record of records) { record.item.hidden = !visible.has(record.item); renderHighlight(record.link.querySelector('[data-city-name-text]'), record.name, query); renderHighlight(record.link.querySelector('[data-city-region-text]'), record.region, query); }
+    for (const record of records) { record.item.hidden = !visible.has(record.item); renderHighlight(record.link.querySelector('[data-city-name-text]'), record.name, query); }
     for (const result of matches) list.append(result.city.item);
     activate(query && matches.length ? 0 : -1); input.setAttribute('aria-expanded', String(matches.length > 0)); onChange({ query, count: matches.length }); return matches;
   };

@@ -1,0 +1,468 @@
+{
+  "hero": {
+    "Саратов": [
+      {
+        "height": 48,
+        "marks": [
+          "Саратов"
+        ],
+        "name": "Саратов"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "сар": [
+      {
+        "height": 48,
+        "marks": [
+          "Сар"
+        ],
+        "name": "Сарапул"
+      },
+      {
+        "height": 48,
+        "marks": [
+          "Сар"
+        ],
+        "name": "Саратов"
+      },
+      {
+        "height": 48,
+        "marks": [
+          "сар"
+        ],
+        "name": "Новочебоксарск"
+      },
+      {
+        "height": 48,
+        "marks": [
+          "сар"
+        ],
+        "name": "Чебоксары"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "Саратовская": [
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Саратов"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "нижний  нов": [
+      {
+        "height": 48,
+        "marks": [
+          "Нижний Нов"
+        ],
+        "name": "Нижний Новгород"
+      }
+    ],
+    "zzzzzz": []
+  },
+  "modal": {
+    "Саратов": [
+      {
+        "height": 48,
+        "marks": [
+          "Саратов"
+        ],
+        "name": "Саратов"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "сар": [
+      {
+        "height": 48,
+        "marks": [
+          "Сар"
+        ],
+        "name": "Сарапул"
+      },
+      {
+        "height": 48,
+        "marks": [
+          "Сар"
+        ],
+        "name": "Саратов"
+      },
+      {
+        "height": 48,
+        "marks": [
+          "сар"
+        ],
+        "name": "Новочебоксарск"
+      },
+      {
+        "height": 48,
+        "marks": [
+          "сар"
+        ],
+        "name": "Чебоксары"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "Саратовская": [
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Саратов"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "height": 48,
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "нижний  нов": [
+      {
+        "height": 48,
+        "marks": [
+          "Нижний Нов"
+        ],
+        "name": "Нижний Новгород"
+      }
+    ],
+    "zzzzzz": []
+  },
+  "sizes": [
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "dialogOverflow": false,
+      "image": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "regionNodes": 0,
+      "width": 1440
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "dialogOverflow": false,
+      "image": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "regionNodes": 0,
+      "width": 834
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "dialogOverflow": false,
+      "image": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "regionNodes": 0,
+      "width": 390
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "dialogOverflow": false,
+      "image": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "regionNodes": 0,
+      "width": 320
+    }
+  ],
+  "actions": {
+    "modalClear": {
+      "count": 207,
+      "current": "Саратов",
+      "focus": "site-city-search",
+      "value": ""
+    },
+    "modalClick": "http://127.0.0.1:4323/kazan",
+    "heroClick": "http://127.0.0.1:4323/samara",
+    "heroArrow": {
+      "active": "Саратов",
+      "focus": "hero-city-search"
+    },
+    "heroEnter": "http://127.0.0.1:4323/saratov",
+    "heroClear": {
+      "current": "Саратов",
+      "focus": "hero-city-search",
+      "listHidden": true,
+      "value": ""
+    },
+    "modalSelected": {
+      "background": "rgb(255, 234, 233)",
+      "border": "rgb(254, 49, 44)",
+      "check": 0,
+      "name": "Саратов"
+    },
+    "modalEnter": "http://127.0.0.1:4323/kazan"
+  },
+  "heroSizes": [
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "heights": [
+        48
+      ],
+      "overflow": false,
+      "width": 1440
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "heights": [
+        48
+      ],
+      "overflow": false,
+      "width": 834
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "heights": [
+        48
+      ],
+      "overflow": false,
+      "width": 390
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "heights": [
+        48
+      ],
+      "overflow": false,
+      "width": 320
+    }
+  ]
+}

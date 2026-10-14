@@ -8,7 +8,6 @@
 .popular-city[aria-current]:hover .chip-surface, .city-chips a[aria-current]:hover { background: #ffeae9; }
 .city-result { min-width: 0; }
 .city-result-copy { display: flex; flex-direction: column; min-width: 0; overflow-wrap: anywhere; }
-.city-result-copy small { font-size: 12px; line-height: 18px; color: #526071; }
 .city-result mark { background: transparent; color: #c61f1a; font-weight: 700; }
 .city-result[data-active-city-result] { background: #f4f6f8; box-shadow: inset 0 0 0 1px #1769aa; border-radius: 8px; }
 .city-result[aria-current] { background: #ffeae9; }

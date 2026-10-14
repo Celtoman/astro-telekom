@@ -24,7 +24,7 @@ const ordered = [...cities].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
           <p class="city-feedback" data-hero-city-error role="status" hidden></p>
           <div class="city-results" id="hero-city-results" role="listbox" data-hero-city-results hidden>
             <p class="result-count" data-hero-city-count role="status"></p>
-            <ul>{ordered.map(city => <li data-hero-city-option role="presentation" hidden><a class="city-result" href={publicHtmlPath(city.slug)} data-city-id={city.id || city.slug} data-city-slug={city.slug} data-city-name={city.name} data-city-region={city.region.name} role="option"><span class="city-result-copy"><span data-city-name-text>{city.name}</span><small data-city-region-text>{city.region.name}</small></span></a></li>)}</ul>
+            <ul>{ordered.map(city => <li data-hero-city-option role="presentation" hidden><a class="city-result" href={publicHtmlPath(city.slug)} data-city-id={city.id || city.slug} data-city-slug={city.slug} data-city-name={city.name} data-city-region={city.region.name} role="option"><span class="city-result-copy"><span data-city-name-text>{city.name}</span></span></a></li>)}</ul>
             <a href="/goroda-obsluzhivaniya" data-city-choice-trigger aria-haspopup="dialog" aria-controls="site-city-picker">{data.allCitiesText}</a>
           </div>
         </div><button class="search-button" type="submit" disabled>{data.searchButtonText}</button></div>
@@ -73,7 +73,6 @@ const ordered = [...cities].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
   .result-count { margin: 0 0 8px; color: #526071; font-size: 14px; line-height: 20px; }
   .city-results ul { max-height: 240px; overflow-y: auto; overscroll-behavior: contain; padding: 0; margin: 0; list-style: none; }
   .city-results li a { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; min-height: 48px; padding: 8px 10px; color: #18202a; text-decoration: none; font-size: 16px; line-height: 24px; }
-  .city-results small { color: #526071; font-size: 12px; }
   .city-results > a { display: inline-flex; align-items: center; min-height: 44px; color: #1769aa; font-size: 14px; }
   .city-steps { display: flex; flex: 1; flex-direction: column; min-width: 0; align-self: flex-start; margin: 0; padding: 0 0 0 32px; border-left: 1px solid #dcecf7; list-style: none; }
   .city-steps li { position: relative; display: flex; gap: 28px; }
