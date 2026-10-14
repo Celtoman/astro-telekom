@@ -1,0 +1,441 @@
+{
+  "upstream": "https://tv-internet-dom.ru",
+  "browserTransport": "read-only localhost reverse proxy; responses fetched from external site",
+  "hero": {
+    "Саратов": [
+      {
+        "marks": [
+          "Саратов"
+        ],
+        "name": "Саратов"
+      },
+      {
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "сар": [
+      {
+        "marks": [
+          "Сар"
+        ],
+        "name": "Сарапул"
+      },
+      {
+        "marks": [
+          "Сар"
+        ],
+        "name": "Саратов"
+      },
+      {
+        "marks": [
+          "сар"
+        ],
+        "name": "Новочебоксарск"
+      },
+      {
+        "marks": [
+          "сар"
+        ],
+        "name": "Чебоксары"
+      },
+      {
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "Саратовская": [
+      {
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "marks": [],
+        "name": "Саратов"
+      },
+      {
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "нижний  нов": [
+      {
+        "marks": [
+          "Нижний Нов"
+        ],
+        "name": "Нижний Новгород"
+      }
+    ],
+    "zzzzzz": []
+  },
+  "modal": {
+    "Саратов": [
+      {
+        "marks": [
+          "Саратов"
+        ],
+        "name": "Саратов"
+      },
+      {
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "сар": [
+      {
+        "marks": [
+          "Сар"
+        ],
+        "name": "Сарапул"
+      },
+      {
+        "marks": [
+          "Сар"
+        ],
+        "name": "Саратов"
+      },
+      {
+        "marks": [
+          "сар"
+        ],
+        "name": "Новочебоксарск"
+      },
+      {
+        "marks": [
+          "сар"
+        ],
+        "name": "Чебоксары"
+      },
+      {
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "Саратовская": [
+      {
+        "marks": [],
+        "name": "Аркадак"
+      },
+      {
+        "marks": [],
+        "name": "Балашов"
+      },
+      {
+        "marks": [],
+        "name": "Калининск"
+      },
+      {
+        "marks": [],
+        "name": "Маркс"
+      },
+      {
+        "marks": [],
+        "name": "Саратов"
+      },
+      {
+        "marks": [],
+        "name": "Степное"
+      },
+      {
+        "marks": [],
+        "name": "Энгельс"
+      },
+      {
+        "marks": [],
+        "name": "Юбилейный"
+      }
+    ],
+    "нижний  нов": [
+      {
+        "marks": [
+          "Нижний Нов"
+        ],
+        "name": "Нижний Новгород"
+      }
+    ],
+    "zzzzzz": []
+  },
+  "sizes": [
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "field": "hero",
+      "icon": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "rows": [
+        48
+      ],
+      "width": 1440
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "field": "hero",
+      "icon": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "rows": [
+        48
+      ],
+      "width": 834
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "field": "hero",
+      "icon": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "rows": [
+        48
+      ],
+      "width": 390
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "field": "hero",
+      "icon": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "rows": [
+        48
+      ],
+      "width": 320
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "field": "modal",
+      "icon": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "rows": [
+        48
+      ],
+      "width": 1440
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "field": "modal",
+      "icon": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "rows": [
+        48
+      ],
+      "width": 834
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "field": "modal",
+      "icon": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "rows": [
+        48
+      ],
+      "width": 390
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "clear": [
+        44,
+        44
+      ],
+      "field": "modal",
+      "icon": [
+        16,
+        16
+      ],
+      "overflow": false,
+      "rows": [
+        48
+      ],
+      "width": 320
+    }
+  ],
+  "actions": {
+    "modalClear": {
+      "count": 207,
+      "focus": "site-city-search",
+      "value": ""
+    },
+    "modalClick": "/kazan",
+    "returnSelected": {
+      "chip": "rgb(255, 234, 233)",
+      "value": "Казань"
+    },
+    "heroClick": "/samara",
+    "heroKeyboard": "/saratov",
+    "heroClear": {
+      "current": "Саратов",
+      "focus": "hero-city-search",
+      "listHidden": true,
+      "value": ""
+    },
+    "modalSelected": {
+      "background": "rgb(255, 234, 233)",
+      "border": "rgb(254, 49, 44)",
+      "check": 0,
+      "name": "Саратов"
+    },
+    "modalKeyboard": "/kazan"
+  },
+  "sameResults": true,
+  "logs": []
+}

@@ -19,3 +19,5 @@
 Доказательства: [browser-proof.json](evidence/2026-10-14-city-search-compact-code/browser-proof.json), [Hero](evidence/2026-10-14-city-search-compact-code/hero-mobile.jpg), [O01](evidence/2026-10-14-city-search-compact-code/modal-mobile.jpg), [Selected Hero](evidence/2026-10-14-city-search-compact-code/hero-selected.jpg), [Selected O01](evidence/2026-10-14-city-search-compact-code/modal-selected.jpg).
 
 Изменения локальные; push, деплой и CMS-публикация в эту проверку не входят. README и профильные паспорта/дизайн-правила актуализированы. Новых находок вне согласованной коррекции не обнаружено.
+
+Последующий этап: по отдельному поручению владельца выполнены push, зелёный CI, exact-SHA деплой и CODE-подтверждение. [Внешняя приёмка](2026-10-14-city-search-external-release.md) подтверждает выпуск aeb3fa2c и сохранение ревизии 21; CMS-публикация не потребовалась.

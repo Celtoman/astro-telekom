@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-14T08:54:17.763Z",
+  "siteId": "cmtuaqqj1000107lkiiiia2xa",
+  "health": "running:healthy",
+  "deployments": [
+    {
+      "id": "1jgtfyobrteeo1cqpft6gjjr",
+      "commit": "HEAD",
+      "status": "cancelled-by-user"
+    },
+    {
+      "id": "8zjowjz77jlrcrz63l0bpc67",
+      "commit": "b3181ce9c72d8e4d289930201fd8572ddeb53b48",
+      "status": "finished"
+    },
+    {
+      "id": "0o2bln7oweal9jjdo1enlsce",
+      "commit": "1c34c52182afab05d42cbda10ebf6ff66837f8ed",
+      "status": "finished"
+    }
+  ],
+  "workingRevision": 21,
+  "publishedRevision": 21,
+  "latestPublication": {
+    "id": "cmv6o4jfp000101nwmg9d5exe",
+    "status": "SUCCEEDED"
+  },
+  "catalogDigest": "97da55675668581262f789c92c924e60fa4a4a74482be78ba9845ac739a6c97a",
+  "seoDigest": "9426c0806c3bef8175f2202c4578cea7b4bbb0385eec62cbc097155d59d6c748",
+  "cities": 207,
+  "homeVersion": "2.0.0",
+  "hasHero": true,
+  "hasRegionSubtitle": false,
+  "artifact": "41cd513379551bdfd8757cecc5089f1724a4e0367766f968b56a86868d09710f",
+  "clearAsset": "/__publication_assets/41cd513379551bdfd8757cecc5089f1724a4e0367766f968b56a86868d09710f/images/figma/search-clear.svg"
+}

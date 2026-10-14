@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-14T09:18:37.821Z",
+  "status": 200,
+  "commit": "aeb3fa2c2cdd0826f8a918c2616431de9a8c72cb",
+  "deploymentId": "vs3wtwycuhjggkob1w4z7kwc",
+  "result": {
+    "status": "SUCCEEDED",
+    "artifactId": "37db84531693e39f31ce1270afa636a7ad851fb43e2f14d777c7ec35e8164023",
+    "publicationId": "cmv6o4jfp000101nwmg9d5exe",
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "siteRevision": 21,
+    "rendererId": "9253f091ced8bc0cf50c1cafc0e28e2e51ac695048e47fc48b625510119bb0d6",
+    "catalogDigest": "13636dc70d99fdd304547dd394d79064beaacc4a5e6820a4fe1cf8ab2686b1bb",
+    "rebuildId": "code-a06e638cbc085c617e1da82c3aae982d21ce76e702f01f2988836f1b415067f4",
+    "rebuildRevision": 1,
+    "manifestDigest": "bba95f0e2004d8dd5477f13f9183b64dfa2a48e1b3d623300aedd7747fc953a6"
+  }
+}
