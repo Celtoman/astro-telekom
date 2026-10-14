@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-14",
+  "scope": "Figma only",
+  "devices": {
+    "file": "../devices-transparent.png",
+    "source": "C:/Users/Александр/Downloads/movix_devices_transparent.png",
+    "size": [
+      1586,
+      992
+    ],
+    "hasAlpha": true,
+    "conceptualScreens": true
+  },
+  "logos": [
+    {
+      "name": "Кинопоиск",
+      "file": "kinopoisk.svg",
+      "source": "logo.zip / logo/rus/black background/kinopoisk-logo-white-on-blackbackground-rus.svg",
+      "provider": "user",
+      "nodeId": "1598:620"
+    },
+    {
+      "name": "Иви",
+      "file": "ivi.svg",
+      "source": "Logotype.zip / Logotype/Monochrome/White/White.svg",
+      "provider": "user",
+      "nodeId": "1598:622"
+    },
+    {
+      "name": "Okko",
+      "file": "okko.svg",
+      "source": "Okko - Белый.svg",
+      "provider": "user",
+      "nodeId": "1598:624"
+    },
+    {
+      "name": "PREMIER",
+      "file": "premier.svg",
+      "source": "PREMIER_logo.svg",
+      "provider": "user",
+      "nodeId": "1598:626"
+    },
+    {
+      "name": "START",
+      "file": "start.svg",
+      "source": "https://i.logos-download.com/114227/31093-c9ba4783510d6d834287c3f7bf79958e.svg/Start_%28streaming_service%29_Logo_2025.svg?dl=",
+      "provider": "external catalog; visually matched user START_logo_2025.svg.webp",
+      "nodeId": "1598:628"
+    },
+    {
+      "name": "Amediateka",
+      "file": "amediateka.svg",
+      "source": "Logotypes.zip / Logotype/Full Logotype/Full Logotype White.svg",
+      "provider": "user",
+      "nodeId": "1598:630"
+    }
+  ]
+}
