@@ -1,0 +1,194 @@
+{
+  "date": "2026-10-14",
+  "task": 308,
+  "desktopViews": [
+    {
+      "id": "1628:1594",
+      "name": "White page / Desktop / Links",
+      "w": 1440,
+      "h": 678
+    },
+    {
+      "id": "1628:1713",
+      "name": "White page / Desktop / Info",
+      "w": 1440,
+      "h": 661.1046752929688
+    }
+  ],
+  "variants": [
+    {
+      "id": "1592:2",
+      "name": "Device=Desktop, Action=Links",
+      "w": 1360,
+      "h": 598,
+      "eyebrowCount": 0,
+      "centerDelta": 0,
+      "contentY": 0,
+      "pictureY": 8.447662353515625
+    },
+    {
+      "id": "1592:81",
+      "name": "Device=Desktop, Action=None",
+      "w": 1360,
+      "h": 581.1046752929688,
+      "eyebrowCount": 0,
+      "centerDelta": 0,
+      "contentY": 0,
+      "pictureY": 0
+    },
+    {
+      "id": "1592:145",
+      "name": "Device=Tablet, Action=Links",
+      "w": 720,
+      "h": 1064.3101806640625,
+      "eyebrowCount": 0,
+      "centerDelta": null,
+      "contentY": 0,
+      "pictureY": 0
+    },
+    {
+      "id": "1592:219",
+      "name": "Device=Tablet, Action=None",
+      "w": 720,
+      "h": 1000.3101806640625,
+      "eyebrowCount": 0,
+      "centerDelta": null,
+      "contentY": 0,
+      "pictureY": 0
+    },
+    {
+      "id": "1592:283",
+      "name": "Device=Mobile, Action=Links",
+      "w": 358,
+      "h": 1217.8966064453125,
+      "eyebrowCount": 0,
+      "centerDelta": null,
+      "contentY": 0,
+      "pictureY": 0
+    },
+    {
+      "id": "1592:362",
+      "name": "Device=Mobile, Action=None",
+      "w": 358,
+      "h": 1081.8966064453125,
+      "eyebrowCount": 0,
+      "centerDelta": null,
+      "contentY": 0,
+      "pictureY": 0
+    },
+    {
+      "id": "1592:426",
+      "name": "Device=Mobile320, Action=Links",
+      "w": 288,
+      "h": 1322.1173095703125,
+      "eyebrowCount": 0,
+      "centerDelta": null,
+      "contentY": 0,
+      "pictureY": 0
+    },
+    {
+      "id": "1592:500",
+      "name": "Device=Mobile320, Action=None",
+      "w": 288,
+      "h": 1186.1173095703125,
+      "eyebrowCount": 0,
+      "centerDelta": null,
+      "contentY": 0,
+      "pictureY": 0
+    }
+  ],
+  "verification": [
+    {
+      "id": "1592:2",
+      "name": "Device=Desktop, Action=Links",
+      "eyebrow": 0,
+      "chipCount": 6,
+      "outside": [],
+      "actions": [
+        "Выбрать тариф",
+        "О Movix"
+      ],
+      "hasTitle": true,
+      "hasIntro": true
+    },
+    {
+      "id": "1592:81",
+      "name": "Device=Desktop, Action=None",
+      "eyebrow": 0,
+      "chipCount": 6,
+      "outside": [],
+      "actions": [],
+      "hasTitle": true,
+      "hasIntro": true
+    },
+    {
+      "id": "1592:145",
+      "name": "Device=Tablet, Action=Links",
+      "eyebrow": 0,
+      "chipCount": 6,
+      "outside": [],
+      "actions": [
+        "Выбрать тариф",
+        "О Movix"
+      ],
+      "hasTitle": true,
+      "hasIntro": true
+    },
+    {
+      "id": "1592:219",
+      "name": "Device=Tablet, Action=None",
+      "eyebrow": 0,
+      "chipCount": 6,
+      "outside": [],
+      "actions": [],
+      "hasTitle": true,
+      "hasIntro": true
+    },
+    {
+      "id": "1592:283",
+      "name": "Device=Mobile, Action=Links",
+      "eyebrow": 0,
+      "chipCount": 6,
+      "outside": [],
+      "actions": [
+        "Выбрать тариф",
+        "О Movix"
+      ],
+      "hasTitle": true,
+      "hasIntro": true
+    },
+    {
+      "id": "1592:362",
+      "name": "Device=Mobile, Action=None",
+      "eyebrow": 0,
+      "chipCount": 6,
+      "outside": [],
+      "actions": [],
+      "hasTitle": true,
+      "hasIntro": true
+    },
+    {
+      "id": "1592:426",
+      "name": "Device=Mobile320, Action=Links",
+      "eyebrow": 0,
+      "chipCount": 6,
+      "outside": [],
+      "actions": [
+        "Выбрать тариф",
+        "О Movix"
+      ],
+      "hasTitle": true,
+      "hasIntro": true
+    },
+    {
+      "id": "1592:500",
+      "name": "Device=Mobile320, Action=None",
+      "eyebrow": 0,
+      "chipCount": 6,
+      "outside": [],
+      "actions": [],
+      "hasTitle": true,
+      "hasIntro": true
+    }
+  ]
+}
