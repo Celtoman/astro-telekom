@@ -1,0 +1,168 @@
+{
+  "date": "2026-10-14",
+  "task": 310,
+  "views": [
+    {
+      "id": "1637:1586",
+      "name": "White page / Desktop / Links",
+      "w": 1440,
+      "h": 678,
+      "master": "1592:2"
+    },
+    {
+      "id": "1637:1705",
+      "name": "White page / Desktop / Info",
+      "w": 1440,
+      "h": 661.1046752929688,
+      "master": "1592:81"
+    },
+    {
+      "id": "1636:1814",
+      "name": "White page / Tablet / Links",
+      "w": 768,
+      "h": 1144.3101806640625,
+      "master": "1592:145"
+    },
+    {
+      "id": "1636:1933",
+      "name": "White page / Tablet / Info",
+      "w": 768,
+      "h": 1080.3101806640625,
+      "master": "1592:219"
+    },
+    {
+      "id": "1636:2042",
+      "name": "White page / Mobile / Links",
+      "w": 390,
+      "h": 1297.8966064453125,
+      "master": "1592:283"
+    },
+    {
+      "id": "1636:2165",
+      "name": "White page / Mobile / Info",
+      "w": 390,
+      "h": 1161.8966064453125,
+      "master": "1592:362"
+    },
+    {
+      "id": "1636:2278",
+      "name": "White page / Mobile320 / Links",
+      "w": 320,
+      "h": 1402.1173095703125,
+      "master": "1592:426"
+    },
+    {
+      "id": "1636:2402",
+      "name": "White page / Mobile320 / Info",
+      "w": 320,
+      "h": 1266.1173095703125,
+      "master": "1592:500"
+    }
+  ],
+  "variants": [
+    {
+      "id": "1592:2",
+      "name": "Device=Desktop, Action=Links",
+      "w": 1360,
+      "h": 598,
+      "disclaimer": "Какие онлайн-кинотеатры доступны, зависит от выбранного тарифа",
+      "noteHeight": 32,
+      "footerAlign": "CENTER",
+      "verticalDelta": 0,
+      "outside": []
+    },
+    {
+      "id": "1592:81",
+      "name": "Device=Desktop, Action=None",
+      "w": 1360,
+      "h": 581.1046752929688,
+      "disclaimer": "Какие онлайн-кинотеатры доступны, зависит от выбранного тарифа",
+      "noteHeight": 32,
+      "footerAlign": "CENTER",
+      "verticalDelta": 0,
+      "outside": []
+    },
+    {
+      "id": "1592:145",
+      "name": "Device=Tablet, Action=Links",
+      "w": 720,
+      "h": 1064.3101806640625,
+      "disclaimer": "Какие онлайн-кинотеатры доступны, зависит от выбранного тарифа",
+      "noteHeight": 16,
+      "footerAlign": "MIN",
+      "verticalDelta": null,
+      "outside": []
+    },
+    {
+      "id": "1592:219",
+      "name": "Device=Tablet, Action=None",
+      "w": 720,
+      "h": 1000.3101806640625,
+      "disclaimer": "Какие онлайн-кинотеатры доступны, зависит от выбранного тарифа",
+      "noteHeight": 16,
+      "footerAlign": "MIN",
+      "verticalDelta": null,
+      "outside": []
+    },
+    {
+      "id": "1592:283",
+      "name": "Device=Mobile, Action=Links",
+      "w": 358,
+      "h": 1217.8966064453125,
+      "disclaimer": "Какие онлайн-кинотеатры доступны, зависит от выбранного тарифа",
+      "noteHeight": 32,
+      "footerAlign": "MIN",
+      "verticalDelta": null,
+      "outside": []
+    },
+    {
+      "id": "1592:362",
+      "name": "Device=Mobile, Action=None",
+      "w": 358,
+      "h": 1081.8966064453125,
+      "disclaimer": "Какие онлайн-кинотеатры доступны, зависит от выбранного тарифа",
+      "noteHeight": 32,
+      "footerAlign": "MIN",
+      "verticalDelta": null,
+      "outside": []
+    },
+    {
+      "id": "1592:426",
+      "name": "Device=Mobile320, Action=Links",
+      "w": 288,
+      "h": 1322.1173095703125,
+      "disclaimer": "Какие онлайн-кинотеатры доступны, зависит от выбранного тарифа",
+      "noteHeight": 32,
+      "footerAlign": "MIN",
+      "verticalDelta": null,
+      "outside": []
+    },
+    {
+      "id": "1592:500",
+      "name": "Device=Mobile320, Action=None",
+      "w": 288,
+      "h": 1186.1173095703125,
+      "disclaimer": "Какие онлайн-кинотеатры доступны, зависит от выбранного тарифа",
+      "noteHeight": 32,
+      "footerAlign": "MIN",
+      "verticalDelta": null,
+      "outside": []
+    }
+  ],
+  "balancedDesktop": [
+    {
+      "id": "1592:2",
+      "disclaimer": "Какие онлайн-кинотеатры доступны, зависит от выбранного тарифа",
+      "centerDelta": 0,
+      "fontSize": 12,
+      "noteHeight": 32
+    },
+    {
+      "id": "1592:81",
+      "disclaimer": "Какие онлайн-кинотеатры доступны, зависит от выбранного тарифа",
+      "centerDelta": 0,
+      "fontSize": 12,
+      "noteHeight": 32
+    }
+  ]
+}
