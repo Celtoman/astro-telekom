@@ -1,4 +1,5 @@
-import { applyCityContext, selectCity, normalizeCityQuery } from './city-context.mjs';
+import { applyCityContext, selectCity } from './city-context.mjs';
+import { createCitySearch } from './city-search.mjs';
 export function initializeSiteHeader() {
   const header = document.querySelector('[data-site-header]');
   if (!header || header.dataset.ready === 'true') return;
@@ -19,24 +20,18 @@ export function initializeSiteHeader() {
     if (!input) return;
     input.focus();
   };
-  const filterCities = () => {
-    const query = normalizeCityQuery(search?.value);
-    let count = 0;
-    for (const item of picker.querySelectorAll('[data-city-option]')) {
-      item.hidden = !item.dataset.citySearchText.toLocaleLowerCase('ru-RU').replaceAll('ё', 'е').includes(query);
-      if (!item.hidden) count += 1;
-    }
+  const citySearch = picker && search ? createCitySearch({ input: search, list: picker.querySelector('.city-options'), options: [...picker.querySelectorAll('[data-city-option]')], allowEmpty: true, onChange: ({ query, count }) => {
+    picker.dataset.searching = String(!!query);
     picker.querySelector('[data-city-empty]').hidden = count > 0 || query.length === 0;
     picker.querySelector('[data-city-quick]').hidden = !!query;
     picker.querySelector('[data-city-all]').hidden = !!query && !count;
     picker.querySelector('[data-city-list-title]').textContent = query ? 'Результаты поиска' : 'Все города';
     picker.querySelector('[data-city-clear]').hidden = !query;
     picker.querySelector('[data-city-result-status]').textContent = query ? `Найдено городов: ${count}` : '';
-  };
-  search?.addEventListener('input', filterCities);
-  for (const control of picker?.querySelectorAll('[data-city-clear], [data-city-reset]') || []) control.addEventListener('click', () => { search.value = ''; filterCities(); search.focus(); });
-  search?.addEventListener('keydown', event => { if (event.key === 'ArrowDown') { event.preventDefault(); picker.querySelector('[data-city-option]:not([hidden]) a')?.focus(); } if (event.key === 'Enter') { event.preventDefault(); const matches = picker.querySelectorAll('[data-city-option]:not([hidden]) a'); if (search.value.trim() && matches.length === 1) matches[0].click(); } });
-  picker?.addEventListener('keydown', event => { if (!['ArrowDown', 'ArrowUp'].includes(event.key) || event.target === search) return; const links = [...picker.querySelectorAll('[data-city-option]:not([hidden]) a')]; const index = links.indexOf(document.activeElement); if (index < 0) return; event.preventDefault(); const next = index + (event.key === 'ArrowDown' ? 1 : -1); (links[next] || search).focus(); });
+  } }) : null;
+  for (const control of picker?.querySelectorAll('[data-city-clear], [data-city-reset]') || []) control.addEventListener('click', () => { search.value = ''; citySearch.filter(); search.focus(); });
+  search?.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); citySearch.submit(); } });
+  picker?.addEventListener('keydown', event => citySearch.keydown(event));
   document.addEventListener('click', (event) => {
     const target = event.target instanceof Element ? event.target.closest('button, a') : null;
     if (!target) return;
@@ -57,7 +52,7 @@ export function initializeSiteHeader() {
       }
       picker.querySelector('[data-city-choice-message]').hidden = !anchor;
       search.value = '';
-      filterCities();
+      citySearch.filter();
       picker.showModal();
       search.focus();
     } else if (target.hasAttribute('data-city-choice-link')) {
@@ -75,7 +70,7 @@ export function initializeSiteHeader() {
       focusAddress();
     } else if (menu?.contains(target) && target instanceof HTMLAnchorElement) closeMenu();
   });
-  picker?.addEventListener('close', () => pickerOpener?.focus());
+  picker?.addEventListener('close', () => { citySearch.close(); pickerOpener?.focus(); });
   menu?.addEventListener('close', () => { if (restoreMenuFocus && !document.querySelector('dialog[open]')) menuOpener?.focus(); });
   for (const dialog of [picker, menu]) {
     dialog?.addEventListener('keydown', (event) => {

@@ -1,0 +1,611 @@
+{
+  "hero": [
+    {
+      "query": "Саратов",
+      "rows": [
+        {
+          "active": true,
+          "marks": [
+            "Саратов",
+            "Саратов"
+          ],
+          "name": "Саратов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Аркадак",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Балашов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Калининск",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Маркс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Степное",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Энгельс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Юбилейный",
+          "region": "Саратовская область"
+        }
+      ]
+    },
+    {
+      "query": "сар",
+      "rows": [
+        {
+          "active": true,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Сарапул",
+          "region": "Удмуртия"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар",
+            "Сар"
+          ],
+          "name": "Саратов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "сар"
+          ],
+          "name": "Новочебоксарск",
+          "region": "Чувашия"
+        },
+        {
+          "active": false,
+          "marks": [
+            "сар"
+          ],
+          "name": "Чебоксары",
+          "region": "Чувашия"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Аркадак",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Балашов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Калининск",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Маркс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Степное",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Энгельс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Юбилейный",
+          "region": "Саратовская область"
+        }
+      ]
+    },
+    {
+      "query": "Саратовская",
+      "rows": [
+        {
+          "active": true,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Аркадак",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Балашов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Калининск",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Маркс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Саратов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Степное",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Энгельс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Юбилейный",
+          "region": "Саратовская область"
+        }
+      ]
+    },
+    {
+      "query": "ОЗЕРСК",
+      "rows": []
+    },
+    {
+      "query": "нижний  нов",
+      "rows": [
+        {
+          "active": true,
+          "marks": [
+            "Нижний Нов"
+          ],
+          "name": "Нижний Новгород",
+          "region": "Нижегородская область"
+        }
+      ]
+    }
+  ],
+  "modal": [
+    {
+      "query": "Саратов",
+      "rows": [
+        {
+          "active": true,
+          "marks": [
+            "Саратов",
+            "Саратов"
+          ],
+          "name": "Саратов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Аркадак",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Балашов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Калининск",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Маркс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Степное",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Энгельс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратов"
+          ],
+          "name": "Юбилейный",
+          "region": "Саратовская область"
+        }
+      ]
+    },
+    {
+      "query": "сар",
+      "rows": [
+        {
+          "active": true,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Сарапул",
+          "region": "Удмуртия"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар",
+            "Сар"
+          ],
+          "name": "Саратов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "сар"
+          ],
+          "name": "Новочебоксарск",
+          "region": "Чувашия"
+        },
+        {
+          "active": false,
+          "marks": [
+            "сар"
+          ],
+          "name": "Чебоксары",
+          "region": "Чувашия"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Аркадак",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Балашов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Калининск",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Маркс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Степное",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Энгельс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Сар"
+          ],
+          "name": "Юбилейный",
+          "region": "Саратовская область"
+        }
+      ]
+    },
+    {
+      "query": "Саратовская",
+      "rows": [
+        {
+          "active": true,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Аркадак",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Балашов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Калининск",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Маркс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Саратов",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Степное",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Энгельс",
+          "region": "Саратовская область"
+        },
+        {
+          "active": false,
+          "marks": [
+            "Саратовская"
+          ],
+          "name": "Юбилейный",
+          "region": "Саратовская область"
+        }
+      ]
+    },
+    {
+      "query": "ОЗЕРСК",
+      "rows": []
+    },
+    {
+      "query": "нижний  нов",
+      "rows": [
+        {
+          "active": true,
+          "marks": [
+            "Нижний Нов"
+          ],
+          "name": "Нижний Новгород",
+          "region": "Нижегородская область"
+        }
+      ]
+    }
+  ],
+  "selectedHero": {
+    "beforeChip": {
+      "color": "rgb(255, 255, 255)",
+      "width": 75.0625
+    },
+    "selectedProof": {
+      "address": "/kazan#address-check",
+      "background": "rgb(255, 234, 233)",
+      "border": "rgb(254, 49, 44)",
+      "mark": false,
+      "value": "Казань",
+      "weight": "600",
+      "width": 75.0625
+    }
+  },
+  "sizes": [
+    {
+      "width": 1440,
+      "heroState": {
+        "first": "Саратов",
+        "marks": [
+          "Саратов",
+          "Саратов"
+        ],
+        "overflow": false
+      },
+      "modalState": {
+        "columns": "1",
+        "count": 8,
+        "first": "Саратов",
+        "overflow": false
+      },
+      "resetTotal": 207
+    },
+    {
+      "width": 834,
+      "heroState": {
+        "first": "Саратов",
+        "marks": [
+          "Саратов",
+          "Саратов"
+        ],
+        "overflow": false
+      },
+      "modalState": {
+        "columns": "1",
+        "count": 8,
+        "first": "Саратов",
+        "overflow": false
+      },
+      "resetTotal": 207
+    },
+    {
+      "width": 390,
+      "heroState": {
+        "first": "Саратов",
+        "marks": [
+          "Саратов",
+          "Саратов"
+        ],
+        "overflow": false
+      },
+      "modalState": {
+        "columns": "1",
+        "count": 8,
+        "first": "Саратов",
+        "overflow": false
+      },
+      "resetTotal": 207
+    },
+    {
+      "width": 320,
+      "heroState": {
+        "first": "Саратов",
+        "marks": [
+          "Саратов",
+          "Саратов"
+        ],
+        "overflow": false
+      },
+      "modalState": {
+        "columns": "1",
+        "count": 8,
+        "first": "Саратов",
+        "overflow": false
+      },
+      "resetTotal": 207
+    }
+  ],
+  "emptyHero": {
+    "query": "неТакогоГорода",
+    "resultsHidden": true,
+    "state": "NoResults"
+  },
+  "clear": {
+    "address": "/kazan#address-check",
+    "invalid": "false",
+    "saved": "Казань",
+    "value": ""
+  },
+  "emptySubmit": {
+    "invalid": "true",
+    "state": "InputError"
+  },
+  "mobileCtaUrl": "http://127.0.0.1:4323/saratov"
+}

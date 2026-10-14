@@ -3,6 +3,7 @@ import { publicAsset } from '../data/public-asset';
 import { publicHtmlPath } from '../data/public-url';
 import type { CityView } from '../data/site';
 import { assertRenderedHomeHero, parseRedTitle } from '../../../api/src/home-hero-model';
+import '../styles/city-choice.css';
 interface Props { content: Record<string, any>; cities: CityView[] }
 const { content, cities } = Astro.props as Props;
 const data = assertRenderedHomeHero(content);
@@ -10,7 +11,6 @@ const title = parseRedTitle(data.title);
 const names = ['Москва', 'Санкт-Петербург', 'Екатеринбург', 'Иркутск', 'Казань', 'Самара', 'Саратов'];
 const popular = names.map(name => cities.find(city => city.name === name)).filter((city): city is CityView => !!city);
 const ordered = [...cities].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
-const ambiguousNames = new Set(ordered.filter((city, index) => ordered.some((other, position) => position !== index && other.name === city.name)).map(city => city.name));
 ---
 <section class="general-home-hero" data-home-hero="city-search" data-general-home-hero>
   <div class="hero-container"><div class="hero-card">
@@ -20,17 +20,17 @@ const ambiguousNames = new Set(ordered.filter((city, index) => ordered.some((oth
       <form class="city-form" data-hero-city-form novalidate>
         <noscript><p>Выберите город по ссылкам ниже или откройте полный список городов.</p></noscript>
         <div class="city-search-row"><div class="city-field-stack">
-          <div class="city-search-field"><img src={publicAsset('/images/figma/hero1d-desktop-imglocationicon.svg')} width="24" height="24" alt="" /><input type="search" role="combobox" aria-autocomplete="list" aria-label="Поиск города" disabled placeholder={data.cityPlaceholder} maxlength="120" autocomplete="off" data-hero-city-input aria-controls="hero-city-results" aria-expanded="false" /><button type="button" class="city-clear" data-hero-city-clear aria-label="Очистить поиск" hidden><img src={publicAsset('/images/figma/search-clear.svg')} width="16" height="16" alt="" /></button></div>
+          <div class="city-search-field"><img src={publicAsset('/images/figma/hero1d-desktop-imglocationicon.svg')} width="24" height="24" alt="" /><input id="hero-city-search" type="search" role="combobox" aria-autocomplete="list" aria-label="Поиск города" disabled placeholder={data.cityPlaceholder} maxlength="120" autocomplete="off" data-hero-city-input aria-controls="hero-city-results" aria-expanded="false" /><button type="button" class="city-clear" data-hero-city-clear aria-label="Очистить поиск" hidden><img src={publicAsset('/images/figma/search-clear.svg')} width="16" height="16" alt="" /></button></div>
           <p class="city-feedback" data-hero-city-error role="status" hidden></p>
           <div class="city-results" id="hero-city-results" role="listbox" data-hero-city-results hidden>
             <p class="result-count" data-hero-city-count role="status"></p>
-            <ul>{ordered.map(city => <li data-hero-city-option data-search-text={`${city.name} ${city.region.name}`} hidden><a href={publicHtmlPath(city.slug)} data-city-id={city.id || city.slug} data-city-slug={city.slug} data-city-name={city.name} role="option">{city.name}{ambiguousNames.has(city.name) && <small>{city.region.name}</small>}</a></li>)}</ul>
+            <ul>{ordered.map(city => <li data-hero-city-option role="presentation" hidden><a class="city-result" href={publicHtmlPath(city.slug)} data-city-id={city.id || city.slug} data-city-slug={city.slug} data-city-name={city.name} data-city-region={city.region.name} role="option"><span class="city-result-copy"><span data-city-name-text>{city.name}</span><small data-city-region-text>{city.region.name}</small></span></a></li>)}</ul>
             <a href="/goroda-obsluzhivaniya" data-city-choice-trigger aria-haspopup="dialog" aria-controls="site-city-picker">{data.allCitiesText}</a>
           </div>
         </div><button class="search-button" type="submit" disabled>{data.searchButtonText}</button></div>
         <span data-hero-empty-message hidden>{data.emptyMessage}</span><span data-hero-input-error-message hidden>{data.inputErrorMessage}</span>
       </form>
-      <div class="popular-cities">{[popular.slice(0, 4), popular.slice(4)].map((row, rowIndex) => <div class="popular-row">{row.map(city => <a class="popular-city" href={publicHtmlPath(city.slug)} data-hero-city-choice data-city-id={city.id || city.slug} data-city-slug={city.slug} data-city-name={city.name}><span class="chip-surface">{city.name}<img src={publicAsset('/images/figma/hero1d-desktop-imgselectedcheck.svg')} width="16" height="16" alt="" hidden /></span></a>)}{rowIndex === 1 && <a class="all-cities-link" href="/goroda-obsluzhivaniya" data-city-choice-trigger aria-haspopup="dialog" aria-controls="site-city-picker">{data.allCitiesText}</a>}</div>)}</div>
+      <div class="popular-cities">{[popular.slice(0, 4), popular.slice(4)].map((row, rowIndex) => <div class="popular-row">{row.map(city => <a class="popular-city" href={publicHtmlPath(city.slug)} data-hero-city-choice data-city-id={city.id || city.slug} data-city-slug={city.slug} data-city-name={city.name}><span class="chip-surface"><span class="city-chip-label" data-label={city.name}><span>{city.name}</span></span></span></a>)}{rowIndex === 1 && <a class="all-cities-link" href="/goroda-obsluzhivaniya" data-city-choice-trigger aria-haspopup="dialog" aria-controls="site-city-picker">{data.allCitiesText}</a>}</div>)}</div>
     </div>
     <ol class="city-steps">{data.steps.map((step: { title: string; text: string }, index: number) => <li><div class="icon-circle"><picture><source media="(max-width: 620px)" srcset={publicAsset(`/images/figma/hero1d-mobile-imgicon${index || ''}.svg`)} /><source media="(max-width: 1100px)" srcset={publicAsset(`/images/figma/hero1d-tablet-imgicon${index || ''}.svg`)} /><img src={publicAsset(`/images/figma/hero1d-desktop-imgicon${index || ''}.svg`)} alt="" /></picture></div><div class="step-copy"><span class="step-number">0{index + 1}</span><h2>{step.title}</h2><p>{step.text}</p></div></li>)}</ol>
   </div></div>
@@ -65,14 +65,14 @@ const ambiguousNames = new Set(ordered.filter((city, index) => ordered.some((oth
   .popular-cities { display: flex; flex-direction: column; gap: 4px; width: 100%; }
   .popular-row { display: flex; flex-wrap: wrap; gap: 8px; }
   .popular-city { display: flex; min-height: 44px; align-items: center; padding: 4px 0; text-decoration: none; color: #18202a; }
-  .chip-surface { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 7px 12px; border: 1px solid #1769aa; border-radius: 10px; background: #fff; font-size: 14px; line-height: 20px; white-space: nowrap; }
-  .popular-city:hover .chip-surface, .popular-city[aria-current] .chip-surface { background: #eaf7ff; }
+  .chip-surface { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 7px 12px; border: 1px solid #dcecf7; border-radius: 10px; background: #fff; font-size: 14px; line-height: 20px; white-space: nowrap; }
+  .popular-city:hover .chip-surface { background: #f4f6f8; }
   .all-cities-link { display: flex; align-items: center; min-height: 44px; padding: 0 8px; color: #1769aa; text-decoration: underline; font-size: 14px; line-height: 20px; }
   button:focus-visible, a:focus-visible { outline: 2px solid #1769aa; outline-offset: 2px; }
   .city-results { position: absolute; top: 56px; left: 0; width: 100%; padding: 8px 12px 12px; background: #fff; border: 1px solid #dcecf7; border-radius: 10px; z-index: 10; box-shadow: 0 8px 24px #18202a12; }
   .result-count { margin: 0 0 8px; color: #526071; font-size: 14px; line-height: 20px; }
   .city-results ul { max-height: 240px; overflow-y: auto; overscroll-behavior: contain; padding: 0; margin: 0; list-style: none; }
-  .city-results li a { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; min-height: 48px; padding: 8px 0; color: #18202a; text-decoration: none; font-size: 16px; line-height: 24px; }
+  .city-results li a { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; min-height: 48px; padding: 8px 10px; color: #18202a; text-decoration: none; font-size: 16px; line-height: 24px; }
   .city-results small { color: #526071; font-size: 12px; }
   .city-results > a { display: inline-flex; align-items: center; min-height: 44px; color: #1769aa; font-size: 14px; }
   .city-steps { display: flex; flex: 1; flex-direction: column; min-width: 0; align-self: flex-start; margin: 0; padding: 0 0 0 32px; border-left: 1px solid #dcecf7; list-style: none; }

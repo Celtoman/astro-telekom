@@ -1,4 +1,4 @@
-export const normalizeCityQuery = value => String(value || '').trim().toLocaleLowerCase('ru-RU').replaceAll('ё', 'е');
+export const normalizeCityQuery = value => String(value || '').trim().replace(/\s+/gu, ' ').toLocaleLowerCase('ru-RU').replaceAll('ё', 'е');
 /** @template {{ name?: string }} T @param {T[]} cities @returns {T | null} */
 export function publishedMoscow(cities) {
   const matches = cities.filter(city => city.name?.trim() === 'Москва');
@@ -34,6 +34,10 @@ export function applyCityContext() {
   }
   for (const link of document.querySelectorAll('[data-city-choice-link]')) {
     const current = link.dataset.cityId === active.id; if (current) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current'); const mark = link.querySelector('[data-city-selected-mark]'); if (mark) mark.hidden = !current;
+  }
+  for (const link of document.querySelectorAll('[data-hero-city-choice]')) {
+    if (link.dataset.cityId === active.id && context.confirmed) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
   }
   return context;
 }

@@ -2,6 +2,7 @@
 import { publicAsset } from '../data/public-asset';
 import { publicHtmlPath } from '../data/public-url';
 import type { CityView } from '../data/site';
+import '../styles/city-choice.css';
 interface Props { cities: CityView[]; current?: CityView }
 const { cities, current } = Astro.props as Props;
 const popularNames = ['Москва', 'Санкт-Петербург', 'Екатеринбург', 'Иркутск', 'Казань', 'Самара', 'Саратов'];
@@ -15,14 +16,14 @@ const ordered = [...cities].sort((a,b) => a.name.localeCompare(b.name,'ru'));
       <div class="flow-header"><img src={publicAsset('/images/figma/city-pin.svg')} width="24" height="24" alt="" /><h2 id="city-picker-title">Выберите город</h2><button type="button" class="flow-close" data-modal-close aria-label="Закрыть выбор города"><img src={publicAsset('/images/figma/close.svg')} width="24" height="24" alt="" /></button></div>
       <p class="city-picker-current">Текущий город: <strong data-current-city-label>{current?.name || 'Не выбран'}</strong></p>
       <p data-city-choice-message hidden></p>
-      <div class="city-search-group"><label for="site-city-search">Название города</label><div class="city-search-field"><img src={publicAsset('/images/figma/city-search.svg')} width="24" height="24" alt="" /><input id="site-city-search" type="search" placeholder="Введите название города" data-city-search autocomplete="off" /><button type="button" class="city-clear" data-city-clear aria-label="Очистить поиск" hidden><img src={publicAsset('/images/figma/search-clear.svg')} width="16" height="16" alt="" /></button></div></div>
+      <div class="city-search-group"><label for="site-city-search">Название города</label><div class="city-search-field"><img src={publicAsset('/images/figma/city-search.svg')} width="24" height="24" alt="" /><input id="site-city-search" type="search" role="combobox" aria-autocomplete="list" aria-controls="picker-city-results" aria-expanded="false" placeholder="Введите название города" data-city-search autocomplete="off" /><button type="button" class="city-clear" data-city-clear aria-label="Очистить поиск" hidden><img src={publicAsset('/images/figma/search-clear.svg')} width="16" height="16" alt="" /></button></div></div>
     </div>
     <div class="city-picker-scroll">
       <div class="city-quick-groups" data-city-quick>
-        {regional.length > 0 && <section><h3>Города региона: {current?.region.name}</h3><div class="city-chips">{regional.map(item => <a href={publicHtmlPath(item.slug)} data-city-choice-link data-city-id={item.id || item.slug} data-city-slug={item.slug} data-city-name={item.name}>{item.name}</a>)}</div></section>}
-        {popular.length > 0 && <section><h3>Популярные города</h3><div class="city-chips">{popular.map(item => <a href={publicHtmlPath(item.slug)} data-city-choice-link data-city-id={item.id || item.slug} data-city-slug={item.slug} data-city-name={item.name} aria-current={item.slug === current?.slug ? 'location' : undefined}>{item.name}<img src={publicAsset('/images/figma/city-selected.svg')} width="24" height="24" alt="Выбран" data-city-selected-mark hidden={item.slug !== current?.slug} /></a>)}</div></section>}
+        {regional.length > 0 && <section><h3>Города региона: {current?.region.name}</h3><div class="city-chips">{regional.map(item => <a href={publicHtmlPath(item.slug)} data-city-choice-link data-city-id={item.id || item.slug} data-city-slug={item.slug} data-city-name={item.name}><span class="city-chip-label" data-label={item.name}><span>{item.name}</span></span></a>)}</div></section>}
+        {popular.length > 0 && <section><h3>Популярные города</h3><div class="city-chips">{popular.map(item => <a href={publicHtmlPath(item.slug)} data-city-choice-link data-city-id={item.id || item.slug} data-city-slug={item.slug} data-city-name={item.name} aria-current={item.slug === current?.slug ? 'location' : undefined}><span class="city-chip-label" data-label={item.name}><span>{item.name}</span></span></a>)}</div></section>}
       </div>
-      <section data-city-all><h3 data-city-list-title>Все города</h3><ul class="city-options">{ordered.map(item => <li data-city-option data-city-search-text={`${item.name} ${item.region.name}`}><a href={publicHtmlPath(item.slug)} data-city-choice-link data-city-id={item.id || item.slug} data-city-slug={item.slug} data-city-name={item.name} aria-current={item.slug === current?.slug ? 'location' : undefined}>{item.name}<img src={publicAsset('/images/figma/city-selected.svg')} width="24" height="24" alt="Выбран" data-city-selected-mark hidden={item.slug !== current?.slug} /></a></li>)}</ul></section>
+      <section data-city-all><h3 data-city-list-title>Все города</h3><ul class="city-options" id="picker-city-results" role="listbox" aria-label="Города">{ordered.map(item => <li data-city-option role="presentation"><a class="city-result" role="option" href={publicHtmlPath(item.slug)} data-city-choice-link data-city-id={item.id || item.slug} data-city-slug={item.slug} data-city-name={item.name} data-city-region={item.region.name} aria-current={item.slug === current?.slug ? 'location' : undefined}><span class="city-result-copy"><span data-city-name-text>{item.name}</span><small data-city-region-text>{item.region.name}</small></span><span class="city-current-note">Текущий</span></a></li>)}</ul></section>
       <section class="city-no-results" data-city-empty hidden><h3>Город не найден</h3><p>Проверьте название или выберите город из общего списка.</p><button type="button" class="flow-text-action" data-city-reset>Показать все города</button></section>
       <p class="city-result-status" data-city-result-status role="status" aria-live="polite"></p>
       {cities.length === 0 && <p>Опубликованных городов пока нет.</p>}
@@ -46,10 +47,9 @@ const ordered = [...cities].sort((a,b) => a.name.localeCompare(b.name,'ru'));
   .city-picker h3 { margin: 0 0 8px; font-size: 16px; line-height: 24px; font-weight: 600; }
   .city-quick-groups, .city-quick-groups section { margin-bottom: 24px; }
   .city-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .city-chips a { min-height: 48px; padding: 12px; background: #eef8ff; font-size: 14px; line-height: 20px; }
+  .city-chips a { min-height: 48px; padding: 12px; font-size: 14px; line-height: 20px; }
   .city-picker a { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-radius: 10px; text-decoration: none; }
-  .city-picker a[aria-current] { background: #eaf7ff; }
-  .city-picker a:hover { background: #eef8ff; }
+  .city-picker a:hover { background: #f4f6f8; }
   .city-options { columns: 3; column-gap: 24px; margin: 0; padding: 0; list-style: none; }
   .city-options li { break-inside: avoid; }
   .city-options a { min-height: 48px; padding: 12px; font-size: 16px; line-height: 24px; }
