@@ -4,4 +4,4 @@ import { AdminWorkspace } from '../../components/AdminWorkspace';
 import AdminRuntime from '../../components/AdminRuntime.astro';
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 ---
-<!doctype html><html lang="ru" transition:animate="none"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex, nofollow" /><title>Первые экраны · Админка</title><AdminRuntime /></head><body><AdminWorkspace apiUrl={apiUrl} initialPath="/templates/home" client:load transition:persist="admin-workspace" transition:persist-props /></body></html>
+<!doctype html><html lang="ru" transition:animate="none"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex, nofollow" /><title>Главная сайта и города · Админка</title><AdminRuntime /></head><body><AdminWorkspace apiUrl={apiUrl} initialPath="/templates/home" client:load transition:persist="admin-workspace" transition:persist-props /></body></html>

@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-10-16T12:08:41.412Z",
+  "scope": "Local compiled admin with isolated HTTP fixtures; no external writes",
+  "checks": [
+    "ten ordered sections; separate absent published snapshot; system contacts read-only",
+    "nested SITE variable insertion; FAQ add/reorder; complete atomic save without storage columns",
+    "409 retains input; structured server error focuses the exact FAQ answer",
+    "discard cancellation and explicit refresh preserve expected values",
+    "publication deep link focuses the requested saved answer",
+    "FAQ delete; unsupported site has explicit legacy path without fabricated content",
+    "load failure and retry",
+    "401 returns to login"
+  ],
+  "sizes": [
+    {
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "width": 834,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "overflow": false
+    }
+  ],
+  "pageErrors": []
+}

@@ -54,7 +54,7 @@ function fields(rule: GeneralHomeFieldRule, path = ''): BlockPassportField[] {
   }];
 }
 
-/** Registry metadata only. No API editor, data migration, renderer or activation is installed. */
+/** Editorial readiness is independent from the public renderer and publication lifecycle. */
 export const GENERAL_HOME_PASSPORTS: readonly BlockPassport[] = GENERAL_HOME_BLOCK_TYPES.map(id => {
   const definition = definitions[id];
   return {
@@ -62,11 +62,11 @@ export const GENERAL_HOME_PASSPORTS: readonly BlockPassport[] = GENERAL_HOME_BLO
     visualVariants: ['Утверждённые Screens Desktop/Tablet/Mobile; новый дизайн не проектируется'],
     fields: fields(GENERAL_HOME_SCHEMAS[id]),
     emptyBehavior: 'Безопасные пустые строки сохраняются черновиком; неправильные типы/ключи и опасные данные запрещены. Обязательные пропуски блокируют готовность к публикации с точным block/field. Фиксированные смысловые карточки не исчезают.',
-    editorForm: 'Паспорт утверждён; редактор ещё не реализован. Разрешены только указанные поля, без управления порядком секций, стилями, контактами или действиями.',
+    editorForm: 'Редактор /templates/home?kind=HOME: атомарная рабочая версия десяти блоков, фиксированные карточки, FAQ до50 пар, ошибки точного поля и защита несохранённого ввода. Разрешены только указанные поля, без управления порядком секций, стилями, контактами или действиями.',
     previewScenarios: ['Desktop 1440, Tablet 834, Mobile 390 и 320 px', 'Полный контент, безопасный неполный черновик и длинные тексты', 'Ошибки/пустые данные по паспорту; preview и действия проверяются на следующих этапах'],
     accessibility: ['Один H1 страницы, H2 секции; смысловые изображения с alt', 'Фокус и управление с клавиатуры по типу действия; ошибки связаны с полем', 'Допустимый контент не обрезается'],
-    status: 'APPROVED', passportVersion: GENERAL_HOME_VERSION, approvedBy: 'Владелец проекта; согласование 2026-10-16', editorReadiness: 'PENDING', replacementId: null,
-    implementation: 'PageTemplate(HOME) → PageTemplateBlock.data; general-home-model.ts/general-home.ts/general-home-template.ts задают контракт, guarded API и catalog.generalHome. Проверка подключена к publication preflight. Редактор и renderer ещё не реализованы.',
+    status: 'APPROVED', passportVersion: GENERAL_HOME_VERSION, approvedBy: 'Владелец проекта; согласование 2026-10-16', editorReadiness: 'READY', replacementId: null,
+    implementation: 'PageTemplate(HOME) → PageTemplateBlock.data; типизированный контракт, guarded API, catalog.generalHome и publication preflight. GeneralHomeApp редактирует разрешённые поля; готовность редактора подтверждена локально. Публичный renderer и preview полной HOME — следующие этапы; статус ACTIVE не присваивается по готовности формы.',
     design: { fileKey: 'BdxNHlBVZWejREtOEIWDkI', nodeId: definition.nodes[0], name: definition.title, variants: definition.nodes.map((nodeId, index) => ({ device: (['Desktop', 'Tablet', 'Mobile'] as const)[index], nodeId })) },
     runtimeRules: [...definition.rules, 'Контакты — Site, города — опубликованный каталог; ежедневно 24/7, звонок в течение 15 минут. Юридические документы и логика FLOW системные, не копии CMS-полей.'],
   };

@@ -46,9 +46,10 @@ test('content sources lead to existing editors and never offer a missing city ed
   }
   assert.equal(passportSource(byId('home.hero')).href, '/templates/home?kind=HOME');
   for (const passport of filterPassports(passports, '', 'root').filter(item => item.id !== 'home.hero')) {
-    assert.equal(passport.editorReadiness, 'PENDING');
-    assert.equal(passportSource(passport).href, null);
-    assert.match(passportSource(passport).note, /ещё не подключён/);
+    assert.equal(passport.editorReadiness, 'READY');
+    assert.equal(passportSource(passport).href, `/templates/home?kind=HOME&block=${encodeURIComponent(passport.id)}`);
+    assert.match(passportSource(passport).note, /рабочую версию/);
+    assert.equal(passportSource({ ...passport, editorReadiness: 'PENDING' }).href, null);
     assert.equal(passportPlacement(passport), 'Общая главная');
   }
   for (const id of ['tariff.faq', 'tariff.address']) assert.doesNotMatch(passportSource(byId(id)).note, /Контент меняется|редакторе/);

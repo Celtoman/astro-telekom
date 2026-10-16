@@ -148,9 +148,10 @@ test('city Hero V3 separates template content, computed catalog facts and legacy
   assert.ok(hero.runtimeRules.some((rule) => /TARGET_AVAILABLE/.test(rule)));
 });
 
-test('existing READY editors are unchanged while the new approved HOME editors remain pending', () => {
+test('verified HOME editors are READY while existing CITY_HOME editor fields retain their contract', () => {
   const { BLOCK_PASSPORTS } = require('../apps/api/dist/block-passports.js');
-  assert.deepEqual(BLOCK_PASSPORTS.filter(p => p.editorReadiness === 'READY').map(p => p.id), ['hero', 'tariff_grid', 'home.hero']);
+  const { GENERAL_HOME_BLOCK_TYPES } = require('../apps/api/dist/general-home-model.js');
+  assert.deepEqual(BLOCK_PASSPORTS.filter(p => p.editorReadiness === 'READY').map(p => p.id), ['hero', 'tariff_grid', 'home.hero', ...GENERAL_HOME_BLOCK_TYPES]);
   for (const passport of BLOCK_PASSPORTS.filter(p => p.id === 'hero')) {
     for (const key of ['addressPlaceholder', 'checkButtonText', 'image', 'imageAlt']) {
       const item = passport.fields.find(f => f.key === key);

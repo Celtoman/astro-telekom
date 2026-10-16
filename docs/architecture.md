@@ -140,3 +140,8 @@ GET sites?summary=true исключает provider/regions/cities graph. GET sit
 Миграция `0058_home_composition_tariff_collection` скрывает пять прежних блоков рабочего CITY_HOME и фиксирует версии композиции/паспорта/runtime в template.content; опубликованные snapshots, legacy PageBlock и tariff detail не изменяются. Код материализации проецирует только известную прежнюю последовательность из семи блоков, чтобы CODE rollout мог пересобрать прежний обслуживаемый снимок.
 
 FLOW 1 реализован отдельным CallbackDialog + callback-client, но использует общий POST leads, idempotency и notification outbox. Причина callback_consultation имеет MANUAL route; NULL cityId допустим только для неё на публичной границе. FLOW 2 сохраняет AddressForm/address-check-client, persisted coverage и sales decision/delivery. LegalDocuments использует те же разделы юридических страниц, public-dialogs меняет только внутреннюю панель native dialog и сохраняет форму. CityPicker использует published catalog; общие public-ui.css токены и локальные Figma assets обслуживаются тем же versioned asset contract.
+
+
+### Полная HOME: подготовка контента и редактор
+
+Начальный контент девяти блоков хранится в versioned JSON assets API; seed и defaults используют его, неизменяемый SQL payload0061 сверяется профильным тестом. Guarded миграция меняет только известный рабочий HOME Дом.ру с одной revision/audit, не SitePublication. GeneralHomeApp сохраняет всю десятиблочную композицию атомарно через HTTP; schema-derived поля/лимиты и SITE-пути переиспользуются без конструктора стилей. CITY_HOME и legacy Hero доступны своим прежним режимом. READY редакторов не означает готовность публичной вёрстки. [Приёмка этапа4](research/2026-10-16-general-home-stage4-editors-acceptance.md).

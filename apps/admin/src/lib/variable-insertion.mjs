@@ -14,7 +14,7 @@ export function filterVariableDefinitions(definitions, field, context, query) {
   const normalizedQuery = query.trim().toLocaleLowerCase('ru')
   return definitions.filter((definition) =>
     definition.status === 'ACTIVE'
-    && definition.allowedFields.includes(field)
+    && (definition.allowedFields.includes(field) || definition.allowedFields.includes(field.replace(/\.\d+(?=\.|$)/g, '[]')))
     && scopeRanks[definition.scope] <= scopeRanks[context]
     && (!normalizedQuery || `${definition.code} ${definition.name}`.toLocaleLowerCase('ru').includes(normalizedQuery))
   )

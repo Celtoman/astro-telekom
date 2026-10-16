@@ -19,7 +19,7 @@
 | Область | Текущая реализация | Ограничения и следующий объём |
 | --- | --- | --- |
 | Инфраструктура | pnpm monorepo; PostgreSQL/Redis; API readiness; Coolify Compose; separate migration/runtime images; CI запускает `pnpm check`. | Migration target прямого prod Compose исправлен и проверен на отдельной PostgreSQL 18: все миграции и точный повтор (#236). Полный direct stack не проверен. Локальная transient-блокировка Docker context — [#251](https://github.com/Celtoman/astro-telekom/issues/251). |
-| Данные и запуск | Единственная Prisma schema и клиент `apps/api/generated`; 60 миграций до `0060_home_hero_city_search`. Миграции выполняются до API. | Seed проходит свежую PostgreSQL 18 и publication preflight; атомарен, повторный запуск сохраняет данные и credentials. Примеры тарифов — DRAFT без цен. На действующем test-контуре seed выключен. |
+| Данные и запуск | Единственная Prisma schema и клиент `apps/api/generated`; 61 миграция до `0061_general_home_composition` (последняя проверена локально, внешний переход ещё не выполнен). Миграции выполняются до API. | Seed проходит свежую PostgreSQL 18; полная HOME требует заполнить FAQ до publication preflight; атомарен, повторный запуск сохраняет данные и credentials. Примеры тарифов — DRAFT без цен. На действующем test-контуре seed выключен. |
 | Доступ | HttpOnly-cookie admin session; защищённые admin/machine/worker routes; login rate limit, CORS и noindex; внешний test-контур закрыт Basic Auth. | Dependency audit после #258 — без advisory entries; origin/absolute HTTP request targets используют одинаковые специализированные buckets (#259). Нет scoped service accounts и полного read-only Agent diagnostics API: [#34](https://github.com/Celtoman/astro-telekom/issues/34). |
 | Города | Канонический XLSX-справочник; формы топонимов, office state, subscriber profile; поиск, фильтры, cursor-list, create/edit, readiness, slug/301, архив и восстановление в DRAFT. HOME связана с общим CITY_HOME template. | Индивидуальные city content/SEO override не используются. Координат и географической карты нет; coverage проверяется по адресу. |
 | Тарифы | Строгий 37-колоночный full-snapshot XLSX; validate/apply/guarded undo; серверная business identity; ручной редактор, цены, комплектация, availability, archive/purge/slug/301. | Новые тарифные/сервисные листинги находятся за пределами Release 1. |
@@ -90,3 +90,13 @@ API сохранения, публичный каталог, маршруты, �
 Добавлены защищённые GET/PATCH `/admin/sites/:siteId/page-templates/general-home`: атомарный полный save десяти блоков, сохранение ID и системного порядка, safe draft, одна working revision и before/after audit, 409 при конфликте. Рабочая и опубликованная версии читаются раздельно; неизвестные версии отклоняются, при отсутствии опубликованной новой HOME возвращается null. Старый редактор Hero сохраняет остальные девять блоков и метаданные состава.
 
 `SiteCatalogService` проецирует явный новый состав в `catalog.generalHome`, разрешает SITE-переменные во вложенных текстовых полях, учитывает usages и проверяет результат после подстановки. Общие правила графика/обратного звонка входят в публичный Site. Publication preflight сообщает GENERAL_HOME_NOT_READY с точными HOME/block/field/reason. Без метаданных новой композиции старые снимки сохраняют прежний Hero. Новых данных, миграций, редакторов и блоков сайта этап 2 не добавляет; внешний выпуск ещё не выполнен.
+
+
+### Общая HOME: подготовка данных, этап 3
+
+Подготовлены guarded/idempotent миграция0061 и свежий seed десяти блоков с сохранением Hero2.0.0, начальный контент и восемь исходных assets Figma. FAQ намеренно пуст: сохранение черновика разрешено, публикация блокируется до настоящих ответов. PostgreSQL18 rehearsal проверяет сохранность снимка и истории, изоляцию провайдеров, атомарный save/stale409. Исправлен аудит вложенных data (#345); исторические события не переписаны. Внешняя миграция и публикация ещё не выполнялись. [Приёмка](research/2026-10-16-general-home-stage3-data-acceptance.md).
+
+
+### Общая HOME: редакторы, этап 4
+
+GeneralHomeApp на /templates/home?kind=HOME редактирует десять блоков атомарно, с фиксированными карточками и FAQ0–50, SITE-переменными из схем, разделением working/published, защитой ввода при409 и точным block/field. CITY_HOME остаётся прежним. Девять новых editorReadiness=READY после локального browser smoke; status=APPROVED. Публичный renderer/preview и внешний rollout ещё не завершены. [Приёмка](research/2026-10-16-general-home-stage4-editors-acceptance.md).

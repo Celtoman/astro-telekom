@@ -24,13 +24,13 @@ const checkError = (fn, block, field, reason) => assert.throws(fn, error => {
   return true;
 });
 
-test('nine approved HOME passports are registered without marking editors READY or blocks ACTIVE', () => {
+test('nine approved HOME passports have verified editors without marking public blocks ACTIVE', () => {
   const passports = BLOCK_PASSPORTS.filter(item => Object.hasOwn(fixtures(), item.id));
   assert.equal(passports.length, 9);
   for (const passport of passports) {
     assert.equal(passport.status, 'APPROVED', passport.id);
     assert.equal(passport.passportVersion, '1.0.0', passport.id);
-    assert.equal(passport.editorReadiness, 'PENDING', passport.id);
+    assert.equal(passport.editorReadiness, 'READY', passport.id);
     assert.equal(passport.proposedContentScope, 'TEMPLATE');
     assert.deepEqual(passport.proposedAllowedPages, ['HOME']);
     assert.match(passport.approvedBy, /2026-10-16/);

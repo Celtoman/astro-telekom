@@ -1,4 +1,5 @@
 import { tariffTemplateBlocks } from './tariff-template.mjs'
+import { generalHomeSections, generalHomeFieldRule, generalHomeFieldLabel } from './general-home-editor.mjs'
 const templates = { HOME: 'Главная сайта', CITY_HOME: 'Главная города', CITY_TARIFF_DETAIL: 'Страница тарифа' }
 const blocks = { ...Object.fromEntries(tariffTemplateBlocks.map(block => [block.id, block.title])), hero: 'Первый экран', 'home.hero': 'Первый экран', tariff_grid: 'Тарифы города', rich_text: 'Текстовый блок', service_grid: 'Услуги', feature_grid: 'Преимущества', steps: 'Этапы подключения' }
 export const publicationFieldLabels = {
@@ -17,15 +18,23 @@ export function publicationIssuePresentation(issue, siteId) {
   const service = issue.context === 'SERVICE_DATA'
   const serviceNames = { INTERNET: 'Интернет', INTERNET_TV: 'Интернет и ТВ', TV: 'Телевидение' }
   const template = templates[issue.template]
-  const block = blocks[issue.block]
-  const field = publicationFieldLabels[issue.field] ?? (issue.field ? `Поле ${issue.field}` : null)
+  const homeSection = issue.template === 'HOME' ? generalHomeSections.find(section => section.id === issue.block) : null
+  const block = homeSection?.title ?? blocks[issue.block]
+  const homeRule = homeSection && generalHomeFieldRule(issue.block, issue.field)
+  const field = homeRule ? generalHomeFieldLabel(issue.field) : publicationFieldLabels[issue.field] ?? (issue.field ? `Поле ${issue.field}` : null)
   const heading = system ? 'Не удалось проверить сборку сайта' : service ? `Служебные данные города · ${serviceNames[issue.pageType] ?? issue.pageType ?? 'Страница'}` : [template, block].filter(Boolean).join(' · ') || 'Проверка страницы'
   let href = null
   if (!system && !service && siteId) {
     const query = new URLSearchParams({ siteId })
     if (issue.field && publicationFieldLabels[issue.field]) query.set('field', issue.field)
     query.set('from', 'publication')
-    if (issue.template === 'CITY_HOME' && issue.block === 'tariff_grid') href = `/templates/tariffs?${query}`
+    if (homeSection && issue.block !== 'home.hero') {
+      query.set('kind', 'HOME'); query.set('block', issue.block)
+      if (homeRule) query.set('field', issue.field)
+      else query.delete('field')
+      href = `/templates/home?${query}`
+    }
+    else if (issue.template === 'CITY_HOME' && issue.block === 'tariff_grid') href = `/templates/tariffs?${query}`
     else if (['HOME', 'CITY_HOME'].includes(issue.template) && ['hero', 'home.hero'].includes(issue.block)) {
       query.set('kind', issue.template); href = `/templates/home?${query}`
     } else if (issue.template === 'CITY_TARIFF_DETAIL' && issue.entityId) {

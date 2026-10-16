@@ -5,6 +5,8 @@ import { randomBytes, scryptSync } from 'node:crypto';
 import { ensureCityHomeTemplate } from './page-template';
 import { homeHeroDefaults, HOME_HERO_VERSION, HOME_HERO_IMPLEMENTATION } from './home-hero-model';
 import { defaultDomruProfileCatalog } from './domru-profile-catalog';
+import { generalHomeDefaultBlocks } from './general-home-defaults';
+import { GENERAL_HOME_METADATA } from './general-home-model';
 
 const PUBLISHED = 'PUBLISHED' as const;
 const DRAFT = 'DRAFT' as const;
@@ -104,8 +106,11 @@ async function main() {
       create: {
         siteId: site.id, kind: 'HOME', status: PUBLISHED,
         titleTemplate: `Подключение домашнего интернета и телевидения ${site.name}`,
-        content: { firstScreenPassportVersion: HOME_HERO_VERSION, firstScreenImplementationVersion: HOME_HERO_IMPLEMENTATION },
-        blocks: { create: [{ blockType: 'home.hero', position: 10, visible: true, data: homeHeroDefaults(site.name), source: 'seed:first-screen' }] },
+        content: { firstScreenPassportVersion: HOME_HERO_VERSION, firstScreenImplementationVersion: HOME_HERO_IMPLEMENTATION, ...GENERAL_HOME_METADATA },
+        blocks: { create: [
+          { blockType: 'home.hero', position: 10, visible: true, data: homeHeroDefaults(site.name), source: 'seed:first-screen' },
+          ...generalHomeDefaultBlocks().map((block, index) => ({ blockType: block.blockType, position: (index + 2) * 10, visible: true, data: block.data, source: 'seed:general-home' })),
+        ] },
       },
     });
 

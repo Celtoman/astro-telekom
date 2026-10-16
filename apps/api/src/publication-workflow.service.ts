@@ -14,6 +14,18 @@ import { readCmsProgress, estimatePublicationRemaining, type CmsProgress } from 
 type Transaction = Prisma.TransactionClient | PrismaService;
 type JsonObject = Record<string, unknown>;
 
+function auditFieldValue(snapshot: JsonObject, field: string): unknown {
+  if (Object.hasOwn(snapshot, field)) return snapshot[field] ?? null;
+  const visit = (value: unknown, path: string[]): unknown => {
+    if (!path.length) return value ?? null;
+    if (!value || typeof value !== 'object') return null;
+    const [key, ...rest] = path;
+    if (Array.isArray(value) && !/^(0|[1-9]\d*)$/.test(key)) return value.map(item => visit(item, path));
+    return Object.hasOwn(value, key) ? visit((value as JsonObject)[key], rest) : null;
+  };
+  return visit(snapshot, field.split('.'));
+}
+
 type WorkingRevisionInput = {
   siteId: string;
   entityType: 'PROVIDER' | 'SITE' | 'REGION' | 'CITY' | 'PAGE' | 'PAGE_TEMPLATE' | 'TARIFF' | 'REDIRECT';
@@ -61,8 +73,8 @@ export class PublicationWorkflowService {
     return Object.fromEntries([...new Set(input.changedFields)].sort().map((field) => [
       field,
       {
-        before: previous[field] === undefined ? null : previous[field],
-        after: next[field] === undefined ? null : next[field],
+        before: auditFieldValue(previous, field),
+        after: auditFieldValue(next, field),
       },
     ])) as Prisma.InputJsonObject;
   }

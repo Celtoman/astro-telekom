@@ -43,7 +43,17 @@ try {
   assert.equal(first.status, 0, first.stderr || first.stdout);
   const site = await db.site.findUniqueOrThrow({ where: { slug: 'domru-site' } });
   const catalogService = new SiteCatalogService(db);
-  const source = await catalogService.captureSourceBySiteId(site.id);
+  let source = await catalogService.captureSourceBySiteId(site.id);
+  const incomplete = validatePublicationSource(source, { appVersion: 'seed-rehearsal', siteRevision: site.workingRevision }, (candidate, now) => catalogService.renderSource(candidate, now));
+  assert.equal(incomplete.report.outcome, 'BLOCKED', 'fresh HOME requires real FAQ content before publication');
+  assert.ok(incomplete.report.issues.some(issue => issue.code === 'GENERAL_HOME_NOT_READY' && issue.block === 'home.faq' && issue.field === 'items'));
+  const fullHome = source.pageTemplates.find(template => template.kind === 'HOME');
+  assert.equal(fullHome.blocks.length, 10);
+  const faq = fullHome.blocks.find(block => block.blockType === 'home.faq');
+  assert.deepEqual(faq.data.items, []);
+  // Isolated synthetic content proves readiness without shipping demo answers in bootstrap defaults.
+  await db.pageTemplateBlock.update({ where: { id: faq.id }, data: { data: { ...faq.data, items: [{ question: 'Синтетический вопрос', answer: 'Ответ только для изолированной проверки.' }] } } });
+  source = await catalogService.captureSourceBySiteId(site.id);
   const validation = validatePublicationSource(source, { appVersion: 'seed-rehearsal', siteRevision: site.workingRevision }, (candidate, now) => catalogService.renderSource(candidate, now));
   assert.notEqual(validation.report.outcome, 'BLOCKED', JSON.stringify(validation.report.issues));
   assert.equal(validation.catalog.routes.length, 7, 'root, five globals and the single city HOME; unpriced demo tariffs remain drafts');
@@ -97,7 +107,7 @@ try {
   assert.equal(await db.provider.count(), 0, 'a mid-bootstrap error must roll back the provider and all related rows');
   assert.equal(await db.site.count(), 0);
   assert.equal(await db.user.count(), 0);
-  process.stdout.write('seed rehearsal: fresh bootstrap, publication preflight, exact idempotence, preserved edits, imported catalog, credentials and atomic rollback passed\n');
+  process.stdout.write('seed rehearsal: fresh bootstrap, explicit FAQ readiness, publication preflight, exact idempotence, preserved edits, imported catalog, credentials and atomic rollback passed\n');
 } finally {
   if (db) await db.onModuleDestroy();
   docker(['rm', '-f', container], true);

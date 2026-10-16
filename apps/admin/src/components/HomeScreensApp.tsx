@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "./ui/field"
 import { Input } from "./ui/input"
 import { editRedTitle, parseRedTitle } from "../../../api/src/home-hero-model"
+import { GeneralHomeApp } from "./GeneralHomeApp"
 
 type Kind = "HOME" | "CITY_HOME"
 interface Screen { kind: Kind; passportVersion?: string; data: Record<string, any>; missingFields: string[]; published: Record<string, any> | null }
@@ -31,6 +32,11 @@ type FieldKey = keyof typeof fields
 const clone = (data: Record<string, any>) => JSON.parse(JSON.stringify(data))
 
 export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
+  const query = typeof window === "undefined" ? null : new URLSearchParams(window.location.search)
+  return query?.get("kind") === "CITY_HOME" || query?.get("mode") === "legacy" ? <FirstScreenEditor apiUrl={apiUrl} /> : <GeneralHomeApp apiUrl={apiUrl} />
+}
+
+function FirstScreenEditor({ apiUrl }: { apiUrl: string }) {
   const [user, setUser] = useState<{ id: string; email: string } | null>(null)
   const [sites, setSites] = useState<Site[]>(() => peekNavigationJson(apiUrl, "/admin/sites?summary=true") ?? [])
   const [siteId, setSiteId] = useState(() => editorSiteId(sites, typeof window === "undefined" ? "" : window.location.search))

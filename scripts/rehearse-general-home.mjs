@@ -1,0 +1,125 @@
+import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const { PrismaService } = require('../apps/api/dist/prisma.service.js');
+const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
+const { PublicationWorkflowService } = require('../apps/api/dist/publication-workflow.service.js');
+const { AdminPageTemplatesController } = require('../apps/api/dist/admin-page-templates.controller.js');
+const { validateGeneralHomeComposition } = require('../apps/api/dist/general-home.js');
+const { generalHomeFromTemplate } = require('../apps/api/dist/general-home-template.js');
+const container = `astro-home-data-${randomUUID().slice(0, 8)}`;
+const email = 'home-data-rehearsal@example.test';
+const migration = readFileSync(new URL('../prisma/migrations/0061_general_home_composition/migration.sql', import.meta.url), 'utf8');
+function docker(args, options = {}) {
+  const result = spawnSync('docker', args, { encoding: 'utf8', timeout: 120000, windowsHide: true, ...options });
+  return result;
+}
+function checked(result) { assert.equal(result.status, 0, result.stderr || result.stdout || result.error?.message); return result.stdout.trim(); }
+function apply() { return docker(['exec', '-i', container, 'psql', '-U', 'postgres', '-d', 'provider', '-v', 'ON_ERROR_STOP=1'], { input: migration }); }
+const json = value => JSON.parse(JSON.stringify(value));
+let db;
+try {
+  checked(docker(['run', '--rm', '-d', '--name', container, '-p', '127.0.0.1::5432', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=provider', 'postgres:18.6-alpine']));
+  let ready = false;
+  for (let i = 0; i < 60; i++) {
+    if (docker(['exec', container, 'pg_isready', '-U', 'postgres', '-d', 'provider'], { timeout: 5000 }).status === 0) { ready = true; break; }
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200);
+  }
+  assert.ok(ready, 'owned isolated PostgreSQL is ready');
+  const port = checked(docker(['port', container, '5432/tcp'])).match(/:(\d+)\s*$/)[1];
+  process.env.DATABASE_URL = `postgresql://postgres:postgres@127.0.0.1:${port}/provider`;
+  checked(spawnSync('pnpm', ['--filter', '@provider/database', 'migrate:deploy'], { shell: process.platform === 'win32', env: process.env, encoding: 'utf8', timeout: 120000, windowsHide: true }));
+  checked(spawnSync(process.execPath, ['apps/api/dist/seed.js'], { env: { ...process.env, ADMIN_EMAIL: email, ADMIN_PASSWORD: 'synthetic-home-data-password' }, encoding: 'utf8', timeout: 30000, windowsHide: true }));
+  db = new PrismaService(); await db.onModuleInit();
+  const template = id => db.pageTemplate.findUniqueOrThrow({ where: { id }, include: { blocks: { orderBy: { position: 'asc' } } } });
+  const site = await db.site.findUniqueOrThrow({ where: { slug: 'domru-site' } });
+  let main = await db.pageTemplate.findUniqueOrThrow({ where: { siteId_kind: { siteId: site.id, kind: 'HOME' } }, include: { blocks: { orderBy: { position: 'asc' } } } });
+  assert.equal(main.blocks.length, 10);
+  assert.deepEqual(main.blocks.at(-1).data.items, []);
+  const city = json(await db.pageTemplate.findUniqueOrThrow({ where: { siteId_kind: { siteId: site.id, kind: 'CITY_HOME' } }, include: { blocks: { orderBy: { position: 'asc' } } } }));
+  const hero = { ...main.blocks[0], data: { ...main.blocks[0].data, title: 'Сохранённый редакционный <red>заголовок</red>' } };
+  const legacyContent = { ...main.content }; delete legacyContent.generalHomeCompositionVersion; delete legacyContent.generalHomeImplementationVersion;
+  await db.pageTemplateBlock.deleteMany({ where: { templateId: main.id, blockType: { not: 'home.hero' } } });
+  await db.pageTemplateBlock.update({ where: { id: hero.id }, data: { data: hero.data } });
+  await db.pageTemplate.update({ where: { id: main.id }, data: { content: legacyContent } });
+  await db.site.update({ where: { id: site.id }, data: { workingRevision: 7, publishedRevision: 7 } });
+  const published = json(await db.sitePublication.create({ data: { siteId: site.id, siteRevision: 7, status: 'SUCCEEDED', catalog: { sentinel: 'immutable', homeHero: hero.data, homeHeroVersion: '2.0.0' }, triggerEntity: 'test', triggerEntityId: site.id } }));
+  const secondSite = await db.site.create({ data: { providerId: site.providerId, name: 'Другой сайт Дом.ру', slug: 'second-domru', workingRevision: 3 } });
+  const second = await db.pageTemplate.create({ data: { siteId: secondSite.id, kind: 'HOME', titleTemplate: 'Другой сайт', content: legacyContent, blocks: { create: { blockType: 'home.hero', position: 10, data: hero.data } } } });
+  const foreignProvider = await db.provider.create({ data: { name: 'Другой оператор', slug: 'other-provider' } });
+  const foreignSite = await db.site.create({ data: { providerId: foreignProvider.id, name: 'Другой оператор', slug: 'other-site' } });
+  const foreign = await db.pageTemplate.create({ data: { siteId: foreignSite.id, kind: 'HOME', titleTemplate: 'Чужой шаблон', content: { generalHomeCompositionVersion: 'unknown' }, blocks: { create: { blockType: 'unrelated', position: 4, data: {} } } } });
+  const foreignBefore = json(await template(foreign.id));
+  const extra = await db.pageTemplateBlock.create({ data: { templateId: main.id, blockType: 'unknown', position: 999, data: {} } });
+  const beforeRejected = json(await template(main.id));
+  assert.notEqual(apply().status, 0, 'ambiguous source must fail');
+  assert.deepEqual(json(await template(main.id)), beforeRejected);
+  assert.equal((await template(second.id)).blocks.length, 1, 'other valid target must not be partially upgraded');
+  assert.equal((await db.site.findUniqueOrThrow({ where: { id: site.id } })).workingRevision, 7);
+  assert.equal(await db.contentRevision.count({ where: { source: 'migration:0061:general-home-composition' } }), 0);
+  await db.pageTemplateBlock.delete({ where: { id: extra.id } });
+  checked(apply());
+  main = await template(main.id);
+  assert.equal(main.blocks.length, 10);
+  assert.deepEqual(main.blocks[0], hero);
+  assert.equal((await template(second.id)).blocks.length, 10);
+  assert.equal((await db.site.findUniqueOrThrow({ where: { id: site.id } })).workingRevision, 8);
+  assert.equal((await db.site.findUniqueOrThrow({ where: { id: secondSite.id } })).workingRevision, 4);
+  assert.deepEqual(json(await template(city.id)), city);
+  assert.deepEqual(json(await template(foreign.id)), foreignBefore);
+  assert.deepEqual(json(await db.sitePublication.findUniqueOrThrow({ where: { id: published.id } })), published);
+  assert.equal((await db.site.findUniqueOrThrow({ where: { id: site.id } })).publishedRevision, 7);
+  const revision = await db.contentRevision.findFirstOrThrow({ where: { siteId: site.id, source: 'migration:0061:general-home-composition' } });
+  assert.equal(revision.previousSnapshot.blocks.length, 1);
+  assert.equal(revision.snapshot.blocks.length, 10);
+  assert.equal(revision.siteRevision, 8);
+  assert.equal(await db.auditEvent.count({ where: { source: 'migration:0061:general-home-composition' } }), 2);
+  const view = generalHomeFromTemplate(main, true);
+  assert.deepEqual(validateGeneralHomeComposition(view.blocks.map(({ blockType, data }) => ({ blockType, data })), view.version, true), [{ block: 'home.faq', field: 'items' }]);
+  const controller = new AdminPageTemplatesController(db, new PublicationWorkflowService(db, new SiteCatalogService(db)));
+  const editor = await controller.generalHome(site.id);
+  assert.equal(editor.published, null, 'legacy snapshot is distinct from working HOME');
+  const changed = editor.blocks.map(({ blockType, data }) => ({ blockType, data: structuredClone(data) }));
+  changed[1].data.title = 'Проверка сохранения';
+  changed.at(-1).data.items = [{ question: 'Синтетический вопрос проверки', answer: 'Ответ только изолированного теста.' }];
+  const user = await db.user.findUniqueOrThrow({ where: { email } });
+  const saved = await controller.updateGeneralHome(site.id, { expectedWorkingRevision: 8, blocks: changed }, { user: { id: user.id } });
+  assert.equal(saved.workingRevision, 9);
+  assert.deepEqual(saved.missingFields, []);
+  assert.deepEqual(saved.blocks.map(({ blockType, data }) => ({ blockType, data })), changed);
+  const audit = await db.auditEvent.findFirstOrThrow({ where: { siteId: site.id, source: 'admin:general-home' } });
+  assert.equal(audit.actorId, user.id);
+  assert.deepEqual(audit.changes['blocks.data'].before, main.blocks.map(block => block.data));
+  assert.deepEqual(audit.changes['blocks.data'].after, changed.map(block => block.data));
+  const history = await db.contentRevision.findFirstOrThrow({ where: { siteId: site.id, source: 'admin:general-home' } });
+  assert.deepEqual(history.previousSnapshot.blocks.map(block => block.data), main.blocks.map(block => block.data));
+  assert.deepEqual(history.snapshot.blocks.map(block => block.data), changed.map(block => block.data));
+  const stable = json(await template(main.id));
+  // Fail the last block after earlier writes to prove the actual database transaction rolls back.
+  await db.$executeRawUnsafe(`ALTER TABLE "PageTemplateBlock" ADD CONSTRAINT "home_rehearsal_late_failure" CHECK ("blockType" <> 'home.faq' OR "data"->>'title' <> 'FORCED_ROLLBACK')`);
+  const rejected = structuredClone(changed);
+  rejected[1].data.title = 'Это изменение должно откатиться';
+  rejected.at(-1).data.title = 'FORCED_ROLLBACK';
+  await assert.rejects(() => controller.updateGeneralHome(site.id, { expectedWorkingRevision: 9, blocks: rejected }, { user: { id: user.id } }));
+  assert.deepEqual(json(await template(main.id)), stable, 'failure on the last write must undo all earlier writes');
+  assert.equal((await db.site.findUniqueOrThrow({ where: { id: site.id } })).workingRevision, 9);
+  assert.equal(await db.contentRevision.count({ where: { siteId: site.id, source: 'admin:general-home' } }), 1);
+  assert.equal(await db.auditEvent.count({ where: { siteId: site.id, source: 'admin:general-home' } }), 1);
+  await db.$executeRawUnsafe('ALTER TABLE "PageTemplateBlock" DROP CONSTRAINT "home_rehearsal_late_failure"');
+  await assert.rejects(() => controller.updateGeneralHome(site.id, { expectedWorkingRevision: 8, blocks: changed }), error => error.status === 409);
+  checked(apply());
+  assert.deepEqual(json(await template(main.id)), stable, 'repeat migration preserves edited content, IDs and timestamps');
+  assert.equal((await db.site.findUniqueOrThrow({ where: { id: site.id } })).workingRevision, 9);
+  assert.equal(await db.contentRevision.count({ where: { source: 'migration:0061:general-home-composition' } }), 2);
+  assert.deepEqual(json(await db.sitePublication.findUniqueOrThrow({ where: { id: published.id } })), published);
+  await db.pageTemplate.update({ where: { id: main.id }, data: { content: { ...main.content, generalHomeCompositionVersion: '99' } } });
+  assert.notEqual(apply().status, 0, 'unknown version must fail');
+  assert.equal((await db.site.findUniqueOrThrow({ where: { id: site.id } })).workingRevision, 9);
+  process.stdout.write('general HOME: guarded migration, idempotence, immutable publication, preserved Hero, isolated providers and atomic API save passed\n');
+} finally {
+  if (db) await db.onModuleDestroy();
+  docker(['rm', '-f', container]);
+}

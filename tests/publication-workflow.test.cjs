@@ -5,6 +5,24 @@ const { PublicationWorkflowController } = require('../apps/api/dist/publication-
 const { publicationSource, city } = require('./helpers/publication-source.cjs');
 const { buildReleaseOneRoutes } = require('../apps/api/dist/public-route-policy.js');
 
+test('audit changes retain nested object values, block data arrays and missing fields without reading prototypes', () => {
+  const service = new PublicationWorkflowService({}, {});
+  const changes = service.fieldChanges({
+    previousSnapshot: { title: 'Before', content: { version: '1' }, blocks: [{ data: { title: 'Old block' } }, {}] },
+    snapshot: { title: 'After', content: { version: '2' }, blocks: [{ data: { title: 'New block' } }, {}] },
+    changedFields: ['title', 'content.version', 'blocks.data', 'blocks.0.data.title', 'missing', '__proto__.toString'],
+  });
+  assert.deepEqual(changes, {
+    title: { before: 'Before', after: 'After' },
+    'content.version': { before: '1', after: '2' },
+    'blocks.data': { before: [{ title: 'Old block' }, null], after: [{ title: 'New block' }, null] },
+    'blocks.0.data.title': { before: 'Old block', after: 'New block' },
+    missing: { before: null, after: null },
+    '__proto__.toString': { before: null, after: null },
+  });
+  assert.deepEqual(service.fieldChanges({ previousSnapshot: { 'content.version': 'literal' }, snapshot: {}, changedFields: ['content.version'] }), { 'content.version': { before: 'literal', after: null } });
+});
+
 function fixture() {
   const sites = new Map([
     ['site-1', {

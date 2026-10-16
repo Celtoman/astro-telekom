@@ -1,3 +1,4 @@
+import { generalHomeFieldLabel } from './general-home-editor.mjs';
 const names = {
   header: 'Шапка сайта', 'home.hero': 'Первый экран главной', hero: 'Первый экран города',
   tariff_grid: 'Тарифы города', service_grid: 'Услуги', feature_grid: 'Преимущества',
@@ -42,12 +43,13 @@ export function passportContent(passport) {
   const fields = passport.id === 'header'
     ? passport.fields.filter(field => ['connectionPhone', 'supportPhone'].includes(field.key))
     : passport.fields.filter(field => field.control !== 'read_only');
-  return fields.map(field => ({ key: field.key, label: fieldNames[field.key] ?? 'Дополнительное поле', required: field.required }));
+  return fields.map(field => ({ key: field.key, label: fieldNames[field.key] ?? (passportGroup(passport) === 'root' ? generalHomeFieldLabel(field.key) : 'Дополнительное поле'), required: field.required }));
 }
 export function passportSource(passport) {
   if (passport.id === 'tariff_grid' && passport.editorReadiness === 'READY') return { href: '/templates/tariffs', label: 'Открыть редактор', note: 'Общий тарифный блок городов. Цены и закрепление меняются в каталоге тарифов.' };
   if (['home.hero', 'hero'].includes(passport.id) && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=${passport.id === 'home.hero' ? 'HOME' : 'CITY_HOME'}`, label: 'Открыть редактор', note: 'Редактируется контент своего общего шаблона. Сохранение меняет только рабочую версию.' };
   if (passport.id === 'home.hero') return { href: null, label: null, note: 'Паспорт утверждён. Редактор первого экрана общей главной ещё не подключён.' };
+  if (passportGroup(passport) === 'root' && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=HOME&block=${encodeURIComponent(passport.id)}`, label: 'Открыть редактор', note: 'Редактируется контент выбранного блока общей главной. Сохранение меняет только рабочую версию.' };
   if (passportGroup(passport) === 'root') return { href: null, label: null, note: 'Паспорт утверждён. Редактор блока общей главной ещё не подключён.' };
   if (passport.id === 'header') return { href: '/variables', label: 'Открыть переменные сайта', note: null };
   if (passportGroup(passport) === 'tariff') return { href: '/tariffs', label: 'Открыть каталог тарифов', note: 'Данные тарифа доступны в каталоге. Структура и поведение блока задаются программно.' };

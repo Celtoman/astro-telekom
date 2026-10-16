@@ -17,7 +17,7 @@ export function PageTemplatesApp({ apiUrl }: { apiUrl: string }) {
   }, [apiUrl])
   if (!user) return <div className="p-6" role="status">{error ?? "Загружаем шаблоны…"}</div>
   const templates = [
-    { name: "Общая главная", path: "/", description: "Первый экран для проверки подключения и выбора города.", blocks: [{ label: "Первый экран", href: "/templates/home?kind=HOME" }] },
+    { name: "Общая главная", path: "/", description: "Десять контентных блоков в утверждённом порядке. Сохранение меняет рабочую версию; публикация выполняется отдельно.", blocks: [{ label: "Редактировать главную", href: "/templates/home?kind=HOME" }] },
     { name: "Главная города", path: "/{город}", description: "Один шаблон для всех городов. Название города и тарифы подставляются автоматически.", blocks: [{ label: "Первый экран", href: "/templates/home?kind=CITY_HOME" }, { label: "Тарифы города", href: "/templates/tariffs" }] },
   ]
   return <AdminShell apiUrl={apiUrl} user={user} active="templates"><div className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-6 lg:p-8">
