@@ -22,7 +22,7 @@ test('passport search uses Russian names, ignores case and ё, and preserves the
 });
 
 test('placement filter distinguishes root, shared city template, tariff and future blocks', () => {
-  assert.deepEqual(filterPassports(passports, '', 'root').map(passport => passport.id), ['home.hero']);
+  assert.deepEqual(filterPassports(passports, '', 'root').map(passport => passport.id), ['home.hero', 'home.address_check', 'home.provider_about', 'home.benefits', 'home.connection_steps', 'home.movix', 'home.more_possibilities', 'home.connection_help', 'home.city_directory', 'home.faq']);
   assert.deepEqual(filterPassports(passports, '', 'global').map(passport => passport.id), ['header']);
   assert.equal(filterPassports(passports, '', 'tariff').length, 9);
   assert.equal(filterPassports(passports, '', 'city').length, 2);
@@ -45,6 +45,12 @@ test('content sources lead to existing editors and never offer a missing city ed
     assert.equal(passportSource(passport).href, '/templates/tariffs');
   }
   assert.equal(passportSource(byId('home.hero')).href, '/templates/home?kind=HOME');
+  for (const passport of filterPassports(passports, '', 'root').filter(item => item.id !== 'home.hero')) {
+    assert.equal(passport.editorReadiness, 'PENDING');
+    assert.equal(passportSource(passport).href, null);
+    assert.match(passportSource(passport).note, /ещё не подключён/);
+    assert.equal(passportPlacement(passport), 'Общая главная');
+  }
   for (const id of ['tariff.faq', 'tariff.address']) assert.doesNotMatch(passportSource(byId(id)).note, /Контент меняется|редакторе/);
   assert.equal(byId('rich_text'), undefined);
 });

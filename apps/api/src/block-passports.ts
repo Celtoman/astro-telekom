@@ -1,4 +1,5 @@
 import { BLOCK_TYPES } from './block-validation';
+import { GENERAL_HOME_PASSPORTS } from './general-home-passports';
 
 export const BLOCK_PASSPORT_LIFECYCLE = ['DRAFT', 'APPROVED', 'ACTIVE', 'DEPRECATED', 'ARCHIVED'] as const;
 export const BLOCK_PASSPORT_TRANSITIONS = {
@@ -291,5 +292,6 @@ export const BLOCK_PASSPORTS: readonly BlockPassport[] = [
   managedPassports.hero,
   tariffCollectionPassport,
   ...sitePassports,
+  ...GENERAL_HOME_PASSPORTS,
   ...programmaticPassports,
 ].map(approvedFirstScreen);

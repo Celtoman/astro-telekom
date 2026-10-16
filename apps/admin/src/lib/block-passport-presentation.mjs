@@ -19,7 +19,7 @@ export const passportGroups = [
 ];
 export function passportGroup(passport) {
   if (passport.id === 'header') return 'global';
-  if (passport.id === 'home.hero') return 'root';
+  if (passport.id.startsWith('home.')) return 'root';
   if (passport.id === 'rich_text') return 'future';
   return passport.id.startsWith('tariff.') ? 'tariff' : 'city';
 }
@@ -48,6 +48,7 @@ export function passportSource(passport) {
   if (passport.id === 'tariff_grid' && passport.editorReadiness === 'READY') return { href: '/templates/tariffs', label: 'Открыть редактор', note: 'Общий тарифный блок городов. Цены и закрепление меняются в каталоге тарифов.' };
   if (['home.hero', 'hero'].includes(passport.id) && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=${passport.id === 'home.hero' ? 'HOME' : 'CITY_HOME'}`, label: 'Открыть редактор', note: 'Редактируется контент своего общего шаблона. Сохранение меняет только рабочую версию.' };
   if (passport.id === 'home.hero') return { href: null, label: null, note: 'Паспорт утверждён. Редактор первого экрана общей главной ещё не подключён.' };
+  if (passportGroup(passport) === 'root') return { href: null, label: null, note: 'Паспорт утверждён. Редактор блока общей главной ещё не подключён.' };
   if (passport.id === 'header') return { href: '/variables', label: 'Открыть переменные сайта', note: null };
   if (passportGroup(passport) === 'tariff') return { href: '/tariffs', label: 'Открыть каталог тарифов', note: 'Данные тарифа доступны в каталоге. Структура и поведение блока задаются программно.' };
   if (passportGroup(passport) === 'city') return { href: null, label: null, note: 'Редактор общего шаблона ещё не подключён.' };
