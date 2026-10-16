@@ -16,7 +16,8 @@ interface Props {
   dialogId?: string;
   serviceType?: ServiceType;
   tariff?: TariffView;
-  variant?: 'standard' | 'hero';
+  variant?: 'standard' | 'hero' | 'home-entry';
+  addressLabel?: string;
   addressPlaceholder?: string;
   checkButtonText?: string;
 }
@@ -31,6 +32,7 @@ const {
   serviceType = 'INTERNET',
   tariff,
   variant = 'standard',
+  addressLabel = 'Адрес',
   addressPlaceholder,
   checkButtonText,
 } = Astro.props as Props;
@@ -51,7 +53,7 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
 ---
 
 <div
-  class:list={['address-check-root', { embedded: presentation === 'embedded', modal: presentation === 'dialog', 'hero-address': variant === 'hero' }]}
+  class:list={['address-check-root', { embedded: presentation === 'embedded', modal: presentation === 'dialog', 'hero-address': variant === 'hero', 'home-entry': variant === 'home-entry' }]}
   data-address-check-root
   data-presentation={presentation}
   data-entry-dialog-id={presentation === 'dialog' ? entryDialogId : ''}
@@ -81,9 +83,9 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
           <label for={`website-${formId}`}>Ваш сайт</label>
           <input id={`website-${formId}`} name="website" tabindex="-1" autocomplete="off" />
         </div>
-        <label for={`address-${formId}`}>Адрес</label>
+        <label for={`address-${formId}`}>{addressLabel}</label>
         <div class="address-field">
-          {variant === 'hero' && <img class="address-icon" src={publicAsset('/images/figma/map-pin.svg')} width="20" height="20" alt="" />}
+          {variant !== 'standard' && <img class="address-icon" src={publicAsset(variant === 'home-entry' ? '/images/general-home/address-pin.svg' : '/images/figma/map-pin.svg')} width="20" height="20" alt="" />}
           <input
             id={`address-${formId}`}
             type="text"

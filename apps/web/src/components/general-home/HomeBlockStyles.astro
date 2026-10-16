@@ -1,0 +1,20 @@
+<style is:global>
+  .home-block .home-action { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; background: #e0231e; color: #fff; font: inherit; font-size: 14px; font-weight: 600; line-height: 20px; text-align: center; text-decoration: none; overflow-wrap: anywhere; cursor: pointer; }
+  .home-block .home-action:hover { background: #c61f1a; }
+  .home-block .home-action:active { background: #ad1916; }
+  .home-block .home-action[aria-disabled="true"] { cursor: default; }
+  .home-block { min-width: 0; color: #18202a; font-family: 'Geist Variable', ui-sans-serif, system-ui, sans-serif; }
+  .home-block *, .home-block *::before, .home-block *::after { box-sizing: border-box; }
+  .home-block :is(h2, h3, p, dl, dd, dt):not(:where(.public-dialog *)) { margin: 0; max-width: none; }
+  .home-block h2:not(:where(.public-dialog *)) { font-size: 32px; font-weight: 700; line-height: 38px; letter-spacing: -1.1px; }
+  .home-block h3:not(:where(.public-dialog *)) { font-size: 20px; font-weight: 700; line-height: 25px; letter-spacing: -.2px; }
+  .home-block p:not(:where(.public-dialog *)) { color: #526071; font-size: 16px; font-weight: 400; line-height: 24px; white-space: pre-line; overflow-wrap: break-word; }
+  .home-section-intro { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .home-card-icon { display: block; flex: 0 0 48px; width: 48px; height: 48px; }
+  .home-card-icon img { display: block; width: 48px; height: 48px; max-width: none; }
+  .home-card-heading { display: flex; align-items: center; gap: 16px; min-height: 64px; min-width: 0; }
+  .home-card-heading h3 { flex: 1; min-width: 0; overflow-wrap: break-word; }
+  @media (max-width: 620px) {
+    .home-block h2:not(:where(.public-dialog *)) { font-size: 24px; line-height: 29px; letter-spacing: -.8px; }
+  }
+</style>

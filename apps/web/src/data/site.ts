@@ -4,6 +4,8 @@ import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { normalizePublicHtmlPath, publicHtmlPath } from './public-url';
 import { homeHeroDefaults } from '../../../api/src/home-hero-model';
+import { GENERAL_HOME_CONTACT_RULES } from '../../../api/src/general-home-model';
+import { generalHomeCatalog, type GeneralHomeCatalog } from './general-home';
 
 export interface PageView {
   type: string;
@@ -31,6 +33,8 @@ export interface SiteView {
   domain?: string | null;
   connectionPhone: string;
   supportPhone: string;
+  connectionHours?: string;
+  callbackWithinMinutes?: number;
 }
 
 export interface RedirectView {
@@ -50,6 +54,7 @@ export interface PublicRouteView {
 }
 
 export interface SiteCatalog {
+  generalHome?: GeneralHomeCatalog;
   homeHero?: Record<string, unknown>;
   homeHeroVersion?: '1.0.0' | '2.0.0';
   site: SiteView;
@@ -328,6 +333,8 @@ function normalizedCatalog(value: unknown): SiteCatalog {
   const connectionPhone = String(payload.site.connectionPhone || '').trim();
   const supportPhone = String(payload.site.supportPhone || '').trim();
   if (!connectionPhone || !supportPhone) throw new Error('API не вернул обязательные телефоны сайта');
+  const generalHome = generalHomeCatalog(payload.generalHome);
+  if (generalHome && (payload.site.connectionHours !== GENERAL_HOME_CONTACT_RULES.connectionHours || payload.site.callbackWithinMinutes !== GENERAL_HOME_CONTACT_RULES.callbackWithinMinutes)) throw new Error('Полная HOME требует согласованных системных правил24/7 и15 минут.');
   return {
     site: {
       name: String(payload.site.name || 'Дом.ру'),
@@ -335,8 +342,9 @@ function normalizedCatalog(value: unknown): SiteCatalog {
       domain: typeof payload.site.domain === 'string' ? payload.site.domain : null,
       connectionPhone,
       supportPhone,
+      ...(generalHome ? GENERAL_HOME_CONTACT_RULES : {}),
     },
-    ...(payload.homeHero ? { homeHero: payload.homeHero, homeHeroVersion: normalizeHomeHeroVersion(payload.homeHeroVersion) } : {}),
+    ...(generalHome ? { generalHome, homeHero: generalHome.blocks[0].data, homeHeroVersion: '2.0.0' as const } : payload.homeHero ? { homeHero: payload.homeHero, homeHeroVersion: normalizeHomeHeroVersion(payload.homeHeroVersion) } : {}),
     globalPages,
     routes,
     cities,

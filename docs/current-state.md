@@ -100,3 +100,8 @@ API сохранения, публичный каталог, маршруты, �
 ### Общая HOME: редакторы, этап 4
 
 GeneralHomeApp на /templates/home?kind=HOME редактирует десять блоков атомарно, с фиксированными карточками и FAQ0–50, SITE-переменными из схем, разделением working/published, защитой ввода при409 и точным block/field. CITY_HOME остаётся прежним. Девять новых editorReadiness=READY после локального browser smoke; status=APPROVED. Публичный renderer/preview и внешний rollout ещё не завершены. [Приёмка](research/2026-10-16-general-home-stage4-editors-acceptance.md).
+
+
+### Общая HOME: отдельные компоненты, часть этапа 5
+
+Девять новых Astro-компонентов используют управляемый каталог и общий экранирующий renderer. Проверены отдельные public/inactive preview на 1440/834/390/320, исходные assets и локальные сценарии 2g/2e/B13/B19 с перехваченным API. У 2g сохранена действующая AddressForm; 2e и модальный FLOW 1 используют общий HTTP-адаптер консультации. Строгая загрузка полного каталога и вычисление origins изображений подготовлены. Figma и внешний контур не менялись. `index.astro`, Header/Footer, общий preview и подключение CSP ещё не завершены; этапы 5–7 остаются открытыми. [Доказательства и ограничения](research/2026-10-16-general-home-stage5-blocks-acceptance.md).

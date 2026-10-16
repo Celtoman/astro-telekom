@@ -1,5 +1,6 @@
 import { createSubmissionKey, formatRussianPhone, normalizeRussianPhone, hasInvalidRussianMobilePrefix } from './address-check-flow.mjs';
 import { sessionForLead } from './session-attribution.mjs';
+import { sendCallbackRequest } from './callback-request.mjs';
 export function initializeCallbackDialog() {
   const dialog = document.querySelector('[data-callback-dialog]');
   if (!dialog || dialog.dataset.ready) return;
@@ -49,9 +50,7 @@ export function initializeCallbackDialog() {
       let session;
       try { session = sessionForLead(sessionStorage, location.href, document.referrer); } catch { session = sessionForLead(null, location.href, document.referrer); }
       const { timeOnSiteSeconds, ...sessionContext } = session;
-      const response = await fetch(`${dialog.dataset.apiUrl}/leads`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(20000), body: JSON.stringify({ siteSlug: dialog.dataset.siteSlug, citySlug: dialog.dataset.citySlug || undefined, reasonCode: 'callback_consultation', phone: normalized, comment: question.value.trim() || undefined, submissionKey: key, consentVersion: form.dataset.consentVersion, consentAccepted: true, formName: 'callback-dialog', session: sessionContext, timeOnSiteSeconds, website: form.elements.website.value }) });
-      const result = await response.json().catch(() => null);
-      if (!response.ok || !result?.id) { const message = Array.isArray(result?.message) ? result.message[0] : result?.message; throw new Error(message || 'Не удалось сохранить заявку. Повторите попытку.'); }
+      await sendCallbackRequest(dialog.dataset.apiUrl, { siteSlug: dialog.dataset.siteSlug, citySlug: dialog.dataset.citySlug || undefined, phone: normalized, comment: question.value.trim() || undefined, submissionKey: key, consentVersion: form.dataset.consentVersion, consentAccepted: true, formName: 'callback-dialog', session: sessionContext, timeOnSiteSeconds, website: form.elements.website.value });
       done = true; form.hidden = audience.hidden = true; dialog.querySelector('[data-callback-success]').hidden = false;
       dialog.querySelector('#callback-title').textContent = 'Заявка отправлена';
       const icon = dialog.querySelector('[data-callback-icon]'); icon.dataset.mode = 'success'; icon.querySelector('img').src = dialog.dataset.successIcon;

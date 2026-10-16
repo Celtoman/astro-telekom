@@ -1,0 +1,402 @@
+{
+  "fileKey": "BdxNHlBVZWejREtOEIWDkI",
+  "date": "2026-10-16",
+  "assets": [
+    {
+      "path": "/images/general-home/about-development.svg",
+      "sha256": "1ac7667be0d894f0c6a22d772d28528142bec009904edfcc6df7c4f46a5e0a20",
+      "figmaNodeId": "I263:3557;1336:107;1336:10;859:90",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/about-infrastructure.svg",
+      "sha256": "955bbd3a8fc9bd2f2f5dd46899e641322785429eb1cd3c32af074414b7a8acab",
+      "figmaNodeId": "I263:3557;1336:88;1336:10;859:90",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/about-mobile-development.svg",
+      "sha256": "b05c19dba2956a5ad927bdb98f2bfec967a8aa287831c82802946f8c13eebad8",
+      "figmaNodeId": "I263:3803;1336:913;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/about-mobile-infrastructure.svg",
+      "sha256": "3dd03ef39c725d8e3b51aa85f66891585a5749cb4e5f46664502921d6c395b63",
+      "figmaNodeId": "I263:3803;1336:893;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/about-mobile-research.svg",
+      "sha256": "e153e7205e49038e3600d915a5beb1db9f669c0631eb0ded570f7ec455bc9769",
+      "figmaNodeId": "I263:3803;1336:934;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/about-research.svg",
+      "sha256": "08d7e99d746248d07259d1c55b214d881f2f41533a6ac744745339ce760348dd",
+      "figmaNodeId": "I263:3557;1336:127;1336:10;859:90",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/address-house.png",
+      "sha256": "bd7ccee43505d77bf0e763fa635a21d447f17c0ba21fc4a1f1003e544a85f6eb",
+      "figmaNodeId": "301:5488",
+      "sourceKind": "original-figma-image-asset"
+    },
+    {
+      "path": "/images/general-home/address-mobile-phone.svg",
+      "sha256": "d47e61951f47049efe7dd11e631d8cb27d7c24b10edd9dade625ef7173071f7e",
+      "figmaNodeId": "I328:5949;1684:295",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/address-mobile-shield.svg",
+      "sha256": "1605e55cdf0059d5e2eef106161a347e7d9f4a8df1886a0efb1f71b6e9be2374",
+      "figmaNodeId": "I328:5949;1684:272",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/address-pin.svg",
+      "sha256": "6163a9f89809593a2700e1a0694ab1765b0c9261110d82f7a5f371a185cca891",
+      "figmaNodeId": "I301:5488;1658:30;306:2",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/address-shield.svg",
+      "sha256": "b16434484bf50c617a2569a378e5f03533133c0f3e00197341bf544a8e74f8be",
+      "figmaNodeId": "I301:5488;1658:44",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/benefit-connection.svg",
+      "sha256": "466ae6c9ec7c5eeaa2a10db3f6525579e402412e9f3f5a657aad1947dd2b19f3",
+      "figmaNodeId": "I250:11480;1336:230;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/benefit-fiber.svg",
+      "sha256": "6d79cd40281baf8f3dd39416140c50560e738adf70e1783fcb6d1dcf0cee7b6c",
+      "figmaNodeId": "I250:11480;1336:170;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/benefit-movix.svg",
+      "sha256": "026e82dd5923de1d8026a981cb878e2ce5c5a20e8117dcbe52466aebe6aee61d",
+      "figmaNodeId": "I250:11480;1336:211;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/benefit-speed.svg",
+      "sha256": "1dacc95cfb7cccaec49a39e44840ab84bf5a929a75a991c7bbb1b9141944ebe3",
+      "figmaNodeId": "I250:11480;1336:151;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/benefit-support.svg",
+      "sha256": "1759192acb9e11600ac0619e91fafe1f5c21e19be5f034547cef0f71ae34d65c",
+      "figmaNodeId": "I250:11480;1336:250;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/benefit-wifi6.svg",
+      "sha256": "bea84cf1eb0eb32589a9adb07e5fb94b020e02b25b3be0735977e29bac08b918",
+      "figmaNodeId": "I250:11480;1336:189;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/cinema-amediateka.svg",
+      "sha256": "e64955ef66636c912bd9b3debf109de2f594f02d38fff4e97740f1a96b7ab5ac",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/cinema-compact-amediateka.svg",
+      "sha256": "38b945a29ac8fa6a9cf454e339e2453232398d8f6579eb97774ffbbc60640824",
+      "figmaNodeId": "I291:5710;1621:63348;1619:59160",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/cinema-compact-premier.svg",
+      "sha256": "eaddf5dd436e4896544e848bf23a7c8808ccc47a9c9eb37689bd42cbf4e27cd2",
+      "figmaNodeId": "I291:5710;1621:63334;1619:59126",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/cinema-ivi.svg",
+      "sha256": "56dab45ab6614a12a11ea3bfeb4bf22b8e235c62b2c63e7086b5e3098a81bda3",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/cinema-kinopoisk.png",
+      "sha256": "80597bc0722eb13e1f2e064ca8bb1346b5a42a482acf3ab0ed31cd34e19d6981",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "original-figma-image-asset"
+    },
+    {
+      "path": "/images/general-home/cinema-okko.svg",
+      "sha256": "7c97d98403991ff0e7558aad71e74f4fb3b3927b022caefa1dc26310ac926f22",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/cinema-premier.svg",
+      "sha256": "fda7ac30790476842ef7659763c3a0879c6468f698604a9931dbcb4549aaafa8",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/cinema-start.png",
+      "sha256": "c679d8a4a24fc345b348c980dc0385e4b7fdf1730cc12b1659d4463e448e16b0",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "original-figma-image-asset"
+    },
+    {
+      "path": "/images/general-home/faq-minus.svg",
+      "sha256": "7923797cea74ac67a6f5ec5585fbeee2dee2fcf142b78cec363e3c1832b58474",
+      "figmaNodeId": "351:6034",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/faq-plus.svg",
+      "sha256": "5f12823b9ce2f65c5cb4df0d2f89a26bbca4c7d0944f921caf467d4db2327086",
+      "figmaNodeId": "I269:4014;1745:1499;1753:45",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/help-clock.svg",
+      "sha256": "71886e86c81a8ec201b40458d44752ac5ade59568f0f0e1abc8fe1ba2ab320cc",
+      "figmaNodeId": "I337:5962;1721:1117",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/help-free-call.svg",
+      "sha256": "dabfb849efc3c98c86f3183fe2526e322b28f66f25f32582ae4cdbca46b157b0",
+      "figmaNodeId": "I337:5962;1721:1110",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/help-phone.svg",
+      "sha256": "74cb5e2ab650e10526f227fe44e9fd2c76f06ba3908ab67c2866ceb1ef3f1a1b",
+      "figmaNodeId": "I337:5962;1711:1084",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-app.svg",
+      "sha256": "5134c7999cc766cc6465cb40a20cf19bf8e6ce214d67b077d860a23fe3cc8381",
+      "figmaNodeId": "I258:2790;1336:338;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-autopay.svg",
+      "sha256": "98451e6dc7f2867d9120a0dd6c8d62db504fd0a56fd6cfe9bf80dbdbf0159020",
+      "figmaNodeId": "I258:2790;1336:316;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-bonus.svg",
+      "sha256": "1fc586adb20ab5150447fca91dc5b127391428c275cd6a5c3a75849a362999f7",
+      "figmaNodeId": "I258:2790;1336:277;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-cameras.svg",
+      "sha256": "cbd7b34192914de5e254e5a7cae83d6c79f6c7cdd8cb994ab04f7167befcac11",
+      "figmaNodeId": "I258:2790;1336:426;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-city-wifi.svg",
+      "sha256": "9d7b00c3d42d6a5d069cdf160497930382074ddd5d0e5bf439f26f8428ff894a",
+      "figmaNodeId": "I258:2790;1336:445;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-intercom.svg",
+      "sha256": "a50b69b93491fc955d4411b7baec792599534c8ca38eb28933860164df05c002",
+      "figmaNodeId": "I258:2790;1336:406;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-mobile-app.svg",
+      "sha256": "e16fee316f0bdf60fc677a14b29cd99aa785c0e360c9532c6d45845e629642ec",
+      "figmaNodeId": "I258:3363;1336:1151;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-mobile-autopay.svg",
+      "sha256": "f339e278d555e8e46ec223cc2822ea5056b8acf3fcca5e54ad85d01e27217731",
+      "figmaNodeId": "I258:3363;1336:1129;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-mobile-bonus.svg",
+      "sha256": "d0ab09f4590e0e1517096406fe32bb872a932f288fa4ce5db60cdba9176d5519",
+      "figmaNodeId": "I258:3363;1336:1088;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-mobile-cameras.svg",
+      "sha256": "fcc4161725b29274fdee04b65725bb059eff3846215fddfbe3d5a40b4bf013a3",
+      "figmaNodeId": "I258:3363;1336:1242;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-mobile-city-wifi.svg",
+      "sha256": "5d46ba2f5790bfe03ba9bbc5e72eed3981214789ae659b2e8d979ad4625b0e22",
+      "figmaNodeId": "I258:3363;1336:1262;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-mobile-intercom.svg",
+      "sha256": "3aaaf7aace6eeab9ae5f3475116a573c7e6403b07dc39f8630405a7fdd698b5d",
+      "figmaNodeId": "I258:3363;1336:1221;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-mobile-pause.svg",
+      "sha256": "21e64e7ab7461817e18963c909de879bc7b52fe73d3d75b4914f499667c596fc",
+      "figmaNodeId": "I258:3363;1336:1170;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-mobile-promised-payment.svg",
+      "sha256": "3e3c697f467515ae3772c2b0cdbbff269243f72babc6816e0f99986945c4613b",
+      "figmaNodeId": "I258:3363;1336:1108;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-mobile-tariff-builder.svg",
+      "sha256": "3bad4c04a3d683693ddcfc1af7e7a5ccfaf475aa606ba2d0546c61f0c48871c7",
+      "figmaNodeId": "I258:3363;1336:1191;1336:50;1773:76",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-pause.svg",
+      "sha256": "cfc7f8ee14e13a02ee62363417adf944bb40772ab89110fb16c3b7adcc70d77e",
+      "figmaNodeId": "I258:2790;1336:356;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-promised-payment.svg",
+      "sha256": "ee9a94617062b0d4be50aae69ab04b9b77699d900b7c827456e0055cf9994e36",
+      "figmaNodeId": "I258:2790;1336:296;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/more-tariff-builder.svg",
+      "sha256": "77d31886e37657128785b53219a559d7e8ae9f09824ac1325afe55250e1d7f87",
+      "figmaNodeId": "I258:2790;1336:376;1336:10;1469:61",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-arrow.svg",
+      "sha256": "278bbbd4ef5921e0b39003c3eb08aa61f460d0d5684282823432ac4cce068d12",
+      "figmaNodeId": "I291:5238;1592:71",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-compact-devices.svg",
+      "sha256": "1a536404d50629d0967d51e6af1c333d421574510a62e42f084a7e365729268a",
+      "figmaNodeId": "I291:5474;1592:190",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-compact-search.svg",
+      "sha256": "b12a0b21447489de589843f21da4c38fbb0fd6c44e47fc0ccebe03f82208182b",
+      "figmaNodeId": "I291:5474;1592:173",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-compact-television.svg",
+      "sha256": "e343ec917cacad47c6fd9c74e9564ace0a0895c8eae3d22ffaa9e9107b2bfb77",
+      "figmaNodeId": "I291:5474;1592:156",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-desktop-ambient-blue.svg",
+      "sha256": "6e2a4d088b3af495bd90620f0bf6f908b8eb2cc9df7399001704d0a55a93b19a",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-desktop-ambient-violet.svg",
+      "sha256": "b497800dc4ec397a04f6273ba5abe1271acd2ee10dcd859b7e927bee8a9cca0e",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-devices.png",
+      "sha256": "985d75fa32de125810f921d041b390dcb25b42be1184a58d2560e40cc604e832",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "original-figma-image-asset"
+    },
+    {
+      "path": "/images/general-home/movix-devices.svg",
+      "sha256": "cca199c7812916c5060ae9175b428beaf356f0619d586ec1ac12b6a91501f575",
+      "figmaNodeId": "I291:5238;1592:52",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-mobile-ambient-blue.svg",
+      "sha256": "7979250e63721ce5bd1a6f62233990c8fd34bd965c5c589424301d631b211b81",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-mobile-ambient-violet.svg",
+      "sha256": "6e54531e8135e71e9e5eed4bf27c3754a6dc6ef1cab48d7a0b6b0f877fecb486",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-search.svg",
+      "sha256": "cd14a14d43b911bc7662e32655e37eb1a0b7ea9e62e21afb0b73c1072112b3d6",
+      "figmaNodeId": "I291:5238;1592:35",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-tablet-ambient-blue.svg",
+      "sha256": "ddbc436235772c55b90f8f41591a4ca21b1ab3944d2b1b3b33634d9fe6aa49fe",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-tablet-ambient-violet.svg",
+      "sha256": "2ac8890f8cfb69aaa4464583ff62216b4b48c877fa08b3f7fb41d7e795193807",
+      "figmaNodeId": "291:5238",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/movix-television.svg",
+      "sha256": "104ab67f0c66ab4b2913d9d9557770df43896a82f76e180808be132746e04fc2",
+      "figmaNodeId": "I291:5238;1592:13",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/step-1.svg",
+      "sha256": "f33eacdea74bd128c173d864f8434328f37f3d8e2d10c5fd481e76c21c16e2ec",
+      "figmaNodeId": "I282:4501;1610:1906;1625:8",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/step-2.svg",
+      "sha256": "b1ffd68b6c96d17b4b2de2831decd25891ce6564254924f0f7b1d1c09c973177",
+      "figmaNodeId": "I282:4501;1610:1914;1618:4",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/step-3.svg",
+      "sha256": "0245ec458a4b1c97171a92e6d1421e6231a6d62cc79623ab3b772d6fd8337df0",
+      "figmaNodeId": "I282:4501;1610:1922;1618:4",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/step-4.svg",
+      "sha256": "99741c2e0792ab495dd6317a021c1993c4abbbe1be0699333a7d753e33c05687",
+      "figmaNodeId": "I282:4501;1610:1930;1618:4",
+      "sourceKind": "native-whole-node-svg-export"
+    }
+  ]
+}

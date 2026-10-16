@@ -4,6 +4,8 @@
 
 ## Дизайн и структура страниц
 
+- [Общая HOME: отдельные компоненты этапа 5, 16 октября](2026-10-16-general-home-stage5-blocks-acceptance.md)
+
 - [HOME Hero 1d: итоговое поведение и внешний выпуск, 13 октября](2026-10-13-home-hero-1d-final-acceptance.md)
 
 - [Общая главная: сверка блоков источников и пропусков обсуждения, 12 октября](2026-10-12-general-home-source-block-reconciliation.md)

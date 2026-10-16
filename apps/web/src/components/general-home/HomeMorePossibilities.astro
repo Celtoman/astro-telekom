@@ -1,0 +1,42 @@
+---
+import type { GeneralHomeDataByType } from '../../../../api/src/general-home-model';
+import { renderMorePossibilities } from '../../lib/general-home-render';
+import { publicAsset } from '../../data/public-asset';
+import HomeBlockStyles from './HomeBlockStyles.astro';
+interface Props { content: GeneralHomeDataByType['home.more_possibilities'] }
+---
+<Fragment set:html={renderMorePossibilities(Astro.props.content, { asset: publicAsset, interactive: true })} />
+<HomeBlockStyles />
+<style is:global>
+  .home-more { display: flex; flex-direction: column; gap: 32px; padding: 16px 48px 48px; background: #fff; }
+  .home-more-panels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .home-more-category { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; min-width: 0; min-height: 732px; padding: 24px; border: 1px solid #dcecf7; border-radius: 24px; background: #fff; }
+  .home-more .home-more-category > h3 { width: 100%; min-height: 58px; font-size: 24px; font-weight: 700; line-height: 29px; letter-spacing: -.5px; overflow-wrap: break-word; }
+  .home-more-category ul { width: 100%; margin: 0; padding: 0; list-style: none; }
+  .home-more-category li { min-width: 0; }
+  .home-more-category li + li { margin-top: 12px; padding-top: 12px; border-top: 1px solid #dcecf7; }
+  .home-opportunity-copy { display: flex; flex-direction: column; gap: 16px; }
+  .home-more .home-card-heading { min-height: 48px; }
+  .home-more h4 { flex: 1; min-width: 0; margin: 0; font-size: 20px; font-weight: 700; line-height: 25px; letter-spacing: -.2px; overflow-wrap: break-word; }
+  @media (min-width: 1101px) {
+    .home-more [data-home-opportunity="promised_payment"] .home-opportunity-copy,
+    .home-more [data-home-opportunity="autopay"] .home-opportunity-copy,
+    .home-more [data-home-opportunity="tariff_builder"] .home-opportunity-copy,
+    .home-more [data-home-opportunity="intercom"] .home-opportunity-copy { padding-bottom: 24px; }
+    .home-more [data-home-opportunity="promised_payment"] .home-card-heading { padding-bottom: 2px; }
+  }
+  @media (max-width: 1100px) {
+    .home-more { gap: 24px; padding: 16px 32px 32px; }
+    .home-more-panels { grid-template-columns: minmax(0, 1fr); }
+    .home-more-category { min-height: 0; }
+    .home-more .home-more-category > h3 { min-height: 0; }
+  }
+  @media (max-width: 620px) {
+    .home-more { gap: 20px; padding: 20px; }
+    .home-more-category { padding: 16px; }
+    .home-more .home-more-category > h3 { font-size: 20px; line-height: 25px; letter-spacing: -.2px; }
+    .home-more .home-card-heading { gap: 8px; min-height: 0; align-items: flex-start; }
+    .home-more .home-card-icon, .home-more .home-card-icon img { width: 40px; height: 40px; flex-basis: 40px; }
+    .home-more h4 { font-size: 16px; font-weight: 600; line-height: 24px; letter-spacing: 0; }
+  }
+</style>

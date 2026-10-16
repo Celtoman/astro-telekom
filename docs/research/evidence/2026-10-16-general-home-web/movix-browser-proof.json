@@ -1,0 +1,472 @@
+{
+  "date": "2026-10-16T12:57:24.112Z",
+  "scope": "Compiled Astro and same shared inactive preview; isolated local fixture",
+  "sizes": [
+    {
+      "viewport": 1440,
+      "mode": "public",
+      "width": 1360,
+      "height": 598,
+      "heading": {
+        "fontSize": "40px",
+        "lineHeight": "43px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Телеканалы на любой вкус",
+          "width": 484,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобный поиск",
+          "width": 484,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "До 5 устройств",
+          "width": 484,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 64,
+          "height": 64,
+          "loaded": true,
+          "currentSrc": "movix-television.svg"
+        },
+        {
+          "width": 64,
+          "height": 64,
+          "loaded": true,
+          "currentSrc": "movix-search.svg"
+        },
+        {
+          "width": 64,
+          "height": 64,
+          "loaded": true,
+          "currentSrc": "movix-devices.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 1440,
+      "mode": "preview",
+      "width": 1360,
+      "height": 598,
+      "heading": {
+        "fontSize": "40px",
+        "lineHeight": "43px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Телеканалы на любой вкус",
+          "width": 484,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобный поиск",
+          "width": 484,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "До 5 устройств",
+          "width": 484,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 64,
+          "height": 64,
+          "loaded": true,
+          "currentSrc": "movix-television.svg"
+        },
+        {
+          "width": 64,
+          "height": 64,
+          "loaded": true,
+          "currentSrc": "movix-search.svg"
+        },
+        {
+          "width": 64,
+          "height": 64,
+          "loaded": true,
+          "currentSrc": "movix-devices.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 834,
+      "mode": "public",
+      "width": 720,
+      "height": 1054.296875,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Телеканалы на любой вкус",
+          "width": 592,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобный поиск",
+          "width": 592,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "До 5 устройств",
+          "width": 592,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-television.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-search.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-devices.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 834,
+      "mode": "preview",
+      "width": 720,
+      "height": 1054.296875,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Телеканалы на любой вкус",
+          "width": 592,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобный поиск",
+          "width": 592,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "До 5 устройств",
+          "width": 592,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-television.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-search.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-devices.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 390,
+      "mode": "public",
+      "width": 358,
+      "height": 1217.890625,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Телеканалы на любой вкус",
+          "width": 246,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобный поиск",
+          "width": 246,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "До 5 устройств",
+          "width": 246,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-television.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-search.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-devices.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 390,
+      "mode": "preview",
+      "width": 358,
+      "height": 1217.890625,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Телеканалы на любой вкус",
+          "width": 246,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобный поиск",
+          "width": 246,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "До 5 устройств",
+          "width": 246,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-television.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-search.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-devices.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 320,
+      "mode": "public",
+      "width": 288,
+      "height": 1339.109375,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Телеканалы на любой вкус",
+          "width": 176,
+          "height": 48,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобный поиск",
+          "width": 176,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "До 5 устройств",
+          "width": 176,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-television.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-search.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-devices.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 320,
+      "mode": "preview",
+      "width": 288,
+      "height": 1339.109375,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Телеканалы на любой вкус",
+          "width": 176,
+          "height": 48,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобный поиск",
+          "width": 176,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "До 5 устройств",
+          "width": 176,
+          "height": 24,
+          "font": "600 16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-television.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-search.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "movix-compact-devices.svg"
+        }
+      ],
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "mismatches": []
+}

@@ -1,0 +1,785 @@
+{
+  "date": "2026-10-16T12:47:23.178Z",
+  "scope": "Compiled Astro and same shared inactive preview; isolated local fixture",
+  "sizes": [
+    {
+      "viewport": 1440,
+      "mode": "public",
+      "width": 1360,
+      "height": 930,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Бонусы и удобная оплата",
+          "width": 360.65625,
+          "height": 58,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        },
+        {
+          "tag": "H3",
+          "text": "Свобода и управление услугами",
+          "width": 360.671875,
+          "height": 58,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        },
+        {
+          "tag": "H3",
+          "text": "Цифровые сервисы для дома",
+          "width": 360.65625,
+          "height": 58,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-bonus.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-promised-payment.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-autopay.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-app.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-pause.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-tariff-builder.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-intercom.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-cameras.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-city-wifi.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 1440,
+      "mode": "preview",
+      "width": 1360,
+      "height": 930,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Бонусы и удобная оплата",
+          "width": 360.65625,
+          "height": 58,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        },
+        {
+          "tag": "H3",
+          "text": "Свобода и управление услугами",
+          "width": 360.671875,
+          "height": 58,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        },
+        {
+          "tag": "H3",
+          "text": "Цифровые сервисы для дома",
+          "width": 360.65625,
+          "height": 58,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-bonus.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-promised-payment.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-autopay.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-app.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-pause.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-tariff-builder.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-intercom.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-cameras.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-city-wifi.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 834,
+      "mode": "public",
+      "width": 720,
+      "height": 1805,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Бонусы и удобная оплата",
+          "width": 606,
+          "height": 29,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        },
+        {
+          "tag": "H3",
+          "text": "Свобода и управление услугами",
+          "width": 606,
+          "height": 29,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        },
+        {
+          "tag": "H3",
+          "text": "Цифровые сервисы для дома",
+          "width": 606,
+          "height": 29,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-bonus.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-promised-payment.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-autopay.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-app.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-pause.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-tariff-builder.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-intercom.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-cameras.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-city-wifi.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 834,
+      "mode": "preview",
+      "width": 720,
+      "height": 1805,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Бонусы и удобная оплата",
+          "width": 606,
+          "height": 29,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        },
+        {
+          "tag": "H3",
+          "text": "Свобода и управление услугами",
+          "width": 606,
+          "height": 29,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        },
+        {
+          "tag": "H3",
+          "text": "Цифровые сервисы для дома",
+          "width": 606,
+          "height": 29,
+          "font": "700 24px / 29px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.5px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-bonus.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-promised-payment.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-autopay.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-app.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-pause.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-tariff-builder.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-intercom.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-cameras.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "more-city-wifi.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 390,
+      "mode": "public",
+      "width": 358,
+      "height": 2387,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Бонусы и удобная оплата",
+          "width": 284,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Свобода и управление услугами",
+          "width": 284,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Цифровые сервисы для дома",
+          "width": 284,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-bonus.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-promised-payment.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-autopay.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-app.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-pause.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-tariff-builder.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-intercom.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-cameras.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-city-wifi.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 390,
+      "mode": "preview",
+      "width": 358,
+      "height": 2387,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Бонусы и удобная оплата",
+          "width": 284,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Свобода и управление услугами",
+          "width": 284,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Цифровые сервисы для дома",
+          "width": 284,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-bonus.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-promised-payment.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-autopay.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-app.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-pause.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-tariff-builder.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-intercom.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-cameras.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-city-wifi.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 320,
+      "mode": "public",
+      "width": 288,
+      "height": 3066,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Бонусы и удобная оплата",
+          "width": 214,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Свобода и управление услугами",
+          "width": 214,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Цифровые сервисы для дома",
+          "width": 214,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-bonus.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-promised-payment.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-autopay.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-app.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-pause.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-tariff-builder.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-intercom.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-cameras.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-city-wifi.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 320,
+      "mode": "preview",
+      "width": 288,
+      "height": 3066,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Бонусы и удобная оплата",
+          "width": 214,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Свобода и управление услугами",
+          "width": 214,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Цифровые сервисы для дома",
+          "width": 214,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-bonus.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-promised-payment.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-autopay.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-app.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-pause.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-tariff-builder.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-intercom.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-cameras.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "more-mobile-city-wifi.svg"
+        }
+      ],
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "mismatches": [
+    {
+      "width": 834,
+      "actual": 1805,
+      "expected": 1829
+    },
+    {
+      "width": 390,
+      "actual": 2387,
+      "expected": 2419
+    }
+  ],
+  "reviewedSourceHeightAdaptations": [
+    {
+      "viewport": 834,
+      "sourceHeight": 1829,
+      "renderHeight": 1805,
+      "reason": "Естественный перенос абзаца автоплатежа; независимый review принял adaptation."
+    },
+    {
+      "viewport": 390,
+      "sourceHeight": 2419,
+      "renderHeight": 2387,
+      "reason": "Естественный перенос абзаца паузы и заголовка видеонаблюдения; независимый review принял adaptation."
+    }
+  ]
+}

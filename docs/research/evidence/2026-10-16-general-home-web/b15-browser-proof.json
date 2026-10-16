@@ -1,0 +1,808 @@
+{
+  "date": "2026-10-16T13:08:13.572Z",
+  "scope": "Compiled Astro and same shared inactive preview; isolated local fixture",
+  "sizes": [
+    {
+      "viewport": 1440,
+      "mode": "public",
+      "width": 1360,
+      "height": 664,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Высокая скорость интернета",
+          "width": 298.65625,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Оптоволоконная сеть",
+          "width": 298.671875,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Домашний Wi-Fi 6",
+          "width": 298.65625,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Фильмы и сериалы в Movix",
+          "width": 298.65625,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобное оформление подключения",
+          "width": 298.671875,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Поддержка абонентов 24/7",
+          "width": 298.65625,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-speed.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-fiber.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-wifi6.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-movix.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-connection.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-support.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 1440,
+      "mode": "preview",
+      "width": 1360,
+      "height": 664,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Высокая скорость интернета",
+          "width": 298.65625,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Оптоволоконная сеть",
+          "width": 298.671875,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Домашний Wi-Fi 6",
+          "width": 298.65625,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Фильмы и сериалы в Movix",
+          "width": 298.65625,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобное оформление подключения",
+          "width": 298.671875,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Поддержка абонентов 24/7",
+          "width": 298.65625,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-speed.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-fiber.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-wifi6.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-movix.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-connection.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-support.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 834,
+      "mode": "public",
+      "width": 720,
+      "height": 1007,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Высокая скорость интернета",
+          "width": 208,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Оптоволоконная сеть",
+          "width": 208,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Домашний Wi-Fi 6",
+          "width": 208,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Фильмы и сериалы в Movix",
+          "width": 208,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобное оформление подключения",
+          "width": 208,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Поддержка абонентов 24/7",
+          "width": 208,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-speed.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-fiber.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-wifi6.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-movix.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-connection.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-support.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 834,
+      "mode": "preview",
+      "width": 720,
+      "height": 1007,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Высокая скорость интернета",
+          "width": 208,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Оптоволоконная сеть",
+          "width": 208,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Домашний Wi-Fi 6",
+          "width": 208,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Фильмы и сериалы в Movix",
+          "width": 208,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобное оформление подключения",
+          "width": 208,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Поддержка абонентов 24/7",
+          "width": 208,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-speed.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-fiber.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-wifi6.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-movix.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-connection.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-support.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 390,
+      "mode": "public",
+      "width": 358,
+      "height": 428,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Высокая скорость интернета",
+          "width": 198,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Оптоволоконная сеть",
+          "width": 198,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Домашний Wi-Fi 6",
+          "width": 178.265625,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Фильмы и сериалы в Movix",
+          "width": 198,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобное оформление подключения",
+          "width": 198,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Поддержка абонентов 24/7",
+          "width": 198,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-speed.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-fiber.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-wifi6.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-movix.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-connection.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-support.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 390,
+      "mode": "preview",
+      "width": 358,
+      "height": 428,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Высокая скорость интернета",
+          "width": 198,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Оптоволоконная сеть",
+          "width": 198,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Домашний Wi-Fi 6",
+          "width": 178.265625,
+          "height": 25,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Фильмы и сериалы в Movix",
+          "width": 198,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобное оформление подключения",
+          "width": 198,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Поддержка абонентов 24/7",
+          "width": 198,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-speed.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-fiber.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-wifi6.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-movix.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-connection.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-support.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 320,
+      "mode": "public",
+      "width": 288,
+      "height": 481,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Высокая скорость интернета",
+          "width": 160,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Оптоволоконная сеть",
+          "width": 168.78125,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Домашний Wi-Fi 6",
+          "width": 160,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Фильмы и сериалы в Movix",
+          "width": 160,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобное оформление подключения",
+          "width": 160,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Поддержка абонентов 24/7",
+          "width": 160,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-speed.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-fiber.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-wifi6.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-movix.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-connection.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-support.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 320,
+      "mode": "preview",
+      "width": 288,
+      "height": 481,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Высокая скорость интернета",
+          "width": 160,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Оптоволоконная сеть",
+          "width": 168.78125,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Домашний Wi-Fi 6",
+          "width": 160,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Фильмы и сериалы в Movix",
+          "width": 160,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Удобное оформление подключения",
+          "width": 160,
+          "height": 75,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "H3",
+          "text": "Поддержка абонентов 24/7",
+          "width": 160,
+          "height": 50,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-speed.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-fiber.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-wifi6.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-movix.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-connection.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "benefit-support.svg"
+        }
+      ],
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "mismatches": []
+}

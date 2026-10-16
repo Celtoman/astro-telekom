@@ -1,0 +1,74 @@
+---
+import type { GeneralHomeDataByType } from '../../../../api/src/general-home-model';
+import { renderMovix } from '../../lib/general-home-render';
+import { publicAsset } from '../../data/public-asset';
+import HomeBlockStyles from './HomeBlockStyles.astro';
+interface Props { content: GeneralHomeDataByType['home.movix']; tariffHref?: string | null }
+---
+<Fragment set:html={renderMovix(Astro.props.content, { asset: publicAsset, interactive: true, tariffHref: Astro.props.tariffHref })} />
+<HomeBlockStyles />
+<style is:global>
+  .home-movix { position: relative; display: flex; flex-direction: column; gap: 24px; padding: 24px 40px; border-radius: 24px; overflow: hidden; background: linear-gradient(90deg, #071229, #102751); }
+  .home-movix-ambient { position: absolute; left: -160px; top: -10px; width: 770px; height: 600px; pointer-events: none; }
+  .home-movix-ambient img { display: block; width: auto; height: auto; max-width: none; }
+  .home-movix-main { position: relative; display: grid; grid-template-columns: minmax(0, 628fr) minmax(0, 620fr); gap: 32px; min-height: 469.1047px; width: 100%; }
+  .home-movix-artwork { position: relative; min-width: 0; margin: 0; }
+  .home-movix-artwork > img { display: block; position: absolute; left: -40px; top: 50%; width: min(750px, calc(100% + 122px)); max-width: none; height: auto; transform: translateY(-50%); }
+  .home-movix-content { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .home-movix .home-section-intro { gap: 12px; }
+  .home-movix h2 { color: #fff; font-size: 40px; line-height: 43px; letter-spacing: -1.6px; }
+  .home-movix .home-movix-intro { color: #b4c8ef; font-size: 18px; line-height: 26px; }
+  .home-movix-features { display: flex; flex-direction: column; gap: 16px; min-width: 0; padding-left: 56px; }
+  .home-movix-feature { display: flex; align-items: flex-start; gap: 16px; min-width: 0; }
+  .home-movix-icon, .home-movix-icon img { display: block; width: 64px; height: 64px; flex: 0 0 64px; max-width: none; }
+  .home-movix-feature-copy { display: flex; flex: 1; flex-direction: column; gap: 4px; min-width: 0; }
+  .home-movix-feature h3 { color: #fff; font-size: 16px; font-weight: 600; line-height: 24px; letter-spacing: 0; }
+  .home-movix-feature p { color: #b4c8ef; font-size: 14px; line-height: 20px; }
+  .home-movix-actions { display: flex; align-items: center; gap: 24px; padding-left: 56px; }
+  .home-movix-actions .home-action { width: 240px; }
+  .home-movix-details { display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; width: 132px; min-height: 48px; color: #aec0ff; font-size: 14px; font-weight: 600; line-height: 20px; text-decoration: none; }
+  .home-movix-details span { text-decoration: underline; text-underline-offset: 2px; }
+  .home-movix-details .home-static-icon { width: 20px; height: 20px; flex-basis: 20px; }
+  .home-movix-footer { position: relative; display: flex; align-items: center; gap: 20px; min-width: 0; width: 100%; }
+  .home-movix-partners { display: flex; align-items: center; gap: 16px; min-width: 0; }
+  .home-movix .home-movix-cinemas-label { flex: 0 0 188px; color: #b4c8ef; font-size: 12px; line-height: 16px; }
+  .home-movix-cinemas { display: grid; grid-template-columns: repeat(6, 104px); gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .home-movix-cinemas li { display: flex; align-items: center; justify-content: center; height: 40px; padding: 8px; border: 1px solid #253a60; border-radius: 10px; background: #040d22; }
+  .home-cinema-logo, .home-cinema-logo img { display: block; flex-shrink: 0; width: auto; height: auto; max-width: none; }
+  .home-cinema-raster img { width: 88px; height: auto; }
+  .home-movix .home-movix-disclaimer { flex: 1; min-width: 0; color: #a4b8dd; font-size: 12px; line-height: 16px; text-align: right; }
+  @media (min-width: 1101px) and (max-width: 1300px) {
+    .home-movix-footer { flex-wrap: wrap; }
+    .home-movix-partners { flex-wrap: wrap; }
+    .home-movix .home-movix-disclaimer { flex-basis: 100%; }
+  }
+  @media (max-width: 1100px) {
+    .home-movix { padding: 24px 32px; }
+    .home-movix-main { display: flex; flex-direction: column; gap: 24px; min-height: 0; }
+    .home-movix-artwork { order: 1; width: 100%; aspect-ratio: 1586 / 992; }
+    .home-movix-artwork > img { position: static; width: 100%; height: auto; transform: none; }
+    .home-movix h2 { max-width: 480px; font-size: 32px; line-height: 38px; letter-spacing: -1.1px; }
+    .home-movix-features, .home-movix-actions { padding-left: 0; }
+    .home-movix-icon, .home-movix-icon img { width: 48px; height: 48px; flex-basis: 48px; }
+    .home-movix-footer { flex-direction: column; align-items: stretch; gap: 12px; }
+    .home-movix-partners { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .home-movix .home-movix-cinemas-label { flex: none; }
+    .home-movix-cinemas { grid-template-columns: repeat(auto-fit, 96px); width: 100%; max-width: 616px; }
+    .home-movix .home-movix-disclaimer { white-space: normal; }
+    .home-cinema-raster img { width: 80px; }
+    .home-movix-ambient { left: -80px; top: 464px; width: 822.4px; height: 664px; }
+  }
+  @media (max-width: 620px) {
+    .home-movix { padding: 24px; }
+    .home-movix h2 { max-width: none; font-size: 24px; line-height: 29px; letter-spacing: -.8px; }
+    .home-movix .home-movix-intro { font-size: 16px; line-height: 24px; }
+    .home-movix-feature { display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 16px; row-gap: 12px; }
+    .home-movix-feature-copy { display: contents; }
+    .home-movix-feature h3 { align-self: center; }
+    .home-movix-feature p { grid-column: 1 / -1; font-size: 15px; line-height: 22px; }
+    .home-movix-actions { flex-direction: column; gap: 24px; }
+    .home-movix-actions .home-action, .home-movix-details { width: 100%; }
+    .home-movix-cinemas { max-width: 304px; }
+    .home-movix-ambient { left: -80px; top: 770px; width: 489.36px; height: 410.6px; }
+  }
+</style>

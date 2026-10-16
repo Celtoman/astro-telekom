@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const sources = [
@@ -6,6 +6,16 @@ const sources = [
   ['header', 'components/SiteHeader.astro'],
   ['hero', 'components/HomeHero.astro'],
   ['generalhero', 'components/GeneralHomeHero.astro'],
+  ['generalhome', 'components/general-home/HomeBlockStyles.astro'],
+  ['generalhome', 'components/general-home/HomeProviderAbout.astro'],
+  ['generalhome', 'components/general-home/HomeBenefits.astro'],
+  ['generalhome', 'components/general-home/HomeMorePossibilities.astro'],
+  ['generalhome', 'components/general-home/HomeMovix.astro'],
+  ['generalhome', 'components/general-home/HomeConnectionSteps.astro'],
+  ['generalhome', 'components/general-home/HomeFaq.astro'],
+  ['generalhome', 'components/general-home/HomeCityDirectory.astro'],
+  ['generalhome', 'components/general-home/HomeConnectionHelp.astro'],
+  ['generalhome', 'components/general-home/HomeAddressEntry.astro'],
   ['address', 'components/AddressForm.astro'],
   ['blocks', 'components/BlockRenderer.astro'],
   ['collection', 'components/TariffCollection.astro'],
@@ -15,6 +25,8 @@ const sources = [
 ].map(([name, path]) => [name, fileURLToPath(new URL(`../apps/web/src/${path}`, import.meta.url))]);
 const assetPaths = ['home-hero.png', 'domru-logo.png', 'map-pin.svg', 'chevron-down.svg', 'search.svg', 'headphones.svg', 'phone.svg', 'menu.svg', 'tag.svg', 'wifi.svg', 'tv.svg', 'tag-blue.svg', 'wifi-blue.svg', 'tv-blue.svg', 'shield-check.svg', 'check.svg']
   .map(name => `/images/figma/${name}`).concat(['/images/figma/hero1d-desktop-imglocationicon.svg', ...['desktop', 'tablet', 'mobile'].flatMap(device => [0, 1, 2].map(index => `/images/figma/hero1d-${device}-imgicon${index || ''}.svg`))]);
+// Repository-owned static assets only; CMS never supplies imports or executable paths.
+assetPaths.push(...readdirSync(new URL('../apps/web/public/images/general-home/', import.meta.url)).filter(name => /^[a-z0-9-]+\.(?:png|svg)$/.test(name)).map(name => `/images/general-home/${name}`));
 
 // Only trusted repository CSS is embedded. Catalog data never reaches this loader.
 // Native CSS nesting isolates Astro's local selectors from other preview components.

@@ -1,0 +1,34 @@
+---
+import type { GeneralHomeDataByType } from '../../../../api/src/general-home-model';
+import { renderBenefits } from '../../lib/general-home-render';
+import { publicAsset } from '../../data/public-asset';
+import HomeBlockStyles from './HomeBlockStyles.astro';
+interface Props { content: GeneralHomeDataByType['home.benefits'] }
+---
+<Fragment set:html={renderBenefits(Astro.props.content, { asset: publicAsset, interactive: true })} />
+<HomeBlockStyles />
+<style is:global>
+  .home-benefits { display: flex; flex-direction: column; gap: 32px; padding: 48px; background: #fff; }
+  .home-benefits-carousel { display: flex; flex-direction: column; gap: 8px; width: 100%; min-width: 0; }
+  .home-benefits-hint { display: none; }
+  .home-benefits-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; width: 100%; margin: 0; padding: 0; list-style: none; }
+  .home-benefit-card { display: grid; grid-template-rows: subgrid; grid-row: span 3; row-gap: 16px; min-width: 0; padding: 24px; background: #eef8ff; border-radius: 24px; }
+  .home-benefits .home-card-heading { min-height: 48px; }
+  .home-static-icon { display: block; width: 48px; height: 48px; flex: 0 0 48px; }
+  .home-benefit-fact { justify-self: start; align-self: end; max-width: 100%; padding: 4px 8px; border-radius: 10px; background: #fff; font-size: 14px; font-weight: 600; line-height: 20px; overflow-wrap: anywhere; }
+  @media (max-width: 1100px) {
+    .home-benefits { gap: 24px; padding: 32px; }
+    .home-benefits-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .home-benefits .home-card-heading { align-self: start; }
+  }
+  @media (max-width: 620px) {
+    .home-benefits { gap: 20px; padding: 20px; }
+    .home-benefits .home-benefits-hint { display: block; font-size: 12px; line-height: 16px; }
+    .home-benefits-grid { display: flex; align-items: stretch; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x proximity; scrollbar-width: none; }
+    .home-benefits-grid::-webkit-scrollbar { display: none; }
+    .home-benefit-card { display: flex; flex: 0 0 min(286px, 100%); flex-direction: column; gap: 16px; min-height: 286px; padding: 16px; scroll-snap-align: start; }
+    .home-benefits .home-card-heading { align-items: flex-start; gap: 8px; }
+    .home-benefit-fact { align-self: flex-start; margin-top: auto; }
+    .home-benefits-grid:focus-visible { outline: 3px solid #1769aa; outline-offset: -3px; }
+  }
+</style>

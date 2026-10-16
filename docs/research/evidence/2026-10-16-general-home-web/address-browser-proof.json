@@ -1,0 +1,421 @@
+{
+  "scope": "Compiled 2g with existing AddressForm slot; no real API/lead requests",
+  "date": "2026-10-16T13:31:13.238Z",
+  "sizes": [
+    {
+      "mode": "public",
+      "viewport": 1440,
+      "width": 1360,
+      "height": 368,
+      "overflow": false,
+      "boxes": [
+        {
+          "text": "H2",
+          "left": 72,
+          "top": 62,
+          "width": 432,
+          "height": 76
+        },
+        {
+          "text": "LABEL",
+          "left": 72,
+          "top": 228,
+          "width": 864,
+          "height": 20
+        },
+        {
+          "text": "DIV",
+          "left": 72,
+          "top": 256,
+          "width": 648,
+          "height": 48
+        },
+        {
+          "text": "BUTTON",
+          "left": 736,
+          "top": 256,
+          "width": 200,
+          "height": 48
+        },
+        {
+          "text": "H3",
+          "left": 1024,
+          "top": 62,
+          "width": 344,
+          "height": 58
+        },
+        {
+          "text": "DIV",
+          "left": 1024,
+          "top": 159,
+          "width": 344,
+          "height": 185
+        }
+      ]
+    },
+    {
+      "mode": "preview",
+      "viewport": 1440,
+      "width": 1360,
+      "height": 368,
+      "overflow": false,
+      "boxes": [
+        {
+          "text": "H2",
+          "left": 72,
+          "top": 62,
+          "width": 432,
+          "height": 76
+        },
+        {
+          "text": "LABEL",
+          "left": 72,
+          "top": 228,
+          "width": 864,
+          "height": 20
+        },
+        {
+          "text": "DIV",
+          "left": 72,
+          "top": 256,
+          "width": 648,
+          "height": 48
+        },
+        {
+          "text": "BUTTON",
+          "left": 736,
+          "top": 256,
+          "width": 200,
+          "height": 48
+        },
+        {
+          "text": "H3",
+          "left": 1024,
+          "top": 62,
+          "width": 344,
+          "height": 58
+        },
+        {
+          "text": "DIV",
+          "left": 1024,
+          "top": 159,
+          "width": 344,
+          "height": 185
+        }
+      ]
+    },
+    {
+      "mode": "public",
+      "viewport": 834,
+      "width": 720,
+      "height": 611,
+      "overflow": false,
+      "boxes": [
+        {
+          "text": "H2",
+          "left": 81,
+          "top": 54,
+          "width": 448,
+          "height": 76
+        },
+        {
+          "text": "LABEL",
+          "left": 81,
+          "top": 214,
+          "width": 672,
+          "height": 20
+        },
+        {
+          "text": "DIV",
+          "left": 81,
+          "top": 242,
+          "width": 456,
+          "height": 48
+        },
+        {
+          "text": "BUTTON",
+          "left": 553,
+          "top": 242,
+          "width": 200,
+          "height": 48
+        },
+        {
+          "text": "H3",
+          "left": 81,
+          "top": 432,
+          "width": 328,
+          "height": 58
+        },
+        {
+          "text": "DIV",
+          "left": 433,
+          "top": 402,
+          "width": 320,
+          "height": 185
+        }
+      ]
+    },
+    {
+      "mode": "preview",
+      "viewport": 834,
+      "width": 720,
+      "height": 611,
+      "overflow": false,
+      "boxes": [
+        {
+          "text": "H2",
+          "left": 81,
+          "top": 54,
+          "width": 448,
+          "height": 76
+        },
+        {
+          "text": "LABEL",
+          "left": 81,
+          "top": 214,
+          "width": 672,
+          "height": 20
+        },
+        {
+          "text": "DIV",
+          "left": 81,
+          "top": 242,
+          "width": 456,
+          "height": 48
+        },
+        {
+          "text": "BUTTON",
+          "left": 553,
+          "top": 242,
+          "width": 200,
+          "height": 48
+        },
+        {
+          "text": "H3",
+          "left": 81,
+          "top": 432,
+          "width": 328,
+          "height": 58
+        },
+        {
+          "text": "DIV",
+          "left": 433,
+          "top": 402,
+          "width": 320,
+          "height": 185
+        }
+      ]
+    },
+    {
+      "mode": "public",
+      "viewport": 390,
+      "width": 358,
+      "height": 757,
+      "overflow": false,
+      "boxes": [
+        {
+          "text": "H2",
+          "left": 36,
+          "top": 50,
+          "width": 318,
+          "height": 50
+        },
+        {
+          "text": "LABEL",
+          "left": 36,
+          "top": 208,
+          "width": 318,
+          "height": 20
+        },
+        {
+          "text": "DIV",
+          "left": 36,
+          "top": 236,
+          "width": 318,
+          "height": 48
+        },
+        {
+          "text": "BUTTON",
+          "left": 36,
+          "top": 296,
+          "width": 318,
+          "height": 48
+        },
+        {
+          "text": "H3",
+          "left": 36,
+          "top": 482,
+          "width": 318,
+          "height": 50
+        },
+        {
+          "text": "DIV",
+          "left": 36,
+          "top": 556,
+          "width": 318,
+          "height": 181
+        }
+      ]
+    },
+    {
+      "mode": "preview",
+      "viewport": 390,
+      "width": 358,
+      "height": 757,
+      "overflow": false,
+      "boxes": [
+        {
+          "text": "H2",
+          "left": 36,
+          "top": 50,
+          "width": 318,
+          "height": 50
+        },
+        {
+          "text": "LABEL",
+          "left": 36,
+          "top": 208,
+          "width": 318,
+          "height": 20
+        },
+        {
+          "text": "DIV",
+          "left": 36,
+          "top": 236,
+          "width": 318,
+          "height": 48
+        },
+        {
+          "text": "BUTTON",
+          "left": 36,
+          "top": 296,
+          "width": 318,
+          "height": 48
+        },
+        {
+          "text": "H3",
+          "left": 36,
+          "top": 482,
+          "width": 318,
+          "height": 50
+        },
+        {
+          "text": "DIV",
+          "left": 36,
+          "top": 556,
+          "width": 318,
+          "height": 181
+        }
+      ]
+    },
+    {
+      "mode": "public",
+      "viewport": 320,
+      "width": 288,
+      "height": 806,
+      "overflow": false,
+      "boxes": [
+        {
+          "text": "H2",
+          "left": 36,
+          "top": 50,
+          "width": 248,
+          "height": 75
+        },
+        {
+          "text": "LABEL",
+          "left": 36,
+          "top": 257,
+          "width": 248,
+          "height": 20
+        },
+        {
+          "text": "DIV",
+          "left": 36,
+          "top": 285,
+          "width": 248,
+          "height": 48
+        },
+        {
+          "text": "BUTTON",
+          "left": 36,
+          "top": 345,
+          "width": 248,
+          "height": 48
+        },
+        {
+          "text": "H3",
+          "left": 36,
+          "top": 531,
+          "width": 248,
+          "height": 50
+        },
+        {
+          "text": "DIV",
+          "left": 36,
+          "top": 605,
+          "width": 248,
+          "height": 181
+        }
+      ]
+    },
+    {
+      "mode": "preview",
+      "viewport": 320,
+      "width": 288,
+      "height": 806,
+      "overflow": false,
+      "boxes": [
+        {
+          "text": "H2",
+          "left": 36,
+          "top": 50,
+          "width": 248,
+          "height": 75
+        },
+        {
+          "text": "LABEL",
+          "left": 36,
+          "top": 257,
+          "width": 248,
+          "height": 20
+        },
+        {
+          "text": "DIV",
+          "left": 36,
+          "top": 285,
+          "width": 248,
+          "height": 48
+        },
+        {
+          "text": "BUTTON",
+          "left": 36,
+          "top": 345,
+          "width": 248,
+          "height": 48
+        },
+        {
+          "text": "H3",
+          "left": 36,
+          "top": 531,
+          "width": 248,
+          "height": 50
+        },
+        {
+          "text": "DIV",
+          "left": 36,
+          "top": 605,
+          "width": 248,
+          "height": 181
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "behavior": {
+    "suggestions": 1,
+    "checks": 2,
+    "leadRequests": 1,
+    "result": "Global selected house survives technical error/retry and opens existing result dialog; receipt-confirmed lead; source city preserved; no real external traffic"
+  }
+}

@@ -1,0 +1,34 @@
+---
+import type { GeneralHomeDataByType } from '../../../../api/src/general-home-model';
+import { renderConnectionSteps } from '../../lib/general-home-render';
+import { publicAsset } from '../../data/public-asset';
+import HomeBlockStyles from './HomeBlockStyles.astro';
+interface Props { content: GeneralHomeDataByType['home.connection_steps']; phone: string; phoneHref: string; addressDialogId: string }
+const { content, phone, phoneHref, addressDialogId } = Astro.props;
+---
+<Fragment set:html={renderConnectionSteps(content, { asset: publicAsset, phone, phoneHref, addressDialogId })} />
+<HomeBlockStyles />
+<style is:global>
+  .home-steps { display: flex; flex-direction: column; gap: 24px; padding: 48px; border-radius: 26px; background: #eef8ff; }
+  .home-steps .home-section-intro { gap: 8px; }
+  .home-steps-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; width: 100%; margin: 0; padding: 0; list-style: none; }
+  .home-steps-grid > li { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; min-width: 0; padding: 20px; border: 1px solid #dcecf7; border-radius: 24px; background: #fff; }
+  .home-step-heading { display: flex; align-items: center; gap: 12px; min-height: 50px; width: 100%; }
+  .home-step-heading img { display: block; flex: 0 0 40px; width: 40px; height: 40px; }
+  .home-step-heading h3 { flex: 1; min-width: 0; overflow-wrap: break-word; }
+  .home-steps-grid > li > p { width: 100%; min-height: 72px; }
+  .home-step-phone { display: flex; align-items: center; min-height: 44px; width: 100%; color: #18202a; font-size: 20px; font-weight: 700; line-height: 25px; letter-spacing: -.2px; text-decoration: none; overflow-wrap: anywhere; }
+  .home-steps .home-action { width: 100%; }
+  @media (max-width: 1100px) {
+    .home-steps { padding: 32px; }
+    .home-steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 620px) {
+    .home-steps { padding: 20px; }
+    .home-steps h2 { letter-spacing: -.5px; }
+    .home-steps-grid { grid-template-columns: minmax(0, 1fr); }
+    .home-steps-grid > li { gap: 8px; padding: 16px; }
+    .home-step-heading { min-height: 0; }
+    .home-steps-grid > li > p { min-height: 0; }
+  }
+</style>

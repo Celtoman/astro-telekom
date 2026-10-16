@@ -1,0 +1,798 @@
+{
+  "scope": "Isolated compiled Astro components and shared inactive preview; synthetic catalog/FAQ, intercepted API only",
+  "date": "2026-10-16T13:17:52.025Z",
+  "sizes": [
+    {
+      "block": "steps",
+      "mode": "public",
+      "viewport": 1440,
+      "width": 1360,
+      "height": 494,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Как подключить Дом.ру",
+          "top": 48,
+          "height": 38
+        },
+        {
+          "text": "Оставьте заявку",
+          "top": 175.5,
+          "height": 25
+        },
+        {
+          "text": "Согласование визита",
+          "top": 163,
+          "height": 50
+        },
+        {
+          "text": "Подключение и настройка",
+          "top": 163,
+          "height": 50
+        },
+        {
+          "text": "Оформление и проверка",
+          "top": 163,
+          "height": 50
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "steps",
+      "mode": "preview",
+      "viewport": 1440,
+      "width": 1360,
+      "height": 494,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Как подключить Дом.ру",
+          "top": 48,
+          "height": 38
+        },
+        {
+          "text": "Оставьте заявку",
+          "top": 175.5,
+          "height": 25
+        },
+        {
+          "text": "Согласование визита",
+          "top": 163,
+          "height": 50
+        },
+        {
+          "text": "Подключение и настройка",
+          "top": 163,
+          "height": 50
+        },
+        {
+          "text": "Оформление и проверка",
+          "top": 163,
+          "height": 50
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "steps",
+      "mode": "public",
+      "viewport": 834,
+      "width": 720,
+      "height": 658,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Как подключить Дом.ру",
+          "top": 32,
+          "height": 38
+        },
+        {
+          "text": "Оставьте заявку",
+          "top": 159.5,
+          "height": 25
+        },
+        {
+          "text": "Согласование визита",
+          "top": 159.5,
+          "height": 25
+        },
+        {
+          "text": "Подключение и настройка",
+          "top": 467,
+          "height": 50
+        },
+        {
+          "text": "Оформление и проверка",
+          "top": 467,
+          "height": 50
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "steps",
+      "mode": "preview",
+      "viewport": 834,
+      "width": 720,
+      "height": 658,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Как подключить Дом.ру",
+          "top": 32,
+          "height": 38
+        },
+        {
+          "text": "Оставьте заявку",
+          "top": 159.5,
+          "height": 25
+        },
+        {
+          "text": "Согласование визита",
+          "top": 159.5,
+          "height": 25
+        },
+        {
+          "text": "Подключение и настройка",
+          "top": 467,
+          "height": 50
+        },
+        {
+          "text": "Оформление и проверка",
+          "top": 467,
+          "height": 50
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "steps",
+      "mode": "public",
+      "viewport": 390,
+      "width": 358,
+      "height": 845,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Как подключить Дом.ру",
+          "top": 20,
+          "height": 29
+        },
+        {
+          "text": "Оставьте заявку",
+          "top": 153.5,
+          "height": 25
+        },
+        {
+          "text": "Согласование визита",
+          "top": 407.5,
+          "height": 25
+        },
+        {
+          "text": "Подключение и настройка",
+          "top": 546,
+          "height": 50
+        },
+        {
+          "text": "Оформление и проверка",
+          "top": 702,
+          "height": 50
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "steps",
+      "mode": "preview",
+      "viewport": 390,
+      "width": 358,
+      "height": 845,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Как подключить Дом.ру",
+          "top": 20,
+          "height": 29
+        },
+        {
+          "text": "Оставьте заявку",
+          "top": 153.5,
+          "height": 25
+        },
+        {
+          "text": "Согласование визита",
+          "top": 407.5,
+          "height": 25
+        },
+        {
+          "text": "Подключение и настройка",
+          "top": 546,
+          "height": 50
+        },
+        {
+          "text": "Оформление и проверка",
+          "top": 702,
+          "height": 50
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "steps",
+      "mode": "public",
+      "viewport": 320,
+      "width": 288,
+      "height": 990,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Как подключить Дом.ру",
+          "top": 20,
+          "height": 58
+        },
+        {
+          "text": "Оставьте заявку",
+          "top": 199,
+          "height": 50
+        },
+        {
+          "text": "Согласование визита",
+          "top": 487,
+          "height": 50
+        },
+        {
+          "text": "Подключение и настройка",
+          "top": 667,
+          "height": 50
+        },
+        {
+          "text": "Оформление и проверка",
+          "top": 823,
+          "height": 50
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "steps",
+      "mode": "preview",
+      "viewport": 320,
+      "width": 288,
+      "height": 990,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Как подключить Дом.ру",
+          "top": 20,
+          "height": 58
+        },
+        {
+          "text": "Оставьте заявку",
+          "top": 199,
+          "height": 50
+        },
+        {
+          "text": "Согласование визита",
+          "top": 487,
+          "height": 50
+        },
+        {
+          "text": "Подключение и настройка",
+          "top": 667,
+          "height": 50
+        },
+        {
+          "text": "Оформление и проверка",
+          "top": 823,
+          "height": 50
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "cities",
+      "mode": "public",
+      "viewport": 1440,
+      "width": 1360,
+      "height": 766,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Выберите свой город",
+          "top": 48,
+          "height": 38
+        }
+      ],
+      "cityCount": 24
+    },
+    {
+      "block": "cities",
+      "mode": "preview",
+      "viewport": 1440,
+      "width": 1360,
+      "height": 766,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Выберите свой город",
+          "top": 48,
+          "height": 38
+        }
+      ],
+      "cityCount": 24
+    },
+    {
+      "block": "cities",
+      "mode": "public",
+      "viewport": 390,
+      "width": 358,
+      "height": 709,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Выберите свой город",
+          "top": 20,
+          "height": 29
+        }
+      ],
+      "cityCount": 12
+    },
+    {
+      "block": "cities",
+      "mode": "preview",
+      "viewport": 390,
+      "width": 358,
+      "height": 709,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Выберите свой город",
+          "top": 20,
+          "height": 29
+        }
+      ],
+      "cityCount": 12
+    },
+    {
+      "block": "cities",
+      "mode": "public",
+      "viewport": 320,
+      "width": 288,
+      "height": 757,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Выберите свой город",
+          "top": 20,
+          "height": 29
+        }
+      ],
+      "cityCount": 12
+    },
+    {
+      "block": "cities",
+      "mode": "preview",
+      "viewport": 320,
+      "width": 288,
+      "height": 757,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Выберите свой город",
+          "top": 20,
+          "height": 29
+        }
+      ],
+      "cityCount": 12
+    },
+    {
+      "block": "faq",
+      "mode": "public",
+      "viewport": 1440,
+      "width": 1360,
+      "height": 534,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Популярные вопросы",
+          "top": 32,
+          "height": 38
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "faq",
+      "mode": "preview",
+      "viewport": 1440,
+      "width": 1360,
+      "height": 534,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Популярные вопросы",
+          "top": 32,
+          "height": 38
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "faq",
+      "mode": "public",
+      "viewport": 390,
+      "width": 358,
+      "height": 589,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Популярные вопросы",
+          "top": 16,
+          "height": 29
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "faq",
+      "mode": "preview",
+      "viewport": 390,
+      "width": 358,
+      "height": 589,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Популярные вопросы",
+          "top": 16,
+          "height": 29
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "faq",
+      "mode": "public",
+      "viewport": 320,
+      "width": 288,
+      "height": 685,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Популярные вопросы",
+          "top": 16,
+          "height": 29
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "faq",
+      "mode": "preview",
+      "viewport": 320,
+      "width": 288,
+      "height": 685,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Популярные вопросы",
+          "top": 16,
+          "height": 29
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "help",
+      "mode": "public",
+      "viewport": 1440,
+      "width": 1360,
+      "height": 343,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Поможем выбрать тариф и подключить Дом.ру",
+          "top": 32,
+          "height": 68
+        },
+        {
+          "text": "Перезвоним вам",
+          "top": 32,
+          "height": 25
+        },
+        {
+          "text": "Заявка отправлена",
+          "top": 0,
+          "height": 0
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "help",
+      "mode": "preview",
+      "viewport": 1440,
+      "width": 1360,
+      "height": 343,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Поможем выбрать тариф и подключить Дом.ру",
+          "top": 32,
+          "height": 68
+        },
+        {
+          "text": "Перезвоним вам",
+          "top": 32,
+          "height": 25
+        },
+        {
+          "text": "Заявка отправлена",
+          "top": 0,
+          "height": 0
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "help",
+      "mode": "public",
+      "viewport": 834,
+      "width": 720,
+      "height": 363,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Поможем выбрать тариф и подключить Дом.ру",
+          "top": 24,
+          "height": 102
+        },
+        {
+          "text": "Перезвоним вам",
+          "top": 24,
+          "height": 25
+        },
+        {
+          "text": "Заявка отправлена",
+          "top": 0,
+          "height": 0
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "help",
+      "mode": "preview",
+      "viewport": 834,
+      "width": 720,
+      "height": 363,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Поможем выбрать тариф и подключить Дом.ру",
+          "top": 24,
+          "height": 102
+        },
+        {
+          "text": "Перезвоним вам",
+          "top": 24,
+          "height": 25
+        },
+        {
+          "text": "Заявка отправлена",
+          "top": 0,
+          "height": 0
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "help",
+      "mode": "public",
+      "viewport": 390,
+      "width": 358,
+      "height": 660,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Поможем выбрать тариф и подключить Дом.ру",
+          "top": 24,
+          "height": 50
+        },
+        {
+          "text": "Перезвоним вам",
+          "top": 347,
+          "height": 25
+        },
+        {
+          "text": "Заявка отправлена",
+          "top": 0,
+          "height": 0
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "help",
+      "mode": "preview",
+      "viewport": 390,
+      "width": 358,
+      "height": 660,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Поможем выбрать тариф и подключить Дом.ру",
+          "top": 24,
+          "height": 50
+        },
+        {
+          "text": "Перезвоним вам",
+          "top": 347,
+          "height": 25
+        },
+        {
+          "text": "Заявка отправлена",
+          "top": 0,
+          "height": 0
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "help",
+      "mode": "public",
+      "viewport": 320,
+      "width": 288,
+      "height": 747,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Поможем выбрать тариф и подключить Дом.ру",
+          "top": 24,
+          "height": 75
+        },
+        {
+          "text": "Перезвоним вам",
+          "top": 396,
+          "height": 25
+        },
+        {
+          "text": "Заявка отправлена",
+          "top": 0,
+          "height": 0
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "help",
+      "mode": "preview",
+      "viewport": 320,
+      "width": 288,
+      "height": 747,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Поможем выбрать тариф и подключить Дом.ру",
+          "top": 24,
+          "height": 75
+        },
+        {
+          "text": "Перезвоним вам",
+          "top": 396,
+          "height": 25
+        },
+        {
+          "text": "Заявка отправлена",
+          "top": 0,
+          "height": 0
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "faq",
+      "mode": "public",
+      "viewport": 834,
+      "width": 720,
+      "height": 518,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Популярные вопросы",
+          "top": 24,
+          "height": 38
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "faq",
+      "mode": "preview",
+      "viewport": 834,
+      "width": 720,
+      "height": 518,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Популярные вопросы",
+          "top": 24,
+          "height": 38
+        }
+      ],
+      "cityCount": 0
+    },
+    {
+      "block": "cities",
+      "mode": "public",
+      "viewport": 834,
+      "width": 720,
+      "height": 786,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Выберите свой город",
+          "top": 32,
+          "height": 38
+        }
+      ],
+      "cityCount": 18
+    },
+    {
+      "block": "cities",
+      "mode": "preview",
+      "viewport": 834,
+      "width": 720,
+      "height": 786,
+      "overflow": false,
+      "imagesLoaded": true,
+      "titles": [
+        {
+          "text": "Выберите свой город",
+          "top": 32,
+          "height": 38
+        }
+      ],
+      "cityCount": 18
+    }
+  ],
+  "errors": [],
+  "behavior": {
+    "faq": "Enter/Space toggle independent native disclosures",
+    "cities": "12/18/24 after responsive changes; reveal all52; query+letter intersection; reset letter keeps query; empty state",
+    "help": "Explicit unchecked consent; mobile prefix validation; double submit prevented; 503 keeps input+focus; retry same key; success only receipt; manual consultation without invented city/address",
+    "noJs": "All52 catalog links available without JavaScript"
+  },
+  "mismatches": []
+}

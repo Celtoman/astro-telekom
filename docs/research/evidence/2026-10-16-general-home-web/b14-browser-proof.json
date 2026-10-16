@@ -1,0 +1,856 @@
+{
+  "date": "2026-10-16T13:08:13.582Z",
+  "scope": "Compiled Astro and same shared inactive preview; isolated local fixture",
+  "sizes": [
+    {
+      "viewport": 1440,
+      "mode": "public",
+      "width": 1360,
+      "height": 707,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [
+        {
+          "width": 304,
+          "height": 131
+        },
+        {
+          "width": 304,
+          "height": 131
+        },
+        {
+          "width": 304,
+          "height": 131
+        },
+        {
+          "width": 304,
+          "height": 131
+        }
+      ],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Собственная сетевая инфраструктура",
+          "width": 296.65625,
+          "height": 50,
+          "top": 401,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "ЭР-Телеком строит и развивает сети связи в России. Компания управляет собственной инфраструктурой передачи данных, модернизирует магистральные линии и расширяет технические возможности сети.",
+          "width": 360.65625,
+          "height": 120,
+          "top": 478,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Собственные разработки",
+          "width": 296.671875,
+          "height": 25,
+          "top": 413.5,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "Дом.ру развивает оборудование собственной разработки: от домашних маршрутизаторов до умных домофонных панелей. В 2026 году компания сообщила о запуске их серийного производства в России.",
+          "width": 360.671875,
+          "height": 120,
+          "top": 478,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Лидер по стабильности соединения",
+          "width": 296.65625,
+          "height": 50,
+          "top": 401,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "По результатам исследования TelecomDaily за 2022 год Дом.ру занял первое место по стабильности соединения во всех 40 городах, где проводились замеры среди операторов фиксированной связи.",
+          "width": 360.65625,
+          "height": 120,
+          "top": 478,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-infrastructure.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-development.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-research.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 1440,
+      "mode": "preview",
+      "width": 1360,
+      "height": 707,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [
+        {
+          "width": 304,
+          "height": 131
+        },
+        {
+          "width": 304,
+          "height": 131
+        },
+        {
+          "width": 304,
+          "height": 131
+        },
+        {
+          "width": 304,
+          "height": 131
+        }
+      ],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Собственная сетевая инфраструктура",
+          "width": 296.65625,
+          "height": 50,
+          "top": 401,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "ЭР-Телеком строит и развивает сети связи в России. Компания управляет собственной инфраструктурой передачи данных, модернизирует магистральные линии и расширяет технические возможности сети.",
+          "width": 360.65625,
+          "height": 120,
+          "top": 478,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Собственные разработки",
+          "width": 296.671875,
+          "height": 25,
+          "top": 413.5,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "Дом.ру развивает оборудование собственной разработки: от домашних маршрутизаторов до умных домофонных панелей. В 2026 году компания сообщила о запуске их серийного производства в России.",
+          "width": 360.671875,
+          "height": 120,
+          "top": 478,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Лидер по стабильности соединения",
+          "width": 296.65625,
+          "height": 50,
+          "top": 401,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "По результатам исследования TelecomDaily за 2022 год Дом.ру занял первое место по стабильности соединения во всех 40 городах, где проводились замеры среди операторов фиксированной связи.",
+          "width": 360.65625,
+          "height": 120,
+          "top": 478,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-infrastructure.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-development.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-research.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 834,
+      "mode": "public",
+      "width": 720,
+      "height": 1085,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [
+        {
+          "width": 320,
+          "height": 94
+        },
+        {
+          "width": 320,
+          "height": 94
+        },
+        {
+          "width": 320,
+          "height": 94
+        },
+        {
+          "width": 320,
+          "height": 94
+        }
+      ],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Собственная сетевая инфраструктура",
+          "width": 206,
+          "height": 75,
+          "top": 483,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "ЭР-Телеком строит и развивает сети связи в России. Компания управляет собственной инфраструктурой передачи данных, модернизирует магистральные линии и расширяет технические возможности сети.",
+          "width": 270,
+          "height": 192,
+          "top": 578,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Собственные разработки",
+          "width": 206,
+          "height": 50,
+          "top": 490,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "Дом.ру развивает оборудование собственной разработки: от домашних маршрутизаторов до умных домофонных панелей. В 2026 году компания сообщила о запуске их серийного производства в России.",
+          "width": 270,
+          "height": 168,
+          "top": 578,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Лидер по стабильности соединения",
+          "width": 542,
+          "height": 25,
+          "top": 855.5,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "По результатам исследования TelecomDaily за 2022 год Дом.ру занял первое место по стабильности соединения во всех 40 городах, где проводились замеры среди операторов фиксированной связи.",
+          "width": 606,
+          "height": 72,
+          "top": 920,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-infrastructure.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-development.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-research.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 834,
+      "mode": "preview",
+      "width": 720,
+      "height": 1085,
+      "heading": {
+        "fontSize": "32px",
+        "lineHeight": "38px"
+      },
+      "metrics": [
+        {
+          "width": 320,
+          "height": 94
+        },
+        {
+          "width": 320,
+          "height": 94
+        },
+        {
+          "width": 320,
+          "height": 94
+        },
+        {
+          "width": 320,
+          "height": 94
+        }
+      ],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Собственная сетевая инфраструктура",
+          "width": 206,
+          "height": 75,
+          "top": 483,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "ЭР-Телеком строит и развивает сети связи в России. Компания управляет собственной инфраструктурой передачи данных, модернизирует магистральные линии и расширяет технические возможности сети.",
+          "width": 270,
+          "height": 192,
+          "top": 578,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Собственные разработки",
+          "width": 206,
+          "height": 50,
+          "top": 490,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "Дом.ру развивает оборудование собственной разработки: от домашних маршрутизаторов до умных домофонных панелей. В 2026 году компания сообщила о запуске их серийного производства в России.",
+          "width": 270,
+          "height": 168,
+          "top": 578,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Лидер по стабильности соединения",
+          "width": 542,
+          "height": 25,
+          "top": 855.5,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "По результатам исследования TelecomDaily за 2022 год Дом.ру занял первое место по стабильности соединения во всех 40 городах, где проводились замеры среди операторов фиксированной связи.",
+          "width": 606,
+          "height": 72,
+          "top": 920,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-infrastructure.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-development.svg"
+        },
+        {
+          "width": 48,
+          "height": 48,
+          "loaded": true,
+          "currentSrc": "about-research.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 390,
+      "mode": "public",
+      "width": 358,
+      "height": 1527,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [
+        {
+          "width": 151,
+          "height": 149
+        },
+        {
+          "width": 151,
+          "height": 149
+        },
+        {
+          "width": 151,
+          "height": 149
+        },
+        {
+          "width": 151,
+          "height": 149
+        }
+      ],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Собственная сетевая инфраструктура",
+          "width": 236,
+          "height": 50,
+          "top": 652,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "ЭР-Телеком строит и развивает сети связи в России. Компания управляет собственной инфраструктурой передачи данных, модернизирует магистральные линии и расширяет технические возможности сети.",
+          "width": 284,
+          "height": 168,
+          "top": 718,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Собственные разработки",
+          "width": 236,
+          "height": 50,
+          "top": 936,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "Дом.ру развивает оборудование собственной разработки: от домашних маршрутизаторов до умных домофонных панелей. В 2026 году компания сообщила о запуске их серийного производства в России.",
+          "width": 284,
+          "height": 168,
+          "top": 1002,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Лидер по стабильности соединения",
+          "width": 236,
+          "height": 50,
+          "top": 1220,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "По результатам исследования TelecomDaily за 2022 год Дом.ру занял первое место по стабильности соединения во всех 40 городах, где проводились замеры среди операторов фиксированной связи.",
+          "width": 284,
+          "height": 168,
+          "top": 1286,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-infrastructure.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-development.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-research.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 390,
+      "mode": "preview",
+      "width": 358,
+      "height": 1527,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [
+        {
+          "width": 151,
+          "height": 149
+        },
+        {
+          "width": 151,
+          "height": 149
+        },
+        {
+          "width": 151,
+          "height": 149
+        },
+        {
+          "width": 151,
+          "height": 149
+        }
+      ],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Собственная сетевая инфраструктура",
+          "width": 236,
+          "height": 50,
+          "top": 652,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "ЭР-Телеком строит и развивает сети связи в России. Компания управляет собственной инфраструктурой передачи данных, модернизирует магистральные линии и расширяет технические возможности сети.",
+          "width": 284,
+          "height": 168,
+          "top": 718,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Собственные разработки",
+          "width": 236,
+          "height": 50,
+          "top": 936,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "Дом.ру развивает оборудование собственной разработки: от домашних маршрутизаторов до умных домофонных панелей. В 2026 году компания сообщила о запуске их серийного производства в России.",
+          "width": 284,
+          "height": 168,
+          "top": 1002,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Лидер по стабильности соединения",
+          "width": 236,
+          "height": 50,
+          "top": 1220,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "По результатам исследования TelecomDaily за 2022 год Дом.ру занял первое место по стабильности соединения во всех 40 городах, где проводились замеры среди операторов фиксированной связи.",
+          "width": 284,
+          "height": 168,
+          "top": 1286,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-infrastructure.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-development.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-research.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 320,
+      "mode": "public",
+      "width": 288,
+      "height": 1886,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [
+        {
+          "width": 116,
+          "height": 149
+        },
+        {
+          "width": 116,
+          "height": 149
+        },
+        {
+          "width": 116,
+          "height": 149
+        },
+        {
+          "width": 116,
+          "height": 149
+        }
+      ],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Собственная сетевая инфраструктура",
+          "width": 166,
+          "height": 100,
+          "top": 772,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "ЭР-Телеком строит и развивает сети связи в России. Компания управляет собственной инфраструктурой передачи данных, модернизирует магистральные линии и расширяет технические возможности сети.",
+          "width": 214,
+          "height": 216,
+          "top": 888,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Собственные разработки",
+          "width": 166,
+          "height": 50,
+          "top": 1154,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "Дом.ру развивает оборудование собственной разработки: от домашних маршрутизаторов до умных домофонных панелей. В 2026 году компания сообщила о запуске их серийного производства в России.",
+          "width": 214,
+          "height": 216,
+          "top": 1220,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Лидер по стабильности соединения",
+          "width": 166,
+          "height": 75,
+          "top": 1486,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "По результатам исследования TelecomDaily за 2022 год Дом.ру занял первое место по стабильности соединения во всех 40 городах, где проводились замеры среди операторов фиксированной связи.",
+          "width": 214,
+          "height": 216,
+          "top": 1577,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-infrastructure.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-development.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-research.svg"
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "viewport": 320,
+      "mode": "preview",
+      "width": 288,
+      "height": 1886,
+      "heading": {
+        "fontSize": "24px",
+        "lineHeight": "29px"
+      },
+      "metrics": [
+        {
+          "width": 116,
+          "height": 149
+        },
+        {
+          "width": 116,
+          "height": 149
+        },
+        {
+          "width": 116,
+          "height": 149
+        },
+        {
+          "width": 116,
+          "height": 149
+        }
+      ],
+      "copy": [
+        {
+          "tag": "H3",
+          "text": "Собственная сетевая инфраструктура",
+          "width": 166,
+          "height": 100,
+          "top": 772,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "ЭР-Телеком строит и развивает сети связи в России. Компания управляет собственной инфраструктурой передачи данных, модернизирует магистральные линии и расширяет технические возможности сети.",
+          "width": 214,
+          "height": 216,
+          "top": 888,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Собственные разработки",
+          "width": 166,
+          "height": 50,
+          "top": 1154,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "Дом.ру развивает оборудование собственной разработки: от домашних маршрутизаторов до умных домофонных панелей. В 2026 году компания сообщила о запуске их серийного производства в России.",
+          "width": 214,
+          "height": 216,
+          "top": 1220,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        },
+        {
+          "tag": "H3",
+          "text": "Лидер по стабильности соединения",
+          "width": 166,
+          "height": 75,
+          "top": 1486,
+          "font": "700 20px / 25px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "tag": "P",
+          "text": "По результатам исследования TelecomDaily за 2022 год Дом.ру занял первое место по стабильности соединения во всех 40 городах, где проводились замеры среди операторов фиксированной связи.",
+          "width": 214,
+          "height": 216,
+          "top": 1577,
+          "font": "16px / 24px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+          "letterSpacing": "normal"
+        }
+      ],
+      "icons": [
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-infrastructure.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-development.svg"
+        },
+        {
+          "width": 40,
+          "height": 40,
+          "loaded": true,
+          "currentSrc": "about-mobile-research.svg"
+        }
+      ],
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "mismatches": [],
+  "reviewedSourceHeightAdaptations": [
+    {
+      "viewport": 390,
+      "sourceHeight": 1552,
+      "renderHeight": 1527,
+      "reason": "Исследование: естественный перенос заголовка в две строки вместо трёх; независимый review принял adaptation."
+    }
+  ]
+}

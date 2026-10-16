@@ -4,7 +4,7 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [AGENTS.md](../AGENTS.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 782/782 passing на 16 октября 2026 года** (`pnpm check`, включая HOME Hero 2.0.0, атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
+**Baseline: 797/797 passing на 16 октября 2026 года** (`pnpm check`, включая HOME Hero 2.0.0, атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
 
 | Файл | Что проверяет |
 | --- | --- |
@@ -196,3 +196,13 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 - `tests/helpers/general-home.cjs`: общий независимый от реализации fixture девяти паспортов/полной HOME для контрактов, API и SQL rehearsal; без подстановки fixture в рабочие данные.
 - `tests/public-city-catalog.test.cjs`: публичный Site дополнительно содержит общий график24/7 и callbackWithinMinutes=15; прочий published/site boundary сохранён.
 - `scripts/rehearse-admin-read-projections.mjs` через `tests/admin-read-projections.test.cjs`: PostgreSQL-проекция возвращает generalHome=null для прежних snapshots и полный новый состав отдельно от сырых PageTemplate; legacy source без validationId и published-variable proof сохранены.
+
+
+## Компоненты полной HOME — часть этапа 5
+
+- `tests/general-home-render.test.mjs`: строгая версия и состав опубликованной HOME, отсутствие мутации, legacy absence, unsafe/unresolved поля, точные image origins; безопасное экранирование и смысловой порядок девяти renderer, правильные действия, неактивный preview, отсутствие лишних полей/выдуманных FAQ и ссылок; B13 не показывает раскрытие без остатка в preview.
+- `tests/general-home-directory.test.mjs`: адаптивные 24/18/12, раскрытие всего остатка, поиск по городу/региону с ё/е, пересечение с буквой и отсутствие результатов. Не подменяет browser-проверку DOM, фокуса и городского storage.
+- `tests/callback-request.test.mjs`: общий HTTP-адаптер FLOW 1/2e отправляет только консультационный payload, требует API receipt, сохраняет submissionKey, обрабатывает ошибку. Внешние запросы перехвачены.
+- `tests/general-home-help.test.mjs`: настоящий клиент встроенного 2e на event/DOM fixture; явное неотмеченное согласие и мобильный префикс, блокировка двойного submit, сохранение телефона/согласия и фокус ошибки, повтор с тем же ключом, ручная консультация без адреса/фиктивного города/вопроса, success только после receipt.
+
+[Browser-пакет компонентов](research/2026-10-16-general-home-stage5-blocks-acceptance.md) отдельно проверяет реальные Astro public/inactive preview, все четыре ширины, native FAQ, справочник и FLOW 2. Он не подтверждает общий административный preview, полную HOME, внешнюю доставку или deployment.
