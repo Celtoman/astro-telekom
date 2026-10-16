@@ -4,7 +4,7 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [AGENTS.md](../AGENTS.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 743/743 passing на 13 октября 2026 года** (`pnpm check`, включая HOME Hero 2.0.0, атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
+**Baseline: 773/773 passing на 16 октября 2026 года** (`pnpm check`, включая HOME Hero 2.0.0, атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
 
 | Файл | Что проверяет |
 | --- | --- |
@@ -188,3 +188,11 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 - `tests/general-home.test.cjs`: 16 сценариев чистого контракта девяти блоков и композиции десяти блоков с Hero2.0.0. Проверяются фиксированные смысловые ключи, порядок/пропуски/дубли, отдельные версии, отсутствие мутации входа, safe draft и точные block/field/reason, запрет системных полей/HTML/служебных символов/опасных URL и credentials, SITE-переменные против CITY/TARIFF/неизвестных, вложенные лимиты, FAQ0/1/50/51, sparse arrays и диагностика Hero. Реестр имеет девять APPROVED/1.0.0/PENDING; активация и редакторы не подразумеваются.
 - `tests/block-passports.test.cjs`: актуализирован реестр22 записей; прежние два Hero и тарифный блок остаются единственными READY. Подтверждены полный контракт, read-only/auth API и сохранность CITY_HOME/старых паспортов.
 - `tests/admin-block-passports-ui.test.mjs`: новые home.* попадают в группу общей главной; для PENDING нет ссылки на несуществующий редактор. Проверки существующих READY-ссылок/городской группы сохранены. Новые формы админки не добавлены.
+
+
+## 16 октября 2026 года — API полной HOME, этап 2
+
+- `tests/general-home-editor.test.cjs`:8 сценариев защищённого ресурса/метаданных маршрута, отдельных working/published данных и legacy fallback, явной версии, атомарного сохранения10 блоков без смены ID/порядка, одной attributed revision, safe draft, stale/unknown-site/unsafe/client-version отказов и P2034→409. Проверены неизменность новых блоков при сохранении Hero старым редактором, вложенные SITE-подстановки/usages, неизменность source и точная блокирующая диагностика publication preflight.
+- `tests/helpers/general-home.cjs`: общий независимый от реализации fixture девяти паспортов/полной HOME для контрактов, API и SQL rehearsal; без подстановки fixture в рабочие данные.
+- `tests/public-city-catalog.test.cjs`: публичный Site дополнительно содержит общий график24/7 и callbackWithinMinutes=15; прочий published/site boundary сохранён.
+- `scripts/rehearse-admin-read-projections.mjs` через `tests/admin-read-projections.test.cjs`: PostgreSQL-проекция возвращает generalHome=null для прежних snapshots и полный новый состав отдельно от сырых PageTemplate; legacy source без validationId и published-variable proof сохранены.

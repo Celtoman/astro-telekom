@@ -80,7 +80,7 @@ function validateField(raw: unknown, rule: GeneralHomeFieldRule, block: string, 
   if (rule.kind !== 'text') checkUrl(raw, rule.kind, block, path);
 }
 
-/** Pure contract check only: not wired into API writes, catalog or publication yet. */
+/** Pure contract check shared by guarded writes, catalog projection and publication preflight. */
 export function validateGeneralHomeBlock(blockType: string, raw: unknown, draft = false, passportVersion: string = GENERAL_HOME_VERSION): string[] {
   if (passportVersion !== GENERAL_HOME_VERSION) fail(blockType, 'passportVersion', 'VERSION', 'Неизвестная версия паспорта общей HOME.');
   if (!(GENERAL_HOME_BLOCK_TYPES as readonly string[]).includes(blockType)) fail(blockType, 'blockType', 'UNKNOWN_BLOCK', 'Неизвестный блок общей HOME.');

@@ -12,6 +12,8 @@ import { formatSitePhone } from './site-phone';
 import { resolveSeoTemplates } from './seo-templates';
 import { collectSeoTemplateUsages } from './seo-template-usages';
 import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
+import { generalHomeFromTemplate } from './general-home-template';
+import { GENERAL_HOME_CONTACT_RULES } from './general-home-model';
 
 type CatalogClient = Prisma.TransactionClient | PrismaService;
 export type CatalogSource = {
@@ -94,10 +96,12 @@ export class SiteCatalogService {
     const homeTemplate = source.pageTemplates?.find(template => template.kind === 'HOME');
     const homeScreen = homeTemplate ? firstScreenFromTemplate(homeTemplate) : undefined;
     const homeHero = homeScreen?.data;
+    const generalHome = homeTemplate ? generalHomeFromTemplate(homeTemplate) : null;
     if (homeScreen) validateFirstScreen('HOME', homeHero, false, homeScreen.passportVersion);
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
     const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages);
     const resolved = resolveCatalogVariables({
+      ...(generalHome ? { generalHome } : {}),
       ...(homeHero ? { homeHero, homeHeroVersion: homeScreen!.passportVersion, homeHeroBlockId: homeTemplate.blocks.find((block: any) => block.blockType === 'home.hero').id } : {}),
       site: {
         name: site.name,
@@ -105,6 +109,7 @@ export class SiteCatalogService {
         domain: site.domain,
         connectionPhone: site.connectionPhone ? formatSitePhone(site.connectionPhone) : null,
         supportPhone: site.supportPhone ? formatSitePhone(site.supportPhone) : null,
+        ...GENERAL_HOME_CONTACT_RULES,
       },
       globalPages: resolvedGlobalPages,
       routes,

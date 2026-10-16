@@ -2,6 +2,8 @@ import { BadRequestException } from '@nestjs/common';
 import { resolveVariableText, type VariableContext, type VariableWarning } from './variable-registry';
 import { HOME_HERO_VERSION, parseRedTitle } from './home-hero-model';
 import { validateFirstScreen } from './first-screen';
+import { GENERAL_HOME_SCHEMAS, type GeneralHomeBlockType, type GeneralHomeFieldRule } from './general-home-model';
+import { validateGeneralHomeComposition } from './general-home';
 
 type JsonObject = Record<string, any>;
 
@@ -94,6 +96,22 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
     variableUsages: usages,
     variableSources: { providerName: sources.provider?.name ?? null, resolvedAt: sources.now.toISOString() },
   };
+
+  if (catalog.generalHome) {
+    const resolveHomeValue = (value: any, rule: GeneralHomeFieldRule, path: string, owner: UsageOwner): any => {
+      if (rule.kind === 'object') return Object.fromEntries(Object.entries(rule.fields).map(([key, child]) => [key, resolveHomeValue(value[key], child, `${path}.${key}`, owner)]));
+      if (rule.kind === 'list') return value.map((item: unknown, index: number) => resolveHomeValue(item, rule.item, `${path}[${index}]`, owner));
+      return rule.variables ? resolveField(value, path, sources, owner) : value;
+    };
+    result.generalHome = { ...catalog.generalHome, blocks: catalog.generalHome.blocks.map((block: JsonObject, index: number) => ({
+      ...block,
+      data: block.blockType === 'home.hero' ? result.homeHero : resolveHomeValue(block.data, GENERAL_HOME_SCHEMAS[block.blockType as GeneralHomeBlockType], `generalHome.blocks[${index}].data`, {
+        entityType: 'PAGE_TEMPLATE_BLOCK', entityId: block.id, pageType: 'HOME', blockType: block.blockType,
+        editorHref: `/templates/home?kind=HOME&block=${block.blockType}`,
+      }),
+    })) };
+    validateGeneralHomeComposition(result.generalHome.blocks.map(({ blockType, data }: JsonObject) => ({ blockType, data })), result.generalHome.version);
+  }
 
   const assertNoSkippedTokens = (value: unknown, path: string): void => {
     if (typeof value === 'string') {

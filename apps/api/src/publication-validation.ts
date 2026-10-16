@@ -10,6 +10,7 @@ import { resolveSeoTemplates } from './seo-templates';
 import { tariffPreviewDiagnostics } from './tariff-preview-diagnostics';
 import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
 import { contentErrorLocation } from './content-validation-error';
+import { generalHomeFromTemplate } from './general-home-template';
 
 export type PublicationValidationIssue = {
   severity: 'BLOCKING' | 'WARNING';
@@ -101,6 +102,10 @@ export function validatePublicationSource(
   const site = source.site;
   const provider = site.provider;
   for (const template of rawSource.pageTemplates ?? []) {
+    if (template.kind === 'HOME') {
+      try { generalHomeFromTemplate(template); }
+      catch (error) { add('BLOCKING', 'GENERAL_HOME_NOT_READY', '/', message(error), undefined, { template: 'HOME', ...contentErrorLocation(error) }); }
+    }
     if (template.kind === 'CITY_HOME' && template.content?.tariffCollectionPassportVersion) {
       try { validateTariffCollection(template.blocks.find((block: any) => block.blockType === 'tariff_grid' && block.visible)?.data); }
       catch (error) { add('BLOCKING', 'TARIFF_COLLECTION_NOT_READY', '/{city}', message(error), undefined, { template: 'CITY_HOME', block: 'tariff_grid', ...contentErrorLocation(error) }); }

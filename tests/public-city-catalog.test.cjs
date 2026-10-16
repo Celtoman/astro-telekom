@@ -187,7 +187,7 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(calls.redirects.where, { siteId: 'site-1', status: 'PUBLISHED' });
   assert.deepEqual(calls.sitemapExclusions.where, { siteId: 'site-1' });
   assert.deepEqual(calls.seoTemplates.where, { siteId: 'site-1' });
-  assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test', connectionPhone: '+7 (800) 555-35-35', supportPhone: '+7 (800) 250-77-77' });
+  assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test', connectionPhone: '+7 (800) 555-35-35', supportPhone: '+7 (800) 250-77-77', connectionHours: 'Ежедневно, 24/7', callbackWithinMinutes: 15 });
   assert.equal(result.cities.length, 1);
   assert.equal(result.cities[0].namePrepositional, 'Казани');
   assert.equal('supportPhone' in result.cities[0], false);

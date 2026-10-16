@@ -6,6 +6,10 @@ export class ContentValidationError extends BadRequestException {
   constructor(public readonly field: string, public readonly reason: string, message: string) {
     super({ statusCode: 400, error: 'Bad Request', message, field, reason });
   }
+  override getResponse(): string | object {
+    const response = super.getResponse();
+    return this.block && typeof response === 'object' ? { ...response, block: this.block } : response;
+  }
 }
 
 export function validateContentText(value: unknown, field: string, limit: number): asserts value is string {

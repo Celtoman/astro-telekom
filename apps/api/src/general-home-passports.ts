@@ -66,7 +66,7 @@ export const GENERAL_HOME_PASSPORTS: readonly BlockPassport[] = GENERAL_HOME_BLO
     previewScenarios: ['Desktop 1440, Tablet 834, Mobile 390 и 320 px', 'Полный контент, безопасный неполный черновик и длинные тексты', 'Ошибки/пустые данные по паспорту; preview и действия проверяются на следующих этапах'],
     accessibility: ['Один H1 страницы, H2 секции; смысловые изображения с alt', 'Фокус и управление с клавиатуры по типу действия; ошибки связаны с полем', 'Допустимый контент не обрезается'],
     status: 'APPROVED', passportVersion: GENERAL_HOME_VERSION, approvedBy: 'Владелец проекта; согласование 2026-10-16', editorReadiness: 'PENDING', replacementId: null,
-    implementation: 'Контракты general-home-model.ts/general-home.ts для PageTemplate(HOME) → PageTemplateBlock.data. Валидатор пока не подключён к записи API, каталогу, preview или публикации; редактор и renderer не реализованы.',
+    implementation: 'PageTemplate(HOME) → PageTemplateBlock.data; general-home-model.ts/general-home.ts/general-home-template.ts задают контракт, guarded API и catalog.generalHome. Проверка подключена к publication preflight. Редактор и renderer ещё не реализованы.',
     design: { fileKey: 'BdxNHlBVZWejREtOEIWDkI', nodeId: definition.nodes[0], name: definition.title, variants: definition.nodes.map((nodeId, index) => ({ device: (['Desktop', 'Tablet', 'Mobile'] as const)[index], nodeId })) },
     runtimeRules: [...definition.rules, 'Контакты — Site, города — опубликованный каталог; ежедневно 24/7, звонок в течение 15 минут. Юридические документы и логика FLOW системные, не копии CMS-полей.'],
   };

@@ -47,7 +47,7 @@ try {
   await client.query('INSERT INTO "SitePublication" VALUES ($1,$2,$3,$4,$5,$6)', ['pending', 's', 3, 'PENDING', {}, null]);
   const prisma = { $queryRaw: async sql => (await client.query(sql.text, sql.values)).rows };
   const blocks = await publishedPageTemplateView(prisma, 's');
-  assert.deepEqual(blocks, { homeHero: catalog.homeHero, pageTemplates: [home, template] });
+  assert.deepEqual(blocks, { homeHero: catalog.homeHero, generalHome: null, pageTemplates: [home, template] });
   assert.equal(await publishedPageTemplateView(prisma, 'missing'), null);
   const sizes = [];
   for (const cityId of [undefined, 'c0', 'c19']) {
@@ -60,12 +60,20 @@ try {
     sizes.push(Buffer.byteLength(JSON.stringify(projected)));
   }
   assert.equal(await publishedVariableContext(prisma, "site' OR 1=1 --", 'c0'), null);
+  const completeHome = require('../../tests/helpers/general-home.cjs').template();
+  const { generalHomeFromTemplate } = require('./dist/general-home-template');
+  const generalHome = generalHomeFromTemplate(completeHome);
+  await client.query('UPDATE "SitePublicationValidation" SET "sourceSnapshot"=$1 WHERE id=$2', [{ ...source, pageTemplates: [completeHome, template] }, 'v']);
+  await client.query('UPDATE "SitePublication" SET catalog=$1 WHERE id=$2', [{ ...catalog, generalHome }, 'current']);
+  const completeView = await publishedPageTemplateView(prisma, 's');
+  assert.deepEqual(completeView.generalHome, generalHome);
+  assert.deepEqual(completeView.pageTemplates, [completeHome, template]);
   // Legacy snapshots preserve unavailable usage evidence and hero fallback.
   const historical = { site: catalog.site, cities: [] , homeHero: catalog.homeHero };
   await client.query('UPDATE "SitePublication" SET catalog=$1, "validationId"=NULL WHERE id=$2', [historical, 'current']);
   const oldView = await publishedVariableContext(prisma, 'site');
   assert.equal(buildVariableCatalogView({ siteId: 's', workingRevision: 3, publishedRevision: 2, working: catalog, published: oldView }).publishedUsageAvailable, false);
-  assert.deepEqual(await publishedPageTemplateView(prisma, 's'), { homeHero: catalog.homeHero, pageTemplates: null });
+  assert.deepEqual(await publishedPageTemplateView(prisma, 's'), { homeHero: catalog.homeHero, generalHome: null, pageTemplates: null });
   await client.query('UPDATE "Site" SET status=$1 WHERE id=$2', ['DRAFT', 's']);
   assert.equal(await publishedVariableContext(prisma, 'site'), null);
   console.log(JSON.stringify({ postgres: 18, equivalentContexts: 5, latestSucceeded: true, legacyEvidence: true, parameterizedBoundary: true, fullCatalogBytes: Buffer.byteLength(JSON.stringify(catalog)), projectedContextBytes: sizes, projectedTemplateBytes: Buffer.byteLength(JSON.stringify(blocks)) }));

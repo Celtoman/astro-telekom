@@ -3,6 +3,7 @@ import type { homeHeroDefaults } from './home-hero-model';
 /** General HOME composition is independent of home.hero and CITY_HOME versions. */
 export const GENERAL_HOME_VERSION = '1.0.0';
 export const GENERAL_HOME_IMPLEMENTATION = 'general-home-v1';
+export const GENERAL_HOME_CONTACT_RULES = Object.freeze({ connectionHours: 'Ежедневно, 24/7', callbackWithinMinutes: 15 });
 export const GENERAL_HOME_METADATA = Object.freeze({
   generalHomeCompositionVersion: GENERAL_HOME_VERSION,
   generalHomeImplementationVersion: GENERAL_HOME_IMPLEMENTATION,

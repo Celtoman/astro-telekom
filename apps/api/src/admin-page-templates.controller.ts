@@ -8,6 +8,9 @@ import { validateTariffCollection } from './tariff-collection';
 import { TARIFF_COLLECTION_VERSION, TARIFF_COLLECTION_IMPLEMENTATION } from './tariff-collection-model';
 import { firstScreenFromTemplate, validateFirstScreen, type FirstScreenKind } from './first-screen';
 import { publishedPageTemplateView } from './published-page-template-view';
+import { generalHomeFromTemplate, generalHomeFromCatalog } from './general-home-template';
+import { validateGeneralHomeComposition } from './general-home';
+import { GENERAL_HOME_CONTACT_RULES } from './general-home-model';
 
 type TemplateBlockInput = {
   blockType: string;
@@ -37,6 +40,57 @@ export class AdminPageTemplatesController {
       where: { siteId }, orderBy: { kind: 'asc' },
       include: { blocks: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
     });
+  }
+
+  @Get('general-home')
+  async generalHome(@Param('siteId') siteId: string) {
+    return this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      const site = await tx.site.findUnique({ where: { id: siteId }, select: { workingRevision: true, publishedRevision: true, connectionPhone: true, supportPhone: true } });
+      if (!site) throw new NotFoundException('Сайт не найден');
+      const template = await tx.pageTemplate.findUnique({ where: { siteId_kind: { siteId, kind: 'HOME' } }, include: { blocks: true } });
+      const view = template ? generalHomeFromTemplate(template, true) : null;
+      if (!view) throw new NotFoundException('Полная композиция HOME ещё не подготовлена; требуется переход рабочих данных.');
+      const publication = await publishedPageTemplateView(tx, siteId);
+      const publishedTemplate = publication?.pageTemplates?.find((item: any) => item.kind === 'HOME');
+      const published = publishedTemplate?.content?.generalHomeCompositionVersion
+        ? generalHomeFromTemplate(publishedTemplate as any) : generalHomeFromCatalog(publication?.generalHome);
+      return {
+        ...view, missingFields: validateGeneralHomeComposition(view.blocks.map(({ blockType, data }) => ({ blockType, data })), view.version, true),
+        workingRevision: site.workingRevision, publishedRevision: site.publishedRevision, published,
+        system: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, ...GENERAL_HOME_CONTACT_RULES },
+      };
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+  }
+
+  @Patch('general-home')
+  async updateGeneralHome(@Param('siteId') siteId: string,
+    @Body() body: { expectedWorkingRevision: number; blocks: unknown }, @Req() request?: { user?: { id: string } }) {
+    if (!body || Object.keys(body).some(key => !['expectedWorkingRevision', 'blocks'].includes(key)) || !Number.isSafeInteger(body.expectedWorkingRevision) || body.expectedWorkingRevision < 0) throw new BadRequestException('Передайте композицию HOME и актуальную рабочую ревизию.');
+    try {
+      return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+        const site = await tx.site.findUnique({ where: { id: siteId }, select: { workingRevision: true } });
+        if (!site) throw new NotFoundException('Сайт не найден');
+        if (site.workingRevision !== body.expectedWorkingRevision) throw new ConflictException('Рабочая ревизия изменилась. Обновите данные перед сохранением.');
+        const before = await tx.pageTemplate.findUnique({ where: { siteId_kind: { siteId, kind: 'HOME' } }, include: { blocks: true } });
+        const view = before ? generalHomeFromTemplate(before, true) : null;
+        if (!before || !view) throw new NotFoundException('Полная композиция HOME ещё не подготовлена; требуется переход рабочих данных.');
+        const missingFields = validateGeneralHomeComposition(body.blocks, view.version, true);
+        const blocks = body.blocks as { blockType: string; data: Prisma.InputJsonObject }[];
+        for (const [index, block] of blocks.entries()) {
+          await tx.pageTemplateBlock.update({ where: { id: view.blocks[index].id }, data: { data: block.data, source: 'admin:general-home' } });
+        }
+        await tx.pageTemplate.update({ where: { id: before.id }, data: { content: before.content as Prisma.InputJsonObject } });
+        const after = await tx.pageTemplate.findUniqueOrThrow({ where: { id: before.id }, include: { blocks: true } });
+        const revision = await this.publications.recordWorkingRevision(tx, {
+          siteId, entityType: 'PAGE_TEMPLATE', entityId: before.id, action: 'UPDATE', actorId: request?.user?.id, source: 'admin:general-home',
+          previousSnapshot: before as unknown as Record<string, unknown>, snapshot: after as unknown as Record<string, unknown>, changedFields: ['blocks.data'],
+        });
+        return { ...generalHomeFromTemplate(after, true), missingFields, workingRevision: revision.siteRevision };
+      }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    } catch (error) {
+      if (error && typeof error === 'object' && 'code' in error && error.code === 'P2034') throw new ConflictException('Шаблон изменился параллельно; обновите данные.');
+      throw error;
+    }
   }
 
   @Get('first-screens')
