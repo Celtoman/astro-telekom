@@ -1,0 +1,10 @@
+{
+  "scope": "Compiled real admin PreviewApp with fixture API; no live data writes",
+  "date": "2026-10-16T14:22:00.978Z",
+  "checks": [
+    "Incomplete FAQ shows a precise editable field link; no demo substitution or frame",
+    "Actual sandboxed admin iframe renders all ten HOME blocks and new shell on all three viewport controls; every action inactive",
+    "Generic API failure does not retain a stale field link or iframe"
+  ],
+  "errors": []
+}

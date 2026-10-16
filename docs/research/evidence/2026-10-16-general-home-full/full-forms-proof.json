@@ -1,0 +1,15 @@
+{
+  "scope": "Compiled full BaseLayout/GeneralHomeComposition and actual inactive admin document renderer; synthetic cities/FAQ; all lead calls intercepted",
+  "date": "2026-10-16T14:19:33.043Z",
+  "sizes": [],
+  "errors": [],
+  "mismatches": [],
+  "actions": {
+    "inlineLegalPreservesPhoneAndConsent": true,
+    "inlineLegalEscapeAndReturnFocus": true,
+    "inlineConsultationWithoutEmptyModal": true,
+    "modalLegalPreservesInput": true,
+    "callbackUnconfirmedCityNotSubmitted": true,
+    "interceptedReceipts": 2
+  }
+}

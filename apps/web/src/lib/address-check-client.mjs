@@ -550,7 +550,9 @@ function initializeRoot(root) {
 
   for (const trigger of document.querySelectorAll(`[data-address-dialog-trigger="${root.dataset.entryDialogId}"]`)) {
     trigger.addEventListener('click', () => {
-      opener = trigger;
+      const menu = trigger.closest('dialog');
+      opener = menu && menu !== entryDialog ? document.querySelector('[data-menu-trigger]') || trigger : trigger;
+      if (menu && menu !== entryDialog) menu.close();
       const nextCitySlug = trigger.dataset.citySlug || form.dataset.citySlug;
       if (nextCitySlug !== form.dataset.citySlug) {
         form.dataset.citySlug = nextCitySlug;

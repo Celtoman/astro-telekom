@@ -10,6 +10,12 @@ export interface GeneralHomeCatalog {
   blocks: (GeneralHomeBlock & { id: string })[];
 }
 
+export function generalHomeBlock<T extends GeneralHomeBlock['blockType']>(home: GeneralHomeCatalog, type: T): Extract<GeneralHomeBlock, { blockType: T }>['data'] {
+  const block = home.blocks.find(value => value.blockType === type) as Extract<GeneralHomeBlock, { blockType: T }> | undefined;
+  if (!block) throw new Error(`Нет обязательного блока HOME: ${type}`);
+  return block.data;
+}
+
 export class GeneralHomeRenderError extends Error {
   block: string;
   field: string;

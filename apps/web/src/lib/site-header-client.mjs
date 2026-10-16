@@ -1,4 +1,4 @@
-import { applyCityContext, selectCity } from './city-context.mjs';
+import { applyCityContext, selectCity, cityServicePath, CITY_SERVICE_SLUGS } from './city-context.mjs';
 import { createCitySearch } from './city-search.mjs';
 export function initializeSiteHeader() {
   const header = document.querySelector('[data-site-header]');
@@ -45,6 +45,9 @@ export function initializeSiteHeader() {
         : 'Тарифы и проверка подключения доступны на странице выбранного города.';
       for (const link of picker.querySelectorAll('[data-city-choice-link]')) {
         const url = new URL(link.href);
+        url.pathname = target.dataset.cityChoiceService && Object.hasOwn(CITY_SERVICE_SLUGS, target.dataset.cityChoiceService)
+          ? cityServicePath(link.dataset.citySlug, target.dataset.cityChoiceService)
+          : link.dataset.cityHomeHref || `/${link.dataset.citySlug}`;
         url.hash = anchor;
         if (target.hasAttribute('data-callback-intent')) url.searchParams.set('callback', '1');
         else url.searchParams.delete('callback');

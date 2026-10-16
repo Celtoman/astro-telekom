@@ -1,0 +1,46 @@
+---
+import type { GeneralHomeCatalog } from '../../data/general-home';
+import { generalHomeBlock } from '../../data/general-home';
+import type { SiteView, CityView } from '../../data/site';
+import { publicAsset } from '../../data/public-asset';
+import { publishedMoscow } from '../../lib/city-context.mjs';
+import GeneralHomeHero from '../GeneralHomeHero.astro';
+import AddressForm from '../AddressForm.astro';
+import HomeAddressEntry from './HomeAddressEntry.astro';
+import HomeProviderAbout from './HomeProviderAbout.astro';
+import HomeBenefits from './HomeBenefits.astro';
+import HomeConnectionSteps from './HomeConnectionSteps.astro';
+import HomeMovix from './HomeMovix.astro';
+import HomeMorePossibilities from './HomeMorePossibilities.astro';
+import HomeConnectionHelp from './HomeConnectionHelp.astro';
+import HomeCityDirectory from './HomeCityDirectory.astro';
+import HomeFaq from './HomeFaq.astro';
+interface Props { home: GeneralHomeCatalog; site: SiteView; cities: CityView[]; apiUrl: string; addressDialogId: string }
+const { home, site, cities, apiUrl, addressDialogId } = Astro.props as Props;
+const city = publishedMoscow(cities) ?? undefined;
+const phone = site.connectionPhone, phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
+const address = generalHomeBlock(home, 'home.address_check');
+---
+<div class="general-home-composition" data-general-home-composition data-home-composition-version={home.version}>
+  <div data-home-block="home.hero"><GeneralHomeHero content={generalHomeBlock(home, 'home.hero')} {cities} /></div>
+  <HomeAddressEntry content={address} {phone} {phoneHref}>
+    <Fragment slot="address">
+      {city ? <AddressForm {apiUrl} siteSlug={site.slug} pageSlug="" {city} {site} variant="home-entry" addressLabel={address.addressLabel} addressPlaceholder={address.addressPlaceholder} checkButtonText={address.checkButtonText} /> : <div class="address-check-root embedded home-entry"><section id="address-check" class="address-entry"><div class="address-form"><label for="home-address-without-city">{address.addressLabel}</label><div class="address-field"><img class="address-icon" src={publicAsset('/images/general-home/address-pin.svg')} width="20" height="20" alt="" /><input id="home-address-without-city" type="text" placeholder={address.addressPlaceholder} disabled /></div><button class="button" type="button" data-city-choice-trigger data-city-choice-anchor="address-check" aria-haspopup="dialog">{address.checkButtonText}</button><noscript><a href="/goroda-obsluzhivaniya">Выберите город для проверки адреса</a></noscript></div></section></div>}
+    </Fragment>
+  </HomeAddressEntry>
+  <HomeProviderAbout content={generalHomeBlock(home, 'home.provider_about')} />
+  <HomeBenefits content={generalHomeBlock(home, 'home.benefits')} />
+  <HomeConnectionSteps content={generalHomeBlock(home, 'home.connection_steps')} {phone} {phoneHref} addressDialogId={city ? addressDialogId : null} />
+  <HomeMovix content={generalHomeBlock(home, 'home.movix')} tariffHref={city ? `/${city.slug}#tariffs` : null} />
+  <HomeMorePossibilities content={generalHomeBlock(home, 'home.more_possibilities')} />
+  <HomeConnectionHelp content={generalHomeBlock(home, 'home.connection_help')} {phone} {phoneHref} {apiUrl} siteSlug={site.slug} />
+  <HomeCityDirectory content={generalHomeBlock(home, 'home.city_directory')} {cities} />
+  <HomeFaq content={generalHomeBlock(home, 'home.faq')} />
+</div>
+{city && <AddressForm {apiUrl} siteSlug={site.slug} pageSlug="" {city} {site} presentation="dialog" dialogId={addressDialogId} />}
+<style is:global>
+  .general-home-composition { display: flex; flex-direction: column; gap: 24px; width: min(1360px, calc(100% - 32px)); margin: 0 auto; }
+  .general-home-composition [data-general-home-hero] { padding: 0; }
+  .general-home-composition [data-general-home-hero] .hero-container { width: 100%; }
+  @media (max-width: 1100px) { .general-home-composition { width: min(720px, calc(100% - 32px)); } }
+</style>

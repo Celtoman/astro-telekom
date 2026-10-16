@@ -1,0 +1,12 @@
+---
+import type { SiteView, CityView } from '../../data/site';
+import { renderHomeFooter } from '../../lib/general-home-shell';
+import { publicAsset } from '../../data/public-asset';
+import { publishedMoscow } from '../../lib/city-context.mjs';
+import HomeShellStyles from './HomeShellStyles.astro';
+interface Props { site: SiteView; cities: CityView[] }
+const { site, cities } = Astro.props as Props;
+const city = publishedMoscow(cities) ?? undefined;
+---
+<Fragment set:html={renderHomeFooter(site, { city, asset: publicAsset })} />
+<HomeShellStyles />

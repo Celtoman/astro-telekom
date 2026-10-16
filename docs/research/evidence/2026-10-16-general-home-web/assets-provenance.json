@@ -165,6 +165,18 @@
       "sourceKind": "native-whole-node-svg-export"
     },
     {
+      "path": "/images/general-home/header-menu.svg",
+      "sha256": "0f1413fa1a049956dc14d34539820c2aa91ec99ecf63e060818e3ae659da9efe",
+      "figmaNodeId": "I192:925;79:46",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
+      "path": "/images/general-home/header-phone.svg",
+      "sha256": "9ea46cab0c9bc84bdc18d2c50b2bc9de7da2fb226d98a87565ada1fa3604294a",
+      "figmaNodeId": "I192:654;79:21",
+      "sourceKind": "native-whole-node-svg-export"
+    },
+    {
       "path": "/images/general-home/help-clock.svg",
       "sha256": "71886e86c81a8ec201b40458d44752ac5ade59568f0f0e1abc8fe1ba2ab320cc",
       "figmaNodeId": "I337:5962;1721:1117",

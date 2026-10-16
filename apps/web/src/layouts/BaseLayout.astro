@@ -5,6 +5,8 @@ import type { CityView, PageView, SiteView } from '../data/site';
 import { defaultSiteImagePath } from '../data/site';
 import { publicAsset } from '../data/public-asset';
 import SiteHeader from '../components/SiteHeader.astro';
+import GeneralHomeHeader from '../components/general-home/GeneralHomeHeader.astro';
+import GeneralHomeFooter from '../components/general-home/GeneralHomeFooter.astro';
 import CallbackDialog from '../components/CallbackDialog.astro';
 import LegalDocuments from '../components/LegalDocuments.astro';
 import '../styles/public-ui.css';
@@ -21,13 +23,19 @@ interface Props {
   ogDescription?: string;
   ogImage?: string;
   firstScreenImage?: unknown;
+  imageOrigins?: string[];
+  homeShell?: { cities: CityView[]; addressDialogId: string | null };
 }
 
 const { title, description, city, site, indexable = true, ogTitle = title, ogDescription = description, ogImage = defaultSiteImagePath } = Astro.props as Props;
-if (typeof Astro.props.firstScreenImage === 'string' && Astro.props.firstScreenImage.startsWith('https://')) {
-  const imageUrl = new URL(Astro.props.firstScreenImage);
-  Astro.csp.insertDirective(`img-src ${imageUrl.origin}`);
+const homeShell = (Astro.props as Props).homeShell;
+const imageOrigins = new Set<string>((Astro.props as Props).imageOrigins ?? []);
+if (typeof Astro.props.firstScreenImage === 'string' && /^https:\/\//i.test(Astro.props.firstScreenImage)) imageOrigins.add(new URL(Astro.props.firstScreenImage).origin);
+for (const origin of imageOrigins) {
+  const url = new URL(origin);
+  if (url.protocol !== 'https:' || url.origin !== origin || url.username || url.password) throw new Error('Некорректный origin изображения.');
 }
+if (imageOrigins.size) Astro.csp.insertDirective(`img-src ${[...imageOrigins].sort().join(' ')}`);
 const metrikaId = String(import.meta.env.PUBLIC_YANDEX_METRIKA_ID || '').match(/^\d+$/)?.[0];
 const canonicalUrl = new URL(normalizePublicHtmlPath(Astro.url.pathname), Astro.site);
 const socialImageUrl = new URL(publicAsset(ogImage), Astro.site);
@@ -48,7 +56,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang="ru" class:list={{ 'full-general-home': !!homeShell }}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -64,12 +72,12 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     {indexable && <script is:inline type="application/ld+json" set:html={jsonLd}></script>}
     {metrikaBootstrap && <script is:inline set:html={metrikaBootstrap}></script>}
   </head>
-  <body>
-    <SiteHeader {city} {site} />
+  <body class:list={{ 'general-home-page': !!homeShell }}>
+    {homeShell ? <GeneralHomeHeader {site} cities={homeShell.cities} addressDialogId={homeShell.addressDialogId} /> : <SiteHeader {city} {site} />}
     <main>
       <slot />
     </main>
-    <footer class="site-footer">
+    {homeShell ? <GeneralHomeFooter {site} cities={homeShell.cities} /> : <footer class="site-footer">
       <div class="container footer-inner">
         <span>{city ? `Подключение домашнего интернета в ${city.nameIn}` : 'Подключение домашнего интернета'}</span>
         <a href="/goroda-obsluzhivaniya">Города обслуживания</a>
@@ -77,8 +85,8 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
         <a href="/soglasie-na-obrabotku-personalnyh-dannyh">Согласие на обработку данных</a>
         <a href="/politika-obrabotki-faylov-kuki">Политика cookie</a>
       </div>
-    </footer>
-    <CallbackDialog {site} {city} />
+    </footer>}
+    <CallbackDialog {site} {city} requireConfirmedCity={!!homeShell} />
     <LegalDocuments />
     <script>
       import {
@@ -126,6 +134,9 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
 
 <style is:global>
   :root { font-family: 'Geist Variable', ui-sans-serif, system-ui, sans-serif; color: #18202a; background: #f6f7f9; font-synthesis: none; }
+  :root.full-general-home { background: #fff; }
+  .general-home-page { background: #fff; }
+  .general-home-page > main { padding: 24px 0; }
   * { box-sizing: border-box; }
   body { margin: 0; }
   a { color: inherit; }

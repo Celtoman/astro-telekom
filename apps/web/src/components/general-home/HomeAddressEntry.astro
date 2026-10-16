@@ -26,7 +26,7 @@ const addressForm = await Astro.slots.render('address');
   .home-address .home-entry .address-icon { position: absolute; left: 16px; top: 14px; width: 20px; height: 20px; pointer-events: none; }
   .home-address .home-entry .address-form input[name="address"], .home-address .home-entry .address-form input[type="text"] { min-width: 0; width: 100%; height: 48px; padding: 11px 16px 11px 46px; border: 1px solid #f0f3f6; border-radius: 14px; background: #fff; color: #18202a; font: inherit; font-size: 16px; line-height: 24px; }
   .home-address .home-entry input::placeholder { color: #5c6b7d; opacity: 1; }
-  .home-address .home-entry .address-form > .button { grid-column: 2; grid-row: 2; width: 200px; min-width: 0; min-height: 48px; }
+  .home-address .home-entry .address-form > .button { grid-column: 2; grid-row: 2; width: 200px; min-width: 0; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; background: #e0231e; color: #fff; font: inherit; font-size: 14px; font-weight: 600; line-height: 20px; }
   .home-address .home-entry .address-hint:not([data-state]) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .home-address .home-entry .address-hint, .home-address .home-entry .form-result { grid-column: 1 / -1; }
   .home-address .home-entry .form-result:empty { display: none; }
@@ -42,7 +42,8 @@ const addressForm = await Astro.slots.render('address');
   .home-address-phone > span > span { color: #526071; font-size: 16px; line-height: 24px; }
   .home-address-phone strong { font-size: 24px; line-height: 29px; letter-spacing: -.5px; overflow-wrap: anywhere; }
   .home-address-phone small { color: #526071; font-size: 12px; line-height: 16px; }
-  .home-address .home-secondary-action { color: #1769aa; background: #eef8ff; }
+  .home-address .home-action.home-secondary-action { color: #1769aa; background: #eef8ff; }
+  .home-address .home-action.home-secondary-action:hover { background: #dcecf7; }
   .home-address .home-address-response { display: flex; align-items: flex-start; gap: 12px; min-height: 28px; padding-top: 4px; font-size: 14px; line-height: 20px; }
   .home-address-response .home-static-icon { flex: 0 0 20px; width: 20px; height: 20px; }
   .home-address :is(a, button):not(.public-dialog *):focus-visible { outline: 2px solid #1769aa; outline-offset: 2px; }

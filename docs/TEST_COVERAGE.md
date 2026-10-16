@@ -4,7 +4,7 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [AGENTS.md](../AGENTS.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 797/797 passing на 16 октября 2026 года** (`pnpm check`, включая HOME Hero 2.0.0, атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
+**Baseline: 804/804 passing на 16 октября 2026 года** (`pnpm check`, включая HOME Hero 2.0.0, атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
 
 | Файл | Что проверяет |
 | --- | --- |
@@ -205,4 +205,16 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 - `tests/callback-request.test.mjs`: общий HTTP-адаптер FLOW 1/2e отправляет только консультационный payload, требует API receipt, сохраняет submissionKey, обрабатывает ошибку. Внешние запросы перехвачены.
 - `tests/general-home-help.test.mjs`: настоящий клиент встроенного 2e на event/DOM fixture; явное неотмеченное согласие и мобильный префикс, блокировка двойного submit, сохранение телефона/согласия и фокус ошибки, повтор с тем же ключом, ручная консультация без адреса/фиктивного города/вопроса, success только после receipt.
 
-[Browser-пакет компонентов](research/2026-10-16-general-home-stage5-blocks-acceptance.md) отдельно проверяет реальные Astro public/inactive preview, все четыре ширины, native FAQ, справочник и FLOW 2. Он не подтверждает общий административный preview, полную HOME, внешнюю доставку или deployment.
+[Browser-пакет компонентов](research/2026-10-16-general-home-stage5-blocks-acceptance.md) отдельно проверяет реальные Astro public/inactive preview, все четыре ширины, native FAQ, справочник и FLOW 2. Это приёмка отдельных компонентов. Полная локальная интеграция и административный preview дополнительно проверены в следующем пакете; внешнюю доставку/deployment они не подтверждают.
+
+
+## Полная HOME — интеграция этапов 5–7
+
+- `tests/general-home-shell.test.mjs`: два сценария безопасных canonical service URL, FLOW2/FAQ/телефонов/часов и неизменности plain-text соглашения; нет фиктивного города при отсутствии Москвы, preview без переходов/диалогов.
+- `tests/general-home-preview.test.mjs`: все десять блоков в строгом порядке, новая оболочка и отсутствие исполняемых действий, неизменность входа, отказ на неправильный состав.
+- `tests/general-home-build.test.mjs`: настоящий StaticArtifactBuilder с API-rendered полной HOME; полный HTML, одинH1, FLOW2, версионные assets, сохранные inline script hashes, объединённая CSP с тремя точными image origins, исключение исследовательского URL и прежняя CITY_HOME. Legacy snapshot отдельно покрыт прежним static-builder suite.
+- `tests/public-legal-dialogs.test.mjs`: standalone legal из inline2e, возврат/удаление временного dialog/Escape/фокус и неизменность исходной формы; nested FLOW legal сохраняет родительские hidden-состояния и aria-labelledby.
+- `tests/preview-content-issue.test.mjs`: предметная диагностика неполного HOME из API/renderer, точное поле и корректный editor URL; общие/неизвестные ошибки не создают произвольных ссылок.
+- `tests/home-city-context.test.mjs`: дополнен сценарием canonical city-home href независимо от service-намерения picker, переключения service URL и confirmed-only города консультации полной HOME; прежние страницы сохраняют прежнее правило.
+
+[Полная браузерная приёмка](research/2026-10-16-general-home-full-acceptance.md) проверяет настоящую Astro-страницу/неактивный preview на четырёх ширинах, Header/Footer, формы/документы и собранный административный iframe. Fixture FAQ/города и перехваченные receipts не подтверждают внешнюю публикацию или настоящую доставку.

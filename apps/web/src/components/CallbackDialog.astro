@@ -1,11 +1,11 @@
 ---
 import { publicAsset } from '../data/public-asset';
 import type { CityView, SiteView } from '../data/site';
-interface Props { site: SiteView; city?: CityView }
-const { site, city } = Astro.props;
+interface Props { site: SiteView; city?: CityView; requireConfirmedCity?: boolean }
+const { site, city, requireConfirmedCity = false } = Astro.props;
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 ---
-<dialog id="site-callback" class="public-dialog callback-dialog" data-callback-dialog aria-labelledby="callback-title" data-api-url={apiUrl} data-site-slug={site.slug} data-city-slug={city?.slug || ''} data-support-icon={publicAsset('/images/figma/callback-support.svg')} data-success-icon={publicAsset('/images/figma/callback-success.svg')} data-call-icon={publicAsset('/images/figma/phone-incoming.svg')}>
+<dialog id="site-callback" class="public-dialog callback-dialog" data-callback-dialog data-require-confirmed-city={String(requireConfirmedCity)} aria-labelledby="callback-title" data-api-url={apiUrl} data-site-slug={site.slug} data-city-slug={city?.slug || ''} data-support-icon={publicAsset('/images/figma/callback-support.svg')} data-success-icon={publicAsset('/images/figma/callback-success.svg')} data-call-icon={publicAsset('/images/figma/phone-incoming.svg')}>
   <div class="flow-card callback-card" data-modal-content>
     <div class="flow-header">
       <span class="flow-icon callback-icon" data-callback-icon><img src={publicAsset('/images/figma/phone-incoming.svg')} width="24" height="24" alt="" /></span>

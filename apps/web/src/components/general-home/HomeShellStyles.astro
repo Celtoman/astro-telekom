@@ -1,0 +1,128 @@
+<style is:global>
+  .gh-header, .gh-footer { width: min(1360px, calc(100% - 32px)); margin: 0 auto; font-family: 'Geist Variable', ui-sans-serif, system-ui, sans-serif; }
+  .gh-header *, .gh-footer * { box-sizing: border-box; }
+  .gh-header a, .gh-footer a { color: inherit; text-decoration: none; }
+  .gh-header button, .gh-footer button { font-family: inherit; cursor: pointer; }
+  .gh-brand { display: flex; flex: 0 0 auto; align-items: center; }
+  .gh-brand img { display: block; width: 100%; height: auto; }
+  .gh-header { position: relative; z-index: 30; border-bottom: 1px solid #dcecf7; background: #fff; color: #18202a; }
+  .gh-utility { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 40px; border-bottom: 1px solid #f0f3f6; }
+  .gh-city-trigger, .gh-utility-links a, .gh-utility-links button { display: inline-flex; align-items: center; gap: 6px; min-width: 0; padding: 0; border: 0; background: none; color: #526071; font-size: 13px; line-height: 18px; text-align: left; }
+  .gh-city-trigger { min-height: 36px; }
+  .gh-city-trigger img, .gh-utility-links img { display: block; flex-shrink: 0; }
+  .gh-city-trigger [data-current-city-label] { overflow-wrap: anywhere; }
+  .gh-utility-links { display: flex; flex: 0 0 auto; align-items: center; gap: 24px; }
+  .gh-main-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 88px; }
+  .gh-logo-nav { display: flex; align-items: center; gap: 56px; min-width: 0; }
+  .gh-header .gh-brand { width: 157.906px; height: 52px; }
+  .gh-navigation { display: flex; align-items: center; gap: 22px; }
+  .gh-navigation a, .gh-navigation button { display: flex; align-items: center; flex-shrink: 0; min-height: 44px; padding: 0; border: 0; background: none; color: #18202a; font-size: 12px; font-weight: 600; line-height: 16px; letter-spacing: .1px; text-align: left; }
+  .gh-nav-connect { width: 82px; }
+  .gh-nav-internet { width: 132px; }
+  .gh-nav-internet-tv { width: 104px; }
+  .gh-nav-help { width: 64px; }
+  .gh-tablet-label { display: none; }
+  .gh-actions { display: flex; align-items: center; flex-shrink: 0; gap: 28px; }
+  .gh-phone { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .gh-phone-icon { display: block; flex: 0 0 22px; width: 22px; height: 22px; }
+  .gh-phone-copy { display: flex; flex-direction: column; gap: 1px; min-width: 0; white-space: nowrap; }
+  .gh-phone [data-phone-value] { font-size: 17px; font-weight: 700; line-height: 20px; }
+  .gh-phone-caption { color: #526071; font-size: 12px; line-height: normal; }
+  .gh-callback { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; background: #e0231e; color: #fff; font-size: 14px; font-weight: 600; line-height: 20px; text-align: center; }
+  .gh-callback:hover { background: #c61f1a; }
+  .gh-menu-trigger { display: none; flex: 0 0 44px; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 10px; background: none; }
+  .gh-menu-trigger img { display: block; width: 44px; height: 44px; }
+  .gh-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .gh-header :is(a, button):focus-visible, .gh-footer :is(a, button):focus-visible { outline: 2px solid #1769aa; outline-offset: 2px; }
+  .gh-menu { width: min(620px, calc(100% - 32px)); max-height: 85dvh; padding: 32px; border: 0; border-radius: 26px; background: #fff; color: #18202a; }
+  .gh-menu::backdrop { background: rgb(15 23 42 / 62%); }
+  .gh-menu h2 { margin: 0 44px 16px 0; font-size: 28px; line-height: 32px; }
+  .gh-menu-close { position: absolute; right: 16px; top: 16px; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: #f0f3f6; cursor: pointer; }
+  .gh-menu-nav { display: grid; gap: 12px; }
+  .gh-menu-nav a, .gh-menu-nav > button:not(.gh-callback) { display: flex; align-items: center; min-height: 44px; padding: 0; border: 0; background: none; color: #18202a; font: inherit; text-align: left; text-decoration: none; }
+  .gh-footer { display: flex; flex-direction: column; align-items: stretch; gap: 32px; padding: 48px 40px 32px; background: #18202a; color: #fff; }
+  .gh-footer-content { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; min-height: 150px; }
+  .gh-footer .gh-brand { width: 151.833px; height: 50px; }
+  .gh-footer-column { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-width: 0; font-size: 14px; line-height: 20px; }
+  .gh-footer-column > strong { font-weight: 600; }
+  .gh-footer-column a, .gh-footer-column button { display: block; max-width: 100%; padding: 0; border: 0; background: none; color: #fff; font-size: 14px; font-weight: 400; line-height: 20px; text-align: left; overflow-wrap: anywhere; }
+  .gh-desktop-services, .gh-desktop-help { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .gh-footer-services { width: 180px; }
+  .gh-footer-clients { width: 160px; }
+  .gh-footer-help { width: 210px; }
+  .gh-footer-contact { width: 230px; }
+  .gh-tablet-services, .gh-tablet-help, .gh-footer-mobile-links, .gh-footer-mobile-contact { display: none; }
+  .gh-footer-divider { flex: 0 0 1px; height: 1px; background: #334155; }
+  .gh-footer-legal { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; min-height: 20px; font-size: 12px; line-height: 16px; }
+  .gh-footer-legal p { width: 360px; margin: 0; }
+  .gh-footer-legal > div { display: flex; flex-wrap: wrap; gap: 0 12px; width: 430px; }
+  .gh-footer-legal span { display: inline; }
+  @media (max-width: 1300px) and (min-width: 1101px) {
+    .gh-logo-nav { gap: 24px; }
+    .gh-navigation { gap: 12px; }
+    .gh-navigation a, .gh-navigation button { width: auto; }
+    .gh-actions { gap: 16px; }
+    .gh-footer-content { gap: 20px; }
+    .gh-footer-column { flex: 1; }
+  }
+  @media (max-width: 1100px) {
+    .gh-header, .gh-footer { width: min(720px, calc(100% - 32px)); }
+    .gh-utility-links { gap: 20px; }
+    .gh-main-row { min-height: 80px; gap: 12px; }
+    .gh-logo-nav { display: contents; }
+    .gh-header .gh-brand { width: 133.613px; height: 44px; }
+    .gh-nav-connect, .gh-nav-help, .gh-actions > .gh-phone, .gh-desktop-label { display: none !important; }
+    .gh-tablet-label { display: inline; }
+    .gh-nav-internet { width: 64px; }
+    .gh-nav-tv { width: 92px; }
+    .gh-actions { gap: 16px; }
+    .gh-menu-trigger { display: block; }
+    .gh-footer { padding: 48px 24px 32px; }
+    .gh-footer-content { gap: 16px; }
+    .gh-footer .gh-brand { width: 109.32px; height: 36px; }
+    .gh-footer-services, .gh-footer-help { width: 150px; }
+    .gh-footer-contact { width: 190px; }
+    .gh-footer-clients, .gh-desktop-services, .gh-desktop-help { display: none; }
+    .gh-tablet-services, .gh-tablet-help { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+    .gh-footer-legal { display: contents; }
+    .gh-footer-legal p, .gh-footer-legal > div { width: min(520px, 100%); font-size: 12px; line-height: 16px; }
+  }
+  @media (max-width: 760px) and (min-width: 621px) {
+    .gh-navigation { gap: 12px; }
+    .gh-navigation a { width: auto; }
+    .gh-header .gh-brand { width: 121.466px; height: 40px; }
+    .gh-callback { padding-inline: 16px; }
+    .gh-actions { gap: 8px; }
+    .gh-footer-content { flex-wrap: wrap; }
+  }
+  @media (max-width: 620px) {
+    .gh-utility { min-height: 36px; }
+    .gh-city-trigger { min-height: 35px; }
+    .gh-utility-links, .gh-city-chevron, .gh-navigation, .gh-actions > .gh-callback { display: none; }
+    .gh-main-row { min-height: 72px; }
+    .gh-header .gh-brand { width: 109.32px; height: 36px; }
+    .gh-actions { gap: 12px; }
+    .gh-actions > .gh-phone { display: flex !important; gap: 6px; }
+    .gh-phone-icon { flex-basis: 18px; width: 18px; height: 18px; }
+    .gh-phone [data-phone-value] { font-size: 14px; line-height: normal; }
+    .gh-phone-caption { font-size: 10px; }
+    .gh-menu { padding: 24px 20px; }
+    .gh-footer { gap: 24px; padding: 32px 16px; }
+    .gh-footer-content { display: contents; }
+    .gh-footer-column { display: none; }
+    .gh-footer-mobile-links { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+    .gh-footer-mobile-links a, .gh-footer-mobile-links button { max-width: 100%; padding: 0; border: 0; background: none; color: #fff; font-size: 14px; line-height: 20px; text-align: left; overflow-wrap: anywhere; }
+    .gh-footer-mobile-contact { display: contents; }
+    .gh-footer-mobile-contact a { font-size: 20px; font-weight: 700; line-height: 25px; letter-spacing: -.2px; overflow-wrap: anywhere; }
+    .gh-footer-mobile-contact > span { font-size: 12px; line-height: 16px; }
+    .gh-footer-legal p { width: 100%; }
+    .gh-footer-legal > div { flex-direction: column; width: 100%; }
+  }
+  @media (max-width: 360px) {
+    .gh-header .gh-brand { width: 91.093px; height: 30px; }
+    .gh-phone-icon { display: none; }
+    .gh-actions { gap: 8px; }
+    .gh-phone [data-phone-value] { font-size: 12px; }
+    .gh-phone-copy { white-space: normal; overflow-wrap: anywhere; }
+  }
+</style>

@@ -5,8 +5,16 @@ export function initializePublicDialogs() {
   const back = dialog => {
     const state = states.get(dialog); if (!state) return false;
     state.panel.remove(); for (const [node, hidden] of state.children) node.hidden = hidden;
-    dialog.setAttribute('aria-labelledby', state.labelledBy);
-    states.delete(dialog); state.opener.focus(); return true;
+    if (state.labelledBy) dialog.setAttribute('aria-labelledby', state.labelledBy);
+    else dialog.removeAttribute('aria-labelledby');
+    states.delete(dialog);
+    if (state.standalone) dialog.close();
+    state.opener.focus(); return true;
+  };
+  const bind = dialog => {
+    dialog.addEventListener('cancel', event => { if (back(dialog)) event.preventDefault(); });
+    dialog.addEventListener('close', () => { back(dialog); dialog.style.removeProperty('bottom'); if (dialog.dataset.inlineLegal === 'true') dialog.remove(); });
+    dialog.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); } });
   };
   const resize = () => {
     if (!window.visualViewport) return;
@@ -18,7 +26,14 @@ export function initializePublicDialogs() {
   window.visualViewport?.addEventListener('resize', resize); window.visualViewport?.addEventListener('scroll', resize); resize();
   document.addEventListener('click', event => {
     const target = event.target instanceof Element ? event.target.closest('[data-modal-close], [data-legal-document], [data-legal-back]') : null;
-    const dialog = target?.closest('dialog.public-dialog');
+    let dialog = target?.closest('dialog.public-dialog');
+    const standalone = !dialog && target?.hasAttribute('data-legal-document') && !!target.closest('[data-home-callback-form]');
+    if (standalone) {
+      // Reuse the same legal templates and panel; the inline lead form is untouched.
+      if (!document.querySelector(`template[data-legal-template="${target.dataset.legalDocument}"]`)) return;
+      dialog = document.createElement('dialog'); dialog.id = 'site-inline-legal'; dialog.className = 'public-dialog'; dialog.dataset.inlineLegal = 'true';
+      document.body.append(dialog); bind(dialog); resize();
+    }
     if (!dialog) return;
     if (target.hasAttribute('data-modal-close')) { back(dialog); dialog.close(); return; }
     if (target.hasAttribute('data-legal-back')) { back(dialog); return; }
@@ -35,11 +50,11 @@ export function initializePublicDialogs() {
     header.append(title, close); panel.append(header, template.content.cloneNode(true));
     const returnButton = document.createElement('button'); returnButton.type = 'button'; returnButton.className = 'flow-button flow-button-secondary'; returnButton.textContent = 'Вернуться к форме'; returnButton.setAttribute('data-legal-back', ''); panel.append(returnButton);
     const labelledBy = dialog.getAttribute('aria-labelledby');
-    dialog.append(panel); states.set(dialog, { panel, children, opener: target, labelledBy }); dialog.setAttribute('aria-labelledby', title.id); title.focus();
+    dialog.append(panel); states.set(dialog, { panel, children, opener: target, labelledBy, standalone }); dialog.setAttribute('aria-labelledby', title.id);
+    if (standalone) dialog.showModal();
+    title.focus();
   });
   for (const dialog of document.querySelectorAll('dialog.public-dialog')) {
-    dialog.addEventListener('cancel', event => { if (back(dialog)) event.preventDefault(); });
-    dialog.addEventListener('close', () => { back(dialog); dialog.style.removeProperty('bottom'); });
-    dialog.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); } });
+    bind(dialog);
   }
 }

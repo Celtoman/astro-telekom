@@ -1,0 +1,803 @@
+{
+  "scope": "Compiled full BaseLayout/GeneralHomeComposition and actual inactive admin document renderer; synthetic cities/FAQ; all lead calls intercepted",
+  "date": "2026-10-16T14:12:21.630Z",
+  "sizes": [
+    {
+      "mode": "public",
+      "viewport": 1440,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "h1": 1,
+      "blocks": [
+        {
+          "type": "HEADER",
+          "left": 40,
+          "top": 0,
+          "width": 1360,
+          "height": 129
+        },
+        {
+          "type": "home.hero",
+          "left": 40,
+          "top": 153,
+          "width": 1360,
+          "height": 438
+        },
+        {
+          "type": "home.address_check",
+          "left": 40,
+          "top": 615,
+          "width": 1360,
+          "height": 368
+        },
+        {
+          "type": "home.provider_about",
+          "left": 40,
+          "top": 1007,
+          "width": 1360,
+          "height": 707
+        },
+        {
+          "type": "home.benefits",
+          "left": 40,
+          "top": 1738,
+          "width": 1360,
+          "height": 664
+        },
+        {
+          "type": "home.connection_steps",
+          "left": 40,
+          "top": 2426,
+          "width": 1360,
+          "height": 494
+        },
+        {
+          "type": "home.movix",
+          "left": 40,
+          "top": 2944,
+          "width": 1360,
+          "height": 598
+        },
+        {
+          "type": "home.more_possibilities",
+          "left": 40,
+          "top": 3566,
+          "width": 1360,
+          "height": 930
+        },
+        {
+          "type": "home.connection_help",
+          "left": 40,
+          "top": 4520,
+          "width": 1360,
+          "height": 343
+        },
+        {
+          "type": "home.city_directory",
+          "left": 40,
+          "top": 4887,
+          "width": 1360,
+          "height": 766
+        },
+        {
+          "type": "home.faq",
+          "left": 40,
+          "top": 5677,
+          "width": 1360,
+          "height": 534
+        },
+        {
+          "type": "FOOTER",
+          "left": 40,
+          "top": 6235,
+          "width": 1360,
+          "height": 315
+        }
+      ],
+      "duplicateIds": [],
+      "secondaryAction": {
+        "color": "rgb(23, 105, 170)",
+        "background": "rgb(238, 248, 255)"
+      }
+    },
+    {
+      "mode": "preview",
+      "viewport": 1440,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "h1": 1,
+      "blocks": [
+        {
+          "type": "HEADER",
+          "left": 40,
+          "top": 0,
+          "width": 1360,
+          "height": 129
+        },
+        {
+          "type": "home.hero",
+          "left": 40,
+          "top": 153,
+          "width": 1360,
+          "height": 438
+        },
+        {
+          "type": "home.address_check",
+          "left": 40,
+          "top": 615,
+          "width": 1360,
+          "height": 368
+        },
+        {
+          "type": "home.provider_about",
+          "left": 40,
+          "top": 1007,
+          "width": 1360,
+          "height": 707
+        },
+        {
+          "type": "home.benefits",
+          "left": 40,
+          "top": 1738,
+          "width": 1360,
+          "height": 664
+        },
+        {
+          "type": "home.connection_steps",
+          "left": 40,
+          "top": 2426,
+          "width": 1360,
+          "height": 494
+        },
+        {
+          "type": "home.movix",
+          "left": 40,
+          "top": 2944,
+          "width": 1360,
+          "height": 598
+        },
+        {
+          "type": "home.more_possibilities",
+          "left": 40,
+          "top": 3566,
+          "width": 1360,
+          "height": 930
+        },
+        {
+          "type": "home.connection_help",
+          "left": 40,
+          "top": 4520,
+          "width": 1360,
+          "height": 343
+        },
+        {
+          "type": "home.city_directory",
+          "left": 40,
+          "top": 4887,
+          "width": 1360,
+          "height": 766
+        },
+        {
+          "type": "home.faq",
+          "left": 40,
+          "top": 5677,
+          "width": 1360,
+          "height": 534
+        },
+        {
+          "type": "FOOTER",
+          "left": 40,
+          "top": 6235,
+          "width": 1360,
+          "height": 315
+        }
+      ],
+      "duplicateIds": [],
+      "secondaryAction": {
+        "color": "rgb(23, 105, 170)",
+        "background": "rgb(238, 248, 255)"
+      }
+    },
+    {
+      "mode": "public",
+      "viewport": 834,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "h1": 1,
+      "blocks": [
+        {
+          "type": "HEADER",
+          "left": 57,
+          "top": 0,
+          "width": 720,
+          "height": 121
+        },
+        {
+          "type": "home.hero",
+          "left": 57,
+          "top": 145,
+          "width": 720,
+          "height": 780
+        },
+        {
+          "type": "home.address_check",
+          "left": 57,
+          "top": 949,
+          "width": 720,
+          "height": 611
+        },
+        {
+          "type": "home.provider_about",
+          "left": 57,
+          "top": 1584,
+          "width": 720,
+          "height": 1085
+        },
+        {
+          "type": "home.benefits",
+          "left": 57,
+          "top": 2693,
+          "width": 720,
+          "height": 1007
+        },
+        {
+          "type": "home.connection_steps",
+          "left": 57,
+          "top": 3724,
+          "width": 720,
+          "height": 658
+        },
+        {
+          "type": "home.movix",
+          "left": 57,
+          "top": 4406,
+          "width": 720,
+          "height": 1054.296875
+        },
+        {
+          "type": "home.more_possibilities",
+          "left": 57,
+          "top": 5484.296875,
+          "width": 720,
+          "height": 1805
+        },
+        {
+          "type": "home.connection_help",
+          "left": 57,
+          "top": 7313.296875,
+          "width": 720,
+          "height": 363
+        },
+        {
+          "type": "home.city_directory",
+          "left": 57,
+          "top": 7700.296875,
+          "width": 720,
+          "height": 786
+        },
+        {
+          "type": "home.faq",
+          "left": 57,
+          "top": 8510.296875,
+          "width": 720,
+          "height": 518
+        },
+        {
+          "type": "FOOTER",
+          "left": 57,
+          "top": 9052.296875,
+          "width": 720,
+          "height": 399
+        }
+      ],
+      "duplicateIds": [],
+      "secondaryAction": {
+        "color": "rgb(23, 105, 170)",
+        "background": "rgb(238, 248, 255)"
+      }
+    },
+    {
+      "mode": "preview",
+      "viewport": 834,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "h1": 1,
+      "blocks": [
+        {
+          "type": "HEADER",
+          "left": 57,
+          "top": 0,
+          "width": 720,
+          "height": 121
+        },
+        {
+          "type": "home.hero",
+          "left": 57,
+          "top": 145,
+          "width": 720,
+          "height": 780
+        },
+        {
+          "type": "home.address_check",
+          "left": 57,
+          "top": 949,
+          "width": 720,
+          "height": 611
+        },
+        {
+          "type": "home.provider_about",
+          "left": 57,
+          "top": 1584,
+          "width": 720,
+          "height": 1085
+        },
+        {
+          "type": "home.benefits",
+          "left": 57,
+          "top": 2693,
+          "width": 720,
+          "height": 1007
+        },
+        {
+          "type": "home.connection_steps",
+          "left": 57,
+          "top": 3724,
+          "width": 720,
+          "height": 658
+        },
+        {
+          "type": "home.movix",
+          "left": 57,
+          "top": 4406,
+          "width": 720,
+          "height": 1054.296875
+        },
+        {
+          "type": "home.more_possibilities",
+          "left": 57,
+          "top": 5484.296875,
+          "width": 720,
+          "height": 1805
+        },
+        {
+          "type": "home.connection_help",
+          "left": 57,
+          "top": 7313.296875,
+          "width": 720,
+          "height": 363
+        },
+        {
+          "type": "home.city_directory",
+          "left": 57,
+          "top": 7700.296875,
+          "width": 720,
+          "height": 786
+        },
+        {
+          "type": "home.faq",
+          "left": 57,
+          "top": 8510.296875,
+          "width": 720,
+          "height": 518
+        },
+        {
+          "type": "FOOTER",
+          "left": 57,
+          "top": 9052.296875,
+          "width": 720,
+          "height": 399
+        }
+      ],
+      "duplicateIds": [],
+      "secondaryAction": {
+        "color": "rgb(23, 105, 170)",
+        "background": "rgb(238, 248, 255)"
+      }
+    },
+    {
+      "mode": "public",
+      "viewport": 390,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "h1": 1,
+      "blocks": [
+        {
+          "type": "HEADER",
+          "left": 16,
+          "top": 0,
+          "width": 358,
+          "height": 109
+        },
+        {
+          "type": "home.hero",
+          "left": 16,
+          "top": 133,
+          "width": 358,
+          "height": 806
+        },
+        {
+          "type": "home.address_check",
+          "left": 16,
+          "top": 963,
+          "width": 358,
+          "height": 757
+        },
+        {
+          "type": "home.provider_about",
+          "left": 16,
+          "top": 1744,
+          "width": 358,
+          "height": 1527
+        },
+        {
+          "type": "home.benefits",
+          "left": 16,
+          "top": 3295,
+          "width": 358,
+          "height": 428
+        },
+        {
+          "type": "home.connection_steps",
+          "left": 16,
+          "top": 3747,
+          "width": 358,
+          "height": 845
+        },
+        {
+          "type": "home.movix",
+          "left": 16,
+          "top": 4616,
+          "width": 358,
+          "height": 1217.890625
+        },
+        {
+          "type": "home.more_possibilities",
+          "left": 16,
+          "top": 5857.890625,
+          "width": 358,
+          "height": 2387
+        },
+        {
+          "type": "home.connection_help",
+          "left": 16,
+          "top": 8268.890625,
+          "width": 358,
+          "height": 660
+        },
+        {
+          "type": "home.city_directory",
+          "left": 16,
+          "top": 8952.890625,
+          "width": 358,
+          "height": 709
+        },
+        {
+          "type": "home.faq",
+          "left": 16,
+          "top": 9685.890625,
+          "width": 358,
+          "height": 589
+        },
+        {
+          "type": "FOOTER",
+          "left": 16,
+          "top": 10298.890625,
+          "width": 358,
+          "height": 610
+        }
+      ],
+      "duplicateIds": [],
+      "secondaryAction": {
+        "color": "rgb(23, 105, 170)",
+        "background": "rgb(238, 248, 255)"
+      }
+    },
+    {
+      "mode": "preview",
+      "viewport": 390,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "h1": 1,
+      "blocks": [
+        {
+          "type": "HEADER",
+          "left": 16,
+          "top": 0,
+          "width": 358,
+          "height": 109
+        },
+        {
+          "type": "home.hero",
+          "left": 16,
+          "top": 133,
+          "width": 358,
+          "height": 806
+        },
+        {
+          "type": "home.address_check",
+          "left": 16,
+          "top": 963,
+          "width": 358,
+          "height": 757
+        },
+        {
+          "type": "home.provider_about",
+          "left": 16,
+          "top": 1744,
+          "width": 358,
+          "height": 1527
+        },
+        {
+          "type": "home.benefits",
+          "left": 16,
+          "top": 3295,
+          "width": 358,
+          "height": 428
+        },
+        {
+          "type": "home.connection_steps",
+          "left": 16,
+          "top": 3747,
+          "width": 358,
+          "height": 845
+        },
+        {
+          "type": "home.movix",
+          "left": 16,
+          "top": 4616,
+          "width": 358,
+          "height": 1217.890625
+        },
+        {
+          "type": "home.more_possibilities",
+          "left": 16,
+          "top": 5857.890625,
+          "width": 358,
+          "height": 2387
+        },
+        {
+          "type": "home.connection_help",
+          "left": 16,
+          "top": 8268.890625,
+          "width": 358,
+          "height": 660
+        },
+        {
+          "type": "home.city_directory",
+          "left": 16,
+          "top": 8952.890625,
+          "width": 358,
+          "height": 709
+        },
+        {
+          "type": "home.faq",
+          "left": 16,
+          "top": 9685.890625,
+          "width": 358,
+          "height": 589
+        },
+        {
+          "type": "FOOTER",
+          "left": 16,
+          "top": 10298.890625,
+          "width": 358,
+          "height": 610
+        }
+      ],
+      "duplicateIds": [],
+      "secondaryAction": {
+        "color": "rgb(23, 105, 170)",
+        "background": "rgb(238, 248, 255)"
+      }
+    },
+    {
+      "mode": "public",
+      "viewport": 320,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "h1": 1,
+      "blocks": [
+        {
+          "type": "HEADER",
+          "left": 16,
+          "top": 0,
+          "width": 288,
+          "height": 109
+        },
+        {
+          "type": "home.hero",
+          "left": 16,
+          "top": 133,
+          "width": 288,
+          "height": 1029
+        },
+        {
+          "type": "home.address_check",
+          "left": 16,
+          "top": 1186,
+          "width": 288,
+          "height": 806
+        },
+        {
+          "type": "home.provider_about",
+          "left": 16,
+          "top": 2016,
+          "width": 288,
+          "height": 1886
+        },
+        {
+          "type": "home.benefits",
+          "left": 16,
+          "top": 3926,
+          "width": 288,
+          "height": 481
+        },
+        {
+          "type": "home.connection_steps",
+          "left": 16,
+          "top": 4431,
+          "width": 288,
+          "height": 990
+        },
+        {
+          "type": "home.movix",
+          "left": 16,
+          "top": 5445,
+          "width": 288,
+          "height": 1339.109375
+        },
+        {
+          "type": "home.more_possibilities",
+          "left": 16,
+          "top": 6808.109375,
+          "width": 288,
+          "height": 3066
+        },
+        {
+          "type": "home.connection_help",
+          "left": 16,
+          "top": 9898.109375,
+          "width": 288,
+          "height": 747
+        },
+        {
+          "type": "home.city_directory",
+          "left": 16,
+          "top": 10669.109375,
+          "width": 288,
+          "height": 757
+        },
+        {
+          "type": "home.faq",
+          "left": 16,
+          "top": 11450.109375,
+          "width": 288,
+          "height": 685
+        },
+        {
+          "type": "FOOTER",
+          "left": 16,
+          "top": 12159.109375,
+          "width": 288,
+          "height": 626
+        }
+      ],
+      "duplicateIds": [],
+      "secondaryAction": {
+        "color": "rgb(23, 105, 170)",
+        "background": "rgb(238, 248, 255)"
+      }
+    },
+    {
+      "mode": "preview",
+      "viewport": 320,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "h1": 1,
+      "blocks": [
+        {
+          "type": "HEADER",
+          "left": 16,
+          "top": 0,
+          "width": 288,
+          "height": 109
+        },
+        {
+          "type": "home.hero",
+          "left": 16,
+          "top": 133,
+          "width": 288,
+          "height": 1029
+        },
+        {
+          "type": "home.address_check",
+          "left": 16,
+          "top": 1186,
+          "width": 288,
+          "height": 806
+        },
+        {
+          "type": "home.provider_about",
+          "left": 16,
+          "top": 2016,
+          "width": 288,
+          "height": 1886
+        },
+        {
+          "type": "home.benefits",
+          "left": 16,
+          "top": 3926,
+          "width": 288,
+          "height": 481
+        },
+        {
+          "type": "home.connection_steps",
+          "left": 16,
+          "top": 4431,
+          "width": 288,
+          "height": 990
+        },
+        {
+          "type": "home.movix",
+          "left": 16,
+          "top": 5445,
+          "width": 288,
+          "height": 1339.109375
+        },
+        {
+          "type": "home.more_possibilities",
+          "left": 16,
+          "top": 6808.109375,
+          "width": 288,
+          "height": 3066
+        },
+        {
+          "type": "home.connection_help",
+          "left": 16,
+          "top": 9898.109375,
+          "width": 288,
+          "height": 747
+        },
+        {
+          "type": "home.city_directory",
+          "left": 16,
+          "top": 10669.109375,
+          "width": 288,
+          "height": 757
+        },
+        {
+          "type": "home.faq",
+          "left": 16,
+          "top": 11450.109375,
+          "width": 288,
+          "height": 685
+        },
+        {
+          "type": "FOOTER",
+          "left": 16,
+          "top": 12159.109375,
+          "width": 288,
+          "height": 626
+        }
+      ],
+      "duplicateIds": [],
+      "secondaryAction": {
+        "color": "rgb(23, 105, 170)",
+        "background": "rgb(238, 248, 255)"
+      }
+    }
+  ],
+  "errors": [],
+  "mismatches": [],
+  "actions": {
+    "headerFlow2": true,
+    "b06Flow2": true,
+    "mobileMenuOneDialog": true,
+    "escapeFocus": true,
+    "callbackNoUnconfirmedCity": true,
+    "canonicalServiceCitySwitch": true,
+    "noMoscowChoosesPublishedCity": true,
+    "pickerIntentReset": true,
+    "helpTarget": "/faq"
+  }
+}

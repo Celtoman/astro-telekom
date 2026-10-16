@@ -1,11 +1,16 @@
 export const normalizeCityQuery = value => String(value || '').trim().replace(/\s+/gu, ' ').toLocaleLowerCase('ru-RU').replaceAll('ё', 'е');
+export const CITY_SERVICE_SLUGS = Object.freeze({ internet: 'domru-domashniy-internet', internet_tv: 'domru-domashniy-internet-televidenie', tv: 'cifrovoe-televidenie-domru' });
+export function cityServicePath(citySlug, service) {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(citySlug) || !Object.hasOwn(CITY_SERVICE_SLUGS, service)) throw new Error('Некорректное городское назначение.');
+  return `/${citySlug}/${CITY_SERVICE_SLUGS[service]}`;
+}
 /** @template {{ name?: string }} T @param {T[]} cities @returns {T | null} */
 export function publishedMoscow(cities) {
   const matches = cities.filter(city => city.name?.trim() === 'Москва');
   return matches.length === 1 ? matches[0] : null;
 }
 export function publishedCityChoices(document) {
-  return [...new Map([...document.querySelectorAll('[data-city-choice-link][data-city-id]')].map(link => [link.dataset.cityId, { id: link.dataset.cityId, slug: link.dataset.citySlug || link.dataset.cityId, name: link.dataset.cityName, href: new URL(link.href).pathname }])).values()];
+  return [...new Map([...document.querySelectorAll('[data-city-choice-link][data-city-id]')].map(link => [link.dataset.cityId, { id: link.dataset.cityId, slug: link.dataset.citySlug || link.dataset.cityId, name: link.dataset.cityName, href: new URL(link.dataset.cityHomeHref || link.href, 'https://public.invalid').pathname }])).values()];
 }
 export function storedCity(cities, storage, key) {
   try { return cities.find(city => city.id === storage?.getItem(key)) || null; } catch { return null; }
@@ -22,7 +27,7 @@ export function applyCityContext() {
   const context = cityContext(), header = document.querySelector('[data-site-header]'), active = context.active;
   if (!active || !header) return context;
   for (const label of document.querySelectorAll('[data-current-city-label]')) label.textContent = active.name;
-  const dialog = document.querySelector('[data-callback-dialog]'); if (dialog) dialog.dataset.citySlug = active.slug;
+  const dialog = document.querySelector('[data-callback-dialog]'); if (dialog) dialog.dataset.citySlug = dialog.dataset.requireConfirmedCity === 'true' ? context.confirmed?.slug || '' : active.slug;
   if (!header.dataset.routeCity) for (let element of document.querySelectorAll('[data-city-context-anchor]')) {
     if (element.tagName === 'BUTTON') {
       const link = document.createElement('a'); link.className = element.className; link.dataset.cityContextAnchor = element.dataset.cityContextAnchor;
@@ -30,6 +35,15 @@ export function applyCityContext() {
       element.replaceWith(link); element = link;
     }
     element.href = `${active.href}#${element.dataset.cityContextAnchor}`;
+    element.removeAttribute('data-city-choice-trigger');
+  }
+  if (!header.dataset.routeCity) for (let element of document.querySelectorAll('[data-city-context-service]')) {
+    if (element.tagName === 'BUTTON') {
+      const link = document.createElement('a'); link.className = element.className; link.dataset.cityContextService = element.dataset.cityContextService;
+      while (element.firstChild) link.appendChild(element.firstChild);
+      element.replaceWith(link); element = link;
+    }
+    element.href = cityServicePath(active.slug, element.dataset.cityContextService);
     element.removeAttribute('data-city-choice-trigger');
   }
   for (const link of document.querySelectorAll('[data-city-choice-link]')) {

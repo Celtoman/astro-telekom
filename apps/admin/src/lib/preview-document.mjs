@@ -3,6 +3,10 @@ import { tariffView } from '../../../api/src/tariff-view.ts'
 import { heroFacts } from '../../../web/src/data/hero-facts.ts'
 import { legalSections } from '../../../web/src/data/legal-pages.ts'
 import { parseRedTitle } from '../../../api/src/home-hero-model.ts'
+import { generalHomeCatalog, generalHomeBlock } from '../../../web/src/data/general-home.ts'
+import { renderProviderAbout, renderBenefits, renderConnectionSteps, renderMovix, renderMorePossibilities, renderConnectionHelp, renderCityDirectory, renderHomeFaq, renderAddressEntry } from '../../../web/src/lib/general-home-render.ts'
+import { renderHomeHeader, renderHomeFooter } from '../../../web/src/lib/general-home-shell.ts'
+import { publishedMoscow } from '../../../web/src/lib/city-context.mjs'
 
 const list = value => Array.isArray(value) ? value : []
 const record = value => value && typeof value === 'object' && !Array.isArray(value) ? value : {}
@@ -63,13 +67,31 @@ function renderHero(catalog, data, city, variant) {
   return wrap('hero', `<section class="home-hero" data-home-hero="${variant}" ${variant === 'city' ? 'data-block-type="hero" data-city-first-screen' : ''}><div class="hero-container"><div class="hero-card"><div class="hero-copy"><h1>${html(data.title)}</h1><p class="hero-body">${html(data.text)}</p>${facts}${address}${variant === 'general' ? `<ul class="info-chips">${chips.map(chip => `<li>${image(catalog, `/images/figma/${chip.icon}.svg`, '', 'width="20" height="20"')}<span>${html(chip.label)}</span></li>`).join('')}</ul>` : inactiveLink(text(data.tariffsCtaText, 'Посмотреть тарифы'), 'tariffs-cta')}</div><figure class="hero-media">${image(catalog, text(data.image, '/images/figma/home-hero.png'), text(data.imageAlt, 'Wi-Fi-роутер, ТВ-приставка и пульт для домашнего подключения'), 'width="1448" height="1086"')}</figure></div></div></section>`)
 }
 function renderHome(catalog) {
+  if (catalog.generalHome) return renderFullGeneralHome(catalog)
   const data = catalog.homeHero || { title: `Подключение домашнего интернета и телевидения ${text(catalog.site?.name, 'Дом.ру')}`, text: 'Укажите адрес, чтобы проверить возможность подключения Дом.ру в вашем доме и узнать о доступных услугах.' }
   if (catalog.homeHeroVersion === '2.0.0') return renderHomeHero1d(catalog, data)
   return renderHero(catalog, data, list(catalog.cities).find(city => city.slug === 'moskva'), 'general')
 }
+function renderFullGeneralHome(catalog) {
+  const home = generalHomeCatalog(catalog.generalHome)
+  const options = { interactive: false, asset: path => asset(catalog, path), phone: catalog.site.connectionPhone }
+  const data = type => generalHomeBlock(home, type)
+  const body = `<div data-home-block="home.hero">${renderHomeHero1d(catalog, data('home.hero'))}</div>` + wrap('generalhome', [
+    renderAddressEntry(data('home.address_check'), options),
+    renderProviderAbout(data('home.provider_about'), options),
+    renderBenefits(data('home.benefits'), options),
+    renderConnectionSteps(data('home.connection_steps'), options),
+    renderMovix(data('home.movix'), options),
+    renderMorePossibilities(data('home.more_possibilities'), options),
+    renderConnectionHelp(data('home.connection_help'), options),
+    renderCityDirectory(data('home.city_directory'), catalog.cities, options),
+    renderHomeFaq(data('home.faq'), options),
+  ].join(''))
+  return wrap('generalcomposition', `<div class="general-home-composition" data-general-home-composition data-home-composition-version="${home.version}">${body}</div>`)
+}
 function renderHomeHero1d(catalog, data) {
   const popular = ['Москва', 'Санкт-Петербург', 'Екатеринбург', 'Иркутск', 'Казань', 'Самара', 'Саратов'].map(name => list(catalog.cities).find(city => city.name === name)).filter(Boolean)
-  return wrap('generalhero', `<section class="general-home-hero" data-home-hero="city-search"><div class="hero-container"><div class="hero-card"><div class="hero-copy"><h1>${parseRedTitle(data.title).map(part => part.red ? `<span class="title-red">${html(part.text)}</span>` : html(part.text)).join('')}</h1><p class="hero-body">${html(data.text)}</p><div class="city-form"><div class="city-search-row"><div class="city-field-stack"><div class="city-search-field">${image(catalog, '/images/figma/hero1d-desktop-imglocationicon.svg', '', 'width="24" height="24"')}<input type="search" disabled aria-label="Поиск города" placeholder="${html(data.cityPlaceholder)}"></div></div>${button(data.searchButtonText, 'search-button')}</div></div><div class="popular-cities">${[popular.slice(0,4),popular.slice(4)].map((row,index)=>`<div class="popular-row">${row.map(city => `<a class="popular-city" aria-disabled="true"><span class="chip-surface">${html(city.name)}</span></a>`).join('')}${index===1?inactiveLink(data.allCitiesText,'all-cities-link'):''}</div>`).join('')}</div></div><ol class="city-steps">${data.steps.map((step, index) => `<li><div class="icon-circle"><picture><source media="(max-width:620px)" srcset="${html(asset(catalog, `/images/figma/hero1d-mobile-imgicon${index || ''}.svg`))}"><source media="(max-width:1100px)" srcset="${html(asset(catalog, `/images/figma/hero1d-tablet-imgicon${index || ''}.svg`))}">${image(catalog, `/images/figma/hero1d-desktop-imgicon${index || ''}.svg`)}</picture></div><div class="step-copy"><span class="step-number">0${index + 1}</span><h2>${html(step.title)}</h2><p>${html(step.text)}</p></div></li>`).join('')}</ol></div></div></section>`)
+  return wrap('generalhero', `<section class="general-home-hero" data-general-home-hero data-home-hero="city-search"><div class="hero-container"><div class="hero-card"><div class="hero-copy"><h1>${parseRedTitle(data.title).map(part => part.red ? `<span class="title-red">${html(part.text)}</span>` : html(part.text)).join('')}</h1><p class="hero-body">${html(data.text)}</p><div class="city-form"><div class="city-search-row"><div class="city-field-stack"><div class="city-search-field">${image(catalog, '/images/figma/hero1d-desktop-imglocationicon.svg', '', 'width="24" height="24"')}<input type="search" disabled aria-label="Поиск города" placeholder="${html(data.cityPlaceholder)}"></div></div>${button(data.searchButtonText, 'search-button')}</div></div><div class="popular-cities">${[popular.slice(0,4),popular.slice(4)].map((row,index)=>`<div class="popular-row">${row.map(city => `<a class="popular-city" aria-disabled="true"><span class="chip-surface">${html(city.name)}</span></a>`).join('')}${index===1?inactiveLink(data.allCitiesText,'all-cities-link'):''}</div>`).join('')}</div></div><ol class="city-steps">${data.steps.map((step, index) => `<li><div class="icon-circle"><picture><source media="(max-width:620px)" srcset="${html(asset(catalog, `/images/figma/hero1d-mobile-imgicon${index || ''}.svg`))}"><source media="(max-width:1100px)" srcset="${html(asset(catalog, `/images/figma/hero1d-tablet-imgicon${index || ''}.svg`))}">${image(catalog, `/images/figma/hero1d-desktop-imgicon${index || ''}.svg`)}</picture></div><div class="step-copy"><span class="step-number">0${index + 1}</span><h2>${html(step.title)}</h2><p>${html(step.text)}</p></div></li>`).join('')}</ol></div></div></section>`)
 }
 function renderBlock(block, city) {
   const data = record(block.data), title = html(text(data.title)), items = list(data.items)
@@ -142,6 +164,8 @@ export function buildPreviewDocument(catalog, routePath, publicStyles = '', asse
   const route = list(catalog?.routes).find(item => item.path === routePath)
   if (!route) throw new Error('Маршрут отсутствует в рабочем Release 1 inventory')
   const city = route.citySlug ? cityBySlug(catalog, route.citySlug) : null
+  const fullHome = route.kind === 'HOME' ? generalHomeCatalog(catalog.generalHome) : undefined
+  const shellOptions = { interactive: false, asset: path => asset(catalog, path), city: publishedMoscow(catalog.cities) || undefined }
   let content
   if (route.kind === 'HOME') content = renderHome(catalog)
   else if (route.kind === 'CITY_HOME') content = renderCity(catalog, route)
@@ -149,5 +173,5 @@ export function buildPreviewDocument(catalog, routePath, publicStyles = '', asse
   else if (route.kind === 'GLOBAL_PAGE') content = renderGlobal(catalog, route)
   else throw new Error('Тип маршрута не поддерживается предпросмотром')
   const assetOrigins = [...new Set(Object.values(assets).filter(value => /^https?:\/\//.test(value)).map(value => new URL(value).origin))].map(html).join(' ')
-  return `<!doctype html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https: ${assetOrigins}; font-src data:"><title>${html(routeLabel(catalog, route))} — предпросмотр</title><style>${previewStyleText(publicStyles)}</style></head><body>${renderHeader(catalog, city)}<main>${content}</main>${renderFooter(city)}</body></html>`
+  return `<!doctype html><html lang="ru"${fullHome ? ' class="full-general-home"' : ''}><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https: ${assetOrigins}; font-src data:"><title>${html(routeLabel(catalog, route))} — предпросмотр</title><style>${previewStyleText(publicStyles)}</style></head><body${fullHome ? ' class="general-home-page"' : ''}>${fullHome ? wrap('homeshell', renderHomeHeader(catalog.site, shellOptions)) : renderHeader(catalog, city)}<main>${content}</main>${fullHome ? wrap('homeshell', renderHomeFooter(catalog.site, shellOptions)) : renderFooter(city)}</body></html>`
 }

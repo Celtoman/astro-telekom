@@ -3,10 +3,10 @@ import type { GeneralHomeDataByType } from '../../../../api/src/general-home-mod
 import { renderConnectionSteps } from '../../lib/general-home-render';
 import { publicAsset } from '../../data/public-asset';
 import HomeBlockStyles from './HomeBlockStyles.astro';
-interface Props { content: GeneralHomeDataByType['home.connection_steps']; phone: string; phoneHref: string; addressDialogId: string }
+interface Props { content: GeneralHomeDataByType['home.connection_steps']; phone: string; phoneHref: string; addressDialogId?: string | null }
 const { content, phone, phoneHref, addressDialogId } = Astro.props;
 ---
-<Fragment set:html={renderConnectionSteps(content, { asset: publicAsset, phone, phoneHref, addressDialogId })} />
+<Fragment set:html={renderConnectionSteps(content, { asset: publicAsset, phone, phoneHref, addressDialogId, chooseCityForAddress: !addressDialogId })} />
 <HomeBlockStyles />
 <style is:global>
   .home-steps { display: flex; flex-direction: column; gap: 24px; padding: 48px; border-radius: 26px; background: #eef8ff; }

@@ -16,6 +16,8 @@ const sources = [
   ['generalhome', 'components/general-home/HomeCityDirectory.astro'],
   ['generalhome', 'components/general-home/HomeConnectionHelp.astro'],
   ['generalhome', 'components/general-home/HomeAddressEntry.astro'],
+  ['homeshell', 'components/general-home/HomeShellStyles.astro'],
+  ['generalcomposition', 'components/general-home/GeneralHomeComposition.astro'],
   ['address', 'components/AddressForm.astro'],
   ['blocks', 'components/BlockRenderer.astro'],
   ['collection', 'components/TariffCollection.astro'],

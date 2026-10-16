@@ -1,0 +1,52 @@
+{
+  "checkedAt": "2026-10-16T14:31:00.078Z",
+  "workingRevision": 23,
+  "publishedRevision": 23,
+  "publicationId": "cmvb26nmn000401mc1ukxauqi",
+  "faqPairCount": 2,
+  "faqContainsPlaceholderPairs": true,
+  "checks": [
+    {
+      "path": "/movix",
+      "status": 404,
+      "location": null,
+      "inPublishedInventory": false
+    },
+    {
+      "path": "/faq",
+      "status": 404,
+      "location": null,
+      "inPublishedInventory": false
+    },
+    {
+      "path": "/contacts",
+      "status": 404,
+      "location": null,
+      "inPublishedInventory": false
+    },
+    {
+      "path": "/wifi-router",
+      "status": 404,
+      "location": null,
+      "inPublishedInventory": false
+    },
+    {
+      "path": "/moscow/domru-domashniy-internet",
+      "status": 404,
+      "location": null,
+      "inPublishedInventory": false
+    },
+    {
+      "path": "/moscow/domru-domashniy-internet-televidenie",
+      "status": 404,
+      "location": null,
+      "inPublishedInventory": false
+    },
+    {
+      "path": "/moscow/cifrovoe-televidenie-domru",
+      "status": 404,
+      "location": null,
+      "inPublishedInventory": false
+    }
+  ]
+}

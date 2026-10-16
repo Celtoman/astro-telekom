@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { CircleAlert, Monitor, RefreshCw, Smartphone, Tablet } from "lucide-react"
 import { AdminApiError, requestJson, requestSession } from "../lib/admin-api.mjs"
 import { buildPreviewDocument, previewRouteOptions, type PreviewRouteOption } from "../lib/preview-document.mjs"
+import { previewContentIssue } from "../lib/preview-content-issue.mjs"
 import publicPreviewStyles, { assets as publicPreviewAssets } from "virtual:preview-public-styles"
 import { AdminShell } from "./AdminShell"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
@@ -41,6 +42,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
   const [viewport, setViewport] = useState<Viewport>("desktop")
   const [loadingPreview, setLoadingPreview] = useState(false)
   const [previewError, setPreviewError] = useState<string | null>(null)
+  const [previewIssue, setPreviewIssue] = useState<ReturnType<typeof previewContentIssue>>(null)
   const [refreshKey, setRefreshKey] = useState(0)
 
   const handleError = useCallback((caught: unknown, fallback: string) => {
@@ -73,11 +75,14 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
       setPreview(null)
       setSelectedPath("")
       setLoadingPreview(false)
+      setPreviewError(null)
+      setPreviewIssue(null)
       return
     }
     let active = true
     setLoadingPreview(true)
     setPreviewError(null)
+    setPreviewIssue(null)
     void requestJson<PreviewResponse>(apiUrl, `/admin/sites/${encodeURIComponent(selectedSiteId)}/preview-catalog`)
       .then((result) => {
         if (!active) return
@@ -91,7 +96,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
         if (!active) return
         setPreview(null)
         const message = handleError(caught, "Предпросмотр не загружен")
-        if (message) setPreviewError(message)
+        if (message) { setPreviewError(message); setPreviewIssue(previewContentIssue(caught, selectedSiteId)) }
       })
       .finally(() => { if (active) setLoadingPreview(false) })
     return () => { active = false }
@@ -102,14 +107,14 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
     [preview],
   )
   const documentResult = useMemo(() => {
-    if (!preview || !selectedPath) return { html: "", error: null }
+    if (!preview || !selectedPath) return { html: "", error: null, issue: null }
     try {
       const assets = Object.fromEntries(Object.entries(publicPreviewAssets).map(([path, url]) => [path, new URL(url, window.location.origin).href]))
-      return { html: buildPreviewDocument(preview.catalog, selectedPath, publicPreviewStyles, assets), error: null }
+      return { html: buildPreviewDocument(preview.catalog, selectedPath, publicPreviewStyles, assets), error: null, issue: null }
     } catch (caught: unknown) {
-      return { html: "", error: caught instanceof Error ? caught.message : "Страница не может быть показана" }
+      return { html: "", error: caught instanceof Error ? caught.message : "Страница не может быть показана", issue: previewContentIssue(caught, selectedSiteId) }
     }
-  }, [preview, selectedPath])
+  }, [preview, selectedPath, selectedSiteId])
 
   if (state.status === "loading") return <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-96 w-full" /></main>
   if (state.status === "error") return <main className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Предпросмотр недоступен</CardTitle><CardDescription>Не удалось загрузить рабочий экран.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void loadWorkspace()}>Повторить</Button></CardContent></Card></main>
@@ -126,8 +131,8 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
         </div>
 
         {!state.sites.length ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Сайты не найдены</AlertTitle><AlertDescription>Для предпросмотра нужен хотя бы один сайт.</AlertDescription></Alert> : null}
-        {previewError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Рабочую страницу нельзя показать</AlertTitle><AlertDescription>{previewError}. Исправьте неполный шаблон или конфликт маршрутов и обновите предпросмотр.</AlertDescription></Alert> : null}
-        {documentResult.error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Маршрут не отрисован</AlertTitle><AlertDescription>{documentResult.error}</AlertDescription></Alert> : null}
+        {previewError ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Рабочую страницу нельзя показать</AlertTitle><AlertDescription>{previewError}. Исправьте неполный шаблон или конфликт маршрутов и обновите предпросмотр.{previewIssue ? <div className="mt-2"><p>{previewIssue.heading} · {previewIssue.field}</p><a className="inline-flex min-h-11 items-center font-medium underline underline-offset-4" href={previewIssue.href ?? undefined}>Исправить поле</a></div> : null}</AlertDescription></Alert> : null}
+        {documentResult.error ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Маршрут не отрисован</AlertTitle><AlertDescription>{documentResult.error}{documentResult.issue ? <div className="mt-2"><p>{documentResult.issue.heading} · {documentResult.issue.field}</p><a className="inline-flex min-h-11 items-center font-medium underline underline-offset-4" href={documentResult.issue.href ?? undefined}>Исправить поле</a></div> : null}</AlertDescription></Alert> : null}
 
         <Card>
           <CardHeader><CardTitle>Что показать</CardTitle><CardDescription>Состав URL берется из рабочего Release 1 inventory и проходит те же проверки каталога, что публикация.</CardDescription></CardHeader>
