@@ -1,0 +1,117 @@
+{
+  "checkedAt": "2026-10-16T14:48:31.157Z",
+  "scope": "Protected external public/admin browser, real GET data; all address/lead POST intercepted, no real leads",
+  "sizes": [
+    {
+      "viewport": 1440,
+      "blocks": [
+        "home.hero",
+        "home.address_check",
+        "home.provider_about",
+        "home.benefits",
+        "home.connection_steps",
+        "home.movix",
+        "home.more_possibilities",
+        "home.connection_help",
+        "home.city_directory",
+        "home.faq"
+      ],
+      "h1": 1,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "faqPairs": 2,
+      "visibleCities": 24,
+      "secondary": "rgb(238, 248, 255)",
+      "artifactId": "8688732183c31062a7775d6f62c417951065a52c5da8b8a8cccd2ab93acb9893"
+    },
+    {
+      "viewport": 834,
+      "blocks": [
+        "home.hero",
+        "home.address_check",
+        "home.provider_about",
+        "home.benefits",
+        "home.connection_steps",
+        "home.movix",
+        "home.more_possibilities",
+        "home.connection_help",
+        "home.city_directory",
+        "home.faq"
+      ],
+      "h1": 1,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "faqPairs": 2,
+      "visibleCities": 18,
+      "secondary": "rgb(238, 248, 255)",
+      "artifactId": "8688732183c31062a7775d6f62c417951065a52c5da8b8a8cccd2ab93acb9893"
+    },
+    {
+      "viewport": 390,
+      "blocks": [
+        "home.hero",
+        "home.address_check",
+        "home.provider_about",
+        "home.benefits",
+        "home.connection_steps",
+        "home.movix",
+        "home.more_possibilities",
+        "home.connection_help",
+        "home.city_directory",
+        "home.faq"
+      ],
+      "h1": 1,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "faqPairs": 2,
+      "visibleCities": 12,
+      "secondary": "rgb(238, 248, 255)",
+      "artifactId": "8688732183c31062a7775d6f62c417951065a52c5da8b8a8cccd2ab93acb9893"
+    },
+    {
+      "viewport": 320,
+      "blocks": [
+        "home.hero",
+        "home.address_check",
+        "home.provider_about",
+        "home.benefits",
+        "home.connection_steps",
+        "home.movix",
+        "home.more_possibilities",
+        "home.connection_help",
+        "home.city_directory",
+        "home.faq"
+      ],
+      "h1": 1,
+      "overflow": false,
+      "background": "rgb(255, 255, 255)",
+      "faqPairs": 2,
+      "visibleCities": 12,
+      "secondary": "rgb(238, 248, 255)",
+      "artifactId": "8688732183c31062a7775d6f62c417951065a52c5da8b8a8cccd2ab93acb9893"
+    }
+  ],
+  "checks": [
+    "Header/B06/mobile menu FLOW2; intercepted selected-address lead; inline2e legal return and intercepted consultation without fake city",
+    "Confirmed canonical city context and existing subscriber support mode",
+    "Real authenticated admin full sandboxed preview and ten-block editor; no content writes"
+  ],
+  "errors": [],
+  "environmentMessages": [],
+  "interceptedPosts": [
+    {
+      "path": "/api/v1/address-suggestions"
+    },
+    {
+      "path": "/api/v1/address-checks"
+    },
+    {
+      "path": "/api/v1/leads",
+      "reasonCode": "new_connection"
+    },
+    {
+      "path": "/api/v1/leads",
+      "reasonCode": "callback_consultation"
+    }
+  ]
+}

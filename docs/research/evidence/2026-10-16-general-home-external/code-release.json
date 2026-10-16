@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-10-16T14:49:12.424Z",
+  "httpStatus": 200,
+  "commit": "240c15a76ff69a201b3d6d26345ac19b13b6f5b8",
+  "deploymentId": "lrgifv6pzxbcfdhgidunzpq5",
+  "resultStatus": "SUCCEEDED",
+  "resultKeys": [
+    "status",
+    "artifactId",
+    "publicationId",
+    "siteId",
+    "siteRevision",
+    "rendererId",
+    "catalogDigest",
+    "rebuildId",
+    "rebuildRevision",
+    "manifestDigest"
+  ],
+  "artifactId": "8688732183c31062a7775d6f62c417951065a52c5da8b8a8cccd2ab93acb9893",
+  "publicationId": "cmvb26nmn000401mc1ukxauqi",
+  "siteRevision": 23,
+  "rendererId": "ebeac8a5a1239fa13a6f678fb815d59c89cec53b06a12c60b1ca05b259757025"
+}

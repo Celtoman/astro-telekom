@@ -1,0 +1,67 @@
+{
+  "checkedAt": "2026-10-16T15:02:01.927Z",
+  "health": "running:healthy",
+  "autoDeploy": false,
+  "bootstrapSeed": "false",
+  "latestDeployments": [
+    {
+      "id": "lrgifv6pzxbcfdhgidunzpq5",
+      "commit": "240c15a76ff69a201b3d6d26345ac19b13b6f5b8",
+      "status": "finished"
+    },
+    {
+      "id": "4dhsqkzfoj0gz8dqfk5tgu3w",
+      "commit": "6263b40d7d5d5c642198ff508a5ba26b4ca1eec2",
+      "status": "finished"
+    },
+    {
+      "id": "4mmdppdjeoos1hpsd5knbrzt",
+      "commit": "3ee321ce0f9c7b3af44eaacbb3355b824a287214",
+      "status": "finished"
+    }
+  ],
+  "siteId": "cmtuaqqj1000107lkiiiia2xa",
+  "workingRevision": 23,
+  "publishedRevision": 23,
+  "latestPublication": {
+    "id": "cmvb26nmn000401mc1ukxauqi",
+    "status": "SUCCEEDED"
+  },
+  "activePublication": null,
+  "catalogDigest": "1b698c16322ae2402147ba71e769ebefa077661781f4a0cc22d30343ec1c9de6",
+  "cityCount": 207,
+  "tariffCount": 3805,
+  "hasFullGeneralHome": true,
+  "workingHomeMetadata": {
+    "firstScreenPassportVersion": "2.0.0",
+    "generalHomeCompositionVersion": "1.0.0",
+    "firstScreenImplementationVersion": "home-hero-city-search-v2",
+    "generalHomeImplementationVersion": "general-home-v1"
+  },
+  "workingHomeBlockTypes": [
+    "home.hero",
+    "home.address_check",
+    "home.provider_about",
+    "home.benefits",
+    "home.connection_steps",
+    "home.movix",
+    "home.more_possibilities",
+    "home.connection_help",
+    "home.city_directory",
+    "home.faq"
+  ],
+  "workingHeroDigest": "fd494eb11aff95d80561f21006d13acd60034d7c222b911f184d13ee66013bc2",
+  "htmlDigest": "41bc7a2721835befa190f981f2bdab883835d8639cb643d7e7b97453d73fa616",
+  "artifactId": "8688732183c31062a7775d6f62c417951065a52c5da8b8a8cccd2ab93acb9893",
+  "deploymentExact": true,
+  "fullRenderPresent": true,
+  "preserved": {
+    "workingRevision": true,
+    "publishedRevision": true,
+    "publicationId": true,
+    "catalogDigest": true,
+    "workingHero": true
+  },
+  "artifactChanged": true,
+  "ready": true
+}

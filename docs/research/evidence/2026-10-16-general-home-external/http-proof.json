@@ -1,0 +1,306 @@
+{
+  "checkedAt": "2026-10-16T14:50:50.710Z",
+  "codeCommit": "240c15a76ff69a201b3d6d26345ac19b13b6f5b8",
+  "artifactId": "8688732183c31062a7775d6f62c417951065a52c5da8b8a8cccd2ab93acb9893",
+  "anonymousStatus": 401,
+  "readinessStatus": 200,
+  "inlineScriptCspHashesVerified": 2,
+  "assets": [
+    {
+      "path": "/images/general-home/about-development.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/about-infrastructure.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/about-mobile-development.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/about-mobile-infrastructure.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/about-mobile-research.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/about-research.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/address-house.png",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/address-mobile-phone.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/address-mobile-shield.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/address-pin.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/address-shield.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/benefit-connection.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/benefit-fiber.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/benefit-movix.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/benefit-speed.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/benefit-support.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/benefit-wifi6.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/cinema-amediateka.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/cinema-compact-amediateka.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/cinema-compact-premier.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/cinema-ivi.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/cinema-kinopoisk.png",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/cinema-okko.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/cinema-premier.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/cinema-start.png",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/faq-minus.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/faq-plus.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/header-menu.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/header-phone.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/help-clock.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/help-free-call.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/help-phone.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-app.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-autopay.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-bonus.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-cameras.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-city-wifi.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-intercom.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-mobile-app.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-mobile-autopay.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-mobile-bonus.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-mobile-cameras.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-mobile-city-wifi.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-mobile-intercom.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-mobile-pause.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-mobile-promised-payment.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-mobile-tariff-builder.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-pause.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-promised-payment.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/more-tariff-builder.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-arrow.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-compact-devices.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-compact-search.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-compact-television.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-desktop-ambient-blue.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-desktop-ambient-violet.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-devices.png",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-devices.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-mobile-ambient-blue.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-mobile-ambient-violet.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-search.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-tablet-ambient-blue.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-tablet-ambient-violet.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/movix-television.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/step-1.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/step-2.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/step-3.svg",
+      "sha256MatchesSource": true
+    },
+    {
+      "path": "/images/general-home/step-4.svg",
+      "sha256MatchesSource": true
+    }
+  ],
+  "regressions": [
+    {
+      "path": "/abinsk",
+      "status": 200,
+      "legacyShell": true
+    },
+    {
+      "path": "/zverevo",
+      "status": 200,
+      "legacyShell": true
+    },
+    {
+      "path": "/bolshaya-subbotikha",
+      "status": 200,
+      "legacyShell": true
+    },
+    {
+      "path": "/abinsk/giga-300",
+      "status": 200,
+      "legacyShell": true
+    }
+  ],
+  "samplingRule": "first/last canonical slug and longest city name, plus first published tariff detail; all routes covered by immutable build gate",
+  "catalogRouteCount": 4018
+}

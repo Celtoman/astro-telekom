@@ -156,3 +156,8 @@ docker compose -f docker-compose.coolify.yml exec api node -e "fetch('http://loc
 ## Общая HOME: подготовленная миграция 0061
 
 `0061_general_home_composition` переводит известные рабочие HOME Дом.ру на десять блоков с одной attributed revision/audit, сохраняя Hero2.0.0 и SitePublication. Неизвестный состав останавливает всю транзакцию. Повтор не затирает правки и не создаёт ревизий. FAQ остаётся пустым черновиком: до настоящих ответов новый рабочий snapshot не пройдёт публикацию. Применение через migrate перед API должно сопровождаться готовым renderer/редактором и заполнением контента; code deployment продолжает обслуживать прежний snapshot. Read-only preflight16 октября подтвердил внешний состав0061 и ревизии23/23; FAQ содержит временные демопары, разрешённые владельцем D6. Новый renderer выпускается отдельно с сохранением snapshot; отложенные целевые страницы пока404. [Локальная приёмка](research/2026-10-16-general-home-stage3-data-acceptance.md), [свежие доказательства](research/2026-10-16-general-home-full-acceptance.md).
+
+
+## Внешний выпуск полной HOME — 16 октября 2026 года
+
+Код240c15a7 прошёл exact Linux CI и finished deployment; CODE завершился SUCCEEDED и новый artifact подтверждён по фактически обслуживаемой странице. Рабочая/опубликованная ревизии23/23, publication ID, каталог и Hero сохранены; новый CMS snapshot текущим выпуском не создавался. Seed и automatic deployment выключены. Текущий FAQ временно демонстрационный по решению D6, недостающие страницы — отдельный этап D1. [Доказательства и точные идентификаторы](research/2026-10-16-general-home-external-acceptance.md).

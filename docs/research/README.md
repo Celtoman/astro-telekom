@@ -4,6 +4,9 @@
 
 ## Дизайн и структура страниц
 
+- [Управляемая общая HOME: все семь этапов и внешний выпуск, 16 октября](2026-10-16-general-home-external-acceptance.md)
+- [Полная локальная интеграция HOME, 16 октября](2026-10-16-general-home-full-acceptance.md)
+
 - [Общая HOME: отдельные компоненты этапа 5, 16 октября](2026-10-16-general-home-stage5-blocks-acceptance.md)
 
 - [HOME Hero 1d: итоговое поведение и внешний выпуск, 13 октября](2026-10-13-home-hero-1d-final-acceptance.md)
