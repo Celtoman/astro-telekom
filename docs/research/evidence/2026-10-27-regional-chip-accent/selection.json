@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-27",
+  "task": 397,
+  "selectedByOwner": 1,
+  "applied": true,
+  "colors": {
+    "background": "#EAF7FF",
+    "text": "#18202A",
+    "icon": "#1769AA"
+  },
+  "checks": {
+    "countersAbsent": true,
+    "keysPreserved": true,
+    "propertiesPreserved": true,
+    "citiesAndUrlsPreserved": true,
+    "boundsPass": true,
+    "cityTargetsPass": true,
+    "selectedPalettePass": true,
+    "sharedMasterUnchanged": true,
+    "noExtraPageObjects": true,
+    "expectedVariantHeightChange": true,
+    "textContrast": 15.05,
+    "iconContrast": 5.29,
+    "status": "UNPUBLISHED",
+    "selection": 1
+  }
+}

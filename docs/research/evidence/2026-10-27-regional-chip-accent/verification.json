@@ -1,0 +1,1180 @@
+{
+  "set": {
+    "id": "2354:2770",
+    "key": "ad665898823e19100fb2f2c7a401806b915bdd41",
+    "status": "UNPUBLISHED",
+    "props": {
+      "Title#2354:14": {
+        "type": "TEXT",
+        "defaultValue": "Города вашего региона"
+      },
+      "Intro#2370:7": {
+        "type": "TEXT",
+        "defaultValue": "Выберите город, чтобы посмотреть тарифы."
+      },
+      "Device": {
+        "type": "VARIANT",
+        "defaultValue": "Desktop",
+        "variantOptions": [
+          "Desktop",
+          "Tablet",
+          "Mobile"
+        ]
+      },
+      "State": {
+        "type": "VARIANT",
+        "defaultValue": "Default",
+        "variantOptions": [
+          "Default",
+          "Expanded"
+        ]
+      }
+    }
+  },
+  "variants": [
+    {
+      "id": "2354:1411",
+      "key": "ee67cae785986166e7d177ad285630f6d2ccb91d",
+      "w": 1360,
+      "h": 528,
+      "counters": 0,
+      "overflow": [],
+      "minCityTargetHeight": 48,
+      "links": [
+        {
+          "id": "2354:1417",
+          "name": "City link / Богородская",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bogorodskaya"
+        },
+        {
+          "id": "2354:1436",
+          "name": "City link / Большая Гора",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-gora"
+        },
+        {
+          "id": "2354:1455",
+          "name": "City link / Большая Субботиха",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-subbotikha"
+        },
+        {
+          "id": "2354:1474",
+          "name": "City link / Боровые",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/borovye"
+        },
+        {
+          "id": "2354:1494",
+          "name": "City link / Верещагино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/vereshchagino"
+        },
+        {
+          "id": "2354:1513",
+          "name": "City link / Гнусино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/gnusino"
+        },
+        {
+          "id": "2354:1532",
+          "name": "City link / Малая Гора",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/malaya-gora"
+        },
+        {
+          "id": "2354:1551",
+          "name": "City link / Порошино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/poroshino"
+        },
+        {
+          "id": "2354:1571",
+          "name": "City link / Радужный",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/raduzhnyy"
+        },
+        {
+          "id": "2354:1590",
+          "name": "City link / Сергеево",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/sergeevo"
+        },
+        {
+          "id": "2354:1609",
+          "name": "City link / Хабаровы",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/khabarovy"
+        },
+        {
+          "id": "2354:1628",
+          "name": "City link / Шельпяки",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/shelpyaki"
+        },
+        {
+          "id": "2370:2120",
+          "name": "City link / Шубино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/shubino"
+        }
+      ],
+      "chips": [
+        {
+          "id": "2370:2110",
+          "main": "879:7",
+          "label": "Кировская область",
+          "w": 185,
+          "h": 38,
+          "fillToken": "VariableID:2:61",
+          "actualColor": {
+            "r": 0.8784313797950745,
+            "g": 0.13725490868091583,
+            "b": 0.11764705926179886
+          },
+          "textWhite": true,
+          "iconWhite": true,
+          "reactionCount": 0
+        }
+      ]
+    },
+    {
+      "id": "2354:1653",
+      "key": "41064997d6c444c2dab694ebdb09876d8b57006b",
+      "w": 1360,
+      "h": 528,
+      "counters": 0,
+      "overflow": [],
+      "minCityTargetHeight": 48,
+      "links": [
+        {
+          "id": "2354:1659",
+          "name": "City link / Богородская",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bogorodskaya"
+        },
+        {
+          "id": "2354:1678",
+          "name": "City link / Большая Гора",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-gora"
+        },
+        {
+          "id": "2354:1697",
+          "name": "City link / Большая Субботиха",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-subbotikha"
+        },
+        {
+          "id": "2354:1716",
+          "name": "City link / Боровые",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/borovye"
+        },
+        {
+          "id": "2354:1736",
+          "name": "City link / Верещагино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/vereshchagino"
+        },
+        {
+          "id": "2354:1755",
+          "name": "City link / Гнусино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/gnusino"
+        },
+        {
+          "id": "2354:1774",
+          "name": "City link / Малая Гора",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/malaya-gora"
+        },
+        {
+          "id": "2354:1793",
+          "name": "City link / Порошино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/poroshino"
+        },
+        {
+          "id": "2354:1813",
+          "name": "City link / Радужный",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/raduzhnyy"
+        },
+        {
+          "id": "2354:1832",
+          "name": "City link / Сергеево",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/sergeevo"
+        },
+        {
+          "id": "2354:1851",
+          "name": "City link / Хабаровы",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/khabarovy"
+        },
+        {
+          "id": "2354:1870",
+          "name": "City link / Шельпяки",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/shelpyaki"
+        },
+        {
+          "id": "2354:1890",
+          "name": "City link / Шубино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/shubino"
+        }
+      ],
+      "chips": [
+        {
+          "id": "2370:2126",
+          "main": "879:7",
+          "label": "Кировская область",
+          "w": 185,
+          "h": 38,
+          "fillToken": "VariableID:2:61",
+          "actualColor": {
+            "r": 0.8784313797950745,
+            "g": 0.13725490868091583,
+            "b": 0.11764705926179886
+          },
+          "textWhite": true,
+          "iconWhite": true,
+          "reactionCount": 0
+        }
+      ]
+    },
+    {
+      "id": "2354:1918",
+      "key": "265c57fb993df382cdb7a98ba2a3df79d6990c09",
+      "w": 720,
+      "h": 444,
+      "counters": 0,
+      "overflow": [],
+      "minCityTargetHeight": 48,
+      "links": [
+        {
+          "id": "2354:1924",
+          "name": "City link / Богородская",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bogorodskaya"
+        },
+        {
+          "id": "2354:1943",
+          "name": "City link / Большая Гора",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-gora"
+        },
+        {
+          "id": "2354:1962",
+          "name": "City link / Большая Субботиха",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-subbotikha"
+        },
+        {
+          "id": "2354:1982",
+          "name": "City link / Боровые",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/borovye"
+        },
+        {
+          "id": "2354:2001",
+          "name": "City link / Верещагино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/vereshchagino"
+        },
+        {
+          "id": "2354:2020",
+          "name": "City link / Гнусино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/gnusino"
+        },
+        {
+          "id": "2354:2040",
+          "name": "City link / Малая Гора",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/malaya-gora"
+        },
+        {
+          "id": "2354:2059",
+          "name": "City link / Порошино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/poroshino"
+        },
+        {
+          "id": "2354:2078",
+          "name": "City link / Радужный",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/raduzhnyy"
+        }
+      ],
+      "chips": [
+        {
+          "id": "2370:2137",
+          "main": "879:7",
+          "label": "Кировская область",
+          "w": 185,
+          "h": 38,
+          "fillToken": "VariableID:2:61",
+          "actualColor": {
+            "r": 0.8784313797950745,
+            "g": 0.13725490868091583,
+            "b": 0.11764705926179886
+          },
+          "textWhite": true,
+          "iconWhite": true,
+          "reactionCount": 0
+        }
+      ]
+    },
+    {
+      "id": "2354:2103",
+      "key": "180aaae66027df12fa7c3d8a2217c22b2ba0af0b",
+      "w": 720,
+      "h": 556,
+      "counters": 0,
+      "overflow": [],
+      "minCityTargetHeight": 48,
+      "links": [
+        {
+          "id": "2354:2109",
+          "name": "City link / Богородская",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bogorodskaya"
+        },
+        {
+          "id": "2354:2128",
+          "name": "City link / Большая Гора",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-gora"
+        },
+        {
+          "id": "2354:2147",
+          "name": "City link / Большая Субботиха",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-subbotikha"
+        },
+        {
+          "id": "2354:2167",
+          "name": "City link / Боровые",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/borovye"
+        },
+        {
+          "id": "2354:2186",
+          "name": "City link / Верещагино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/vereshchagino"
+        },
+        {
+          "id": "2354:2205",
+          "name": "City link / Гнусино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/gnusino"
+        },
+        {
+          "id": "2354:2225",
+          "name": "City link / Малая Гора",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/malaya-gora"
+        },
+        {
+          "id": "2354:2244",
+          "name": "City link / Порошино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/poroshino"
+        },
+        {
+          "id": "2354:2263",
+          "name": "City link / Радужный",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/raduzhnyy"
+        },
+        {
+          "id": "2354:2283",
+          "name": "City link / Сергеево",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/sergeevo"
+        },
+        {
+          "id": "2354:2302",
+          "name": "City link / Хабаровы",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/khabarovy"
+        },
+        {
+          "id": "2354:2321",
+          "name": "City link / Шельпяки",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/shelpyaki"
+        },
+        {
+          "id": "2354:2341",
+          "name": "City link / Шубино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/shubino"
+        }
+      ],
+      "chips": [
+        {
+          "id": "2370:2148",
+          "main": "879:7",
+          "label": "Кировская область",
+          "w": 185,
+          "h": 38,
+          "fillToken": "VariableID:2:61",
+          "actualColor": {
+            "r": 0.8784313797950745,
+            "g": 0.13725490868091583,
+            "b": 0.11764705926179886
+          },
+          "textWhite": true,
+          "iconWhite": true,
+          "reactionCount": 0
+        }
+      ]
+    },
+    {
+      "id": "2354:2368",
+      "key": "5dc243b250dd7fa21c1efe19a683ce3a41038655",
+      "w": 358,
+      "h": 507,
+      "counters": 0,
+      "overflow": [],
+      "minCityTargetHeight": 48,
+      "links": [
+        {
+          "id": "2354:2374",
+          "name": "City link / Богородская",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bogorodskaya"
+        },
+        {
+          "id": "2354:2394",
+          "name": "City link / Большая Гора",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-gora"
+        },
+        {
+          "id": "2354:2414",
+          "name": "City link / Большая Субботиха",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-subbotikha"
+        },
+        {
+          "id": "2354:2434",
+          "name": "City link / Боровые",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/borovye"
+        },
+        {
+          "id": "2354:2454",
+          "name": "City link / Верещагино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/vereshchagino"
+        },
+        {
+          "id": "2354:2474",
+          "name": "City link / Гнусино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/gnusino"
+        }
+      ],
+      "chips": [
+        {
+          "id": "2370:2159",
+          "main": "879:7",
+          "label": "Кировская область",
+          "w": 185,
+          "h": 38,
+          "fillToken": "VariableID:2:61",
+          "actualColor": {
+            "r": 0.8784313797950745,
+            "g": 0.13725490868091583,
+            "b": 0.11764705926179886
+          },
+          "textWhite": true,
+          "iconWhite": true,
+          "reactionCount": 0
+        }
+      ]
+    },
+    {
+      "id": "2354:2499",
+      "key": "f96a9a7c77e4ec8e9990b356e7f328c918b47580",
+      "w": 358,
+      "h": 731,
+      "counters": 0,
+      "overflow": [],
+      "minCityTargetHeight": 48,
+      "links": [
+        {
+          "id": "2354:2505",
+          "name": "City link / Богородская",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bogorodskaya"
+        },
+        {
+          "id": "2354:2525",
+          "name": "City link / Большая Гора",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-gora"
+        },
+        {
+          "id": "2354:2545",
+          "name": "City link / Большая Субботиха",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/bolshaya-subbotikha"
+        },
+        {
+          "id": "2354:2565",
+          "name": "City link / Боровые",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/borovye"
+        },
+        {
+          "id": "2354:2585",
+          "name": "City link / Верещагино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/vereshchagino"
+        },
+        {
+          "id": "2354:2605",
+          "name": "City link / Гнусино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/gnusino"
+        },
+        {
+          "id": "2354:2625",
+          "name": "City link / Малая Гора",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/malaya-gora"
+        },
+        {
+          "id": "2354:2645",
+          "name": "City link / Порошино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/poroshino"
+        },
+        {
+          "id": "2354:2665",
+          "name": "City link / Радужный",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/raduzhnyy"
+        },
+        {
+          "id": "2354:2685",
+          "name": "City link / Сергеево",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/sergeevo"
+        },
+        {
+          "id": "2354:2705",
+          "name": "City link / Хабаровы",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/khabarovy"
+        },
+        {
+          "id": "2354:2725",
+          "name": "City link / Шельпяки",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/shelpyaki"
+        },
+        {
+          "id": "2354:2745",
+          "name": "City link / Шубино",
+          "main": "1265:142",
+          "url": "https://tarify-dom.ru/shubino"
+        }
+      ],
+      "chips": [
+        {
+          "id": "2370:2170",
+          "main": "879:7",
+          "label": "Кировская область",
+          "w": 185,
+          "h": 38,
+          "fillToken": "VariableID:2:61",
+          "actualColor": {
+            "r": 0.8784313797950745,
+            "g": 0.13725490868091583,
+            "b": 0.11764705926179886
+          },
+          "textWhite": true,
+          "iconWhite": true,
+          "reactionCount": 0
+        }
+      ]
+    }
+  ],
+  "qa": [
+    {
+      "id": "2356:763",
+      "instances": [
+        {
+          "id": "2356:765",
+          "w": 288,
+          "h": 680,
+          "counters": 0,
+          "overflow": [],
+          "minCityTargetHeight": 48,
+          "links": [
+            {
+              "id": "I2356:765;2354:2374",
+              "name": "City link / Богородская",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/bogorodskaya"
+            },
+            {
+              "id": "I2356:765;2354:2394",
+              "name": "City link / Большая Гора",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/bolshaya-gora"
+            },
+            {
+              "id": "I2356:765;2354:2414",
+              "name": "City link / Большая Субботиха",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/bolshaya-subbotikha"
+            },
+            {
+              "id": "I2356:765;2354:2434",
+              "name": "City link / Боровые",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/borovye"
+            },
+            {
+              "id": "I2356:765;2354:2454",
+              "name": "City link / Верещагино",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/vereshchagino"
+            },
+            {
+              "id": "I2356:765;2354:2474",
+              "name": "City link / Гнусино",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/gnusino"
+            }
+          ],
+          "chips": [
+            {
+              "id": "I2356:765;2370:2159",
+              "main": "879:7",
+              "label": "Кировская область",
+              "w": 185,
+              "h": 38,
+              "fillToken": "VariableID:2:61",
+              "actualColor": {
+                "r": 0.8784313797950745,
+                "g": 0.13725490868091583,
+                "b": 0.11764705926179886
+              },
+              "textWhite": true,
+              "iconWhite": true,
+              "reactionCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2356:853",
+      "instances": [
+        {
+          "id": "2356:855",
+          "w": 288,
+          "h": 1072,
+          "counters": 0,
+          "overflow": [],
+          "minCityTargetHeight": 48,
+          "links": [
+            {
+              "id": "I2356:855;2354:2505",
+              "name": "City link / Богородская",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/bogorodskaya"
+            },
+            {
+              "id": "I2356:855;2354:2525",
+              "name": "City link / Большая Гора",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/bolshaya-gora"
+            },
+            {
+              "id": "I2356:855;2354:2545",
+              "name": "City link / Большая Субботиха",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/bolshaya-subbotikha"
+            },
+            {
+              "id": "I2356:855;2354:2565",
+              "name": "City link / Боровые",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/borovye"
+            },
+            {
+              "id": "I2356:855;2354:2585",
+              "name": "City link / Верещагино",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/vereshchagino"
+            },
+            {
+              "id": "I2356:855;2354:2605",
+              "name": "City link / Гнусино",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/gnusino"
+            },
+            {
+              "id": "I2356:855;2354:2625",
+              "name": "City link / Малая Гора",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/malaya-gora"
+            },
+            {
+              "id": "I2356:855;2354:2645",
+              "name": "City link / Порошино",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/poroshino"
+            },
+            {
+              "id": "I2356:855;2354:2665",
+              "name": "City link / Радужный",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/raduzhnyy"
+            },
+            {
+              "id": "I2356:855;2354:2685",
+              "name": "City link / Сергеево",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/sergeevo"
+            },
+            {
+              "id": "I2356:855;2354:2705",
+              "name": "City link / Хабаровы",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/khabarovy"
+            },
+            {
+              "id": "I2356:855;2354:2725",
+              "name": "City link / Шельпяки",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/shelpyaki"
+            },
+            {
+              "id": "I2356:855;2354:2745",
+              "name": "City link / Шубино",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/shubino"
+            }
+          ],
+          "chips": [
+            {
+              "id": "I2356:855;2370:2170",
+              "main": "879:7",
+              "label": "Кировская область",
+              "w": 185,
+              "h": 38,
+              "fillToken": "VariableID:2:61",
+              "actualColor": {
+                "r": 0.8784313797950745,
+                "g": 0.13725490868091583,
+                "b": 0.11764705926179886
+              },
+              "textWhite": true,
+              "iconWhite": true,
+              "reactionCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2356:1034",
+      "instances": [
+        {
+          "id": "2356:1036",
+          "w": 358,
+          "h": 335,
+          "counters": 0,
+          "overflow": [],
+          "minCityTargetHeight": 48,
+          "links": [
+            {
+              "id": "I2356:1036;2354:2374",
+              "name": "City link / Набережные Челны",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/naberezhnye-chelny"
+            },
+            {
+              "id": "I2356:1036;2354:2394",
+              "name": "City link / Нижнекамск",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/nizhnekamsk"
+            }
+          ],
+          "chips": [
+            {
+              "id": "I2356:1036;2370:2159",
+              "main": "879:7",
+              "label": "Татарстан",
+              "w": 122,
+              "h": 38,
+              "fillToken": "VariableID:2:61",
+              "actualColor": {
+                "r": 0.8784313797950745,
+                "g": 0.13725490868091583,
+                "b": 0.11764705926179886
+              },
+              "textWhite": true,
+              "iconWhite": true,
+              "reactionCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2356:1207",
+      "instances": [
+        {
+          "id": "2356:1209",
+          "w": 288,
+          "h": 396,
+          "counters": 0,
+          "overflow": [],
+          "minCityTargetHeight": 48,
+          "links": [
+            {
+              "id": "I2356:1209;2354:2374",
+              "name": "City link / Набережные Челны",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/naberezhnye-chelny"
+            },
+            {
+              "id": "I2356:1209;2354:2394",
+              "name": "City link / Нижнекамск",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/nizhnekamsk"
+            }
+          ],
+          "chips": [
+            {
+              "id": "I2356:1209;2370:2159",
+              "main": "879:7",
+              "label": "Татарстан",
+              "w": 122,
+              "h": 38,
+              "fillToken": "VariableID:2:61",
+              "actualColor": {
+                "r": 0.8784313797950745,
+                "g": 0.13725490868091583,
+                "b": 0.11764705926179886
+              },
+              "textWhite": true,
+              "iconWhite": true,
+              "reactionCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2356:1335",
+      "instances": [
+        {
+          "id": "2356:1337",
+          "w": 288,
+          "h": 340,
+          "counters": 0,
+          "overflow": [],
+          "minCityTargetHeight": 48,
+          "links": [
+            {
+              "id": "I2356:1337;2354:2374",
+              "name": "City link / Нижнекамск",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/nizhnekamsk"
+            }
+          ],
+          "chips": [
+            {
+              "id": "I2356:1337;2370:2159",
+              "main": "879:7",
+              "label": "Татарстан",
+              "w": 122,
+              "h": 38,
+              "fillToken": "VariableID:2:61",
+              "actualColor": {
+                "r": 0.8784313797950745,
+                "g": 0.13725490868091583,
+                "b": 0.11764705926179886
+              },
+              "textWhite": true,
+              "iconWhite": true,
+              "reactionCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2356:1462",
+      "instances": []
+    },
+    {
+      "id": "2356:1590",
+      "instances": [
+        {
+          "id": "2356:1592",
+          "w": 288,
+          "h": 380,
+          "counters": 0,
+          "overflow": [],
+          "minCityTargetHeight": 48,
+          "links": [
+            {
+              "id": "I2356:1592;2354:2374",
+              "name": "City link / Нижневартовск",
+              "main": "1265:142"
+            }
+          ],
+          "chips": [
+            {
+              "id": "I2356:1592;2370:2159",
+              "main": "879:7",
+              "label": "Ханты-Мансийский автономный округ — Югра",
+              "w": 185,
+              "h": 78,
+              "fillToken": "VariableID:2:61",
+              "actualColor": {
+                "r": 0.8784313797950745,
+                "g": 0.13725490868091583,
+                "b": 0.11764705926179886
+              },
+              "textWhite": true,
+              "iconWhite": true,
+              "reactionCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2356:1716",
+      "instances": [
+        {
+          "id": "2356:1718",
+          "w": 288,
+          "h": 340,
+          "counters": 0,
+          "overflow": [],
+          "minCityTargetHeight": 48,
+          "links": [
+            {
+              "id": "I2356:1718;2354:2374",
+              "name": "City link / Петропавловск-Камчатский",
+              "main": "1265:142"
+            }
+          ],
+          "chips": [
+            {
+              "id": "I2356:1718;2370:2159",
+              "main": "879:7",
+              "label": "Камчатский край",
+              "w": 170,
+              "h": 38,
+              "fillToken": "VariableID:2:61",
+              "actualColor": {
+                "r": 0.8784313797950745,
+                "g": 0.13725490868091583,
+                "b": 0.11764705926179886
+              },
+              "textWhite": true,
+              "iconWhite": true,
+              "reactionCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2356:1842",
+      "instances": [
+        {
+          "id": "2356:1843",
+          "w": 288,
+          "h": 680,
+          "counters": 0,
+          "overflow": [],
+          "minCityTargetHeight": 48,
+          "links": [
+            {
+              "id": "I2356:1843;2354:2374",
+              "name": "City link / Богородская",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/bogorodskaya"
+            },
+            {
+              "id": "I2356:1843;2354:2394",
+              "name": "City link / Большая Гора",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/bolshaya-gora"
+            },
+            {
+              "id": "I2356:1843;2354:2414",
+              "name": "City link / Большая Субботиха",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/bolshaya-subbotikha"
+            },
+            {
+              "id": "I2356:1843;2354:2434",
+              "name": "City link / Боровые",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/borovye"
+            },
+            {
+              "id": "I2356:1843;2354:2454",
+              "name": "City link / Верещагино",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/vereshchagino"
+            },
+            {
+              "id": "I2356:1843;2354:2474",
+              "name": "City link / Гнусино",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/gnusino"
+            }
+          ],
+          "chips": [
+            {
+              "id": "I2356:1843;2370:2159",
+              "main": "879:7",
+              "label": "Кировская область",
+              "w": 185,
+              "h": 38,
+              "fillToken": "VariableID:2:61",
+              "actualColor": {
+                "r": 0.8784313797950745,
+                "g": 0.13725490868091583,
+                "b": 0.11764705926179886
+              },
+              "textWhite": true,
+              "iconWhite": true,
+              "reactionCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2375:2561",
+      "instances": [
+        {
+          "id": "2375:2562",
+          "w": 1360,
+          "h": 360,
+          "counters": 0,
+          "overflow": [],
+          "minCityTargetHeight": 48,
+          "links": [
+            {
+              "id": "I2375:2562;2354:1417",
+              "name": "City link / Набережные Челны",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/naberezhnye-chelny"
+            },
+            {
+              "id": "I2375:2562;2354:1436",
+              "name": "City link / Нижнекамск",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/nizhnekamsk"
+            }
+          ],
+          "chips": [
+            {
+              "id": "I2375:2562;2370:2110",
+              "main": "879:7",
+              "label": "Татарстан",
+              "w": 122,
+              "h": 38,
+              "fillToken": "VariableID:2:61",
+              "actualColor": {
+                "r": 0.8784313797950745,
+                "g": 0.13725490868091583,
+                "b": 0.11764705926179886
+              },
+              "textWhite": true,
+              "iconWhite": true,
+              "reactionCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2375:2825",
+      "instances": [
+        {
+          "id": "2375:2826",
+          "w": 720,
+          "h": 328,
+          "counters": 0,
+          "overflow": [],
+          "minCityTargetHeight": 48,
+          "links": [
+            {
+              "id": "I2375:2826;2354:1924",
+              "name": "City link / Набережные Челны",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/naberezhnye-chelny"
+            },
+            {
+              "id": "I2375:2826;2354:1943",
+              "name": "City link / Нижнекамск",
+              "main": "1265:142",
+              "url": "https://tarify-dom.ru/nizhnekamsk"
+            }
+          ],
+          "chips": [
+            {
+              "id": "I2375:2826;2370:2137",
+              "main": "879:7",
+              "label": "Татарстан",
+              "w": 122,
+              "h": 38,
+              "fillToken": "VariableID:2:61",
+              "actualColor": {
+                "r": 0.8784313797950745,
+                "g": 0.13725490868091583,
+                "b": 0.11764705926179886
+              },
+              "textWhite": true,
+              "iconWhite": true,
+              "reactionCount": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "countersAnywhere": [],
+  "finalChecks": {
+    "noCounters": true,
+    "keysPreserved": true,
+    "propertiesPreserved": true,
+    "citiesAndUrlsPreserved": true,
+    "boundsPass": true,
+    "cityTargetsPass": true,
+    "accentPass": true,
+    "sharedMasterUnchanged": true,
+    "status": "UNPUBLISHED",
+    "contrastWhiteOnAccent": 4.74,
+    "limitations": [
+      "No new interactive Present run; geometry and reactions inspected",
+      "No keyboard/screen-reader/external-URL test",
+      "No Screens writes, library publication or code changes"
+    ]
+  }
+}
