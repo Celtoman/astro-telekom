@@ -1,0 +1,21 @@
+{
+  "tabletMobileWholeScreensIdentical": true,
+  "sourceMasterProfilesIdentical": true,
+  "officePngBytesIdentical": true,
+  "unrelatedDesktopSubtreeDifferences": [],
+  "contactPropertiesIdentical": true,
+  "contactInstanceIdPreserved": true,
+  "contactKeyPreserved": true,
+  "contactRemote": true,
+  "visibleOverflow": [],
+  "publishStatus": "CURRENT",
+  "finalProfilesMatchVerified": true,
+  "pageHeight": {
+    "before": 7136,
+    "after": 7080
+  },
+  "footerY": {
+    "before": 6550,
+    "after": 6494
+  }
+}
