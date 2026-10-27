@@ -1,0 +1,1 @@
+await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('1998:2'));const n=await figma.getNodeByIdAsync('2008:194');n.layoutSizingHorizontal='FILL';n.layoutSizingVertical='HUG';return {mutatedNodeIds:[n.id]};

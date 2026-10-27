@@ -1,0 +1,8 @@
+{
+  "tabletMobileInstancesIdentical": true,
+  "tabletMobileMastersIdentical": true,
+  "screensIdentical": true,
+  "officeRenderBytesIdentical": true,
+  "textStyleDifferences": [],
+  "boundsOverflow": []
+}
