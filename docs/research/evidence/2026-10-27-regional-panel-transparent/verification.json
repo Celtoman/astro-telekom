@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-27",
+  "task": 395,
+  "mutatedNodeIds": [
+    "2370:2118",
+    "2370:2134",
+    "2370:2145",
+    "2370:2156",
+    "2370:2167",
+    "2370:2178"
+  ],
+  "allSurfacesTransparent": true,
+  "geometryAndContentUnchanged": true,
+  "keysPreserved": true,
+  "componentPropertiesPreserved": true,
+  "status": "UNPUBLISHED",
+  "screensUnchanged": true,
+  "source0017": {
+    "id": "1268:9669",
+    "key": "7554aa9626b0abd7b43e0fadf42d128e4575ab00",
+    "status": "CURRENT",
+    "variantCount": 18
+  },
+  "mainTextContrastOnPanel": 15.05,
+  "limits": [
+    "No new Present keyboard/screen-reader/external-URL run",
+    "Only six fill mutations; no code, CMS, site or publication changes"
+  ],
+  "images": [
+    {
+      "name": "desktop.png",
+      "w": 1360,
+      "h": 434,
+      "sha256": "3ae208849e11ffd1c91196ad8bc1a6190eaef073cd6b8e3f5a36e39748274607"
+    },
+    {
+      "name": "tablet.png",
+      "w": 720,
+      "h": 370,
+      "sha256": "a7e9a6f1f38682332bc913710e1bdb93ef65567980c4258e8f59da9af5358b75"
+    },
+    {
+      "name": "mobile.png",
+      "w": 358,
+      "h": 547,
+      "sha256": "500f304f9d040dfab77fa6d961ceb834589d48b862e51c1065259b563c6ce9ba"
+    },
+    {
+      "name": "mobile-320.png",
+      "w": 320,
+      "h": 640,
+      "sha256": "4ccd539a6d35a175d5f6b214ee30506cd4dd5f0f70410f527356cbce5f619006"
+    },
+    {
+      "name": "expanded-320.png",
+      "w": 320,
+      "h": 976,
+      "sha256": "18cebea11f3b6feaecfb0006d72630ee069464e1573452749ac53d452dcd6ee0"
+    },
+    {
+      "name": "short-320.png",
+      "w": 320,
+      "h": 448,
+      "sha256": "5601226032861529a161530d45c541649a96e703820ec54110abbd5afe5a8090"
+    },
+    {
+      "name": "long-city-320.png",
+      "w": 320,
+      "h": 444,
+      "sha256": "ecda6c2577bdf7be6c8cd8020e87cb0ed97805b3ea78b9280b8c125b1119da96"
+    }
+  ]
+}
