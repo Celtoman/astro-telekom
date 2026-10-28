@@ -44,6 +44,9 @@ try {
       await transaction.$queryRawUnsafe('SELECT 1 AS waited FROM pg_sleep(6)');
       return structuredClone(source);
     },
+    async listBySiteId(siteId, transaction) {
+      return this.renderSource(await this.captureSourceBySiteId(siteId, transaction));
+    },
     renderSource: (snapshot, now) => renderer.renderSource(snapshot, now),
   };
   const service = new PublicationWorkflowService(db, catalog);
@@ -62,6 +65,18 @@ try {
   assert.equal(retried.id, publication.id); assert.equal(retried.status, 'PENDING'); assert.equal(captures, 2);
   assert.equal(await db.sitePublication.count(), 1);
   assert.equal((await db.site.findUnique({ where: { id: source.site.id } })).publishedRevision, 0);
+  const readStarted = Date.now();
+  const [review, preview] = await Promise.all([
+    service.getPublicationReview(source.site.id),
+    service.getWorkingPreview(source.site.id),
+  ]);
+  assert.ok(Date.now() - readStarted >= 6000);
+  assert.equal(review.workingRevision, 1); assert.equal(review.validation.outcome, 'PASSED');
+  assert.equal(preview.workingRevision, 1); assert.equal(preview.catalog.site.slug, source.site.slug);
+  assert.equal(preview.catalog.cities.length, source.cities.length);
+  assert.equal((await db.site.findUnique({ where: { id: source.site.id } })).publishedRevision, 0);
+  assert.equal(await db.sitePublication.count(), 1, 'Read-only review/preview must not create publications');
+  console.log('Real SQL concurrent review and preview exceed 5 seconds without losing their consistent snapshots');
   console.log('Real SQL capture beyond 5 seconds prepares and retries an immutable publication without publishing');
 } finally {
   if (db) await db.onModuleDestroy();

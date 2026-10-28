@@ -10,10 +10,10 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| TD-180 | [#402](https://github.com/Celtoman/astro-telekom/issues/402) 🟢 | Перенести владельческие подписи HOME в общие факты при миграции0062; исправление локально проверено, полный gate прошёл, commit и выпуск впереди |
-| TD-181 | [#404](https://github.com/Celtoman/astro-telekom/issues/404) 🟢 | Стабилизировать порядок блоков в audit/content revisions CMS; полный gate прошёл, выпуск впереди |
-| TD-182 | [#405](https://github.com/Celtoman/astro-telekom/issues/405) 🟢 | Исправить overflow, tie-порядок и CSP изображений CITY_HOME; локальная сборка и браузерная проверка выполнены |
-| TD-183 | [#406](https://github.com/Celtoman/astro-telekom/issues/406) 🟢 | Уточнить guard test baseline без изменения Figma evidence; regression прошёл локально |
+| TD-180 | [#402](https://github.com/Celtoman/astro-telekom/issues/402) ✅ | Миграция0062 сохраняет владельческие подписи HOME в общих фактах |
+| TD-181 | [#404](https://github.com/Celtoman/astro-telekom/issues/404) ✅ | Стабильный порядок блоков в audit/content revisions CMS |
+| TD-182 | [#405](https://github.com/Celtoman/astro-telekom/issues/405) ✅ | Исправлены CITY overflow/tie/CSP assets, recovery links, callback context и preview CTA |
+| TD-183 | [#406](https://github.com/Celtoman/astro-telekom/issues/406) ✅ | Guard baseline различает тесты и исторические Figma occurrences |
 
 ## P0
 
@@ -122,7 +122,7 @@
 | TD-172 | [#272](https://github.com/Celtoman/astro-telekom/issues/272) ✅ | После успешного сохранения города остаётся ложное предупреждение о несохранённых изменениях |
 | TD-173 | [#273](https://github.com/Celtoman/astro-telekom/issues/273) 🟢 | Ошибка сохранения города отображается за открытым модальным редактором |
 | TD-174 | [#276](https://github.com/Celtoman/astro-telekom/issues/276) 🟢 | Адресное действие шапки на общей главной ведёт к локальному якорю вместо городской проверки |
-| TD-168 | [#266](https://github.com/Celtoman/astro-telekom/issues/266) 🟢 | Параллельные чтения полного каталога иногда дают HTTP 500 в preflight/preview |
+| TD-168 | [#266](https://github.com/Celtoman/astro-telekom/issues/266) 🟢 | Review/preview используют bounded publication budget; локальный regression прошёл, конкурентная live-проверка впереди |
 | TD-169 | [#267](https://github.com/Celtoman/astro-telekom/issues/267) ✅ | CITY_HOME тарифные карточки расходятся с визуальными параметрами актуального Figma B04 |
 | TD-165 | [#262](https://github.com/Celtoman/astro-telekom/issues/262) ✅ | Control GET/POST не переносят pooled соединения через Caddy reload; readback и UNCERTAIN сохраняются |
 | #236 | [#236](https://github.com/Celtoman/astro-telekom/issues/236) ✅ | Direct Compose использует migration target; реальный Docker/PG rehearsal и идемпотентность |

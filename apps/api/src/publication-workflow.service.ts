@@ -14,6 +14,9 @@ import { readCmsProgress, estimatePublicationRemaining, type CmsProgress } from 
 type Transaction = Prisma.TransactionClient | PrismaService;
 type JsonObject = Record<string, unknown>;
 
+// Full publication catalogs share a bounded budget; ordinary CMS transactions keep their defaults.
+const PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS = 60_000;
+
 function auditFieldValue(snapshot: JsonObject, field: string): unknown {
   if (Object.hasOwn(snapshot, field)) return snapshot[field] ?? null;
   const visit = (value: unknown, path: string[]): unknown => {
@@ -240,7 +243,7 @@ export class PublicationWorkflowService {
       // Capturing/validating a whole published city/tariff catalog and storing
       // its JSON can exceed Prisma's default 5-second interactive transaction.
       // Keep one consistent snapshot and a bounded publication-only budget.
-      timeout: 60_000,
+      timeout: PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS,
     });
     if (result.blocked) {
       const first = result.report.issues.find((issue) => issue.severity === 'BLOCKING');
@@ -373,7 +376,7 @@ export class PublicationWorkflowService {
         publishedRevision: site.publishedRevision,
         catalog: this.jsonSnapshot(catalog) as JsonObject,
       };
-    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS });
   }
 
   async getPublicationReview(siteId: string) {
@@ -408,7 +411,7 @@ export class PublicationWorkflowService {
         })),
         validation: report,
       };
-    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable, timeout: PUBLICATION_CATALOG_TRANSACTION_TIMEOUT_MS });
   }
 
   async getBuildCatalog(siteSlug: string): Promise<JsonObject> {
