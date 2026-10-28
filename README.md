@@ -25,6 +25,7 @@ HOME Hero 1d реализован в коде по [паспорту 2.0.0](docs
 | Сохранение, публикация, CODE и восстановление | [Контракт публикации](docs/publication.md) |
 | Модули, HTTP и данные | [Архитектура](docs/architecture.md), [API](docs/api-contracts.md), [модель данных](docs/data-model.md) |
 | Окружение и эксплуатационные процедуры | [Deployment](docs/deployment.md), [технологическая база](docs/technology-baseline.md), [worker](docs/worker.md), [runbook миграции данных](docs/runbooks/release-one-data-migration.md) |
+| Работа агента с Coolify через MCP | [Обязательная процедура](docs/deployment.md#работа-агента-с-coolify-через-mcp) |
 | Дизайн и разрешённые CMS-поля | [Admin](docs/admin-design-system.md), [public web](docs/web-design-system.md), [паспорта блоков](docs/block-passports.md) |
 | Проектирование блоков и страниц в Figma | [Единый регламент](docs/figma-design-rules.md) |
 | Проверки и учёт работы | [Покрытие тестами](docs/TEST_COVERAGE.md), [task management](docs/task-management.md), [индекс долга](docs/technical-debt.md), [product findings](docs/product-findings.md) |
