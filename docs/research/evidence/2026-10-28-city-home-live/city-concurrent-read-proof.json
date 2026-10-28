@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-28T13:54:11.219Z",
+  "elapsedMs": 38033,
+  "reviewDurationMs": 37429,
+  "previewDurationMs": 37917,
+  "reviewHttpStatus": 200,
+  "previewHttpStatus": 200,
+  "workingRevision": 24,
+  "publishedRevision": 23,
+  "outcome": "PASSED",
+  "checkedUrlCount": 4018,
+  "cities": 207,
+  "tariffs": 3805,
+  "tariffCanonicalDigest": "4abeb77b76c069a44c106387c2c592ccacc72d349587242d4ec61c9b21c7e19c"
+}

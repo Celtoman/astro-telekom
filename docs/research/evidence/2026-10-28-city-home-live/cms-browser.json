@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-28T13:31:52.513Z",
+  "pageErrors": [],
+  "sections": [
+    "Первый экран",
+    "Каталог тарифов",
+    "Сравнение тарифов",
+    "Помощь с выбором",
+    "Преимущества",
+    "Этапы подключения",
+    "Movix",
+    "Города вашего региона",
+    "Вопросы и ответы",
+    "Контакты"
+  ],
+  "saveDisabledWithoutChanges": true,
+  "previewBlocks": 10,
+  "previewSandbox": "",
+  "previewForms": 1,
+  "previewEnabledControls": [
+    {
+      "name": "website",
+      "type": null,
+      "tabIndex": -1,
+      "ariaHidden": true
+    }
+  ],
+  "previewLiveLinks": 0
+}

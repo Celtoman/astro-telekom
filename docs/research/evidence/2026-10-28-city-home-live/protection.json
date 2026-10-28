@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-28T14:25:49.366Z",
+  "unauthenticated": [
+    {
+      "url": "https://tv-internet-dom.ru/kazan",
+      "status": 401,
+      "basicChallenge": true
+    },
+    {
+      "url": "https://admin.tv-internet-dom.ru/",
+      "status": 401,
+      "basicChallenge": true
+    }
+  ]
+}

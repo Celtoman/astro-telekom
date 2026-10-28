@@ -156,6 +156,20 @@ export function validatePublicationSource(
     }
   }
 
+  // Detail routes share their city's aggregate within this captured validation only.
+  // Keep calculation lazy so malformed tariffs retain the existing per-route diagnostics.
+  type CityFactsOutcome = { ok: true; facts: ReturnType<typeof cityTariffFacts> } | { ok: false; error: unknown };
+  const cityFactsByCity = new Map<object, CityFactsOutcome>();
+  const factsForCity = (city: CatalogSource['cities'][number]) => {
+    if (!cityFactsByCity.has(city)) {
+      try { cityFactsByCity.set(city, { ok: true, facts: cityTariffFacts(city.tariffs || []) }); }
+      catch (error) { cityFactsByCity.set(city, { ok: false, error }); }
+    }
+    const outcome = cityFactsByCity.get(city)!;
+    if (!outcome.ok) throw outcome.error;
+    return outcome.facts;
+  };
+
   for (const item of routes) {
     const { route, page, city, tariff } = item;
     const previous = seen.get(route.path);
@@ -194,7 +208,7 @@ export function validatePublicationSource(
       const mini = {
         site: { name: site.name, slug: site.slug, domain: site.domain, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, publicDisplay },
         globalPages: page ? [page] : [],
-        cities: city ? [{ ...city, tariffFacts: cityTariffFacts(city.tariffs || []), pages: route.kind === 'CITY_HOME' ? (city.pages || []).filter((candidate: any) => candidate.type === 'HOME') : [], tariffs: tariff ? [tariff] : [] }] : [],
+        cities: city ? [{ ...city, tariffFacts: factsForCity(city), pages: route.kind === 'CITY_HOME' ? (city.pages || []).filter((candidate: any) => candidate.type === 'HOME') : [], tariffs: tariff ? [tariff] : [] }] : [],
         routes: [route],
         redirects: [],
         sitemap: { excludedPaths: [] },

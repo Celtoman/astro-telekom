@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-28T14:18:16.797Z",
+  "captureMs": 10060,
+  "timings": {
+    "validationAndRecordMs": 7702,
+    "createPublicationMs": 2246
+  },
+  "cities": 207,
+  "tariffs": 3805,
+  "sourceBytes": 11126998,
+  "catalogBytes": 17036956,
+  "siteRevision": 24,
+  "status": "PENDING",
+  "publishedRevision": 0,
+  "savedCatalogPreserved": true,
+  "budgetMs": 60000,
+  "fixture": "Sanitized public source; owned PostgreSQL with full JSON persistence; no external requests or activation"
+}

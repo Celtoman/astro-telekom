@@ -1,0 +1,31 @@
+{
+  "mode": "after",
+  "elapsedMs": 9255.9123,
+  "outcome": "PASSED",
+  "checkedUrlCount": 4018,
+  "issues": [],
+  "stats": {
+    "cityTariffFacts": {
+      "calls": 414,
+      "elapsedMs": 4668.811999999999
+    },
+    "tariffView": {
+      "calls": 11415,
+      "elapsedMs": 7150.076700000063
+    },
+    "resolveCatalogVariables": {
+      "calls": 4019,
+      "elapsedMs": 713.4006999999696
+    },
+    "tariffPreviewDiagnostics": {
+      "calls": 3805,
+      "elapsedMs": 2618.9646000000394
+    },
+    "resolveSeoTemplates": {
+      "calls": 4019,
+      "elapsedMs": 474.79329999999584
+    }
+  },
+  "catalogBytes": 17036956,
+  "resultDigest": "868359d28abb3e4ec5ef80b84adf8606f38c9fd214a993d5dbdae51e3048ea99"
+}
