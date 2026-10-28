@@ -14,6 +14,7 @@ import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 import { Tabs, TabsContent, TabsList, TabsPanels, TabsTrigger } from "./ui/tabs"
+import type { SitePublicDisplay } from "../../../api/src/site-public-display"
 
 interface Administrator { id: string; email: string }
 interface SiteSummary { id: string; name: string; slug: string }
@@ -28,7 +29,20 @@ interface SiteValues {
   workingRevision: number
   publishedRevision: number
   readinessErrors: string[]
+  publicDisplay: SitePublicDisplay
 }
+
+const displayTextFields = [
+  { key: "connectionHours", label: "График приёма звонков", limit: 120 },
+  { key: "supportHours", label: "График поддержки", limit: 120 },
+  { key: "onlineApplicationsHours", label: "График приёма онлайн-заявок", limit: 120 },
+  { key: "technologyFact", label: "Технологии подключения — короткая подпись", limit: 200 },
+  { key: "wifiFact", label: "Возможности Wi-Fi — короткая подпись", limit: 200 },
+  { key: "movixFact", label: "Библиотека Movix — короткая подпись", limit: 200 },
+  { key: "applicationFact", label: "Онлайн-заявка — короткая подпись", limit: 200 },
+  { key: "footerLegalText", label: "Информационно-юридический текст футера", limit: 5000 },
+  { key: "footerCtaText", label: "Подпись кнопки обращения в футере", limit: 80 },
+] as const
 
 type ScreenState =
   | { status: "loading" }
@@ -191,6 +205,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
   const [state, setState] = useState<ScreenState>({ status: "loading" })
   const [connectionPhone, setConnectionPhone] = useState("")
   const [supportPhone, setSupportPhone] = useState("")
+  const [publicDisplay, setPublicDisplay] = useState<SitePublicDisplay | null>(null)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<{ kind: "error" | "success"; text: string } | null>(null)
 
@@ -203,8 +218,10 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
       ])
       if (sites.length !== 1) throw new Error("Раздел значений сайта ожидает единственный сайт Дом.ру")
       const values = sites[0]
+      if (!values.publicDisplay) throw new Error("Общие настройки сайта недоступны")
       setConnectionPhone(values.connectionPhoneFormatted || values.connectionPhone || "")
       setSupportPhone(values.supportPhoneFormatted || values.supportPhone || "")
+      setPublicDisplay(values.publicDisplay)
       setState({ status: "ready", user: session.user, site: sites[0], values })
     } catch (caught: unknown) {
       if (caught instanceof AdminApiError && caught.status === 401) {
@@ -218,7 +235,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
   useEffect(() => { void load() }, [load])
 
   async function save() {
-    if (state.status !== "ready") return
+    if (state.status !== "ready" || !publicDisplay) return
     setSaving(true)
     setMessage(null)
     try {
@@ -228,10 +245,12 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
           expectedWorkingRevision: state.values.workingRevision,
           connectionPhone,
           supportPhone,
+          publicDisplay,
         },
       })
       setConnectionPhone(values.connectionPhoneFormatted || "")
       setSupportPhone(values.supportPhoneFormatted || "")
+      setPublicDisplay(values.publicDisplay)
       setState({ ...state, values })
       setMessage({ kind: "success", text: `Рабочая версия ${values.workingRevision} сохранена. Публичный сайт изменится после общей публикации.` })
     } catch (caught: unknown) {
@@ -241,7 +260,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
     }
   }
 
-  useUnsavedChanges(state.status === "ready" && (connectionPhone !== (state.values.connectionPhoneFormatted || state.values.connectionPhone || "") || supportPhone !== (state.values.supportPhoneFormatted || state.values.supportPhone || "")))
+  useUnsavedChanges(state.status === "ready" && (connectionPhone !== (state.values.connectionPhoneFormatted || state.values.connectionPhone || "") || supportPhone !== (state.values.supportPhoneFormatted || state.values.supportPhone || "") || JSON.stringify(publicDisplay) !== JSON.stringify(state.values.publicDisplay)))
   if (state.status === "loading") return <div className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-80 w-full" /></div>
   if (state.status === "error") return <div className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Переменные недоступны</CardTitle><CardDescription>Не удалось загрузить значения сайта.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void load()}>Повторить</Button></CardContent></Card></div>
 
@@ -256,9 +275,18 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
           <Card>
             <CardHeader><CardTitle>Значения сайта</CardTitle><CardDescription>Телефоны хранятся в формате 7XXXXXXXXXX, а отображение и ссылка tel: формируются автоматически.</CardDescription></CardHeader>
             <CardContent className="flex flex-col gap-5">
-              <Field><FieldLabel htmlFor="connection-phone">Телефон подключения</FieldLabel><Input id="connection-phone" inputMode="tel" value={connectionPhone} onChange={(event) => setConnectionPhone(event.target.value)} placeholder="+7 (800) 555-72-44" /><FieldDescription>{state.values.connectionPhoneFormatted ? <a className="underline" href={`tel:+${state.values.connectionPhone}`}>{state.values.connectionPhoneFormatted}</a> : "Не задан"}</FieldDescription></Field>
-              <Field><FieldLabel htmlFor="support-phone">Телефон техподдержки</FieldLabel><Input id="support-phone" inputMode="tel" value={supportPhone} onChange={(event) => setSupportPhone(event.target.value)} placeholder="+7 (800) 250-77-77" /><FieldDescription>{state.values.supportPhoneFormatted ? <a className="underline" href={`tel:+${state.values.supportPhone}`}>{state.values.supportPhoneFormatted}</a> : "Не задан"}</FieldDescription></Field>
-              <div className="flex items-center justify-between gap-4 border-t pt-4 text-sm text-muted-foreground"><span>Рабочая версия: {state.values.workingRevision}; опубликована: {state.values.publishedRevision}</span><Button disabled={saving || !connectionPhone.trim() || !supportPhone.trim()} onClick={() => void save()}><Save data-icon="inline-start" />{saving ? "Сохраняем…" : "Сохранить"}</Button></div>
+              <Field><FieldLabel htmlFor="connection-phone">Телефон подключения</FieldLabel><Input id="connection-phone" inputMode="tel" disabled={saving} value={connectionPhone} onChange={(event) => setConnectionPhone(event.target.value)} placeholder="+7 (800) 555-72-44" /><FieldDescription>{state.values.connectionPhoneFormatted ? <a className="underline" href={`tel:+${state.values.connectionPhone}`}>{state.values.connectionPhoneFormatted}</a> : "Не задан"}</FieldDescription></Field>
+              <Field><FieldLabel htmlFor="support-phone">Телефон техподдержки</FieldLabel><Input id="support-phone" inputMode="tel" disabled={saving} value={supportPhone} onChange={(event) => setSupportPhone(event.target.value)} placeholder="+7 (800) 250-77-77" /><FieldDescription>{state.values.supportPhoneFormatted ? <a className="underline" href={`tel:+${state.values.supportPhone}`}>{state.values.supportPhoneFormatted}</a> : "Не задан"}</FieldDescription></Field>
+              {publicDisplay ? <>
+                <p className="border-t pt-4 text-sm text-muted-foreground">Графики и короткие подписи используются совместно на главной и городских страницах. Показатели тарифов рассчитываются отдельно.</p>
+                {displayTextFields.map(({ key, label, limit }) => <Field key={key}>
+                  <FieldLabel htmlFor={`site-display-${key}`}>{label}</FieldLabel>
+                  {key === "footerLegalText" ? <textarea id={`site-display-${key}`} className="w-full rounded-lg border border-input bg-background p-3 text-base outline-none focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive md:text-sm" disabled={saving} maxLength={limit} rows={5} value={publicDisplay[key]} onChange={(event) => setPublicDisplay({ ...publicDisplay, [key]: event.target.value })} />
+                    : <Input id={`site-display-${key}`} disabled={saving} maxLength={limit} value={publicDisplay[key]} onChange={(event) => setPublicDisplay({ ...publicDisplay, [key]: event.target.value })} />}
+                </Field>)}
+                <Field><FieldLabel htmlFor="site-display-callbackWithinMinutes">Срок обратного звонка, минут</FieldLabel><Input id="site-display-callbackWithinMinutes" type="number" min={1} max={1440} step={1} disabled={saving} value={Number.isFinite(publicDisplay.callbackWithinMinutes) ? publicDisplay.callbackWithinMinutes : ""} onChange={(event) => setPublicDisplay({ ...publicDisplay, callbackWithinMinutes: event.target.value === "" ? NaN : Number(event.target.value) })} /></Field>
+              </> : null}
+              <div className="flex items-center justify-between gap-4 border-t pt-4 text-sm text-muted-foreground"><span>Рабочая версия: {state.values.workingRevision}; опубликована: {state.values.publishedRevision}</span><Button disabled={saving || !connectionPhone.trim() || !supportPhone.trim() || !publicDisplay || !Number.isInteger(publicDisplay.callbackWithinMinutes) || publicDisplay.callbackWithinMinutes < 1 || publicDisplay.callbackWithinMinutes > 1440 || displayTextFields.some(({ key }) => !publicDisplay[key].trim())} onClick={() => void save()}><Save data-icon="inline-start" />{saving ? "Сохраняем…" : "Сохранить"}</Button></div>
             </CardContent>
           </Card>
         </TabsContent>

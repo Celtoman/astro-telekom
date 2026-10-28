@@ -18,6 +18,8 @@ const sources = [
   ['generalhome', 'components/general-home/HomeAddressEntry.astro'],
   ['homeshell', 'components/general-home/HomeShellStyles.astro'],
   ['generalcomposition', 'components/general-home/GeneralHomeComposition.astro'],
+  ['citycomposition', 'components/city-home/CityHomeComposition.astro'],
+  ['cityhome', 'components/city-home/CityHomeStyles.astro'],
   ['address', 'components/AddressForm.astro'],
   ['blocks', 'components/BlockRenderer.astro'],
   ['collection', 'components/TariffCollection.astro'],
@@ -29,6 +31,7 @@ const assetPaths = ['home-hero.png', 'domru-logo.png', 'map-pin.svg', 'chevron-d
   .map(name => `/images/figma/${name}`).concat(['/images/figma/hero1d-desktop-imglocationicon.svg', ...['desktop', 'tablet', 'mobile'].flatMap(device => [0, 1, 2].map(index => `/images/figma/hero1d-${device}-imgicon${index || ''}.svg`))]);
 // Repository-owned static assets only; CMS never supplies imports or executable paths.
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/general-home/', import.meta.url)).filter(name => /^[a-z0-9-]+\.(?:png|svg)$/.test(name)).map(name => `/images/general-home/${name}`));
+assetPaths.push(...readdirSync(new URL('../apps/web/public/images/city-home/', import.meta.url)).filter(name => /^[a-z0-9-]+\.svg$/.test(name)).map(name => `/images/city-home/${name}`));
 
 // Only trusted repository CSS is embedded. Catalog data never reaches this loader.
 // Native CSS nesting isolates Astro's local selectors from other preview components.

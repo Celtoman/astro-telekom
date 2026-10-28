@@ -55,7 +55,7 @@ const monthWord = (count: number) => {
         {tariff.pricing.standardLabel && <del class="standard-price">{tariff.pricing.standardLabel}</del>}
         <div class="price">{tariff.pricing.currentLabel}</div>
         {tariff.connection && <p>{tariff.connection}</p>}
-        <button class="button" type="button" data-address-dialog-trigger={addressDialogId}>Проверить адрес</button>
+        <button class="button" type="button" data-callback-trigger data-callback-tariff-slug={tariff.slug} data-callback-tariff-name={tariff.name} data-callback-city-slug={city.slug} data-callback-city-name={city.name} aria-haspopup="dialog">Подключить</button>
         <small>Окончательные условия и техническую возможность подтвердит оператор.</small>
       </aside>
     </section>
@@ -167,7 +167,7 @@ const monthWord = (count: number) => {
     </section>
   )}
 
-  <section class="section soft-section" data-tariff-block="faq">
+  <section id="faq" class="section soft-section" data-tariff-block="faq">
     <div class="container faq-layout">
       <div><span class="section-kicker">Вопросы и ответы</span><h2>О тарифе и подключении</h2></div>
       <div class="faq-list">

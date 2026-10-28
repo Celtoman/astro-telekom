@@ -283,7 +283,7 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(tariffSection, /<h2[^>]*>Популярные тарифы<\/h2>/);
   assert.doesNotMatch(tariffSection, /Все тарифы Дом\.ру/);
   assert.match(kazan, /Бесплатное подключение/);
-  assert.match(kazan, /data-address-dialog-trigger="address-entry-kazan-catalog"[^>]*>Подключить/);
+  assert.match(kazan, /data-callback-trigger[^>]*data-callback-tariff-slug="api-internet-500"[^>]*>Подключить/);
   assert.match(kazan, /href="\/kazan\/api-internet-500"[^>]*>Подробнее/);
   assert.doesNotMatch(kazan, /href="\/kazan\/(?:internet|internet-tv)"/);
   assert.equal((kazan.match(/data-block-type="tariff_grid"/g) || []).length, 1);
@@ -319,7 +319,7 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.match(tariffDetail, /data-tariff-slug="api-internet-500"/);
   assert.match(tariffDetail, /data-tariff-block="configurator"/);
   assert.match(tariffDetail, /Соберите свой тариф/);
-  assert.match(tariffDetail, /Выбранная комплектация будет сохранена с заявкой/);
+  assert.match(tariffDetail, /Оборудование и дополнительные услуги согласуйте с оператором/);
   assert.match(tariffDetail, /href="\/kazan\/api-internet-tv-500"/);
   assert.doesNotMatch(tariffDetail, /private_token|secret/);
   const tariffBlockOrder = ['hero', 'description', 'equipment', 'configurator', 'address', 'related', 'faq']

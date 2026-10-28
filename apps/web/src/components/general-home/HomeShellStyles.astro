@@ -25,9 +25,9 @@
   .gh-actions { display: flex; align-items: center; flex-shrink: 0; gap: 28px; }
   .gh-phone { display: flex; align-items: center; gap: 10px; min-width: 0; }
   .gh-phone-icon { display: block; flex: 0 0 22px; width: 22px; height: 22px; }
-  .gh-phone-copy { display: flex; flex-direction: column; gap: 1px; min-width: 0; white-space: nowrap; }
-  .gh-phone [data-phone-value] { font-size: 17px; font-weight: 700; line-height: 20px; }
-  .gh-phone-caption { color: #526071; font-size: 12px; line-height: normal; }
+  .gh-phone-copy { display: flex; flex-direction: column; gap: 1px; min-width: 0; max-width: 200px; }
+  .gh-phone [data-phone-value] { white-space: nowrap; font-size: 17px; font-weight: 700; line-height: 20px; }
+  .gh-phone-caption { color: #526071; font-size: 12px; line-height: normal; overflow-wrap: anywhere; }
   .gh-callback { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; background: #e0231e; color: #fff; font-size: 14px; font-weight: 600; line-height: 20px; text-align: center; }
   .gh-callback:hover { background: #c61f1a; }
   .gh-menu-trigger { display: none; flex: 0 0 44px; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 10px; background: none; }
@@ -57,6 +57,16 @@
   .gh-footer-legal p { width: 360px; margin: 0; }
   .gh-footer-legal > div { display: flex; flex-wrap: wrap; gap: 0 12px; width: 430px; }
   .gh-footer-legal span { display: inline; }
+  .gh-contact-strip { display: grid; grid-template-columns: 1fr 1fr 224px; align-items: center; gap: 24px; }
+  .gh-contact-strip > div { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-width: 0; }
+  .gh-contact-strip strong { font-size: 14px; font-weight: 600; line-height: 20px; }
+  .gh-contact-strip a { font-size: 24px; font-weight: 700; line-height: 29px; letter-spacing: -.5px; overflow-wrap: anywhere; }
+  .gh-contact-strip span { font-size: 14px; line-height: 20px; color: #cbd5e1; overflow-wrap: anywhere; }
+  .gh-footer-apply { min-width: 0; max-width: 100%; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; background: #e0231e; color: #fff; font-size: 14px; font-weight: 600; line-height: 20px; overflow-wrap: anywhere; }
+  .gh-footer .gh-footer-legal { display: flex; flex-direction: column; gap: 16px; }
+  .gh-footer-legal nav { display: flex; flex-wrap: wrap; gap: 12px 24px; width: 100%; }
+  .gh-footer-legal .gh-footer-information { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .gh-footer-legal .gh-footer-information p { width: 100%; color: #cbd5e1; overflow-wrap: anywhere; }
   @media (max-width: 1300px) and (min-width: 1101px) {
     .gh-logo-nav { gap: 24px; }
     .gh-navigation { gap: 12px; }
@@ -78,6 +88,8 @@
     .gh-actions { gap: 16px; }
     .gh-menu-trigger { display: block; }
     .gh-footer { padding: 48px 24px 32px; }
+    .gh-contact-strip { grid-template-columns: 1fr 1fr 184px; gap: 24px; }
+    .gh-footer-apply { justify-self: stretch; }
     .gh-footer-content { gap: 16px; }
     .gh-footer .gh-brand { width: 109.32px; height: 36px; }
     .gh-footer-services, .gh-footer-help { width: 150px; }
@@ -101,13 +113,19 @@
     .gh-utility-links, .gh-city-chevron, .gh-navigation, .gh-actions > .gh-callback { display: none; }
     .gh-main-row { min-height: 72px; }
     .gh-header .gh-brand { width: 109.32px; height: 36px; }
-    .gh-actions { gap: 12px; }
+    .gh-actions { gap: 12px; flex-shrink: 1; min-width: 0; }
     .gh-actions > .gh-phone { display: flex !important; gap: 6px; }
     .gh-phone-icon { flex-basis: 18px; width: 18px; height: 18px; }
     .gh-phone [data-phone-value] { font-size: 14px; line-height: normal; }
     .gh-phone-caption { font-size: 10px; }
+    .gh-phone-copy { max-width: 140px; }
     .gh-menu { padding: 24px 20px; }
     .gh-footer { gap: 24px; padding: 32px 16px; }
+    .gh-contact-strip { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .gh-contact-strip a { font-size: 20px; line-height: 25px; letter-spacing: -.2px; }
+    .gh-footer-apply { justify-self: stretch; }
+    .gh-footer-legal nav { flex-direction: column; gap: 0; }
+    .gh-footer-legal nav a, .gh-footer-mobile-links :is(a, button) { display: flex; align-items: center; min-height: 44px; }
     .gh-footer-content { display: contents; }
     .gh-footer-column { display: none; }
     .gh-footer-mobile-links { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }

@@ -1,5 +1,6 @@
 import { BLOCK_TYPES } from './block-validation';
 import { GENERAL_HOME_PASSPORTS } from './general-home-passports';
+import { CITY_HOME_PASSPORTS } from './city-home-passports';
 
 export const BLOCK_PASSPORT_LIFECYCLE = ['DRAFT', 'APPROVED', 'ACTIVE', 'DEPRECATED', 'ARCHIVED'] as const;
 export const BLOCK_PASSPORT_TRANSITIONS = {
@@ -166,13 +167,13 @@ const sitePassports: BlockPassport[] = [
     visualVariants: ['Desktop: >1100 px; две строки, телефон и CTA', 'Tablet: 621–1100 px; меню, телефон скрыт; навигация скрывается при ≤760 px', 'Mobile: ≤620 px; телефон и меню, CTA внутри меню'],
     design: figmaDesign('79:69', 'Block/B01 Header', ['79:3', '79:28', '79:50']),
     fields: [
-      field('logo', 'url', true, 'SiteHeader.astro; /images/figma/domru-logo.png', 'Фиксированный Дом.ру-logo, подпись и ссылка /; не вычисляется из Site.name и не настраивается в паспорте.', 'read_only'),
-      field('activeCity', 'computed', false, 'City из URL-контекста BaseLayout или единственная опубликованная Москва из loadSiteData(); href из записи City', 'Контекст страницы имеет приоритет над Москвой. Без опубликованной Москвы видна подпись «Москва», но переходы требуют выбора опубликованного города.', 'read_only'),
+      field('logo', 'url', true, 'general-home/GeneralHomeHeader.astro; /images/figma/domru-logo.png', 'Фиксированный Дом.ру-logo, подпись и ссылка /; не вычисляется из Site.name и не настраивается в паспорте.', 'read_only'),
+      field('activeCity', 'computed', false, 'City из URL-контекста BaseLayout или единственная опубликованная Москва из loadSiteData(); href из записи City', 'Контекст страницы имеет приоритет над Москвой. Контекст маршрута имеет приоритет, затем подтверждённый выбор, затем опубликованная Москва. Без реального города показывается «Выберите город».', 'read_only'),
       field('publishedCities', 'list', false, 'loadSiteData().cities: City.name, City.slug, City.region.name', 'Только опубликованный snapshot; поиск по городу/региону без учёта регистра, ё/е; пустой каталог имеет объяснение.', 'read_only'),
       field('connectionPhone', 'text', true, 'Site.connectionPhone', 'Непустой глобальный телефон из snapshot; tel: очищается от форматирования. normalizedCatalog отклоняет отсутствие телефона.', 'read_only'),
       field('supportPhone', 'text', true, 'Site.supportPhone', 'Непустой глобальный телефон из snapshot; отдельная поддержка и телефон в режиме абонента. normalizedCatalog отклоняет отсутствие телефона.', 'read_only'),
-      field('navigation', 'list', true, 'SiteHeader.astro; publicHtmlPath(activeCity.slug), Astro.url.pathname', 'Тарифы → текущая CITY_HOME #tariffs или /{city}#tariffs; Города → /goroda-obsluzhivaniya; Карта → /karta-pokrytiya-provaydera. Без city тарифы открывают picker.', 'read_only'),
-      field('addressAction', 'url', true, 'SiteHeader.astro; Astro.url.pathname и activeCity', 'На общей HOME переход /{city}#address-check; на CITY_HOME фокус локальной #address-check. Без city — выбор города; выдуманный /moskva не создаётся.', 'read_only'),
+      field('navigation', 'list', true, 'general-home/GeneralHomeHeader.astro; publicHtmlPath(activeCity.slug), Astro.url.pathname', 'Тарифы → текущая CITY_HOME #tariffs или /{city}#tariffs; Города → /goroda-obsluzhivaniya; Карта → /karta-pokrytiya-provaydera. Без city тарифы открывают picker.', 'read_only'),
+      field('addressAction', 'url', true, 'general-home/GeneralHomeHeader.astro; Astro.url.pathname и activeCity', 'На общей HOME переход /{city}#address-check; на CITY_HOME фокус локальной #address-check. Без city — выбор города; выдуманный /moskva не создаётся.', 'read_only'),
       field('callback', 'computed', true, 'SiteHeader.astro → site-header-client.mjs → AddressForm.astro', '«Заказать звонок» включает пояснение и ведёт в сценарий проверки адреса; телефон только после положительного результата. Межстраничный переход: ?callback=1#address-check.', 'read_only'),
       field('subscriberMode', 'computed', false, 'BaseLayout.astro; subscriber-mode.mjs и событие режима абонента', 'В активном режиме абонента основной телефон/подпись заменяются на Site.supportPhone/«Техподдержка», tel: и aria-label обновляются, иконка сохраняется.', 'read_only'),
     ],
@@ -181,15 +182,15 @@ const sitePassports: BlockPassport[] = [
     runtimeRules: [
       'Общее размещение через BaseLayout.astro; глобальные Site-телефоны и опубликованный список City читаются из snapshot. URL-контекст определяет город, а не локальный контент Header.',
       'Выбор города сохраняется до закрытия вкладки; контекст URL имеет приоритет. На общей HOME ссылки используют выбранный город либо опубликованную Москву. O01 сохраняет назначение инициатора.',
-      'Desktop utility/main: 40/88 px; tablet 40/80 px; mobile 36/72 px. При ≤360 px скрывается иконка телефона. Неподтверждённые часы работы не показываются.',
+      'Desktop utility/main: 40/88 px; tablet 40/80 px; mobile 36/72 px. При ≤360 px скрывается иконка телефона. Телефон подключения подписан графиком из Site.publicDisplay, начальное значение8:00–22:00.',
       'Активный режим действующего абонента переключает основной контакт на поддержку. Он не превращает callback в отдельный API или обход адресной проверки.',
       'Диалоги выбора города/меню нативные: Escape закрывает, поиск получает фокус, после закрытия фокус возвращается к opener; переход меню → picker/адрес не перехватывает конечный фокус.',
-      'Callback сохраняет явное пояснение до адресной проверки; отдельной формы обратного звонка и отдельного callback API нет. Эта продуктовая идея записана как PF-026.',
+      'CallbackDialog открывает самостоятельный FLOW1 через общий POST /leads; адресная проверка FLOW2 остаётся отдельным действием. Тарифные CTA сохраняют интерес к предложению без комплектации.',
     ],
     previewScenarios: ['URL-город и общая HOME с опубликованной Москвой', 'Москва отсутствует; не создаётся ссылка /moskva', 'Опубликованных городов нет / поиск без совпадений / поиск по региону и ё/е', 'Локальный и межстраничный адрес/callback; объяснение и фокус', 'Режим абонента: номер, подпись, tel: и иконка', '320/390/834/1440 px; меню, Escape и возврат фокуса'],
     accessibility: ['Семантические header/nav с подписями, tel:-ссылки', 'Кнопки выбора города и меню имеют aria-haspopup/понятные метки', 'Dialog имеет заголовок; поиск подписан; Escape и возврат фокуса', 'Логотип имеет alt, декоративные иконки — пустой alt'],
     status: 'DRAFT', passportVersion: '0-draft', approvedBy: null, replacementId: null,
-    implementation: 'BaseLayout.astro → SiteHeader.astro; site-header-client.mjs управляет меню/выбором города/адресным фокусом, BaseLayout применяет subscriber-mode.mjs. Структура CODE, контакты Site глобальные; PageTemplateBlock/индивидуальные city overrides не создаются.',
+    implementation: 'BaseLayout.astro → general-home/GeneralHomeHeader.astro; site-header-client.mjs управляет меню/выбором города/адресным фокусом, BaseLayout применяет subscriber-mode.mjs. Структура CODE, контакты Site глобальные; PageTemplateBlock/индивидуальные city overrides не создаются.',
   },
   {
     id: 'home.hero', title: 'Hero 1b общей главной', kind: 'PROGRAMMATIC',
@@ -267,7 +268,7 @@ function approvedFirstScreen(passport: BlockPassport): BlockPassport {
 }
 
 const tariffCollectionPassport: BlockPassport = {
-  id: 'tariff_grid', title: 'Тарифы города', kind: 'MANAGED', purpose: 'Полный опубликованный каталог города без фильтров и ручного выбора карточек.',
+  id: 'tariff_grid', title: 'Тарифы города', kind: 'MANAGED', purpose: 'Опубликованный каталог города с категориями и быстрыми фильтрами. Состав карточек задаётся тарифами.',
   proposedAllowedPages: ['CITY_HOME'], proposedContentScope: 'TEMPLATE',
   visualVariants: ['Desktop: три колонки', 'Tablet: две колонки', 'Mobile: горизонтальная лента'],
   design: figmaDesign('93:569', 'Block/B04 Tariff Collection', ['93:3', '93:195', '93:382']),
@@ -286,12 +287,13 @@ const tariffCollectionPassport: BlockPassport = {
   accessibility: ['H2 секции и H3 карточек', 'Нативная кнопка раскрытия с клавиатуры и объявление полного количества', 'Клавиатурный фокус переходит к первой открытой карточке', 'В preview действия отключены'],
   status: 'APPROVED', passportVersion: '1.0.0', approvedBy: 'Владелец проекта; согласование 2026-10-06/07', replacementId: null,
   editorReadiness: 'READY', implementation: 'PageTemplate(CITY_HOME) → PageTemplateBlock.data → tariff-collection-model.ts → TariffCollection.astro; общий renderer для сайта и sandbox preview. Миграция 0058 скрывает старые блоки; опубликованные snapshots неизменны.',
-  runtimeRules: ['#tariffs сохраняется для шапки и первого экрана.', 'Один клик «Показать ещё» раскрывает весь остаток; рядом системное количество. При отсутствии остатка кнопки нет.', 'Сортировка задаётся в админке, приоритет важнее цены. Нет фильтров и отдельной страницы «Все тарифы».', 'Сохранение меняет только рабочую ревизию; публикация выполняется вручную в разделе «Публикация сайта».'],
+  runtimeRules: ['#tariffs сохраняется для шапки и первого экрана.', 'Один клик «Показать ещё» раскрывает весь остаток; рядом системное количество. При отсутствии остатка кнопки нет.', 'Сортировка задаётся в админке, приоритет закрепления выше цены. Категории и три быстрых фильтра пересекаются по AND; «Все тарифы» снимает только категорию, явный сброс очищает весь отбор. Смена отбора возвращает initialCount и начало мобильной ленты.', 'Сохранение меняет только рабочую ревизию; публикация выполняется вручную в разделе «Публикация сайта».'],
 };
 export const BLOCK_PASSPORTS: readonly BlockPassport[] = [
   managedPassports.hero,
   tariffCollectionPassport,
   ...sitePassports,
   ...GENERAL_HOME_PASSPORTS,
+  ...CITY_HOME_PASSPORTS,
   ...programmaticPassports,
 ].map(approvedFirstScreen);

@@ -43,8 +43,8 @@ test('full HOME keeps city-service URLs canonical and consultation city requires
   globalThis.window={sessionStorage:{getItem:()=>stored}};
   globalThis.document={querySelector:s=>s==='[data-site-header]'?header:s==='[data-callback-dialog]'?callback:null,querySelectorAll:s=>s==='[data-city-choice-link][data-city-id]'||s==='[data-city-choice-link]'?choices:s==='[data-city-context-service]'?[service]:[]};
   assert.equal(applyCityContext().active.href,'/moscow');
-  assert.equal(service.href,'/moscow/domru-domashniy-internet');
+  assert.equal(service.href,'/moscow?category=INTERNET#tariffs');
   assert.equal(callback.dataset.citySlug,'');
-  stored='k';assert.equal(applyCityContext().active.href,'/kazan');assert.equal(service.href,'/kazan/domru-domashniy-internet');assert.equal(callback.dataset.citySlug,'kazan');
+  stored='k';assert.equal(applyCityContext().active.href,'/kazan');assert.equal(service.href,'/kazan?category=INTERNET#tariffs');assert.equal(callback.dataset.citySlug,'kazan');
   stored=null;callback.dataset.requireConfirmedCity='false';applyCityContext();assert.equal(callback.dataset.citySlug,'moscow');
 });

@@ -65,10 +65,24 @@ export const GENERAL_HOME_SCHEMAS = Object.freeze({
   'home.faq': object({ title: title(), items: Object.freeze({ kind: 'list' as const, min: 1, max: 50, item: object({ question: text(2000, true), answer: text(20000, true) }) }) }),
 } satisfies Record<GeneralHomeBlockType, GeneralHomeFieldRule>);
 
+/** Shared safe field primitives; CITY content and version remain independent of HOME. */
+export const CITY_HOME_SCHEMAS = Object.freeze({
+  'city.comparison': object({ title: title(), text: body(), connectButtonText: text(80) }),
+  'city.help': GENERAL_HOME_SCHEMAS['home.connection_help'],
+  'city.benefits': object({ title: title(), items: fixed(['speed', 'fiber', 'wifi6', 'movix', 'connection', 'support'], card()) }),
+  'city.connection_steps': GENERAL_HOME_SCHEMAS['home.connection_steps'],
+  'city.movix': GENERAL_HOME_SCHEMAS['home.movix'],
+  'city.regional_cities': object({ title: title(), intro: body(), allCitiesLinkText: text(80) }),
+  'city.faq': GENERAL_HOME_SCHEMAS['home.faq'],
+  'city.contacts': object({ title: title(), salesTitle: text(250), salesAudience: text(250), callbackButtonText: text(80),
+    supportTitle: text(250), supportAudience: text(250), supportCost: text(250), supportTopics: body() }),
+});
+
 type FieldValue<R> = R extends { kind: 'object'; fields: infer F }
   ? { [K in keyof F]: FieldValue<F[K]> }
   : R extends { kind: 'list'; item: infer I } ? FieldValue<I>[] : string;
 export type GeneralHomeDataByType = { [K in GeneralHomeBlockType]: FieldValue<(typeof GENERAL_HOME_SCHEMAS)[K]> };
+export type CityHomeDataByType = { [K in keyof typeof CITY_HOME_SCHEMAS]: FieldValue<(typeof CITY_HOME_SCHEMAS)[K]> };
 export type GeneralHomeBlock = { [K in GeneralHomeBlockType]: { blockType: K; data: GeneralHomeDataByType[K] } }[GeneralHomeBlockType]
   | { blockType: 'home.hero'; data: ReturnType<typeof homeHeroDefaults> };
 export type GeneralHomeMissingField = { block: GeneralHomeBlock['blockType']; field: string };

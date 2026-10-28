@@ -73,7 +73,7 @@ test('preview uses saved grid title and the full public tariff model for raw cat
 
 test('preview includes current header, footer and shared legal sections', () => {
   const root = buildPreviewDocument(catalog, '/');
-  for (const value of ['Карта покрытия', 'Техподдержка', 'Заказать звонок', 'Политика cookie']) assert.ok(root.includes(value), value);
+  for (const value of ['Города обслуживания', 'Техническая поддержка', 'Заказать звонок', 'Политика cookie']) assert.ok(root.includes(value), value);
   const legal = buildPreviewDocument(catalog, '/politika');
   assert.match(legal, /165038398334/);
   assert.match(legal, /noindex, nofollow/);

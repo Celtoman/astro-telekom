@@ -41,7 +41,7 @@ function checkUrl(value: string, kind: 'asset' | 'https', block: string, path: s
   }
 }
 
-function checkVariables(value: string, allowed: boolean, block: string, path: string) {
+function checkVariables(value: string, allowed: boolean, block: string, path: string, scopes: readonly string[] = ['SITE']) {
   if (!/[{}]/.test(value)) return;
   if (!allowed) fail(block, path, 'VARIABLE', 'Переменные недоступны в этом поле.');
   // Validate syntax and URL interpolation using the existing registry, without storing resolved values.
@@ -49,20 +49,20 @@ function checkVariables(value: string, allowed: boolean, block: string, path: st
   catch (error) { fail(block, path, 'VARIABLE', error instanceof Error ? error.message : 'Некорректная переменная.'); }
   const definitions = listVariableDefinitions();
   for (const token of value.matchAll(/\{([^{}]+)\}/g)) {
-    if (!definitions.some(definition => definition.code === token[1] && definition.scope === 'SITE')) {
-      fail(block, path, 'VARIABLE', 'В общей HOME доступны только разрешённые переменные сайта.');
+    if (!definitions.some(definition => definition.code === token[1] && scopes.includes(definition.scope))) {
+      fail(block, path, 'VARIABLE', scopes.length === 1 ? 'В общей HOME доступны только разрешённые переменные сайта.' : 'Доступны только разрешённые переменные сайта и города.');
     }
   }
 }
 
-function validateField(raw: unknown, rule: GeneralHomeFieldRule, block: string, path: string, missing: string[]) {
+function validateField(raw: unknown, rule: GeneralHomeFieldRule, block: string, path: string, missing: string[], scopes: readonly string[] = ['SITE']) {
   if (rule.kind === 'object') {
     const data = object(raw, block, path || 'data');
     knownKeys(data, Object.keys(rule.fields), block, path);
     for (const [key, child] of Object.entries(rule.fields)) {
       const field = path ? `${path}.${key}` : key;
       if (!Object.hasOwn(data, key)) fail(block, field, 'TYPE', 'Поле отсутствует. Передайте поле утверждённого паспорта.');
-      validateField(data[key], child, block, field, missing);
+      validateField(data[key], child, block, field, missing, scopes);
     }
     return;
   }
@@ -70,14 +70,23 @@ function validateField(raw: unknown, rule: GeneralHomeFieldRule, block: string, 
     if (!Array.isArray(raw)) fail(block, path, 'TYPE', 'Нужен список вопросов и ответов.');
     if (raw.length > rule.max) fail(block, path, 'RANGE', `Допустимо не более ${rule.max} элементов.`);
     if (raw.length < rule.min) missing.push(path);
-    for (let index = 0; index < raw.length; index++) validateField(raw[index], rule.item, block, `${path}.${index}`, missing);
+    for (let index = 0; index < raw.length; index++) validateField(raw[index], rule.item, block, `${path}.${index}`, missing, scopes);
     return;
   }
   validateContentText(raw, path, rule.limit);
   if (/[\u000b\u000c\u000e-\u001f\u007f]/.test(raw)) fail(block, path, 'UNSAFE_TEXT', 'Служебные символы запрещены.');
-  checkVariables(raw, rule.variables, block, path);
+  checkVariables(raw, rule.variables, block, path, scopes);
   if (!raw.trim()) { missing.push(path); return; }
   if (rule.kind !== 'text') checkUrl(raw, rule.kind, block, path);
+}
+
+/** Reuses the safe structural contract while the caller explicitly owns variable scopes. */
+export function validateStructuredBlock(block: string, raw: unknown, schema: GeneralHomeFieldRule, draft = false, scopes: readonly ('SITE' | 'CITY')[] = ['SITE']): string[] {
+  const missing: string[] = [];
+  try { validateField(raw, schema, block, '', missing, scopes); }
+  catch (error) { if (error instanceof ContentValidationError) error.block = block; throw error; }
+  if (!draft && missing.length) fail(block, missing[0], 'REQUIRED', 'Блок не готов к публикации: заполните обязательное поле.');
+  return missing;
 }
 
 /** Pure contract check shared by guarded writes, catalog projection and publication preflight. */

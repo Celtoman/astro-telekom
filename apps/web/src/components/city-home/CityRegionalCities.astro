@@ -1,0 +1,9 @@
+---
+import { renderRegionalCities } from '../../lib/city-home-render';
+import type { CityView } from '../../data/site';
+import { publicAsset } from '../../data/public-asset';
+import CityHomeStyles from './CityHomeStyles.astro';
+interface Props { data: Parameters<typeof renderRegionalCities>[0]; city: CityView; cities: CityView[] }
+---
+<Fragment set:html={renderRegionalCities(Astro.props.data, Astro.props.city, Astro.props.cities, { asset: publicAsset })} />
+<CityHomeStyles />

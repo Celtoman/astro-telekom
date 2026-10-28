@@ -1,0 +1,52 @@
+---
+import type { CityView, SiteView, PageView } from '../../data/site';
+import type { CityHomeDataByType } from '../../../../api/src/city-home-model';
+import { publishedTariffFacts } from '../../../../api/src/tariff-view';
+import { projectBenefitFacts } from '../../lib/city-home-render';
+import { publicDisplayForCatalog } from '../../lib/public-display';
+import { sortCollectionTariffs } from '../../../../api/src/tariff-collection-model';
+import CityHomeFirstScreen from '../CityHomeFirstScreen.astro';
+import TariffCollection from '../TariffCollection.astro';
+import HomeConnectionHelp from '../general-home/HomeConnectionHelp.astro';
+import HomeBenefits from '../general-home/HomeBenefits.astro';
+import HomeConnectionSteps from '../general-home/HomeConnectionSteps.astro';
+import HomeMovix from '../general-home/HomeMovix.astro';
+import HomeFaq from '../general-home/HomeFaq.astro';
+import CityTariffComparison from './CityTariffComparison.astro';
+import CityRegionalCities from './CityRegionalCities.astro';
+import CityContacts from './CityContacts.astro';
+interface Props { page: PageView; city: CityView; cities: CityView[]; site: SiteView; apiUrl: string }
+const { page, city, cities, site, apiUrl } = Astro.props as Props;
+function data<K extends keyof CityHomeDataByType>(type: K): CityHomeDataByType[K] {
+  const block = page.blocks?.find(block => block.blockType === type);
+  if (!block) throw new Error(`Не найден обязательный блок ${type}`);
+  return block.data as CityHomeDataByType[K];
+}
+const hero = page.blocks!.find(block => block.blockType === 'hero')!;
+const collection = page.blocks!.find(block => block.blockType === 'tariff_grid')!.data;
+const catalogOrder = sortCollectionTariffs(city.tariffs, String(collection.sort));
+const display = publicDisplayForCatalog(site);
+const phone = site.connectionPhone, phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
+const benefits = projectBenefitFacts(data('city.benefits'), display, { kind: 'CITY_HOME', maxSpeedMbps: publishedTariffFacts(city.tariffs).maxSpeed });
+const regionCities = cities.filter(other => other.slug !== city.slug && other.region.slug === city.region.slug);
+---
+<div class="city-home-composition" data-city-home-composition>
+  <div data-city-block="hero"><CityHomeFirstScreen block={hero} {city} {site} tariffs={city.tariffs} {apiUrl} siteSlug={site.slug} pageSlug="" /></div>
+  <div data-city-block="tariff_grid"><TariffCollection data={collection} tariffs={city.tariffs} citySlug={city.slug} cityName={city.name} dialogId="address-check-dialog" /></div>
+  <div data-city-block="city.comparison"><CityTariffComparison data={data('city.comparison')} tariffs={catalogOrder} citySlug={city.slug} cityName={city.name} /></div>
+  <div data-city-block="city.help"><HomeConnectionHelp content={data('city.help')} {phone} {phoneHref} {apiUrl} siteSlug={site.slug} callbackWithinMinutes={display.callbackWithinMinutes} /></div>
+  <div data-city-block="city.benefits"><HomeBenefits content={benefits} /></div>
+  <div data-city-block="city.connection_steps"><HomeConnectionSteps content={data('city.connection_steps')} {phone} {phoneHref} /></div>
+  <div data-city-block="city.movix"><HomeMovix content={data('city.movix')} tariffHref={`/${city.slug}#tariffs`} /></div>
+  {regionCities.length > 0 && <div data-city-block="city.regional_cities"><CityRegionalCities data={data('city.regional_cities')} {city} {cities} /></div>}
+  {data('city.faq').items.length > 0 && <div data-city-block="city.faq"><HomeFaq content={data('city.faq')} /></div>}
+  <div data-city-block="city.contacts"><CityContacts data={data('city.contacts')} site={{ ...site, publicDisplay: display }} /></div>
+</div>
+<style is:global>
+  .city-home-composition { display: flex; flex-direction: column; gap: 24px; width: min(1360px, calc(100% - 32px)); margin: 0 auto; }
+  .city-home-composition > div { min-width: 0; }
+  .city-home-composition .tariff-collection { width: 100%; margin: 0; }
+  .city-home-composition [data-home-hero] { padding: 0; }
+  .city-home-composition .hero-container { width: 100%; }
+  @media (max-width: 1100px) { .city-home-composition { width: min(720px, calc(100% - 32px)); } }
+</style>

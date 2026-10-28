@@ -4,6 +4,7 @@ import IORedis from 'ioredis';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import { LeadNotificationError, NotificationsService } from './notifications.service';
+import { readCallbackInterest } from './callback-interest';
 
 const QUEUE_NAME = 'lead-notifications';
 const DEFAULT_MAX_ATTEMPTS = 3;
@@ -174,14 +175,15 @@ export class LeadNotificationOutboxService implements OnModuleInit, OnModuleDest
     if (started.count !== 1) return { skipped: true as const, reason: 'not_claimed' };
 
     try {
+      const interest = readCallbackInterest(notification.lead.attributionSnapshot);
       const result = await this.notifications.notifyLead({
         id: notification.lead.id,
         notificationRevision: notification.revision,
         phone: notification.lead.phone,
         name: notification.lead.name,
-        city: notification.lead.city?.name || 'Город не выбран — уточнить при звонке',
+        city: interest?.cityName || notification.lead.city?.name || 'Город не выбран — уточнить при звонке',
         address: notification.lead.address,
-        tariff: notification.lead.tariff?.name,
+        tariff: interest?.tariffName || notification.lead.tariff?.name,
       });
       const completed = await this.prisma.leadNotification.updateMany({
         where: { id, revision: notification.revision, status: 'RUNNING', attempts: attempt },

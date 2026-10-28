@@ -1,0 +1,43 @@
+{
+  "recordedAt": "2026-10-28T12:45:31.877Z",
+  "siteId": "cmtuaqqj1000107lkiiiia2xa",
+  "workingRevision": 23,
+  "publishedRevision": 23,
+  "cities": 207,
+  "tariffs": 3805,
+  "tariffDataDigest": "56345408ce1a8fd830022017d940663ca114051a653d2991efa436428d77b03f",
+  "cityHeroCatalog": [
+    {
+      "id": "page_template_block_d3ae090dbdb3a1993e8a99c5b3eba506",
+      "blockType": "hero",
+      "data": {
+        "text": "Сравните опубликованные тарифы, проверьте возможность подключения по адресу и оставьте заявку на консультацию. 2222",
+        "image": "/images/figma/home-hero.png",
+        "title": "Домашний интернет и телевидение в {CITY_NAME_PREPOSITIONAL} 222",
+        "imageAlt": "Wi-Fi-роутер, ТВ-приставка и пульт для домашнего подключения",
+        "tariffsCtaText": "Посмотреть тарифы",
+        "checkButtonText": "Проверить адрес",
+        "addressPlaceholder": "Введите ваш адрес"
+      }
+    },
+    {
+      "id": "page_template_block_2290393caf8d4eb39e8813554f0f5e01",
+      "blockType": "tariff_grid",
+      "data": {
+        "sort": "PRICE_ASC",
+        "text": "Сравните скорость, телевидение и дополнительные возможности. В карточке сразу видны ключевые условия.",
+        "title": "Популярные тарифы с интернетом и ТВ",
+        "initialCount": 12,
+        "moreButtonText": "Показать ещё",
+        "connectButtonText": "Подключить",
+        "detailsButtonText": "Подробнее"
+      }
+    }
+  ],
+  "homeFacts": {
+    "fiber": "FTTB и GPON",
+    "wifi6": "До 50–100 устройств",
+    "movix": "100 000+ фильмов и сериалов",
+    "connection": "Заявка онлайн"
+  }
+}

@@ -1,0 +1,128 @@
+<style is:global>
+  .city-home-composition { display: flex; flex-direction: column; gap: 24px; width: min(1360px, calc(100% - 32px)); margin: 0 auto; min-width: 0; }
+  .city-home-composition > * { min-width: 0; }
+  .city-home-composition .home-hero { padding: 0; }
+  .city-home-composition .hero-container, .city-home-composition .tariff-collection { width: 100%; margin: 0; }
+  .city-comparison, .city-regional-cities, .city-contacts { min-width: 0; width: 100%; color: #18202a; font-family: 'Geist Variable', ui-sans-serif, system-ui, sans-serif; }
+  .city-comparison *, .city-regional-cities *, .city-contacts * { box-sizing: border-box; }
+  .city-section-intro { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .city-section-intro h2, .city-contacts h2 { margin: 0; font-size: 32px; font-weight: 700; line-height: 38px; letter-spacing: -1.1px; overflow-wrap: anywhere; }
+  .city-section-intro p { margin: 0; color: #526071; font-size: 16px; line-height: 24px; overflow-wrap: anywhere; }
+  .city-comparison { display: flex; flex-direction: column; gap: 28px; padding: 38px 36px; border-radius: 28px; background: #fff; box-shadow: 0 8px 24px rgb(21 40 66 / 5%); }
+  .comparison-sort-control, .comparison-scroll-hint, .comparison-static-label, .comparison-tv-compact { display: none; }
+  .comparison-scroll { position: relative; min-width: 0; width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
+  .comparison-scroll:focus-visible { outline: 3px solid #1769aa; outline-offset: 3px; border-radius: 16px; }
+  .comparison-scroll table { width: 1288px; min-width: 1288px; table-layout: fixed; border-collapse: separate; border-spacing: 0 10px; margin-block: -10px; }
+  .comparison-scroll th, .comparison-scroll td { padding: 14px 0; text-align: left; vertical-align: middle; overflow-wrap: anywhere; }
+  .comparison-scroll tr > :nth-child(1) { width: 270px; padding-left: 20px; }
+  .comparison-scroll tr > :nth-child(2) { width: 190px; }
+  .comparison-scroll tr > :nth-child(3), .comparison-scroll tr > :nth-child(4) { width: 140px; }
+  .comparison-scroll tr > :nth-child(5) { width: 348px; }
+  .comparison-scroll tr > :nth-child(6) { width: 200px; padding-right: 20px; text-align: right; }
+  .comparison-scroll thead th { height: 52px; padding-block: 4px; background: #f6f7f9; color: #526071; font-size: 12px; line-height: 20px; font-weight: 600; }
+  .comparison-scroll thead th:first-child { border-radius: 16px 0 0 16px; }
+  .comparison-scroll thead th:last-child { border-radius: 0 16px 16px 0; }
+  .comparison-scroll thead button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+  .comparison-scroll thead th[aria-sort]:not([aria-sort=none]) button { color: #e0231e; }
+  .comparison-direction { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 16px; width: 16px; height: 24px; }
+  .comparison-active-direction { display: none; }
+  .comparison-idle-direction { display: flex; flex-direction: column; width: 12px; height: 24px; }
+  .comparison-direction img { display: block; max-width: none; }
+  th[aria-sort=ascending] .comparison-active-direction, th[aria-sort=descending] .comparison-active-direction { display: block; }
+  th[aria-sort=ascending] .comparison-idle-direction, th[aria-sort=descending] .comparison-idle-direction { display: none; }
+  th[aria-sort=descending] .comparison-active-direction { transform: rotate(180deg); }
+  .comparison-tv-heading { display: flex; align-items: center; gap: 7px; }
+  .comparison-scroll tbody tr { height: 78px; }
+  .comparison-scroll tbody :is(td, th) { border-block: 1px solid #f0f3f6; background: #fff; font-size: 16px; line-height: 20px; font-weight: 400; }
+  .comparison-scroll tbody tr > :first-child { border-left: 1px solid #f0f3f6; border-radius: 18px 0 0 18px; }
+  .comparison-scroll tbody tr > :last-child { border-right: 1px solid #f0f3f6; border-radius: 0 18px 18px 0; }
+  .comparison-tariff-name { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding-right: 16px; }
+  .comparison-scroll strong { font-weight: 600; }
+  .comparison-price { display: block; font-size: 20px; line-height: 25px; }
+  .comparison-scroll small { display: block; color: #526071; font-size: 12px; line-height: 18px; }
+  .comparison-scroll .comparison-hd { color: #176b45; }
+  .comparison-badge { max-width: 100%; padding: 4px 8px; border-radius: 999px; background: #e0231e; color: #fff; font-size: 10px; line-height: 12px; font-weight: 600; }
+  .comparison-included { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding-right: 16px; }
+  .comparison-feature { font-size: 12px; line-height: 18px; }
+  .city-comparison .home-action, .city-contacts .home-action { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; background: #e0231e; color: #fff; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; cursor: pointer; overflow-wrap: anywhere; }
+  .city-comparison .home-action:hover, .city-contacts .home-action:hover { background: #c61f1a; }
+  .city-comparison .home-action:active, .city-contacts .home-action:active { background: #ad1916; }
+  .comparison-connect { width: 180px; max-width: 100%; }
+  .city-comparison button:focus-visible, .city-contacts :is(button, a):focus-visible, .city-regional-cities a:focus-visible { outline: 3px solid #1769aa; outline-offset: 3px; }
+  .city-regional-cities { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; padding: 48px; border-radius: 26px; background: #fff; }
+  .city-region-chip { display: inline-flex; align-items: center; gap: 8px; max-width: min(260px, 100%); margin-top: -8px; padding: 8px 12px; border-radius: 999px; background: #eaf7ff; font-size: 14px; line-height: 20px; }
+  .city-region-chip img { flex: 0 0 20px; }
+  .city-region-chip span { min-width: 0; overflow-wrap: anywhere; }
+  .city-region-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-content: start; gap: 8px 16px; min-height: 216px; width: 100%; margin: 0; padding: 0; list-style: none; }
+  .city-region-link { display: flex; align-items: center; min-height: 48px; width: 100%; padding: 12px; border-radius: 10px; color: #18202a; font-size: 16px; line-height: 24px; text-decoration: none; overflow-wrap: anywhere; }
+  .city-region-link:hover { background: #eaf7ff; }
+  .city-region-all { display: inline-flex; align-items: center; justify-content: center; align-self: center; min-height: 44px; max-width: 100%; color: #1769aa; font-size: 14px; line-height: 20px; font-weight: 600; text-align: center; text-decoration: none; overflow-wrap: anywhere; }
+  .city-region-all:hover { text-decoration: underline; }
+  .city-contacts { display: flex; flex-direction: column; gap: 24px; padding: 32px; border-radius: 26px; background: #eef8ff; }
+  .city-contact-groups { display: flex; align-items: flex-start; gap: 16px; width: 100%; }
+  .city-contact-card { display: flex; flex: 1 1 0; flex-direction: column; align-items: flex-start; gap: 12px; min-width: 0; padding: 24px; border-radius: 24px; background: #fff; }
+  .city-contact-card:nth-child(2) { align-self: stretch; }
+  .city-contact-heading { display: flex; align-items: flex-start; gap: 12px; width: 100%; }
+  .city-contact-heading > div { display: flex; flex: 1; flex-direction: column; gap: 4px; min-width: 0; }
+  .city-contact-heading h3 { margin: 0; font-size: 20px; line-height: 25px; font-weight: 700; letter-spacing: -.2px; overflow-wrap: anywhere; }
+  .city-contact-card p { margin: 0; color: #526071; font-size: 14px; line-height: 20px; overflow-wrap: anywhere; }
+  .city-contact-icon-backplate { display: flex; flex: 0 0 44px; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; background: #eef8ff; }
+  .city-contact-icon { display: inline-flex; flex: 0 0 24px; width: 24px; height: 24px; overflow: visible; }
+  .city-contact-icon img { display: block; flex: none; max-width: none; }
+  .city-contact-icon-small { flex-basis: 20px; width: 20px; height: 20px; }
+  .city-contact-native-24 { transform: scale(.8333333333); transform-origin: top left; }
+  .city-contact-phone { display: inline-flex; width: 100%; align-items: center; min-height: 44px; max-width: 100%; color: #1769aa; font-size: 20px; line-height: 25px; font-weight: 700; letter-spacing: -.2px; text-decoration: none; overflow-wrap: anywhere; }
+  .city-contact-phone:hover { text-decoration: underline; }
+  .city-sales-contact { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .city-contact-schedules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; width: 100%; margin: 0; font-size: 14px; line-height: 20px; }
+  .city-contact-schedules dt { color: #526071; }
+  .city-contact-schedules dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+  .city-contact-callback { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .city-contact-callback .home-action { width: 100%; }
+  .city-contact-callback p, .city-support-availability p, .city-support-topics { display: flex; align-items: flex-start; gap: 8px; min-width: 0; }
+  .city-support-availability { display: flex; flex-wrap: wrap; gap: 8px 24px; width: 100%; }
+  .city-support-topics > span:last-child { flex: 1; min-width: 0; }
+  .city-sr-only { position: absolute; left: 0; top: 0; width: 1px; height: 1px; margin: -1px; overflow: hidden; padding: 0; border: 0; clip: rect(0,0,0,0); white-space: nowrap; }
+  @media (max-width: 1100px) {
+    .city-home-composition { width: min(720px, calc(100% - 32px)); }
+    .city-comparison { padding: 24px; }
+    .comparison-sort-control { display: flex; align-items: center; gap: 24px; font-size: 14px; line-height: 20px; }
+    .comparison-select { position: relative; width: 256px; max-width: 100%; }
+    .comparison-select select { appearance: none; width: 100%; min-height: 44px; padding: 10px 36px 10px 12px; border: 1px solid #f0f3f6; border-radius: 14px; background: #fff; color: #18202a; font: inherit; cursor: pointer; }
+    .comparison-select > img { position: absolute; top: 16px; right: 12px; pointer-events: none; }
+    .comparison-select select:focus-visible { outline: 3px solid #1769aa; outline-offset: 3px; }
+    .comparison-scroll-hint { display: block; margin: -20px 0 0; color: #526071; font-size: 12px; line-height: 16px; }
+    .comparison-scroll thead button { display: none; }
+    .comparison-static-label { display: inline; }
+    .city-regional-cities { padding: 32px; }
+    .city-region-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); min-height: 160px; }
+    .city-contacts { padding: 24px; }
+    .city-contact-card { min-height: 341px; padding: 20px; }
+    .city-contact-schedules { grid-template-columns: 1fr; }
+    .city-support-availability { flex-direction: column; }
+  }
+  @media (max-width: 620px) {
+    .city-section-intro h2, .city-contacts h2 { font-size: 24px; line-height: 29px; letter-spacing: -.8px; }
+    .city-comparison { gap: 24px; padding: 16px; }
+    .comparison-sort-control { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .comparison-scroll-hint { margin-top: -16px; }
+    .comparison-scroll table { width: 914px; min-width: 914px; border-spacing: 0 6px; margin-block: -6px; }
+    .comparison-scroll tr > :nth-child(1) { width: 156px; padding-left: 12px; }
+    .comparison-scroll tr > :nth-child(2) { width: 100px; }
+    .comparison-scroll tr > :nth-child(3) { width: 96px; }
+    .comparison-scroll tr > :nth-child(4) { width: 120px; }
+    .comparison-scroll tr > :nth-child(5) { width: 280px; }
+    .comparison-scroll tr > :nth-child(6) { width: 162px; padding-right: 12px; }
+    .comparison-scroll tbody :is(td, th) { padding-block: 12px; font-size: 14px; }
+    .comparison-price { font-size: 18px; line-height: 23px; }
+    .comparison-tv-wide { display: none; }
+    .comparison-tv-compact { display: inline; }
+    .comparison-connect { width: 148px; }
+    .city-regional-cities { padding: 20px; gap: 20px; }
+    .city-region-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); min-height: 184px; }
+    .city-contacts { padding: 16px; gap: 20px; }
+    .city-contact-groups { flex-direction: column; gap: 12px; }
+    .city-contact-card { flex: none; width: 100%; min-height: 0; }
+  }
+  @media (max-width: 360px) { .city-region-grid { grid-template-columns: 1fr; } }
+</style>

@@ -1,13 +1,15 @@
 import { BadRequestException } from '@nestjs/common';
 import { formatSitePhone } from './site-phone';
-import { GENERAL_HOME_SCHEMAS, type GeneralHomeFieldRule } from './general-home-model';
+import { GENERAL_HOME_SCHEMAS, CITY_HOME_SCHEMAS, type GeneralHomeFieldRule } from './general-home-model';
 
 type VariableType = 'text' | 'number' | 'phone' | 'date';
 type VariableScope = 'SITE' | 'CITY' | 'TARIFF';
 type VariableCode =
   | 'CONNECTION_PHONE' | 'SUPPORT_PHONE' | 'PROVIDER_NAME'
   | 'CITY_NAME' | 'CITY_NAME_GENITIVE' | 'CITY_NAME_PREPOSITIONAL'
-  | 'TARIFF_NAME' | 'TARIFF_SPEED' | 'TARIFF_PRICE' | 'TARIFF_CHANNELS' | 'YEAR';
+  | 'TARIFF_NAME' | 'TARIFF_SPEED' | 'TARIFF_PRICE' | 'TARIFF_CHANNELS' | 'YEAR'
+  | 'CONNECTION_HOURS' | 'SUPPORT_HOURS' | 'ONLINE_APPLICATIONS_HOURS' | 'CALLBACK_WITHIN_MINUTES'
+  | 'CITY_MIN_PRICE' | 'CITY_MAX_SPEED' | 'CITY_MAX_CHANNELS';
 
 export interface VariableDefinition {
   code: VariableCode;
@@ -32,6 +34,7 @@ function homeVariableFields(rule: GeneralHomeFieldRule, path = ''): string[] {
   return rule.variables ? [`PageTemplateBlock.data.${path}`] : [];
 }
 const HOME_VARIABLE_FIELDS = [...new Set(Object.values(GENERAL_HOME_SCHEMAS).flatMap(rule => homeVariableFields(rule)))];
+const CITY_VARIABLE_FIELDS = [...new Set(Object.values(CITY_HOME_SCHEMAS).flatMap(rule => homeVariableFields(rule)))];
 const TARIFF_FIELDS = ['Tariff.promoText'];
 const SEO_TEMPLATE_FIELDS = ['SeoTemplate.titleTemplate', 'SeoTemplate.descriptionTemplate', 'SeoTemplate.ogTitleTemplate', 'SeoTemplate.ogDescriptionTemplate'];
 const SITE_CONTEXTS = ['Общая страница', 'Городская страница', 'Тариф'];
@@ -50,14 +53,21 @@ const DEFINITIONS: readonly VariableDefinition[] = [
   { code: 'TARIFF_PRICE', type: 'number', source: 'Tariff.effectivePrice', scope: 'TARIFF', name: 'Цена тарифа', description: 'Промо-цена при наличии, иначе стандартная цена; без валюты.', example: '599', status: 'ACTIVE', allowedContexts: TARIFF_CONTEXTS, allowedFields: [...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
   { code: 'TARIFF_CHANNELS', type: 'number', source: 'Tariff.attributes.tv_channels_total', scope: 'TARIFF', name: 'Телеканалы', description: 'Общее число каналов без единицы измерения.', example: '150', status: 'ACTIVE', allowedContexts: TARIFF_CONTEXTS, allowedFields: [...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
   { code: 'YEAR', type: 'date', source: 'Catalog.resolvedAt', scope: 'SITE', name: 'Год публикации', description: 'Год формирования снимка каталога.', example: '2026', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'CONNECTION_HOURS', type: 'text', source: 'Site.publicDisplay.connectionHours', scope: 'SITE', name: 'Приём звонков', description: 'Единый график входящей линии подключения.', example: 'Ежедневно с 8:00 до 22:00', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: PAGE_FIELDS },
+  { code: 'SUPPORT_HOURS', type: 'text', source: 'Site.publicDisplay.supportHours', scope: 'SITE', name: 'График поддержки', description: 'Единый график поддержки абонентов.', example: 'Круглосуточно', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: PAGE_FIELDS },
+  { code: 'ONLINE_APPLICATIONS_HOURS', type: 'text', source: 'Site.publicDisplay.onlineApplicationsHours', scope: 'SITE', name: 'Приём онлайн-заявок', description: 'График приёма заявок через сайт.', example: 'Круглосуточно', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: PAGE_FIELDS },
+  { code: 'CALLBACK_WITHIN_MINUTES', type: 'number', source: 'Site.publicDisplay.callbackWithinMinutes', scope: 'SITE', name: 'Срок обратного звонка', description: 'Срок в минутах, без единицы измерения.', example: '15', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: PAGE_FIELDS },
+  { code: 'CITY_MIN_PRICE', type: 'number', source: 'City.tariffFacts.minPrice', scope: 'CITY', name: 'Минимальная цена города', description: 'Минимальная действующая цена опубликованных тарифов города, без валюты.', example: '599', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: PAGE_FIELDS },
+  { code: 'CITY_MAX_SPEED', type: 'number', source: 'City.tariffFacts.maxSpeed', scope: 'CITY', name: 'Максимальная скорость города', description: 'Максимальная известная скорость опубликованных тарифов, без единицы измерения.', example: '1000', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: PAGE_FIELDS },
+  { code: 'CITY_MAX_CHANNELS', type: 'number', source: 'City.tariffFacts.maxChannels', scope: 'CITY', name: 'Максимум каналов города', description: 'Максимальное известное число каналов опубликованных пакетов с ТВ.', example: '150', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: PAGE_FIELDS },
 ];
 
 const BY_CODE = new Map(DEFINITIONS.map((definition) => [definition.code, definition]));
 
 export interface VariableContext {
-  site?: { connectionPhone?: string | null; supportPhone?: string | null };
+  site?: { connectionPhone?: string | null; supportPhone?: string | null; connectionHours?: string | null; supportHours?: string | null; onlineApplicationsHours?: string | null; callbackWithinMinutes?: number | null };
   provider?: { name?: string | null };
-  city?: { name?: string | null; nameGenitive?: string | null; namePrepositional?: string | null };
+  city?: { name?: string | null; nameGenitive?: string | null; namePrepositional?: string | null; tariffFacts?: { minPrice?: number | null; maxSpeed?: number | null; maxChannels?: number | null } };
   tariff?: {
     name?: string | null;
     speed?: unknown;
@@ -75,17 +85,27 @@ export interface VariableWarning {
 }
 
 export function listVariableDefinitions(): VariableDefinition[] {
-  return DEFINITIONS.map((definition) => ({ ...definition, allowedContexts: [...definition.allowedContexts], allowedFields: [...new Set([...definition.allowedFields, ...(definition.scope === 'SITE' ? HOME_VARIABLE_FIELDS : [])])] }));
+  return DEFINITIONS.map((definition) => ({ ...definition, allowedContexts: [...definition.allowedContexts], allowedFields: [...new Set([
+    ...definition.allowedFields, ...(definition.scope === 'SITE' ? HOME_VARIABLE_FIELDS : []),
+    ...(['SITE', 'CITY'].includes(definition.scope) ? CITY_VARIABLE_FIELDS : []),
+  ])] }));
 }
 
 function sourceValue(code: VariableCode, context: VariableContext): unknown {
   switch (code) {
     case 'CONNECTION_PHONE': return context.site?.connectionPhone;
     case 'SUPPORT_PHONE': return context.site?.supportPhone;
+    case 'CONNECTION_HOURS': return context.site?.connectionHours;
+    case 'SUPPORT_HOURS': return context.site?.supportHours;
+    case 'ONLINE_APPLICATIONS_HOURS': return context.site?.onlineApplicationsHours;
+    case 'CALLBACK_WITHIN_MINUTES': return context.site?.callbackWithinMinutes;
     case 'PROVIDER_NAME': return context.provider?.name;
     case 'CITY_NAME': return context.city?.name;
     case 'CITY_NAME_GENITIVE': return context.city?.nameGenitive;
     case 'CITY_NAME_PREPOSITIONAL': return context.city?.namePrepositional;
+    case 'CITY_MIN_PRICE': return context.city?.tariffFacts?.minPrice;
+    case 'CITY_MAX_SPEED': return context.city?.tariffFacts?.maxSpeed;
+    case 'CITY_MAX_CHANNELS': return context.city?.tariffFacts?.maxChannels;
     case 'TARIFF_NAME': return context.tariff?.name;
     case 'TARIFF_SPEED': return context.tariff?.speed;
     case 'TARIFF_PRICE': return context.tariff?.promoPrice ?? context.tariff?.standardPrice;

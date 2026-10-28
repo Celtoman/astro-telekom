@@ -5,19 +5,22 @@ import { cityServicePath } from '../apps/web/src/lib/city-context.mjs';
 const site = { name: 'Дом.ру', slug: 'site', connectionPhone: '8-800-555-72-44', supportPhone: '8-800-250-25-25', connectionHours: 'Ежедневно, 24/7', callbackWithinMinutes: 15 };
 const options = { city: { slug: 'moscow', name: 'Москва' }, addressDialogId: 'general-home-address-entry' };
 
-test('HOME shell links use the canonical selected city and explicit FLOW2/help actions', () => {
+test('HOME shell links use the canonical selected city and approved callback and catalog destinations', () => {
   const header = renderHomeHeader(site, options), footer = renderHomeFooter(site, options);
-  assert.match(header, /data-address-dialog-trigger="general-home-address-entry"/);
-  assert.match(header, /href="\/faq"/);
-  assert.match(header, /href="\/moscow\/domru-domashniy-internet"/);
+  assert.match(header, /data-callback-trigger/);
+  assert.match(header, /href="\/moscow#faq"/);
+  assert.match(header, /href="\/moscow\?category=INTERNET#tariffs"/);
   assert.match(header, /href="tel:88005557244"/);
-  assert.match(header, /Подключение, 24\/7/);
-  assert.match(footer, /Ежедневно, 24\/7/);
+  assert.match(header, /Подключение, 8:00–22:00/);
+  assert.match(footer, /Ежедневно с 8:00 до 22:00/);
   assert.match(footer, /href="\/moscow#tariffs"/);
   assert.match(footer, /href="\/politika-konfidencialnosti"/);
-  assert.match(footer, /<span[^>]*>Пользовательское соглашение<\/span>/);
+  assert.match(footer, /href="https:\/\/dom.ru\/" target="_blank" rel="noopener noreferrer"/);
+  assert.match(renderHomeHeader(site, { ...options, localSections: ['faq'] }), /href="#faq" data-current-section/);
+  assert.match(footer, /Согласие на обработку данных/);
+  assert.doesNotMatch(header + footer, /Цифровое ТВ|Оборудование|href="\/contacts"|href="\/faq"/);
   assert.doesNotMatch(footer, /href="[^"]*(?:agreement|soglashenie|\/policy)/);
-  assert.equal(cityServicePath('samara', 'internet_tv'), '/samara/domru-domashniy-internet-televidenie');
+  assert.equal(cityServicePath('samara', 'internet_tv'), '/samara?category=INTERNET_TV#tariffs');
   assert.throws(() => cityServicePath('../admin', 'internet'));
   assert.throws(() => cityServicePath('moscow', 'javascript:alert(1)'));
 });

@@ -44,11 +44,8 @@ export function initializeSiteHeader() {
         ? 'Выберите город, затем проверьте адрес на его странице.'
         : 'Тарифы и проверка подключения доступны на странице выбранного города.';
       for (const link of picker.querySelectorAll('[data-city-choice-link]')) {
-        const url = new URL(link.href);
-        url.pathname = target.dataset.cityChoiceService && Object.hasOwn(CITY_SERVICE_SLUGS, target.dataset.cityChoiceService)
-          ? cityServicePath(link.dataset.citySlug, target.dataset.cityChoiceService)
-          : link.dataset.cityHomeHref || `/${link.dataset.citySlug}`;
-        url.hash = anchor;
+        const url = new URL(target.dataset.cityChoiceService && Object.hasOwn(CITY_SERVICE_SLUGS, target.dataset.cityChoiceService) ? cityServicePath(link.dataset.citySlug, target.dataset.cityChoiceService) : link.dataset.cityHomeHref || `/${link.dataset.citySlug}`, location.origin);
+        if (anchor) url.hash = anchor;
         if (target.hasAttribute('data-callback-intent')) url.searchParams.set('callback', '1');
         else url.searchParams.delete('callback');
         link.href = url.href;

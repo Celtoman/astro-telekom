@@ -133,6 +133,15 @@ export interface TariffView {
   game: { code: keyof typeof gameLabels; title: string; status: ServiceStatus; statusLabel: string } | null;
 }
 
+export interface TariffFacts { minPrice: number | null; maxSpeed: number | null; maxChannels: number | null }
+/** Shared facts use the same normalized prices, speed and TV fields as cards and comparison. */
+export function publishedTariffFacts(tariffs: readonly TariffView[]): TariffFacts {
+  const available = tariffs.filter(tariff => tariff.availability !== false);
+  const values = (key: 'priceAmount' | 'speedMbps' | 'tvChannelsTotal') => available.map(tariff => tariff[key]).filter((value): value is number => value !== null && Number.isFinite(value));
+  const prices = values('priceAmount'), speeds = values('speedMbps'), channels = values('tvChannelsTotal');
+  return { minPrice: prices.length ? Math.min(...prices) : null, maxSpeed: speeds.length ? Math.max(...speeds) : null, maxChannels: channels.length ? Math.max(...channels) : null };
+}
+
 function requiredText(value: unknown, field: string): string {
   if (typeof value !== 'string' || !value.trim()) throw new TariffViewError(`Тариф требует непустое поле ${field}`, 'hero', field);
   return value.trim();

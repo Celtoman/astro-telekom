@@ -3,11 +3,11 @@ import type { GeneralHomeDataByType } from '../../../../api/src/general-home-mod
 import { renderAddressEntry } from '../../lib/general-home-render';
 import { publicAsset } from '../../data/public-asset';
 import HomeBlockStyles from './HomeBlockStyles.astro';
-interface Props { content: GeneralHomeDataByType['home.address_check']; phone: string; phoneHref: string }
+interface Props { content: GeneralHomeDataByType['home.address_check']; phone: string; phoneHref: string; callbackWithinMinutes?: number }
 const { content, phone, phoneHref } = Astro.props;
 const addressForm = await Astro.slots.render('address');
 ---
-<Fragment set:html={renderAddressEntry(content, { asset: publicAsset, phone, phoneHref }, addressForm)} />
+<Fragment set:html={renderAddressEntry(content, { asset: publicAsset, phone, phoneHref, callbackWithinMinutes: Astro.props.callbackWithinMinutes }, addressForm)} />
 <HomeBlockStyles />
 <style is:global>
   .home-address { display: grid; grid-template-columns: minmax(0, 928fr) minmax(0, 408fr); align-items: stretch; gap: 24px; }

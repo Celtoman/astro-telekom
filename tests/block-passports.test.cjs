@@ -11,10 +11,10 @@ test('registry covers implemented block types and the approved root first screen
   const { tariffTemplateBlocks } = await import('../apps/admin/src/lib/tariff-template.mjs');
   const renderer = readFileSync(join(root, 'apps/web/src/components/TariffDetail.astro'), 'utf8');
   const renderedIds = [...renderer.matchAll(/data-tariff-block="([a-z]+)"/g)].map((match) => match[1]);
-  assert.deepEqual(BLOCK_PASSPORTS.filter((item) => item.kind === 'MANAGED' && !item.id.startsWith('home.')).map((item) => item.id), ['hero', 'tariff_grid']);
+  assert.deepEqual(BLOCK_PASSPORTS.filter((item) => item.kind === 'MANAGED' && !item.id.startsWith('home.') && !item.id.startsWith('city.')).map((item) => item.id), ['hero', 'tariff_grid']);
   assert.deepEqual(BLOCK_PASSPORTS.filter((item) => item.id.startsWith('tariff.')).map((item) => item.id),
     tariffTemplateBlocks.map((item) => `tariff.${item.id}`));
-  assert.deepEqual(BLOCK_PASSPORTS.filter((item) => !BLOCK_TYPES.includes(item.id) && !item.id.startsWith('tariff.')).map((item) => item.id),
+  assert.deepEqual(BLOCK_PASSPORTS.filter((item) => !BLOCK_TYPES.includes(item.id) && !item.id.startsWith('tariff.') && !item.id.startsWith('city.')).map((item) => item.id),
     ['header', 'home.hero', 'home.address_check', 'home.provider_about', 'home.benefits', 'home.connection_steps', 'home.movix', 'home.more_possibilities', 'home.connection_help', 'home.city_directory', 'home.faq']);
   assert.deepEqual(renderedIds, tariffTemplateBlocks.map((item) => item.id));
 });
@@ -26,10 +26,10 @@ test('every passport is complete and only owner-approved contracts leave DRAFT',
   assert.deepEqual(BLOCK_PASSPORT_TRANSITIONS.ARCHIVED, []);
   assert.equal(new Set(BLOCK_PASSPORTS.map((item) => item.id)).size, BLOCK_PASSPORTS.length);
   for (const passport of BLOCK_PASSPORTS) {
-    const approved = ['hero', 'tariff_grid'].includes(passport.id) || passport.id.startsWith('home.');
+    const approved = ['hero', 'tariff_grid'].includes(passport.id) || passport.id.startsWith('home.') || passport.id.startsWith('city.');
     assert.equal(passport.status, approved ? 'APPROVED' : 'DRAFT', passport.id);
-    assert.equal(passport.passportVersion, passport.id === 'home.hero' ? '2.0.0' : approved ? '1.0.0' : '0-draft', passport.id);
-    if (passport.status === 'APPROVED') assert.match(passport.approvedBy, /Владелец.*2026-10-(?:0[567]|13|16)/); else assert.equal(passport.approvedBy, null, passport.id);
+    assert.equal(passport.passportVersion, passport.id.startsWith('city.') ? '3.0.0' : passport.id === 'home.hero' ? '2.0.0' : approved ? '1.0.0' : '0-draft', passport.id);
+    if (passport.status === 'APPROVED') assert.match(passport.approvedBy, /Владелец.*2026-10-(?:0[567]|13|16|28)/); else assert.equal(passport.approvedBy, null, passport.id);
     assert.equal(passport.replacementId, null, passport.id);
     for (const key of ['title', 'purpose', 'emptyBehavior', 'editorForm', 'implementation']) {
       assert.ok(passport[key]?.trim(), `${passport.id}: ${key}`);
@@ -66,7 +66,7 @@ test('passport API is read-only behind admin authentication and the templates sc
   const controller = new AdminBlocksController({}, {});
   assert.equal(Reflect.getMetadata('path', AdminBlocksController.prototype.passports), 'block-passports');
   assert.ok(Reflect.getMetadata('__guards__', AdminBlocksController)?.some((guard) => guard.name === 'AdminTokenGuard'));
-  assert.equal(controller.passports().passports.length, 22);
+  assert.equal(controller.passports().passports.length, 30);
   const screen = readFileSync(join(root, 'apps/admin/src/components/BlockPassportsPanel.tsx'), 'utf8');
   assert.match(screen, /useNavigationQuery<Registry>\(apiUrl, "\/admin\/block-passports"/);
   assert.match(screen, /Паспорта показывают разрешённый контент блока/);
@@ -151,7 +151,7 @@ test('city Hero V3 separates template content, computed catalog facts and legacy
 test('verified HOME editors are READY while existing CITY_HOME editor fields retain their contract', () => {
   const { BLOCK_PASSPORTS } = require('../apps/api/dist/block-passports.js');
   const { GENERAL_HOME_BLOCK_TYPES } = require('../apps/api/dist/general-home-model.js');
-  assert.deepEqual(BLOCK_PASSPORTS.filter(p => p.editorReadiness === 'READY').map(p => p.id), ['hero', 'tariff_grid', 'home.hero', ...GENERAL_HOME_BLOCK_TYPES]);
+  assert.deepEqual(BLOCK_PASSPORTS.filter(p => p.editorReadiness === 'READY').map(p => p.id), ['hero', 'tariff_grid', 'home.hero', ...GENERAL_HOME_BLOCK_TYPES, 'city.comparison', 'city.help', 'city.benefits', 'city.connection_steps', 'city.movix', 'city.regional_cities', 'city.faq', 'city.contacts']);
   for (const passport of BLOCK_PASSPORTS.filter(p => p.id === 'hero')) {
     for (const key of ['addressPlaceholder', 'checkButtonText', 'image', 'imageAlt']) {
       const item = passport.fields.find(f => f.key === key);

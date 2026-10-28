@@ -13,7 +13,9 @@ import { resolveSeoTemplates } from './seo-templates';
 import { collectSeoTemplateUsages } from './seo-template-usages';
 import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
 import { generalHomeFromTemplate } from './general-home-template';
-import { GENERAL_HOME_CONTACT_RULES } from './general-home-model';
+import { readSitePublicDisplay } from './site-public-display';
+import { CITY_HOME_VERSION } from './city-home-model';
+import { cityTariffFacts } from './city-tariff-facts';
 
 type CatalogClient = Prisma.TransactionClient | PrismaService;
 export type CatalogSource = {
@@ -97,6 +99,7 @@ export class SiteCatalogService {
     const homeScreen = homeTemplate ? firstScreenFromTemplate(homeTemplate) : undefined;
     const homeHero = homeScreen?.data;
     const generalHome = homeTemplate ? generalHomeFromTemplate(homeTemplate) : null;
+    const publicDisplay = readSitePublicDisplay(site.settings);
     if (homeScreen) validateFirstScreen('HOME', homeHero, false, homeScreen.passportVersion);
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
     const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages);
@@ -109,7 +112,9 @@ export class SiteCatalogService {
         domain: site.domain,
         connectionPhone: site.connectionPhone ? formatSitePhone(site.connectionPhone) : null,
         supportPhone: site.supportPhone ? formatSitePhone(site.supportPhone) : null,
-        ...GENERAL_HOME_CONTACT_RULES,
+        connectionHours: publicDisplay.connectionHours,
+        callbackWithinMinutes: publicDisplay.callbackWithinMinutes,
+        publicDisplay,
       },
       globalPages: resolvedGlobalPages,
       routes,
@@ -117,7 +122,7 @@ export class SiteCatalogService {
       redirects: this.effectiveRedirects(routes, redirects),
       cities: cities.map((city: any) => this.cityResponse(city, site)),
     }, {
-      site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
+      site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
       provider: { name: site.provider.name },
       now,
     });
@@ -169,11 +174,15 @@ export class SiteCatalogService {
     if (homePages[0].slug !== '') {
       throw new BadRequestException(`Городская HOME «${city.name}» должна иметь пустой slug`);
     }
+    if (homePages[0].content?.homeCompositionVersion === CITY_HOME_VERSION && !tariffs.some((tariff: any) => !['DRAFT', 'ARCHIVED'].includes(tariff.status))) {
+      throw new BadRequestException(`Город «${city.name}» нельзя опубликовать без опубликованного тарифа. Добавьте тариф или снимите город с публикации.`);
+    }
     return {
       ...cityData,
       content: inheritedContent,
       seo: inheritedSeo,
       region: { name: region.name, slug: region.slug },
+      tariffFacts: cityTariffFacts(tariffs),
       pages: pages.map((page: any) => this.pageResponse(page, inheritedContent, inheritedSeo, city.name)),
       tariffs: tariffs.map((tariff: any) => ({
         ...tariff,
@@ -183,7 +192,7 @@ export class SiteCatalogService {
   }
 
   pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string) {
-    if (page.type === 'HOME' && cityName) { page = { ...page, blocks: projectCityHomeBlocks(page.blocks || []) }; validateCityHomeBlocks(page.blocks, cityName); }
+    if (page.type === 'HOME' && cityName) { page = { ...page, blocks: projectCityHomeBlocks(page.blocks || []) }; validateCityHomeBlocks(page.blocks, cityName, page.content?.homeCompositionVersion); }
     else validatePublishedBlocks(page.blocks, { pageType: cityName ? page.type : undefined });
     const { templateId: _templateId, ...publicPage } = page;
     return {

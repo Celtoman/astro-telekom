@@ -4,7 +4,9 @@ import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { normalizePublicHtmlPath, publicHtmlPath } from './public-url';
 import { homeHeroDefaults } from '../../../api/src/home-hero-model';
-import { GENERAL_HOME_CONTACT_RULES } from '../../../api/src/general-home-model';
+import { CITY_HOME_BLOCK_ORDER, CITY_HOME_VERSION, CITY_HOME_IMPLEMENTATION } from '../../../api/src/city-home-model';
+import type { SitePublicDisplay } from '../../../api/src/site-public-display-model';
+import { publicDisplayForCatalog } from '../lib/public-display';
 import { generalHomeCatalog, type GeneralHomeCatalog } from './general-home';
 
 export interface PageView {
@@ -35,6 +37,7 @@ export interface SiteView {
   supportPhone: string;
   connectionHours?: string;
   callbackWithinMinutes?: number;
+  publicDisplay?: SitePublicDisplay;
 }
 
 export interface RedirectView {
@@ -101,10 +104,16 @@ function assertCityHomeTemplate(city: CityView): void {
   if (homePages.length !== 1 || homePages[0]?.slug !== '') {
     throw new Error(`Город «${city.name}» должен иметь ровно одну опубликованную HOME с пустым slug`);
   }
-  const sequence = homePages[0].blocks?.map((block) => block.blockType) || [];
-  if (JSON.stringify(sequence) !== JSON.stringify(cityHomeBlockSequence)) {
+  const home = homePages[0];
+  const version = home.content?.homeCompositionVersion;
+  const isV3 = version === CITY_HOME_VERSION;
+  if (version !== undefined && version !== '2.0.0' && !isV3) throw new Error(`Город «${city.name}»: неизвестная версия HOME`);
+  if (isV3 && home.content?.cityHomeImplementationVersion !== CITY_HOME_IMPLEMENTATION) throw new Error(`Город «${city.name}»: неизвестная реализация HOME`);
+  const sequence = home.blocks?.map((block) => block.blockType) || [];
+  if (JSON.stringify(sequence) !== JSON.stringify(isV3 ? CITY_HOME_BLOCK_ORDER : cityHomeBlockSequence)) {
     throw new Error(`Город «${city.name}»: опубликованная HOME не соответствует каноническому шаблону из 2 блоков`);
   }
+  if (isV3 && city.tariffs.length === 0) throw new Error(`Город «${city.name}»: добавьте хотя бы один опубликованный тариф`);
 }
 
 function expectedReleaseOneRoutes(cities: CityView[], globalPages: PageView[]): PublicRouteView[] {
@@ -334,7 +343,7 @@ function normalizedCatalog(value: unknown): SiteCatalog {
   const supportPhone = String(payload.site.supportPhone || '').trim();
   if (!connectionPhone || !supportPhone) throw new Error('API не вернул обязательные телефоны сайта');
   const generalHome = generalHomeCatalog(payload.generalHome);
-  if (generalHome && (payload.site.connectionHours !== GENERAL_HOME_CONTACT_RULES.connectionHours || payload.site.callbackWithinMinutes !== GENERAL_HOME_CONTACT_RULES.callbackWithinMinutes)) throw new Error('Полная HOME требует согласованных системных правил24/7 и15 минут.');
+  const publicDisplay = publicDisplayForCatalog(payload.site, generalHome);
   return {
     site: {
       name: String(payload.site.name || 'Дом.ру'),
@@ -342,7 +351,9 @@ function normalizedCatalog(value: unknown): SiteCatalog {
       domain: typeof payload.site.domain === 'string' ? payload.site.domain : null,
       connectionPhone,
       supportPhone,
-      ...(generalHome ? GENERAL_HOME_CONTACT_RULES : {}),
+      publicDisplay,
+      connectionHours: publicDisplay.connectionHours,
+      callbackWithinMinutes: publicDisplay.callbackWithinMinutes,
     },
     ...(generalHome ? { generalHome, homeHero: generalHome.blocks[0].data, homeHeroVersion: '2.0.0' as const } : payload.homeHero ? { homeHero: payload.homeHero, homeHeroVersion: normalizeHomeHeroVersion(payload.homeHeroVersion) } : {}),
     globalPages,

@@ -25,7 +25,7 @@ test('immutable Astro HOME builds every approved block with exact image CSP and 
   home.blocks[5].data.image = 'HTTPS://movix-images.example.test/devices.png';
   home.blocks[5].data.cinemas.ivi.image = 'https://cinema-images.example.test/ivi.png';
   home.blocks[2].data.evidence.research.sourceUrl = 'https://research.example.test/report';
-  const cityTemplate = { id: 'city-home-template', siteId: 'site-1', kind: 'CITY_HOME', status: 'PUBLISHED', titleTemplate: 'Домашний интернет', content: {}, blocks: cityHomeTemplateBlocks({ name: '{CITY_NAME}', namePrepositional: '{CITY_NAME_PREPOSITIONAL}' }) };
+  const cityTemplate = { id: 'city-home-template', siteId: 'site-1', kind: 'CITY_HOME', status: 'PUBLISHED', titleTemplate: 'Домашний интернет', content: {}, blocks: cityHomeTemplateBlocks({ name: '{CITY_NAME}', namePrepositional: '{CITY_NAME_PREPOSITIONAL}' }).slice(0,2) };
   for (const location of source.cities) location.pages[0].templateId = cityTemplate.id;
   source.pageTemplates = [home, cityTemplate];
   const catalog = new SiteCatalogService({}).renderSource(source, new Date('2026-10-16T00:00:00Z'));
@@ -45,8 +45,9 @@ test('immutable Astro HOME builds every approved block with exact image CSP and 
     assert.deepEqual([...html.matchAll(/data-home-block="([^"]+)"/g)].map(match => match[1]), order);
     assert.match(html, /<header class="gh-header"/); assert.match(html, /data-general-home-footer/);
     assert.equal([...html.matchAll(/<h1\b/g)].length, 1);
-    assert.ok(html.includes('data-address-dialog-trigger="general-home-address-entry"'));
-    assert.ok(html.includes('href="/moscow/domru-domashniy-internet"'));
+    assert.ok(html.includes('data-callback-trigger'));
+    assert.ok(html.includes('id="address-check"'));
+    assert.ok(html.includes('href="/moscow?category=INTERNET#tariffs"'));
     assert.ok(html.includes('data-require-confirmed-city="true"'));
     const csp = html.match(/http-equiv="content-security-policy" content="([^"]+)"/i)?.[1];
     assert.ok(csp, 'CSP is emitted by the actual Astro build');
@@ -61,8 +62,9 @@ test('immutable Astro HOME builds every approved block with exact image CSP and 
       assert.ok(csp.includes(`sha256-${createHash('sha256').update(content).digest('base64')}`), 'Immutable versioned assets preserve inline script hashes');
     }
     const cityHtml = await readFile(join(directory, 'moscow', 'index.html'), 'utf8');
-    assert.doesNotMatch(cityHtml, /<header class="gh-header"|data-general-home-composition|data-general-home-footer/);
-    assert.match(cityHtml, /class="site-header"/);
+    assert.doesNotMatch(cityHtml, /data-general-home-composition/);
+    assert.match(cityHtml, /data-general-home-footer/);
+    assert.match(cityHtml, /class="gh-header"/);
     assert.ok(!cityHtml.includes('address-images.example.test'));
     assert.equal(artifact.catalogDigest, bundle.catalogDigest);
     assert.ok(artifact.files.some(file => file.path === 'images/general-home/header-menu.svg'));

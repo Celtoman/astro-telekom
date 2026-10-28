@@ -114,7 +114,7 @@ export default function TariffConfigurator(props: {
         ? `Известная часть: ${rubles(quote.totals.knownOneTime)}; полная сумма уточняется`
         : rubles(quote.totals.oneTime)}</strong>
     </div>}
-    <p className="configurator-disclaimer">Расчёт предварительный. Выбранная комплектация будет сохранена с заявкой после проверки адреса;
-      окончательную доступность и стоимость подтвердит оператор.</p>
+    <p className="configurator-disclaimer">Расчёт предварительный. Оборудование и дополнительные услуги согласуйте с оператором.
+      Окончательную доступность и стоимость он подтвердит перед подключением.</p>
   </div>;
 }

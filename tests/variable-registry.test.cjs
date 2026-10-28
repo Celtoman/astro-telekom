@@ -28,6 +28,8 @@ test('registry has unique fixed codes, explicit types and one authoritative sour
   assert.deepEqual(codes, [
     'CONNECTION_PHONE', 'SUPPORT_PHONE', 'PROVIDER_NAME', 'CITY_NAME', 'CITY_NAME_GENITIVE',
     'CITY_NAME_PREPOSITIONAL', 'TARIFF_NAME', 'TARIFF_SPEED', 'TARIFF_PRICE', 'TARIFF_CHANNELS', 'YEAR',
+    'CONNECTION_HOURS', 'SUPPORT_HOURS', 'ONLINE_APPLICATIONS_HOURS', 'CALLBACK_WITHIN_MINUTES',
+    'CITY_MIN_PRICE', 'CITY_MAX_SPEED', 'CITY_MAX_CHANNELS',
   ]);
   assert.ok(definitions.every((item) => ['text', 'number', 'phone', 'date'].includes(item.type) && typeof item.source === 'string' && item.source.length));
   assert.equal(definitions.find((item) => item.code === 'TARIFF_PRICE').source, 'Tariff.effectivePrice');

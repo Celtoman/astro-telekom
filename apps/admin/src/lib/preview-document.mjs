@@ -1,5 +1,7 @@
-import { renderTariffCollection, projectCityHomeBlocks } from '../../../api/src/tariff-collection-model.ts'
-import { tariffView } from '../../../api/src/tariff-view.ts'
+import { renderTariffCollection, projectCityHomeBlocks, sortCollectionTariffs } from '../../../api/src/tariff-collection-model.ts'
+import { tariffView, publishedTariffFacts } from '../../../api/src/tariff-view.ts'
+import { renderCityComparison, renderRegionalCities, renderCityContacts, projectBenefitFacts } from '../../../web/src/lib/city-home-render.ts'
+import { publicDisplayForCatalog } from '../../../web/src/lib/public-display.ts'
 import { heroFacts } from '../../../web/src/data/hero-facts.ts'
 import { legalSections } from '../../../web/src/data/legal-pages.ts'
 import { parseRedTitle } from '../../../api/src/home-hero-model.ts'
@@ -45,18 +47,6 @@ function image(catalog, path, alt = '', extra = '') {
   const source = asset(catalog, path)
   return source ? `<img src="${html(source)}" alt="${html(alt)}" referrerpolicy="no-referrer" ${extra}>` : ''
 }
-function renderHeader(catalog, city) {
-  const activeCity = city || list(catalog.cities).find(item => item.slug === 'moskva')
-  return wrap('header', `<header class="site-header"><div class="utility-line"><div class="header-container utility-inner">
-    <button class="utility-link city-trigger" disabled>${image(catalog, '/images/figma/map-pin.svg', '', 'width="16" height="16"')}<span>${html(activeCity?.name || 'Москва')}</span>${image(catalog, '/images/figma/chevron-down.svg', '', 'class="chevron" width="14" height="14"')}</button>
-    <div class="utility-actions">${inactiveLink('Проверить адрес', 'utility-link')}${inactiveLink('Техподдержка', 'utility-link support-link')}</div></div></div>
-    <div class="header-container main-line"><a class="brand" aria-disabled="true">${image(catalog, '/images/figma/domru-logo.png', 'Дом.ру', 'width="2071" height="682"') || html(text(catalog.site?.name, 'Дом.ру'))}</a>
-    <nav class="header-nav" aria-label="Основная навигация">${['Тарифы', 'Города', 'Карта покрытия'].map(label => inactiveLink(label)).join('')}</nav>
-    <div class="header-actions"><a class="header-phone" aria-disabled="true">${image(catalog, '/images/figma/phone.svg', '', 'width="22" height="22"')}<span class="phone-copy"><span data-phone-value>${html(catalog.site?.connectionPhone)}</span><span class="phone-caption">Подключение</span></span></a>${button('Заказать звонок', 'callback-button')}<button class="menu-trigger" disabled aria-label="Открыть меню">${image(catalog, '/images/figma/menu.svg', '', 'width="24" height="24"')}</button></div></div></header>`)
-}
-function renderFooter(city) {
-  return `<footer class="site-footer"><div class="container footer-inner"><span>${html(city ? `Подключение домашнего интернета в ${cityNameIn(city)}` : 'Подключение домашнего интернета')}</span>${['Города обслуживания', 'Политика конфиденциальности', 'Согласие на обработку данных', 'Политика cookie'].map(label => inactiveLink(label)).join('')}</div></footer>`
-}
 function addressEntry(catalog, data) {
   return wrap('address', `<div class="address-check-root embedded hero-address"><div class="address-entry"><div><div class="address-form"><label>Адрес</label><div class="address-field">${image(catalog, '/images/figma/map-pin.svg', '', 'class="address-icon" width="20" height="20"')}<input type="text" disabled aria-label="Адрес" placeholder="${html(text(data.addressPlaceholder, 'Введите ваш адрес'))}"></div><p class="address-hint">Начните вводить город и адрес, затем выберите подходящий вариант.</p><button class="button" data-submit disabled>${html(text(data.checkButtonText, 'Проверить'))}</button></div></div></div></div>`)
 }
@@ -74,12 +64,12 @@ function renderHome(catalog) {
 }
 function renderFullGeneralHome(catalog) {
   const home = generalHomeCatalog(catalog.generalHome)
-  const options = { interactive: false, asset: path => asset(catalog, path), phone: catalog.site.connectionPhone }
+  const options = { interactive: false, asset: path => asset(catalog, path), phone: catalog.site.connectionPhone, callbackWithinMinutes: catalog.site.publicDisplay.callbackWithinMinutes }
   const data = type => generalHomeBlock(home, type)
   const body = `<div data-home-block="home.hero">${renderHomeHero1d(catalog, data('home.hero'))}</div>` + wrap('generalhome', [
     renderAddressEntry(data('home.address_check'), options),
     renderProviderAbout(data('home.provider_about'), options),
-    renderBenefits(data('home.benefits'), options),
+    renderBenefits(projectBenefitFacts(data('home.benefits'), catalog.site.publicDisplay, { kind: 'HOME' }), options),
     renderConnectionSteps(data('home.connection_steps'), options),
     renderMovix(data('home.movix'), options),
     renderMorePossibilities(data('home.more_possibilities'), options),
@@ -113,6 +103,27 @@ function renderCity(catalog, route) {
   if (!page) throw new Error('HOME маршрута предпросмотра не найдена')
   const blocks = projectCityHomeBlocks(list(page.blocks)), hero = blocks.find(block => block.blockType === 'hero')
   if (!hero) throw new Error('HOME маршрута предпросмотра не содержит hero')
+  if (page.content?.homeCompositionVersion === '3.0.0') {
+    const options = { interactive: false, asset: path => asset(catalog, path), phone: catalog.site.connectionPhone, callbackWithinMinutes: catalog.site.publicDisplay.callbackWithinMinutes };
+    const tariffs = tariffsOf(city), collection = blocks.find(block => block.blockType === 'tariff_grid');
+    const render = block => {
+      const data = block.data;
+      switch (block.blockType) {
+        case 'hero': return renderHero(catalog, data, city, 'city');
+        case 'tariff_grid': return wrap('collection', renderTariffCollection(data, tariffs, options));
+        case 'city.comparison': return wrap('cityhome', renderCityComparison(data, sortCollectionTariffs(tariffs, collection.data.sort), options));
+        case 'city.help': return wrap('generalhome', renderConnectionHelp(data, options));
+        case 'city.benefits': return wrap('generalhome', renderBenefits(projectBenefitFacts(data, catalog.site.publicDisplay, { kind: 'CITY_HOME', maxSpeedMbps: publishedTariffFacts(tariffs).maxSpeed }), options));
+        case 'city.connection_steps': return wrap('generalhome', renderConnectionSteps(data, options));
+        case 'city.movix': return wrap('generalhome', renderMovix(data, options));
+        case 'city.regional_cities': { const html = renderRegionalCities(data, city, catalog.cities, options); return html ? wrap('cityhome', html) : ''; }
+        case 'city.faq': return data.items.length ? wrap('generalhome', renderHomeFaq(data, options)) : '';
+        case 'city.contacts': return wrap('cityhome', renderCityContacts(data, catalog.site, options));
+        default: throw new Error(`Неизвестный блок городской страницы: ${block.blockType}`);
+      }
+    };
+    return wrap('citycomposition', `<div class="city-home-composition" data-city-home-composition>${blocks.map(block => { const body = render(block); return body ? `<div data-city-block="${html(block.blockType)}">${body}</div>` : ''; }).join('')}</div>`);
+  }
   return renderHero(catalog, record(hero.data), city, 'city') + wrap('blocks', blocks.filter(block => block.blockType !== 'hero').map(block => renderBlock(block, city)).join(''))
 }
 function renderTariff(catalog, route) {
@@ -127,7 +138,7 @@ function renderTariff(catalog, route) {
     ['Какая стоимость будет после заявки?', 'На странице показаны опубликованные условия тарифа. Итоговую стоимость, оборудование и доступные опции подтвердит оператор перед подключением.'],
     ['Можно ли выбрать другой тариф?', `Да. Ниже и на странице города показаны другие опубликованные предложения для ${cityNameIn(city)}.`],
   ]
-  return wrap('tariff', `<article class="tariff-detail" data-tariff-detail><div class="container"><nav class="breadcrumbs">${inactiveLink('Главная')}<span>/</span>${inactiveLink(city.name)}<span>/</span><span>${html(tariff.name)}</span></nav><section class="tariff-hero" data-tariff-block="hero"><div class="tariff-copy"><div class="tariff-labels"><span class="service-label">${html(tariff.service)}</span>${tariff.badge ? `<span class="badge">${html(tariff.badge)}</span>` : ''}</div><h1>${html(tariff.name)}</h1>${tariff.subtitle ? `<p class="subtitle">${html(tariff.subtitle)}</p>` : ''}<dl class="tariff-facts">${tariff.baseComponents.map(item => `<div class="${item.included ? '' : 'is-missing'}" data-component="${html(item.code)}"><dt>${html(item.title)}</dt><dd>${html(item.value)}</dd></div>`).join('')}<div><dt>Доступность</dt><dd>${tariff.availability ? 'Проверяется по адресу' : 'Тариф в архиве'}</dd></div></dl></div><aside class="price-panel" aria-label="Стоимость тарифа">${tariff.promoText ? `<span class="promo">${html(tariff.promoText)}</span>` : ''}${tariff.pricing.standardLabel ? `<del class="standard-price">${html(tariff.pricing.standardLabel)}</del>` : ''}<div class="price">${html(tariff.pricing.currentLabel)}</div>${tariff.connection ? `<p>${html(tariff.connection)}</p>` : ''}${button('Проверить адрес')}<small>Окончательные условия и техническую возможность подтвердит оператор.</small></aside></section></div>
+  return wrap('tariff', `<article class="tariff-detail" data-tariff-detail><div class="container"><nav class="breadcrumbs">${inactiveLink('Главная')}<span>/</span>${inactiveLink(city.name)}<span>/</span><span>${html(tariff.name)}</span></nav><section class="tariff-hero" data-tariff-block="hero"><div class="tariff-copy"><div class="tariff-labels"><span class="service-label">${html(tariff.service)}</span>${tariff.badge ? `<span class="badge">${html(tariff.badge)}</span>` : ''}</div><h1>${html(tariff.name)}</h1>${tariff.subtitle ? `<p class="subtitle">${html(tariff.subtitle)}</p>` : ''}<dl class="tariff-facts">${tariff.baseComponents.map(item => `<div class="${item.included ? '' : 'is-missing'}" data-component="${html(item.code)}"><dt>${html(item.title)}</dt><dd>${html(item.value)}</dd></div>`).join('')}<div><dt>Доступность</dt><dd>${tariff.availability ? 'Проверяется по адресу' : 'Тариф в архиве'}</dd></div></dl></div><aside class="price-panel" aria-label="Стоимость тарифа">${tariff.promoText ? `<span class="promo">${html(tariff.promoText)}</span>` : ''}${tariff.pricing.standardLabel ? `<del class="standard-price">${html(tariff.pricing.standardLabel)}</del>` : ''}<div class="price">${html(tariff.pricing.currentLabel)}</div>${tariff.connection ? `<p>${html(tariff.connection)}</p>` : ''}${button('Подключить')}<small>Окончательные условия и техническую возможность подтвердит оператор.</small></aside></section></div>
     ${tariff.description ? `<section class="section container details-section" data-tariff-block="description"><div><span class="section-kicker">Состав тарифа</span><h2>Что входит</h2></div><p class="details-copy">${html(tariff.description)}</p></section>` : ''}
     ${tariff.cinemas.length ? section('cinemas', 'Уже включено', 'Онлайн-кинотеатры', `<div class="cinema-list">${tariff.cinemas.map(item => `<span class="cinema-chip" data-cinema-code="${html(item.code)}">${html(item.title)}</span>`).join('')}</div>`) : ''}
     ${equipment ? section('equipment', 'Оборудование', 'Варианты для подключения', `<div class="cards">${equipment}</div>`, true) : ''}
@@ -145,7 +156,7 @@ function renderCities(catalog, page) {
   const regions = [...groups.values()].sort((a, b) => a.region.name.localeCompare(b.region.name, 'ru'))
   return wrap('cities', `<section class="cities-hero"><div class="container cities-hero-grid"><div><span class="eyebrow">География подключения</span><h1>Города подключения Дом.ру</h1><p class="lead">${html(text(page.content?.text, 'Найдите свой город, откройте актуальные тарифы и проверьте техническую возможность подключения по точному адресу.'))}</p><dl class="directory-stats"><div><dt>Города</dt><dd>${cities.length}</dd></div><div><dt>Регионы</dt><dd>${regions.length}</dd></div><div><dt>Проверка</dt><dd>по адресу</dd></div></dl></div><div class="coverage-radar" aria-hidden="true"><span class="radar-ring ring-one"></span><span class="radar-ring ring-two"></span><span class="radar-ring ring-three"></span><span class="radar-beam"></span><span class="radar-point point-one"></span><span class="radar-point point-two"></span><span class="radar-point point-three"></span><strong>${cities.length}</strong><small>городов в каталоге</small></div></div></section>
   <section class="section container coverage-callout"><div class="coverage-copy"><span class="section-label">Покрытие сети</span><h2>Проверьте не только город, но и точный адрес</h2><p>Присутствие города в каталоге не гарантирует подключение конкретного дома. Выберите город и укажите улицу и дом — система проверит техническую доступность.</p></div>${inactiveLink('Перейти к проверке покрытия', 'button')}</section>
-  <section class="section container city-directory"><div class="directory-heading"><div><span class="section-label">Все направления</span><h2>Выберите город</h2></div><p>Показано: ${cities.length} ${cityWord(cities.length)}</p></div><div class="city-search"><label>Поиск по городу</label><div class="search-control"><input disabled type="search" placeholder="Например, Казань" aria-label="Поиск по городу"></div></div><div class="region-list">${regions.map(group => `<section class="region-group"><header><h3>${html(group.region.name)}</h3><span>${group.cities.length} ${cityWord(group.cities.length)}</span></header><ul>${group.cities.map(city => `<li><a aria-disabled="true"><span>${html(city.name)}</span><span>→</span></a></li>`).join('')}</ul></section>`).join('')}</div></section><section class="section directory-faq"><div class="container faq-grid"><div><span class="section-label">Помощь</span><h2>Вопросы о подключении</h2><p>Коротко о том, как пользоваться каталогом городов и проверкой адреса.</p></div><div class="faq-list"><details><summary>Как узнать, доступен ли Дом.ру в моем доме?</summary><p>Найдите город в каталоге, откройте его страницу и введите точный адрес в форме проверки. Доступность определяется отдельно для каждого дома.</p></details><details><summary>Почему город есть в списке, а адрес не подключается?</summary><p>Покрытие внутри одного города отличается по улицам и домам. Если система не подтверждает адрес, оператор сможет уточнить возможные варианты.</p></details><details><summary>Где посмотреть тарифы для своего города?</summary><p>На странице каждого города опубликован полный доступный каталог тарифов, цены, скорость и стоимость подключения из базы платформы.</p></details></div></div></section>`)
+  <section class="section container city-directory"><div class="directory-heading"><div><span class="section-label">Все направления</span><h2>Выберите город</h2></div><p>Показано: ${cities.length} ${cityWord(cities.length)}</p></div><div class="city-search"><label>Поиск по городу</label><div class="search-control"><input disabled type="search" placeholder="Например, Казань" aria-label="Поиск по городу"></div></div><div class="region-list">${regions.map(group => `<section class="region-group"><header><h3>${html(group.region.name)}</h3><span>${group.cities.length} ${cityWord(group.cities.length)}</span></header><ul>${group.cities.map(city => `<li><a aria-disabled="true"><span>${html(city.name)}</span><span>→</span></a></li>`).join('')}</ul></section>`).join('')}</div></section><section id="faq" class="section directory-faq"><div class="container faq-grid"><div><span class="section-label">Помощь</span><h2>Вопросы о подключении</h2><p>Коротко о том, как пользоваться каталогом городов и проверкой адреса.</p></div><div class="faq-list"><details><summary>Как узнать, доступен ли Дом.ру в моем доме?</summary><p>Найдите город в каталоге, откройте его страницу и введите точный адрес в форме проверки. Доступность определяется отдельно для каждого дома.</p></details><details><summary>Почему город есть в списке, а адрес не подключается?</summary><p>Покрытие внутри одного города отличается по улицам и домам. Если система не подтверждает адрес, оператор сможет уточнить возможные варианты.</p></details><details><summary>Где посмотреть тарифы для своего города?</summary><p>На странице каждого города опубликован полный доступный каталог тарифов, цены, скорость и стоимость подключения из базы платформы.</p></details></div></div></section>`)
 }
 function renderGlobal(catalog, route) {
   const page = pageByType(catalog, route.pageType)
@@ -161,11 +172,11 @@ export function previewStyleText(publicStyles) {
 export function buildPreviewDocument(catalog, routePath, publicStyles = '', assets = {}) {
   const published = item => !item.status || item.status === 'PUBLISHED'
   catalog = { ...catalog, previewAssets: assets, globalPages: list(catalog.globalPages).filter(published), cities: list(catalog.cities).filter(published).map(city => ({ ...city, pages: list(city.pages).filter(published), tariffs: list(city.tariffs).filter(published) })) }
+  catalog.site = { ...catalog.site, publicDisplay: publicDisplayForCatalog(catalog.site, catalog.generalHome) };
   const route = list(catalog?.routes).find(item => item.path === routePath)
   if (!route) throw new Error('Маршрут отсутствует в рабочем Release 1 inventory')
   const city = route.citySlug ? cityBySlug(catalog, route.citySlug) : null
-  const fullHome = route.kind === 'HOME' ? generalHomeCatalog(catalog.generalHome) : undefined
-  const shellOptions = { interactive: false, asset: path => asset(catalog, path), city: publishedMoscow(catalog.cities) || undefined }
+  const shellOptions = { interactive: false, asset: path => asset(catalog, path), city: city || publishedMoscow(catalog.cities) || undefined }
   let content
   if (route.kind === 'HOME') content = renderHome(catalog)
   else if (route.kind === 'CITY_HOME') content = renderCity(catalog, route)
@@ -173,5 +184,5 @@ export function buildPreviewDocument(catalog, routePath, publicStyles = '', asse
   else if (route.kind === 'GLOBAL_PAGE') content = renderGlobal(catalog, route)
   else throw new Error('Тип маршрута не поддерживается предпросмотром')
   const assetOrigins = [...new Set(Object.values(assets).filter(value => /^https?:\/\//.test(value)).map(value => new URL(value).origin))].map(html).join(' ')
-  return `<!doctype html><html lang="ru"${fullHome ? ' class="full-general-home"' : ''}><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https: ${assetOrigins}; font-src data:"><title>${html(routeLabel(catalog, route))} — предпросмотр</title><style>${previewStyleText(publicStyles)}</style></head><body${fullHome ? ' class="general-home-page"' : ''}>${fullHome ? wrap('homeshell', renderHomeHeader(catalog.site, shellOptions)) : renderHeader(catalog, city)}<main>${content}</main>${fullHome ? wrap('homeshell', renderHomeFooter(catalog.site, shellOptions)) : renderFooter(city)}</body></html>`
+  return `<!doctype html><html lang="ru" class="full-general-home"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https: ${assetOrigins}; font-src data:"><title>${html(routeLabel(catalog, route))} — предпросмотр</title><style>${previewStyleText(publicStyles)}</style></head><body class="general-home-page">${wrap('homeshell', renderHomeHeader(catalog.site, shellOptions))}<main>${content}</main>${wrap('homeshell', renderHomeFooter(catalog.site, shellOptions))}</body></html>`
 }

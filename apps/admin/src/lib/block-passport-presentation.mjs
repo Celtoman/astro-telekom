@@ -43,11 +43,12 @@ export function passportContent(passport) {
   const fields = passport.id === 'header'
     ? passport.fields.filter(field => ['connectionPhone', 'supportPhone'].includes(field.key))
     : passport.fields.filter(field => field.control !== 'read_only');
-  return fields.map(field => ({ key: field.key, label: fieldNames[field.key] ?? (passportGroup(passport) === 'root' ? generalHomeFieldLabel(field.key) : 'Дополнительное поле'), required: field.required }));
+  return fields.map(field => ({ key: field.key, label: fieldNames[field.key] ?? (passportGroup(passport) === 'root' || passport.id.startsWith('city.') ? generalHomeFieldLabel(field.key) : 'Дополнительное поле'), required: field.required }));
 }
 export function passportSource(passport) {
+  if (passport.id.startsWith('city.') && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=CITY_HOME&block=${encodeURIComponent(passport.id)}`, label: 'Открыть редактор', note: 'Независимый контент шаблона города. Общие факты меняются в настройках сайта.' };
   if (passport.id === 'tariff_grid' && passport.editorReadiness === 'READY') return { href: '/templates/tariffs', label: 'Открыть редактор', note: 'Общий тарифный блок городов. Цены и закрепление меняются в каталоге тарифов.' };
-  if (['home.hero', 'hero'].includes(passport.id) && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=${passport.id === 'home.hero' ? 'HOME' : 'CITY_HOME'}`, label: 'Открыть редактор', note: 'Редактируется контент своего общего шаблона. Сохранение меняет только рабочую версию.' };
+  if (['home.hero', 'hero'].includes(passport.id) && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=${passport.id === 'home.hero' ? 'HOME' : 'CITY_HOME&mode=legacy'}`, label: 'Открыть редактор', note: 'Редактируется контент своего общего шаблона. Сохранение меняет только рабочую версию.' };
   if (passport.id === 'home.hero') return { href: null, label: null, note: 'Паспорт утверждён. Редактор первого экрана общей главной ещё не подключён.' };
   if (passportGroup(passport) === 'root' && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=HOME&block=${encodeURIComponent(passport.id)}`, label: 'Открыть редактор', note: 'Редактируется контент выбранного блока общей главной. Сохранение меняет только рабочую версию.' };
   if (passportGroup(passport) === 'root') return { href: null, label: null, note: 'Паспорт утверждён. Редактор блока общей главной ещё не подключён.' };

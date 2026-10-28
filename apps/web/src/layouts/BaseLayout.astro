@@ -2,9 +2,8 @@
 import { createHash } from 'node:crypto';
 import '@fontsource-variable/geist';
 import type { CityView, PageView, SiteView } from '../data/site';
-import { defaultSiteImagePath } from '../data/site';
+import { defaultSiteImagePath, loadSiteData } from '../data/site';
 import { publicAsset } from '../data/public-asset';
-import SiteHeader from '../components/SiteHeader.astro';
 import GeneralHomeHeader from '../components/general-home/GeneralHomeHeader.astro';
 import GeneralHomeFooter from '../components/general-home/GeneralHomeFooter.astro';
 import CallbackDialog from '../components/CallbackDialog.astro';
@@ -29,6 +28,12 @@ interface Props {
 
 const { title, description, city, site, indexable = true, ogTitle = title, ogDescription = description, ogImage = defaultSiteImagePath } = Astro.props as Props;
 const homeShell = (Astro.props as Props).homeShell;
+const catalog = await loadSiteData();
+const currentRoute = catalog.routes.find(route => route.path === normalizePublicHtmlPath(Astro.url.pathname));
+const cityComposition = city?.pages.find(page => page.type === 'HOME' && page.slug === '')?.content?.homeCompositionVersion;
+const localSections = homeShell ? ['faq', 'movix', 'address-check']
+  : currentRoute?.kind === 'CITY_HOME' ? ['tariffs', 'address-check', ...(cityComposition === '3.0.0' ? ['comparison', 'faq', 'movix', 'contacts'] : [])]
+    : currentRoute?.kind === 'CITY_TARIFF_DETAIL' || currentRoute?.pageType === 'CITIES' ? ['faq'] : [];
 const imageOrigins = new Set<string>((Astro.props as Props).imageOrigins ?? []);
 if (typeof Astro.props.firstScreenImage === 'string' && /^https:\/\//i.test(Astro.props.firstScreenImage)) imageOrigins.add(new URL(Astro.props.firstScreenImage).origin);
 for (const origin of imageOrigins) {
@@ -56,7 +61,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
 ---
 
 <!doctype html>
-<html lang="ru" class:list={{ 'full-general-home': !!homeShell }}>
+<html lang="ru" class="full-general-home">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -72,21 +77,13 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     {indexable && <script is:inline type="application/ld+json" set:html={jsonLd}></script>}
     {metrikaBootstrap && <script is:inline set:html={metrikaBootstrap}></script>}
   </head>
-  <body class:list={{ 'general-home-page': !!homeShell }}>
-    {homeShell ? <GeneralHomeHeader {site} cities={homeShell.cities} addressDialogId={homeShell.addressDialogId} /> : <SiteHeader {city} {site} />}
+  <body class="general-home-page">
+    <GeneralHomeHeader {site} {city} cities={catalog.cities} {localSections} addressDialogId={homeShell?.addressDialogId} />
     <main>
       <slot />
     </main>
-    {homeShell ? <GeneralHomeFooter {site} cities={homeShell.cities} /> : <footer class="site-footer">
-      <div class="container footer-inner">
-        <span>{city ? `Подключение домашнего интернета в ${city.nameIn}` : 'Подключение домашнего интернета'}</span>
-        <a href="/goroda-obsluzhivaniya">Города обслуживания</a>
-        <a href="/politika-konfidencialnosti">Политика конфиденциальности</a>
-        <a href="/soglasie-na-obrabotku-personalnyh-dannyh">Согласие на обработку данных</a>
-        <a href="/politika-obrabotki-faylov-kuki">Политика cookie</a>
-      </div>
-    </footer>}
-    <CallbackDialog {site} {city} requireConfirmedCity={!!homeShell} />
+    <GeneralHomeFooter {site} {city} cities={catalog.cities} {localSections} />
+    <CallbackDialog {site} {city} requireConfirmedCity={!city} />
     <LegalDocuments />
     <script>
       import {

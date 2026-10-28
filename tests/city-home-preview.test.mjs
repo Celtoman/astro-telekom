@@ -1,0 +1,28 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { buildPreviewDocument } from '../apps/admin/src/lib/preview-document.mjs';
+import { readPreviewPublicStyles } from '../scripts/preview-public-styles.mjs';
+const require = createRequire(import.meta.url);
+const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
+const { cityHomeSource } = require('./helpers/city-home-source.cjs');
+test('CITY preview renders the agreed composition, settings and shared shell without executable controls', () => {
+  const catalog = new SiteCatalogService({}).renderSource(cityHomeSource());
+  const before = structuredClone(catalog), styles = readPreviewPublicStyles();
+  const html = buildPreviewDocument(catalog, '/kazan', styles);
+  assert.deepEqual([...html.matchAll(/data-city-block="([^"]+)"/g)].map(m => m[1]), ['hero','tariff_grid','city.comparison','city.help','city.benefits','city.connection_steps','city.movix','city.regional_cities','city.faq','city.contacts']);
+  assert.equal([...html.matchAll(/data-comparison-row/g)].length, 6);
+  assert.match(html, /class="gh-header"/); assert.match(html, /data-general-home-footer/);
+  assert.match(html, /Казань/); assert.match(html, /Ежедневно с 8:00 до 22:00/);
+  assert.match(styles, /\.city-home-composition/); assert.match(styles, /\.city-comparison/);
+  assert.doesNotMatch(html, /<script\b|\shref=|data-callback-trigger|data-address-dialog-trigger|data-home-callback-form/);
+  assert.deepEqual(catalog, before);
+  const detail = buildPreviewDocument(catalog, '/kazan/giga-300-tv');
+  assert.match(detail, /<aside class="price-panel"[\s\S]*?<button[^>]*disabled>Подключить<\/button>/);
+  assert.match(detail, /data-tariff-block="address"[\s\S]*?Проверить адрес/);
+  const city = catalog.cities.find(city => city.slug === 'kazan'), page = city.pages.find(page => page.type === 'HOME');
+  page.blocks.find(block => block.blockType === 'city.faq').data.items = [];
+  catalog.cities = [city];
+  const sparse = buildPreviewDocument(catalog, '/kazan');
+  assert.doesNotMatch(sparse, /data-city-block="city.faq"|data-city-block="city.regional_cities"/);
+});

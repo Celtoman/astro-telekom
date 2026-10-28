@@ -16,11 +16,11 @@ const definitions: Record<GeneralHomeBlockType, { title: string; purpose: string
   },
   'home.connection_steps': {
     title: 'Как подключить B06b', purpose: 'Четыре шага от обращения до работающих услуг.', nodes: ['282:4501', '282:4571', '282:4641'],
-    rules: ['request → appointment → installation → confirmation. Телефон и CTA только в первой карточке.', 'A11 «Оставить заявку» запускает адресный FLOW2. Новое пояснение возле CTA и новые действия в остальных шагах не добавляются.'],
+    rules: ['request → appointment → installation → confirmation. Телефон и CTA только в первой карточке.', 'A11 «Оставить заявку» открывает обратный звонок FLOW1. Новое пояснение возле CTA и новые действия в остальных шагах не добавляются.'],
   },
   'home.movix': {
     title: 'Movix B17', purpose: 'Промоблок сервиса с тремя преимуществами и шестью логотипами.', nodes: ['291:5238', '291:5474', '291:5710'],
-    rules: ['Три features: television/search/devices; шесть cinemas: kinopoisk/ivi/okko/premier/start/amediateka. Action=Links фиксирован.', 'A12 ведёт на HOME канонического города Ctx#tariffs; A13 — /movix. Недостающая страница реализуется отдельно, без подмены CTA. Сноска сохраняется.'],
+    rules: ['Три features: television/search/devices; шесть cinemas: kinopoisk/ivi/okko/premier/start/amediateka. Action=Links фиксирован.', 'A12 ведёт на HOME канонического города Ctx#tariffs; Дополнительная ссылка внутри блока скрыта до появления отдельной страницы Movix. Сноска сохраняется.'],
   },
   'home.more_possibilities': {
     title: 'Больше возможностей B16', purpose: 'Девять возможностей в трёх категориях.', nodes: ['258:2790', '258:3075', '258:3363'],
@@ -40,17 +40,17 @@ const definitions: Record<GeneralHomeBlockType, { title: string; purpose: string
   },
 };
 
-function fields(rule: GeneralHomeFieldRule, path = ''): BlockPassportField[] {
+export function structuredPassportFields(rule: GeneralHomeFieldRule, path = '', scopes = 'SITE'): BlockPassportField[] {
   const source = `PageTemplateBlock.data.${path}`;
-  if (rule.kind === 'object') return Object.entries(rule.fields).flatMap(([key, child]) => fields(child, path ? `${path}.${key}` : key));
+  if (rule.kind === 'object') return Object.entries(rule.fields).flatMap(([key, child]) => structuredPassportFields(child, path ? `${path}.${key}` : key, scopes));
   if (rule.kind === 'list') return [{
     key: path, type: 'list', required: true, source, control: 'list',
     validation: `${rule.min}–${rule.max} при публикации; 0–${rule.max} в черновике. Порядок пар редактируемый.`,
-  }, ...fields(rule.item, `${path}[]`)];
+  }, ...structuredPassportFields(rule.item, `${path}[]`, scopes)];
   return [{
     key: path, type: rule.kind === 'text' ? 'text' : 'url', required: true, source,
     control: rule.kind === 'text' && rule.limit > 250 ? 'textarea' : 'input',
-    validation: `Непустая строка до ${rule.limit} символов при публикации; пустой безопасный черновик допустим. ${rule.kind === 'asset' ? 'Безопасный локальный путь файла или HTTPS без credentials.' : rule.kind === 'https' ? 'Только HTTPS без credentials.' : 'Обычный текст без HTML.'} ${rule.variables ? 'Разрешены SITE-переменные действующего каталога; CITY/TARIFF запрещены.' : 'Переменные запрещены.'}`,
+    validation: `Непустая строка до ${rule.limit} символов при публикации; пустой безопасный черновик допустим. ${rule.kind === 'asset' ? 'Безопасный локальный путь файла или HTTPS без credentials.' : rule.kind === 'https' ? 'Только HTTPS без credentials.' : 'Обычный текст без HTML.'} ${rule.variables ? `Разрешены переменные ${scopes} действующего каталога; TARIFF запрещены.` : 'Переменные запрещены.'}`,
   }];
 }
 
@@ -60,14 +60,14 @@ export const GENERAL_HOME_PASSPORTS: readonly BlockPassport[] = GENERAL_HOME_BLO
   return {
     id, title: definition.title, purpose: definition.purpose, kind: 'MANAGED', proposedAllowedPages: ['HOME'], proposedContentScope: 'TEMPLATE',
     visualVariants: ['Утверждённые Screens Desktop/Tablet/Mobile; новый дизайн не проектируется'],
-    fields: fields(GENERAL_HOME_SCHEMAS[id]),
+    fields: structuredPassportFields(GENERAL_HOME_SCHEMAS[id]).map(field => id === 'home.benefits' && field.key.endsWith('.factText') ? { ...field, control: 'read_only' as const, source: 'Общие настройки Site.publicDisplay; скорость HOME фиксирована кодом' } : field),
     emptyBehavior: 'Безопасные пустые строки сохраняются черновиком; неправильные типы/ключи и опасные данные запрещены. Обязательные пропуски блокируют готовность к публикации с точным block/field. Фиксированные смысловые карточки не исчезают.',
     editorForm: 'Редактор /templates/home?kind=HOME: атомарная рабочая версия десяти блоков, фиксированные карточки, FAQ до50 пар, ошибки точного поля и защита несохранённого ввода. Разрешены только указанные поля, без управления порядком секций, стилями, контактами или действиями.',
     previewScenarios: ['Desktop 1440, Tablet 834, Mobile 390 и 320 px', 'Полный контент, безопасный неполный черновик и длинные тексты', 'Ошибки/пустые данные по паспорту; preview и действия проверяются на следующих этапах'],
     accessibility: ['Один H1 страницы, H2 секции; смысловые изображения с alt', 'Фокус и управление с клавиатуры по типу действия; ошибки связаны с полем', 'Допустимый контент не обрезается'],
     status: 'APPROVED', passportVersion: GENERAL_HOME_VERSION, approvedBy: 'Владелец проекта; согласование 2026-10-16', editorReadiness: 'READY', replacementId: null,
-    implementation: 'PageTemplate(HOME) → PageTemplateBlock.data; типизированный контракт, guarded API, catalog.generalHome и publication preflight. GeneralHomeApp редактирует разрешённые поля; готовность редактора подтверждена локально. Публичный renderer и preview полной HOME — следующие этапы; статус ACTIVE не присваивается по готовности формы.',
+    implementation: 'PageTemplate(HOME) → PageTemplateBlock.data; типизированный контракт, guarded API, catalog.generalHome и publication preflight. GeneralHomeApp редактирует разрешённые поля; готовность редактора подтверждена локально. Публичный renderer и sandbox preview используют общую проекцию; статус ACTIVE требует отдельной проверки выпуска.',
     design: { fileKey: 'BdxNHlBVZWejREtOEIWDkI', nodeId: definition.nodes[0], name: definition.title, variants: definition.nodes.map((nodeId, index) => ({ device: (['Desktop', 'Tablet', 'Mobile'] as const)[index], nodeId })) },
-    runtimeRules: [...definition.rules, 'Контакты — Site, города — опубликованный каталог; ежедневно 24/7, звонок в течение 15 минут. Юридические документы и логика FLOW системные, не копии CMS-полей.'],
+    runtimeRules: [...definition.rules, 'Телефоны — Site, графики и срок звонка — централизованные Site.publicDisplay, города — опубликованный каталог. Юридические документы и логика FLOW системные, не копии CMS-полей.'],
   };
 });

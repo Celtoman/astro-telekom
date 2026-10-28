@@ -130,7 +130,7 @@ test('public city catalog returns only published entities for one published site
             id: 'page-1', slug: 'internet', type: 'INTERNET', status: 'PUBLISHED', content: {}, seo: {},
             blocks: [{ id: 'block-1', blockType: 'hero', position: 10, visible: true, data: { title: 'Интернет {CITY_NAME_PREPOSITIONAL}', text: 'Проверьте подключение по адресу.' } }],
           }, canonicalHome()],
-          tariffs: [{ id: 'tariff-1', slug: 'giga-500', status: 'PUBLISHED', seo: {} }],
+          tariffs: [{ id: 'tariff-1', slug: 'giga-500', name: 'Гига 500', serviceType: 'INTERNET', availability: 'ACTIVE', status: 'PUBLISHED', seo: {} }],
         }];
       },
     },
@@ -187,7 +187,7 @@ test('public city catalog returns only published entities for one published site
   assert.deepEqual(calls.redirects.where, { siteId: 'site-1', status: 'PUBLISHED' });
   assert.deepEqual(calls.sitemapExclusions.where, { siteId: 'site-1' });
   assert.deepEqual(calls.seoTemplates.where, { siteId: 'site-1' });
-  assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test', connectionPhone: '+7 (800) 555-35-35', supportPhone: '+7 (800) 250-77-77', connectionHours: 'Ежедневно, 24/7', callbackWithinMinutes: 15 });
+  assert.deepEqual(result.site, { name: 'Дом.ру', slug: 'domru-site', domain: 'partner.example.test', connectionPhone: '+7 (800) 555-35-35', supportPhone: '+7 (800) 250-77-77', connectionHours: 'Ежедневно с 8:00 до 22:00', callbackWithinMinutes: 15, publicDisplay: require('../apps/api/dist/site-public-display.js').sitePublicDisplayDefaults() });
   assert.equal(result.cities.length, 1);
   assert.equal(result.cities[0].namePrepositional, 'Казани');
   assert.equal('supportPhone' in result.cities[0], false);
@@ -252,7 +252,7 @@ test('public city catalog does not apply removed city or region content and SEO 
         blocks: [{ id: 'hero', blockType: 'hero', position: 10, visible: true, data: { title: 'Интернет', text: 'Проверьте адрес.' } }],
       },
     ],
-    tariffs: [{ id: 'tariff', slug: 'giga-500', status: 'PUBLISHED', seo: { openGraph: { title: 'Гига 500' }, robots: { follow: false } } }],
+    tariffs: [{ id: 'tariff', slug: 'giga-500', name: 'Гига 500', serviceType: 'INTERNET', availability: 'ACTIVE', status: 'PUBLISHED', seo: { openGraph: { title: 'Гига 500' }, robots: { follow: false } } }],
   };
 
   const result = catalog.cityResponse(city, site);

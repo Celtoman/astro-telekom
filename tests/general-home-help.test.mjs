@@ -14,6 +14,9 @@ test('embedded consultation preserves consent and phone through failure, blocks 
   t.after(() => { for (const [key, descriptor] of Object.entries(previous)) { if (descriptor) Object.defineProperty(globalThis, key, descriptor); else delete globalThis[key]; } });
   const document = new Node(), form = new Node(), phone = new Node(), consent = new Node(), submit = new Node(), label = new Node(), error = new Node(), phoneError = new Node(), success = new Node(), wrapper = new Node();
   document.referrer = ''; document.nodes.set('[data-home-callback-form]', [form]);
+  const header = new Node(); header.dataset = { siteSlug: 'fixture', routeCity: '' }; document.nodes.set('[data-site-header]', header);
+  const defaultCity = { dataset: { cityId: 'm', citySlug: 'moscow', cityName: 'Москва' }, href: 'https://fixture.invalid/moscow' };
+  document.nodes.set('[data-city-choice-link][data-city-id]', [defaultCity]);
   form.dataset = { apiUrl: 'https://fixture.invalid/api/v1', siteSlug: 'fixture', consentVersion: 'lead-form-v1-2026-09-22' };
   form.elements = { phone, consent, website: new Node() }; form.parentElement = wrapper;
   form.nodes.set('[type=submit]', submit); submit.nodes.set('span', label); label.textContent = 'Заказать звонок';

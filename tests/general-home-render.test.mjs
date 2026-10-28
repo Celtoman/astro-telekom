@@ -86,8 +86,8 @@ test('Movix preserves three features, six logos and contextual navigation withou
   assert.equal((html.match(/data-movix-feature=/g) || []).length, 3);
   assert.equal((html.match(/data-movix-cinema=/g) || []).length, 6);
   assert.match(html, /href="\/samara#tariffs"[^>]*data-city-context-anchor="tariffs"/);
-  assert.match(html, /href="\/movix"/);
-  assert.equal((html.match(/<a\b/g) || []).length, 2);
+  assert.doesNotMatch(html, /href="\/movix"|home-movix-details/);
+  assert.equal((html.match(/<a\b/g) || []).length, 1);
   assert.match(html, /movix-compact-television.svg/);
   assert.match(html, /cinema-compact-premier.svg/);
   assert.match(renderMovix(data), /data-city-choice-anchor="tariffs"/);
@@ -96,15 +96,15 @@ test('Movix preserves three features, six logos and contextual navigation withou
   assert.throws(() => renderMovix(data, { tariffHref: 'javascript:alert(1)' }));
 });
 
-test('connection steps preserve fixed semantic sequence, system phone and FLOW 2 action; preview is inactive', () => {
+test('connection steps preserve fixed semantic sequence, system phone and FLOW 1 action; preview is inactive', () => {
   const data = generalHomeDefaultBlocks().find(block => block.blockType === 'home.connection_steps').data;
   const html = renderConnectionSteps(data, { phone: '8 (800) 555-72-44', phoneHref: 'tel:+78005557244', addressDialogId: 'address-entry-moscow-home', interactive: true });
   assert.equal((html.match(/data-home-step=/g) || []).length, 4);
   assert.match(html, /<ol\b/);
   assert.ok(html.indexOf('data-home-step="request"') < html.indexOf('data-home-step="appointment"'));
   assert.match(html, /href="tel:\+78005557244"/);
-  assert.match(html, /data-address-dialog-trigger="address-entry-moscow-home"/);
-  assert.doesNotMatch(html, /data-callback-trigger/);
+  assert.match(html, /data-callback-trigger/);
+  assert.doesNotMatch(html, /data-address-dialog-trigger/);
   const preview = renderConnectionSteps(data, { phone: '8 (800) 555-72-44', interactive: false });
   assert.doesNotMatch(preview, /href=|data-address-dialog-trigger=/);
   assert.match(preview, /disabled/);

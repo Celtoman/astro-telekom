@@ -35,7 +35,8 @@ export function initializeConnectionHelp(root = document) {
         let session;
         try { session = sessionForLead(sessionStorage, location.href, document.referrer); } catch { session = sessionForLead(null, location.href, document.referrer); }
         const { timeOnSiteSeconds, ...sessionContext } = session;
-        await sendCallbackRequest(form.dataset.apiUrl, { siteSlug: form.dataset.siteSlug, citySlug: cityContext().confirmed?.slug, phone: normalized, submissionKey: key, consentVersion: form.dataset.consentVersion, consentAccepted: true, formName: 'home-connection-help', session: sessionContext, timeOnSiteSeconds, website: form.elements.website.value });
+        const context = cityContext();
+        await sendCallbackRequest(form.dataset.apiUrl, { siteSlug: form.dataset.siteSlug, citySlug: context.routeCity?.slug || context.confirmed?.slug, phone: normalized, submissionKey: key, consentVersion: form.dataset.consentVersion, consentAccepted: true, formName: 'home-connection-help', session: sessionContext, timeOnSiteSeconds, website: form.elements.website.value });
         form.dataset.state = 'Success'; form.hidden = true; success.hidden = false; success.focus();
       } catch (failure) {
         form.dataset.state = 'Error'; error.hidden = false;

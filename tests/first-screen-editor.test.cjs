@@ -54,8 +54,8 @@ test('incomplete safe content saves as a working draft but cannot pass publicati
 });
 
 test('catalog resolves template titles but preserves separate root and city form labels', () => {
-  const source = publicationSource([city('moskva')]);
-  const cityTemplate = { id: 'city-template', kind: 'CITY_HOME', status: 'PUBLISHED', titleTemplate: 'В {CITY_NAME_PREPOSITIONAL}', content: { firstScreenPassportVersion: '1.0.0' }, blocks: cityHomeTemplateBlocks({ name: 'Москва', namePrepositional: 'Москве' }) };
+  const source = publicationSource([city('moskva', ['internet'])]);
+  const cityTemplate = { id: 'city-template', kind: 'CITY_HOME', status: 'PUBLISHED', titleTemplate: 'В {CITY_NAME_PREPOSITIONAL}', content: { ...require('../apps/api/dist/city-home-model.js').CITY_HOME_METADATA, firstScreenPassportVersion: '1.0.0', tariffCollectionPassportVersion: '1.0.0' }, blocks: cityHomeTemplateBlocks({ name: 'Москва', namePrepositional: 'Москве' }).map((block, index) => ({ ...block, id: `city-block-${index}` })) };
   cityTemplate.blocks[0].data = { ...firstScreenDefaults('CITY_HOME'), addressPlaceholder: 'Адрес города', checkButtonText: 'Проверка города' };
   source.cities[0].pages[0].templateId = cityTemplate.id;
   source.pageTemplates = [cityTemplate, { id: 'root-template', kind: 'HOME', blocks: [{ id: 'root-block', blockType: 'home.hero', data: { ...firstScreenDefaults('HOME'), title: 'Подключение {PROVIDER_NAME}', addressPlaceholder: 'Адрес главной', checkButtonText: 'Проверка главной' } }] }];

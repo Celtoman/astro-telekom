@@ -18,14 +18,22 @@ export const homeHeroEditorSchema = { kind: 'object', fields: {
   ...Object.fromEntries(Object.entries(HOME_HERO_TEXT_LIMITS).map(([key, limit]) => [key, text(limit, ['title', 'text'].includes(key))])),
   steps: { kind: 'list', min: 3, max: 3, item: { kind: 'object', fields: { title: text(80), text: text(250) } } },
 } }
-export const generalHomeEditorSchemas = { 'home.hero': homeHeroEditorSchema, ...GENERAL_HOME_SCHEMAS }
+const benefits = GENERAL_HOME_SCHEMAS['home.benefits'];
+const benefitsEditorSchema = { ...benefits, fields: { ...benefits.fields, items: {
+  kind: 'object', fields: Object.fromEntries(Object.entries(benefits.fields.items.fields).map(([key, rule]) => [key, {
+    ...rule, fields: { title: rule.fields.title, text: rule.fields.text },
+  }])),
+} } };
+export const generalHomeEditorSchemas = { 'home.hero': homeHeroEditorSchema, ...GENERAL_HOME_SCHEMAS, 'home.benefits': benefitsEditorSchema }
 export const generalHomeFieldId = (block, field) => `general-${block}--${field}`
 const labels = {
   title: 'Заголовок', text: 'Описание', intro: 'Вводный текст', eyebrow: 'Надзаголовок', addressLabel: 'Подпись адреса', addressPlaceholder: 'Подсказка адреса', checkButtonText: 'Кнопка проверки', reassuranceText: 'Пояснение под формой', image: 'Изображение', imageAlt: 'Описание изображения', imageBadgeText: 'Подпись на иллюстрации', helpEyebrow: 'Надзаголовок помощи', helpTitle: 'Заголовок помощи', callbackButtonText: 'Кнопка обратного звонка', metrics: 'Показатели', value: 'Значение', label: 'Подпись', brand_history: 'История бренда', network_length: 'Протяжённость сети', city_wifi: 'Городской Wi-Fi', network_uptime: 'Работа сети', evidence: 'Доказательства', infrastructure: 'Сетевая инфраструктура', development: 'Собственные разработки', research: 'Исследование', sourceLabel: 'Подпись ссылки источника', sourceUrl: 'Ссылка исследования', items: 'Элементы', speed: 'Скорость', fiber: 'Оптоволокно', wifi6: 'Wi-Fi 6', movix: 'Movix', connection: 'Подключение', support: 'Поддержка', factText: 'Факт под карточкой', steps: 'Шаги', request: 'Обращение', appointment: 'Визит', installation: 'Установка', confirmation: 'Проверка', applyButtonText: 'Кнопка заявки', features: 'Преимущества', television: 'Телевидение', search: 'Поиск', devices: 'До пяти устройств', cinemasLabel: 'Подпись кинотеатров', cinemas: 'Кинотеатры', kinopoisk: 'Кинопоиск', ivi: 'Иви', okko: 'Okko', premier: 'PREMIER', start: 'START', amediateka: 'Amediateka', alt: 'Описание логотипа', tariffButtonText: 'Кнопка выбора тарифа', detailsLinkText: 'Ссылка подробностей', disclaimerText: 'Сноска', groups: 'Категории', payments: 'Бонусы и оплата', bonus: 'Бонусная программа', promised_payment: 'Обещанный платёж', autopay: 'Автоплатёж', management: 'Управление услугами', app: 'Приложение', pause: 'Приостановка услуг', tariff_builder: 'Тариф-конструктор', smart_home: 'Цифровые сервисы', intercom: 'Домофон', cameras: 'Видеонаблюдение', formTitle: 'Заголовок формы', phoneLabel: 'Подпись телефона', phonePlaceholder: 'Подсказка телефона', submitButtonText: 'Кнопка отправки', searchPlaceholder: 'Подсказка поиска', showMoreText: 'Кнопка раскрытия', question: 'Вопрос', answer: 'Ответ', cityPlaceholder: 'Подсказка поиска города', searchButtonText: 'Кнопка поиска города', allCitiesText: 'Ссылка списка городов', emptyMessage: 'Сообщение: город не найден', inputErrorMessage: 'Ошибка пустого поиска',
 }
-export function generalHomeFieldLabel(path) { return path.split('.').map(key => /^\d+$/.test(key) ? String(Number(key) + 1) : labels[key.replace(/\[\]$/, '')] ?? key).join(' · ') }
-export function generalHomeFieldRule(block, path) {
-  let rule = generalHomeEditorSchemas[block]
+const cityLabels = { salesTitle: 'Заголовок подключения', salesAudience: 'Подпись для новых абонентов', supportTitle: 'Заголовок поддержки', supportAudience: 'Подпись для действующих абонентов', supportCost: 'Стоимость звонка', supportTopics: 'С какими вопросами обращаться', allCitiesLinkText: 'Ссылка всех городов', connectButtonText: 'Кнопка подключения' };
+export function generalHomeFieldLabel(path) { return path.split('.').map(key => /^\d+$/.test(key) ? String(Number(key) + 1) : cityLabels[key.replace(/\[\]$/, '')] ?? labels[key.replace(/\[\]$/, '')] ?? key).join(' · ') }
+/** @param {string} block @param {string} path @param {Record<string, import('../../../api/src/general-home-model.ts').GeneralHomeFieldRule>} [schemas] */
+export function generalHomeFieldRule(block, path, schemas = generalHomeEditorSchemas) {
+  let rule = schemas[block]
   if (!rule || typeof path !== 'string') return null
   for (const key of path.split('.')) {
     if (rule.kind === 'object') { if (!Object.hasOwn(rule.fields, key)) return null; rule = rule.fields[key] }

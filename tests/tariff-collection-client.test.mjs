@@ -2,31 +2,39 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { initializeTariffCollections } from '../apps/web/src/scripts/tariff-collection-client.mjs';
 
-function collection() {
-  let focused = false;
-  const overflow = Array.from({ length: 4 }, () => ({ hidden: false, querySelector: () => ({ focus: () => { focused = true; } }) }));
-  const status = { textContent: '' }, listeners = [];
-  const button = { hidden: true, disabled: false, addEventListener: (_name, listener, options) => { assert.equal(options.once, true); listeners.push(listener); } };
-  const section = { dataset: {}, querySelector: selector => selector === '[data-collection-more]' ? button : status, querySelectorAll: selector => selector === '[data-collection-overflow]' ? overflow : Array(10) };
-  return { root: { querySelectorAll: () => [section] }, button, status, listeners, overflow, focused: () => focused };
+function control(dataset = {}) {
+  const listeners = {};
+  return { dataset, hidden: false, textContent: '', focused: false, attrs: {}, addEventListener: (type, fn) => { listeners[type] = fn; },
+    setAttribute(key, value) { this.attrs[key] = value; }, focus() { this.focused = true; }, click(detail = 1) { listeners.click({ detail }); } };
 }
-test('one activation opens the whole remainder; reinitialization preserves expanded state and order', () => {
-  const fixture = collection();
-  initializeTariffCollections(fixture.root);
-  assert.equal(fixture.button.hidden, false);
-  assert.ok(fixture.overflow.every(card => card.hidden));
-  initializeTariffCollections(fixture.root);
-  assert.equal(fixture.listeners.length, 1);
-  fixture.listeners[0]({ detail: 1 });
-  assert.ok(fixture.overflow.every(card => !card.hidden));
-  assert.equal(fixture.button.hidden, true);
-  assert.equal(fixture.status.textContent, 'Показаны все тарифы: 10.');
-  assert.equal(fixture.focused(), false);
-  initializeTariffCollections(fixture.root);
-  assert.ok(fixture.overflow.every(card => !card.hidden));
+function collection() {
+  const cards = Array.from({ length: 8 }, (_, i) => {
+    const button = control();
+    return { hidden: false, dataset: { serviceType: i < 4 ? 'INTERNET' : 'INTERNET_TV', speed: '500', gaming: 'false', cinemas: String(i >= 4) }, querySelector: () => button, button };
+  });
+  const more = control({ moreLabel: 'Ещё предложения' }), status = control(), count = control(), empty = control(), grid = { scrollLeft: 70 };
+  const categories = ['ALL', 'INTERNET', 'INTERNET_TV'].map(collectionCategory => control({ collectionCategory }));
+  const quick = ['gaming', 'cinemas', 'fast'].map(collectionQuick => control({ collectionQuick })), resets = [control(), control()];
+  const singles = { '[data-collection-more]': more, '[data-collection-status]': status, '[data-collection-count]': count, '[data-collection-empty]': empty, '.collection-grid': grid };
+  const lists = { '[data-collection-card]': cards, '[data-collection-category]': categories, '[data-collection-quick]': quick, '[data-collection-reset]': resets };
+  const section = { dataset: { initialCount: '3' }, querySelector: key => singles[key], querySelectorAll: key => lists[key] || [] };
+  return { root: { querySelectorAll: () => [section] }, more, status, empty, grid, categories, quick, resets, cards, visible: () => cards.filter(card => !card.hidden).length };
+}
+test('show more reveals all; changing filters resets to the configured count without moving filter focus', () => {
+  const f = collection(); initializeTariffCollections(f.root);
+  assert.equal(f.visible(), 3); assert.equal(f.more.textContent, 'Ещё предложения · 5');
+  f.more.click(); assert.equal(f.visible(), 8); assert.equal(f.more.hidden, true);
+  initializeTariffCollections(f.root); assert.equal(f.visible(), 8);
+  f.categories[2].focus(); f.categories[2].click();
+  assert.equal(f.visible(), 3); assert.equal(f.more.hidden, false); assert.equal(f.grid.scrollLeft, 0); assert.equal(f.categories[2].focused, true);
+  f.more.click(0); assert.equal(f.visible(), 4); assert.equal(f.cards[7].button.focused, true);
 });
-test('keyboard activation moves focus into the newly available cards', () => {
-  const fixture = collection(); initializeTariffCollections(fixture.root);
-  fixture.listeners[0]({ detail: 0 });
-  assert.equal(fixture.focused(), true);
+test('all tariffs resets only the category; explicit reset clears the full empty intersection', () => {
+  const f = collection(); initializeTariffCollections(f.root);
+  f.quick[1].click(); f.categories[1].click();
+  assert.equal(f.visible(), 0); assert.equal(f.empty.hidden, false); assert.equal(f.more.hidden, true);
+  f.categories[0].click(); assert.equal(f.visible(), 3); assert.equal(f.quick[1].attrs['aria-pressed'], 'true');
+  f.quick[0].click(); assert.equal(f.visible(), 0);
+  f.resets[1].click(); assert.equal(f.visible(), 3); assert.equal(f.empty.hidden, true);
+  assert.ok(f.quick.every(button => button.attrs['aria-pressed'] === 'false')); assert.equal(f.categories[0].focused, true);
 });

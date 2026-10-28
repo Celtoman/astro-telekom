@@ -1,5 +1,5 @@
 import {
-  GENERAL_HOME_VERSION, GENERAL_HOME_IMPLEMENTATION, GENERAL_HOME_BLOCK_ORDER, GENERAL_HOME_SCHEMAS,
+  GENERAL_HOME_VERSION, GENERAL_HOME_IMPLEMENTATION, GENERAL_HOME_BLOCK_ORDER, GENERAL_HOME_SCHEMAS, CITY_HOME_SCHEMAS,
   type GeneralHomeBlock, type GeneralHomeBlockType, type GeneralHomeFieldRule,
 } from '../../../api/src/general-home-model.ts';
 import { assertRenderedHomeHero } from '../../../api/src/home-hero-model.ts';
@@ -76,12 +76,18 @@ export function generalHomeCatalog(raw: unknown): GeneralHomeCatalog | undefined
 }
 
 export function generalHomeImageOrigins(home: GeneralHomeCatalog | undefined): string[] {
+  return blockImageOrigins(home?.blocks ?? [], GENERAL_HOME_SCHEMAS);
+}
+export function cityHomeImageOrigins(blocks: Array<{ blockType: string; data: Record<string, unknown> }>): string[] {
+  return blockImageOrigins(blocks, CITY_HOME_SCHEMAS);
+}
+function blockImageOrigins(blocks: Array<{ blockType: string; data: unknown }>, schemas: Record<string, GeneralHomeFieldRule>): string[] {
   const origins = new Set<string>();
   function visit(data: any, rule: GeneralHomeFieldRule) {
     if (rule.kind === 'object') for (const [key, child] of Object.entries(rule.fields)) visit(data[key], child);
     else if (rule.kind === 'list') for (const item of data) visit(item, rule.item);
     else if (rule.kind === 'asset' && /^https:\/\//i.test(data)) origins.add(new URL(data).origin);
   }
-  for (const block of home?.blocks ?? []) if (block.blockType !== 'home.hero') visit(block.data, GENERAL_HOME_SCHEMAS[block.blockType]);
+  for (const block of blocks) if (schemas[block.blockType]) visit(block.data, schemas[block.blockType]);
   return [...origins].sort();
 }

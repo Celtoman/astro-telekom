@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { resolveVariableText, type VariableContext, type VariableWarning } from './variable-registry';
 import { HOME_HERO_VERSION, parseRedTitle } from './home-hero-model';
 import { validateFirstScreen } from './first-screen';
-import { GENERAL_HOME_SCHEMAS, type GeneralHomeBlockType, type GeneralHomeFieldRule } from './general-home-model';
+import { GENERAL_HOME_SCHEMAS, CITY_HOME_SCHEMAS, type GeneralHomeBlockType, type GeneralHomeFieldRule } from './general-home-model';
 import { validateGeneralHomeComposition } from './general-home';
 
 type JsonObject = Record<string, any>;
@@ -49,6 +49,11 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
     }
     return output;
   };
+  const resolveStructured = (value: any, rule: GeneralHomeFieldRule, path: string, context: VariableContext, owner: UsageOwner): any => {
+    if (rule.kind === 'object') return Object.fromEntries(Object.entries(rule.fields).map(([key, child]) => [key, resolveStructured(value[key], child, `${path}.${key}`, context, owner)]));
+    if (rule.kind === 'list') return value.map((item: unknown, index: number) => resolveStructured(item, rule.item, `${path}[${index}]`, context, owner));
+    return rule.variables ? resolveField(value, path, context, owner) : value;
+  };
   const resolvePage = (page: JsonObject, path: string, context: VariableContext, cityId?: string): JsonObject => ({
     ...page,
     title: resolveField(page.title, `${path}.title`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, cityId, editorHref: null }),
@@ -57,6 +62,19 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
     blocks: Array.isArray(page.blocks) ? page.blocks.map((block: JsonObject, index: number) => {
       const blockPath = `${path}.blocks[${index}]`;
       const owner: UsageOwner = { entityType: 'BLOCK', entityId: String(block.id), pageType: page.type, blockType: block.blockType, cityId, editorHref: null };
+      if (Object.hasOwn(CITY_HOME_SCHEMAS, block.blockType)) {
+        const rule: GeneralHomeFieldRule = CITY_HOME_SCHEMAS[block.blockType as keyof typeof CITY_HOME_SCHEMAS];
+        if (block.blockType === 'city.faq' && rule.kind === 'object' && rule.fields.items.kind === 'list') {
+          const itemRule = rule.fields.items.item;
+          const items = block.data.items.flatMap((item: any, itemIndex: number) => {
+            const warningCount = warnings.length;
+            const resolved = resolveStructured(item, itemRule, `${blockPath}.data.items[${itemIndex}]`, context, owner);
+            return warnings.length === warningCount ? [resolved] : [];
+          });
+          return { ...block, data: { title: resolveStructured(block.data.title, rule.fields.title, `${blockPath}.data.title`, context, owner), items } };
+        }
+        return { ...block, data: resolveStructured(block.data, rule, `${blockPath}.data`, context, owner) };
+      }
       const data = resolveNamedFields(block.data, ['eyebrow', 'title', 'text', 'ctaText'], `${blockPath}.data`, context, owner);
       if (Array.isArray(data.items)) {
         data.items = data.items.map((item: JsonObject, itemIndex: number) => resolveNamedFields(

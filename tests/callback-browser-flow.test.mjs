@@ -19,7 +19,8 @@ test('callback error keeps the submission, retry is idempotent, and reopening su
   const previous = Object.fromEntries(['document','Element','location','fetch'].map(key=>[key,Object.getOwnPropertyDescriptor(globalThis,key)]));
   t.after(()=>{for(const [key,descriptor] of Object.entries(previous)){if(descriptor)Object.defineProperty(globalThis,key,descriptor);else delete globalThis[key];}});
   const document=node(),dialog=node(),form=node(),phone=node(),question=node(),consent=node(),submit=node(),label=node(),error=node(),phoneError=node(),spinner=node(),audience=node(),title=node(),icon=node(),iconImage=node(),success=node(),successButton=node(),support=node(),trigger=node();
-  trigger.trigger=true;
+  trigger.trigger=true; trigger.dataset={callbackTariffSlug:'internet-500',callbackTariffName:'Интернет 500',callbackCitySlug:'kazan',callbackCityName:'Казань'};
+  const context=node();form.nodes.set('[data-callback-tariff-context]',context);
   const newButton=node(),existingButton=node();newButton.dataset.callbackMode='new';existingButton.dataset.callbackMode='existing';
   audience.querySelectorAll=()=>[newButton,existingButton];
   document.referrer='';document.nodes.set('[data-callback-dialog]',dialog);document.nodes.set('[data-callback-trigger]',trigger);
@@ -34,11 +35,11 @@ test('callback error keeps the submission, retry is idempotent, and reopening su
   initializeCallbackDialog();
   const open=()=>{const event=new Event('click',{cancelable:true});Object.defineProperty(event,'target',{value:trigger});document.dispatchEvent(event);};
   const send=async()=>{form.dispatchEvent(new Event('submit',{cancelable:true}));await new Promise(resolve=>setImmediate(resolve));};
-  open();phone.value='+7 (999) 123-45-67';phone.dispatchEvent(new Event('input'));question.value='Нужна консультация';consent.checked=true;consent.dispatchEvent(new Event('change'));
+  open();assert.equal(context.hidden,false);assert.match(context.textContent,/Интернет 500.*Казань/);phone.value='+7 (999) 123-45-67';phone.dispatchEvent(new Event('input'));question.value='Нужна консультация';consent.checked=true;consent.dispatchEvent(new Event('change'));
   assert.equal(submit.disabled,false);
   existingButton.dispatchEvent(new Event('click'));await send();assert.equal(requests.length,0);assert.equal(support.hidden,false);assert.equal(form.hidden,true);
   newButton.dispatchEvent(new Event('click'));assert.equal(consent.checked,true);assert.equal(question.value,'Нужна консультация');
   await send();assert.equal(error.hidden,false);assert.equal(document.activeElement,error);assert.equal(label.textContent,'Попробовать ещё раз');assert.equal(consent.checked,true);assert.equal(phone.disabled,false);
-  await send();assert.equal(requests.length,2);assert.equal(requests[0].submissionKey,requests[1].submissionKey);assert.equal(requests[0].phone,requests[1].phone);assert.equal(requests[0].citySlug,undefined);assert.equal(requests[0].reasonCode,'callback_consultation');assert.equal(requests[0].consentAccepted,true);assert.equal(requests[0].addressCheckId,undefined);assert.equal(success.hidden,false);
-  dialog.close();open();assert.equal(label.textContent,'Заказать звонок');assert.equal(phone.value,'');assert.equal(consent.checked,false);assert.equal(submit.disabled,true);assert.equal(success.hidden,true);assert.equal(form.hidden,false);assert.equal(title.textContent,'Заказать звонок');
+  await send();assert.equal(requests.length,2);assert.equal(requests[0].submissionKey,requests[1].submissionKey);assert.equal(requests[0].phone,requests[1].phone);assert.equal(requests[0].citySlug,'kazan');assert.equal(requests[0].tariffSlug,'internet-500');assert.equal(requests[0].configuration,undefined);assert.equal(requests[0].reasonCode,'callback_consultation');assert.equal(requests[0].consentAccepted,true);assert.equal(requests[0].addressCheckId,undefined);assert.equal(success.hidden,false);
+  dialog.close();trigger.dataset={};open();assert.equal(context.hidden,true);assert.equal(context.textContent,'');assert.equal(label.textContent,'Заказать звонок');assert.equal(phone.value,'');assert.equal(consent.checked,false);assert.equal(submit.disabled,true);assert.equal(success.hidden,true);assert.equal(form.hidden,false);assert.equal(title.textContent,'Заказать звонок');
 });

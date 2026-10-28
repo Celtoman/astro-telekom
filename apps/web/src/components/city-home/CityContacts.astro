@@ -1,0 +1,8 @@
+---
+import { renderCityContacts } from '../../lib/city-home-render';
+import { publicAsset } from '../../data/public-asset';
+import CityHomeStyles from './CityHomeStyles.astro';
+interface Props { data: Parameters<typeof renderCityContacts>[0]; site: Parameters<typeof renderCityContacts>[1] }
+---
+<Fragment set:html={renderCityContacts(Astro.props.data, Astro.props.site, { asset: publicAsset })} />
+<CityHomeStyles />

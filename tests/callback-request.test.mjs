@@ -15,6 +15,11 @@ test('callback adapter sends only a manual consultation and requires an API rece
   assert.equal(requests[0].body.citySlug, undefined);
   assert.equal(requests[0].body.submissionKey, 'fixed-key');
   assert.equal(requests[0].options.signal instanceof AbortSignal, true);
+  await sendCallbackRequest('https://api.example.test/api/v1', { ...payload, citySlug: 'kazan', tariffSlug: 'internet-500', configuration: { ignored: true }, equipment: ['ignored'] });
+  assert.equal(requests[1].body.tariffSlug, 'internet-500');
+  assert.equal(requests[1].body.citySlug, 'kazan');
+  assert.equal(requests[1].body.configuration, undefined);
+  assert.equal(requests[1].body.equipment, undefined);
   globalThis.fetch = async () => ({ ok: true, json: async () => ({ accepted: true }) });
   await assert.rejects(sendCallbackRequest('https://api.example.test/api/v1', payload), /Не удалось сохранить заявку/);
   globalThis.fetch = async () => ({ ok: false, json: async () => ({ message: ['Временная ошибка'] }) });

@@ -3,12 +3,20 @@ const assert = require('node:assert/strict');
 const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 const { materializeCityHomeSource } = require('../apps/api/dist/page-template.js');
-const { cityHomeTemplateBlocks } = require('../apps/api/dist/city-home-template.js');
+const { firstScreenDefaults } = require('../apps/api/dist/first-screen.js');
+const { tariffCollectionDefaults } = require('../apps/api/dist/tariff-collection-model.js');
 const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
 const { validatePublicationSource } = require('../apps/api/dist/publication-validation.js');
 const { AdminPageTemplatesController } = require('../apps/api/dist/admin-page-templates.controller.js');
 const { parseWorkbook } = require('../apps/api/dist/tariff-import.service.js');
 const { publicationSource, city } = require('./helpers/publication-source.cjs');
+
+// This suite preserves the immutable v2 template equivalence/legacy writer contract.
+// Fresh v3 composition and its guarded writer are covered by city-home-editor/catalog.
+const cityHomeTemplateBlocks = ({ name, namePrepositional }) => [
+  { blockType: 'hero', position: 10, visible: true, source: 'template:city-home:v2', data: { ...firstScreenDefaults('CITY_HOME'), title: `Домашний интернет и телевидение в ${namePrepositional || name}` } },
+  { blockType: 'tariff_grid', position: 30, visible: true, source: 'template:city-home:v2', data: tariffCollectionDefaults() },
+];
 
 const cityBlock = (block, id, pageId) => ({
   id, pageId, blockType: block.blockType, position: block.position,

@@ -2,7 +2,7 @@ export const normalizeCityQuery = value => String(value || '').trim().replace(/\
 export const CITY_SERVICE_SLUGS = Object.freeze({ internet: 'domru-domashniy-internet', internet_tv: 'domru-domashniy-internet-televidenie', tv: 'cifrovoe-televidenie-domru' });
 export function cityServicePath(citySlug, service) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(citySlug) || !Object.hasOwn(CITY_SERVICE_SLUGS, service)) throw new Error('Некорректное городское назначение.');
-  return `/${citySlug}/${CITY_SERVICE_SLUGS[service]}`;
+  return `/${citySlug}?category=${service === 'internet_tv' ? 'INTERNET_TV' : service === 'internet' ? 'INTERNET' : 'ALL'}#tariffs`;
 }
 /** @template {{ name?: string }} T @param {T[]} cities @returns {T | null} */
 export function publishedMoscow(cities) {
@@ -20,15 +20,16 @@ export function cityContext() {
   const cities = publishedCityChoices(document), key = `provider:${header?.dataset.siteSlug || ''}:selected-city`;
   let storage; try { storage = window.sessionStorage; } catch { /* optional storage */ }
   const confirmed = cities.find(city => city.id === header?.dataset.selectedCity) || storedCity(cities, storage, key);
-  const active = cities.find(city => city.slug === header?.dataset.routeCity) || confirmed || publishedMoscow(cities);
-  return { cities, key, storage, confirmed, active };
+  const routeCity = cities.find(city => city.slug === header?.dataset.routeCity);
+  const active = routeCity || confirmed || publishedMoscow(cities);
+  return { cities, key, storage, confirmed, routeCity, active };
 }
 export function applyCityContext() {
   const context = cityContext(), header = document.querySelector('[data-site-header]'), active = context.active;
   if (!active || !header) return context;
   for (const label of document.querySelectorAll('[data-current-city-label]')) label.textContent = active.name;
   const dialog = document.querySelector('[data-callback-dialog]'); if (dialog) dialog.dataset.citySlug = dialog.dataset.requireConfirmedCity === 'true' ? context.confirmed?.slug || '' : active.slug;
-  if (!header.dataset.routeCity) for (let element of document.querySelectorAll('[data-city-context-anchor]')) {
+  if (!header.dataset.routeCity) for (let element of document.querySelectorAll('[data-city-context-anchor]:not([data-current-section])')) {
     if (element.tagName === 'BUTTON') {
       const link = document.createElement('a'); link.className = element.className; link.dataset.cityContextAnchor = element.dataset.cityContextAnchor;
       while (element.firstChild) link.appendChild(element.firstChild);

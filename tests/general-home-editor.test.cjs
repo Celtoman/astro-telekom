@@ -44,7 +44,7 @@ test('general HOME resource is explicitly guarded and exposes separate working/p
   assert.equal(result.workingRevision, 7); assert.equal(result.publishedRevision, 6);
   assert.equal(result.published.blocks[1].data.title, 'Опубликованная проверка');
   assert.equal(result.blocks[1].data.title, 'Проверить адрес');
-  assert.equal(result.system.connectionHours, 'Ежедневно, 24/7');
+  assert.equal(result.system.connectionHours, 'Ежедневно с 8:00 до 22:00');
   assert.equal(result.system.callbackWithinMinutes, 15);
   context.prisma.$queryRaw = async () => [{ pageTemplates: [], generalHome: null }];
   assert.equal((await context.controller.generalHome('site-1')).published, null);
@@ -90,6 +90,13 @@ test('legacy Hero editor keeps all new blocks and composition metadata intact', 
   assert.equal(context.current().content.generalHomeCompositionVersion, '1.0.0');
 });
 
+test('HOME benefit facts cannot be edited as template-local copies', async () => {
+  const context = workspace(), blocks = composition();
+  blocks.find(block => block.blockType === 'home.benefits').data.items.speed.factText = 'До 100 Гбит/с';
+  await assert.rejects(context.controller.updateGeneralHome('site-1', { expectedWorkingRevision: 7, blocks }), error => error.block === 'home.benefits' && error.field === 'items.speed.factText' && error.reason === 'READ_ONLY');
+  assert.equal(context.writes.length, 0); assert.equal(context.revisions.length, 0);
+});
+
 test('template projection rejects unknown versions/compositions and never enables extra blocks without a version', () => {
   assert.equal(typeof projection.generalHomeFromTemplate, 'function');
   const current = template();
@@ -115,7 +122,7 @@ test('public catalog resolves nested HOME variables with real usages and keeps t
   const usage = catalog.variableUsages.find(item => item.blockType === 'home.provider_about' && item.code === 'YEAR');
   assert.ok(usage); assert.equal(usage.entityType, 'PAGE_TEMPLATE_BLOCK');
   assert.match(usage.editorHref, /kind=HOME.*block=home.provider_about/);
-  assert.equal(catalog.site.connectionHours, 'Ежедневно, 24/7');
+  assert.equal(catalog.site.connectionHours, 'Ежедневно с 8:00 до 22:00');
   assert.equal(catalog.site.callbackWithinMinutes, 15);
 });
 

@@ -2,6 +2,8 @@ import { BadRequestException } from '@nestjs/common';
 import { validateFirstScreen } from './first-screen';
 import { validateTariffCollection } from './tariff-collection';
 import { ContentValidationError } from './content-validation-error';
+import { CITY_HOME_VERSION, CITY_HOME_HIDDEN_LEGACY_TYPES } from './city-home-model';
+import { validateCityHomeComposition } from './city-home';
 
 export const BLOCK_TYPES = ['hero', 'rich_text', 'tariff_grid', 'service_grid', 'feature_grid', 'steps', 'faq'] as const;
 const SERVICE_PAGE_TYPES = ['INTERNET', 'INTERNET_TV', 'TV', 'ADDRESS_CHECK', 'FAQ'] as const;
@@ -205,8 +207,15 @@ export function validatePublishedBlocks(rawBlocks: unknown, context: BlockContex
 
 const CITY_HOME_BLOCK_SEQUENCE = ['hero', 'tariff_grid'];
 
-export function validateCityHomeBlocks(rawBlocks: unknown, cityName: string): void {
+export function validateCityHomeBlocks(rawBlocks: unknown, cityName: string, version?: string): void {
   if (!Array.isArray(rawBlocks)) fail('Блоки городской HOME должны быть массивом');
+  const cityVersion = version ?? (rawBlocks.some(block => block?.blockType?.startsWith('city.')) ? CITY_HOME_VERSION : '2.0.0');
+  if (cityVersion === CITY_HOME_VERSION) {
+    if (rawBlocks.some(block => !block || block.visible === false && (!CITY_HOME_HIDDEN_LEGACY_TYPES.includes(block.blockType) || block.position < 1000))) throw new ContentValidationError('blocks', 'COMPOSITION', 'Состав CITY_HOME фиксирован; блоки нельзя отключать вручную.');
+    validateCityHomeComposition(rawBlocks.filter(block => block.visible !== false).map(block => ({ blockType: block.blockType, data: block.data })));
+    return;
+  }
+  if (cityVersion !== '2.0.0') throw new ContentValidationError('homeCompositionVersion', 'VERSION', 'Неизвестная версия композиции CITY_HOME.');
   const blocks = rawBlocks.filter(block => block.visible !== false) as Array<Record<string, unknown>>;
   validatePublishedBlocks(blocks);
   const actualSequence = blocks.map((block) => block.blockType);

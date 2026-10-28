@@ -44,7 +44,7 @@ const catalogDialogId = `address-entry-${city.slug}-catalog`;
     return <section class="section container narrow" data-block-type="rich_text"><h2>{title}</h2><p class="lead">{text}</p></section>;
   }
   if (block.blockType === 'tariff_grid') {
-    return <TariffCollection data={block.data} {tariffs} {citySlug} dialogId={catalogDialogId} />;
+    return <TariffCollection data={block.data} {tariffs} {citySlug} cityName={city.name} dialogId={catalogDialogId} />;
   }
   if (block.blockType === 'service_grid') {
     const items = Array.isArray(block.data.items) ? block.data.items as ServiceItem[] : [];

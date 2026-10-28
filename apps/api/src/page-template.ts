@@ -3,9 +3,11 @@ import { Prisma } from '../generated';
 import { cityHomeTemplateBlocks } from './city-home-template';
 import type { CatalogSource } from './site-catalog.service';
 import type { PublicationWorkflowService } from './publication-workflow.service';
-import { FIRST_SCREEN_IMPLEMENTATION, FIRST_SCREEN_VERSION, firstScreenDefaults } from './first-screen';
+import { FIRST_SCREEN_IMPLEMENTATION, FIRST_SCREEN_VERSION } from './first-screen';
 
-import { projectCityHomeBlocks, TARIFF_COLLECTION_VERSION, TARIFF_COLLECTION_IMPLEMENTATION, HOME_COMPOSITION_VERSION } from './tariff-collection-model';
+import { projectCityHomeBlocks, TARIFF_COLLECTION_VERSION, TARIFF_COLLECTION_IMPLEMENTATION } from './tariff-collection-model';
+import { cityHomeFromTemplate } from './city-home-view';
+import { CITY_HOME_METADATA } from './city-home-model';
 
 const CITY_TOKEN = '{CITY_NAME_PREPOSITIONAL}';
 
@@ -22,9 +24,9 @@ export async function ensureCityHomeTemplate(
     data: {
       siteId, kind: 'CITY_HOME', status: 'PUBLISHED',
       titleTemplate: `Домашний интернет в ${CITY_TOKEN}`,
-      content: { firstScreenPassportVersion: FIRST_SCREEN_VERSION, firstScreenImplementationVersion: FIRST_SCREEN_IMPLEMENTATION, tariffCollectionPassportVersion: TARIFF_COLLECTION_VERSION, tariffCollectionImplementationVersion: TARIFF_COLLECTION_IMPLEMENTATION, homeCompositionVersion: HOME_COMPOSITION_VERSION },
+      content: { firstScreenPassportVersion: FIRST_SCREEN_VERSION, firstScreenImplementationVersion: FIRST_SCREEN_IMPLEMENTATION, tariffCollectionPassportVersion: TARIFF_COLLECTION_VERSION, tariffCollectionImplementationVersion: TARIFF_COLLECTION_IMPLEMENTATION, ...CITY_HOME_METADATA },
       blocks: { create: blocks.map(({ blockType, position, visible, data, source }) => ({
-        blockType, position, visible, data: blockType === 'hero' ? firstScreenDefaults('CITY_HOME') : data, source,
+        blockType, position, visible, data, source,
       })) },
     },
     include: { blocks: true },
@@ -47,6 +49,7 @@ export function materializeCityHomeSource<T extends CatalogSource>(source: T): T
   }
   const templates = new Map(source.pageTemplates.map((template: any) => [template.id, template]));
   const homeTemplate = source.pageTemplates.find((template: any) => template.kind === 'CITY_HOME');
+  if (homeTemplate) cityHomeFromTemplate(homeTemplate);
   return {
     ...source,
     cities: source.cities.map((city: any) => ({

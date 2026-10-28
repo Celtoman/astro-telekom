@@ -6,6 +6,15 @@
 
 **Статус ведётся в GitHub Issues** (репозиторий `Celtoman/astro-telekom`, label `tech-debt` + приоритет). 🟢 — open, ✅ — closed. Актуально на момент чтения этой таблицы issue может отличаться от статуса ниже — сверяться по ссылке, не по этому файлу, если нужен текущий статус.
 
+## Текущая миграция CITY_HOME
+
+| ID | Issue | Суть |
+| --- | --- | --- |
+| TD-180 | [#402](https://github.com/Celtoman/astro-telekom/issues/402) 🟢 | Перенести владельческие подписи HOME в общие факты при миграции0062; исправление локально проверено, полный gate прошёл, commit и выпуск впереди |
+| TD-181 | [#404](https://github.com/Celtoman/astro-telekom/issues/404) 🟢 | Стабилизировать порядок блоков в audit/content revisions CMS; полный gate прошёл, выпуск впереди |
+| TD-182 | [#405](https://github.com/Celtoman/astro-telekom/issues/405) 🟢 | Исправить overflow, tie-порядок и CSP изображений CITY_HOME; локальная сборка и браузерная проверка выполнены |
+| TD-183 | [#406](https://github.com/Celtoman/astro-telekom/issues/406) 🟢 | Уточнить guard test baseline без изменения Figma evidence; regression прошёл локально |
+
 ## P0
 
 | ID | Issue | Суть |

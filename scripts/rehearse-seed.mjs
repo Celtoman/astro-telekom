@@ -54,16 +54,20 @@ try {
   // Isolated synthetic content proves readiness without shipping demo answers in bootstrap defaults.
   await db.pageTemplateBlock.update({ where: { id: faq.id }, data: { data: { ...faq.data, items: [{ question: 'Синтетический вопрос', answer: 'Ответ только для изолированной проверки.' }] } } });
   source = await catalogService.captureSourceBySiteId(site.id);
+  const withoutTariffs = validatePublicationSource(source, { appVersion: 'seed-rehearsal', siteRevision: site.workingRevision }, (candidate, now) => catalogService.renderSource(candidate, now));
+  assert.ok(withoutTariffs.report.issues.some(issue => issue.code === 'CITY_TARIFFS_REQUIRED'));
+  await db.tariff.create({ data: { providerId: site.providerId, cityId: source.cities[0].id, name: 'Синтетический тариф проверки', slug: 'synthetic-seed-proof', identityKey: 'rehearsal:synthetic-seed-proof', dataSource: 'rehearsal', serviceType: 'INTERNET', status: 'PUBLISHED', availability: 'ACTIVE', standardPrice: '799', speed: 500 } });
+  source = await catalogService.captureSourceBySiteId(site.id);
   const validation = validatePublicationSource(source, { appVersion: 'seed-rehearsal', siteRevision: site.workingRevision }, (candidate, now) => catalogService.renderSource(candidate, now));
   assert.notEqual(validation.report.outcome, 'BLOCKED', JSON.stringify(validation.report.issues));
-  assert.equal(validation.catalog.routes.length, 7, 'root, five globals and the single city HOME; unpriced demo tariffs remain drafts');
+  assert.equal(validation.catalog.routes.length, 8, 'root, five globals, city HOME and one synthetic published tariff; other unpriced demo tariffs remain drafts');
   assert.equal(source.seoTemplates.length, 8);
   assert.equal(source.pageTemplates.length, 2);
   assert.equal(source.cities[0].pages[0].templateId, source.pageTemplates.find(template => template.kind === 'CITY_HOME').id);
   assert.equal(validation.catalog.homeHero.searchButtonText, 'Найти город');
   assert.equal(validation.catalog.homeHeroVersion, '2.0.0');
   assert.match(validation.catalog.homeHero.title, /<red>в вашем городе<\/red>/);
-  assert.deepEqual(validation.catalog.cities[0].pages[0].blocks.map(block => block.blockType), ['hero','tariff_grid']);
+  assert.deepEqual(validation.catalog.cities[0].pages[0].blocks.map(block => block.blockType), ['hero','tariff_grid','city.comparison','city.help','city.benefits','city.connection_steps','city.movix','city.regional_cities','city.faq','city.contacts']);
   assert.equal(await db.tariff.count({ where: { status: 'DRAFT', dataSource: 'seed' } }), 2);
   assert.equal(await db.sitePublication.count(), 0);
   assert.equal(await db.siteRebuild.count(), 0);

@@ -1,0 +1,15 @@
+---
+import { renderCityComparison } from '../../lib/city-home-render';
+import type { TariffView } from '../../data/tariff-view';
+import { publicAsset } from '../../data/public-asset';
+import CityHomeStyles from './CityHomeStyles.astro';
+interface Props { data: Parameters<typeof renderCityComparison>[0]; tariffs: TariffView[]; citySlug: string; cityName: string }
+const { data, tariffs, citySlug, cityName } = Astro.props;
+---
+<Fragment set:html={renderCityComparison(data, tariffs, { asset: publicAsset, citySlug, cityName })} />
+<CityHomeStyles />
+<script>
+  import { initializeCityComparisons } from '../../scripts/city-comparison-client';
+  initializeCityComparisons();
+  document.addEventListener('astro:page-load', () => initializeCityComparisons());
+</script>

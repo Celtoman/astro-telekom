@@ -5,11 +5,11 @@ import { publicAsset } from '../../data/public-asset';
 import { publishedMoscow } from '../../lib/city-context.mjs';
 import CityPicker from '../CityPicker.astro';
 import HomeShellStyles from './HomeShellStyles.astro';
-interface Props { site: SiteView; cities: CityView[]; addressDialogId?: string | null }
-const { site, cities, addressDialogId } = Astro.props as Props;
-const city = publishedMoscow(cities) ?? undefined;
+interface Props { site: SiteView; cities: CityView[]; city?: CityView; addressDialogId?: string | null; localSections?: string[] }
+const { site, cities, addressDialogId, localSections } = Astro.props as Props;
+const city = Astro.props.city ?? publishedMoscow(cities) ?? undefined;
 ---
-<Fragment set:html={renderHomeHeader(site, { city, addressDialogId, asset: publicAsset })} />
+<Fragment set:html={renderHomeHeader(site, { city, routeCity: Astro.props.city?.slug, localSections, addressDialogId, asset: publicAsset })} />
 <CityPicker {cities} current={city} />
 <HomeShellStyles />
 <script>

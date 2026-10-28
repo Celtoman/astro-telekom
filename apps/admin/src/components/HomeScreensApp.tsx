@@ -33,7 +33,7 @@ const clone = (data: Record<string, any>) => JSON.parse(JSON.stringify(data))
 
 export function HomeScreensApp({ apiUrl }: { apiUrl: string }) {
   const query = typeof window === "undefined" ? null : new URLSearchParams(window.location.search)
-  return query?.get("kind") === "CITY_HOME" || query?.get("mode") === "legacy" ? <FirstScreenEditor apiUrl={apiUrl} /> : <GeneralHomeApp apiUrl={apiUrl} />
+  return query?.get("mode") === "legacy" ? <FirstScreenEditor apiUrl={apiUrl} /> : <GeneralHomeApp apiUrl={apiUrl} kind={query?.get("kind") === "CITY_HOME" ? "CITY_HOME" : "HOME"} />
 }
 
 function FirstScreenEditor({ apiUrl }: { apiUrl: string }) {

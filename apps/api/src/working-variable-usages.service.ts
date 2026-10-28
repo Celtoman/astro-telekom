@@ -4,6 +4,7 @@ import { PrismaService } from './prisma.service';
 import type { VariableUsage } from './catalog-variables';
 import { listVariableDefinitions } from './variable-registry';
 import { collectSeoTemplateUsages } from './seo-template-usages';
+import { CITY_HOME_SCHEMAS, GENERAL_HOME_SCHEMAS, type GeneralHomeFieldRule } from './general-home-model';
 
 const KNOWN_CODES = new Set<string>(listVariableDefinitions().map((definition) => definition.code));
 
@@ -18,6 +19,12 @@ function recordFields(value: unknown, fields: readonly string[], path: string, o
   if (!value || typeof value !== 'object' || Array.isArray(value)) return;
   const data = value as Record<string, unknown>;
   for (const field of fields) recordText(data[field], `${path}.${field}`, owner, usages);
+}
+function recordStructured(value: unknown, rule: GeneralHomeFieldRule, path: string, owner: Omit<VariableUsage, 'code' | 'path' | 'template'>, usages: VariableUsage[]) {
+  if (rule.kind === 'object' && value && typeof value === 'object' && !Array.isArray(value)) {
+    for (const [key, child] of Object.entries(rule.fields)) recordStructured((value as Record<string, unknown>)[key], child, `${path}.${key}`, owner, usages);
+  } else if (rule.kind === 'list' && Array.isArray(value)) value.forEach((item, index) => recordStructured(item, rule.item, `${path}[${index}]`, owner, usages));
+  else if (rule.kind === 'text' && rule.variables) recordText(value, path, owner, usages);
 }
 
 @Injectable()
@@ -83,6 +90,11 @@ export class WorkingVariableUsagesService {
           const blockPath = `${path}.blocks[${index}]`;
           const blockOwner = { entityType: 'PAGE_TEMPLATE_BLOCK' as const, entityId: block.id, pageType: template.kind,
             blockType: block.blockType, lifecycleStatus: template.status, visible: block.visible, editorHref: null };
+          const schemas: Record<string, GeneralHomeFieldRule> = template.kind === 'CITY_HOME' ? CITY_HOME_SCHEMAS : template.kind === 'HOME' ? GENERAL_HOME_SCHEMAS : {};
+          if (schemas[block.blockType]) {
+            recordStructured(block.data, schemas[block.blockType], `${blockPath}.data`, blockOwner, usages);
+            continue;
+          }
           recordFields(block.data, ['eyebrow', 'title', 'text', 'ctaText'], `${blockPath}.data`, blockOwner, usages);
           const items = block.data && typeof block.data === 'object' && !Array.isArray(block.data)
             ? (block.data as Record<string, unknown>).items : null;

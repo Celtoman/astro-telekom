@@ -25,7 +25,7 @@ test('placement filter distinguishes root, shared city template, tariff and futu
   assert.deepEqual(filterPassports(passports, '', 'root').map(passport => passport.id), ['home.hero', 'home.address_check', 'home.provider_about', 'home.benefits', 'home.connection_steps', 'home.movix', 'home.more_possibilities', 'home.connection_help', 'home.city_directory', 'home.faq']);
   assert.deepEqual(filterPassports(passports, '', 'global').map(passport => passport.id), ['header']);
   assert.equal(filterPassports(passports, '', 'tariff').length, 9);
-  assert.equal(filterPassports(passports, '', 'city').length, 2);
+  assert.equal(filterPassports(passports, '', 'city').length, 10);
   assert.deepEqual(filterPassports(passports, '', 'future').map(passport => passport.id), []);
   assert.equal(filterPassports(passports, 'Первый экран', 'tariff').length, 1);
   assert.equal(passportPlacement(byId('tariff_grid')), 'Общий шаблон города');
@@ -39,10 +39,10 @@ test('content sources lead to existing editors and never offer a missing city ed
   for (const passport of filterPassports(passports, '', 'tariff')) assert.equal(passportSource(passport).href, '/tariffs');
   for (const passport of filterPassports(passports, '', 'city')) {
     if (passport.id === 'hero') {
-      assert.equal(passportSource(passport).href, '/templates/home?kind=CITY_HOME');
+      assert.equal(passportSource(passport).href, '/templates/home?kind=CITY_HOME&mode=legacy');
       continue;
     }
-    assert.equal(passportSource(passport).href, '/templates/tariffs');
+    assert.equal(passportSource(passport).href, passport.id === 'tariff_grid' ? '/templates/tariffs' : `/templates/home?kind=CITY_HOME&block=${encodeURIComponent(passport.id)}`);
   }
   assert.equal(passportSource(byId('home.hero')).href, '/templates/home?kind=HOME');
   for (const passport of filterPassports(passports, '', 'root').filter(item => item.id !== 'home.hero')) {

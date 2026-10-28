@@ -48,9 +48,10 @@ export class PublicLeadsController {
     if (body.website) throw new BadRequestException('Некорректный запрос');
     const reason = classifyLeadReason(body.reasonCode);
     const callback = reason?.code === 'callback_consultation';
-    if (callback && (body.consentAccepted !== true || body.addressCheckId || body.address || body.tariffSlug || body.configuration || body.pageSlug || body.objectType || body.serviceType)) {
-      throw new BadRequestException('Для обратного звонка подтвердите согласие; адрес и тариф оформляются после проверки подключения');
+    if (callback && (body.consentAccepted !== true || body.addressCheckId || body.address || body.configuration || body.pageSlug || body.objectType || body.serviceType)) {
+      throw new BadRequestException('Для обратного звонка подтвердите согласие; проверка адреса оформляется отдельно');
     }
+    if (callback && body.tariffSlug && !body.citySlug) throw new BadRequestException('Для выбранного тарифа укажите город');
     if (body.reasonCode !== undefined && !reason) throw new BadRequestException('Неизвестная причина обращения');
     const comment = body.comment?.trim() || undefined;
     const commentAnalysis = analyzeLeadComment(comment, reason?.code);
@@ -249,7 +250,9 @@ export class PublicLeadsController {
             serviceType: body.serviceType || tariff?.serviceType,
             addressCheckId: addressCheck?.id,
             source: body.source || 'website',
-            attributionSnapshot: attribution.snapshot as Prisma.InputJsonObject,
+            attributionSnapshot: { ...attribution.snapshot,
+              ...(callback && tariff && city ? { callbackInterest: { version: 1, tariffName: tariff.name, cityName: city.name } } : {}),
+            } as Prisma.InputJsonObject,
             utm: attribution.legacy.utm as Prisma.InputJsonObject,
             referrer: attribution.legacy.referrer,
             pageUrl: attribution.legacy.pageUrl,

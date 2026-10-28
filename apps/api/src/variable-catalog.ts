@@ -1,6 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { listVariableDefinitions, resolveVariableText, type VariableContext } from './variable-registry';
 import type { VariableUsage } from './catalog-variables';
+import { CITY_HOME_SCHEMAS, GENERAL_HOME_SCHEMAS, type GeneralHomeFieldRule } from './general-home-model';
 
 type CatalogRecord = Record<string, any>;
 export type ValueStatus = 'VALUE' | 'EMPTY' | 'SELECT_CITY' | 'SELECT_TARIFF' | 'NOT_PUBLISHED' | 'UNAVAILABLE';
@@ -47,7 +48,7 @@ function selectedValue(code: string, scope: string, catalog: CatalogRecord | nul
   if (code === 'YEAR' && !sourceSnapshot?.resolvedAt) return unavailable('UNAVAILABLE');
   const now = sourceSnapshot?.resolvedAt ? new Date(sourceSnapshot.resolvedAt) : new Date(0);
   const context: VariableContext = {
-    site: { connectionPhone: catalog.site?.connectionPhone, supportPhone: catalog.site?.supportPhone },
+    site: { ...catalog.site?.publicDisplay, connectionPhone: catalog.site?.connectionPhone, supportPhone: catalog.site?.supportPhone },
     provider: { name: sourceSnapshot?.providerName },
     city,
     tariff,
@@ -63,6 +64,15 @@ function usagesOf(catalog?: CatalogRecord | null): VariableUsage[] | null {
 
 function withEditorLink(usage: VariableUsage, siteId: string, published = false): VariableUsage {
   // Navigation metadata belongs to this view, never to immutable snapshot evidence.
+  const field = usage.path.split('.data.')[1]?.replace(/\[(\d+)\]/g, '.$1');
+  const cityKind = usage.pageType === 'CITY_HOME' || published && usage.pageType === 'HOME' && Boolean(usage.cityId);
+  const schemas: Record<string, GeneralHomeFieldRule> = cityKind ? CITY_HOME_SCHEMAS : GENERAL_HOME_SCHEMAS;
+  let rule: GeneralHomeFieldRule | undefined = usage.blockType ? schemas[usage.blockType] : undefined;
+  if (field) for (const part of field.split('.')) rule = rule?.kind === 'object' ? rule.fields[part] : rule?.kind === 'list' && /^\d+$/.test(part) ? rule.item : undefined;
+  if (field && rule?.kind === 'text' && rule.variables && usage.blockType) {
+    const query = new URLSearchParams({ siteId, kind: cityKind ? 'CITY_HOME' : 'HOME', block: usage.blockType, field });
+    return { ...usage, editorHref: `/templates/home?${query}` };
+  }
   const editableText = /\.data\.(title|text)$/.test(usage.path) || /^homeHero\.(title|text)$/.test(usage.path);
   if (editableText && usage.blockType === 'tariff_grid' && ((usage.entityType === 'PAGE_TEMPLATE_BLOCK' && usage.pageType === 'CITY_HOME') || (published && usage.entityType === 'BLOCK' && usage.pageType === 'HOME' && usage.cityId))) {
     return { ...usage, editorHref: `/templates/tariffs?siteId=${encodeURIComponent(siteId)}` };
@@ -74,7 +84,7 @@ function withEditorLink(usage: VariableUsage, siteId: string, published = false)
   }
   // Historical published city pages materialize the shared template as BLOCK.
   if (published && editableText && usage.entityType === 'BLOCK' && usage.pageType === 'HOME' && usage.blockType === 'hero' && usage.cityId) kind = 'CITY_HOME';
-  return kind ? { ...usage, editorHref: `/templates/home?kind=${kind}&siteId=${encodeURIComponent(siteId)}` } : usage;
+  return kind ? { ...usage, editorHref: `/templates/home?kind=${kind}${kind === 'CITY_HOME' ? '&mode=legacy' : ''}&siteId=${encodeURIComponent(siteId)}` } : usage;
 }
 
 export function buildVariableCatalogView(input: CatalogViewInput) {

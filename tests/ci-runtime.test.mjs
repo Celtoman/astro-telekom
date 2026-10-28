@@ -5,6 +5,7 @@ import { join } from 'node:path';
 
 const repositoryRoot = join(import.meta.dirname, '..');
 const root = join(repositoryRoot, '.github', 'workflows');
+const exactTestBaselinePattern = /(?:baseline(?: тестов)?|pnpm test)[^.\r\n]{0,100}\b(?:\d+\/\d+|\d+\s+тест(?:ов|а)?)(?![\p{L}\p{N}_])/iu;
 
 test('GitHub workflows use Node 24 actions without weakening the release gate', () => {
   const ci = readFileSync(join(root, 'ci.yml'), 'utf8');
@@ -36,7 +37,7 @@ test('the exact test baseline has docs/TEST_COVERAGE.md as its only source of tr
     const mirror = readFileSync(join(repositoryRoot, path), 'utf8');
     assert.doesNotMatch(
       mirror,
-      /(?:baseline(?: тестов)?|pnpm test)[^\r\n]{0,100}\b(?:\d+\/\d+|\d+\s+тест(?:ов|а)?)\b/i,
+      exactTestBaselinePattern,
       `${path} must not duplicate the exact test baseline`,
     );
   }
@@ -49,6 +50,13 @@ test('task management derives milestone composition from GitHub instead of a fix
   assert.match(taskManagement, /--state all --milestone/);
   assert.doesNotMatch(
     taskManagement,
-    /(?:milestone|MVP)[^\r\n]{0,100}\b\d+\s+(?:Task issues?|задач|issues?)/i,
+    /(?:milestone|MVP)[^.\r\n]{0,100}\b\d+\s+(?:Task issues?|задач|issues?)/i,
   );
+});
+
+
+test('baseline guard does not treat Figma occurrence evidence in the next sentence as a test count', () => {
+
+  assert.doesNotMatch('Размеры совпали с baseline. Все instance-ссылки разрешены: 144/142/142 occurrences.', exactTestBaselinePattern);
+  for (const text of ['Baseline: 854/854 passing', 'baseline тестов — 854/854', 'pnpm test: 854 теста']) assert.match(text, exactTestBaselinePattern);
 });

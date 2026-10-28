@@ -31,8 +31,8 @@ test('usage navigation opens only editable Hero fields, keeps site context and p
   const before = JSON.stringify({ working, published });
   const view = buildVariableCatalogView({ siteId: 'site & 2', workingRevision: 8, publishedRevision: 7, working, published });
   const item = view.items.find(item => item.code === 'PROVIDER_NAME');
-  assert.deepEqual(item.workingUsages.map(usage => usage.editorHref), ['/templates/home?kind=CITY_HOME&siteId=site%20%26%202', '/templates/home?kind=HOME&siteId=site%20%26%202', null, null, null, null, '/templates/tariffs?siteId=site%20%26%202']);
-  assert.equal(item.publishedUsages[0].editorHref, '/templates/home?kind=CITY_HOME&siteId=site%20%26%202');
+  assert.deepEqual(item.workingUsages.map(usage => usage.editorHref), ['/templates/home?kind=CITY_HOME&mode=legacy&siteId=site%20%26%202', '/templates/home?kind=HOME&siteId=site%20%26%202', null, null, null, null, '/templates/tariffs?siteId=site%20%26%202']);
+  assert.equal(item.publishedUsages[0].editorHref, '/templates/home?kind=CITY_HOME&mode=legacy&siteId=site%20%26%202');
   assert.equal(item.publishedUsages[1].editorHref, '/templates/tariffs?siteId=site%20%26%202');
   assert.equal(JSON.stringify({ working, published }), before);
   const legacy = buildVariableCatalogView({ siteId: 'site-1', workingRevision: 8, publishedRevision: 7, working, published: rawCatalog() });
@@ -43,7 +43,7 @@ test('usage navigation opens only editable Hero fields, keeps site context and p
 test('registry exposes immutable operator metadata for every implemented code', () => {
   const { listVariableDefinitions } = api('variable-registry');
   const definitions = listVariableDefinitions();
-  assert.equal(definitions.length, 11);
+  assert.equal(definitions.length, 18);
   for (const definition of definitions) {
     assert.match(definition.name, /\S/);
     assert.match(definition.description, /\S/);
@@ -83,7 +83,7 @@ test('catalog view compares selected city and tariff working/published values an
   const view = buildVariableCatalogView({ siteId: 'site-1', workingRevision: 8, publishedRevision: 7, working, published, cityId: 'city-1', tariffId: 'tariff-1' });
   assert.equal(view.cities[0].id, 'city-1');
   assert.equal(view.tariffs[0].id, 'tariff-1');
-  assert.equal(view.items.length, 11);
+  assert.equal(view.items.length, 18);
   const phone = view.items.find((item) => item.code === 'CONNECTION_PHONE');
   assert.deepEqual([phone.working.value, phone.published.value, phone.changed], ['+7 (800) 555-72-44', '+7 (800) 555-35-35', true]);
   assert.equal(phone.workingUsages.length, 1);
@@ -156,7 +156,7 @@ test('admin exposes a lightweight guarded variable definition list without build
   const { AdminVariableCatalogController } = api('admin-variable-catalog.controller');
   const controller = new AdminVariableCatalogController({ getVariableContext: () => assert.fail('preview must not run') }, { list: () => assert.fail('usage scan must not run') });
   const definitions = controller.definitions();
-  assert.equal(definitions.length, 11);
+  assert.equal(definitions.length, 18);
   assert.ok(definitions.find((item) => item.code === 'CITY_NAME').allowedFields.includes('SeoTemplate.titleTemplate'));
   assert.equal(Reflect.getMetadata('path', AdminVariableCatalogController.prototype.definitions), 'definitions');
   assert.ok(Reflect.getMetadata('__guards__', AdminVariableCatalogController)?.length);

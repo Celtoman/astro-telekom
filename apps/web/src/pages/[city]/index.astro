@@ -2,6 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlockRenderer from '../../components/BlockRenderer.astro';
 import CityHomeFirstScreen from '../../components/CityHomeFirstScreen.astro';
+import CityHomeComposition from '../../components/city-home/CityHomeComposition.astro';
+import { cityHomeImageOrigins } from '../../data/general-home';
 import { loadSiteData, pageMeta, seoMeta, publicSiteSlug, type CityView, type SiteView } from '../../data/site';
 
 interface Props { city: CityView; site: SiteView }
@@ -19,9 +21,11 @@ const heroBlock = homePage?.blocks?.find((block) => block.blockType === 'hero');
 if (!heroBlock) throw new Error(`HOME города «${city.name}» не содержит hero канонического шаблона`);
 const contentBlocks = homePage?.blocks?.filter((block) => block.blockType !== 'hero') || [];
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+const imageOrigins = cityHomeImageOrigins(homePage.blocks ?? []);
 ---
 
-<BaseLayout title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} firstScreenImage={heroBlock.data.image} indexable={meta.indexState !== 'NOINDEX'} city={city} pages={city.pages} {site}>
+<BaseLayout title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} firstScreenImage={heroBlock.data.image} {imageOrigins} indexable={meta.indexState !== 'NOINDEX'} city={city} pages={city.pages} {site}>
+  {homePage.content?.homeCompositionVersion === '3.0.0' ? <CityHomeComposition page={homePage} {city} {site} {apiUrl} cities={(await loadSiteData()).cities} /> : <>
   <CityHomeFirstScreen block={heroBlock} {city} {site} tariffs={city.tariffs} {apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage.slug} />
   <BlockRenderer
     blocks={contentBlocks}
@@ -34,4 +38,5 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
     siteSlug={publicSiteSlug}
     pageSlug={homePage.slug}
   />
+  </>}
 </BaseLayout>

@@ -11,6 +11,9 @@ import { tariffPreviewDiagnostics } from './tariff-preview-diagnostics';
 import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
 import { contentErrorLocation } from './content-validation-error';
 import { generalHomeFromTemplate } from './general-home-template';
+import { readSitePublicDisplay, sitePublicDisplayDefaults } from './site-public-display';
+import { cityTariffFacts } from './city-tariff-facts';
+import { CITY_HOME_VERSION } from './city-home-model';
 
 export type PublicationValidationIssue = {
   severity: 'BLOCKING' | 'WARNING';
@@ -94,13 +97,23 @@ export function validatePublicationSource(
     }
   };
   let source = rawSource;
+  let cityTemplateReady = true;
   try { source = materializeCityHomeSource(rawSource); }
-  catch (error) { add('BLOCKING', 'CITY_HOME_TEMPLATE', '/', message(error)); }
+  catch (error) {
+    cityTemplateReady = false;
+    add('BLOCKING', 'CITY_HOME_TEMPLATE', '/{city}', message(error), undefined, { template: 'CITY_HOME', ...contentErrorLocation(error) });
+  }
   const routes = routeSources(source);
   const seen = new Map<string, string>();
   const checkedPaths: string[] = [];
   const site = source.site;
   const provider = site.provider;
+  let publicDisplay = sitePublicDisplayDefaults();
+  try { publicDisplay = readSitePublicDisplay(site.settings); }
+  catch (error) {
+    // Defaults only permit further diagnostics; this blocking issue forbids activation.
+    add('BLOCKING', 'SITE_VALUES', '/', message(error), undefined, contentErrorLocation(error));
+  }
   for (const template of rawSource.pageTemplates ?? []) {
     if (template.kind === 'HOME') {
       try { generalHomeFromTemplate(template); }
@@ -165,7 +178,10 @@ export function validatePublicationSource(
       if (homes.length !== 1) add('BLOCKING', 'CITY_HOME_COUNT', route.path, `У города «${city.name}» должна быть ровно одна HOME`);
       else {
         if (homes[0].slug !== '') add('BLOCKING', 'CITY_HOME_SLUG', route.path, 'Городская HOME должна иметь пустой slug');
-        try { validateCityHomeBlocks(homes[0].blocks, city.name); } catch (error) { add('BLOCKING', 'CITY_HOME_BLOCKS', route.path, message(error), undefined, { template: 'CITY_HOME', ...contentErrorLocation(error) }); }
+        if (cityTemplateReady) try { validateCityHomeBlocks(homes[0].blocks, city.name, homes[0].content?.homeCompositionVersion); } catch (error) { add('BLOCKING', 'CITY_HOME_BLOCKS', route.path, message(error), undefined, { template: 'CITY_HOME', ...contentErrorLocation(error) }); }
+        if (homes[0].content?.homeCompositionVersion === CITY_HOME_VERSION && !(city.tariffs || []).some((value: any) => !['DRAFT', 'ARCHIVED'].includes(value.status))) {
+          add('BLOCKING', 'CITY_TARIFFS_REQUIRED', route.path, `У города «${city.name}» нет опубликованных тарифов. Добавьте тариф или вручную снимите город с публикации.`, undefined, { template: 'CITY_HOME', block: 'tariff_grid' });
+        }
       }
     }
     if (route.kind === 'CITY_TARIFF_DETAIL') {
@@ -176,15 +192,15 @@ export function validatePublicationSource(
     }
     try {
       const mini = {
-        site: { name: site.name, slug: site.slug, domain: site.domain, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
+        site: { name: site.name, slug: site.slug, domain: site.domain, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, publicDisplay },
         globalPages: page ? [page] : [],
-        cities: city ? [{ ...city, pages: route.kind === 'CITY_HOME' ? (city.pages || []).filter((candidate: any) => candidate.type === 'HOME') : [], tariffs: tariff ? [tariff] : [] }] : [],
+        cities: city ? [{ ...city, tariffFacts: cityTariffFacts(city.tariffs || []), pages: route.kind === 'CITY_HOME' ? (city.pages || []).filter((candidate: any) => candidate.type === 'HOME') : [], tariffs: tariff ? [tariff] : [] }] : [],
         routes: [route],
         redirects: [],
         sitemap: { excludedPaths: [] },
       };
       const resolved = resolveCatalogVariables(mini, {
-        site: { connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
+        site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
         provider: { name: provider.name },
         now,
       });

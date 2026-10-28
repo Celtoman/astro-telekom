@@ -10,7 +10,8 @@ export function initializeCallbackDialog() {
   const submit = form.querySelector('[type=submit]'), label = form.querySelector('[data-callback-submit-label]');
   const error = form.querySelector('[data-callback-error]'), phoneError = form.querySelector('[data-callback-phone-error]');
   const spinner = form.querySelector('[data-callback-spinner]'), audience = dialog.querySelector('[data-callback-audience]');
-  let sending = false, key = null, opener = null, mode = 'new', done = false;
+  const context = form.querySelector('[data-callback-tariff-context]');
+  let sending = false, key = null, opener = null, mode = 'new', done = false, selectedTariff = null, submittedSignature = null;
   const update = () => { submit.disabled = sending || !consent.checked || !normalizeRussianPhone(phone.value); };
   const switchMode = (next) => {
     mode = next;
@@ -24,6 +25,7 @@ export function initializeCallbackDialog() {
     const target = event.target instanceof Element ? event.target.closest('[data-callback-trigger]') : null;
     if (!target) return;
     event.preventDefault();
+    if (sending) return;
     const menu = target.closest('dialog'); opener = menu ? document.querySelector('[data-menu-trigger]') : target;
     menu?.close();
     if (done) {
@@ -31,6 +33,12 @@ export function initializeCallbackDialog() {
       phone.setAttribute('aria-invalid', 'false'); label.textContent = 'Заказать звонок'; spinner.hidden = true;
       audience.hidden = false; dialog.querySelector('[data-callback-success]').hidden = true; switchMode('new'); update();
     }
+    selectedTariff = target.dataset.callbackTariffSlug ? { slug: target.dataset.callbackTariffSlug, name: target.dataset.callbackTariffName || target.dataset.callbackTariffSlug, citySlug: target.dataset.callbackCitySlug || dialog.dataset.citySlug, cityName: target.dataset.callbackCityName || target.dataset.callbackCitySlug || '' } : null;
+    if (context) {
+      context.hidden = !selectedTariff;
+      context.textContent = selectedTariff ? `Выбранный тариф: ${selectedTariff.name}. Город: ${selectedTariff.cityName}.` : '';
+    }
+    switchMode('new');
     dialog.showModal();
     if (mode === 'new') phone.focus(); else audience.querySelector('[aria-pressed=true]').focus();
   });
@@ -45,12 +53,15 @@ export function initializeCallbackDialog() {
     sending = true; update(); phone.disabled = question.disabled = consent.disabled = true;
     for (const button of audience.querySelectorAll('button')) button.disabled = true;
     label.textContent = 'Отправляем…'; spinner.hidden = false; error.hidden = true;
+    const signature = JSON.stringify([normalized, question.value.trim(), selectedTariff?.slug, selectedTariff?.citySlug || dialog.dataset.citySlug]);
+    if (submittedSignature !== signature) key = null;
+    submittedSignature = signature;
     key ||= createSubmissionKey();
     try {
       let session;
       try { session = sessionForLead(sessionStorage, location.href, document.referrer); } catch { session = sessionForLead(null, location.href, document.referrer); }
       const { timeOnSiteSeconds, ...sessionContext } = session;
-      await sendCallbackRequest(dialog.dataset.apiUrl, { siteSlug: dialog.dataset.siteSlug, citySlug: dialog.dataset.citySlug || undefined, phone: normalized, comment: question.value.trim() || undefined, submissionKey: key, consentVersion: form.dataset.consentVersion, consentAccepted: true, formName: 'callback-dialog', session: sessionContext, timeOnSiteSeconds, website: form.elements.website.value });
+      await sendCallbackRequest(dialog.dataset.apiUrl, { siteSlug: dialog.dataset.siteSlug, citySlug: selectedTariff?.citySlug || dialog.dataset.citySlug || undefined, tariffSlug: selectedTariff?.slug, phone: normalized, comment: question.value.trim() || undefined, submissionKey: key, consentVersion: form.dataset.consentVersion, consentAccepted: true, formName: 'callback-dialog', session: sessionContext, timeOnSiteSeconds, website: form.elements.website.value });
       done = true; form.hidden = audience.hidden = true; dialog.querySelector('[data-callback-success]').hidden = false;
       dialog.querySelector('#callback-title').textContent = 'Заявка отправлена';
       const icon = dialog.querySelector('[data-callback-icon]'); icon.dataset.mode = 'success'; icon.querySelector('img').src = dialog.dataset.successIcon;
