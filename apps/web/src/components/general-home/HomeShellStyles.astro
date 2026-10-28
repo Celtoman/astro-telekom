@@ -5,7 +5,7 @@
   .gh-header button, .gh-footer button { font-family: inherit; cursor: pointer; }
   .gh-brand { display: flex; flex: 0 0 auto; align-items: center; }
   .gh-brand img { display: block; width: 100%; height: auto; }
-  .gh-header { position: relative; z-index: 30; border-bottom: 1px solid #dcecf7; background: #fff; color: #18202a; }
+  .gh-header { position: relative; z-index: 30; background: #fff; color: #18202a; }
   .gh-utility { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 40px; border-bottom: 1px solid #f0f3f6; }
   .gh-city-trigger, .gh-utility-links a, .gh-utility-links button { display: inline-flex; align-items: center; gap: 6px; min-width: 0; padding: 0; border: 0; background: none; color: #526071; font-size: 13px; line-height: 18px; text-align: left; }
   .gh-city-trigger { min-height: 36px; }
@@ -41,7 +41,7 @@
   .gh-menu-nav { display: grid; gap: 12px; }
   .gh-menu-nav a, .gh-menu-nav > button:not(.gh-callback) { display: flex; align-items: center; min-height: 44px; padding: 0; border: 0; background: none; color: #18202a; font: inherit; text-align: left; text-decoration: none; }
   .gh-footer { display: flex; flex-direction: column; align-items: stretch; gap: 32px; padding: 48px 40px 32px; background: #18202a; color: #fff; }
-  .gh-footer-content { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; min-height: 150px; }
+  .gh-footer-content { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; min-height: 140px; }
   .gh-footer .gh-brand { width: 151.833px; height: 50px; }
   .gh-footer-column { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-width: 0; font-size: 14px; line-height: 20px; }
   .gh-footer-column > strong { font-weight: 600; }
@@ -53,7 +53,7 @@
   .gh-footer-contact { width: 230px; }
   .gh-tablet-services, .gh-tablet-help, .gh-footer-mobile-links, .gh-footer-mobile-contact { display: none; }
   .gh-footer-divider { flex: 0 0 1px; height: 1px; background: #334155; }
-  .gh-footer-legal { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; min-height: 20px; font-size: 12px; line-height: 16px; }
+  .gh-footer-legal { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; min-height: 20px; font-size: 14px; line-height: 20px; }
   .gh-footer-legal p { width: 360px; margin: 0; }
   .gh-footer-legal > div { display: flex; flex-wrap: wrap; gap: 0 12px; width: 430px; }
   .gh-footer-legal span { display: inline; }
@@ -62,11 +62,14 @@
   .gh-contact-strip strong { font-size: 14px; font-weight: 600; line-height: 20px; }
   .gh-contact-strip a { font-size: 24px; font-weight: 700; line-height: 29px; letter-spacing: -.5px; overflow-wrap: anywhere; }
   .gh-contact-strip span { font-size: 14px; line-height: 20px; color: #cbd5e1; overflow-wrap: anywhere; }
+  .gh-contact-mobile-hours, .gh-contact-mobile-label { display: none; }
   .gh-footer-apply { min-width: 0; max-width: 100%; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; background: #e0231e; color: #fff; font-size: 14px; font-weight: 600; line-height: 20px; overflow-wrap: anywhere; }
   .gh-footer .gh-footer-legal { display: flex; flex-direction: column; gap: 16px; }
   .gh-footer-legal nav { display: flex; flex-wrap: wrap; gap: 12px 24px; width: 100%; }
+  .gh-footer-legal nav a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: 2px; }
   .gh-footer-legal .gh-footer-information { display: flex; flex-direction: column; gap: 8px; width: 100%; }
-  .gh-footer-legal .gh-footer-information p { width: 100%; color: #cbd5e1; overflow-wrap: anywhere; }
+  .gh-footer-legal .gh-footer-information p { width: 100%; max-width: 880px; color: #cbd5e1; overflow-wrap: anywhere; }
+  .gh-footer-information a { text-decoration: underline; text-underline-offset: 2px; }
   @media (max-width: 1300px) and (min-width: 1101px) {
     .gh-logo-nav { gap: 24px; }
     .gh-navigation { gap: 12px; }
@@ -97,7 +100,7 @@
     .gh-footer-clients, .gh-desktop-services, .gh-desktop-help { display: none; }
     .gh-tablet-services, .gh-tablet-help { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
     .gh-footer-legal { display: contents; }
-    .gh-footer-legal p, .gh-footer-legal > div { width: min(520px, 100%); font-size: 12px; line-height: 16px; }
+    .gh-footer-legal p, .gh-footer-legal > div { width: 100%; font-size: 14px; line-height: 20px; }
   }
   @media (max-width: 760px) and (min-width: 621px) {
     .gh-navigation { gap: 12px; }
@@ -121,8 +124,11 @@
     .gh-phone-copy { max-width: 140px; }
     .gh-menu { padding: 24px 20px; }
     .gh-footer { gap: 24px; padding: 32px 16px; }
-    .gh-contact-strip { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-    .gh-contact-strip a { font-size: 20px; line-height: 25px; letter-spacing: -.2px; }
+    .gh-contact-strip { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .gh-contact-strip a { font-size: 22px; line-height: 27px; letter-spacing: 0; }
+    .gh-contact-strip .gh-contact-hours, .gh-contact-desktop-label { display: none; }
+    .gh-contact-mobile-label, .gh-contact-mobile-hours { display: inline; }
+    .gh-contact-mobile-hours { text-transform: lowercase; }
     .gh-footer-apply { justify-self: stretch; }
     .gh-footer-legal nav { flex-direction: column; gap: 0; }
     .gh-footer-legal nav a, .gh-footer-mobile-links :is(a, button) { display: flex; align-items: center; min-height: 44px; }

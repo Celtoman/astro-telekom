@@ -294,8 +294,9 @@ test('web build emits city and tariff detail inventory for every published city'
   assert.equal((kazan.match(/<h1\b/g) || []).length, 1);
   assert.match(kazan, /data-api-url="https:\/\/api\.partner\.example\.test\/api\/v1"/);
   assert.match(kazan, /href="tel:\+78005553535"/);
-  assert.match(kazan, /data-phone-value[^>]*>\+7 \(800\) 555-35-35<\/span>/);
-  assert.match(kazan, /data-support-phone="\+7 \(800\) 250-77-77"/);
+  assert.match(kazan, /data-phone-value[^>]*>8-800-555-35-35<\/span>/);
+  assert.match(kazan, /data-support-phone="8-800-250-77-77"/);
+  assert.match(kazan, /data-support-phone-href="tel:\+78002507777"/);
   assert.match(almetyevsk, /<link rel="canonical" href="https:\/\/partner\.example\.test\/almetyevsk">/);
   assert.match(almetyevsk, /<h1[^>]*>Домашний интернет и телевидение в Альметьевске<\/h1>/);
   assert.match(almetyevsk, /data-address-check-root data-presentation="embedded"/);

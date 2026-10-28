@@ -1,4 +1,4 @@
-import { COMPARISON_SORTS, sortComparisonTariffs, type ComparisonSort } from '../lib/city-home-render';
+import { COMPARISON_SORTS, comparisonSortLabel, sortComparisonTariffs, type ComparisonSort } from '../lib/city-home-render';
 
 export function initializeCityComparisons(root: ParentNode = document) {
   for (const panel of root.querySelectorAll<HTMLElement>('[data-city-comparison]')) {
@@ -15,6 +15,8 @@ export function initializeCityComparisons(root: ParentNode = document) {
       panel.dataset.comparisonSort = sort;
       body.append(...sortComparisonTariffs(rows, sort).map(row => row.node));
       select.value = sort;
+      const visibleLabel = panel.querySelector('[data-comparison-sort-label]');
+      if (visibleLabel) visibleLabel.textContent = comparisonSortLabel(sort);
       for (const header of panel.querySelectorAll<HTMLElement>('[data-comparison-column]')) {
         const active = sort.startsWith(header.dataset.comparisonColumn!.toUpperCase());
         header.setAttribute('aria-sort', active ? sort.endsWith('ASC') ? 'ascending' : 'descending' : 'none');

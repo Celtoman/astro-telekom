@@ -28,3 +28,15 @@ test('editable callback delays use natural Russian after both promise constructi
     assert.equal(model.callbackMinutesLabel(minutes, 'genitive'), afterWithin);
   }
 });
+
+test('phone and compact hours presentation preserve custom source text and never mutate stored values', () => {
+  const source = { phone: '+7 (800) 555-72-44', hours: 'Ежедневно с 8:00 до 22:00' };
+  const original = structuredClone(source);
+  assert.equal(model.publicPhoneLabel(source.phone), '8-800-555-72-44');
+  assert.equal(model.publicPhoneLabel('88002507777'), '8-800-250-77-77');
+  assert.equal(model.publicPhoneLabel('+7 (495) 123-45-67'), '+7 (495) 123-45-67');
+  assert.equal(model.publicPhoneLabel('Телефон уточняется'), 'Телефон уточняется');
+  assert.equal(model.compactConnectionHours(source.hours), '8:00–22:00');
+  assert.equal(model.compactConnectionHours('Будни, 9:00–18:00'), 'Будни, 9:00–18:00');
+  assert.deepEqual(source, original);
+});

@@ -1,5 +1,17 @@
 import { assertSitePublicDisplay, sitePublicDisplayDefaults, type SitePublicDisplay } from '../../../api/src/site-public-display-model.ts';
 
+/** Presentation only: preserve the stored value and the independently validated tel target. */
+export function publicPhoneLabel(value: string): string {
+  const digits = value.replace(/\D/g, '');
+  return /^[78]800\d{7}$/.test(digits)
+    ? `8-800-${digits.slice(4, 7)}-${digits.slice(7, 9)}-${digits.slice(9)}`
+    : value;
+}
+
+export function compactConnectionHours(value: string): string {
+  return value.replace(/^Ежедневно с (.+) до (.+)$/, '$1–$2');
+}
+
 /** Accusative follows «за»; genitive follows «в течение». */
 export function callbackMinutesLabel(value = sitePublicDisplayDefaults().callbackWithinMinutes, grammaticalCase: 'accusative' | 'genitive' = 'accusative'): string {
   const remainder = value % 100;

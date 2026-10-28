@@ -21,7 +21,7 @@ test('immutable CITY_HOME builds all ten blocks, local assets and the shared she
       publicEnv: { PUBLIC_SITE_URL: 'https://partner.example.test', PUBLIC_API_URL: 'https://partner.example.test/api/v1', PUBLIC_SITE_SLUG: 'domru-site' }, fetchImpl: async () => Response.json(bundle) });
     const artifact = await builder.build({ publicationId: bundle.publicationId, siteSlug: bundle.siteSlug, siteId: bundle.siteId, rebuildId: 'city-v3', rebuildRevision: 1 });
     const directory = join(root, 'releases', artifact.artifactId), html = await readFile(join(directory, 'kazan/index.html'), 'utf8');
-    assert.deepEqual([...html.matchAll(/data-city-block="([^"]+)"/g)].map(match => match[1]), ['hero', 'tariff_grid', 'city.comparison', 'city.help', 'city.benefits', 'city.connection_steps', 'city.movix', 'city.regional_cities', 'city.faq', 'city.contacts']);
+    assert.deepEqual([...html.matchAll(/<div\b[^>]*\bdata-city-block="([^"]+)"/g)].map(match => match[1]), ['hero', 'tariff_grid', 'city.comparison', 'city.help', 'city.benefits', 'city.connection_steps', 'city.movix', 'city.regional_cities', 'city.faq', 'city.contacts']);
     assert.match(html, /class="gh-header"/); assert.match(html, /data-general-home-footer/);
     assert.equal([...html.matchAll(/<h1\b/g)].length, 1); assert.equal([...html.matchAll(/data-comparison-row/g)].length, 6);
     assert.match(html, /data-callback-tariff-slug="giga-300-tv"/);

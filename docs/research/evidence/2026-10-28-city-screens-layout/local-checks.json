@@ -1,0 +1,50 @@
+{
+  "release": {
+    "commit": false,
+    "push": false,
+    "deployment": false,
+    "reason": "Waiting for commit, exact CI and external acceptance"
+  },
+  "cms": {
+    "checkedAt": "2026-10-28T19:21:57.274Z",
+    "workingRevision": 24,
+    "publishedRevision": 24,
+    "publicationId": "cmvs82yuw000101o52i6ams8d",
+    "publicDigest": "42af8c9d2be5ab0e2f7043241f3a1946039ccf3806af8a9d4c8c121f178ec858",
+    "tariffDigest": "56345408ce1a8fd830022017d940663ca114051a653d2991efa436428d77b03f",
+    "cities": 207,
+    "tariffs": 3805,
+    "artifactId": "1fa51ea9d898dae23abf5398e396b4cc112aa002d62774e5b90c66e34017051a",
+    "preserved": true
+  },
+  "docker": {
+    "available": true,
+    "serverVersion": "29.9.2",
+    "recoveredByOwner": true
+  },
+  "profile": {
+    "tests": 37,
+    "passed": 37,
+    "failed": 0
+  },
+  "initialGate": {
+    "command": "pnpm check",
+    "lint": "passed",
+    "prismaValidate": "passed",
+    "build": "passed on retry",
+    "tests": "failed",
+    "dockerUnavailableSuites": 16,
+    "presentationExpectationSuite": 1,
+    "presentationExpectation": "updated to Screens 8-800 display; original tel targets still asserted",
+    "rerunRequired": true,
+    "finalRun": "in progress after Docker recovery"
+  },
+  "fullGate": {
+    "command": "pnpm check",
+    "status": "passed",
+    "tests": 861,
+    "passed": 861,
+    "failed": 0,
+    "skipped": 0
+  }
+}

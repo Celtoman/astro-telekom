@@ -1,0 +1,42 @@
+[
+  {
+    "path": "apps/web/public/images/general-home/movix-television.svg",
+    "figmaNodeId": "I11:2766;1592:13",
+    "sha256": "f8c338a43f8bb35cdd9a522f5507d3ab97e88dafdb653d2dab63fffd3158619a"
+  },
+  {
+    "path": "apps/web/public/images/general-home/movix-search.svg",
+    "figmaNodeId": "I11:2766;1592:35",
+    "sha256": "20926644b48efdddb21771b693deeca0fbe5d7b270518c26243818d61628e3a1"
+  },
+  {
+    "path": "apps/web/public/images/general-home/movix-devices.svg",
+    "figmaNodeId": "I11:2766;1592:52",
+    "sha256": "e35269d1d6558d83bddc0129c3bd8037cb003cb50ddb3e1827eb7e887b823851"
+  },
+  {
+    "path": "apps/web/public/images/general-home/movix-compact-television.svg",
+    "figmaNodeId": "I11:5021;1592:294",
+    "sha256": "ef913cd378b54d3b293135daf2965cc97ce45a692db4bff4e90846aae962fae3"
+  },
+  {
+    "path": "apps/web/public/images/general-home/movix-compact-search.svg",
+    "figmaNodeId": "I11:5021;1592:316",
+    "sha256": "afaa10f9c38cae3a39ac2ac62899a9d7052913f471d6ac2bcd3241300aa0826f"
+  },
+  {
+    "path": "apps/web/public/images/general-home/movix-compact-devices.svg",
+    "figmaNodeId": "I11:5021;1592:333",
+    "sha256": "5a5e2fcb1d75bb33c9c51e0fcf1dd3174f79caf0f1da767c7357daec3313c509"
+  },
+  {
+    "path": "apps/web/public/images/figma/hero-speed-blue.svg",
+    "figmaNodeId": "I11:1987;12:206",
+    "sha256": "e2657e25b1e854779d119e8b28491669f8ebdf46ee67a6cc161187b21c76d83f"
+  },
+  {
+    "path": "apps/web/public/images/figma/hero-speed.svg",
+    "figmaNodeId": "I11:3189;12:235",
+    "sha256": "64fb958c80e2b5370081625eb0bf80dd195fb986a904abc46f718be32021d261"
+  }
+]

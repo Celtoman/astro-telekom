@@ -77,7 +77,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     {indexable && <script is:inline type="application/ld+json" set:html={jsonLd}></script>}
     {metrikaBootstrap && <script is:inline set:html={metrikaBootstrap}></script>}
   </head>
-  <body class="general-home-page">
+  <body class:list={["general-home-page", { "city-home-page": currentRoute?.kind === "CITY_HOME" && cityComposition === "3.0.0" }]}>
     <GeneralHomeHeader {site} {city} cities={catalog.cities} {localSections} addressDialogId={homeShell?.addressDialogId} />
     <main>
       <slot />
@@ -133,6 +133,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
   :root { font-family: 'Geist Variable', ui-sans-serif, system-ui, sans-serif; color: #18202a; background: #f6f7f9; font-synthesis: none; }
   :root.full-general-home { background: #fff; }
   .general-home-page { background: #fff; }
+  .city-home-page { padding-block: 24px; }
   .general-home-page > main { padding: 24px 0; }
   * { box-sizing: border-box; }
   body { margin: 0; }
