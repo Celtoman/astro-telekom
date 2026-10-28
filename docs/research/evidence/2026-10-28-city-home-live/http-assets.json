@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-10-28T15:06:19.489Z",
+  "httpErrors": [
+    {
+      "url": "https://tv-internet-dom.ru/city-home-acceptance-missing",
+      "status": 404,
+      "type": "document"
+    }
+  ],
+  "unexpectedHttpErrors": 0
+}

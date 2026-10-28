@@ -1,8 +1,8 @@
 {
-  "checkedAt": "2026-10-28T13:54:11.219Z",
-  "elapsedMs": 38033,
-  "reviewDurationMs": 37429,
-  "previewDurationMs": 37917,
+  "checkedAt": "2026-10-28T14:39:53.974Z",
+  "elapsedMs": 16731,
+  "reviewDurationMs": 9454,
+  "previewDurationMs": 16440,
   "reviewHttpStatus": 200,
   "previewHttpStatus": 200,
   "workingRevision": 24,

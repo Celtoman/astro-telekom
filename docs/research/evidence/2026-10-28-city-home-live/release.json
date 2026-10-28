@@ -1,0 +1,49 @@
+{
+  "checkedAt": "2026-10-28T17:45:30.513Z",
+  "codeCommit": "a9569b55e199d7ac541a60bc770916ff537ffbf8",
+  "ci": {
+    "conclusion": "success",
+    "headSha": "a9569b55e199d7ac541a60bc770916ff537ffbf8",
+    "status": "completed",
+    "url": "https://github.com/Celtoman/astro-telekom/actions/runs/40706528580"
+  },
+  "deployment": {
+    "id": "vvpoyjm5t29gf6fk3mmdrelv",
+    "status": "finished",
+    "commit": "a9569b55e199d7ac541a60bc770916ff537ffbf8",
+    "health": "running:healthy"
+  },
+  "code": {
+    "status": "SUCCEEDED",
+    "publicationId": "cmvb26nmn000401mc1ukxauqi",
+    "siteRevision": 23,
+    "artifactId": "bdc075f535d5ff6c4859874af9e8fffd740ab8ccd87ddac7d566c5c8dc5c00dd",
+    "rendererId": "4ddc151ba399e1aa9d78fcea38663cedb516a8afd4a7f62fa6fa599258c91fb7",
+    "catalogDigest": "7f29d9e1bc9cf504b093509ca327cf2e6fa63613275d16c7d18ac0c865304349",
+    "manifestDigest": "72947c05fc70daa8c715c1a0f4f47cdfaa9721d761777fa832e9d7b5c44abf5a"
+  },
+  "cms": {
+    "status": "SUCCEEDED",
+    "publicationId": "cmvs82yuw000101o52i6ams8d",
+    "siteRevision": 24,
+    "artifactId": "1fa51ea9d898dae23abf5398e396b4cc112aa002d62774e5b90c66e34017051a",
+    "rendererId": "4ddc151ba399e1aa9d78fcea38663cedb516a8afd4a7f62fa6fa599258c91fb7",
+    "catalogDigest": "d9b3c8469cdeffccbf3a3ad896ba6979af13cbc6a8e383aa4ca99348b9095d07",
+    "manifestDigest": "b4e398873b8d05316b02af77b9968a3c0659b40162c734f555cd21922e3dbeb4",
+    "rebuildId": "cmtw6dpwj015g01o0ho99ow05",
+    "rebuildRevision": 22
+  },
+  "data": {
+    "cities": 207,
+    "tariffs": 3805,
+    "tariffDataDigest": "56345408ce1a8fd830022017d940663ca114051a653d2991efa436428d77b03f",
+    "heroCatalogPreserved": true,
+    "homeFactsPreserved": true,
+    "cityVersions": [
+      "3.0.0"
+    ]
+  },
+  "workingRevision": 24,
+  "publishedRevision": 24,
+  "checkedUrlCount": 4018
+}

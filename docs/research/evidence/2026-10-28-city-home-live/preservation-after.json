@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-10-28T17:41:41.252Z",
+  "cities": 207,
+  "tariffs": 3805,
+  "tariffDataDigest": "56345408ce1a8fd830022017d940663ca114051a653d2991efa436428d77b03f",
+  "heroCatalogPreserved": true,
+  "homeFactsPreserved": true,
+  "cityVersions": [
+    "3.0.0"
+  ]
+}
