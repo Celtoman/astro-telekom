@@ -13,6 +13,10 @@
 
 [Происхождение и размеры](evidence/2026-10-29-public-shell-stability/source-proof.json). [Снимок до изменений](evidence/2026-10-29-public-shell-stability/before.json).
 
+## Дополнительная проверка progressive HTML
+
+Первый внешний прогон выявил ещё один CLS на HOME Desktop:0.00116–0.00194. MutationObserver подтвердил, что parser успевал показать пустой `.home-address-reassurance` до получения его дочернего picture и текста; высота менялась с0 до24px, поднимая форму на24px. Резервируется минимальная высота уже существующей иконки:24px/20px. Многострочный текст остаётся свободным, тексты не меняются. Первую внешнюю версию e08a883 не считаем завершённой приёмкой. Принудительная350ms пауза сразу после открывающего тега пояснения на локальном новом artifact дала CLS0 на1440/834/390/320; независимый review доправки не нашёл Critical/Important. [До](evidence/2026-10-29-public-shell-stability/progressive-html-before.json), [после](evidence/2026-10-29-public-shell-stability/progressive-html-after.json).
+
 ## Локальная проверка
 
 Настоящий StaticArtifactBuilder собрал124 маршрута на сокращённой копии текущего опубликованного каталога: шесть городов, все22 тарифа Казани, реальные заголовки/юридические тексты. Это тестовый fixture, не новая CMS-публикация. API URL и SEO inventory проходят обычные build-policy guards. Полный публичный каталог не редактируется.
