@@ -806,25 +806,25 @@
 
 ### PF-137 — Поле над шапкой ошибочно перенесено из макета
 
-- Дата: 2026-10-29. Статус: CONVERTED / [#420](https://github.com/Celtoman/astro-telekom/issues/420); исправление и выпуск разрешены в [#429](https://github.com/Celtoman/astro-telekom/issues/429).
+- Дата: 2026-10-29. Статус: RESOLVED / [#420](https://github.com/Celtoman/astro-telekom/issues/420); исправление и внешний выпуск проверены в [#429](https://github.com/Celtoman/astro-telekom/issues/429), [приёмка](research/2026-10-29-city-shell-release.md).
 - Наблюдение: Владелец уточнил: над шапкой нужен нулевой отступ. Причина подтверждена в общем body padding; в текущем проходе оболочка только проверялась.
 - [Повторная сверка](research/2026-10-29-city-screens-reaudit.md); реализация вне legal-блока в текущем проходе не разрешена.
 
 ### PF-138 — Первый кадр каталога меняет список после JS-инициализации
 
-- Дата: 2026-10-29. Статус: CONVERTED / [#423](https://github.com/Celtoman/astro-telekom/issues/423); исправление и выпуск разрешены в [#429](https://github.com/Celtoman/astro-telekom/issues/429).
+- Дата: 2026-10-29. Статус: RESOLVED / [#423](https://github.com/Celtoman/astro-telekom/issues/423); исправление и внешний выпуск проверены в [#429](https://github.com/Celtoman/astro-telekom/issues/429), [приёмка](research/2026-10-29-city-shell-release.md).
 - Наблюдение: При входе по категории меняются состав и высота уже показанной выдачи. Не исправлять это сменой согласованной CMS-настройки количества карточек.
 - [Повторная сверка](research/2026-10-29-city-screens-reaudit.md); реализация вне legal-блока в текущем проходе не разрешена.
 
 ### PF-139 — Иконка телевидения в Hero не совпадает со Screens
 
-- Дата: 2026-10-29. Статус: CONVERTED / [#424](https://github.com/Celtoman/astro-telekom/issues/424); исправление и выпуск разрешены в [#429](https://github.com/Celtoman/astro-telekom/issues/429).
+- Дата: 2026-10-29. Статус: RESOLVED / [#424](https://github.com/Celtoman/astro-telekom/issues/424); исправление и внешний выпуск проверены в [#429](https://github.com/Celtoman/astro-telekom/issues/429), [приёмка](research/2026-10-29-city-shell-release.md).
 - Наблюдение: Размер и подложка верны, но графема монитора отличается от принятого телевизора с антенной. Исправление в этом проходе не выполнялось.
 - [Повторная сверка](research/2026-10-29-city-screens-reaudit.md); реализация вне legal-блока в текущем проходе не разрешена.
 
 ### PF-140 — Вертикальный ритм мобильного футера отличается от Screens
 
-- Дата: 2026-10-29. Статус: CONVERTED / [#425](https://github.com/Celtoman/astro-telekom/issues/425); исправление и выпуск разрешены в [#429](https://github.com/Celtoman/astro-telekom/issues/429).
+- Дата: 2026-10-29. Статус: RESOLVED / [#425](https://github.com/Celtoman/astro-telekom/issues/425); исправление и внешний выпуск проверены в [#429](https://github.com/Celtoman/astro-telekom/issues/429), [приёмка](research/2026-10-29-city-shell-release.md).
 - Наблюдение: Футер стабилен при переходах, но увеличенные зоны ссылок делают его выше. Отдельно согласовать компактную компоновку с сохранением доступности.
 - [Повторная сверка](research/2026-10-29-city-screens-reaudit.md); реализация вне legal-блока в текущем проходе не разрешена.
 

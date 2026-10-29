@@ -11,10 +11,10 @@
 | ID | Issue | Суть |
 | --- | --- | --- |
 | TD-198 | [#430](https://github.com/Celtoman/astro-telekom/issues/430) 🟢 | Диагностировать нехватку памяти Windows при полном gate |
-| TD-192 | [#420](https://github.com/Celtoman/astro-telekom/issues/420) 🟢 | Поле над шапкой ошибочно перенесено из макета |
-| TD-193 | [#423](https://github.com/Celtoman/astro-telekom/issues/423) 🟢 | Первый кадр каталога меняет список после JS-инициализации |
-| TD-194 | [#424](https://github.com/Celtoman/astro-telekom/issues/424) 🟢 | Иконка телевидения в Hero не совпадает со Screens |
-| TD-195 | [#425](https://github.com/Celtoman/astro-telekom/issues/425) 🟢 | Вертикальный ритм мобильного футера отличается от Screens |
+| TD-192 | [#420](https://github.com/Celtoman/astro-telekom/issues/420) ✅ | Поле над шапкой ошибочно перенесено из макета |
+| TD-193 | [#423](https://github.com/Celtoman/astro-telekom/issues/423) ✅ | Первый кадр каталога меняет список после JS-инициализации |
+| TD-194 | [#424](https://github.com/Celtoman/astro-telekom/issues/424) ✅ | Иконка телевидения в Hero не совпадает со Screens |
+| TD-195 | [#425](https://github.com/Celtoman/astro-telekom/issues/425) ✅ | Вертикальный ритм мобильного футера отличается от Screens |
 | TD-196 | [#426](https://github.com/Celtoman/astro-telekom/issues/426) 🟢 | Принятый Screens хранит дефектные иконки Movix |
 | TD-197 | [#427](https://github.com/Celtoman/astro-telekom/issues/427) 🟢 | Коллизия исторического BLK-0032 между файлами |
 | TD-180 | [#402](https://github.com/Celtoman/astro-telekom/issues/402) ✅ | Миграция0062 сохраняет владельческие подписи HOME в общих фактах |

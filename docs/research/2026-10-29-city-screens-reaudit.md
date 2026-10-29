@@ -2,6 +2,8 @@
 
 Проверена живая [Казань](https://tv-internet-dom.ru/kazan), serving artifact `483421ae0990b0574edcf6f71e7ca4601abd97729ced81eea21771829d9a0a0c`, и актуальный Screens `BdxNHlBVZWejREtOEIWDkI`. Уточнение владельца: legal-блок внедрять, остальные части только проверять. Код города, шапки, футера, каталога и Movix в этом проходе не менялся.
 
+После этого аудита владелец разрешил исправления #420/#423/#424/#425 и выпуск legal #421. [Фактическая внешняя приёмка](2026-10-29-city-shell-release.md); приведённые ниже измерения относятся к предыдущему artifact и сохранены как исходное состояние.
+
 ## Проверка и источники
 
 Основные композиции Screens: [Desktop1440](https://www.figma.com/design/BdxNHlBVZWejREtOEIWDkI?node-id=11-1937), [Tablet834](https://www.figma.com/design/BdxNHlBVZWejREtOEIWDkI?node-id=11-3143), [Mobile390](https://www.figma.com/design/BdxNHlBVZWejREtOEIWDkI?node-id=11-4322). В этой странице Screens отдельного полного320-макета нет: сайт320 проверен как дополнительная адаптация, без заявления о попиксельном совпадении с несуществующей полной композицией.
