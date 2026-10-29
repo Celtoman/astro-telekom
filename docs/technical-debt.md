@@ -14,6 +14,9 @@
 | TD-181 | [#404](https://github.com/Celtoman/astro-telekom/issues/404) ✅ | Стабильный порядок блоков в audit/content revisions CMS |
 | TD-182 | [#405](https://github.com/Celtoman/astro-telekom/issues/405) ✅ | Исправлены CITY overflow/tie/CSP assets, recovery links, callback context и preview CTA |
 | TD-183 | [#406](https://github.com/Celtoman/astro-telekom/issues/406) ✅ | Guard baseline различает тесты и исторические Figma occurrences |
+| TD-187 | [#411](https://github.com/Celtoman/astro-telekom/issues/411) 🟢 | Стабилизировать первый кадр общей шапки и оболочку страниц |
+| TD-188 | [#412](https://github.com/Celtoman/astro-telekom/issues/412) 🟢 | Убрать внутреннюю вертикальную прокрутку сравнения |
+| TD-189 | [#413](https://github.com/Celtoman/astro-telekom/issues/413) 🟢 | Восстановить цельные подложки и центрированные SVG Movix |
 | TD-186 | [#410](https://github.com/Celtoman/astro-telekom/issues/410) 🟢 | Длинный H1 юридического документа переполняет общую страницу на320 |
 | TD-185 | [#408](https://github.com/Celtoman/astro-telekom/issues/408) ✅ | Привести вёрстку городской страницы к принятой Screens на D/T/M/320 без изменения CMS |
 | TD-184 | [#407](https://github.com/Celtoman/astro-telekom/issues/407) ✅ | Повторный расчёт городских агрегатов устранён; полный snapshot24 опубликован и подтверждён serving receipt |

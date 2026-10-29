@@ -37,7 +37,7 @@ assetPaths.push(...readdirSync(new URL('../apps/web/public/images/city-home/', i
 // Native CSS nesting isolates Astro's local selectors from other preview components.
 export function readPreviewPublicStyles() {
   const fontRoot = new URL('../apps/admin/node_modules/@fontsource-variable/geist/', import.meta.url);
-  const fonts = readFileSync(new URL('wght.css', fontRoot), 'utf8').replace(/url\(\.\/([^)]*)\)/g, (_, path) => `url(data:font/woff2;base64,${readFileSync(new URL(path, fontRoot)).toString('base64')})`);
+  const fonts = readFileSync(new URL('wght.css', fontRoot), 'utf8').replace(/font-display: swap;/g, 'font-display: optional;').replace(/url\(\.\/([^)]*)\)/g, (_, path) => `url(data:font/woff2;base64,${readFileSync(new URL(path, fontRoot)).toString('base64')})`);
   return (fonts + sources.map(([name, path]) => {
     const styles = [...readFileSync(path, 'utf8').matchAll(/<style(?:\s[^>]*)?>([\s\S]*?)<\/style>/g)];
     if (!styles.length) throw new Error(`No public styles in ${path}`);

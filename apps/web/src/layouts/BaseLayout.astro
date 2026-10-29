@@ -1,6 +1,9 @@
 ---
 import { createHash } from 'node:crypto';
-import '@fontsource-variable/geist';
+import '../styles/public-fonts.css';
+import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
+import geistCyrillic from '@fontsource-variable/geist/files/geist-cyrillic-wght-normal.woff2?url';
+import { publicShellBootstrap, prepareHeaderScript, prepareFooterScript } from '../lib/public-shell-state.mjs';
 import type { CityView, PageView, SiteView } from '../data/site';
 import { defaultSiteImagePath, loadSiteData } from '../data/site';
 import { publicAsset } from '../data/public-asset';
@@ -56,6 +59,8 @@ const metrikaBootstrap = metrikaId
   ? `window.__YANDEX_METRIKA_ID__=${metrikaId};(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t);a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(${metrikaId},'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});`
   : undefined;
 const scriptHash = (source: string) => `sha256-${createHash('sha256').update(source).digest('base64')}` as const;
+const shellBootstrap = publicShellBootstrap(catalog.cities, site.slug);
+for (const source of [shellBootstrap, prepareHeaderScript, prepareFooterScript]) Astro.csp.insertScriptHash(scriptHash(source));
 Astro.csp.insertScriptHash(scriptHash(jsonLd));
 if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
 ---
@@ -64,6 +69,9 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
 <html lang="ru" class="full-general-home">
   <head>
     <meta charset="UTF-8" />
+    <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={geistCyrillic} as="font" type="font/woff2" crossorigin="anonymous" />
+    <script is:inline set:html={shellBootstrap}></script>
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" href={publicAsset('/favicon.ico')} />
     <title>{title}</title>
@@ -86,11 +94,8 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     <CallbackDialog {site} {city} requireConfirmedCity={!city} />
     <LegalDocuments />
     <script>
-      import {
-        SUBSCRIBER_MODE_EVENT,
-        SUBSCRIBER_MODE_STORAGE_KEY,
-        isSubscriberModeActive,
-      } from '../lib/subscriber-mode.mjs';
+      import { SUBSCRIBER_MODE_EVENT } from '../lib/subscriber-mode.mjs';
+      import { applySubscriberPhone } from '../lib/public-shell-state.mjs';
       import { recordSessionPage } from '../lib/session-attribution.mjs';
 
       type MetrikaWindow = Window & {
@@ -99,25 +104,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
       };
       const metrikaWindow = window as MetrikaWindow;
       try { recordSessionPage(sessionStorage, location.href, document.referrer); } catch { /* Storage may be unavailable. */ }
-      const applySubscriberMode = () => {
-        document.querySelectorAll('.subscriber-phone').forEach((node) => {
-          const support = node.getAttribute('data-support-phone') || 'Официальная поддержка';
-          const supportHref = node.getAttribute('data-support-phone-href');
-          const value = node.querySelector('[data-phone-value]');
-          const caption = node.querySelector('[data-phone-caption]');
-          if (value) value.textContent = support;
-          else node.textContent = support;
-          if (caption) caption.textContent = 'Техподдержка';
-          if (supportHref && node instanceof HTMLAnchorElement) node.href = supportHref;
-          node.setAttribute('aria-label', `Техническая поддержка: ${support}`);
-        });
-      };
-      window.addEventListener(SUBSCRIBER_MODE_EVENT, applySubscriberMode);
-      try {
-        const expiresAt = localStorage.getItem(SUBSCRIBER_MODE_STORAGE_KEY);
-        if (isSubscriberModeActive(expiresAt)) applySubscriberMode();
-        else if (expiresAt !== null) localStorage.removeItem(SUBSCRIBER_MODE_STORAGE_KEY);
-      } catch { /* private browsing can disable localStorage */ }
+      window.addEventListener(SUBSCRIBER_MODE_EVENT, () => applySubscriberPhone(document));
       document.addEventListener('click', (event) => {
         const target = event.target instanceof Element ? event.target.closest('a[href^="tel:"]') : null;
         if (target && typeof metrikaWindow.ym === 'function') metrikaWindow.ym(metrikaWindow.__YANDEX_METRIKA_ID__, 'reachGoal', 'phone_click');
@@ -132,8 +119,8 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
 <style is:global>
   :root { font-family: 'Geist Variable', ui-sans-serif, system-ui, sans-serif; color: #18202a; background: #f6f7f9; font-synthesis: none; }
   :root.full-general-home { background: #fff; }
-  .general-home-page { background: #fff; }
-  .city-home-page { padding-block: 24px; }
+  .general-home-page { background: #fff; padding-block: 24px; }
+  html[data-public-shell-pending] [data-site-header] { visibility: hidden; }
   .general-home-page > main { padding: 24px 0; }
   * { box-sizing: border-box; }
   body { margin: 0; }
@@ -147,7 +134,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
   .phone { font-weight: 700; text-decoration: none; white-space: nowrap; }
   .hero { padding: 72px 0 56px; background: linear-gradient(135deg, #e8f4ff, #f6f7f9); }
   .eyebrow { color: #1769aa; font-weight: 700; }
-  h1 { font-size: clamp(36px, 6vw, 64px); line-height: 1.02; max-width: 780px; margin: 16px 0; letter-spacing: -0.04em; }
+  h1 { overflow-wrap: anywhere; font-size: clamp(36px, 6vw, 64px); line-height: 1.02; max-width: 780px; margin: 16px 0; letter-spacing: -0.04em; }
   h2 { font-size: 32px; margin: 0 0 24px; letter-spacing: -0.03em; }
   .lead { font-size: 20px; line-height: 1.5; max-width: 680px; color: #526071; }
   .section { padding: 56px 0; }

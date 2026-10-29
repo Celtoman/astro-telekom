@@ -25,6 +25,10 @@ HOME Hero 1d реализован в коде по [паспорту 2.0.0](docs
 
 Вёрстка городской страницы выровнена по принятой Screens на Desktop, Tablet, Mobile и320. Код `e47ca57a` прошёл локальный gate, [exact-SHA CI](https://github.com/Celtoman/astro-telekom/actions/runs/40755546548), finished/healthy deployment, CODE и внешнюю сверку. CMS revision24/24, publication ID и полный каталог сохранены; Figma и библиотека не менялись. [Приёмка и снимки](docs/research/2026-10-28-city-screens-layout-acceptance.md), [граница работ](docs/plans/2026-10-28-city-screens-layout-fix.md), [current-state](docs/current-state.md).
 
+## Стабильность публичной оболочки — 29 октября 2026
+
+Исправляются первый кадр шапки, одинаковые внешние поля страниц, #410, внутренняя прокрутка сравнения и SVG Movix по [задаче #414](https://github.com/Celtoman/astro-telekom/issues/414). [План](docs/plans/2026-10-29-public-shell-stability.md), [локальная сверка](docs/research/2026-10-29-public-shell-stability.md). CMS snapshot24 и тексты сохраняются. Внешний выпуск фиксируется отдельно в [current-state](docs/current-state.md).
+
 ## Документация
 
 | Нужно узнать | Источник |

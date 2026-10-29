@@ -4,9 +4,11 @@ import { renderHomeFooter } from '../../lib/general-home-shell';
 import { publicAsset } from '../../data/public-asset';
 import { publishedMoscow } from '../../lib/city-context.mjs';
 import HomeShellStyles from './HomeShellStyles.astro';
+import { prepareFooterScript } from '../../lib/public-shell-state.mjs';
 interface Props { site: SiteView; cities: CityView[]; city?: CityView; localSections?: string[] }
 const { site, cities } = Astro.props as Props;
 const city = Astro.props.city ?? publishedMoscow(cities) ?? undefined;
 ---
 <Fragment set:html={renderHomeFooter(site, { city, localSections: Astro.props.localSections, asset: publicAsset })} />
+<script is:inline set:html={prepareFooterScript}></script>
 <HomeShellStyles />

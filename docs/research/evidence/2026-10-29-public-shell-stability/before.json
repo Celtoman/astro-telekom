@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-29T06:45:27.497Z",
+  "catalogDigest": "d9b3c8469cdeffccbf3a3ad896ba6979af13cbc6a8e383aa4ca99348b9095d07",
+  "rendererId": "4ddc151ba399e1aa9d78fcea38663cedb516a8afd4a7f62fa6fa599258c91fb7",
+  "artifactId": "3b5f9b7e8c663c0c960a38507915f168f2e1f036d0833b2962eaa6aaabbf2ed8",
+  "publicDigest": "42af8c9d2be5ab0e2f7043241f3a1946039ccf3806af8a9d4c8c121f178ec858",
+  "tariffDigest": "56345408ce1a8fd830022017d940663ca114051a653d2991efa436428d77b03f",
+  "cities": 207,
+  "tariffs": 3805,
+  "workingRevision": 24,
+  "publishedRevision": 24,
+  "publicationId": "cmvs82yuw000101o52i6ams8d"
+}

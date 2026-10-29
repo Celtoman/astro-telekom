@@ -4,6 +4,12 @@
 
 Этот документ описывает действующую реализацию и её ограничения. Целевое поведение задаёт [продуктовый контракт](product-contract.md), следующую очередь — [план релизов](release-plan.md), механические статусы работ — [GitHub Issues](https://github.com/Celtoman/astro-telekom/issues). Датированные SHA, deployment IDs и измерения сохраняются в [исследованиях и приёмках](research/README.md).
 
+## 29 октября 2026 — стабилизация первого кадра публичных страниц
+
+Выполняется разрешённая владельцем задача #414 (sub-issues #410–#413): общий24px каркас по Screens, CSP-hashed parser-time header/footer state, сохранение subscriber/city context, preload/optional Geist, перенос длинного H1, исправление scroll box сравнения и полные центрированные SVG Movix. [План](plans/2026-10-29-public-shell-stability.md), [проверки](research/2026-10-29-public-shell-stability.md).
+
+Локальный immutable artifact на сокращённой копии опубликованного каталога прошёл D/T/M/320/1000 и cold/warm/storage/no-JS проверки. В измеренных холодных сценариях CLS0 при задержке шрифтов800ms, initial phone сразу соответствует режиму; header/footer имеют одинаковую геометрию HOME/CITY. Юридические тексты и CMS не менялись. Полный `pnpm check` прошёл; внешний выпуск пока не завершён; последняя подтверждённая внешняя версия описана ниже.
+
 ## 29 октября 2026 — CITY_HOME выровнен по Screens и выпущен в test-контур
 
 По [#409](https://github.com/Celtoman/astro-telekom/issues/409) исправлены геометрия Hero/внешних полей/регионального списка, помощь и преимущества320, футер, сравнение и иконки. Общие renderer и sandbox preview используют те же стили/ассеты. Код `e47ca57a` прошёл полный локальный `pnpm check`, независимый review и [CI](https://github.com/Celtoman/astro-telekom/actions/runs/40755546548); deployment `xwuvpsx55uyvkikwpcbwdnx3` завершён с точным SHA и healthy-приложением. CODE завершился `SUCCEEDED` и пересобрал прежний snapshot24.

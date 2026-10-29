@@ -1,0 +1,58 @@
+{
+  "fileKey": "BdxNHlBVZWejREtOEIWDkI",
+  "homeFrames": [
+    "192:653",
+    "192:924",
+    "192:1188"
+  ],
+  "cityFrames": [
+    "11:1937",
+    "11:3143",
+    "11:4322"
+  ],
+  "allFramesPaddingTop": 24,
+  "homeHeaderHeights": [
+    129,
+    121,
+    109
+  ],
+  "cityHeaderHeights": [
+    128,
+    120,
+    108
+  ],
+  "resolution": "One shared implementation at128/120/108; direct owner instruction requires identical geometry. Figma/library unchanged.",
+  "movix": "Screens SVG itself contains negative backdrop coordinates. Owner asked to correct web icon composition; prior existing complete64/48tiles restored.",
+  "restoredAssets": [
+    {
+      "path": "apps/web/public/images/general-home/movix-television.svg",
+      "sourceCommit": "3dadca30e929621762766820fba9c0981ac4cd64",
+      "sha256": "104ab67f0c66ab4b2913d9d9557770df43896a82f76e180808be132746e04fc2"
+    },
+    {
+      "path": "apps/web/public/images/general-home/movix-search.svg",
+      "sourceCommit": "3dadca30e929621762766820fba9c0981ac4cd64",
+      "sha256": "cd14a14d43b911bc7662e32655e37eb1a0b7ea9e62e21afb0b73c1072112b3d6"
+    },
+    {
+      "path": "apps/web/public/images/general-home/movix-devices.svg",
+      "sourceCommit": "3dadca30e929621762766820fba9c0981ac4cd64",
+      "sha256": "cca199c7812916c5060ae9175b428beaf356f0619d586ec1ac12b6a91501f575"
+    },
+    {
+      "path": "apps/web/public/images/general-home/movix-compact-television.svg",
+      "sourceCommit": "3dadca30e929621762766820fba9c0981ac4cd64",
+      "sha256": "e343ec917cacad47c6fd9c74e9564ace0a0895c8eae3d22ffaa9e9107b2bfb77"
+    },
+    {
+      "path": "apps/web/public/images/general-home/movix-compact-search.svg",
+      "sourceCommit": "3dadca30e929621762766820fba9c0981ac4cd64",
+      "sha256": "b12a0b21447489de589843f21da4c38fbb0fd6c44e47fc0ccebe03f82208182b"
+    },
+    {
+      "path": "apps/web/public/images/general-home/movix-compact-devices.svg",
+      "sourceCommit": "3dadca30e929621762766820fba9c0981ac4cd64",
+      "sha256": "1a536404d50629d0967d51e6af1c333d421574510a62e42f084a7e365729268a"
+    }
+  ]
+}

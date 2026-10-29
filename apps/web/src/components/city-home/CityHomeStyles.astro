@@ -12,9 +12,9 @@
   .city-section-intro p { margin: 0; color: #526071; font-size: 16px; line-height: 24px; overflow-wrap: anywhere; }
   .city-comparison { display: flex; flex-direction: column; gap: 28px; padding: 38px 36px; border-radius: 28px; background: #fff; box-shadow: 0 8px 24px rgb(21 40 66 / 5%); }
   .comparison-sort-row, .comparison-sort-control, .comparison-scroll-hint, .comparison-static-label, .comparison-tv-compact { display: none; }
-  .comparison-scroll { position: relative; min-width: 0; width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
+  .comparison-scroll { position: relative; min-width: 0; width: 100%; overflow-x: auto; overscroll-behavior-x: contain; margin-block: -10px; }
   .comparison-scroll:focus-visible { outline: 3px solid #1769aa; outline-offset: 3px; border-radius: 16px; }
-  .comparison-scroll table { width: 1288px; min-width: 1288px; table-layout: fixed; border-collapse: separate; border-spacing: 0 10px; margin-block: -10px; }
+  .comparison-scroll table { width: 1288px; min-width: 1288px; table-layout: fixed; border-collapse: separate; border-spacing: 0 10px; margin: 0; }
   .comparison-scroll th, .comparison-scroll td { padding: 14px 0; text-align: left; vertical-align: middle; overflow-wrap: anywhere; }
   .comparison-scroll tr > :nth-child(1) { width: 270px; padding-left: 20px; }
   .comparison-scroll tr > :nth-child(2) { width: 190px; }
@@ -110,7 +110,8 @@
     .city-comparison { gap: 24px; padding: 16px; }
     .comparison-sort-row { flex-direction: column; align-items: flex-start; gap: 24px; }
     .comparison-sort-control { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .comparison-scroll table { width: 914px; min-width: 914px; border-spacing: 0 6px; margin-block: -6px; }
+    .comparison-scroll { margin-block: -6px; }
+    .comparison-scroll table { width: 914px; min-width: 914px; border-spacing: 0 6px; }
     .comparison-scroll tr > :nth-child(1) { width: 156px; padding-left: 12px; }
     .comparison-scroll tr > :nth-child(2) { width: 100px; }
     .comparison-scroll tr > :nth-child(3) { width: 96px; }
