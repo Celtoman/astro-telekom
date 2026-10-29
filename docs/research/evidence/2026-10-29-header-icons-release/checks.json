@@ -1,0 +1,29 @@
+{
+  "phase": "local verified and full gate passed; release pending",
+  "profilePassed": 18,
+  "profileFailed": 0,
+  "publicCases": 8,
+  "previewCases": 8,
+  "noJsCases": 4,
+  "navigationWidths": [
+    1440,
+    834,
+    390,
+    320
+  ],
+  "moduleDelayMs": 900,
+  "observedMs": 4200,
+  "coldCLS": 0,
+  "headerFrames": 1,
+  "exactFigmaAssets": 4,
+  "preservedAssets": 6,
+  "figmaModified": false,
+  "cmsModified": false,
+  "fullGate": {
+    "passed": 870,
+    "failed": 0,
+    "skipped": 0,
+    "cpuAffinity": 2,
+    "commandsUnchanged": true
+  }
+}

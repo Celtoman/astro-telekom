@@ -56,7 +56,10 @@ test('immutable Astro HOME builds every approved block with exact image CSP and 
     for (const origin of ['https://address-images.example.test', 'https://movix-images.example.test', 'https://cinema-images.example.test']) assert.ok(images.includes(origin), origin);
     assert.ok(!images.includes('research.example.test'), 'A research link is not an image permission');
     assert.ok(!images.includes('https: '), 'There is no blanket HTTPS image permission');
-    for (const path of ['header-menu.svg', 'header-phone.svg', 'benefit-speed.svg']) assert.ok(html.includes(`${prefix}/images/general-home/${path}`), path);
+    for (const path of ['header-menu.svg', 'header-phone.svg', 'header-map-pin.svg', 'header-chevron-down.svg', 'header-search.svg', 'header-support.svg', 'benefit-speed.svg']) {
+      assert.ok(html.includes(`${prefix}/images/general-home/${path}`), path);
+      assert.ok(artifact.files.some(file => file.path === `images/general-home/${path}`), `Shipped asset ${path}`);
+    }
     for (const [, attributes, content] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
       if (/\bsrc=/.test(attributes)) continue;
       assert.ok(csp.includes(`sha256-${createHash('sha256').update(content).digest('base64')}`), 'Immutable versioned assets preserve inline script hashes');

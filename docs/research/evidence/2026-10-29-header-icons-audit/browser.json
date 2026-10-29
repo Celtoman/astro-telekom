@@ -1,0 +1,805 @@
+{
+  "checkedAt": "2026-10-29T13:46:54.191Z",
+  "pages": [
+    {
+      "route": "/",
+      "width": 1440,
+      "y": 0,
+      "images": [
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/map-pin.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/chevron-down.svg",
+          "w": 14,
+          "h": 14,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/search.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/headphones.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/domru-logo.png",
+          "w": 157.890625,
+          "h": 51.984375,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-phone.svg",
+          "w": 22,
+          "h": 22,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-menu.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        }
+      ],
+      "actions": [
+        {
+          "label": "Москва — выбрать город",
+          "width": 89.359375,
+          "height": 36
+        },
+        {
+          "label": "Проверка подключения",
+          "width": 171.4375,
+          "height": 18
+        },
+        {
+          "label": "Техническая поддержка",
+          "width": 173,
+          "height": 18
+        },
+        {
+          "label": "Дом.ру — главная",
+          "width": 157.890625,
+          "height": 52
+        },
+        {
+          "label": "Подключить",
+          "width": 82,
+          "height": 44
+        },
+        {
+          "label": "Домашний интернетИнтернет",
+          "width": 132,
+          "height": 44
+        },
+        {
+          "label": "Интернет + ТВ",
+          "width": 104,
+          "height": 44
+        },
+        {
+          "label": "Помощь",
+          "width": 64,
+          "height": 44
+        },
+        {
+          "label": "8-800-555-72-44Подключение, 8:00–22:00",
+          "width": 185.984375,
+          "height": 37
+        },
+        {
+          "label": "Заказать звонок",
+          "width": 164.28125,
+          "height": 48
+        }
+      ]
+    },
+    {
+      "route": "/kazan",
+      "width": 1440,
+      "y": 0,
+      "images": [
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/map-pin.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/chevron-down.svg",
+          "w": 14,
+          "h": 14,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/search.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/headphones.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/domru-logo.png",
+          "w": 157.890625,
+          "h": 51.984375,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-phone.svg",
+          "w": 22,
+          "h": 22,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-menu.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        }
+      ],
+      "actions": [
+        {
+          "label": "Казань — выбрать город",
+          "width": 85.5625,
+          "height": 36
+        },
+        {
+          "label": "Проверка подключения",
+          "width": 171.4375,
+          "height": 18
+        },
+        {
+          "label": "Техническая поддержка",
+          "width": 173,
+          "height": 18
+        },
+        {
+          "label": "Дом.ру — главная",
+          "width": 157.890625,
+          "height": 52
+        },
+        {
+          "label": "Подключить",
+          "width": 82,
+          "height": 44
+        },
+        {
+          "label": "Домашний интернетИнтернет",
+          "width": 132,
+          "height": 44
+        },
+        {
+          "label": "Интернет + ТВ",
+          "width": 104,
+          "height": 44
+        },
+        {
+          "label": "Помощь",
+          "width": 64,
+          "height": 44
+        },
+        {
+          "label": "8-800-555-72-44Подключение, 8:00–22:00",
+          "width": 185.984375,
+          "height": 37
+        },
+        {
+          "label": "Заказать звонок",
+          "width": 164.28125,
+          "height": 48
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "width": 834,
+      "y": 0,
+      "images": [
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/map-pin.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/chevron-down.svg",
+          "w": 14,
+          "h": 14,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/search.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/headphones.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/domru-logo.png",
+          "w": 133.609375,
+          "h": 43.984375,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-phone.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-menu.svg",
+          "w": 44,
+          "h": 44,
+          "visible": true,
+          "loaded": true
+        }
+      ],
+      "actions": [
+        {
+          "label": "Москва — выбрать город",
+          "width": 89.359375,
+          "height": 36
+        },
+        {
+          "label": "Проверка подключения",
+          "width": 171.4375,
+          "height": 18
+        },
+        {
+          "label": "Техническая поддержка",
+          "width": 173,
+          "height": 18
+        },
+        {
+          "label": "Дом.ру — главная",
+          "width": 133.609375,
+          "height": 44
+        },
+        {
+          "label": "Домашний интернетИнтернет",
+          "width": 64,
+          "height": 44
+        },
+        {
+          "label": "Интернет + ТВ",
+          "width": 104,
+          "height": 44
+        },
+        {
+          "label": "Заказать звонок",
+          "width": 164.28125,
+          "height": 48
+        },
+        {
+          "label": "Открыть меню",
+          "width": 44,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "route": "/kazan",
+      "width": 834,
+      "y": 0,
+      "images": [
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/map-pin.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/chevron-down.svg",
+          "w": 14,
+          "h": 14,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/search.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/headphones.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/domru-logo.png",
+          "w": 133.609375,
+          "h": 43.984375,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-phone.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-menu.svg",
+          "w": 44,
+          "h": 44,
+          "visible": true,
+          "loaded": true
+        }
+      ],
+      "actions": [
+        {
+          "label": "Казань — выбрать город",
+          "width": 85.5625,
+          "height": 36
+        },
+        {
+          "label": "Проверка подключения",
+          "width": 171.4375,
+          "height": 18
+        },
+        {
+          "label": "Техническая поддержка",
+          "width": 173,
+          "height": 18
+        },
+        {
+          "label": "Дом.ру — главная",
+          "width": 133.609375,
+          "height": 44
+        },
+        {
+          "label": "Домашний интернетИнтернет",
+          "width": 64,
+          "height": 44
+        },
+        {
+          "label": "Интернет + ТВ",
+          "width": 104,
+          "height": 44
+        },
+        {
+          "label": "Заказать звонок",
+          "width": 164.28125,
+          "height": 48
+        },
+        {
+          "label": "Открыть меню",
+          "width": 44,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "y": 0,
+      "images": [
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/map-pin.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/chevron-down.svg",
+          "w": 14,
+          "h": 14,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/search.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/headphones.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/domru-logo.png",
+          "w": 109.3125,
+          "h": 35.984375,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-phone.svg",
+          "w": 18,
+          "h": 18,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-menu.svg",
+          "w": 44,
+          "h": 44,
+          "visible": true,
+          "loaded": true
+        }
+      ],
+      "actions": [
+        {
+          "label": "Москва — выбрать город",
+          "width": 89.359375,
+          "height": 35
+        },
+        {
+          "label": "Дом.ру — главная",
+          "width": 109.3125,
+          "height": 36
+        },
+        {
+          "label": "8-800-555-72-44Подключение, 8:00–22:00",
+          "width": 152.328125,
+          "height": 32
+        },
+        {
+          "label": "Открыть меню",
+          "width": 44,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "route": "/kazan",
+      "width": 390,
+      "y": 0,
+      "images": [
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/map-pin.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/chevron-down.svg",
+          "w": 14,
+          "h": 14,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/search.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/headphones.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/domru-logo.png",
+          "w": 109.3125,
+          "h": 35.984375,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-phone.svg",
+          "w": 18,
+          "h": 18,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-menu.svg",
+          "w": 44,
+          "h": 44,
+          "visible": true,
+          "loaded": true
+        }
+      ],
+      "actions": [
+        {
+          "label": "Казань — выбрать город",
+          "width": 85.5625,
+          "height": 35
+        },
+        {
+          "label": "Дом.ру — главная",
+          "width": 109.3125,
+          "height": 36
+        },
+        {
+          "label": "8-800-555-72-44Подключение, 8:00–22:00",
+          "width": 152.328125,
+          "height": 32
+        },
+        {
+          "label": "Открыть меню",
+          "width": 44,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "width": 320,
+      "y": 0,
+      "images": [
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/map-pin.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/chevron-down.svg",
+          "w": 14,
+          "h": 14,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/search.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/headphones.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/domru-logo.png",
+          "w": 91.078125,
+          "h": 29.984375,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-phone.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-menu.svg",
+          "w": 44,
+          "h": 44,
+          "visible": true,
+          "loaded": true
+        }
+      ],
+      "actions": [
+        {
+          "label": "Москва — выбрать город",
+          "width": 89.359375,
+          "height": 35
+        },
+        {
+          "label": "Дом.ру — главная",
+          "width": 91.078125,
+          "height": 30
+        },
+        {
+          "label": "8-800-555-72-44Подключение, 8:00–22:00",
+          "width": 128.328125,
+          "height": 30
+        },
+        {
+          "label": "Открыть меню",
+          "width": 44,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "route": "/kazan",
+      "width": 320,
+      "y": 0,
+      "images": [
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/map-pin.svg",
+          "w": 16,
+          "h": 16,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/chevron-down.svg",
+          "w": 14,
+          "h": 14,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/search.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/headphones.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/domru-logo.png",
+          "w": 91.078125,
+          "h": 29.984375,
+          "visible": true,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-phone.svg",
+          "w": 0,
+          "h": 0,
+          "visible": false,
+          "loaded": true
+        },
+        {
+          "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-menu.svg",
+          "w": 44,
+          "h": 44,
+          "visible": true,
+          "loaded": true
+        }
+      ],
+      "actions": [
+        {
+          "label": "Казань — выбрать город",
+          "width": 85.5625,
+          "height": 35
+        },
+        {
+          "label": "Дом.ру — главная",
+          "width": 91.078125,
+          "height": 30
+        },
+        {
+          "label": "8-800-555-72-44Подключение, 8:00–22:00",
+          "width": 128.328125,
+          "height": 30
+        },
+        {
+          "label": "Открыть меню",
+          "width": 44,
+          "height": 44
+        }
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "key": "map",
+      "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/map-pin.svg",
+      "sha256": "aea7119cb1830db129100d13542874b9cb4f7a80a2e5c59a0db9275949690bde",
+      "duotone": false,
+      "stroked": true
+    },
+    {
+      "key": "chevron",
+      "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/chevron-down.svg",
+      "sha256": "e8ced8909184d42f5cb0bff3a40adf19327f4402bff4fcdfeaa056af300f13ea",
+      "duotone": false,
+      "stroked": true
+    },
+    {
+      "key": "search",
+      "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/search.svg",
+      "sha256": "28f58accc8dcc5eb098a3d0e377fc40bc4f5697467c9ab1629a714506f488fd4",
+      "duotone": false,
+      "stroked": true
+    },
+    {
+      "key": "support",
+      "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/figma/headphones.svg",
+      "sha256": "a1f99069c318e23d53e55410201530c7168ea4e5eae913295601fad15c86c62f",
+      "duotone": false,
+      "stroked": true
+    },
+    {
+      "key": "phone",
+      "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-phone.svg",
+      "sha256": "9ea46cab0c9bc84bdc18d2c50b2bc9de7da2fb226d98a87565ada1fa3604294a",
+      "duotone": true,
+      "stroked": false
+    },
+    {
+      "key": "menu",
+      "src": "https://tv-internet-dom.ru/__publication_assets/b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223/images/general-home/header-menu.svg",
+      "sha256": "0f1413fa1a049956dc14d34539820c2aa91ec99ecf63e060818e3ae659da9efe",
+      "duotone": true,
+      "stroked": false
+    }
+  ],
+  "raster": [
+    {
+      "key": "map",
+      "meanChannelDelta": 14.46755642361111,
+      "changedPixelRatio": 0.3363715277777778
+    },
+    {
+      "key": "chevron",
+      "meanChannelDelta": 8.13107638888889,
+      "changedPixelRatio": 0.13444010416666666
+    },
+    {
+      "key": "search",
+      "meanChannelDelta": 14.001763237847221,
+      "changedPixelRatio": 0.328125
+    },
+    {
+      "key": "support",
+      "meanChannelDelta": 18.98578559027778,
+      "changedPixelRatio": 0.28125
+    },
+    {
+      "key": "phone",
+      "meanChannelDelta": 0,
+      "changedPixelRatio": 0
+    },
+    {
+      "key": "menu",
+      "meanChannelDelta": 0,
+      "changedPixelRatio": 0
+    }
+  ]
+}

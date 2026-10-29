@@ -1,0 +1,8 @@
+{
+  "apps/web/public/images/general-home/header-phone.svg": "9ea46cab0c9bc84bdc18d2c50b2bc9de7da2fb226d98a87565ada1fa3604294a",
+  "apps/web/public/images/general-home/header-menu.svg": "0f1413fa1a049956dc14d34539820c2aa91ec99ecf63e060818e3ae659da9efe",
+  "apps/web/public/images/figma/map-pin.svg": "aea7119cb1830db129100d13542874b9cb4f7a80a2e5c59a0db9275949690bde",
+  "apps/web/public/images/figma/search.svg": "28f58accc8dcc5eb098a3d0e377fc40bc4f5697467c9ab1629a714506f488fd4",
+  "apps/web/public/images/figma/headphones.svg": "a1f99069c318e23d53e55410201530c7168ea4e5eae913295601fad15c86c62f",
+  "apps/web/public/images/figma/chevron-down.svg": "e8ced8909184d42f5cb0bff3a40adf19327f4402bff4fcdfeaa056af300f13ea"
+}

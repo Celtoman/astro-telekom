@@ -10,6 +10,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| TD-199 | [#433](https://github.com/Celtoman/astro-telekom/issues/433) 🟢 | Outline SVG шапки и лишняя mobile стрелка не соответствуют Screens |
 | TD-198 | [#430](https://github.com/Celtoman/astro-telekom/issues/430) 🟢 | Диагностировать нехватку памяти Windows при полном gate |
 | TD-192 | [#420](https://github.com/Celtoman/astro-telekom/issues/420) ✅ | Поле над шапкой ошибочно перенесено из макета |
 | TD-193 | [#423](https://github.com/Celtoman/astro-telekom/issues/423) ✅ | Первый кадр каталога меняет список после JS-инициализации |

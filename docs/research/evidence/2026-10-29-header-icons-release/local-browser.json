@@ -1,0 +1,1029 @@
+{
+  "checkedAt": "2026-10-29T14:00:14.946Z",
+  "origin": "http://127.0.0.1:4398",
+  "public": [
+    {
+      "route": "/",
+      "width": 1440,
+      "scroll": 1440,
+      "header": {
+        "x": 40,
+        "y": 0,
+        "w": 1360,
+        "h": 128
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+          "visible": true,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+          "visible": true,
+          "w": 157.890625,
+          "h": 51.984375
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+          "visible": true,
+          "w": 22,
+          "h": 22
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        }
+      ],
+      "chevronDisplay": "block",
+      "probe": {
+        "frames": [
+          {
+            "x": 40,
+            "y": 0,
+            "w": 1360,
+            "h": 128,
+            "phone": "8-800-250-77-77",
+            "city": "Казань",
+            "icons": [
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+                "x": 40,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+                "x": 111.5625,
+                "y": 12.5,
+                "w": 14,
+                "h": 14
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+                "x": 1031.5625,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+                "x": 1227,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+                "x": 40,
+                "y": 58,
+                "w": 157.890625,
+                "h": 51.984375
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+                "x": 1031.265625,
+                "y": 73,
+                "w": 22,
+                "h": 22
+              }
+            ]
+          }
+        ],
+        "shifts": []
+      }
+    },
+    {
+      "route": "/kazan",
+      "width": 1440,
+      "scroll": 1440,
+      "header": {
+        "x": 40,
+        "y": 0,
+        "w": 1360,
+        "h": 128
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+          "visible": true,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+          "visible": true,
+          "w": 157.890625,
+          "h": 51.984375
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+          "visible": true,
+          "w": 22,
+          "h": 22
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        }
+      ],
+      "chevronDisplay": "block",
+      "probe": {
+        "frames": [
+          {
+            "x": 40,
+            "y": 0,
+            "w": 1360,
+            "h": 128,
+            "phone": "8-800-250-77-77",
+            "city": "Казань",
+            "icons": [
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+                "x": 40,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+                "x": 111.5625,
+                "y": 12.5,
+                "w": 14,
+                "h": 14
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+                "x": 1031.5625,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+                "x": 1227,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+                "x": 40,
+                "y": 58,
+                "w": 157.890625,
+                "h": 51.984375
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+                "x": 1031.265625,
+                "y": 73,
+                "w": 22,
+                "h": 22
+              }
+            ]
+          }
+        ],
+        "shifts": []
+      }
+    },
+    {
+      "route": "/",
+      "width": 834,
+      "scroll": 834,
+      "header": {
+        "x": 57,
+        "y": 0,
+        "w": 720,
+        "h": 120
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+          "visible": true,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+          "visible": true,
+          "w": 133.609375,
+          "h": 43.984375
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+          "visible": true,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "chevronDisplay": "block",
+      "probe": {
+        "frames": [
+          {
+            "x": 57,
+            "y": 0,
+            "w": 720,
+            "h": 120,
+            "phone": "8-800-250-77-77",
+            "city": "Казань",
+            "icons": [
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+                "x": 57,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+                "x": 128.5625,
+                "y": 12.5,
+                "w": 14,
+                "h": 14
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+                "x": 412.5625,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+                "x": 604,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+                "x": 57,
+                "y": 58,
+                "w": 133.609375,
+                "h": 43.984375
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+                "x": 733,
+                "y": 58,
+                "w": 44,
+                "h": 44
+              }
+            ]
+          }
+        ],
+        "shifts": []
+      }
+    },
+    {
+      "route": "/kazan",
+      "width": 834,
+      "scroll": 834,
+      "header": {
+        "x": 57,
+        "y": 0,
+        "w": 720,
+        "h": 120
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+          "visible": true,
+          "w": 14,
+          "h": 14
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+          "visible": true,
+          "w": 133.609375,
+          "h": 43.984375
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+          "visible": true,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "chevronDisplay": "block",
+      "probe": {
+        "frames": [
+          {
+            "x": 57,
+            "y": 0,
+            "w": 720,
+            "h": 120,
+            "phone": "8-800-250-77-77",
+            "city": "Казань",
+            "icons": [
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+                "x": 57,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+                "x": 128.5625,
+                "y": 12.5,
+                "w": 14,
+                "h": 14
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+                "x": 412.5625,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+                "x": 604,
+                "y": 11.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+                "x": 57,
+                "y": 58,
+                "w": 133.609375,
+                "h": 43.984375
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+                "x": 733,
+                "y": 58,
+                "w": 44,
+                "h": 44
+              }
+            ]
+          }
+        ],
+        "shifts": []
+      }
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "scroll": 390,
+      "header": {
+        "x": 16,
+        "y": 0,
+        "w": 358,
+        "h": 108
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+          "visible": true,
+          "w": 109.3125,
+          "h": 35.984375
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+          "visible": true,
+          "w": 18,
+          "h": 18
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+          "visible": true,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "chevronDisplay": "none",
+      "probe": {
+        "frames": [
+          {
+            "x": 16,
+            "y": 0,
+            "w": 358,
+            "h": 108,
+            "phone": "8-800-250-77-77",
+            "city": "Казань",
+            "icons": [
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+                "x": 16,
+                "y": 9.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+                "x": 16,
+                "y": 54,
+                "w": 109.3125,
+                "h": 35.984375
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+                "x": 175.03125,
+                "y": 63,
+                "w": 18,
+                "h": 18
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+                "x": 330,
+                "y": 50,
+                "w": 44,
+                "h": 44
+              }
+            ]
+          }
+        ],
+        "shifts": []
+      }
+    },
+    {
+      "route": "/kazan",
+      "width": 390,
+      "scroll": 390,
+      "header": {
+        "x": 16,
+        "y": 0,
+        "w": 358,
+        "h": 108
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+          "visible": true,
+          "w": 109.3125,
+          "h": 35.984375
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+          "visible": true,
+          "w": 18,
+          "h": 18
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+          "visible": true,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "chevronDisplay": "none",
+      "probe": {
+        "frames": [
+          {
+            "x": 16,
+            "y": 0,
+            "w": 358,
+            "h": 108,
+            "phone": "8-800-250-77-77",
+            "city": "Казань",
+            "icons": [
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+                "x": 16,
+                "y": 9.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+                "x": 16,
+                "y": 54,
+                "w": 109.3125,
+                "h": 35.984375
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+                "x": 175.03125,
+                "y": 63,
+                "w": 18,
+                "h": 18
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+                "x": 330,
+                "y": 50,
+                "w": 44,
+                "h": 44
+              }
+            ]
+          }
+        ],
+        "shifts": []
+      }
+    },
+    {
+      "route": "/",
+      "width": 320,
+      "scroll": 320,
+      "header": {
+        "x": 16,
+        "y": 0,
+        "w": 288,
+        "h": 108
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+          "visible": true,
+          "w": 91.078125,
+          "h": 29.984375
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+          "visible": true,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "chevronDisplay": "none",
+      "probe": {
+        "frames": [
+          {
+            "x": 16,
+            "y": 0,
+            "w": 288,
+            "h": 108,
+            "phone": "8-800-250-77-77",
+            "city": "Казань",
+            "icons": [
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+                "x": 16,
+                "y": 9.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+                "x": 16,
+                "y": 57,
+                "w": 91.078125,
+                "h": 29.984375
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+                "x": 260,
+                "y": 50,
+                "w": 44,
+                "h": 44
+              }
+            ]
+          }
+        ],
+        "shifts": []
+      }
+    },
+    {
+      "route": "/kazan",
+      "width": 320,
+      "scroll": 320,
+      "header": {
+        "x": 16,
+        "y": 0,
+        "w": 288,
+        "h": 108
+      },
+      "images": [
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+          "visible": true,
+          "w": 16,
+          "h": 16
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+          "visible": true,
+          "w": 91.078125,
+          "h": 29.984375
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+          "visible": false,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+          "visible": true,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "chevronDisplay": "none",
+      "probe": {
+        "frames": [
+          {
+            "x": 16,
+            "y": 0,
+            "w": 288,
+            "h": 108,
+            "phone": "8-800-250-77-77",
+            "city": "Казань",
+            "icons": [
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+                "x": 16,
+                "y": 9.5,
+                "w": 16,
+                "h": 16
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/figma/domru-logo.png",
+                "x": 16,
+                "y": 57,
+                "w": 91.078125,
+                "h": 29.984375
+              },
+              {
+                "src": "/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+                "x": 260,
+                "y": 50,
+                "w": 44,
+                "h": 44
+              }
+            ]
+          }
+        ],
+        "shifts": []
+      }
+    }
+  ],
+  "navigation": [
+    {
+      "width": 1440,
+      "header": {
+        "x": 40,
+        "y": 0,
+        "w": 1360,
+        "h": 128
+      },
+      "cityPicker": true,
+      "menu": false,
+      "stable": true
+    },
+    {
+      "width": 834,
+      "header": {
+        "x": 57,
+        "y": 0,
+        "w": 720,
+        "h": 120
+      },
+      "cityPicker": true,
+      "menu": true,
+      "stable": true
+    },
+    {
+      "width": 390,
+      "header": {
+        "x": 16,
+        "y": 0,
+        "w": 358,
+        "h": 108
+      },
+      "cityPicker": true,
+      "menu": true,
+      "stable": true
+    },
+    {
+      "width": 320,
+      "header": {
+        "x": 16,
+        "y": 0,
+        "w": 288,
+        "h": 108
+      },
+      "cityPicker": true,
+      "menu": true,
+      "stable": true
+    }
+  ],
+  "noJs": [
+    {
+      "width": 1440,
+      "chevron": "block",
+      "header": {
+        "x": 40,
+        "y": 0,
+        "w": 1360,
+        "h": 128
+      }
+    },
+    {
+      "width": 834,
+      "chevron": "block",
+      "header": {
+        "x": 57,
+        "y": 0,
+        "w": 720,
+        "h": 120
+      }
+    },
+    {
+      "width": 390,
+      "chevron": "none",
+      "header": {
+        "x": 16,
+        "y": 0,
+        "w": 358,
+        "h": 108
+      }
+    },
+    {
+      "width": 320,
+      "chevron": "none",
+      "header": {
+        "x": 16,
+        "y": 0,
+        "w": 288,
+        "h": 108
+      }
+    }
+  ],
+  "preview": [
+    {
+      "route": "/",
+      "width": 1440,
+      "chevron": "block",
+      "imagesLoaded": true,
+      "controlsDisabled": true
+    },
+    {
+      "route": "/kazan",
+      "width": 1440,
+      "chevron": "block",
+      "imagesLoaded": true,
+      "controlsDisabled": true
+    },
+    {
+      "route": "/",
+      "width": 834,
+      "chevron": "block",
+      "imagesLoaded": true,
+      "controlsDisabled": true
+    },
+    {
+      "route": "/kazan",
+      "width": 834,
+      "chevron": "block",
+      "imagesLoaded": true,
+      "controlsDisabled": true
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "chevron": "none",
+      "imagesLoaded": true,
+      "controlsDisabled": true
+    },
+    {
+      "route": "/kazan",
+      "width": 390,
+      "chevron": "none",
+      "imagesLoaded": true,
+      "controlsDisabled": true
+    },
+    {
+      "route": "/",
+      "width": 320,
+      "chevron": "none",
+      "imagesLoaded": true,
+      "controlsDisabled": true
+    },
+    {
+      "route": "/kazan",
+      "width": 320,
+      "chevron": "none",
+      "imagesLoaded": true,
+      "controlsDisabled": true
+    }
+  ],
+  "assets": [
+    {
+      "key": "map",
+      "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-map-pin.svg",
+      "hash": "c2e18e6d1173f3bcb5212bee524b6f918ef006632d5839e6f7218866181b232e",
+      "exact": true
+    },
+    {
+      "key": "chevron",
+      "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-chevron-down.svg",
+      "hash": "6a5b42302c8a110bc04bcc340a78b797cca0b0577dd668b5feb2b5adf66e5ad1",
+      "exact": true
+    },
+    {
+      "key": "search",
+      "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-search.svg",
+      "hash": "a591c7610b07d88ff6193a67d6b4d82394e1509ec3c9c3f393a9de24f4e17f02",
+      "exact": true
+    },
+    {
+      "key": "support",
+      "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-support.svg",
+      "hash": "957387707ba70c9c9a96c7f670ca75f0fe525db5e2921fafeefe7dee19d30c77",
+      "exact": true
+    },
+    {
+      "key": "phone",
+      "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-phone.svg",
+      "hash": "9ea46cab0c9bc84bdc18d2c50b2bc9de7da2fb226d98a87565ada1fa3604294a",
+      "exact": true
+    },
+    {
+      "key": "menu",
+      "src": "http://127.0.0.1:4398/__publication_assets/8ec98c6ca9754f7748f9695d4a125887def1de1f7b65982d62f4db28f0d239c3/images/general-home/header-menu.svg",
+      "hash": "0f1413fa1a049956dc14d34539820c2aa91ec99ecf63e060818e3ae659da9efe",
+      "exact": true
+    }
+  ],
+  "errors": []
+}
