@@ -14,6 +14,7 @@
 | TD-181 | [#404](https://github.com/Celtoman/astro-telekom/issues/404) ✅ | Стабильный порядок блоков в audit/content revisions CMS |
 | TD-182 | [#405](https://github.com/Celtoman/astro-telekom/issues/405) ✅ | Исправлены CITY overflow/tie/CSP assets, recovery links, callback context и preview CTA |
 | TD-183 | [#406](https://github.com/Celtoman/astro-telekom/issues/406) ✅ | Guard baseline различает тесты и исторические Figma occurrences |
+| TD-190 | [#415](https://github.com/Celtoman/astro-telekom/issues/415) 🟢 | Ограничить ширину fieldset конфигуратора на320 |
 | TD-187 | [#411](https://github.com/Celtoman/astro-telekom/issues/411) 🟢 | Стабилизировать первый кадр общей шапки и оболочку страниц |
 | TD-188 | [#412](https://github.com/Celtoman/astro-telekom/issues/412) 🟢 | Убрать внутреннюю вертикальную прокрутку сравнения |
 | TD-189 | [#413](https://github.com/Celtoman/astro-telekom/issues/413) 🟢 | Восстановить цельные подложки и центрированные SVG Movix |

@@ -1,0 +1,98 @@
+{
+  "m": {
+    "header": {
+      "x": 16,
+      "y": 24,
+      "w": 288,
+      "h": 108
+    },
+    "footer": {
+      "x": 16,
+      "y": 6523.359375,
+      "w": 288,
+      "h": 1276
+    },
+    "scroll": 363,
+    "width": 320,
+    "pending": false,
+    "phone": "8-800-250-77-77",
+    "phoneHref": "tel:+78002507777",
+    "city": "Казань",
+    "preloads": [
+      "/__publication_assets/230228491c8f71774ba663d7fcacca81fdbf23d56c9388b85abc652bcc81fdac/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+      "/__publication_assets/230228491c8f71774ba663d7fcacca81fdbf23d56c9388b85abc652bcc81fdac/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+    ],
+    "probe": {
+      "frames": [
+        {
+          "time": 2200.9000000003725,
+          "value": {
+            "phone": "8-800-250-77-77",
+            "city": "Казань",
+            "x": 16,
+            "y": 24,
+            "w": 288,
+            "h": 108
+          }
+        }
+      ],
+      "shifts": []
+    },
+    "table": null,
+    "movix": []
+  },
+  "outside": [
+    {
+      "tag": "FIELDSET",
+      "c": "",
+      "x": 31,
+      "right": 363,
+      "w": 332,
+      "text": null,
+      "font": "16px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+      "fontDisplay": "",
+      "whiteSpace": "normal",
+      "minWidth": "min-content",
+      "display": "block"
+    },
+    {
+      "tag": "SELECT",
+      "c": "",
+      "x": 31,
+      "right": 363,
+      "w": 332,
+      "text": null,
+      "font": "16px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+      "fontDisplay": "",
+      "whiteSpace": "pre",
+      "minWidth": "0px",
+      "display": "inline-block"
+    },
+    {
+      "tag": "FIELDSET",
+      "c": "",
+      "x": 31,
+      "right": 363,
+      "w": 332,
+      "text": null,
+      "font": "16px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+      "fontDisplay": "",
+      "whiteSpace": "normal",
+      "minWidth": "min-content",
+      "display": "block"
+    },
+    {
+      "tag": "SELECT",
+      "c": "",
+      "x": 31,
+      "right": 363,
+      "w": 332,
+      "text": null,
+      "font": "16px \"Geist Variable\", ui-sans-serif, system-ui, sans-serif",
+      "fontDisplay": "",
+      "whiteSpace": "pre",
+      "minWidth": "0px",
+      "display": "inline-block"
+    }
+  ]
+}
