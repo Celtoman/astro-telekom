@@ -1,5 +1,7 @@
 # Покрытие тестами
 
+Архивная retention (#440/#438): `publication-retention.test.mjs` проверяет protected set, незавершённые CMS intents, запрет удаления без проверенного архива, сохранение assets/metadata, crash/resume, symlink/path guards, исторические receipts без повторной активации, общую serial queue и восстановление полного sealed дерева с последующим закреплением. `publication-retention-archive.test.mjs` запускает `publication_retention_test.py`: полная файловая опись/restore, corruption, traversal, missing file и отказ S3 без archive acknowledgment/GC. На Linux symlink guard должен проходить без пропуска.
+
 Живой документ. Обновлять в том же коммите, что и любое добавление, удаление или существенное изменение теста в `tests/`. Должен точно отражать, что проверяет каждый файл — не оставлять устаревшим.
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [AGENTS.md](../AGENTS.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.

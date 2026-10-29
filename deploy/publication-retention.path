@@ -1,0 +1,7 @@
+[Unit]
+Description=Run retention after confirmed Astro Telekom publications
+[Path]
+PathChanged=/var/lib/docker/volumes/jlrsktdos9yhchkgnrd9f5fj_web-publication/_data/receipts
+Unit=publication-retention.service
+[Install]
+WantedBy=multi-user.target

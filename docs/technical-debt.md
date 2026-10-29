@@ -10,6 +10,7 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| TD-200 | [#438](https://github.com/Celtoman/astro-telekom/issues/438) 🟢 | Неограниченное накопление publication HTML заполняет диск; архивная очистка — [#440](https://github.com/Celtoman/astro-telekom/issues/440) |
 | TD-199 | [#433](https://github.com/Celtoman/astro-telekom/issues/433) 🟢 | Outline SVG шапки и лишняя mobile стрелка не соответствуют Screens |
 | TD-198 | [#430](https://github.com/Celtoman/astro-telekom/issues/430) 🟢 | Диагностировать нехватку памяти Windows при полном gate |
 | TD-192 | [#420](https://github.com/Celtoman/astro-telekom/issues/420) ✅ | Поле над шапкой ошибочно перенесено из макета |

@@ -100,17 +100,67 @@ export async function writeImmutableJson(directory, name, value) {
   } finally { await rm(temporary, { force: true }); }
 }
 
-export async function readArtifact(publicationRoot, artifactId) {
+export async function readManifest(publicationRoot, artifactId) {
   requireArtifactId(artifactId);
   const root = resolve(publicationRoot);
   const raw = JSON.parse((await fileBytes(join(root, 'manifests', `${artifactId}.json`))).toString('utf8'));
   const { manifestDigest, ...content } = raw;
   if (raw.artifactId !== artifactId || sha256(bytes(content)) !== manifestDigest) throw new Error('Artifact manifest integrity mismatch');
   const identity = normalizeIdentity(raw);
-  if (!Array.isArray(raw.files) || JSON.stringify(await inventory(join(root, 'releases', artifactId))) !== JSON.stringify(raw.files)) {
-    throw new Error('Artifact file digest/integrity mismatch');
+  if (!Array.isArray(raw.files) || !Number.isFinite(Date.parse(raw.sealedAt))) throw new Error('Artifact manifest integrity mismatch');
+  const paths = new Set();
+  for (const file of raw.files) {
+    if (typeof file.path !== 'string' || !file.path || file.path.includes('\\') || file.path.split('/').some(part => !part || part.startsWith('.'))
+      || !Number.isSafeInteger(file.size) || file.size < 0 || !HASH.test(file.sha256 || '') || paths.has(file.path)) throw new Error('Artifact manifest inventory mismatch');
+    paths.add(file.path);
   }
   return { ...identity, sealedAt: raw.sealedAt, files: raw.files, manifestDigest };
+}
+
+export async function readIntegrityRecord(directory, name, digestField = 'recordDigest') {
+  const raw = JSON.parse((await fileBytes(join(directory, name))).toString('utf8'));
+  const { [digestField]: recordDigest, ...content } = raw;
+  if (sha256(bytes(content)) !== recordDigest) throw new Error('Publication record integrity mismatch');
+  return raw;
+}
+
+export function verifyArtifactReceipt(artifact, receipt) {
+  if (receipt.status !== 'SUCCEEDED' || ['artifactId', 'publicationId', 'siteId', 'siteRevision', 'rendererId', 'catalogDigest', 'rebuildId', 'rebuildRevision', 'manifestDigest']
+    .some(field => receipt[field] !== artifact[field])) throw new Error('Publication receipt integrity mismatch');
+  return receipt;
+}
+
+export async function readRetirement(publicationRoot, artifact) {
+  const root = resolve(publicationRoot);
+  const state = await readIntegrityRecord(join(root, 'gc'), `${artifact.artifactId}.json`).catch(error => { if (error.code !== 'ENOENT') throw error; return null; });
+  if (!state) return null;
+  const archive = await readIntegrityRecord(join(root, 'archives'), `${artifact.artifactId}.json`);
+  if (state.artifactId !== artifact.artifactId || state.manifestDigest !== artifact.manifestDigest || state.archiveRecordDigest !== archive.recordDigest
+    || archive.artifactId !== artifact.artifactId || archive.manifestDigest !== artifact.manifestDigest || archive.restoreVerified !== true) throw new Error('Archived artifact integrity mismatch');
+  verifyArtifactReceipt(artifact, await readReceipt(root, artifact.artifactId));
+  const restored = await readIntegrityRecord(join(root, 'gc-restored'), `${artifact.artifactId}.json`).catch(error => { if (error.code !== 'ENOENT') throw error; return null; });
+  if (restored) {
+    if (restored.artifactId !== artifact.artifactId || restored.manifestDigest !== artifact.manifestDigest
+      || restored.gcRecordDigest !== state.recordDigest) throw new Error('Restored artifact integrity mismatch');
+    return null;
+  }
+  return state;
+}
+
+export async function readArtifact(publicationRoot, artifactId) {
+  const artifact = await readManifest(publicationRoot, artifactId);
+  if (await readRetirement(publicationRoot, artifact)) throw Object.assign(new Error('Artifact is archived; restore the complete sealed tree before activation'), { code: 'ARTIFACT_ARCHIVED' });
+  if (JSON.stringify(await inventory(join(resolve(publicationRoot), 'releases', artifactId))) !== JSON.stringify(artifact.files)) {
+    throw new Error('Artifact file digest/integrity mismatch');
+  }
+  return artifact;
+}
+
+// Only terminal historical operations may use metadata after HTML reclamation.
+// Activation, baseline and builder reuse always require readArtifact().
+export async function readHistoricalArtifact(publicationRoot, artifactId) {
+  const artifact = await readManifest(publicationRoot, artifactId);
+  return await readRetirement(publicationRoot, artifact) ? artifact : readArtifact(publicationRoot, artifactId);
 }
 
 export async function sealArtifact({ publicationRoot, sourceDirectory, identity: rawIdentity }) {

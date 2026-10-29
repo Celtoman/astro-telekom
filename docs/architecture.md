@@ -4,6 +4,8 @@
 
 ## Статус архитектуры
 
+Архивная очистка publication volume разделена между host orchestrator и private controller. Host helper выполняет read-only SQL/BullMQ preflight, tar/SHA, upload в существующее S3 и полное download/restore; credentials остаются в Coolify. Controller под общей очередью с builder/activation пересчитывает protected set, сохраняет immutable GC marker и удаляет только старый HTML. Assets, manifests, receipts и intents остаются; terminal historical reads отделены от строгого полного readArtifact для activation/baseline. Systemd timer/path запускают тот же процесс; [контракт и восстановление](runbooks/publication-retention.md).
+
 В репозитории реализован прототип статической витрины Дом.ру с защищенным внешним test-контуром в Coolify. Архитектура разделяет public web, admin, backoffice API и worker. Публичная маршрутизация строит static paths из отдельного Release 1 route inventory: корень, пять site-global страниц, HOME каждого опубликованного города и detail каждого опубликованного тарифа такого города. Канонический импорт переводит весь входящий каталог городов в `PUBLISHED` и создает новым городам единую композицию HOME.
 
 ## Стек и приложения
