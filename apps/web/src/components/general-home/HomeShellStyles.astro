@@ -131,11 +131,13 @@
     .gh-contact-mobile-hours { text-transform: lowercase; }
     .gh-footer-apply { justify-self: stretch; }
     .gh-footer-legal nav { flex-direction: column; gap: 0; }
-    .gh-footer-legal nav a, .gh-footer-mobile-links :is(a, button) { display: flex; align-items: center; min-height: 44px; }
+    .gh-footer-legal nav a { display: flex; align-items: center; min-height: 44px; }
     .gh-footer-content { display: contents; }
     .gh-footer-column { display: none; }
-    .gh-footer-mobile-links { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+    .gh-footer-mobile-links { display: flex; flex-direction: column; align-items: flex-start; gap: 0; }
     .gh-footer-mobile-links a, .gh-footer-mobile-links button { max-width: 100%; padding: 0; border: 0; background: none; color: #fff; font-size: 14px; line-height: 20px; text-align: left; overflow-wrap: anywhere; }
+    .gh-footer-mobile-links :is(a, button) { display: flex; align-items: center; min-height: 32px; padding-block: 6px; }
+    .gh-footer-mobile-links > :nth-last-child(-n+2) { min-height: 44px; margin-top: 12px; }
     .gh-footer-mobile-contact { display: contents; }
     .gh-footer-mobile-contact a { font-size: 20px; font-weight: 700; line-height: 25px; letter-spacing: -.2px; overflow-wrap: anywhere; }
     .gh-footer-mobile-contact > span { font-size: 12px; line-height: 16px; }

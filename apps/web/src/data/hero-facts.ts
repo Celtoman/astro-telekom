@@ -7,6 +7,6 @@ export function heroFacts(tariffs: TariffView[]) {
   return [
     { id: 'price', label: 'Минимальная стоимость', value: facts.minPrice !== null ? `от ${money(facts.minPrice)} ₽/мес.` : 'Стоимость уточняется', icon: 'tag' },
     { id: 'speed', label: 'Максимальная скорость', value: facts.maxSpeed !== null ? `до ${facts.maxSpeed} Мбит/с` : 'Скорость уточняется', icon: 'hero-speed' },
-    { id: 'channels', label: 'Каналов цифрового ТВ', value: facts.maxChannels !== null ? `до ${facts.maxChannels}` : 'Уточняется', icon: 'tv' },
+    { id: 'channels', label: 'Каналов цифрового ТВ', value: facts.maxChannels !== null ? `до ${facts.maxChannels}` : 'Уточняется', icon: 'hero-television' },
   ];
 }

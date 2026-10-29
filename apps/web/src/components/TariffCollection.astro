@@ -1,16 +1,19 @@
 ---
 import { renderTariffCollection } from '../../../api/src/tariff-collection-model';
 import type { TariffView } from '../data/tariff-view';
+import { prepareCollectionScript } from '../lib/tariff-collection-prepaint.mjs';
 interface Props { data: Record<string, unknown>; tariffs: TariffView[]; citySlug: string; cityName?: string; dialogId: string }
 const { data, tariffs, citySlug, cityName, dialogId } = Astro.props;
 ---
 <Fragment set:html={renderTariffCollection(data, tariffs, { interactive: true, citySlug, cityName, dialogId })} />
+<script is:inline set:html={prepareCollectionScript}></script>
 <script>
   import { initializeTariffCollections } from '../scripts/tariff-collection-client.mjs';
   initializeTariffCollections(document);
   document.addEventListener('astro:page-load', () => initializeTariffCollections(document));
 </script>
 <style is:global>
+  html[data-tariff-collections-js] .tariff-collection:not([data-collection-prepared]) { visibility: hidden; }
   .tariff-collection { width: min(1360px, calc(100% - 64px)); margin: 32px auto 64px; border-radius: 26px; background: #eef8ff; color: #18202a; }
   .tariff-collection * { box-sizing: border-box; }
   .tariff-collection [hidden] { display: none !important; }

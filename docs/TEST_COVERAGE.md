@@ -4,9 +4,9 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [AGENTS.md](../AGENTS.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 866/866 passing на 29 октября 2026 года** (`pnpm check`, включая HOME Hero 2.0.0, атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
+**Baseline: 870/870 passing на 29 октября 2026 года** (`pnpm check`, включая HOME Hero 2.0.0, атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
 
-Уточнение29.10 после этого полного baseline: добавлены3 теста legal-document-render. Профиль legal/admin-preview/web-build-data прошёл24/24; полный набор после этих локальных изменений ещё не перезапускался. Baseline выше относится к предыдущему коду.
+Baseline включает3 legal-теста и parser-time регрессию каталога. Полный pnpm check прошёл в процессе с CPU affinity2 после Windows OOM; набор команд и тестов не сокращался, skips0. Ресурсная проблема отдельно остаётся в #430.
 
 | Файл | Что проверяет |
 | --- | --- |
@@ -174,7 +174,7 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 ## CITY_HOME / #193
 
 - `tariff-collection.test.cjs`: весь каталог и неразрушающая сортировка (закрепление раньше цены, оба направления, неизвестная цена), точная совместимость прежнего snapshot, безопасные поля/неполный черновик, HTML-экранирование и неактивный preview, stale/unsafe write без записи, одна attributed revision и сохранение Hero, publication guard даже без городов. Реальный PostgreSQL rehearsal `scripts/rehearse-tariff-collection.mjs` проверяет откат неизвестной композиции, скрытые данные и before/after историю, immutable publication и идемпотентность миграции 0058.
-- `tariff-collection-client.test.mjs`: один клик раскрывает все оставшиеся карточки, скрывает кнопку, объявляет количество и сохраняет клавиатурный фокус; повторная инициализация не сворачивает список.
+- `tariff-collection-client.test.mjs`: один клик раскрывает все оставшиеся карточки, скрывает кнопку, объявляет количество и сохраняет клавиатурный фокус; повторная инициализация не сворачивает список. Parser-time вариант того же initializer проверяет URL-категорию, лимит и состояние до загрузки модулей, а поздний модуль не сбрасывает раскрытие и обработчики.
 - `web-build-data.test.mjs`: реальная Astro-сборка прежнего каталога показывает только Hero + новые тарифы, сохраняет #tariffs/адресные действия/details и исключает старые блоки. `admin-block-passports-ui`, `block-passports`, `admin-navigation-performance`, `browser-security`, `tariff-template-ui` проверяют отдельные маршруты/реестр и сохраняемую диагностику tariff detail.
 
 `variable-catalog.test.cjs` дополнительно проверяет переход из title/text тарифного блока в `/templates/tariffs` с site context для рабочей и исторической опубликованной колонки, сохраняя immutable evidence.

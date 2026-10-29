@@ -1,0 +1,35 @@
+{
+  "profile": {
+    "passed": 16,
+    "failed": 0
+  },
+  "review": {
+    "critical": 0,
+    "important": 0,
+    "independentProfilePassed": 16
+  },
+  "coldCases": 12,
+  "firstVisibleCollectionStable": true,
+  "coldCLS": 0,
+  "navigationWidths": [
+    1440,
+    834,
+    390,
+    320
+  ],
+  "legalCases": 15,
+  "noJsLegalCases": 3,
+  "cmsPreviewCases": 2,
+  "snapshotRevision": 24,
+  "figmaModified": false,
+  "cmsModified": false,
+  "phase": "local verified and full gate passed; release pending",
+  "windowsResourceIssue": 430,
+  "fullGate": {
+    "passed": 870,
+    "failed": 0,
+    "skipped": 0,
+    "cpuAffinity": 2,
+    "repositoryCommandsUnchanged": true
+  }
+}

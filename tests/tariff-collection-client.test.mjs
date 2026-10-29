@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { initializeTariffCollections } from '../apps/web/src/scripts/tariff-collection-client.mjs';
+import { prepareCollectionScript } from '../apps/web/src/lib/tariff-collection-prepaint.mjs';
+import vm from 'node:vm';
 
 function control(dataset = {}) {
   const listeners = {};
@@ -37,4 +39,20 @@ test('all tariffs resets only the category; explicit reset clears the full empty
   f.quick[0].click(); assert.equal(f.visible(), 0);
   f.resets[1].click(); assert.equal(f.visible(), 3); assert.equal(f.empty.hidden, true);
   assert.ok(f.quick.every(button => button.attrs['aria-pressed'] === 'false')); assert.equal(f.categories[0].focused, true);
+});
+
+test('parser initializer applies URL category and configured limit before module loading and binds controls once', () => {
+  const f = collection();
+  const section = f.root.querySelectorAll()[0];
+  const context = { document: { currentScript: { previousElementSibling: section } }, URLSearchParams, location: { search: '?category=INTERNET_TV' } };
+  vm.runInNewContext(prepareCollectionScript, context);
+  assert.equal(f.visible(), 3);
+  assert.equal(f.cards[0].hidden, true);
+  assert.equal(f.categories[2].attrs['aria-pressed'], 'true');
+  assert.equal(section.dataset.collectionPrepared, 'true');
+  assert.equal(f.more.textContent, 'Ещё предложения · 1');
+  f.more.click(); assert.equal(f.visible(), 4);
+  initializeTariffCollections(f.root);
+  assert.equal(f.visible(), 4, 'module initialization must preserve the expanded parser-time state');
+  f.resets[0].click(); assert.equal(f.visible(), 3);
 });

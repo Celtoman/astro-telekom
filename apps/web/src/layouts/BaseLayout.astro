@@ -4,6 +4,7 @@ import '../styles/public-fonts.css';
 import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
 import geistCyrillic from '@fontsource-variable/geist/files/geist-cyrillic-wght-normal.woff2?url';
 import { publicShellBootstrap, prepareHeaderScript, prepareFooterScript } from '../lib/public-shell-state.mjs';
+import { collectionBootstrap, prepareCollectionScript } from '../lib/tariff-collection-prepaint.mjs';
 import type { CityView, PageView, SiteView } from '../data/site';
 import { defaultSiteImagePath, loadSiteData } from '../data/site';
 import { publicAsset } from '../data/public-asset';
@@ -60,7 +61,7 @@ const metrikaBootstrap = metrikaId
   : undefined;
 const scriptHash = (source: string) => `sha256-${createHash('sha256').update(source).digest('base64')}` as const;
 const shellBootstrap = publicShellBootstrap(catalog.cities, site.slug);
-for (const source of [shellBootstrap, prepareHeaderScript, prepareFooterScript]) Astro.csp.insertScriptHash(scriptHash(source));
+for (const source of [shellBootstrap, prepareHeaderScript, prepareFooterScript, collectionBootstrap, prepareCollectionScript]) Astro.csp.insertScriptHash(scriptHash(source));
 Astro.csp.insertScriptHash(scriptHash(jsonLd));
 if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
 ---
@@ -72,6 +73,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin="anonymous" />
     <link rel="preload" href={geistCyrillic} as="font" type="font/woff2" crossorigin="anonymous" />
     <script is:inline set:html={shellBootstrap}></script>
+    <script is:inline set:html={collectionBootstrap}></script>
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" href={publicAsset('/favicon.ico')} />
     <title>{title}</title>
@@ -119,7 +121,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
 <style is:global>
   :root { font-family: 'Geist Variable', ui-sans-serif, system-ui, sans-serif; color: #18202a; background: #f6f7f9; font-synthesis: none; }
   :root.full-general-home { background: #fff; }
-  .general-home-page { background: #fff; padding-block: 24px; }
+  .general-home-page { background: #fff; padding: 0 0 24px; }
   html[data-public-shell-pending] [data-site-header] { visibility: hidden; }
   html[data-public-shell-fonts-pending] :is([data-site-header], [data-general-home-footer]) { visibility: hidden; }
   html[data-public-shell-fonts-enabled] :is([data-site-header], [data-general-home-footer]) { font-family: 'Geist Shell', ui-sans-serif, system-ui, sans-serif; }

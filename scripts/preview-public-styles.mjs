@@ -28,7 +28,7 @@ const sources = [
   ['legal', 'components/LegalDocument.astro'],
   ['cities', 'components/CitiesDirectory.astro'],
 ].map(([name, path]) => [name, fileURLToPath(new URL(`../apps/web/src/${path}`, import.meta.url))]);
-const assetPaths = ['home-hero.png', 'domru-logo.png', 'map-pin.svg', 'chevron-down.svg', 'search.svg', 'headphones.svg', 'phone.svg', 'menu.svg', 'tag.svg', 'wifi.svg', 'tv.svg', 'tag-blue.svg', 'wifi-blue.svg', 'hero-speed.svg', 'hero-speed-blue.svg', 'tv-blue.svg', 'shield-check.svg', 'check.svg']
+const assetPaths = ['home-hero.png', 'domru-logo.png', 'map-pin.svg', 'chevron-down.svg', 'search.svg', 'headphones.svg', 'phone.svg', 'menu.svg', 'tag.svg', 'wifi.svg', 'tv.svg', 'tag-blue.svg', 'wifi-blue.svg', 'hero-speed.svg', 'hero-speed-blue.svg', 'tv-blue.svg', 'hero-television.svg', 'hero-television-blue.svg', 'shield-check.svg', 'check.svg']
   .map(name => `/images/figma/${name}`).concat(['/images/figma/hero1d-desktop-imglocationicon.svg', ...['desktop', 'tablet', 'mobile'].flatMap(device => [0, 1, 2].map(index => `/images/figma/hero1d-${device}-imgicon${index || ''}.svg`))]);
 // Repository-owned static assets only; CMS never supplies imports or executable paths.
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/general-home/', import.meta.url)).filter(name => /^[a-z0-9-]+\.(?:png|svg)$/.test(name)).map(name => `/images/general-home/${name}`));

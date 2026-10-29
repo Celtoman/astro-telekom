@@ -1,0 +1,1273 @@
+{
+  "checkedAt": "2026-10-29T12:32:31.229Z",
+  "before": {
+    "/politika-konfidencialnosti": {
+      "title": "Политика конфиденциальности",
+      "sections": [
+        {
+          "title": "1. Общие положения",
+          "paragraphs": [
+            "Политика определяет правила обработки и защиты персональных данных оператором: ИП Кочергин Александр Андреевич, ИНН 165038398334, ОГРНИП 323169000159136, адрес: г. Набережные Челны, переулок Энергетиков, д. 2, офис 7. Она применяется к сведениям, полученным через сайт https://tv-internet-dom.ru, формы заявок, обратную связь и иные обращения пользователей."
+          ]
+        },
+        {
+          "title": "2. Основные принципы",
+          "paragraphs": [
+            "Обработка ведется законно и добросовестно, только для заранее определенных целей. Объем данных не должен быть избыточным, хранение ограничивается необходимым сроком, а по достижении целей данные удаляются, уничтожаются или обезличиваются, если закон не требует иного."
+          ]
+        },
+        {
+          "title": "3. Категории данных и субъектов",
+          "paragraphs": [
+            "Обрабатываются данные посетителей и пользователей, направивших заявку: имя и контактные сведения, адрес предполагаемого подключения, содержание обращения, а также технические данные — IP-адрес, сведения об устройстве и браузере, время обращения, первая и текущая страницы сессии, просмотренные страницы, источник перехода, метки рекламной кампании (UTM) и cookie. Специальные категории и биометрические данные через сайт не запрашиваются."
+          ]
+        },
+        {
+          "title": "4. Цели и правовые основания",
+          "paragraphs": [
+            "Цели обработки: проверка доступности услуг по адресу, консультация, обратная связь, оформление и сопровождение заявки, организация подключения, рассмотрение обращений, обеспечение работоспособности и безопасности сайта, а также анализ посещаемости. Основаниями являются согласие субъекта, действия по его запросу и иные основания, предусмотренные законодательством Российской Федерации."
+          ]
+        },
+        {
+          "title": "5. Передача данных",
+          "paragraphs": [
+            "Для проверки и исполнения заявки сведения могут передаваться следующим получателям: АО «ЭР-Телеком Холдинг» (бренд Дом.ру) и (или) официальный партнер АО «ЭР-Телеком Холдинг» — ИП Горбушин Алексей Александрович, ИНН 635003964992, ОГРНИП 316631300113332. Государственным органам данные предоставляются только по основаниям и в порядке, установленным законом."
+          ]
+        },
+        {
+          "title": "6. Порядок и сроки обработки",
+          "paragraphs": [
+            "Оператор может обрабатывать данные автоматически и без автоматизации. Срок определяется целью обработки и обязательными требованиями закона. Базы данных, используемые при сборе персональных данных граждан Российской Федерации, должны находиться на территории Российской Федерации."
+          ]
+        },
+        {
+          "title": "7. Защита данных",
+          "paragraphs": [
+            "Оператор применяет организационные и технические меры: разграничивает доступ, использует средства защиты, контролирует действия с данными, выявляет инциденты и при необходимости восстанавливает информацию. Доступ получают только уполномоченные лица."
+          ]
+        },
+        {
+          "title": "8. Права пользователя",
+          "paragraphs": [
+            "Пользователь вправе запросить сведения об обработке, потребовать уточнения, блокирования, прекращения обработки или уничтожения данных при наличии оснований, отозвать согласие, а также обжаловать действия оператора в Роскомнадзор или суд."
+          ]
+        },
+        {
+          "title": "9. Обращения и отзыв согласия",
+          "paragraphs": [
+            "Обращения принимаются по адресу info@tv-internet-dom.ru. Для поиска заявки рекомендуется указать имя, телефон или электронную почту и суть требования. Ответ и прекращение обработки выполняются в сроки, предусмотренные действующим законодательством."
+          ]
+        },
+        {
+          "title": "10. Изменение политики",
+          "paragraphs": [
+            "Оператор вправе обновлять документ при изменении процессов или требований закона. Новая редакция действует с момента публикации на сайте, если в ней не указан иной срок."
+          ]
+        }
+      ]
+    },
+    "/soglasie-na-obrabotku-personalnyh-dannyh": {
+      "title": "Согласие на обработку персональных данных",
+      "sections": [
+        {
+          "title": "1. Предоставление согласия",
+          "paragraphs": [
+            "Отправляя заявку или форму обратной связи на сайте https://tv-internet-dom.ru, пользователь свободно, своей волей и в своем интересе дает согласие оператору персональных данных: ИП Кочергин Александр Андреевич, ИНН 165038398334, ОГРНИП 323169000159136, адрес: г. Набережные Челны, переулок Энергетиков, д. 2, офис 7. Согласие предоставляется во исполнение Федерального закона от 27.07.2006 № 152-ФЗ «О персональных данных»."
+          ]
+        },
+        {
+          "title": "2. Состав персональных данных",
+          "paragraphs": [
+            "Оператор вправе обрабатывать имя, фамилию и отчество, если они указаны; контактный телефон; адрес подключения; адрес электронной почты, если он указан. При посещении сайта также могут обрабатываться IP-адрес, сведения об устройстве и браузере, дата и время обращения, запрошенные страницы, cookie и аналогичные технические данные."
+          ]
+        },
+        {
+          "title": "3. Цели обработки",
+          "paragraphs": [
+            "Данные используются для проверки технической возможности подключения Дом.ру по указанному адресу, консультации по тарифам и условиям, связи по заявке, уточнения введенных сведений, организации подключения и ответа на обращения пользователя."
+          ]
+        },
+        {
+          "title": "4. Действия с данными и получатели",
+          "paragraphs": [
+            "Согласие распространяется на сбор, запись, систематизацию, накопление, хранение, уточнение, извлечение, использование, предоставление доступа, передачу, обезличивание, блокирование, удаление и уничтожение данных с применением средств автоматизации или без них. Для обработки заявки данные могут быть переданы следующим получателям: АО «ЭР-Телеком Холдинг» (бренд Дом.ру) и (или) официальный партнер АО «ЭР-Телеком Холдинг» — ИП Горбушин Алексей Александрович, ИНН 635003964992, ОГРНИП 316631300113332, а также уполномоченным сотрудникам оператора."
+          ]
+        },
+        {
+          "title": "5. Срок действия",
+          "paragraphs": [
+            "Согласие действует до достижения перечисленных целей либо до его отзыва, если законодательство не предусматривает иного основания обработки. После завершения необходимых действий данные удаляются, уничтожаются или обезличиваются, кроме случаев обязательного хранения по закону."
+          ]
+        },
+        {
+          "title": "6. Отзыв согласия",
+          "paragraphs": [
+            "Отозвать согласие можно обращением на info@tv-internet-dom.ru. Оператор прекращает обработку и при отсутствии иных законных оснований обеспечивает уничтожение данных в предусмотренный законом срок."
+          ]
+        },
+        {
+          "title": "7. Связанные документы",
+          "paragraphs": [
+            "Подробные условия изложены в Политике обработки персональных данных https://tv-internet-dom.ru/politika-konfidencialnosti и Политике обработки файлов cookie https://tv-internet-dom.ru/politika-obrabotki-faylov-kuki."
+          ]
+        }
+      ]
+    },
+    "/politika-obrabotki-faylov-kuki": {
+      "title": "Политика обработки файлов cookie",
+      "sections": [
+        {
+          "title": "1. Общие положения",
+          "paragraphs": [
+            "Настоящая политика объясняет использование файлов cookie и технических данных на сайте https://tv-internet-dom.ru. Оператор сайта: ИП Кочергин Александр Андреевич, ИНН 165038398334, ОГРНИП 323169000159136, адрес: г. Набережные Челны, переулок Энергетиков, д. 2, офис 7."
+          ]
+        },
+        {
+          "title": "2. Какие данные используются",
+          "paragraphs": [
+            "Cookie — небольшие текстовые файлы, которые браузер сохраняет на устройстве посетителя. Вместе с ними сайт может получать IP-адрес, тип и версию браузера, характеристики устройства, язык, дату и время обращения, адреса просмотренных страниц и другие технические сведения."
+          ]
+        },
+        {
+          "title": "3. Назначение cookie",
+          "paragraphs": [
+            "Строго необходимые cookie обеспечивают работу и безопасность сайта. Аналитические cookie помогают оценивать посещаемость, находить ошибки и улучшать интерфейс. Для веб-аналитики на сайте может использоваться Яндекс.Метрика."
+          ]
+        },
+        {
+          "title": "4. Управление cookie",
+          "paragraphs": [
+            "Посетитель может удалить, заблокировать или ограничить cookie в настройках браузера. После отключения строго необходимых cookie отдельные функции сайта могут работать некорректно или стать недоступными."
+          ]
+        },
+        {
+          "title": "5. Обращения",
+          "paragraphs": [
+            "Вопросы об использовании cookie и технических данных можно направить на info@tv-internet-dom.ru. Порядок обработки персональных данных описан по адресу https://tv-internet-dom.ru/politika-konfidencialnosti."
+          ]
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "path": "/politika-konfidencialnosti",
+      "width": 1440,
+      "scroll": 1440,
+      "block": {
+        "x": 40,
+        "y": 152,
+        "w": 1360,
+        "h": 1928
+      },
+      "container": {
+        "x": 184,
+        "y": 184,
+        "w": 1072,
+        "h": 1864
+      },
+      "copy": {
+        "x": 184,
+        "y": 266,
+        "w": 720,
+        "h": 1782
+      },
+      "h1": {
+        "x": 184,
+        "y": 184,
+        "w": 1072,
+        "h": 50,
+        "font": "48px",
+        "line": "50px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": null,
+      "sidebar": {
+        "x": 968,
+        "y": 266,
+        "w": 288,
+        "h": 569
+      },
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 10,
+      "headings": [
+        "1. Общие положения",
+        "2. Основные принципы",
+        "3. Категории данных и субъектов",
+        "4. Цели и правовые основания",
+        "5. Передача данных",
+        "6. Порядок и сроки обработки",
+        "7. Защита данных",
+        "8. Права пользователя",
+        "9. Обращения и отзыв согласия",
+        "10. Изменение политики"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/soglasie-na-obrabotku-personalnyh-dannyh",
+      "width": 1440,
+      "scroll": 1440,
+      "block": {
+        "x": 40,
+        "y": 152,
+        "w": 1360,
+        "h": 1421
+      },
+      "container": {
+        "x": 184,
+        "y": 184,
+        "w": 1072,
+        "h": 1357
+      },
+      "copy": {
+        "x": 184,
+        "y": 266,
+        "w": 720,
+        "h": 1275
+      },
+      "h1": {
+        "x": 184,
+        "y": 184,
+        "w": 1072,
+        "h": 50,
+        "font": "48px",
+        "line": "50px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": null,
+      "sidebar": {
+        "x": 968,
+        "y": 266,
+        "w": 288,
+        "h": 425
+      },
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 7,
+      "headings": [
+        "1. Предоставление согласия",
+        "2. Состав персональных данных",
+        "3. Цели обработки",
+        "4. Действия с данными и получатели",
+        "5. Срок действия",
+        "6. Отзыв согласия",
+        "7. Связанные документы"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/politika-obrabotki-faylov-kuki",
+      "width": 1440,
+      "scroll": 1440,
+      "block": {
+        "x": 40,
+        "y": 152,
+        "w": 1360,
+        "h": 963
+      },
+      "container": {
+        "x": 184,
+        "y": 184,
+        "w": 1072,
+        "h": 899
+      },
+      "copy": {
+        "x": 184,
+        "y": 266,
+        "w": 720,
+        "h": 817
+      },
+      "h1": {
+        "x": 184,
+        "y": 184,
+        "w": 1072,
+        "h": 50,
+        "font": "48px",
+        "line": "50px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": null,
+      "sidebar": {
+        "x": 968,
+        "y": 266,
+        "w": 288,
+        "h": 329
+      },
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 5,
+      "headings": [
+        "1. Общие положения",
+        "2. Какие данные используются",
+        "3. Назначение cookie",
+        "4. Управление cookie",
+        "5. Обращения"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/politika-konfidencialnosti",
+      "width": 834,
+      "scroll": 834,
+      "block": {
+        "x": 57,
+        "y": 144,
+        "w": 720,
+        "h": 2092
+      },
+      "container": {
+        "x": 81,
+        "y": 168,
+        "w": 672,
+        "h": 2044
+      },
+      "copy": {
+        "x": 81,
+        "y": 358,
+        "w": 672,
+        "h": 1854
+      },
+      "h1": {
+        "x": 81,
+        "y": 168,
+        "w": 672,
+        "h": 43,
+        "font": "40px",
+        "line": "43px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 98,
+        "y": 260,
+        "w": 638,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 10,
+      "headings": [
+        "1. Общие положения",
+        "2. Основные принципы",
+        "3. Категории данных и субъектов",
+        "4. Цели и правовые основания",
+        "5. Передача данных",
+        "6. Порядок и сроки обработки",
+        "7. Защита данных",
+        "8. Права пользователя",
+        "9. Обращения и отзыв согласия",
+        "10. Изменение политики"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/soglasie-na-obrabotku-personalnyh-dannyh",
+      "width": 834,
+      "scroll": 834,
+      "block": {
+        "x": 57,
+        "y": 144,
+        "w": 720,
+        "h": 1628
+      },
+      "container": {
+        "x": 81,
+        "y": 168,
+        "w": 672,
+        "h": 1580
+      },
+      "copy": {
+        "x": 81,
+        "y": 401,
+        "w": 672,
+        "h": 1347
+      },
+      "h1": {
+        "x": 81,
+        "y": 168,
+        "w": 672,
+        "h": 86,
+        "font": "40px",
+        "line": "43px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 98,
+        "y": 303,
+        "w": 638,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 7,
+      "headings": [
+        "1. Предоставление согласия",
+        "2. Состав персональных данных",
+        "3. Цели обработки",
+        "4. Действия с данными и получатели",
+        "5. Срок действия",
+        "6. Отзыв согласия",
+        "7. Связанные документы"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/politika-obrabotki-faylov-kuki",
+      "width": 834,
+      "scroll": 834,
+      "block": {
+        "x": 57,
+        "y": 144,
+        "w": 720,
+        "h": 1122
+      },
+      "container": {
+        "x": 81,
+        "y": 168,
+        "w": 672,
+        "h": 1074
+      },
+      "copy": {
+        "x": 81,
+        "y": 401,
+        "w": 672,
+        "h": 841
+      },
+      "h1": {
+        "x": 81,
+        "y": 168,
+        "w": 672,
+        "h": 86,
+        "font": "40px",
+        "line": "43px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 98,
+        "y": 303,
+        "w": 638,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 5,
+      "headings": [
+        "1. Общие положения",
+        "2. Какие данные используются",
+        "3. Назначение cookie",
+        "4. Управление cookie",
+        "5. Обращения"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/politika-konfidencialnosti",
+      "width": 768,
+      "scroll": 768,
+      "block": {
+        "x": 24,
+        "y": 144,
+        "w": 720,
+        "h": 2092
+      },
+      "container": {
+        "x": 48,
+        "y": 168,
+        "w": 672,
+        "h": 2044
+      },
+      "copy": {
+        "x": 48,
+        "y": 358,
+        "w": 672,
+        "h": 1854
+      },
+      "h1": {
+        "x": 48,
+        "y": 168,
+        "w": 672,
+        "h": 43,
+        "font": "40px",
+        "line": "43px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 65,
+        "y": 260,
+        "w": 638,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 10,
+      "headings": [
+        "1. Общие положения",
+        "2. Основные принципы",
+        "3. Категории данных и субъектов",
+        "4. Цели и правовые основания",
+        "5. Передача данных",
+        "6. Порядок и сроки обработки",
+        "7. Защита данных",
+        "8. Права пользователя",
+        "9. Обращения и отзыв согласия",
+        "10. Изменение политики"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/soglasie-na-obrabotku-personalnyh-dannyh",
+      "width": 768,
+      "scroll": 768,
+      "block": {
+        "x": 24,
+        "y": 144,
+        "w": 720,
+        "h": 1628
+      },
+      "container": {
+        "x": 48,
+        "y": 168,
+        "w": 672,
+        "h": 1580
+      },
+      "copy": {
+        "x": 48,
+        "y": 401,
+        "w": 672,
+        "h": 1347
+      },
+      "h1": {
+        "x": 48,
+        "y": 168,
+        "w": 672,
+        "h": 86,
+        "font": "40px",
+        "line": "43px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 65,
+        "y": 303,
+        "w": 638,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 7,
+      "headings": [
+        "1. Предоставление согласия",
+        "2. Состав персональных данных",
+        "3. Цели обработки",
+        "4. Действия с данными и получатели",
+        "5. Срок действия",
+        "6. Отзыв согласия",
+        "7. Связанные документы"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/politika-obrabotki-faylov-kuki",
+      "width": 768,
+      "scroll": 768,
+      "block": {
+        "x": 24,
+        "y": 144,
+        "w": 720,
+        "h": 1122
+      },
+      "container": {
+        "x": 48,
+        "y": 168,
+        "w": 672,
+        "h": 1074
+      },
+      "copy": {
+        "x": 48,
+        "y": 401,
+        "w": 672,
+        "h": 841
+      },
+      "h1": {
+        "x": 48,
+        "y": 168,
+        "w": 672,
+        "h": 86,
+        "font": "40px",
+        "line": "43px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 65,
+        "y": 303,
+        "w": 638,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 5,
+      "headings": [
+        "1. Общие положения",
+        "2. Какие данные используются",
+        "3. Назначение cookie",
+        "4. Управление cookie",
+        "5. Обращения"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/politika-konfidencialnosti",
+      "width": 390,
+      "scroll": 390,
+      "block": {
+        "x": 16,
+        "y": 132,
+        "w": 358,
+        "h": 3252
+      },
+      "container": {
+        "x": 32,
+        "y": 148,
+        "w": 326,
+        "h": 3220
+      },
+      "copy": {
+        "x": 32,
+        "y": 361,
+        "w": 326,
+        "h": 3007
+      },
+      "h1": {
+        "x": 32,
+        "y": 148,
+        "w": 326,
+        "h": 66,
+        "font": "28px",
+        "line": "33px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 49,
+        "y": 263,
+        "w": 292,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 10,
+      "headings": [
+        "1. Общие положения",
+        "2. Основные принципы",
+        "3. Категории данных и субъектов",
+        "4. Цели и правовые основания",
+        "5. Передача данных",
+        "6. Порядок и сроки обработки",
+        "7. Защита данных",
+        "8. Права пользователя",
+        "9. Обращения и отзыв согласия",
+        "10. Изменение политики"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/soglasie-na-obrabotku-personalnyh-dannyh",
+      "width": 390,
+      "scroll": 390,
+      "block": {
+        "x": 16,
+        "y": 132,
+        "w": 358,
+        "h": 2458
+      },
+      "container": {
+        "x": 32,
+        "y": 148,
+        "w": 326,
+        "h": 2426
+      },
+      "copy": {
+        "x": 32,
+        "y": 361,
+        "w": 326,
+        "h": 2213
+      },
+      "h1": {
+        "x": 32,
+        "y": 148,
+        "w": 326,
+        "h": 66,
+        "font": "28px",
+        "line": "33px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 49,
+        "y": 263,
+        "w": 292,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 7,
+      "headings": [
+        "1. Предоставление согласия",
+        "2. Состав персональных данных",
+        "3. Цели обработки",
+        "4. Действия с данными и получатели",
+        "5. Срок действия",
+        "6. Отзыв согласия",
+        "7. Связанные документы"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/politika-obrabotki-faylov-kuki",
+      "width": 390,
+      "scroll": 390,
+      "block": {
+        "x": 16,
+        "y": 132,
+        "w": 358,
+        "h": 1494
+      },
+      "container": {
+        "x": 32,
+        "y": 148,
+        "w": 326,
+        "h": 1462
+      },
+      "copy": {
+        "x": 32,
+        "y": 361,
+        "w": 326,
+        "h": 1249
+      },
+      "h1": {
+        "x": 32,
+        "y": 148,
+        "w": 326,
+        "h": 66,
+        "font": "28px",
+        "line": "33px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 49,
+        "y": 263,
+        "w": 292,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 5,
+      "headings": [
+        "1. Общие положения",
+        "2. Какие данные используются",
+        "3. Назначение cookie",
+        "4. Управление cookie",
+        "5. Обращения"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/politika-konfidencialnosti",
+      "width": 320,
+      "scroll": 320,
+      "block": {
+        "x": 16,
+        "y": 132,
+        "w": 288,
+        "h": 4032
+      },
+      "container": {
+        "x": 32,
+        "y": 148,
+        "w": 256,
+        "h": 4000
+      },
+      "copy": {
+        "x": 32,
+        "y": 394,
+        "w": 256,
+        "h": 3754
+      },
+      "h1": {
+        "x": 32,
+        "y": 148,
+        "w": 256,
+        "h": 99,
+        "font": "28px",
+        "line": "33px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 49,
+        "y": 296,
+        "w": 222,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 10,
+      "headings": [
+        "1. Общие положения",
+        "2. Основные принципы",
+        "3. Категории данных и субъектов",
+        "4. Цели и правовые основания",
+        "5. Передача данных",
+        "6. Порядок и сроки обработки",
+        "7. Защита данных",
+        "8. Права пользователя",
+        "9. Обращения и отзыв согласия",
+        "10. Изменение политики"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/soglasie-na-obrabotku-personalnyh-dannyh",
+      "width": 320,
+      "scroll": 320,
+      "block": {
+        "x": 16,
+        "y": 132,
+        "w": 288,
+        "h": 3077
+      },
+      "container": {
+        "x": 32,
+        "y": 148,
+        "w": 256,
+        "h": 3045
+      },
+      "copy": {
+        "x": 32,
+        "y": 427,
+        "w": 256,
+        "h": 2766
+      },
+      "h1": {
+        "x": 32,
+        "y": 148,
+        "w": 256,
+        "h": 132,
+        "font": "28px",
+        "line": "33px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 49,
+        "y": 329,
+        "w": 222,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 7,
+      "headings": [
+        "1. Предоставление согласия",
+        "2. Состав персональных данных",
+        "3. Цели обработки",
+        "4. Действия с данными и получатели",
+        "5. Срок действия",
+        "6. Отзыв согласия",
+        "7. Связанные документы"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    },
+    {
+      "path": "/politika-obrabotki-faylov-kuki",
+      "width": 320,
+      "scroll": 320,
+      "block": {
+        "x": 16,
+        "y": 132,
+        "w": 288,
+        "h": 1792
+      },
+      "container": {
+        "x": 32,
+        "y": 148,
+        "w": 256,
+        "h": 1760
+      },
+      "copy": {
+        "x": 32,
+        "y": 394,
+        "w": 256,
+        "h": 1514
+      },
+      "h1": {
+        "x": 32,
+        "y": 148,
+        "w": 256,
+        "h": 99,
+        "font": "28px",
+        "line": "33px"
+      },
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "summary": {
+        "x": 49,
+        "y": 296,
+        "w": 222,
+        "h": 49
+      },
+      "sidebar": null,
+      "images": [
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-down.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/981e40b0e546403a8c1c92e451692829b5982b481abd7728e2f80bfe78693d33/images/legal/caret-up.svg",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "tocCount": 5,
+      "headings": [
+        "1. Общие положения",
+        "2. Какие данные используются",
+        "3. Назначение cookie",
+        "4. Управление cookie",
+        "5. Обращения"
+      ],
+      "textPreserved": true,
+      "anchors": true,
+      "keyboard": true
+    }
+  ],
+  "noJs": [
+    {
+      "path": "/politika-konfidencialnosti",
+      "details": true,
+      "anchors": true,
+      "textPreserved": true
+    },
+    {
+      "path": "/soglasie-na-obrabotku-personalnyh-dannyh",
+      "details": true,
+      "anchors": true,
+      "textPreserved": true
+    },
+    {
+      "path": "/politika-obrabotki-faylov-kuki",
+      "details": true,
+      "anchors": true,
+      "textPreserved": true
+    }
+  ],
+  "preview": [
+    {
+      "width": 1440,
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "copy": {
+        "x": 184,
+        "y": 266,
+        "w": 720,
+        "h": 1734
+      },
+      "images": [
+        {
+          "src": "data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJDTVAtMDAxMSAvICYjMjA4OyYjMTUyOyYjMjA4OyYjMTg2OyYjMjA4OyYjMTkwOyYjMjA4OyYjMTg5OyYjMjA4OyYjMTg2OyYjMjA4OyYjMTc2OyAmIzIyNjsmIzEyODsmIzE0ODsgJiMyMDg7JiMxNjE7JiMyMDk7JiMxMzA7JiMyMDk7JiMxMjg7JiMyMDg7JiMxODE7JiMyMDg7JiMxODc7JiMyMDg7JiMxODY7JiMyMDg7JiMxNzY7ICYjMjA4OyYjMTc4OyYjMjA4OyYjMTg5OyYjMjA4OyYjMTg0OyYjMjA4OyYjMTgzOyIgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzBfMTkpIj4KPGcgaWQ9IkdseXBoIC8gUGhvc3Bob3IgRHVvdG9uZSI+CjxwYXRoIGlkPSJWZWN0b3IiIG9wYWNpdHk9IjAuMiIgZD0iTTE5LjUgOUwxMiAxNi41TDQuNSA5SDE5LjVaIiBmaWxsPSIjMTgyMDJBIi8+CjxwYXRoIGlkPSJWZWN0b3JfMiIgZD0iTTIwLjE5MjggOC43MTMxM0MyMC4xMzYxIDguNTc2MDcgMjAuMDQgOC40NTg5MiAxOS45MTY3IDguMzc2NDhDMTkuNzkzMyA4LjI5NDA1IDE5LjY0ODMgOC4yNTAwMyAxOS41IDguMjVINC41QzQuMzUxNTggOC4yNDk4OCA0LjIwNjQ2IDguMjkzODEgNC4wODMwMSA4LjM3NjIxQzMuOTU5NTcgOC40NTg2MSAzLjg2MzM1IDguNTc1NzkgMy44MDY1MyA4LjcxMjkxQzMuNzQ5NzIgOC44NTAwMiAzLjczNDg3IDkuMDAwOTIgMy43NjM4NSA5LjE0NjQ4QzMuNzkyODQgOS4yOTIwNCAzLjg2NDM3IDkuNDI1NzMgMy45NjkzNyA5LjUzMDYzTDExLjQ2OTQgMTcuMDMwNkMxMS41MzkgMTcuMTAwNCAxMS42MjE3IDE3LjE1NTcgMTEuNzEyOCAxNy4xOTM0QzExLjgwMzggMTcuMjMxMiAxMS45MDE0IDE3LjI1MDYgMTIgMTcuMjUwNkMxMi4wOTg2IDE3LjI1MDYgMTIuMTk2MiAxNy4yMzEyIDEyLjI4NzIgMTcuMTkzNEMxMi4zNzgzIDE3LjE1NTcgMTIuNDYxIDE3LjEwMDQgMTIuNTMwNiAxNy4wMzA2TDIwLjAzMDYgOS41MzA2M0MyMC4xMzU1IDkuNDI1NjggMjAuMjA2OSA5LjI5MTk5IDIwLjIzNTcgOS4xNDY0OEMyMC4yNjQ2IDkuMDAwOTYgMjAuMjQ5NyA4Ljg1MDE1IDIwLjE5MjggOC43MTMxM1pNMTIgMTUuNDM5N0w2LjMxMDMxIDkuNzVIMTcuNjg5N0wxMiAxNS40Mzk3WiIgZmlsbD0iIzE4MjAyQSIvPgo8L2c+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMF8xOSI+CjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJHbHlwaCAvIFBob3NwaG9yIER1b3RvbmUiPgo8cGF0aCBpZD0iVmVjdG9yIiBvcGFjaXR5PSIwLjIiIGQ9Ik0xOS41IDE1SDQuNUwxMiA3LjVMMTkuNSAxNVoiIGZpbGw9IiMxODIwMkEiLz4KPHBhdGggaWQ9IlZlY3Rvcl8yIiBkPSJNMjAuMDMwNiAxNC40Njk0TDEyLjUzMDYgNi45NjkzN0MxMi40NjEgNi44OTk2NCAxMi4zNzgzIDYuODQ0MzIgMTIuMjg3MiA2LjgwNjU4QzEyLjE5NjIgNi43Njg4NCAxMi4wOTg2IDYuNzQ5NDEgMTIgNi43NDk0MUMxMS45MDE0IDYuNzQ5NDEgMTEuODAzOCA2Ljc2ODg0IDExLjcxMjggNi44MDY1OEMxMS42MjE3IDYuODQ0MzIgMTEuNTM5IDYuODk5NjQgMTEuNDY5NCA2Ljk2OTM3TDMuOTY5MzcgMTQuNDY5NEMzLjg2NDM3IDE0LjU3NDMgMy43OTI4NCAxNC43MDggMy43NjM4NSAxNC44NTM1QzMuNzM0ODcgMTQuOTk5MSAzLjc0OTcyIDE1LjE1IDMuODA2NTMgMTUuMjg3MUMzLjg2MzM1IDE1LjQyNDIgMy45NTk1NyAxNS41NDE0IDQuMDgzMDEgMTUuNjIzOEM0LjIwNjQ2IDE1LjcwNjIgNC4zNTE1OCAxNS43NTAxIDQuNSAxNS43NUgxOS41QzE5LjY0ODQgMTUuNzUwMSAxOS43OTM1IDE1LjcwNjIgMTkuOTE3IDE1LjYyMzhDMjAuMDQwNCAxNS41NDE0IDIwLjEzNjcgMTUuNDI0MiAyMC4xOTM1IDE1LjI4NzFDMjAuMjUwMyAxNS4xNSAyMC4yNjUxIDE0Ljk5OTEgMjAuMjM2MSAxNC44NTM1QzIwLjIwNzIgMTQuNzA4IDIwLjEzNTYgMTQuNTc0MyAyMC4wMzA2IDE0LjQ2OTRaTTYuMzEwMzEgMTQuMjVMMTIgOC41NjAzMUwxNy42ODk3IDE0LjI1SDYuMzEwMzFaIiBmaWxsPSIjMTgyMDJBIi8+CjwvZz4KPC9zdmc+Cg==",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "disabledLinks": true
+    },
+    {
+      "width": 320,
+      "body": {
+        "font": "16px",
+        "line": "24px"
+      },
+      "copy": {
+        "x": 32,
+        "y": 394,
+        "w": 256,
+        "h": 3658
+      },
+      "images": [
+        {
+          "src": "data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJDTVAtMDAxMSAvICYjMjA4OyYjMTUyOyYjMjA4OyYjMTg2OyYjMjA4OyYjMTkwOyYjMjA4OyYjMTg5OyYjMjA4OyYjMTg2OyYjMjA4OyYjMTc2OyAmIzIyNjsmIzEyODsmIzE0ODsgJiMyMDg7JiMxNjE7JiMyMDk7JiMxMzA7JiMyMDk7JiMxMjg7JiMyMDg7JiMxODE7JiMyMDg7JiMxODc7JiMyMDg7JiMxODY7JiMyMDg7JiMxNzY7ICYjMjA4OyYjMTc4OyYjMjA4OyYjMTg5OyYjMjA4OyYjMTg0OyYjMjA4OyYjMTgzOyIgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzBfMTkpIj4KPGcgaWQ9IkdseXBoIC8gUGhvc3Bob3IgRHVvdG9uZSI+CjxwYXRoIGlkPSJWZWN0b3IiIG9wYWNpdHk9IjAuMiIgZD0iTTE5LjUgOUwxMiAxNi41TDQuNSA5SDE5LjVaIiBmaWxsPSIjMTgyMDJBIi8+CjxwYXRoIGlkPSJWZWN0b3JfMiIgZD0iTTIwLjE5MjggOC43MTMxM0MyMC4xMzYxIDguNTc2MDcgMjAuMDQgOC40NTg5MiAxOS45MTY3IDguMzc2NDhDMTkuNzkzMyA4LjI5NDA1IDE5LjY0ODMgOC4yNTAwMyAxOS41IDguMjVINC41QzQuMzUxNTggOC4yNDk4OCA0LjIwNjQ2IDguMjkzODEgNC4wODMwMSA4LjM3NjIxQzMuOTU5NTcgOC40NTg2MSAzLjg2MzM1IDguNTc1NzkgMy44MDY1MyA4LjcxMjkxQzMuNzQ5NzIgOC44NTAwMiAzLjczNDg3IDkuMDAwOTIgMy43NjM4NSA5LjE0NjQ4QzMuNzkyODQgOS4yOTIwNCAzLjg2NDM3IDkuNDI1NzMgMy45NjkzNyA5LjUzMDYzTDExLjQ2OTQgMTcuMDMwNkMxMS41MzkgMTcuMTAwNCAxMS42MjE3IDE3LjE1NTcgMTEuNzEyOCAxNy4xOTM0QzExLjgwMzggMTcuMjMxMiAxMS45MDE0IDE3LjI1MDYgMTIgMTcuMjUwNkMxMi4wOTg2IDE3LjI1MDYgMTIuMTk2MiAxNy4yMzEyIDEyLjI4NzIgMTcuMTkzNEMxMi4zNzgzIDE3LjE1NTcgMTIuNDYxIDE3LjEwMDQgMTIuNTMwNiAxNy4wMzA2TDIwLjAzMDYgOS41MzA2M0MyMC4xMzU1IDkuNDI1NjggMjAuMjA2OSA5LjI5MTk5IDIwLjIzNTcgOS4xNDY0OEMyMC4yNjQ2IDkuMDAwOTYgMjAuMjQ5NyA4Ljg1MDE1IDIwLjE5MjggOC43MTMxM1pNMTIgMTUuNDM5N0w2LjMxMDMxIDkuNzVIMTcuNjg5N0wxMiAxNS40Mzk3WiIgZmlsbD0iIzE4MjAyQSIvPgo8L2c+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMF8xOSI+CjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        },
+        {
+          "src": "data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJHbHlwaCAvIFBob3NwaG9yIER1b3RvbmUiPgo8cGF0aCBpZD0iVmVjdG9yIiBvcGFjaXR5PSIwLjIiIGQ9Ik0xOS41IDE1SDQuNUwxMiA3LjVMMTkuNSAxNVoiIGZpbGw9IiMxODIwMkEiLz4KPHBhdGggaWQ9IlZlY3Rvcl8yIiBkPSJNMjAuMDMwNiAxNC40Njk0TDEyLjUzMDYgNi45NjkzN0MxMi40NjEgNi44OTk2NCAxMi4zNzgzIDYuODQ0MzIgMTIuMjg3MiA2LjgwNjU4QzEyLjE5NjIgNi43Njg4NCAxMi4wOTg2IDYuNzQ5NDEgMTIgNi43NDk0MUMxMS45MDE0IDYuNzQ5NDEgMTEuODAzOCA2Ljc2ODg0IDExLjcxMjggNi44MDY1OEMxMS42MjE3IDYuODQ0MzIgMTEuNTM5IDYuODk5NjQgMTEuNDY5NCA2Ljk2OTM3TDMuOTY5MzcgMTQuNDY5NEMzLjg2NDM3IDE0LjU3NDMgMy43OTI4NCAxNC43MDggMy43NjM4NSAxNC44NTM1QzMuNzM0ODcgMTQuOTk5MSAzLjc0OTcyIDE1LjE1IDMuODA2NTMgMTUuMjg3MUMzLjg2MzM1IDE1LjQyNDIgMy45NTk1NyAxNS41NDE0IDQuMDgzMDEgMTUuNjIzOEM0LjIwNjQ2IDE1LjcwNjIgNC4zNTE1OCAxNS43NTAxIDQuNSAxNS43NUgxOS41QzE5LjY0ODQgMTUuNzUwMSAxOS43OTM1IDE1LjcwNjIgMTkuOTE3IDE1LjYyMzhDMjAuMDQwNCAxNS41NDE0IDIwLjEzNjcgMTUuNDI0MiAyMC4xOTM1IDE1LjI4NzFDMjAuMjUwMyAxNS4xNSAyMC4yNjUxIDE0Ljk5OTEgMjAuMjM2MSAxNC44NTM1QzIwLjIwNzIgMTQuNzA4IDIwLjEzNTYgMTQuNTc0MyAyMC4wMzA2IDE0LjQ2OTRaTTYuMzEwMzEgMTQuMjVMMTIgOC41NjAzMUwxNy42ODk3IDE0LjI1SDYuMzEwMzFaIiBmaWxsPSIjMTgyMDJBIi8+CjwvZz4KPC9zdmc+Cg==",
+          "w": 24,
+          "h": 24,
+          "loaded": true
+        }
+      ],
+      "disabledLinks": true
+    }
+  ],
+  "errors": []
+}
