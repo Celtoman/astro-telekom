@@ -27,7 +27,7 @@ HOME Hero 1d реализован в коде по [паспорту 2.0.0](docs
 
 ## Стабильность публичной оболочки — 29 октября 2026
 
-Исправляются первый кадр шапки, одинаковые внешние поля страниц, #410, внутренняя прокрутка сравнения и SVG Movix по [задаче #414](https://github.com/Celtoman/astro-telekom/issues/414). [План](docs/plans/2026-10-29-public-shell-stability.md), [локальная сверка](docs/research/2026-10-29-public-shell-stability.md). CMS snapshot24 и тексты сохраняются. Внешний выпуск фиксируется отдельно в [current-state](docs/current-state.md).
+Стабилизированы первый кадр шапки и внешние поля страниц, исправлены #410, внутренняя прокрутка сравнения и SVG Movix по [задаче #414](https://github.com/Celtoman/astro-telekom/issues/414). Код `19a96863` прошёл полный gate, CI и выпуск в защищённый test-контур. CMS snapshot24 и тексты сохранены. [Проверки и ограничения](docs/research/2026-10-29-public-shell-stability.md), [current-state](docs/current-state.md).
 
 ## Документация
 

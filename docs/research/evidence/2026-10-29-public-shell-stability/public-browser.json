@@ -1,0 +1,698 @@
+{
+  "checkedAt": "2026-10-29T11:10:14.814Z",
+  "sizes": [
+    {
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "broken": []
+    },
+    {
+      "width": 834,
+      "client": 834,
+      "scroll": 834,
+      "broken": []
+    },
+    {
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "broken": []
+    },
+    {
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "broken": []
+    },
+    {
+      "width": 1000,
+      "client": 1000,
+      "scroll": 1000,
+      "broken": []
+    }
+  ],
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "sharedShell": true,
+      "responsive": [
+        {
+          "width": 1440,
+          "client": 1440,
+          "scroll": 1440,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 40,
+              "right": 1400
+            },
+            {
+              "x": 40,
+              "right": 1400
+            }
+          ],
+          "h1Size": "48px"
+        },
+        {
+          "width": 834,
+          "client": 834,
+          "scroll": 834,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 57,
+              "right": 777
+            },
+            {
+              "x": 57,
+              "right": 777
+            }
+          ],
+          "h1Size": "40px"
+        },
+        {
+          "width": 390,
+          "client": 390,
+          "scroll": 390,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 374
+            },
+            {
+              "x": 16,
+              "right": 374
+            }
+          ],
+          "h1Size": "28px"
+        },
+        {
+          "width": 320,
+          "client": 320,
+          "scroll": 320,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 304
+            },
+            {
+              "x": 16,
+              "right": 304
+            }
+          ],
+          "h1Size": "28px"
+        }
+      ]
+    },
+    {
+      "path": "/kazan/giga-300-tv",
+      "status": 200,
+      "sharedShell": true,
+      "responsive": [
+        {
+          "width": 1440,
+          "client": 1440,
+          "scroll": 1440,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 40,
+              "right": 1400
+            },
+            {
+              "x": 40,
+              "right": 1400
+            }
+          ],
+          "h1Size": "68px"
+        },
+        {
+          "width": 834,
+          "client": 834,
+          "scroll": 834,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 57,
+              "right": 777
+            },
+            {
+              "x": 57,
+              "right": 777
+            }
+          ],
+          "h1Size": "45.87px"
+        },
+        {
+          "width": 390,
+          "client": 390,
+          "scroll": 390,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 374
+            },
+            {
+              "x": 16,
+              "right": 374
+            }
+          ],
+          "h1Size": "40px"
+        },
+        {
+          "width": 320,
+          "client": 320,
+          "scroll": 320,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 304
+            },
+            {
+              "x": 16,
+              "right": 304
+            }
+          ],
+          "h1Size": "40px"
+        }
+      ]
+    },
+    {
+      "path": "/goroda-obsluzhivaniya",
+      "status": 200,
+      "sharedShell": true,
+      "responsive": [
+        {
+          "width": 1440,
+          "client": 1440,
+          "scroll": 1440,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 40,
+              "right": 1400
+            },
+            {
+              "x": 40,
+              "right": 1400
+            }
+          ],
+          "h1Size": "64px"
+        },
+        {
+          "width": 834,
+          "client": 834,
+          "scroll": 834,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 57,
+              "right": 777
+            },
+            {
+              "x": 57,
+              "right": 777
+            }
+          ],
+          "h1Size": "50.04px"
+        },
+        {
+          "width": 390,
+          "client": 390,
+          "scroll": 390,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 374
+            },
+            {
+              "x": 16,
+              "right": 374
+            }
+          ],
+          "h1Size": "36px"
+        },
+        {
+          "width": 320,
+          "client": 320,
+          "scroll": 320,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 304
+            },
+            {
+              "x": 16,
+              "right": 304
+            }
+          ],
+          "h1Size": "36px"
+        }
+      ]
+    },
+    {
+      "path": "/karta-pokrytiya-provaydera",
+      "status": 200,
+      "sharedShell": true,
+      "responsive": [
+        {
+          "width": 1440,
+          "client": 1440,
+          "scroll": 1440,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 40,
+              "right": 1400
+            },
+            {
+              "x": 40,
+              "right": 1400
+            }
+          ],
+          "h1Size": "64px"
+        },
+        {
+          "width": 834,
+          "client": 834,
+          "scroll": 834,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 57,
+              "right": 777
+            },
+            {
+              "x": 57,
+              "right": 777
+            }
+          ],
+          "h1Size": "50.04px"
+        },
+        {
+          "width": 390,
+          "client": 390,
+          "scroll": 390,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 374
+            },
+            {
+              "x": 16,
+              "right": 374
+            }
+          ],
+          "h1Size": "36px"
+        },
+        {
+          "width": 320,
+          "client": 320,
+          "scroll": 320,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 304
+            },
+            {
+              "x": 16,
+              "right": 304
+            }
+          ],
+          "h1Size": "36px"
+        }
+      ]
+    },
+    {
+      "path": "/politika-konfidencialnosti",
+      "status": 200,
+      "sharedShell": true,
+      "responsive": [
+        {
+          "width": 1440,
+          "client": 1440,
+          "scroll": 1440,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 40,
+              "right": 1400
+            },
+            {
+              "x": 40,
+              "right": 1400
+            }
+          ],
+          "h1Size": "64px"
+        },
+        {
+          "width": 834,
+          "client": 834,
+          "scroll": 834,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 57,
+              "right": 777
+            },
+            {
+              "x": 57,
+              "right": 777
+            }
+          ],
+          "h1Size": "50.04px"
+        },
+        {
+          "width": 390,
+          "client": 390,
+          "scroll": 390,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 374
+            },
+            {
+              "x": 16,
+              "right": 374
+            }
+          ],
+          "h1Size": "36px"
+        },
+        {
+          "width": 320,
+          "client": 320,
+          "scroll": 320,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 304
+            },
+            {
+              "x": 16,
+              "right": 304
+            }
+          ],
+          "h1Size": "36px"
+        }
+      ]
+    },
+    {
+      "path": "/soglasie-na-obrabotku-personalnyh-dannyh",
+      "status": 200,
+      "sharedShell": true,
+      "responsive": [
+        {
+          "width": 1440,
+          "client": 1440,
+          "scroll": 1440,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 40,
+              "right": 1400
+            },
+            {
+              "x": 40,
+              "right": 1400
+            }
+          ],
+          "h1Size": "64px"
+        },
+        {
+          "width": 834,
+          "client": 834,
+          "scroll": 834,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 57,
+              "right": 777
+            },
+            {
+              "x": 57,
+              "right": 777
+            }
+          ],
+          "h1Size": "50.04px"
+        },
+        {
+          "width": 390,
+          "client": 390,
+          "scroll": 390,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 374
+            },
+            {
+              "x": 16,
+              "right": 374
+            }
+          ],
+          "h1Size": "36px"
+        },
+        {
+          "width": 320,
+          "client": 320,
+          "scroll": 320,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 304
+            },
+            {
+              "x": 16,
+              "right": 304
+            }
+          ],
+          "h1Size": "36px"
+        }
+      ]
+    },
+    {
+      "path": "/politika-obrabotki-faylov-kuki",
+      "status": 200,
+      "sharedShell": true,
+      "responsive": [
+        {
+          "width": 1440,
+          "client": 1440,
+          "scroll": 1440,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 40,
+              "right": 1400
+            },
+            {
+              "x": 40,
+              "right": 1400
+            }
+          ],
+          "h1Size": "64px"
+        },
+        {
+          "width": 834,
+          "client": 834,
+          "scroll": 834,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 57,
+              "right": 777
+            },
+            {
+              "x": 57,
+              "right": 777
+            }
+          ],
+          "h1Size": "50.04px"
+        },
+        {
+          "width": 390,
+          "client": 390,
+          "scroll": 390,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 374
+            },
+            {
+              "x": 16,
+              "right": 374
+            }
+          ],
+          "h1Size": "36px"
+        },
+        {
+          "width": 320,
+          "client": 320,
+          "scroll": 320,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 304
+            },
+            {
+              "x": 16,
+              "right": 304
+            }
+          ],
+          "h1Size": "36px"
+        }
+      ]
+    },
+    {
+      "path": "/city-home-acceptance-missing",
+      "status": 404,
+      "sharedShell": true,
+      "responsive": [
+        {
+          "width": 1440,
+          "client": 1440,
+          "scroll": 1440,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 40,
+              "right": 1400
+            },
+            {
+              "x": 40,
+              "right": 1400
+            }
+          ],
+          "h1Size": "64px"
+        },
+        {
+          "width": 834,
+          "client": 834,
+          "scroll": 834,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 57,
+              "right": 777
+            },
+            {
+              "x": 57,
+              "right": 777
+            }
+          ],
+          "h1Size": "50.04px"
+        },
+        {
+          "width": 390,
+          "client": 390,
+          "scroll": 390,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 374
+            },
+            {
+              "x": 16,
+              "right": 374
+            }
+          ],
+          "h1Size": "36px"
+        },
+        {
+          "width": 320,
+          "client": 320,
+          "scroll": 320,
+          "legal": "14px",
+          "shell": [
+            {
+              "x": 16,
+              "right": 304
+            },
+            {
+              "x": 16,
+              "right": 304
+            }
+          ],
+          "h1Size": "36px"
+        }
+      ]
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+    "The Content-Security-Policy directive 'child-src' contains the keyword 'none' alongside with other source expressions. The keyword 'none' must be the only source expression in the directive value, otherwise it is ignored.",
+    "The Content-Security-Policy directive 'frame-src' contains the keyword 'none' alongside with other source expressions. The keyword 'none' must be the only source expression in the directive value, otherwise it is ignored.",
+    "Failed to load resource: the server responded with a status of 404 ()"
+  ],
+  "artifactId": "483421ae0990b0574edcf6f71e7ca4601abd97729ced81eea21771829d9a0a0c",
+  "blocks": [
+    "hero",
+    "tariff_grid",
+    "city.comparison",
+    "city.help",
+    "city.benefits",
+    "city.connection_steps",
+    "city.movix",
+    "city.regional_cities",
+    "city.faq",
+    "city.contacts"
+  ],
+  "publicApiBases": [
+    "https://tv-internet-dom.ru/api/v1"
+  ],
+  "filterComparisonIndependent": true,
+  "priceDescending": true,
+  "callbackContextClears": true,
+  "regionalPeers": 2,
+  "regionalAlphabetical": true,
+  "faqPairs": 6,
+  "faqTokensResolved": true,
+  "mobileMenuFocusRestored": true,
+  "callback320": true,
+  "homeSpeedFact": "До 1 Гбит/с",
+  "citySpeedAlternative": {
+    "slug": "abinsk",
+    "max": 800,
+    "actual": "До 800 Мбит/с"
+  },
+  "emptyRegionHidden": {
+    "slug": "michurinsk",
+    "hidden": true
+  },
+  "navigationTargets": [
+    "/",
+    "/moscow?category=INTERNET#tariffs",
+    "/moscow?category=INTERNET_TV#tariffs",
+    "/moscow#tariffs",
+    "/moscow#contacts",
+    "/goroda-obsluzhivaniya",
+    "/politika-konfidencialnosti",
+    "/soglasie-na-obrabotku-personalnyh-dannyh",
+    "/politika-obrabotki-faylov-kuki",
+    "/kazan#address-check",
+    "/kazan?category=INTERNET#tariffs",
+    "/kazan?category=INTERNET_TV#tariffs",
+    "/kazan#tariffs",
+    "/kazan#movix",
+    "/kazan#contacts",
+    "/moscow#address-check",
+    "/moscow#movix",
+    "/moscow#faq"
+  ]
+}

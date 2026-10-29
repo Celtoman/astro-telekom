@@ -1,12 +1,12 @@
 {
   "fullGate": {
     "command": "pnpm check",
-    "passed": 864,
+    "passed": 866,
     "failed": 0,
     "skipped": 0
   },
   "profile": {
-    "passed": 26,
+    "passed": 28,
     "failed": 0
   },
   "astroCheck": {
@@ -23,6 +23,18 @@
     "warnings": 8,
     "disposition": "Existing approved Geist and shadow conventions retained; no redesign"
   },
-  "localArtifact": "93b92c098e4c7fb257e51cccb945480ea91dd4916e568f0b621cbd08d47e6b7d",
-  "release": "pending exact-SHA CI/deployment/CODE/live checks"
+  "localArtifact": "2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9",
+  "release": "verified",
+  "codeCommit": "19a9686365cef313b20369cbfd7ca02de88bbfe0",
+  "ci": "https://github.com/Celtoman/astro-telekom/actions/runs/40861167809",
+  "localBuildTransientIssue": 417,
+  "fontReview": {
+    "critical": 0,
+    "important": 0,
+    "resolvedImportant": 1
+  },
+  "progressiveHtmlReview": {
+    "critical": 0,
+    "important": 0
+  }
 }

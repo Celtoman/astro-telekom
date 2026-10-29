@@ -1,0 +1,55 @@
+{
+  "checkedAt": "2026-10-29T11:28:12.243Z",
+  "codeCommit": "19a9686365cef313b20369cbfd7ca02de88bbfe0",
+  "ci": {
+    "conclusion": "success",
+    "headSha": "19a9686365cef313b20369cbfd7ca02de88bbfe0",
+    "status": "completed",
+    "url": "https://github.com/Celtoman/astro-telekom/actions/runs/40861167809"
+  },
+  "deployment": {
+    "expectedSha": "19a9686365cef313b20369cbfd7ca02de88bbfe0",
+    "ciRun": 40861167809,
+    "deploymentId": "mudm0srkdhd25iq77vpbbvcw",
+    "requestedAt": "2026-10-29T10:59:33.728Z",
+    "source": "coolify MCP",
+    "status": "finished",
+    "commit": "19a9686365cef313b20369cbfd7ca02de88bbfe0",
+    "health": "running:healthy",
+    "checkedAt": "2026-10-29T11:25:00.096Z"
+  },
+  "code": {
+    "checkedAt": "2026-10-29T11:10:28.607Z",
+    "httpStatus": 200,
+    "deploymentId": "mudm0srkdhd25iq77vpbbvcw",
+    "expectedSha": "19a9686365cef313b20369cbfd7ca02de88bbfe0",
+    "result": {
+      "status": "SUCCEEDED",
+      "artifactId": "483421ae0990b0574edcf6f71e7ca4601abd97729ced81eea21771829d9a0a0c",
+      "publicationId": "cmvs82yuw000101o52i6ams8d",
+      "siteId": "cmtuaqqj1000107lkiiiia2xa",
+      "siteRevision": 24,
+      "rendererId": "4c5988a40e9c0fbdfb4150d8b04c1de565d9ccf28ab9e3afb008143a8a432c04",
+      "catalogDigest": "d9b3c8469cdeffccbf3a3ad896ba6979af13cbc6a8e383aa4ca99348b9095d07",
+      "rebuildId": "code-437c28d34e972304e27c88c2eb93c51b95f05943087cb0326be56e140f887e6d",
+      "rebuildRevision": 1,
+      "manifestDigest": "5e4bb0ba9a33b8fa82d60067f4af790933fe6534a2aa3c9beef0b3224c7cc826"
+    }
+  },
+  "cmsPreserved": {
+    "checkedAt": "2026-10-29T11:25:05.921Z",
+    "workingRevision": 24,
+    "publishedRevision": 24,
+    "publicationId": "cmvs82yuw000101o52i6ams8d",
+    "publicDigest": "42af8c9d2be5ab0e2f7043241f3a1946039ccf3806af8a9d4c8c121f178ec858",
+    "tariffDigest": "56345408ce1a8fd830022017d940663ca114051a653d2991efa436428d77b03f",
+    "cities": 207,
+    "tariffs": 3805,
+    "artifactId": "483421ae0990b0574edcf6f71e7ca4601abd97729ced81eea21771829d9a0a0c",
+    "preserved": true
+  },
+  "verified": true,
+  "figmaModified": false,
+  "libraryPublished": false,
+  "externalLeadSubmitted": false
+}
