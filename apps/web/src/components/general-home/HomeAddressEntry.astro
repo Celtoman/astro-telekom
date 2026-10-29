@@ -10,6 +10,8 @@ const addressForm = await Astro.slots.render('address');
 <Fragment set:html={renderAddressEntry(content, { asset: publicAsset, phone, phoneHref, callbackWithinMinutes: Astro.props.callbackWithinMinutes }, addressForm)} />
 <HomeBlockStyles />
 <style is:global>
+  /* Paint the SSR block only after its final child has arrived. */
+  .home-address:not(:has(> [data-address-render-complete])) { visibility: hidden; }
   .home-address { display: grid; grid-template-columns: minmax(0, 928fr) minmax(0, 408fr); align-items: stretch; gap: 24px; }
   .home-address-primary { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; min-height: 368px; min-width: 0; padding: 32px 32px 24px; border-radius: 24px; background: #eaf7ff; }
   .home-address-intro { display: flex; align-items: flex-start; gap: 32px; }

@@ -1,0 +1,170 @@
+{
+  "width": 1440,
+  "path": "/",
+  "reassurance": "24px",
+  "header": {
+    "x": 40,
+    "y": 24,
+    "w": 1360,
+    "h": 128
+  },
+  "footer": {
+    "x": 40,
+    "y": 5965.09375,
+    "w": 1360,
+    "h": 563
+  },
+  "scroll": 1440,
+  "pending": false,
+  "phone": "8-800-250-77-77",
+  "phoneHref": "tel:+78002507777",
+  "city": "Казань",
+  "preloads": [
+    "/__publication_assets/a05c0017938cee4be17ac4bbb8397dad49fdb07e7d3544698d6654ad6488ecc5/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+    "/__publication_assets/a05c0017938cee4be17ac4bbb8397dad49fdb07e7d3544698d6654ad6488ecc5/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+  ],
+  "probe": {
+    "frames": [
+      {
+        "time": 4098.300000000745,
+        "value": {
+          "parts": [
+            {
+              "x": 40,
+              "y": 25.5,
+              "w": 82.625,
+              "h": 36
+            },
+            {
+              "x": 1043.140625,
+              "y": 34.5,
+              "w": 166.34375,
+              "h": 18
+            },
+            {
+              "x": 1233.484375,
+              "y": 34.5,
+              "w": 166.515625,
+              "h": 18
+            },
+            {
+              "x": 1049.6875,
+              "y": 89.5,
+              "w": 167.0625,
+              "h": 37
+            }
+          ],
+          "phone": "8-800-250-77-77",
+          "city": "Казань",
+          "x": 40,
+          "y": 24,
+          "w": 1360,
+          "h": 128
+        }
+      }
+    ],
+    "shifts": [
+      {
+        "value": 0.0019355709876543207,
+        "recent": false,
+        "time": 4362.4000000003725,
+        "sources": [
+          {
+            "node": "address-form",
+            "previous": {
+              "x": 71,
+              "y": 906,
+              "width": 865,
+              "height": 76,
+              "top": 906,
+              "right": 936,
+              "bottom": 982,
+              "left": 71
+            },
+            "current": {
+              "x": 71,
+              "y": 866,
+              "width": 865,
+              "height": 76,
+              "top": 866,
+              "right": 936,
+              "bottom": 942,
+              "left": 71
+            }
+          },
+          {
+            "node": "home-address-form-area",
+            "previous": {
+              "x": 72,
+              "y": 906,
+              "width": 864,
+              "height": 76,
+              "top": 906,
+              "right": 936,
+              "bottom": 982,
+              "left": 72
+            },
+            "current": {
+              "x": 72,
+              "y": 866,
+              "width": 864,
+              "height": 116,
+              "top": 866,
+              "right": 936,
+              "bottom": 982,
+              "left": 72
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "table": null,
+  "movix": [
+    {
+      "wrapper": {
+        "x": 796,
+        "y": 3133,
+        "w": 64,
+        "h": 64
+      },
+      "image": {
+        "x": 796,
+        "y": 3133,
+        "w": 64,
+        "h": 64
+      },
+      "naturalWidth": 0
+    },
+    {
+      "wrapper": {
+        "x": 796,
+        "y": 3217,
+        "w": 64,
+        "h": 64
+      },
+      "image": {
+        "x": 796,
+        "y": 3217,
+        "w": 64,
+        "h": 64
+      },
+      "naturalWidth": 0
+    },
+    {
+      "wrapper": {
+        "x": 796,
+        "y": 3301,
+        "w": 64,
+        "h": 64
+      },
+      "image": {
+        "x": 796,
+        "y": 3301,
+        "w": 64,
+        "h": 64
+      },
+      "naturalWidth": 0
+    }
+  ]
+}

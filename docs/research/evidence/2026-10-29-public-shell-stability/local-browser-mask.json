@@ -1,0 +1,1409 @@
+{
+  "checkedAt": "2026-10-29T09:28:14.621Z",
+  "origin": "http://127.0.0.1:4392",
+  "cold": [
+    {
+      "width": 1440,
+      "path": "/",
+      "cls": 0,
+      "addressState": {
+        "visibility": "visible",
+        "complete": true
+      },
+      "reassurance": "24px",
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "footer": {
+        "x": 40,
+        "y": 5641.09375,
+        "w": 1360,
+        "h": 563
+      },
+      "scroll": 1440,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 516.5999999996275,
+            "value": {
+              "parts": [
+                {
+                  "x": 40,
+                  "y": 25.5,
+                  "w": 82.625,
+                  "h": 36
+                },
+                {
+                  "x": 1043.140625,
+                  "y": 34.5,
+                  "w": 166.34375,
+                  "h": 18
+                },
+                {
+                  "x": 1233.484375,
+                  "y": 34.5,
+                  "w": 166.515625,
+                  "h": 18
+                },
+                {
+                  "x": 1049.6875,
+                  "y": 89.5,
+                  "w": 167.0625,
+                  "h": 37
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 40,
+              "y": 24,
+              "w": 1360,
+              "h": 128
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": null,
+      "movix": [
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 3133,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 3133,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 3217,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 3217,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 3301,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 3301,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/kazan",
+      "cls": 0,
+      "addressState": null,
+      "reassurance": null,
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "footer": {
+        "x": 40,
+        "y": 9049.09375,
+        "w": 1360,
+        "h": 563
+      },
+      "scroll": 1440,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 605.1000000014901,
+            "value": {
+              "parts": [
+                {
+                  "x": 40,
+                  "y": 25.5,
+                  "w": 82.625,
+                  "h": 36
+                },
+                {
+                  "x": 1043.140625,
+                  "y": 34.5,
+                  "w": 166.34375,
+                  "h": 18
+                },
+                {
+                  "x": 1233.484375,
+                  "y": 34.5,
+                  "w": 166.515625,
+                  "h": 18
+                },
+                {
+                  "x": 1049.6875,
+                  "y": 89.5,
+                  "w": 167.0625,
+                  "h": 37
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 40,
+              "y": 24,
+              "w": 1360,
+              "h": 128
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": {
+        "clientH": 2008,
+        "scrollH": 2008,
+        "clientW": 1288,
+        "scrollW": 1288
+      },
+      "movix": [
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 7251,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 7251,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 7335,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 7335,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 7419,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 7419,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        }
+      ]
+    },
+    {
+      "width": 834,
+      "path": "/",
+      "cls": 0,
+      "addressState": {
+        "visibility": "visible",
+        "complete": true
+      },
+      "reassurance": "24px",
+      "header": {
+        "x": 57,
+        "y": 24,
+        "w": 720,
+        "h": 120
+      },
+      "footer": {
+        "x": 57,
+        "y": 8412.296875,
+        "w": 720,
+        "h": 643
+      },
+      "scroll": 834,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 473.19999999925494,
+            "value": {
+              "parts": [
+                {
+                  "x": 57,
+                  "y": 25.5,
+                  "w": 82.625,
+                  "h": 36
+                },
+                {
+                  "x": 424.140625,
+                  "y": 34.5,
+                  "w": 166.34375,
+                  "h": 18
+                },
+                {
+                  "x": 610.484375,
+                  "y": 34.5,
+                  "w": 166.515625,
+                  "h": 18
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 57,
+              "y": 24,
+              "w": 720,
+              "h": 120
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": null,
+      "movix": [
+        {
+          "wrapper": {
+            "x": 89,
+            "y": 4550,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 89,
+            "y": 4550,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 89,
+            "y": 4634,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 89,
+            "y": 4634,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 89,
+            "y": 4718,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 89,
+            "y": 4718,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        }
+      ]
+    },
+    {
+      "width": 834,
+      "path": "/kazan",
+      "cls": 0,
+      "addressState": null,
+      "reassurance": null,
+      "header": {
+        "x": 57,
+        "y": 24,
+        "w": 720,
+        "h": 120
+      },
+      "footer": {
+        "x": 57,
+        "y": 11233.296875,
+        "w": 720,
+        "h": 643
+      },
+      "scroll": 834,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 553.7000000011176,
+            "value": {
+              "parts": [
+                {
+                  "x": 57,
+                  "y": 25.5,
+                  "w": 82.625,
+                  "h": 36
+                },
+                {
+                  "x": 424.140625,
+                  "y": 34.5,
+                  "w": 166.34375,
+                  "h": 18
+                },
+                {
+                  "x": 610.484375,
+                  "y": 34.5,
+                  "w": 166.515625,
+                  "h": 18
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 57,
+              "y": 24,
+              "w": 720,
+              "h": 120
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": {
+        "clientH": 2008,
+        "scrollH": 2008,
+        "clientW": 672,
+        "scrollW": 1288
+      },
+      "movix": [
+        {
+          "wrapper": {
+            "x": 89,
+            "y": 8968,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 89,
+            "y": 8968,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 89,
+            "y": 9052,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 89,
+            "y": 9052,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 89,
+            "y": 9136,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 89,
+            "y": 9136,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/",
+      "cls": 0,
+      "addressState": {
+        "visibility": "visible",
+        "complete": true
+      },
+      "reassurance": "20px",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 358,
+        "h": 108
+      },
+      "footer": {
+        "x": 16,
+        "y": 9465.890625,
+        "w": 358,
+        "h": 1236
+      },
+      "scroll": 390,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 450.59999999962747,
+            "value": {
+              "parts": [
+                {
+                  "x": 16,
+                  "y": 24,
+                  "w": 82.625,
+                  "h": 35
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 182.765625,
+                  "y": 79,
+                  "w": 135.234375,
+                  "h": 34
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 16,
+              "y": 24,
+              "w": 358,
+              "h": 108
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": null,
+      "movix": [
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 4653,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 4653,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 4817,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 4817,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 4981,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 4981,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/kazan",
+      "cls": 0,
+      "addressState": null,
+      "reassurance": null,
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 358,
+        "h": 108
+      },
+      "footer": {
+        "x": 16,
+        "y": 9003.890625,
+        "w": 358,
+        "h": 1236
+      },
+      "scroll": 390,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 568.5,
+            "value": {
+              "parts": [
+                {
+                  "x": 16,
+                  "y": 24,
+                  "w": 82.625,
+                  "h": 35
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 182.765625,
+                  "y": 79,
+                  "w": 135.234375,
+                  "h": 34
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 16,
+              "y": 24,
+              "w": 358,
+              "h": 108
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": {
+        "clientH": 1996,
+        "scrollH": 1996,
+        "clientW": 326,
+        "scrollW": 914
+      },
+      "movix": [
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 6267,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 6267,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 6431,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 6431,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 6595,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 6595,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/",
+      "cls": 0,
+      "addressState": {
+        "visibility": "visible",
+        "complete": true
+      },
+      "reassurance": "20px",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 288,
+        "h": 108
+      },
+      "footer": {
+        "x": 16,
+        "y": 11027.109375,
+        "w": 288,
+        "h": 1276
+      },
+      "scroll": 320,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 455.90000000037253,
+            "value": {
+              "parts": [
+                {
+                  "x": 16,
+                  "y": 24,
+                  "w": 82.625,
+                  "h": 35
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 156.65625,
+                  "y": 80.5,
+                  "w": 95.34375,
+                  "h": 31
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 16,
+              "y": 24,
+              "w": 288,
+              "h": 108
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": null,
+      "movix": [
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 5511,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 5511,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 5697,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 5697,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 5883,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 5883,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "path": "/kazan",
+      "cls": 0,
+      "addressState": null,
+      "reassurance": null,
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 288,
+        "h": 108
+      },
+      "footer": {
+        "x": 16,
+        "y": 9834.109375,
+        "w": 288,
+        "h": 1276
+      },
+      "scroll": 320,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/1e595605eea2a18b600ad06718fe60686199156d2b753eec77e51e6bb865b714/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 608.5999999996275,
+            "value": {
+              "parts": [
+                {
+                  "x": 16,
+                  "y": 24,
+                  "w": 82.625,
+                  "h": 35
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 156.65625,
+                  "y": 80.5,
+                  "w": 95.34375,
+                  "h": 31
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 16,
+              "y": 24,
+              "w": 288,
+              "h": 108
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": {
+        "clientH": 1996,
+        "scrollH": 1996,
+        "clientW": 256,
+        "scrollW": 914
+      },
+      "movix": [
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 6780,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 6780,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 6966,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 6966,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 7152,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 7152,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        }
+      ]
+    }
+  ],
+  "legal": [
+    {
+      "width": 1440,
+      "path": "/politika-konfidencialnosti",
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "scroll": 1440,
+      "title": "Политика конфиденциальности"
+    },
+    {
+      "width": 1440,
+      "path": "/soglasie-na-obrabotku-personalnyh-dannyh",
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "scroll": 1440,
+      "title": "Согласие на обработку персональных данных"
+    },
+    {
+      "width": 1440,
+      "path": "/politika-obrabotki-faylov-kuki",
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "scroll": 1440,
+      "title": "Политика обработки файлов cookie"
+    },
+    {
+      "width": 834,
+      "path": "/politika-konfidencialnosti",
+      "header": {
+        "x": 57,
+        "y": 24,
+        "w": 720,
+        "h": 120
+      },
+      "scroll": 834,
+      "title": "Политика конфиденциальности"
+    },
+    {
+      "width": 834,
+      "path": "/soglasie-na-obrabotku-personalnyh-dannyh",
+      "header": {
+        "x": 57,
+        "y": 24,
+        "w": 720,
+        "h": 120
+      },
+      "scroll": 834,
+      "title": "Согласие на обработку персональных данных"
+    },
+    {
+      "width": 834,
+      "path": "/politika-obrabotki-faylov-kuki",
+      "header": {
+        "x": 57,
+        "y": 24,
+        "w": 720,
+        "h": 120
+      },
+      "scroll": 834,
+      "title": "Политика обработки файлов cookie"
+    },
+    {
+      "width": 390,
+      "path": "/politika-konfidencialnosti",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 358,
+        "h": 108
+      },
+      "scroll": 390,
+      "title": "Политика конфиденциальности"
+    },
+    {
+      "width": 390,
+      "path": "/soglasie-na-obrabotku-personalnyh-dannyh",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 358,
+        "h": 108
+      },
+      "scroll": 390,
+      "title": "Согласие на обработку персональных данных"
+    },
+    {
+      "width": 390,
+      "path": "/politika-obrabotki-faylov-kuki",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 358,
+        "h": 108
+      },
+      "scroll": 390,
+      "title": "Политика обработки файлов cookie"
+    },
+    {
+      "width": 320,
+      "path": "/politika-konfidencialnosti",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 288,
+        "h": 108
+      },
+      "scroll": 320,
+      "title": "Политика конфиденциальности"
+    },
+    {
+      "width": 320,
+      "path": "/soglasie-na-obrabotku-personalnyh-dannyh",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 288,
+        "h": 108
+      },
+      "scroll": 320,
+      "title": "Согласие на обработку персональных данных"
+    },
+    {
+      "width": 320,
+      "path": "/politika-obrabotki-faylov-kuki",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 288,
+        "h": 108
+      },
+      "scroll": 320,
+      "title": "Политика обработки файлов cookie"
+    }
+  ],
+  "states": [
+    {
+      "state": "expired",
+      "phone": "8-800-555-72-44",
+      "pending": false,
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 288,
+        "h": 108
+      }
+    },
+    {
+      "state": "blocked",
+      "phone": "8-800-555-72-44",
+      "pending": false,
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 288,
+        "h": 108
+      }
+    },
+    {
+      "state": "no-js",
+      "phone": "8-800-555-72-44",
+      "pending": false,
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 288,
+        "h": 108
+      }
+    }
+  ],
+  "pageErrors": [],
+  "subscriberEvent": true,
+  "noJsHome": true,
+  "warmHeaderParts": [
+    {
+      "width": 1440,
+      "path": "/",
+      "parts": [
+        {
+          "x": 40,
+          "y": 25.5,
+          "w": 85.5625,
+          "h": 36
+        },
+        {
+          "x": 1031.5625,
+          "y": 34.5,
+          "w": 171.4375,
+          "h": 18
+        },
+        {
+          "x": 1227,
+          "y": 34.5,
+          "w": 173,
+          "h": 18
+        },
+        {
+          "x": 1031.265625,
+          "y": 89.5,
+          "w": 176.453125,
+          "h": 37
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/kazan",
+      "parts": [
+        {
+          "x": 40,
+          "y": 25.5,
+          "w": 85.5625,
+          "h": 36
+        },
+        {
+          "x": 1031.5625,
+          "y": 34.5,
+          "w": 171.4375,
+          "h": 18
+        },
+        {
+          "x": 1227,
+          "y": 34.5,
+          "w": 173,
+          "h": 18
+        },
+        {
+          "x": 1031.265625,
+          "y": 89.5,
+          "w": 176.453125,
+          "h": 37
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/politika-konfidencialnosti",
+      "parts": [
+        {
+          "x": 40,
+          "y": 25.5,
+          "w": 85.5625,
+          "h": 36
+        },
+        {
+          "x": 1031.5625,
+          "y": 34.5,
+          "w": 171.4375,
+          "h": 18
+        },
+        {
+          "x": 1227,
+          "y": 34.5,
+          "w": 173,
+          "h": 18
+        },
+        {
+          "x": 1031.265625,
+          "y": 89.5,
+          "w": 176.453125,
+          "h": 37
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/",
+      "parts": [
+        {
+          "x": 40,
+          "y": 25.5,
+          "w": 85.5625,
+          "h": 36
+        },
+        {
+          "x": 1031.5625,
+          "y": 34.5,
+          "w": 171.4375,
+          "h": 18
+        },
+        {
+          "x": 1227,
+          "y": 34.5,
+          "w": 173,
+          "h": 18
+        },
+        {
+          "x": 1031.265625,
+          "y": 89.5,
+          "w": 176.453125,
+          "h": 37
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/",
+      "parts": [
+        {
+          "x": 16,
+          "y": 24,
+          "w": 85.5625,
+          "h": 35
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "x": 175.03125,
+          "y": 80,
+          "w": 142.96875,
+          "h": 32
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/kazan",
+      "parts": [
+        {
+          "x": 16,
+          "y": 24,
+          "w": 85.5625,
+          "h": 35
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "x": 175.03125,
+          "y": 80,
+          "w": 142.96875,
+          "h": 32
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/politika-konfidencialnosti",
+      "parts": [
+        {
+          "x": 16,
+          "y": 24,
+          "w": 85.5625,
+          "h": 35
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "x": 175.03125,
+          "y": 80,
+          "w": 142.96875,
+          "h": 32
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/",
+      "parts": [
+        {
+          "x": 16,
+          "y": 24,
+          "w": 85.5625,
+          "h": 35
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "x": 175.03125,
+          "y": 80,
+          "w": 142.96875,
+          "h": 32
+        }
+      ]
+    }
+  ],
+  "warmNavigation": true
+}
