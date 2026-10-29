@@ -4,6 +4,7 @@ import { renderCityComparison, renderRegionalCities, renderCityContacts, project
 import { publicDisplayForCatalog } from '../../../web/src/lib/public-display.ts'
 import { heroFacts } from '../../../web/src/data/hero-facts.ts'
 import { legalSections } from '../../../web/src/data/legal-pages.ts'
+import { renderLegalDocument } from '../../../web/src/lib/legal-document-render.ts'
 import { parseRedTitle } from '../../../api/src/home-hero-model.ts'
 import { generalHomeCatalog, generalHomeBlock } from '../../../web/src/data/general-home.ts'
 import { renderProviderAbout, renderBenefits, renderConnectionSteps, renderMovix, renderMorePossibilities, renderConnectionHelp, renderCityDirectory, renderHomeFaq, renderAddressEntry } from '../../../web/src/lib/general-home-render.ts'
@@ -164,6 +165,18 @@ function renderGlobal(catalog, route) {
   if (route.pageType === 'CITIES') return renderCities(catalog, page)
   const coverage = route.pageType === 'COVERAGE', cities = list(catalog.cities)
   const sections = legalSections(route.pageType, text(catalog.site?.domain, 'tv-internet-dom.ru'))
+  if (['PRIVACY', 'PERSONAL_DATA_CONSENT', 'COOKIE_POLICY'].includes(route.pageType)) {
+    return wrap('legal', renderLegalDocument({
+      title: typeof page.title === 'string' ? page.title : '',
+      introduction: !sections.length && typeof page.content?.text === 'string' ? page.content.text : '',
+      sections: [...sections, ...list(page.blocks).filter(block => block.blockType === 'rich_text').map(block => ({
+        title: typeof block.data?.title === 'string' ? block.data.title : '',
+        paragraphs: typeof block.data?.text === 'string' && block.data.text ? [block.data.text] : [],
+      }))],
+      interactive: false,
+      asset: path => asset(catalog, path),
+    }))
+  }
   return `<section class="hero"><div class="container"><span class="eyebrow">Дом.ру</span><h1>${html(page.title)}</h1>${coverage && page.content?.text ? `<p class="lead">${html(page.content.text)}</p>` : ''}</div></section>` + (coverage ? `<section class="section container"><h2>Проверка подключения по городам</h2>${cities.length ? `<div class="grid">${cities.map(city => `<article class="card"><h3>${html(city.name)}</h3><p>Откройте страницу города и укажите адрес для проверки технической возможности.</p>${button('Проверить адрес →', 'card-link link-button')}</article>`).join('')}</div>` : '<p class="lead">Опубликованных городов пока нет.</p>'}</section>` : `<section class="section container legal-copy">${!sections.length && page.content?.text ? `<p>${html(page.content.text)}</p>` : ''}${sections.map(section => `<section><h2>${html(section.title)}</h2>${section.paragraphs.map(paragraph => `<p>${html(paragraph)}</p>`).join('')}</section>`).join('')}${list(page.blocks).filter(block => block.blockType === 'rich_text').map(block => `<section>${block.data?.title ? `<h2>${html(block.data.title)}</h2>` : ''}${block.data?.text ? `<p>${html(block.data.text)}</p>` : ''}</section>`).join('')}${!sections.length && !page.content?.text && !list(page.blocks).length ? '<p class="lead">Содержание страницы пока не опубликовано.</p>' : ''}</section>`)
 }
 export function previewStyleText(publicStyles) {

@@ -1,0 +1,34 @@
+{
+  "webCheck": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "adminCheck": {
+    "errors": 0,
+    "warnings": 0,
+    "hints": 2
+  },
+  "adminBuild": "passed",
+  "publicBuild": "124-route immutable fixture",
+  "profile": {
+    "passed": 24,
+    "failed": 0
+  },
+  "legalCases": 15,
+  "noJsCases": 3,
+  "previewCases": 2,
+  "transitions": 4,
+  "headerFirstVisibleContext": "Kazan/support phone in every captured frame",
+  "svgBytesUnchanged": true,
+  "fullGateRun": false,
+  "committed": true,
+  "pushed": false,
+  "deployed": false,
+  "libraryPublished": false,
+  "cmsSaved": false,
+  "finalProfileRerun": {
+    "passed": 13,
+    "failed": 0
+  },
+  "finalAdminBuild": "passed"
+}

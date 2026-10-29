@@ -10,6 +10,12 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
+| TD-192 | [#420](https://github.com/Celtoman/astro-telekom/issues/420) 🟢 | Поле над шапкой ошибочно перенесено из макета |
+| TD-193 | [#423](https://github.com/Celtoman/astro-telekom/issues/423) 🟢 | Первый кадр каталога меняет список после JS-инициализации |
+| TD-194 | [#424](https://github.com/Celtoman/astro-telekom/issues/424) 🟢 | Иконка телевидения в Hero не совпадает со Screens |
+| TD-195 | [#425](https://github.com/Celtoman/astro-telekom/issues/425) 🟢 | Вертикальный ритм мобильного футера отличается от Screens |
+| TD-196 | [#426](https://github.com/Celtoman/astro-telekom/issues/426) 🟢 | Принятый Screens хранит дефектные иконки Movix |
+| TD-197 | [#427](https://github.com/Celtoman/astro-telekom/issues/427) 🟢 | Коллизия исторического BLK-0032 между файлами |
 | TD-180 | [#402](https://github.com/Celtoman/astro-telekom/issues/402) ✅ | Миграция0062 сохраняет владельческие подписи HOME в общих фактах |
 | TD-181 | [#404](https://github.com/Celtoman/astro-telekom/issues/404) ✅ | Стабильный порядок блоков в audit/content revisions CMS |
 | TD-182 | [#405](https://github.com/Celtoman/astro-telekom/issues/405) ✅ | Исправлены CITY overflow/tie/CSP assets, recovery links, callback context и preview CTA |

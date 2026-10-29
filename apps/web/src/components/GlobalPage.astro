@@ -4,6 +4,7 @@ import { loadSiteData, pageMeta, seoMeta } from '../data/site';
 import { legalSections } from '../data/legal-pages';
 import CitiesDirectory from './CitiesDirectory.astro';
 import AddressForm from './AddressForm.astro';
+import LegalDocument from './LegalDocument.astro';
 
 interface Props {
   type: 'COVERAGE' | 'CITIES' | 'PRIVACY' | 'PERSONAL_DATA_CONSENT' | 'COOKIE_POLICY';
@@ -43,6 +44,11 @@ const richTextBlocks = (page.blocks || []).filter((block) => block.blockType ===
 const isCoverage = type === 'COVERAGE';
 const domain = Astro.site?.hostname || 'tv-internet-dom.ru';
 const versionedLegalSections = legalSections(type, domain);
+const isLegal = ['PRIVACY', 'PERSONAL_DATA_CONSENT', 'COOKIE_POLICY'].includes(type);
+const documentSections = [...versionedLegalSections, ...richTextBlocks.map(block => ({
+  title: typeof block.data.title === 'string' ? block.data.title : '',
+  paragraphs: typeof block.data.text === 'string' && block.data.text ? [block.data.text] : [],
+}))];
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 const publicSiteSlug = import.meta.env.PUBLIC_SITE_SLUG || 'domru-site';
 const coverageDialogId = 'address-entry-coverage';
@@ -50,14 +56,18 @@ const defaultCoverageCity = cities[0];
 ---
 
 <BaseLayout title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} indexable={meta.indexState !== 'NOINDEX'} {site}>
-  {type === 'CITIES' ? <CitiesDirectory {cities} intro={contentText} /> : <section class="hero">
+  {isLegal ? <LegalDocument
+    title={page.title || defaults.title}
+    introduction={versionedLegalSections.length === 0 ? contentText : ''}
+    sections={documentSections}
+  /> : type === 'CITIES' ? <CitiesDirectory {cities} intro={contentText} /> : <section class="hero">
     <div class="container">
       <span class="eyebrow">Дом.ру</span>
       <h1>{page.title || defaults.title}</h1>
       {isCoverage && contentText && <p class="lead">{contentText}</p>}
     </div>
   </section>}
-  {isCoverage ? <section class="section container">
+  {isCoverage && <section class="section container">
     <h2>Проверка подключения по городам</h2>
     {cities.length > 0 ? <div class="grid">{cities.map((city) => <article class="card">
       <h3>{city.name}</h3>
@@ -70,15 +80,6 @@ const defaultCoverageCity = cities[0];
         aria-label={`Проверить адрес в городе ${city.name}`}
       >Проверить адрес →</button>
     </article>)}</div> : <p class="lead">Опубликованных городов пока нет.</p>}
-  </section> : type !== 'CITIES' && <section class="section container legal-copy">
-    {contentText && versionedLegalSections.length === 0 && <p>{contentText}</p>}
-    {versionedLegalSections.map((section) => <section><h2>{section.title}</h2>{section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}</section>)}
-    {richTextBlocks.map((block) => {
-      const title = typeof block.data.title === 'string' ? block.data.title : '';
-      const text = typeof block.data.text === 'string' ? block.data.text : '';
-      return <section>{title && <h2>{title}</h2>}{text && <p>{text}</p>}</section>;
-    })}
-    {!contentText && versionedLegalSections.length === 0 && richTextBlocks.length === 0 && <p class="lead">Содержание страницы пока не опубликовано.</p>}
   </section>}
   {isCoverage && defaultCoverageCity && (
     <AddressForm
@@ -95,7 +96,4 @@ const defaultCoverageCity = cities[0];
 
 <style is:global>
   .link-button { border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; }
-  .legal-copy { max-width: 880px; }
-  .legal-copy section + section { margin-top: 32px; }
-  .legal-copy p { color: #526071; font-size: 18px; line-height: 1.7; white-space: pre-line; }
 </style>
