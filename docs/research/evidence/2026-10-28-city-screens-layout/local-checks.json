@@ -1,9 +1,9 @@
 {
   "release": {
-    "commit": false,
-    "push": false,
-    "deployment": false,
-    "reason": "Waiting for commit, exact CI and external acceptance"
+    "commit": "e47ca57aeb3dc579cf122e1631b776ac8bd81f23",
+    "push": true,
+    "deployment": "xwuvpsx55uyvkikwpcbwdnx3",
+    "verified": true
   },
   "cms": {
     "checkedAt": "2026-10-28T19:21:57.274Z",
@@ -37,7 +37,7 @@
     "presentationExpectationSuite": 1,
     "presentationExpectation": "updated to Screens 8-800 display; original tel targets still asserted",
     "rerunRequired": true,
-    "finalRun": "in progress after Docker recovery"
+    "finalRun": "superseded by successful fullGate"
   },
   "fullGate": {
     "command": "pnpm check",
@@ -46,5 +46,9 @@
     "passed": 861,
     "failed": 0,
     "skipped": 0
-  }
+  },
+  "knownUnrelatedIssues": [
+    280,
+    410
+  ]
 }

@@ -1,0 +1,1089 @@
+{
+  "checkedAt": "2026-10-29T06:07:39.251Z",
+  "url": "https://tv-internet-dom.ru/kazan",
+  "layouts": [
+    {
+      "width": 1440,
+      "client": 1440,
+      "scroll": 1440,
+      "height": 9677,
+      "bodyPadding": "24px 0px",
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "hero": {
+        "x": 40,
+        "y": 176,
+        "w": 1360,
+        "h": 522
+      },
+      "heroCard": {
+        "x": 40,
+        "y": 176,
+        "w": 1360,
+        "h": 522
+      },
+      "heroMedia": {
+        "x": 808,
+        "y": 224,
+        "w": 544,
+        "h": 426
+      },
+      "region": {
+        "x": 88,
+        "y": 7901,
+        "w": 1264,
+        "h": 48,
+        "columns": "624px 624px",
+        "minHeight": "auto",
+        "items": [
+          {
+            "x": 88,
+            "y": 7901,
+            "w": 624,
+            "h": 48
+          },
+          {
+            "x": 728,
+            "y": 7901,
+            "w": 624,
+            "h": 48
+          }
+        ]
+      },
+      "help": {
+        "x": 40,
+        "y": 5512,
+        "w": 1360,
+        "h": 343
+      },
+      "helpPhone": {
+        "x": 140,
+        "y": 5736,
+        "w": 204.765625,
+        "h": 29,
+        "size": "24px",
+        "line": "29px",
+        "weight": "700",
+        "padding": "0px",
+        "display": "block",
+        "whiteSpace": "normal"
+      },
+      "benefit": {
+        "card": {
+          "x": 88,
+          "y": 5997,
+          "w": 410.65625,
+          "h": 252
+        },
+        "icon": {
+          "x": 112,
+          "y": 6021,
+          "w": 48,
+          "h": 48
+        },
+        "heading": {
+          "x": 176,
+          "y": 6032.5,
+          "w": 298.65625,
+          "h": 25
+        },
+        "viewport": {
+          "x": 88,
+          "y": 5997,
+          "w": 1264,
+          "h": 498
+        }
+      },
+      "footer": {
+        "x": 40,
+        "y": 9090,
+        "w": 1360,
+        "h": 563,
+        "legal": {
+          "x": 80,
+          "y": 9553,
+          "w": 880,
+          "h": 20,
+          "size": "14px",
+          "line": "20px",
+          "weight": "400",
+          "padding": "0px",
+          "display": "block",
+          "whiteSpace": "normal"
+        },
+        "link": {
+          "x": 80,
+          "y": 9166,
+          "w": 204.765625,
+          "h": 29,
+          "size": "24px",
+          "line": "29px",
+          "weight": "700",
+          "padding": "0px",
+          "display": "block",
+          "whiteSpace": "normal"
+        },
+        "linkCount": 9
+      },
+      "sections": [
+        {
+          "key": "header",
+          "x": 40,
+          "y": 24,
+          "w": 1360,
+          "h": 128
+        },
+        {
+          "key": "hero",
+          "x": 40,
+          "y": 176,
+          "w": 1360,
+          "h": 522
+        },
+        {
+          "key": "tariff_grid",
+          "x": 40,
+          "y": 722,
+          "w": 1360,
+          "h": 2580
+        },
+        {
+          "key": "city.comparison",
+          "x": 40,
+          "y": 3326,
+          "w": 1360,
+          "h": 2162
+        },
+        {
+          "key": "city.help",
+          "x": 40,
+          "y": 5512,
+          "w": 1360,
+          "h": 343
+        },
+        {
+          "key": "city.benefits",
+          "x": 40,
+          "y": 5879,
+          "w": 1360,
+          "h": 664
+        },
+        {
+          "key": "city.connection_steps",
+          "x": 40,
+          "y": 6567,
+          "w": 1360,
+          "h": 494
+        },
+        {
+          "key": "city.movix",
+          "x": 40,
+          "y": 7085,
+          "w": 1360,
+          "h": 598
+        },
+        {
+          "key": "city.regional_cities",
+          "x": 40,
+          "y": 7707,
+          "w": 1360,
+          "h": 358
+        },
+        {
+          "key": "city.faq",
+          "x": 40,
+          "y": 8089,
+          "w": 1360,
+          "h": 534
+        },
+        {
+          "key": "city.contacts",
+          "x": 40,
+          "y": 8647,
+          "w": 1360,
+          "h": 419
+        },
+        {
+          "key": "footer",
+          "x": 40,
+          "y": 9090,
+          "w": 1360,
+          "h": 563
+        }
+      ],
+      "broken": [],
+      "tableRows": 22
+    },
+    {
+      "width": 834,
+      "client": 834,
+      "scroll": 834,
+      "height": 11940,
+      "bodyPadding": "24px 0px",
+      "header": {
+        "x": 57,
+        "y": 24,
+        "w": 720,
+        "h": 120
+      },
+      "hero": {
+        "x": 57,
+        "y": 168,
+        "w": 720,
+        "h": 724
+      },
+      "heroCard": {
+        "x": 57,
+        "y": 168,
+        "w": 720,
+        "h": 724
+      },
+      "heroMedia": {
+        "x": 89,
+        "y": 590,
+        "w": 656,
+        "h": 270
+      },
+      "region": {
+        "x": 89,
+        "y": 10044.296875,
+        "w": 656,
+        "h": 48,
+        "columns": "320px 320px",
+        "minHeight": "auto",
+        "items": [
+          {
+            "x": 89,
+            "y": 10044.296875,
+            "w": 320,
+            "h": 48
+          },
+          {
+            "x": 425,
+            "y": 10044.296875,
+            "w": 320,
+            "h": 48
+          }
+        ]
+      },
+      "help": {
+        "x": 57,
+        "y": 6688,
+        "w": 720,
+        "h": 363
+      },
+      "helpPhone": {
+        "x": 149,
+        "y": 6946,
+        "w": 204.765625,
+        "h": 29,
+        "size": "24px",
+        "line": "29px",
+        "weight": "700",
+        "padding": "0px",
+        "display": "block",
+        "whiteSpace": "normal"
+      },
+      "benefit": {
+        "card": {
+          "x": 89,
+          "y": 7207,
+          "w": 320,
+          "h": 278
+        },
+        "icon": {
+          "x": 113,
+          "y": 7232,
+          "w": 48,
+          "h": 48
+        },
+        "heading": {
+          "x": 177,
+          "y": 7231,
+          "w": 208,
+          "h": 50
+        },
+        "viewport": {
+          "x": 89,
+          "y": 7207,
+          "w": 656,
+          "h": 843
+        }
+      },
+      "footer": {
+        "x": 57,
+        "y": 11233.296875,
+        "w": 720,
+        "h": 683,
+        "legal": {
+          "x": 81,
+          "y": 11776.296875,
+          "w": 672,
+          "h": 40,
+          "size": "14px",
+          "line": "20px",
+          "weight": "400",
+          "padding": "0px",
+          "display": "block",
+          "whiteSpace": "normal"
+        },
+        "link": {
+          "x": 81,
+          "y": 11309.296875,
+          "w": 204.765625,
+          "h": 29,
+          "size": "24px",
+          "line": "29px",
+          "weight": "700",
+          "padding": "0px",
+          "display": "block",
+          "whiteSpace": "normal"
+        },
+        "linkCount": 8
+      },
+      "sections": [
+        {
+          "key": "header",
+          "x": 57,
+          "y": 24,
+          "w": 720,
+          "h": 120
+        },
+        {
+          "key": "hero",
+          "x": 57,
+          "y": 168,
+          "w": 720,
+          "h": 724
+        },
+        {
+          "key": "tariff_grid",
+          "x": 57,
+          "y": 916,
+          "w": 720,
+          "h": 3518
+        },
+        {
+          "key": "city.comparison",
+          "x": 57,
+          "y": 4458,
+          "w": 720,
+          "h": 2206
+        },
+        {
+          "key": "city.help",
+          "x": 57,
+          "y": 6688,
+          "w": 720,
+          "h": 363
+        },
+        {
+          "key": "city.benefits",
+          "x": 57,
+          "y": 7075,
+          "w": 720,
+          "h": 1007
+        },
+        {
+          "key": "city.connection_steps",
+          "x": 57,
+          "y": 8106,
+          "w": 720,
+          "h": 658
+        },
+        {
+          "key": "city.movix",
+          "x": 57,
+          "y": 8788,
+          "w": 720,
+          "h": 1054.296875
+        },
+        {
+          "key": "city.regional_cities",
+          "x": 57,
+          "y": 9866.296875,
+          "w": 720,
+          "h": 326
+        },
+        {
+          "key": "city.faq",
+          "x": 57,
+          "y": 10216.296875,
+          "w": 720,
+          "h": 518
+        },
+        {
+          "key": "city.contacts",
+          "x": 57,
+          "y": 10758.296875,
+          "w": 720,
+          "h": 451
+        },
+        {
+          "key": "footer",
+          "x": 57,
+          "y": 11233.296875,
+          "w": 720,
+          "h": 683
+        }
+      ],
+      "broken": [],
+      "tableRows": 22
+    },
+    {
+      "width": 390,
+      "client": 390,
+      "scroll": 390,
+      "height": 10321,
+      "bodyPadding": "24px 0px",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 358,
+        "h": 108
+      },
+      "hero": {
+        "x": 16,
+        "y": 156,
+        "w": 358,
+        "h": 673
+      },
+      "heroCard": {
+        "x": 16,
+        "y": 156,
+        "w": 358,
+        "h": 673
+      },
+      "heroMedia": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "region": {
+        "x": 36,
+        "y": 7464.890625,
+        "w": 318,
+        "h": 72,
+        "columns": "151px 151px",
+        "minHeight": "auto",
+        "items": [
+          {
+            "x": 36,
+            "y": 7464.890625,
+            "w": 151,
+            "h": 72
+          },
+          {
+            "x": 203,
+            "y": 7464.890625,
+            "w": 151,
+            "h": 72
+          }
+        ]
+      },
+      "help": {
+        "x": 16,
+        "y": 4113,
+        "w": 358,
+        "h": 660
+      },
+      "helpPhone": {
+        "x": 96,
+        "y": 4327,
+        "w": 173.890625,
+        "h": 25,
+        "size": "20px",
+        "line": "25px",
+        "weight": "700",
+        "padding": "0px",
+        "display": "block",
+        "whiteSpace": "normal"
+      },
+      "benefit": {
+        "card": {
+          "x": 36,
+          "y": 4919,
+          "w": 286,
+          "h": 286
+        },
+        "icon": {
+          "x": 52,
+          "y": 4935,
+          "w": 48,
+          "h": 48
+        },
+        "heading": {
+          "x": 108,
+          "y": 4935,
+          "w": 198,
+          "h": 50
+        },
+        "viewport": {
+          "x": 36,
+          "y": 4919,
+          "w": 318,
+          "h": 286
+        }
+      },
+      "footer": {
+        "x": 16,
+        "y": 9060.890625,
+        "w": 358,
+        "h": 1236,
+        "legal": {
+          "x": 32,
+          "y": 10096.890625,
+          "w": 326,
+          "h": 60,
+          "size": "14px",
+          "line": "20px",
+          "weight": "400",
+          "padding": "0px",
+          "display": "block",
+          "whiteSpace": "normal"
+        },
+        "link": {
+          "x": 32,
+          "y": 9120.890625,
+          "w": 194.578125,
+          "h": 27,
+          "size": "22px",
+          "line": "27px",
+          "weight": "700",
+          "padding": "0px",
+          "display": "block",
+          "whiteSpace": "normal"
+        },
+        "linkCount": 0
+      },
+      "sections": [
+        {
+          "key": "header",
+          "x": 16,
+          "y": 24,
+          "w": 358,
+          "h": 108
+        },
+        {
+          "key": "hero",
+          "x": 16,
+          "y": 156,
+          "w": 358,
+          "h": 673
+        },
+        {
+          "key": "tariff_grid",
+          "x": 16,
+          "y": 853,
+          "w": 358,
+          "h": 951
+        },
+        {
+          "key": "city.comparison",
+          "x": 16,
+          "y": 1828,
+          "w": 358,
+          "h": 2261
+        },
+        {
+          "key": "city.help",
+          "x": 16,
+          "y": 4113,
+          "w": 358,
+          "h": 660
+        },
+        {
+          "key": "city.benefits",
+          "x": 16,
+          "y": 4797,
+          "w": 358,
+          "h": 428
+        },
+        {
+          "key": "city.connection_steps",
+          "x": 16,
+          "y": 5249,
+          "w": 358,
+          "h": 845
+        },
+        {
+          "key": "city.movix",
+          "x": 16,
+          "y": 6118,
+          "w": 358,
+          "h": 1145.890625
+        },
+        {
+          "key": "city.regional_cities",
+          "x": 16,
+          "y": 7287.890625,
+          "w": 358,
+          "h": 333
+        },
+        {
+          "key": "city.faq",
+          "x": 16,
+          "y": 7644.890625,
+          "w": 358,
+          "h": 637
+        },
+        {
+          "key": "city.contacts",
+          "x": 16,
+          "y": 8305.890625,
+          "w": 358,
+          "h": 731
+        },
+        {
+          "key": "footer",
+          "x": 16,
+          "y": 9060.890625,
+          "w": 358,
+          "h": 1236
+        }
+      ],
+      "broken": [],
+      "tableRows": 22
+    },
+    {
+      "width": 320,
+      "client": 320,
+      "scroll": 320,
+      "height": 11239,
+      "bodyPadding": "24px 0px",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 288,
+        "h": 108
+      },
+      "hero": {
+        "x": 16,
+        "y": 156,
+        "w": 288,
+        "h": 730
+      },
+      "heroCard": {
+        "x": 16,
+        "y": 156,
+        "w": 288,
+        "h": 730
+      },
+      "heroMedia": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "region": {
+        "x": 36,
+        "y": 8077.109375,
+        "w": 248,
+        "h": 104,
+        "columns": "248px",
+        "minHeight": "auto",
+        "items": [
+          {
+            "x": 36,
+            "y": 8077.109375,
+            "w": 248,
+            "h": 48
+          },
+          {
+            "x": 36,
+            "y": 8133.109375,
+            "w": 248,
+            "h": 48
+          }
+        ]
+      },
+      "help": {
+        "x": 16,
+        "y": 4245,
+        "w": 288,
+        "h": 711
+      },
+      "helpPhone": {
+        "x": 92,
+        "y": 4504,
+        "w": 173.890625,
+        "h": 25,
+        "size": "20px",
+        "line": "25px",
+        "weight": "700",
+        "padding": "0px",
+        "display": "block",
+        "whiteSpace": "normal"
+      },
+      "benefit": {
+        "card": {
+          "x": 36,
+          "y": 5131,
+          "w": 216,
+          "h": 391
+        },
+        "icon": {
+          "x": 52,
+          "y": 5147,
+          "w": 48,
+          "h": 48
+        },
+        "heading": {
+          "x": 52,
+          "y": 5203,
+          "w": 184,
+          "h": 75
+        },
+        "viewport": {
+          "x": 36,
+          "y": 5131,
+          "w": 248,
+          "h": 391
+        }
+      },
+      "footer": {
+        "x": 16,
+        "y": 9939.109375,
+        "w": 288,
+        "h": 1276,
+        "legal": {
+          "x": 32,
+          "y": 10975.109375,
+          "w": 256,
+          "h": 80,
+          "size": "14px",
+          "line": "20px",
+          "weight": "400",
+          "padding": "0px",
+          "display": "block",
+          "whiteSpace": "normal"
+        },
+        "link": {
+          "x": 32,
+          "y": 9999.109375,
+          "w": 194.578125,
+          "h": 27,
+          "size": "22px",
+          "line": "27px",
+          "weight": "700",
+          "padding": "0px",
+          "display": "block",
+          "whiteSpace": "normal"
+        },
+        "linkCount": 0
+      },
+      "sections": [
+        {
+          "key": "header",
+          "x": 16,
+          "y": 24,
+          "w": 288,
+          "h": 108
+        },
+        {
+          "key": "hero",
+          "x": 16,
+          "y": 156,
+          "w": 288,
+          "h": 730
+        },
+        {
+          "key": "tariff_grid",
+          "x": 16,
+          "y": 910,
+          "w": 288,
+          "h": 973
+        },
+        {
+          "key": "city.comparison",
+          "x": 16,
+          "y": 1907,
+          "w": 288,
+          "h": 2314
+        },
+        {
+          "key": "city.help",
+          "x": 16,
+          "y": 4245,
+          "w": 288,
+          "h": 711
+        },
+        {
+          "key": "city.benefits",
+          "x": 16,
+          "y": 4980,
+          "w": 288,
+          "h": 562
+        },
+        {
+          "key": "city.connection_steps",
+          "x": 16,
+          "y": 5566,
+          "w": 288,
+          "h": 990
+        },
+        {
+          "key": "city.movix",
+          "x": 16,
+          "y": 6580,
+          "w": 288,
+          "h": 1267.109375
+        },
+        {
+          "key": "city.regional_cities",
+          "x": 16,
+          "y": 7871.109375,
+          "w": 288,
+          "h": 394
+        },
+        {
+          "key": "city.faq",
+          "x": 16,
+          "y": 8289.109375,
+          "w": 288,
+          "h": 757
+        },
+        {
+          "key": "city.contacts",
+          "x": 16,
+          "y": 9070.109375,
+          "w": 288,
+          "h": 845
+        },
+        {
+          "key": "footer",
+          "x": 16,
+          "y": 9939.109375,
+          "w": 288,
+          "h": 1276
+        }
+      ],
+      "broken": [],
+      "tableRows": 22,
+      "customPhoneSafe": true
+    },
+    {
+      "width": 1000,
+      "client": 1000,
+      "scroll": 1000,
+      "height": 11940,
+      "bodyPadding": "24px 0px",
+      "header": {
+        "x": 140,
+        "y": 24,
+        "w": 720,
+        "h": 120
+      },
+      "hero": {
+        "x": 140,
+        "y": 168,
+        "w": 720,
+        "h": 724
+      },
+      "heroCard": {
+        "x": 140,
+        "y": 168,
+        "w": 720,
+        "h": 724
+      },
+      "heroMedia": {
+        "x": 172,
+        "y": 590,
+        "w": 656,
+        "h": 270
+      },
+      "region": {
+        "x": 172,
+        "y": 10044.296875,
+        "w": 656,
+        "h": 48,
+        "columns": "320px 320px",
+        "minHeight": "auto",
+        "items": [
+          {
+            "x": 172,
+            "y": 10044.296875,
+            "w": 320,
+            "h": 48
+          },
+          {
+            "x": 508,
+            "y": 10044.296875,
+            "w": 320,
+            "h": 48
+          }
+        ]
+      },
+      "help": {
+        "x": 140,
+        "y": 6688,
+        "w": 720,
+        "h": 363
+      },
+      "helpPhone": {
+        "x": 232,
+        "y": 6946,
+        "w": 204.765625,
+        "h": 29,
+        "size": "24px",
+        "line": "29px",
+        "weight": "700",
+        "padding": "0px",
+        "display": "block",
+        "whiteSpace": "normal"
+      },
+      "benefit": {
+        "card": {
+          "x": 172,
+          "y": 7207,
+          "w": 320,
+          "h": 278
+        },
+        "icon": {
+          "x": 196,
+          "y": 7232,
+          "w": 48,
+          "h": 48
+        },
+        "heading": {
+          "x": 260,
+          "y": 7231,
+          "w": 208,
+          "h": 50
+        },
+        "viewport": {
+          "x": 172,
+          "y": 7207,
+          "w": 656,
+          "h": 843
+        }
+      },
+      "footer": {
+        "x": 140,
+        "y": 11233.296875,
+        "w": 720,
+        "h": 683,
+        "legal": {
+          "x": 164,
+          "y": 11776.296875,
+          "w": 672,
+          "h": 40,
+          "size": "14px",
+          "line": "20px",
+          "weight": "400",
+          "padding": "0px",
+          "display": "block",
+          "whiteSpace": "normal"
+        },
+        "link": {
+          "x": 164,
+          "y": 11309.296875,
+          "w": 204.765625,
+          "h": 29,
+          "size": "24px",
+          "line": "29px",
+          "weight": "700",
+          "padding": "0px",
+          "display": "block",
+          "whiteSpace": "normal"
+        },
+        "linkCount": 8
+      },
+      "sections": [
+        {
+          "key": "header",
+          "x": 140,
+          "y": 24,
+          "w": 720,
+          "h": 120
+        },
+        {
+          "key": "hero",
+          "x": 140,
+          "y": 168,
+          "w": 720,
+          "h": 724
+        },
+        {
+          "key": "tariff_grid",
+          "x": 140,
+          "y": 916,
+          "w": 720,
+          "h": 3518
+        },
+        {
+          "key": "city.comparison",
+          "x": 140,
+          "y": 4458,
+          "w": 720,
+          "h": 2206
+        },
+        {
+          "key": "city.help",
+          "x": 140,
+          "y": 6688,
+          "w": 720,
+          "h": 363
+        },
+        {
+          "key": "city.benefits",
+          "x": 140,
+          "y": 7075,
+          "w": 720,
+          "h": 1007
+        },
+        {
+          "key": "city.connection_steps",
+          "x": 140,
+          "y": 8106,
+          "w": 720,
+          "h": 658
+        },
+        {
+          "key": "city.movix",
+          "x": 140,
+          "y": 8788,
+          "w": 720,
+          "h": 1054.296875
+        },
+        {
+          "key": "city.regional_cities",
+          "x": 140,
+          "y": 9866.296875,
+          "w": 720,
+          "h": 326
+        },
+        {
+          "key": "city.faq",
+          "x": 140,
+          "y": 10216.296875,
+          "w": 720,
+          "h": 518
+        },
+        {
+          "key": "city.contacts",
+          "x": 140,
+          "y": 10758.296875,
+          "w": 720,
+          "h": 451
+        },
+        {
+          "key": "footer",
+          "x": 140,
+          "y": 11233.296875,
+          "w": 720,
+          "h": 683
+        }
+      ],
+      "broken": [],
+      "tableRows": 22
+    }
+  ],
+  "pageErrors": [],
+  "capturePreloadsImages": true
+}

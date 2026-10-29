@@ -1,0 +1,54 @@
+{
+  "checkedAt": "2026-10-29T06:11:11.084Z",
+  "codeCommit": "e47ca57aeb3dc579cf122e1631b776ac8bd81f23",
+  "ci": {
+    "conclusion": "success",
+    "headSha": "e47ca57aeb3dc579cf122e1631b776ac8bd81f23",
+    "status": "completed",
+    "url": "https://github.com/Celtoman/astro-telekom/actions/runs/40755546548"
+  },
+  "deployment": {
+    "expectedSha": "e47ca57aeb3dc579cf122e1631b776ac8bd81f23",
+    "ciRun": 40755546548,
+    "deploymentId": "xwuvpsx55uyvkikwpcbwdnx3",
+    "status": "finished",
+    "commit": "e47ca57aeb3dc579cf122e1631b776ac8bd81f23",
+    "health": "running:healthy",
+    "checkedAt": "2026-10-29T06:10:17.105Z",
+    "source": "coolify MCP"
+  },
+  "code": {
+    "checkedAt": "2026-10-29T06:00:45.974Z",
+    "httpStatus": 200,
+    "deploymentId": "xwuvpsx55uyvkikwpcbwdnx3",
+    "expectedSha": "e47ca57aeb3dc579cf122e1631b776ac8bd81f23",
+    "result": {
+      "status": "SUCCEEDED",
+      "artifactId": "3b5f9b7e8c663c0c960a38507915f168f2e1f036d0833b2962eaa6aaabbf2ed8",
+      "publicationId": "cmvs82yuw000101o52i6ams8d",
+      "siteId": "cmtuaqqj1000107lkiiiia2xa",
+      "siteRevision": 24,
+      "rendererId": "a68388f2fc2dd86975d4a5f42082008c7b694c9c41f558b779bd1544db0544e1",
+      "catalogDigest": "d9b3c8469cdeffccbf3a3ad896ba6979af13cbc6a8e383aa4ca99348b9095d07",
+      "rebuildId": "code-229fb0fe20ec41f60299cb87f6d836231c034fe8eaa2067ae0bbd8c5b17d939f",
+      "rebuildRevision": 1,
+      "manifestDigest": "23f5e049c160f5434845ea88dd3e60739c2b052f85e78f14bd1fa452bbd46a57"
+    }
+  },
+  "cmsPreserved": {
+    "checkedAt": "2026-10-29T06:10:20.558Z",
+    "workingRevision": 24,
+    "publishedRevision": 24,
+    "publicationId": "cmvs82yuw000101o52i6ams8d",
+    "publicDigest": "42af8c9d2be5ab0e2f7043241f3a1946039ccf3806af8a9d4c8c121f178ec858",
+    "tariffDigest": "56345408ce1a8fd830022017d940663ca114051a653d2991efa436428d77b03f",
+    "cities": 207,
+    "tariffs": 3805,
+    "artifactId": "3b5f9b7e8c663c0c960a38507915f168f2e1f036d0833b2962eaa6aaabbf2ed8",
+    "preserved": true
+  },
+  "verified": true,
+  "figmaModified": false,
+  "libraryPublished": false,
+  "externalLeadSubmitted": false
+}

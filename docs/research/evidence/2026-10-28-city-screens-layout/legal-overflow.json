@@ -1,0 +1,22 @@
+{
+  "width": 320,
+  "before": 389,
+  "afterHeadingWrap": 320,
+  "overflowText": [
+    {
+      "tag": "H1",
+      "text": "Политика конфиденциальности",
+      "right": 389.265625,
+      "font": "36px",
+      "wordBreak": "normal"
+    }
+  ],
+  "header": {
+    "x": 16,
+    "right": 304
+  },
+  "footer": {
+    "x": 16,
+    "right": 304
+  }
+}

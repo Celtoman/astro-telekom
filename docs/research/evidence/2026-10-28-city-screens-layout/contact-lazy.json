@@ -1,0 +1,47 @@
+{
+  "images": [
+    {
+      "src": "/__publication_assets/3b5f9b7e8c663c0c960a38507915f168f2e1f036d0833b2962eaa6aaabbf2ed8/images/city-home/contact-phone.svg",
+      "loaded": true,
+      "y": 94.890625,
+      "complete": true,
+      "loading": "lazy"
+    },
+    {
+      "src": "/__publication_assets/3b5f9b7e8c663c0c960a38507915f168f2e1f036d0833b2962eaa6aaabbf2ed8/images/city-home/contact-clock.svg",
+      "loaded": true,
+      "y": 365.890625,
+      "complete": true,
+      "loading": "lazy"
+    },
+    {
+      "src": "/__publication_assets/3b5f9b7e8c663c0c960a38507915f168f2e1f036d0833b2962eaa6aaabbf2ed8/images/city-home/contact-support.svg",
+      "loaded": true,
+      "y": 447.890625,
+      "complete": true,
+      "loading": "lazy"
+    },
+    {
+      "src": "/__publication_assets/3b5f9b7e8c663c0c960a38507915f168f2e1f036d0833b2962eaa6aaabbf2ed8/images/city-home/contact-always.svg",
+      "loaded": true,
+      "y": 554.890625,
+      "complete": true,
+      "loading": "lazy"
+    },
+    {
+      "src": "/__publication_assets/3b5f9b7e8c663c0c960a38507915f168f2e1f036d0833b2962eaa6aaabbf2ed8/images/city-home/contact-free-call.svg",
+      "loaded": true,
+      "y": 582.890625,
+      "complete": true,
+      "loading": "lazy"
+    },
+    {
+      "src": "/__publication_assets/3b5f9b7e8c663c0c960a38507915f168f2e1f036d0833b2962eaa6aaabbf2ed8/images/city-home/contact-help.svg",
+      "loaded": true,
+      "y": 614.890625,
+      "complete": true,
+      "loading": "lazy"
+    }
+  ],
+  "failures": []
+}

@@ -21,9 +21,9 @@ HOME Hero 1d реализован в коде по [паспорту 2.0.0](docs
 
 Код `a9569b55` прошёл полный gate, CI и finished/healthy deployment. CMS-ревизия 24 опубликована; данные 207 городов и 3805 тарифов, Hero/каталог и четыре владельческих факта HOME сохранены. Проверены Desktop/Tablet/Mobile и 320, CMS/preview, навигация и serving receipt. [Доказательства и ограничения](docs/research/2026-10-28-city-home-live-acceptance.md), [текущее состояние](docs/current-state.md). Live seed не запускался; существующие маршруты и исторические immutable snapshots сохранены. Решение о реальном трафике остаётся за владельцем.
 
-## Визуальная доводка CITY_HOME — 28 октября 2026
+## Визуальная доводка CITY_HOME — 28–29 октября 2026
 
-После отдельного сравнения со Screens исправляются геометрия Hero/регионального списка, узкая адаптация помощи/преимуществ, футер и таблица. [План и граница](docs/plans/2026-10-28-city-screens-layout-fix.md), [задача #409](https://github.com/Celtoman/astro-telekom/issues/409). Контент CMS, принятые Figma и библиотека сохраняются. Следующий CODE выпуск должен пересобрать ту же опубликованную ревизию24; новая CMS-публикация не выполняется. Фактические CI/deployment/serving фиксируются в [current-state](docs/current-state.md).
+Вёрстка городской страницы выровнена по принятой Screens на Desktop, Tablet, Mobile и320. Код `e47ca57a` прошёл локальный gate, [exact-SHA CI](https://github.com/Celtoman/astro-telekom/actions/runs/40755546548), finished/healthy deployment, CODE и внешнюю сверку. CMS revision24/24, publication ID и полный каталог сохранены; Figma и библиотека не менялись. [Приёмка и снимки](docs/research/2026-10-28-city-screens-layout-acceptance.md), [граница работ](docs/plans/2026-10-28-city-screens-layout-fix.md), [current-state](docs/current-state.md).
 
 ## Документация
 

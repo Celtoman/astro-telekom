@@ -1,0 +1,256 @@
+{
+  "checkedAt": "2026-10-29T06:02:43.432Z",
+  "pageErrors": [],
+  "sections": [
+    "Первый экран",
+    "Каталог тарифов",
+    "Сравнение тарифов",
+    "Помощь с выбором",
+    "Преимущества",
+    "Этапы подключения",
+    "Movix",
+    "Города вашего региона",
+    "Вопросы и ответы",
+    "Контакты"
+  ],
+  "saveDisabledWithoutChanges": true,
+  "previewBlocks": 10,
+  "previewSandbox": "",
+  "previewForms": 1,
+  "previewEnabledControls": [
+    {
+      "name": "website",
+      "type": null,
+      "tabIndex": -1,
+      "ariaHidden": true
+    }
+  ],
+  "previewLiveLinks": 0,
+  "previewGeometry": {
+    "padding": "24px 0px",
+    "width": 1360,
+    "hero": 1360
+  },
+  "previewImages": [
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/domru-logo.Ba1JxijO.png",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/home-hero.CN9PwEqq.png",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/benefit-speed.Bw-jmw2O.svg",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/benefit-fiber.BB98_NGU.svg",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/benefit-wifi6.CoEkWtYH.svg",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/benefit-movix.CwK6X3CC.svg",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/benefit-connection.CYSCGI-o.svg",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/benefit-support.DpbeFm1K.svg",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/movix-devices.Bg7NffQs.png",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/cinema-kinopoisk.Bb-P0GhJ.png",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/cinema-premier.Bi0sxH8p.svg",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/png;base64",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/contact-free-call.D2ohYtx5.svg",
+      "loaded": true
+    },
+    {
+      "source": "inline:data:image/svg+xml",
+      "loaded": true
+    },
+    {
+      "source": "/_astro/domru-logo.Ba1JxijO.png",
+      "loaded": true
+    }
+  ],
+  "previewSpeedIcon": {
+    "inlined": true,
+    "matchesAcceptedSvg": true
+  }
+}
