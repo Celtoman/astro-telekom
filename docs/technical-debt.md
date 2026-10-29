@@ -1,6 +1,6 @@
 # Технический долг — индекс
 
-Дата последнего обновления индекса: 8 октября 2026 года. **Полное описание каждой проблемы (доказательство, влияние, следующее действие) живёт в GitHub Issue, не здесь** — эта таблица дублировала текст до 8 сентября 2026, что и было источником рассинхронизации; теперь она только индекс. Как устроена вся система — [docs/task-management.md](task-management.md).
+Дата последнего обновления индекса: 29 октября 2026 года. **Полное описание каждой проблемы (доказательство, влияние, следующее действие) живёт в GitHub Issue, не здесь** — эта таблица дублировала текст до 8 сентября 2026, что и было источником рассинхронизации; теперь она только индекс. Как устроена вся система — [docs/task-management.md](task-management.md).
 
 Приоритеты: P0 — блокирует безопасный запуск или ведет к недостоверным данным; P1 — нарушает ключевой путь первого релиза; P2 — существенно ограничивает эксплуатацию; P3 — улучшение качества и поддерживаемости.
 
@@ -10,7 +10,9 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| TD-200 | [#438](https://github.com/Celtoman/astro-telekom/issues/438) 🟢 | Неограниченное накопление publication HTML заполняет диск; архивная очистка — [#440](https://github.com/Celtoman/astro-telekom/issues/440) |
+| TD-202 | [#442](https://github.com/Celtoman/astro-telekom/issues/442) 🟢 | CRLF shell helper из Windows ломает Linux Docker rehearsal |
+| TD-201 | [#441](https://github.com/Celtoman/astro-telekom/issues/441) 🟢 | Docker rehearsals оставляют анонимные PostgreSQL volumes |
+| TD-200 | [#438](https://github.com/Celtoman/astro-telekom/issues/438) ✅ | Неограниченное накопление publication HTML заполняет диск; архивная очистка — [#440](https://github.com/Celtoman/astro-telekom/issues/440) |
 | TD-199 | [#433](https://github.com/Celtoman/astro-telekom/issues/433) 🟢 | Outline SVG шапки и лишняя mobile стрелка не соответствуют Screens |
 | TD-198 | [#430](https://github.com/Celtoman/astro-telekom/issues/430) 🟢 | Диагностировать нехватку памяти Windows при полном gate |
 | TD-192 | [#420](https://github.com/Celtoman/astro-telekom/issues/420) ✅ | Поле над шапкой ошибочно перенесено из макета |

@@ -6,9 +6,9 @@
 
 Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [AGENTS.md](../AGENTS.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
 
-**Baseline: 870/870 passing на 29 октября 2026 года** (`pnpm check`, включая HOME Hero 2.0.0, атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
+**Baseline: 885/885 passing на 29 октября 2026 года** (`pnpm check`, включая HOME Hero 2.0.0, атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
 
-Baseline включает3 legal-теста и parser-time регрессию каталога. Полный pnpm check прошёл в процессе с CPU affinity2 после Windows OOM; набор команд и тестов не сокращался, skips0. Ресурсная проблема отдельно остаётся в #430.
+Baseline включает legal-тесты, parser-time регрессию каталога и архивную retention. Последний полный pnpm check прошёл в изолированном Linux/Node Docker-окружении с реальными PostgreSQL/Redis/Caddy rehearsals; набор команд и тестов не сокращался, пропусков нет. Ресурсная проблема Windows отдельно остаётся в #430.
 
 | Файл | Что проверяет |
 | --- | --- |

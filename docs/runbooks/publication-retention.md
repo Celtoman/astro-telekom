@@ -2,6 +2,8 @@
 
 Задача [#440](https://github.com/Celtoman/astro-telekom/issues/440), проблема [#438](https://github.com/Celtoman/astro-telekom/issues/438). Реализация не меняет опубликованный каталог и не создаёт CMS snapshot.
 
+Подтверждённое внедрение 29 октября 2026: [внешняя приёмка](../research/2026-10-29-publication-retention.md). Timer/path включены, ручной и событийный запуски проверены.
+
 ## Защищённые данные
 
 Controller читает фактическую Caddy configuration с разрешённым Origin. Сохраняются active, все serving/fallback roots, legacy baseline, две последние успешно подтверждённые версии помимо active, версии за семь суток, неподтверждённые артефакты и candidate/previous незавершённых CMS/CODE intents. Неопознанные release directories и legacy current не удаляются. Восстановленный оператором артефакт закрепляется и больше не попадает в автоматическую GC.

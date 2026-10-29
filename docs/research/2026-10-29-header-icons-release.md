@@ -12,4 +12,4 @@ Mobile selector `.gh-city-trigger .gh-city-chevron` сильнее `.gh-city-tri
 
 ## Граница выпуска
 
-Код пока не отправлен и не выпущен. Для push требуется полный `pnpm check`; затем зелёный CI выбранного SHA, Coolify MCP finished/exact SHA/running:healthy, CODE SUCCEEDED и повторная живая проверка нового artifact. Общий snapshot/CMS/public digest должны сохраниться. Figma и библиотека не изменяются. Документ не выдаёт локальную сборку за результат test-контура.
+При исходной локальной проверке код ещё не был отправлен и выпущен. Позднее он вошёл в [инфраструктурный выпуск `98adae8`](2026-10-29-publication-retention.md): полный gate/CI, exact finished Coolify deployment и CODE SUCCEEDED подтверждены, snapshot/CMS/public digest сохранены. Отдельная внешняя визуальная приёмка иконок по #435/#433 в задаче очистки не проводилась. Figma и библиотека не менялись.
