@@ -1,0 +1,6 @@
+{
+  "codeCommit": "6ef814da7464a473f0c51d3b7f48e6335d26e07a",
+  "artifactId": "eb6cda7e06f9f8927f5dfae015bdb5d8628efedbc44ff7f4a1cbe4df245e71f7",
+  "viewport": 1440,
+  "observed": "AssertionError [ERR_ASSERTION]: header items differ across navigations\n+ actual - expected\n\n  [\n    {\n      h: 36,\n+     w: 82.625,\n-     w: 85.5625,\n      x: 40,\n      y: 25.5\n    },\n    {\n      h: 18,\n+     w: 166.03125,\n+     x: 1043.765625,\n-     w: 171.4375,\n-     x: 1031.5625,\n      y: 34.5\n    },\n    {\n      h: 18,\n+     w: 166.203125,\n+     x: 1233.796875,\n-     w: 173,\n-     x: 1227,\n      y: 34.5\n    },\n    {\n+     h: 38,\n-     h: 37,\n      w: 176.453125,\n+     x: 1040.84375,\n+     y: 89\n-     x: 1031.265625,\n-     y: 89.5\n    }\n  ]"
+}

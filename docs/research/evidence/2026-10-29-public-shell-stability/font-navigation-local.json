@@ -1,0 +1,1115 @@
+{
+  "checkedAt": "2026-10-29T10:20:09.471Z",
+  "origin": "http://127.0.0.1:4392",
+  "cold": [
+    {
+      "width": 1440,
+      "path": "/",
+      "fontState": {
+        "enabled": true,
+        "pending": false,
+        "fallback": false,
+        "family": "\"Geist Shell\", ui-sans-serif, system-ui, sans-serif"
+      },
+      "addressState": {
+        "visibility": "visible",
+        "complete": true
+      },
+      "reassurance": "24px",
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "footer": {
+        "x": 40,
+        "y": 5706,
+        "w": 1360,
+        "h": 563
+      },
+      "scroll": 1440,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 725.5999999996275,
+            "value": {
+              "parts": [
+                {
+                  "x": 40,
+                  "y": 25.5,
+                  "w": 85.5625,
+                  "h": 36
+                },
+                {
+                  "x": 1031.5625,
+                  "y": 34.5,
+                  "w": 171.4375,
+                  "h": 18
+                },
+                {
+                  "x": 1227,
+                  "y": 34.5,
+                  "w": 173,
+                  "h": 18
+                },
+                {
+                  "x": 1031.265625,
+                  "y": 89.5,
+                  "w": 176.453125,
+                  "h": 37
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 40,
+              "y": 24,
+              "w": 1360,
+              "h": 128
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": null,
+      "movix": [
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 3157,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 3157,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 3241,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 3241,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 3345,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 3345,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        }
+      ],
+      "platformFonts": [
+        {
+          "selector": "[data-current-city-label]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist",
+              "isCustomFont": true,
+              "glyphCount": 6
+            }
+          ]
+        },
+        {
+          "selector": "[data-phone-value]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist-Bold",
+              "isCustomFont": true,
+              "glyphCount": 15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/kazan",
+      "fontState": {
+        "enabled": true,
+        "pending": false,
+        "fallback": false,
+        "family": "\"Geist Shell\", ui-sans-serif, system-ui, sans-serif"
+      },
+      "addressState": null,
+      "reassurance": null,
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "footer": {
+        "x": 40,
+        "y": 9090,
+        "w": 1360,
+        "h": 563
+      },
+      "scroll": 1440,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 211.7999999988824,
+            "value": {
+              "parts": [
+                {
+                  "x": 40,
+                  "y": 25.5,
+                  "w": 85.5625,
+                  "h": 36
+                },
+                {
+                  "x": 1031.5625,
+                  "y": 34.5,
+                  "w": 171.4375,
+                  "h": 18
+                },
+                {
+                  "x": 1227,
+                  "y": 34.5,
+                  "w": 173,
+                  "h": 18
+                },
+                {
+                  "x": 1031.265625,
+                  "y": 89.5,
+                  "w": 176.453125,
+                  "h": 37
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 40,
+              "y": 24,
+              "w": 1360,
+              "h": 128
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": {
+        "clientH": 2008,
+        "scrollH": 2008,
+        "clientW": 1288,
+        "scrollW": 1288
+      },
+      "movix": [
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 7275,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 7275,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 7359,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 7359,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 7463,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 7463,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        }
+      ],
+      "platformFonts": [
+        {
+          "selector": "[data-current-city-label]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist",
+              "isCustomFont": true,
+              "glyphCount": 6
+            }
+          ]
+        },
+        {
+          "selector": "[data-phone-value]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist-Bold",
+              "isCustomFont": true,
+              "glyphCount": 15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/politika-konfidencialnosti",
+      "fontState": {
+        "enabled": true,
+        "pending": false,
+        "fallback": false,
+        "family": "\"Geist Shell\", ui-sans-serif, system-ui, sans-serif"
+      },
+      "addressState": null,
+      "reassurance": null,
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "footer": {
+        "x": 40,
+        "y": 2711.5,
+        "w": 1360,
+        "h": 563
+      },
+      "scroll": 1440,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 297.19999999925494,
+            "value": {
+              "parts": [
+                {
+                  "x": 40,
+                  "y": 25.5,
+                  "w": 85.5625,
+                  "h": 36
+                },
+                {
+                  "x": 1031.5625,
+                  "y": 34.5,
+                  "w": 171.4375,
+                  "h": 18
+                },
+                {
+                  "x": 1227,
+                  "y": 34.5,
+                  "w": 173,
+                  "h": 18
+                },
+                {
+                  "x": 1031.265625,
+                  "y": 89.5,
+                  "w": 176.453125,
+                  "h": 37
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 40,
+              "y": 24,
+              "w": 1360,
+              "h": 128
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": null,
+      "movix": [],
+      "platformFonts": [
+        {
+          "selector": "[data-current-city-label]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist",
+              "isCustomFont": true,
+              "glyphCount": 6
+            }
+          ]
+        },
+        {
+          "selector": "[data-phone-value]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist-Bold",
+              "isCustomFont": true,
+              "glyphCount": 15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "path": "/",
+      "fontState": {
+        "enabled": true,
+        "pending": false,
+        "fallback": false,
+        "family": "\"Geist Shell\", ui-sans-serif, system-ui, sans-serif"
+      },
+      "addressState": {
+        "visibility": "visible",
+        "complete": true
+      },
+      "reassurance": "24px",
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "footer": {
+        "x": 40,
+        "y": 5706,
+        "w": 1360,
+        "h": 563
+      },
+      "scroll": 1440,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 374.19999999925494,
+            "value": {
+              "parts": [
+                {
+                  "x": 40,
+                  "y": 25.5,
+                  "w": 85.5625,
+                  "h": 36
+                },
+                {
+                  "x": 1031.5625,
+                  "y": 34.5,
+                  "w": 171.4375,
+                  "h": 18
+                },
+                {
+                  "x": 1227,
+                  "y": 34.5,
+                  "w": 173,
+                  "h": 18
+                },
+                {
+                  "x": 1031.265625,
+                  "y": 89.5,
+                  "w": 176.453125,
+                  "h": 37
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 40,
+              "y": 24,
+              "w": 1360,
+              "h": 128
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": null,
+      "movix": [
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 3157,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 3157,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 3241,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 3241,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 3345,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 3345,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        }
+      ],
+      "platformFonts": [
+        {
+          "selector": "[data-current-city-label]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist",
+              "isCustomFont": true,
+              "glyphCount": 6
+            }
+          ]
+        },
+        {
+          "selector": "[data-phone-value]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist-Bold",
+              "isCustomFont": true,
+              "glyphCount": 15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/",
+      "fontState": {
+        "enabled": true,
+        "pending": false,
+        "fallback": false,
+        "family": "\"Geist Shell\", ui-sans-serif, system-ui, sans-serif"
+      },
+      "addressState": {
+        "visibility": "visible",
+        "complete": true
+      },
+      "reassurance": "20px",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 358,
+        "h": 108
+      },
+      "footer": {
+        "x": 16,
+        "y": 9585.890625,
+        "w": 358,
+        "h": 1236
+      },
+      "scroll": 390,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 155.7999999988824,
+            "value": {
+              "parts": [
+                {
+                  "x": 16,
+                  "y": 24,
+                  "w": 85.5625,
+                  "h": 35
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 175.03125,
+                  "y": 80,
+                  "w": 142.96875,
+                  "h": 32
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 16,
+              "y": 24,
+              "w": 358,
+              "h": 108
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": null,
+      "movix": [
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 4749,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 4749,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 4913,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 4913,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 5077,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 5077,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        }
+      ],
+      "platformFonts": [
+        {
+          "selector": "[data-current-city-label]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist",
+              "isCustomFont": true,
+              "glyphCount": 6
+            }
+          ]
+        },
+        {
+          "selector": "[data-phone-value]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist-Bold",
+              "isCustomFont": true,
+              "glyphCount": 15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/kazan",
+      "fontState": {
+        "enabled": true,
+        "pending": false,
+        "fallback": false,
+        "family": "\"Geist Shell\", ui-sans-serif, system-ui, sans-serif"
+      },
+      "addressState": null,
+      "reassurance": null,
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 358,
+        "h": 108
+      },
+      "footer": {
+        "x": 16,
+        "y": 9060.890625,
+        "w": 358,
+        "h": 1236
+      },
+      "scroll": 390,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 254.40000000037253,
+            "value": {
+              "parts": [
+                {
+                  "x": 16,
+                  "y": 24,
+                  "w": 85.5625,
+                  "h": 35
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 175.03125,
+                  "y": 80,
+                  "w": 142.96875,
+                  "h": 32
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 16,
+              "y": 24,
+              "w": 358,
+              "h": 108
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": {
+        "clientH": 1996,
+        "scrollH": 1996,
+        "clientW": 326,
+        "scrollW": 914
+      },
+      "movix": [
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 6324,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 6324,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 6488,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 6488,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 6652,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 6652,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        }
+      ],
+      "platformFonts": [
+        {
+          "selector": "[data-current-city-label]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist",
+              "isCustomFont": true,
+              "glyphCount": 6
+            }
+          ]
+        },
+        {
+          "selector": "[data-phone-value]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist-Bold",
+              "isCustomFont": true,
+              "glyphCount": 15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/politika-konfidencialnosti",
+      "fontState": {
+        "enabled": true,
+        "pending": false,
+        "fallback": false,
+        "family": "\"Geist Shell\", ui-sans-serif, system-ui, sans-serif"
+      },
+      "addressState": null,
+      "reassurance": null,
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 358,
+        "h": 108
+      },
+      "footer": {
+        "x": 16,
+        "y": 4587.96875,
+        "w": 358,
+        "h": 1236
+      },
+      "scroll": 390,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 180.40000000037253,
+            "value": {
+              "parts": [
+                {
+                  "x": 16,
+                  "y": 24,
+                  "w": 85.5625,
+                  "h": 35
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 175.03125,
+                  "y": 80,
+                  "w": 142.96875,
+                  "h": 32
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 16,
+              "y": 24,
+              "w": 358,
+              "h": 108
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": null,
+      "movix": [],
+      "platformFonts": [
+        {
+          "selector": "[data-current-city-label]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist",
+              "isCustomFont": true,
+              "glyphCount": 6
+            }
+          ]
+        },
+        {
+          "selector": "[data-phone-value]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist-Bold",
+              "isCustomFont": true,
+              "glyphCount": 15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "path": "/",
+      "fontState": {
+        "enabled": true,
+        "pending": false,
+        "fallback": false,
+        "family": "\"Geist Shell\", ui-sans-serif, system-ui, sans-serif"
+      },
+      "addressState": {
+        "visibility": "visible",
+        "complete": true
+      },
+      "reassurance": "20px",
+      "header": {
+        "x": 16,
+        "y": 24,
+        "w": 358,
+        "h": 108
+      },
+      "footer": {
+        "x": 16,
+        "y": 9585.890625,
+        "w": 358,
+        "h": 1236
+      },
+      "scroll": 390,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 307.09999999962747,
+            "value": {
+              "parts": [
+                {
+                  "x": 16,
+                  "y": 24,
+                  "w": 85.5625,
+                  "h": 35
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0
+                },
+                {
+                  "x": 175.03125,
+                  "y": 80,
+                  "w": 142.96875,
+                  "h": 32
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 16,
+              "y": 24,
+              "w": 358,
+              "h": 108
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": null,
+      "movix": [
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 4749,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 4749,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 4913,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 4913,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 40,
+            "y": 5077,
+            "w": 48,
+            "h": 48
+          },
+          "image": {
+            "x": 40,
+            "y": 5077,
+            "w": 48,
+            "h": 48
+          },
+          "naturalWidth": 0
+        }
+      ],
+      "platformFonts": [
+        {
+          "selector": "[data-current-city-label]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist",
+              "isCustomFont": true,
+              "glyphCount": 6
+            }
+          ]
+        },
+        {
+          "selector": "[data-phone-value]",
+          "fonts": [
+            {
+              "familyName": "Geist",
+              "postScriptName": "Geist-Bold",
+              "isCustomFont": true,
+              "glyphCount": 15
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "legal": [],
+  "states": [],
+  "pageErrors": []
+}

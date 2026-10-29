@@ -31,6 +31,14 @@
 
 На e46a9bce cold320 выявил scrollWidth363 при CLS0: только два fieldset/select выступали за viewport. Browser min-width:min-content задавал332px при доступных258px; имеющийся select max-width100% ограничивался этим слишком широким родителем. В тёплом прогоне переполнение не проявлялось. [#415](https://github.com/Celtoman/astro-telekom/issues/415) добавлен в #414. Правка — min-width0 у существующих fieldset; тексты, варианты и вычисления сохраняются. Независимый review не нашёл Critical/Important. [Диагностика](evidence/2026-10-29-public-shell-stability/tariff-cold-before.json). Новая локальная immutable-сборка прошла cold1440/834/390/320 и смену опций: CLS0, fieldset320=258px, min-width0. Для локального origin защищённый публичный quote API проксировался тестовым harness; CMS и заявки не изменялись. [Проверка](evidence/2026-10-29-public-shell-stability/tariff-cold-local.json).
 
+## Одинаковые метрики шапки между документами
+
+На6ef814da cold CLS был0, но строгая warm-проверка выявила разные размеры пунктов: city width85.56→82.63px, utility x1031.56→1043.77px, phone height37→38px. Optional body face сохранял fallback первого документа, следующий документ получал cache и другие метрики. [Фактический diff](evidence/2026-10-29-public-shell-stability/font-navigation-before.json).
+
+Header/footer используют отдельное семейство Geist Shell на тех же двух файлах Geist. Parser initializer готовит город/телефон сразу, но shell становится видимым после FontFaceSet.load кириллицы и латиницы. Body сохраняет optional без поздней смены. Для отказа/пустого результата/3s deadline выбирается явный systemfont и сохраняется на последующие документы вкладки. Если storage нельзя прочитать или записать, systemfont выбирается сразу в каждом документе. Поздняя загрузка не меняет уже выбранные метрики. Без JS остаётся прежний SSR и optional-family; CSS-marker адресного блока от JS не зависит.
+
+Новые unit cases проверяют ожидание, reject/empty/timeout, late resolve, следующие navigation, blocked/read-only storage. Initial Important о недоступной записи исправлен; повторный review без Critical/Important. Browser CDP подтвердил реальный Geist для city/phone на1440/390 и одинаковые координаты при HOME→CITY→legal→HOME. При задержке шрифтов5s два документа сохраняют systemfont/те же координаты и CLS0, даже когда файлы уже загружены. [Geist](evidence/2026-10-29-public-shell-stability/font-navigation-local.json), [fallback](evidence/2026-10-29-public-shell-stability/font-fallback-local.json).
+
 ## Локальная проверка
 
 Настоящий StaticArtifactBuilder собрал124 маршрута на сокращённой копии текущего опубликованного каталога: шесть городов, все22 тарифа Казани, реальные заголовки/юридические тексты. Это тестовый fixture, не новая CMS-публикация. API URL и SEO inventory проходят обычные build-policy guards. Полный публичный каталог не редактируется.
@@ -40,3 +48,8 @@ Chromium,1440/834/390/320: HOME/CITY с действующим subscriber mode. 
 Дополнительно cold paint наD/320: тариф, города, покрытие, три документа,404; промежуточный1000. В этих контролируемых сценариях CLS0, исключений JavaScript нет. Это не универсальная гарантия для всех браузеров и будущего контента. [Основная проверка](evidence/2026-10-29-public-shell-stability/local-browser.json), [общие маршруты](evidence/2026-10-29-public-shell-stability/local-shared-cold.json), [до изменений](evidence/2026-10-29-public-shell-stability/before-browser.json), [Desktop](evidence/2026-10-29-public-shell-stability/local-city-1440.png), [320](evidence/2026-10-29-public-shell-stability/local-city-320.png).
 
 Независимый read-only review не нашёл Critical/Important. Astro check без ошибок/предупреждений; профильные тесты прошли. Механический detector отметил только сохранённые Geist/существующие shadow conventions; новая визуальная система не вводилась. Полный `pnpm check` прошёл, актуальный baseline — только в [TEST_COVERAGE](../TEST_COVERAGE.md). Внешний выпуск пока не завершён.
+
+
+## Локальная Windows-блокировка при проверке
+
+Один полный прогон получил EPERM при переносе PNG в admin CSP build-тесте (865/866). Изолированная проверка CSP прошла3/3, затем неизменённый полный pnpm check прошёл866/866. Причина блокировки отдельно не установлена; [#417](https://github.com/Celtoman/astro-telekom/issues/417) остаётся открытым, проверки не ослаблялись. [Доказательство](evidence/2026-10-29-public-shell-stability/local-build-transient.json).

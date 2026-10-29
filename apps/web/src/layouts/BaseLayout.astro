@@ -121,6 +121,9 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
   :root.full-general-home { background: #fff; }
   .general-home-page { background: #fff; padding-block: 24px; }
   html[data-public-shell-pending] [data-site-header] { visibility: hidden; }
+  html[data-public-shell-fonts-pending] :is([data-site-header], [data-general-home-footer]) { visibility: hidden; }
+  html[data-public-shell-fonts-enabled] :is([data-site-header], [data-general-home-footer]) { font-family: 'Geist Shell', ui-sans-serif, system-ui, sans-serif; }
+  html[data-public-shell-fonts-fallback] :is([data-site-header], [data-general-home-footer]) { font-family: ui-sans-serif, system-ui, sans-serif; }
   .general-home-page > main { padding: 24px 0; }
   * { box-sizing: border-box; }
   body { margin: 0; }

@@ -18,6 +18,38 @@ export function applySubscriberPhone(root) {
 // This function is serialized into a CSP-hashed, synchronous head script.
 // Keep it self-contained: it must not close over imported runtime symbols.
 function startPublicShell(data, applyPhone) {
+  const html = document.documentElement;
+  const fontKey = `provider:${data.siteSlug}:shell-font`;
+  let fontStarted = false;
+  function prepareFonts() {
+    if (fontStarted) return;
+    fontStarted = true;
+    let settled = false;
+    let timer;
+    const finish = fallback => {
+      if (settled) return;
+      settled = true;
+      if (timer !== undefined) clearTimeout(timer);
+      if (fallback) {
+        html.setAttribute('data-public-shell-fonts-fallback', '');
+        try { sessionStorage.setItem(fontKey, 'fallback'); } catch { /* Storage is optional. */ }
+      }
+      html.removeAttribute('data-public-shell-fonts-pending');
+    };
+    try {
+      const choice = sessionStorage.getItem(fontKey);
+      // Probe writes as well as reads; a later document must make the same choice.
+      sessionStorage.setItem(fontKey, choice === 'fallback' ? 'fallback' : 'automatic');
+      if (choice === 'fallback') { finish(true); return; }
+    } catch { finish(true); return; }
+    if (!document.fonts?.load) { finish(true); return; }
+    timer = setTimeout(() => finish(true), 3000);
+    try {
+      // A separate face prevents the body's optional fallback from locking shell metrics.
+      Promise.resolve(document.fonts.load('600 16px "Geist Shell"', 'Казань ABC 8'))
+        .then(faces => finish(!faces?.length), () => finish(true));
+    } catch { finish(true); }
+  }
   let confirmed = null;
   let subscriber = false;
   try {
@@ -60,10 +92,13 @@ function startPublicShell(data, applyPhone) {
         if (header && subscriber) applyPhone(root);
       } finally {
         if (header) document.documentElement.removeAttribute('data-public-shell-pending');
+        prepareFonts();
       }
     },
   };
   document.documentElement.setAttribute('data-public-shell-pending', '');
+  html.setAttribute('data-public-shell-fonts-enabled', '');
+  html.setAttribute('data-public-shell-fonts-pending', '');
 }
 
 export const prepareHeaderScript = "try{window.__domruPublicShell?.prepare(document.querySelector('[data-site-header]'));}finally{document.documentElement.removeAttribute('data-public-shell-pending');}";

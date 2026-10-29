@@ -1,0 +1,264 @@
+{
+  "checkedAt": "2026-10-29T10:22:26.730Z",
+  "origin": "http://127.0.0.1:4392",
+  "cold": [
+    {
+      "path": "/kazan",
+      "cls": 0,
+      "fontState": {
+        "enabled": true,
+        "pending": false,
+        "fallback": true,
+        "family": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "addressState": null,
+      "reassurance": null,
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "footer": {
+        "x": 40,
+        "y": 9049.09375,
+        "w": 1360,
+        "h": 563
+      },
+      "scroll": 1440,
+      "width": 1440,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 3239.5,
+            "value": {
+              "parts": [
+                {
+                  "x": 40,
+                  "y": 25.5,
+                  "w": 82.625,
+                  "h": 36
+                },
+                {
+                  "x": 1043.140625,
+                  "y": 34.5,
+                  "w": 166.34375,
+                  "h": 18
+                },
+                {
+                  "x": 1233.484375,
+                  "y": 34.5,
+                  "w": 166.515625,
+                  "h": 18
+                },
+                {
+                  "x": 1049.6875,
+                  "y": 89.5,
+                  "w": 167.0625,
+                  "h": 37
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 40,
+              "y": 24,
+              "w": 1360,
+              "h": 128
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": {
+        "clientH": 2008,
+        "scrollH": 2008,
+        "clientW": 1288,
+        "scrollW": 1288
+      },
+      "movix": [
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 7251,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 7251,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 7335,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 7335,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        },
+        {
+          "wrapper": {
+            "x": 796,
+            "y": 7419,
+            "w": 64,
+            "h": 64
+          },
+          "image": {
+            "x": 796,
+            "y": 7419,
+            "w": 64,
+            "h": 64
+          },
+          "naturalWidth": 0
+        }
+      ],
+      "platformFonts": [
+        {
+          "selector": "[data-current-city-label]",
+          "fonts": [
+            {
+              "familyName": "Segoe UI",
+              "postScriptName": "SegoeUI",
+              "isCustomFont": false,
+              "glyphCount": 6
+            }
+          ]
+        },
+        {
+          "selector": "[data-phone-value]",
+          "fonts": [
+            {
+              "familyName": "Segoe UI",
+              "postScriptName": "SegoeUI-Bold",
+              "isCustomFont": false,
+              "glyphCount": 15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/kazan/giga-300-tv",
+      "cls": 0,
+      "fontState": {
+        "enabled": true,
+        "pending": false,
+        "fallback": true,
+        "family": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "addressState": null,
+      "reassurance": null,
+      "header": {
+        "x": 40,
+        "y": 24,
+        "w": 1360,
+        "h": 128
+      },
+      "footer": {
+        "x": 40,
+        "y": 3769.234375,
+        "w": 1360,
+        "h": 563
+      },
+      "scroll": 1440,
+      "width": 1440,
+      "pending": false,
+      "phone": "8-800-250-77-77",
+      "phoneHref": "tel:+78002507777",
+      "city": "Казань",
+      "preloads": [
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+        "/__publication_assets/2e503750fe72e714d1ca73c5deb30806a995fd14157de8da9fd22928c3caa8d9/_astro/geist-cyrillic-wght-normal.BEAKL7Jp.woff2"
+      ],
+      "probe": {
+        "frames": [
+          {
+            "time": 439.6000000014901,
+            "value": {
+              "parts": [
+                {
+                  "x": 40,
+                  "y": 25.5,
+                  "w": 82.625,
+                  "h": 36
+                },
+                {
+                  "x": 1043.140625,
+                  "y": 34.5,
+                  "w": 166.34375,
+                  "h": 18
+                },
+                {
+                  "x": 1233.484375,
+                  "y": 34.5,
+                  "w": 166.515625,
+                  "h": 18
+                },
+                {
+                  "x": 1049.6875,
+                  "y": 89.5,
+                  "w": 167.0625,
+                  "h": 37
+                }
+              ],
+              "phone": "8-800-250-77-77",
+              "city": "Казань",
+              "x": 40,
+              "y": 24,
+              "w": 1360,
+              "h": 128
+            }
+          }
+        ],
+        "shifts": []
+      },
+      "table": null,
+      "movix": [],
+      "platformFonts": [
+        {
+          "selector": "[data-current-city-label]",
+          "fonts": [
+            {
+              "familyName": "Segoe UI",
+              "postScriptName": "SegoeUI",
+              "isCustomFont": false,
+              "glyphCount": 6
+            }
+          ]
+        },
+        {
+          "selector": "[data-phone-value]",
+          "fonts": [
+            {
+              "familyName": "Segoe UI",
+              "postScriptName": "SegoeUI-Bold",
+              "isCustomFont": false,
+              "glyphCount": 15
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "legal": [],
+  "states": [],
+  "pageErrors": []
+}

@@ -1,0 +1,19 @@
+{
+  "command": "pnpm check",
+  "total": 866,
+  "passed": 865,
+  "failed": 1,
+  "kind": "Windows EPERM moving cinema-kinopoisk asset in admin CSP build",
+  "issue": 417,
+  "isolatedRetry": {
+    "command": "node --test tests/browser-security.test.mjs",
+    "passed": 3,
+    "failed": 0
+  },
+  "fullRetry": {
+    "command": "pnpm check",
+    "passed": 866,
+    "failed": 0,
+    "skipped": 0
+  }
+}
