@@ -58,3 +58,7 @@ readArtifact по-прежнему требует полный локальны�
 Нужны tests/publication-retention.test.mjs (protected set, intents, archive evidence, crash/resume, symlink, historical receipts, общая queue, реальное восстановление), tests/publication-retention-archive.test.mjs и Python archive tests (полная файловая опись, corruption, traversal, отсутствие файлов и S3 failure без удаления). Перед commit/push — полный pnpm check. Linux должен выполнить symlink test без пропуска и реальный Node/Caddy runtime rehearsal.
 
 Чтобы прекратить будущие запуски: systemctl disable --now publication-retention.timer publication-retention.path. Уже начатое удаление прерывается безопасно по durable marker и может быть продолжено. Код предыдущего релиза без GC-aware readers нельзя выпускать поверх уже очищенного volume: такой rollback требует полного восстановления архивных HTML либо версии кода с поддержкой GC metadata.
+
+## Ручное обслуживание вне publication GC
+
+Private build от 13 октября удалена отдельно 30 октября после внешнего архива и полного Linux-восстановления; штатный helper по-прежнему не удаляет builds. [Результат и инцидент системного journal](../research/2026-10-30-vps-cleanup.md). Для строгого сохранения журнала за 30 суток перед удалением нужно прочитать tail realtime timestamp каждого закрытого файла и сохранить пересекающий границу файл вне VPS; один vacuum-time не является доказательством полноты окна. Инцидент [#444](https://github.com/Celtoman/astro-telekom/issues/444) остаётся открытым, утраченная история не восстановлена.
