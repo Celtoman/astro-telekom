@@ -60,7 +60,7 @@ const defaultCoverageCity = cities[0];
     title={page.title || defaults.title}
     introduction={versionedLegalSections.length === 0 ? contentText : ''}
     sections={documentSections}
-  /> : type === 'CITIES' ? <CitiesDirectory {cities} intro={contentText} /> : <section class="hero">
+  /> : type === 'CITIES' ? <CitiesDirectory {cities} /> : <section class="hero">
     <div class="container">
       <span class="eyebrow">Дом.ру</span>
       <h1>{page.title || defaults.title}</h1>

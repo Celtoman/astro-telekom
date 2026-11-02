@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-02",
+  "command": "pnpm check",
+  "exitCode": 0,
+  "stages": [
+    "lint",
+    "db:validate",
+    "build:ci",
+    "test"
+  ],
+  "processorAffinity": "two CPUs; own task process only",
+  "node": "22.23.2",
+  "pnpm": "11.19.0",
+  "dockerServer": "29.9.2",
+  "logSha256": "5fa9e7d2d90154abc28885c6266b0c1762e04ce07011fab7d44c3964b874f109",
+  "relatedCommand": "node --test tests/cities-directory.test.mjs tests/admin-preview-ui.test.mjs tests/general-home-directory.test.mjs tests/general-home-shell.test.mjs tests/city-home-build.test.mjs tests/web-build-data.test.mjs tests/browser-security.test.mjs",
+  "relatedExitCode": 0,
+  "firstAttempt": "Docker Engine unavailable; legacy H1 assertion subsequently updated",
+  "browserEvidence": "browser.json",
+  "navigationEvidence": "navigation.json"
+}

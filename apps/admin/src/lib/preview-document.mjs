@@ -5,6 +5,7 @@ import { publicDisplayForCatalog } from '../../../web/src/lib/public-display.ts'
 import { heroFacts } from '../../../web/src/data/hero-facts.ts'
 import { legalSections } from '../../../web/src/data/legal-pages.ts'
 import { renderLegalDocument } from '../../../web/src/lib/legal-document-render.ts'
+import { renderCitiesDirectory } from '../../../web/src/lib/cities-directory-render.ts'
 import { parseRedTitle } from '../../../api/src/home-hero-model.ts'
 import { generalHomeCatalog, generalHomeBlock } from '../../../web/src/data/general-home.ts'
 import { renderProviderAbout, renderBenefits, renderConnectionSteps, renderMovix, renderMorePossibilities, renderConnectionHelp, renderCityDirectory, renderHomeFaq, renderAddressEntry } from '../../../web/src/lib/general-home-render.ts'
@@ -150,19 +151,13 @@ function renderTariff(catalog, route) {
     <section class="section soft-section" data-tariff-block="faq"><div class="container faq-layout"><div><span class="section-kicker">Вопросы и ответы</span><h2>О тарифе и подключении</h2></div><div class="faq-list">${faq.map(([question, answer]) => `<details><summary>${html(question)}</summary><p>${html(answer)}</p></details>`).join('')}</div></div></section></article>`)
 }
 function monthWord(count) { const last = count % 10; return count % 100 >= 11 && count % 100 <= 14 ? 'месяцев' : last === 1 ? 'месяц' : last >= 2 && last <= 4 ? 'месяца' : 'месяцев' }
-function cityWord(count) { const last = count % 10; return count % 100 >= 11 && count % 100 <= 19 ? 'городов' : last === 1 ? 'город' : last >= 2 && last <= 4 ? 'города' : 'городов' }
-function renderCities(catalog, page) {
-  const cities = list(catalog.cities), groups = new Map()
-  for (const city of cities) { const region = city.region || { slug: '', name: '' }; if (!groups.has(region.slug)) groups.set(region.slug, { region, cities: [] }); groups.get(region.slug).cities.push(city) }
-  const regions = [...groups.values()].sort((a, b) => a.region.name.localeCompare(b.region.name, 'ru'))
-  return wrap('cities', `<section class="cities-hero"><div class="container cities-hero-grid"><div><span class="eyebrow">География подключения</span><h1>Города подключения Дом.ру</h1><p class="lead">${html(text(page.content?.text, 'Найдите свой город, откройте актуальные тарифы и проверьте техническую возможность подключения по точному адресу.'))}</p><dl class="directory-stats"><div><dt>Города</dt><dd>${cities.length}</dd></div><div><dt>Регионы</dt><dd>${regions.length}</dd></div><div><dt>Проверка</dt><dd>по адресу</dd></div></dl></div><div class="coverage-radar" aria-hidden="true"><span class="radar-ring ring-one"></span><span class="radar-ring ring-two"></span><span class="radar-ring ring-three"></span><span class="radar-beam"></span><span class="radar-point point-one"></span><span class="radar-point point-two"></span><span class="radar-point point-three"></span><strong>${cities.length}</strong><small>городов в каталоге</small></div></div></section>
-  <section class="section container coverage-callout"><div class="coverage-copy"><span class="section-label">Покрытие сети</span><h2>Проверьте не только город, но и точный адрес</h2><p>Присутствие города в каталоге не гарантирует подключение конкретного дома. Выберите город и укажите улицу и дом — система проверит техническую доступность.</p></div>${inactiveLink('Перейти к проверке покрытия', 'button')}</section>
-  <section class="section container city-directory"><div class="directory-heading"><div><span class="section-label">Все направления</span><h2>Выберите город</h2></div><p>Показано: ${cities.length} ${cityWord(cities.length)}</p></div><div class="city-search"><label>Поиск по городу</label><div class="search-control"><input disabled type="search" placeholder="Например, Казань" aria-label="Поиск по городу"></div></div><div class="region-list">${regions.map(group => `<section class="region-group"><header><h3>${html(group.region.name)}</h3><span>${group.cities.length} ${cityWord(group.cities.length)}</span></header><ul>${group.cities.map(city => `<li><a aria-disabled="true"><span>${html(city.name)}</span><span>→</span></a></li>`).join('')}</ul></section>`).join('')}</div></section><section id="faq" class="section directory-faq"><div class="container faq-grid"><div><span class="section-label">Помощь</span><h2>Вопросы о подключении</h2><p>Коротко о том, как пользоваться каталогом городов и проверкой адреса.</p></div><div class="faq-list"><details><summary>Как узнать, доступен ли Дом.ру в моем доме?</summary><p>Найдите город в каталоге, откройте его страницу и введите точный адрес в форме проверки. Доступность определяется отдельно для каждого дома.</p></details><details><summary>Почему город есть в списке, а адрес не подключается?</summary><p>Покрытие внутри одного города отличается по улицам и домам. Если система не подтверждает адрес, оператор сможет уточнить возможные варианты.</p></details><details><summary>Где посмотреть тарифы для своего города?</summary><p>На странице каждого города опубликован полный доступный каталог тарифов, цены, скорость и стоимость подключения из базы платформы.</p></details></div></div></section>`)
+function renderCities(catalog) {
+  return wrap('cities', renderCitiesDirectory({ cities: list(catalog.cities), interactive: false, asset: path => asset(catalog, path) }))
 }
 function renderGlobal(catalog, route) {
   const page = pageByType(catalog, route.pageType)
   if (!page) throw new Error('Общая страница маршрута предпросмотра не найдена')
-  if (route.pageType === 'CITIES') return renderCities(catalog, page)
+  if (route.pageType === 'CITIES') return renderCities(catalog)
   const coverage = route.pageType === 'COVERAGE', cities = list(catalog.cities)
   const sections = legalSections(route.pageType, text(catalog.site?.domain, 'tv-internet-dom.ru'))
   if (['PRIVACY', 'PERSONAL_DATA_CONSENT', 'COOKIE_POLICY'].includes(route.pageType)) {

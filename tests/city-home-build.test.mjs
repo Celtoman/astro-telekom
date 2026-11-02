@@ -32,6 +32,12 @@ test('immutable CITY_HOME builds all ten blocks, local assets and the shared she
     assert.ok((await readFile(join(directory, 'images/city-home/contact-phone.svg'))).length > 100);
     const policy = await readFile(join(directory, 'politika-konfidencialnosti/index.html'), 'utf8');
     assert.match(policy, /class="gh-header"/); assert.match(policy, /data-general-home-footer/);
+    const citiesPage = await readFile(join(directory, 'goroda-obsluzhivaniya/index.html'), 'utf8');
+    assert.match(citiesPage, /data-directory-block="BLK-0035"/);
+    assert.equal([...citiesPage.matchAll(/data-directory-city\b/g)].length, 3);
+    assert.match(citiesPage, /В каталоге 3 города · 1 регион/);
+    assert.doesNotMatch(citiesPage, /href="#faq"|id="faq"|coverage-radar|directory-faq/);
+    assert.ok((await readFile(join(directory, 'images/cities-directory/search.svg'))).length > 100);
     assert.deepEqual(new Set(catalog.routes.map(route => route.path)), new Set(['/', '/kazan', '/naberezhnye-chelny', '/nizhnekamsk', ...catalog.cities.flatMap(city => city.tariffs.map(tariff => `/${city.slug}/${tariff.slug}`)), '/karta-pokrytiya-provaydera', '/goroda-obsluzhivaniya', '/politika-konfidencialnosti', '/soglasie-na-obrabotku-personalnyh-dannyh', '/politika-obrabotki-faylov-kuki']));
   } finally {
     assert.ok(resolve(root).startsWith(resolve(temporary) + sep), 'remove only the owned temporary artifact directory');

@@ -1,191 +1,70 @@
 ---
-import { publicHtmlPath } from '../data/public-url';
 import type { CityView } from '../data/site';
+import { publicAsset } from '../data/public-asset';
+import { renderCitiesDirectory } from '../lib/cities-directory-render';
 
-interface Props {
-  cities: CityView[];
-  intro?: string;
-}
-
-const { cities, intro } = Astro.props as Props;
-const groupedCities = [...cities].reduce((groups, city) => {
-  const current = groups.get(city.region.slug) || { region: city.region, cities: [] as CityView[] };
-  current.cities.push(city);
-  groups.set(city.region.slug, current);
-  return groups;
-}, new Map<string, { region: CityView['region']; cities: CityView[] }>());
-const regions = [...groupedCities.values()].sort((left, right) => left.region.name.localeCompare(right.region.name, 'ru'));
-const cityWord = (count: number) => {
-  const lastTwo = count % 100;
-  const last = count % 10;
-  if (lastTwo >= 11 && lastTwo <= 19) return 'городов';
-  if (last === 1) return 'город';
-  if (last >= 2 && last <= 4) return 'города';
-  return 'городов';
-};
+interface Props { cities: CityView[] }
+const { cities } = Astro.props as Props;
 ---
 
-<section class="cities-hero">
-  <div class="container cities-hero-grid">
-    <div>
-      <span class="eyebrow">География подключения</span>
-      <h1>Города подключения Дом.ру</h1>
-      <p class="lead">{intro || 'Найдите свой город, откройте актуальные тарифы и проверьте техническую возможность подключения по точному адресу.'}</p>
-      <dl class="directory-stats" aria-label="Состав опубликованного каталога">
-        <div><dt>Города</dt><dd>{cities.length}</dd></div>
-        <div><dt>Регионы</dt><dd>{regions.length}</dd></div>
-        <div><dt>Проверка</dt><dd>по адресу</dd></div>
-      </dl>
-    </div>
-    <div class="coverage-radar" aria-hidden="true">
-      <span class="radar-ring ring-one"></span>
-      <span class="radar-ring ring-two"></span>
-      <span class="radar-ring ring-three"></span>
-      <span class="radar-beam"></span>
-      <span class="radar-point point-one"></span>
-      <span class="radar-point point-two"></span>
-      <span class="radar-point point-three"></span>
-      <strong>{cities.length}</strong>
-      <small>городов в каталоге</small>
-    </div>
-  </div>
-</section>
-
-<section class="section container coverage-callout" aria-labelledby="coverage-title">
-  <div class="coverage-copy">
-    <span class="section-label">Покрытие сети</span>
-    <h2 id="coverage-title">Проверьте не только город, но и точный адрес</h2>
-    <p>Присутствие города в каталоге не гарантирует подключение конкретного дома. Выберите город и укажите улицу и дом — система проверит техническую доступность.</p>
-  </div>
-  <a class="button" href="/karta-pokrytiya-provaydera">Перейти к проверке покрытия</a>
-</section>
-
-<section class="section container city-directory" data-city-directory aria-labelledby="directory-title">
-  <div class="directory-heading">
-    <div>
-      <span class="section-label">Все направления</span>
-      <h2 id="directory-title">Выберите город</h2>
-    </div>
-    <p data-city-results aria-live="polite">Показано: {cities.length} {cityWord(cities.length)}</p>
-  </div>
-
-  <div class="city-search">
-    <label for="city-search">Поиск по городу</label>
-    <div class="search-control">
-      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg>
-      <input id="city-search" type="search" autocomplete="off" placeholder="Например, Казань" data-city-search aria-controls="city-groups" />
-    </div>
-  </div>
-
-  <div id="city-groups" class="region-list">
-    {regions.map(({ region, cities: regionCities }) => <section class="region-group" data-region data-region-name={region.name}>
-      <header>
-        <h3>{region.name}</h3>
-        <span>{regionCities.length} {cityWord(regionCities.length)}</span>
-      </header>
-      <ul>
-        {regionCities.map((city) => <li data-city-name={city.name}>
-          <a href={publicHtmlPath(city.slug)}><span>{city.name}</span><span aria-hidden="true">→</span></a>
-        </li>)}
-      </ul>
-    </section>)}
-  </div>
-  <p class="empty-result" data-city-empty hidden>Город не найден. Проверьте написание или выберите ближайший город из полного списка.</p>
-</section>
-
-<section id="faq" class="section directory-faq" aria-labelledby="cities-faq-title">
-  <div class="container faq-grid">
-    <div>
-      <span class="section-label">Помощь</span>
-      <h2 id="cities-faq-title">Вопросы о подключении</h2>
-      <p>Коротко о том, как пользоваться каталогом городов и проверкой адреса.</p>
-    </div>
-    <div class="faq-list">
-      <details>
-        <summary>Как узнать, доступен ли Дом.ру в моем доме?</summary>
-        <p>Найдите город в каталоге, откройте его страницу и введите точный адрес в форме проверки. Доступность определяется отдельно для каждого дома.</p>
-      </details>
-      <details>
-        <summary>Почему город есть в списке, а адрес не подключается?</summary>
-        <p>Покрытие внутри одного города отличается по улицам и домам. Если система не подтверждает адрес, оператор сможет уточнить возможные варианты.</p>
-      </details>
-      <details>
-        <summary>Где посмотреть тарифы для своего города?</summary>
-        <p>На странице каждого города опубликован полный доступный каталог тарифов, цены, скорость и стоимость подключения из базы платформы.</p>
-      </details>
-    </div>
-  </div>
-</section>
+<Fragment set:html={renderCitiesDirectory({ cities, asset: publicAsset })} />
 
 <script>
-  const directory = document.querySelector<HTMLElement>('[data-city-directory]');
-  const input = directory?.querySelector<HTMLInputElement>('[data-city-search]');
-  const result = directory?.querySelector<HTMLElement>('[data-city-results]');
-  const empty = directory?.querySelector<HTMLElement>('[data-city-empty]');
-  const normalize = (value: string) => value.toLocaleLowerCase('ru-RU').replaceAll('ё', 'е').trim();
-  const cityWord = (count: number) => {
-    const lastTwo = count % 100;
-    const last = count % 10;
-    if (lastTwo >= 11 && lastTwo <= 19) return 'городов';
-    if (last === 1) return 'город';
-    if (last >= 2 && last <= 4) return 'города';
-    return 'городов';
-  };
-
-  input?.addEventListener('input', () => {
-    const query = normalize(input.value);
-    let visibleCount = 0;
-    directory?.querySelectorAll<HTMLElement>('[data-region]').forEach((region) => {
-      let regionCount = 0;
-      region.querySelectorAll<HTMLElement>('[data-city-name]').forEach((city) => {
-        const visible = normalize(city.dataset.cityName || '').includes(query);
-        city.hidden = !visible;
-        if (visible) regionCount += 1;
-      });
-      region.hidden = regionCount === 0;
-      visibleCount += regionCount;
-    });
-    if (result) result.textContent = `Показано: ${visibleCount} ${cityWord(visibleCount)}`;
-    if (empty) empty.hidden = visibleCount !== 0;
-  });
+  import { initializeCitiesDirectories } from '../lib/cities-directory.mjs';
+  initializeCitiesDirectories();
+  document.addEventListener('astro:page-load', () => initializeCitiesDirectories());
 </script>
 
-<style>
-  .cities-hero { overflow: hidden; padding: 72px 0 64px; background: linear-gradient(135deg, #edf7ff 0%, #f7f8fa 52%, #fcecf3 100%); }
-  .cities-hero-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, .55fr); align-items: center; gap: 64px; }
-  .directory-stats { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0 0; }
-  .directory-stats div { min-width: 132px; padding: 16px 18px; border: 1px solid rgba(24, 32, 42, .09); border-radius: 18px; background: rgba(255, 255, 255, .72); backdrop-filter: blur(8px); }
-  .directory-stats dt { color: #697789; font-size: 13px; font-weight: 700; }
-  .directory-stats dd { margin: 4px 0 0; font-size: 22px; font-weight: 850; }
-  .coverage-radar { position: relative; display: grid; place-content: center; width: min(340px, 100%); aspect-ratio: 1; justify-self: end; overflow: hidden; border: 1px solid rgba(23, 105, 170, .18); border-radius: 50%; color: #18202a; background: radial-gradient(circle, rgba(255,255,255,.92) 0 8%, rgba(255,255,255,.42) 9% 100%); box-shadow: 0 28px 80px rgba(23, 105, 170, .16); text-align: center; }
-  .coverage-radar strong { position: relative; z-index: 2; font-size: 48px; line-height: 1; }
-  .coverage-radar small { position: relative; z-index: 2; margin-top: 8px; color: #526071; font-weight: 700; }
-  .radar-ring { position: absolute; inset: 50%; border: 1px solid rgba(23, 105, 170, .2); border-radius: 50%; transform: translate(-50%, -50%); }
-  .ring-one { width: 34%; height: 34%; }.ring-two { width: 66%; height: 66%; }.ring-three { width: 96%; height: 96%; }
-  .radar-beam { position: absolute; inset: 50% 50% 0; width: 50%; height: 1px; transform-origin: left center; transform: rotate(-34deg); background: linear-gradient(90deg, #1769aa, transparent); }
-  .radar-point { position: absolute; width: 11px; height: 11px; border: 3px solid #fff; border-radius: 50%; background: #c91f5c; box-shadow: 0 3px 12px rgba(201, 31, 92, .35); }
-  .point-one { top: 18%; right: 28%; }.point-two { right: 13%; bottom: 32%; }.point-three { bottom: 14%; left: 25%; }
-  .coverage-callout { display: flex; align-items: center; justify-content: space-between; gap: 48px; margin-top: 56px; padding: 38px 40px; border-radius: 26px; color: #fff; background: #18202a; }
-  .coverage-copy { max-width: 760px; }.coverage-copy h2 { margin: 8px 0 12px; }.coverage-copy p { margin: 0; color: #c5cfda; font-size: 17px; line-height: 1.6; }
-  .section-label { color: #63b3ed; font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-  .city-directory { padding-top: 76px; }
-  .directory-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
-  .directory-heading h2 { margin: 8px 0 0; }.directory-heading p { margin: 0 0 6px; color: #697789; font-weight: 700; }
-  .city-search { max-width: 720px; margin: 28px 0 32px; }.city-search label { display: block; margin-bottom: 9px; font-size: 14px; font-weight: 750; }
-  .search-control { position: relative; }.search-control svg { position: absolute; top: 50%; left: 18px; width: 22px; fill: none; stroke: #697789; stroke-linecap: round; stroke-width: 2; transform: translateY(-50%); }
-  .search-control input { width: 100%; min-height: 58px; padding: 0 18px 0 54px; border: 1px solid #d8dee8; border-radius: 16px; color: #18202a; background: #fff; font: inherit; font-size: 17px; box-shadow: 0 8px 24px rgba(21,40,66,.05); }
-  .region-list { display: grid; gap: 18px; }.region-group { padding: 26px; border: 1px solid #e3e8ef; border-radius: 22px; background: #fff; box-shadow: 0 8px 28px rgba(21,40,66,.045); }
-  .region-group header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid #edf0f4; }.region-group h3 { margin: 0; font-size: 22px; }.region-group header span { color: #697789; font-size: 13px; font-weight: 700; }
-  .region-group ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px 18px; margin: 16px 0 0; padding: 0; list-style: none; }
-  .region-group a { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 46px; padding: 8px 10px; border-radius: 10px; font-weight: 680; text-decoration: none; }.region-group a span:last-child { color: #1769aa; }.region-group a:hover { color: #1769aa; background: #edf7ff; }
-  .empty-result { padding: 30px; border: 1px dashed #c7d0dc; border-radius: 18px; color: #526071; text-align: center; }
-  .directory-faq { background: #edf2f7; }.faq-grid { display: grid; grid-template-columns: .7fr 1.3fr; gap: 72px; }.faq-grid h2 { margin-top: 8px; }.faq-grid > div:first-child p { color: #526071; line-height: 1.6; }
-  .faq-list { display: grid; gap: 10px; }.faq-list details { padding: 20px 22px; border: 1px solid #dde3eb; border-radius: 16px; background: #fff; }.faq-list summary { cursor: pointer; font-weight: 780; }.faq-list p { margin: 14px 0 0; color: #526071; line-height: 1.6; }
-  [hidden] { display: none !important; }
-  @media (max-width: 800px) {
-    .cities-hero { padding: 48px 0; }.cities-hero-grid, .faq-grid { grid-template-columns: 1fr; gap: 32px; }.coverage-radar { width: 250px; justify-self: center; }
-    .coverage-callout { align-items: stretch; flex-direction: column; gap: 24px; margin-top: 32px; padding: 28px 24px; }.directory-heading { align-items: start; flex-direction: column; gap: 8px; }
-    .region-group { padding: 22px 16px; }.region-group ul { grid-template-columns: 1fr 1fr; }
+<style is:global>
+  .cities-directory { display: flex; flex-direction: column; gap: 32px; width: min(1360px, calc(100% - 80px)); min-width: 0; margin: 0 auto; padding: 48px; color: #18202a; background: #fff; font-family: 'Geist Variable', ui-sans-serif, system-ui, sans-serif; }
+  .cities-directory-heading { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; min-width: 0; }
+  .cities-directory h1 { width: 100%; max-width: none; margin: 0; font-size: 48px; font-weight: 800; line-height: 50px; letter-spacing: -2.4px; overflow-wrap: anywhere; }
+  .cities-directory p { margin: 0; }
+  .cities-directory-intro { width: 100%; color: #526071; font-size: 16px; line-height: 24px; }
+  .cities-directory-compact-copy { display: none; }
+  .cities-directory-search { position: relative; display: flex; align-items: center; gap: 8px; width: 100%; max-width: 640px; height: 48px; padding: 0 12px; border: 1px solid #dcecf7; border-radius: 10px; background: #fff; }
+  .cities-directory-compact-placeholder { display: none; }
+  .cities-directory-search > img { display: block; flex: 0 0 24px; }
+  .cities-directory-search input { flex: 1; width: 0; min-width: 0; height: 24px; margin: 0; padding: 0; border: 0; border-radius: 0; outline: 0; color: #18202a; background: transparent; font: inherit; font-size: 16px; line-height: 24px; appearance: none; }
+  .cities-directory-search input::placeholder { color: #526071; opacity: 1; }
+  .cities-directory-search input::-webkit-search-cancel-button { display: none; }
+  .cities-directory-search input:disabled { opacity: 1; -webkit-text-fill-color: #526071; }
+  .cities-directory-search:focus-within { border-color: #1769aa; box-shadow: inset 0 0 0 1px #1769aa; }
+  .cities-directory-search input:focus-visible { outline: 0; }
+  .cities-directory-clear { display: flex; flex: 0 0 44px; align-items: center; justify-content: center; width: 44px; height: 44px; margin-right: -10px; padding: 0; border: 0; border-radius: 10px; background: transparent; cursor: pointer; }
+  .cities-directory-clear img { display: block; }
+  .cities-directory-status { color: #526071; font-size: 14px; line-height: 20px; }
+  .cities-directory-groups { display: flex; flex-direction: column; gap: 32px; min-width: 0; }
+  .cities-directory-region { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .cities-directory-region header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid #dcecf7; }
+  .cities-directory h2 { min-width: 0; margin: 0; font-size: 20px; line-height: 25px; font-weight: 700; letter-spacing: -.2px; overflow-wrap: anywhere; }
+  .cities-directory-region header span { flex: 0 0 auto; color: #526071; font-size: 14px; line-height: 20px; }
+  .cities-directory-region ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px 24px; margin: 0; padding: 0; list-style: none; }
+  .cities-directory-region li { display: flex; min-width: 0; }
+  .cities-directory-region a { display: flex; align-items: center; width: 100%; min-width: 0; min-height: 48px; padding: 12px; border-radius: 10px; color: #18202a; font-size: 16px; line-height: 24px; font-weight: 400; text-decoration: none; overflow-wrap: anywhere; }
+  .cities-directory-region a:hover { color: #1769aa; background: #eef8ff; }
+  .cities-directory :is(a, button):focus-visible { outline: 2px solid #1769aa; outline-offset: 2px; }
+  .cities-directory-empty { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px; border-radius: 14px; background: #eaf7ff; }
+  .cities-directory-empty p { color: #526071; font-size: 16px; line-height: 24px; overflow-wrap: anywhere; }
+  .cities-directory-empty button { min-height: 44px; max-width: 100%; padding: 12px 20px; border: 0; border-radius: 14px; color: #1769aa; background: #eef8ff; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; cursor: pointer; }
+  .cities-directory-empty button:hover { background: #dcecf7; }
+  .cities-directory [hidden] { display: none !important; }
+  @media (max-width: 1100px) {
+    .cities-directory { width: min(720px, calc(100% - 32px)); padding: 32px; }
+    .cities-directory h1 { font-size: 40px; line-height: 43px; letter-spacing: -1.6px; }
+    .cities-directory-search { max-width: none; }
+    .cities-directory-region ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
-  @media (max-width: 520px) { .directory-stats div { flex: 1 1 100px; min-width: 0; }.region-group ul { grid-template-columns: 1fr; } }
+  @media (max-width: 620px) {
+    .cities-directory { gap: 24px; padding: 20px; }
+    .cities-directory h1 { font-size: 28px; line-height: 33px; letter-spacing: -1.4px; }
+    .cities-directory-region ul { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
+  }
+  @media (max-width: 360px) {
+    .cities-directory-full-copy { display: none; }
+    .cities-directory-compact-copy { display: inline; }
+    .cities-directory-region ul { grid-template-columns: minmax(0, 1fr); }
+    .cities-directory-search input::placeholder { color: transparent; -webkit-text-fill-color: transparent; }
+    .cities-directory-search input:placeholder-shown + .cities-directory-compact-placeholder { position: absolute; left: 44px; right: 12px; display: block; color: #526071; font-size: 16px; line-height: 24px; white-space: nowrap; overflow: hidden; pointer-events: none; }
+  }
 </style>

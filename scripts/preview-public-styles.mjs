@@ -34,6 +34,7 @@ const assetPaths = ['home-hero.png', 'domru-logo.png', 'map-pin.svg', 'chevron-d
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/general-home/', import.meta.url)).filter(name => /^[a-z0-9-]+\.(?:png|svg)$/.test(name)).map(name => `/images/general-home/${name}`));
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/city-home/', import.meta.url)).filter(name => /^[a-z0-9-]+\.svg$/.test(name)).map(name => `/images/city-home/${name}`));
 assetPaths.push('/images/legal/caret-down.svg', '/images/legal/caret-up.svg');
+assetPaths.push('/images/cities-directory/search.svg', '/images/cities-directory/clear.svg');
 
 // Only trusted repository CSS is embedded. Catalog data never reaches this loader.
 // Native CSS nesting isolates Astro's local selectors from other preview components.

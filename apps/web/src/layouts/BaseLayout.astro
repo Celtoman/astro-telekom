@@ -37,7 +37,7 @@ const currentRoute = catalog.routes.find(route => route.path === normalizePublic
 const cityComposition = city?.pages.find(page => page.type === 'HOME' && page.slug === '')?.content?.homeCompositionVersion;
 const localSections = homeShell ? ['faq', 'movix', 'address-check']
   : currentRoute?.kind === 'CITY_HOME' ? ['tariffs', 'address-check', ...(cityComposition === '3.0.0' ? ['comparison', 'faq', 'movix', 'contacts'] : [])]
-    : currentRoute?.kind === 'CITY_TARIFF_DETAIL' || currentRoute?.pageType === 'CITIES' ? ['faq'] : [];
+    : currentRoute?.kind === 'CITY_TARIFF_DETAIL' ? ['faq'] : [];
 const imageOrigins = new Set<string>((Astro.props as Props).imageOrigins ?? []);
 if (typeof Astro.props.firstScreenImage === 'string' && /^https:\/\//i.test(Astro.props.firstScreenImage)) imageOrigins.add(new URL(Astro.props.firstScreenImage).origin);
 for (const origin of imageOrigins) {

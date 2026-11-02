@@ -39,6 +39,24 @@ test('preview route selector covers every working Release 1 route with useful la
   assert.match(options[3].label, /Политика/);
 });
 
+test('CITIES preview uses BLK-0035, its working catalog and inert controls without rewriting CMS copy', () => {
+  const source = structuredClone(catalog);
+  source.routes.push({ kind: 'GLOBAL_PAGE', path: '/goroda-obsluzhivaniya', pageType: 'CITIES' });
+  source.globalPages.push({ type: 'CITIES', slug: 'goroda-obsluzhivaniya', content: { text: 'Старое пояснение CMS' } });
+  source.cities[0].region = { slug: 'tatarstan', name: 'Татарстан' };
+  source.cities.push({ ...structuredClone(source.cities[0]), slug: 'draft-city', name: 'Скрытый город', status: 'DRAFT' });
+  const original = structuredClone(source);
+  const result = buildPreviewDocument(source, '/goroda-obsluzhivaniya', readPreviewPublicStyles(), {
+    '/images/cities-directory/search.svg': '/preview-search.svg', '/images/cities-directory/clear.svg': '/preview-clear.svg',
+  });
+  assert.match(result, /data-directory-block="BLK-0035"/);
+  assert.match(result, /В каталоге 1 город · 1 регион/);
+  assert.match(result, /src="\/preview-search.svg" width="24" height="24"/);
+  assert.match(result, /Город не найден/);
+  assert.doesNotMatch(result, /Старое пояснение CMS|Скрытый город|coverage-radar|directory-faq|<script|\shref=/);
+  assert.deepEqual(source, original);
+});
+
 test('preview document renders working city and tariff data without executable content', () => {
   const cityDocument = buildPreviewDocument(catalog, '/kazan');
   const tariffDocument = buildPreviewDocument(catalog, '/kazan/giga-300');
