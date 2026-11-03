@@ -1,0 +1,9 @@
+{
+  "indexablePages": 1455,
+  "htmlPages": 1456,
+  "output": ".codex-tmp/cities-458/static-public",
+  "publicSiteUrl": "https://example.com",
+  "allowDemoData": false,
+  "fixture": "207 published city names and regions; synthetic tariffs",
+  "cliNote": "Workspace build wrapper checks apps/web/dist; isolated output verified through the same exported function as StaticPublicationBuilder."
+}

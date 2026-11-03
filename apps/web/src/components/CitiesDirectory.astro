@@ -16,7 +16,8 @@ const { cities } = Astro.props as Props;
 </script>
 
 <style is:global>
-  .cities-directory { display: flex; flex-direction: column; gap: 32px; width: min(1360px, calc(100% - 80px)); min-width: 0; margin: 0 auto; padding: 48px; color: #18202a; background: #fff; font-family: 'Geist Variable', ui-sans-serif, system-ui, sans-serif; }
+  /* Match the public Header container; section spacing must not add a second horizontal gutter. */
+  .cities-directory { display: flex; flex-direction: column; gap: 32px; width: min(1360px, calc(100% - 32px)); min-width: 0; margin: 0 auto; padding: 48px 0; color: #18202a; background: #fff; font-family: 'Geist Variable', ui-sans-serif, system-ui, sans-serif; }
   .cities-directory-heading { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; min-width: 0; }
   .cities-directory h1 { width: 100%; max-width: none; margin: 0; font-size: 48px; font-weight: 800; line-height: 50px; letter-spacing: -2.4px; overflow-wrap: anywhere; }
   .cities-directory p { margin: 0; }
@@ -50,13 +51,13 @@ const { cities } = Astro.props as Props;
   .cities-directory-empty button:hover { background: #dcecf7; }
   .cities-directory [hidden] { display: none !important; }
   @media (max-width: 1100px) {
-    .cities-directory { width: min(720px, calc(100% - 32px)); padding: 32px; }
+    .cities-directory { width: min(720px, calc(100% - 32px)); padding: 32px 0; }
     .cities-directory h1 { font-size: 40px; line-height: 43px; letter-spacing: -1.6px; }
     .cities-directory-search { max-width: none; }
     .cities-directory-region ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
   @media (max-width: 620px) {
-    .cities-directory { gap: 24px; padding: 20px; }
+    .cities-directory { gap: 24px; padding: 20px 0; }
     .cities-directory h1 { font-size: 28px; line-height: 33px; letter-spacing: -1.4px; }
     .cities-directory-region ul { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
   }

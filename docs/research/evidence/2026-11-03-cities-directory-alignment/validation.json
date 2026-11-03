@@ -1,0 +1,33 @@
+{
+  "command": "pnpm check",
+  "exitCode": 0,
+  "platform": "Windows, Node22.23.2/pnpm11.19.0",
+  "counts": {
+    "tests": 889,
+    "pass": 888,
+    "fail": 0,
+    "skipped": 1,
+    "cancelled": 0
+  },
+  "logSha256": "7c3d856605548d6e33fd6c2644393ec250eb0bbacfd3c5961fb7dd840d2b69c4",
+  "scope": "Final application diff only CitiesDirectory.astro: same Header width formula; section vertical padding retained; horizontal padding removed.",
+  "staticBuild": "isolated output verified through exported verifyPublication with allowDemoData=false",
+  "rejectedAttempts": [
+    "Preliminary full gate interrupted during geometry verification; not accepted.",
+    "Astro dev exited before ready (#461); visual checks use actual static build.",
+    "Workspace build CLI checks default apps/web/dist; its failure for isolated output was not accepted. Correct isolated output passed exported verifier."
+  ],
+  "detector": [
+    {
+      "antipattern": "overused-font",
+      "name": "Overused font",
+      "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+      "severity": "warning",
+      "category": "slop",
+      "file": "D:\\01 vibecode\\astro-telekom\\apps\\web\\src\\components\\CitiesDirectory.astro",
+      "line": 20,
+      "snippet": "font-family: 'Geist"
+    }
+  ],
+  "detectorDecision": "Geist is mandated by the accepted Figma/library; font warning is outside this targeted alignment correction and is intentionally not applied."
+}

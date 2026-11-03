@@ -14,6 +14,8 @@
 
 Exact-SHA Linux CI [41597918122](https://github.com/Celtoman/astro-telekom/actions/runs/41597918122) для `59f64d2c71ba6dcfa13ede0f7f254e5c3785c775` подтвердил полный `pnpm check`: 889 passed, 0 failed, 0 skipped. Предыдущий CI после merge не принят из-за изменённого формата строки Baseline; docs-only исправление #456 проверено профильным guard и повторным полным CI.
 
+Правка ширины BLK-0035 (#458): полный Windows `pnpm check` на финальном CSS завершился с кодом 0; 888 passed, 0 failed, 1 symlink skip/EPERM. Новых тестовых случаев и изменений API нет. Геометрия проверена отдельно в Chrome на 15 ширинах, четырёх preview и двух no-JS; [доказательства](research/2026-11-03-cities-directory-alignment.md).
+
 Baseline включает legal-тесты, parser-time регрессию каталога и архивную retention. Полный набор команд и тестов не сокращался; реальные PostgreSQL/Redis/Caddy rehearsals прошли в штатном Windows gate. Попытка полного gate в контейнере Docker Desktop не принималась: отдельная сеть не давала доступ к fixture-портам через127.0.0.1, конвертация Git archive добавила CRLF в shell helper (известный #442). Ресурсная проблема Windows отдельно остаётся в #430; устранение временной нехватки места текущего выпуска фиксируется в #455.
 
 | Файл | Что проверяет |

@@ -1,0 +1,859 @@
+{
+  "source": "Local Astro frontend; synthetic catalog using city/region snapshot of 2026-10-29",
+  "layouts": [
+    {
+      "width": 1440,
+      "header": {
+        "x": 40,
+        "w": 1360
+      },
+      "headingBox": {
+        "x": 40,
+        "y": 48,
+        "w": 1360,
+        "h": 50
+      },
+      "groupsBox": {
+        "x": 40,
+        "y": 270,
+        "w": 1360,
+        "h": 6650
+      },
+      "columnGap": "24px",
+      "firstCellWidth": 322,
+      "lastCellWidth": 322,
+      "box": {
+        "x": 40,
+        "w": 1360,
+        "h": 6968
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "48px",
+      "columns": 4,
+      "search": {
+        "x": 40,
+        "y": 154,
+        "w": 640,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 270,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 834,
+      "header": {
+        "x": 57,
+        "w": 720
+      },
+      "headingBox": {
+        "x": 57,
+        "y": 32,
+        "w": 720,
+        "h": 43
+      },
+      "groupsBox": {
+        "x": 57,
+        "y": 247,
+        "w": 720,
+        "h": 7482
+      },
+      "columnGap": "24px",
+      "firstCellWidth": 224,
+      "lastCellWidth": 224,
+      "box": {
+        "x": 57,
+        "w": 720,
+        "h": 7761
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "40px",
+      "columns": 3,
+      "search": {
+        "x": 57,
+        "y": 131,
+        "w": 720,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 247,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 390,
+      "header": {
+        "x": 16,
+        "w": 358
+      },
+      "headingBox": {
+        "x": 16,
+        "y": 20,
+        "w": 358,
+        "h": 66
+      },
+      "groupsBox": {
+        "x": 16,
+        "y": 274,
+        "w": 358,
+        "h": 9090
+      },
+      "columnGap": "16px",
+      "firstCellWidth": 171,
+      "lastCellWidth": 171,
+      "box": {
+        "x": 16,
+        "w": 358,
+        "h": 9384
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "28px",
+      "columns": 2,
+      "search": {
+        "x": 16,
+        "y": 166,
+        "w": 358,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 274,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 320,
+      "header": {
+        "x": 16,
+        "w": 288
+      },
+      "headingBox": {
+        "x": 16,
+        "y": 20,
+        "w": 288,
+        "h": 66
+      },
+      "groupsBox": {
+        "x": 16,
+        "y": 274,
+        "w": 288,
+        "h": 13930
+      },
+      "columnGap": "16px",
+      "firstCellWidth": 288,
+      "lastCellWidth": 288,
+      "box": {
+        "x": 16,
+        "w": 288,
+        "h": 14224
+      },
+      "heading": "Города обслуживания",
+      "headingFont": "28px",
+      "columns": 1,
+      "search": {
+        "x": 16,
+        "y": 166,
+        "w": 288,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 274,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 340,
+      "header": {
+        "x": 16,
+        "w": 308
+      },
+      "headingBox": {
+        "x": 16,
+        "y": 20,
+        "w": 308,
+        "h": 33
+      },
+      "groupsBox": {
+        "x": 16,
+        "y": 241,
+        "w": 308,
+        "h": 13930
+      },
+      "columnGap": "16px",
+      "firstCellWidth": 308,
+      "lastCellWidth": 308,
+      "box": {
+        "x": 16,
+        "w": 308,
+        "h": 14191
+      },
+      "heading": "Города обслуживания",
+      "headingFont": "28px",
+      "columns": 1,
+      "search": {
+        "x": 16,
+        "y": 133,
+        "w": 308,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 241,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 360,
+      "header": {
+        "x": 16,
+        "w": 328
+      },
+      "headingBox": {
+        "x": 16,
+        "y": 20,
+        "w": 328,
+        "h": 33
+      },
+      "groupsBox": {
+        "x": 16,
+        "y": 241,
+        "w": 328,
+        "h": 13930
+      },
+      "columnGap": "16px",
+      "firstCellWidth": 328,
+      "lastCellWidth": 328,
+      "box": {
+        "x": 16,
+        "w": 328,
+        "h": 14191
+      },
+      "heading": "Города обслуживания",
+      "headingFont": "28px",
+      "columns": 1,
+      "search": {
+        "x": 16,
+        "y": 133,
+        "w": 328,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 241,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 375,
+      "header": {
+        "x": 16,
+        "w": 343
+      },
+      "headingBox": {
+        "x": 16,
+        "y": 20,
+        "w": 343,
+        "h": 66
+      },
+      "groupsBox": {
+        "x": 16,
+        "y": 274,
+        "w": 343,
+        "h": 9114
+      },
+      "columnGap": "16px",
+      "firstCellWidth": 163.5,
+      "lastCellWidth": 163.5,
+      "box": {
+        "x": 16,
+        "w": 343,
+        "h": 9408
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "28px",
+      "columns": 2,
+      "search": {
+        "x": 16,
+        "y": 166,
+        "w": 343,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 274,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 620,
+      "header": {
+        "x": 16,
+        "w": 588
+      },
+      "headingBox": {
+        "x": 16,
+        "y": 20,
+        "w": 588,
+        "h": 33
+      },
+      "groupsBox": {
+        "x": 16,
+        "y": 241,
+        "w": 588,
+        "h": 9042
+      },
+      "columnGap": "16px",
+      "firstCellWidth": 286,
+      "lastCellWidth": 286,
+      "box": {
+        "x": 16,
+        "w": 588,
+        "h": 9303
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "28px",
+      "columns": 2,
+      "search": {
+        "x": 16,
+        "y": 133,
+        "w": 588,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 241,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 621,
+      "header": {
+        "x": 16,
+        "w": 589
+      },
+      "headingBox": {
+        "x": 16,
+        "y": 32,
+        "w": 589,
+        "h": 43
+      },
+      "groupsBox": {
+        "x": 16,
+        "y": 271,
+        "w": 589,
+        "h": 7482
+      },
+      "columnGap": "24px",
+      "firstCellWidth": 180.328125,
+      "lastCellWidth": 180.328125,
+      "box": {
+        "x": 16,
+        "w": 589,
+        "h": 7785
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "40px",
+      "columns": 3,
+      "search": {
+        "x": 16,
+        "y": 155,
+        "w": 589,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 271,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 768,
+      "header": {
+        "x": 24,
+        "w": 720
+      },
+      "headingBox": {
+        "x": 24,
+        "y": 32,
+        "w": 720,
+        "h": 43
+      },
+      "groupsBox": {
+        "x": 24,
+        "y": 247,
+        "w": 720,
+        "h": 7482
+      },
+      "columnGap": "24px",
+      "firstCellWidth": 224,
+      "lastCellWidth": 224,
+      "box": {
+        "x": 24,
+        "w": 720,
+        "h": 7761
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "40px",
+      "columns": 3,
+      "search": {
+        "x": 24,
+        "y": 131,
+        "w": 720,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 247,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 1000,
+      "header": {
+        "x": 140,
+        "w": 720
+      },
+      "headingBox": {
+        "x": 140,
+        "y": 32,
+        "w": 720,
+        "h": 43
+      },
+      "groupsBox": {
+        "x": 140,
+        "y": 247,
+        "w": 720,
+        "h": 7482
+      },
+      "columnGap": "24px",
+      "firstCellWidth": 224,
+      "lastCellWidth": 224,
+      "box": {
+        "x": 140,
+        "w": 720,
+        "h": 7761
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "40px",
+      "columns": 3,
+      "search": {
+        "x": 140,
+        "y": 131,
+        "w": 720,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 247,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 1100,
+      "header": {
+        "x": 190,
+        "w": 720
+      },
+      "headingBox": {
+        "x": 190,
+        "y": 32,
+        "w": 720,
+        "h": 43
+      },
+      "groupsBox": {
+        "x": 190,
+        "y": 247,
+        "w": 720,
+        "h": 7482
+      },
+      "columnGap": "24px",
+      "firstCellWidth": 224,
+      "lastCellWidth": 224,
+      "box": {
+        "x": 190,
+        "w": 720,
+        "h": 7761
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "40px",
+      "columns": 3,
+      "search": {
+        "x": 190,
+        "y": 131,
+        "w": 720,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 247,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 1101,
+      "header": {
+        "x": 16,
+        "w": 1069
+      },
+      "headingBox": {
+        "x": 16,
+        "y": 48,
+        "w": 1069,
+        "h": 50
+      },
+      "groupsBox": {
+        "x": 16,
+        "y": 270,
+        "w": 1069,
+        "h": 6650
+      },
+      "columnGap": "24px",
+      "firstCellWidth": 249.25,
+      "lastCellWidth": 249.25,
+      "box": {
+        "x": 16,
+        "w": 1069,
+        "h": 6968
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "48px",
+      "columns": 4,
+      "search": {
+        "x": 16,
+        "y": 154,
+        "w": 640,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 270,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 1280,
+      "header": {
+        "x": 16,
+        "w": 1248
+      },
+      "headingBox": {
+        "x": 16,
+        "y": 48,
+        "w": 1248,
+        "h": 50
+      },
+      "groupsBox": {
+        "x": 16,
+        "y": 270,
+        "w": 1248,
+        "h": 6650
+      },
+      "columnGap": "24px",
+      "firstCellWidth": 294,
+      "lastCellWidth": 294,
+      "box": {
+        "x": 16,
+        "w": 1248,
+        "h": 6968
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "48px",
+      "columns": 4,
+      "search": {
+        "x": 16,
+        "y": 154,
+        "w": 640,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 270,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    },
+    {
+      "width": 1920,
+      "header": {
+        "x": 280,
+        "w": 1360
+      },
+      "headingBox": {
+        "x": 280,
+        "y": 48,
+        "w": 1360,
+        "h": 50
+      },
+      "groupsBox": {
+        "x": 280,
+        "y": 270,
+        "w": 1360,
+        "h": 6650
+      },
+      "columnGap": "24px",
+      "firstCellWidth": 322,
+      "lastCellWidth": 322,
+      "box": {
+        "x": 280,
+        "w": 1360,
+        "h": 6968
+      },
+      "heading": "Города подключения Дом.ру",
+      "headingFont": "48px",
+      "columns": 4,
+      "search": {
+        "x": 280,
+        "y": 154,
+        "w": 640,
+        "h": 48
+      },
+      "overflow": false,
+      "groupTop": 270,
+      "assets": [
+        {
+          "width": 24,
+          "height": 24,
+          "loaded": true
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        }
+      ],
+      "citySearch": 1,
+      "regionSearch": 3,
+      "clearAndReset": true,
+      "longQuery": true
+    }
+  ],
+  "preview": [
+    {
+      "width": 1440,
+      "cities": 207,
+      "inert": true,
+      "overflow": false
+    },
+    {
+      "width": 834,
+      "cities": 207,
+      "inert": true,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "cities": 207,
+      "inert": true,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "cities": 207,
+      "inert": true,
+      "overflow": false
+    }
+  ],
+  "noJs": [
+    {
+      "width": 1440,
+      "cities": 207,
+      "links": true
+    },
+    {
+      "width": 320,
+      "cities": 207,
+      "links": true
+    }
+  ],
+  "errors": [],
+  "navigation": {
+    "href": "/kazan",
+    "url": "http://127.0.0.1:4483/kazan",
+    "headings": 1
+  }
+}
