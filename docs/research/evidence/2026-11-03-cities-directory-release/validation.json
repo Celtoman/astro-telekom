@@ -1,0 +1,88 @@
+{
+  "codeCommit": "59f64d2c71ba6dcfa13ede0f7f254e5c3785c775",
+  "checks": [
+    {
+      "command": "pnpm check",
+      "platform": "Windows",
+      "result": {
+        "tests": 889,
+        "pass": 888,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 1
+      },
+      "logSha256": "08c2a5ed5945fbfe8b63489ddd2efd44b1bccce8a9d382f55255db8a5539a8f5"
+    },
+    {
+      "command": "node --test tests/publication-retention.test.mjs tests/publication-retention-archive.test.mjs",
+      "platform": "Linux",
+      "result": {
+        "tests": 15,
+        "pass": 15,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "logSha256": "862b5035ed20691640a4e223a07386ac2c7aa5b10eb184866ce59798a0e04ecc"
+    }
+  ],
+  "platformNote": "Windows symlink EPERM skip and Python flock covered by Linux retention run; failed full Docker Desktop runner is not used as passing evidence.",
+  "preservation": {
+    "preservedUserDocuments": [
+      "README.md",
+      "docs/block-passports.md",
+      "docs/decisions.md",
+      "docs/figma-design-rules.md",
+      "docs/plans/2026-10-12-general-home-block-agreement.md",
+      "docs/product-findings.md",
+      "docs/research/README.md",
+      "docs/site-structure.md",
+      "docs/technical-debt.md",
+      "docs/web-design-system.md"
+    ],
+    "contentDeltaMatches": true,
+    "exception": "Obsolete technical-debt date 22 October superseded by upstream 30 October; all other added/deleted lines match.",
+    "byteIdenticalToBackup": [
+      "docs/decisions.md",
+      "docs/figma-design-rules.md",
+      "docs/plans/2026-10-12-general-home-block-agreement.md",
+      "docs/site-structure.md",
+      "docs/web-design-system.md"
+    ]
+  },
+  "runtimeEquivalentTo": "a8afdfdf833db3d5dcc1abd551b4a10147b58ff7",
+  "documentationGuard": {
+    "command": "node --test tests/ci-runtime.test.mjs",
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0
+  },
+  "rejectedAttempts": [
+    {
+      "kind": "full Docker Desktop Linux runner",
+      "reason": "127.0.0.1 fixture connectivity and Git archive CRLF conversion",
+      "accepted": false
+    },
+    {
+      "kind": "CI",
+      "runId": 41596855313,
+      "sha": "a8afdfdf833db3d5dcc1abd551b4a10147b58ff7",
+      "reason": "Canonical Baseline format changed after local gate; fixed docs-only in selected release SHA (#456).",
+      "accepted": false
+    }
+  ],
+  "ci": {
+    "runId": 41597918122,
+    "url": "https://github.com/Celtoman/astro-telekom/actions/runs/41597918122",
+    "sha": "59f64d2c71ba6dcfa13ede0f7f254e5c3785c775",
+    "conclusion": "success",
+    "result": {
+      "tests": 889,
+      "pass": 889,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "logSha256": "4a383887b8e3f26bc14a3c561455641e71cc116b96e7da273cb402306b6f886e"
+  }
+}
