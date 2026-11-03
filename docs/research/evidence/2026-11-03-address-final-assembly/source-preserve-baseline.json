@@ -1,0 +1,46 @@
+[
+  {
+    "id": "12:394",
+    "name": "BLK-0032 / Что означает результат проверки",
+    "type": "COMPONENT_SET",
+    "key": "b1f158f7d2829000bb402dc18997b7e4e10ed06a",
+    "profile": "3c73fb03"
+  },
+  {
+    "id": "17:1152",
+    "name": "BLK-0033 / Тарифы в городе — подборка",
+    "type": "COMPONENT_SET",
+    "key": "4e74cd57bef1a5855234d3ee7846b9cb0dbc1d48",
+    "profile": "a9ed17ec"
+  },
+  {
+    "id": "22:3080",
+    "name": "QA / 2 тарифа / Desktop",
+    "type": "FRAME",
+    "profile": "98e35acf"
+  },
+  {
+    "id": "22:3214",
+    "name": "QA / 2 тарифа / Tablet",
+    "type": "FRAME",
+    "profile": "15253ec0"
+  },
+  {
+    "id": "22:3348",
+    "name": "QA / 2 тарифа / Mobile",
+    "type": "FRAME",
+    "profile": "56757004"
+  },
+  {
+    "id": "22:3482",
+    "name": "QA / 2 тарифа / Mobile320",
+    "type": "FRAME",
+    "profile": "fcd77574"
+  },
+  {
+    "id": "22:3616",
+    "name": "QA / Длинный город и тариф / 320",
+    "type": "FRAME",
+    "profile": "90a3bb0a"
+  }
+]

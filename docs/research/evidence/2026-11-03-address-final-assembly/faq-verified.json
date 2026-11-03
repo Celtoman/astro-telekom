@@ -1,0 +1,146 @@
+[
+  {
+    "id": "620:6582",
+    "referenceId": "620:6597",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:6634",
+    "referenceId": "620:6649",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:6686",
+    "referenceId": "620:6701",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:6738",
+    "referenceId": "620:6753",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:6912",
+    "referenceId": "620:6927",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:6962",
+    "referenceId": "620:6977",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:7012",
+    "referenceId": "620:7027",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:7062",
+    "referenceId": "620:7077",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:7227",
+    "referenceId": "620:7242",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:7277",
+    "referenceId": "620:7292",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:7327",
+    "referenceId": "620:7342",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:7377",
+    "referenceId": "620:7392",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:7556",
+    "referenceId": "620:7571",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:7606",
+    "referenceId": "620:7621",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:7656",
+    "referenceId": "620:7671",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  },
+  {
+    "id": "620:7706",
+    "referenceId": "620:7721",
+    "referenceMatches": false,
+    "controllerRows": 12,
+    "controllerAllMatch": true,
+    "open": 6,
+    "closed": 6
+  }
+]

@@ -1,0 +1,74 @@
+{
+  "collection": {
+    "id": "VariableCollectionId:56:3",
+    "name": "Прототип / Проверка подключения",
+    "variableIds": [
+      "VariableID:56:4",
+      "VariableID:68:27924",
+      "VariableID:68:27925",
+      "VariableID:70:28062",
+      "VariableID:79:28453",
+      "VariableID:79:28454",
+      "VariableID:79:28455",
+      "VariableID:79:28456",
+      "VariableID:79:28457",
+      "VariableID:79:28458",
+      "VariableID:79:28459",
+      "VariableID:79:28460",
+      "VariableID:79:28461",
+      "VariableID:79:28462",
+      "VariableID:79:28463",
+      "VariableID:79:28464"
+    ],
+    "pages": [
+      {
+        "id": "0:1",
+        "name": "00 / Обложка"
+      },
+      {
+        "id": "1:3",
+        "name": "01 / Вводная секция — крошки и H1"
+      },
+      {
+        "id": "11:3",
+        "name": "BLK-0032 / Что означает результат проверки"
+      },
+      {
+        "id": "16:3",
+        "name": "BLK-0033 / Тарифы в городе — подборка"
+      }
+    ]
+  },
+  "references": [
+    {
+      "file": "pKN4YecfI2fZuMj822ud49",
+      "page": "0:1",
+      "refs": []
+    },
+    {
+      "file": "pKN4YecfI2fZuMj822ud49",
+      "page": "1:3",
+      "refs": []
+    },
+    {
+      "file": "pKN4YecfI2fZuMj822ud49",
+      "page": "11:3",
+      "refs": []
+    },
+    {
+      "file": "pKN4YecfI2fZuMj822ud49",
+      "page": "16:3",
+      "refs": []
+    },
+    {
+      "file": "BdxNHlBVZWejREtOEIWDkI",
+      "page": "619:22435",
+      "refs": []
+    },
+    {
+      "file": "BdxNHlBVZWejREtOEIWDkI",
+      "page": "619:22437",
+      "refs": []
+    }
+  ]
+}

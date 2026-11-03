@@ -1,0 +1,2156 @@
+{
+  "date": "2026-11-03",
+  "mode": "READ_ONLY_FIGMA",
+  "sourceFile": "pKN4YecfI2fZuMj822ud49",
+  "screensFile": "BdxNHlBVZWejREtOEIWDkI",
+  "inventory": [
+    {
+      "id": "0:1",
+      "name": "00 / Обложка",
+      "topCount": 1,
+      "topTypes": {
+        "FRAME": 1
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "1:2",
+          "type": "FRAME",
+          "name": "Обложка / Проверка подключения"
+        }
+      ],
+      "frameCount": 3,
+      "instanceCount": 1
+    },
+    {
+      "id": "1:3",
+      "name": "01 / Первый экран и форма",
+      "topCount": 4,
+      "topTypes": {
+        "FRAME": 4
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "1:4",
+          "type": "FRAME",
+          "name": "Первый экран / Desktop"
+        },
+        {
+          "id": "1:5",
+          "type": "FRAME",
+          "name": "Первый экран / Tablet"
+        },
+        {
+          "id": "1:6",
+          "type": "FRAME",
+          "name": "Первый экран / Mobile"
+        },
+        {
+          "id": "1:7",
+          "type": "FRAME",
+          "name": "Первый экран / Mobile320"
+        }
+      ],
+      "frameCount": 137,
+      "instanceCount": 64
+    },
+    {
+      "id": "11:3",
+      "name": "BLK-0032 / Что означает результат проверки",
+      "topCount": 2,
+      "topTypes": {
+        "FRAME": 2
+      },
+      "localMasters": [
+        {
+          "id": "12:394",
+          "name": "BLK-0032 / Что означает результат проверки",
+          "type": "COMPONENT_SET",
+          "key": "b1f158f7d2829000bb402dc18997b7e4e10ed06a"
+        }
+      ],
+      "topObjects": [
+        {
+          "id": "11:4",
+          "type": "FRAME",
+          "name": "BLK-0032 / 01 / Мастер"
+        },
+        {
+          "id": "11:5",
+          "type": "FRAME",
+          "name": "BLK-0032 / 02 / Просмотр"
+        }
+      ],
+      "frameCount": 142,
+      "instanceCount": 84
+    },
+    {
+      "id": "6:570",
+      "name": "80 / Проверки",
+      "topCount": 2,
+      "topTypes": {
+        "FRAME": 2
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "6:571",
+          "type": "FRAME",
+          "name": "QA / Длинный город и адрес / 390"
+        },
+        {
+          "id": "6:686",
+          "type": "FRAME",
+          "name": "QA / Длинный город и адрес / 320"
+        }
+      ],
+      "frameCount": 61,
+      "instanceCount": 27
+    },
+    {
+      "id": "6:2",
+      "name": "99 / Материалы",
+      "topCount": 1,
+      "topTypes": {
+        "RECTANGLE": 1
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "6:3",
+          "type": "RECTANGLE",
+          "name": "Иллюстрация / Исходный PNG из UI Library"
+        }
+      ],
+      "frameCount": 0,
+      "instanceCount": 0
+    },
+    {
+      "id": "13:3",
+      "name": "81 / Контекст — первый экран и результаты",
+      "topCount": 4,
+      "topTypes": {
+        "FRAME": 4
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "13:4",
+          "type": "FRAME",
+          "name": "Контекст / Desktop"
+        },
+        {
+          "id": "13:265",
+          "type": "FRAME",
+          "name": "Контекст / Tablet"
+        },
+        {
+          "id": "13:516",
+          "type": "FRAME",
+          "name": "Контекст / Mobile"
+        },
+        {
+          "id": "13:731",
+          "type": "FRAME",
+          "name": "Контекст / Mobile320"
+        }
+      ],
+      "frameCount": 205,
+      "instanceCount": 108
+    },
+    {
+      "id": "16:3",
+      "name": "BLK-0033 / Тарифы в городе — подборка",
+      "topCount": 4,
+      "topTypes": {
+        "SECTION": 4
+      },
+      "localMasters": [
+        {
+          "id": "17:1152",
+          "name": "BLK-0033 / Тарифы в городе — подборка",
+          "type": "COMPONENT_SET",
+          "key": "4e74cd57bef1a5855234d3ee7846b9cb0dbc1d48"
+        }
+      ],
+      "topObjects": [
+        {
+          "id": "16:4",
+          "type": "SECTION",
+          "name": "BLK-0033 / 01 / Мастер"
+        },
+        {
+          "id": "16:5",
+          "type": "SECTION",
+          "name": "BLK-0033 / 02 / Просмотр"
+        },
+        {
+          "id": "16:6",
+          "type": "SECTION",
+          "name": "BLK-0033 / 03 / Документация"
+        },
+        {
+          "id": "21:671",
+          "type": "SECTION",
+          "name": "BLK-0033 / 90 / Материал — CMP-0054 до адаптации"
+        }
+      ],
+      "frameCount": 609,
+      "instanceCount": 204
+    },
+    {
+      "id": "22:869",
+      "name": "82 / Контекст — тарифная подборка",
+      "topCount": 4,
+      "topTypes": {
+        "FRAME": 4
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "22:870",
+          "type": "FRAME",
+          "name": "Контекст до тарифной подборки / Desktop"
+        },
+        {
+          "id": "22:1228",
+          "type": "FRAME",
+          "name": "Контекст до тарифной подборки / Tablet"
+        },
+        {
+          "id": "22:1581",
+          "type": "FRAME",
+          "name": "Контекст до тарифной подборки / Mobile"
+        },
+        {
+          "id": "22:1911",
+          "type": "FRAME",
+          "name": "Контекст до тарифной подборки / Mobile320"
+        }
+      ],
+      "frameCount": 369,
+      "instanceCount": 164
+    },
+    {
+      "id": "22:3079",
+      "name": "83 / Проверки тарифной подборки",
+      "topCount": 5,
+      "topTypes": {
+        "FRAME": 5
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "22:3080",
+          "type": "FRAME",
+          "name": "QA / 2 тарифа / Desktop"
+        },
+        {
+          "id": "22:3214",
+          "type": "FRAME",
+          "name": "QA / 2 тарифа / Tablet"
+        },
+        {
+          "id": "22:3348",
+          "type": "FRAME",
+          "name": "QA / 2 тарифа / Mobile"
+        },
+        {
+          "id": "22:3482",
+          "type": "FRAME",
+          "name": "QA / 2 тарифа / Mobile320"
+        },
+        {
+          "id": "22:3616",
+          "type": "FRAME",
+          "name": "QA / Длинный город и тариф / 320"
+        }
+      ],
+      "frameCount": 150,
+      "instanceCount": 50
+    },
+    {
+      "id": "28:1883",
+      "name": "BLK-0021 / Этапы подключения — применение",
+      "topCount": 4,
+      "topTypes": {
+        "FRAME": 4
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "28:2027",
+          "type": "FRAME",
+          "name": "BLK-0021 / Просмотр / Desktop"
+        },
+        {
+          "id": "28:2098",
+          "type": "FRAME",
+          "name": "BLK-0021 / Просмотр / Tablet"
+        },
+        {
+          "id": "28:2169",
+          "type": "FRAME",
+          "name": "BLK-0021 / Просмотр / Mobile"
+        },
+        {
+          "id": "28:2243",
+          "type": "FRAME",
+          "name": "BLK-0021 / Просмотр / Mobile320"
+        }
+      ],
+      "frameCount": 59,
+      "instanceCount": 40
+    },
+    {
+      "id": "29:1569",
+      "name": "84 / Контекст — этапы подключения",
+      "topCount": 4,
+      "topTypes": {
+        "FRAME": 4
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "29:1570",
+          "type": "FRAME",
+          "name": "Проверка подключения / до этапов / Desktop"
+        },
+        {
+          "id": "29:2099",
+          "type": "FRAME",
+          "name": "Проверка подключения / до этапов / Tablet"
+        },
+        {
+          "id": "29:2480",
+          "type": "FRAME",
+          "name": "Проверка подключения / до этапов / Mobile"
+        },
+        {
+          "id": "29:2841",
+          "type": "FRAME",
+          "name": "Проверка подключения / до этапов / Mobile320"
+        }
+      ],
+      "frameCount": 428,
+      "instanceCount": 204
+    },
+    {
+      "id": "35:2165",
+      "name": "BLK-0005 / Консультация — применение",
+      "topCount": 8,
+      "topTypes": {
+        "FRAME": 8
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "35:2427",
+          "type": "FRAME",
+          "name": "BLK-0005 / Default / Desktop"
+        },
+        {
+          "id": "35:2498",
+          "type": "FRAME",
+          "name": "BLK-0005 / Ready / Desktop"
+        },
+        {
+          "id": "35:2572",
+          "type": "FRAME",
+          "name": "BLK-0005 / Default / Tablet"
+        },
+        {
+          "id": "35:2642",
+          "type": "FRAME",
+          "name": "BLK-0005 / Ready / Tablet"
+        },
+        {
+          "id": "35:2714",
+          "type": "FRAME",
+          "name": "BLK-0005 / Default / Mobile"
+        },
+        {
+          "id": "35:2784",
+          "type": "FRAME",
+          "name": "BLK-0005 / Ready / Mobile"
+        },
+        {
+          "id": "35:2856",
+          "type": "FRAME",
+          "name": "BLK-0005 / Default / Mobile320"
+        },
+        {
+          "id": "35:2926",
+          "type": "FRAME",
+          "name": "BLK-0005 / Ready / Mobile320"
+        }
+      ],
+      "frameCount": 128,
+      "instanceCount": 80
+    },
+    {
+      "id": "35:4439",
+      "name": "85 / Контекст — консультация",
+      "topCount": 4,
+      "topTypes": {
+        "FRAME": 4
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "35:4440",
+          "type": "FRAME",
+          "name": "Проверка подключения / до консультации / Desktop"
+        },
+        {
+          "id": "35:4844",
+          "type": "FRAME",
+          "name": "Проверка подключения / до консультации / Tablet"
+        },
+        {
+          "id": "35:5244",
+          "type": "FRAME",
+          "name": "Проверка подключения / до консультации / Mobile"
+        },
+        {
+          "id": "35:5623",
+          "type": "FRAME",
+          "name": "Проверка подключения / до консультации / Mobile320"
+        }
+      ],
+      "frameCount": 492,
+      "instanceCount": 244
+    },
+    {
+      "id": "38:2720",
+      "name": "BLK-0014 / FAQ проверки адреса — применение",
+      "topCount": 8,
+      "topTypes": {
+        "FRAME": 8
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "38:2953",
+          "type": "FRAME",
+          "name": "FAQ / Closed / Desktop"
+        },
+        {
+          "id": "38:3146",
+          "type": "FRAME",
+          "name": "FAQ / Closed / Tablet"
+        },
+        {
+          "id": "38:3335",
+          "type": "FRAME",
+          "name": "FAQ / Closed / Mobile"
+        },
+        {
+          "id": "38:3524",
+          "type": "FRAME",
+          "name": "FAQ / Closed / Mobile320"
+        },
+        {
+          "id": "38:3713",
+          "type": "FRAME",
+          "name": "FAQ / AllOpen / Desktop"
+        },
+        {
+          "id": "38:3892",
+          "type": "FRAME",
+          "name": "FAQ / AllOpen / Tablet"
+        },
+        {
+          "id": "38:4068",
+          "type": "FRAME",
+          "name": "FAQ / AllOpen / Mobile"
+        },
+        {
+          "id": "38:4244",
+          "type": "FRAME",
+          "name": "FAQ / AllOpen / Mobile320"
+        }
+      ],
+      "frameCount": 288,
+      "instanceCount": 104
+    },
+    {
+      "id": "39:2356",
+      "name": "86 / Контекст — FAQ проверки адреса",
+      "topCount": 4,
+      "topTypes": {
+        "FRAME": 4
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "39:2357",
+          "type": "FRAME",
+          "name": "Проверка подключения / до FAQ / Desktop"
+        },
+        {
+          "id": "39:2968",
+          "type": "FRAME",
+          "name": "Проверка подключения / до FAQ / Tablet"
+        },
+        {
+          "id": "39:3568",
+          "type": "FRAME",
+          "name": "Проверка подключения / до FAQ / Mobile"
+        },
+        {
+          "id": "39:4147",
+          "type": "FRAME",
+          "name": "Проверка подключения / до FAQ / Mobile320"
+        }
+      ],
+      "frameCount": 628,
+      "instanceCount": 296
+    },
+    {
+      "id": "45:6138",
+      "name": "BLK-0016 / Футер — применение",
+      "topCount": 4,
+      "topTypes": {
+        "FRAME": 4
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "45:6139",
+          "type": "FRAME",
+          "name": "Футер / Desktop"
+        },
+        {
+          "id": "45:6169",
+          "type": "FRAME",
+          "name": "Футер / Tablet"
+        },
+        {
+          "id": "45:6196",
+          "type": "FRAME",
+          "name": "Футер / Mobile"
+        },
+        {
+          "id": "45:6216",
+          "type": "FRAME",
+          "name": "Футер / Mobile320"
+        }
+      ],
+      "frameCount": 16,
+      "instanceCount": 8
+    },
+    {
+      "id": "45:6235",
+      "name": "87 / Контекст — полная страница с футером",
+      "topCount": 4,
+      "topTypes": {
+        "FRAME": 4
+      },
+      "localMasters": [],
+      "topObjects": [
+        {
+          "id": "45:6236",
+          "type": "FRAME",
+          "name": "Проверка подключения / полная страница / Desktop"
+        },
+        {
+          "id": "45:6585",
+          "type": "FRAME",
+          "name": "Проверка подключения / полная страница / Tablet"
+        },
+        {
+          "id": "45:6926",
+          "type": "FRAME",
+          "name": "Проверка подключения / полная страница / Mobile"
+        },
+        {
+          "id": "45:7237",
+          "type": "FRAME",
+          "name": "Проверка подключения / полная страница / Mobile320"
+        }
+      ],
+      "frameCount": 753,
+      "instanceCount": 428
+    },
+    {
+      "id": "53:3",
+      "name": "90 / Прототип — проверка подключения",
+      "topCount": 228,
+      "topTypes": {
+        "FRAME": 228
+      },
+      "localMasters": [],
+      "topObjects": [],
+      "frameCount": 6459,
+      "instanceCount": 4024
+    }
+  ],
+  "intro": [
+    {
+      "id": "1:4",
+      "name": "Первый экран / Desktop",
+      "w": 1440,
+      "h": 737,
+      "children": [
+        {
+          "id": "2:541",
+          "name": "Контекст / BLK-0001 / Шапка",
+          "type": "INSTANCE",
+          "w": 1360,
+          "h": 129
+        },
+        {
+          "id": "2:620",
+          "name": "DRAFT / Вводная секция страницы",
+          "type": "FRAME",
+          "w": 1360,
+          "h": 200,
+          "texts": [
+            "Главная  /  Казань  /  Проверка подключения",
+            "Проверка подключения Дом.ру в Казани",
+            "Проверьте, доступен ли Дом.ру в вашем доме."
+          ]
+        },
+        {
+          "id": "2:624",
+          "name": "BLK-0004 / Проверка адреса / Desktop",
+          "type": "INSTANCE",
+          "w": 1360,
+          "h": 368
+        }
+      ]
+    },
+    {
+      "id": "1:5",
+      "name": "Первый экран / Tablet",
+      "w": 834,
+      "h": 986.05712890625,
+      "children": [
+        {
+          "id": "2:825",
+          "name": "Контекст / BLK-0001 / Шапка",
+          "type": "INSTANCE",
+          "w": 720,
+          "h": 121
+        },
+        {
+          "id": "2:901",
+          "name": "DRAFT / Вводная секция страницы",
+          "type": "FRAME",
+          "w": 720,
+          "h": 220,
+          "texts": [
+            "Главная  /  Казань  /  Проверка подключения",
+            "Проверка подключения Дом.ру в Казани",
+            "Проверьте, доступен ли Дом.ру в вашем доме."
+          ]
+        },
+        {
+          "id": "2:905",
+          "name": "BLK-0004 / Проверка адреса / Tablet",
+          "type": "INSTANCE",
+          "w": 720,
+          "h": 605.05712890625
+        }
+      ]
+    },
+    {
+      "id": "1:6",
+      "name": "Первый экран / Mobile",
+      "w": 390,
+      "h": 1071,
+      "children": [
+        {
+          "id": "2:1101",
+          "name": "Контекст / BLK-0001 / Шапка",
+          "type": "INSTANCE",
+          "w": 358,
+          "h": 109
+        },
+        {
+          "id": "2:1146",
+          "name": "DRAFT / Вводная секция страницы",
+          "type": "FRAME",
+          "w": 358,
+          "h": 214,
+          "texts": [
+            "Главная  /  Казань  /  Проверка подключения",
+            "Проверка подключения Дом.ру в Казани",
+            "Проверьте, доступен ли Дом.ру в вашем доме."
+          ]
+        },
+        {
+          "id": "2:1150",
+          "name": "BLK-0004 / Проверка адреса / Mobile",
+          "type": "INSTANCE",
+          "w": 358,
+          "h": 708
+        }
+      ]
+    },
+    {
+      "id": "1:7",
+      "name": "Первый экран / Mobile320",
+      "w": 320,
+      "h": 1149,
+      "children": [
+        {
+          "id": "2:1333",
+          "name": "Контекст / BLK-0001 / Шапка",
+          "type": "INSTANCE",
+          "w": 288,
+          "h": 109
+        },
+        {
+          "id": "2:1363",
+          "name": "DRAFT / Вводная секция страницы",
+          "type": "FRAME",
+          "w": 288,
+          "h": 267,
+          "texts": [
+            "Главная  /  Казань  /  Проверка подключения",
+            "Проверка подключения Дом.ру в Казани",
+            "Проверьте, доступен ли Дом.ру в вашем доме."
+          ]
+        },
+        {
+          "id": "2:1367",
+          "name": "BLK-0004 / Проверка адреса / Mobile320",
+          "type": "INSTANCE",
+          "w": 288,
+          "h": 733
+        }
+      ]
+    }
+  ],
+  "finalComposition": [
+    {
+      "id": "620:1549",
+      "name": "Проверка подключения / полная страница / Desktop",
+      "w": 1440,
+      "h": 5110,
+      "children": [
+        {
+          "id": "620:1550",
+          "name": "Контекст / BLK-0001 / Шапка",
+          "type": "INSTANCE",
+          "w": 1360,
+          "h": 129,
+          "x": 40,
+          "y": 0,
+          "instance": "620:1550",
+          "master": {
+            "key": "bbdd31e2d2d303bef7f023dd544f96a4469314d4",
+            "familyKey": "b56d15543a43b594ee8bcc882ff9a3cc9474d508",
+            "name": "BLK-0001 / Шапка сайта",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1551",
+          "name": "DRAFT / Вводная секция страницы",
+          "type": "FRAME",
+          "w": 1360,
+          "h": 200,
+          "x": 40,
+          "y": 129,
+          "instance": null,
+          "master": null
+        },
+        {
+          "id": "620:1555",
+          "name": "BLK-0004 / Проверка адреса / Desktop",
+          "type": "INSTANCE",
+          "w": 1360,
+          "h": 368,
+          "x": 40,
+          "y": 329,
+          "instance": "620:1555",
+          "master": {
+            "key": "dfa24e91967432687ed52464aae8cafa20140a24",
+            "familyKey": "50090a0d81df59e3787a664f99be47cdda3bd220",
+            "name": "BLK-0004 / Проверка подключения по адресу",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1556",
+          "name": "BLK-0032 / Что означает результат проверки",
+          "type": "INSTANCE",
+          "w": 1360,
+          "h": 596,
+          "x": 40,
+          "y": 697,
+          "instance": "620:1556",
+          "master": {
+            "key": "c5fd1e53b5890a8282ca609abee3af6fa1c2b285",
+            "familyKey": "b1f158f7d2829000bb402dc18997b7e4e10ed06a",
+            "name": "BLK-0032 / Что означает результат проверки",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1557",
+          "name": "BLK-0033 / Тарифы в городе",
+          "type": "INSTANCE",
+          "w": 1360,
+          "h": 832,
+          "x": 40,
+          "y": 1293,
+          "instance": "620:1557",
+          "master": {
+            "key": "93067187915d1ec96b1099f15df472c5bd6ce263",
+            "familyKey": "4e74cd57bef1a5855234d3ee7846b9cb0dbc1d48",
+            "name": "BLK-0033 / Тарифы в городе — подборка",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1558",
+          "name": "Секция / Этапы подключения",
+          "type": "FRAME",
+          "w": 1360,
+          "h": 590,
+          "x": 40,
+          "y": 2125,
+          "instance": "620:1559",
+          "master": {
+            "key": "a895aec9e59dae67286f53d448cbfed97eeedf54",
+            "familyKey": "b906667da5d3230fcc39f59c8edc5f3834d15ec5",
+            "name": "BLK-0021 / Как подключить — общая главная",
+            "remote": true
+          }
+        },
+        {
+          "id": "993:2865",
+          "name": "BLK-0019 / Основные преимущества",
+          "type": "INSTANCE",
+          "w": 1360,
+          "h": 664,
+          "x": 40,
+          "y": 2715,
+          "instance": "993:2865",
+          "master": {
+            "key": "353db5538db9899e463f9b6340ebf075bc3b5df4",
+            "familyKey": "3206e8eb02f11dfd5e024e76773829fb3839c94e",
+            "name": "BLK-0019 / Основные преимущества",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1560",
+          "name": "Секция / Консультация",
+          "type": "FRAME",
+          "w": 1360,
+          "h": 439,
+          "x": 40,
+          "y": 3379,
+          "instance": "620:1561",
+          "master": {
+            "key": "b3e188c4de3b54e58e27cb8fa8460a13fc70c0dc",
+            "familyKey": "9319ffac2c57883af8c881f1d526bbc4aa979d7c",
+            "name": "BLK-0005 / Консультация по подключению",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1562",
+          "name": "Секция / FAQ проверки адреса",
+          "type": "FRAME",
+          "w": 1360,
+          "h": 690,
+          "x": 40,
+          "y": 3818,
+          "instance": "620:1563",
+          "master": {
+            "key": "bfbb734d95777a1a7052415944d4594f7b2877fc",
+            "familyKey": "40caf11f4f6b758af7e571cdf0b821fa44207baf",
+            "name": "BLK-0014 / Универсальный FAQ",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1564",
+          "name": "BLK-0016 / Футер / Desktop",
+          "type": "INSTANCE",
+          "w": 1360,
+          "h": 562,
+          "x": 40,
+          "y": 4508,
+          "instance": "620:1564",
+          "master": {
+            "key": "29aa53f56d0fc09ac81ef5708d64c482b9bc3941",
+            "familyKey": "bfed842d7b3bf3aaeddc6f8d543e8516cf828b8c",
+            "name": "BLK-0016 / Футер",
+            "remote": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "620:1565",
+      "name": "Проверка подключения / полная страница / Tablet",
+      "w": 834,
+      "h": 7004.05712890625,
+      "children": [
+        {
+          "id": "620:1566",
+          "name": "Контекст / BLK-0001 / Шапка",
+          "type": "INSTANCE",
+          "w": 720,
+          "h": 121,
+          "x": 57,
+          "y": 0,
+          "instance": "620:1566",
+          "master": {
+            "key": "91f5ebae9867f07ab2c61ede945a945d0be21d4a",
+            "familyKey": "b56d15543a43b594ee8bcc882ff9a3cc9474d508",
+            "name": "BLK-0001 / Шапка сайта",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1567",
+          "name": "DRAFT / Вводная секция страницы",
+          "type": "FRAME",
+          "w": 720,
+          "h": 220,
+          "x": 57,
+          "y": 121,
+          "instance": null,
+          "master": null
+        },
+        {
+          "id": "620:1571",
+          "name": "BLK-0004 / Проверка адреса / Tablet",
+          "type": "INSTANCE",
+          "w": 720,
+          "h": 605.05712890625,
+          "x": 57,
+          "y": 341,
+          "instance": "620:1571",
+          "master": {
+            "key": "b17a5164d9c5121e8f4fa9b9618ffe02cf53e8e8",
+            "familyKey": "50090a0d81df59e3787a664f99be47cdda3bd220",
+            "name": "BLK-0004 / Проверка подключения по адресу",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1572",
+          "name": "BLK-0032 / Что означает результат проверки",
+          "type": "INSTANCE",
+          "w": 720,
+          "h": 1008,
+          "x": 57,
+          "y": 946.05712890625,
+          "instance": "620:1572",
+          "master": {
+            "key": "71b61ec4090e21bebd7c98c8f914d7bddc92bc02",
+            "familyKey": "b1f158f7d2829000bb402dc18997b7e4e10ed06a",
+            "name": "BLK-0032 / Что означает результат проверки",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1573",
+          "name": "BLK-0033 / Тарифы в городе",
+          "type": "INSTANCE",
+          "w": 720,
+          "h": 1430,
+          "x": 57,
+          "y": 1954.05712890625,
+          "instance": "620:1573",
+          "master": {
+            "key": "091544149aa62cdd621b7d6bdab590be6f46fd1b",
+            "familyKey": "4e74cd57bef1a5855234d3ee7846b9cb0dbc1d48",
+            "name": "BLK-0033 / Тарифы в городе — подборка",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1574",
+          "name": "Секция / Этапы подключения",
+          "type": "FRAME",
+          "w": 720,
+          "h": 754,
+          "x": 57,
+          "y": 3384.05712890625,
+          "instance": "620:1575",
+          "master": {
+            "key": "67a9db73690fbc48fb01175cf2ec06499c6a37a0",
+            "familyKey": "b906667da5d3230fcc39f59c8edc5f3834d15ec5",
+            "name": "BLK-0021 / Как подключить — общая главная",
+            "remote": true
+          }
+        },
+        {
+          "id": "993:3069",
+          "name": "BLK-0019 / Основные преимущества",
+          "type": "INSTANCE",
+          "w": 720,
+          "h": 1007,
+          "x": 57,
+          "y": 4138.05712890625,
+          "instance": "993:3069",
+          "master": {
+            "key": "b22a10172bba12ec59c6d0714756acfd5e630777",
+            "familyKey": "3206e8eb02f11dfd5e024e76773829fb3839c94e",
+            "name": "BLK-0019 / Основные преимущества",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1576",
+          "name": "Секция / Консультация",
+          "type": "FRAME",
+          "w": 720,
+          "h": 459,
+          "x": 57,
+          "y": 5145.05712890625,
+          "instance": "620:1577",
+          "master": {
+            "key": "f9c663011dd458d0351b9c95eb5b09e1abf0233f",
+            "familyKey": "9319ffac2c57883af8c881f1d526bbc4aa979d7c",
+            "name": "BLK-0005 / Консультация по подключению",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1578",
+          "name": "Секция / FAQ проверки адреса",
+          "type": "FRAME",
+          "w": 720,
+          "h": 698,
+          "x": 57,
+          "y": 5604.05712890625,
+          "instance": "620:1579",
+          "master": {
+            "key": "9d0cec9fbe06e5229b405f4eb5a0bc60a4eb4a91",
+            "familyKey": "40caf11f4f6b758af7e571cdf0b821fa44207baf",
+            "name": "BLK-0014 / Универсальный FAQ",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1580",
+          "name": "BLK-0016 / Футер / Tablet",
+          "type": "INSTANCE",
+          "w": 720,
+          "h": 662,
+          "x": 57,
+          "y": 6302.05712890625,
+          "instance": "620:1580",
+          "master": {
+            "key": "9dc488f4c8b4669fa423aa914801babdafcb88e8",
+            "familyKey": "bfed842d7b3bf3aaeddc6f8d543e8516cf828b8c",
+            "name": "BLK-0016 / Футер",
+            "remote": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "620:1581",
+      "name": "Проверка подключения / полная страница / Mobile",
+      "w": 390,
+      "h": 8382,
+      "children": [
+        {
+          "id": "620:1582",
+          "name": "Контекст / BLK-0001 / Шапка",
+          "type": "INSTANCE",
+          "w": 358,
+          "h": 109,
+          "x": 16,
+          "y": 0,
+          "instance": "620:1582",
+          "master": {
+            "key": "86ddd5cd738bbe2ddacb3865c0cb675ad2266d41",
+            "familyKey": "b56d15543a43b594ee8bcc882ff9a3cc9474d508",
+            "name": "BLK-0001 / Шапка сайта",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1583",
+          "name": "DRAFT / Вводная секция страницы",
+          "type": "FRAME",
+          "w": 358,
+          "h": 214,
+          "x": 16,
+          "y": 109,
+          "instance": null,
+          "master": null
+        },
+        {
+          "id": "620:1587",
+          "name": "BLK-0004 / Проверка адреса / Mobile",
+          "type": "INSTANCE",
+          "w": 358,
+          "h": 708,
+          "x": 16,
+          "y": 323,
+          "instance": "620:1587",
+          "master": {
+            "key": "f5693fa3cfb1cf2f5c50ab245fa1d5a4f3b83e0f",
+            "familyKey": "50090a0d81df59e3787a664f99be47cdda3bd220",
+            "name": "BLK-0004 / Проверка подключения по адресу",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1588",
+          "name": "BLK-0032 / Что означает результат проверки",
+          "type": "INSTANCE",
+          "w": 358,
+          "h": 1216,
+          "x": 16,
+          "y": 1031,
+          "instance": "620:1588",
+          "master": {
+            "key": "7b07fa2bb1f99228d0b4a0be78b0fece24ff8799",
+            "familyKey": "b1f158f7d2829000bb402dc18997b7e4e10ed06a",
+            "name": "BLK-0032 / Что означает результат проверки",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1589",
+          "name": "BLK-0033 / Тарифы в городе",
+          "type": "INSTANCE",
+          "w": 358,
+          "h": 2003,
+          "x": 16,
+          "y": 2247,
+          "instance": "620:1589",
+          "master": {
+            "key": "7b0016fcb0b18c2e96c2cd03bcacd92ec2ed9f54",
+            "familyKey": "4e74cd57bef1a5855234d3ee7846b9cb0dbc1d48",
+            "name": "BLK-0033 / Тарифы в городе — подборка",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1590",
+          "name": "Секция / Этапы подключения",
+          "type": "FRAME",
+          "w": 358,
+          "h": 941,
+          "x": 16,
+          "y": 4250,
+          "instance": "620:1591",
+          "master": {
+            "key": "531b281aab0b80623bfe9b80cc527722a1d3438f",
+            "familyKey": "b906667da5d3230fcc39f59c8edc5f3834d15ec5",
+            "name": "BLK-0021 / Как подключить — общая главная",
+            "remote": true
+          }
+        },
+        {
+          "id": "993:3274",
+          "name": "BLK-0019 / Основные преимущества",
+          "type": "INSTANCE",
+          "w": 358,
+          "h": 428,
+          "x": 16,
+          "y": 5191,
+          "instance": "993:3274",
+          "master": {
+            "key": "47ea92972aefc3c5f5522a5584bf534b55e77e34",
+            "familyKey": "3206e8eb02f11dfd5e024e76773829fb3839c94e",
+            "name": "BLK-0019 / Основные преимущества",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1592",
+          "name": "Секция / Консультация",
+          "type": "FRAME",
+          "w": 358,
+          "h": 756,
+          "x": 16,
+          "y": 5619,
+          "instance": "620:1593",
+          "master": {
+            "key": "7e17594bd5c791c0bc0bc85366feae57d19883c0",
+            "familyKey": "9319ffac2c57883af8c881f1d526bbc4aa979d7c",
+            "name": "BLK-0005 / Консультация по подключению",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1594",
+          "name": "Секция / FAQ проверки адреса",
+          "type": "FRAME",
+          "w": 358,
+          "h": 865,
+          "x": 16,
+          "y": 6375,
+          "instance": "620:1595",
+          "master": {
+            "key": "36f14a661c1518983ac2d65be3561f97e29d3aaf",
+            "familyKey": "40caf11f4f6b758af7e571cdf0b821fa44207baf",
+            "name": "BLK-0014 / Универсальный FAQ",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1596",
+          "name": "BLK-0016 / Футер / Mobile",
+          "type": "INSTANCE",
+          "w": 358,
+          "h": 1102,
+          "x": 16,
+          "y": 7240,
+          "instance": "620:1596",
+          "master": {
+            "key": "b8145de9408240ac07cfaa1c337e982c1deae731",
+            "familyKey": "bfed842d7b3bf3aaeddc6f8d543e8516cf828b8c",
+            "name": "BLK-0016 / Футер",
+            "remote": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "620:1597",
+      "name": "Проверка подключения / полная страница / Mobile320",
+      "w": 320,
+      "h": 9683,
+      "children": [
+        {
+          "id": "620:1598",
+          "name": "Контекст / BLK-0001 / Шапка",
+          "type": "INSTANCE",
+          "w": 288,
+          "h": 109,
+          "x": 16,
+          "y": 0,
+          "instance": "620:1598",
+          "master": {
+            "key": "86ddd5cd738bbe2ddacb3865c0cb675ad2266d41",
+            "familyKey": "b56d15543a43b594ee8bcc882ff9a3cc9474d508",
+            "name": "BLK-0001 / Шапка сайта",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1599",
+          "name": "DRAFT / Вводная секция страницы",
+          "type": "FRAME",
+          "w": 288,
+          "h": 267,
+          "x": 16,
+          "y": 109,
+          "instance": null,
+          "master": null
+        },
+        {
+          "id": "620:1603",
+          "name": "BLK-0004 / Проверка адреса / Mobile320",
+          "type": "INSTANCE",
+          "w": 288,
+          "h": 733,
+          "x": 16,
+          "y": 376,
+          "instance": "620:1603",
+          "master": {
+            "key": "f5693fa3cfb1cf2f5c50ab245fa1d5a4f3b83e0f",
+            "familyKey": "50090a0d81df59e3787a664f99be47cdda3bd220",
+            "name": "BLK-0004 / Проверка подключения по адресу",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1604",
+          "name": "BLK-0032 / Что означает результат проверки",
+          "type": "INSTANCE",
+          "w": 288,
+          "h": 1384,
+          "x": 16,
+          "y": 1109,
+          "instance": "620:1604",
+          "master": {
+            "key": "3403994accac35c142e79555814244ec99478db3",
+            "familyKey": "b1f158f7d2829000bb402dc18997b7e4e10ed06a",
+            "name": "BLK-0032 / Что означает результат проверки",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1605",
+          "name": "BLK-0033 / Тарифы в городе",
+          "type": "INSTANCE",
+          "w": 288,
+          "h": 2533,
+          "x": 16,
+          "y": 2493,
+          "instance": "620:1605",
+          "master": {
+            "key": "a622148f1450ba08dd7d4e1e41ee4234cf1839df",
+            "familyKey": "4e74cd57bef1a5855234d3ee7846b9cb0dbc1d48",
+            "name": "BLK-0033 / Тарифы в городе — подборка",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1606",
+          "name": "Секция / Этапы подключения",
+          "type": "FRAME",
+          "w": 288,
+          "h": 1068,
+          "x": 16,
+          "y": 5026,
+          "instance": "620:1607",
+          "master": {
+            "key": "1a604c5a8c4c32be93e350e3a3dc4c4c3804a325",
+            "familyKey": "b906667da5d3230fcc39f59c8edc5f3834d15ec5",
+            "name": "BLK-0021 / Как подключить — общая главная",
+            "remote": true
+          }
+        },
+        {
+          "id": "993:3479",
+          "name": "BLK-0019 / Основные преимущества",
+          "type": "INSTANCE",
+          "w": 288,
+          "h": 591,
+          "x": 16,
+          "y": 6094,
+          "instance": "993:3479",
+          "master": {
+            "key": "1229240349ef6cccbe23b71a6210dbaf813a5f03",
+            "familyKey": "3206e8eb02f11dfd5e024e76773829fb3839c94e",
+            "name": "BLK-0019 / Основные преимущества",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1608",
+          "name": "Секция / Консультация",
+          "type": "FRAME",
+          "w": 288,
+          "h": 807,
+          "x": 16,
+          "y": 6685,
+          "instance": "620:1609",
+          "master": {
+            "key": "34a580292e5873aa762dc6e7b044402ecbea11db",
+            "familyKey": "9319ffac2c57883af8c881f1d526bbc4aa979d7c",
+            "name": "BLK-0005 / Консультация по подключению",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1610",
+          "name": "Секция / FAQ проверки адреса",
+          "type": "FRAME",
+          "w": 288,
+          "h": 1009,
+          "x": 16,
+          "y": 7492,
+          "instance": "620:1611",
+          "master": {
+            "key": "14685657775c10711062b21ebe8ee37a9818029e",
+            "familyKey": "40caf11f4f6b758af7e571cdf0b821fa44207baf",
+            "name": "BLK-0014 / Универсальный FAQ",
+            "remote": true
+          }
+        },
+        {
+          "id": "620:1612",
+          "name": "BLK-0016 / Футер / Mobile320",
+          "type": "INSTANCE",
+          "w": 288,
+          "h": 1142,
+          "x": 16,
+          "y": 8501,
+          "instance": "620:1612",
+          "master": {
+            "key": "b8145de9408240ac07cfaa1c337e982c1deae731",
+            "familyKey": "bfed842d7b3bf3aaeddc6f8d543e8516cf828b8c",
+            "name": "BLK-0016 / Футер",
+            "remote": true
+          }
+        }
+      ]
+    }
+  ],
+  "finalQuality": {
+    "roots": [
+      {
+        "id": "620:1549",
+        "missing": 0,
+        "overflow": [],
+        "childCount": 10
+      },
+      {
+        "id": "620:1565",
+        "missing": 0,
+        "overflow": [],
+        "childCount": 10
+      },
+      {
+        "id": "620:1581",
+        "missing": 0,
+        "overflow": [],
+        "childCount": 10
+      },
+      {
+        "id": "620:1597",
+        "missing": 0,
+        "overflow": [],
+        "childCount": 10
+      }
+    ],
+    "sourceFileUrls": [],
+    "figmaUrls": [
+      "https://www.figma.com/proto/PiSCXYR88uqqcS6tKVfd8T?node-id=1084-968&starting-point-node-id=1084%3A968",
+      "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?node-id=620-43710&starting-point-node-id=620%3A43710",
+      "https://www.figma.com/proto/PiSCXYR88uqqcS6tKVfd8T?node-id=1084-1543&starting-point-node-id=1084%3A1543",
+      "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?node-id=620-43728&starting-point-node-id=620%3A43728",
+      "https://www.figma.com/proto/PiSCXYR88uqqcS6tKVfd8T?node-id=1084-2118&starting-point-node-id=1084%3A2118",
+      "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?node-id=620-43746&starting-point-node-id=620%3A43746"
+    ]
+  },
+  "prototype": {
+    "topCount": 400,
+    "starts": [
+      {
+        "nodeId": "620:6582",
+        "name": "Проверка подключения / Desktop"
+      },
+      {
+        "nodeId": "620:6912",
+        "name": "Проверка подключения / Tablet"
+      },
+      {
+        "nodeId": "620:7227",
+        "name": "Проверка подключения / Mobile"
+      },
+      {
+        "nodeId": "620:7556",
+        "name": "Проверка подключения / Mobile320"
+      },
+      {
+        "nodeId": "620:8505",
+        "name": "Проверка ошибок / Desktop"
+      },
+      {
+        "nodeId": "620:8519",
+        "name": "Проверка ошибок / Tablet"
+      },
+      {
+        "nodeId": "620:8533",
+        "name": "Проверка ошибок / Mobile"
+      },
+      {
+        "nodeId": "620:8547",
+        "name": "Проверка ошибок / Mobile320"
+      },
+      {
+        "nodeId": "620:44389",
+        "name": "Техническая поддержка / Desktop"
+      },
+      {
+        "nodeId": "620:46026",
+        "name": "Проверка ошибки телефона / Desktop"
+      },
+      {
+        "nodeId": "620:44589",
+        "name": "Техническая поддержка / Tablet"
+      },
+      {
+        "nodeId": "620:46076",
+        "name": "Проверка ошибки телефона / Tablet"
+      },
+      {
+        "nodeId": "620:44785",
+        "name": "Техническая поддержка / Mobile"
+      },
+      {
+        "nodeId": "620:46125",
+        "name": "Проверка ошибки телефона / Mobile"
+      },
+      {
+        "nodeId": "620:44981",
+        "name": "Техническая поддержка / Mobile320"
+      },
+      {
+        "nodeId": "620:46174",
+        "name": "Проверка ошибки телефона / Mobile320"
+      }
+    ],
+    "mainCandidates": [
+      {
+        "id": "620:6582",
+        "name": "Проверка подключения / Desktop / Default",
+        "w": 1440,
+        "h": 900
+      },
+      {
+        "id": "620:6634",
+        "name": "Проверка подключения / Desktop / Filled",
+        "w": 1440,
+        "h": 900
+      },
+      {
+        "id": "620:6686",
+        "name": "Проверка подключения / Desktop / Consent",
+        "w": 1440,
+        "h": 900
+      },
+      {
+        "id": "620:6738",
+        "name": "Проверка подключения / Desktop / Ready",
+        "w": 1440,
+        "h": 900
+      },
+      {
+        "id": "620:6912",
+        "name": "Проверка подключения / Tablet / Default",
+        "w": 834,
+        "h": 1100
+      },
+      {
+        "id": "620:6962",
+        "name": "Проверка подключения / Tablet / Filled",
+        "w": 834,
+        "h": 1100
+      },
+      {
+        "id": "620:7012",
+        "name": "Проверка подключения / Tablet / Consent",
+        "w": 834,
+        "h": 1100
+      },
+      {
+        "id": "620:7062",
+        "name": "Проверка подключения / Tablet / Ready",
+        "w": 834,
+        "h": 1100
+      },
+      {
+        "id": "620:7227",
+        "name": "Проверка подключения / Mobile / Default",
+        "w": 390,
+        "h": 844
+      },
+      {
+        "id": "620:7277",
+        "name": "Проверка подключения / Mobile / Filled",
+        "w": 390,
+        "h": 844
+      },
+      {
+        "id": "620:7327",
+        "name": "Проверка подключения / Mobile / Consent",
+        "w": 390,
+        "h": 844
+      },
+      {
+        "id": "620:7377",
+        "name": "Проверка подключения / Mobile / Ready",
+        "w": 390,
+        "h": 844
+      },
+      {
+        "id": "620:7556",
+        "name": "Проверка подключения / Mobile320 / Default",
+        "w": 320,
+        "h": 844
+      },
+      {
+        "id": "620:7606",
+        "name": "Проверка подключения / Mobile320 / Filled",
+        "w": 320,
+        "h": 844
+      },
+      {
+        "id": "620:7656",
+        "name": "Проверка подключения / Mobile320 / Consent",
+        "w": 320,
+        "h": 844
+      },
+      {
+        "id": "620:7706",
+        "name": "Проверка подключения / Mobile320 / Ready",
+        "w": 320,
+        "h": 844
+      }
+    ],
+    "first": [
+      {
+        "id": "620:6582",
+        "name": "Проверка подключения / Desktop / Default"
+      },
+      {
+        "id": "620:6634",
+        "name": "Проверка подключения / Desktop / Filled"
+      },
+      {
+        "id": "620:6686",
+        "name": "Проверка подключения / Desktop / Consent"
+      },
+      {
+        "id": "620:6738",
+        "name": "Проверка подключения / Desktop / Ready"
+      },
+      {
+        "id": "620:6790",
+        "name": "Desktop / Address/Empty"
+      },
+      {
+        "id": "620:6793",
+        "name": "Desktop / Address/Searching"
+      },
+      {
+        "id": "620:6796",
+        "name": "Desktop / Address/Suggestions"
+      },
+      {
+        "id": "620:6799",
+        "name": "Desktop / Address/NoMatches"
+      },
+      {
+        "id": "620:6802",
+        "name": "Desktop / Address/Selected"
+      },
+      {
+        "id": "620:6805",
+        "name": "Desktop / Address/Checking"
+      },
+      {
+        "id": "620:6808",
+        "name": "Desktop / Address/AddressError"
+      },
+      {
+        "id": "620:6811",
+        "name": "Desktop / Address/CheckError"
+      }
+    ]
+  },
+  "prototypeBenefits": [
+    {
+      "id": "620:6582",
+      "name": "Проверка подключения / Desktop / Default",
+      "benefits": 0
+    },
+    {
+      "id": "620:6634",
+      "name": "Проверка подключения / Desktop / Filled",
+      "benefits": 0
+    },
+    {
+      "id": "620:6686",
+      "name": "Проверка подключения / Desktop / Consent",
+      "benefits": 0
+    },
+    {
+      "id": "620:6738",
+      "name": "Проверка подключения / Desktop / Ready",
+      "benefits": 0
+    },
+    {
+      "id": "620:6912",
+      "name": "Проверка подключения / Tablet / Default",
+      "benefits": 0
+    },
+    {
+      "id": "620:6962",
+      "name": "Проверка подключения / Tablet / Filled",
+      "benefits": 0
+    },
+    {
+      "id": "620:7012",
+      "name": "Проверка подключения / Tablet / Consent",
+      "benefits": 0
+    },
+    {
+      "id": "620:7062",
+      "name": "Проверка подключения / Tablet / Ready",
+      "benefits": 0
+    },
+    {
+      "id": "620:7227",
+      "name": "Проверка подключения / Mobile / Default",
+      "benefits": 0
+    },
+    {
+      "id": "620:7277",
+      "name": "Проверка подключения / Mobile / Filled",
+      "benefits": 0
+    },
+    {
+      "id": "620:7327",
+      "name": "Проверка подключения / Mobile / Consent",
+      "benefits": 0
+    },
+    {
+      "id": "620:7377",
+      "name": "Проверка подключения / Mobile / Ready",
+      "benefits": 0
+    },
+    {
+      "id": "620:7556",
+      "name": "Проверка подключения / Mobile320 / Default",
+      "benefits": 0
+    },
+    {
+      "id": "620:7606",
+      "name": "Проверка подключения / Mobile320 / Filled",
+      "benefits": 0
+    },
+    {
+      "id": "620:7656",
+      "name": "Проверка подключения / Mobile320 / Consent",
+      "benefits": 0
+    },
+    {
+      "id": "620:7706",
+      "name": "Проверка подключения / Mobile320 / Ready",
+      "benefits": 0
+    }
+  ],
+  "sourceLinks": [
+    {
+      "id": "620:6586",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6582",
+        "name": "Проверка подключения / Desktop / Default"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19115"
+    },
+    {
+      "id": "620:6586",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6582",
+        "name": "Проверка подключения / Desktop / Default"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19205"
+    },
+    {
+      "id": "620:6638",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6634",
+        "name": "Проверка подключения / Desktop / Filled"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19115"
+    },
+    {
+      "id": "620:6638",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6634",
+        "name": "Проверка подключения / Desktop / Filled"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19205"
+    },
+    {
+      "id": "620:6690",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6686",
+        "name": "Проверка подключения / Desktop / Consent"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19115"
+    },
+    {
+      "id": "620:6690",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6686",
+        "name": "Проверка подключения / Desktop / Consent"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19205"
+    },
+    {
+      "id": "620:6742",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6738",
+        "name": "Проверка подключения / Desktop / Ready"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19115"
+    },
+    {
+      "id": "620:6742",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6738",
+        "name": "Проверка подключения / Desktop / Ready"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19205"
+    },
+    {
+      "id": "620:6916",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6912",
+        "name": "Проверка подключения / Tablet / Default"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35618"
+    },
+    {
+      "id": "620:6916",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6912",
+        "name": "Проверка подключения / Tablet / Default"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35700"
+    },
+    {
+      "id": "620:6966",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6962",
+        "name": "Проверка подключения / Tablet / Filled"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35618"
+    },
+    {
+      "id": "620:6966",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:6962",
+        "name": "Проверка подключения / Tablet / Filled"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35700"
+    },
+    {
+      "id": "620:7016",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7012",
+        "name": "Проверка подключения / Tablet / Consent"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35618"
+    },
+    {
+      "id": "620:7016",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7012",
+        "name": "Проверка подключения / Tablet / Consent"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35700"
+    },
+    {
+      "id": "620:7066",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7062",
+        "name": "Проверка подключения / Tablet / Ready"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35618"
+    },
+    {
+      "id": "620:7066",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7062",
+        "name": "Проверка подключения / Tablet / Ready"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35700"
+    },
+    {
+      "id": "620:7231",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7227",
+        "name": "Проверка подключения / Mobile / Default"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39432"
+    },
+    {
+      "id": "620:7231",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7227",
+        "name": "Проверка подключения / Mobile / Default"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39487"
+    },
+    {
+      "id": "620:7281",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7277",
+        "name": "Проверка подключения / Mobile / Filled"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39432"
+    },
+    {
+      "id": "620:7281",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7277",
+        "name": "Проверка подключения / Mobile / Filled"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39487"
+    },
+    {
+      "id": "620:7331",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7327",
+        "name": "Проверка подключения / Mobile / Consent"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39432"
+    },
+    {
+      "id": "620:7331",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7327",
+        "name": "Проверка подключения / Mobile / Consent"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39487"
+    },
+    {
+      "id": "620:7381",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7377",
+        "name": "Проверка подключения / Mobile / Ready"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39432"
+    },
+    {
+      "id": "620:7381",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7377",
+        "name": "Проверка подключения / Mobile / Ready"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39487"
+    },
+    {
+      "id": "620:7560",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7556",
+        "name": "Проверка подключения / Mobile320 / Default"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42866"
+    },
+    {
+      "id": "620:7560",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7556",
+        "name": "Проверка подключения / Mobile320 / Default"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42917"
+    },
+    {
+      "id": "620:7610",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7606",
+        "name": "Проверка подключения / Mobile320 / Filled"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42866"
+    },
+    {
+      "id": "620:7610",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7606",
+        "name": "Проверка подключения / Mobile320 / Filled"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42917"
+    },
+    {
+      "id": "620:7660",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7656",
+        "name": "Проверка подключения / Mobile320 / Consent"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42866"
+    },
+    {
+      "id": "620:7660",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7656",
+        "name": "Проверка подключения / Mobile320 / Consent"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42917"
+    },
+    {
+      "id": "620:7710",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7706",
+        "name": "Проверка подключения / Mobile320 / Ready"
+      },
+      "text": "Главная",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42866"
+    },
+    {
+      "id": "620:7710",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:7706",
+        "name": "Проверка подключения / Mobile320 / Ready"
+      },
+      "text": "Казань",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42917"
+    },
+    {
+      "id": "620:8507",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:8505",
+        "name": "Проверочные сценарии / Desktop"
+      },
+      "text": "Прототип Figma / Desktop",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19115"
+    },
+    {
+      "id": "620:8521",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:8519",
+        "name": "Проверочные сценарии / Tablet"
+      },
+      "text": "Прототип Figma / Tablet",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35618"
+    },
+    {
+      "id": "620:8535",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:8533",
+        "name": "Проверочные сценарии / Mobile"
+      },
+      "text": "Прототип Figma / Mobile",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39432"
+    },
+    {
+      "id": "620:8549",
+      "name": "Крошки / nav",
+      "top": {
+        "id": "620:8547",
+        "name": "Проверочные сценарии / Mobile320"
+      },
+      "text": "Прототип Figma / Mobile320",
+      "url": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42866"
+    }
+  ],
+  "faqSourceContent": {
+    "id": "38:3714",
+    "texts": [
+      {
+        "name": "question",
+        "text": "Какие данные нужны для проверки адреса?"
+      },
+      {
+        "name": "answer",
+        "text": "Выберите город, улицу и дом из подсказок. Если у дома есть корпус или строение, выберите адрес с нужным уточнением. Проверка относится к конкретному дому."
+      },
+      {
+        "name": "question",
+        "text": "Можно ли проверить адрес без номера телефона?"
+      },
+      {
+        "name": "answer",
+        "text": "Да. Для проверки доступности выберите адрес — телефон на этом шаге не требуется. Если Дом.ру доступен и вы решите оставить заявку на подключение, номер понадобится для связи со специалистом."
+      },
+      {
+        "name": "question",
+        "text": "Что делать, если адреса нет в подсказках?"
+      },
+      {
+        "name": "answer",
+        "text": "Проверьте город и написание улицы, уточните номер дома, корпус или строение. Попробуйте выбрать адрес из подсказок еще раз. Если адрес не появился, воспользуйтесь консультацией. Отсутствие адреса в подсказках не подтверждает отсутствие подключения."
+      },
+      {
+        "name": "question",
+        "text": "Что делать, если проверка завершилась ошибкой?"
+      },
+      {
+        "name": "answer",
+        "text": "Повторите попытку позже. Пока проверка не завершена, вывод о доступности сделать нельзя. Если ошибка повторяется, обратитесь за консультацией."
+      },
+      {
+        "name": "question",
+        "text": "Достаточно ли карты покрытия для проверки?"
+      },
+      {
+        "name": "answer",
+        "text": "Нет. Карта показывает общую зону обслуживания, но не подтверждает подключение конкретного дома. Проверьте точный адрес в форме. Подборка тарифов города также не означает, что все предложения доступны в вашем доме."
+      },
+      {
+        "name": "question",
+        "text": "Можно ли проверить частный дом?"
+      },
+      {
+        "name": "answer",
+        "text": "Возможность подключения частного дома нужно уточнять по его точному адресу. Если адрес доступен в подсказках, выберите его и запустите проверку. Если найти дом не удалось, воспользуйтесь консультацией."
+      }
+    ]
+  },
+  "proposedKeepPages": [
+    "0:1",
+    "1:3",
+    "11:3",
+    "16:3"
+  ],
+  "proposedRemovePages": [
+    "6:570",
+    "6:2",
+    "13:3",
+    "22:869",
+    "22:3079",
+    "28:1883",
+    "29:1569",
+    "35:2165",
+    "35:4439",
+    "38:2720",
+    "39:2356",
+    "45:6138",
+    "45:6235",
+    "53:3"
+  ],
+  "status": "PENDING_OWNER_CONFIRMATION"
+}

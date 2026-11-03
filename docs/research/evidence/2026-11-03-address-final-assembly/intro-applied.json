@@ -1,0 +1,117 @@
+{
+  "deletedNodeIds": [
+    "2:541",
+    "2:624",
+    "2:825",
+    "2:905",
+    "2:1101",
+    "2:1150",
+    "2:1333",
+    "2:1367",
+    "6:572",
+    "6:577",
+    "6:687",
+    "6:692"
+  ],
+  "mutatedNodeIds": [
+    "1:3",
+    "1:4",
+    "1:5",
+    "1:6",
+    "1:7",
+    "6:571",
+    "6:686"
+  ],
+  "result": [
+    {
+      "id": "1:4",
+      "introId": "2:620",
+      "profileBefore": "d9298779",
+      "profileAfter": "d9298779",
+      "size": [
+        1440,
+        240
+      ]
+    },
+    {
+      "id": "1:5",
+      "introId": "2:901",
+      "profileBefore": "6a7d5df",
+      "profileAfter": "6a7d5df",
+      "size": [
+        834,
+        260
+      ]
+    },
+    {
+      "id": "1:6",
+      "introId": "2:1146",
+      "profileBefore": "c1429cf4",
+      "profileAfter": "c1429cf4",
+      "size": [
+        390,
+        254
+      ]
+    },
+    {
+      "id": "1:7",
+      "introId": "2:1363",
+      "profileBefore": "d1a1b80c",
+      "profileAfter": "d1a1b80c",
+      "size": [
+        320,
+        307
+      ]
+    },
+    {
+      "id": "6:571",
+      "introId": "6:573",
+      "profileBefore": "3bf98193",
+      "profileAfter": "3bf98193",
+      "size": [
+        390,
+        307
+      ]
+    },
+    {
+      "id": "6:686",
+      "introId": "6:688",
+      "profileBefore": "7b60d80e",
+      "profileAfter": "7b60d80e",
+      "size": [
+        320,
+        340
+      ]
+    }
+  ],
+  "page": {
+    "id": "1:3",
+    "name": "01 / Вводная секция — крошки и H1",
+    "children": [
+      {
+        "id": "1:4",
+        "name": "Вводная секция / Desktop"
+      },
+      {
+        "id": "1:5",
+        "name": "Вводная секция / Tablet"
+      },
+      {
+        "id": "1:6",
+        "name": "Вводная секция / Mobile"
+      },
+      {
+        "id": "1:7",
+        "name": "Вводная секция / Mobile320"
+      },
+      {
+        "id": "6:571",
+        "name": "QA / Длинный город / Mobile"
+      },
+      {
+        "id": "6:686",
+        "name": "QA / Длинный город / Mobile320"
+      }
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "actionSources": 6622,
+  "hash": "abdd777f",
+  "pairHash": "a1366731",
+  "uniqueTargets": 436,
+  "missingTargets": [],
+  "nullTargets": 0,
+  "legal": [
+    {
+      "id": "620:6582",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:6634",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:6686",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:6738",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:6912",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:6962",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:7012",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:7062",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:7227",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:7277",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:7327",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:7377",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:7556",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:7606",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:7656",
+      "aligned": true,
+      "contained": true
+    },
+    {
+      "id": "620:7706",
+      "aligned": true,
+      "contained": true
+    }
+  ]
+}

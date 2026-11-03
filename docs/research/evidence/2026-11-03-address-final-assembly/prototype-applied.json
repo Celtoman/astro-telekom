@@ -1,0 +1,428 @@
+{
+  "createdNodeIds": [
+    "1011:44648",
+    "1011:44852",
+    "1011:44962",
+    "1011:45072",
+    "1011:45182",
+    "1011:45387",
+    "1011:45498",
+    "1011:45609",
+    "1011:45720",
+    "1011:45925",
+    "1011:46036",
+    "1011:46147",
+    "1011:46258",
+    "1011:46461",
+    "1011:46572",
+    "1011:46683"
+  ],
+  "mutatedNodeIds": [
+    "620:6631",
+    "620:6632",
+    "620:6633",
+    "620:6583",
+    "620:6683",
+    "620:6684",
+    "620:6685",
+    "620:6635",
+    "620:6735",
+    "620:6736",
+    "620:6737",
+    "620:6687",
+    "620:6787",
+    "620:6788",
+    "620:6789",
+    "620:6739",
+    "620:6959",
+    "620:6960",
+    "620:6961",
+    "620:6913",
+    "620:7009",
+    "620:7010",
+    "620:7011",
+    "620:6963",
+    "620:7059",
+    "620:7060",
+    "620:7061",
+    "620:7013",
+    "620:7109",
+    "620:7110",
+    "620:7111",
+    "620:7063",
+    "620:7274",
+    "620:7275",
+    "620:7276",
+    "620:7228",
+    "620:7324",
+    "620:7325",
+    "620:7326",
+    "620:7278",
+    "620:7374",
+    "620:7375",
+    "620:7376",
+    "620:7328",
+    "620:7424",
+    "620:7425",
+    "620:7426",
+    "620:7378",
+    "620:7603",
+    "620:7604",
+    "620:7605",
+    "620:7557",
+    "620:7653",
+    "620:7654",
+    "620:7655",
+    "620:7607",
+    "620:7703",
+    "620:7704",
+    "620:7705",
+    "620:7657",
+    "620:7753",
+    "620:7754",
+    "620:7755",
+    "620:7707"
+  ],
+  "results": [
+    {
+      "rootId": "620:6582",
+      "pageId": "620:6583",
+      "instanceId": "1011:44648",
+      "variantKey": "353db5538db9899e463f9b6340ebf075bc3b5df4",
+      "w": 1360,
+      "h": 664,
+      "oldHeight": 4446,
+      "newHeight": 5110,
+      "shiftedAbsolute": [
+        "620:6631",
+        "620:6632",
+        "620:6633"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:6634",
+      "pageId": "620:6635",
+      "instanceId": "1011:44852",
+      "variantKey": "353db5538db9899e463f9b6340ebf075bc3b5df4",
+      "w": 1360,
+      "h": 664,
+      "oldHeight": 4446,
+      "newHeight": 5110,
+      "shiftedAbsolute": [
+        "620:6683",
+        "620:6684",
+        "620:6685"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:6686",
+      "pageId": "620:6687",
+      "instanceId": "1011:44962",
+      "variantKey": "353db5538db9899e463f9b6340ebf075bc3b5df4",
+      "w": 1360,
+      "h": 664,
+      "oldHeight": 4446,
+      "newHeight": 5110,
+      "shiftedAbsolute": [
+        "620:6735",
+        "620:6736",
+        "620:6737"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:6738",
+      "pageId": "620:6739",
+      "instanceId": "1011:45072",
+      "variantKey": "353db5538db9899e463f9b6340ebf075bc3b5df4",
+      "w": 1360,
+      "h": 664,
+      "oldHeight": 4446,
+      "newHeight": 5110,
+      "shiftedAbsolute": [
+        "620:6787",
+        "620:6788",
+        "620:6789"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:6912",
+      "pageId": "620:6913",
+      "instanceId": "1011:45182",
+      "variantKey": "b22a10172bba12ec59c6d0714756acfd5e630777",
+      "w": 720,
+      "h": 1007,
+      "oldHeight": 5997.05712890625,
+      "newHeight": 7004.05712890625,
+      "shiftedAbsolute": [
+        "620:6959",
+        "620:6960",
+        "620:6961"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:6962",
+      "pageId": "620:6963",
+      "instanceId": "1011:45387",
+      "variantKey": "b22a10172bba12ec59c6d0714756acfd5e630777",
+      "w": 720,
+      "h": 1007,
+      "oldHeight": 5997.05712890625,
+      "newHeight": 7004.05712890625,
+      "shiftedAbsolute": [
+        "620:7009",
+        "620:7010",
+        "620:7011"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:7012",
+      "pageId": "620:7013",
+      "instanceId": "1011:45498",
+      "variantKey": "b22a10172bba12ec59c6d0714756acfd5e630777",
+      "w": 720,
+      "h": 1007,
+      "oldHeight": 5997.05712890625,
+      "newHeight": 7004.05712890625,
+      "shiftedAbsolute": [
+        "620:7059",
+        "620:7060",
+        "620:7061"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:7062",
+      "pageId": "620:7063",
+      "instanceId": "1011:45609",
+      "variantKey": "b22a10172bba12ec59c6d0714756acfd5e630777",
+      "w": 720,
+      "h": 1007,
+      "oldHeight": 5997.05712890625,
+      "newHeight": 7004.05712890625,
+      "shiftedAbsolute": [
+        "620:7109",
+        "620:7110",
+        "620:7111"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:7227",
+      "pageId": "620:7228",
+      "instanceId": "1011:45720",
+      "variantKey": "47ea92972aefc3c5f5522a5584bf534b55e77e34",
+      "w": 358,
+      "h": 428,
+      "oldHeight": 7954,
+      "newHeight": 8382,
+      "shiftedAbsolute": [
+        "620:7274",
+        "620:7275",
+        "620:7276"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:7277",
+      "pageId": "620:7278",
+      "instanceId": "1011:45925",
+      "variantKey": "47ea92972aefc3c5f5522a5584bf534b55e77e34",
+      "w": 358,
+      "h": 428,
+      "oldHeight": 7954,
+      "newHeight": 8382,
+      "shiftedAbsolute": [
+        "620:7324",
+        "620:7325",
+        "620:7326"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:7327",
+      "pageId": "620:7328",
+      "instanceId": "1011:46036",
+      "variantKey": "47ea92972aefc3c5f5522a5584bf534b55e77e34",
+      "w": 358,
+      "h": 428,
+      "oldHeight": 7954,
+      "newHeight": 8382,
+      "shiftedAbsolute": [
+        "620:7374",
+        "620:7375",
+        "620:7376"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:7377",
+      "pageId": "620:7378",
+      "instanceId": "1011:46147",
+      "variantKey": "47ea92972aefc3c5f5522a5584bf534b55e77e34",
+      "w": 358,
+      "h": 428,
+      "oldHeight": 7954,
+      "newHeight": 8382,
+      "shiftedAbsolute": [
+        "620:7424",
+        "620:7425",
+        "620:7426"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:7556",
+      "pageId": "620:7557",
+      "instanceId": "1011:46258",
+      "variantKey": "1229240349ef6cccbe23b71a6210dbaf813a5f03",
+      "w": 288,
+      "h": 591,
+      "oldHeight": 9092,
+      "newHeight": 9683,
+      "shiftedAbsolute": [
+        "620:7603",
+        "620:7604",
+        "620:7605"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:7606",
+      "pageId": "620:7607",
+      "instanceId": "1011:46461",
+      "variantKey": "1229240349ef6cccbe23b71a6210dbaf813a5f03",
+      "w": 288,
+      "h": 591,
+      "oldHeight": 9092,
+      "newHeight": 9683,
+      "shiftedAbsolute": [
+        "620:7653",
+        "620:7654",
+        "620:7655"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:7656",
+      "pageId": "620:7657",
+      "instanceId": "1011:46572",
+      "variantKey": "1229240349ef6cccbe23b71a6210dbaf813a5f03",
+      "w": 288,
+      "h": 591,
+      "oldHeight": 9092,
+      "newHeight": 9683,
+      "shiftedAbsolute": [
+        "620:7703",
+        "620:7704",
+        "620:7705"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    },
+    {
+      "rootId": "620:7706",
+      "pageId": "620:7707",
+      "instanceId": "1011:46683",
+      "variantKey": "1229240349ef6cccbe23b71a6210dbaf813a5f03",
+      "w": 288,
+      "h": 591,
+      "oldHeight": 9092,
+      "newHeight": 9683,
+      "shiftedAbsolute": [
+        "620:7753",
+        "620:7754",
+        "620:7755"
+      ],
+      "changedOriginalProfiles": [],
+      "visibleSectionCount": 10
+    }
+  ],
+  "actionSources": 5769,
+  "actionsHash": "1a22bb8",
+  "starts": [
+    {
+      "nodeId": "620:6582",
+      "name": "Проверка подключения / Desktop"
+    },
+    {
+      "nodeId": "620:6912",
+      "name": "Проверка подключения / Tablet"
+    },
+    {
+      "nodeId": "620:7227",
+      "name": "Проверка подключения / Mobile"
+    },
+    {
+      "nodeId": "620:7556",
+      "name": "Проверка подключения / Mobile320"
+    },
+    {
+      "nodeId": "620:8505",
+      "name": "Проверка ошибок / Desktop"
+    },
+    {
+      "nodeId": "620:8519",
+      "name": "Проверка ошибок / Tablet"
+    },
+    {
+      "nodeId": "620:8533",
+      "name": "Проверка ошибок / Mobile"
+    },
+    {
+      "nodeId": "620:8547",
+      "name": "Проверка ошибок / Mobile320"
+    },
+    {
+      "nodeId": "620:44389",
+      "name": "Техническая поддержка / Desktop"
+    },
+    {
+      "nodeId": "620:46026",
+      "name": "Проверка ошибки телефона / Desktop"
+    },
+    {
+      "nodeId": "620:44589",
+      "name": "Техническая поддержка / Tablet"
+    },
+    {
+      "nodeId": "620:46076",
+      "name": "Проверка ошибки телефона / Tablet"
+    },
+    {
+      "nodeId": "620:44785",
+      "name": "Техническая поддержка / Mobile"
+    },
+    {
+      "nodeId": "620:46125",
+      "name": "Проверка ошибки телефона / Mobile"
+    },
+    {
+      "nodeId": "620:44981",
+      "name": "Техническая поддержка / Mobile320"
+    },
+    {
+      "nodeId": "620:46174",
+      "name": "Проверка ошибки телефона / Mobile320"
+    }
+  ]
+}

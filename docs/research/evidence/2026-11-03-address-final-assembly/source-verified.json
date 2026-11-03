@@ -1,0 +1,35 @@
+{
+  "pages": [
+    {
+      "id": "0:1",
+      "name": "00 / Обложка"
+    },
+    {
+      "id": "1:3",
+      "name": "01 / Вводная секция — крошки и H1"
+    },
+    {
+      "id": "11:3",
+      "name": "BLK-0032 / Что означает результат проверки"
+    },
+    {
+      "id": "16:3",
+      "name": "BLK-0033 / Тарифы в городе — подборка"
+    }
+  ],
+  "masters": [
+    {
+      "id": "12:394",
+      "key": "b1f158f7d2829000bb402dc18997b7e4e10ed06a",
+      "profile": "3c73fb03",
+      "publication": "CURRENT"
+    },
+    {
+      "id": "17:1152",
+      "key": "4e74cd57bef1a5855234d3ee7846b9cb0dbc1d48",
+      "profile": "a9ed17ec",
+      "publication": "CURRENT"
+    }
+  ],
+  "localCollections": 0
+}

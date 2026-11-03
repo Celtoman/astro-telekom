@@ -1,0 +1,278 @@
+{
+  "mutatedNodeIds": [
+    "620:6586",
+    "620:6638",
+    "620:6690",
+    "620:6742",
+    "620:6916",
+    "620:6966",
+    "620:7016",
+    "620:7066",
+    "620:7231",
+    "620:7281",
+    "620:7331",
+    "620:7381",
+    "620:7560",
+    "620:7610",
+    "620:7660",
+    "620:7710",
+    "620:8507",
+    "620:8521",
+    "620:8535",
+    "620:8549"
+  ],
+  "changes": [
+    {
+      "id": "620:6586",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19115",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-7885&starting-point-node-id=620%3A7885&scaling=scale-down&content-scaling=fixed",
+      "target": "620:7885"
+    },
+    {
+      "id": "620:6586",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19205",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-7895&starting-point-node-id=620%3A7895&scaling=scale-down&content-scaling=fixed",
+      "target": "620:7895"
+    },
+    {
+      "id": "620:6638",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19115",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-7885&starting-point-node-id=620%3A7885&scaling=scale-down&content-scaling=fixed",
+      "target": "620:7885"
+    },
+    {
+      "id": "620:6638",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19205",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-7895&starting-point-node-id=620%3A7895&scaling=scale-down&content-scaling=fixed",
+      "target": "620:7895"
+    },
+    {
+      "id": "620:6690",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19115",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-7885&starting-point-node-id=620%3A7885&scaling=scale-down&content-scaling=fixed",
+      "target": "620:7885"
+    },
+    {
+      "id": "620:6690",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19205",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-7895&starting-point-node-id=620%3A7895&scaling=scale-down&content-scaling=fixed",
+      "target": "620:7895"
+    },
+    {
+      "id": "620:6742",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19115",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-7885&starting-point-node-id=620%3A7885&scaling=scale-down&content-scaling=fixed",
+      "target": "620:7885"
+    },
+    {
+      "id": "620:6742",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19205",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-7895&starting-point-node-id=620%3A7895&scaling=scale-down&content-scaling=fixed",
+      "target": "620:7895"
+    },
+    {
+      "id": "620:6916",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35618",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8040&starting-point-node-id=620%3A8040&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8040"
+    },
+    {
+      "id": "620:6916",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35700",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8050&starting-point-node-id=620%3A8050&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8050"
+    },
+    {
+      "id": "620:6966",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35618",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8040&starting-point-node-id=620%3A8040&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8040"
+    },
+    {
+      "id": "620:6966",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35700",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8050&starting-point-node-id=620%3A8050&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8050"
+    },
+    {
+      "id": "620:7016",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35618",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8040&starting-point-node-id=620%3A8040&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8040"
+    },
+    {
+      "id": "620:7016",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35700",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8050&starting-point-node-id=620%3A8050&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8050"
+    },
+    {
+      "id": "620:7066",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35618",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8040&starting-point-node-id=620%3A8040&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8040"
+    },
+    {
+      "id": "620:7066",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35700",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8050&starting-point-node-id=620%3A8050&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8050"
+    },
+    {
+      "id": "620:7231",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39432",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8195&starting-point-node-id=620%3A8195&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8195"
+    },
+    {
+      "id": "620:7231",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39487",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8205&starting-point-node-id=620%3A8205&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8205"
+    },
+    {
+      "id": "620:7281",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39432",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8195&starting-point-node-id=620%3A8195&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8195"
+    },
+    {
+      "id": "620:7281",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39487",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8205&starting-point-node-id=620%3A8205&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8205"
+    },
+    {
+      "id": "620:7331",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39432",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8195&starting-point-node-id=620%3A8195&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8195"
+    },
+    {
+      "id": "620:7331",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39487",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8205&starting-point-node-id=620%3A8205&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8205"
+    },
+    {
+      "id": "620:7381",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39432",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8195&starting-point-node-id=620%3A8195&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8195"
+    },
+    {
+      "id": "620:7381",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39487",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8205&starting-point-node-id=620%3A8205&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8205"
+    },
+    {
+      "id": "620:7560",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42866",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8350&starting-point-node-id=620%3A8350&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8350"
+    },
+    {
+      "id": "620:7560",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42917",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8360&starting-point-node-id=620%3A8360&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8360"
+    },
+    {
+      "id": "620:7610",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42866",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8350&starting-point-node-id=620%3A8350&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8350"
+    },
+    {
+      "id": "620:7610",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42917",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8360&starting-point-node-id=620%3A8360&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8360"
+    },
+    {
+      "id": "620:7660",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42866",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8350&starting-point-node-id=620%3A8350&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8350"
+    },
+    {
+      "id": "620:7660",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42917",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8360&starting-point-node-id=620%3A8360&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8360"
+    },
+    {
+      "id": "620:7710",
+      "text": "Главная",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42866",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8350&starting-point-node-id=620%3A8350&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8350"
+    },
+    {
+      "id": "620:7710",
+      "text": "Казань",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42917",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8360&starting-point-node-id=620%3A8360&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8360"
+    },
+    {
+      "id": "620:8507",
+      "text": "Прототип Figma / Desktop",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-19115",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-7885&starting-point-node-id=620%3A7885&scaling=scale-down&content-scaling=fixed",
+      "target": "620:7885"
+    },
+    {
+      "id": "620:8521",
+      "text": "Прототип Figma / Tablet",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-35618",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8040&starting-point-node-id=620%3A8040&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8040"
+    },
+    {
+      "id": "620:8535",
+      "text": "Прототип Figma / Mobile",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-39432",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8195&starting-point-node-id=620%3A8195&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8195"
+    },
+    {
+      "id": "620:8549",
+      "text": "Прототип Figma / Mobile320",
+      "before": "https://www.figma.com/design/pKN4YecfI2fZuMj822ud49?node-id=57-42866",
+      "after": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?page-id=619%3A22437&node-id=620-8350&starting-point-node-id=620%3A8350&scaling=scale-down&content-scaling=fixed",
+      "target": "620:8350"
+    }
+  ]
+}

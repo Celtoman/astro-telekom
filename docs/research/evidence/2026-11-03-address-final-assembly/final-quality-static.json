@@ -1,0 +1,82 @@
+[
+  {
+    "id": "620:1549",
+    "contentId": "620:1549",
+    "viewport": [
+      1440,
+      5110
+    ],
+    "contentHeight": 5110,
+    "visibleSectionCount": 10,
+    "missingMasters": [],
+    "faqPairs": 6,
+    "faqMatches": true,
+    "prices": [
+      "950 ₽/мес",
+      "1100 ₽/мес",
+      "1300 ₽/мес"
+    ],
+    "overflow": [],
+    "benefits": 1
+  },
+  {
+    "id": "620:1565",
+    "contentId": "620:1565",
+    "viewport": [
+      834,
+      7004.05712890625
+    ],
+    "contentHeight": 7004.05712890625,
+    "visibleSectionCount": 10,
+    "missingMasters": [],
+    "faqPairs": 6,
+    "faqMatches": true,
+    "prices": [
+      "950 ₽/мес",
+      "1100 ₽/мес",
+      "1300 ₽/мес"
+    ],
+    "overflow": [],
+    "benefits": 1
+  },
+  {
+    "id": "620:1581",
+    "contentId": "620:1581",
+    "viewport": [
+      390,
+      8382
+    ],
+    "contentHeight": 8382,
+    "visibleSectionCount": 10,
+    "missingMasters": [],
+    "faqPairs": 6,
+    "faqMatches": true,
+    "prices": [
+      "950 ₽/мес",
+      "1100 ₽/мес",
+      "1300 ₽/мес"
+    ],
+    "overflow": [],
+    "benefits": 1
+  },
+  {
+    "id": "620:1597",
+    "contentId": "620:1597",
+    "viewport": [
+      320,
+      9683
+    ],
+    "contentHeight": 9683,
+    "visibleSectionCount": 10,
+    "missingMasters": [],
+    "faqPairs": 6,
+    "faqMatches": true,
+    "prices": [
+      "950 ₽/мес",
+      "1100 ₽/мес",
+      "1300 ₽/мес"
+    ],
+    "overflow": [],
+    "benefits": 1
+  }
+]
