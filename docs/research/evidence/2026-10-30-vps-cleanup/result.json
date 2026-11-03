@@ -1,0 +1,169 @@
+{
+  "status": "PARTIAL_JOURNAL_RETENTION_VIOLATED",
+  "task": 443,
+  "incident": 444,
+  "totals": {
+    "before": {
+      "total": 83053432832,
+      "used": 51217530880,
+      "available": 31766605824
+    },
+    "after": {
+      "total": 83053432832,
+      "used": 47867301888,
+      "available": 35116834816
+    },
+    "netFreedBytes": 3350228992,
+    "netFreedGiB": 3.1201438903808594,
+    "usedPercent": 57.63434484980976,
+    "freeGiB": 32.705101013183594,
+    "journalDeletedFiles": 32,
+    "journalDeletedAllocatedBytes": 2416050176,
+    "journalRemainingAllocatedBytes": 1870766080,
+    "imagesDeletedByThisRun": 0,
+    "imagesPreserved": 39,
+    "containersPreserved": 31,
+    "volumesPreserved": 25,
+    "protectedBackupSetsPreserved": 6
+  },
+  "archive": {
+    "bytes": 120993059,
+    "sha256": "daf75b9c731b62a2c41bf0d96e920c05fe950d05f4db7f9496365658d73ce6b5",
+    "regularFiles": 4375,
+    "symlinks": 2,
+    "logicalBytes": 730622903,
+    "fullRestoreVerified": true
+  },
+  "archiveCopies": [
+    "D:\\01 vibecode\\server-backups\\20261030-extra-cleanup\\stale-build-7e305970.tar.gz",
+    "/root/maintenance/extra-cleanup-20261030/stale-build-7e305970.tar.gz"
+  ],
+  "preservation": {
+    "containersUnchanged": true,
+    "volumesUnchanged": true,
+    "imagesUnchanged": true,
+    "backupsUnchanged": true,
+    "activeUnchanged": true,
+    "protectedUnchanged": true,
+    "packagesUnchanged": true,
+    "engineUnchanged": true,
+    "staleBuildRemoved": true,
+    "testWorkspaceRemoved": true,
+    "containerMountComparison": "order-independent by destination/source"
+  },
+  "active": {
+    "artifactId": "a1f5c0f0e0cda0b7c77d56473cf9ccd2d133156ea1d79e6c80495604d83169a3",
+    "publicationId": "cmvs82yuw000101o52i6ams8d",
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "siteSlug": "domru-site",
+    "siteRevision": 24,
+    "rendererId": "1814b103097be467b39e8f59090609e125f53e40d595243f54b8f2b179e8a9b4",
+    "catalogDigest": "d9b3c8469cdeffccbf3a3ad896ba6979af13cbc6a8e383aa4ca99348b9095d07",
+    "manifestDigest": "8628e67b7d4badc2faa9828f291577e77ce9da968a9d1a8fef73ef5c72a07130"
+  },
+  "sourceCommit": "98adae87901e3951690840b6149420a336d42699",
+  "protectedArtifactVerification": [
+    {
+      "artifactId": "a1f5c0f0e0cda0b7c77d56473cf9ccd2d133156ea1d79e6c80495604d83169a3",
+      "files": 4186
+    },
+    {
+      "artifactId": "a5c3994b11742c77eed7721b8b2d993adff8102ece136aea0025ce630402b475",
+      "files": 4059
+    },
+    {
+      "artifactId": "1fa51ea9d898dae23abf5398e396b4cc112aa002d62774e5b90c66e34017051a",
+      "files": 4176
+    },
+    {
+      "artifactId": "230228491c8f71774ba663d7fcacca81fdbf23d56c9388b85abc652bcc81fdac",
+      "files": 4178
+    },
+    {
+      "artifactId": "3b5f9b7e8c663c0c960a38507915f168f2e1f036d0833b2962eaa6aaabbf2ed8",
+      "files": 4178
+    },
+    {
+      "artifactId": "483421ae0990b0574edcf6f71e7ca4601abd97729ced81eea21771829d9a0a0c",
+      "files": 4178
+    },
+    {
+      "artifactId": "5077f28d12f28e4ed9a7c937f85ccb748ebf4f182ad7b339a404ac368b578ace",
+      "files": 4176
+    },
+    {
+      "artifactId": "88d91719b626ec1863a754c420153ce690fa1d9099bf3f92443e7efbe8ab2b38",
+      "files": 4178
+    },
+    {
+      "artifactId": "a05c0017938cee4be17ac4bbb8397dad49fdb07e7d3544698d6654ad6488ecc5",
+      "files": 4178
+    },
+    {
+      "artifactId": "b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223",
+      "files": 4182
+    },
+    {
+      "artifactId": "bdc075f535d5ff6c4859874af9e8fffd740ab8ccd87ddac7d566c5c8dc5c00dd",
+      "files": 4176
+    },
+    {
+      "artifactId": "cb8ad2048099a356e4c4d0a6f2addee5437d385a675f8333c86ee0f8f4f87ef7",
+      "files": 4176
+    },
+    {
+      "artifactId": "eb6cda7e06f9f8927f5dfae015bdb5d8628efedbc44ff7f4a1cbe4df245e71f7",
+      "files": 4178
+    }
+  ],
+  "http": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/kazan",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/health/ready",
+      "status": 200
+    }
+  ],
+  "external": [
+    {
+      "host": "https://tv-internet-dom.ru",
+      "status": 401,
+      "robots": [
+        "x-robots-tag: noindex, nofollow"
+      ]
+    },
+    {
+      "host": "https://admin.tv-internet-dom.ru",
+      "status": 401,
+      "robots": [
+        "x-robots-tag: noindex, nofollow, noarchive"
+      ]
+    }
+  ],
+  "journalIncident": {
+    "requiredCutoff": "2026-09-30T20:13:51+03:00",
+    "earliestRemaining": "2026-10-01T07:57:39+03:00",
+    "approximateMissingHours": 11.73,
+    "deletedFile": "system@8b7c3eda888946beb83d0580a484512a-000000000054d9f9-00065cb01b85ad14.journal",
+    "providerSnapshotAvailable": false,
+    "openDeletedHandleAvailable": false,
+    "systemJournalInCheckedHostBackups": false,
+    "restored": false
+  },
+  "packagesUnchanged": true,
+  "engine": "29.5.1",
+  "previousImageSets": [
+    "e6596a16b6235ee1a39a575c477b20ae5cd23914",
+    "024c7364c9ad1f190c5dd51e9915d11b9bbea88b"
+  ]
+}

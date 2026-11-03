@@ -2,7 +2,8 @@ import { createServer } from 'node:http';
 import { createHash, timingSafeEqual, randomUUID } from 'node:crypto';
 import { readFile, readdir } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
-import { readArtifact, readReceipt, writeImmutableJson } from './artifact-store.mjs';
+import { readArtifact, readHistoricalArtifact, readReceipt, writeImmutableJson } from './artifact-store.mjs';
+import { planRetention, acknowledgeArchive, collectArtifact, restoreArtifact } from './artifact-retention.mjs';
 import { ActivationConflictError, ActivationUncertainError, ActivationRejectedError } from './caddy-activation.mjs';
 
 class InputError extends Error { constructor(message, status = 400) { super(message); this.status = status; } }
@@ -41,6 +42,28 @@ export class PublicationController {
 
   async rendererIdentity() { return { rendererId: await this.builder.renderer, instanceId: this.instanceId }; }
 
+  serial(operation) {
+    const result = this.pending.then(operation);
+    this.pending = result.catch(() => undefined);
+    return result;
+  }
+
+  retentionPlan(options = {}) {
+    return this.serial(async () => planRetention({ root: this.root, serving: await this.activation.current(), ...options }));
+  }
+
+  acknowledgeArchive(proof) {
+    return this.serial(() => acknowledgeArchive(this.root, proof));
+  }
+
+  collectArtifact(artifactId) {
+    return this.serial(() => collectArtifact({ root: this.root, servingReader: () => this.activation.current(), artifactId }));
+  }
+
+  restoreArtifact(artifactId) {
+    return this.serial(() => restoreArtifact({ root: this.root, artifactId }));
+  }
+
   async eligible(artifact, job) {
     const snapshot = await this.builder.fetchSnapshot(job);
     if (['publicationId', 'siteId', 'siteSlug', 'siteRevision', 'catalogDigest'].some(field => snapshot[field] !== artifact[field])) throw new Error('Persisted snapshot identity/digest mismatch');
@@ -54,12 +77,16 @@ export class PublicationController {
     if (digest(content) !== operationDigest || !/^[a-f0-9]{64}$/.test(operation.expectedActiveArtifactId || '')) throw new ActivationUncertainError('Persisted publication intent integrity mismatch');
     const identity = jobIdentity(operation.job);
     if (identity.rebuildId !== rebuildId || identity.rebuildRevision !== revision) throw new Error('Persisted publication identity mismatch');
-    const artifact = await readArtifact(this.root, operation.artifactId);
+    const artifact = await readHistoricalArtifact(this.root, operation.artifactId);
     if (fields.some(field => artifact[field] !== identity[field])) throw new Error('Persisted artifact identity mismatch');
     return { ...operation, artifact };
   }
 
   async receipt(rebuildId, revision) {
+    return this.serial(() => this.receiptSerial(rebuildId, revision));
+  }
+
+  async receiptSerial(rebuildId, revision) {
     const operation = await this.operation(rebuildId, revision);
     if (!operation) return { status: 'NOT_FOUND' };
     const existing = await readReceipt(this.root, operation.artifactId).catch(error => { if (error.code !== 'ENOENT') throw error; return null; });
@@ -99,7 +126,7 @@ export class PublicationController {
     if (operation && fields.some(field => operation.job[field] !== job[field])) throw new ActivationConflictError('Publication operation identity collision');
     if (operation) {
       let receipt;
-      try { receipt = await this.receipt(job.rebuildId, job.rebuildRevision); }
+      try { receipt = await this.receiptSerial(job.rebuildId, job.rebuildRevision); }
       catch (error) { throw new ActivationUncertainError('Publication receipt could not be verified', { cause: error }); }
       if (receipt.status === 'SUCCEEDED') { await report({ stage: 'CONFIRMING' }); return receipt; }
       try { await this.eligible(operation.artifact, job); }
@@ -162,7 +189,7 @@ export class PublicationController {
       const record = JSON.parse(await readFile(join(this.root, 'operations', name), 'utf8'));
       const operation = await this.operation(record.job.rebuildId, record.job.rebuildRevision);
       if (operation.artifact.siteId !== active.siteId || operation.artifact.siteRevision <= active.siteRevision) continue;
-      if ((await this.receipt(record.job.rebuildId, record.job.rebuildRevision)).status === 'SUCCEEDED') continue;
+      if ((await this.receiptSerial(record.job.rebuildId, record.job.rebuildRevision)).status === 'SUCCEEDED') continue;
       try { await this.eligible(operation.artifact, operation.job); }
       catch (error) { if ([404, 409].includes(error.httpStatus)) continue; throw error; }
       throw new ActivationUncertainError('Code release is waiting for an unresolved CMS activation');
@@ -180,7 +207,7 @@ export class PublicationController {
     if (record) {
       const { operationDigest, ...content } = record;
       if (digest(content) !== operationDigest || digest(record.release) !== digest(identity)) throw new ActivationUncertainError('Code intent integrity mismatch');
-      artifact = await readArtifact(this.root, record.artifactId);
+      artifact = await readHistoricalArtifact(this.root, record.artifactId);
       if (artifact.rendererId !== release.rendererId || fields.some(field => artifact[field] !== record.job[field])) throw new ActivationUncertainError('Code artifact identity mismatch');
       const current = await this.activation.current();
       if (current.active) await this.activation.reconcile(current.active);
@@ -238,6 +265,13 @@ export function createPublicationServer({ adminToken, controller, onError = () =
       if (supplied.length !== token.length || !timingSafeEqual(supplied, token)) { request.resume(); send(401, { error: 'Unauthorized' }); return; }
       if (request.method === 'GET' && request.url === '/active') { send(200, await controller.active()); return; }
       if (request.method === 'GET' && request.url === '/renderer') { send(200, await controller.rendererIdentity()); return; }
+      if (request.method === 'GET' && request.url === '/retention/plan') { send(200, await controller.retentionPlan()); return; }
+      if (request.method === 'POST' && request.url === '/retention/archive') { send(200, await controller.acknowledgeArchive(await requestBody(request))); return; }
+      if (request.method === 'POST' && ['/retention/collect', '/retention/restore'].includes(request.url)) {
+        const body = await requestBody(request);
+        if (!body || Object.keys(body).join(',') !== 'artifactId') throw new InputError('Only artifactId is accepted');
+        send(200, await controller[request.url.endsWith('/restore') ? 'restoreArtifact' : 'collectArtifact'](body.artifactId)); return;
+      }
       if (request.method === 'POST' && request.url === '/release-code') { send(200, await controller.releaseCode(codeIdentity(await requestBody(request)))); return; }
       if (request.method === 'POST' && request.url === '/publish') { send(200, await controller.publish(jobIdentity(await requestBody(request)))); return; }
       const receipt = request.url?.match(/^\/receipts\/([a-zA-Z0-9_-]{1,200})\/([1-9][0-9]{0,14})$/);

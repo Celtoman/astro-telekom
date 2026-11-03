@@ -1,0 +1,315 @@
+{
+  "release": {
+    "application": {
+      "uuid": "jlrsktdos9yhchkgnrd9f5fj",
+      "status": "running:healthy",
+      "git_repository": "Celtoman/astro-telekom",
+      "git_branch": "master"
+    },
+    "deployment": {
+      "deployment_uuid": "h8cw4mj6d8uw5lejmpaghamv",
+      "application_uuid": "jlrsktdos9yhchkgnrd9f5fj",
+      "application_name": "astro-telekom",
+      "server_name": "localhost",
+      "status": "finished",
+      "commit": "98adae87901e3951690840b6149420a336d42699",
+      "commit_message": "feat(publication): archive and collect stale HTML safely\n\nRefs #438, #440",
+      "pull_request_id": 0,
+      "force_rebuild": false,
+      "is_webhook": false,
+      "is_api": true,
+      "restart_only": false,
+      "rollback": false,
+      "git_type": null,
+      "deployment_url": "/project/thlsnvgai5gzcfsro45fkbdq/environment/rpdpbuvp7pvaddxpozrjrq4g/application/jlrsktdos9yhchkgnrd9f5fj/deployment/h8cw4mj6d8uw5lejmpaghamv",
+      "docker_registry_image_tag": null,
+      "created_at": "2026-10-29T19:57:19.000000Z",
+      "updated_at": "2026-10-29T20:05:18.000000Z",
+      "finished_at": "2026-10-29T20:05:17.000000Z"
+    },
+    "ci": {
+      "url": "https://github.com/Celtoman/astro-telekom/actions/runs/40943339931",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "98adae87901e3951690840b6149420a336d42699"
+    }
+  },
+  "site": {
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "workingRevision": 24,
+    "publishedRevision": 24
+  },
+  "active": {
+    "artifactId": "a1f5c0f0e0cda0b7c77d56473cf9ccd2d133156ea1d79e6c80495604d83169a3",
+    "publicationId": "cmvs82yuw000101o52i6ams8d",
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "siteSlug": "domru-site",
+    "siteRevision": 24,
+    "rendererId": "1814b103097be467b39e8f59090609e125f53e40d595243f54b8f2b179e8a9b4",
+    "catalogDigest": "d9b3c8469cdeffccbf3a3ad896ba6979af13cbc6a8e383aa4ca99348b9095d07",
+    "manifestDigest": "8628e67b7d4badc2faa9828f291577e77ce9da968a9d1a8fef73ef5c72a07130"
+  },
+  "codeReceipt": {
+    "status": "SUCCEEDED",
+    "artifactId": "a1f5c0f0e0cda0b7c77d56473cf9ccd2d133156ea1d79e6c80495604d83169a3",
+    "publicationId": "cmvs82yuw000101o52i6ams8d",
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "siteRevision": 24,
+    "rendererId": "1814b103097be467b39e8f59090609e125f53e40d595243f54b8f2b179e8a9b4",
+    "catalogDigest": "d9b3c8469cdeffccbf3a3ad896ba6979af13cbc6a8e383aa4ca99348b9095d07",
+    "rebuildId": "code-f57f880bc3e62e91dc09edb4218da788314261cc1674b2520bed495c418eaa66",
+    "rebuildRevision": 1,
+    "manifestDigest": "8628e67b7d4badc2faa9828f291577e77ce9da968a9d1a8fef73ef5c72a07130"
+  },
+  "archives": {
+    "archiveCount": 32,
+    "archiveBytes": 3073163534
+  },
+  "gc": {
+    "time": "2026-10-29T20:33:24Z",
+    "gcCount": 27,
+    "deletedHtmlFiles": 108513,
+    "deletedLogicalBytes": 13270859993,
+    "retainedAssetFiles": 1573,
+    "retainedAssetLogicalBytes": 77197344,
+    "archiveCount": 32,
+    "archiveBytes": 3073163534,
+    "manifestCount": 40,
+    "receiptCount": 40,
+    "publicationAllocatedBytes": 11854028800,
+    "availableBytes": 21996380160,
+    "totalBytes": 83053432832,
+    "usedBytes": 60987756544
+  },
+  "publicationBytesBefore": 25786068992,
+  "publicationBytesFreed": 13932040192,
+  "initialDisk": {
+    "total_bytes": 83053432832,
+    "used_bytes": 79462309888,
+    "available_bytes": 3521826816
+  },
+  "protected": [
+    {
+      "artifactId": "a1f5c0f0e0cda0b7c77d56473cf9ccd2d133156ea1d79e6c80495604d83169a3",
+      "reasons": [
+        "active",
+        "serving",
+        "recent"
+      ],
+      "verifiedFiles": 4186
+    },
+    {
+      "artifactId": "a5c3994b11742c77eed7721b8b2d993adff8102ece136aea0025ce630402b475",
+      "reasons": [
+        "serving",
+        "baseline"
+      ],
+      "verifiedFiles": 4059
+    },
+    {
+      "artifactId": "1fa51ea9d898dae23abf5398e396b4cc112aa002d62774e5b90c66e34017051a",
+      "reasons": [
+        "recent"
+      ],
+      "verifiedFiles": 4176
+    },
+    {
+      "artifactId": "230228491c8f71774ba663d7fcacca81fdbf23d56c9388b85abc652bcc81fdac",
+      "reasons": [
+        "recent"
+      ],
+      "verifiedFiles": 4178
+    },
+    {
+      "artifactId": "3b5f9b7e8c663c0c960a38507915f168f2e1f036d0833b2962eaa6aaabbf2ed8",
+      "reasons": [
+        "recent"
+      ],
+      "verifiedFiles": 4178
+    },
+    {
+      "artifactId": "483421ae0990b0574edcf6f71e7ca4601abd97729ced81eea21771829d9a0a0c",
+      "reasons": [
+        "recent",
+        "rollback"
+      ],
+      "verifiedFiles": 4178
+    },
+    {
+      "artifactId": "5077f28d12f28e4ed9a7c937f85ccb748ebf4f182ad7b339a404ac368b578ace",
+      "reasons": [
+        "recent"
+      ],
+      "verifiedFiles": 4176
+    },
+    {
+      "artifactId": "88d91719b626ec1863a754c420153ce690fa1d9099bf3f92443e7efbe8ab2b38",
+      "reasons": [
+        "recent"
+      ],
+      "verifiedFiles": 4178
+    },
+    {
+      "artifactId": "a05c0017938cee4be17ac4bbb8397dad49fdb07e7d3544698d6654ad6488ecc5",
+      "reasons": [
+        "recent"
+      ],
+      "verifiedFiles": 4178
+    },
+    {
+      "artifactId": "b870d08bc3bdbb83d05b735f26ff3bb2a155adc517688e19b6e3783541d7d223",
+      "reasons": [
+        "recent",
+        "rollback"
+      ],
+      "verifiedFiles": 4182
+    },
+    {
+      "artifactId": "bdc075f535d5ff6c4859874af9e8fffd740ab8ccd87ddac7d566c5c8dc5c00dd",
+      "reasons": [
+        "recent"
+      ],
+      "verifiedFiles": 4176
+    },
+    {
+      "artifactId": "cb8ad2048099a356e4c4d0a6f2addee5437d385a675f8333c86ee0f8f4f87ef7",
+      "reasons": [
+        "recent"
+      ],
+      "verifiedFiles": 4176
+    },
+    {
+      "artifactId": "eb6cda7e06f9f8927f5dfae015bdb5d8628efedbc44ff7f4a1cbe4df245e71f7",
+      "reasons": [
+        "recent"
+      ],
+      "verifiedFiles": 4178
+    }
+  ],
+  "historicalReceiptCount": 27,
+  "cmsReceiptReadbackCount": 8,
+  "oldCssReadbackCount": 27,
+  "api": [
+    {
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/health/ready",
+      "status": 200
+    }
+  ],
+  "external": [
+    {
+      "host": "https://tv-internet-dom.ru",
+      "status": 401,
+      "robots": [
+        "x-robots-tag: noindex, nofollow"
+      ]
+    },
+    {
+      "host": "https://admin.tv-internet-dom.ru",
+      "status": 401,
+      "robots": [
+        "x-robots-tag: noindex, nofollow, noarchive"
+      ]
+    }
+  ],
+  "scheduler": {
+    "started": "2026-10-29 20:33:05 UTC",
+    "units": {
+      "timer": {
+        "enabled": "enabled",
+        "NextElapseUSecRealtime": "Fri 2026-10-30 05:32:39 MSK",
+        "ActiveState": "active",
+        "SubState": "waiting"
+      },
+      "path": {
+        "enabled": "enabled",
+        "ActiveState": "active",
+        "SubState": "waiting"
+      }
+    },
+    "manualRun": {
+      "Result": "success",
+      "ExecMainStartTimestampMonotonic": "91711052278",
+      "ExecMainExitTimestamp": "Thu 2026-10-29 23:33:08 MSK",
+      "ExecMainStatus": "0",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "pathTriggeredRun": {
+      "Result": "success",
+      "ExecMainStartTimestampMonotonic": "91714262242",
+      "ExecMainExitTimestamp": "Thu 2026-10-29 23:33:11 MSK",
+      "ExecMainStatus": "0",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "receiptSha256Unchanged": "55e61a56b2fa5d2addae3f6380d2232d0900092de06162e35c83733734b9ffef",
+    "events": [
+      {
+        "event": "plan",
+        "activeArtifactId": "a1f5c0f0e0cda0b7c77d56473cf9ccd2d133156ea1d79e6c80495604d83169a3",
+        "candidates": 0,
+        "protected": 13,
+        "apply": true
+      },
+      {
+        "event": "finished",
+        "freeBytes": 21994950656,
+        "usedPercent": 73.52
+      },
+      {
+        "event": "plan",
+        "activeArtifactId": "a1f5c0f0e0cda0b7c77d56473cf9ccd2d133156ea1d79e6c80495604d83169a3",
+        "candidates": 0,
+        "protected": 13,
+        "apply": true
+      },
+      {
+        "event": "finished",
+        "freeBytes": 21994946560,
+        "usedPercent": 73.52
+      }
+    ]
+  },
+  "unaffected": {
+    "unrelatedContainers": 23,
+    "changes": [],
+    "engine": "29.5.1",
+    "originalVolumesPreserved": true
+  },
+  "installedHelpers": [
+    {
+      "source": "deploy/publication-retention.py",
+      "target": "/opt/astro-telekom-retention/publication-retention.py",
+      "sha256": "46f7eab1f2f5558b267b9cd65081b53a8c334aeebf6986829428579a1b345ebc",
+      "mode": "0o700"
+    },
+    {
+      "source": "deploy/publication-retention-s3.php",
+      "target": "/data/coolify/backups/publication-retention/publication-retention-s3.php",
+      "sha256": "8887ef5569e3f81b669841de5ce8446ece13dc3b595dc2c0825be6e0654b83a0",
+      "mode": "0o600"
+    },
+    {
+      "source": "deploy/publication-retention.service",
+      "target": "/etc/systemd/system/publication-retention.service",
+      "sha256": "6e975f16125e931427dd2254f0655e2770e8f4d07449ee4e1bf0bff2622a48ef",
+      "mode": "0o644"
+    },
+    {
+      "source": "deploy/publication-retention.timer",
+      "target": "/etc/systemd/system/publication-retention.timer",
+      "sha256": "1643ef57b70759f646c2581dd02a7ecd072c3b97f9b58a7b734dcbe9c9a2f1c2",
+      "mode": "0o644"
+    },
+    {
+      "source": "deploy/publication-retention.path",
+      "target": "/etc/systemd/system/publication-retention.path",
+      "sha256": "b9ddb983fba2227dde849ab536e9910563fd349a20f999ef2be34c0b7a0639c0",
+      "mode": "0o644"
+    }
+  ]
+}

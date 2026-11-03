@@ -4,6 +4,10 @@
 
 Direct prod Compose использует migration target с Prisma CLI; отдельный Docker/PostgreSQL 18 rehearsal (#236) проверяет применение всех миграций и точную идемпотентность. Запуск: `node scripts/rehearse-direct-migration.mjs`. Эта проверка не подтверждает полный запуск direct stack: web по-прежнему требует уже доступный `SITE_DATA_API_URL`. Seed соответствует текущей schema и прошёл отдельный свежий PostgreSQL rehearsal. Действующий Coolify-контур использует RUN_BOOTSTRAP_SEED=false. Только владелец определяет готовность к реальному трафику.
 
+## Хранение публикаций
+
+Старый HTML обслуживается отдельной [архивной retention](runbooks/publication-retention.md), не Docker prune. Host helper использует существующее S3-хранилище Coolify без передачи credentials в web; полное скачивание/восстановление архива обязательно до удаления. Приватный controller разделяет очередь с CMS/CODE и защищает active/baseline/две rollback/семь суток/незавершённые операции. Versioned assets и immutable metadata сохраняются. Systemd timer/path включаются только после exact-SHA выпуска и первой успешной очистки; факт включения фиксируется отдельно.
+
 ## Контуры
 
 | Контур | Команда | Состав |

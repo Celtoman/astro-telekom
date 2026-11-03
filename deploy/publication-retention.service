@@ -1,0 +1,15 @@
+[Unit]
+Description=Archive and collect Astro Telekom publication HTML
+After=docker.service network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+User=root
+UMask=0077
+ExecStart=/usr/bin/python3 /opt/astro-telekom-retention/publication-retention.py --apply --limit 10
+TimeoutStartSec=45min
+Nice=10
+IOSchedulingClass=idle
+StandardOutput=journal
+StandardError=journal
