@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-11-03T09:36:50.030Z",
+  "httpStatus": 200,
+  "deploymentId": "flckzpibrl3bnrwe9z4m2mdd",
+  "expectedSha": "b693c6c80f8977ecdeb6f9e802b17523d16f3fcc",
+  "result": {
+    "status": "SUCCEEDED",
+    "artifactId": "08b4078b8b6908d2f6ae3a4dbc0d2987d3a6037b8d751f45e72eea969aa34d41",
+    "publicationId": "cmvs82yuw000101o52i6ams8d",
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "siteRevision": 24,
+    "rendererId": "6139b13111c7f4259cda9aaa1fffffa518efca038e8858c6e36a1091aac718e7",
+    "catalogDigest": "d9b3c8469cdeffccbf3a3ad896ba6979af13cbc6a8e383aa4ca99348b9095d07",
+    "rebuildId": "code-a9b3c0df9a0486dda720782d51c0863d25cfd69a1318cc38be695b2dea7a5e76",
+    "rebuildRevision": 1,
+    "manifestDigest": "458705eaf89334e905b0722b23f02a15a3a6e9e9b64deaac49edae079a717f2b"
+  }
+}

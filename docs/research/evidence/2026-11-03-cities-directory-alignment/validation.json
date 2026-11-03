@@ -29,5 +29,19 @@
       "snippet": "font-family: 'Geist"
     }
   ],
-  "detectorDecision": "Geist is mandated by the accepted Figma/library; font warning is outside this targeted alignment correction and is intentionally not applied."
+  "detectorDecision": "Geist is mandated by the accepted Figma/library; font warning is outside this targeted alignment correction and is intentionally not applied.",
+  "ci": {
+    "runId": 41609750587,
+    "sha": "b693c6c80f8977ecdeb6f9e802b17523d16f3fcc",
+    "url": "https://github.com/Celtoman/astro-telekom/actions/runs/41609750587",
+    "conclusion": "success",
+    "counts": {
+      "tests": 889,
+      "pass": 889,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "logSha256": "715ad16b284c1647e96d140bb46e65bff515737ab833e7599e60b24da5d36f44"
+  }
 }

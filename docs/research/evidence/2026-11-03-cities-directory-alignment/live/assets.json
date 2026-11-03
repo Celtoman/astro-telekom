@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-11-03T09:37:07.609Z",
+  "artifactId": "08b4078b8b6908d2f6ae3a4dbc0d2987d3a6037b8d751f45e72eea969aa34d41",
+  "assets": [
+    {
+      "name": "search",
+      "path": "/__publication_assets/08b4078b8b6908d2f6ae3a4dbc0d2987d3a6037b8d751f45e72eea969aa34d41/images/cities-directory/search.svg",
+      "sha256": "f34afb9f4747d98219e0deeafa800ded08ad789cd583ef944f906072fed76113",
+      "matchesAccepted": true
+    },
+    {
+      "name": "clear",
+      "path": "/__publication_assets/08b4078b8b6908d2f6ae3a4dbc0d2987d3a6037b8d751f45e72eea969aa34d41/images/cities-directory/clear.svg",
+      "sha256": "9ed9c34755c40c2e4af1c1460e65936802ae781a9100966486c6ea2c6e40b764",
+      "matchesAccepted": true
+    }
+  ],
+  "protection": {
+    "publicStatus": 401,
+    "adminStatus": 401,
+    "robots": "noindex, nofollow"
+  },
+  "h1": 1
+}

@@ -2449,5 +2449,11 @@
   "passed": true,
   "libraryPublished": false,
   "createdNodeIds": [],
-  "removedNodeIds": []
+  "removedNodeIds": [],
+  "heightCheck": {
+    "cells": 1672,
+    "layoutSizingVertical": "HUG",
+    "primaryAxisSizingMode": "AUTO",
+    "passed": true
+  }
 }

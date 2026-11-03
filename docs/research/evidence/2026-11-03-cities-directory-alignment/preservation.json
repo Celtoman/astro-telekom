@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-11-03T09:37:18.240Z",
+  "siteId": "cmtuaqqj1000107lkiiiia2xa",
+  "publicationId": "cmvs82yuw000101o52i6ams8d",
+  "revisions": [
+    24,
+    24
+  ],
+  "hasUnpublishedChanges": false,
+  "cities": 207,
+  "tariffs": 3805,
+  "publicDigest": "42af8c9d2be5ab0e2f7043241f3a1946039ccf3806af8a9d4c8c121f178ec858",
+  "tariffDigest": "56345408ce1a8fd830022017d940663ca114051a653d2991efa436428d77b03f",
+  "workingStableDigest": "0231722b8aeb541c48daecc07eb42a1b34ba4a379b5b1598ec9201df488fb9cb",
+  "publicProjectionDigest": "c60574939ed75523a962cf648df6c96b1ad11871675f703520c3dda18e36b3a2",
+  "catalogDigest": "d9b3c8469cdeffccbf3a3ad896ba6979af13cbc6a8e383aa4ca99348b9095d07",
+  "artifactBefore": "fec0db1dfd7ed1d87a513c82f84fc42985b02e0b9916d79b07d62d1db8fa6953",
+  "artifactAfter": "08b4078b8b6908d2f6ae3a4dbc0d2987d3a6037b8d751f45e72eea969aa34d41",
+  "checks": {
+    "catalogPreserved": true,
+    "fullWorkingCatalogPreservedExceptResolvedAt": true,
+    "publicationStatePreserved": true,
+    "codeReceiptMatchesServing": true,
+    "applicationHealthy": true
+  }
+}
