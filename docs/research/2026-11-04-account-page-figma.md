@@ -1,6 +1,8 @@
 # Личный кабинет: блоки и полная страница в Figma
 
-4 ноября 2026. [Задача #485](https://github.com/Celtoman/astro-telekom/issues/485). Статус результата: **REVIEW / UNPUBLISHED**. Владелец поручил создание всех блоков, сборку и комплексную доработку выбранного открытого путеводителя. Приёмка владельца ещё не получена.
+> Последующее решение владельца: композиция отклонена как статья с неудачным боковым оглавлением. Сохраняется первый экран. Остальные блоки перепроектируются тремя независимыми агентами; по3 кандидата на блок, оглавление — чипы, итоговую страницу до выбора не собирать. Новая задача [#494](https://github.com/Celtoman/astro-telekom/issues/494). Ниже — исторический отчёт первой итерации, а не принятый дизайн.
+
+4 ноября 2026. [Задача #485](https://github.com/Celtoman/astro-telekom/issues/485). Текущий статус первой итерации: **REJECTED / ARCHIVED / UNPUBLISHED**. Владелец поручил создание всех блоков и сборку, затем отклонил композицию. Новый результат — [45 вариантов отдельных блоков V2](2026-11-04-account-block-options-figma.md), без новой сборки страницы. Дальше сохранён исторический отчёт исполнения #485.
 
 [Рабочий файл в Astro](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj), [Desktop](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=22-7), [Tablet](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=22-873), [Mobile](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=22-1658), [320](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=22-2402). Обложка35:17; спецификация взаимодействий35:1178.
 

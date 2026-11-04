@@ -1,0 +1,1532 @@
+[
+  {
+    "key": "navigation",
+    "lane": "A",
+    "title": "Плитка тем",
+    "tradeoff": "Регулярная сетка даёт темам равный вес, но занимает больше высоты, чем свободное облако чипов.",
+    "pageId": "47:3",
+    "familyId": "51:246",
+    "variants": [
+      {
+        "id": "51:71",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 313
+      },
+      {
+        "id": "51:113",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 345
+      },
+      {
+        "id": "51:156",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 441
+      },
+      {
+        "id": "51:201",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 457
+      }
+    ]
+  },
+  {
+    "key": "login",
+    "lane": "A",
+    "title": "Три канала входа",
+    "tradeoff": "Способы входа и типы данных разделены, но полный текст образует длинную мобильную последовательность.",
+    "pageId": "47:4",
+    "familyId": "53:842",
+    "variants": [
+      {
+        "id": "53:712",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1069
+      },
+      {
+        "id": "53:743",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1781
+      },
+      {
+        "id": "53:776",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 2229.358642578125
+      },
+      {
+        "id": "53:809",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 2559.28857421875
+      }
+    ]
+  },
+  {
+    "key": "recovery",
+    "lane": "A",
+    "title": "Четыре способа в карточках",
+    "tradeoff": "Способы удобно сравнить, но вводная часть со снимком занимает дополнительную высоту перед ними.",
+    "pageId": "47:5",
+    "familyId": "53:1044",
+    "variants": [
+      {
+        "id": "53:846",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1156.70263671875
+      },
+      {
+        "id": "53:894",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1842.70263671875
+      },
+      {
+        "id": "53:944",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 2233.15673828125
+      },
+      {
+        "id": "53:994",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 2499.23779296875
+      }
+    ]
+  },
+  {
+    "key": "registration",
+    "lane": "A",
+    "title": "Доступ после подключения",
+    "tradeoff": "Каналы получения доступа видны отдельно, но полные описания делают мобильные карточки высокими.",
+    "pageId": "47:6",
+    "familyId": "53:1142",
+    "variants": [
+      {
+        "id": "53:1048",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 875.3486938476562
+      },
+      {
+        "id": "53:1070",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1378.4881591796875
+      },
+      {
+        "id": "53:1094",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1482.0933837890625
+      },
+      {
+        "id": "53:1118",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1681.209228515625
+      }
+    ]
+  },
+  {
+    "key": "address",
+    "lane": "A",
+    "title": "Единая адресная форма",
+    "tradeoff": "Сохраняет привычный сквозной блок, но полный исходный intro увеличивает его мобильную высоту.",
+    "pageId": "47:7",
+    "familyId": "54:242",
+    "variants": [
+      {
+        "id": "54:23",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 380
+      },
+      {
+        "id": "54:83",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 458
+      },
+      {
+        "id": "54:136",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 531
+      },
+      {
+        "id": "54:189",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 628
+      }
+    ]
+  },
+  {
+    "key": "features",
+    "lane": "A",
+    "title": "Три группы возможностей",
+    "tradeoff": "Категории быстро сканируются, но длинные заголовки и мелкий снимок требуют больше внимания на320.",
+    "pageId": "47:8",
+    "familyId": "54:364",
+    "variants": [
+      {
+        "id": "54:246",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1153.6842041015625
+      },
+      {
+        "id": "54:274",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1416.631591796875
+      },
+      {
+        "id": "54:304",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1475.907958984375
+      },
+      {
+        "id": "54:334",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1557.842041015625
+      }
+    ]
+  },
+  {
+    "key": "overview",
+    "lane": "A",
+    "title": "Две зоны интерфейса",
+    "tradeoff": "Пояснения привязаны к конкретным областям кабинета, но полный состав делает модуль объёмным.",
+    "pageId": "47:9",
+    "familyId": "54:580",
+    "variants": [
+      {
+        "id": "54:368",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 2090.75537109375
+      },
+      {
+        "id": "54:418",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 2476.832763671875
+      },
+      {
+        "id": "54:472",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 2995.03271484375
+      },
+      {
+        "id": "54:526",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 3476.94384765625
+      }
+    ]
+  },
+  {
+    "key": "payment",
+    "lane": "A",
+    "title": "Оплата в два шага",
+    "tradeoff": "Путь оплаты отделён от способов платежа, но Desktop-сплит оставляет свободное место под короткими шагами.",
+    "pageId": "47:10",
+    "familyId": "56:191",
+    "variants": [
+      {
+        "id": "56:99",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 781.7605590820312
+      },
+      {
+        "id": "56:122",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1018.5211181640625
+      },
+      {
+        "id": "56:145",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 910.774658203125
+      },
+      {
+        "id": "56:168",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 994.3662109375
+      }
+    ]
+  },
+  {
+    "key": "promised",
+    "lane": "A",
+    "title": "Условия и шаги отсрочки",
+    "tradeoff": "Условия прочитываются до алгоритма, но на мобильном экране последовательность получается длинной.",
+    "pageId": "47:11",
+    "familyId": "54:746",
+    "variants": [
+      {
+        "id": "54:584",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 786.3829345703125
+      },
+      {
+        "id": "54:623",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1257.3829345703125
+      },
+      {
+        "id": "54:664",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1457.4586181640625
+      },
+      {
+        "id": "54:705",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1541.1064453125
+      }
+    ]
+  },
+  {
+    "key": "termination",
+    "lane": "A",
+    "title": "Два визуальных шага расторжения",
+    "tradeoff": "Каждый шаг связан со снимком, но мелкие элементы снимков нужно увеличивать на узком экране.",
+    "pageId": "47:12",
+    "familyId": "54:869",
+    "variants": [
+      {
+        "id": "54:750",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 855.527587890625
+      },
+      {
+        "id": "54:779",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1393.8514404296875
+      },
+      {
+        "id": "54:809",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1318.978515625
+      },
+      {
+        "id": "54:839",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1414.49951171875
+      }
+    ]
+  },
+  {
+    "key": "pause",
+    "lane": "A",
+    "title": "Условия и порядок паузы",
+    "tradeoff": "Правила отделены от действий, но сохраняется вся длина исходного алгоритма.",
+    "pageId": "47:13",
+    "familyId": "54:1045",
+    "variants": [
+      {
+        "id": "54:873",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 835.265625
+      },
+      {
+        "id": "54:916",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1485.824462890625
+      },
+      {
+        "id": "54:959",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1454.4630126953125
+      },
+      {
+        "id": "54:1002",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1597.21044921875
+      }
+    ]
+  },
+  {
+    "key": "interzet",
+    "lane": "A",
+    "title": "Быстрый вход Интерзет",
+    "tradeoff": "Вход показывается раньше истории бренда, но полный исторический текст сохраняет заметную высоту блока.",
+    "pageId": "47:14",
+    "familyId": "54:1113",
+    "variants": [
+      {
+        "id": "54:1049",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 494
+      },
+      {
+        "id": "54:1065",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 766
+      },
+      {
+        "id": "54:1081",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 882
+      },
+      {
+        "id": "54:1097",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 978
+      }
+    ]
+  },
+  {
+    "key": "business",
+    "lane": "A",
+    "title": "Вход для бизнеса",
+    "tradeoff": "Доступ к кабинету поднят к заголовку, но описание услуг и применения нужно читать ниже.",
+    "pageId": "47:15",
+    "familyId": "54:1193",
+    "variants": [
+      {
+        "id": "54:1117",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 799.25
+      },
+      {
+        "id": "54:1136",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1184
+      },
+      {
+        "id": "54:1155",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1185.75
+      },
+      {
+        "id": "54:1174",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1310
+      }
+    ]
+  },
+  {
+    "key": "app",
+    "lane": "A",
+    "title": "Установка и помощь в приложении",
+    "tradeoff": "Магазины доступны до длинной инструкции, но полный текст и preview делают мобильный модуль высоким.",
+    "pageId": "47:16",
+    "familyId": "54:1321",
+    "variants": [
+      {
+        "id": "54:1197",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 618.0371704101562
+      },
+      {
+        "id": "54:1228",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1111.498046875
+      },
+      {
+        "id": "54:1259",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 997.1287841796875
+      },
+      {
+        "id": "54:1290",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1060.42236328125
+      }
+    ]
+  },
+  {
+    "key": "faq",
+    "lane": "A",
+    "title": "Классический полноширинный FAQ",
+    "tradeoff": "Привычный аккордеон легко узнать, но открытый первый ответ занимает много места на мобильном экране.",
+    "pageId": "47:17",
+    "familyId": "56:963",
+    "variants": [
+      {
+        "id": "56:363",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 666
+      },
+      {
+        "id": "56:516",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 674
+      },
+      {
+        "id": "56:663",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 966
+      },
+      {
+        "id": "56:816",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1134
+      }
+    ]
+  },
+  {
+    "key": "navigation",
+    "lane": "B",
+    "title": "Три группы чипов",
+    "tradeoff": "Темы собраны по смыслу; на узком экране группировка занимает больше высоты, чем единое облако.",
+    "pageId": "47:3",
+    "familyId": "52:359",
+    "variants": [
+      {
+        "id": "52:167",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 258
+      },
+      {
+        "id": "52:216",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 350
+      },
+      {
+        "id": "52:264",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 257
+      },
+      {
+        "id": "52:310",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 413
+      }
+    ]
+  },
+  {
+    "key": "login",
+    "lane": "B",
+    "title": "Экран входа и типы реквизитов",
+    "tradeoff": "Изображение связано со способами входа, а длинному телефонному варианту дана большая ширина; Mobile остаётся объёмным.",
+    "pageId": "47:4",
+    "familyId": "53:303",
+    "variants": [
+      {
+        "id": "53:175",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1166
+      },
+      {
+        "id": "53:207",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1858
+      },
+      {
+        "id": "53:239",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 2227.32666015625
+      },
+      {
+        "id": "53:271",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 2511.256591796875
+      }
+    ]
+  },
+  {
+    "key": "recovery",
+    "lane": "B",
+    "title": "Основной способ и альтернативы",
+    "tradeoff": "Способ4 выделен по исходной рекомендации; другие варианты явно отделены, но не равноправны по акценту.",
+    "pageId": "47:5",
+    "familyId": "84:788",
+    "variants": [
+      {
+        "id": "84:583",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1143.2161865234375
+      },
+      {
+        "id": "84:633",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 2003.2161865234375
+      },
+      {
+        "id": "84:684",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 2261.908203125
+      },
+      {
+        "id": "84:736",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 2527.9892578125
+      }
+    ]
+  },
+  {
+    "key": "registration",
+    "lane": "B",
+    "title": "Регистрация и каналы обращения",
+    "tradeoff": "Автоматический доступ и способы заявки собраны рядом с изображением; весь текст получения реквизитов сохранён ниже.",
+    "pageId": "47:6",
+    "familyId": "84:1124",
+    "variants": [
+      {
+        "id": "84:1020",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 797.073486328125
+      },
+      {
+        "id": "84:1046",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1281.073486328125
+      },
+      {
+        "id": "84:1072",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1380.0933837890625
+      },
+      {
+        "id": "84:1098",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1576.209228515625
+      }
+    ]
+  },
+  {
+    "key": "address",
+    "lane": "B",
+    "title": "Раздельная адресная проверка",
+    "tradeoff": "На Desktop текст отделён от готовой формы; на Mobile весь исходный intro приходится прочитать до ввода.",
+    "pageId": "47:7",
+    "familyId": "81:728",
+    "variants": [
+      {
+        "id": "81:560",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 272
+      },
+      {
+        "id": "81:602",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 428
+      },
+      {
+        "id": "81:644",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 551
+      },
+      {
+        "id": "81:686",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 604
+      }
+    ]
+  },
+  {
+    "key": "features",
+    "lane": "B",
+    "title": "Сначала интерфейс, затем функции",
+    "tradeoff": "Крупное изображение ведёт композицию; три категории действий расположены после него.",
+    "pageId": "47:8",
+    "familyId": "56:1281",
+    "variants": [
+      {
+        "id": "56:1164",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1319.368408203125
+      },
+      {
+        "id": "56:1192",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1356.157958984375
+      },
+      {
+        "id": "56:1221",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1449.592041015625
+      },
+      {
+        "id": "56:1251",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1507.5263671875
+      }
+    ]
+  },
+  {
+    "key": "overview",
+    "lane": "B",
+    "title": "Визуальный тур по кабинету",
+    "tradeoff": "Пояснения распределены возле нужных областей экрана; полный исходный материал делает модуль длинным на Mobile.",
+    "pageId": "47:9",
+    "familyId": "84:1632",
+    "variants": [
+      {
+        "id": "84:1344",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1974.9453125
+      },
+      {
+        "id": "84:1413",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 2791.233154296875
+      },
+      {
+        "id": "84:1484",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 3299.163818359375
+      },
+      {
+        "id": "84:1558",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 3714.07470703125
+      }
+    ]
+  },
+  {
+    "key": "payment",
+    "lane": "B",
+    "title": "Экран и порядок оплаты",
+    "tradeoff": "Порядок и способы оплаты рядом с большим снимком; на Mobile сначала идут инструкции, затем изображение.",
+    "pageId": "47:10",
+    "familyId": "56:1885",
+    "variants": [
+      {
+        "id": "56:1769",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 719.0140991210938
+      },
+      {
+        "id": "56:1798",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1140.126708984375
+      },
+      {
+        "id": "56:1827",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1011.8450927734375
+      },
+      {
+        "id": "56:1856",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1048.4366455078125
+      }
+    ]
+  },
+  {
+    "key": "promised",
+    "lane": "B",
+    "title": "Условия отсрочки рядом с экраном",
+    "tradeoff": "Условия отделены от алгоритма; портретный снимок задаёт высоту верхней части Desktop.",
+    "pageId": "47:11",
+    "familyId": "56:2212",
+    "variants": [
+      {
+        "id": "56:1993",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1017.037841796875
+      },
+      {
+        "id": "56:2046",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1514
+      },
+      {
+        "id": "56:2100",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1785.6690673828125
+      },
+      {
+        "id": "56:2156",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1906.3167724609375
+      }
+    ]
+  },
+  {
+    "key": "termination",
+    "lane": "B",
+    "title": "Две стадии с отдельными снимками",
+    "tradeoff": "Каждое действие связано со своим изображением, а офисная инструкция вынесена после предупреждения; мелкие детали требуют увеличения.",
+    "pageId": "47:12",
+    "familyId": "84:1783",
+    "variants": [
+      {
+        "id": "84:1636",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 985.8453369140625
+      },
+      {
+        "id": "84:1672",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1623.098876953125
+      },
+      {
+        "id": "84:1709",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1364.261962890625
+      },
+      {
+        "id": "84:1746",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1432.782958984375
+      }
+    ]
+  },
+  {
+    "key": "pause",
+    "lane": "B",
+    "title": "Ситуация, условия и шесть действий",
+    "tradeoff": "Временная приостановка объяснена до алгоритма; сохраняется вся длина исходных условий и действий.",
+    "pageId": "47:13",
+    "familyId": "56:2641",
+    "variants": [
+      {
+        "id": "56:2368",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1080.020263671875
+      },
+      {
+        "id": "56:2434",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1610.020263671875
+      },
+      {
+        "id": "56:2501",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1975.4630126953125
+      },
+      {
+        "id": "56:2571",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 2070.21044921875
+      }
+    ]
+  },
+  {
+    "key": "interzet",
+    "lane": "B",
+    "title": "Вход первым, история ниже",
+    "tradeoff": "Адрес и действие вынесены в отдельную верхнюю полосу; история и бренд остаются самостоятельной спокойной зоной.",
+    "pageId": "47:14",
+    "familyId": "84:279",
+    "variants": [
+      {
+        "id": "84:207",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 510
+      },
+      {
+        "id": "84:225",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 700
+      },
+      {
+        "id": "84:243",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 834
+      },
+      {
+        "id": "84:261",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 931
+      }
+    ]
+  },
+  {
+    "key": "business",
+    "lane": "B",
+    "title": "Назначение кабинета для компаний",
+    "tradeoff": "Изображение и полное объяснение уравновешены; на Mobile вход появляется после вводного описания.",
+    "pageId": "47:15",
+    "familyId": "56:2841",
+    "variants": [
+      {
+        "id": "56:2773",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 606
+      },
+      {
+        "id": "56:2790",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1110
+      },
+      {
+        "id": "56:2807",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1109.75
+      },
+      {
+        "id": "56:2824",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1234
+      }
+    ]
+  },
+  {
+    "key": "app",
+    "lane": "B",
+    "title": "Иллюстрация, установка и помощь",
+    "tradeoff": "Магазины доступны после короткого intro до длинной помощи; на Mobile визуальная часть всё равно идёт первой.",
+    "pageId": "47:16",
+    "familyId": "84:932",
+    "variants": [
+      {
+        "id": "84:804",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 634.3399658203125
+      },
+      {
+        "id": "84:836",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 890.3399658203125
+      },
+      {
+        "id": "84:868",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 954.09033203125
+      },
+      {
+        "id": "84:900",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 993.3837890625
+      }
+    ]
+  },
+  {
+    "key": "faq",
+    "lane": "B",
+    "title": "Вопросы строками на белом",
+    "tradeoff": "Спокойные разделители и первый открытый ответ; остальные полные ответы доступны через привычное раскрытие.",
+    "pageId": "47:17",
+    "familyId": "56:3342",
+    "variants": [
+      {
+        "id": "56:2985",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 601
+      },
+      {
+        "id": "56:3091",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 655
+      },
+      {
+        "id": "56:3190",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 771
+      },
+      {
+        "id": "56:3266",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 891
+      }
+    ]
+  },
+  {
+    "key": "navigation",
+    "lane": "C",
+    "title": "Компактное облако тем",
+    "tradeoff": "Короткие подписи экономят место; полные исходные названия тем находятся в именах/описании, а не в длинных видимых вопросах.",
+    "pageId": "47:3",
+    "familyId": "66:340",
+    "variants": [
+      {
+        "id": "66:167",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 238
+      },
+      {
+        "id": "66:208",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 258
+      },
+      {
+        "id": "66:250",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 305
+      },
+      {
+        "id": "66:294",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 409
+      }
+    ]
+  },
+  {
+    "key": "login",
+    "lane": "C",
+    "title": "Две матрицы выбора",
+    "tradeoff": "Одновременно различимы место входа и учётные данные; полное чтение двух независимых списков на Mobile остаётся длинным.",
+    "pageId": "47:4",
+    "familyId": "88:343",
+    "variants": [
+      {
+        "id": "88:179",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1060
+      },
+      {
+        "id": "88:220",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1732
+      },
+      {
+        "id": "88:261",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 2084.358642578125
+      },
+      {
+        "id": "88:302",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 2318.28857421875
+      }
+    ]
+  },
+  {
+    "key": "recovery",
+    "lane": "C",
+    "title": "Сравнение четырёх маршрутов",
+    "tradeoff": "Все способы сравнимы в одном модуле; рекомендованный исходником способ4 не превращён в единственную крупную кнопку.",
+    "pageId": "47:5",
+    "familyId": "51:998",
+    "variants": [
+      {
+        "id": "51:798",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 962
+      },
+      {
+        "id": "51:848",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1673.29736328125
+      },
+      {
+        "id": "51:898",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1985.15673828125
+      },
+      {
+        "id": "51:948",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 2179.23779296875
+      }
+    ]
+  },
+  {
+    "key": "registration",
+    "lane": "C",
+    "title": "Доступ после подключения",
+    "tradeoff": "Автоматическая регистрация выделена первой фразой; все три способа обращения и пояснение о документах остаются открытыми.",
+    "pageId": "47:6",
+    "familyId": "88:541",
+    "variants": [
+      {
+        "id": "88:431",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 998.4533081054688
+      },
+      {
+        "id": "88:457",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1513.4881591796875
+      },
+      {
+        "id": "88:485",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1543.0933837890625
+      },
+      {
+        "id": "88:513",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1739.209228515625
+      }
+    ]
+  },
+  {
+    "key": "address",
+    "lane": "C",
+    "title": "Форма и дальнейшие этапы",
+    "tradeoff": "Использован готовый блок и объяснение процесса; нижние этапы частично повторяют смысл полного исходного intro.",
+    "pageId": "47:7",
+    "familyId": "88:1325",
+    "variants": [
+      {
+        "id": "88:1063",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 544.05712890625
+      },
+      {
+        "id": "88:1127",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 804
+      },
+      {
+        "id": "88:1193",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 963
+      },
+      {
+        "id": "88:1259",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1084
+      }
+    ]
+  },
+  {
+    "key": "features",
+    "lane": "C",
+    "title": "Матрица функций",
+    "tradeoff": "На Desktop функции удобно сопоставлять по направлениям; на Mobile матрица складывается в три последовательные группы.",
+    "pageId": "47:8",
+    "familyId": "54:1662",
+    "variants": [
+      {
+        "id": "54:1538",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1533.0526123046875
+      },
+      {
+        "id": "54:1569",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1416.631591796875
+      },
+      {
+        "id": "54:1600",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1475.907958984375
+      },
+      {
+        "id": "54:1631",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1533.842041015625
+      }
+    ]
+  },
+  {
+    "key": "overview",
+    "lane": "C",
+    "title": "Два тура по интерфейсу",
+    "tradeoff": "Номера и пояснения связаны с двумя изображениями; полный разбор длиннее компактных раскрытий, особенно на320.",
+    "pageId": "47:9",
+    "familyId": "54:2064",
+    "variants": [
+      {
+        "id": "54:1666",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 2229.8720703125
+      },
+      {
+        "id": "54:1761",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 2831.75830078125
+      },
+      {
+        "id": "54:1862",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 3231.570068359375
+      },
+      {
+        "id": "54:1963",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 3709.48095703125
+      }
+    ]
+  },
+  {
+    "key": "payment",
+    "lane": "C",
+    "title": "Маршрут к оплате",
+    "tradeoff": "Две реальные стадии отделены от списка способов оплаты; работа реального платёжного сервиса здесь не моделируется.",
+    "pageId": "47:10",
+    "familyId": "88:1581",
+    "variants": [
+      {
+        "id": "88:1461",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 868.9718017578125
+      },
+      {
+        "id": "88:1491",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1204.5211181640625
+      },
+      {
+        "id": "88:1521",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1096.774658203125
+      },
+      {
+        "id": "88:1551",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1156.3662109375
+      }
+    ]
+  },
+  {
+    "key": "promised",
+    "lane": "C",
+    "title": "Условия и активация",
+    "tradeoff": "Условия видны отдельно от четырёх действий; на Desktop короткие условия ниже по высоте, чем иллюстрация.",
+    "pageId": "47:11",
+    "familyId": "54:2426",
+    "variants": [
+      {
+        "id": "54:2216",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1048.3829345703125
+      },
+      {
+        "id": "54:2267",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1561.3829345703125
+      },
+      {
+        "id": "54:2320",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1771.4586181640625
+      },
+      {
+        "id": "54:2373",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1872.1064453125
+      }
+    ]
+  },
+  {
+    "key": "termination",
+    "lane": "C",
+    "title": "Последовательные этапы",
+    "tradeoff": "Предупреждение и подсказка об офисах видны до действий; два полноширинных этапа длиннее двух параллельных карточек.",
+    "pageId": "47:12",
+    "familyId": "88:1857",
+    "variants": [
+      {
+        "id": "88:1705",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1149.7847900390625
+      },
+      {
+        "id": "88:1743",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1632.098876953125
+      },
+      {
+        "id": "88:1781",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1428.978515625
+      },
+      {
+        "id": "88:1819",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1501.49951171875
+      }
+    ]
+  },
+  {
+    "key": "pause",
+    "lane": "C",
+    "title": "Условия и шесть действий",
+    "tradeoff": "Стоимость не смешана с алгоритмом; полный исходный текст и шесть действий увеличивают мобильную высоту.",
+    "pageId": "47:13",
+    "familyId": "54:2841",
+    "variants": [
+      {
+        "id": "54:2569",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1073.6226806640625
+      },
+      {
+        "id": "54:2634",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 2012.824462890625
+      },
+      {
+        "id": "54:2703",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1991.4630126953125
+      },
+      {
+        "id": "54:2772",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 2086.21044921875
+      }
+    ]
+  },
+  {
+    "key": "interzet",
+    "lane": "C",
+    "title": "Сначала адрес входа",
+    "tradeoff": "Нужный адрес сразу послеH2; исторический контекст и прежний логотип сохранены ниже.",
+    "pageId": "47:14",
+    "familyId": "88:2029",
+    "variants": [
+      {
+        "id": "88:1925",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 583
+      },
+      {
+        "id": "88:1951",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 884
+      },
+      {
+        "id": "88:1977",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1026
+      },
+      {
+        "id": "88:2003",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1148
+      }
+    ]
+  },
+  {
+    "key": "business",
+    "lane": "C",
+    "title": "Быстрый вход для бизнеса",
+    "tradeoff": "Ссылка доступна до длинного объяснения; исходные абзацы и функциональное резюме всё равно требуют места.",
+    "pageId": "47:15",
+    "familyId": "54:3021",
+    "variants": [
+      {
+        "id": "54:2953",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 891
+      },
+      {
+        "id": "54:2970",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1199
+      },
+      {
+        "id": "54:2987",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1197.75
+      },
+      {
+        "id": "54:3004",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1342
+      }
+    ]
+  },
+  {
+    "key": "app",
+    "lane": "C",
+    "title": "Установка и помощь",
+    "tradeoff": "Две горизонтальные стадии показывают путь после установки; полный исходный текст помощи разбит только на предложения.",
+    "pageId": "47:16",
+    "familyId": "88:2219",
+    "variants": [
+      {
+        "id": "88:2045",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 796.6334228515625
+      },
+      {
+        "id": "88:2087",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1133.6334228515625
+      },
+      {
+        "id": "88:2131",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 1215.609619140625
+      },
+      {
+        "id": "88:2175",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 1279.903076171875
+      }
+    ]
+  },
+  {
+    "key": "faq",
+    "lane": "C",
+    "title": "Все ответы открыты",
+    "tradeoff": "Можно прочитать и сопоставить ответы без раскрытий; Mobile заметно длиннее аккордеона.",
+    "pageId": "47:17",
+    "familyId": "55:470",
+    "variants": [
+      {
+        "id": "55:167",
+        "name": "Device=Desktop",
+        "width": 1360,
+        "height": 1010
+      },
+      {
+        "id": "55:242",
+        "name": "Device=Tablet",
+        "width": 720,
+        "height": 1662
+      },
+      {
+        "id": "55:317",
+        "name": "Device=Mobile",
+        "width": 358,
+        "height": 2306
+      },
+      {
+        "id": "55:395",
+        "name": "Device=Mobile320",
+        "width": 288,
+        "height": 2834
+      }
+    ]
+  }
+]
