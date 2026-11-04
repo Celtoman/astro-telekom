@@ -1,0 +1,99 @@
+{
+  "checkedAt": "2026-11-04T11:20:08.454Z",
+  "origin": "https://tv-internet-dom.ru",
+  "page": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu",
+  "layouts": [
+    {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "header": {
+        "x": 40,
+        "width": 1360
+      },
+      "content": {
+        "x": 40,
+        "width": 1360
+      },
+      "columns": "437.328px 437.328px 437.344px",
+      "firstFaqOpen": true,
+      "missingImages": [],
+      "pageSlug": "proverka-podklyucheniya-k-domru-po-adresu",
+      "blue": "rgb(238, 248, 255)",
+      "note": "rgb(255, 234, 233)",
+      "tariffContext": true,
+      "ordinaryCallbackClearsTariff": true,
+      "independentFaq": true,
+      "citySwitchResetsAddress": true,
+      "pageErrors": []
+    },
+    {
+      "viewport": 834,
+      "scrollWidth": 834,
+      "header": {
+        "x": 57,
+        "width": 720
+      },
+      "content": {
+        "x": 57,
+        "width": 720
+      },
+      "columns": "348px 348px",
+      "firstFaqOpen": true,
+      "missingImages": [],
+      "pageSlug": "proverka-podklyucheniya-k-domru-po-adresu",
+      "blue": "rgb(238, 248, 255)",
+      "note": "rgb(255, 234, 233)",
+      "tariffContext": true,
+      "ordinaryCallbackClearsTariff": true,
+      "independentFaq": true,
+      "citySwitchResetsAddress": true,
+      "pageErrors": []
+    },
+    {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "header": {
+        "x": 16,
+        "width": 358
+      },
+      "content": {
+        "x": 16,
+        "width": 358
+      },
+      "columns": "358px",
+      "firstFaqOpen": true,
+      "missingImages": [],
+      "pageSlug": "proverka-podklyucheniya-k-domru-po-adresu",
+      "blue": "rgb(238, 248, 255)",
+      "note": "rgb(255, 234, 233)",
+      "tariffContext": true,
+      "ordinaryCallbackClearsTariff": true,
+      "independentFaq": true,
+      "citySwitchResetsAddress": true,
+      "pageErrors": []
+    },
+    {
+      "viewport": 320,
+      "scrollWidth": 320,
+      "header": {
+        "x": 16,
+        "width": 288
+      },
+      "content": {
+        "x": 16,
+        "width": 288
+      },
+      "columns": "288px",
+      "firstFaqOpen": true,
+      "missingImages": [],
+      "pageSlug": "proverka-podklyucheniya-k-domru-po-adresu",
+      "blue": "rgb(238, 248, 255)",
+      "note": "rgb(255, 234, 233)",
+      "tariffContext": true,
+      "ordinaryCallbackClearsTariff": true,
+      "independentFaq": true,
+      "citySwitchResetsAddress": true,
+      "pageErrors": []
+    }
+  ]
+}

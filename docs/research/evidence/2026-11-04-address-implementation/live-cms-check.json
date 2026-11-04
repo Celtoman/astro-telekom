@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-11-04T11:13:17.903Z",
+  "beforeWorkingRevision": 25,
+  "publishedRevision": 24,
+  "edits": [
+    {
+      "workingRevision": 26,
+      "blockCount": 8,
+      "missingFields": 0
+    },
+    {
+      "workingRevision": 27,
+      "blockCount": 8,
+      "missingFields": 0
+    }
+  ],
+  "sections": [
+    "section-address.intro",
+    "section-address.check",
+    "section-address.results",
+    "section-address.tariffs",
+    "section-address.connection_steps",
+    "section-address.benefits",
+    "section-address.help",
+    "section-address.faq"
+  ],
+  "afterWorkingRevision": 27,
+  "otherTemplatesUnchanged": true,
+  "publishedCatalogUnchanged": true,
+  "originalRestored": true,
+  "pageErrors": []
+}

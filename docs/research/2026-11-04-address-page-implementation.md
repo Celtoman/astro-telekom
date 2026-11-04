@@ -1,6 +1,6 @@
 # Внедрение страницы проверки подключения
 
-Работа по [#479](https://github.com/Celtoman/astro-telekom/issues/479) и [контракту Q1–Q20](../plans/2026-11-04-address-check-implementation-contract.md). Полное внедрение, push, деплой и CMS-публикация разрешены владельцем. Этот отчёт фиксирует проверенные результаты; выпуск пока продолжается.
+Работа по [#479](https://github.com/Celtoman/astro-telekom/issues/479) и [контракту Q1–Q20](../plans/2026-11-04-address-check-implementation-contract.md). Полное внедрение, push, деплой и CMS-публикация разрешены владельцем. Страница внедрена и опубликована в действующем защищённом test-контуре для всех207 городов. Ниже — проверенные технические результаты, без решения о реальном трафике.
 
 ## Реализация
 
@@ -30,4 +30,19 @@ Screens `BdxNHlBVZWejREtOEIWDkI`: 620:1549 / 620:1565 / 620:1581 / 620:1597. П�
 
 Независимый review нашёл #481/#483; оба исправлены, 29 профильных тестов и повторный review без существенных замечаний. Живой каталог проверен для всех207 городов: каждый имеет три подходящих тарифа; ожидаемый новый inventory4225, значение вычислено из текущего каталога, а не задано в коде.
 
-Push, exact-SHA CI/Coolify/CODE, CMS activation receipt и живой smoke пока не подтверждены. Реальные внешние заявки автоматически не отправлялись. Basic Auth/noindex test-контура сохраняются; только владелец определяет готовность к реальному трафику.
+Push, exact-SHA CI/Coolify/CODE, CMS activation receipt и живой smoke подтверждены ниже. Реальные внешние заявки автоматически не отправлялись. Basic Auth/noindex test-контура сохраняются; только владелец определяет готовность к реальному трафику.
+
+## Внешний выпуск и приёмка
+
+- Код [41eedc80](https://github.com/Celtoman/astro-telekom/commit/41eedc80637184233e1ba8052884ea18bb5b21e8) отправлен в master. [CI41817647325](https://github.com/Celtoman/astro-telekom/actions/runs/41817647325):927passed,0failed,0skipped на Linux.
+- Coolify MCP deployment `uan1zw22imwic4bg9bho5ock`: finished на этом exact SHA, приложение running:healthy, APIlive/ready200. Runtime RUN_BOOTSTRAP_SEED=false подтверждён через MCP; bootstrap не включался.
+- CODE подтверждён сменой обслуживаемого artifact `08b4078b…` → `d4d1ef11…` с сохранением публикации24, её ID и digest публичного каталога. Отдельная CODE-квитанция напрямую не читалась; основание подтверждения записано в release.json.
+- Миграция создала рабочую ревизию25. Через реальный редактор сохранена временная правка26 и восстановлен исходный текст27; HOME/CITY_HOME и обслуживаемый каталог не изменились. Все восемь секций доступны. Предпубликационная проверка:210 собственных изменений,4225 URL, PASSED,0warnings/0blocking.
+- CMS publication `cmw20tzmt000f01pdzw24unp7`, siteRevision27, SUCCEEDED. Rebuild `cmtw6dpwj015g01o0ho99ow05` /23 — SUCCEEDED. Рабочая/публичная ревизии27/27; опубликованная ADDRESS-композиция совпадает с рабочей.
+- Durable receipt из API совпал с действующими HTML: artifact `b6bf93c5ba83c55b77246ac50a1038010f0bb292e6e760321f3cae92857f5930`, renderer `2427fe8116c22323319297e81ce2965dc9b5f108300f216b01ff8c3bcafabaa2`. Catalog/manifest digest и идентичность публикации сохранены в [release.json](evidence/2026-11-04-address-implementation/release.json).
+- Проверены все207 новых URL:200, один H1, собственный canonical, восемь секций, ожидаемые тарифы/цены и один serving artifact. Все207 URL находятся в sitemap; всего4225 обычных маршрутов и4226 HTML с404. Basic Auth401, test noindex, readiness200, legal URL200 и контролируемый404 сохранены. [Полный HTTP smoke](evidence/2026-11-04-address-implementation/live-public-smoke.json).
+- Публичный браузер1440/834/390/320: ширины1360/720/358/288 совпадают с шапкой, нет overflow и сломанных видимых изображений. Проверены тарифный FLOW1, очистка выбора при обычном звонке, независимые FAQ и сброс адреса при смене города. [Браузер](evidence/2026-11-04-address-implementation/live-browser-check.json).
+- Реальный CMS preview проверен на тех же ширинах: восемь секций,3/2/1/1 колонки тарифов,0 активных ссылок/кнопок/скриптов, все видимые изображения загружены. [Preview](evidence/2026-11-04-address-implementation/live-preview-check.json).
+- FLOW2 принят с новым pageSlug: адрес выбран из публичного справочника здания текущего города, получен business/TARGET_AVAILABLE. Создан только AddressCheck; телефон и заявка не отправлялись. [Проверка](evidence/2026-11-04-address-implementation/live-flow2-check.json).
+
+Пример опубликованной [страницы](https://tv-internet-dom.ru/abinsk/proverka-podklyucheniya-k-domru-po-adresu); [редактор ADDRESS](https://admin.tv-internet-dom.ru/templates/home?kind=CITY_ADDRESS_CHECK&siteId=cmtuaqqj1000107lkiiiia2xa). Ограничения доступа test-контура сохраняются. Только владелец определяет готовность к реальному трафику.

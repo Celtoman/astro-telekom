@@ -1,0 +1,111 @@
+{
+  "checkedAt": "2026-11-04T11:23:10.232Z",
+  "ci": {
+    "conclusion": "success",
+    "databaseId": 41817647325,
+    "headSha": "41eedc80637184233e1ba8052884ea18bb5b21e8",
+    "startedAt": "2026-11-04T10:57:25Z",
+    "status": "completed",
+    "updatedAt": "2026-11-04T11:04:26Z",
+    "url": "https://github.com/Celtoman/astro-telekom/actions/runs/41817647325"
+  },
+  "deployment": {
+    "deploymentId": "uan1zw22imwic4bg9bho5ock",
+    "applicationUuid": "jlrsktdos9yhchkgnrd9f5fj",
+    "status": "finished",
+    "commit": "41eedc80637184233e1ba8052884ea18bb5b21e8",
+    "finishedAt": "2026-11-04T11:10:07.000000Z",
+    "applicationStatus": "running:healthy",
+    "repository": "Celtoman/astro-telekom",
+    "branch": "master",
+    "bootstrapSeed": "false"
+  },
+  "codeActivation": {
+    "checkedAt": "2026-11-04T11:15:09.396Z",
+    "deploymentId": "uan1zw22imwic4bg9bho5ock",
+    "commit": "41eedc80637184233e1ba8052884ea18bb5b21e8",
+    "proofType": "serving artifact transition with unchanged immutable publication and catalog",
+    "publicationId": "cmvs82yuw000101o52i6ams8d",
+    "siteRevision": 24,
+    "catalogDigest": "42af8c9d2be5ab0e2f7043241f3a1946039ccf3806af8a9d4c8c121f178ec858",
+    "previousArtifactId": "08b4078b8b6908d2f6ae3a4dbc0d2987d3a6037b8d751f45e72eea969aa34d41",
+    "artifactId": "d4d1ef1166c166d4fc0b5b70fbb7b50b3f15f7e89256f0468716da14d4cb43b2"
+  },
+  "cms": {
+    "publicationId": "cmw20tzmt000f01pdzw24unp7",
+    "siteRevision": 27,
+    "status": "SUCCEEDED",
+    "publishedAt": "2026-11-04T11:20:09.768Z",
+    "rebuildId": "cmtw6dpwj015g01o0ho99ow05",
+    "rebuildRevision": 23,
+    "receipt": {
+      "siteId": "cmtuaqqj1000107lkiiiia2xa",
+      "status": "SUCCEEDED",
+      "rebuildId": "cmtw6dpwj015g01o0ho99ow05",
+      "artifactId": "b6bf93c5ba83c55b77246ac50a1038010f0bb292e6e760321f3cae92857f5930",
+      "rendererId": "2427fe8116c22323319297e81ce2965dc9b5f108300f216b01ff8c3bcafabaa2",
+      "cmsProgress": {
+        "runId": "dbf01ee1-171d-4bf5-b859-5c73ead5e356",
+        "stage": "CONFIRMING",
+        "stages": {
+          "BUILDING": {
+            "startedAt": "2026-11-04T11:16:21.536Z",
+            "completedAt": "2026-11-04T11:17:19.001Z"
+          },
+          "CHECKING": {
+            "startedAt": "2026-11-04T11:17:19.001Z",
+            "completedAt": "2026-11-04T11:19:31.782Z"
+          },
+          "PREPARING": {
+            "startedAt": "2026-11-04T11:16:18.136Z",
+            "completedAt": "2026-11-04T11:16:21.536Z"
+          },
+          "ACTIVATING": {
+            "startedAt": "2026-11-04T11:19:31.782Z",
+            "completedAt": "2026-11-04T11:19:55.467Z"
+          },
+          "CONFIRMING": {
+            "startedAt": "2026-11-04T11:19:55.467Z",
+            "completedAt": "2026-11-04T11:20:08.352Z"
+          }
+        },
+        "version": 1,
+        "revision": 23,
+        "sequence": 113,
+        "startedAt": "2026-11-04T11:16:18.136Z",
+        "updatedAt": "2026-11-04T11:19:55.467Z",
+        "rendererId": "2427fe8116c22323319297e81ce2965dc9b5f108300f216b01ff8c3bcafabaa2",
+        "totalPages": 4226,
+        "completedAt": "2026-11-04T11:20:08.352Z",
+        "publicationId": "cmw20tzmt000f01pdzw24unp7",
+        "sampleEligible": true
+      },
+      "siteRevision": 27,
+      "catalogDigest": "23d2c86f28de2e7a5a895d0fabc5709db31baf137185e6e65da0863861313a0f",
+      "publicationId": "cmw20tzmt000f01pdzw24unp7",
+      "manifestDigest": "06dc798aa92117d4229314096781da0f6144fa04750bb6186680dfd08fad67a0",
+      "rebuildRevision": 23
+    }
+  },
+  "inventory": {
+    "publishedCities": 207,
+    "ordinaryRoutes": 4225,
+    "addressRoutes": 207,
+    "addressUrlsTested": 207,
+    "addressSitemapUrls": 207,
+    "htmlFilesIncluding404": 4226
+  },
+  "cmsPublishedMatchesWorking": true,
+  "flow2": {
+    "checkedAt": "2026-11-04T11:24:47.880Z",
+    "citySlug": "abinsk",
+    "pageSlug": "proverka-podklyucheniya-k-domru-po-adresu",
+    "suggestionAccepted": true,
+    "checkId": "cmw2161fy000q01pdy0j9nsi9",
+    "resultType": "business",
+    "outcome": "TARGET_AVAILABLE",
+    "leadSubmitted": false
+  },
+  "testAccessBoundaryPreserved": true,
+  "realLeadSubmitted": false
+}

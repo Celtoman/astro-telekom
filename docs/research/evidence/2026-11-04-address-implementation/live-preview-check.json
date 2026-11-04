@@ -1,0 +1,50 @@
+{
+  "checkedAt": "2026-11-04T11:26:25.947Z",
+  "layouts": [
+    {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "sectionCount": 8,
+      "contentWidth": 1360,
+      "columns": "437.328px 437.328px 437.344px",
+      "activeLinks": 0,
+      "activeButtons": 0,
+      "scripts": 0,
+      "missingImages": []
+    },
+    {
+      "viewport": 834,
+      "scrollWidth": 834,
+      "sectionCount": 8,
+      "contentWidth": 720,
+      "columns": "348px 348px",
+      "activeLinks": 0,
+      "activeButtons": 0,
+      "scripts": 0,
+      "missingImages": []
+    },
+    {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "sectionCount": 8,
+      "contentWidth": 358,
+      "columns": "358px",
+      "activeLinks": 0,
+      "activeButtons": 0,
+      "scripts": 0,
+      "missingImages": []
+    },
+    {
+      "viewport": 320,
+      "scrollWidth": 320,
+      "sectionCount": 8,
+      "contentWidth": 288,
+      "columns": "288px",
+      "activeLinks": 0,
+      "activeButtons": 0,
+      "scripts": 0,
+      "missingImages": []
+    }
+  ],
+  "selectedPath": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu"
+}
