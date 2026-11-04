@@ -1,0 +1,33 @@
+{
+  "originals": [
+    {
+      "id": "13:126",
+      "width": 1360,
+      "height": 609.049072265625,
+      "missing": [],
+      "imagePreserved": true
+    },
+    {
+      "id": "13:147",
+      "width": 720,
+      "height": 1116.77392578125,
+      "missing": [],
+      "imagePreserved": true
+    },
+    {
+      "id": "13:168",
+      "width": 358,
+      "height": 1211.9765625,
+      "missing": [],
+      "imagePreserved": true
+    },
+    {
+      "id": "13:189",
+      "width": 288,
+      "height": 1288.439208984375,
+      "missing": [],
+      "imagePreserved": true
+    }
+  ],
+  "mutatedNodeIds": []
+}

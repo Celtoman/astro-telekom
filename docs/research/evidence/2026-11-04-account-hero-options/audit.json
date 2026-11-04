@@ -1,0 +1,630 @@
+{
+  "roots": 12,
+  "textComparisons": 84,
+  "audit": [
+    {
+      "lane": "A",
+      "device": "Desktop",
+      "id": "97:5",
+      "width": 1360,
+      "height": 755.049072265625,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "97:9",
+        "size": 48,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 50
+        },
+        "style": "Heading/Page/Desktop",
+        "key": "8fcc389eb533e41749e8e1b13775812839067708",
+        "expectedStyle": "Heading/Page/Desktop",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "97:11",
+          "width": 296,
+          "height": 48,
+          "y": 41,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    },
+    {
+      "lane": "A",
+      "device": "Tablet",
+      "id": "97:37",
+      "width": 720,
+      "height": 880,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "97:39",
+        "size": 40,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 43
+        },
+        "style": "Heading/Page/Tablet",
+        "key": "c6ed82c0324df362e4ce89f81e9949fd8122ed83",
+        "expectedStyle": "Heading/Page/Tablet",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "97:41",
+          "width": 237,
+          "height": 48,
+          "y": 171,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    },
+    {
+      "lane": "A",
+      "device": "Mobile",
+      "id": "97:65",
+      "width": 358,
+      "height": 1355.526611328125,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "97:67",
+        "size": 28,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 33
+        },
+        "style": "Heading/Page/Mobile",
+        "key": "5a35e91a30df5d77acd466309faec06e255f2028",
+        "expectedStyle": "Heading/Page/Mobile",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "97:68",
+          "width": 358,
+          "height": 48,
+          "y": 49,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    },
+    {
+      "lane": "A",
+      "device": "Mobile320",
+      "id": "97:91",
+      "width": 288,
+      "height": 1481.9893798828125,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "97:93",
+        "size": 28,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 33
+        },
+        "style": "Heading/Page/Mobile",
+        "key": "5a35e91a30df5d77acd466309faec06e255f2028",
+        "expectedStyle": "Heading/Page/Mobile",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "97:94",
+          "width": 288,
+          "height": 48,
+          "y": 82,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    },
+    {
+      "lane": "B",
+      "device": "Desktop",
+      "id": "97:121",
+      "width": 1360,
+      "height": 819.049072265625,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "97:123",
+        "size": 48,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 50
+        },
+        "style": "Heading/Page/Desktop",
+        "key": "8fcc389eb533e41749e8e1b13775812839067708",
+        "expectedStyle": "Heading/Page/Desktop",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "97:126",
+          "width": 304,
+          "height": 48,
+          "y": 170,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    },
+    {
+      "lane": "B",
+      "device": "Tablet",
+      "id": "97:144",
+      "width": 720,
+      "height": 767.2415771484375,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "97:146",
+        "size": 40,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 43
+        },
+        "style": "Heading/Page/Tablet",
+        "key": "c6ed82c0324df362e4ce89f81e9949fd8122ed83",
+        "expectedStyle": "Heading/Page/Tablet",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "97:149",
+          "width": 304,
+          "height": 48,
+          "y": 171,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    },
+    {
+      "lane": "B",
+      "device": "Mobile",
+      "id": "97:166",
+      "width": 358,
+      "height": 1095.816650390625,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "97:168",
+        "size": 28,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 33
+        },
+        "style": "Heading/Page/Mobile",
+        "key": "5a35e91a30df5d77acd466309faec06e255f2028",
+        "expectedStyle": "Heading/Page/Mobile",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "97:171",
+          "width": 358,
+          "height": 48,
+          "y": 209,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    },
+    {
+      "lane": "B",
+      "device": "Mobile320",
+      "id": "97:188",
+      "width": 288,
+      "height": 1196.279296875,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "97:190",
+        "size": 28,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 33
+        },
+        "style": "Heading/Page/Mobile",
+        "key": "5a35e91a30df5d77acd466309faec06e255f2028",
+        "expectedStyle": "Heading/Page/Mobile",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "97:193",
+          "width": 288,
+          "height": 48,
+          "y": 266,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    },
+    {
+      "lane": "C",
+      "device": "Desktop",
+      "id": "99:21",
+      "width": 1360,
+      "height": 439.799560546875,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "99:24",
+        "size": 48,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 50
+        },
+        "style": "Heading/Page/Desktop",
+        "key": "8fcc389eb533e41749e8e1b13775812839067708",
+        "expectedStyle": "Heading/Page/Desktop",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "99:28",
+          "width": 260,
+          "height": 48,
+          "y": 73,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    },
+    {
+      "lane": "C",
+      "device": "Tablet",
+      "id": "99:47",
+      "width": 720,
+      "height": 664.799560546875,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "99:50",
+        "size": 40,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 43
+        },
+        "style": "Heading/Page/Tablet",
+        "key": "c6ed82c0324df362e4ce89f81e9949fd8122ed83",
+        "expectedStyle": "Heading/Page/Tablet",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "99:52",
+          "width": 260,
+          "height": 48,
+          "y": 179,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    },
+    {
+      "lane": "C",
+      "device": "Mobile",
+      "id": "99:70",
+      "width": 358,
+      "height": 781.3496704101562,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "99:73",
+        "size": 28,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 33
+        },
+        "style": "Heading/Page/Mobile",
+        "key": "5a35e91a30df5d77acd466309faec06e255f2028",
+        "expectedStyle": "Heading/Page/Mobile",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "99:75",
+          "width": 318,
+          "height": 48,
+          "y": 229,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    },
+    {
+      "lane": "C",
+      "device": "Mobile320",
+      "id": "99:93",
+      "width": 288,
+      "height": 974,
+      "missing": [],
+      "imagePreserved": true,
+      "h1": {
+        "id": "99:96",
+        "size": 28,
+        "lineHeight": {
+          "unit": "PIXELS",
+          "value": 33
+        },
+        "style": "Heading/Page/Mobile",
+        "key": "5a35e91a30df5d77acd466309faec06e255f2028",
+        "expectedStyle": "Heading/Page/Mobile",
+        "stylePass": true
+      },
+      "actions": [
+        {
+          "id": "99:98",
+          "width": 248,
+          "height": 48,
+          "y": 310,
+          "reactions": [
+            {
+              "action": {
+                "type": "URL",
+                "url": "https://dom.ru/user/login",
+                "openInNewTab": true
+              },
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://dom.ru/user/login",
+                  "openInNewTab": true
+                }
+              ],
+              "trigger": {
+                "type": "ON_CLICK"
+              }
+            }
+          ]
+        }
+      ],
+      "bounds": [],
+      "contrastMin": 4.74,
+      "lowContrast": [],
+      "fixedLongText": []
+    }
+  ]
+}

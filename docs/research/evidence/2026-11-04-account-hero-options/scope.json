@@ -1,0 +1,32 @@
+{
+  "fileKey": "AcPPCDVqYqZIUJ0GXZVlHj",
+  "sessionId": "1fa5d28a-a6fd-45ca-8fbb-0840e04b0415",
+  "pageId": "96:2",
+  "issue": 497,
+  "sourceWidgets": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "originalIds": [
+    "13:126",
+    "13:147",
+    "13:168",
+    "13:189"
+  ],
+  "sizes": [
+    1360,
+    720,
+    358,
+    288
+  ],
+  "originalImage": {
+    "index": 0,
+    "hash": "e6e43ccfe9dc858847d46239eb6e04a2278d167a",
+    "width": 469,
+    "height": 486,
+    "alt": "Меню входа в ЛК Дом.ру"
+  }
+}
