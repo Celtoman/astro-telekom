@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"wiring\":[{\"device\":\"Desktop\",\"expanded\":false,\"id\":\"22:7\",\"anchors\":16,\"backs\":14,\"images\":15,\"zoom\":14},{\"device\":\"Tablet\",\"expanded\":false,\"id\":\"22:873\",\"anchors\":2,\"backs\":14,\"images\":15,\"zoom\":14},{\"device\":\"Mobile\",\"expanded\":false,\"id\":\"22:1658\",\"anchors\":2,\"backs\":14,\"images\":15,\"zoom\":14},{\"device\":\"Mobile320\",\"expanded\":false,\"id\":\"22:2402\",\"anchors\":2,\"backs\":14,\"images\":15,\"zoom\":14},{\"device\":\"Tablet\",\"expanded\":true,\"id\":\"30:2888\",\"anchors\":16,\"backs\":14,\"images\":15,\"zoom\":14},{\"device\":\"Mobile\",\"expanded\":true,\"id\":\"30:3435\",\"anchors\":16,\"backs\":14,\"images\":15,\"zoom\":14},{\"device\":\"Mobile320\",\"expanded\":true,\"id\":\"30:3959\",\"anchors\":16,\"backs\":14,\"images\":15,\"zoom\":14}],\"mutatedNodeIds\":[\"22:7\",\"22:873\",\"22:1658\",\"22:2402\",\"30:2888\",\"30:3435\",\"30:3959\"]}"
+    }
+  ]
+}

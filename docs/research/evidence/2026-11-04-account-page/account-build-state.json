@@ -1,0 +1,999 @@
+{
+  "version": 1,
+  "fileKey": "AcPPCDVqYqZIUJ0GXZVlHj",
+  "sessionId": "0986e2aa-0dbb-4a56-a8f2-370c4af4a91b",
+  "issue": 485,
+  "pages": {
+    "00 / Обложка": "10:2",
+    "01 / Первый экран": "10:3",
+    "02 / Оглавление": "10:4",
+    "03 / Вход в кабинет": "10:5",
+    "04 / Восстановление доступа": "10:6",
+    "05 / Регистрация": "10:7",
+    "06 / Возможности кабинета": "10:8",
+    "07 / Обзор интерфейса": "10:9",
+    "08 / Оплата услуг": "10:10",
+    "09 / Обещанный платёж": "10:11",
+    "10 / Расторжение договора": "10:12",
+    "11 / Приостановление договора": "10:13",
+    "12 / Дом.ру Интерзет": "10:14",
+    "13 / Кабинет для бизнеса": "10:15",
+    "14 / Мобильное приложение": "10:16",
+    "15 / Сквозные блоки": "10:17",
+    "80 / Полная страница — REVIEW": "10:18",
+    "81 / Состояния и взаимодействия": "10:19"
+  },
+  "capturedImages": [
+    {
+      "index": 0,
+      "hash": "e6e43ccfe9dc858847d46239eb6e04a2278d167a",
+      "width": 469,
+      "height": 486
+    },
+    {
+      "index": 1,
+      "hash": "db5a2ef5e5cb82d5657f8d8a32a45f81d9e844c1",
+      "width": 803,
+      "height": 469
+    },
+    {
+      "index": 2,
+      "hash": "b80de0dc025122399dec3bb8b453f1c91ff38289",
+      "width": 499,
+      "height": 250
+    },
+    {
+      "index": 3,
+      "hash": "28199ceb665605da5ede3ddd7dc559492ac9b984",
+      "width": 555,
+      "height": 594
+    },
+    {
+      "index": 4,
+      "hash": "42f97ba3646333537061d4d0e3860e6d2c4a169e",
+      "width": 1520,
+      "height": 870
+    },
+    {
+      "index": 5,
+      "hash": "8613640902ff9b05816fafa7f581945605174e55",
+      "width": 1534,
+      "height": 103
+    },
+    {
+      "index": 6,
+      "hash": "2ade0f7ad7d04c2a61972e63c3ae145df1e82619",
+      "width": 1509,
+      "height": 806
+    },
+    {
+      "index": 7,
+      "hash": "3141ad961878e24121c7b2a0b79936c6f00d19d0",
+      "width": 1349,
+      "height": 798
+    },
+    {
+      "index": 8,
+      "hash": "3a659d4ea6d763a4b3525f2620e13543a698a228",
+      "width": 423,
+      "height": 407
+    },
+    {
+      "index": 9,
+      "hash": "aef05ef6d45c40b354f06e3446cd271a93fa8702",
+      "width": 485,
+      "height": 280
+    },
+    {
+      "index": 10,
+      "hash": "adfa6e809a70d3e320d353515e4b4b2698cf07e5",
+      "width": 1050,
+      "height": 481
+    },
+    {
+      "index": 11,
+      "hash": "dbb46e83cef06fbac2e4eb82d19698ae30c1db50",
+      "width": 689,
+      "height": 534
+    },
+    {
+      "index": 12,
+      "hash": "bbb87d92d7d10f7ceeec4f2bb55fce6fa88e7ca4",
+      "width": 400,
+      "height": 400
+    },
+    {
+      "index": 13,
+      "hash": "726ff919bfbd8509b55eeafb1aac323c8cd7353f",
+      "width": 800,
+      "height": 500
+    },
+    {
+      "index": 14,
+      "hash": "87fdc5a47053d6acb634370dcee37fe7bba8fb65",
+      "width": 753,
+      "height": 610
+    }
+  ],
+  "blocks": {
+    "hero": {
+      "pageId": "10:3",
+      "familyId": "13:210",
+      "variants": [
+        {
+          "id": "13:126",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 609.049072265625
+        },
+        {
+          "id": "13:147",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1064.77392578125
+        },
+        {
+          "id": "13:168",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1159.9765625
+        },
+        {
+          "id": "13:189",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1236.439208984375
+        }
+      ]
+    },
+    "login": {
+      "familyId": "16:95",
+      "pageId": "10:5",
+      "variants": [
+        {
+          "id": "16:19",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 1272
+        },
+        {
+          "id": "16:38",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1320
+        },
+        {
+          "id": "16:57",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1680.358642578125
+        },
+        {
+          "id": "16:76",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1890.28857421875
+        }
+      ]
+    },
+    "recovery": {
+      "familyId": "16:348",
+      "pageId": "10:6",
+      "variants": [
+        {
+          "id": "16:188",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 1770
+        },
+        {
+          "id": "16:228",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1842
+        },
+        {
+          "id": "16:268",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1933.15673828125
+        },
+        {
+          "id": "16:308",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 2127.23779296875
+        }
+      ]
+    },
+    "registration": {
+      "familyId": "16:405",
+      "pageId": "10:7",
+      "variants": [
+        {
+          "id": "16:349",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 1093.885498046875
+        },
+        {
+          "id": "16:363",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1081.1431884765625
+        },
+        {
+          "id": "16:377",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1127.0933837890625
+        },
+        {
+          "id": "16:391",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1274.209228515625
+        }
+      ]
+    },
+    "features": {
+      "familyId": "17:105",
+      "pageId": "10:8",
+      "variants": [
+        {
+          "id": "17:13",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 1304
+        },
+        {
+          "id": "17:36",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1293.4736328125
+        },
+        {
+          "id": "17:59",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1297.907958984375
+        },
+        {
+          "id": "17:82",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1329.842041015625
+        }
+      ]
+    },
+    "overview": {
+      "familyId": "18:153",
+      "pageId": "10:9",
+      "variants": [
+        {
+          "id": "18:13",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 2000.9676513671875
+        },
+        {
+          "id": "18:48",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 2034.435302734375
+        },
+        {
+          "id": "18:83",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 2330.255859375
+        },
+        {
+          "id": "18:118",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 2624.166748046875
+        }
+      ]
+    },
+    "payment": {
+      "familyId": "18:202",
+      "pageId": "10:10",
+      "variants": [
+        {
+          "id": "18:154",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 961.5774536132812
+        },
+        {
+          "id": "18:166",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 924.0563354492188
+        },
+        {
+          "id": "18:178",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 785.774658203125
+        },
+        {
+          "id": "18:190",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 821.3662109375
+        }
+      ]
+    },
+    "promised": {
+      "familyId": "18:271",
+      "pageId": "10:11",
+      "variants": [
+        {
+          "id": "18:203",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 1105
+        },
+        {
+          "id": "18:220",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1105
+        },
+        {
+          "id": "18:237",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1238.4586181640625
+        },
+        {
+          "id": "18:254",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1315.1064453125
+        }
+      ]
+    },
+    "termination": {
+      "familyId": "18:344",
+      "pageId": "10:12",
+      "variants": [
+        {
+          "id": "18:272",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 1266.15234375
+        },
+        {
+          "id": "18:290",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1280.510498046875
+        },
+        {
+          "id": "18:308",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1132.678466796875
+        },
+        {
+          "id": "18:326",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1176.199462890625
+        }
+      ]
+    },
+    "pause": {
+      "familyId": "18:413",
+      "pageId": "10:13",
+      "variants": [
+        {
+          "id": "18:345",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 1304
+        },
+        {
+          "id": "18:362",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1340.423828125
+        },
+        {
+          "id": "18:379",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1291.4630126953125
+        },
+        {
+          "id": "18:396",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1362.21044921875
+        }
+      ]
+    },
+    "interzet": {
+      "familyId": "18:450",
+      "pageId": "10:14",
+      "variants": [
+        {
+          "id": "18:414",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 606
+        },
+        {
+          "id": "18:423",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 630
+        },
+        {
+          "id": "18:432",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 730
+        },
+        {
+          "id": "18:441",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 802
+        }
+      ]
+    },
+    "business": {
+      "familyId": "18:503",
+      "pageId": "10:15",
+      "variants": [
+        {
+          "id": "18:451",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 1085
+        },
+        {
+          "id": "18:464",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1082
+        },
+        {
+          "id": "18:477",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1077.75
+        },
+        {
+          "id": "18:490",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1178
+        }
+      ]
+    },
+    "navigation": {
+      "familyId": "20:177",
+      "itemFamilyId": "20:42",
+      "labelProperty": "Label#20:5",
+      "pageId": "10:4",
+      "variants": [
+        {
+          "id": "20:45",
+          "name": "Device=Desktop, State=Expanded",
+          "width": 256,
+          "height": 897
+        },
+        {
+          "id": "20:75",
+          "name": "Device=Tablet, State=Collapsed",
+          "width": 720,
+          "height": 80
+        },
+        {
+          "id": "20:78",
+          "name": "Device=Tablet, State=Expanded",
+          "width": 720,
+          "height": 864
+        },
+        {
+          "id": "20:109",
+          "name": "Device=Mobile, State=Collapsed",
+          "width": 358,
+          "height": 80
+        },
+        {
+          "id": "20:112",
+          "name": "Device=Mobile, State=Expanded",
+          "width": 358,
+          "height": 896
+        },
+        {
+          "id": "20:143",
+          "name": "Device=Mobile320, State=Collapsed",
+          "width": 288,
+          "height": 80
+        },
+        {
+          "id": "20:146",
+          "name": "Device=Mobile320, State=Expanded",
+          "width": 288,
+          "height": 952
+        }
+      ]
+    },
+    "app": {
+      "familyId": "20:308",
+      "pageId": "10:16",
+      "variants": [
+        {
+          "id": "20:184",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 528
+        },
+        {
+          "id": "20:215",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 878.0371704101562
+        },
+        {
+          "id": "20:246",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1049.1287841796875
+        },
+        {
+          "id": "20:277",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1141.42236328125
+        }
+      ]
+    },
+    "address": {
+      "pageId": "10:17",
+      "familyId": "21:1829",
+      "variants": [
+        {
+          "id": "21:618",
+          "name": "Device=Desktop",
+          "width": 912,
+          "height": 416.0570983886719
+        },
+        {
+          "id": "21:957",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 440
+        },
+        {
+          "id": "21:1264",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 599
+        },
+        {
+          "id": "21:1558",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 696
+        }
+      ]
+    },
+    "faq": {
+      "pageId": "10:17",
+      "familyId": "21:1830",
+      "variants": [
+        {
+          "id": "21:676",
+          "name": "Device=Desktop, Open=1",
+          "width": 912,
+          "height": 666
+        },
+        {
+          "id": "21:994",
+          "name": "Device=Tablet, Open=1",
+          "width": 720,
+          "height": 674
+        },
+        {
+          "id": "21:1317",
+          "name": "Device=Mobile, Open=1",
+          "width": 358,
+          "height": 870
+        },
+        {
+          "id": "21:1611",
+          "name": "Device=Mobile320, Open=1",
+          "width": 288,
+          "height": 990
+        }
+      ]
+    }
+  },
+  "completedSteps": [
+    "source_inventory",
+    "library_discovery",
+    "pages",
+    "imports",
+    "components",
+    "responsive_assemblies",
+    "content_verification",
+    "expert_critique",
+    "visual_refinement",
+    "interaction_destinations",
+    "usability_protocol",
+    "review_report"
+  ],
+  "importsFile": "account-imports.json",
+  "headers": {
+    "Desktop": "21:829",
+    "Tablet": "21:1141",
+    "Mobile": "21:1470",
+    "Mobile320": "21:1758"
+  },
+  "footers": {
+    "Desktop": "21:908",
+    "Tablet": "21:1217",
+    "Mobile": "21:1515",
+    "Mobile320": "21:1788"
+  },
+  "assemblies": {
+    "Desktop": {
+      "device": "Desktop",
+      "frameId": "22:7",
+      "width": 1440,
+      "height": 17073.689453125,
+      "headerId": "22:86",
+      "heroId": "22:140",
+      "guideId": "22:163",
+      "navigationId": "22:164",
+      "articleId": "22:208",
+      "sections": {
+        "login": "22:209",
+        "recovery": "22:229",
+        "registration": "22:294",
+        "address": "22:309",
+        "features": "22:402",
+        "overview": "22:426",
+        "payment": "22:463",
+        "promised": "22:476",
+        "termination": "22:494",
+        "pause": "22:514",
+        "interzet": "22:532",
+        "business": "22:541",
+        "app": "22:555",
+        "faq": "22:585"
+      },
+      "footerId": "22:826"
+    },
+    "Tablet": {
+      "device": "Tablet",
+      "frameId": "22:873",
+      "width": 834,
+      "height": 18323.853515625,
+      "headerId": "22:947",
+      "heroId": "22:996",
+      "guideId": "22:1019",
+      "navigationId": "22:1020",
+      "articleId": "22:1024",
+      "sections": {
+        "login": "22:1025",
+        "recovery": "22:1045",
+        "registration": "22:1110",
+        "address": "22:1125",
+        "features": "22:1197",
+        "overview": "22:1221",
+        "payment": "22:1258",
+        "promised": "22:1271",
+        "termination": "22:1289",
+        "pause": "22:1309",
+        "interzet": "22:1327",
+        "business": "22:1336",
+        "app": "22:1350",
+        "faq": "22:1380"
+      },
+      "footerId": "22:1613"
+    },
+    "Mobile": {
+      "device": "Mobile",
+      "frameId": "22:1658",
+      "width": 390,
+      "height": 20721.001953125,
+      "headerId": "22:1701",
+      "heroId": "22:1730",
+      "guideId": "22:1753",
+      "navigationId": "22:1754",
+      "articleId": "22:1758",
+      "sections": {
+        "login": "22:1759",
+        "recovery": "22:1779",
+        "registration": "22:1844",
+        "address": "22:1859",
+        "features": "22:1943",
+        "overview": "22:1967",
+        "payment": "22:2004",
+        "promised": "22:2017",
+        "termination": "22:2035",
+        "pause": "22:2055",
+        "interzet": "22:2073",
+        "business": "22:2082",
+        "app": "22:2096",
+        "faq": "22:2126"
+      },
+      "footerId": "22:2361"
+    },
+    "Mobile320": {
+      "device": "Mobile320",
+      "frameId": "22:2402",
+      "width": 320,
+      "height": 22422.48828125,
+      "headerId": "22:2431",
+      "heroId": "22:2460",
+      "guideId": "22:2483",
+      "navigationId": "22:2484",
+      "articleId": "22:2488",
+      "sections": {
+        "login": "22:2489",
+        "recovery": "22:2509",
+        "registration": "22:2574",
+        "address": "22:2589",
+        "features": "22:2673",
+        "overview": "22:2697",
+        "payment": "22:2734",
+        "promised": "22:2747",
+        "termination": "22:2765",
+        "pause": "22:2785",
+        "interzet": "22:2803",
+        "business": "22:2812",
+        "app": "22:2826",
+        "faq": "22:2856"
+      },
+      "footerId": "22:3083"
+    }
+  },
+  "expanded": [
+    {
+      "device": "Tablet",
+      "frameId": "30:2888",
+      "navigationId": "30:2892",
+      "sections": {
+        "login": "30:2894",
+        "recovery": "30:2895",
+        "registration": "30:2896",
+        "address": "30:2897",
+        "features": "30:2898",
+        "overview": "30:2899",
+        "payment": "30:2900",
+        "promised": "30:2901",
+        "termination": "30:2902",
+        "pause": "30:2903",
+        "interzet": "30:2904",
+        "business": "30:2905",
+        "app": "30:2906",
+        "faq": "30:2907"
+      }
+    },
+    {
+      "device": "Mobile",
+      "frameId": "30:3435",
+      "navigationId": "30:3439",
+      "sections": {
+        "login": "30:3441",
+        "recovery": "30:3442",
+        "registration": "30:3443",
+        "address": "30:3444",
+        "features": "30:3445",
+        "overview": "30:3446",
+        "payment": "30:3447",
+        "promised": "30:3448",
+        "termination": "30:3449",
+        "pause": "30:3450",
+        "interzet": "30:3451",
+        "business": "30:3452",
+        "app": "30:3453",
+        "faq": "30:3454"
+      }
+    },
+    {
+      "device": "Mobile320",
+      "frameId": "30:3959",
+      "navigationId": "30:3963",
+      "sections": {
+        "login": "30:3965",
+        "recovery": "30:3966",
+        "registration": "30:3967",
+        "address": "30:3968",
+        "features": "30:3969",
+        "overview": "30:3970",
+        "payment": "30:3971",
+        "promised": "30:3972",
+        "termination": "30:3973",
+        "pause": "30:3974",
+        "interzet": "30:3975",
+        "business": "30:3976",
+        "app": "30:3977",
+        "faq": "30:3978"
+      }
+    }
+  ],
+  "coverId": "35:17",
+  "specId": "35:1178",
+  "faqStates": [
+    {
+      "device": "Desktop",
+      "open": 0,
+      "id": "29:774",
+      "height": 734
+    },
+    {
+      "device": "Desktop",
+      "open": 1,
+      "id": "21:676",
+      "height": 734
+    },
+    {
+      "device": "Desktop",
+      "open": 2,
+      "id": "29:848",
+      "height": 734
+    },
+    {
+      "device": "Desktop",
+      "open": 3,
+      "id": "29:922",
+      "height": 734
+    },
+    {
+      "device": "Desktop",
+      "open": 4,
+      "id": "29:996",
+      "height": 734
+    },
+    {
+      "device": "Desktop",
+      "open": 5,
+      "id": "29:1070",
+      "height": 734
+    },
+    {
+      "device": "Desktop",
+      "open": 6,
+      "id": "29:1144",
+      "height": 734
+    },
+    {
+      "device": "Tablet",
+      "open": 0,
+      "id": "29:1224",
+      "height": 742
+    },
+    {
+      "device": "Tablet",
+      "open": 1,
+      "id": "21:994",
+      "height": 742
+    },
+    {
+      "device": "Tablet",
+      "open": 2,
+      "id": "29:1298",
+      "height": 742
+    },
+    {
+      "device": "Tablet",
+      "open": 3,
+      "id": "29:1372",
+      "height": 742
+    },
+    {
+      "device": "Tablet",
+      "open": 4,
+      "id": "29:1446",
+      "height": 742
+    },
+    {
+      "device": "Tablet",
+      "open": 5,
+      "id": "29:1520",
+      "height": 742
+    },
+    {
+      "device": "Tablet",
+      "open": 6,
+      "id": "29:1594",
+      "height": 742
+    },
+    {
+      "device": "Mobile",
+      "open": 0,
+      "id": "29:1674",
+      "height": 938
+    },
+    {
+      "device": "Mobile",
+      "open": 1,
+      "id": "21:1317",
+      "height": 938
+    },
+    {
+      "device": "Mobile",
+      "open": 2,
+      "id": "29:1748",
+      "height": 938
+    },
+    {
+      "device": "Mobile",
+      "open": 3,
+      "id": "29:1822",
+      "height": 938
+    },
+    {
+      "device": "Mobile",
+      "open": 4,
+      "id": "29:1896",
+      "height": 938
+    },
+    {
+      "device": "Mobile",
+      "open": 5,
+      "id": "29:1970",
+      "height": 938
+    },
+    {
+      "device": "Mobile",
+      "open": 6,
+      "id": "29:2044",
+      "height": 938
+    },
+    {
+      "device": "Mobile320",
+      "open": 0,
+      "id": "29:2124",
+      "height": 1058
+    },
+    {
+      "device": "Mobile320",
+      "open": 1,
+      "id": "21:1611",
+      "height": 1058
+    },
+    {
+      "device": "Mobile320",
+      "open": 2,
+      "id": "29:2198",
+      "height": 1058
+    },
+    {
+      "device": "Mobile320",
+      "open": 3,
+      "id": "29:2272",
+      "height": 1058
+    },
+    {
+      "device": "Mobile320",
+      "open": 4,
+      "id": "29:2346",
+      "height": 1058
+    },
+    {
+      "device": "Mobile320",
+      "open": 5,
+      "id": "29:2420",
+      "height": 1058
+    },
+    {
+      "device": "Mobile320",
+      "open": 6,
+      "id": "29:2494",
+      "height": 1058
+    }
+  ],
+  "status": "REVIEW / UNPUBLISHED"
+}

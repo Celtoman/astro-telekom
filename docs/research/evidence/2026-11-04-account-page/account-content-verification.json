@@ -1,0 +1,30 @@
+[
+  {
+    "device": "Desktop",
+    "checkedTextFragments": 139,
+    "missing": [],
+    "missingImages": [],
+    "missingFAQ": []
+  },
+  {
+    "device": "Tablet",
+    "checkedTextFragments": 139,
+    "missing": [],
+    "missingImages": [],
+    "missingFAQ": []
+  },
+  {
+    "device": "Mobile",
+    "checkedTextFragments": 139,
+    "missing": [],
+    "missingImages": [],
+    "missingFAQ": []
+  },
+  {
+    "device": "Mobile320",
+    "checkedTextFragments": 139,
+    "missing": [],
+    "missingImages": [],
+    "missingFAQ": []
+  }
+]

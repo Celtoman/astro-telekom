@@ -1,0 +1,67 @@
+[
+  {
+    "foreground": "color/text/primary",
+    "background": "color/bg/surface",
+    "ratio": 16.42
+  },
+  {
+    "foreground": "color/text/secondary",
+    "background": "color/bg/surface",
+    "ratio": 6.42
+  },
+  {
+    "foreground": "color/text/link",
+    "background": "color/bg/surface",
+    "ratio": 5.77
+  },
+  {
+    "foreground": "color/text/primary",
+    "background": "color/bg/hero",
+    "ratio": 15.05
+  },
+  {
+    "foreground": "color/text/secondary",
+    "background": "color/bg/hero",
+    "ratio": 5.89
+  },
+  {
+    "foreground": "color/text/link",
+    "background": "color/bg/hero",
+    "ratio": 5.29
+  },
+  {
+    "foreground": "color/text/primary",
+    "background": "color/bg/subtle",
+    "ratio": 15.25
+  },
+  {
+    "foreground": "color/text/secondary",
+    "background": "color/bg/subtle",
+    "ratio": 5.96
+  },
+  {
+    "foreground": "color/text/link",
+    "background": "color/bg/subtle",
+    "ratio": 5.36
+  },
+  {
+    "foreground": "color/text/primary",
+    "background": "color/bg/accent-soft",
+    "ratio": 14.23
+  },
+  {
+    "foreground": "color/text/secondary",
+    "background": "color/bg/accent-soft",
+    "ratio": 5.56
+  },
+  {
+    "foreground": "color/text/link",
+    "background": "color/bg/accent-soft",
+    "ratio": 5
+  },
+  {
+    "foreground": "white",
+    "background": "color/bg/accent",
+    "ratio": 4.74
+  }
+]

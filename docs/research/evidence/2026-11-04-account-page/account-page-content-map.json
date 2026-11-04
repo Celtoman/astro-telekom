@@ -1,0 +1,129 @@
+{
+  "status": "PROPOSED; вариант 1 выбран, первый экран и порядок ожидают согласования",
+  "source": "account-page-source.json",
+  "scope": "Индексы source.details.widgets с нуля; исходный текст не сокращается. Общие шапка и футер находятся вне этого массива.",
+  "headerOrder": 1,
+  "footerOrder": 18,
+  "groups": [
+    {
+      "order": 2,
+      "name": "Первый экран",
+      "from": 0,
+      "to": 4,
+      "images": 1
+    },
+    {
+      "order": 3,
+      "name": "Оглавление",
+      "from": 5,
+      "to": 6,
+      "images": 0
+    },
+    {
+      "order": 4,
+      "name": "Вход в личный кабинет",
+      "from": 12,
+      "to": 19,
+      "images": 1
+    },
+    {
+      "order": 5,
+      "name": "Восстановление доступа",
+      "from": 20,
+      "to": 35,
+      "images": 1
+    },
+    {
+      "order": 6,
+      "name": "Регистрация",
+      "from": 8,
+      "to": 11,
+      "images": 1
+    },
+    {
+      "order": 7,
+      "name": "Проверка подключения по адресу",
+      "from": 7,
+      "to": 7,
+      "images": 0
+    },
+    {
+      "order": 8,
+      "name": "Возможности кабинета",
+      "from": 36,
+      "to": 39,
+      "images": 1
+    },
+    {
+      "order": 9,
+      "name": "Описание главной страницы кабинета",
+      "from": 40,
+      "to": 46,
+      "images": 2
+    },
+    {
+      "order": 10,
+      "name": "Оплата",
+      "from": 47,
+      "to": 50,
+      "images": 1
+    },
+    {
+      "order": 11,
+      "name": "Обещанный платеж",
+      "from": 51,
+      "to": 54,
+      "images": 1
+    },
+    {
+      "order": 12,
+      "name": "Расторжение договора",
+      "from": 55,
+      "to": 63,
+      "images": 2
+    },
+    {
+      "order": 13,
+      "name": "Приостановление договора",
+      "from": 64,
+      "to": 67,
+      "images": 1
+    },
+    {
+      "order": 14,
+      "name": "Дом.ру Интерзет",
+      "from": 68,
+      "to": 71,
+      "images": 1
+    },
+    {
+      "order": 15,
+      "name": "Кабинет юридических лиц",
+      "from": 72,
+      "to": 75,
+      "images": 1
+    },
+    {
+      "order": 16,
+      "name": "Приложение Мой Дом.ру",
+      "from": 76,
+      "to": 81,
+      "images": 1
+    },
+    {
+      "order": 17,
+      "name": "FAQ",
+      "from": 82,
+      "to": 83,
+      "images": 0
+    }
+  ],
+  "verification": {
+    "sourceWidgets": 84,
+    "mappedWidgets": 84,
+    "uniqueWidgets": 84,
+    "missing": [],
+    "images": 15,
+    "faqPairs": 6
+  }
+}
