@@ -1,5 +1,7 @@
 # Технологическая база
 
+Локально в репозитории65 каталогов миграций; последний — `0065_tvbox_availability`. Он вводит явную доступность ТВ-приставки в рабочие атрибуты с аудитом и сохранением immutable publications. Внешнее применение этой миграции не подтверждается одним наличием файла; см. [отчет#495](research/2026-11-04-tariff-contract-implementation.md).
+
 Последняя сверка с manifests, Dockerfiles, Compose и migrations: 6 октября 2026 года. Доказательства внешних rollout — в [research/README.md](research/README.md); ограничения запуска — в [current-state.md](current-state.md).
 
 ## Зафиксированные версии
@@ -78,7 +80,7 @@ API создает `lead-decisions`, `lead-deliveries` и `site-rebuilds` при
 
 На 6 октября после #258 `pnpm audit --json` возвращает ноль advisory entries (раньше 31: 15 high, 15 moderate, 1 low). NestJS/Fastify обновлены в существующих major; lodash, fast-uri, ip-address, brace-expansion, devalue, http-cache-semantics, smol-toml и source-map-js закреплены overrides с ограничением диапазона. Prisma остаётся 7.10.0; mysql2 обновлён только в CLI-графе, deepmerge-ts 8.0.0 — только под `@prisma/config`. Его совместимость с plain-object Prisma config и реальными migrate/generate проверяется отдельно. Регрессии проверяют absolute request target у Nest middleware и циклический граф deepmerge. Собственная классификация rate-limit для absolute target остаётся отдельным открытым [#259](https://github.com/Celtoman/astro-telekom/issues/259). Новые advisory проверяются при каждом изменении зависимостей.
 
-В рабочем дереве на 4 ноября находятся 64 миграции до `0064_address_page_composition`. Новая0062 готовит рабочую CITY_HOME из десяти блоков и общий источник фактов/графиков/футера, сохраняя Hero, каталог и immutable publications. Предыдущая0061 ввела независимую полную HOME; её внешняя приёмка датирована16 октября в current-state.md. Применение0062 и публикация нового снимка24 во внешнем test-контуре подтверждены [приёмкой28 октября](research/2026-10-28-city-home-live-acceptance.md).
+В рабочем дереве на 4 ноября находятся 65 миграций до `0065_tvbox_availability`. Новая0062 готовит рабочую CITY_HOME из десяти блоков и общий источник фактов/графиков/футера, сохраняя Hero, каталог и immutable publications. Предыдущая0061 ввела независимую полную HOME; её внешняя приёмка датирована16 октября в current-state.md. Применение0062 и публикация нового снимка24 во внешнем test-контуре подтверждены [приёмкой28 октября](research/2026-10-28-city-home-live-acceptance.md).
 
 
 ## CITY_HOME 3: миграция 0062 и внешний выпуск
@@ -89,4 +91,4 @@ API создает `lead-decisions`, `lead-deliveries` и `site-rebuilds` при
 
 ## ADDRESS 1.0.0 — 4 ноября 2026
 
-64 миграции до `0064_address_page_composition`; отдельная0063 вводит CITY_ADDRESS_CHECK в PageTemplateKind/SeoTemplateKind. Новый ADDRESS snapshot добавляет по одному URL для каждого опубликованного города, всего `2N + T + 6`. Исторический inventory `N + T + 6` поддерживается для CODE rebuild прежних снимков без ADDRESS. Явный `[city]/proverka-podklyucheniya-k-domru-po-adresu.astro` строится только из inventory; `[city]/[slug]` продолжает обслуживать тарифы. Тот же inventory покрывают SEO, sitemap и redirects. Новых runtime-зависимостей нет.
+65 миграций до `0065_tvbox_availability`; отдельная0063 вводит CITY_ADDRESS_CHECK в PageTemplateKind/SeoTemplateKind. Новый ADDRESS snapshot добавляет по одному URL для каждого опубликованного города, всего `2N + T + 6`. Исторический inventory `N + T + 6` поддерживается для CODE rebuild прежних снимков без ADDRESS. Явный `[city]/proverka-podklyucheniya-k-domru-po-adresu.astro` строится только из inventory; `[city]/[slug]` продолжает обслуживать тарифы. Тот же inventory покрывают SEO, sitemap и redirects. Новых runtime-зависимостей нет.

@@ -10,7 +10,7 @@ export const CANONICAL_IMPORT_COLUMNS = [
   'subekt_rf', 'gorod_name', 'gorod_slug', 'tarif_type', 'post_title', 'tariff_slug',
   'nazvanie_tarifa', 'card_subtitle', 'skorost_interneta', 'tv_channels_total',
   'tv_channels_hd', 'price_standard', 'price_promo', 'connection_cost', 'opisanie_aktsii',
-  'opisanie_tarifa', 'card_feature', 'online_cinemas', 'tvbox_installment_price',
+  'opisanie_tarifa', 'card_feature', 'online_cinemas', 'tvbox_available', 'tvbox_installment_price',
   'tvbox_installment_months', 'tvbox_buyout_price', 'router_installment_price',
   'router_installment_months', 'router_buyout_price', 'srv_vkplaycloud_status',
   'srv_video_status', 'srv_video_price', 'cctv_buyout_price', 'cctv_connection_price',
@@ -29,6 +29,7 @@ export const TARIFF_ATTRIBUTE_FIELDS = [
   { key: 'tv_channels_total', label: 'ТВ-каналов', group: 'Телевидение', kind: 'integer' },
   { key: 'tv_channels_hd', label: 'HD-каналов', group: 'Телевидение', kind: 'integer' },
   { key: 'online_cinemas', label: 'Онлайн-кинотеатры', group: 'Телевидение', kind: 'code-list' },
+  { key: 'tvbox_available', label: 'ТВ-приставка доступна', group: 'Оборудование', kind: 'boolean' },
   { key: 'router_buyout_price', label: 'Выкуп роутера, ₽', group: 'Оборудование', kind: 'integer' },
   { key: 'router_installment_months', label: 'Рассрочка роутера, мес.', group: 'Оборудование', kind: 'integer' },
   { key: 'router_installment_price', label: 'Платеж за роутер, ₽', group: 'Оборудование', kind: 'integer' },
@@ -386,6 +387,14 @@ export function normalizeTariffAttributes(value: unknown): Prisma.InputJsonObjec
     if (normalized !== null) result[key] = normalized;
   }
   const total = result.tv_channels_total;
+  const tvboxPrices = ['tvbox_buyout_price', 'tvbox_installment_price', 'tvbox_installment_months'];
+  const hasTvboxPrices = tvboxPrices.some((key) => result[key] !== undefined);
+  if (hasTvboxPrices && result.tvbox_available !== true) {
+    throw new BadRequestException('Цены ТВ-приставки требуют tvbox_available=true; для недоступной приставки очистите цены');
+  }
+  if (result.tvbox_available === true && !hasTvboxPrices) {
+    throw new BadRequestException('Для доступной ТВ-приставки укажите выкуп или рассрочку');
+  }
   const hd = result.tv_channels_hd;
   if (typeof total === 'number' && total <= 0) throw new BadRequestException('tv_channels_total должен быть положительным целым числом');
   if (typeof hd === 'number' && hd <= 0) throw new BadRequestException('tv_channels_hd должен быть положительным целым числом');
@@ -507,10 +516,10 @@ export class TariffImportService {
     const normalizedRows = sourceRows.map((row) => Object.fromEntries(Object.entries(row).map(([column, value]) => [column.replace(/^\uFEFF/, '').trim(), value])));
     const columns = Object.keys(normalizedRows[0] || {});
     if (!isDeepStrictEqual(columns, [...CANONICAL_IMPORT_COLUMNS])) {
-      throw new BadRequestException(`Структура XLSX не соответствует каноническому контракту. Ожидаются 37 колонок в точном порядке: ${CANONICAL_IMPORT_COLUMNS.join(', ')}`);
+      throw new BadRequestException(`Структура XLSX не соответствует каноническому контракту. Ожидаются ${CANONICAL_IMPORT_COLUMNS.length} колонок в точном порядке: ${CANONICAL_IMPORT_COLUMNS.join(', ')}`);
     }
     if (normalizedRows.some((row) => !isDeepStrictEqual(Object.keys(row), columns))) {
-      throw new BadRequestException('Все строки XLSX должны соответствовать единому набору из 37 колонок');
+      throw new BadRequestException(`Все строки XLSX должны соответствовать единому набору из ${CANONICAL_IMPORT_COLUMNS.length} колонок`);
     }
 
     const citySlugs = [...new Set(normalizedRows.map((row) => slug(row.gorod_slug)).filter(Boolean))];
@@ -629,6 +638,9 @@ export class TariffImportService {
         add('error', `Измените URL /${citySlug}/${existing.slug} → /${citySlug}/${tariffSlug} отдельно в редакторе с явным подтверждением и подготовкой 301-редиректа, затем проверьте XLSX повторно`);
       }
       const attributeSource = Object.fromEntries(TARIFF_ATTRIBUTE_FIELDS.map((field) => [field.key, row[field.key]]));
+      if (row.tvbox_available === null || row.tvbox_available === undefined || row.tvbox_available === '') {
+        add('error', 'Укажите tvbox_available: 0 или 1');
+      }
       for (const [priceKey, monthsKey] of [
         ['router_installment_price', 'router_installment_months'],
         ['tvbox_installment_price', 'tvbox_installment_months'],

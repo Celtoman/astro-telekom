@@ -169,7 +169,12 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
   }
 
   function updateAttribute(key: string, value: string) {
-    setForm((current) => current ? { ...current, attributes: { ...current.attributes, [key]: value } } : current)
+    setForm((current) => current ? { ...current, attributes: {
+      ...current.attributes, [key]: value,
+      ...(key === "tvbox_available" && value === "false" ? {
+        tvbox_buyout_price: "", tvbox_installment_price: "", tvbox_installment_months: "",
+      } : {}),
+    } } : current)
     setFieldErrors((current) => { const next = { ...current }; delete next[`attribute-${key}`]; return next })
     setConfirmed(false)
   }
@@ -205,6 +210,9 @@ export function TariffEditorApp({ apiUrl }: { apiUrl: string }) {
       if (field.kind === "integer" && !Number.isInteger(Number(value))) errors[errorKey] = "Требуется целое число"
       if (field.kind === "service-status" && !["UNAVAILABLE", "OPTIONAL", "INCLUDED"].includes(value)) errors[errorKey] = "Выберите состояние из списка"
     }
+    const hasTvboxPrices = ["tvbox_buyout_price", "tvbox_installment_price", "tvbox_installment_months"].some(key => current.attributes[key] !== "" && current.attributes[key] !== undefined)
+    if (hasTvboxPrices && current.attributes.tvbox_available !== "true") errors["attribute-tvbox_available"] = "Подтвердите доступность приставки или очистите цены"
+    if (current.attributes.tvbox_available === "true" && !hasTvboxPrices) errors["attribute-tvbox_buyout_price"] = "Укажите выкуп или рассрочку"
     setFieldErrors(errors)
     const first = Object.keys(errors)[0]
     if (first) document.querySelector<HTMLElement>(`[name="${first}"]`)?.focus()

@@ -307,7 +307,7 @@ test('an imported tariff round-trips through detail and the manual editor contra
     post_title: 'Гига 500', tariff_slug: 'giga-500', nazvanie_tarifa: 'Гига 500', card_subtitle: 'Название карточки',
     skorost_interneta: 500, tv_channels_total: null, tv_channels_hd: null, price_standard: 900, price_promo: null,
     connection_cost: 0, opisanie_aktsii: null, opisanie_tarifa: null, card_feature: null, online_cinemas: 'ivi',
-    tvbox_installment_price: null, tvbox_installment_months: null, tvbox_buyout_price: null,
+    tvbox_available: 0, tvbox_installment_price: null, tvbox_installment_months: null, tvbox_buyout_price: null,
     router_installment_price: null, router_installment_months: null, router_buyout_price: null,
     srv_vkplaycloud_status: 0, srv_video_status: '-1', srv_video_price: null, cctv_buyout_price: null,
     cctv_connection_price: null, srv_gaming_status: 0, game_code: null, srv_litres_status: 0,

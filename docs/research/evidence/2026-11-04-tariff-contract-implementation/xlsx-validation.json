@@ -1,0 +1,13 @@
+{
+  "totalRows": 3805,
+  "validRows": 3805,
+  "errorRows": 0,
+  "warningRows": 0,
+  "issues": [],
+  "diff": {
+    "created": 0,
+    "updated": 3805,
+    "archived": 0,
+    "unchanged": 0
+  }
+}

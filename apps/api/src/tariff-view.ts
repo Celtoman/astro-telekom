@@ -1,3 +1,14 @@
+/** Legacy immutable snapshots may only infer availability from a positive offer.
+ * A free offer always requires explicit confirmation. */
+export function tvboxAvailable(attributes: Record<string, unknown>): boolean {
+  const explicit = attributes.tvbox_available;
+  if (typeof explicit === 'boolean') return explicit;
+  if (explicit !== null && explicit !== undefined) throw new Error('tvbox_available должен быть булевым значением');
+  return (typeof attributes.tvbox_buyout_price === 'number' && attributes.tvbox_buyout_price > 0)
+    || (typeof attributes.tvbox_installment_price === 'number' && attributes.tvbox_installment_price > 0
+      && typeof attributes.tvbox_installment_months === 'number' && attributes.tvbox_installment_months > 0);
+}
+
 const serviceLabels = {
   INTERNET: 'Домашний интернет',
   INTERNET_TV: 'Интернет и телевидение',
@@ -20,7 +31,7 @@ const publicAttributeKeys = new Set([
   'card_subtitle', 'badge_text', 'card_feature', 'opisanie_tarifa', 'is_sticky',
   'tv_channels_total', 'tv_channels_hd', 'online_cinemas', 'router_buyout_price',
   'router_installment_months', 'router_installment_price', 'tvbox_buyout_price',
-  'tvbox_installment_months', 'tvbox_installment_price', 'ont_buyout_price',
+  'tvbox_installment_months', 'tvbox_installment_price', 'tvbox_available', 'ont_buyout_price',
   'cctv_buyout_price', 'cctv_connection_price', 'srv_video_status', 'srv_video_price',
   'srv_gaming_status', 'game_code', 'srv_vkplaycloud_status', 'srv_litres_status',
   'srv_ont_status', 'srv_staticip_status',
@@ -214,6 +225,7 @@ function equipment(
   title: string,
   alternative: string,
 ): TariffEquipmentView | null {
+  if (code === 'tvbox' && !tvboxAvailable(source)) return null;
   const buyout = numberAttribute(source, `${code}_buyout_price`);
   const installmentPrice = numberAttribute(source, `${code}_installment_price`);
   const installmentMonths = numberAttribute(source, `${code}_installment_months`);
@@ -296,9 +308,9 @@ function services(source: Record<string, AttributeValue>): TariffServiceView[] {
   if (ontStatus !== 'UNAVAILABLE') {
     result.push({
       code: 'ont', title: 'ONT-терминал', status: ontStatus,
-      statusLabel: statusLabel(ontStatus, 'Доступность определяется по адресу'),
+      statusLabel: ontStatus === 'INCLUDED' ? 'Оплачивается отдельно при подключении' : statusLabel(ontStatus, 'Доступность определяется по адресу'),
       monthlyPriceAmount: null, monthlyPriceLabel: null,
-      oneTimeCharges: ontBuyout === null ? [] : [charge('Выкуп', ontBuyout)],
+      oneTimeCharges: ontBuyout === null ? [] : [charge('Единоразово при подключении', ontBuyout)],
     });
   }
   return result;

@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { tvboxAvailable } from './tariff-view';
 
 type EquipmentCode = 'router' | 'tvbox';
 type EquipmentSelection = 'NONE' | 'INSTALLMENT' | 'BUYOUT';
@@ -34,6 +35,7 @@ function price(value: unknown, label: string, required = false, decimalString = 
 }
 
 function equipmentChoices(attributes: Record<string, unknown>, code: EquipmentCode, title: string) {
+  if (code === 'tvbox' && !tvboxAvailable(attributes)) return null;
   const installmentAmount = price(attributes[`${code}_installment_price`], `${code}_installment_price`);
   const installmentMonths = attributes[`${code}_installment_months`] ?? null;
   const buyout = price(attributes[`${code}_buyout_price`], `${code}_buyout_price`);
@@ -103,6 +105,9 @@ export function quoteTariffConfiguration(tariff: TariffSource, requested: Tariff
   const oneTimeCharges: Array<{ code: string; title: string; amount: number | null }> = [
     { code: 'connection', title: 'Подключение', amount: connection },
   ];
+  if (attributes.srv_ont_status === 'INCLUDED' || attributes.srv_ont_status === -1) {
+    oneTimeCharges.push({ code: 'ont', title: 'ONT-терминал', amount: price(attributes.ont_buyout_price, 'ont_buyout_price') });
+  }
   for (const code of ['router', 'tvbox'] as const) {
     const selected = selection[code];
     if (selected === 'NONE') continue;

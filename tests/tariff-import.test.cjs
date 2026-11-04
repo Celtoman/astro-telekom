@@ -17,7 +17,7 @@ const row = (overrides = {}) => ({
   post_title: 'Гига 500', tariff_slug: 'giga-500', nazvanie_tarifa: 'Гига 500', card_subtitle: null,
   skorost_interneta: 500, tv_channels_total: null, tv_channels_hd: null, price_standard: 990, price_promo: 890,
   connection_cost: 0, opisanie_aktsii: 'Промо', opisanie_tarifa: null, card_feature: null, online_cinemas: null,
-  tvbox_installment_price: null, tvbox_installment_months: null, tvbox_buyout_price: null,
+  tvbox_available: 0, tvbox_installment_price: null, tvbox_installment_months: null, tvbox_buyout_price: null,
   router_installment_price: null, router_installment_months: null, router_buyout_price: null,
   srv_vkplaycloud_status: 0, srv_video_status: 0, srv_video_price: null, cctv_buyout_price: null,
   cctv_connection_price: null, srv_gaming_status: 0, game_code: null, srv_litres_status: 0,
@@ -58,7 +58,7 @@ test('import runs persist change sets and attributed undo state', () => {
 test('the tariff attribute registry exposes only canonical typed tariff attributes', () => {
   assert.deepEqual(TARIFF_ATTRIBUTE_FIELDS.map(({ key }) => key), [
     'card_subtitle', 'badge_text', 'card_feature', 'opisanie_tarifa', 'is_sticky',
-    'tv_channels_total', 'tv_channels_hd', 'online_cinemas', 'router_buyout_price', 'router_installment_months',
+    'tv_channels_total', 'tv_channels_hd', 'online_cinemas', 'tvbox_available', 'router_buyout_price', 'router_installment_months',
     'router_installment_price', 'tvbox_buyout_price', 'tvbox_installment_months',
     'tvbox_installment_price', 'ont_buyout_price', 'cctv_buyout_price', 'cctv_connection_price',
     'srv_video_status', 'srv_video_price', 'srv_gaming_status', 'game_code',
@@ -66,8 +66,8 @@ test('the tariff attribute registry exposes only canonical typed tariff attribut
   ]);
 });
 
-test('canonical tariff XLSX contains exactly 37 agreed headers in order', () => {
-  assert.equal(CANONICAL_IMPORT_COLUMNS.length, 37);
+test('canonical tariff XLSX contains exactly 38 agreed headers in order', () => {
+  assert.equal(CANONICAL_IMPORT_COLUMNS.length, 38);
   assert.deepEqual(Object.keys(row()), [...CANONICAL_IMPORT_COLUMNS]);
   for (const forbidden of ['show_on_site', 'external_id', 'equip_router', 'equip_tv_box', 'srv_gaming_name', 'is_gaming_tarif']) {
     assert.equal(CANONICAL_IMPORT_COLUMNS.includes(forbidden), false);
@@ -170,7 +170,7 @@ test('validation preserves the complete allowlisted editor contract with normali
 test('validation rejects a non-empty column outside the current tariff field registry', async () => {
   await assert.rejects(
     service().validateRows('provider-1', 'tariffs.xlsx', [row({ surprise_column: 'unexpected' })]),
-    /37 колонок в точном порядке/i,
+    /38 колонок в точном порядке/i,
   );
 });
 
@@ -305,13 +305,13 @@ test('validation rejects a tariff URL already occupied by a published page', asy
 test('validation rejects missing or reordered canonical headers before reading values', async () => {
   const missing = row();
   delete missing.badge_text;
-  await assert.rejects(service().validateRows('provider-1', 'tariffs.xlsx', [missing]), /37 колонок в точном порядке/i);
+  await assert.rejects(service().validateRows('provider-1', 'tariffs.xlsx', [missing]), /38 колонок в точном порядке/i);
 
   const entries = Object.entries(row());
   [entries[0], entries[1]] = [entries[1], entries[0]];
   await assert.rejects(
     service().validateRows('provider-1', 'tariffs.xlsx', [Object.fromEntries(entries)]),
-    /37 колонок в точном порядке/i,
+    /38 колонок в точном порядке/i,
   );
 });
 

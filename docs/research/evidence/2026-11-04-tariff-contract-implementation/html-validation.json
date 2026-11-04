@@ -1,0 +1,18 @@
+{
+  "checked": 3805,
+  "failures": [],
+  "method": "Python HTMLParser over actual generated HTML; expected tariffView per live published tariff",
+  "checks": [
+    "one H1 and correct name",
+    "canonical and description",
+    "conditional block presence/order",
+    "base price",
+    "internet/TV values",
+    "equipment codes",
+    "cinema codes",
+    "game code",
+    "service codes/status/charges",
+    "full description",
+    "same-city related links"
+  ]
+}

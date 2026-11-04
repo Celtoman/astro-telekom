@@ -152,7 +152,7 @@ test('public tariff view maps canonical attributes into typed renderer blocks', 
   ]);
   assert.equal(result.services[0].monthlyPriceLabel, '350 ₽/мес.');
   assert.deepEqual(result.services[0].oneTimeCharges, [{ label: 'Подключение', amount: 0, amountLabel: 'Бесплатно' }]);
-  assert.deepEqual(result.services[2].oneTimeCharges, [{ label: 'Выкуп', amount: 1500, amountLabel: '1 500 ₽' }]);
+  assert.deepEqual(result.services[2].oneTimeCharges, [{ label: 'Единоразово при подключении', amount: 1500, amountLabel: '1 500 ₽' }]);
 });
 
 test('minimal internet tariff hides optional blocks and names the missing TV component', () => {

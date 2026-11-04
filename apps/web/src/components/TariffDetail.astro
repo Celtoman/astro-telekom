@@ -70,8 +70,7 @@ const monthWord = (count: number) => {
 
   {tariff.cinemas.length > 0 && (
     <section class="section container" data-tariff-block="cinemas">
-      <span class="section-kicker">Уже включено</span>
-      <h2>Онлайн-кинотеатры</h2>
+      <h2>Подписки в тарифе</h2>
       <div class="cinema-list">
         {tariff.cinemas.map((cinema) => <span class="cinema-chip" data-cinema-code={cinema.code}>{cinema.title}</span>)}
       </div>

@@ -1,0 +1,114 @@
+{
+  "catalog": {
+    "active": 3805,
+    "archivedPreserved": 108,
+    "workingPublishedDiffs": 0,
+    "configurationCount": 25405,
+    "errors": 0
+  },
+  "migration": {
+    "all": 3805,
+    "available": 2335,
+    "unavailable": 1470,
+    "zeroOffers": 0,
+    "historyRows": 3805,
+    "preservedPreviousTimestamps": true,
+    "preservedPublication": true,
+    "preservedNamesPrices": true,
+    "idempotent": true
+  },
+  "build": {
+    "htmlPages": 4226,
+    "indexablePages": 4225,
+    "passed": true
+  },
+  "allTariffHtml": {
+    "checked": 3805,
+    "failures": [],
+    "method": "Python HTMLParser over actual generated HTML; expected tariffView per live published tariff",
+    "checks": [
+      "one H1 and correct name",
+      "canonical and description",
+      "conditional block presence/order",
+      "base price",
+      "internet/TV values",
+      "equipment codes",
+      "cinema codes",
+      "game code",
+      "service codes/status/charges",
+      "full description",
+      "same-city related links"
+    ]
+  },
+  "externalStateChanged": false,
+  "visual": {
+    "sizes": [
+      1440,
+      834,
+      390,
+      320
+    ],
+    "desktopTablet": "Figma export inspected",
+    "mobile": "Figma browser canvas inspected",
+    "compactAndFull320": true,
+    "staleOntNotes": 0
+  },
+  "importXlsx": {
+    "rows": 3805,
+    "columns": 38,
+    "available": 2335,
+    "unavailable": 1470,
+    "parserPassed": true
+  },
+  "designDetector": [],
+  "xlsxValidation": {
+    "totalRows": 3805,
+    "validRows": 3805,
+    "errorRows": 0,
+    "warningRows": 0,
+    "issues": [],
+    "diff": {
+      "created": 0,
+      "updated": 3805,
+      "archived": 0,
+      "unchanged": 0
+    }
+  },
+  "confirmationTests": {
+    "passed": 17,
+    "failed": 0
+  },
+  "webBuildTests": {
+    "passed": 11,
+    "failed": 0
+  },
+  "runtimeStandalone": {
+    "passed": 2,
+    "failed": 0,
+    "durationMs": 328303.7192
+  },
+  "fullGate": {
+    "status": "passed",
+    "command": "pnpm check",
+    "tests": 932,
+    "pass": 931,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 1,
+    "duration_ms": 1024570.6961,
+    "checkedAt": "2026-11-04T19:24:50.327303+00:00",
+    "environment": "Windows; Docker 29.9.2; process affinity 1; process-scoped TEMP/TMP on D:",
+    "log": "full-check.txt",
+    "skip": "Windows symlink privilege unavailable; Linux rehearsal covers this guard",
+    "previousInfrastructureIssueStillOpen": 496,
+    "secretValueMatches": 0,
+    "rawLogSha256": "c0e22c70e32091c8dd28c93e687b287e18e7f8603841c6822fecc9c360691f8e",
+    "logNormalization": "Trailing whitespace removed; original log retained at D:/Temp/tariff-contract-restored-check.log"
+  },
+  "legacySnapshot": {
+    "checked": 3805,
+    "availableTvbox": 2335,
+    "unconfirmedFreeOffers": 0,
+    "errors": []
+  }
+}

@@ -1,0 +1,1207 @@
+{
+  "date": "2026-11-04T11:56:42.713Z",
+  "code": "ref: refs/heads/master",
+  "counts": {
+    "published": 3805,
+    "working": 3805,
+    "archived": 108,
+    "index": 3913,
+    "indexPublished": 3805
+  },
+  "typeCounts": {
+    "INTERNET": 1470,
+    "INTERNET_TV": 2335
+  },
+  "fields": {
+    "standardPrice": {
+      "present": 3805
+    },
+    "promoPrice": {
+      "absent": 3805
+    },
+    "speed": {
+      "present": 3805
+    },
+    "promoText": {
+      "absent": 3805
+    },
+    "connectionFee": {
+      "present": 3805
+    },
+    "card_subtitle": {
+      "absent": 3805
+    },
+    "badge_text": {
+      "absent": 3599,
+      "present": 206
+    },
+    "card_feature": {
+      "absent": 3695,
+      "present": 110
+    },
+    "opisanie_tarifa": {
+      "present": 3775,
+      "absent": 30
+    },
+    "is_sticky": {
+      "present": 3805
+    },
+    "tv_channels_total": {
+      "absent": 1470,
+      "present": 2335
+    },
+    "tv_channels_hd": {
+      "absent": 1470,
+      "present": 2335
+    },
+    "online_cinemas": {
+      "absent": 2895,
+      "present": 910
+    },
+    "tvbox_available": {
+      "present": 3805
+    },
+    "router_buyout_price": {
+      "present": 3805
+    },
+    "router_installment_months": {
+      "present": 3665,
+      "absent": 140
+    },
+    "router_installment_price": {
+      "present": 3665,
+      "absent": 140
+    },
+    "tvbox_buyout_price": {
+      "absent": 1470,
+      "present": 2335
+    },
+    "tvbox_installment_months": {
+      "absent": 1550,
+      "present": 2255
+    },
+    "tvbox_installment_price": {
+      "absent": 1550,
+      "present": 2255
+    },
+    "ont_buyout_price": {
+      "absent": 3799,
+      "present": 6
+    },
+    "cctv_buyout_price": {
+      "absent": 3665,
+      "present": 140
+    },
+    "cctv_connection_price": {
+      "absent": 3665,
+      "present": 140
+    },
+    "srv_video_status": {
+      "present": 3805
+    },
+    "srv_video_price": {
+      "absent": 3665,
+      "present": 140
+    },
+    "srv_gaming_status": {
+      "present": 3805
+    },
+    "game_code": {
+      "absent": 2413,
+      "present": 1392
+    },
+    "srv_vkplaycloud_status": {
+      "present": 3805
+    },
+    "srv_litres_status": {
+      "present": 3805
+    },
+    "srv_ont_status": {
+      "present": 3805
+    },
+    "srv_staticip_status": {
+      "present": 3805
+    }
+  },
+  "equipment": {
+    "router": {
+      "INSTALLMENT+BUYOUT": 3665,
+      "BUYOUT": 140
+    },
+    "tvbox": {
+      "NONE": 1470,
+      "INSTALLMENT+BUYOUT": 2255,
+      "BUYOUT": 80
+    }
+  },
+  "statusCounts": {
+    "srv_video_status": {
+      "UNAVAILABLE": 3665,
+      "OPTIONAL": 140
+    },
+    "srv_gaming_status": {
+      "UNAVAILABLE": 2413,
+      "INCLUDED": 1392
+    },
+    "srv_vkplaycloud_status": {
+      "UNAVAILABLE": 3761,
+      "INCLUDED": 44
+    },
+    "srv_litres_status": {
+      "UNAVAILABLE": 3761,
+      "INCLUDED": 44
+    },
+    "srv_staticip_status": {
+      "UNAVAILABLE": 2141,
+      "INCLUDED": 1664
+    },
+    "srv_ont_status": {
+      "UNAVAILABLE": 3799,
+      "INCLUDED": 6
+    }
+  },
+  "videoStates": {
+    "HIDDEN": 3665,
+    "OPTIONAL / COMPLETE": 140
+  },
+  "ontStates": {
+    "HIDDEN": 3799,
+    "INCLUDED / PAID": 6
+  },
+  "blockCounts": {
+    "hero": 3805,
+    "description": 3775,
+    "equipment": 3805,
+    "configurator": 3805,
+    "address": 3805,
+    "related": 3805,
+    "faq": 3805,
+    "services": 2427,
+    "cinemas": 910
+  },
+  "canonicalErrors": {
+    "published": [],
+    "archived": [
+      {
+        "id": "cmtw6nmvk02gd01rzfj3wlfej",
+        "name": "Mega 500 PON",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nmvg02gb01rztltaubaz",
+        "name": "Mega 300 PON",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nmvj02gc01rzcs9mhpm5",
+        "name": "Mega 300 PON",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nmve02ga01rzmyff1qdt",
+        "name": "Mega 500 PON",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nlye01vn01rzlxx2uqxj",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nlyc01vl01rzf0psvp35",
+        "name": "Гейминг+ 600 Леста + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nly901vj01rzqfti3zbf",
+        "name": "Гейминг+ 300 Warface + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nlyd01vm01rz52tajay6",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nly501vg01rzobdd03xb",
+        "name": "Гига+ 800 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nly801vi01rzz7du3asb",
+        "name": "Гейминг+ 300 Леста + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nly401vf01rzyja5e66l",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nly101vd01rztx8nx9td",
+        "name": "Гейминг+ 600 Warface + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nlxy01vb01rzxzegt0tu",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nly001vc01rz5sw4hav0",
+        "name": "Гига+ 500 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nlxw01v901rzmnh1ne0g",
+        "name": "Гейминг+ 600 Леста",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nlxu01v801rzj7eiw0r0",
+        "name": "Гейминг+ 300 Леста",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nlxt01v701rzd7y93fe5",
+        "name": "Гига+ 800",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nlxr01v601rz4gw0pjcs",
+        "name": "Гига+ 500",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nlxq01v501rzm7orhpck",
+        "name": "Гейминг+ 600 Warface",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nlxo01v401rzt7vktcm4",
+        "name": "Гейминг+ 300 Warface",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nla901i801rzgcr2nl7e",
+        "name": "Гига+ 300 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nla601i701rzsfpdv9xe",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nla401i601rzqfdvv61r",
+        "name": "Гига+ 300 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nla201i501rz3cv7njd2",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl9y01i301rzu9okirw8",
+        "name": "Гига+ 250 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nla001i401rzrznh88xg",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl9v01i101rzug5iihq4",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl9k01hv01rz0z985is5",
+        "name": "Гига+ 250",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl9h01hu01rzthqzdxd1",
+        "name": "Гига+ 300 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl9g01ht01rz74g1a0o3",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl9e01hs01rz4zmxc3sh",
+        "name": "Гига+ 300 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl9d01hr01rzjaafeu97",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl9b01hq01rz38vwj4em",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl9901hp01rz9z9qsz20",
+        "name": "Гига+ 250 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl9601hn01rzkkg9u2vq",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8z01hh01rzefs3ap9i",
+        "name": "Гига+ 250",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8x01hg01rzyj4v1o73",
+        "name": "Гига+ 300 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8w01hf01rz90sugt2c",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8v01he01rz0iyyf0v2",
+        "name": "Гига+ 300 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8t01hd01rz4ywnbr7k",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8s01hc01rzrxr5lwt6",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8f01h301rz1vkoa4n8",
+        "name": "Гига+ 250",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8r01hb01rzzle8x3fc",
+        "name": "Гига+ 250 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8o01h901rzzh1oma7j",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8e01h201rztwxfu2nt",
+        "name": "Гига+ 300 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8b01h001rz4cj2tcz6",
+        "name": "Гига+ 300 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8c01h101rzdx3r0xk4",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8901gz01rzynw31zo2",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8601gx01rz2s3jorss",
+        "name": "Гига+ 250 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7s01gp01rzcb83ps6x",
+        "name": "Гига+ 250",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8801gy01rza6jzftfr",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl8301gv01rzfqi7lyes",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7q01go01rzerpyahqf",
+        "name": "Гига+ 300 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7o01gn01rz2ajzs5bk",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7m01gm01rzwiilpcbb",
+        "name": "Гига+ 300 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7k01gl01rz977rr6ix",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7g01gj01rz3bhi4fr0",
+        "name": "Гига+ 250 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7i01gk01rzqgspb0ve",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7501gb01rz8bflzcp5",
+        "name": "Гига+ 250",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7d01gh01rzsdwpj5nb",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7401ga01rz9342t9p0",
+        "name": "Гига+ 300 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7301g901rz2ptg9h2r",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7101g801rz6a08n31s",
+        "name": "Гига+ 300 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl7001g701rzilucio2a",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6x01g501rz87u4gu96",
+        "name": "Гига+ 250 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6z01g601rzhm2dnl1b",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6u01g301rzbjbtuwaf",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6l01fx01rzlbvuhfrl",
+        "name": "Гига+ 250",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6g01ft01rzcllle8pm",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6k01fw01rzinjpb6ln",
+        "name": "Гига+ 300 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6i01fu01rzaut1j2qw",
+        "name": "Гига+ 300 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6j01fv01rz8kpcena1",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6f01fs01rz8093vyo0",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6e01fr01rzg0ywqf93",
+        "name": "Гига+ 250 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6401fj01rz2vqs9fwf",
+        "name": "Гига+ 250",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6b01fp01rzmpgrgpus",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl6101fi01rzd3hd83mh",
+        "name": "Гига+ 300 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5y01fg01rzd6rt6pa3",
+        "name": "Гига+ 300 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5z01fh01rz1o5t9iai",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5w01ff01rznwk2jert",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5v01fe01rzbz13xzhl",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5p01fb01rz67dnr61r",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5g01f501rzb87sw30a",
+        "name": "Гига+ 250",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5t01fd01rzczc8yht9",
+        "name": "Гига+ 250 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5f01f401rz464c9c3e",
+        "name": "Гига+ 300 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5d01f301rzirmtqmgh",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5801f101rzyr5wjmyq",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5b01f201rz4983tm7t",
+        "name": "Гига+ 300 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5701f001rz9oxyaneg",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5501ez01rziyvgu3gz",
+        "name": "Гига+ 250 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl5101ex01rz60beh8ti",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl4q01eq01rzniy07v8p",
+        "name": "Гига+ 300 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl4r01er01rzjumqrb4q",
+        "name": "Гига+ 250",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl4o01ep01rzdmyr8f5f",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl4n01eo01rzf1qov6za",
+        "name": "Гига+ 300 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl4l01en01rz63efzji7",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl4k01em01rzj9nv56kk",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl4i01el01rzuk7dv6bf",
+        "name": "Гига+ 250 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl4e01ej01rzt41cfb1i",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl4301ed01rzamwgwc8q",
+        "name": "Гига+ 250",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl4101ec01rz5oojl9mc",
+        "name": "Гига+ 800 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl3u01ea01rzgtimfvfg",
+        "name": "Гига+ 800 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl3p01e801rz6nkdmkh7",
+        "name": "Гига+ 300 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl3y01eb01rz3dpo4g1r",
+        "name": "Гига+ 500 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl3s01e901rzmjnivw0i",
+        "name": "Гига+ 500 Movix. Засмотрись! 3",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl3801e301rz67dkd5p5",
+        "name": "Гига+ 250 + ТВ",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl3m01e701rztxjiwerc",
+        "name": "Гига+ 300 Movix. Засмотрись! 5",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      },
+      {
+        "id": "cmtw6nl2t01dz01rzci6i99id",
+        "name": "Гига+ 250",
+        "error": "equip_router не входит в текущий контракт полей тарифа"
+      }
+    ]
+  },
+  "comparison": {
+    "missingWorking": [],
+    "different": []
+  },
+  "indexDiff": [],
+  "routeCheck": {
+    "declared": 3805,
+    "unique": 3805,
+    "expected": 3805,
+    "missing": [],
+    "extra": []
+  },
+  "quoteCount": 25405,
+  "quoteCases": [
+    {
+      "path": "/berdsk/giga-100-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1570,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/giga-100-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1570,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    },
+    {
+      "path": "/berdsk/geyming-600-warface-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1860,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/geyming-600-warface-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1860,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    },
+    {
+      "path": "/berdsk/geyming-800-lesta-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 2260,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/geyming-800-lesta-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 2260,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    },
+    {
+      "path": "/berdsk/geyming-300-warface-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1760,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/geyming-300-warface-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1760,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    },
+    {
+      "path": "/berdsk/giga-600-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1710,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/giga-600-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1710,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    },
+    {
+      "path": "/berdsk/geyming-600-lesta-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1860,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/geyming-600-lesta-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1860,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    },
+    {
+      "path": "/berdsk/geyming-800-warface-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 2260,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/geyming-800-warface-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 2260,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    },
+    {
+      "path": "/berdsk/geyming-100-warface-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1660,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/geyming-100-warface-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1660,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    },
+    {
+      "path": "/berdsk/giga-800-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 2110,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/giga-800-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 2110,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    },
+    {
+      "path": "/berdsk/giga-300-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1610,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/giga-300-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1610,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    },
+    {
+      "path": "/berdsk/geyming-100-lesta-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1660,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/geyming-100-lesta-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1660,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    },
+    {
+      "path": "/berdsk/geyming-300-lesta-mono",
+      "selection": {
+        "router": "NONE",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1760,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      }
+    },
+    {
+      "path": "/berdsk/geyming-300-lesta-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "NONE",
+        "services": [
+          "video"
+        ]
+      },
+      "totals": {
+        "monthly": 1760,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      }
+    }
+  ],
+  "samples": {
+    "INTERNET": {
+      "id": "cmtw6nk3l00uk01rzsjne5d5u",
+      "path": "/abinsk/giga-300",
+      "name": "Гига+ 300"
+    },
+    "video-HIDDEN": {
+      "id": "cmtw6nk3l00uk01rzsjne5d5u",
+      "path": "/abinsk/giga-300",
+      "name": "Гига+ 300"
+    },
+    "ont-HIDDEN": {
+      "id": "cmtw6nk3l00uk01rzsjne5d5u",
+      "path": "/abinsk/giga-300",
+      "name": "Гига+ 300"
+    },
+    "game-lesta": {
+      "id": "cmtw6nk3n00ul01rzospt3asu",
+      "path": "/abinsk/geyming-600-lesta",
+      "name": "Гейминг+ 600 Леста"
+    },
+    "game-warface": {
+      "id": "cmtw6nk3p00um01rzkgvxuk6z",
+      "path": "/abinsk/geyming-300-warface",
+      "name": "Гейминг+ 300 Warface"
+    },
+    "INTERNET_TV": {
+      "id": "cmtw6nk3z00ur01rzhujspwmr",
+      "path": "/abinsk/giga-500-tv",
+      "name": "Гига+ 500 + ТВ"
+    },
+    "cinema-4": {
+      "id": "cmtw6nk4100us01rz9b1crmvb",
+      "path": "/abinsk/giga-800-movix-zasmotris-3",
+      "name": "Гига+ 800 Movix. Засмотрись! 3"
+    },
+    "cinema-5": {
+      "id": "cmtw6nk4700uv01rz2ek3robd",
+      "path": "/abinsk/giga-500-movix-zasmotris-5",
+      "name": "Гига+ 500 Movix. Засмотрись! 5"
+    },
+    "cinema-1": {
+      "id": "cmtw6nipf002p01rzo7ha637x",
+      "path": "/arhangelskoe/giga-800-razvlekatelnyy",
+      "name": "Гига+ 800 Развлекательный"
+    },
+    "video-OPTIONAL / COMPLETE": {
+      "id": "cmtw6nldj01k001rzoyq8fdco",
+      "path": "/berdsk/giga-100-mono",
+      "name": "Гига+ 100 моно"
+    },
+    "cinema-3": {
+      "id": "cmtw6nlen01kg01rz7c88js4u",
+      "path": "/berdsk/giga-300-movix-zasmotris-3-hd",
+      "name": "Гига+ 300 Movix. Засмотрись! 3 HD"
+    },
+    "ont-INCLUDED / PAID": {
+      "id": "cmufiqze6001f01ufvxcpjeyx",
+      "path": "/tolyatti/giga-300",
+      "name": "Гига+ 300"
+    },
+    "ont-external-cost": {
+      "id": "cmufiqze6001f01ufvxcpjeyx",
+      "path": "/tolyatti/giga-300",
+      "name": "Гига+ 300"
+    }
+  },
+  "combinationCounts": {
+    "INTERNET|cinemas:0|game:none|equipment:router:INSTALLMENT+BUYOUT|services:": 257,
+    "INTERNET|cinemas:0|game:lesta|equipment:router:INSTALLMENT+BUYOUT|services:staticip:INCLUDED": 163,
+    "INTERNET|cinemas:0|game:warface|equipment:router:INSTALLMENT+BUYOUT|services:": 165,
+    "INTERNET|cinemas:0|game:warface|equipment:router:INSTALLMENT+BUYOUT|services:staticip:INCLUDED": 163,
+    "INTERNET|cinemas:0|game:none|equipment:router:INSTALLMENT+BUYOUT|services:staticip:INCLUDED": 472,
+    "INTERNET|cinemas:0|game:lesta|equipment:router:INSTALLMENT+BUYOUT|services:": 165,
+    "INTERNET_TV|cinemas:0|game:none|equipment:router:INSTALLMENT+BUYOUT,tvbox:INSTALLMENT+BUYOUT|services:staticip:INCLUDED": 453,
+    "INTERNET_TV|cinemas:4|game:none|equipment:router:INSTALLMENT+BUYOUT,tvbox:INSTALLMENT+BUYOUT|services:": 505,
+    "INTERNET_TV|cinemas:0|game:warface|equipment:router:INSTALLMENT+BUYOUT,tvbox:INSTALLMENT+BUYOUT|services:": 165,
+    "INTERNET_TV|cinemas:0|game:lesta|equipment:router:INSTALLMENT+BUYOUT,tvbox:INSTALLMENT+BUYOUT|services:staticip:INCLUDED": 163,
+    "INTERNET_TV|cinemas:5|game:none|equipment:router:INSTALLMENT+BUYOUT,tvbox:INSTALLMENT+BUYOUT|services:": 341,
+    "INTERNET_TV|cinemas:0|game:warface|equipment:router:INSTALLMENT+BUYOUT,tvbox:INSTALLMENT+BUYOUT|services:staticip:INCLUDED": 163,
+    "INTERNET_TV|cinemas:0|game:lesta|equipment:router:INSTALLMENT+BUYOUT,tvbox:INSTALLMENT+BUYOUT|services:": 165,
+    "INTERNET_TV|cinemas:0|game:none|equipment:router:INSTALLMENT+BUYOUT,tvbox:INSTALLMENT+BUYOUT|services:": 275,
+    "INTERNET|cinemas:1|game:none|equipment:router:INSTALLMENT+BUYOUT|services:vkplaycloud:INCLUDED,litres:INCLUDED,staticip:INCLUDED": 11,
+    "INTERNET|cinemas:1|game:none|equipment:router:INSTALLMENT+BUYOUT|services:vkplaycloud:INCLUDED,litres:INCLUDED": 11,
+    "INTERNET_TV|cinemas:1|game:none|equipment:router:INSTALLMENT+BUYOUT,tvbox:INSTALLMENT+BUYOUT|services:vkplaycloud:INCLUDED,litres:INCLUDED,staticip:INCLUDED": 11,
+    "INTERNET_TV|cinemas:1|game:none|equipment:router:INSTALLMENT+BUYOUT,tvbox:INSTALLMENT+BUYOUT|services:vkplaycloud:INCLUDED,litres:INCLUDED": 11,
+    "INTERNET|cinemas:0|game:none|equipment:router:BUYOUT|services:video:OPTIONAL": 10,
+    "INTERNET|cinemas:0|game:warface|equipment:router:BUYOUT|services:video:OPTIONAL,staticip:INCLUDED": 10,
+    "INTERNET|cinemas:0|game:lesta|equipment:router:BUYOUT|services:video:OPTIONAL,staticip:INCLUDED": 10,
+    "INTERNET|cinemas:0|game:warface|equipment:router:BUYOUT|services:video:OPTIONAL": 10,
+    "INTERNET|cinemas:0|game:none|equipment:router:BUYOUT|services:video:OPTIONAL,staticip:INCLUDED": 10,
+    "INTERNET|cinemas:0|game:lesta|equipment:router:BUYOUT|services:video:OPTIONAL": 10,
+    "INTERNET_TV|cinemas:0|game:warface|equipment:router:BUYOUT,tvbox:BUYOUT|services:video:OPTIONAL,staticip:INCLUDED": 10,
+    "INTERNET_TV|cinemas:0|game:lesta|equipment:router:BUYOUT,tvbox:BUYOUT|services:video:OPTIONAL": 10,
+    "INTERNET_TV|cinemas:0|game:none|equipment:router:BUYOUT,tvbox:BUYOUT|services:video:OPTIONAL": 10,
+    "INTERNET_TV|cinemas:3|game:none|equipment:router:BUYOUT,tvbox:BUYOUT|services:video:OPTIONAL": 15,
+    "INTERNET_TV|cinemas:0|game:lesta|equipment:router:BUYOUT,tvbox:BUYOUT|services:video:OPTIONAL,staticip:INCLUDED": 10,
+    "INTERNET_TV|cinemas:0|game:none|equipment:router:BUYOUT,tvbox:BUYOUT|services:video:OPTIONAL,staticip:INCLUDED": 10,
+    "INTERNET_TV|cinemas:0|game:warface|equipment:router:BUYOUT,tvbox:BUYOUT|services:video:OPTIONAL": 10,
+    "INTERNET_TV|cinemas:4|game:none|equipment:router:BUYOUT,tvbox:BUYOUT|services:video:OPTIONAL,staticip:INCLUDED": 5,
+    "INTERNET|cinemas:0|game:none|equipment:router:INSTALLMENT+BUYOUT|services:ont:INCLUDED": 3,
+    "INTERNET_TV|cinemas:0|game:none|equipment:router:INSTALLMENT+BUYOUT,tvbox:INSTALLMENT+BUYOUT|services:ont:INCLUDED": 3
+  },
+  "errors": [],
+  "warnings": []
+}

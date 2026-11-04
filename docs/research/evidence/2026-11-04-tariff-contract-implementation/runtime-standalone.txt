@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: runtime cannot turn unknown legacy serving into EMPTY or resume an unrecognized config
+ok 1 - runtime cannot turn unknown legacy serving into EMPTY or resume an unrecognized config
+  ---
+  duration_ms: 28.3183
+  type: 'test'
+  ...
+# Subtest: real Node/Caddy image separates CODE/CMS and resumes static HTML/assets without API
+ok 2 - real Node/Caddy image separates CODE/CMS and resumes static HTML/assets without API
+  ---
+  duration_ms: 327975.5481
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 328303.7192

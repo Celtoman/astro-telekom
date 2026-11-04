@@ -1,0 +1,176 @@
+[
+  {
+    "id": "cmufiqwme000701uf24shykkk",
+    "path": "/vidnoe/giga-1000",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwmj000801uffc1cqtdz",
+    "path": "/vidnoe/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwn1000b01uf4j8ffpki",
+    "path": "/dmitrov/giga-1000",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwn5000c01ufgcthjwo1",
+    "path": "/dmitrov/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwns000f01uf1go11rce",
+    "path": "/domodedovo/giga-1000",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwny000g01ufscz2bw9l",
+    "path": "/domodedovo/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwok000j01ufodww1j36",
+    "path": "/krasnogorsk/giga-1000",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwop000k01uf052qrm5t",
+    "path": "/krasnogorsk/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqxsk001b01ufke3hm4hd",
+    "path": "/krasnokamsk/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwpc000n01ufb4mc0qqj",
+    "path": "/lyubertsy/giga-1000",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwph000o01ufdi32emip",
+    "path": "/lyubertsy/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwkz000301uf7etqeli6",
+    "path": "/moscow/giga-1000",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwll000401ufjcnk1xna",
+    "path": "/moscow/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwq2000r01ufx8rqj0mr",
+    "path": "/mytishchi/giga-1000",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwq8000s01ufitajdy4z",
+    "path": "/mytishchi/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwr4000v01ufialbij6s",
+    "path": "/odintsovo/giga-1000",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwra000w01ufz4ej7bkl",
+    "path": "/odintsovo/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwry000z01uflb8zbtto",
+    "path": "/pushkino/giga-1000",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqws3001001ufanvkacrs",
+    "path": "/pushkino/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmtw6njln00k401rzf9ycngdn",
+    "path": "/slyudyanka/slyudyanka-30",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmtw6njlp00k501rzjirn8yx6",
+    "path": "/slyudyanka/slyudyanka-50",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmtw6njls00k601rzdbkhf52a",
+    "path": "/slyudyanka/slyudyanka-15",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwsp001301ufgpklyjiy",
+    "path": "/solnechnogorsk/giga-1000",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwsv001401ufi351i4jf",
+    "path": "/solnechnogorsk/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqze6001f01ufvxcpjeyx",
+    "path": "/tolyatti/giga-300",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqzeb001g01ufk649wz2q",
+    "path": "/tolyatti/giga-500",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqzef001h01uf91j6fvhj",
+    "path": "/tolyatti/giga-200",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwtm001701ufzyh1r99p",
+    "path": "/khimki/giga-1000",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  },
+  {
+    "id": "cmufiqwtr001801ufpcv85eoa",
+    "path": "/khimki/giga-100",
+    "decision": "Do not offer TV box until confirmed",
+    "ownerApproved": true
+  }
+]
