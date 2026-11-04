@@ -1,0 +1,24 @@
+{
+  "lint": "PASSED",
+  "dbValidate": "PASSED",
+  "buildCi": "PASSED",
+  "testCommand": "node --test --test-concurrency=2 tests/*.test.cjs tests/*.test.mjs",
+  "tests": 927,
+  "passed": 926,
+  "failed": 0,
+  "skipped": 1,
+  "skipReason": "Windows symlink privilege",
+  "localPreviewCases": 13,
+  "viewportWidths": [
+    1920,
+    1440,
+    1280,
+    1101,
+    1100,
+    834,
+    620,
+    390,
+    320
+  ],
+  "figmaScreens": 4
+}

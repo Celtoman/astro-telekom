@@ -172,3 +172,5 @@ Worker поддерживает три provider-режима. Coolify Compose з
 ## Проверка подключения по адресу
 
 Шаблон `CITY_ADDRESS_CHECK` создаёт страницу `/{location}/proverka-podklyucheniya-k-domru-po-adresu` для каждого опубликованного города. Восемь секций редактируются независимо от HOME/CITY_HOME в `/templates/home?kind=CITY_ADDRESS_CHECK`; общие компоненты, контакты и факты переиспользуются. [Контракт внедрения](docs/plans/2026-11-04-address-check-implementation-contract.md) и [проверки](docs/research/2026-11-04-address-page-implementation.md). Изменения кода выпускаются отдельно от CMS-публикации.
+
+Нормализация отступов ADDRESS и ширины H1 в коде, Screens и preview: [границы и проверка](docs/research/2026-11-04-address-page-spacing.md).

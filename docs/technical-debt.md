@@ -6,6 +6,14 @@
 
 **Статус ведётся в GitHub Issues** (репозиторий `Celtoman/astro-telekom`, label `tech-debt` + приоритет). 🟢 — open, ✅ — closed. Актуально на момент чтения этой таблицы issue может отличаться от статуса ниже — сверяться по ссылке, не по этому файлу, если нужен текущий статус.
 
+## Визуальная сверка ADDRESS, 4 ноября 2026
+
+| ID | Issue | Суть |
+| --- | --- | --- |
+| TD-207 | [#487](https://github.com/Celtoman/astro-telekom/issues/487) 🟢 | Накопленные отступы ADDRESS в Screens и коде расходятся с ритмом HOME/CITY_HOME |
+| TD-208 | [#488](https://github.com/Celtoman/astro-telekom/issues/488) 🟢 | Глобальное ограничение H1 до780px вызывает лишний перенос на Desktop |
+| TD-209 | [#493](https://github.com/Celtoman/astro-telekom/issues/493) 🟢 | Недостаток места в Windows TEMP блокирует rehearsal архивации |
+
 ## Текущая миграция CITY_HOME
 
 | ID | Issue | Суть |
