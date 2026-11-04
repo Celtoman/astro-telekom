@@ -1,0 +1,1486 @@
+{
+  "checkedAt": "2026-11-04T13:01:28.314Z",
+  "siteRevision": 27,
+  "publicationId": "cmw20tzmt000f01pdzw24unp7",
+  "rebuild": {
+    "id": "cmtw6dpwj015g01o0ho99ow05",
+    "status": "SUCCEEDED",
+    "requestedRevision": 23,
+    "processingRevision": 23,
+    "publishedRevision": 23,
+    "requestedPublicationId": "cmw20tzmt000f01pdzw24unp7",
+    "processingPublicationId": "cmw20tzmt000f01pdzw24unp7",
+    "publishedPublicationId": "cmw20tzmt000f01pdzw24unp7",
+    "attempts": 1,
+    "maxAttempts": 3,
+    "lastError": null,
+    "providerStatus": "SUCCEEDED",
+    "providerDeploymentId": null,
+    "queuedAt": "2026-11-04T11:16:17.819Z",
+    "startedAt": "2026-11-04T11:16:18.136Z",
+    "completedAt": "2026-11-04T11:20:08.352Z",
+    "updatedAt": "2026-11-04T11:20:08.355Z"
+  },
+  "catalogDigest": "f65b78fdb8703878d87881609f2e81e83d07ff54b64288e872d1b37dde562e3e",
+  "cities": 207,
+  "routes": 4225,
+  "addressPages": [
+    {
+      "path": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/aksay/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/aleysk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/alekseyevka/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/angarsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/aramil/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/arkadak/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/arhangelskoe/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/okhtyrka/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/babushkin/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/balashov/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/barnaul/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/bataysk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/belaya-kalitva/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/belokuriha/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/berdsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/berezniki/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/berezovskiy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/biysk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/biryusinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/bogorodskaya/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/bolshaya-gora/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/bolshaya-murta/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/bolshaya-subbotikha/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/bor/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/borovye/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/borodino/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/bryansk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/buzuluk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/vereshchagino/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/vidnoe/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/volgograd/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/voljskiy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/voronej/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/vorotnikovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/votkinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/vsevolozhsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/gatchina/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/gnusino/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/gorodishche/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/gukovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/gulkevichi/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/dzerjinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/dimitrovgrad/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/dmitrievka/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/dmitrov/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/dobryanka/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/domodedovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/doneck/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/dyatkovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/ekaterinburg/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/yeniseysk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/zhigulevsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/zato-sibirskiy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/zavodoukovsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/zaozerny/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/zarechnyy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/zarinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/zasechnoe/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/zverevo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/znamenskiy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/izhevsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/irkutsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/isilkul/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/iskitim/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/yoshkarola/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kazan/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kalininsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kamyshin/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kansk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/karachev/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/ketovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kinel/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kirov/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kirovsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kolpino/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kolcovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kommunar/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/konakovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/korablino/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/korenovsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kotovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/krasnogorsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/krasnodar/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/krasnokamsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/krasnoselskiy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/krasnoslobodsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/krasnoyarsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/krasny-sulin/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kronshtadt/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kudrovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kulunda/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kungur/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kurgan/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kursk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/kahta/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/lebedyan/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/lipetsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/listvyanka/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/lobanovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/loskutovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/lysva/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/lyubertsy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/magnitogorsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/malaya-gora/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/marks/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/medvedevo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/michurinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/moscow/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/murino/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/mytishchi/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/naberezhnye-chelny/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/nizhnekamsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/nizhneudinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/nizhny-novgorod/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/novoaltaysk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/novovoronezh/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/novoe-devyatkino/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/novokastornoe/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/novosemeykino/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/novosibirsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/novotroitsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/novocheboksarsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/novocherkassk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/ob/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/odintsovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/ozerki/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/omsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/orenburg/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/orsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/pavlovsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/penza/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/perm/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/petra-dubrava/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/polazna/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/polevskoy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/poroshino/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/pochep/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/proletarsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/pushkino/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/raduzhnyy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/rostov-na-donu/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/rubcovsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/rybinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/rybnoye/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/ryazhsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/ryazan/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/salsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/samara/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/sankt-peterburg/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/sarapul/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/saratov/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/sasovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/sayanskiy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/svirsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/seversk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/selenginsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/selco/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/semiluki/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/sergeevo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/sertolovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/skopin/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/slavgorod/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/slyudyanka/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/smyshlyaevka/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/soldatskoe/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/solikamsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/solnechnogorsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/sosnovoborsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/sosnoviy-bor/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/stepnoye/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/stroykeramika/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/sizran/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/tayshet/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/tara/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/tver/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/terekhovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/tolyatti/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/tomsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/tula/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/tulun/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/tumen/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/ulan-ude/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/ulyanovsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/usole/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/usolie-sibirskoe/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/ust-kinelskiy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/ust-labinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/ufa/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/khabarovy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/khimki/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/horoshilovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/chaykovskiy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/cheboksary/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/chelyabinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/cheremkhovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/chernikovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/chuzhikovo/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/chusovoy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/shakhty/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/shelehov/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/shelpyaki/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/shubino/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/engels/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/yubileynyy/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/yarovoe/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/yaroslavl/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "cards": 3,
+      "robots": "noindex, nofollow"
+    }
+  ],
+  "sitemapAddressCount": 207,
+  "unauthorized": {
+    "https://tv-internet-dom.ru": 401,
+    "https://admin.tv-internet-dom.ru": 401,
+    "https://tv-internet-dom.ru/api/v1/health/ready": 401
+  },
+  "apiReadiness": 200,
+  "unknownUrl": 404
+}

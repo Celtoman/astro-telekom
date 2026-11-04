@@ -1,0 +1,37 @@
+{
+  "codeCommit": "68653a221e71f2f7f1262ba7efca6b546a5ae670",
+  "ci": "https://github.com/Celtoman/astro-telekom/actions/runs/41831893730",
+  "deployment": {
+    "deploymentId": "y4uo9yh1jnp14avcwhbyagc0",
+    "commit": "68653a221e71f2f7f1262ba7efca6b546a5ae670",
+    "status": "finished",
+    "finishedAt": "2026-11-04T12:56:04.000000Z",
+    "application": {
+      "uuid": "jlrsktdos9yhchkgnrd9f5fj",
+      "status": "running:healthy",
+      "git_branch": "master",
+      "git_repository": "Celtoman/astro-telekom"
+    }
+  },
+  "activation": {
+    "method": "durable CODE receipt + same serving artifact on all city URLs + unchanged snapshot/public catalog + live geometry",
+    "previousArtifactId": "b6bf93c5ba83c55b77246ac50a1038010f0bb292e6e760321f3cae92857f5930",
+    "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+    "privateReceiptRead": true,
+    "rendererId": "8b7d5e7754ac5ef0e7117d938e33a64f7bd80fa18848c8eecdf983b63475189f",
+    "catalogDigest": "23d2c86f28de2e7a5a895d0fabc5709db31baf137185e6e65da0863861313a0f"
+  },
+  "state": {
+    "working": 27,
+    "published": 27,
+    "publication": "cmw20tzmt000f01pdzw24unp7",
+    "hasUnpublishedChanges": false,
+    "cities": 207,
+    "routes": 4225,
+    "publicCatalogDigest": "f65b78fdb8703878d87881609f2e81e83d07ff54b64288e872d1b37dde562e3e"
+  },
+  "publicCases": 13,
+  "previewCases": 4,
+  "allCityPages": 207,
+  "sitemapAddressCount": 207
+}

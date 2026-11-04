@@ -10,8 +10,8 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| TD-207 | [#487](https://github.com/Celtoman/astro-telekom/issues/487) 🟢 | Накопленные отступы ADDRESS в Screens и коде расходятся с ритмом HOME/CITY_HOME |
-| TD-208 | [#488](https://github.com/Celtoman/astro-telekom/issues/488) 🟢 | Глобальное ограничение H1 до780px вызывает лишний перенос на Desktop |
+| TD-207 | [#487](https://github.com/Celtoman/astro-telekom/issues/487) ✅ | Накопленные отступы ADDRESS в Screens и коде расходятся с ритмом HOME/CITY_HOME |
+| TD-208 | [#488](https://github.com/Celtoman/astro-telekom/issues/488) ✅ | Глобальное ограничение H1 до780px вызывает лишний перенос на Desktop |
 | TD-209 | [#493](https://github.com/Celtoman/astro-telekom/issues/493) 🟢 | Недостаток места в Windows TEMP блокирует rehearsal архивации |
 
 ## Текущая миграция CITY_HOME

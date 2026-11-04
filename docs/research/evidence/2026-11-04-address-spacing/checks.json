@@ -20,5 +20,14 @@
     390,
     320
   ],
-  "figmaScreens": 4
+  "figmaScreens": 4,
+  "ci": {
+    "sha": "68653a221e71f2f7f1262ba7efca6b546a5ae670",
+    "conclusion": "success",
+    "url": "https://github.com/Celtoman/astro-telekom/actions/runs/41831893730",
+    "tests": 927,
+    "passed": 927,
+    "failed": 0,
+    "skipped": 0
+  }
 }

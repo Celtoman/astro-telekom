@@ -1,0 +1,1553 @@
+{
+  "checkedAt": "2026-11-04T13:04:04.893Z",
+  "mode": "live",
+  "report": [
+    {
+      "path": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 1920,
+      "scrollWidth": 1920,
+      "root": {
+        "x": 280,
+        "top": 152,
+        "bottom": 4155,
+        "width": 1360,
+        "height": 4003
+      },
+      "h1": {
+        "x": 280,
+        "top": 188,
+        "bottom": 238,
+        "width": 1360,
+        "height": 50,
+        "text": "Проверка подключения Дом.ру в Абинске",
+        "lines": 1,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 280,
+          "top": 152,
+          "bottom": 280,
+          "width": 1360,
+          "height": 128,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 280,
+          "top": 304,
+          "bottom": 672,
+          "width": 1360,
+          "height": 368,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 280,
+          "top": 696,
+          "bottom": 1196,
+          "width": 1360,
+          "height": 500,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 280,
+          "top": 1220,
+          "bottom": 1956,
+          "width": 1360,
+          "height": 736,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 280,
+          "top": 1980,
+          "bottom": 2474,
+          "width": 1360,
+          "height": 494,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 280,
+          "top": 2498,
+          "bottom": 3162,
+          "width": 1360,
+          "height": 664,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 280,
+          "top": 3186,
+          "bottom": 3529,
+          "width": 1360,
+          "height": 343,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 280,
+          "top": 3553,
+          "bottom": 4155,
+          "width": 1360,
+          "height": 602,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "48px",
+      "benefitsPadding": "48px",
+      "missingImages": [],
+      "activeLinks": 278,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "root": {
+        "x": 40,
+        "top": 152,
+        "bottom": 4155,
+        "width": 1360,
+        "height": 4003
+      },
+      "h1": {
+        "x": 40,
+        "top": 188,
+        "bottom": 238,
+        "width": 1360,
+        "height": 50,
+        "text": "Проверка подключения Дом.ру в Абинске",
+        "lines": 1,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 40,
+          "top": 152,
+          "bottom": 280,
+          "width": 1360,
+          "height": 128,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 40,
+          "top": 304,
+          "bottom": 672,
+          "width": 1360,
+          "height": 368,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 40,
+          "top": 696,
+          "bottom": 1196,
+          "width": 1360,
+          "height": 500,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 40,
+          "top": 1220,
+          "bottom": 1956,
+          "width": 1360,
+          "height": 736,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 40,
+          "top": 1980,
+          "bottom": 2474,
+          "width": 1360,
+          "height": 494,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 40,
+          "top": 2498,
+          "bottom": 3162,
+          "width": 1360,
+          "height": 664,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 40,
+          "top": 3186,
+          "bottom": 3529,
+          "width": 1360,
+          "height": 343,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 40,
+          "top": 3553,
+          "bottom": 4155,
+          "width": 1360,
+          "height": 602,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "48px",
+      "benefitsPadding": "48px",
+      "missingImages": [],
+      "activeLinks": 278,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/bolshaya-subbotikha/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "root": {
+        "x": 40,
+        "top": 152,
+        "bottom": 4127,
+        "width": 1360,
+        "height": 3975
+      },
+      "h1": {
+        "x": 40,
+        "top": 188,
+        "bottom": 238,
+        "width": 1360,
+        "height": 50,
+        "text": "Проверка подключения Дом.ру в Большой Субботихе",
+        "lines": 1,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 40,
+          "top": 152,
+          "bottom": 280,
+          "width": 1360,
+          "height": 128,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 40,
+          "top": 304,
+          "bottom": 672,
+          "width": 1360,
+          "height": 368,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 40,
+          "top": 696,
+          "bottom": 1196,
+          "width": 1360,
+          "height": 500,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 40,
+          "top": 1220,
+          "bottom": 1976,
+          "width": 1360,
+          "height": 756,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 40,
+          "top": 2000,
+          "bottom": 2494,
+          "width": 1360,
+          "height": 494,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 40,
+          "top": 2518,
+          "bottom": 3158,
+          "width": 1360,
+          "height": 640,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 40,
+          "top": 3182,
+          "bottom": 3525,
+          "width": 1360,
+          "height": 343,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 40,
+          "top": 3549,
+          "bottom": 4127,
+          "width": 1360,
+          "height": 578,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "48px",
+      "benefitsPadding": "48px",
+      "missingImages": [],
+      "activeLinks": 285,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/naberezhnye-chelny/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "root": {
+        "x": 40,
+        "top": 152,
+        "bottom": 4175,
+        "width": 1360,
+        "height": 4023
+      },
+      "h1": {
+        "x": 40,
+        "top": 188,
+        "bottom": 238,
+        "width": 1360,
+        "height": 50,
+        "text": "Проверка подключения Дом.ру в Набережных Челнах",
+        "lines": 1,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 40,
+          "top": 152,
+          "bottom": 280,
+          "width": 1360,
+          "height": 128,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 40,
+          "top": 304,
+          "bottom": 672,
+          "width": 1360,
+          "height": 368,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 40,
+          "top": 696,
+          "bottom": 1196,
+          "width": 1360,
+          "height": 500,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 40,
+          "top": 1220,
+          "bottom": 1976,
+          "width": 1360,
+          "height": 756,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 40,
+          "top": 2000,
+          "bottom": 2494,
+          "width": 1360,
+          "height": 494,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 40,
+          "top": 2518,
+          "bottom": 3182,
+          "width": 1360,
+          "height": 664,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 40,
+          "top": 3206,
+          "bottom": 3549,
+          "width": 1360,
+          "height": 343,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 40,
+          "top": 3573,
+          "bottom": 4175,
+          "width": 1360,
+          "height": 602,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "48px",
+      "benefitsPadding": "48px",
+      "missingImages": [],
+      "activeLinks": 274,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 1280,
+      "scrollWidth": 1280,
+      "root": {
+        "x": 16,
+        "top": 152,
+        "bottom": 4157,
+        "width": 1248,
+        "height": 4005
+      },
+      "h1": {
+        "x": 16,
+        "top": 188,
+        "bottom": 238,
+        "width": 1248,
+        "height": 50,
+        "text": "Проверка подключения Дом.ру в Абинске",
+        "lines": 1,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 16,
+          "top": 152,
+          "bottom": 280,
+          "width": 1248,
+          "height": 128,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 16,
+          "top": 304,
+          "bottom": 672,
+          "width": 1248,
+          "height": 368,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 16,
+          "top": 696,
+          "bottom": 1196,
+          "width": 1248,
+          "height": 500,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 16,
+          "top": 1220,
+          "bottom": 1956,
+          "width": 1248,
+          "height": 736,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 16,
+          "top": 1980,
+          "bottom": 2474,
+          "width": 1248,
+          "height": 494,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 16,
+          "top": 2498,
+          "bottom": 3164,
+          "width": 1248,
+          "height": 666,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 16,
+          "top": 3188,
+          "bottom": 3531,
+          "width": 1248,
+          "height": 343,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 16,
+          "top": 3555,
+          "bottom": 4157,
+          "width": 1248,
+          "height": 602,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "48px",
+      "benefitsPadding": "48px",
+      "missingImages": [],
+      "activeLinks": 278,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 1101,
+      "scrollWidth": 1101,
+      "root": {
+        "x": 16,
+        "top": 152,
+        "bottom": 4278,
+        "width": 1069,
+        "height": 4126
+      },
+      "h1": {
+        "x": 16,
+        "top": 188,
+        "bottom": 238,
+        "width": 1069,
+        "height": 50,
+        "text": "Проверка подключения Дом.ру в Абинске",
+        "lines": 1,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 16,
+          "top": 152,
+          "bottom": 280,
+          "width": 1069,
+          "height": 128,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 16,
+          "top": 304,
+          "bottom": 672,
+          "width": 1069,
+          "height": 368,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 16,
+          "top": 696,
+          "bottom": 1220,
+          "width": 1069,
+          "height": 524,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 16,
+          "top": 1244,
+          "bottom": 1980,
+          "width": 1069,
+          "height": 736,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 16,
+          "top": 2004,
+          "bottom": 2522,
+          "width": 1069,
+          "height": 518,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 16,
+          "top": 2546,
+          "bottom": 3285,
+          "width": 1069,
+          "height": 739,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 16,
+          "top": 3309,
+          "bottom": 3652,
+          "width": 1069,
+          "height": 343,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 16,
+          "top": 3676,
+          "bottom": 4278,
+          "width": 1069,
+          "height": 602,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "48px",
+      "benefitsPadding": "48px",
+      "missingImages": [],
+      "activeLinks": 278,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 1100,
+      "scrollWidth": 1100,
+      "root": {
+        "x": 190,
+        "top": 144,
+        "bottom": 5867.046875,
+        "width": 720,
+        "height": 5723.046875
+      },
+      "h1": {
+        "x": 190,
+        "top": 180,
+        "bottom": 266,
+        "width": 720,
+        "height": 86,
+        "text": "Проверка подключения Дом.ру в Абинске",
+        "lines": 2,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 190,
+          "top": 144,
+          "bottom": 308,
+          "width": 720,
+          "height": 164,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 190,
+          "top": 332,
+          "bottom": 937.046875,
+          "width": 720,
+          "height": 605.046875,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 190,
+          "top": 961.046875,
+          "bottom": 1867.046875,
+          "width": 720,
+          "height": 906,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 190,
+          "top": 1891.046875,
+          "bottom": 3133.046875,
+          "width": 720,
+          "height": 1242,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 190,
+          "top": 3157.046875,
+          "bottom": 3815.046875,
+          "width": 720,
+          "height": 658,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 190,
+          "top": 3839.046875,
+          "bottom": 4846.046875,
+          "width": 720,
+          "height": 1007,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 190,
+          "top": 4870.046875,
+          "bottom": 5233.046875,
+          "width": 720,
+          "height": 363,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 190,
+          "top": 5257.046875,
+          "bottom": 5867.046875,
+          "width": 720,
+          "height": 610,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "32px",
+      "benefitsPadding": "32px",
+      "missingImages": [],
+      "activeLinks": 278,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 834,
+      "scrollWidth": 834,
+      "root": {
+        "x": 57,
+        "top": 144,
+        "bottom": 5867.046875,
+        "width": 720,
+        "height": 5723.046875
+      },
+      "h1": {
+        "x": 57,
+        "top": 180,
+        "bottom": 266,
+        "width": 720,
+        "height": 86,
+        "text": "Проверка подключения Дом.ру в Абинске",
+        "lines": 2,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 57,
+          "top": 144,
+          "bottom": 308,
+          "width": 720,
+          "height": 164,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 57,
+          "top": 332,
+          "bottom": 937.046875,
+          "width": 720,
+          "height": 605.046875,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 57,
+          "top": 961.046875,
+          "bottom": 1867.046875,
+          "width": 720,
+          "height": 906,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 57,
+          "top": 1891.046875,
+          "bottom": 3133.046875,
+          "width": 720,
+          "height": 1242,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 57,
+          "top": 3157.046875,
+          "bottom": 3815.046875,
+          "width": 720,
+          "height": 658,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 57,
+          "top": 3839.046875,
+          "bottom": 4846.046875,
+          "width": 720,
+          "height": 1007,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 57,
+          "top": 4870.046875,
+          "bottom": 5233.046875,
+          "width": 720,
+          "height": 363,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 57,
+          "top": 5257.046875,
+          "bottom": 5867.046875,
+          "width": 720,
+          "height": 610,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "32px",
+      "benefitsPadding": "32px",
+      "missingImages": [],
+      "activeLinks": 278,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 620,
+      "scrollWidth": 620,
+      "root": {
+        "x": 16,
+        "top": 132,
+        "bottom": 6174,
+        "width": 588,
+        "height": 6042
+      },
+      "h1": {
+        "x": 16,
+        "top": 168,
+        "bottom": 201,
+        "width": 588,
+        "height": 33,
+        "text": "Проверка подключения Дом.ру в Абинске",
+        "lines": 1,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 16,
+          "top": 132,
+          "bottom": 241,
+          "width": 588,
+          "height": 109,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 16,
+          "top": 265,
+          "bottom": 929,
+          "width": 588,
+          "height": 664,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 16,
+          "top": 953,
+          "bottom": 1918,
+          "width": 588,
+          "height": 965,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 16,
+          "top": 1942,
+          "bottom": 3792,
+          "width": 588,
+          "height": 1850,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 16,
+          "top": 3816,
+          "bottom": 4521,
+          "width": 588,
+          "height": 705,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 16,
+          "top": 4545,
+          "bottom": 4944,
+          "width": 588,
+          "height": 399,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 16,
+          "top": 4968,
+          "bottom": 5569,
+          "width": 588,
+          "height": 601,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 16,
+          "top": 5593,
+          "bottom": 6174,
+          "width": 588,
+          "height": 581,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "20px",
+      "benefitsPadding": "20px",
+      "missingImages": [],
+      "activeLinks": 278,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 390,
+      "scrollWidth": 390,
+      "root": {
+        "x": 16,
+        "top": 132,
+        "bottom": 6829,
+        "width": 358,
+        "height": 6697
+      },
+      "h1": {
+        "x": 16,
+        "top": 168,
+        "bottom": 234,
+        "width": 358,
+        "height": 66,
+        "text": "Проверка подключения Дом.ру в Абинске",
+        "lines": 2,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 16,
+          "top": 132,
+          "bottom": 274,
+          "width": 358,
+          "height": 142,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 16,
+          "top": 298,
+          "bottom": 1006,
+          "width": 358,
+          "height": 708,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 16,
+          "top": 1030,
+          "bottom": 2100,
+          "width": 358,
+          "height": 1070,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 16,
+          "top": 2124,
+          "bottom": 4027,
+          "width": 358,
+          "height": 1903,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 16,
+          "top": 4051,
+          "bottom": 4896,
+          "width": 358,
+          "height": 845,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 16,
+          "top": 4920,
+          "bottom": 5348,
+          "width": 358,
+          "height": 428,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 16,
+          "top": 5372,
+          "bottom": 6032,
+          "width": 358,
+          "height": 660,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 16,
+          "top": 6056,
+          "bottom": 6829,
+          "width": 358,
+          "height": 773,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "20px",
+      "benefitsPadding": "20px",
+      "missingImages": [],
+      "activeLinks": 278,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/abinsk/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 320,
+      "scrollWidth": 320,
+      "root": {
+        "x": 16,
+        "top": 132,
+        "bottom": 7654,
+        "width": 288,
+        "height": 7522
+      },
+      "h1": {
+        "x": 16,
+        "top": 196,
+        "bottom": 295,
+        "width": 288,
+        "height": 99,
+        "text": "Проверка подключения Дом.ру в Абинске",
+        "lines": 3,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 16,
+          "top": 132,
+          "bottom": 359,
+          "width": 288,
+          "height": 227,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 16,
+          "top": 383,
+          "bottom": 1116,
+          "width": 288,
+          "height": 733,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 16,
+          "top": 1140,
+          "bottom": 2398,
+          "width": 288,
+          "height": 1258,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 16,
+          "top": 2422,
+          "bottom": 4349,
+          "width": 288,
+          "height": 1927,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 16,
+          "top": 4373,
+          "bottom": 5363,
+          "width": 288,
+          "height": 990,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 16,
+          "top": 5387,
+          "bottom": 5978,
+          "width": 288,
+          "height": 591,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 16,
+          "top": 6002,
+          "bottom": 6713,
+          "width": 288,
+          "height": 711,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 16,
+          "top": 6737,
+          "bottom": 7654,
+          "width": 288,
+          "height": 917,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "20px",
+      "benefitsPadding": "20px",
+      "missingImages": [],
+      "activeLinks": 278,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/bolshaya-subbotikha/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 320,
+      "scrollWidth": 320,
+      "root": {
+        "x": 16,
+        "top": 132,
+        "bottom": 7645,
+        "width": 288,
+        "height": 7513
+      },
+      "h1": {
+        "x": 16,
+        "top": 196,
+        "bottom": 295,
+        "width": 288,
+        "height": 99,
+        "text": "Проверка подключения Дом.ру в Большой Субботихе",
+        "lines": 3,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 16,
+          "top": 132,
+          "bottom": 359,
+          "width": 288,
+          "height": 227,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 16,
+          "top": 383,
+          "bottom": 1116,
+          "width": 288,
+          "height": 733,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 16,
+          "top": 1140,
+          "bottom": 2398,
+          "width": 288,
+          "height": 1258,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 16,
+          "top": 2422,
+          "bottom": 4369,
+          "width": 288,
+          "height": 1947,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 16,
+          "top": 4393,
+          "bottom": 5383,
+          "width": 288,
+          "height": 990,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 16,
+          "top": 5407,
+          "bottom": 5969,
+          "width": 288,
+          "height": 562,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 16,
+          "top": 5993,
+          "bottom": 6704,
+          "width": 288,
+          "height": 711,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 16,
+          "top": 6728,
+          "bottom": 7645,
+          "width": 288,
+          "height": 917,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "20px",
+      "benefitsPadding": "20px",
+      "missingImages": [],
+      "activeLinks": 285,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    },
+    {
+      "path": "/naberezhnye-chelny/proverka-podklyucheniya-k-domru-po-adresu",
+      "width": 320,
+      "scrollWidth": 320,
+      "root": {
+        "x": 16,
+        "top": 132,
+        "bottom": 7678,
+        "width": 288,
+        "height": 7546
+      },
+      "h1": {
+        "x": 16,
+        "top": 196,
+        "bottom": 328,
+        "width": 288,
+        "height": 132,
+        "text": "Проверка подключения Дом.ру в Набережных Челнах",
+        "lines": 4,
+        "maxWidth": "none"
+      },
+      "crumbGap": 24,
+      "blocks": [
+        {
+          "key": "address.intro",
+          "x": 16,
+          "top": 132,
+          "bottom": 392,
+          "width": 288,
+          "height": 260,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": null
+        },
+        {
+          "key": "address.check",
+          "x": 16,
+          "top": 416,
+          "bottom": 1149,
+          "width": 288,
+          "height": 733,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.results",
+          "x": 16,
+          "top": 1173,
+          "bottom": 2431,
+          "width": 288,
+          "height": 1258,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.tariffs",
+          "x": 16,
+          "top": 2455,
+          "bottom": 4402,
+          "width": 288,
+          "height": 1947,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.connection_steps",
+          "x": 16,
+          "top": 4426,
+          "bottom": 5416,
+          "width": 288,
+          "height": 990,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.benefits",
+          "x": 16,
+          "top": 5440,
+          "bottom": 6002,
+          "width": 288,
+          "height": 562,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.help",
+          "x": 16,
+          "top": 6026,
+          "bottom": 6737,
+          "width": 288,
+          "height": 711,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        },
+        {
+          "key": "address.faq",
+          "x": 16,
+          "top": 6761,
+          "bottom": 7678,
+          "width": 288,
+          "height": 917,
+          "pt": "0px",
+          "pb": "0px",
+          "gap": 24
+        }
+      ],
+      "stepsPadding": "20px",
+      "benefitsPadding": "20px",
+      "missingImages": [],
+      "activeLinks": 274,
+      "activeButtons": 29,
+      "firstFaqOpen": true
+    }
+  ]
+}
