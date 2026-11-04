@@ -28,6 +28,14 @@ export function applyCityContext() {
   const context = cityContext(), header = document.querySelector('[data-site-header]'), active = context.active;
   if (!active || !header) return context;
   for (const label of document.querySelectorAll('[data-current-city-label]')) if (label.textContent !== active.name) label.textContent = active.name;
+  for (let element of document.querySelectorAll('[data-city-context-address]')) {
+    if (element.tagName === 'BUTTON') {
+      const link = document.createElement('a'); link.className = element.className; link.dataset.cityContextAddress = element.dataset.cityContextAddress;
+      while (element.firstChild) link.appendChild(element.firstChild);
+      element.replaceWith(link); element = link;
+    }
+    element.href = `/${active.slug}/${element.dataset.cityContextAddress}`;
+  }
   const dialog = document.querySelector('[data-callback-dialog]'); if (dialog) dialog.dataset.citySlug = dialog.dataset.requireConfirmedCity === 'true' ? context.confirmed?.slug || '' : active.slug;
   if (!header.dataset.routeCity) for (let element of document.querySelectorAll('[data-city-context-anchor]:not([data-current-section])')) {
     if (element.tagName === 'BUTTON') {

@@ -2,7 +2,7 @@ import type { GeneralHomeDataByType } from '../../../api/src/general-home-model.
 import { safeHomeUrl } from '../data/general-home.ts';
 import { callbackMinutesLabel, publicPhoneLabel } from './public-display.ts';
 
-export interface HomeRenderOptions { asset?: (path: string) => string; interactive?: boolean; tariffHref?: string | null; callbackWithinMinutes?: number }
+export interface HomeRenderOptions { asset?: (path: string) => string; interactive?: boolean; tariffHref?: string | null; callbackWithinMinutes?: number; firstFaqOpen?: boolean }
 export interface HomeContactRenderOptions extends HomeRenderOptions { phone: string; phoneHref?: string; addressDialogId?: string | null; chooseCityForAddress?: boolean }
 export interface HomeDirectoryCity { id?: string; slug: string; name: string; region: { name: string } }
 export interface HomeHelpRenderOptions extends HomeContactRenderOptions { apiUrl?: string; siteSlug?: string }
@@ -23,9 +23,9 @@ export function renderHomeFaq(data: GeneralHomeDataByType['home.faq'], options: 
   if (!data.items.length) throw new Error('Для FAQ необходимы реальные вопросы и ответы.');
   const plus = `<img class="home-faq-plus" src="${resolveAsset('/images/general-home/faq-plus.svg', options)}" width="20" height="20" alt="" loading="lazy">`;
   const minus = `<img class="home-faq-minus" src="${resolveAsset('/images/general-home/faq-minus.svg', options)}" width="20" height="20" alt="" loading="lazy">`;
-  return `<section id="faq" class="home-block home-faq" data-home-block="home.faq" aria-labelledby="home-faq-title"><h2 id="home-faq-title">${homeHtml(data.title)}</h2><div class="home-faq-stack">${data.items.map(item => options.interactive === false
-    ? `<div class="home-faq-item"><div class="home-faq-question"><span>${homeHtml(item.question)}</span>${plus}</div></div>`
-    : `<details class="home-faq-item"><summary class="home-faq-question"><span>${homeHtml(item.question)}</span>${plus}${minus}</summary><div class="home-faq-answer"><p>${homeHtml(item.answer)}</p></div></details>`).join('')}</div></section>`;
+  return `<section id="faq" class="home-block home-faq" data-home-block="home.faq" aria-labelledby="home-faq-title"><h2 id="home-faq-title">${homeHtml(data.title)}</h2><div class="home-faq-stack">${data.items.map((item, index) => options.interactive === false
+    ? `<div class="home-faq-item"${options.firstFaqOpen && index === 0 ? ' open' : ''}><div class="home-faq-question"><span>${homeHtml(item.question)}</span>${options.firstFaqOpen && index === 0 ? minus : plus}</div>${options.firstFaqOpen && index === 0 ? `<div class="home-faq-answer"><p>${homeHtml(item.answer)}</p></div>` : ''}</div>`
+    : `<details class="home-faq-item"${options.firstFaqOpen && index === 0 ? ' open' : ''}><summary class="home-faq-question"><span>${homeHtml(item.question)}</span>${plus}${minus}</summary><div class="home-faq-answer"><p>${homeHtml(item.answer)}</p></div></details>`).join('')}</div></section>`;
 }
 
 export function renderCityDirectory(data: GeneralHomeDataByType['home.city_directory'], cities: HomeDirectoryCity[], options: HomeRenderOptions = {}): string {

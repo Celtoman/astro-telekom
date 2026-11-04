@@ -1,3 +1,4 @@
+import { ensureCityAddressPage } from './address-page-storage';
 import { BadRequestException, Body, ConflictException, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { pageSize, searchQuery } from './admin-pagination';
@@ -147,6 +148,7 @@ export class AdminCitiesController {
       const city = await transaction.city.create({ data: { ...data, siteId: body.siteId, status: 'DRAFT' } });
       const template = await ensureCityHomeTemplate(transaction, city.siteId, this.publications, request?.user?.id);
       await transaction.page.create({ data: { siteId: city.siteId, cityId: city.id, type: 'HOME', title: `Домашний интернет в ${city.namePrepositional}`, slug: '', status: 'PUBLISHED', templateId: template.id } });
+      await ensureCityAddressPage(transaction, city);
       const revision = await this.publications.recordWorkingRevision(transaction, {
         siteId: city.siteId,
         entityType: 'CITY',

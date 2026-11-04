@@ -74,7 +74,7 @@ function startPublicShell(data, applyPhone) {
           for (const label of root.querySelectorAll('[data-current-city-label]')) {
             if (label.textContent !== active.name) label.textContent = active.name;
           }
-          for (let node of root.querySelectorAll('[data-city-context-service], [data-city-context-anchor]:not([data-current-section])')) {
+          for (let node of root.querySelectorAll('[data-city-context-address], [data-city-context-service], [data-city-context-anchor]:not([data-current-section])')) {
             if (node.tagName === 'BUTTON') {
               const anchor = document.createElement('a');
               for (const attr of node.attributes) anchor.setAttribute(attr.name, attr.value);
@@ -84,7 +84,8 @@ function startPublicShell(data, applyPhone) {
             }
             const service = node.dataset.cityContextService;
             const section = node.dataset.cityContextAnchor;
-            if (service) node.setAttribute('href', `/${active.slug}?category=${service === 'internet_tv' ? 'INTERNET_TV' : service === 'internet' ? 'INTERNET' : 'ALL'}#tariffs`);
+            if (node.dataset.cityContextAddress) node.setAttribute('href', `/${active.slug}/${node.dataset.cityContextAddress}`);
+            else if (service) node.setAttribute('href', `/${active.slug}?category=${service === 'internet_tv' ? 'INTERNET_TV' : service === 'internet' ? 'INTERNET' : 'ALL'}#tariffs`);
             else if (section && /^[a-z-]+$/.test(section)) node.setAttribute('href', `/${active.slug}#${section}`);
             node.removeAttribute('data-city-choice-trigger');
           }

@@ -1,3 +1,5 @@
+import { ADDRESS_PAGE_SLUG } from './address-page-model';
+
 export const RELEASE_ONE_GLOBAL_PAGES = [
   { type: 'COVERAGE', slug: 'karta-pokrytiya-provaydera' },
   { type: 'CITIES', slug: 'goroda-obsluzhivaniya' },
@@ -9,18 +11,19 @@ export const RELEASE_ONE_GLOBAL_PAGES = [
 export type ReleaseOneGlobalPageType = typeof RELEASE_ONE_GLOBAL_PAGES[number]['type'];
 
 export type PublicRoute = {
-  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | ReleaseOneGlobalPageType;
-  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'GLOBAL_PAGE';
+  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | ReleaseOneGlobalPageType;
+  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'GLOBAL_PAGE';
   path: string;
   citySlug?: string;
   tariffSlug?: string;
   pageType?: ReleaseOneGlobalPageType;
 };
 
-type CityRouteSource = { slug: string; tariffs?: Array<{ slug: string }> };
+type CityRouteSource = { slug: string; tariffs?: Array<{ slug: string }>; pages?: Array<{ type: string; slug: string }> };
 type GlobalPageRouteSource = { type: string; slug: string };
+export interface PublicRouteOptions { addressCheck?: boolean }
 
-export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: GlobalPageRouteSource[]): PublicRoute[] {
+export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: GlobalPageRouteSource[], options: PublicRouteOptions = {}): PublicRoute[] {
   const pagesByType = new Map<string, GlobalPageRouteSource>();
   for (const page of globalPages) {
     if (pagesByType.has(page.type)) throw new Error(`Дублируется общая страница Release 1: ${page.type}`);
@@ -48,6 +51,14 @@ export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: Gl
     if (occupiedPaths.has(path)) throw new Error(`Конфликт маршрута Release 1: ${path}`);
     occupiedPaths.add(path);
     routes.push({ id: 'CITY_HOME', kind: 'CITY_HOME', path, citySlug: city.slug });
+    if (options.addressCheck) {
+      const addressPages = (city.pages ?? []).filter(page => page.type === 'ADDRESS_CHECK' && page.slug === ADDRESS_PAGE_SLUG);
+      if (addressPages.length !== 1) throw new Error(`Не найдена единственная страница проверки подключения города: ${city.slug}`);
+      const addressPath = `/${city.slug}/${ADDRESS_PAGE_SLUG}`;
+      if (occupiedPaths.has(addressPath)) throw new Error(`Конфликт маршрута Release 1: ${addressPath}`);
+      occupiedPaths.add(addressPath);
+      routes.push({ id: 'CITY_ADDRESS_CHECK', kind: 'CITY_ADDRESS_CHECK', path: addressPath, citySlug: city.slug });
+    }
     for (const tariff of city.tariffs || []) {
       const tariffPath = `/${city.slug}/${tariff.slug}`;
       if (occupiedPaths.has(tariffPath)) throw new Error(`Конфликт маршрута Release 1: ${tariffPath}`);
@@ -64,6 +75,6 @@ export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: Gl
   return routes;
 }
 
-export function releaseOnePaths(cities: CityRouteSource[], globalPages: GlobalPageRouteSource[]) {
-  return new Set(buildReleaseOneRoutes(cities, globalPages).map((route) => route.path));
+export function releaseOnePaths(cities: CityRouteSource[], globalPages: GlobalPageRouteSource[], options: PublicRouteOptions = {}) {
+  return new Set(buildReleaseOneRoutes(cities, globalPages, options).map((route) => route.path));
 }

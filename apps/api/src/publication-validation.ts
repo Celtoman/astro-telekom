@@ -14,6 +14,9 @@ import { generalHomeFromTemplate } from './general-home-template';
 import { readSitePublicDisplay, sitePublicDisplayDefaults } from './site-public-display';
 import { cityTariffFacts } from './city-tariff-facts';
 import { CITY_HOME_VERSION } from './city-home-model';
+import { ADDRESS_PAGE_SLUG } from './address-page-model';
+import { addressPageFromTemplate } from './address-page-view';
+import { validateAddressPageComposition } from './address-page';
 
 export type PublicationValidationIssue = {
   severity: 'BLOCKING' | 'WARNING';
@@ -60,6 +63,10 @@ function routeSources(source: CatalogSource): RouteSource[] {
   for (const city of source.cities) {
     const cityPath = `/${city.slug}`;
     routes.push({ route: { id: 'CITY_HOME', kind: 'CITY_HOME', path: cityPath, citySlug: city.slug }, city });
+    if (source.pageTemplates?.some(template => template.kind === 'CITY_ADDRESS_CHECK')) routes.push({
+      route: { id: 'CITY_ADDRESS_CHECK', kind: 'CITY_ADDRESS_CHECK', path: `${cityPath}/${ADDRESS_PAGE_SLUG}`, citySlug: city.slug }, city,
+      page: city.pages.find((page: any) => page.type === 'ADDRESS_CHECK' && page.slug === ADDRESS_PAGE_SLUG),
+    });
     for (const tariff of city.tariffs || []) {
       routes.push({
         route: { id: 'CITY_TARIFF_DETAIL', kind: 'CITY_TARIFF_DETAIL', path: `${cityPath}/${tariff.slug}`, citySlug: city.slug, tariffSlug: tariff.slug },
@@ -97,6 +104,10 @@ export function validatePublicationSource(
     }
   };
   let source = rawSource;
+  for (const template of rawSource.pageTemplates ?? []) {
+    if (template.kind === 'CITY_ADDRESS_CHECK') try { addressPageFromTemplate(template); }
+    catch (error) { add('BLOCKING', 'ADDRESS_TEMPLATE', `/{city}/${ADDRESS_PAGE_SLUG}`, message(error), undefined, { template: 'CITY_ADDRESS_CHECK', ...contentErrorLocation(error) }); }
+  }
   let cityTemplateReady = true;
   try { source = materializeCityHomeSource(rawSource); }
   catch (error) {
@@ -135,6 +146,7 @@ export function validatePublicationSource(
   // Service-page data participates in catalog rendering even though Release 1 gives it no detail URL.
   for (const city of source.cities) {
     for (const page of (city.pages || []).filter((page: any) => page.type !== 'HOME')) {
+      if (page.type === 'ADDRESS_CHECK' && page.content?.addressCheckCompositionVersion) continue;
       try { validatePublishedBlocks(page.blocks, { pageType: page.type }); }
       catch (error) { add('BLOCKING', 'SERVICE_PAGE_BLOCKS', `/${city.slug}`, message(error), undefined,
         { context: 'SERVICE_DATA', pageType: page.type, entityId: page.id, ...contentErrorLocation(error) }); }
@@ -204,11 +216,17 @@ export function validatePublicationSource(
           { template: diagnostic.template, block: diagnostic.block, field: diagnostic.field, entityId: tariff.id });
       }
     }
+    if (route.kind === 'CITY_ADDRESS_CHECK') {
+      try {
+        if (!page) throw new Error('Не опубликована страница проверки подключения города');
+        validateAddressPageComposition(page.blocks.map(({ blockType, data }: any) => ({ blockType, data })), { version: page.content?.addressCheckCompositionVersion });
+      } catch (error) { add('BLOCKING', 'ADDRESS_PAGE', route.path, message(error), undefined, { template: route.id, ...contentErrorLocation(error) }); }
+    }
     try {
       const mini = {
         site: { name: site.name, slug: site.slug, domain: site.domain, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, publicDisplay },
-        globalPages: page ? [page] : [],
-        cities: city ? [{ ...city, tariffFacts: factsForCity(city), pages: route.kind === 'CITY_HOME' ? (city.pages || []).filter((candidate: any) => candidate.type === 'HOME') : [], tariffs: tariff ? [tariff] : [] }] : [],
+        globalPages: route.kind === 'GLOBAL_PAGE' && page ? [page] : [],
+        cities: city ? [{ ...city, tariffFacts: factsForCity(city), pages: route.kind === 'CITY_ADDRESS_CHECK' ? (page ? [page] : []) : route.kind === 'CITY_HOME' ? (city.pages || []).filter((candidate: any) => candidate.type === 'HOME') : [], tariffs: tariff ? [tariff] : [] }] : [],
         routes: [route],
         redirects: [],
         sitemap: { excludedPaths: [] },

@@ -1,0 +1,194 @@
+[
+  {
+    "width": 1440,
+    "scrollWidth": 1440,
+    "sections": [
+      {
+        "id": "address.intro",
+        "width": 1360,
+        "height": 250
+      },
+      {
+        "id": "address.check",
+        "width": 1360,
+        "height": 368
+      },
+      {
+        "id": "address.results",
+        "width": 1360,
+        "height": 596
+      },
+      {
+        "id": "address.tariffs",
+        "width": 1360,
+        "height": 832
+      },
+      {
+        "id": "address.connection_steps",
+        "width": 1360,
+        "height": 590
+      },
+      {
+        "id": "address.benefits",
+        "width": 1360,
+        "height": 736
+      },
+      {
+        "id": "address.help",
+        "width": 1360,
+        "height": 439
+      },
+      {
+        "id": "address.faq",
+        "width": 1360,
+        "height": 674
+      }
+    ],
+    "cards": "437.328px 437.328px 437.344px",
+    "missingImages": []
+  },
+  {
+    "width": 834,
+    "scrollWidth": 834,
+    "sections": [
+      {
+        "id": "address.intro",
+        "width": 720,
+        "height": 220
+      },
+      {
+        "id": "address.check",
+        "width": 720,
+        "height": 605.046875
+      },
+      {
+        "id": "address.results",
+        "width": 720,
+        "height": 1002
+      },
+      {
+        "id": "address.tariffs",
+        "width": 720,
+        "height": 1376
+      },
+      {
+        "id": "address.connection_steps",
+        "width": 720,
+        "height": 754
+      },
+      {
+        "id": "address.benefits",
+        "width": 720,
+        "height": 1103
+      },
+      {
+        "id": "address.help",
+        "width": 720,
+        "height": 459
+      },
+      {
+        "id": "address.faq",
+        "width": 720,
+        "height": 682
+      }
+    ],
+    "cards": "348px 348px",
+    "missingImages": []
+  },
+  {
+    "width": 390,
+    "scrollWidth": 390,
+    "sections": [
+      {
+        "id": "address.intro",
+        "width": 358,
+        "height": 190
+      },
+      {
+        "id": "address.check",
+        "width": 358,
+        "height": 708
+      },
+      {
+        "id": "address.results",
+        "width": 358,
+        "height": 1166
+      },
+      {
+        "id": "address.tariffs",
+        "width": 358,
+        "height": 1970
+      },
+      {
+        "id": "address.connection_steps",
+        "width": 358,
+        "height": 941
+      },
+      {
+        "id": "address.benefits",
+        "width": 358,
+        "height": 524
+      },
+      {
+        "id": "address.help",
+        "width": 358,
+        "height": 756
+      },
+      {
+        "id": "address.faq",
+        "width": 358,
+        "height": 869
+      }
+    ],
+    "cards": "358px",
+    "missingImages": []
+  },
+  {
+    "width": 320,
+    "scrollWidth": 320,
+    "sections": [
+      {
+        "id": "address.intro",
+        "width": 288,
+        "height": 275
+      },
+      {
+        "id": "address.check",
+        "width": 288,
+        "height": 733
+      },
+      {
+        "id": "address.results",
+        "width": 288,
+        "height": 1354
+      },
+      {
+        "id": "address.tariffs",
+        "width": 288,
+        "height": 1999
+      },
+      {
+        "id": "address.connection_steps",
+        "width": 288,
+        "height": 1076
+      },
+      {
+        "id": "address.benefits",
+        "width": 288,
+        "height": 657
+      },
+      {
+        "id": "address.help",
+        "width": 288,
+        "height": 783
+      },
+      {
+        "id": "address.faq",
+        "width": 288,
+        "height": 965
+      }
+    ],
+    "cards": "288px",
+    "missingImages": []
+  }
+]

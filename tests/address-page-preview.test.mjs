@@ -1,0 +1,38 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { buildPreviewDocument, previewRouteOptions } from '../apps/admin/src/lib/preview-document.mjs';
+import { readPreviewPublicStyles, previewPublicStylesPlugin } from '../scripts/preview-public-styles.mjs';
+import { publicationIssuePresentation } from '../apps/admin/src/lib/publication-issue-presentation.mjs';
+import { previewContentIssue } from '../apps/admin/src/lib/preview-content-issue.mjs';
+const require = createRequire(import.meta.url);
+test('ADDRESS preview uses all shared renderers, bundles accepted assets and disables external actions', () => {
+  const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
+  const { addressPageSource } = require('./helpers/address-page-source.cjs');
+  const catalog = new SiteCatalogService({}).renderSource(addressPageSource());
+  const before = structuredClone(catalog), styles = readPreviewPublicStyles();
+  const route = catalog.routes.find(route => route.kind === 'CITY_ADDRESS_CHECK');
+  assert.match(previewRouteOptions(catalog).find(option => option.path === route.path).label, /^Проверка подключения — /);
+  const html = buildPreviewDocument(catalog, route.path, styles);
+  assert.equal((html.match(/<div[^>]*data-address-block=/g) || []).length, 8);
+  assert.match(html, /<h1>/); assert.match(html, /class="collection-card/); assert.match(html, /class="home-faq-item" open/);
+  assert.match(html, /Выберите город, улицу и дом из подсказок/);
+  assert.doesNotMatch(html, /<script\b|\shref=|data-callback-trigger|data-home-callback-form/);
+  assert.match(styles, /\.address-page-composition/); assert.match(styles, /#ffeae9/);
+  const plugin = previewPublicStylesPlugin(), watched = [];
+  plugin.load.call({ addWatchFile: path => watched.push(path) }, plugin.resolveId('virtual:preview-public-styles'));
+  for (const name of ['available','alternatives','none','retry']) assert.ok(watched.some(path => path.endsWith(`address-page/${name}.svg`) || path.endsWith(`address-page\\${name}.svg`)));
+  assert.deepEqual(catalog, before);
+  for (const city of catalog.cities) city.pages.find(page => page.type === 'ADDRESS_CHECK').blocks.find(block => block.blockType === 'address.faq').data.items = [];
+  const emptyFaq = buildPreviewDocument(catalog, route.path);
+  assert.doesNotMatch(emptyFaq, /<div data-address-block="address.faq">/);
+});
+test('ADDRESS field errors link to the independent editor and only known editable fields', () => {
+  const issue = { template: 'CITY_ADDRESS_CHECK', block: 'address.results', field: 'items.none.nextText' };
+  const shown = publicationIssuePresentation(issue, 'site-1');
+  assert.ok(shown.href.includes('kind=CITY_ADDRESS_CHECK'));
+  assert.ok(shown.href.includes('field=items.none.nextText'));
+  assert.match(shown.heading, /Проверка подключения/);
+  assert.equal(previewContentIssue(issue, 'site-1').href, shown.href);
+  assert.equal(previewContentIssue({ ...issue, field: 'items.none.icon' }, 'site-1'), null);
+});

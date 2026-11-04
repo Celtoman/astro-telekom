@@ -610,7 +610,8 @@ exports.SeoTemplateKind = exports.$Enums.SeoTemplateKind = {
   PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT',
   COOKIE_POLICY: 'COOKIE_POLICY',
   CITY_HOME: 'CITY_HOME',
-  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL'
+  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL',
+  CITY_ADDRESS_CHECK: 'CITY_ADDRESS_CHECK'
 };
 
 exports.SeoIndexState = exports.$Enums.SeoIndexState = {
@@ -690,7 +691,8 @@ exports.PageTemplateKind = exports.$Enums.PageTemplateKind = {
   PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT',
   COOKIE_POLICY: 'COOKIE_POLICY',
   CITY_HOME: 'CITY_HOME',
-  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL'
+  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL',
+  CITY_ADDRESS_CHECK: 'CITY_ADDRESS_CHECK'
 };
 
 exports.ServiceType = exports.$Enums.ServiceType = {

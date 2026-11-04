@@ -1,3 +1,4 @@
+import { ADDRESS_PAGE_SLUG } from './address-page-model';
 import { BadRequestException, Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
@@ -115,6 +116,7 @@ export class AdminPagesController {
       return await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
         const current = await transaction.page.findUnique({ where: { id } });
         if (!current) throw new NotFoundException('Page not found');
+        if (current.type === 'ADDRESS_CHECK' && current.slug === ADDRESS_PAGE_SLUG && current.templateId) throw new BadRequestException('Страница проверки подключения редактируется через общий шаблон ADDRESS');
         if (current.type === 'HOME' || body.type === 'HOME') throw new BadRequestException('Городская HOME редактируется через общий шаблон');
         const nextScope = {
           type: body.type ?? current.type,

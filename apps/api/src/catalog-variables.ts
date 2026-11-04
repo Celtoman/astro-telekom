@@ -4,6 +4,7 @@ import { HOME_HERO_VERSION, parseRedTitle } from './home-hero-model';
 import { validateFirstScreen } from './first-screen';
 import { GENERAL_HOME_SCHEMAS, CITY_HOME_SCHEMAS, type GeneralHomeBlockType, type GeneralHomeFieldRule } from './general-home-model';
 import { validateGeneralHomeComposition } from './general-home';
+import { ADDRESS_PAGE_SCHEMAS } from './address-page-model';
 
 type JsonObject = Record<string, any>;
 
@@ -62,9 +63,11 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
     blocks: Array.isArray(page.blocks) ? page.blocks.map((block: JsonObject, index: number) => {
       const blockPath = `${path}.blocks[${index}]`;
       const owner: UsageOwner = { entityType: 'BLOCK', entityId: String(block.id), pageType: page.type, blockType: block.blockType, cityId, editorHref: null };
-      if (Object.hasOwn(CITY_HOME_SCHEMAS, block.blockType)) {
-        const rule: GeneralHomeFieldRule = CITY_HOME_SCHEMAS[block.blockType as keyof typeof CITY_HOME_SCHEMAS];
-        if (block.blockType === 'city.faq' && rule.kind === 'object' && rule.fields.items.kind === 'list') {
+      if (Object.hasOwn(ADDRESS_PAGE_SCHEMAS, block.blockType)) { owner.entityType = 'PAGE_TEMPLATE_BLOCK'; owner.editorHref = `/templates/home?kind=CITY_ADDRESS_CHECK&block=${block.blockType}`; }
+      const schemas = { ...CITY_HOME_SCHEMAS, ...ADDRESS_PAGE_SCHEMAS };
+      if (Object.hasOwn(schemas, block.blockType)) {
+        const rule: GeneralHomeFieldRule = schemas[block.blockType as keyof typeof schemas];
+        if (['city.faq', 'address.faq'].includes(block.blockType) && rule.kind === 'object' && rule.fields.items.kind === 'list') {
           const itemRule = rule.fields.items.item;
           const items = block.data.items.flatMap((item: any, itemIndex: number) => {
             const warningCount = warnings.length;

@@ -198,7 +198,8 @@ export const SeoTemplateKind: {
   PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT',
   COOKIE_POLICY: 'COOKIE_POLICY',
   CITY_HOME: 'CITY_HOME',
-  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL'
+  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL',
+  CITY_ADDRESS_CHECK: 'CITY_ADDRESS_CHECK'
 };
 
 export type SeoTemplateKind = (typeof SeoTemplateKind)[keyof typeof SeoTemplateKind]
@@ -380,7 +381,8 @@ export const PageTemplateKind: {
   PERSONAL_DATA_CONSENT: 'PERSONAL_DATA_CONSENT',
   COOKIE_POLICY: 'COOKIE_POLICY',
   CITY_HOME: 'CITY_HOME',
-  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL'
+  CITY_TARIFF_DETAIL: 'CITY_TARIFF_DETAIL',
+  CITY_ADDRESS_CHECK: 'CITY_ADDRESS_CHECK'
 };
 
 export type PageTemplateKind = (typeof PageTemplateKind)[keyof typeof PageTemplateKind]

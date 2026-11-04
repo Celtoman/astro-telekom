@@ -33,12 +33,10 @@ export function filterCollectionTariffs<T extends { serviceType: string; speedMb
     && (!filters.fast || tariff.speedMbps != null && tariff.speedMbps >= 500));
 }
 const escapeHtml = (value: unknown) => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
-export function renderTariffCollection(raw: Record<string, any>, tariffs: any[], options: { interactive: boolean; citySlug?: string; cityName?: string; dialogId?: string }) {
-  const data = { ...tariffCollectionDefaults(), ...raw };
-  const ordered = sortCollectionTariffs(tariffs.filter(tariff => tariff.availability !== false), data.sort);
+export interface TariffCardRenderOptions { interactive: boolean; citySlug?: string; cityName?: string; dialogId?: string }
+export function renderTariffCards(data: { connectButtonText: string; detailsButtonText: string; initialCount: number }, tariffs: any[], options: TariffCardRenderOptions): string {
   const e = escapeHtml;
-  const remaining = Math.max(0, ordered.length - data.initialCount);
-  const cards = ordered.map((tariff: any, index) => {
+  return tariffs.map((tariff: any, index) => {
     const gaming = tariff.game?.status === 'INCLUDED';
     const features = [tariff.cardFeature, ...(gaming ? [tariff.game.title] : []), ...((tariff.baseComponents ?? []).filter((item: any) => item.included && !['internet', 'television'].includes(item.code)).map((item: any) => item.value))].filter(Boolean);
     const subscriptions = (tariff.cinemas ?? []).map((cinema: any) => `<span class="collection-subscription" data-cinema="${e(cinema.code)}">${e(cinema.title)}</span>`).join('');
@@ -53,6 +51,13 @@ export function renderTariffCollection(raw: Record<string, any>, tariffs: any[],
       <div class="collection-price"><div><strong>${e(tariff.price)}</strong>${tariff.promoText ? `<span class="collection-promo">${e(tariff.promoText)}</span>` : ''}</div>${tariff.pricing?.standardLabel ? `<p>Далее: ${e(tariff.pricing.standardLabel)}</p>` : ''}${tariff.connection ? `<p>${e(tariff.connection)}</p>` : ''}</div>
       <div class="collection-actions"><button type="button" class="collection-connect" ${connect} aria-label="${e(data.connectButtonText)}: ${e(tariff.name)}">${e(data.connectButtonText)}</button><a class="collection-details" ${details} aria-label="${e(data.detailsButtonText)}: ${e(tariff.name)}">${e(data.detailsButtonText)}</a></div></article>`;
   }).join('');
+}
+export function renderTariffCollection(raw: Record<string, any>, tariffs: any[], options: { interactive: boolean; citySlug?: string; cityName?: string; dialogId?: string }) {
+  const data = { ...tariffCollectionDefaults(), ...raw };
+  const ordered = sortCollectionTariffs(tariffs.filter(tariff => tariff.availability !== false), data.sort);
+  const e = escapeHtml;
+  const remaining = Math.max(0, ordered.length - data.initialCount);
+  const cards = renderTariffCards(data, ordered, options);
   const filterButton = (key: string, value: string, label: string, selected = false) => `<button type="button" data-collection-${key}="${value}" aria-pressed="${selected}"${options.interactive ? '' : ' disabled'}>${label}</button>`;
   const filters = `<div class="collection-filter-row"><div class="collection-filter-track" role="group" aria-label="Фильтры тарифов">${filterButton('category', 'ALL', 'Все тарифы', true)}${filterButton('category', 'INTERNET', 'Только интернет')}${filterButton('category', 'INTERNET_TV', 'Интернет + ТВ')}<span class="collection-filter-divider" aria-hidden="true"></span>${filterButton('quick', 'gaming', 'Для геймеров')}${filterButton('quick', 'cinemas', 'Онлайн-кинотеатры')}${filterButton('quick', 'fast', 'От 500 Мбит/с')}</div><button class="collection-reset" type="button" data-collection-reset${options.interactive ? ' hidden' : ' disabled'}>Сбросить фильтры</button></div><p class="collection-count" data-collection-count>${ordered.length} ${tariffWord(ordered.length)}</p>`;
   return `<section class="tariff-collection" id="tariffs" data-block-type="tariff_grid" data-initial-count="${e(data.initialCount)}"><div class="collection-container"><h2>${e(data.title)}</h2>${data.text ? `<p class="collection-intro">${e(data.text)}</p>` : ''}${filters}${ordered.length ? `<div class="collection-mobile-guide"><span>Листайте тарифы →</span></div><div class="collection-grid">${cards}</div>` : '<p class="collection-empty">Опубликованные тарифы пока не добавлены.</p>'}<div class="collection-empty" data-collection-empty hidden><p>По выбранным фильтрам тарифов не найдено.</p><button type="button" class="collection-reset" data-collection-reset${options.interactive ? '' : ' disabled'}>Сбросить фильтры</button></div>${remaining ? `<div class="collection-more"><button type="button" data-collection-more data-more-label="${e(data.moreButtonText)}" data-remaining="${remaining}" ${options.interactive ? 'hidden' : 'disabled'}>${e(data.moreButtonText)} <span>· ${remaining}</span></button></div>` : ''}<p class="collection-sr-only" data-collection-status role="status"></p></div></section>`;

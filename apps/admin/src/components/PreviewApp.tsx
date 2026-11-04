@@ -90,7 +90,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
         setPreview(result)
         setSelectedPath((current) => options.some((option) => option.path === current)
           ? current
-          : options.find((option) => option.path === new URLSearchParams(window.location.search).get("path"))?.path || options.find((option) => option.kind === "CITY_HOME")?.path || options[0]?.path || "")
+          : options.find((option) => option.path === new URLSearchParams(window.location.search).get("path") || option.kind === new URLSearchParams(window.location.search).get("path"))?.path || options.find((option) => option.kind === "CITY_HOME")?.path || options[0]?.path || "")
       })
       .catch((caught: unknown) => {
         if (!active) return

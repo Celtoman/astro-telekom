@@ -233,3 +233,10 @@
 | TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) ✅ | `docs/worker.md` синхронизирован с фактическим routing и retry-поведением |
 | TD-70 | [#90](https://github.com/Celtoman/astro-telekom/issues/90) ✅ | DTO ограничивает query официальным максимумом DaData 300 символов |
 | TD-131 | [#214](https://github.com/Celtoman/astro-telekom/issues/214) ✅ | Каталог кодов указывает все четыре допустимых SEO/OG-текстовых поля, исключая URL изображения |
+
+## Находки review внедрения ADDRESS
+
+| Issue | Статус | Кратко |
+| --- | --- | --- |
+| [#481](https://github.com/Celtoman/astro-telekom/issues/481) | CLOSED | Отмена импорта с HOME и ADDRESS; regression и повторный review пройдены. |
+| [#483](https://github.com/Celtoman/astro-telekom/issues/483) | CLOSED | Пустой FAQ в ADDRESS preview; regression и повторный review пройдены. |

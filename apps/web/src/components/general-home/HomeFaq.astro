@@ -3,9 +3,9 @@ import type { GeneralHomeDataByType } from '../../../../api/src/general-home-mod
 import { renderHomeFaq } from '../../lib/general-home-render';
 import { publicAsset } from '../../data/public-asset';
 import HomeBlockStyles from './HomeBlockStyles.astro';
-interface Props { content: GeneralHomeDataByType['home.faq'] }
+interface Props { content: GeneralHomeDataByType['home.faq']; firstOpen?: boolean }
 ---
-<Fragment set:html={renderHomeFaq(Astro.props.content, { asset: publicAsset })} />
+<Fragment set:html={renderHomeFaq(Astro.props.content, { asset: publicAsset, firstFaqOpen: Astro.props.firstOpen })} />
 <HomeBlockStyles />
 <style is:global>
   .home-faq { display: flex; flex-direction: column; gap: 24px; padding: 32px; border-radius: 26px; background: #eef8ff; }

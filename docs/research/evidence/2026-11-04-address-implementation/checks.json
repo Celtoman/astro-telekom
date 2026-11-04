@@ -1,0 +1,18 @@
+{
+  "command": "pnpm check",
+  "exitCode": 0,
+  "tests": 927,
+  "passed": 926,
+  "failed": 0,
+  "skipped": 1,
+  "skipReason": "Windows symlink privilege unavailable; Linux rehearsal covers the guard",
+  "independentReview": "initial findings481/483 fixed; second review: no remaining substantial findings",
+  "previewWidths": [
+    1440,
+    834,
+    390,
+    320
+  ],
+  "localLinksChecked": 19,
+  "missingLinks": 0
+}

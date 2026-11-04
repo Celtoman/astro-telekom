@@ -1,3 +1,4 @@
+import { ADDRESS_PAGE_SLUG, ADDRESS_PAGE_BLOCK_ORDER, ADDRESS_PAGE_VERSION, ADDRESS_PAGE_IMPLEMENTATION } from '../../../api/src/address-page-model';
 import { projectCityHomeBlocks } from '../../../api/src/tariff-collection-model';
 import { tariffView, type TariffView } from './tariff-view';
 import { readFile } from 'node:fs/promises';
@@ -49,7 +50,7 @@ export interface RedirectView {
 
 export interface PublicRouteView {
   id: string;
-  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'GLOBAL_PAGE';
+  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'GLOBAL_PAGE';
   path: string;
   citySlug?: string;
   tariffSlug?: string;
@@ -141,6 +142,15 @@ function expectedReleaseOneRoutes(cities: CityView[], globalPages: PageView[]): 
     if (occupiedPaths.has(path)) throw new Error(`Конфликт маршрута Release 1: ${path}`);
     occupiedPaths.add(path);
     routes.push({ id: 'CITY_HOME', kind: 'CITY_HOME', path, citySlug: city.slug });
+    const address = city.pages.find(page => page.type === 'ADDRESS_CHECK' && page.slug === ADDRESS_PAGE_SLUG);
+    if (address?.content?.addressCheckCompositionVersion) {
+      if (address.content.addressCheckCompositionVersion !== ADDRESS_PAGE_VERSION || address.content.addressCheckImplementationVersion !== ADDRESS_PAGE_IMPLEMENTATION
+        || JSON.stringify(address.blocks?.map(block => block.blockType)) !== JSON.stringify(ADDRESS_PAGE_BLOCK_ORDER)) throw new Error(`Неизвестная композиция ADDRESS: ${city.slug}`);
+      const addressPath = publicHtmlPath(city.slug, ADDRESS_PAGE_SLUG);
+      occupiedPaths.add(addressPath);
+      routes.push({ id: 'CITY_ADDRESS_CHECK', kind: 'CITY_ADDRESS_CHECK', path: addressPath, citySlug: city.slug });
+    }
+
     for (const tariff of city.tariffs) {
       if (!slugPattern.test(tariff.slug)) throw new Error(`Некорректный slug опубликованного тарифа: ${tariff.slug || '(пусто)'}`);
       const tariffPath = publicHtmlPath(city.slug, tariff.slug);

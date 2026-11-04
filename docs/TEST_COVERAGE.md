@@ -247,3 +247,14 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 - `tests/home-city-context.test.mjs`: дополнен сценарием canonical city-home href независимо от service-намерения picker, переключения service URL и confirmed-only города консультации полной HOME; прежние страницы сохраняют прежнее правило.
 
 [Полная браузерная приёмка](research/2026-10-16-general-home-full-acceptance.md) проверяет настоящую Astro-страницу/неактивный preview на четырёх ширинах, Header/Footer, формы/документы и собранный административный iframe. Fixture FAQ/города и перехваченные receipts не подтверждают внешнюю публикацию или настоящую доставку.
+
+## ADDRESS 1.0.0
+
+- `address-page-contract.test.cjs`: восемь схем, безопасные черновики/строгая публикация, фиксированные поля и состав, независимые defaults, FAQ/переменные/asset URL; категории тарифов, текущая цена, Gaming, дедупликация, добор, равенство цен и неполная подборка.
+- `address-page-routes.test.cjs`: новый inventory всех городов и совместимость прежнего, коллизии, отсутствующие shell, версионирование, материализация без мутации источника.
+- `address-page-catalog.test.cjs`: общий catalog/preflight, независимый контент, городские подстановки, SEO и блокировка незаполненного шаблона с локализацией ошибки.
+- `address-page-editor.test.cjs`: рабочая/опубликованная версии, атомарный save с сохранением ID, неполный FAQ, 409, запрет чужих/небезопасных полей, зависимая shell новых городов только после инициализации ADDRESS.
+- `address-page-render.test.mjs`: фиксированные иконки и экранирование результатов, общая городская карточка, FLOW1 и контекст тарифа/города, выключенные действия preview.
+- `address-page-preview.test.mjs`: восемь секций, общие renderer, первый FAQ, локальные assets/CSS, отсутствие выполняемых действий, ссылка ошибки на собственный редактор.
+- `address-page-data.test.cjs` и `scripts/rehearse-address-page.mjs`: точный payload миграции и настоящая PostgreSQL-проверка bootstrap/backfill/idempotence, сохранности HOME и immutable publication, provider isolation, атомарного save и rollback коллизии.
+- `address-page-build.test.mjs`: настоящий StaticArtifactBuilder immutable snapshot, все города, восемь секций, SEO/canonical/sitemap, контекст FLOW2, общий shell/карточки, первый FAQ и локальные иконки.

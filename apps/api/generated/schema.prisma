@@ -37,6 +37,7 @@ enum SeoTemplateKind {
   COOKIE_POLICY
   CITY_HOME
   CITY_TARIFF_DETAIL
+  CITY_ADDRESS_CHECK
 }
 
 enum SeoIndexState {
@@ -171,6 +172,7 @@ enum PageTemplateKind {
   COOKIE_POLICY
   CITY_HOME
   CITY_TARIFF_DETAIL
+  CITY_ADDRESS_CHECK
 }
 
 enum ContentRevisionAction {

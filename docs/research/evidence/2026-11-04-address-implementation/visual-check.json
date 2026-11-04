@@ -1,0 +1,241 @@
+{
+  "checkedAt": "2026-11-04T10:29:57.390Z",
+  "layouts": [
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "content": {
+        "x": 40,
+        "width": 1360,
+        "height": 4533
+      },
+      "header": {
+        "x": 40,
+        "width": 1360,
+        "height": 88
+      },
+      "results": {
+        "x": 40,
+        "width": 1360,
+        "height": 596
+      },
+      "popular": {
+        "x": 40,
+        "width": 1360,
+        "height": 832
+      },
+      "popularVisibility": "visible",
+      "cardColumns": "437.328px 437.328px 437.344px",
+      "icons": [
+        {
+          "src": "/images/address-page/available.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/alternatives.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/none.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/retry.svg",
+          "loaded": true
+        }
+      ],
+      "firstFaqOpen": true,
+      "blue": "rgb(238, 248, 255)",
+      "note": "rgb(255, 234, 233)",
+      "callbackDialog": {
+        "citySlug": "kazan",
+        "text": true
+      },
+      "citySwitch": [
+        "/naberezhnye-chelny/proverka-podklyucheniya-k-domru-po-adresu",
+        "/nizhnekamsk/proverka-podklyucheniya-k-domru-po-adresu",
+        "/kazan/proverka-podklyucheniya-k-domru-po-adresu",
+        "/kazan/proverka-podklyucheniya-k-domru-po-adresu",
+        "/naberezhnye-chelny/proverka-podklyucheniya-k-domru-po-adresu",
+        "/nizhnekamsk/proverka-podklyucheniya-k-domru-po-adresu"
+      ]
+    },
+    {
+      "width": 834,
+      "scrollWidth": 834,
+      "content": {
+        "x": 57,
+        "width": 720,
+        "height": 6225.046875
+      },
+      "header": {
+        "x": 57,
+        "width": 720,
+        "height": 80
+      },
+      "results": {
+        "x": 57,
+        "width": 720,
+        "height": 1002
+      },
+      "popular": {
+        "x": 57,
+        "width": 720,
+        "height": 1376
+      },
+      "popularVisibility": "visible",
+      "cardColumns": "348px 348px",
+      "icons": [
+        {
+          "src": "/images/address-page/available.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/alternatives.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/none.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/retry.svg",
+          "loaded": true
+        }
+      ],
+      "firstFaqOpen": true,
+      "blue": "rgb(238, 248, 255)",
+      "note": "rgb(255, 234, 233)",
+      "callbackDialog": {
+        "citySlug": "kazan",
+        "text": true
+      },
+      "citySwitch": [
+        "/naberezhnye-chelny/proverka-podklyucheniya-k-domru-po-adresu",
+        "/nizhnekamsk/proverka-podklyucheniya-k-domru-po-adresu",
+        "/kazan/proverka-podklyucheniya-k-domru-po-adresu",
+        "/kazan/proverka-podklyucheniya-k-domru-po-adresu",
+        "/naberezhnye-chelny/proverka-podklyucheniya-k-domru-po-adresu",
+        "/nizhnekamsk/proverka-podklyucheniya-k-domru-po-adresu"
+      ]
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "content": {
+        "x": 16,
+        "width": 358,
+        "height": 7124
+      },
+      "header": {
+        "x": 16,
+        "width": 358,
+        "height": 72
+      },
+      "results": {
+        "x": 16,
+        "width": 358,
+        "height": 1166
+      },
+      "popular": {
+        "x": 16,
+        "width": 358,
+        "height": 1970
+      },
+      "popularVisibility": "visible",
+      "cardColumns": "358px",
+      "icons": [
+        {
+          "src": "/images/address-page/available.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/alternatives.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/none.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/retry.svg",
+          "loaded": true
+        }
+      ],
+      "firstFaqOpen": true,
+      "blue": "rgb(238, 248, 255)",
+      "note": "rgb(255, 234, 233)",
+      "callbackDialog": {
+        "citySlug": "kazan",
+        "text": true
+      },
+      "citySwitch": [
+        "/naberezhnye-chelny/proverka-podklyucheniya-k-domru-po-adresu",
+        "/nizhnekamsk/proverka-podklyucheniya-k-domru-po-adresu",
+        "/kazan/proverka-podklyucheniya-k-domru-po-adresu",
+        "/kazan/proverka-podklyucheniya-k-domru-po-adresu",
+        "/naberezhnye-chelny/proverka-podklyucheniya-k-domru-po-adresu",
+        "/nizhnekamsk/proverka-podklyucheniya-k-domru-po-adresu"
+      ]
+    },
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "content": {
+        "x": 16,
+        "width": 288,
+        "height": 7949
+      },
+      "header": {
+        "x": 16,
+        "width": 288,
+        "height": 72
+      },
+      "results": {
+        "x": 16,
+        "width": 288,
+        "height": 1354
+      },
+      "popular": {
+        "x": 16,
+        "width": 288,
+        "height": 2023
+      },
+      "popularVisibility": "visible",
+      "cardColumns": "288px",
+      "icons": [
+        {
+          "src": "/images/address-page/available.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/alternatives.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/none.svg",
+          "loaded": true
+        },
+        {
+          "src": "/images/address-page/retry.svg",
+          "loaded": true
+        }
+      ],
+      "firstFaqOpen": true,
+      "blue": "rgb(238, 248, 255)",
+      "note": "rgb(255, 234, 233)",
+      "callbackDialog": {
+        "citySlug": "kazan",
+        "text": true
+      },
+      "citySwitch": [
+        "/naberezhnye-chelny/proverka-podklyucheniya-k-domru-po-adresu",
+        "/nizhnekamsk/proverka-podklyucheniya-k-domru-po-adresu",
+        "/kazan/proverka-podklyucheniya-k-domru-po-adresu",
+        "/kazan/proverka-podklyucheniya-k-domru-po-adresu",
+        "/naberezhnye-chelny/proverka-podklyucheniya-k-domru-po-adresu",
+        "/nizhnekamsk/proverka-podklyucheniya-k-domru-po-adresu"
+      ]
+    }
+  ]
+}

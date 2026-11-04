@@ -1,3 +1,4 @@
+import { ADDRESS_PAGE_SLUG } from './address-page-model';
 import { BadRequestException, Body, ConflictException, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
@@ -18,7 +19,8 @@ interface AdminRequest {
   user?: { id: string };
 }
 
-function assertEditablePage(page: { type: string }) {
+function assertEditablePage(page: { type: string; slug?: string; templateId?: string | null }) {
+  if (page.type === 'ADDRESS_CHECK' && page.slug === ADDRESS_PAGE_SLUG && page.templateId) throw new BadRequestException('Блоки ADDRESS редактируются через общий шаблон');
   if (page.type === 'HOME') throw new BadRequestException('Блоки городской HOME редактируются через общий шаблон');
 }
 

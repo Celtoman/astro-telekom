@@ -1,6 +1,7 @@
 import { BLOCK_TYPES } from './block-validation';
 import { GENERAL_HOME_PASSPORTS } from './general-home-passports';
 import { CITY_HOME_PASSPORTS } from './city-home-passports';
+import { ADDRESS_PAGE_PASSPORTS } from './address-page-passports';
 
 export const BLOCK_PASSPORT_LIFECYCLE = ['DRAFT', 'APPROVED', 'ACTIVE', 'DEPRECATED', 'ARCHIVED'] as const;
 export const BLOCK_PASSPORT_TRANSITIONS = {
@@ -173,8 +174,8 @@ const sitePassports: BlockPassport[] = [
       field('connectionPhone', 'text', true, 'Site.connectionPhone', 'Непустой глобальный телефон из snapshot; tel: очищается от форматирования. normalizedCatalog отклоняет отсутствие телефона.', 'read_only'),
       field('supportPhone', 'text', true, 'Site.supportPhone', 'Непустой глобальный телефон из snapshot; отдельная поддержка и телефон в режиме абонента. normalizedCatalog отклоняет отсутствие телефона.', 'read_only'),
       field('navigation', 'list', true, 'general-home/GeneralHomeHeader.astro; publicHtmlPath(activeCity.slug), Astro.url.pathname', 'Тарифы → текущая CITY_HOME #tariffs или /{city}#tariffs; Города → /goroda-obsluzhivaniya; Карта → /karta-pokrytiya-provaydera. Без city тарифы открывают picker.', 'read_only'),
-      field('addressAction', 'url', true, 'general-home/GeneralHomeHeader.astro; Astro.url.pathname и activeCity', 'На общей HOME переход /{city}#address-check; на CITY_HOME фокус локальной #address-check. Без city — выбор города; выдуманный /moskva не создаётся.', 'read_only'),
-      field('callback', 'computed', true, 'SiteHeader.astro → site-header-client.mjs → AddressForm.astro', '«Заказать звонок» включает пояснение и ведёт в сценарий проверки адреса; телефон только после положительного результата. Межстраничный переход: ?callback=1#address-check.', 'read_only'),
+      field('addressAction', 'url', true, 'general-home/GeneralHomeHeader.astro; Astro.url.pathname и activeCity', 'При наличии CITY_ADDRESS_CHECK в опубликованном inventory переход /{city}/proverka-podklyucheniya-k-domru-po-adresu; исторические snapshots сохраняют #address-check. Без города — выбор опубликованного города.', 'read_only'),
+      field('callback', 'computed', true, 'BaseLayout.astro → CallbackDialog.astro → FLOW1', '«Заказать звонок» открывает самостоятельную форму FLOW1 с контекстом города. Предварительная проверка адреса не требуется.', 'read_only'),
       field('subscriberMode', 'computed', false, 'BaseLayout.astro; subscriber-mode.mjs и событие режима абонента', 'В активном режиме абонента основной телефон/подпись заменяются на Site.supportPhone/«Техподдержка», tel: и aria-label обновляются, иконка сохраняется.', 'read_only'),
     ],
     emptyBehavior: 'Без опубликованной Москвы и URL-контекста адрес/тарифы/callback открывают выбор города; пустой список и отсутствие совпадений имеют разные сообщения. Отсутствие обязательного Site-телефона отклоняет загрузку catalog; телефон не заменяется нулём.',
@@ -295,5 +296,6 @@ export const BLOCK_PASSPORTS: readonly BlockPassport[] = [
   ...sitePassports,
   ...GENERAL_HOME_PASSPORTS,
   ...CITY_HOME_PASSPORTS,
+  ...ADDRESS_PAGE_PASSPORTS,
   ...programmaticPassports,
 ].map(approvedFirstScreen);

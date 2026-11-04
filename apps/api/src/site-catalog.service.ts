@@ -6,6 +6,7 @@ import { resolveCatalogVariables } from './catalog-variables';
 import { mergeContent, publicContent } from './content-resolution';
 import { PrismaService } from './prisma.service';
 import { buildReleaseOneRoutes } from './public-route-policy';
+import { validateAddressPageComposition } from './address-page';
 import { normalizeRedirectPath } from './redirect-path';
 import { materializeCityHomeSource } from './page-template';
 import { formatSitePhone } from './site-phone';
@@ -102,7 +103,7 @@ export class SiteCatalogService {
     const publicDisplay = readSitePublicDisplay(site.settings);
     if (homeScreen) validateFirstScreen('HOME', homeHero, false, homeScreen.passportVersion);
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
-    const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages);
+    const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages, { addressCheck: source.pageTemplates?.some(template => template.kind === 'CITY_ADDRESS_CHECK') });
     const resolved = resolveCatalogVariables({
       ...(generalHome ? { generalHome } : {}),
       ...(homeHero ? { homeHero, homeHeroVersion: homeScreen!.passportVersion, homeHeroBlockId: homeTemplate.blocks.find((block: any) => block.blockType === 'home.hero').id } : {}),
@@ -193,6 +194,7 @@ export class SiteCatalogService {
 
   pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string) {
     if (page.type === 'HOME' && cityName) { page = { ...page, blocks: projectCityHomeBlocks(page.blocks || []) }; validateCityHomeBlocks(page.blocks, cityName, page.content?.homeCompositionVersion); }
+    else if (page.type === 'ADDRESS_CHECK' && page.content?.addressCheckCompositionVersion) validateAddressPageComposition(page.blocks.map(({ blockType, data }: any) => ({ blockType, data })), { version: page.content.addressCheckCompositionVersion });
     else validatePublishedBlocks(page.blocks, { pageType: cityName ? page.type : undefined });
     const { templateId: _templateId, ...publicPage } = page;
     return {

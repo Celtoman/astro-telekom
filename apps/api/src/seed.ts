@@ -1,3 +1,4 @@
+import { ensureAddressTemplate, ensureCityAddressPage } from './address-page-storage';
 import { PrismaClient } from '../generated/index.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
@@ -100,6 +101,7 @@ async function main() {
     ] as const;
 
     const homeTemplate = await ensureCityHomeTemplate(prisma, site.id);
+    await ensureAddressTemplate(prisma, site.id);
     await prisma.pageTemplate.upsert({
       where: { siteId_kind: { siteId: site.id, kind: 'HOME' } },
       update: {},
@@ -132,6 +134,7 @@ async function main() {
 
     // Migration backfills apply only to sites that already exist. A new site
     // needs the same eight sources before its catalog can pass preflight.
+    await ensureCityAddressPage(prisma, city);
     const seoTemplates = [
       ['HOME', 'Домашний интернет и телевидение {PROVIDER_NAME}', 'Выберите город, чтобы посмотреть тарифы домашнего интернета и телевидения.'],
       ['COVERAGE', 'Карта покрытия {PROVIDER_NAME}', 'Выберите город и проверьте возможность подключения {PROVIDER_NAME} по адресу.'],
@@ -140,6 +143,7 @@ async function main() {
       ['PERSONAL_DATA_CONSENT', 'Согласие на обработку персональных данных', 'Согласие на обработку персональных данных на сайте партнёра {PROVIDER_NAME}.'],
       ['COOKIE_POLICY', 'Политика обработки файлов cookie', 'Правила использования файлов cookie на сайте партнёра {PROVIDER_NAME}.'],
       ['CITY_HOME', 'Домашний интернет в {CITY_NAME_PREPOSITIONAL}', 'Тарифы домашнего интернета, телевидения и подключения в {CITY_NAME_PREPOSITIONAL}.'],
+      ['CITY_ADDRESS_CHECK', 'Проверка подключения Дом.ру по адресу в {CITY_NAME_PREPOSITIONAL}', 'Проверьте, доступен ли Дом.ру по вашему адресу в {CITY_NAME_PREPOSITIONAL}. Выберите дом, узнайте результат проверки и посмотрите тарифы города'],
       ['CITY_TARIFF_DETAIL', '{TARIFF_NAME} в {CITY_NAME_PREPOSITIONAL} — подключить {PROVIDER_NAME}', 'Тариф {TARIFF_NAME} в {CITY_NAME_PREPOSITIONAL}. Проверьте возможность подключения по адресу.'],
     ] as const;
     for (const [kind, titleTemplate, descriptionTemplate] of seoTemplates) {

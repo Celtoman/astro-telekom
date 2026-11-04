@@ -1,0 +1,41 @@
+---
+import type { CityView, SiteView, PageView } from '../../data/site';
+import type { AddressPageDataByType } from '../../../../api/src/address-page-model';
+import { publishedTariffFacts } from '../../../../api/src/tariff-view';
+import { renderAddressIntro, renderAddressResults, renderAddressTariffs } from '../../lib/address-page-render';
+import { projectBenefitFacts } from '../../lib/city-home-render';
+import { publicDisplayForCatalog } from '../../lib/public-display';
+import { publicAsset } from '../../data/public-asset';
+import AddressForm from '../AddressForm.astro';
+import HomeAddressEntry from '../general-home/HomeAddressEntry.astro';
+import HomeConnectionSteps from '../general-home/HomeConnectionSteps.astro';
+import HomeBenefits from '../general-home/HomeBenefits.astro';
+import HomeConnectionHelp from '../general-home/HomeConnectionHelp.astro';
+import HomeFaq from '../general-home/HomeFaq.astro';
+import TariffCollectionStyles from '../TariffCollectionStyles.astro';
+import AddressPageStyles from './AddressPageStyles.astro';
+interface Props { page: PageView; city: CityView; site: SiteView; apiUrl: string }
+const { page, city, site, apiUrl } = Astro.props as Props;
+function data<K extends keyof AddressPageDataByType>(type: K): AddressPageDataByType[K] {
+  const block = page.blocks?.find(block => block.blockType === type);
+  if (!block) throw new Error(`Не найден обязательный блок ${type}`);
+  return block.data as AddressPageDataByType[K];
+}
+const address = data('address.check'), display = publicDisplayForCatalog(site);
+const phone = site.connectionPhone, phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
+const benefits = projectBenefitFacts(data('address.benefits'), display, { kind: 'CITY_HOME', maxSpeedMbps: publishedTariffFacts(city.tariffs).maxSpeed });
+---
+<div class="address-page-composition" data-address-page-composition>
+  <div data-address-block="address.intro" set:html={renderAddressIntro(data('address.intro'), city)} />
+  <div data-address-block="address.check"><HomeAddressEntry content={address} {phone} {phoneHref} callbackWithinMinutes={display.callbackWithinMinutes}>
+    <AddressForm slot="address" {apiUrl} siteSlug={site.slug} pageSlug={page.slug} {city} {site} variant="home-entry" addressLabel={address.addressLabel} addressPlaceholder={address.addressPlaceholder} checkButtonText={address.checkButtonText} />
+  </HomeAddressEntry></div>
+  <div data-address-block="address.results" set:html={renderAddressResults(data('address.results'), { asset: publicAsset })} />
+  <div data-address-block="address.tariffs" set:html={renderAddressTariffs(data('address.tariffs'), city.tariffs, { interactive: true, citySlug: city.slug, cityName: city.name })} />
+  <div data-address-block="address.connection_steps"><HomeConnectionSteps content={data('address.connection_steps')} {phone} {phoneHref} /></div>
+  <div data-address-block="address.benefits"><HomeBenefits content={benefits} /></div>
+  <div data-address-block="address.help"><HomeConnectionHelp content={data('address.help')} {phone} {phoneHref} {apiUrl} siteSlug={site.slug} callbackWithinMinutes={display.callbackWithinMinutes} /></div>
+  {data('address.faq').items.length > 0 && <div data-address-block="address.faq"><HomeFaq content={data('address.faq')} firstOpen /></div>}
+</div>
+<TariffCollectionStyles />
+<AddressPageStyles />

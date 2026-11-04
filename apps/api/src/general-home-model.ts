@@ -86,3 +86,27 @@ export type CityHomeDataByType = { [K in keyof typeof CITY_HOME_SCHEMAS]: FieldV
 export type GeneralHomeBlock = { [K in GeneralHomeBlockType]: { blockType: K; data: GeneralHomeDataByType[K] } }[GeneralHomeBlockType]
   | { blockType: 'home.hero'; data: ReturnType<typeof homeHeroDefaults> };
 export type GeneralHomeMissingField = { block: GeneralHomeBlock['blockType']; field: string };
+
+/** Independent ADDRESS composition; shared by API, editors and static rendering. */
+export const ADDRESS_PAGE_VERSION = '1.0.0';
+export const ADDRESS_PAGE_IMPLEMENTATION = 'address-page-v1';
+export const ADDRESS_PAGE_SLUG = 'proverka-podklyucheniya-k-domru-po-adresu';
+export const ADDRESS_PAGE_METADATA = Object.freeze({ addressCheckCompositionVersion: ADDRESS_PAGE_VERSION, addressCheckImplementationVersion: ADDRESS_PAGE_IMPLEMENTATION });
+export const ADDRESS_PAGE_BLOCK_ORDER = Object.freeze([
+  'address.intro', 'address.check', 'address.results', 'address.tariffs',
+  'address.connection_steps', 'address.benefits', 'address.help', 'address.faq',
+] as const);
+export type AddressPageBlockType = typeof ADDRESS_PAGE_BLOCK_ORDER[number];
+const addressText = (limit: number, variables = true): GeneralHomeFieldRule => ({ kind: 'text', limit, variables });
+const addressObject = (fields: Record<string, GeneralHomeFieldRule>): GeneralHomeFieldRule => ({ kind: 'object', fields });
+const addressResult = () => addressObject({ title: addressText(250), text: addressText(5000), nextLabel: addressText(120), nextText: addressText(5000) });
+export const ADDRESS_PAGE_SCHEMAS: Readonly<Record<AddressPageBlockType, GeneralHomeFieldRule>> = Object.freeze({
+  'address.intro': addressObject({ title: addressText(250), intro: addressText(5000) }),
+  'address.check': GENERAL_HOME_SCHEMAS['home.address_check'],
+  'address.results': addressObject({ title: addressText(250), intro: addressText(5000), items: addressObject({ available: addressResult(), alternatives: addressResult(), none: addressResult() }), noteTitle: addressText(250), noteText: addressText(5000) }),
+  'address.tariffs': addressObject({ title: addressText(250), intro: addressText(5000), connectButtonText: addressText(80, false), detailsButtonText: addressText(80, false), allTariffsLinkText: addressText(120) }),
+  'address.connection_steps': GENERAL_HOME_SCHEMAS['home.connection_steps'],
+  'address.benefits': CITY_HOME_SCHEMAS['city.benefits'],
+  'address.help': GENERAL_HOME_SCHEMAS['home.connection_help'],
+  'address.faq': GENERAL_HOME_SCHEMAS['home.faq'],
+});

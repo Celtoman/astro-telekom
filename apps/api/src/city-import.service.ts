@@ -1,3 +1,5 @@
+import { ensureCityAddressPage } from './address-page-storage';
+import { ADDRESS_PAGE_SLUG } from './address-page-model';
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { isDeepStrictEqual } from 'node:util';
 import { Prisma, PublishStatus } from '../generated';
@@ -457,6 +459,8 @@ export class CityImportService {
               templateId: template.id,
             },
           });
+          const addressPage = await ensureCityAddressPage(tx, city);
+          if (addressPage) { createdPageIds.push(addressPage.id); pagesCreated += 1; }
           affectedCityIds.push(city.id);
           createdCityIds.push(city.id);
           createdPageIds.push(page.id);
@@ -552,6 +556,7 @@ export class CityImportService {
       const createdRegionIds = createdRegions.map((region) => region.id);
       const createdPageIds = createdPages.map((page) => page.id);
       const createdPageCityIds = new Set(createdPages.map((page) => page.cityId));
+      const includesAddress = createdPages.some(page => page.type === 'ADDRESS_CHECK');
       const referencedRegionIds = new Set(afterCities.map((city) => city.regionId));
       const snapshotIsComplete = beforeIds.size === beforeCities.length
         && afterIds.size === afterCities.length
@@ -561,18 +566,20 @@ export class CityImportService {
         && afterIds.size === expectedAfterIds.size
         && [...expectedAfterIds].every((id) => afterIds.has(id))
         && createdCityIds.every((id) => !beforeIds.has(id))
-        && createdPages.length === createdCityIds.length
+        && createdPages.length === createdCityIds.length * (includesAddress ? 2 : 1)
         && createdPageCityIds.size === createdIds.size
         && createdCityIds.every((id) => createdPageCityIds.has(id))
+        && createdCityIds.every(id => createdPages.filter(page => page.cityId === id && page.type === 'HOME').length === 1
+          && createdPages.filter(page => page.cityId === id && page.type === 'ADDRESS_CHECK').length === (includesAddress ? 1 : 0))
         && createdRegionIds.every((id) => referencedRegionIds.has(id))
         && [...beforeCities, ...afterCities].every((city) => city.siteId === run.siteId)
         && createdRegions.every((region) => region.siteId === run.siteId)
         && createdPages.every((page) => page.siteId === run.siteId
           && typeof page.cityId === 'string'
           && createdIds.has(page.cityId)
-          && page.type === 'HOME'
-          && page.slug === ''
-          && (page.blocks.length === 7 || (page.blocks.length === 0 && typeof page.templateId === 'string'))
+          && (page.type === 'HOME' && page.slug === ''
+            && (page.blocks.length === 7 || (page.blocks.length === 0 && typeof page.templateId === 'string'))
+            || page.type === 'ADDRESS_CHECK' && page.slug === ADDRESS_PAGE_SLUG && page.blocks.length === 0 && typeof page.templateId === 'string' && page.templateId.length > 0)
           && page.blocks.every((block) => block.pageId === page.id));
       if (!snapshotIsComplete) throw new BadRequestException('Для этого импорта нет полного безопасного снимка отмены');
 

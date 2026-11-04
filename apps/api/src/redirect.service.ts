@@ -1,3 +1,4 @@
+import { ADDRESS_PAGE_SLUG } from './address-page-model';
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, PublishStatus } from '../generated';
 import { PrismaService } from './prisma.service';
@@ -160,6 +161,7 @@ export class RedirectService {
         where: { siteId, status: PublishStatus.PUBLISHED },
         select: {
           slug: true,
+          pages: { where: { type: 'ADDRESS_CHECK', slug: ADDRESS_PAGE_SLUG, status: PublishStatus.PUBLISHED }, select: { type: true, slug: true } },
           tariffs: { where: { status: PublishStatus.PUBLISHED, availability: 'ACTIVE' }, select: { slug: true } },
         },
       }),
@@ -174,7 +176,7 @@ export class RedirectService {
     ]);
     let publishedPaths: Set<string>;
     try {
-      publishedPaths = releaseOnePaths(cities, globalPages);
+      publishedPaths = releaseOnePaths(cities, globalPages, { addressCheck: cities.some(city => city.pages?.some(page => page.slug === ADDRESS_PAGE_SLUG)) });
     } catch (error) {
       throw new ConflictException(`Release 1 route inventory не готов: ${(error as Error).message}`);
     }

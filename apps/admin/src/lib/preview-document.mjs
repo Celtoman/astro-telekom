@@ -1,3 +1,4 @@
+import { renderAddressIntro, renderAddressResults, renderAddressTariffs } from '../../../web/src/lib/address-page-render.ts'
 import { renderTariffCollection, projectCityHomeBlocks, sortCollectionTariffs } from '../../../api/src/tariff-collection-model.ts'
 import { tariffView, publishedTariffFacts } from '../../../api/src/tariff-view.ts'
 import { renderCityComparison, renderRegionalCities, renderCityContacts, projectBenefitFacts } from '../../../web/src/lib/city-home-render.ts'
@@ -30,6 +31,7 @@ function routeLabel(catalog, route) {
   const city = cityBySlug(catalog, route.citySlug)
   if (route.kind === 'HOME') return 'Главная сайта'
   if (route.kind === 'CITY_HOME') return city?.name || route.citySlug
+  if (route.kind === 'CITY_ADDRESS_CHECK') return `Проверка подключения — ${city?.name || route.citySlug}`
   if (route.kind === 'CITY_TARIFF_DETAIL') return `${list(city?.tariffs).find(tariff => tariff.slug === route.tariffSlug)?.name || route.tariffSlug} — ${city?.name || route.citySlug}`
   return pageByType(catalog, route.pageType)?.title || route.pageType || route.path
 }
@@ -174,6 +176,28 @@ function renderGlobal(catalog, route) {
   }
   return `<section class="hero"><div class="container"><span class="eyebrow">Дом.ру</span><h1>${html(page.title)}</h1>${coverage && page.content?.text ? `<p class="lead">${html(page.content.text)}</p>` : ''}</div></section>` + (coverage ? `<section class="section container"><h2>Проверка подключения по городам</h2>${cities.length ? `<div class="grid">${cities.map(city => `<article class="card"><h3>${html(city.name)}</h3><p>Откройте страницу города и укажите адрес для проверки технической возможности.</p>${button('Проверить адрес →', 'card-link link-button')}</article>`).join('')}</div>` : '<p class="lead">Опубликованных городов пока нет.</p>'}</section>` : `<section class="section container legal-copy">${!sections.length && page.content?.text ? `<p>${html(page.content.text)}</p>` : ''}${sections.map(section => `<section><h2>${html(section.title)}</h2>${section.paragraphs.map(paragraph => `<p>${html(paragraph)}</p>`).join('')}</section>`).join('')}${list(page.blocks).filter(block => block.blockType === 'rich_text').map(block => `<section>${block.data?.title ? `<h2>${html(block.data.title)}</h2>` : ''}${block.data?.text ? `<p>${html(block.data.text)}</p>` : ''}</section>`).join('')}${!sections.length && !page.content?.text && !list(page.blocks).length ? '<p class="lead">Содержание страницы пока не опубликовано.</p>' : ''}</section>`)
 }
+function renderAddress(catalog, route) {
+  const city = cityBySlug(catalog, route.citySlug);
+  const page = list(city?.pages).find(page => page.type === 'ADDRESS_CHECK' && route.path === `/${city.slug}/${page.slug}`);
+  if (!page) throw new Error('ADDRESS маршрута предпросмотра не найдена');
+  const tariffs = tariffsOf(city);
+  const options = { interactive: false, asset: path => asset(catalog, path), phone: catalog.site.connectionPhone, callbackWithinMinutes: catalog.site.publicDisplay.callbackWithinMinutes };
+  const render = block => {
+    const data = block.data;
+    switch (block.blockType) {
+      case 'address.intro': return renderAddressIntro(data, city, options);
+      case 'address.check': return wrap('generalhome', renderAddressEntry(data, options));
+      case 'address.results': return renderAddressResults(data, options);
+      case 'address.tariffs': return wrap('collection', renderAddressTariffs(data, tariffs, options));
+      case 'address.connection_steps': return wrap('generalhome', renderConnectionSteps(data, options));
+      case 'address.benefits': return wrap('generalhome', renderBenefits(projectBenefitFacts(data, catalog.site.publicDisplay, { kind: 'CITY_HOME', maxSpeedMbps: publishedTariffFacts(tariffs).maxSpeed }), options));
+      case 'address.help': return wrap('generalhome', renderConnectionHelp(data, options));
+      case 'address.faq': return data.items.length ? wrap('generalhome', renderHomeFaq(data, { ...options, firstFaqOpen: true })) : '';
+      default: throw new Error(`Неизвестный блок ADDRESS: ${block.blockType}`);
+    }
+  };
+  return wrap('addresspage', `<div class="address-page-composition" data-address-page-composition>${list(page.blocks).map(block => { const body = render(block); return body ? `<div data-address-block="${html(block.blockType)}">${body}</div>` : ''; }).join('')}</div>`);
+}
 export function previewStyleText(publicStyles) {
   return publicStyles.replaceAll('</style', '<\\/style') + '[class^="preview-"]{display:contents}a[aria-disabled],button:disabled{cursor:default}'
 }
@@ -188,6 +212,7 @@ export function buildPreviewDocument(catalog, routePath, publicStyles = '', asse
   let content
   if (route.kind === 'HOME') content = renderHome(catalog)
   else if (route.kind === 'CITY_HOME') content = renderCity(catalog, route)
+  else if (route.kind === 'CITY_ADDRESS_CHECK') content = renderAddress(catalog, route)
   else if (route.kind === 'CITY_TARIFF_DETAIL') content = renderTariff(catalog, route)
   else if (route.kind === 'GLOBAL_PAGE') content = renderGlobal(catalog, route)
   else throw new Error('Тип маршрута не поддерживается предпросмотром')

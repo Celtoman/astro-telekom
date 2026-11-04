@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AddressPageComposition from '../../components/address-page/AddressPageComposition.astro';
+import { loadSiteData, seoMeta, type CityView, type SiteView, type PageView } from '../../data/site';
+import { cityHomeImageOrigins } from '../../data/general-home';
+interface Props { city: CityView; site: SiteView; page: PageView }
+export async function getStaticPaths() {
+  const catalog = await loadSiteData();
+  return catalog.routes.filter(route => route.kind === 'CITY_ADDRESS_CHECK').map(route => {
+    const city = catalog.cities.find(city => city.slug === route.citySlug);
+    const page = city?.pages.find(page => page.type === 'ADDRESS_CHECK' && route.path === `/${city.slug}/${page.slug}`);
+    if (!city || !page) throw new Error(`Маршрут ADDRESS не соответствует каталогу: ${route.path}`);
+    return { params: { city: city.slug }, props: { city, site: catalog.site, page } };
+  });
+}
+const { city, site, page } = Astro.props as Props;
+const meta = seoMeta(await loadSiteData(), `/${city.slug}/${page.slug}`, { title: page.title ?? '', description: '' });
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
+const imageOrigins = cityHomeImageOrigins(page.blocks ?? []);
+---
+<BaseLayout title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} {imageOrigins} indexable={meta.indexState !== 'NOINDEX'} {city} pages={city.pages} {site}>
+  <AddressPageComposition {page} {city} {site} {apiUrl} />
+</BaseLayout>

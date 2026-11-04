@@ -79,7 +79,7 @@ export function generalHomeImageOrigins(home: GeneralHomeCatalog | undefined): s
   return blockImageOrigins(home?.blocks ?? [], GENERAL_HOME_SCHEMAS);
 }
 export function cityHomeImageOrigins(blocks: Array<{ blockType: string; data: Record<string, unknown> }>): string[] {
-  return blockImageOrigins(blocks, CITY_HOME_SCHEMAS);
+  return blockImageOrigins(blocks, { ...CITY_HOME_SCHEMAS, 'address.check': GENERAL_HOME_SCHEMAS['home.address_check'] });
 }
 function blockImageOrigins(blocks: Array<{ blockType: string; data: unknown }>, schemas: Record<string, GeneralHomeFieldRule>): string[] {
   const origins = new Set<string>();

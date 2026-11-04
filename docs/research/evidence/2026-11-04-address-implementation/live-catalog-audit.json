@@ -1,0 +1,4773 @@
+{
+  "checkedAt": "2026-11-04T10:35:29.367Z",
+  "cities": 207,
+  "currentRoutes": 4018,
+  "expectedAddressRoutes": 207,
+  "expectedTotalRoutes": 4225,
+  "sizes": {
+    "3": 207
+  },
+  "selections": [
+    {
+      "citySlug": "abinsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "aksay",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "aleysk",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1340,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "alekseyevka",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1340,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "angarsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "aramil",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "arkadak",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-500",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "arhangelskoe",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "okhtyrka",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "babushkin",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-500",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "balashov",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-500",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "barnaul",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "bataysk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "belaya-kalitva",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "belokuriha",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1340,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "berdsk",
+      "tariffs": [
+        {
+          "slug": "giga-100-mono",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-100-warface-mono",
+          "priceAmount": 1240,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "berezniki",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "berezovskiy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "biysk",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1340,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "biryusinsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "bogorodskaya",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "bolshaya-gora",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "bolshaya-murta",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "bolshaya-subbotikha",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "bor",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "borovye",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "borodino",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "bryansk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "buzuluk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "vereshchagino",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "vidnoe",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "volgograd",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "voljskiy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "voronej",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "vorotnikovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "votkinsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "vsevolozhsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "gatchina",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "gnusino",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "gorodishche",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "gukovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "gulkevichi",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "dzerjinsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "dimitrovgrad",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "dmitrievka",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "dmitrov",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "dobryanka",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "domodedovo",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "doneck",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "dyatkovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "ekaterinburg",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "yeniseysk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "zhigulevsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "zato-sibirskiy",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1340,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "zavodoukovsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "zaozerny",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "zarechnyy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "zarinsk",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1340,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "zasechnoe",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "zverevo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "znamenskiy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "izhevsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "irkutsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "isilkul",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "iskitim",
+      "tariffs": [
+        {
+          "slug": "giga-100-mono",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-100-warface-mono",
+          "priceAmount": 1240,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "yoshkarola",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kazan",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kalininsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-500",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "kamyshin",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kansk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "karachev",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "ketovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kinel",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kirov",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kirovsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kolpino",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kolcovo",
+      "tariffs": [
+        {
+          "slug": "giga-100-mono",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-100-warface-mono",
+          "priceAmount": 1240,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kommunar",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "konakovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "korablino",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "korenovsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kotovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "krasnogorsk",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "krasnodar",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "krasnokamsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "krasnoselskiy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "krasnoslobodsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "krasnoyarsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "krasny-sulin",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kronshtadt",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kudrovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kulunda",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1340,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "kungur",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "kurgan",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kursk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 750,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 850,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "kahta",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-500",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "lebedyan",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "lipetsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "listvyanka",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "lobanovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "loskutovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 800,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "lysva",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "lyubertsy",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "magnitogorsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 750,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "malaya-gora",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "marks",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-500",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "medvedevo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "michurinsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "moscow",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "murino",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "mytishchi",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "naberezhnye-chelny",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "nizhnekamsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 800,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "nizhneudinsk",
+      "tariffs": [
+        {
+          "slug": "giga-200",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-200-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-200-movix-zasmotris-3",
+          "priceAmount": 1540,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "nizhny-novgorod",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "novoaltaysk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "novovoronezh",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "novoe-devyatkino",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "novokastornoe",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 750,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 850,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "novosemeykino",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "novosibirsk",
+      "tariffs": [
+        {
+          "slug": "giga-100-mono",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-100-warface-mono",
+          "priceAmount": 1240,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "novotroitsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "novocheboksarsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "novocherkassk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "ob",
+      "tariffs": [
+        {
+          "slug": "giga-100-mono",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-100-warface-mono",
+          "priceAmount": 1240,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "odintsovo",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "ozerki",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "omsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "orenburg",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "orsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "pavlovsk",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1340,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "penza",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "perm",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "petra-dubrava",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "polazna",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "polevskoy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "poroshino",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "pochep",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "proletarsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "pushkino",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "raduzhnyy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "rostov-na-donu",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "rubcovsk",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1340,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "rybinsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "rybnoye",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "ryazhsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "ryazan",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "salsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "samara",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "sankt-peterburg",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "sarapul",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "saratov",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "sasovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "sayanskiy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "svirsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "seversk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 800,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "selenginsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1290,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "selco",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "semiluki",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "sergeevo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "sertolovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "skopin",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "slavgorod",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1340,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "slyudyanka",
+      "tariffs": [
+        {
+          "slug": "slyudyanka-15",
+          "priceAmount": 550,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "slyudyanka-30",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "slyudyanka-50-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "smyshlyaevka",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "soldatskoe",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "solikamsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "solnechnogorsk",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "sosnovoborsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "sosnoviy-bor",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "stepnoye",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-500",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "stroykeramika",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "sizran",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "tayshet",
+      "tariffs": [
+        {
+          "slug": "giga-200",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-200-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-200-movix-zasmotris-3",
+          "priceAmount": 1540,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "tara",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "tver",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "terekhovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "tolyatti",
+      "tariffs": [
+        {
+          "slug": "giga-200",
+          "priceAmount": 750,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 800,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-200-tv",
+          "priceAmount": 850,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "tomsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 800,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "tula",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "tulun",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-500",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "tumen",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "ulan-ude",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-500",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "ulyanovsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "usole",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "usolie-sibirskoe",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "ust-kinelskiy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1300,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "ust-labinsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "ufa",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "khabarovy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "khimki",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 900,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "horoshilovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "chaykovskiy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "cheboksary",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "chelyabinsk",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 750,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 900,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "cheremkhovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "chernikovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "chuzhikovo",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 700,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 800,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "chusovoy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "shakhty",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1250,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "shelehov",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "shelpyaki",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "shubino",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1150,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "engels",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-warface",
+          "priceAmount": 1200,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    },
+    {
+      "citySlug": "yubileynyy",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 1000,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-500",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "yarovoe",
+      "tariffs": [
+        {
+          "slug": "giga-100",
+          "priceAmount": 850,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-tv",
+          "priceAmount": 950,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-100-movix-zasmotris-3",
+          "priceAmount": 1340,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        }
+      ]
+    },
+    {
+      "citySlug": "yaroslavl",
+      "tariffs": [
+        {
+          "slug": "giga-300",
+          "priceAmount": 950,
+          "serviceType": "INTERNET",
+          "includedGaming": false
+        },
+        {
+          "slug": "giga-300-tv",
+          "priceAmount": 1050,
+          "serviceType": "INTERNET_TV",
+          "includedGaming": false
+        },
+        {
+          "slug": "geyming-300-lesta",
+          "priceAmount": 1100,
+          "serviceType": "INTERNET",
+          "includedGaming": true
+        }
+      ]
+    }
+  ]
+}

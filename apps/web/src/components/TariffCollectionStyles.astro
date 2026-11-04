@@ -1,0 +1,96 @@
+<style is:global>
+  html[data-tariff-collections-js] .tariff-collection:not([data-collection-prepared]) { visibility: hidden; }
+  .tariff-collection { width: min(1360px, calc(100% - 64px)); margin: 32px auto 64px; border-radius: 26px; background: #eef8ff; color: #18202a; }
+  .tariff-collection * { box-sizing: border-box; }
+  .tariff-collection [hidden] { display: none !important; }
+  .collection-container { padding: 32px; }
+  .tariff-collection h2 { margin: 0; max-width: 850px; font-size: 32px; line-height: 38px; letter-spacing: -1.1px; font-weight: 700; }
+  .collection-intro { max-width: 100%; margin: 16px 0; color: #526071; font-size: 15px; line-height: 22px; }
+  .collection-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+  .collection-card { position: relative; display: flex; flex-direction: column; gap: 14px; min-width: 0; min-height: 550px; padding: 20px 20px 24px; border: 1px solid #dcecf7; border-radius: 18px; background: #fff; box-shadow: 0 8px 24px #1528420d; }
+  .collection-card:nth-child(-n+3), .collection-card:has(.collection-badge) { padding-top: 58px; }
+  .collection-card:hover, .collection-card:focus-within { box-shadow: 0 14px 40px rgb(21 40 66 / 7%); }
+  .collection-badge { position: absolute; top: 20px; left: 20px; max-width: calc(100% - 40px); border-radius: 9999px; padding: 4px 10px; background: #e0231e; color: #fff; font-size: 12px; font-weight: 600; line-height: 16px; overflow-wrap: anywhere; }
+  .collection-card:has(.collection-badge) { padding-top: 20px; }
+  .collection-card:has(.collection-badge) .collection-heading { margin-top: 0; }
+  .collection-badge { position: static; align-self: flex-start; max-width: 100%; }
+  .collection-heading h3 { margin: 0; font-size: 22px; line-height: 27px; font-weight: 700; overflow-wrap: anywhere; }
+  .collection-heading p { margin: 4px 0 0; color: #526071; font-size: 13px; line-height: 18px; }
+  .collection-metrics { display: flex; gap: 8px; }
+  .collection-metrics > div { flex: 1; min-width: 0; min-height: 62px; border-radius: 10px; background: #eef8ff; padding: 7px 12px 5px; }
+  .collection-metrics span { display: block; color: #5c6b7d; font-size: 10px; line-height: 14px; font-weight: 600; text-transform: uppercase; }
+  .collection-metrics small { display: block; color: #176b45; font-size: 10px; line-height: 13px; font-weight: 600; }
+  .collection-metrics strong { display: block; margin-top: 2px; margin-right: -20px; font-size: 19px; line-height: 25px; overflow-wrap: anywhere; }
+  .collection-metrics > div:not([data-tv-metric]) { padding-top: 9px; }
+  .collection-metrics > div:not([data-tv-metric]) strong { margin-top: 5px; }
+  .collection-metrics [data-tv-metric] strong { font-size: 17px; line-height: 22px; }
+  .collection-subscriptions { display: flex; flex-direction: column; gap: 6px; padding: 8px 12px; border-radius: 12px; background: #eef8ff; }
+  .collection-subscriptions p { margin: 0; color: #526071; font-size: 11px; line-height: 15px; font-weight: 500; }
+  .collection-subscriptions > div { display: flex; flex-wrap: wrap; gap: 6px; }
+  .collection-subscription { padding: 3px 12px; border-radius: 6px; background: #eef3fa; color: #18202a; font-size: 10px; line-height: 15px; font-weight: 700; }
+  .collection-subscription[data-cinema=ivi] { background: #ea1647; color: #fff; }
+  .collection-subscription[data-cinema=start] { background: #000; color: #fff; }
+  .collection-subscription[data-cinema=kinopoisk] { background: #ff5c00; color: #fff; }
+  .collection-subscription[data-cinema=wink] { background: #6d3bea; color: #fff; }
+  .collection-subscription[data-cinema=premier] { background: #131313; color: #fbce05; }
+  .collection-subscription[data-cinema=amediateka] { background: #181818; color: #fff; }
+  .collection-subscription[data-cinema=dorama] { background: #ff4d88; color: #fff; }
+  .collection-subscription[data-cinema=viju] { background: #b2ff00; color: #000; }
+  .collection-features { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; font-size: 14px; line-height: 22px; color: #526071; }
+  .collection-features li { display: flex; gap: 4px; overflow-wrap: anywhere; }
+  .collection-features li::before { content: '✓'; flex-shrink: 0; }
+  .collection-price { display: flex; flex-direction: column; gap: 6px; margin-top: auto; padding-top: 14px; border-top: 1px solid #dcecf7; }
+  .collection-price > div { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .collection-price strong { font-size: 26px; line-height: 32px; font-weight: 700; }
+  .collection-price p { margin: 0; color: #5c6b7d; font-size: 12px; line-height: 18px; }
+  .collection-promo { padding: 5px 9px; border-radius: 7px; background: #ffeae9; color: #e0231e; font-size: 11px; line-height: 15px; font-weight: 600; }
+  .collection-actions { display: flex; gap: 8px; }
+  .collection-connect, .collection-details, [data-collection-more] { display: flex; justify-content: center; align-items: center; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; color: #1769aa; background: #eef8ff; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; text-decoration: none; cursor: pointer; text-align: center; overflow-wrap: anywhere; }
+  .collection-connect { flex: 1; min-width: 0; background: #e0231e; color: #fff; }
+  .collection-details { flex-shrink: 0; max-width: 60%; }
+  .collection-actions :focus-visible, [data-collection-more]:focus-visible { outline: 2px solid #1769aa; outline-offset: 3px; }
+  .collection-connect:hover { background: #c61f1a; }
+  .collection-connect:active { background: #ad1916; }
+  .collection-details:hover, [data-collection-more]:hover { background: #eaf7ff; }
+  .collection-card-gaming { background: #18202a; color: #fff; border-color: #334155; }
+  .collection-card-gaming .collection-metrics > div { background: rgb(255 255 255 / 8%); }
+  .collection-card-gaming .collection-subscriptions { background: #334155; }
+  .collection-card-gaming .collection-heading p, .collection-card-gaming .collection-features, .collection-card-gaming .collection-price p, .collection-card-gaming .collection-metrics span, .collection-card-gaming .collection-subscriptions p { color: #94a3b8; }
+  .collection-card-gaming .collection-promo { background: #e0231e; color: #fff; }
+  .collection-card-gaming .collection-price { border-color: #334155; }
+  .collection-more { display: flex; justify-content: center; margin-top: 24px; }
+  [data-collection-more] { gap: 6px; min-width: 220px; }
+  .collection-empty { margin: 16px 0 0; color: #526071; }
+  .collection-mobile-guide { display: none; }
+  .collection-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .collection-filter-row { display: flex; align-items: flex-start; gap: 12px; width: 100%; margin-top: 24px; }
+  .collection-filter-track { display: flex; align-items: center; flex: 1; min-width: 0; gap: 12px; overflow-x: auto; padding: 3px; margin: -3px; scrollbar-width: thin; }
+  .collection-filter-track button { flex-shrink: 0; min-height: 44px; padding: 10px 16px; border: 1px solid #dcecf7; border-radius: 9999px; background: #fff; color: #18202a; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .collection-filter-track button[aria-pressed=true] { background: #ffeae9; border-color: #fe312c; }
+  .collection-filter-track button[data-collection-quick] { display: inline-flex; align-items: center; gap: 8px; }
+  .collection-filter-track button[data-collection-quick]::after { content: ''; flex: 0 0 16px; width: 16px; height: 16px; background: center / contain no-repeat url('data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M14%208C14%208.13261%2013.9473%208.25979%2013.8536%208.35355C13.7598%208.44732%2013.6326%208.5%2013.5%208.5H8.5V13.5C8.5%2013.6326%208.44732%2013.7598%208.35355%2013.8536C8.25979%2013.9473%208.13261%2014%208%2014C7.86739%2014%207.74021%2013.9473%207.64645%2013.8536C7.55268%2013.7598%207.5%2013.6326%207.5%2013.5V8.5H2.5C2.36739%208.5%202.24021%208.44732%202.14645%208.35355C2.05268%208.25979%202%208.13261%202%208C2%207.86739%202.05268%207.74021%202.14645%207.64645C2.24021%207.55268%202.36739%207.5%202.5%207.5H7.5V2.5C7.5%202.36739%207.55268%202.24021%207.64645%202.14645C7.74021%202.05268%207.86739%202%208%202C8.13261%202%208.25979%202.05268%208.35355%202.14645C8.44732%202.24021%208.5%202.36739%208.5%202.5V7.5H13.5C13.6326%207.5%2013.7598%207.55268%2013.8536%207.64645C13.9473%207.74021%2014%207.86739%2014%208Z%22%20fill%3D%22%23526071%22%2F%3E%0A%3C%2Fsvg%3E%0A'); }
+  .collection-filter-track button[data-collection-quick][aria-pressed=true]::after { transform: rotate(45deg); }
+  .collection-filter-divider { flex: 0 0 1px; height: 24px; background: #dcecf7; }
+  .collection-reset { flex-shrink: 0; min-height: 44px; padding: 10px 0; border: 0; background: none; color: #1769aa; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; cursor: pointer; }
+  .collection-count { margin: 16px 0 0; color: #526071; font-size: 14px; line-height: 20px; }
+  @media (max-width: 620px) { .collection-filter-row { flex-direction: column; gap: 8px; } .collection-filter-track { flex: auto; width: calc(100% + 6px); } .collection-reset { align-self: flex-start; } }
+  @media (max-width: 1100px) { .tariff-collection { width: min(720px, calc(100% - 48px)); } .collection-container { padding: 24px; } .collection-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .collection-card { min-height: 523px; } .collection-card:nth-child(3):not(:has(.collection-badge)) { padding-top: 20px; } .collection-card-gaming { min-height: 485px; } }
+  @media (max-width: 620px) {
+    .tariff-collection { width: calc(100% - 32px); margin: 24px auto 40px; border-radius: 20px; }
+    .collection-container { padding: 16px; }
+    .tariff-collection h2 { font-size: 24px; line-height: 29px; letter-spacing: -.8px; }
+    .collection-intro { margin: 24px 0; }
+    .collection-mobile-guide { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; line-height: 16px; color: #526071; margin-top: 24px; }
+    .collection-grid { display: flex; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; gap: 16px; margin-top: 16px; padding-bottom: 0; }
+    .collection-card { flex: 0 0 100%; min-height: 539px; scroll-snap-align: start; }
+    .collection-card:nth-child(-n+3):not(:has(.collection-badge)) { padding-top: 20px; }
+    .collection-connect, .collection-details { padding-inline: 20px; }
+    [data-collection-more] { width: 100%; }
+  }
+  @media (max-width: 360px) {
+    .collection-metrics { flex-direction: column; }
+    .collection-metrics strong { margin-right: 0; }
+    .collection-actions { flex-direction: column; }
+    .collection-details { max-width: none; }
+  }
+</style>
