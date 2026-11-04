@@ -1,0 +1,15 @@
+{
+  "workingRevision": 28,
+  "publishedRevision": 27,
+  "tariffs": 3805,
+  "cities": 207,
+  "available": 2335,
+  "unavailable": 1470,
+  "historyChanges": 3805,
+  "historySources": [
+    "migration:0065:tvbox-availability"
+  ],
+  "oldPublicationPreserved": true,
+  "unrelatedChanges": [],
+  "errors": []
+}

@@ -1,0 +1,12 @@
+{
+  "deploymentId": "gtzfw2gjkfkk2gwcg9ojh1u0",
+  "applicationUuid": "jlrsktdos9yhchkgnrd9f5fj",
+  "status": "finished",
+  "commit": "8b03ab78fbb75e69d60ea18f9de4c05ee5cb5f74",
+  "finishedAt": "2026-11-04T19:52:19.000000Z",
+  "ciRun": 41897510806,
+  "ciConclusion": "success",
+  "applicationStatus": "running:healthy",
+  "migrateExited": true,
+  "apiHealthy": true
+}

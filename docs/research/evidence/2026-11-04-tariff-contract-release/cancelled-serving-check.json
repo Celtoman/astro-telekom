@@ -1,0 +1,10 @@
+[
+  {
+    "url": "https://tv-internet-dom.ru/tolyatti/giga-300",
+    "status": 503
+  },
+  {
+    "url": "https://admin.tv-internet-dom.ru/api/v1/health/ready",
+    "status": 503
+  }
+]

@@ -1,0 +1,70 @@
+{
+  "checkedAt": "2026-11-04T20:15:22.867119+00:00",
+  "rows": [
+    {
+      "url": "https://tv-internet-dom.ru/",
+      "authenticated": false,
+      "status": 401,
+      "hsts": "max-age=31536000",
+      "nosniff": "nosniff",
+      "robots": "noindex, nofollow"
+    },
+    {
+      "url": "https://tv-internet-dom.ru/robots.txt",
+      "authenticated": false,
+      "status": 401,
+      "hsts": "max-age=31536000",
+      "nosniff": "nosniff",
+      "robots": "noindex, nofollow"
+    },
+    {
+      "url": "https://tv-internet-dom.ru/sitemap.xml",
+      "authenticated": false,
+      "status": 401,
+      "hsts": "max-age=31536000",
+      "nosniff": "nosniff",
+      "robots": "noindex, nofollow"
+    },
+    {
+      "url": "https://tv-internet-dom.ru/tolyatti/giga-300",
+      "authenticated": false,
+      "status": 401,
+      "hsts": "max-age=31536000",
+      "nosniff": "nosniff",
+      "robots": "noindex, nofollow"
+    },
+    {
+      "url": "https://tv-internet-dom.ru/api/v1/health/ready",
+      "authenticated": false,
+      "status": 401,
+      "hsts": "max-age=31536000",
+      "nosniff": "nosniff",
+      "robots": "noindex, nofollow"
+    },
+    {
+      "url": "https://admin.tv-internet-dom.ru/",
+      "authenticated": false,
+      "status": 401,
+      "hsts": "max-age=31536000",
+      "nosniff": "nosniff",
+      "robots": "noindex, nofollow, noarchive"
+    },
+    {
+      "url": "https://admin.tv-internet-dom.ru/api/v1/health/ready",
+      "authenticated": false,
+      "status": 401,
+      "hsts": "max-age=31536000",
+      "nosniff": "nosniff",
+      "robots": "noindex, nofollow, noarchive"
+    },
+    {
+      "url": "https://admin.tv-internet-dom.ru/api/v1/health/ready",
+      "authenticated": true,
+      "status": 200,
+      "hsts": "max-age=31536000",
+      "nosniff": "nosniff",
+      "robots": "noindex, nofollow, noarchive"
+    }
+  ],
+  "passed": true
+}

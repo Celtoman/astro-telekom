@@ -1,0 +1,181 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "path": "/tolyatti/giga-300",
+      "kind": "ont",
+      "bounds": {
+        "viewport": 1440,
+        "document": 1440
+      },
+      "defaultTotals": {
+        "monthly": 800,
+        "oneTime": 5900,
+        "knownOneTime": 5900
+      },
+      "selectedBuyoutTotals": {
+        "monthly": 800,
+        "oneTime": 9490,
+        "knownOneTime": 9490
+      },
+      "errors": [],
+      "failedApiRequests": [],
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "path": "/berdsk/giga-300-movix-zasmotris-3-hd",
+      "kind": "tvbox",
+      "bounds": {
+        "viewport": 1440,
+        "document": 1440
+      },
+      "defaultTotals": {
+        "monthly": 1630,
+        "oneTime": 1001,
+        "knownOneTime": 1001
+      },
+      "selectedBuyoutTotals": {
+        "monthly": 1630,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": [],
+      "failedApiRequests": [],
+      "passed": true
+    },
+    {
+      "width": 834,
+      "path": "/tolyatti/giga-300",
+      "kind": "ont",
+      "bounds": {
+        "viewport": 834,
+        "document": 834
+      },
+      "defaultTotals": {
+        "monthly": 800,
+        "oneTime": 5900,
+        "knownOneTime": 5900
+      },
+      "selectedBuyoutTotals": {
+        "monthly": 800,
+        "oneTime": 9490,
+        "knownOneTime": 9490
+      },
+      "errors": [],
+      "failedApiRequests": [],
+      "passed": true
+    },
+    {
+      "width": 834,
+      "path": "/berdsk/giga-300-movix-zasmotris-3-hd",
+      "kind": "tvbox",
+      "bounds": {
+        "viewport": 834,
+        "document": 834
+      },
+      "defaultTotals": {
+        "monthly": 1630,
+        "oneTime": 1001,
+        "knownOneTime": 1001
+      },
+      "selectedBuyoutTotals": {
+        "monthly": 1630,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": [],
+      "failedApiRequests": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/tolyatti/giga-300",
+      "kind": "ont",
+      "bounds": {
+        "viewport": 390,
+        "document": 390
+      },
+      "defaultTotals": {
+        "monthly": 800,
+        "oneTime": 5900,
+        "knownOneTime": 5900
+      },
+      "selectedBuyoutTotals": {
+        "monthly": 800,
+        "oneTime": 9490,
+        "knownOneTime": 9490
+      },
+      "errors": [],
+      "failedApiRequests": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/berdsk/giga-300-movix-zasmotris-3-hd",
+      "kind": "tvbox",
+      "bounds": {
+        "viewport": 390,
+        "document": 390
+      },
+      "defaultTotals": {
+        "monthly": 1630,
+        "oneTime": 1001,
+        "knownOneTime": 1001
+      },
+      "selectedBuyoutTotals": {
+        "monthly": 1630,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": [],
+      "failedApiRequests": [],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/tolyatti/giga-300",
+      "kind": "ont",
+      "bounds": {
+        "viewport": 320,
+        "document": 320
+      },
+      "defaultTotals": {
+        "monthly": 800,
+        "oneTime": 5900,
+        "knownOneTime": 5900
+      },
+      "selectedBuyoutTotals": {
+        "monthly": 800,
+        "oneTime": 9490,
+        "knownOneTime": 9490
+      },
+      "errors": [],
+      "failedApiRequests": [],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/berdsk/giga-300-movix-zasmotris-3-hd",
+      "kind": "tvbox",
+      "bounds": {
+        "viewport": 320,
+        "document": 320
+      },
+      "defaultTotals": {
+        "monthly": 1630,
+        "oneTime": 1001,
+        "knownOneTime": 1001
+      },
+      "selectedBuyoutTotals": {
+        "monthly": 1630,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": [],
+      "failedApiRequests": [],
+      "passed": true
+    }
+  ],
+  "passed": true
+}

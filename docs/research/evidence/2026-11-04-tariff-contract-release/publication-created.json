@@ -1,0 +1,15 @@
+{
+  "publication": {
+    "id": "cmw2jk1nr000401p3r0xykg4b",
+    "siteRevision": 28,
+    "status": "PENDING",
+    "validationId": "cmw2jjycu000301p3wxj8s6jr",
+    "createdAt": "2026-11-04T20:00:25.191Z"
+  },
+  "rebuild": {
+    "id": "cmtw6dpwj015g01o0ho99ow05",
+    "status": "PENDING",
+    "requestedRevision": 24,
+    "requestedPublicationId": "cmw2jk1nr000401p3r0xykg4b"
+  }
+}

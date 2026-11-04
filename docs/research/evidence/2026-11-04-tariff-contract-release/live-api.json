@@ -1,0 +1,3985 @@
+{
+  "checkedAt": "2026-11-04T20:12:41.137208+00:00",
+  "checked": 347,
+  "mode": "api",
+  "elapsedSeconds": 431.5,
+  "failures": [],
+  "rows": [
+    {
+      "path": "/abinsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/abinsk/giga-300",
+      "selection": {
+        "router": "INSTALLMENT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/abinsk/giga-300",
+      "selection": {
+        "router": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 4590,
+        "knownOneTime": 4590
+      },
+      "errors": []
+    },
+    {
+      "path": "/abinsk/giga-300",
+      "selection": {
+        "router": "BUYOUT",
+        "services": []
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 4590,
+        "knownOneTime": 4590
+      },
+      "errors": []
+    },
+    {
+      "path": "/abinsk/giga-300",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/abinsk/giga-500-tv",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1001,
+        "knownOneTime": 1001
+      },
+      "errors": []
+    },
+    {
+      "path": "/abinsk/giga-500-tv",
+      "selection": {
+        "router": "INSTALLMENT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1450,
+        "oneTime": 1001,
+        "knownOneTime": 1001
+      },
+      "errors": []
+    },
+    {
+      "path": "/abinsk/giga-500-tv",
+      "selection": {
+        "router": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 4591,
+        "knownOneTime": 4591
+      },
+      "errors": []
+    },
+    {
+      "path": "/abinsk/giga-500-tv",
+      "selection": {
+        "tvbox": "INSTALLMENT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1582,
+        "oneTime": 1001,
+        "knownOneTime": 1001
+      },
+      "errors": []
+    },
+    {
+      "path": "/abinsk/giga-500-tv",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/abinsk/giga-500-tv",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "BUYOUT",
+        "services": []
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 9541,
+        "knownOneTime": 9541
+      },
+      "errors": []
+    },
+    {
+      "path": "/aksay/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/aleysk/giga-100",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/alekseyevka/giga-100",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/angarsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/aramil/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/arkadak/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/arhangelskoe/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 950,
+        "knownOneTime": 950
+      },
+      "errors": []
+    },
+    {
+      "path": "/okhtyrka/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/babushkin/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1000,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/balashov/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/barnaul/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/bataysk/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/belaya-kalitva/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/belokuriha/giga-100",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-100-mono",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-100-mono",
+      "selection": {
+        "router": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 6200,
+        "knownOneTime": 6200
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-100-mono",
+      "selection": {
+        "services": [
+          "video"
+        ]
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1570,
+        "oneTime": 6900,
+        "knownOneTime": 6900
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-100-mono",
+      "selection": {
+        "router": "BUYOUT",
+        "services": [
+          "video"
+        ]
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1570,
+        "oneTime": 12100,
+        "knownOneTime": 12100
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-100-mono",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-800-warface-hd",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 1001,
+        "knownOneTime": 1001
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-800-warface-hd",
+      "selection": {
+        "router": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 6201,
+        "knownOneTime": 6201
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-800-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-800-warface-hd",
+      "selection": {
+        "services": [
+          "video"
+        ]
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 2310,
+        "oneTime": 6901,
+        "knownOneTime": 6901
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-800-warface-hd",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "BUYOUT",
+        "services": [
+          "video"
+        ]
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 2310,
+        "oneTime": 17051,
+        "knownOneTime": 17051
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-300-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1390,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-300",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1240,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-300-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1630,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-600-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1730,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-100-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1530,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-600-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1490,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-600",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1340,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-300-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1390,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-800-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-800",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1740,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-100-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1290,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-100-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1290,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/geyming-600-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1490,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berdsk/giga-800-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 2130,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/berezniki/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/berezovskiy/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/biysk/giga-100",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/biryusinsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/bogorodskaya/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/bolshaya-gora/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/bolshaya-murta/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/bolshaya-subbotikha/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/bor/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/borovye/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/borodino/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/bryansk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/buzuluk/geyming-600-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/vereshchagino/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/vidnoe/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1300,
+        "knownOneTime": 1300
+      },
+      "errors": []
+    },
+    {
+      "path": "/vidnoe/giga-1000",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/vidnoe/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/volgograd/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/voljskiy/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/voronej/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/vorotnikovo/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 950,
+        "knownOneTime": 950
+      },
+      "errors": []
+    },
+    {
+      "path": "/votkinsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/vsevolozhsk/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1400,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/gatchina/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1400,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/gnusino/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/gorodishche/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 950,
+        "knownOneTime": 950
+      },
+      "errors": []
+    },
+    {
+      "path": "/gukovo/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/gulkevichi/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/dzerjinsk/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/dimitrovgrad/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/dmitrievka/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 950,
+        "knownOneTime": 950
+      },
+      "errors": []
+    },
+    {
+      "path": "/dmitrov/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1300,
+        "knownOneTime": 1300
+      },
+      "errors": []
+    },
+    {
+      "path": "/dmitrov/giga-1000",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/dmitrov/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/dobryanka/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/domodedovo/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1300,
+        "knownOneTime": 1300
+      },
+      "errors": []
+    },
+    {
+      "path": "/domodedovo/giga-1000",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/domodedovo/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/doneck/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1300,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/dyatkovo/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/ekaterinburg/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/yeniseysk/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/zhigulevsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/zato-sibirskiy/giga-100",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/zavodoukovsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/zaozerny/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/zarechnyy/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/zarinsk/giga-100",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/zasechnoe/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/zverevo/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/znamenskiy/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/izhevsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 950,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/irkutsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/isilkul/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/giga-100-mono",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/geyming-800-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/geyming-300-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1390,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/giga-300",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1240,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/giga-300-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1630,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/giga-600-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1730,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/giga-100-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1530,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/geyming-600-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1490,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/giga-600",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1340,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/geyming-300-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1390,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/geyming-800-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/giga-800",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1740,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/geyming-100-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1290,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/geyming-100-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1290,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/geyming-600-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1490,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/iskitim/giga-800-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 2130,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/yoshkarola/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kazan/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kalininsk/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kamyshin/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kansk/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/karachev/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/ketovo/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 950,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kinel/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kirov/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kirovsk/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1400,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolpino/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1400,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/giga-100-mono",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/geyming-800-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/geyming-300-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1390,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/giga-300",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1240,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/giga-300-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1630,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/giga-600-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1730,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/giga-100-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1530,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/geyming-600-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1490,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/giga-600",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1340,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/geyming-300-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1390,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/geyming-800-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/giga-800",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1740,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/geyming-100-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1290,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/geyming-100-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1290,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/geyming-600-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1490,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kolcovo/giga-800-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 2130,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/kommunar/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1400,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/konakovo/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/korablino/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/korenovsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kotovo/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 950,
+        "knownOneTime": 950
+      },
+      "errors": []
+    },
+    {
+      "path": "/krasnogorsk/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1300,
+        "knownOneTime": 1300
+      },
+      "errors": []
+    },
+    {
+      "path": "/krasnogorsk/giga-1000",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/krasnogorsk/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/krasnodar/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/krasnokamsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/krasnokamsk/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/krasnoselskiy/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/krasnoslobodsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/krasnoyarsk/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/krasny-sulin/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kronshtadt/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1400,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kudrovo/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1400,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kulunda/giga-100",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kungur/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1000,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kurgan/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 950,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kursk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 750,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/kahta/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1000,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/lebedyan/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/lipetsk/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/listvyanka/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/lobanovo/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/loskutovo/geyming-600-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1350,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/lysva/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/lyubertsy/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1300,
+        "knownOneTime": 1300
+      },
+      "errors": []
+    },
+    {
+      "path": "/lyubertsy/giga-1000",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/lyubertsy/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/magnitogorsk/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/malaya-gora/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/marks/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/medvedevo/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/michurinsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 950,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/moscow/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1300,
+        "knownOneTime": 1300
+      },
+      "errors": []
+    },
+    {
+      "path": "/moscow/giga-1000",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/moscow/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/murino/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1400,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/mytishchi/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1300,
+        "knownOneTime": 1300
+      },
+      "errors": []
+    },
+    {
+      "path": "/mytishchi/giga-1000",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/mytishchi/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/naberezhnye-chelny/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/nizhnekamsk/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/nizhneudinsk/giga-200",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 950,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/nizhny-novgorod/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/novoaltaysk/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/novovoronezh/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/novoe-devyatkino/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1400,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/novokastornoe/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 750,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosemeykino/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/giga-100-mono",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/geyming-800-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/geyming-300-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1390,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/giga-300",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1240,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/giga-300-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1630,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/giga-600-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1730,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/giga-100-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1530,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/geyming-600-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1490,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/giga-600",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1340,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/geyming-300-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1390,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/geyming-800-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/giga-800",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1740,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/geyming-100-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1290,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/geyming-100-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1290,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/geyming-600-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1490,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novosibirsk/giga-800-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 2130,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/novotroitsk/geyming-600-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/novocheboksarsk/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/novocherkassk/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/giga-100-mono",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/geyming-800-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/geyming-300-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1390,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/giga-300",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1240,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/giga-300-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1630,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/giga-600-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1730,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/giga-100-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1530,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/geyming-600-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1490,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/giga-600",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1340,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/geyming-300-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1390,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/geyming-800-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1890,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/giga-800",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1740,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/geyming-100-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1290,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/geyming-100-lesta-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1290,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/geyming-600-warface-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1490,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/ob/giga-800-movix-zasmotris-3-hd",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 2130,
+        "oneTime": 5951,
+        "knownOneTime": 5951
+      },
+      "errors": []
+    },
+    {
+      "path": "/odintsovo/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1300,
+        "knownOneTime": 1300
+      },
+      "errors": []
+    },
+    {
+      "path": "/odintsovo/giga-1000",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/odintsovo/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/ozerki/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 950,
+        "knownOneTime": 950
+      },
+      "errors": []
+    },
+    {
+      "path": "/omsk/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/orenburg/geyming-600-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/orsk/geyming-600-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/pavlovsk/giga-100",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/penza/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/perm/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1450,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/petra-dubrava/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/polazna/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/polevskoy/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/poroshino/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/pochep/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/proletarsk/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/pushkino/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1300,
+        "knownOneTime": 1300
+      },
+      "errors": []
+    },
+    {
+      "path": "/pushkino/giga-1000",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/pushkino/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/raduzhnyy/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/rostov-na-donu/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/rubcovsk/giga-100",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/rybinsk/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/rybnoye/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/ryazhsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/ryazan/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/salsk/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/samara/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/sankt-peterburg/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/sarapul/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 950,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/saratov/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/sasovo/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/sayanskiy/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/svirsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/seversk/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/selenginsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 950,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/selco/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/semiluki/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/sergeevo/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/sertolovo/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1400,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/skopin/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/slavgorod/giga-100",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/slyudyanka/slyudyanka-30",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 700,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/slyudyanka/slyudyanka-30",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/slyudyanka/slyudyanka-50",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/slyudyanka/slyudyanka-15",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/smyshlyaevka/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/soldatskoe/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 950,
+        "knownOneTime": 950
+      },
+      "errors": []
+    },
+    {
+      "path": "/solikamsk/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/solnechnogorsk/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1300,
+        "knownOneTime": 1300
+      },
+      "errors": []
+    },
+    {
+      "path": "/solnechnogorsk/giga-1000",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/solnechnogorsk/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/sosnovoborsk/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/sosnoviy-bor/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1300,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/stepnoye/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/stroykeramika/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/sizran/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/tayshet/giga-200",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 950,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/tara/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/tver/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/terekhovo/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 950,
+        "knownOneTime": 950
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 800,
+        "oneTime": 5900,
+        "knownOneTime": 5900
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-300",
+      "selection": {
+        "router": "INSTALLMENT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 5900,
+        "knownOneTime": 5900
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-300",
+      "selection": {
+        "router": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 800,
+        "oneTime": 9490,
+        "knownOneTime": 9490
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-300",
+      "selection": {
+        "router": "BUYOUT",
+        "services": []
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 800,
+        "oneTime": 9490,
+        "knownOneTime": 9490
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-300",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 5900,
+        "knownOneTime": 5900
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-500",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-200",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 750,
+        "oneTime": 5900,
+        "knownOneTime": 5900
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-200",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-500-tv",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 5901,
+        "knownOneTime": 5901
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-500-tv",
+      "selection": {
+        "router": "INSTALLMENT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1400,
+        "oneTime": 5901,
+        "knownOneTime": 5901
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-500-tv",
+      "selection": {
+        "router": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 9491,
+        "knownOneTime": 9491
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-500-tv",
+      "selection": {
+        "tvbox": "INSTALLMENT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1532,
+        "oneTime": 5901,
+        "knownOneTime": 5901
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-500-tv",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 10851,
+        "knownOneTime": 10851
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-500-tv",
+      "selection": {
+        "router": "BUYOUT",
+        "tvbox": "BUYOUT",
+        "services": []
+      },
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 14441,
+        "knownOneTime": 14441
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-200-tv",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 5901,
+        "knownOneTime": 5901
+      },
+      "errors": []
+    },
+    {
+      "path": "/tolyatti/giga-300-tv",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 5901,
+        "knownOneTime": 5901
+      },
+      "errors": []
+    },
+    {
+      "path": "/tomsk/geyming-600-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1350,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/tula/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1300,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/tulun/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 950,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/tumen/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/ulan-ude/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1000,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/ulyanovsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1000,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/usole/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/usolie-sibirskoe/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1000,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/ust-kinelskiy/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1150,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/ust-labinsk/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 900,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/ufa/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/khabarovy/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/khimki/giga-800",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1300,
+        "knownOneTime": 1300
+      },
+      "errors": []
+    },
+    {
+      "path": "/khimki/giga-1000",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/khimki/giga-100",
+      "selection": {
+        "tvbox": "BUYOUT"
+      },
+      "status": 400,
+      "totals": null,
+      "errors": []
+    },
+    {
+      "path": "/horoshilovo/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 950,
+        "knownOneTime": 950
+      },
+      "errors": []
+    },
+    {
+      "path": "/chaykovskiy/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/cheboksary/geyming-600-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/chelyabinsk/geyming-600-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/cheremkhovo/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/chernikovo/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 950,
+        "knownOneTime": 950
+      },
+      "errors": []
+    },
+    {
+      "path": "/chuzhikovo/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 950,
+        "knownOneTime": 950
+      },
+      "errors": []
+    },
+    {
+      "path": "/chusovoy/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/shakhty/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1250,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/shelehov/giga-300",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1050,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/shelpyaki/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/shubino/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/engels/geyming-300-warface",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1200,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/yubileynyy/giga-500",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/yarovoe/giga-100",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 850,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    },
+    {
+      "path": "/yaroslavl/geyming-300-lesta",
+      "selection": {},
+      "status": 200,
+      "totals": {
+        "monthly": 1100,
+        "oneTime": 1000,
+        "knownOneTime": 1000
+      },
+      "errors": []
+    }
+  ]
+}

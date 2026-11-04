@@ -6,6 +6,15 @@
 
 **Статус ведётся в GitHub Issues** (репозиторий `Celtoman/astro-telekom`, label `tech-debt` + приоритет). 🟢 — open, ✅ — closed. Актуально на момент чтения этой таблицы issue может отличаться от статуса ниже — сверяться по ссылке, не по этому файлу, если нужен текущий статус.
 
+## Живые данные тарифов, 4 ноября 2026
+
+Локальный проверочный контур: [TD-213 / #496](https://github.com/Celtoman/astro-telekom/issues/496) 🟢 — intermittent timeout ожидания Automatic CODE в полном Windows/Docker gate; отдельный runtime rehearsal проходит, причина не установлена.
+
+| ID | Issue | Суть |
+| --- | --- | --- |
+| TD-211 | [#491](https://github.com/Celtoman/astro-telekom/issues/491) ✅ | 1470 интернет-тарифов предлагают выкуп ТВ-приставки за0 ₽ без отдельного признака доступности |
+| TD-212 | [#492](https://github.com/Celtoman/astro-telekom/issues/492) ✅ | Отдельную разовую оплату ONT4900 ₽ нужно учитывать в итоге подключения |
+
 ## Визуальная сверка ADDRESS, 4 ноября 2026
 
 | ID | Issue | Суть |
@@ -13,6 +22,12 @@
 | TD-207 | [#487](https://github.com/Celtoman/astro-telekom/issues/487) ✅ | Накопленные отступы ADDRESS в Screens и коде расходятся с ритмом HOME/CITY_HOME |
 | TD-208 | [#488](https://github.com/Celtoman/astro-telekom/issues/488) ✅ | Глобальное ограничение H1 до780px вызывает лишний перенос на Desktop |
 | TD-209 | [#493](https://github.com/Celtoman/astro-telekom/issues/493) 🟢 | Недостаток места в Windows TEMP блокирует rehearsal архивации |
+
+## Контракт кинотеатров тарифа, 3 ноября 2026
+
+| ID | Issue | Суть |
+| --- | --- | --- |
+| TD-206 | [#468](https://github.com/Celtoman/astro-telekom/issues/468) ✅ | Подпись кинотеатров нужно привести к согласованному списку доступных подписок без альтернатив |
 
 ## Текущая миграция CITY_HOME
 

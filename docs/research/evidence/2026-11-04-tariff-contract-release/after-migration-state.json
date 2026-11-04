@@ -1,0 +1,88 @@
+{
+  "siteId": "cmtuaqqj1000107lkiiiia2xa",
+  "workingRevision": 28,
+  "publishedRevision": 27,
+  "hasUnpublishedChanges": true,
+  "latestPublication": {
+    "id": "cmw20tzmt000f01pdzw24unp7",
+    "siteRevision": 27,
+    "status": "SUCCEEDED",
+    "triggerEntity": "site",
+    "triggerEntityId": "cmtuaqqj1000107lkiiiia2xa",
+    "requestedById": "cmtuaqr0b000n07lkpte6ezh2",
+    "validationId": "cmw20txyd000e01pd7v3wlhy0",
+    "lastError": null,
+    "providerDeploymentId": null,
+    "createdAt": "2026-11-04T11:16:16.422Z",
+    "updatedAt": "2026-11-04T11:20:09.777Z",
+    "publishedAt": "2026-11-04T11:20:09.768Z"
+  },
+  "latestValidation": {
+    "id": "cmw20txyd000e01pd7v3wlhy0",
+    "siteRevision": 27,
+    "appVersion": "0.1.0",
+    "outcome": "PASSED",
+    "checkedUrlCount": 4225,
+    "requestedById": "cmtuaqr0b000n07lkpte6ezh2",
+    "validatedAt": "2026-11-04T11:16:06.876Z"
+  },
+  "rebuild": {
+    "id": "cmtw6dpwj015g01o0ho99ow05",
+    "status": "SUCCEEDED",
+    "requestedRevision": 23,
+    "processingRevision": 23,
+    "publishedRevision": 23,
+    "requestedPublicationId": "cmw20tzmt000f01pdzw24unp7",
+    "processingPublicationId": "cmw20tzmt000f01pdzw24unp7",
+    "publishedPublicationId": "cmw20tzmt000f01pdzw24unp7",
+    "attempts": 1,
+    "maxAttempts": 3,
+    "lastError": null,
+    "providerStatus": "SUCCEEDED",
+    "providerDeploymentId": null,
+    "queuedAt": "2026-11-04T11:16:17.819Z",
+    "startedAt": "2026-11-04T11:16:18.136Z",
+    "completedAt": "2026-11-04T11:20:08.352Z",
+    "updatedAt": "2026-11-04T11:20:08.355Z"
+  },
+  "progress": {
+    "runId": "dbf01ee1-171d-4bf5-b859-5c73ead5e356",
+    "stage": "CONFIRMING",
+    "stages": {
+      "BUILDING": {
+        "startedAt": "2026-11-04T11:16:21.536Z",
+        "completedAt": "2026-11-04T11:17:19.001Z"
+      },
+      "CHECKING": {
+        "startedAt": "2026-11-04T11:17:19.001Z",
+        "completedAt": "2026-11-04T11:19:31.782Z"
+      },
+      "PREPARING": {
+        "startedAt": "2026-11-04T11:16:18.136Z",
+        "completedAt": "2026-11-04T11:16:21.536Z"
+      },
+      "ACTIVATING": {
+        "startedAt": "2026-11-04T11:19:31.782Z",
+        "completedAt": "2026-11-04T11:19:55.467Z"
+      },
+      "CONFIRMING": {
+        "startedAt": "2026-11-04T11:19:55.467Z",
+        "completedAt": "2026-11-04T11:20:08.352Z"
+      }
+    },
+    "version": 1,
+    "revision": 23,
+    "sequence": 113,
+    "startedAt": "2026-11-04T11:16:18.136Z",
+    "updatedAt": "2026-11-04T11:19:55.467Z",
+    "rendererId": "2427fe8116c22323319297e81ce2965dc9b5f108300f216b01ff8c3bcafabaa2",
+    "totalPages": 4226,
+    "completedAt": "2026-11-04T11:20:08.352Z",
+    "publicationId": "cmw20tzmt000f01pdzw24unp7",
+    "sampleEligible": true,
+    "estimate": null,
+    "overdue": false,
+    "elapsedSeconds": 230,
+    "stale": false
+  }
+}
