@@ -1,0 +1,364 @@
+[
+  {
+    "id": "118:2109",
+    "w": 390,
+    "h": 17992.140625,
+    "rails": [
+      {
+        "id": "I118:2318;184:197",
+        "name": "CAR / Учётные данные",
+        "buttons": [
+          {
+            "id": "I118:2318;184:201",
+            "target": "53:259",
+            "targetName": "Учётные данные / 1",
+            "targetPage": "47:4",
+            "actualCard": "I118:2318;53:259",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2318;184:204",
+            "target": "53:262",
+            "targetName": "Учётные данные / 2",
+            "targetPage": "47:4",
+            "actualCard": "I118:2318;53:262",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2318;184:207",
+            "target": "53:265",
+            "targetName": "Учётные данные / 3",
+            "targetPage": "47:4",
+            "actualCard": "I118:2318;53:265",
+            "type": "SCROLL_TO"
+          }
+        ]
+      },
+      {
+        "id": "I118:2348;184:667",
+        "name": "CAR / Восстановление доступа",
+        "buttons": [
+          {
+            "id": "I118:2348;184:672",
+            "target": "51:912",
+            "targetName": "Маршрут 1",
+            "targetPage": "47:5",
+            "actualCard": "I118:2348;51:912",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2348;184:675",
+            "target": "51:921",
+            "targetName": "Маршрут 2",
+            "targetPage": "47:5",
+            "actualCard": "I118:2348;51:921",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2348;184:678",
+            "target": "51:930",
+            "targetName": "Маршрут 3",
+            "targetPage": "47:5",
+            "actualCard": "I118:2348;51:930",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2348;184:681",
+            "target": "51:939",
+            "targetName": "Маршрут 4",
+            "targetPage": "47:5",
+            "actualCard": "I118:2348;51:939",
+            "type": "SCROLL_TO"
+          }
+        ]
+      },
+      {
+        "id": "I118:2420;184:923",
+        "name": "CAR / Возможности кабинета",
+        "buttons": [
+          {
+            "id": "I118:2420;184:927",
+            "target": "56:1232",
+            "targetName": "Возможности / 1",
+            "targetPage": "47:8",
+            "actualCard": "I118:2420;56:1232",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2420;184:930",
+            "target": "56:1240",
+            "targetName": "Возможности / 7",
+            "targetPage": "47:8",
+            "actualCard": "I118:2420;56:1240",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2420;184:933",
+            "target": "56:1247",
+            "targetName": "Возможности / 12",
+            "targetPage": "47:8",
+            "actualCard": "I118:2420;56:1247",
+            "type": "SCROLL_TO"
+          }
+        ]
+      },
+      {
+        "id": "I118:2448;184:1319",
+        "name": "CAR / Верхнее меню",
+        "buttons": [
+          {
+            "id": "I118:2448;184:1323",
+            "target": "54:1884",
+            "targetName": "Пункт верхнего меню 1",
+            "targetPage": "47:9",
+            "actualCard": "I118:2448;54:1884",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2448;184:1326",
+            "target": "54:1893",
+            "targetName": "Пункт верхнего меню 2",
+            "targetPage": "47:9",
+            "actualCard": "I118:2448;54:1893",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2448;184:1329",
+            "target": "54:1902",
+            "targetName": "Пункт верхнего меню 3",
+            "targetPage": "47:9",
+            "actualCard": "I118:2448;54:1902",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2448;184:1332",
+            "target": "54:1911",
+            "targetName": "Пункт верхнего меню 4",
+            "targetPage": "47:9",
+            "actualCard": "I118:2448;54:1911",
+            "type": "SCROLL_TO"
+          }
+        ]
+      },
+      {
+        "id": "I118:2448;184:1335",
+        "name": "CAR / Главная страница кабинета",
+        "buttons": [
+          {
+            "id": "I118:2448;184:1339",
+            "target": "54:1928",
+            "targetName": "Область главной страницы / Главное меню",
+            "targetPage": "47:9",
+            "actualCard": "I118:2448;54:1928",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2448;184:1342",
+            "target": "54:1937",
+            "targetName": "Область главной страницы / Услуги активны",
+            "targetPage": "47:9",
+            "actualCard": "I118:2448;54:1937",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2448;184:1345",
+            "target": "54:1946",
+            "targetName": "Область главной страницы / Неполадки",
+            "targetPage": "47:9",
+            "actualCard": "I118:2448;54:1946",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:2448;184:1348",
+            "target": "54:1955",
+            "targetName": "Область главной страницы / Дом.ру Бонус",
+            "targetPage": "47:9",
+            "actualCard": "I118:2448;54:1955",
+            "type": "SCROLL_TO"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "118:3096",
+    "w": 320,
+    "h": 19881.787109375,
+    "rails": [
+      {
+        "id": "I118:3283;184:210",
+        "name": "CAR / Учётные данные",
+        "buttons": [
+          {
+            "id": "I118:3283;184:214",
+            "target": "53:291",
+            "targetName": "Учётные данные / 1",
+            "targetPage": "47:4",
+            "actualCard": "I118:3283;53:291",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3283;184:217",
+            "target": "53:294",
+            "targetName": "Учётные данные / 2",
+            "targetPage": "47:4",
+            "actualCard": "I118:3283;53:294",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3283;184:220",
+            "target": "53:297",
+            "targetName": "Учётные данные / 3",
+            "targetPage": "47:4",
+            "actualCard": "I118:3283;53:297",
+            "type": "SCROLL_TO"
+          }
+        ]
+      },
+      {
+        "id": "I118:3313;184:684",
+        "name": "CAR / Восстановление доступа",
+        "buttons": [
+          {
+            "id": "I118:3313;184:689",
+            "target": "51:962",
+            "targetName": "Маршрут 1",
+            "targetPage": "47:5",
+            "actualCard": "I118:3313;51:962",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3313;184:692",
+            "target": "51:971",
+            "targetName": "Маршрут 2",
+            "targetPage": "47:5",
+            "actualCard": "I118:3313;51:971",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3313;184:695",
+            "target": "51:980",
+            "targetName": "Маршрут 3",
+            "targetPage": "47:5",
+            "actualCard": "I118:3313;51:980",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3313;184:698",
+            "target": "51:989",
+            "targetName": "Маршрут 4",
+            "targetPage": "47:5",
+            "actualCard": "I118:3313;51:989",
+            "type": "SCROLL_TO"
+          }
+        ]
+      },
+      {
+        "id": "I118:3385;184:936",
+        "name": "CAR / Возможности кабинета",
+        "buttons": [
+          {
+            "id": "I118:3385;184:940",
+            "target": "56:1262",
+            "targetName": "Возможности / 1",
+            "targetPage": "47:8",
+            "actualCard": "I118:3385;56:1262",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3385;184:943",
+            "target": "56:1270",
+            "targetName": "Возможности / 7",
+            "targetPage": "47:8",
+            "actualCard": "I118:3385;56:1270",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3385;184:946",
+            "target": "56:1277",
+            "targetName": "Возможности / 12",
+            "targetPage": "47:8",
+            "actualCard": "I118:3385;56:1277",
+            "type": "SCROLL_TO"
+          }
+        ]
+      },
+      {
+        "id": "I118:3413;184:1351",
+        "name": "CAR / Верхнее меню",
+        "buttons": [
+          {
+            "id": "I118:3413;184:1355",
+            "target": "54:1985",
+            "targetName": "Пункт верхнего меню 1",
+            "targetPage": "47:9",
+            "actualCard": "I118:3413;54:1985",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3413;184:1358",
+            "target": "54:1994",
+            "targetName": "Пункт верхнего меню 2",
+            "targetPage": "47:9",
+            "actualCard": "I118:3413;54:1994",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3413;184:1361",
+            "target": "54:2003",
+            "targetName": "Пункт верхнего меню 3",
+            "targetPage": "47:9",
+            "actualCard": "I118:3413;54:2003",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3413;184:1364",
+            "target": "54:2012",
+            "targetName": "Пункт верхнего меню 4",
+            "targetPage": "47:9",
+            "actualCard": "I118:3413;54:2012",
+            "type": "SCROLL_TO"
+          }
+        ]
+      },
+      {
+        "id": "I118:3413;184:1367",
+        "name": "CAR / Главная страница кабинета",
+        "buttons": [
+          {
+            "id": "I118:3413;184:1371",
+            "target": "54:2029",
+            "targetName": "Область главной страницы / Главное меню",
+            "targetPage": "47:9",
+            "actualCard": "I118:3413;54:2029",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3413;184:1374",
+            "target": "54:2038",
+            "targetName": "Область главной страницы / Услуги активны",
+            "targetPage": "47:9",
+            "actualCard": "I118:3413;54:2038",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3413;184:1377",
+            "target": "54:2047",
+            "targetName": "Область главной страницы / Неполадки",
+            "targetPage": "47:9",
+            "actualCard": "I118:3413;54:2047",
+            "type": "SCROLL_TO"
+          },
+          {
+            "id": "I118:3413;184:1380",
+            "target": "54:2056",
+            "targetName": "Область главной страницы / Дом.ру Бонус",
+            "targetPage": "47:9",
+            "actualCard": "I118:3413;54:2056",
+            "type": "SCROLL_TO"
+          }
+        ]
+      }
+    ]
+  }
+]

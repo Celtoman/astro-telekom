@@ -1,0 +1,251 @@
+{
+  "source": "Actual Codex/IAB Figma player screenshots; comparison is a crop of the original before/after captures",
+  "files": [
+    {
+      "file": "320-features-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "7c3d2b930ef42ebb3e862401b5ca5ba1bd93d1df9c9e8ce98ecd400fc5f2b03c"
+    },
+    {
+      "file": "320-features-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "a542458185eb90495df7bb58273dcf1c180d0694fd9569150104f14a900f7259"
+    },
+    {
+      "file": "320-features-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "7b55d37906adc49c93cbb826ca9e8d5f3c188017dd650871ee14f1f1fb425618"
+    },
+    {
+      "file": "320-login-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "5afd1fe3f8c43bfdaf33cbd2e51a04dd69cb280add3e8bebf94d57ca5a4f8b84"
+    },
+    {
+      "file": "320-login-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "b0347d777b2dc98e362d6e0bddd1debddc736721f6a1e108b904aac923d6f699"
+    },
+    {
+      "file": "320-login-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "4d77ee9ab37222edcadd38a8abb81e9d79a733eee86303aa875fac91a1c88f3b"
+    },
+    {
+      "file": "320-menu-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "d6514c7706cd2d542ede49dad34b9cd61953fab9ab95bfc2e72af2763ae14fff"
+    },
+    {
+      "file": "320-menu-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "c0cc521a8d5aca1c7ce00d1e4a087a9a338fd84789a232816bb6cea34312c3bb"
+    },
+    {
+      "file": "320-menu-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "7bd7d85f27f86b143a558c2e21d08d95ca3d81a3da6ca27c3fbf57220edae5e4"
+    },
+    {
+      "file": "320-normal-after-button1.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "45b153a94b2929990b8f1d06c532239d69d3b5586875d055e938545a7c1cd3b6"
+    },
+    {
+      "file": "320-normal-after-button4.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "b26d9bb6d79d3d1733c13fd191ada20fc8808137854d0b7b41239a7cd5d6c062"
+    },
+    {
+      "file": "320-normal-before-button4.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "caf3707da7afeb1b14e9ac01305b2ac9898114434d81bc8c0f25eaeaf07f2a21"
+    },
+    {
+      "file": "320-normal-button1-settled.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "342914a39b5f83283650aaa7b18781cc5f5c05f543cbe44beb17bf8b19451bcc"
+    },
+    {
+      "file": "320-normal-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "342914a39b5f83283650aaa7b18781cc5f5c05f543cbe44beb17bf8b19451bcc"
+    },
+    {
+      "file": "320-overview-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "bea193712277830c25bc27921b8773b17ee4901214e94e01df3b98ba048e42d7"
+    },
+    {
+      "file": "320-overview-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "adeae95a8dfe7a1f7f1b26ca580ba8a3abdf08a2aab40870db88ef74b2b4cf11"
+    },
+    {
+      "file": "320-overview-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "caf3707da7afeb1b14e9ac01305b2ac9898114434d81bc8c0f25eaeaf07f2a21"
+    },
+    {
+      "file": "320-recovery-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "bd9dc7bceb67ea4a0b6ca6bf23702c1d7cefdb6d1d250d12fa4489d6e733a418"
+    },
+    {
+      "file": "320-recovery-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "00797f888c4904ba8ff4f49e21afe13bbe0b1c7b0c9da5de03acea5d39e2a509"
+    },
+    {
+      "file": "320-recovery-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "285f18ded15f41ddc6f32d7c55572978a4872be16c1c5669f3097f2c6b4dc1ff"
+    },
+    {
+      "file": "390-button-comparison.png",
+      "width": 840,
+      "height": 795,
+      "sha256": "c732bbab24c5232c877e20785cef7727ef1c91e7f31c5927cdd71e9aceafabbf"
+    },
+    {
+      "file": "390-features-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "7b5afca81480e37b0b6024383fcd1cca3cddf86dfdd3933f82bbaee712283e63"
+    },
+    {
+      "file": "390-features-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "3a75308a20d3abc64b826e58800c8024aaf007a7d0415f52547b3ee2cbe6695c"
+    },
+    {
+      "file": "390-features-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "d55a1b54a9f9eb04882466261147308e773933f9a2f56412513a3b45c1539370"
+    },
+    {
+      "file": "390-login-button3.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "c780eb9cf3547a843051ed66ac951004f1587a47ca28315c0fd6ae19592cefbe"
+    },
+    {
+      "file": "390-login-drag.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "2e7dc9c956f4fa4e4a33fe40b44f20213a8929fb5c8b06e59f9e88ace2525638"
+    },
+    {
+      "file": "390-login-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "7a2c6dd3fa8820f289a3eb5905785adab9a7305bd0388841a59eb992f02492a3"
+    },
+    {
+      "file": "390-login-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "107f1a7eb088d3b6faf9e50bec00fb035d8696b81f4eeb3cec5c307901e5455f"
+    },
+    {
+      "file": "390-login-return-button-black.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "06babac7b62e4dbdac79dbd70134392212cfc3196eb87a4a2826c72ad7d7de86"
+    },
+    {
+      "file": "390-login-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "40fc96937ea66442eddcec0ecbf424f1f5ae847926df4df8822cc92a915d4a90"
+    },
+    {
+      "file": "390-menu-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "73d5f634a7eeb3413757098c6762a34af8f81f7e0eefd70c8a498a3f201fc56a"
+    },
+    {
+      "file": "390-menu-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "3f1af67bc4264881b147404461fa8414bfa0a5a4c938087b135b85670b3705f2"
+    },
+    {
+      "file": "390-menu-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "92dd63fa348051bb51cdf2cca92487eccbb0f4ea560b49c68577fc0386722a84"
+    },
+    {
+      "file": "390-normal-before.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "1843f7c139435c2acc2d3b999f45494866089dfa8bff663ac8791b24b28bc5ca"
+    },
+    {
+      "file": "390-normal-button4-settled.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "87b7c86dfa11bc2c683a176ccd94c65a581906b2e843e5f29011431933e64722"
+    },
+    {
+      "file": "390-overview-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "1843f7c139435c2acc2d3b999f45494866089dfa8bff663ac8791b24b28bc5ca"
+    },
+    {
+      "file": "390-overview-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "e67895cf5ca600e011f0e5203f98b00e8ba0220383eb91bfe34e54cd008a90ed"
+    },
+    {
+      "file": "390-overview-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "7ab1e4f032b74048eb6fabfb08d14adc94a331a943d344f28a375ac1be27c295"
+    },
+    {
+      "file": "390-recovery-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "fe5b724037893d31dbedf553ced718ab54be5d68fbe0eff2bd89aa728103e4cd"
+    },
+    {
+      "file": "390-recovery-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "253c74ef8c0c0c6c5958a527b5c62b569f886514f5c4c3008cc2a1ad649ecb1b"
+    },
+    {
+      "file": "390-recovery-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "285059b7c4077f5efef5d68eead6715771be649ed1b928c4576e18bbd6b54964"
+    }
+  ]
+}

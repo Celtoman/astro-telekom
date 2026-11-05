@@ -1,0 +1,31 @@
+{
+  "results": [
+    {
+      "width": 390,
+      "rails": 5,
+      "cards": 18,
+      "scrollTransitions": 13,
+      "scrollPass": 13,
+      "buttonChecks": 18,
+      "buttonExpectedPosition": 0,
+      "horizontalDragIndependent": true,
+      "verticalIndependent": true,
+      "returnToFirstByScroll": true
+    },
+    {
+      "width": 320,
+      "rails": 5,
+      "cards": 18,
+      "scrollTransitions": 13,
+      "scrollPass": 13,
+      "buttonChecks": 18,
+      "buttonExpectedPosition": 0,
+      "horizontalDragIndependent": true,
+      "verticalIndependent": true,
+      "returnToFirstByScroll": true
+    }
+  ],
+  "scope": "Actual IAB Figma player; frames 390/320 at natural size in 1280x720 browser; mouse dragging and horizontal/vertical wheel; no physical touchscreen/AT conformance claim",
+  "buttonMeasurement": "DOM scroll position immediately after real click; additional ordinary-mode checks with 1200/1500ms settling confirmed defect",
+  "adaptContentRestoredFalse": true
+}

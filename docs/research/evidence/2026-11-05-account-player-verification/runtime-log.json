@@ -1,0 +1,1284 @@
+[
+  {
+    "width": 390,
+    "rail": "login",
+    "action": "physical button 1 after horizontal drag",
+    "before": [
+      {
+        "h": 720,
+        "left": 0,
+        "sh": 17992,
+        "sw": 390,
+        "top": 3999,
+        "w": 390
+      },
+      {
+        "h": 17992,
+        "left": 0,
+        "sh": 17992,
+        "sw": 390,
+        "top": 0,
+        "w": 390
+      },
+      {
+        "h": 418,
+        "left": 433,
+        "sh": 418,
+        "sw": 1010,
+        "top": 0,
+        "w": 358
+      },
+      {
+        "h": 418,
+        "left": 0,
+        "sh": 418,
+        "sw": 1010,
+        "top": 0,
+        "w": 1010
+      },
+      {
+        "h": 372,
+        "left": 0,
+        "sh": 372,
+        "sw": 1352,
+        "top": 0,
+        "w": 358
+      },
+      {
+        "h": 372,
+        "left": 0,
+        "sh": 372,
+        "sw": 1352,
+        "top": 0,
+        "w": 1352
+      },
+      {
+        "h": 397,
+        "left": 0,
+        "sh": 397,
+        "sw": 1010,
+        "top": 0,
+        "w": 358
+      },
+      {
+        "h": 397,
+        "left": 0,
+        "sh": 397,
+        "sw": 1010,
+        "top": 0,
+        "w": 1010
+      },
+      {
+        "h": 300,
+        "left": 0,
+        "sh": 300,
+        "sw": 1192,
+        "top": 0,
+        "w": 318
+      },
+      {
+        "h": 300,
+        "left": 0,
+        "sh": 300,
+        "sw": 1192,
+        "top": 0,
+        "w": 1192
+      },
+      {
+        "h": 498,
+        "left": 0,
+        "sh": 498,
+        "sw": 1352,
+        "top": 0,
+        "w": 358
+      },
+      {
+        "h": 498,
+        "left": 0,
+        "sh": 498,
+        "sw": 1352,
+        "top": 0,
+        "w": 1352
+      }
+    ],
+    "after": [
+      {
+        "h": 720,
+        "left": 0,
+        "sh": 17992,
+        "sw": 390,
+        "top": 3999,
+        "w": 390
+      },
+      {
+        "h": 17992,
+        "left": 0,
+        "sh": 17992,
+        "sw": 390,
+        "top": 0,
+        "w": 390
+      },
+      {
+        "h": 418,
+        "left": 433,
+        "sh": 418,
+        "sw": 1010,
+        "top": 0,
+        "w": 358
+      },
+      {
+        "h": 418,
+        "left": 0,
+        "sh": 418,
+        "sw": 1010,
+        "top": 0,
+        "w": 1010
+      },
+      {
+        "h": 372,
+        "left": 0,
+        "sh": 372,
+        "sw": 1352,
+        "top": 0,
+        "w": 358
+      },
+      {
+        "h": 372,
+        "left": 0,
+        "sh": 372,
+        "sw": 1352,
+        "top": 0,
+        "w": 1352
+      },
+      {
+        "h": 397,
+        "left": 0,
+        "sh": 397,
+        "sw": 1010,
+        "top": 0,
+        "w": 358
+      },
+      {
+        "h": 397,
+        "left": 0,
+        "sh": 397,
+        "sw": 1010,
+        "top": 0,
+        "w": 1010
+      },
+      {
+        "h": 300,
+        "left": 0,
+        "sh": 300,
+        "sw": 1192,
+        "top": 0,
+        "w": 318
+      },
+      {
+        "h": 300,
+        "left": 0,
+        "sh": 300,
+        "sw": 1192,
+        "top": 0,
+        "w": 1192
+      },
+      {
+        "h": 498,
+        "left": 0,
+        "sh": 498,
+        "sw": 1352,
+        "top": 0,
+        "w": 358
+      },
+      {
+        "h": 498,
+        "left": 0,
+        "sh": 498,
+        "sw": 1352,
+        "top": 0,
+        "w": 1352
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "rail": "login",
+    "buttons": [
+      {
+        "n": 2,
+        "expected": 342,
+        "before": {
+          "x": 0,
+          "y": 4135
+        },
+        "after": {
+          "x": 0,
+          "y": 4135
+        }
+      },
+      {
+        "n": 3,
+        "expected": 652,
+        "before": {
+          "x": 0,
+          "y": 4135
+        },
+        "after": {
+          "x": 0,
+          "y": 4135
+        }
+      },
+      {
+        "n": 1,
+        "expected": 0,
+        "before": {
+          "x": 652,
+          "y": 4135
+        },
+        "after": {
+          "x": 652,
+          "y": 4135
+        }
+      }
+    ],
+    "scrollSteps": [
+      {
+        "card": 2,
+        "expected": 342,
+        "x": 342,
+        "pageBefore": 4135,
+        "pageAfter": 4135
+      },
+      {
+        "card": 3,
+        "expected": 652,
+        "x": 652,
+        "pageBefore": 4135,
+        "pageAfter": 4135
+      }
+    ],
+    "drag": {
+      "before": {
+        "x": 0,
+        "y": 4135
+      },
+      "after": {
+        "x": 489,
+        "y": 4135
+      }
+    },
+    "verticalOverRail": {
+      "before": {
+        "x": 489,
+        "y": 4135
+      },
+      "after": {
+        "x": 491,
+        "y": 4207
+      }
+    },
+    "wheelReturn": {
+      "before": {
+        "x": 491,
+        "y": 4207
+      },
+      "after": {
+        "x": 0,
+        "y": 4207
+      }
+    }
+  },
+  {
+    "width": 390,
+    "rail": "recovery",
+    "buttons": [
+      {
+        "n": 2,
+        "expected": 342,
+        "before": {
+          "x": 0,
+          "y": 5803
+        },
+        "after": {
+          "x": 0,
+          "y": 5803
+        }
+      },
+      {
+        "n": 3,
+        "expected": 684,
+        "before": {
+          "x": 0,
+          "y": 5803
+        },
+        "after": {
+          "x": 0,
+          "y": 5803
+        }
+      },
+      {
+        "n": 4,
+        "expected": 994,
+        "before": {
+          "x": 0,
+          "y": 5803
+        },
+        "after": {
+          "x": 0,
+          "y": 5803
+        }
+      },
+      {
+        "n": 1,
+        "expected": 0,
+        "before": {
+          "x": 994,
+          "y": 5803
+        },
+        "after": {
+          "x": 994,
+          "y": 5803
+        }
+      }
+    ],
+    "scrollSteps": [
+      {
+        "card": 2,
+        "expected": 342,
+        "x": 342,
+        "pageBefore": 5803,
+        "pageAfter": 5803
+      },
+      {
+        "card": 3,
+        "expected": 684,
+        "x": 684,
+        "pageBefore": 5803,
+        "pageAfter": 5803
+      },
+      {
+        "card": 4,
+        "expected": 994,
+        "x": 994,
+        "pageBefore": 5803,
+        "pageAfter": 5803
+      }
+    ],
+    "drag": {
+      "before": {
+        "x": 0,
+        "y": 5803
+      },
+      "after": {
+        "x": 493,
+        "y": 5803
+      }
+    },
+    "verticalOverRail": {
+      "before": {
+        "x": 493,
+        "y": 5803
+      },
+      "after": {
+        "x": 495,
+        "y": 5875
+      }
+    },
+    "wheelReturn": {
+      "before": {
+        "x": 495,
+        "y": 5875
+      },
+      "after": {
+        "x": 0,
+        "y": 5875
+      }
+    }
+  },
+  {
+    "width": 390,
+    "rail": "login",
+    "action": "vertical wheel over rail after clamping at last card",
+    "before": {
+      "x": 652,
+      "y": 4135
+    },
+    "after": {
+      "x": 652,
+      "y": 4207
+    },
+    "returnX": 0
+  },
+  {
+    "width": 390,
+    "rail": "recovery",
+    "action": "vertical wheel over rail after clamping at last card",
+    "before": {
+      "x": 994,
+      "y": 5802
+    },
+    "after": {
+      "x": 994,
+      "y": 5874
+    },
+    "returnX": 0
+  },
+  {
+    "width": 390,
+    "rail": "features",
+    "buttons": [
+      {
+        "n": 2,
+        "expected": 342,
+        "before": {
+          "x": 0,
+          "y": 6735
+        },
+        "after": {
+          "x": 0,
+          "y": 6735
+        }
+      },
+      {
+        "n": 3,
+        "expected": 652,
+        "before": {
+          "x": 0,
+          "y": 6735
+        },
+        "after": {
+          "x": 0,
+          "y": 6735
+        }
+      },
+      {
+        "n": 1,
+        "expected": 0,
+        "before": {
+          "x": 652,
+          "y": 6735
+        },
+        "after": {
+          "x": 652,
+          "y": 6735
+        }
+      }
+    ],
+    "scrollSteps": [
+      {
+        "card": 2,
+        "expected": 342,
+        "x": 342,
+        "pageBefore": 6735,
+        "pageAfter": 6735
+      },
+      {
+        "card": 3,
+        "expected": 652,
+        "x": 652,
+        "pageBefore": 6735,
+        "pageAfter": 6735
+      }
+    ],
+    "drag": {
+      "before": {
+        "x": 0,
+        "y": 6735
+      },
+      "after": {
+        "x": 476,
+        "y": 6735
+      }
+    },
+    "verticalOverRail": {
+      "before": {
+        "x": 476,
+        "y": 6735
+      },
+      "after": {
+        "x": 476,
+        "y": 6807
+      }
+    },
+    "wheelReturn": {
+      "before": {
+        "x": 476,
+        "y": 6807
+      },
+      "after": {
+        "x": 0,
+        "y": 6807
+      }
+    }
+  },
+  {
+    "width": 390,
+    "rail": "features",
+    "action": "vertical wheel over rail after clamping at last card",
+    "before": {
+      "x": 652,
+      "y": 6735
+    },
+    "after": {
+      "x": 652,
+      "y": 6807
+    },
+    "returnX": 0
+  },
+  {
+    "width": 390,
+    "rail": "menu",
+    "buttons": [
+      {
+        "n": 2,
+        "expected": 302,
+        "before": {
+          "x": 0,
+          "y": 7704
+        },
+        "after": {
+          "x": 0,
+          "y": 7704
+        }
+      },
+      {
+        "n": 3,
+        "expected": 604,
+        "before": {
+          "x": 0,
+          "y": 7704
+        },
+        "after": {
+          "x": 0,
+          "y": 7704
+        }
+      },
+      {
+        "n": 4,
+        "expected": 874,
+        "before": {
+          "x": 0,
+          "y": 7704
+        },
+        "after": {
+          "x": 0,
+          "y": 7704
+        }
+      },
+      {
+        "n": 1,
+        "expected": 0,
+        "before": {
+          "x": 874,
+          "y": 7704
+        },
+        "after": {
+          "x": 874,
+          "y": 7704
+        }
+      }
+    ],
+    "scrollSteps": [
+      {
+        "card": 2,
+        "expected": 302,
+        "x": 302,
+        "pageBefore": 7704,
+        "pageAfter": 7704
+      },
+      {
+        "card": 3,
+        "expected": 604,
+        "x": 604,
+        "pageBefore": 7704,
+        "pageAfter": 7704
+      },
+      {
+        "card": 4,
+        "expected": 874,
+        "x": 874,
+        "pageBefore": 7704,
+        "pageAfter": 7704
+      }
+    ],
+    "drag": {
+      "before": {
+        "x": 0,
+        "y": 7704
+      },
+      "after": {
+        "x": 322,
+        "y": 7704
+      }
+    },
+    "verticalOverRail": {
+      "before": {
+        "x": 322,
+        "y": 7704
+      },
+      "after": {
+        "x": 322,
+        "y": 7776
+      }
+    },
+    "wheelReturn": {
+      "before": {
+        "x": 322,
+        "y": 7776
+      },
+      "after": {
+        "x": 0,
+        "y": 7776
+      }
+    }
+  },
+  {
+    "width": 390,
+    "rail": "menu",
+    "action": "vertical wheel over rail after clamping at last card",
+    "before": {
+      "x": 874,
+      "y": 7705
+    },
+    "after": {
+      "x": 874,
+      "y": 7777
+    },
+    "returnX": 0
+  },
+  {
+    "width": 390,
+    "rail": "overview",
+    "buttons": [
+      {
+        "n": 2,
+        "expected": 342,
+        "before": {
+          "x": 0,
+          "y": 8480
+        },
+        "after": {
+          "x": 0,
+          "y": 8480
+        }
+      },
+      {
+        "n": 3,
+        "expected": 684,
+        "before": {
+          "x": 0,
+          "y": 8480
+        },
+        "after": {
+          "x": 0,
+          "y": 8480
+        }
+      },
+      {
+        "n": 4,
+        "expected": 994,
+        "before": {
+          "x": 0,
+          "y": 8480
+        },
+        "after": {
+          "x": 0,
+          "y": 8480
+        }
+      },
+      {
+        "n": 1,
+        "expected": 0,
+        "before": {
+          "x": 994,
+          "y": 8480
+        },
+        "after": {
+          "x": 994,
+          "y": 8480
+        }
+      }
+    ],
+    "scrollSteps": [
+      {
+        "card": 2,
+        "expected": 342,
+        "x": 342,
+        "pageBefore": 8480,
+        "pageAfter": 8480
+      },
+      {
+        "card": 3,
+        "expected": 684,
+        "x": 684,
+        "pageBefore": 8480,
+        "pageAfter": 8480
+      },
+      {
+        "card": 4,
+        "expected": 994,
+        "x": 994,
+        "pageBefore": 8480,
+        "pageAfter": 8480
+      }
+    ],
+    "drag": {
+      "before": {
+        "x": 0,
+        "y": 8480
+      },
+      "after": {
+        "x": 488,
+        "y": 8480
+      }
+    },
+    "verticalOverRail": {
+      "before": {
+        "x": 994,
+        "y": 8480
+      },
+      "after": {
+        "x": 994,
+        "y": 8552
+      }
+    },
+    "wheelReturn": {
+      "before": {
+        "x": 994,
+        "y": 8552
+      },
+      "after": {
+        "x": 0,
+        "y": 8552
+      }
+    }
+  },
+  {
+    "width": 320,
+    "rail": "login",
+    "buttons": [
+      {
+        "n": 2,
+        "expected": 272,
+        "before": {
+          "x": 0,
+          "y": 4722
+        },
+        "after": {
+          "x": 0,
+          "y": 4722
+        }
+      },
+      {
+        "n": 3,
+        "expected": 512,
+        "before": {
+          "x": 0,
+          "y": 4722
+        },
+        "after": {
+          "x": 0,
+          "y": 4722
+        }
+      },
+      {
+        "n": 1,
+        "expected": 0,
+        "before": {
+          "x": 512,
+          "y": 4722
+        },
+        "after": {
+          "x": 512,
+          "y": 4722
+        }
+      }
+    ],
+    "scrollSteps": [
+      {
+        "card": 2,
+        "expected": 272,
+        "x": 272,
+        "pageBefore": 4722,
+        "pageAfter": 4722
+      },
+      {
+        "card": 3,
+        "expected": 512,
+        "x": 512,
+        "pageBefore": 4722,
+        "pageAfter": 4722
+      }
+    ],
+    "drag": {
+      "before": {
+        "x": 0,
+        "y": 4722
+      },
+      "after": {
+        "x": 341,
+        "y": 4722
+      }
+    },
+    "verticalOverRail": {
+      "before": {
+        "x": 512,
+        "y": 4722
+      },
+      "after": {
+        "x": 512,
+        "y": 4794
+      }
+    },
+    "wheelReturn": {
+      "before": {
+        "x": 512,
+        "y": 4794
+      },
+      "after": {
+        "x": 0,
+        "y": 4794
+      }
+    }
+  },
+  {
+    "width": 320,
+    "rail": "recovery",
+    "buttons": [
+      {
+        "n": 2,
+        "expected": 272,
+        "before": {
+          "x": 0,
+          "y": 6559
+        },
+        "after": {
+          "x": 0,
+          "y": 6559
+        }
+      },
+      {
+        "n": 3,
+        "expected": 544,
+        "before": {
+          "x": 0,
+          "y": 6559
+        },
+        "after": {
+          "x": 0,
+          "y": 6559
+        }
+      },
+      {
+        "n": 4,
+        "expected": 784,
+        "before": {
+          "x": 0,
+          "y": 6559
+        },
+        "after": {
+          "x": 0,
+          "y": 6559
+        }
+      },
+      {
+        "n": 1,
+        "expected": 0,
+        "before": {
+          "x": 784,
+          "y": 6559
+        },
+        "after": {
+          "x": 784,
+          "y": 6559
+        }
+      }
+    ],
+    "scrollSteps": [
+      {
+        "card": 2,
+        "expected": 272,
+        "x": 272,
+        "pageBefore": 6559,
+        "pageAfter": 6559
+      },
+      {
+        "card": 3,
+        "expected": 544,
+        "x": 544,
+        "pageBefore": 6559,
+        "pageAfter": 6559
+      },
+      {
+        "card": 4,
+        "expected": 784,
+        "x": 784,
+        "pageBefore": 6559,
+        "pageAfter": 6559
+      }
+    ],
+    "drag": {
+      "before": {
+        "x": 0,
+        "y": 6559
+      },
+      "after": {
+        "x": 341,
+        "y": 6559
+      }
+    },
+    "verticalOverRail": {
+      "before": {
+        "x": 784,
+        "y": 6559
+      },
+      "after": {
+        "x": 784,
+        "y": 6631
+      }
+    },
+    "wheelReturn": {
+      "before": {
+        "x": 784,
+        "y": 6631
+      },
+      "after": {
+        "x": 0,
+        "y": 6631
+      }
+    }
+  },
+  {
+    "width": 320,
+    "rail": "features",
+    "buttons": [
+      {
+        "n": 2,
+        "expected": 272,
+        "before": {
+          "x": 0,
+          "y": 7572
+        },
+        "after": {
+          "x": 0,
+          "y": 7572
+        }
+      },
+      {
+        "n": 3,
+        "expected": 512,
+        "before": {
+          "x": 0,
+          "y": 7572
+        },
+        "after": {
+          "x": 0,
+          "y": 7572
+        }
+      },
+      {
+        "n": 1,
+        "expected": 0,
+        "before": {
+          "x": 512,
+          "y": 7572
+        },
+        "after": {
+          "x": 512,
+          "y": 7572
+        }
+      }
+    ],
+    "scrollSteps": [
+      {
+        "card": 2,
+        "expected": 272,
+        "x": 272,
+        "pageBefore": 7572,
+        "pageAfter": 7572
+      },
+      {
+        "card": 3,
+        "expected": 512,
+        "x": 512,
+        "pageBefore": 7572,
+        "pageAfter": 7572
+      }
+    ],
+    "drag": {
+      "before": {
+        "x": 0,
+        "y": 7572
+      },
+      "after": {
+        "x": 337,
+        "y": 7572
+      }
+    },
+    "verticalOverRail": {
+      "before": {
+        "x": 512,
+        "y": 7572
+      },
+      "after": {
+        "x": 512,
+        "y": 7644
+      }
+    },
+    "wheelReturn": {
+      "before": {
+        "x": 512,
+        "y": 7644
+      },
+      "after": {
+        "x": 0,
+        "y": 7644
+      }
+    }
+  },
+  {
+    "width": 320,
+    "rail": "menu",
+    "buttons": [
+      {
+        "n": 2,
+        "expected": 264,
+        "before": {
+          "x": 0,
+          "y": 8722
+        },
+        "after": {
+          "x": 0,
+          "y": 8722
+        }
+      },
+      {
+        "n": 3,
+        "expected": 528,
+        "before": {
+          "x": 0,
+          "y": 8722
+        },
+        "after": {
+          "x": 0,
+          "y": 8722
+        }
+      },
+      {
+        "n": 4,
+        "expected": 792,
+        "before": {
+          "x": 0,
+          "y": 8722
+        },
+        "after": {
+          "x": 0,
+          "y": 8722
+        }
+      },
+      {
+        "n": 1,
+        "expected": 0,
+        "before": {
+          "x": 792,
+          "y": 8722
+        },
+        "after": {
+          "x": 792,
+          "y": 8722
+        }
+      }
+    ],
+    "scrollSteps": [
+      {
+        "card": 2,
+        "expected": 264,
+        "x": 264,
+        "pageBefore": 8722,
+        "pageAfter": 8722
+      },
+      {
+        "card": 3,
+        "expected": 528,
+        "x": 528,
+        "pageBefore": 8722,
+        "pageAfter": 8722
+      },
+      {
+        "card": 4,
+        "expected": 792,
+        "x": 792,
+        "pageBefore": 8722,
+        "pageAfter": 8722
+      }
+    ],
+    "drag": {
+      "before": {
+        "x": 0,
+        "y": 8722
+      },
+      "after": {
+        "x": 264,
+        "y": 8722
+      }
+    },
+    "verticalOverRail": {
+      "before": {
+        "x": 792,
+        "y": 8722
+      },
+      "after": {
+        "x": 792,
+        "y": 8794
+      }
+    },
+    "wheelReturn": {
+      "before": {
+        "x": 792,
+        "y": 8794
+      },
+      "after": {
+        "x": 0,
+        "y": 8794
+      }
+    }
+  },
+  {
+    "width": 320,
+    "rail": "overview",
+    "buttons": [
+      {
+        "n": 2,
+        "expected": 272,
+        "before": {
+          "x": 0,
+          "y": 9508
+        },
+        "after": {
+          "x": 0,
+          "y": 9508
+        }
+      },
+      {
+        "n": 3,
+        "expected": 544,
+        "before": {
+          "x": 0,
+          "y": 9508
+        },
+        "after": {
+          "x": 0,
+          "y": 9508
+        }
+      },
+      {
+        "n": 4,
+        "expected": 784,
+        "before": {
+          "x": 0,
+          "y": 9508
+        },
+        "after": {
+          "x": 0,
+          "y": 9508
+        }
+      },
+      {
+        "n": 1,
+        "expected": 0,
+        "before": {
+          "x": 784,
+          "y": 9508
+        },
+        "after": {
+          "x": 784,
+          "y": 9508
+        }
+      }
+    ],
+    "scrollSteps": [
+      {
+        "card": 2,
+        "expected": 272,
+        "x": 272,
+        "pageBefore": 9508,
+        "pageAfter": 9508
+      },
+      {
+        "card": 3,
+        "expected": 544,
+        "x": 544,
+        "pageBefore": 9508,
+        "pageAfter": 9508
+      },
+      {
+        "card": 4,
+        "expected": 784,
+        "x": 784,
+        "pageBefore": 9508,
+        "pageAfter": 9508
+      }
+    ],
+    "drag": {
+      "before": {
+        "x": 0,
+        "y": 9508
+      },
+      "after": {
+        "x": 341,
+        "y": 9508
+      }
+    },
+    "verticalOverRail": {
+      "before": {
+        "x": 784,
+        "y": 9508
+      },
+      "after": {
+        "x": 784,
+        "y": 9580
+      }
+    },
+    "wheelReturn": {
+      "before": {
+        "x": 784,
+        "y": 9580
+      },
+      "after": {
+        "x": 0,
+        "y": 9580
+      }
+    }
+  },
+  {
+    "action": "normal player control checks",
+    "adaptContent": false,
+    "cases": [
+      {
+        "width": 320,
+        "rail": "overview",
+        "button": 4,
+        "result": "first card remained visible",
+        "evidence": "320-normal-after-button4.png"
+      },
+      {
+        "width": 320,
+        "rail": "overview",
+        "button": 1,
+        "from": "last card",
+        "result": "Did not return from last card to first; intermittent black capture is inconclusive for rendering",
+        "waitMs": 1500,
+        "evidence": "320-normal-button1-settled.png"
+      },
+      {
+        "width": 390,
+        "rail": "overview",
+        "button": 4,
+        "result": "Saved screenshot still shows first card after button4, despite 1200ms settling",
+        "waitMs": 1200,
+        "evidence": "390-normal-button4-settled.png"
+      }
+    ],
+    "captureLimitation": "Some getScreenshot calls showed black while neighboring browser.screenshot files showed content. Do not classify these as a confirmed rendering defect."
+  }
+]

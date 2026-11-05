@@ -1,5 +1,7 @@
 # Личный кабинет: компактные мобильные ленты карточек
 
+Фактическая проверка плеера выполнена в [#506](2026-11-05-account-player-verification.md): прокрутка и возврат жестом прошли на390/320; кнопки не прошли, дефект [#507](https://github.com/Celtoman/astro-telekom/issues/507) открыт. Авторизация Codex позволила открыть плеер без повторного входа. Ниже сохранены исходная статическая проверка и её прежние ограничения; API-валидность ссылок не означает рабочие кнопки.
+
 05.11.2026. [Задача #505](https://github.com/Celtoman/astro-telekom/issues/505), продолжение [#504](2026-11-05-account-list-style-figma.md). **DESKTOP_TABLET_OWNER_OK / MOBILE_APPLIED_REVIEW / UNPUBLISHED**. Владелец принял Desktop и Tablet и поручил проверить/сократить мобильную страницу с использованием горизонтальных карточек.
 
 [Mobile390](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-2109) · [Mobile320](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-3096).
