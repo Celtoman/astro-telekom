@@ -1,0 +1,125 @@
+{
+  "source": "Figma native screenshots and derived detail crops",
+  "files": [
+    {
+      "file": "Desktop-active.png",
+      "width": 672,
+      "height": 265,
+      "sha256": "4ef77c78f7ce813576eca1823430b7e570b9c5a64c16e57ccffed99e23b1cd40"
+    },
+    {
+      "file": "Desktop-bonus.png",
+      "width": 672,
+      "height": 193,
+      "sha256": "8f83f36858f31afa5ff7ef88b3acc93c3e86d30cb9c94044b53d9ac925c70765"
+    },
+    {
+      "file": "Desktop-login.png",
+      "width": 851,
+      "height": 249,
+      "sha256": "cf041c5aaa1a2092b9375ceb0d18787648a2fc68b5033c03198db54b89eb6526"
+    },
+    {
+      "file": "Desktop-registration.png",
+      "width": 730,
+      "height": 213,
+      "sha256": "eae3d6bcaee07ff6dd79ba98cf2d9e687ef087f07e93b2c52ef853b54c4adf36"
+    },
+    {
+      "file": "Desktop.png",
+      "width": 1440,
+      "height": 11785,
+      "sha256": "85795faf3e332c67f7e13a5b6a31e557883323f88534b4f7a9b918c470c4fc61"
+    },
+    {
+      "file": "Mobile-active.png",
+      "width": 358,
+      "height": 385,
+      "sha256": "e5453a954a3e0b62bda652d962b0b1d0ae8e79ea67f110d0341ba385a7b94831"
+    },
+    {
+      "file": "Mobile-bonus.png",
+      "width": 358,
+      "height": 241,
+      "sha256": "f32e35c09f651faf08f9dfa7f0c49531cf505dfc8e2737f90e414654c69d200d"
+    },
+    {
+      "file": "Mobile-login.png",
+      "width": 390,
+      "height": 465,
+      "sha256": "be1eebd933f2d79993393bd408c30d1451030342ba094a670884a0243a951dcf"
+    },
+    {
+      "file": "Mobile-registration.png",
+      "width": 364,
+      "height": 285,
+      "sha256": "ca534c915fe9962135f3f3e7f1a893faffcfda171b8721dbe0b57c63d6c8aad5"
+    },
+    {
+      "file": "Mobile.png",
+      "width": 390,
+      "height": 21243,
+      "sha256": "86bd4ba77b618181ca3cd1374129559bc7a164613effb46ed4d709d46d4c974e"
+    },
+    {
+      "file": "Mobile320-active.png",
+      "width": 288,
+      "height": 481,
+      "sha256": "131c5076066156a4f8294d14a25ebca9206e70f20543a822e1d05c607b40d9cf"
+    },
+    {
+      "file": "Mobile320-bonus.png",
+      "width": 288,
+      "height": 289,
+      "sha256": "aa4b9a1aaf90bd25e3608a43876ef7bafffc07622c2813a9c7cc31662e16f21d"
+    },
+    {
+      "file": "Mobile320-login.png",
+      "width": 320,
+      "height": 585,
+      "sha256": "7b41b45f41f38baa9c7455475d4e032653b6da996adc31d7a8acb5335c6cde28"
+    },
+    {
+      "file": "Mobile320-registration.png",
+      "width": 294,
+      "height": 357,
+      "sha256": "0466256e0752b3a8b5f891b06e39d651b5a7f24000149d6869a5f784ed98bcf8"
+    },
+    {
+      "file": "Mobile320.png",
+      "width": 320,
+      "height": 23492,
+      "sha256": "701f339f07755463f3e6a0cc4a2f781889fbaf5f29b4e260283950fc9cbc871e"
+    },
+    {
+      "file": "Tablet-active.png",
+      "width": 720,
+      "height": 265,
+      "sha256": "62589662cab12fc27202241aaae87c69850f6292687988881d03100cf4a6ccb8"
+    },
+    {
+      "file": "Tablet-bonus.png",
+      "width": 720,
+      "height": 193,
+      "sha256": "1b36d6fb409d8e37f820fe7cf835f49058601bf6929d7b0b555fbedae561cd11"
+    },
+    {
+      "file": "Tablet-login.png",
+      "width": 760,
+      "height": 273,
+      "sha256": "7ca0d2667c84a9f53d5e67b017c464cfc317719bc95e060669a3896158c4b4a9"
+    },
+    {
+      "file": "Tablet-registration.png",
+      "width": 726,
+      "height": 213,
+      "sha256": "bab268183276e5cdf59c84104cdbd3be9cf4540d2ae6729dfc6823a7902bdd3a"
+    },
+    {
+      "file": "Tablet.png",
+      "width": 834,
+      "height": 17786,
+      "sha256": "2e2fe8174b9ff1cf8bd127bc5b61f604ac2e6606ba4d7b35921f388923ed9e74"
+    }
+  ]
+}

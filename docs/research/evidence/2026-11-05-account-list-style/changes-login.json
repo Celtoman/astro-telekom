@@ -1,0 +1,268 @@
+{
+  "mutatedNodeIds": [
+    "53:187",
+    "53:189",
+    "53:191",
+    "53:219",
+    "53:221",
+    "53:223",
+    "53:251",
+    "53:253",
+    "53:255",
+    "53:283",
+    "53:285",
+    "53:287",
+    "53:185",
+    "53:217",
+    "53:249",
+    "53:281"
+  ],
+  "changed": [
+    {
+      "id": "53:187",
+      "text": "Главная страница Dom.ru — Кнопка расположены в верхнем правом углу сайта. При нажатии на неё вы увидите поля для ввода учетных данных. Так же ссылка для входа в ЛК находится в нижнем меню официально сайта провайдера.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": []
+    },
+    {
+      "id": "53:189",
+      "text": "Страница входа в ЛК Домру lk.dom.ru — При входе на страницу сразу появляются поля для заполнения логина и пароля. Также здесь предусмотрена возможность восстановить забытые данные.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "lk.dom.ru",
+          "link": {
+            "type": "URL",
+            "value": "https://dom.ru/user/login"
+          }
+        }
+      ]
+    },
+    {
+      "id": "53:191",
+      "text": "Приложение Мой Дом.ru — Официальное приложение Домру для мобильных устройств. Скачивайте программу в Google Play, RuStore или AppGallery. После установки введите ваши учетные данные.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "Google Play",
+          "link": {
+            "type": "URL",
+            "value": "https://play.google.com/store/apps/details?id=com.ertelecom.agent&hl=ru"
+          }
+        },
+        {
+          "text": "RuStore",
+          "link": {
+            "type": "URL",
+            "value": "https://www.rustore.ru/catalog/app/com.ertelecom.agent"
+          }
+        },
+        {
+          "text": "AppGallery",
+          "link": {
+            "type": "URL",
+            "value": "https://appgallery.huawei.com/app/C101960911"
+          }
+        }
+      ]
+    },
+    {
+      "id": "53:219",
+      "text": "Главная страница Dom.ru — Кнопка расположены в верхнем правом углу сайта. При нажатии на неё вы увидите поля для ввода учетных данных. Так же ссылка для входа в ЛК находится в нижнем меню официально сайта провайдера.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": []
+    },
+    {
+      "id": "53:221",
+      "text": "Страница входа в ЛК Домру lk.dom.ru — При входе на страницу сразу появляются поля для заполнения логина и пароля. Также здесь предусмотрена возможность восстановить забытые данные.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "lk.dom.ru",
+          "link": {
+            "type": "URL",
+            "value": "https://dom.ru/user/login"
+          }
+        }
+      ]
+    },
+    {
+      "id": "53:223",
+      "text": "Приложение Мой Дом.ru — Официальное приложение Домру для мобильных устройств. Скачивайте программу в Google Play, RuStore или AppGallery. После установки введите ваши учетные данные.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "Google Play",
+          "link": {
+            "type": "URL",
+            "value": "https://play.google.com/store/apps/details?id=com.ertelecom.agent&hl=ru"
+          }
+        },
+        {
+          "text": "RuStore",
+          "link": {
+            "type": "URL",
+            "value": "https://www.rustore.ru/catalog/app/com.ertelecom.agent"
+          }
+        },
+        {
+          "text": "AppGallery",
+          "link": {
+            "type": "URL",
+            "value": "https://appgallery.huawei.com/app/C101960911"
+          }
+        }
+      ]
+    },
+    {
+      "id": "53:251",
+      "text": "Главная страница Dom.ru — Кнопка расположены в верхнем правом углу сайта. При нажатии на неё вы увидите поля для ввода учетных данных. Так же ссылка для входа в ЛК находится в нижнем меню официально сайта провайдера.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": []
+    },
+    {
+      "id": "53:253",
+      "text": "Страница входа в ЛК Домру lk.dom.ru — При входе на страницу сразу появляются поля для заполнения логина и пароля. Также здесь предусмотрена возможность восстановить забытые данные.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "lk.dom.ru",
+          "link": {
+            "type": "URL",
+            "value": "https://dom.ru/user/login"
+          }
+        }
+      ]
+    },
+    {
+      "id": "53:255",
+      "text": "Приложение Мой Дом.ru — Официальное приложение Домру для мобильных устройств. Скачивайте программу в Google Play, RuStore или AppGallery. После установки введите ваши учетные данные.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "Google Play",
+          "link": {
+            "type": "URL",
+            "value": "https://play.google.com/store/apps/details?id=com.ertelecom.agent&hl=ru"
+          }
+        },
+        {
+          "text": "RuStore",
+          "link": {
+            "type": "URL",
+            "value": "https://www.rustore.ru/catalog/app/com.ertelecom.agent"
+          }
+        },
+        {
+          "text": "AppGallery",
+          "link": {
+            "type": "URL",
+            "value": "https://appgallery.huawei.com/app/C101960911"
+          }
+        }
+      ]
+    },
+    {
+      "id": "53:283",
+      "text": "Главная страница Dom.ru — Кнопка расположены в верхнем правом углу сайта. При нажатии на неё вы увидите поля для ввода учетных данных. Так же ссылка для входа в ЛК находится в нижнем меню официально сайта провайдера.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": []
+    },
+    {
+      "id": "53:285",
+      "text": "Страница входа в ЛК Домру lk.dom.ru — При входе на страницу сразу появляются поля для заполнения логина и пароля. Также здесь предусмотрена возможность восстановить забытые данные.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "lk.dom.ru",
+          "link": {
+            "type": "URL",
+            "value": "https://dom.ru/user/login"
+          }
+        }
+      ]
+    },
+    {
+      "id": "53:287",
+      "text": "Приложение Мой Дом.ru — Официальное приложение Домру для мобильных устройств. Скачивайте программу в Google Play, RuStore или AppGallery. После установки введите ваши учетные данные.",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "Google Play",
+          "link": {
+            "type": "URL",
+            "value": "https://play.google.com/store/apps/details?id=com.ertelecom.agent&hl=ru"
+          }
+        },
+        {
+          "text": "RuStore",
+          "link": {
+            "type": "URL",
+            "value": "https://www.rustore.ru/catalog/app/com.ertelecom.agent"
+          }
+        },
+        {
+          "text": "AppGallery",
+          "link": {
+            "type": "URL",
+            "value": "https://appgallery.huawei.com/app/C101960911"
+          }
+        }
+      ]
+    }
+  ],
+  "parents": [
+    "53:185",
+    "53:217",
+    "53:249",
+    "53:281"
+  ]
+}

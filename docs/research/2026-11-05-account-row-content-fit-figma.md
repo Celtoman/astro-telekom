@@ -1,5 +1,7 @@
 # Личный кабинет: высота карточек по содержимому и подписи
 
+Следующая итерация [#504](2026-11-05-account-list-style-figma.md) унифицирует текстовые списки по образцу «Услуги активны». От добавленных интервалов нижний Desktop-ряд естественно вырос226→258px. Числа и экспорты ниже фиксируют состояние #503.
+
 05.11.2026. [Задача #503](https://github.com/Celtoman/astro-telekom/issues/503), продолжение [#502](2026-11-05-account-faq-payment-polish-figma.md). Статус: **APPLIED_IN_FIGMA / REVIEW / UNPUBLISHED**.
 
 [Desktop1440](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-5) · [Tablet834](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-1066) · [Mobile390](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-2109) · [Mobile320](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-3096).

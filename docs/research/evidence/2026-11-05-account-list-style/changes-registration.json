@@ -1,0 +1,203 @@
+{
+  "mutatedNodeIds": [
+    "84:1029",
+    "84:1031",
+    "84:1033",
+    "84:1055",
+    "84:1057",
+    "84:1059",
+    "84:1081",
+    "84:1083",
+    "84:1085",
+    "84:1107",
+    "84:1109",
+    "84:1111"
+  ],
+  "changed": [
+    {
+      "id": "84:1029",
+      "text": "Отправить заявку с нашего сайта",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "Отправить заявку",
+          "link": {
+            "type": "URL",
+            "value": "https://tarify-dom.ru/lichnyy-kabinet-dom-ru#popup:promoblock"
+          }
+        }
+      ]
+    },
+    {
+      "id": "84:1031",
+      "text": "Позвонить в отдел подключений по бесплатному номеру 8−800−555−72−44",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "8−800−555−72−44",
+          "link": {
+            "type": "URL",
+            "value": "tel:+78005557244"
+          }
+        }
+      ]
+    },
+    {
+      "id": "84:1033",
+      "text": "Посетить ближайший офис продажи обслуживания в вашем городе",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": []
+    },
+    {
+      "id": "84:1055",
+      "text": "Отправить заявку с нашего сайта",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "Отправить заявку",
+          "link": {
+            "type": "URL",
+            "value": "https://tarify-dom.ru/lichnyy-kabinet-dom-ru#popup:promoblock"
+          }
+        }
+      ]
+    },
+    {
+      "id": "84:1057",
+      "text": "Позвонить в отдел подключений по бесплатному номеру 8−800−555−72−44",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "8−800−555−72−44",
+          "link": {
+            "type": "URL",
+            "value": "tel:+78005557244"
+          }
+        }
+      ]
+    },
+    {
+      "id": "84:1059",
+      "text": "Посетить ближайший офис продажи обслуживания в вашем городе",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": []
+    },
+    {
+      "id": "84:1081",
+      "text": "Отправить заявку с нашего сайта",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "Отправить заявку",
+          "link": {
+            "type": "URL",
+            "value": "https://tarify-dom.ru/lichnyy-kabinet-dom-ru#popup:promoblock"
+          }
+        }
+      ]
+    },
+    {
+      "id": "84:1083",
+      "text": "Позвонить в отдел подключений по бесплатному номеру 8−800−555−72−44",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "8−800−555−72−44",
+          "link": {
+            "type": "URL",
+            "value": "tel:+78005557244"
+          }
+        }
+      ]
+    },
+    {
+      "id": "84:1085",
+      "text": "Посетить ближайший офис продажи обслуживания в вашем городе",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": []
+    },
+    {
+      "id": "84:1107",
+      "text": "Отправить заявку с нашего сайта",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "Отправить заявку",
+          "link": {
+            "type": "URL",
+            "value": "https://tarify-dom.ru/lichnyy-kabinet-dom-ru#popup:promoblock"
+          }
+        }
+      ]
+    },
+    {
+      "id": "84:1109",
+      "text": "Позвонить в отдел подключений по бесплатному номеру 8−800−555−72−44",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": [
+        {
+          "text": "8−800−555−72−44",
+          "link": {
+            "type": "URL",
+            "value": "tel:+78005557244"
+          }
+        }
+      ]
+    },
+    {
+      "id": "84:1111",
+      "text": "Посетить ближайший офис продажи обслуживания в вашем городе",
+      "options": {
+        "type": "UNORDERED"
+      },
+      "spacing": 8,
+      "linksPreserved": true,
+      "links": []
+    }
+  ],
+  "parents": []
+}
