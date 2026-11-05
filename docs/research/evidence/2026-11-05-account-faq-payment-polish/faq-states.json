@@ -1,0 +1,240 @@
+{
+  "screens": [
+    {
+      "id": "118:818",
+      "closedHeight": 534,
+      "restoredHeight": 534,
+      "cases": [
+        {
+          "i": 1,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": [
+            "tel:+78005557244",
+            "tel:+78002507777",
+            "tel:+78002228634"
+          ]
+        },
+        {
+          "i": 2,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 3,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 4,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 5,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 6,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        }
+      ]
+    },
+    {
+      "id": "118:1868",
+      "closedHeight": 518,
+      "restoredHeight": 518,
+      "cases": [
+        {
+          "i": 1,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": [
+            "tel:+78005557244",
+            "tel:+78002507777",
+            "tel:+78002228634"
+          ]
+        },
+        {
+          "i": 2,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 3,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 4,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 5,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 6,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        }
+      ]
+    },
+    {
+      "id": "118:2860",
+      "closedHeight": 690,
+      "restoredHeight": 690,
+      "cases": [
+        {
+          "i": 1,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": [
+            "tel:+78005557244",
+            "tel:+78002507777",
+            "tel:+78002228634"
+          ]
+        },
+        {
+          "i": 2,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 3,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 4,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 5,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 6,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        }
+      ]
+    },
+    {
+      "id": "118:3825",
+      "closedHeight": 738,
+      "restoredHeight": 738,
+      "cases": [
+        {
+          "i": 1,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": [
+            "tel:+78005557244",
+            "tel:+78002507777",
+            "tel:+78002228634"
+          ]
+        },
+        {
+          "i": 2,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 3,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 4,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 5,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        },
+        {
+          "i": 6,
+          "unchanged": true,
+          "answerVisible": true,
+          "autoResize": "HEIGHT",
+          "inside": true,
+          "phoneLinks": []
+        }
+      ]
+    }
+  ]
+}

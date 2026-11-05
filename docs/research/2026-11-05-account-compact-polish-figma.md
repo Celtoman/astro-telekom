@@ -1,5 +1,7 @@
 # Личный кабинет: оглавление, списки, маркеры и компактное приложение
 
+> Следующая итерация: [белые подложки, дубли нумерации, точки заголовков, FAQ и способы оплаты, #502](2026-11-05-account-faq-payment-polish-figma.md). Доказательства ниже относятся к состоянию #501.
+
 5 ноября2026. [Задача #501](https://github.com/Celtoman/astro-telekom/issues/501). Статус: **APPLIED_IN_FIGMA / REVIEW / UNPUBLISHED**. Точечная доработка выбранной страницы по прямому поручению владельца.
 
 [Desktop1440](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-5) · [Tablet834](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-1066) · [Mobile390](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-2109) · [Mobile320](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-3096).

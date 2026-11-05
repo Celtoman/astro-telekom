@@ -1,0 +1,608 @@
+[
+  {
+    "key": "overview",
+    "mutatedNodeIds": [
+      "54:1729",
+      "I54:1729;1608:4",
+      "54:1737",
+      "I54:1737;1608:4",
+      "54:1746",
+      "I54:1746;1608:4",
+      "54:1754",
+      "I54:1754;1608:4",
+      "54:1828",
+      "I54:1828;1608:4",
+      "54:1837",
+      "I54:1837;1608:4",
+      "54:1846",
+      "I54:1846;1608:4",
+      "54:1855",
+      "I54:1855;1608:4",
+      "54:1929",
+      "I54:1929;1608:4",
+      "54:1938",
+      "I54:1938;1608:4",
+      "54:1947",
+      "I54:1947;1608:4",
+      "54:1956",
+      "I54:1956;1608:4",
+      "54:2030",
+      "I54:2030;1608:4",
+      "54:2039",
+      "I54:2039;1608:4",
+      "54:2048",
+      "I54:2048;1608:4",
+      "54:2057",
+      "I54:2057;1608:4"
+    ],
+    "createdNodeIds": [],
+    "removedNodeIds": [],
+    "metrics": [
+      {
+        "id": "54:1729",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:1737",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:1746",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:1754",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:1828",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:1837",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:1846",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:1855",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:1929",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:1938",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:1947",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:1956",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:2030",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:2039",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:2048",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "54:2057",
+        "removedPrefix": true,
+        "white": [
+          {
+            "type": "SOLID",
+            "visible": true,
+            "opacity": 1,
+            "blendMode": "NORMAL",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1
+            },
+            "boundVariables": {
+              "color": {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "headings",
+    "mutatedNodeIds": [
+      "53:196",
+      "53:199",
+      "53:202",
+      "53:228",
+      "53:231",
+      "53:234",
+      "53:260",
+      "53:263",
+      "53:266",
+      "53:292",
+      "53:295",
+      "53:298"
+    ],
+    "createdNodeIds": [],
+    "removedNodeIds": [],
+    "metrics": [
+      {
+        "id": "53:196",
+        "text": "Вход по номеру договора"
+      },
+      {
+        "id": "53:199",
+        "text": "Вход по номеру телефона"
+      },
+      {
+        "id": "53:202",
+        "text": "Вход по адресу электронной почты"
+      },
+      {
+        "id": "53:228",
+        "text": "Вход по номеру договора"
+      },
+      {
+        "id": "53:231",
+        "text": "Вход по номеру телефона"
+      },
+      {
+        "id": "53:234",
+        "text": "Вход по адресу электронной почты"
+      },
+      {
+        "id": "53:260",
+        "text": "Вход по номеру договора"
+      },
+      {
+        "id": "53:263",
+        "text": "Вход по номеру телефона"
+      },
+      {
+        "id": "53:266",
+        "text": "Вход по адресу электронной почты"
+      },
+      {
+        "id": "53:292",
+        "text": "Вход по номеру договора"
+      },
+      {
+        "id": "53:295",
+        "text": "Вход по номеру телефона"
+      },
+      {
+        "id": "53:298",
+        "text": "Вход по адресу электронной почты"
+      }
+    ]
+  },
+  {
+    "key": "payment",
+    "mutatedNodeIds": [
+      "56:1786",
+      "56:1787",
+      "56:1789",
+      "56:1815",
+      "56:1816",
+      "56:1818",
+      "56:1844",
+      "56:1845",
+      "56:1847",
+      "56:1873",
+      "56:1874",
+      "56:1876"
+    ],
+    "createdNodeIds": [
+      "162:3788",
+      "162:3789",
+      "162:3790",
+      "162:3791",
+      "162:3792",
+      "162:3793",
+      "162:3794",
+      "162:3795",
+      "162:3796",
+      "162:3797",
+      "162:3798",
+      "162:3799",
+      "162:3800",
+      "162:3801",
+      "162:3802",
+      "162:3803",
+      "162:3804",
+      "162:3805",
+      "162:3806",
+      "162:3807",
+      "162:3808",
+      "162:3809",
+      "162:3810",
+      "162:3811"
+    ],
+    "removedNodeIds": [
+      "56:1788",
+      "56:1817",
+      "56:1846",
+      "56:1875"
+    ],
+    "metrics": [
+      {
+        "id": "56:1786",
+        "width": 489.67742919921875,
+        "height": 231,
+        "labels": [
+          "Банковская карта",
+          "SberPay (Сбербанк Онлайн)",
+          "СБП"
+        ]
+      },
+      {
+        "id": "56:1815",
+        "width": 720,
+        "height": 231,
+        "labels": [
+          "Банковская карта",
+          "SberPay (Сбербанк Онлайн)",
+          "СБП"
+        ]
+      },
+      {
+        "id": "56:1844",
+        "width": 358,
+        "height": 243,
+        "labels": [
+          "Банковская карта",
+          "SberPay (Сбербанк Онлайн)",
+          "СБП"
+        ]
+      },
+      {
+        "id": "56:1873",
+        "width": 288,
+        "height": 243,
+        "labels": [
+          "Банковская карта",
+          "SberPay (Сбербанк Онлайн)",
+          "СБП"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "faq",
+    "mutatedNodeIds": [
+      "118:818",
+      "118:1868",
+      "118:2860",
+      "118:3825"
+    ],
+    "createdNodeIds": [],
+    "removedNodeIds": [],
+    "metrics": [
+      {
+        "id": "118:818",
+        "padding": 32,
+        "width": 1360,
+        "height": 534
+      },
+      {
+        "id": "118:1868",
+        "padding": 24,
+        "width": 720,
+        "height": 518
+      },
+      {
+        "id": "118:2860",
+        "padding": 16,
+        "width": 358,
+        "height": 690
+      },
+      {
+        "id": "118:3825",
+        "padding": 16,
+        "width": 288,
+        "height": 738
+      }
+    ]
+  }
+]
