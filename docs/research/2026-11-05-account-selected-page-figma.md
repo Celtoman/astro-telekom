@@ -1,5 +1,7 @@
 # Личный кабинет: выбранная страница в Figma
 
+> Последующая обратная связь05.11.2026 обработана в [правках #499](2026-11-05-account-page-refinement-figma.md): ссылки hero и технические подписи убраны, визуальная ширина исправлена, карточки выровнены, мокап приложения заменён готовым; три варианта «Важно» ожидают выбора. Числа и снимки ниже относятся к исходной сборке #498.
+
 5 ноября2026. [Задача #498](https://github.com/Celtoman/astro-telekom/issues/498). Статус: **APPLIED_IN_FIGMA / REVIEW / UNPUBLISHED**. Варианты и порядок выбраны владельцем; готовая сборка ещё не проходила отдельную приёмку владельца.
 
 [Desktop1440](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-5) · [Tablet834](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-1066) · [Mobile390](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-2109) · [Mobile320](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-3096). Страница файла:114:2 «70 / Личный кабинет — выбранная сборка». Общий индекс Figma89:23 теперь ведёт в эту сборку; альтернативы сохранены.
