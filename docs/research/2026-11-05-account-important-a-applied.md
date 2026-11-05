@@ -1,5 +1,7 @@
 # Личный кабинет: стиль «Важно» с лампочкой применён
 
+> Следующая итерация: [оглавление, списки, цифровые маркеры и компактный мокап, #501](2026-11-05-account-compact-polish-figma.md). Выбранный стиль A сохранён. Размеры и контрольные снимки ниже относятся к моменту применения A в #500.
+
 5 ноября2026. [Задача #500](https://github.com/Celtoman/astro-telekom/issues/500). Владелец выбрал A и поручил применить ко всем «Важно», сохранив подходящую компоновку. Статус: **STYLE_SELECTED / APPLIED_IN_FIGMA / REVIEW / UNPUBLISHED**. Это выбор оформления предупреждений, не приёмка всей страницы или выпуск.
 
 [Desktop1440](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-5) · [Tablet834](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-1066) · [Mobile390](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-2109) · [Mobile320](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-3096).
