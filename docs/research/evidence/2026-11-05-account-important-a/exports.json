@@ -1,0 +1,26 @@
+[
+  {
+    "file": "Desktop.png",
+    "width": 1440,
+    "height": 12364,
+    "sha256": "0644a3ea13566eca0c3b2438e22c4be10c1c04aabed0584d94988ca0ce9eea3f"
+  },
+  {
+    "file": "Tablet.png",
+    "width": 834,
+    "height": 18725,
+    "sha256": "85de8ceb56c307fce943f2f94e477d2d150f0c61d9966ce0918fe03ba08e47c3"
+  },
+  {
+    "file": "Mobile.png",
+    "width": 390,
+    "height": 22146,
+    "sha256": "da848382b9f674d16b9dce1a8f4680a43920b94531872cbf7048e67ac309fb3a"
+  },
+  {
+    "file": "Mobile320.png",
+    "width": 320,
+    "height": 24726,
+    "sha256": "80185f2175939b33923af1efd16757899e3faf25f45f8b878e025d23907f797a"
+  }
+]

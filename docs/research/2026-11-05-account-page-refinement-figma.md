@@ -1,6 +1,6 @@
 # Личный кабинет: правки выбранной страницы и три оформления «Важно»
 
-5 ноября2026. Задача [#499](https://github.com/Celtoman/astro-telekom/issues/499), продолжение [выбранной сборки](2026-11-05-account-selected-page-figma.md). Статус: **APPLIED_IN_FIGMA / REVIEW / UNPUBLISHED**. Общий вариант «Важно» ещё не выбран владельцем.
+5 ноября2026. Задача [#499](https://github.com/Celtoman/astro-telekom/issues/499), продолжение [выбранной сборки](2026-11-05-account-selected-page-figma.md). Статус: **APPLIED_IN_FIGMA / REVIEW / UNPUBLISHED**. Последующее решение: **A выбран и применён ко всем «Важно»**, см. [результат #500](2026-11-05-account-important-a-applied.md). Ниже — состояние и доказательства предыдущей итерации #499.
 
 [Desktop1440](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-5) · [Tablet834](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-1066) · [Mobile390](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-2109) · [Mobile320](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-3096).
 
@@ -49,4 +49,4 @@
 
 product-design-and-ux применён к устранению дублирующей навигации и сохранности содержания; design-critique — к группировке и иерархии; web-accessibility — к контрасту, нечувствительным к цвету обозначениям и reflow; emil-design-eng — к линиям, высотам и поверхностям. Прежний [протокол пользовательской проверки](evidence/2026-11-05-account-selected-assembly/usability-protocol.md) остаётся применимым; сессий не проводили. Новых действий в статичных предупреждениях нет. Нативные keyboard/AT, runtime-переходы внешних сайтов и пользовательское исследование не проверялись.
 
-Код, CMS, production, Screens и публикация общей библиотеки не изменялись. README и основной регламент остаются актуальными. Готовность к внедрению и выбор оформления «Важно» требуют отдельного решения владельца.
+Код, CMS, production, Screens и публикация общей библиотеки не изменялись. README и основной регламент остаются актуальными. Готовность к внедрению требует отдельного решения владельца. Стиль A выбран и применён в последующей задаче #500.
