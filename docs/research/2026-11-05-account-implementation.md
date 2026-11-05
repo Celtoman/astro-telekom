@@ -1,6 +1,6 @@
 # ACCOUNT — перенос в код и минимум CMS
 
-5 ноября 2026. Задача [#511](https://github.com/Celtoman/astro-telekom/issues/511), принятый план `cfb9524d`. Этот отчёт описывает локальную реализацию. Внешний push/deployment и CMS-активация ещё не выполнены; обслуживаемый test snapshot не изменялся.
+5 ноября 2026. Задача [#511](https://github.com/Celtoman/astro-telekom/issues/511), принятый план `cfb9524d`. Этот отчёт описывает локальную реализацию. Код c2982c7 отправлен в master, exact-SHA CI зелёный, test-deployment finished/healthy. После отдельного согласия владельца CMS29 активирована, durable receipt SUCCEEDED; [отдельный внешний протокол](2026-11-05-account-test-release.md) содержит актуальный CODE/live статус и полный diff.
 
 ## Реализация
 
@@ -36,7 +36,7 @@
 | Code review | Независимые backend/frontend review, исправлены найденные замечания | PASS финальной сверки исправлений; новых подтверждённых P1/P2 в frontend/backend-коде не найдено |
 | Полный gate | pnpm check на итоговом коде | PASS:956 passed/0 failed/1 skipped, exit0; Windows/Node22.23.2,4 ядра только у дерева gate. Skip — недоступная Windows symlink privilege |
 | Linux/non-root ACCOUNT | Old A без ACCOUNT → CMS B с ACCOUNT,14 native decode assets/выдача через Caddy, configuration CODE и restart без API | PASS внутри полного gate |
-| Внешний test | exact SHA CI→Coolify→CODE→согласованный CMS snapshot/receipt | НЕ ВЫПОЛНЕНО |
+| Внешний test | exact SHA CI→Coolify→CODE→согласованный CMS snapshot/receipt | CI957/957, deployment finished/healthy, CODE и CMS29 SUCCEEDED; live — [внешний протокол](2026-11-05-account-test-release.md) |
 
 Первый полный gate выявил устаревшие ожидания тестов по числу паспортов/маршрутов/SEO и migration head; они обновлены под явный дополнительный ACCOUNT, без ослабления проверок. В CITY test double добавлен реальный slug запрашиваемого города. Cold Docker runtime rehearsal упёрся в600s build limit при загрузке и экспорте dependency image; повтор построил image, но automatic CODE не завершился; изолированный повтор прежнего полного сценария прошёл2/2. При controlled full gate защищённый диагностический POST подтвердил SUCCEEDED того же CODE после120s ожидания. Точная причина задержки пока не установлена; Итоговый прогон прошёл: pure automatic CODE A95356ms, context CODE83384ms, до успеха ручного POST не было. Бюджет Windows fixture240s, Linux120s. Эти времена меньше120s и не доказывают точную причину предыдущих срывов; production-регресс не подтверждён. Это бюджет fixture, production guards не менялись. Ограничение остановки child по node:test timeout вынесено отдельно в #517. Ни одной ошибке не присвоен допустимый красный baseline.
 
@@ -48,8 +48,8 @@
 
 ## Что требуется перед внешней активацией
 
-1. Зелёный полный gate завершён. Зафиксировать только ACCOUNT-изменения Conventional Commit; чужие незакоммиченные документы сохранить отдельно.
-2. Получить явное разрешение push/внешнего выпуска, предусмотренное AGENTS.md и этапом5 принятого плана. Проверить exact-SHA CI, затем Coolify MCP и CODE прежнего serving snapshot.
-3. Перед CMS-публикацией предъявить полный working diff. Не включать чужие рабочие изменения автоматически. После согласованной активации подтвердить durable receipt, actual serving id/revision, новый URL/SEO/media и сохранность прочего каталога.
+1. Зелёный полный gate завершён. ACCOUNT-изменения изолированно зафиксированы c2982c7; чужие незакоммиченные документы сохранены.
+2. Владелец разрешил push/test-deployment. Exact-SHA CI и Coolify MCP deployment подтверждены; CODE прежнего serving snapshot контролируется по [внешнему протоколу](2026-11-05-account-test-release.md).
+3. Полный working diff предъявлен и отдельно согласован: одна новая ACCOUNT с SEO, без чужих изменений. Активирована ревизия29; durable receipt, actual serving id/revision, URL/SEO/media и сохранность прочего каталога фиксируются во внешнем протоколе.
 
 Недостающие `/official-site-domru`, `/faq`, `/proverit-skorost-interneta`, `/{location}/tehpodderzhka` не реализованы и остаются зависимостями публичного выпуска. Их canonical targets сохранены; для поддержки используется существующий выбор города. Реальный вход, платёж, расторжение, установка приложений, звонки и внешние заявки не выполнялись. Полная функциональная приёмка всех внешних/недостающих переходов и решение о реальном трафике остаются за владельцем.

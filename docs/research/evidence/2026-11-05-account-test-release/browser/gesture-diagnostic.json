@@ -1,0 +1,57 @@
+{
+  "browser": "Edge/Chromium156 Windows",
+  "viewport": {
+    "width": 390,
+    "height": 900
+  },
+  "mixedProtocolFailures": [
+    {
+      "rail": "recovery",
+      "initialWaitMs": 700,
+      "result": "vertical delta not greater than40",
+      "trace": "initial compound run"
+    },
+    {
+      "rail": "menu",
+      "waitMs": 1500,
+      "scrollYBefore": 7355,
+      "scrollYAfter": 7355,
+      "box": {
+        "x": 36,
+        "y": 309.203125,
+        "width": 318,
+        "height": 282
+      },
+      "touchStartY": 549.203125,
+      "target": "ARTICLE.account-card"
+    }
+  ],
+  "isolatedMenuScenarios": [
+    {
+      "scenario": "vertical",
+      "before": 7355,
+      "after": 7490
+    },
+    {
+      "scenario": "horizontal-vertical",
+      "before": 7490,
+      "after": 7625
+    },
+    {
+      "scenario": "wheel-horizontal-reset-vertical",
+      "before": 7625,
+      "after": 7808
+    }
+  ],
+  "css": {
+    "touchAction": "auto",
+    "overscrollX": "contain",
+    "overscrollY": "auto",
+    "scrollHeight": 282,
+    "clientHeight": 282
+  },
+  "rootCause": "not established",
+  "productionRegression": "not confirmed",
+  "issue": "https://github.com/Celtoman/astro-telekom/issues/521",
+  "naturalProtocol": "separate native touch session; no mouse.wheel or programmatic scrollLeft reset"
+}

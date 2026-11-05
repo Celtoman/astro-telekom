@@ -1,0 +1,12 @@
+{
+  "status": "SUCCEEDED",
+  "artifactId": "c91416093bcaf27574182e7a50d98b03f09c33c3b2d3dada1fca1a7f0636abca",
+  "publicationId": "cmw2jk1nr000401p3r0xykg4b",
+  "siteId": "cmtuaqqj1000107lkiiiia2xa",
+  "siteRevision": 28,
+  "rendererId": "af133e9d8d65fca1d7f56754c192a32438909f7f9adb00325dd13c42196fd9d1",
+  "catalogDigest": "63e70c3b9d35afe8f2a506a512e979f18c77f0f954b6dd071c26e294eb4880bf",
+  "rebuildId": "code-75f10e2ca4f9137edcda726381ce8d16709e50efbce300172ff922cfc729f243",
+  "rebuildRevision": 1,
+  "manifestDigest": "36d003133953f9009d2b16e8b0f5fe6d7c270704bb8241d820d889310f4e8404"
+}

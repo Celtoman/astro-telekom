@@ -1,0 +1,18 @@
+{
+  "expectedWorkingRevision": 29,
+  "approvedByOwner": true,
+  "publication": {
+    "id": "cmw3yhh28000101tlbxw5phzk",
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "siteRevision": 29,
+    "status": "PENDING",
+    "validationId": "cmw3yhdzl000001tlwesdcfzc",
+    "createdAt": "2026-11-05T19:46:05.601Z"
+  },
+  "rebuild": {
+    "id": "cmtw6dpwj015g01o0ho99ow05",
+    "status": "PENDING",
+    "requestedRevision": 25,
+    "requestedPublicationId": "cmw3yhh28000101tlbxw5phzk"
+  }
+}

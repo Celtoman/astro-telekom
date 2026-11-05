@@ -1,0 +1,57 @@
+{
+  "workingRevision": 29,
+  "publishedRevision": 28,
+  "changes": [
+    {
+      "id": "account_revision_c09ede207678326d7cda89c3cb3c1d1b",
+      "siteRevision": 29,
+      "entityType": "PAGE",
+      "entityId": "account_page_e2124e97458f4ccc6280a94b4e435b08",
+      "action": "CREATE",
+      "changedFields": [
+        "content",
+        "slug",
+        "status"
+      ],
+      "source": "migration:0067:account",
+      "createdAt": "2026-11-05T19:35:28.395Z",
+      "subject": "Личный кабинет",
+      "textChanges": []
+    }
+  ],
+  "previewValidation": "PASSED",
+  "previewRoutes": 4226,
+  "servingRoutes": 4225,
+  "existingCatalogUnchanged": true,
+  "publicProjectionUnchanged": true,
+  "bundleDigestUnchanged": true,
+  "addedVariableUsages": [
+    {
+      "code": "CONNECTION_PHONE",
+      "path": "globalPages[5].content.faq.items[0].answer",
+      "template": "Телефоны горячей линии Дом.ру:\n1. Подключение новых абонентов: {CONNECTION_PHONE}\n2. Служба технической поддержки: {SUPPORT_PHONE}\n3. Поддержка корпоративных клиентов: 8-800-222-86-34\nЗвонок бесплатный с любых телефонов на территории России, горячая линия работает круглосуточно.",
+      "entityType": "PAGE",
+      "entityId": "account_page_e2124e97458f4ccc6280a94b4e435b08",
+      "pageType": "ACCOUNT",
+      "editorHref": "/templates/account"
+    },
+    {
+      "code": "SUPPORT_PHONE",
+      "path": "globalPages[5].content.faq.items[0].answer",
+      "template": "Телефоны горячей линии Дом.ру:\n1. Подключение новых абонентов: {CONNECTION_PHONE}\n2. Служба технической поддержки: {SUPPORT_PHONE}\n3. Поддержка корпоративных клиентов: 8-800-222-86-34\nЗвонок бесплатный с любых телефонов на территории России, горячая линия работает круглосуточно.",
+      "entityType": "PAGE",
+      "entityId": "account_page_e2124e97458f4ccc6280a94b4e435b08",
+      "pageType": "ACCOUNT",
+      "editorHref": "/templates/account"
+    }
+  ],
+  "removedVariableUsages": [],
+  "accountSEO": {
+    "title": "Личный кабинет Дом.ру — вход и инструкции",
+    "description": "Как войти в личный кабинет Дом.ру, восстановить доступ, оплатить услуги и пользоваться приложением.",
+    "indexState": "INDEX",
+    "ogTitle": "Личный кабинет Дом.ру — вход и инструкции",
+    "ogDescription": "Как войти в личный кабинет Дом.ру, восстановить доступ, оплатить услуги и пользоваться приложением.",
+    "ogImage": "/images/home-connection-equipment.webp"
+  }
+}

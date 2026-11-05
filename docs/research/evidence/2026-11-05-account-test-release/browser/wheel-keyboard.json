@@ -1,0 +1,95 @@
+{
+  "browser": "156.0.4314.58",
+  "reports": [
+    {
+      "width": 390,
+      "checks": [
+        {
+          "name": "Способы входа",
+          "cards": 3,
+          "last": true,
+          "first": true,
+          "verticalWheel": true,
+          "keyboard": true
+        },
+        {
+          "name": "Способы восстановления доступа",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "verticalWheel": true,
+          "keyboard": true
+        },
+        {
+          "name": "Возможности личного кабинета",
+          "cards": 3,
+          "last": true,
+          "first": true,
+          "verticalWheel": true,
+          "keyboard": true
+        },
+        {
+          "name": "Разделы верхнего меню",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "verticalWheel": true,
+          "keyboard": true
+        },
+        {
+          "name": "Блоки главной страницы кабинета",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "verticalWheel": true,
+          "keyboard": true
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "checks": [
+        {
+          "name": "Способы входа",
+          "cards": 3,
+          "last": true,
+          "first": true,
+          "verticalWheel": true,
+          "keyboard": true
+        },
+        {
+          "name": "Способы восстановления доступа",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "verticalWheel": true,
+          "keyboard": true
+        },
+        {
+          "name": "Возможности личного кабинета",
+          "cards": 3,
+          "last": true,
+          "first": true,
+          "verticalWheel": true,
+          "keyboard": true
+        },
+        {
+          "name": "Разделы верхнего меню",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "verticalWheel": true,
+          "keyboard": true
+        },
+        {
+          "name": "Блоки главной страницы кабинета",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "verticalWheel": true,
+          "keyboard": true
+        }
+      ]
+    }
+  ]
+}

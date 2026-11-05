@@ -50,7 +50,7 @@ HOME Hero 1d реализован в коде по [паспорту 2.0.0](docs
 | Окружение и эксплуатационные процедуры | [Deployment](docs/deployment.md), [технологическая база](docs/technology-baseline.md), [worker](docs/worker.md), [runbook миграции данных](docs/runbooks/release-one-data-migration.md) |
 | Работа агента с Coolify через MCP | [Обязательная процедура](docs/deployment.md#работа-агента-с-coolify-через-mcp) |
 | Дизайн и разрешённые CMS-поля | [Admin](docs/admin-design-system.md), [public web](docs/web-design-system.md), [паспорта блоков](docs/block-passports.md) |
-| Передача страницы «Личный кабинет» в разработку | [Технические паспорта](docs/plans/2026-11-05-account-block-passports.md), [план и минимальная CMS](docs/plans/2026-11-05-account-implementation-plan.md); только документация, реализация не начата |
+| Передача страницы «Личный кабинет» в разработку | [Технические паспорта](docs/plans/2026-11-05-account-block-passports.md), [план и минимальная CMS](docs/plans/2026-11-05-account-implementation-plan.md); код и минимальная CMS реализованы, [состояние test-выпуска](docs/research/2026-11-05-account-test-release.md) |
 | Проектирование блоков и страниц в Figma | [Единый регламент](docs/figma-design-rules.md) |
 | Проверки и учёт работы | [Покрытие тестами](docs/TEST_COVERAGE.md), [task management](docs/task-management.md), [индекс долга](docs/technical-debt.md), [product findings](docs/product-findings.md) |
 | Исторические доказательства и старые планы | [Исследования и архив](docs/research/README.md) |
@@ -176,6 +176,6 @@ Worker поддерживает три provider-режима. Coolify Compose з
 
 Нормализация отступов ADDRESS и ширины H1 в коде, Screens и preview: [границы и проверка](docs/research/2026-11-04-address-page-spacing.md).
 
-## ACCOUNT — локальное внедрение
+## ACCOUNT — внедрение в test-контуре
 
-Информационная страница `/lichnyy-kabinet-dom-ru` перенесена в код:13 собственных программных секций и готовые Header/Address-only/FAQ/Footer. Одна защищённая форма `/templates/account` редактирует H1, вступление, ссылку входа,14 фиксированных иллюстраций и FAQ; инструкции и условия остаются в коде. ACCOUNT добавляется только в новый snapshot, старые снимки совместимы. Внешний rollout ещё не выполнен. [Проверки и ограничения](docs/research/2026-11-05-account-implementation.md).
+Информационная страница `/lichnyy-kabinet-dom-ru` перенесена в код:13 собственных программных секций и готовые Header/Address-only/FAQ/Footer. Одна защищённая форма `/templates/account` редактирует H1, вступление, ссылку входа,14 фиксированных иллюстраций и FAQ; инструкции и условия остаются в коде. ACCOUNT добавляется только в новый snapshot, старые снимки совместимы. Код и согласованная CMS-ревизия29 выпущены в защищённый test-контур: [страница](https://tv-internet-dom.ru/lichnyy-kabinet-dom-ru), [редактор](https://admin.tv-internet-dom.ru/templates/account). [Внешний выпуск и полный diff](docs/research/2026-11-05-account-test-release.md), [локальные проверки и ограничения](docs/research/2026-11-05-account-implementation.md).

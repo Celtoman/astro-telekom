@@ -1,0 +1,37 @@
+{
+  "siteId": "cmtuaqqj1000107lkiiiia2xa",
+  "siteName": "Дом.ру",
+  "workingRevision": 29,
+  "publishedRevision": 28,
+  "hasUnpublishedChanges": true,
+  "totalChanges": 1,
+  "changes": [
+    {
+      "id": "account_revision_c09ede207678326d7cda89c3cb3c1d1b",
+      "siteRevision": 29,
+      "entityType": "PAGE",
+      "entityId": "account_page_e2124e97458f4ccc6280a94b4e435b08",
+      "action": "CREATE",
+      "changedFields": [
+        "content",
+        "slug",
+        "status"
+      ],
+      "source": "migration:0067:account",
+      "createdAt": "2026-11-05T19:35:28.395Z",
+      "subject": "Личный кабинет",
+      "textChanges": []
+    }
+  ],
+  "validation": {
+    "schemaVersion": 1,
+    "appVersion": "0.1.0",
+    "validatedAt": "2026-11-05T19:40:55.741Z",
+    "requestedById": null,
+    "siteRevision": 29,
+    "checkedUrlCount": 4226,
+    "issues": [],
+    "outcome": "PASSED",
+    "checkedPathsCount": 4226
+  }
+}

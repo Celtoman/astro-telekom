@@ -1,0 +1,601 @@
+{
+  "browser": "156.0.4314.58",
+  "reports": [
+    {
+      "width": 1440,
+      "pageWidth": 1440,
+      "title": "Личный кабинет Дом.ру — вход и инструкции",
+      "h1": [
+        "Личный Кабинет Дом ру"
+      ],
+      "canonical": "https://tv-internet-dom.ru/lichnyy-kabinet-dom-ru",
+      "sections": 13,
+      "images": [
+        {
+          "slot": "heroLogin",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/hero-login-07434dabcc931648.png",
+          "loaded": true,
+          "alt": "Меню входа в ЛК Дом.ру"
+        },
+        {
+          "slot": "registrationRequest",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/registration-request-a95efec9a128c7cf.png",
+          "loaded": true,
+          "alt": "Оставить заявку на подключение к Дом ру"
+        },
+        {
+          "slot": "loginEntry",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/login-entry-ba7d0402929b891d.png",
+          "loaded": true,
+          "alt": "Кнопка для входа в ЛК Дом.ру"
+        },
+        {
+          "slot": "passwordRecovery",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/password-recovery-a24ac5d2ec3421bc.png",
+          "loaded": true,
+          "alt": "Восстановить пароль к личному кабинету Домру"
+        },
+        {
+          "slot": "capabilitiesOverview",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/capabilities-overview-1e6afb354b5163bd.png",
+          "loaded": true,
+          "alt": "Главная страница личного кабинета Дом ру"
+        },
+        {
+          "slot": "interfaceTopMenu",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/interface-top-menu-138569ced478da72.png",
+          "loaded": true,
+          "alt": "Меню личного кабинета Дом ру"
+        },
+        {
+          "slot": "interfaceDashboard",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/interface-dashboard-f6a48fbd3d7e55aa.png",
+          "loaded": true,
+          "alt": "Меню личного кабинета Дом ру"
+        },
+        {
+          "slot": "paymentScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/payment-screen-7567984a98709ba6.png",
+          "loaded": true,
+          "alt": "Оплата Домру через личный кабинет"
+        },
+        {
+          "slot": "promisedPaymentScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/promised-payment-screen-4c3db734fc9bd330.png",
+          "loaded": true,
+          "alt": "Как получить обещанный платеж в кабинете Дом ру"
+        },
+        {
+          "slot": "terminationEntry",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/termination-entry-fe49b7268207cd11.png",
+          "loaded": true,
+          "alt": "Где расторгнуть договор с дом ру"
+        },
+        {
+          "slot": "terminationScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/termination-screen-3136d94f64633cf0.png",
+          "loaded": true,
+          "alt": "Расторгнуть договор с Домру"
+        },
+        {
+          "slot": "suspensionScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/suspension-screen-7eeb4216491ca286.png",
+          "loaded": true,
+          "alt": "Как приостановить договор в кабинете Дом ру"
+        },
+        {
+          "slot": "businessIllustration",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/business-illustration-9f23973c7882b747.png",
+          "loaded": true,
+          "alt": "CRM и ip-телефония"
+        },
+        {
+          "slot": "appScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/app-screen-ebba0b7b3ccd1ae5.jpg",
+          "loaded": true,
+          "alt": "Экран приложения «Мой Дом.ру»"
+        }
+      ],
+      "captionOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "tocRows": 1,
+      "appCaption": 0,
+      "numberedHeadings": [],
+      "faq": 6,
+      "businessHeights": [
+        376,
+        376
+      ],
+      "terminationImageY": [
+        8532.765625,
+        8532.765625
+      ],
+      "rails": [],
+      "pageErrors": [],
+      "faqKeyboard": true
+    },
+    {
+      "width": 834,
+      "pageWidth": 834,
+      "title": "Личный кабинет Дом.ру — вход и инструкции",
+      "h1": [
+        "Личный Кабинет Дом ру"
+      ],
+      "canonical": "https://tv-internet-dom.ru/lichnyy-kabinet-dom-ru",
+      "sections": 13,
+      "images": [
+        {
+          "slot": "heroLogin",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/hero-login-07434dabcc931648.png",
+          "loaded": true,
+          "alt": "Меню входа в ЛК Дом.ру"
+        },
+        {
+          "slot": "registrationRequest",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/registration-request-a95efec9a128c7cf.png",
+          "loaded": true,
+          "alt": "Оставить заявку на подключение к Дом ру"
+        },
+        {
+          "slot": "loginEntry",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/login-entry-ba7d0402929b891d.png",
+          "loaded": true,
+          "alt": "Кнопка для входа в ЛК Дом.ру"
+        },
+        {
+          "slot": "passwordRecovery",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/password-recovery-a24ac5d2ec3421bc.png",
+          "loaded": true,
+          "alt": "Восстановить пароль к личному кабинету Домру"
+        },
+        {
+          "slot": "capabilitiesOverview",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/capabilities-overview-1e6afb354b5163bd.png",
+          "loaded": true,
+          "alt": "Главная страница личного кабинета Дом ру"
+        },
+        {
+          "slot": "interfaceTopMenu",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/interface-top-menu-138569ced478da72.png",
+          "loaded": true,
+          "alt": "Меню личного кабинета Дом ру"
+        },
+        {
+          "slot": "interfaceDashboard",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/interface-dashboard-f6a48fbd3d7e55aa.png",
+          "loaded": true,
+          "alt": "Меню личного кабинета Дом ру"
+        },
+        {
+          "slot": "paymentScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/payment-screen-7567984a98709ba6.png",
+          "loaded": true,
+          "alt": "Оплата Домру через личный кабинет"
+        },
+        {
+          "slot": "promisedPaymentScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/promised-payment-screen-4c3db734fc9bd330.png",
+          "loaded": true,
+          "alt": "Как получить обещанный платеж в кабинете Дом ру"
+        },
+        {
+          "slot": "terminationEntry",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/termination-entry-fe49b7268207cd11.png",
+          "loaded": true,
+          "alt": "Где расторгнуть договор с дом ру"
+        },
+        {
+          "slot": "terminationScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/termination-screen-3136d94f64633cf0.png",
+          "loaded": true,
+          "alt": "Расторгнуть договор с Домру"
+        },
+        {
+          "slot": "suspensionScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/suspension-screen-7eeb4216491ca286.png",
+          "loaded": true,
+          "alt": "Как приостановить договор в кабинете Дом ру"
+        },
+        {
+          "slot": "businessIllustration",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/business-illustration-9f23973c7882b747.png",
+          "loaded": true,
+          "alt": "CRM и ip-телефония"
+        },
+        {
+          "slot": "appScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/app-screen-ebba0b7b3ccd1ae5.jpg",
+          "loaded": true,
+          "alt": "Экран приложения «Мой Дом.ру»"
+        }
+      ],
+      "captionOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "tocRows": 2,
+      "appCaption": 0,
+      "numberedHeadings": [],
+      "faq": 6,
+      "businessHeights": [
+        496.75,
+        376
+      ],
+      "terminationImageY": [
+        12805.859375,
+        13391.5
+      ],
+      "rails": [],
+      "pageErrors": [],
+      "faqKeyboard": true
+    },
+    {
+      "width": 390,
+      "pageWidth": 390,
+      "title": "Личный кабинет Дом.ру — вход и инструкции",
+      "h1": [
+        "Личный Кабинет Дом ру"
+      ],
+      "canonical": "https://tv-internet-dom.ru/lichnyy-kabinet-dom-ru",
+      "sections": 13,
+      "images": [
+        {
+          "slot": "heroLogin",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/hero-login-07434dabcc931648.png",
+          "loaded": true,
+          "alt": "Меню входа в ЛК Дом.ру"
+        },
+        {
+          "slot": "registrationRequest",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/registration-request-a95efec9a128c7cf.png",
+          "loaded": true,
+          "alt": "Оставить заявку на подключение к Дом ру"
+        },
+        {
+          "slot": "loginEntry",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/login-entry-ba7d0402929b891d.png",
+          "loaded": true,
+          "alt": "Кнопка для входа в ЛК Дом.ру"
+        },
+        {
+          "slot": "passwordRecovery",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/password-recovery-a24ac5d2ec3421bc.png",
+          "loaded": true,
+          "alt": "Восстановить пароль к личному кабинету Домру"
+        },
+        {
+          "slot": "capabilitiesOverview",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/capabilities-overview-1e6afb354b5163bd.png",
+          "loaded": true,
+          "alt": "Главная страница личного кабинета Дом ру"
+        },
+        {
+          "slot": "interfaceTopMenu",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/interface-top-menu-138569ced478da72.png",
+          "loaded": true,
+          "alt": "Меню личного кабинета Дом ру"
+        },
+        {
+          "slot": "interfaceDashboard",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/interface-dashboard-f6a48fbd3d7e55aa.png",
+          "loaded": true,
+          "alt": "Меню личного кабинета Дом ру"
+        },
+        {
+          "slot": "paymentScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/payment-screen-7567984a98709ba6.png",
+          "loaded": true,
+          "alt": "Оплата Домру через личный кабинет"
+        },
+        {
+          "slot": "promisedPaymentScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/promised-payment-screen-4c3db734fc9bd330.png",
+          "loaded": true,
+          "alt": "Как получить обещанный платеж в кабинете Дом ру"
+        },
+        {
+          "slot": "terminationEntry",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/termination-entry-fe49b7268207cd11.png",
+          "loaded": true,
+          "alt": "Где расторгнуть договор с дом ру"
+        },
+        {
+          "slot": "terminationScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/termination-screen-3136d94f64633cf0.png",
+          "loaded": true,
+          "alt": "Расторгнуть договор с Домру"
+        },
+        {
+          "slot": "suspensionScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/suspension-screen-7eeb4216491ca286.png",
+          "loaded": true,
+          "alt": "Как приостановить договор в кабинете Дом ру"
+        },
+        {
+          "slot": "businessIllustration",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/business-illustration-9f23973c7882b747.png",
+          "loaded": true,
+          "alt": "CRM и ip-телефония"
+        },
+        {
+          "slot": "appScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/app-screen-ebba0b7b3ccd1ae5.jpg",
+          "loaded": true,
+          "alt": "Экран приложения «Мой Дом.ру»"
+        }
+      ],
+      "captionOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "tocRows": 4,
+      "appCaption": 0,
+      "numberedHeadings": [],
+      "faq": 6,
+      "businessHeights": [
+        267.5,
+        656
+      ],
+      "terminationImageY": [
+        11477.453125,
+        11946.71875
+      ],
+      "rails": [
+        {
+          "name": "Способы входа",
+          "cards": 3,
+          "last": true,
+          "first": true,
+          "touch": true,
+          "vertical": true,
+          "keyboard": true
+        },
+        {
+          "name": "Способы восстановления доступа",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "touch": true,
+          "vertical": true,
+          "keyboard": true
+        },
+        {
+          "name": "Возможности личного кабинета",
+          "cards": 3,
+          "last": true,
+          "first": true,
+          "touch": true,
+          "vertical": true,
+          "keyboard": true
+        },
+        {
+          "name": "Разделы верхнего меню",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "touch": true,
+          "vertical": true,
+          "keyboard": true
+        },
+        {
+          "name": "Блоки главной страницы кабинета",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "touch": true,
+          "vertical": true,
+          "keyboard": true
+        }
+      ],
+      "pageErrors": [],
+      "faqKeyboard": true
+    },
+    {
+      "width": 320,
+      "pageWidth": 320,
+      "title": "Личный кабинет Дом.ру — вход и инструкции",
+      "h1": [
+        "Личный Кабинет Дом ру"
+      ],
+      "canonical": "https://tv-internet-dom.ru/lichnyy-kabinet-dom-ru",
+      "sections": 13,
+      "images": [
+        {
+          "slot": "heroLogin",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/hero-login-07434dabcc931648.png",
+          "loaded": true,
+          "alt": "Меню входа в ЛК Дом.ру"
+        },
+        {
+          "slot": "registrationRequest",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/registration-request-a95efec9a128c7cf.png",
+          "loaded": true,
+          "alt": "Оставить заявку на подключение к Дом ру"
+        },
+        {
+          "slot": "loginEntry",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/login-entry-ba7d0402929b891d.png",
+          "loaded": true,
+          "alt": "Кнопка для входа в ЛК Дом.ру"
+        },
+        {
+          "slot": "passwordRecovery",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/password-recovery-a24ac5d2ec3421bc.png",
+          "loaded": true,
+          "alt": "Восстановить пароль к личному кабинету Домру"
+        },
+        {
+          "slot": "capabilitiesOverview",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/capabilities-overview-1e6afb354b5163bd.png",
+          "loaded": true,
+          "alt": "Главная страница личного кабинета Дом ру"
+        },
+        {
+          "slot": "interfaceTopMenu",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/interface-top-menu-138569ced478da72.png",
+          "loaded": true,
+          "alt": "Меню личного кабинета Дом ру"
+        },
+        {
+          "slot": "interfaceDashboard",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/interface-dashboard-f6a48fbd3d7e55aa.png",
+          "loaded": true,
+          "alt": "Меню личного кабинета Дом ру"
+        },
+        {
+          "slot": "paymentScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/payment-screen-7567984a98709ba6.png",
+          "loaded": true,
+          "alt": "Оплата Домру через личный кабинет"
+        },
+        {
+          "slot": "promisedPaymentScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/promised-payment-screen-4c3db734fc9bd330.png",
+          "loaded": true,
+          "alt": "Как получить обещанный платеж в кабинете Дом ру"
+        },
+        {
+          "slot": "terminationEntry",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/termination-entry-fe49b7268207cd11.png",
+          "loaded": true,
+          "alt": "Где расторгнуть договор с дом ру"
+        },
+        {
+          "slot": "terminationScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/termination-screen-3136d94f64633cf0.png",
+          "loaded": true,
+          "alt": "Расторгнуть договор с Домру"
+        },
+        {
+          "slot": "suspensionScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/suspension-screen-7eeb4216491ca286.png",
+          "loaded": true,
+          "alt": "Как приостановить договор в кабинете Дом ру"
+        },
+        {
+          "slot": "businessIllustration",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/business-illustration-9f23973c7882b747.png",
+          "loaded": true,
+          "alt": "CRM и ip-телефония"
+        },
+        {
+          "slot": "appScreen",
+          "src": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/app-screen-ebba0b7b3ccd1ae5.jpg",
+          "loaded": true,
+          "alt": "Экран приложения «Мой Дом.ру»"
+        }
+      ],
+      "captionOffsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "tocRows": 6,
+      "appCaption": 0,
+      "numberedHeadings": [],
+      "faq": 6,
+      "businessHeights": [
+        223.75,
+        800
+      ],
+      "terminationImageY": [
+        12938.125,
+        13438.984375
+      ],
+      "rails": [
+        {
+          "name": "Способы входа",
+          "cards": 3,
+          "last": true,
+          "first": true,
+          "touch": true,
+          "vertical": true,
+          "keyboard": true
+        },
+        {
+          "name": "Способы восстановления доступа",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "touch": true,
+          "vertical": true,
+          "keyboard": true
+        },
+        {
+          "name": "Возможности личного кабинета",
+          "cards": 3,
+          "last": true,
+          "first": true,
+          "touch": true,
+          "vertical": true,
+          "keyboard": true
+        },
+        {
+          "name": "Разделы верхнего меню",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "touch": true,
+          "vertical": true,
+          "keyboard": true
+        },
+        {
+          "name": "Блоки главной страницы кабинета",
+          "cards": 4,
+          "last": true,
+          "first": true,
+          "touch": true,
+          "vertical": true,
+          "keyboard": true
+        }
+      ],
+      "pageErrors": [],
+      "faqKeyboard": true
+    }
+  ]
+}

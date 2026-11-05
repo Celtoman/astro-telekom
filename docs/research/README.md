@@ -113,6 +113,6 @@
 
 - [Навигация админки и rate-limit request targets, 6 октября](2026-10-06-admin-navigation-and-rate-limits.md)
 
-## ACCOUNT — локальное внедрение 5 ноября 2026
+## ACCOUNT — внедрение и test-выпуск 5 ноября 2026
 
-- [Перенос в код, минимум CMS, миграции и браузерные проверки](2026-11-05-account-implementation.md). Внешний rollout/активация отдельно; не является допуском к реальному трафику.
+- [Перенос в код, минимум CMS, миграции и браузерные проверки](2026-11-05-account-implementation.md). [Exact-SHA CI/deployment, CODE, согласованная CMS29 и live-проверки](2026-11-05-account-test-release.md). Не является допуском к реальному трафику.

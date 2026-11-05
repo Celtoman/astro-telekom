@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-11-05T19:50:59.605Z",
+  "workingRevision": 29,
+  "publishedRevision": 29,
+  "publicationId": "cmw3yhh28000101tlbxw5phzk",
+  "status": "SUCCEEDED",
+  "unpublished": false,
+  "receipt": {
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "status": "SUCCEEDED",
+    "rebuildId": "cmtw6dpwj015g01o0ho99ow05",
+    "artifactId": "ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205",
+    "rendererId": "af133e9d8d65fca1d7f56754c192a32438909f7f9adb00325dd13c42196fd9d1",
+    "siteRevision": 29,
+    "catalogDigest": "2508436475c59651ea8a894f054addbdf317d9c43a1055d0b930f6261c573f8a",
+    "publicationId": "cmw3yhh28000101tlbxw5phzk",
+    "manifestDigest": "83ece902d78a709cc896cdd049d9a7c7df9a9de12f0a13276c8a32c11a9a911b",
+    "rebuildRevision": 25
+  },
+  "receiptMatchesFrozenSnapshot": true,
+  "rendererPreserved": true,
+  "publicProjectionUnchanged": false,
+  "cities": 207,
+  "tariffs": 3805,
+  "routes": 4226,
+  "contentPublished": true,
+  "publishedContentEqualsWorking": true,
+  "remainingChanges": 0,
+  "publicProjectionChangeExpectedAccountOnly": true,
+  "publicProjectionDigestBefore": "5937a92785e40bbf36cf10d93f602c0df3e80bdaa8af2983d01c87bc5a9318f9",
+  "publicProjectionDigestAfter": "f779ac753d5beddcd754d896815cd041ae21f5f6875a3e79249d527231467b48"
+}

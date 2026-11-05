@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-11-05T19:11:47.784Z",
+  "siteId": "cmtuaqqj1000107lkiiiia2xa",
+  "workingRevision": 28,
+  "publishedRevision": 28,
+  "publicationId": "cmw2jk1nr000401p3r0xykg4b",
+  "status": "SUCCEEDED",
+  "bundleKeys": [
+    "publicationId",
+    "siteId",
+    "siteSlug",
+    "siteRevision",
+    "catalogDigest",
+    "catalog"
+  ],
+  "catalogDigest": "63e70c3b9d35afe8f2a506a512e979f18c77f0f954b6dd071c26e294eb4880bf",
+  "projectionDigest": "5937a92785e40bbf36cf10d93f602c0df3e80bdaa8af2983d01c87bc5a9318f9",
+  "cities": 207,
+  "tariffs": 3805,
+  "routes": 4225
+}

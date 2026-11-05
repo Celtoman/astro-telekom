@@ -1,0 +1,128 @@
+[
+  {
+    "slot": "heroLogin",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/hero-login-07434dabcc931648.png",
+    "sha256": "07434dabcc931648b1e46130d82cfe9d5c4fa06112c47e62daf6b6160b2e5314",
+    "bytes": 9134,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "registrationRequest",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/registration-request-a95efec9a128c7cf.png",
+    "sha256": "a95efec9a128c7cfe81d3ca65b58034e3bdaceb6936230c0fb1e55ca83b37019",
+    "bytes": 60984,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "loginEntry",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/login-entry-ba7d0402929b891d.png",
+    "sha256": "ba7d0402929b891d2480fef774ebf4a2fd68a5480a6915a5ceb8c7188eab2f78",
+    "bytes": 18085,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "passwordRecovery",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/password-recovery-a24ac5d2ec3421bc.png",
+    "sha256": "a24ac5d2ec3421bc8d245e45ff367a897db8c44f86638f3919525bf9b25f87c6",
+    "bytes": 11794,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "capabilitiesOverview",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/capabilities-overview-1e6afb354b5163bd.png",
+    "sha256": "1e6afb354b5163bd946c0213514260549a114e7a4559aa25f82c799a397e9a72",
+    "bytes": 308451,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "interfaceTopMenu",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/interface-top-menu-138569ced478da72.png",
+    "sha256": "138569ced478da72af2e1a9d5e5ad3e994862d2a77cf596ec9586cf5939dcbe5",
+    "bytes": 9885,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "interfaceDashboard",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/interface-dashboard-f6a48fbd3d7e55aa.png",
+    "sha256": "f6a48fbd3d7e55aa5334180772e32342974bfa80b4c768754aa433fe7eabd2c9",
+    "bytes": 273134,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "paymentScreen",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/payment-screen-7567984a98709ba6.png",
+    "sha256": "7567984a98709ba6339db0554d06e6765e8ccf570a6ee76bee349c1180a022e3",
+    "bytes": 32153,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "promisedPaymentScreen",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/promised-payment-screen-4c3db734fc9bd330.png",
+    "sha256": "4c3db734fc9bd330531e92680a3012c58d9be2844902b4f03dfa45b496992a00",
+    "bytes": 9189,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "terminationEntry",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/termination-entry-fe49b7268207cd11.png",
+    "sha256": "fe49b7268207cd11c4399f7e26cd3ed036a38ed829d76670eeca7b6cb5164132",
+    "bytes": 7219,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "terminationScreen",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/termination-screen-3136d94f64633cf0.png",
+    "sha256": "3136d94f64633cf01f6712d24a164190d3b7902cb5b6db5a75e60da92e8f2dba",
+    "bytes": 16001,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "suspensionScreen",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/suspension-screen-7eeb4216491ca286.png",
+    "sha256": "7eeb4216491ca286b594e66ac17c8c300cddda552d6472b1768e952be6cfb2f6",
+    "bytes": 17248,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "businessIllustration",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/business-illustration-9f23973c7882b747.png",
+    "sha256": "9f23973c7882b747014b45e1c6bb6f9888282beec02ab15451473871a54d57ad",
+    "bytes": 85253,
+    "status": 200,
+    "contentType": "image/png",
+    "cacheControl": "public, max-age=31536000, immutable"
+  },
+  {
+    "slot": "appScreen",
+    "url": "https://tv-internet-dom.ru/__publication_assets/ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205/images/account/v1/app-screen-ebba0b7b3ccd1ae5.jpg",
+    "sha256": "ebba0b7b3ccd1ae560d57b38798b988614c4acd797d53b712d1f01922bb27bdf",
+    "bytes": 318130,
+    "status": 200,
+    "contentType": "image/jpeg",
+    "cacheControl": "public, max-age=31536000, immutable"
+  }
+]

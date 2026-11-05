@@ -1,0 +1,10 @@
+{
+  "deploymentId": "jl6yim4jydguraakgkccy3s9",
+  "applicationUuid": "jlrsktdos9yhchkgnrd9f5fj",
+  "status": "finished",
+  "commit": "c2982c7267edc202cb695d6065ae9a98c5255b4f",
+  "createdAt": "2026-11-05T19:20:14.000000Z",
+  "finishedAt": "2026-11-05T19:35:47.000000Z",
+  "applicationStatus": "running:healthy",
+  "source": "Coolify MCP get_deployment + list_deployments + get_application"
+}

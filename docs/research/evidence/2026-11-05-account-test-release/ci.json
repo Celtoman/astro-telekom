@@ -1,0 +1,14 @@
+{
+  "runId": 42091512557,
+  "url": "https://github.com/Celtoman/astro-telekom/actions/runs/42091512557",
+  "sha": "c2982c7267edc202cb695d6065ae9a98c5255b4f",
+  "status": "completed",
+  "conclusion": "success",
+  "node": "22.23.2",
+  "platform": "ubuntu-latest",
+  "tests": 957,
+  "passed": 957,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 367929.034907
+}

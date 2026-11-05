@@ -1,0 +1,72 @@
+{
+  "checkedAt": "2026-11-05T19:40:59.705Z",
+  "authenticated": [
+    {
+      "path": "/",
+      "status": 200,
+      "robots": "noindex, nofollow",
+      "canonical": "https://tv-internet-dom.ru/",
+      "accountMention": false,
+      "length": 346763
+    },
+    {
+      "path": "/kazan",
+      "status": 200,
+      "robots": "noindex, nofollow",
+      "canonical": "https://tv-internet-dom.ru/kazan",
+      "accountMention": false,
+      "length": 259622
+    },
+    {
+      "path": "/kazan/proverka-podklyucheniya-k-domru-po-adresu",
+      "status": 200,
+      "robots": "noindex, nofollow",
+      "canonical": "https://tv-internet-dom.ru/kazan/proverka-podklyucheniya-k-domru-po-adresu",
+      "accountMention": false,
+      "length": 200648
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "robots": "noindex, nofollow",
+      "accountMention": false,
+      "length": 105
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "robots": "noindex, nofollow",
+      "accountMention": false,
+      "length": 344
+    },
+    {
+      "path": "/lichnyy-kabinet-dom-ru",
+      "status": 404,
+      "robots": "noindex, nofollow",
+      "accountMention": false,
+      "length": 162705
+    }
+  ],
+  "unauthenticated": [
+    {
+      "path": "/",
+      "status": 401,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/robots.txt",
+      "status": 401,
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 401,
+      "robots": "noindex, nofollow"
+    }
+  ],
+  "adminAccountTemplate": {
+    "status": 200,
+    "robots": "noindex, nofollow, noarchive"
+  },
+  "accountPublication": "not activated"
+}
