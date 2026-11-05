@@ -1,0 +1,1118 @@
+{
+  "sessionId": "131b1a9f-39e3-488e-bfde-40fb8164c2b5",
+  "sourceFile": "AcPPCDVqYqZIUJ0GXZVlHj",
+  "screensFile": "BdxNHlBVZWejREtOEIWDkI",
+  "inventory": {
+    "roots": [
+      {
+        "id": "118:5",
+        "w": 1440,
+        "h": 11784.759765625,
+        "children": [
+          {
+            "id": "118:84",
+            "name": "00 / Готовая шапка",
+            "w": 1360,
+            "h": 128,
+            "main": "21:189",
+            "key": "bbdd31e2d2d303bef7f023dd544f96a4469314d4",
+            "remote": true
+          },
+          {
+            "id": "118:138",
+            "name": "01 / Первый экран",
+            "w": 1360,
+            "h": 401.0490417480469,
+            "main": "13:126",
+            "key": "e7192a1c2ef390a632bc13d277cb0afa3bee0796",
+            "remote": false
+          },
+          {
+            "id": "118:164",
+            "name": "02 / Оглавление без заголовка",
+            "w": 1360,
+            "h": 44,
+            "main": "66:167",
+            "key": "a5eb3f9f6a68c1937b750d65f539010431a19fa7",
+            "remote": false
+          },
+          {
+            "id": "118:199",
+            "name": "03 / Проверка подключения",
+            "w": 1360,
+            "h": 336,
+            "main": "21:535",
+            "key": "df1e8d3a644d7853f96293b934b0c0cf14da4806",
+            "remote": true
+          },
+          {
+            "id": "118:258",
+            "name": "04 / Регистрация",
+            "w": 1360,
+            "h": 732,
+            "main": "84:1020",
+            "key": "99fd5982b4a4f5280666c2f365462f4a7e32db99",
+            "remote": false
+          },
+          {
+            "id": "118:284",
+            "name": "05 / Вход в кабинет",
+            "w": 1360,
+            "h": 1019.94775390625,
+            "main": "53:175",
+            "key": "d0642454ef9d34392ae4afefc72e156ac63d24be",
+            "remote": false
+          },
+          {
+            "id": "118:314",
+            "name": "06 / Восстановление доступа",
+            "w": 1360,
+            "h": 810,
+            "main": "51:798",
+            "key": "b892f28bc2ddd5747f61878bc9126563d287f618",
+            "remote": false
+          },
+          {
+            "id": "118:386",
+            "name": "07 / Возможности",
+            "w": 1360,
+            "h": 1179.368408203125,
+            "main": "56:1164",
+            "key": "ad8b8b9c91e760a171797fe5c8dacdfc838b1f97",
+            "remote": false
+          },
+          {
+            "id": "118:415",
+            "name": "08 / Описание интерфейса",
+            "w": 1360,
+            "h": 2091.24365234375,
+            "main": "54:1666",
+            "key": "e3dacca73aac4e32bc4a982a49a35e4ef292d4d7",
+            "remote": false
+          },
+          {
+            "id": "118:554",
+            "name": "09 / Оплата",
+            "w": 1360,
+            "h": 625,
+            "main": "56:1769",
+            "key": "d9a6ac7affbeb65531bbf2a5261a3d3dc12a6328",
+            "remote": false
+          },
+          {
+            "id": "118:593",
+            "name": "10 / Обещанный платёж",
+            "w": 1360,
+            "h": 676.5870361328125,
+            "main": "54:584",
+            "key": "dfb20ea087f6e831e18ff41131d001e0683b680b",
+            "remote": false
+          },
+          {
+            "id": "118:630",
+            "name": "11 / Расторжение",
+            "w": 1360,
+            "h": 688.9352416992188,
+            "main": "54:750",
+            "key": "d97c89c88755bf27acc46488c2c5c3452eb109cd",
+            "remote": false
+          },
+          {
+            "id": "118:656",
+            "name": "12 / Приостановление",
+            "w": 1360,
+            "h": 724.6287841796875,
+            "main": "54:873",
+            "key": "96380d75ab89ac641c178ccb5cca7eb1512cb5fb",
+            "remote": false
+          },
+          {
+            "id": "118:697",
+            "name": "13 / Для бизнеса",
+            "w": 1360,
+            "h": 474,
+            "main": "56:2773",
+            "key": "ce9b8d4f5ee3de455274c593242c53a23f9bd7b3",
+            "remote": false
+          },
+          {
+            "id": "118:712",
+            "name": "14 / Приложение",
+            "w": 1360,
+            "h": 374,
+            "main": "54:1197",
+            "key": "94c526140417889ac53dcfebb99652a34350d4b3",
+            "remote": false
+          },
+          {
+            "id": "118:818",
+            "name": "15 / FAQ",
+            "w": 1360,
+            "h": 534,
+            "main": "21:417",
+            "key": "bfbb734d95777a1a7052415944d4594f7b2877fc",
+            "remote": true
+          },
+          {
+            "id": "118:1005",
+            "name": "16 / Готовый подвал",
+            "w": 1360,
+            "h": 562,
+            "main": "21:22",
+            "key": "29aa53f56d0fc09ac81ef5708d64c482b9bc3941",
+            "remote": true
+          }
+        ]
+      },
+      {
+        "id": "118:1066",
+        "w": 834,
+        "h": 17785.306640625,
+        "children": [
+          {
+            "id": "118:1139",
+            "name": "00 / Готовая шапка",
+            "w": 720,
+            "h": 120,
+            "main": "21:190",
+            "key": "91f5ebae9867f07ab2c61ede945a945d0be21d4a",
+            "remote": true
+          },
+          {
+            "id": "118:1188",
+            "name": "01 / Первый экран",
+            "w": 720,
+            "h": 808.7739868164062,
+            "main": "13:147",
+            "key": "8e425325391ba2e58b6660e9014197cd205f57fa",
+            "remote": false
+          },
+          {
+            "id": "118:1214",
+            "name": "02 / Оглавление без заголовка",
+            "w": 720,
+            "h": 96,
+            "main": "66:208",
+            "key": "d6066799fbf81baa31bdddb8d5de473c08191c1b",
+            "remote": false
+          },
+          {
+            "id": "118:1249",
+            "name": "03 / Проверка подключения",
+            "w": 720,
+            "h": 348.0570983886719,
+            "main": "21:536",
+            "key": "69f07e0cf243ec1c26280a32702d66b5c96047f2",
+            "remote": true
+          },
+          {
+            "id": "118:1301",
+            "name": "04 / Регистрация",
+            "w": 720,
+            "h": 1207.073486328125,
+            "main": "84:1046",
+            "key": "9bd2d952fe242a39ec10daefdd615f1455e6634a",
+            "remote": false
+          },
+          {
+            "id": "118:1325",
+            "name": "05 / Вход в кабинет",
+            "w": 720,
+            "h": 1699,
+            "main": "53:207",
+            "key": "c21b38d94d961ed2218c957da67fd6359f66e5e9",
+            "remote": false
+          },
+          {
+            "id": "118:1355",
+            "name": "06 / Восстановление доступа",
+            "w": 720,
+            "h": 1525.29736328125,
+            "main": "51:848",
+            "key": "c62a3aa3749b259030e77a16aed2c00d7d603920",
+            "remote": false
+          },
+          {
+            "id": "118:1427",
+            "name": "07 / Возможности",
+            "w": 720,
+            "h": 1260.631591796875,
+            "main": "56:1192",
+            "key": "5d7a6c43f855ad54507a8bda9c4f76b7864bf6f3",
+            "remote": false
+          },
+          {
+            "id": "118:1456",
+            "name": "08 / Описание интерфейса",
+            "w": 720,
+            "h": 2724.619384765625,
+            "main": "54:1761",
+            "key": "65193b06903ab2d857b462dc006a82828025899b",
+            "remote": false
+          },
+          {
+            "id": "118:1601",
+            "name": "09 / Оплата",
+            "w": 720,
+            "h": 1108.5211181640625,
+            "main": "56:1798",
+            "key": "0e0bd1483dcaacc9d5fdabef3aee8be30d0ac168",
+            "remote": false
+          },
+          {
+            "id": "118:1640",
+            "name": "10 / Обещанный платёж",
+            "w": 720,
+            "h": 1162.3829345703125,
+            "main": "54:623",
+            "key": "dff0e12475e958851efac2791876c5c77a390564",
+            "remote": false
+          },
+          {
+            "id": "118:1679",
+            "name": "11 / Расторжение",
+            "w": 720,
+            "h": 1204.923828125,
+            "main": "54:779",
+            "key": "16bca3330918a7d38d3b07728cb236bbc3d42713",
+            "remote": false
+          },
+          {
+            "id": "118:1706",
+            "name": "12 / Приостановление",
+            "w": 720,
+            "h": 1364.026123046875,
+            "main": "54:916",
+            "key": "1ce54a56b9e000eaa7d08e860827700481cf7c84",
+            "remote": false
+          },
+          {
+            "id": "118:1747",
+            "name": "13 / Для бизнеса",
+            "w": 720,
+            "h": 954,
+            "main": "56:2790",
+            "key": "b4f42ecf0e00b62faef5b23c8f6c0b2910d4178a",
+            "remote": false
+          },
+          {
+            "id": "118:1762",
+            "name": "14 / Приложение",
+            "w": 720,
+            "h": 638,
+            "main": "54:1228",
+            "key": "f7e34e29d4c7fc65cc18a3aa09ab55d3dae7de33",
+            "remote": false
+          },
+          {
+            "id": "118:1868",
+            "name": "15 / FAQ",
+            "w": 720,
+            "h": 518,
+            "main": "21:418",
+            "key": "9d0cec9fbe06e5229b405f4eb5a0bc60a4eb4a91",
+            "remote": true
+          },
+          {
+            "id": "118:2050",
+            "name": "16 / Готовый подвал",
+            "w": 720,
+            "h": 662,
+            "main": "21:23",
+            "key": "9dc488f4c8b4669fa423aa914801babdafcb88e8",
+            "remote": true
+          }
+        ]
+      },
+      {
+        "id": "118:2109",
+        "w": 390,
+        "h": 17712.140625,
+        "children": [
+          {
+            "id": "118:2152",
+            "name": "00 / Готовая шапка",
+            "w": 358,
+            "h": 108,
+            "main": "21:191",
+            "key": "86ddd5cd738bbe2ddacb3865c0cb675ad2266d41",
+            "remote": true
+          },
+          {
+            "id": "118:2181",
+            "name": "01 / Первый экран",
+            "w": 358,
+            "h": 967.9765625,
+            "main": "13:168",
+            "key": "69696a29e2865c8b9c40f9159a8aca972eb68fd0",
+            "remote": false
+          },
+          {
+            "id": "118:2207",
+            "name": "02 / Оглавление без заголовка",
+            "w": 358,
+            "h": 200,
+            "main": "66:250",
+            "key": "f190b875fd40293b2cb64b32db7ab7680485c5cb",
+            "remote": false
+          },
+          {
+            "id": "118:2242",
+            "name": "03 / Проверка подключения",
+            "w": 358,
+            "h": 386,
+            "main": "21:537",
+            "key": "6e9c61bd80dbb5ec0ce84cf82a66ec595caeb0d6",
+            "remote": true
+          },
+          {
+            "id": "118:2294",
+            "name": "04 / Регистрация",
+            "w": 358,
+            "h": 1393.0933837890625,
+            "main": "84:1072",
+            "key": "054f56ab8e7381585e23d9586a2fd871afb9b9fe",
+            "remote": false
+          },
+          {
+            "id": "118:2318",
+            "name": "05 / Вход в кабинет",
+            "w": 358,
+            "h": 1710.32666015625,
+            "main": "53:239",
+            "key": "6e39f7f239f2dac897c9f813bb682b648120c01b",
+            "remote": false
+          },
+          {
+            "id": "118:2348",
+            "name": "06 / Восстановление доступа",
+            "w": 358,
+            "h": 1269.15673828125,
+            "main": "51:898",
+            "key": "cfa675aa989ec5b892bab7f8eff6f6b11b714cae",
+            "remote": false
+          },
+          {
+            "id": "118:2420",
+            "name": "07 / Возможности",
+            "w": 358,
+            "h": 877.5921020507812,
+            "main": "56:1221",
+            "key": "58d7e7a3713c128d7336d5e01dde81e97286d419",
+            "remote": false
+          },
+          {
+            "id": "118:2448",
+            "name": "08 / Описание интерфейса",
+            "w": 358,
+            "h": 1709.570068359375,
+            "main": "54:1862",
+            "key": "71537ec35da116ce4e9c5f3b2ee351149f98192f",
+            "remote": false
+          },
+          {
+            "id": "118:2593",
+            "name": "09 / Оплата",
+            "w": 358,
+            "h": 953.8450927734375,
+            "main": "56:1827",
+            "key": "dbd97193c833e56b4cd6ce359c19c98ecc24efb8",
+            "remote": false
+          },
+          {
+            "id": "118:2632",
+            "name": "10 / Обещанный платёж",
+            "w": 358,
+            "h": 1404.4586181640625,
+            "main": "54:664",
+            "key": "a30581c9f3fbba8b9961716b3f81315a3878861d",
+            "remote": false
+          },
+          {
+            "id": "118:2671",
+            "name": "11 / Расторжение",
+            "w": 358,
+            "h": 1192.90771484375,
+            "main": "54:809",
+            "key": "dabbde4c012e9442867cae119e66406c29d2df6e",
+            "remote": false
+          },
+          {
+            "id": "118:2698",
+            "name": "12 / Приостановление",
+            "w": 358,
+            "h": 1423.4630126953125,
+            "main": "54:959",
+            "key": "f73bff00b5a3beb1ca29e172471631bedb57ab88",
+            "remote": false
+          },
+          {
+            "id": "118:2739",
+            "name": "13 / Для бизнеса",
+            "w": 358,
+            "h": 1053.75,
+            "main": "56:2807",
+            "key": "b64a2d9da94ecbe65632aa4c3def6f5a10a230cb",
+            "remote": false
+          },
+          {
+            "id": "118:2754",
+            "name": "14 / Приложение",
+            "w": 358,
+            "h": 886,
+            "main": "54:1259",
+            "key": "8cc44767416b0c5df18367b2001a831756d484fa",
+            "remote": false
+          },
+          {
+            "id": "118:2860",
+            "name": "15 / FAQ",
+            "w": 358,
+            "h": 690,
+            "main": "21:419",
+            "key": "36f14a661c1518983ac2d65be3561f97e29d3aaf",
+            "remote": true
+          },
+          {
+            "id": "118:3041",
+            "name": "16 / Готовый подвал",
+            "w": 358,
+            "h": 1102,
+            "main": "21:24",
+            "key": "b8145de9408240ac07cfaa1c337e982c1deae731",
+            "remote": true
+          }
+        ]
+      },
+      {
+        "id": "118:3096",
+        "w": 320,
+        "h": 19601.787109375,
+        "children": [
+          {
+            "id": "118:3121",
+            "name": "00 / Готовая шапка",
+            "w": 288,
+            "h": 108,
+            "main": "21:191",
+            "key": "86ddd5cd738bbe2ddacb3865c0cb675ad2266d41",
+            "remote": true
+          },
+          {
+            "id": "118:3146",
+            "name": "01 / Первый экран",
+            "w": 288,
+            "h": 1044.439208984375,
+            "main": "13:189",
+            "key": "8b934cc17e920c1e1f94f2cea103fe22d92014b2",
+            "remote": false
+          },
+          {
+            "id": "118:3172",
+            "name": "02 / Оглавление без заголовка",
+            "w": 288,
+            "h": 304,
+            "main": "66:294",
+            "key": "a489cc8a8e0c4a6738e014ba5ffc37c16ebb2411",
+            "remote": false
+          },
+          {
+            "id": "118:3207",
+            "name": "03 / Проверка подключения",
+            "w": 288,
+            "h": 435,
+            "main": "21:538",
+            "key": "cc0da6a618ec66088ce9965268238d83df124d75",
+            "remote": true
+          },
+          {
+            "id": "118:3259",
+            "name": "04 / Регистрация",
+            "w": 288,
+            "h": 1588.209228515625,
+            "main": "84:1098",
+            "key": "623f1a772ec64b3bb48cf7b3001a32a35683e281",
+            "remote": false
+          },
+          {
+            "id": "118:3283",
+            "name": "05 / Вход в кабинет",
+            "w": 288,
+            "h": 2016.256591796875,
+            "main": "53:271",
+            "key": "473573bfea74bab3d3c96d3a92dfe3e609ba6e9f",
+            "remote": false
+          },
+          {
+            "id": "118:3313",
+            "name": "06 / Восстановление доступа",
+            "w": 288,
+            "h": 1415.23779296875,
+            "main": "51:948",
+            "key": "7d0276c25cfebd06b295ef25885fa187a6f2afcc",
+            "remote": false
+          },
+          {
+            "id": "118:3385",
+            "name": "07 / Возможности",
+            "w": 288,
+            "h": 935.5263061523438,
+            "main": "56:1251",
+            "key": "60ad687f8885cf92f06615c5189dcd8cfe6641d8",
+            "remote": false
+          },
+          {
+            "id": "118:3413",
+            "name": "08 / Описание интерфейса",
+            "w": 288,
+            "h": 1899.48095703125,
+            "main": "54:1963",
+            "key": "9e36050539e433ae6462f9af9e854400a2d18f77",
+            "remote": false
+          },
+          {
+            "id": "118:3558",
+            "name": "09 / Оплата",
+            "w": 288,
+            "h": 965.4366455078125,
+            "main": "56:1856",
+            "key": "5ba133ff63a49c2dfb3273e586ab25cd2ac913e4",
+            "remote": false
+          },
+          {
+            "id": "118:3597",
+            "name": "10 / Обещанный платёж",
+            "w": 288,
+            "h": 1521.1064453125,
+            "main": "54:705",
+            "key": "9f25b4e087c0a9757297dfc0082ab4aae69ee0de",
+            "remote": false
+          },
+          {
+            "id": "118:3636",
+            "name": "11 / Расторжение",
+            "w": 288,
+            "h": 1288.4287109375,
+            "main": "54:839",
+            "key": "9c0dbb07137d29177b01266bd4d143c0464c94af",
+            "remote": false
+          },
+          {
+            "id": "118:3663",
+            "name": "12 / Приостановление",
+            "w": 288,
+            "h": 1566.21044921875,
+            "main": "54:1002",
+            "key": "582b324758c868d09d475de2125052a9270274fb",
+            "remote": false
+          },
+          {
+            "id": "118:3704",
+            "name": "13 / Для бизнеса",
+            "w": 288,
+            "h": 1178,
+            "main": "56:2824",
+            "key": "39cef784989f694d8ecbb45dd5135c38e8be753a",
+            "remote": false
+          },
+          {
+            "id": "118:3719",
+            "name": "14 / Приложение",
+            "w": 288,
+            "h": 1072.45458984375,
+            "main": "54:1290",
+            "key": "c37e88d584c0e560b88189678ef0b43f87e1c6f2",
+            "remote": false
+          },
+          {
+            "id": "118:3825",
+            "name": "15 / FAQ",
+            "w": 288,
+            "h": 738,
+            "main": "21:420",
+            "key": "14685657775c10711062b21ebe8ee37a9818029e",
+            "remote": true
+          },
+          {
+            "id": "118:4001",
+            "name": "16 / Готовый подвал",
+            "w": 288,
+            "h": 1142,
+            "main": "21:24",
+            "key": "b8145de9408240ac07cfaa1c337e982c1deae731",
+            "remote": true
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "id": "13:126",
+        "key": "e7192a1c2ef390a632bc13d277cb0afa3bee0796",
+        "name": "Device=Desktop",
+        "set": "13:210",
+        "setName": "ACCOUNT / Первый экран",
+        "page": "10:3"
+      },
+      {
+        "id": "66:167",
+        "key": "a5eb3f9f6a68c1937b750d65f539010431a19fa7",
+        "name": "Device=Desktop",
+        "set": "66:340",
+        "setName": "V2 / navigation / C",
+        "page": "60:149"
+      },
+      {
+        "id": "84:1020",
+        "key": "99fd5982b4a4f5280666c2f365462f4a7e32db99",
+        "name": "Device=Desktop",
+        "set": "84:1124",
+        "setName": "V2 / registration / B",
+        "page": "61:233"
+      },
+      {
+        "id": "53:175",
+        "key": "d0642454ef9d34392ae4afefc72e156ac63d24be",
+        "name": "Device=Desktop",
+        "set": "53:303",
+        "setName": "V2 / login / B",
+        "page": "60:306"
+      },
+      {
+        "id": "51:798",
+        "key": "b892f28bc2ddd5747f61878bc9126563d287f618",
+        "name": "Device=Desktop",
+        "set": "51:998",
+        "setName": "V2 / recovery / C",
+        "page": "64:305"
+      },
+      {
+        "id": "56:1164",
+        "key": "ad8b8b9c91e760a171797fe5c8dacdfc838b1f97",
+        "name": "Device=Desktop",
+        "set": "56:1281",
+        "setName": "V2 / features / B",
+        "page": "63:17"
+      },
+      {
+        "id": "54:1666",
+        "key": "e3dacca73aac4e32bc4a982a49a35e4ef292d4d7",
+        "name": "Device=Desktop",
+        "set": "54:2064",
+        "setName": "V2 / overview / C",
+        "page": "63:234"
+      },
+      {
+        "id": "56:1769",
+        "key": "d9a6ac7affbeb65531bbf2a5261a3d3dc12a6328",
+        "name": "Device=Desktop",
+        "set": "56:1885",
+        "setName": "V2 / payment / B",
+        "page": "64:438"
+      },
+      {
+        "id": "54:584",
+        "key": "dfb20ea087f6e831e18ff41131d001e0683b680b",
+        "name": "Device=Desktop",
+        "set": "54:746",
+        "setName": "V2 / promised / A",
+        "page": "63:439"
+      },
+      {
+        "id": "54:750",
+        "key": "d97c89c88755bf27acc46488c2c5c3452eb109cd",
+        "name": "Device=Desktop",
+        "set": "54:869",
+        "setName": "V2 / termination / A",
+        "page": "63:560"
+      },
+      {
+        "id": "54:873",
+        "key": "96380d75ab89ac641c178ccb5cca7eb1512cb5fb",
+        "name": "Device=Desktop",
+        "set": "54:1045",
+        "setName": "V2 / pause / A",
+        "page": "64:739"
+      },
+      {
+        "id": "56:2773",
+        "key": "ce9b8d4f5ee3de455274c593242c53a23f9bd7b3",
+        "name": "Device=Desktop",
+        "set": "56:2841",
+        "setName": "V2 / business / B",
+        "page": "64:756"
+      },
+      {
+        "id": "54:1197",
+        "key": "94c526140417889ac53dcfebb99652a34350d4b3",
+        "name": "Device=Desktop",
+        "set": "54:1321",
+        "setName": "V2 / app / A",
+        "page": "63:634"
+      },
+      {
+        "id": "13:147",
+        "key": "8e425325391ba2e58b6660e9014197cd205f57fa",
+        "name": "Device=Tablet",
+        "set": "13:210",
+        "setName": "ACCOUNT / Первый экран",
+        "page": "10:3"
+      },
+      {
+        "id": "66:208",
+        "key": "d6066799fbf81baa31bdddb8d5de473c08191c1b",
+        "name": "Device=Tablet",
+        "set": "66:340",
+        "setName": "V2 / navigation / C",
+        "page": "60:149"
+      },
+      {
+        "id": "84:1046",
+        "key": "9bd2d952fe242a39ec10daefdd615f1455e6634a",
+        "name": "Device=Tablet",
+        "set": "84:1124",
+        "setName": "V2 / registration / B",
+        "page": "61:233"
+      },
+      {
+        "id": "53:207",
+        "key": "c21b38d94d961ed2218c957da67fd6359f66e5e9",
+        "name": "Device=Tablet",
+        "set": "53:303",
+        "setName": "V2 / login / B",
+        "page": "60:306"
+      },
+      {
+        "id": "51:848",
+        "key": "c62a3aa3749b259030e77a16aed2c00d7d603920",
+        "name": "Device=Tablet",
+        "set": "51:998",
+        "setName": "V2 / recovery / C",
+        "page": "64:305"
+      },
+      {
+        "id": "56:1192",
+        "key": "5d7a6c43f855ad54507a8bda9c4f76b7864bf6f3",
+        "name": "Device=Tablet",
+        "set": "56:1281",
+        "setName": "V2 / features / B",
+        "page": "63:17"
+      },
+      {
+        "id": "54:1761",
+        "key": "65193b06903ab2d857b462dc006a82828025899b",
+        "name": "Device=Tablet",
+        "set": "54:2064",
+        "setName": "V2 / overview / C",
+        "page": "63:234"
+      },
+      {
+        "id": "56:1798",
+        "key": "0e0bd1483dcaacc9d5fdabef3aee8be30d0ac168",
+        "name": "Device=Tablet",
+        "set": "56:1885",
+        "setName": "V2 / payment / B",
+        "page": "64:438"
+      },
+      {
+        "id": "54:623",
+        "key": "dff0e12475e958851efac2791876c5c77a390564",
+        "name": "Device=Tablet",
+        "set": "54:746",
+        "setName": "V2 / promised / A",
+        "page": "63:439"
+      },
+      {
+        "id": "54:779",
+        "key": "16bca3330918a7d38d3b07728cb236bbc3d42713",
+        "name": "Device=Tablet",
+        "set": "54:869",
+        "setName": "V2 / termination / A",
+        "page": "63:560"
+      },
+      {
+        "id": "54:916",
+        "key": "1ce54a56b9e000eaa7d08e860827700481cf7c84",
+        "name": "Device=Tablet",
+        "set": "54:1045",
+        "setName": "V2 / pause / A",
+        "page": "64:739"
+      },
+      {
+        "id": "56:2790",
+        "key": "b4f42ecf0e00b62faef5b23c8f6c0b2910d4178a",
+        "name": "Device=Tablet",
+        "set": "56:2841",
+        "setName": "V2 / business / B",
+        "page": "64:756"
+      },
+      {
+        "id": "54:1228",
+        "key": "f7e34e29d4c7fc65cc18a3aa09ab55d3dae7de33",
+        "name": "Device=Tablet",
+        "set": "54:1321",
+        "setName": "V2 / app / A",
+        "page": "63:634"
+      },
+      {
+        "id": "13:168",
+        "key": "69696a29e2865c8b9c40f9159a8aca972eb68fd0",
+        "name": "Device=Mobile",
+        "set": "13:210",
+        "setName": "ACCOUNT / Первый экран",
+        "page": "10:3"
+      },
+      {
+        "id": "66:250",
+        "key": "f190b875fd40293b2cb64b32db7ab7680485c5cb",
+        "name": "Device=Mobile",
+        "set": "66:340",
+        "setName": "V2 / navigation / C",
+        "page": "60:149"
+      },
+      {
+        "id": "84:1072",
+        "key": "054f56ab8e7381585e23d9586a2fd871afb9b9fe",
+        "name": "Device=Mobile",
+        "set": "84:1124",
+        "setName": "V2 / registration / B",
+        "page": "61:233"
+      },
+      {
+        "id": "53:239",
+        "key": "6e39f7f239f2dac897c9f813bb682b648120c01b",
+        "name": "Device=Mobile",
+        "set": "53:303",
+        "setName": "V2 / login / B",
+        "page": "60:306"
+      },
+      {
+        "id": "51:898",
+        "key": "cfa675aa989ec5b892bab7f8eff6f6b11b714cae",
+        "name": "Device=Mobile",
+        "set": "51:998",
+        "setName": "V2 / recovery / C",
+        "page": "64:305"
+      },
+      {
+        "id": "56:1221",
+        "key": "58d7e7a3713c128d7336d5e01dde81e97286d419",
+        "name": "Device=Mobile",
+        "set": "56:1281",
+        "setName": "V2 / features / B",
+        "page": "63:17"
+      },
+      {
+        "id": "54:1862",
+        "key": "71537ec35da116ce4e9c5f3b2ee351149f98192f",
+        "name": "Device=Mobile",
+        "set": "54:2064",
+        "setName": "V2 / overview / C",
+        "page": "63:234"
+      },
+      {
+        "id": "56:1827",
+        "key": "dbd97193c833e56b4cd6ce359c19c98ecc24efb8",
+        "name": "Device=Mobile",
+        "set": "56:1885",
+        "setName": "V2 / payment / B",
+        "page": "64:438"
+      },
+      {
+        "id": "54:664",
+        "key": "a30581c9f3fbba8b9961716b3f81315a3878861d",
+        "name": "Device=Mobile",
+        "set": "54:746",
+        "setName": "V2 / promised / A",
+        "page": "63:439"
+      },
+      {
+        "id": "54:809",
+        "key": "dabbde4c012e9442867cae119e66406c29d2df6e",
+        "name": "Device=Mobile",
+        "set": "54:869",
+        "setName": "V2 / termination / A",
+        "page": "63:560"
+      },
+      {
+        "id": "54:959",
+        "key": "f73bff00b5a3beb1ca29e172471631bedb57ab88",
+        "name": "Device=Mobile",
+        "set": "54:1045",
+        "setName": "V2 / pause / A",
+        "page": "64:739"
+      },
+      {
+        "id": "56:2807",
+        "key": "b64a2d9da94ecbe65632aa4c3def6f5a10a230cb",
+        "name": "Device=Mobile",
+        "set": "56:2841",
+        "setName": "V2 / business / B",
+        "page": "64:756"
+      },
+      {
+        "id": "54:1259",
+        "key": "8cc44767416b0c5df18367b2001a831756d484fa",
+        "name": "Device=Mobile",
+        "set": "54:1321",
+        "setName": "V2 / app / A",
+        "page": "63:634"
+      },
+      {
+        "id": "13:189",
+        "key": "8b934cc17e920c1e1f94f2cea103fe22d92014b2",
+        "name": "Device=Mobile320",
+        "set": "13:210",
+        "setName": "ACCOUNT / Первый экран",
+        "page": "10:3"
+      },
+      {
+        "id": "66:294",
+        "key": "a489cc8a8e0c4a6738e014ba5ffc37c16ebb2411",
+        "name": "Device=Mobile320",
+        "set": "66:340",
+        "setName": "V2 / navigation / C",
+        "page": "60:149"
+      },
+      {
+        "id": "84:1098",
+        "key": "623f1a772ec64b3bb48cf7b3001a32a35683e281",
+        "name": "Device=Mobile320",
+        "set": "84:1124",
+        "setName": "V2 / registration / B",
+        "page": "61:233"
+      },
+      {
+        "id": "53:271",
+        "key": "473573bfea74bab3d3c96d3a92dfe3e609ba6e9f",
+        "name": "Device=Mobile320",
+        "set": "53:303",
+        "setName": "V2 / login / B",
+        "page": "60:306"
+      },
+      {
+        "id": "51:948",
+        "key": "7d0276c25cfebd06b295ef25885fa187a6f2afcc",
+        "name": "Device=Mobile320",
+        "set": "51:998",
+        "setName": "V2 / recovery / C",
+        "page": "64:305"
+      },
+      {
+        "id": "56:1251",
+        "key": "60ad687f8885cf92f06615c5189dcd8cfe6641d8",
+        "name": "Device=Mobile320",
+        "set": "56:1281",
+        "setName": "V2 / features / B",
+        "page": "63:17"
+      },
+      {
+        "id": "54:1963",
+        "key": "9e36050539e433ae6462f9af9e854400a2d18f77",
+        "name": "Device=Mobile320",
+        "set": "54:2064",
+        "setName": "V2 / overview / C",
+        "page": "63:234"
+      },
+      {
+        "id": "56:1856",
+        "key": "5ba133ff63a49c2dfb3273e586ab25cd2ac913e4",
+        "name": "Device=Mobile320",
+        "set": "56:1885",
+        "setName": "V2 / payment / B",
+        "page": "64:438"
+      },
+      {
+        "id": "54:705",
+        "key": "9f25b4e087c0a9757297dfc0082ab4aae69ee0de",
+        "name": "Device=Mobile320",
+        "set": "54:746",
+        "setName": "V2 / promised / A",
+        "page": "63:439"
+      },
+      {
+        "id": "54:839",
+        "key": "9c0dbb07137d29177b01266bd4d143c0464c94af",
+        "name": "Device=Mobile320",
+        "set": "54:869",
+        "setName": "V2 / termination / A",
+        "page": "63:560"
+      },
+      {
+        "id": "54:1002",
+        "key": "582b324758c868d09d475de2125052a9270274fb",
+        "name": "Device=Mobile320",
+        "set": "54:1045",
+        "setName": "V2 / pause / A",
+        "page": "64:739"
+      },
+      {
+        "id": "56:2824",
+        "key": "39cef784989f694d8ecbb45dd5135c38e8be753a",
+        "name": "Device=Mobile320",
+        "set": "56:2841",
+        "setName": "V2 / business / B",
+        "page": "64:756"
+      },
+      {
+        "id": "54:1290",
+        "key": "c37e88d584c0e560b88189678ef0b43f87e1c6f2",
+        "name": "Device=Mobile320",
+        "set": "54:1321",
+        "setName": "V2 / app / A",
+        "page": "63:634"
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "137:453",
+        "key": "7ad83fbf90ec1d9249ff809c14277d5849cedffe",
+        "name": "Width=448",
+        "owner": "137:509",
+        "page": "137:438"
+      },
+      {
+        "id": "137:442",
+        "key": "e616ca1bb03f76e16b182f4adc24d0825ac9c41c",
+        "name": "Icon / Lightbulb / Phosphor Duotone / REVIEW",
+        "owner": "137:442",
+        "page": "137:438"
+      },
+      {
+        "id": "114:3",
+        "key": "1a582cf1bd2d28103e11f20aea217d8c9a4a8e22",
+        "name": "ACCOUNT / Магазин / Google Play",
+        "owner": "114:3",
+        "page": "114:2"
+      },
+      {
+        "id": "114:16",
+        "key": "9f72a4d93f1aab247df47e10e45e00903e2b592b",
+        "name": "ACCOUNT / Магазин / RuStore",
+        "owner": "114:16",
+        "page": "114:2"
+      },
+      {
+        "id": "114:46",
+        "key": "3f90275d01e8220d7635e3223b99227efb4b49a6",
+        "name": "ACCOUNT / Магазин / AppGallery",
+        "owner": "114:46",
+        "page": "114:2"
+      },
+      {
+        "id": "136:194",
+        "key": "01d8fa8d4001f36d4a92faa2fa26a8c8a951f58d",
+        "name": "Мокап / Мой Дом.ру / экран владельца — source339:13",
+        "owner": "136:194",
+        "page": "47:16"
+      },
+      {
+        "id": "137:489",
+        "key": "9d669d3d6b485fb3265554b6410a09ba2f0745ec",
+        "name": "Width=288",
+        "owner": "137:509",
+        "page": "137:438"
+      }
+    ]
+  }
+}

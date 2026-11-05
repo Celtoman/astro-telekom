@@ -1,0 +1,19 @@
+{
+  "sourceFamilies": 13,
+  "sourceVariants": 52,
+  "sourcePages": 15,
+  "removedPages": 23,
+  "variantKeysPreserved": 52,
+  "screens": 4,
+  "linkedSections": 68,
+  "sourceControlsRemoved": 10,
+  "visibleCarouselControls": 0,
+  "anchorsPass": 44,
+  "faqOpenClosePass": 24,
+  "scrollTransitionsPass": 26,
+  "returnPass": 10,
+  "dragPass": 10,
+  "verticalIndependentPass": 10,
+  "libraryPublished": false,
+  "codeCmsChanged": false
+}

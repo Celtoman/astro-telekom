@@ -1,0 +1,1262 @@
+[
+  {
+    "id": "1054:1511",
+    "name": "ACCOUNT / Выбранная страница / Desktop",
+    "type": "FRAME",
+    "w": 1440,
+    "h": 11784.759765625,
+    "children": [
+      {
+        "id": "1054:1512",
+        "name": "00 / Готовая шапка",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 128,
+        "main": {
+          "id": "682:44280",
+          "key": "bbdd31e2d2d303bef7f023dd544f96a4469314d4",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "682:44279",
+            "name": "BLK-0001 / Шапка сайта",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1513",
+        "name": "01 / Первый экран",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 401.0490417480469,
+        "main": {
+          "id": "1054:86",
+          "key": "e7192a1c2ef390a632bc13d277cb0afa3bee0796",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:85",
+            "name": "ACCOUNT / Первый экран",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1514",
+        "name": "02 / Оглавление без заголовка",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 44,
+        "main": {
+          "id": "1054:139",
+          "key": "a5eb3f9f6a68c1937b750d65f539010431a19fa7",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:138",
+            "name": "V2 / navigation / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1515",
+        "name": "03 / Проверка подключения",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 336,
+        "main": {
+          "id": "1054:3",
+          "key": "df1e8d3a644d7853f96293b934b0c0cf14da4806",
+          "name": "Device=Desktop, State=Default",
+          "remote": true,
+          "parent": {
+            "id": "1054:2",
+            "name": "BLK-0036 / Проверка подключения — только адрес",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1516",
+        "name": "04 / Регистрация",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 732,
+        "main": {
+          "id": "1054:209",
+          "key": "99fd5982b4a4f5280666c2f365462f4a7e32db99",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:208",
+            "name": "V2 / registration / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1517",
+        "name": "05 / Вход в кабинет",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 1019.94775390625,
+        "main": {
+          "id": "1054:300",
+          "key": "d0642454ef9d34392ae4afefc72e156ac63d24be",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:299",
+            "name": "V2 / login / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1518",
+        "name": "06 / Восстановление доступа",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 810,
+        "main": {
+          "id": "1054:407",
+          "key": "b892f28bc2ddd5747f61878bc9126563d287f618",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:406",
+            "name": "V2 / recovery / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1519",
+        "name": "07 / Возможности",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 1179.368408203125,
+        "main": {
+          "id": "1054:512",
+          "key": "ad8b8b9c91e760a171797fe5c8dacdfc838b1f97",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:511",
+            "name": "V2 / features / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1520",
+        "name": "08 / Описание интерфейса",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 2091.24365234375,
+        "main": {
+          "id": "1054:659",
+          "key": "e3dacca73aac4e32bc4a982a49a35e4ef292d4d7",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:658",
+            "name": "V2 / overview / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1521",
+        "name": "09 / Оплата",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 625,
+        "main": {
+          "id": "1054:846",
+          "key": "d9a6ac7affbeb65531bbf2a5261a3d3dc12a6328",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:845",
+            "name": "V2 / payment / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1522",
+        "name": "10 / Обещанный платёж",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 676.5870361328125,
+        "main": {
+          "id": "1054:927",
+          "key": "dfb20ea087f6e831e18ff41131d001e0683b680b",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:926",
+            "name": "V2 / promised / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1523",
+        "name": "11 / Расторжение",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 688.9352416992188,
+        "main": {
+          "id": "1054:1082",
+          "key": "d97c89c88755bf27acc46488c2c5c3452eb109cd",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:1081",
+            "name": "V2 / termination / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1524",
+        "name": "12 / Приостановление",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 724.6287841796875,
+        "main": {
+          "id": "1054:1178",
+          "key": "96380d75ab89ac641c178ccb5cca7eb1512cb5fb",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:1177",
+            "name": "V2 / pause / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1525",
+        "name": "13 / Для бизнеса",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 474,
+        "main": {
+          "id": "1054:1343",
+          "key": "ce9b8d4f5ee3de455274c593242c53a23f9bd7b3",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:1342",
+            "name": "V2 / business / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1526",
+        "name": "14 / Приложение",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 374,
+        "main": {
+          "id": "1054:1455",
+          "key": "94c526140417889ac53dcfebb99652a34350d4b3",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "1054:1454",
+            "name": "V2 / app / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1527",
+        "name": "15 / FAQ",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 534,
+        "main": {
+          "id": "809:58423",
+          "key": "bfbb734d95777a1a7052415944d4594f7b2877fc",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "809:58422",
+            "name": "BLK-0014 / Универсальный FAQ",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1528",
+        "name": "16 / Готовый подвал",
+        "type": "INSTANCE",
+        "w": 1360,
+        "h": 562,
+        "main": {
+          "id": "847:6533",
+          "key": "29aa53f56d0fc09ac81ef5708d64c482b9bc3941",
+          "name": "Device=Desktop",
+          "remote": true,
+          "parent": {
+            "id": "847:6532",
+            "name": "BLK-0016 / Футер",
+            "type": "COMPONENT_SET"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "1054:1529",
+    "name": "ACCOUNT / Выбранная страница / Tablet",
+    "type": "FRAME",
+    "w": 834,
+    "h": 17785.306640625,
+    "children": [
+      {
+        "id": "1054:1530",
+        "name": "00 / Готовая шапка",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 120,
+        "main": {
+          "id": "682:44281",
+          "key": "91f5ebae9867f07ab2c61ede945a945d0be21d4a",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "682:44279",
+            "name": "BLK-0001 / Шапка сайта",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1531",
+        "name": "01 / Первый экран",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 808.7739868164062,
+        "main": {
+          "id": "1054:99",
+          "key": "8e425325391ba2e58b6660e9014197cd205f57fa",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:85",
+            "name": "ACCOUNT / Первый экран",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1532",
+        "name": "02 / Оглавление без заголовка",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 96,
+        "main": {
+          "id": "1054:152",
+          "key": "d6066799fbf81baa31bdddb8d5de473c08191c1b",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:138",
+            "name": "V2 / navigation / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1533",
+        "name": "03 / Проверка подключения",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 348.0570983886719,
+        "main": {
+          "id": "1054:25",
+          "key": "69f07e0cf243ec1c26280a32702d66b5c96047f2",
+          "name": "Device=Tablet, State=Default",
+          "remote": true,
+          "parent": {
+            "id": "1054:2",
+            "name": "BLK-0036 / Проверка подключения — только адрес",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1534",
+        "name": "04 / Регистрация",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 1207.073486328125,
+        "main": {
+          "id": "1054:233",
+          "key": "9bd2d952fe242a39ec10daefdd615f1455e6634a",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:208",
+            "name": "V2 / registration / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1535",
+        "name": "05 / Вход в кабинет",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 1699,
+        "main": {
+          "id": "1054:325",
+          "key": "c21b38d94d961ed2218c957da67fd6359f66e5e9",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:299",
+            "name": "V2 / login / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1536",
+        "name": "06 / Восстановление доступа",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 1525.29736328125,
+        "main": {
+          "id": "1054:431",
+          "key": "c62a3aa3749b259030e77a16aed2c00d7d603920",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:406",
+            "name": "V2 / recovery / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1537",
+        "name": "07 / Возможности",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 1260.631591796875,
+        "main": {
+          "id": "1054:549",
+          "key": "5d7a6c43f855ad54507a8bda9c4f76b7864bf6f3",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:511",
+            "name": "V2 / features / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1538",
+        "name": "08 / Описание интерфейса",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 2724.619384765625,
+        "main": {
+          "id": "1054:702",
+          "key": "65193b06903ab2d857b462dc006a82828025899b",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:658",
+            "name": "V2 / overview / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1539",
+        "name": "09 / Оплата",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 1108.5211181640625,
+        "main": {
+          "id": "1054:866",
+          "key": "0e0bd1483dcaacc9d5fdabef3aee8be30d0ac168",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:845",
+            "name": "V2 / payment / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1540",
+        "name": "10 / Обещанный платёж",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 1162.3829345703125,
+        "main": {
+          "id": "1054:964",
+          "key": "dff0e12475e958851efac2791876c5c77a390564",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:926",
+            "name": "V2 / promised / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1541",
+        "name": "11 / Расторжение",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 1204.923828125,
+        "main": {
+          "id": "1054:1105",
+          "key": "16bca3330918a7d38d3b07728cb236bbc3d42713",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:1081",
+            "name": "V2 / termination / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1542",
+        "name": "12 / Приостановление",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 1364.026123046875,
+        "main": {
+          "id": "1054:1219",
+          "key": "1ce54a56b9e000eaa7d08e860827700481cf7c84",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:1177",
+            "name": "V2 / pause / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1543",
+        "name": "13 / Для бизнеса",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 954,
+        "main": {
+          "id": "1054:1358",
+          "key": "b4f42ecf0e00b62faef5b23c8f6c0b2910d4178a",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:1342",
+            "name": "V2 / business / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1544",
+        "name": "14 / Приложение",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 638,
+        "main": {
+          "id": "1054:1469",
+          "key": "f7e34e29d4c7fc65cc18a3aa09ab55d3dae7de33",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "1054:1454",
+            "name": "V2 / app / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1545",
+        "name": "15 / FAQ",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 518,
+        "main": {
+          "id": "809:58424",
+          "key": "9d0cec9fbe06e5229b405f4eb5a0bc60a4eb4a91",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "809:58422",
+            "name": "BLK-0014 / Универсальный FAQ",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1546",
+        "name": "16 / Готовый подвал",
+        "type": "INSTANCE",
+        "w": 720,
+        "h": 662,
+        "main": {
+          "id": "847:6534",
+          "key": "9dc488f4c8b4669fa423aa914801babdafcb88e8",
+          "name": "Device=Tablet",
+          "remote": true,
+          "parent": {
+            "id": "847:6532",
+            "name": "BLK-0016 / Футер",
+            "type": "COMPONENT_SET"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "1054:1547",
+    "name": "ACCOUNT / Выбранная страница / Mobile",
+    "type": "FRAME",
+    "w": 390,
+    "h": 17712.140625,
+    "children": [
+      {
+        "id": "1054:1548",
+        "name": "00 / Готовая шапка",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 108,
+        "main": {
+          "id": "682:44282",
+          "key": "86ddd5cd738bbe2ddacb3865c0cb675ad2266d41",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "682:44279",
+            "name": "BLK-0001 / Шапка сайта",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1549",
+        "name": "01 / Первый экран",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 967.9765625,
+        "main": {
+          "id": "1054:112",
+          "key": "69696a29e2865c8b9c40f9159a8aca972eb68fd0",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:85",
+            "name": "ACCOUNT / Первый экран",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1550",
+        "name": "02 / Оглавление без заголовка",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 200,
+        "main": {
+          "id": "1054:165",
+          "key": "f190b875fd40293b2cb64b32db7ab7680485c5cb",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:138",
+            "name": "V2 / navigation / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1551",
+        "name": "03 / Проверка подключения",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 386,
+        "main": {
+          "id": "1054:45",
+          "key": "6e9c61bd80dbb5ec0ce84cf82a66ec595caeb0d6",
+          "name": "Device=Mobile, State=Default",
+          "remote": true,
+          "parent": {
+            "id": "1054:2",
+            "name": "BLK-0036 / Проверка подключения — только адрес",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1552",
+        "name": "04 / Регистрация",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 1393.0933837890625,
+        "main": {
+          "id": "1054:255",
+          "key": "054f56ab8e7381585e23d9586a2fd871afb9b9fe",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:208",
+            "name": "V2 / registration / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1553",
+        "name": "05 / Вход в кабинет",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 1710.32666015625,
+        "main": {
+          "id": "1054:350",
+          "key": "6e39f7f239f2dac897c9f813bb682b648120c01b",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:299",
+            "name": "V2 / login / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1554",
+        "name": "06 / Восстановление доступа",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 1269.15673828125,
+        "main": {
+          "id": "1054:455",
+          "key": "cfa675aa989ec5b892bab7f8eff6f6b11b714cae",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:406",
+            "name": "V2 / recovery / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1555",
+        "name": "07 / Возможности",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 877.5921020507812,
+        "main": {
+          "id": "1054:586",
+          "key": "58d7e7a3713c128d7336d5e01dde81e97286d419",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:511",
+            "name": "V2 / features / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1556",
+        "name": "08 / Описание интерфейса",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 1709.570068359375,
+        "main": {
+          "id": "1054:751",
+          "key": "71537ec35da116ce4e9c5f3b2ee351149f98192f",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:658",
+            "name": "V2 / overview / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1557",
+        "name": "09 / Оплата",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 953.8450927734375,
+        "main": {
+          "id": "1054:886",
+          "key": "dbd97193c833e56b4cd6ce359c19c98ecc24efb8",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:845",
+            "name": "V2 / payment / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1558",
+        "name": "10 / Обещанный платёж",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 1404.4586181640625,
+        "main": {
+          "id": "1054:1003",
+          "key": "a30581c9f3fbba8b9961716b3f81315a3878861d",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:926",
+            "name": "V2 / promised / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1559",
+        "name": "11 / Расторжение",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 1192.90771484375,
+        "main": {
+          "id": "1054:1129",
+          "key": "dabbde4c012e9442867cae119e66406c29d2df6e",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:1081",
+            "name": "V2 / termination / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1560",
+        "name": "12 / Приостановление",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 1423.4630126953125,
+        "main": {
+          "id": "1054:1260",
+          "key": "f73bff00b5a3beb1ca29e172471631bedb57ab88",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:1177",
+            "name": "V2 / pause / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1561",
+        "name": "13 / Для бизнеса",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 1053.75,
+        "main": {
+          "id": "1054:1373",
+          "key": "b64a2d9da94ecbe65632aa4c3def6f5a10a230cb",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:1342",
+            "name": "V2 / business / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1562",
+        "name": "14 / Приложение",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 886,
+        "main": {
+          "id": "1054:1483",
+          "key": "8cc44767416b0c5df18367b2001a831756d484fa",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "1054:1454",
+            "name": "V2 / app / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1563",
+        "name": "15 / FAQ",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 690,
+        "main": {
+          "id": "809:58425",
+          "key": "36f14a661c1518983ac2d65be3561f97e29d3aaf",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "809:58422",
+            "name": "BLK-0014 / Универсальный FAQ",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1564",
+        "name": "16 / Готовый подвал",
+        "type": "INSTANCE",
+        "w": 358,
+        "h": 1102,
+        "main": {
+          "id": "847:6535",
+          "key": "b8145de9408240ac07cfaa1c337e982c1deae731",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "847:6532",
+            "name": "BLK-0016 / Футер",
+            "type": "COMPONENT_SET"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "1054:1565",
+    "name": "ACCOUNT / Выбранная страница / Mobile320",
+    "type": "FRAME",
+    "w": 320,
+    "h": 19601.787109375,
+    "children": [
+      {
+        "id": "1054:1566",
+        "name": "00 / Готовая шапка",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 108,
+        "main": {
+          "id": "682:44282",
+          "key": "86ddd5cd738bbe2ddacb3865c0cb675ad2266d41",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "682:44279",
+            "name": "BLK-0001 / Шапка сайта",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1567",
+        "name": "01 / Первый экран",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 1044.439208984375,
+        "main": {
+          "id": "1054:125",
+          "key": "8b934cc17e920c1e1f94f2cea103fe22d92014b2",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:85",
+            "name": "ACCOUNT / Первый экран",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1568",
+        "name": "02 / Оглавление без заголовка",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 304,
+        "main": {
+          "id": "1054:178",
+          "key": "a489cc8a8e0c4a6738e014ba5ffc37c16ebb2411",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:138",
+            "name": "V2 / navigation / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1569",
+        "name": "03 / Проверка подключения",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 435,
+        "main": {
+          "id": "1054:65",
+          "key": "cc0da6a618ec66088ce9965268238d83df124d75",
+          "name": "Device=Mobile320, State=Default",
+          "remote": true,
+          "parent": {
+            "id": "1054:2",
+            "name": "BLK-0036 / Проверка подключения — только адрес",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1570",
+        "name": "04 / Регистрация",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 1588.209228515625,
+        "main": {
+          "id": "1054:277",
+          "key": "623f1a772ec64b3bb48cf7b3001a32a35683e281",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:208",
+            "name": "V2 / registration / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1571",
+        "name": "05 / Вход в кабинет",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 2016.256591796875,
+        "main": {
+          "id": "1054:378",
+          "key": "473573bfea74bab3d3c96d3a92dfe3e609ba6e9f",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:299",
+            "name": "V2 / login / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1572",
+        "name": "06 / Восстановление доступа",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 1415.23779296875,
+        "main": {
+          "id": "1054:483",
+          "key": "7d0276c25cfebd06b295ef25885fa187a6f2afcc",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:406",
+            "name": "V2 / recovery / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1573",
+        "name": "07 / Возможности",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 935.5263061523438,
+        "main": {
+          "id": "1054:622",
+          "key": "60ad687f8885cf92f06615c5189dcd8cfe6641d8",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:511",
+            "name": "V2 / features / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1574",
+        "name": "08 / Описание интерфейса",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 1899.48095703125,
+        "main": {
+          "id": "1054:798",
+          "key": "9e36050539e433ae6462f9af9e854400a2d18f77",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:658",
+            "name": "V2 / overview / C",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1575",
+        "name": "09 / Оплата",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 965.4366455078125,
+        "main": {
+          "id": "1054:906",
+          "key": "5ba133ff63a49c2dfb3273e586ab25cd2ac913e4",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:845",
+            "name": "V2 / payment / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1576",
+        "name": "10 / Обещанный платёж",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 1521.1064453125,
+        "main": {
+          "id": "1054:1042",
+          "key": "9f25b4e087c0a9757297dfc0082ab4aae69ee0de",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:926",
+            "name": "V2 / promised / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1577",
+        "name": "11 / Расторжение",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 1288.4287109375,
+        "main": {
+          "id": "1054:1153",
+          "key": "9c0dbb07137d29177b01266bd4d143c0464c94af",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:1081",
+            "name": "V2 / termination / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1578",
+        "name": "12 / Приостановление",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 1566.21044921875,
+        "main": {
+          "id": "1054:1301",
+          "key": "582b324758c868d09d475de2125052a9270274fb",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:1177",
+            "name": "V2 / pause / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1579",
+        "name": "13 / Для бизнеса",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 1178,
+        "main": {
+          "id": "1054:1388",
+          "key": "39cef784989f694d8ecbb45dd5135c38e8be753a",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:1342",
+            "name": "V2 / business / B",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1580",
+        "name": "14 / Приложение",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 1072.45458984375,
+        "main": {
+          "id": "1054:1497",
+          "key": "c37e88d584c0e560b88189678ef0b43f87e1c6f2",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "1054:1454",
+            "name": "V2 / app / A",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1581",
+        "name": "15 / FAQ",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 738,
+        "main": {
+          "id": "809:58426",
+          "key": "14685657775c10711062b21ebe8ee37a9818029e",
+          "name": "Device=Mobile320",
+          "remote": true,
+          "parent": {
+            "id": "809:58422",
+            "name": "BLK-0014 / Универсальный FAQ",
+            "type": "COMPONENT_SET"
+          }
+        }
+      },
+      {
+        "id": "1054:1582",
+        "name": "16 / Готовый подвал",
+        "type": "INSTANCE",
+        "w": 288,
+        "h": 1142,
+        "main": {
+          "id": "847:6535",
+          "key": "b8145de9408240ac07cfaa1c337e982c1deae731",
+          "name": "Device=Mobile",
+          "remote": true,
+          "parent": {
+            "id": "847:6532",
+            "name": "BLK-0016 / Футер",
+            "type": "COMPONENT_SET"
+          }
+        }
+      }
+    ]
+  }
+]

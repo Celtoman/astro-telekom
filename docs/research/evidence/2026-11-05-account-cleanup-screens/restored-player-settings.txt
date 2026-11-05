@@ -1,0 +1,60 @@
+agraph: Популярные вопросы
+    - paragraph: Контакты
+    - link:
+      - link:
+        - /url: https://tarify-dom.ru/goroda-obsluzhivaniya-domru
+        - text: Города обслуживания
+    - link:
+      - paragraph:
+        - link:
+          - /url: https://tarify-dom.ru/policy
+          - text: Политика конфиденциальности
+    - link:
+      - paragraph:
+        - link:
+          - /url: https://tarify-dom.ru/soglasie
+          - text: Согласие на обработку данных
+    - link:
+      - paragraph:
+        - link:
+          - /url: https://tarify-dom.ru/politika-obrabotki-faylov-kuki
+          - text: Политика cookie
+    - paragraph: Материалы сайта носят информационный характер и не являются публичной офертой (ст. 437 ГК РФ).
+    - paragraph:
+      - text: "© 2020–2026 tarify-dom.ru — сайт ИП Кочергина Александра Андреевича (ИНН 165038398334, ОГРНИП 323169000159136) и не относится к официальным ресурсам Дом.ру. Официальный сайт:"
+      - link:
+        - /url: https://dom.ru/
+        - text: dom.ru
+      - text: .
+- navigation:
+  - button:
+    - text: Restart
+    - generic: R
+- text: Give feedback, ask a question, or just leave a note of appreciation. Click anywhere in the file to leave a comment.
+- dialog "Accessibility settings":
+  - heading "Accessibility settings" [level=2]
+  - checkbox "Adapt content for screen readers" [active]
+  - generic: Adapt content for screen readers
+  - paragraph: Provide text and structure for assistive technologies in Figma Design, FigJam, Slides, and Buzz.
+  - checkbox "Underline links in UI"
+  - generic: Underline links in UI
+  - paragraph: Distinguish links with an underline in panels and dialogs. Design content won’t change.
+  - checkbox "Simplify focus navigation in Actions menu"
+  - generic: Simplify focus navigation in Actions menu
+  - paragraph: Focus follows default tab stops. (Recommended for screen readers.)
+  - checkbox "Enhanced contrast mode"
+  - generic: Enhanced contrast mode
+  - paragraph: Contrast between text and controls and their backgrounds will be increased.
+  - checkbox "Ignore Figma shortcuts in text fields"
+  - generic: Ignore Figma shortcuts in text fields
+  - paragraph: Using special characters in text fields will not trigger Figma shortcuts.
+  - checkbox "Rotate layers with a keyboard shortcut"
+  - generic: Rotate layers with a keyboard shortcut
+  - paragraph: Ctrl+Alt+↑ and Ctrl+Alt+↓ will rotate layers instead of moving them forward and back.
+  - checkbox "Automatically follow a spotlight" [checked]
+  - generic: Automatically follow a spotlight
+  - paragraph:
+    - generic: When a collaborator spotlights themselves, you'll automatically follow them on your screen.
+  - button "Close":
+- alert
+- alert

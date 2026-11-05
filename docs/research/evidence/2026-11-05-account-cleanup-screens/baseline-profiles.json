@@ -1,0 +1,46 @@
+[
+  {
+    "id": "118:5",
+    "w": 1440,
+    "h": 11784.759765625,
+    "visibleCount": 679,
+    "visualHash": "aa2ada67",
+    "textCount": 225,
+    "textHash": "d5eb8a29",
+    "imageCount": 17,
+    "imageHash": "1851c614"
+  },
+  {
+    "id": "118:1066",
+    "w": 834,
+    "h": 17785.306640625,
+    "visibleCount": 677,
+    "visualHash": "7de82a56",
+    "textCount": 220,
+    "textHash": "7d35d3fc",
+    "imageCount": 17,
+    "imageHash": "1851c614"
+  },
+  {
+    "id": "118:2109",
+    "w": 390,
+    "h": 17712.140625,
+    "visibleCount": 653,
+    "visualHash": "3a704341",
+    "textCount": 216,
+    "textHash": "cc78b718",
+    "imageCount": 16,
+    "imageHash": "af759c41"
+  },
+  {
+    "id": "118:3096",
+    "w": 320,
+    "h": 19601.787109375,
+    "visibleCount": 649,
+    "visualHash": "fb80ab9",
+    "textCount": 216,
+    "textHash": "cc78b718",
+    "imageCount": 16,
+    "imageHash": "af759c41"
+  }
+]

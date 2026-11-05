@@ -1,0 +1,624 @@
+{
+  "pages": [
+    {
+      "id": "47:2",
+      "name": "00 / Обложка"
+    },
+    {
+      "id": "10:3",
+      "name": "01 / Первый экран"
+    },
+    {
+      "id": "47:3",
+      "name": "02 / Оглавление"
+    },
+    {
+      "id": "47:6",
+      "name": "03 / Регистрация"
+    },
+    {
+      "id": "47:4",
+      "name": "04 / Вход в кабинет"
+    },
+    {
+      "id": "47:5",
+      "name": "05 / Восстановление доступа"
+    },
+    {
+      "id": "47:8",
+      "name": "06 / Возможности"
+    },
+    {
+      "id": "47:9",
+      "name": "07 / Описание интерфейса"
+    },
+    {
+      "id": "47:10",
+      "name": "08 / Оплата"
+    },
+    {
+      "id": "47:11",
+      "name": "09 / Обещанный платёж"
+    },
+    {
+      "id": "47:12",
+      "name": "10 / Расторжение"
+    },
+    {
+      "id": "47:13",
+      "name": "11 / Приостановление"
+    },
+    {
+      "id": "47:15",
+      "name": "12 / Для бизнеса"
+    },
+    {
+      "id": "47:16",
+      "name": "13 / Мобильное приложение"
+    },
+    {
+      "id": "242:2",
+      "name": "90 / Вспомогательные компоненты"
+    }
+  ],
+  "families": [
+    {
+      "id": "13:210",
+      "key": "420f16974f3824c96c91928118073436f1d73003",
+      "name": "ACCOUNT / Первый экран",
+      "page": "10:3",
+      "variants": [
+        {
+          "id": "13:126",
+          "key": "e7192a1c2ef390a632bc13d277cb0afa3bee0796",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 401.0490417480469,
+          "navRows": 0
+        },
+        {
+          "id": "13:147",
+          "key": "8e425325391ba2e58b6660e9014197cd205f57fa",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 808.7739868164062,
+          "navRows": 0
+        },
+        {
+          "id": "13:168",
+          "key": "69696a29e2865c8b9c40f9159a8aca972eb68fd0",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 967.9765625,
+          "navRows": 0
+        },
+        {
+          "id": "13:189",
+          "key": "8b934cc17e920c1e1f94f2cea103fe22d92014b2",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 1044.439208984375,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "66:340",
+      "key": "d9d6ea70450aeab760faae903c0fa9edce823041",
+      "name": "ACCOUNT / Оглавление",
+      "page": "47:3",
+      "variants": [
+        {
+          "id": "66:167",
+          "key": "a5eb3f9f6a68c1937b750d65f539010431a19fa7",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 44,
+          "navRows": 0
+        },
+        {
+          "id": "66:208",
+          "key": "d6066799fbf81baa31bdddb8d5de473c08191c1b",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 96,
+          "navRows": 0
+        },
+        {
+          "id": "66:250",
+          "key": "f190b875fd40293b2cb64b32db7ab7680485c5cb",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 200,
+          "navRows": 0
+        },
+        {
+          "id": "66:294",
+          "key": "a489cc8a8e0c4a6738e014ba5ffc37c16ebb2411",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 304,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "84:1124",
+      "key": "21b95c57f08849e53067f219dda8bb442f9452a6",
+      "name": "ACCOUNT / Регистрация",
+      "page": "47:6",
+      "variants": [
+        {
+          "id": "84:1020",
+          "key": "99fd5982b4a4f5280666c2f365462f4a7e32db99",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 732,
+          "navRows": 0
+        },
+        {
+          "id": "84:1046",
+          "key": "9bd2d952fe242a39ec10daefdd615f1455e6634a",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 1207.073486328125,
+          "navRows": 0
+        },
+        {
+          "id": "84:1072",
+          "key": "054f56ab8e7381585e23d9586a2fd871afb9b9fe",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 1393.0933837890625,
+          "navRows": 0
+        },
+        {
+          "id": "84:1098",
+          "key": "623f1a772ec64b3bb48cf7b3001a32a35683e281",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 1588.209228515625,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "53:303",
+      "key": "3d9eee67605427f263c1b3468bd01c8608a35396",
+      "name": "ACCOUNT / Вход в кабинет",
+      "page": "47:4",
+      "variants": [
+        {
+          "id": "53:175",
+          "key": "d0642454ef9d34392ae4afefc72e156ac63d24be",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 1019.94775390625,
+          "navRows": 0
+        },
+        {
+          "id": "53:207",
+          "key": "c21b38d94d961ed2218c957da67fd6359f66e5e9",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 1699,
+          "navRows": 0
+        },
+        {
+          "id": "53:239",
+          "key": "6e39f7f239f2dac897c9f813bb682b648120c01b",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 1710.32666015625,
+          "navRows": 0
+        },
+        {
+          "id": "53:271",
+          "key": "473573bfea74bab3d3c96d3a92dfe3e609ba6e9f",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 2016.256591796875,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "51:998",
+      "key": "e56505d96d5be88819b4d41f03826b0190bcc2a7",
+      "name": "ACCOUNT / Восстановление доступа",
+      "page": "47:5",
+      "variants": [
+        {
+          "id": "51:798",
+          "key": "b892f28bc2ddd5747f61878bc9126563d287f618",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 810,
+          "navRows": 0
+        },
+        {
+          "id": "51:848",
+          "key": "c62a3aa3749b259030e77a16aed2c00d7d603920",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 1525.29736328125,
+          "navRows": 0
+        },
+        {
+          "id": "51:898",
+          "key": "cfa675aa989ec5b892bab7f8eff6f6b11b714cae",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 1269.15673828125,
+          "navRows": 0
+        },
+        {
+          "id": "51:948",
+          "key": "7d0276c25cfebd06b295ef25885fa187a6f2afcc",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 1415.23779296875,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "56:1281",
+      "key": "7d9da8faa1a5a7ead2e67ebb89c70f3d1fa03329",
+      "name": "ACCOUNT / Возможности",
+      "page": "47:8",
+      "variants": [
+        {
+          "id": "56:1164",
+          "key": "ad8b8b9c91e760a171797fe5c8dacdfc838b1f97",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 1179.368408203125,
+          "navRows": 0
+        },
+        {
+          "id": "56:1192",
+          "key": "5d7a6c43f855ad54507a8bda9c4f76b7864bf6f3",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 1260.631591796875,
+          "navRows": 0
+        },
+        {
+          "id": "56:1221",
+          "key": "58d7e7a3713c128d7336d5e01dde81e97286d419",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 877.5921020507812,
+          "navRows": 0
+        },
+        {
+          "id": "56:1251",
+          "key": "60ad687f8885cf92f06615c5189dcd8cfe6641d8",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 935.5263061523438,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "54:2064",
+      "key": "e5f2c416054c11664c075cdafca7631118dec5f2",
+      "name": "ACCOUNT / Описание интерфейса",
+      "page": "47:9",
+      "variants": [
+        {
+          "id": "54:1666",
+          "key": "e3dacca73aac4e32bc4a982a49a35e4ef292d4d7",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 2091.24365234375,
+          "navRows": 0
+        },
+        {
+          "id": "54:1761",
+          "key": "65193b06903ab2d857b462dc006a82828025899b",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 2724.619384765625,
+          "navRows": 0
+        },
+        {
+          "id": "54:1862",
+          "key": "71537ec35da116ce4e9c5f3b2ee351149f98192f",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 1709.570068359375,
+          "navRows": 0
+        },
+        {
+          "id": "54:1963",
+          "key": "9e36050539e433ae6462f9af9e854400a2d18f77",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 1899.48095703125,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "56:1885",
+      "key": "3a3e571fc408cc2c311fd008ed258cd40a65fe86",
+      "name": "ACCOUNT / Оплата",
+      "page": "47:10",
+      "variants": [
+        {
+          "id": "56:1769",
+          "key": "d9a6ac7affbeb65531bbf2a5261a3d3dc12a6328",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 625,
+          "navRows": 0
+        },
+        {
+          "id": "56:1798",
+          "key": "0e0bd1483dcaacc9d5fdabef3aee8be30d0ac168",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 1108.5211181640625,
+          "navRows": 0
+        },
+        {
+          "id": "56:1827",
+          "key": "dbd97193c833e56b4cd6ce359c19c98ecc24efb8",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 953.8450927734375,
+          "navRows": 0
+        },
+        {
+          "id": "56:1856",
+          "key": "5ba133ff63a49c2dfb3273e586ab25cd2ac913e4",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 965.4366455078125,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "54:746",
+      "key": "ebb679a13772d9c592b19bf9702b636f9ddf0b4e",
+      "name": "ACCOUNT / Обещанный платёж",
+      "page": "47:11",
+      "variants": [
+        {
+          "id": "54:584",
+          "key": "dfb20ea087f6e831e18ff41131d001e0683b680b",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 676.5870361328125,
+          "navRows": 0
+        },
+        {
+          "id": "54:623",
+          "key": "dff0e12475e958851efac2791876c5c77a390564",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 1162.3829345703125,
+          "navRows": 0
+        },
+        {
+          "id": "54:664",
+          "key": "a30581c9f3fbba8b9961716b3f81315a3878861d",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 1404.4586181640625,
+          "navRows": 0
+        },
+        {
+          "id": "54:705",
+          "key": "9f25b4e087c0a9757297dfc0082ab4aae69ee0de",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 1521.1064453125,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "54:869",
+      "key": "e6629b1b654bc1901a2a7fdf1f2b574ead1d8f6d",
+      "name": "ACCOUNT / Расторжение",
+      "page": "47:12",
+      "variants": [
+        {
+          "id": "54:750",
+          "key": "d97c89c88755bf27acc46488c2c5c3452eb109cd",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 688.9352416992188,
+          "navRows": 0
+        },
+        {
+          "id": "54:779",
+          "key": "16bca3330918a7d38d3b07728cb236bbc3d42713",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 1204.923828125,
+          "navRows": 0
+        },
+        {
+          "id": "54:809",
+          "key": "dabbde4c012e9442867cae119e66406c29d2df6e",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 1192.90771484375,
+          "navRows": 0
+        },
+        {
+          "id": "54:839",
+          "key": "9c0dbb07137d29177b01266bd4d143c0464c94af",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 1288.4287109375,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "54:1045",
+      "key": "9fd7cb6360fe1a665d19c7e114138767f3d0efbe",
+      "name": "ACCOUNT / Приостановление",
+      "page": "47:13",
+      "variants": [
+        {
+          "id": "54:873",
+          "key": "96380d75ab89ac641c178ccb5cca7eb1512cb5fb",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 724.6287841796875,
+          "navRows": 0
+        },
+        {
+          "id": "54:916",
+          "key": "1ce54a56b9e000eaa7d08e860827700481cf7c84",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 1364.026123046875,
+          "navRows": 0
+        },
+        {
+          "id": "54:959",
+          "key": "f73bff00b5a3beb1ca29e172471631bedb57ab88",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 1423.4630126953125,
+          "navRows": 0
+        },
+        {
+          "id": "54:1002",
+          "key": "582b324758c868d09d475de2125052a9270274fb",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 1566.21044921875,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "56:2841",
+      "key": "13b079f9ed082862682208dd73bc1dd4e848ce3d",
+      "name": "ACCOUNT / Для бизнеса",
+      "page": "47:15",
+      "variants": [
+        {
+          "id": "56:2773",
+          "key": "ce9b8d4f5ee3de455274c593242c53a23f9bd7b3",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 474,
+          "navRows": 0
+        },
+        {
+          "id": "56:2790",
+          "key": "b4f42ecf0e00b62faef5b23c8f6c0b2910d4178a",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 954,
+          "navRows": 0
+        },
+        {
+          "id": "56:2807",
+          "key": "b64a2d9da94ecbe65632aa4c3def6f5a10a230cb",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 1053.75,
+          "navRows": 0
+        },
+        {
+          "id": "56:2824",
+          "key": "39cef784989f694d8ecbb45dd5135c38e8be753a",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 1178,
+          "navRows": 0
+        }
+      ]
+    },
+    {
+      "id": "54:1321",
+      "key": "9d7984b00f36becb0a12b17721e20f24dcab887b",
+      "name": "ACCOUNT / Мобильное приложение",
+      "page": "47:16",
+      "variants": [
+        {
+          "id": "54:1197",
+          "key": "94c526140417889ac53dcfebb99652a34350d4b3",
+          "name": "Device=Desktop",
+          "w": 1360,
+          "h": 374,
+          "navRows": 0
+        },
+        {
+          "id": "54:1228",
+          "key": "f7e34e29d4c7fc65cc18a3aa09ab55d3dae7de33",
+          "name": "Device=Tablet",
+          "w": 720,
+          "h": 638,
+          "navRows": 0
+        },
+        {
+          "id": "54:1259",
+          "key": "8cc44767416b0c5df18367b2001a831756d484fa",
+          "name": "Device=Mobile",
+          "w": 358,
+          "h": 886,
+          "navRows": 0
+        },
+        {
+          "id": "54:1290",
+          "key": "c37e88d584c0e560b88189678ef0b43f87e1c6f2",
+          "name": "Device=Mobile320",
+          "w": 288,
+          "h": 1072.45458984375,
+          "navRows": 0
+        }
+      ]
+    }
+  ],
+  "missing": [],
+  "localDependencies": [
+    {
+      "id": "137:453",
+      "key": "7ad83fbf90ec1d9249ff809c14277d5849cedffe",
+      "name": "Width=448"
+    },
+    {
+      "id": "137:442",
+      "key": "e616ca1bb03f76e16b182f4adc24d0825ac9c41c",
+      "name": "Icon / Lightbulb / Phosphor Duotone / REVIEW"
+    },
+    {
+      "id": "137:489",
+      "key": "9d669d3d6b485fb3265554b6410a09ba2f0745ec",
+      "name": "Width=288"
+    },
+    {
+      "id": "114:3",
+      "key": "1a582cf1bd2d28103e11f20aea217d8c9a4a8e22",
+      "name": "ACCOUNT / Магазин / Google Play"
+    },
+    {
+      "id": "114:16",
+      "key": "9f72a4d93f1aab247df47e10e45e00903e2b592b",
+      "name": "ACCOUNT / Магазин / RuStore"
+    },
+    {
+      "id": "114:46",
+      "key": "3f90275d01e8220d7635e3223b99227efb4b49a6",
+      "name": "ACCOUNT / Магазин / AppGallery"
+    },
+    {
+      "id": "136:194",
+      "key": "01d8fa8d4001f36d4a92faa2fa26a8c8a951f58d",
+      "name": "Мокап / Мой Дом.ру / экран владельца — source339:13"
+    }
+  ]
+}

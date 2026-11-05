@@ -1,0 +1,536 @@
+{
+  "sessionId": "131b1a9f-39e3-488e-bfde-40fb8164c2b5",
+  "issue": 509,
+  "source": {
+    "fileKey": "AcPPCDVqYqZIUJ0GXZVlHj",
+    "cover": "247:2",
+    "helperPage": "242:2",
+    "families": [
+      {
+        "id": "13:210",
+        "name": "ACCOUNT / Первый экран",
+        "key": "420f16974f3824c96c91928118073436f1d73003",
+        "page": "10:3",
+        "variants": [
+          {
+            "id": "13:126",
+            "key": "e7192a1c2ef390a632bc13d277cb0afa3bee0796",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "13:147",
+            "key": "8e425325391ba2e58b6660e9014197cd205f57fa",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "13:168",
+            "key": "69696a29e2865c8b9c40f9159a8aca972eb68fd0",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "13:189",
+            "key": "8b934cc17e920c1e1f94f2cea103fe22d92014b2",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "66:340",
+        "name": "ACCOUNT / Оглавление",
+        "key": "d9d6ea70450aeab760faae903c0fa9edce823041",
+        "page": "47:3",
+        "variants": [
+          {
+            "id": "66:167",
+            "key": "a5eb3f9f6a68c1937b750d65f539010431a19fa7",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "66:208",
+            "key": "d6066799fbf81baa31bdddb8d5de473c08191c1b",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "66:250",
+            "key": "f190b875fd40293b2cb64b32db7ab7680485c5cb",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "66:294",
+            "key": "a489cc8a8e0c4a6738e014ba5ffc37c16ebb2411",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "84:1124",
+        "name": "ACCOUNT / Регистрация",
+        "key": "21b95c57f08849e53067f219dda8bb442f9452a6",
+        "page": "47:6",
+        "variants": [
+          {
+            "id": "84:1020",
+            "key": "99fd5982b4a4f5280666c2f365462f4a7e32db99",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "84:1046",
+            "key": "9bd2d952fe242a39ec10daefdd615f1455e6634a",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "84:1072",
+            "key": "054f56ab8e7381585e23d9586a2fd871afb9b9fe",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "84:1098",
+            "key": "623f1a772ec64b3bb48cf7b3001a32a35683e281",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "53:303",
+        "name": "ACCOUNT / Вход в кабинет",
+        "key": "3d9eee67605427f263c1b3468bd01c8608a35396",
+        "page": "47:4",
+        "variants": [
+          {
+            "id": "53:175",
+            "key": "d0642454ef9d34392ae4afefc72e156ac63d24be",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "53:207",
+            "key": "c21b38d94d961ed2218c957da67fd6359f66e5e9",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "53:239",
+            "key": "6e39f7f239f2dac897c9f813bb682b648120c01b",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "53:271",
+            "key": "473573bfea74bab3d3c96d3a92dfe3e609ba6e9f",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "51:998",
+        "name": "ACCOUNT / Восстановление доступа",
+        "key": "e56505d96d5be88819b4d41f03826b0190bcc2a7",
+        "page": "47:5",
+        "variants": [
+          {
+            "id": "51:798",
+            "key": "b892f28bc2ddd5747f61878bc9126563d287f618",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "51:848",
+            "key": "c62a3aa3749b259030e77a16aed2c00d7d603920",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "51:898",
+            "key": "cfa675aa989ec5b892bab7f8eff6f6b11b714cae",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "51:948",
+            "key": "7d0276c25cfebd06b295ef25885fa187a6f2afcc",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "56:1281",
+        "name": "ACCOUNT / Возможности",
+        "key": "7d9da8faa1a5a7ead2e67ebb89c70f3d1fa03329",
+        "page": "47:8",
+        "variants": [
+          {
+            "id": "56:1164",
+            "key": "ad8b8b9c91e760a171797fe5c8dacdfc838b1f97",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "56:1192",
+            "key": "5d7a6c43f855ad54507a8bda9c4f76b7864bf6f3",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "56:1221",
+            "key": "58d7e7a3713c128d7336d5e01dde81e97286d419",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "56:1251",
+            "key": "60ad687f8885cf92f06615c5189dcd8cfe6641d8",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "54:2064",
+        "name": "ACCOUNT / Описание интерфейса",
+        "key": "e5f2c416054c11664c075cdafca7631118dec5f2",
+        "page": "47:9",
+        "variants": [
+          {
+            "id": "54:1666",
+            "key": "e3dacca73aac4e32bc4a982a49a35e4ef292d4d7",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "54:1761",
+            "key": "65193b06903ab2d857b462dc006a82828025899b",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "54:1862",
+            "key": "71537ec35da116ce4e9c5f3b2ee351149f98192f",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "54:1963",
+            "key": "9e36050539e433ae6462f9af9e854400a2d18f77",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "56:1885",
+        "name": "ACCOUNT / Оплата",
+        "key": "3a3e571fc408cc2c311fd008ed258cd40a65fe86",
+        "page": "47:10",
+        "variants": [
+          {
+            "id": "56:1769",
+            "key": "d9a6ac7affbeb65531bbf2a5261a3d3dc12a6328",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "56:1798",
+            "key": "0e0bd1483dcaacc9d5fdabef3aee8be30d0ac168",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "56:1827",
+            "key": "dbd97193c833e56b4cd6ce359c19c98ecc24efb8",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "56:1856",
+            "key": "5ba133ff63a49c2dfb3273e586ab25cd2ac913e4",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "54:746",
+        "name": "ACCOUNT / Обещанный платёж",
+        "key": "ebb679a13772d9c592b19bf9702b636f9ddf0b4e",
+        "page": "47:11",
+        "variants": [
+          {
+            "id": "54:584",
+            "key": "dfb20ea087f6e831e18ff41131d001e0683b680b",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "54:623",
+            "key": "dff0e12475e958851efac2791876c5c77a390564",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "54:664",
+            "key": "a30581c9f3fbba8b9961716b3f81315a3878861d",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "54:705",
+            "key": "9f25b4e087c0a9757297dfc0082ab4aae69ee0de",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "54:869",
+        "name": "ACCOUNT / Расторжение",
+        "key": "e6629b1b654bc1901a2a7fdf1f2b574ead1d8f6d",
+        "page": "47:12",
+        "variants": [
+          {
+            "id": "54:750",
+            "key": "d97c89c88755bf27acc46488c2c5c3452eb109cd",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "54:779",
+            "key": "16bca3330918a7d38d3b07728cb236bbc3d42713",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "54:809",
+            "key": "dabbde4c012e9442867cae119e66406c29d2df6e",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "54:839",
+            "key": "9c0dbb07137d29177b01266bd4d143c0464c94af",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "54:1045",
+        "name": "ACCOUNT / Приостановление",
+        "key": "9fd7cb6360fe1a665d19c7e114138767f3d0efbe",
+        "page": "47:13",
+        "variants": [
+          {
+            "id": "54:873",
+            "key": "96380d75ab89ac641c178ccb5cca7eb1512cb5fb",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "54:916",
+            "key": "1ce54a56b9e000eaa7d08e860827700481cf7c84",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "54:959",
+            "key": "f73bff00b5a3beb1ca29e172471631bedb57ab88",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "54:1002",
+            "key": "582b324758c868d09d475de2125052a9270274fb",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "56:2841",
+        "name": "ACCOUNT / Для бизнеса",
+        "key": "13b079f9ed082862682208dd73bc1dd4e848ce3d",
+        "page": "47:15",
+        "variants": [
+          {
+            "id": "56:2773",
+            "key": "ce9b8d4f5ee3de455274c593242c53a23f9bd7b3",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "56:2790",
+            "key": "b4f42ecf0e00b62faef5b23c8f6c0b2910d4178a",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "56:2807",
+            "key": "b64a2d9da94ecbe65632aa4c3def6f5a10a230cb",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "56:2824",
+            "key": "39cef784989f694d8ecbb45dd5135c38e8be753a",
+            "name": "Device=Mobile320"
+          }
+        ]
+      },
+      {
+        "id": "54:1321",
+        "name": "ACCOUNT / Мобильное приложение",
+        "key": "9d7984b00f36becb0a12b17721e20f24dcab887b",
+        "page": "47:16",
+        "variants": [
+          {
+            "id": "54:1197",
+            "key": "94c526140417889ac53dcfebb99652a34350d4b3",
+            "name": "Device=Desktop"
+          },
+          {
+            "id": "54:1228",
+            "key": "f7e34e29d4c7fc65cc18a3aa09ab55d3dae7de33",
+            "name": "Device=Tablet"
+          },
+          {
+            "id": "54:1259",
+            "key": "8cc44767416b0c5df18367b2001a831756d484fa",
+            "name": "Device=Mobile"
+          },
+          {
+            "id": "54:1290",
+            "key": "c37e88d584c0e560b88189678ef0b43f87e1c6f2",
+            "name": "Device=Mobile320"
+          }
+        ]
+      }
+    ],
+    "pages": [
+      {
+        "id": "47:2",
+        "name": "00 / Обложка"
+      },
+      {
+        "id": "10:3",
+        "name": "01 / Первый экран"
+      },
+      {
+        "id": "47:3",
+        "name": "02 / Оглавление"
+      },
+      {
+        "id": "47:6",
+        "name": "03 / Регистрация"
+      },
+      {
+        "id": "47:4",
+        "name": "04 / Вход в кабинет"
+      },
+      {
+        "id": "47:5",
+        "name": "05 / Восстановление доступа"
+      },
+      {
+        "id": "47:8",
+        "name": "06 / Возможности"
+      },
+      {
+        "id": "47:9",
+        "name": "07 / Описание интерфейса"
+      },
+      {
+        "id": "47:10",
+        "name": "08 / Оплата"
+      },
+      {
+        "id": "47:11",
+        "name": "09 / Обещанный платёж"
+      },
+      {
+        "id": "47:12",
+        "name": "10 / Расторжение"
+      },
+      {
+        "id": "47:13",
+        "name": "11 / Приостановление"
+      },
+      {
+        "id": "47:15",
+        "name": "12 / Для бизнеса"
+      },
+      {
+        "id": "47:16",
+        "name": "13 / Мобильное приложение"
+      },
+      {
+        "id": "242:2",
+        "name": "90 / Вспомогательные компоненты"
+      }
+    ]
+  },
+  "screens": {
+    "fileKey": "BdxNHlBVZWejREtOEIWDkI",
+    "page": "1053:3",
+    "frames": [
+      {
+        "id": "1054:1511",
+        "name": "ACCOUNT / Выбранная страница / Desktop",
+        "width": 1440,
+        "height": 11784.759765625
+      },
+      {
+        "id": "1054:1529",
+        "name": "ACCOUNT / Выбранная страница / Tablet",
+        "width": 834,
+        "height": 17785.306640625
+      },
+      {
+        "id": "1054:1547",
+        "name": "ACCOUNT / Выбранная страница / Mobile",
+        "width": 390,
+        "height": 17712.140625
+      },
+      {
+        "id": "1054:1565",
+        "name": "ACCOUNT / Выбранная страница / Mobile320",
+        "width": 320,
+        "height": 19601.787109375
+      }
+    ]
+  },
+  "backup": {
+    "path": "C:/Users/Александр/Downloads/account-before-cleanup-2026-11-05.fig",
+    "sizeBytes": 5705218,
+    "sha256": "5054c39a9a606d4c7aedef280b16832dd81200a0b185facb1d95befc384ad347",
+    "zipIntegrityPassed": true
+  },
+  "publication": "UNPUBLISHED_NATIVE_LINKED",
+  "unchangedComparison": [
+    [
+      {
+        "id": "118:5",
+        "w": 1440,
+        "h": 11784.759765625,
+        "count": 679,
+        "hash": "a2f0a19b"
+      },
+      {
+        "id": "118:1066",
+        "w": 834,
+        "h": 17785.306640625,
+        "count": 677,
+        "hash": "d779fbfe"
+      },
+      {
+        "id": "118:2109",
+        "w": 390,
+        "h": 17712.140625,
+        "count": 653,
+        "hash": "89208ef2"
+      },
+      {
+        "id": "118:3096",
+        "w": 320,
+        "h": 19601.787109375,
+        "count": 649,
+        "hash": "eb82015b"
+      }
+    ],
+    [
+      {
+        "id": "1054:1511",
+        "w": 1440,
+        "h": 11784.759765625,
+        "count": 679,
+        "hash": "a2f0a19b"
+      },
+      {
+        "id": "1054:1529",
+        "w": 834,
+        "h": 17785.306640625,
+        "count": 677,
+        "hash": "d779fbfe"
+      },
+      {
+        "id": "1054:1547",
+        "w": 390,
+        "h": 17712.140625,
+        "count": 653,
+        "hash": "89208ef2"
+      },
+      {
+        "id": "1054:1565",
+        "w": 320,
+        "h": 19601.787109375,
+        "count": 649,
+        "hash": "eb82015b"
+      }
+    ]
+  ]
+}

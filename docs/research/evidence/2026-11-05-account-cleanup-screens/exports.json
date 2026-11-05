@@ -1,0 +1,740 @@
+{
+  "source": "Figma MCP capped renders, native Export 1x PNG, IAB player captures and labelled crops for visual review",
+  "files": [
+    {
+      "file": "1440-app-anchor.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 90997,
+      "sha256": "f87d8aabb748e170e22d8b24442d7251abadbcf01a6514c6b25325afcd5a5e61"
+    },
+    {
+      "file": "1440-faq-1-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 76641,
+      "sha256": "8bb2e3783604767e0e567003050afd6406d2dae9513e82ba6e5e7c771fc78ff4"
+    },
+    {
+      "file": "1440-faq-2-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 71909,
+      "sha256": "2d24d89929807830878a214dd7b3b7559a552d0cca21059762325adb4fc05633"
+    },
+    {
+      "file": "1440-faq-3-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 73175,
+      "sha256": "233818b2893b770771a61064a0973836017b71944cc01932f21d76b7de857764"
+    },
+    {
+      "file": "1440-faq-4-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 74205,
+      "sha256": "552e3c446d648b112cca8f18c09becac09b82c76f22eb69385bce7eea7819c63"
+    },
+    {
+      "file": "1440-faq-5-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 79527,
+      "sha256": "916cd5bdfaa0fed458ed5b64530c4b40fffe74f790df8131dcef4957196c2b3a"
+    },
+    {
+      "file": "1440-faq-6-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 72786,
+      "sha256": "73389b21bc8dac9378893e3a270ff7fcbeecf8f341a67aeaacfa05e941a1ad9b"
+    },
+    {
+      "file": "320-app-anchor.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 52656,
+      "sha256": "ec2ee6c4f6751256044e2862db0cb1fb54cb28ac09d75913380758c6e6f8c4c8"
+    },
+    {
+      "file": "320-faq-1-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 44147,
+      "sha256": "dfba956c63de1c5213c67c744cf726f22fd73d6476175211bd17d5b43767fcbb"
+    },
+    {
+      "file": "320-faq-2-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 47753,
+      "sha256": "d174fd4b0c360bec3583346f6ad8ad0e06ccfdbd29b3d2639f97d8555ced144c"
+    },
+    {
+      "file": "320-faq-3-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 51306,
+      "sha256": "5461c080a94f3ace9c9e7b433608510cb8c6a5445ec8162a889a07bc94f8ee50"
+    },
+    {
+      "file": "320-faq-4-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 45440,
+      "sha256": "266de78bd89e3672e0a13ca44d18a7b16ecd7c1d86c4933a0b675b6754c13ace"
+    },
+    {
+      "file": "320-faq-5-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 52102,
+      "sha256": "e70310f5caf443ebb7969d52e72d8535b2358f5c501ce6ff56b4d348db3c7830"
+    },
+    {
+      "file": "320-faq-6-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 45652,
+      "sha256": "4a3eb9bdff11c5ab14b817e9a5d685164a4dfe90f1116abca4a49dcbb0306bbd"
+    },
+    {
+      "file": "320-features-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 41707,
+      "sha256": "71f547382815bc1214891fd44f32e9f8b922aa7304f9b8f228c2363bc05b3698"
+    },
+    {
+      "file": "320-features-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 31633,
+      "sha256": "c89f6317fd6126a18e670034bb9d0d02bb0ba44163e3208bb7f36ee870ef1643"
+    },
+    {
+      "file": "320-features-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 45960,
+      "sha256": "4bb61fecde2a3b4ee7e2dbf80938df927b99ecee094a0e128421d3c87ad9cac7"
+    },
+    {
+      "file": "320-login-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 22618,
+      "sha256": "09ad0a122465d8001dc440bdaeddfc83ced0c21517f8886520a67ff8f0103e2f"
+    },
+    {
+      "file": "320-login-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 18988,
+      "sha256": "51b8697800cf2a10e7c5b0e8ae7ffcc16dcfaf51c8f18adb6013d9d71428611b"
+    },
+    {
+      "file": "320-login-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 28812,
+      "sha256": "5597e4ab0503d762f0faad83bc47d15ce3e45cd236a4f5352efa44dbd3dc452c"
+    },
+    {
+      "file": "320-menu-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 46550,
+      "sha256": "7234ceaac8d96f7392cc2fee867f4517ce155fbc822e3738239e51bc9f85a323"
+    },
+    {
+      "file": "320-menu-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 37677,
+      "sha256": "eeeb3c2af2da44aad39280a3adf88aa1e9a48d7b98f234f8e6220e60586b2e9a"
+    },
+    {
+      "file": "320-menu-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 50833,
+      "sha256": "2f25e651caac5109518b38be4ceee4bbdb8f12bc358c643388e6d5d7cc7c6db4"
+    },
+    {
+      "file": "320-normal-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 22618,
+      "sha256": "09ad0a122465d8001dc440bdaeddfc83ced0c21517f8886520a67ff8f0103e2f"
+    },
+    {
+      "file": "320-normal-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 18988,
+      "sha256": "51b8697800cf2a10e7c5b0e8ae7ffcc16dcfaf51c8f18adb6013d9d71428611b"
+    },
+    {
+      "file": "320-normal-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 22618,
+      "sha256": "09ad0a122465d8001dc440bdaeddfc83ced0c21517f8886520a67ff8f0103e2f"
+    },
+    {
+      "file": "320-overview-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 26018,
+      "sha256": "e047a4427f1b7a8f30aa095691d7025306588dd939af04d9cdfc7d6404adb80b"
+    },
+    {
+      "file": "320-overview-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 29226,
+      "sha256": "d489e709c32486af21bc08af8480bf39aa2c36ad06aab29ec40f68a5d5e809bd"
+    },
+    {
+      "file": "320-overview-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 30725,
+      "sha256": "c0f6f2a7528994c7ed424943280ca7a9824ab6ad029b0ca656ea5a0b926c7ef4"
+    },
+    {
+      "file": "320-recovery-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 47017,
+      "sha256": "06de37999b7df86707b2d0e89d25c6c5e71bbf2ee88f34261c24f5fc8ff72afb"
+    },
+    {
+      "file": "320-recovery-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 46580,
+      "sha256": "0f73ed5a58a967fd0c1fc26f3a393a85e0fd945011a3d327529f8ff351ad3f05"
+    },
+    {
+      "file": "320-recovery-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 51197,
+      "sha256": "6dc455418f9b705304cadb377a79da4474b7af69fc9909f1d4ce645c10ac39b3"
+    },
+    {
+      "file": "390-app-anchor.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 67030,
+      "sha256": "4041670b1cf38b85b6ce1a3536cfdb0eee4dcd8bf1ea1be18d79d39995cf8730"
+    },
+    {
+      "file": "390-faq-1-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 51747,
+      "sha256": "0787947b9e0b962dbd381781b210a000edc3e936ea275b112790cf17e2c87c82"
+    },
+    {
+      "file": "390-faq-2-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 49880,
+      "sha256": "588e50f790ecfcce1e0e1ca592e025836c3cf27fb5589571176236c0d28582c9"
+    },
+    {
+      "file": "390-faq-3-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 50043,
+      "sha256": "baf6b84f2a55a3ef36add65840976f79aeb78b5669cbbb8bf9a429e9798cbfa4"
+    },
+    {
+      "file": "390-faq-4-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 51066,
+      "sha256": "b00f16b4d83e78b8fa5b9021b4b72f3b789be68aa3cd4fe8c0cb6ed2339d5d62"
+    },
+    {
+      "file": "390-faq-5-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 56515,
+      "sha256": "a4102d22297f0ae60848a493e2f8c85c9558a73c1f1ca1eb7b07c3b9d099b57e"
+    },
+    {
+      "file": "390-faq-6-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 51730,
+      "sha256": "f4eb6509e43f92cd758bf008e3edb4a83b354a619b8512739d861bf5a69cd4f4"
+    },
+    {
+      "file": "390-features-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 56737,
+      "sha256": "f6ac0e5fef904e391ee19846395348781258ab4159da1df243b22b44938de9f9"
+    },
+    {
+      "file": "390-features-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 41502,
+      "sha256": "87270066c4ad8633493a49bd083eb705fc5d1776ce2b87740fcc348c073f7b52"
+    },
+    {
+      "file": "390-features-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 56737,
+      "sha256": "f6ac0e5fef904e391ee19846395348781258ab4159da1df243b22b44938de9f9"
+    },
+    {
+      "file": "390-login-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 36801,
+      "sha256": "9c02b91eb47d87d828ae73f8f36be66e4fa67625135a71c1257470c2e056d795"
+    },
+    {
+      "file": "390-login-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 33252,
+      "sha256": "185fa56a93d626894eeaa59ec537141acbd1b01817b5975d25a3c892a3bb8a4d"
+    },
+    {
+      "file": "390-login-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 43583,
+      "sha256": "c3664f9d41484c0451e676272a798388004ff41fb62e0493dd01c4158e875d9d"
+    },
+    {
+      "file": "390-menu-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 57226,
+      "sha256": "c99f6307ad14d764fdfd848a3dae10f1e14086a5b2f77b0339f566f59800a571"
+    },
+    {
+      "file": "390-menu-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 48985,
+      "sha256": "cab40d8b76e03a1547a47b54823d53d7580e18223bc5b2c3b28388b6ac206d0b"
+    },
+    {
+      "file": "390-menu-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 60272,
+      "sha256": "a056bc153a05de7f5aa6fd62d300c26ef3a821365c57af744c1901c14cd3f1a6"
+    },
+    {
+      "file": "390-normal-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 36801,
+      "sha256": "9c02b91eb47d87d828ae73f8f36be66e4fa67625135a71c1257470c2e056d795"
+    },
+    {
+      "file": "390-normal-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 33252,
+      "sha256": "185fa56a93d626894eeaa59ec537141acbd1b01817b5975d25a3c892a3bb8a4d"
+    },
+    {
+      "file": "390-normal-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 36801,
+      "sha256": "9c02b91eb47d87d828ae73f8f36be66e4fa67625135a71c1257470c2e056d795"
+    },
+    {
+      "file": "390-overview-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 39519,
+      "sha256": "d3a9447a41154b85da198fb9bd89c68bf3514d7a4173ed93444d4fff5e4ce252"
+    },
+    {
+      "file": "390-overview-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 37789,
+      "sha256": "b84bc494211b4bbb5fb36f7b6ef9ba077dabaa9db77ecfe391a8354a97f7689e"
+    },
+    {
+      "file": "390-overview-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 39587,
+      "sha256": "74b9a712877a2031a3b976725b2b2ba04d34fa8a1f42953213a4763aa7665b17"
+    },
+    {
+      "file": "390-recovery-first.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 56080,
+      "sha256": "e05ed800da915c1f77c6eb21315fe5cfe29683fb2c97372e42ff8be99ee81ddf"
+    },
+    {
+      "file": "390-recovery-last.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 55598,
+      "sha256": "b625374780d217724051c980605df0cd4219d0e40813b1e796059cf5013a56a8"
+    },
+    {
+      "file": "390-recovery-return.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 60463,
+      "sha256": "97148cff26de7e24af0ae1b2406e49f02ce69e070fbc57e39bb8b9d793d1de29"
+    },
+    {
+      "file": "834-app-anchor.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 79591,
+      "sha256": "96823db9ad99d32d527ab2af0a92589126f477ef5834c60dea9cf65042b395b7"
+    },
+    {
+      "file": "834-faq-1-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 73650,
+      "sha256": "fdb045e44b434e610cba567a53f218a837d09cef70c92add9bbe52b76ec54a2a"
+    },
+    {
+      "file": "834-faq-2-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 72991,
+      "sha256": "af5e53b6a20c00829c3a609f97e33fb71cfc2302f0b70f19b937c188a7a19259"
+    },
+    {
+      "file": "834-faq-3-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 73572,
+      "sha256": "3f8a6e052ef3b546c5cc9a9f46683281c1787d0ba6736c45854ddacd1e35dd0e"
+    },
+    {
+      "file": "834-faq-4-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 70876,
+      "sha256": "0e78ae7b0f32a5ab3c4ec9fbfd4f9d416a13e6297c2d091a1cdbada5731704af"
+    },
+    {
+      "file": "834-faq-5-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 75331,
+      "sha256": "50b0a7493c5e8bd2177dffbe4692fc03a841692678f381cec96f71f52bca0d2c"
+    },
+    {
+      "file": "834-faq-6-open.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 70361,
+      "sha256": "5fc921fd5292f30dea5b7cd73a604c3ba44a16a7f6ca49774df87fa719328a38"
+    },
+    {
+      "file": "before-1440.png",
+      "width": 501,
+      "height": 4096,
+      "bytes": 695245,
+      "sha256": "2b6d923f157be01fa81a1ec406139036f577e363c34ccde045c750a3e8b8c538"
+    },
+    {
+      "file": "before-320.png",
+      "width": 67,
+      "height": 4096,
+      "bytes": 166695,
+      "sha256": "e16745e6ece0a7e15a9307f8f830408438a3e78e3cb466fccd0e6a7d1bb623fa"
+    },
+    {
+      "file": "before-390.png",
+      "width": 91,
+      "height": 4096,
+      "bytes": 212057,
+      "sha256": "307dc3b94296cd57513dc40ed2548c6b45c7f4269ef4f732f2370b58f97fc546"
+    },
+    {
+      "file": "before-834.png",
+      "width": 193,
+      "height": 4096,
+      "bytes": 323155,
+      "sha256": "eeaea03e20fdc4a7eb2a77e732b4ad8775af0d4a60c51f8938e5802d75f19978"
+    },
+    {
+      "file": "clean-file-cover.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 65556,
+      "sha256": "1fdb9f28e718687474972588947f4ad3f659785ecd27375aa8d13b29c218ecd3"
+    },
+    {
+      "file": "faq-visual-1440.png",
+      "width": 3840,
+      "height": 1520,
+      "bytes": 1502975,
+      "sha256": "24efa0ba43885bc3ffecc8d5121ab798c5dfad6b55ec3e75f510ecf2ae8f7b68"
+    },
+    {
+      "file": "faq-visual-320.png",
+      "width": 960,
+      "height": 1520,
+      "bytes": 873373,
+      "sha256": "0e56a022c032aa7b9e6acbc8352bd42c693b6ff7d4530b0ddf7750ed23ea0125"
+    },
+    {
+      "file": "faq-visual-390.png",
+      "width": 1170,
+      "height": 1520,
+      "bytes": 1055204,
+      "sha256": "52d7398e13234014bbec894a5ff942c7f33d41bc2771096f6671ce030ac1e5fa"
+    },
+    {
+      "file": "faq-visual-834.png",
+      "width": 2502,
+      "height": 1520,
+      "bytes": 1430080,
+      "sha256": "99c5e58f1e396de2673ca44b237f1582f5173141108f509f11e2b731bf12391b"
+    },
+    {
+      "file": "final-native-1440.png",
+      "width": 1440,
+      "height": 11785,
+      "bytes": 3315327,
+      "sha256": "ee683a45fb27c70493b7cd6a2b9807907036eabd69d2b74547f474bfd95273f4"
+    },
+    {
+      "file": "final-native-320.png",
+      "width": 320,
+      "height": 19602,
+      "bytes": 1423385,
+      "sha256": "3346691ebeb7e5c478f297874d918b40b9358e3265a70b24be3364fed368d2f2"
+    },
+    {
+      "file": "final-native-390.png",
+      "width": 390,
+      "height": 17713,
+      "bytes": 1632257,
+      "sha256": "b1e00e0bc0b3ee4d6dc2f9f982538b983b05b37837b0758f7c1e415109f26ad7"
+    },
+    {
+      "file": "final-native-834.png",
+      "width": 834,
+      "height": 17786,
+      "bytes": 2688840,
+      "sha256": "60567d4ebf0246ab9803a7055dd922a198b888208aaa954ed303695c87bd54ea"
+    },
+    {
+      "file": "overview-1440.png",
+      "width": 269,
+      "height": 2200,
+      "bytes": 319928,
+      "sha256": "9d2e49994fcc7c96a35b349de81ef7296f6efa586ffcea908c60c5974dc25a01"
+    },
+    {
+      "file": "overview-320.png",
+      "width": 36,
+      "height": 2200,
+      "bytes": 81471,
+      "sha256": "a3809937727f4cf050ef76f3d568182676bce184a152e7cf0be83945423de8be"
+    },
+    {
+      "file": "overview-390.png",
+      "width": 48,
+      "height": 2200,
+      "bytes": 100204,
+      "sha256": "26589f1cdfc4631c60d9844700cf049e2fafcd1d98089a1822142b1519fac17b"
+    },
+    {
+      "file": "overview-834.png",
+      "width": 103,
+      "height": 2200,
+      "bytes": 147681,
+      "sha256": "27eb044b07f65ba476f842be201910a18cda760ea3ff3af134fbc93a9d565318"
+    },
+    {
+      "file": "review-1440-app-faq.png",
+      "width": 1440,
+      "height": 932,
+      "bytes": 156858,
+      "sha256": "e6edcfc2fd0e9dc03f0391facf46b6899b2b35f90923ea037adeaccedb6c8e3c"
+    },
+    {
+      "file": "review-1440-overview-1.png",
+      "width": 1440,
+      "height": 1400,
+      "bytes": 723845,
+      "sha256": "9506ff651de896243e75f701fb59cb45b8b6668a56c4dff8b4e2b2d1437fda77"
+    },
+    {
+      "file": "review-1440-overview-2.png",
+      "width": 1440,
+      "height": 691,
+      "bytes": 141076,
+      "sha256": "e8fecebdba91d3cb992c277c448864d56d42314ab47bfe2f5df143c40ca72750"
+    },
+    {
+      "file": "review-1440-top.png",
+      "width": 1440,
+      "height": 1200,
+      "bytes": 255181,
+      "sha256": "81af131a53503cf54d592e7c20c7f50dfafb80603958f85e8b60dbf71ddb0a1e"
+    },
+    {
+      "file": "review-834-app-faq.png",
+      "width": 834,
+      "height": 1180,
+      "bytes": 152293,
+      "sha256": "fee253b8c65376e8d83ec153a4fd81a61dc831292a6d6d5e0dac879217619686"
+    },
+    {
+      "file": "review-834-overview-1.png",
+      "width": 834,
+      "height": 1400,
+      "bytes": 209670,
+      "sha256": "13d9b814070cc1de77dbe9ca3a725ca0f5b308c5d44abd29992ccee17d06d52e"
+    },
+    {
+      "file": "review-834-overview-2.png",
+      "width": 834,
+      "height": 1325,
+      "bytes": 304422,
+      "sha256": "9c3343607c5e22f39afb0ef1b6e3a5e14355162962087a67405ea5831fa05cff"
+    },
+    {
+      "file": "review-834-top.png",
+      "width": 834,
+      "height": 1200,
+      "bytes": 149859,
+      "sha256": "b90b7a81c0bf89e225d6892103bec78f5c2e253bc5106a2caf5fdca39ec2660a"
+    },
+    {
+      "file": "screens-1440.png",
+      "width": 501,
+      "height": 4096,
+      "bytes": 695245,
+      "sha256": "16dc8025eb487c2ddb370f4380dbe73c9dce87aab848564e2bdbfc341eac13b6"
+    },
+    {
+      "file": "screens-320.png",
+      "width": 67,
+      "height": 4096,
+      "bytes": 166772,
+      "sha256": "543655bd71d12dc2b3f436d7da12f97b22bab9097eab0759cf467b787fb00d3c"
+    },
+    {
+      "file": "screens-390.png",
+      "width": 91,
+      "height": 4096,
+      "bytes": 212052,
+      "sha256": "8cdef7399222eb8c02958fe2d42470ae1f3e33827fa005b7206e8613061774f9"
+    },
+    {
+      "file": "screens-834.png",
+      "width": 193,
+      "height": 4096,
+      "bytes": 323176,
+      "sha256": "30d6ec217006a20b1bd93f332f42f5eca0895093859b45df5b16b5427ca25517"
+    },
+    {
+      "file": "visual-1440-1.png",
+      "width": 7200,
+      "height": 1240,
+      "bytes": 1866882,
+      "sha256": "6cf7ed6426f49a563b6f7ba9791ff6409ec2146fe415c3f1ba63344c2e8667ec"
+    },
+    {
+      "file": "visual-1440-2.png",
+      "width": 7200,
+      "height": 1240,
+      "bytes": 1456984,
+      "sha256": "1c101bbefc23c629921d3a6dda2a2417243e993e3e1d2b01b071fd7c7ac146a6"
+    },
+    {
+      "file": "visual-320-1.png",
+      "width": 1600,
+      "height": 1240,
+      "bytes": 468156,
+      "sha256": "e89b7c54522d5ee7e6ad0a37dfccef447c19b4f7f23720ea0eca9c89131f0b05"
+    },
+    {
+      "file": "visual-320-2.png",
+      "width": 1600,
+      "height": 1240,
+      "bytes": 503412,
+      "sha256": "2a94085104c4fdff378522d97d5fa7195cea6cf503c57f3b153313acb709852e"
+    },
+    {
+      "file": "visual-320-3.png",
+      "width": 1600,
+      "height": 1240,
+      "bytes": 530047,
+      "sha256": "328bdd956d5c65f64965e022efdf5f887151433d306a803e67441c4801ee91e1"
+    },
+    {
+      "file": "visual-320-4.png",
+      "width": 640,
+      "height": 1240,
+      "bytes": 96375,
+      "sha256": "dd991b3b1dc7a49ac54b705a9f4a9a8c118772f922a62b9207b3e312166e3a40"
+    },
+    {
+      "file": "visual-390-1.png",
+      "width": 1950,
+      "height": 1240,
+      "bytes": 559394,
+      "sha256": "f0fa5480f18cb631224b9aae06e46a6e3d282490dcf5815c2e2f6e16e7fdc425"
+    },
+    {
+      "file": "visual-390-2.png",
+      "width": 1950,
+      "height": 1240,
+      "bytes": 601090,
+      "sha256": "6afffa7c5f4df014067b3650c19bee9e148b420002a28118584b19820e59f814"
+    },
+    {
+      "file": "visual-390-3.png",
+      "width": 1950,
+      "height": 1240,
+      "bytes": 556257,
+      "sha256": "07471f6b06b18576cab83e33cd6fa90532f16d92d1f4583b03214f6fbd7c5c81"
+    },
+    {
+      "file": "visual-834-1.png",
+      "width": 4170,
+      "height": 1240,
+      "bytes": 815405,
+      "sha256": "878ac45f1049a6ceb9b51aff9027b2f12e9a4bdc6c7ac385c146388ff3131c83"
+    },
+    {
+      "file": "visual-834-2.png",
+      "width": 4170,
+      "height": 1240,
+      "bytes": 1090188,
+      "sha256": "137a9cc9fa66195af27f83e94bd9c0e27dbbfb043940fb5c6e1d5d3091d74a8d"
+    },
+    {
+      "file": "visual-834-3.png",
+      "width": 4170,
+      "height": 1240,
+      "bytes": 833562,
+      "sha256": "4706a5704458ad4f0a0aa72077be706380fe836b07d79194344d4dc85603a3ef"
+    }
+  ]
+}

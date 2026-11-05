@@ -1,0 +1,30 @@
+[
+  {
+    "source": "ACCOUNT / Выбранная страница / Desktop.png",
+    "file": "final-native-1440.png",
+    "width": 1440,
+    "height": 11785,
+    "bytes": 3315327
+  },
+  {
+    "source": "ACCOUNT / Выбранная страница / Tablet.png",
+    "file": "final-native-834.png",
+    "width": 834,
+    "height": 17786,
+    "bytes": 2688840
+  },
+  {
+    "source": "ACCOUNT / Выбранная страница / Mobile.png",
+    "file": "final-native-390.png",
+    "width": 390,
+    "height": 17713,
+    "bytes": 1632257
+  },
+  {
+    "source": "ACCOUNT / Выбранная страница / Mobile320.png",
+    "file": "final-native-320.png",
+    "width": 320,
+    "height": 19602,
+    "bytes": 1423385
+  }
+]

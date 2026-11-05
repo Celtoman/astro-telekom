@@ -1,0 +1,62 @@
+[
+  {
+    "width": 1440,
+    "renderSize": [
+      501,
+      4096
+    ],
+    "sameSize": true,
+    "differentPixels": 23,
+    "bbox": [
+      20,
+      210,
+      431,
+      3923
+    ]
+  },
+  {
+    "width": 834,
+    "renderSize": [
+      193,
+      4096
+    ],
+    "sameSize": true,
+    "differentPixels": 204,
+    "bbox": [
+      13,
+      468,
+      172,
+      4077
+    ]
+  },
+  {
+    "width": 390,
+    "renderSize": [
+      91,
+      4096
+    ],
+    "sameSize": true,
+    "differentPixels": 83,
+    "bbox": [
+      7,
+      1159,
+      77,
+      4058
+    ]
+  },
+  {
+    "width": 320,
+    "renderSize": [
+      67,
+      4096
+    ],
+    "sameSize": true,
+    "differentPixels": 253,
+    "bbox": [
+      3,
+      57,
+      64,
+      4087
+    ]
+  }
+]

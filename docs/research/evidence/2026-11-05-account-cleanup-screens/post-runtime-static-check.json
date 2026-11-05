@@ -1,0 +1,105 @@
+{
+  "profiles": [
+    {
+      "id": "1054:1511",
+      "w": 1440,
+      "h": 11784.759765625,
+      "visibleCount": 679,
+      "visualHash": "d2e67f72",
+      "textCount": 225,
+      "textHash": "d5eb8a29",
+      "imageCount": 17,
+      "imageHash": "1851c614"
+    },
+    {
+      "id": "1054:1529",
+      "w": 834,
+      "h": 17785.306640625,
+      "visibleCount": 677,
+      "visualHash": "7de82a56",
+      "textCount": 220,
+      "textHash": "7d35d3fc",
+      "imageCount": 17,
+      "imageHash": "1851c614"
+    },
+    {
+      "id": "1054:1547",
+      "w": 390,
+      "h": 17712.140625,
+      "visibleCount": 653,
+      "visualHash": "3a704341",
+      "textCount": 216,
+      "textHash": "cc78b718",
+      "imageCount": 16,
+      "imageHash": "af759c41"
+    },
+    {
+      "id": "1054:1565",
+      "w": 320,
+      "h": 19601.787109375,
+      "visibleCount": 649,
+      "visualHash": "fb80ab9",
+      "textCount": 216,
+      "textHash": "cc78b718",
+      "imageCount": 16,
+      "imageHash": "af759c41"
+    }
+  ],
+  "integrity": {
+    "frames": [
+      {
+        "id": "1054:1511",
+        "x": 0,
+        "y": 0,
+        "w": 1440,
+        "h": 11784.759765625,
+        "visible": true
+      },
+      {
+        "id": "1054:1529",
+        "x": 1740,
+        "y": 0,
+        "w": 834,
+        "h": 17785.306640625,
+        "visible": true
+      },
+      {
+        "id": "1054:1547",
+        "x": 3480,
+        "y": 0,
+        "w": 390,
+        "h": 17712.140625,
+        "visible": true
+      },
+      {
+        "id": "1054:1565",
+        "x": 5220,
+        "y": 0,
+        "w": 320,
+        "h": 19601.787109375,
+        "visible": true
+      }
+    ],
+    "badFonts": [],
+    "overlaps": [],
+    "localMasters": [],
+    "flowStartingPoints": [
+      {
+        "nodeId": "1054:1511",
+        "name": "Личный кабинет / 1440 px"
+      },
+      {
+        "nodeId": "1054:1529",
+        "name": "Личный кабинет / 834 px"
+      },
+      {
+        "nodeId": "1054:1547",
+        "name": "Личный кабинет / 390 px"
+      },
+      {
+        "nodeId": "1054:1565",
+        "name": "Личный кабинет / 320 px"
+      }
+    ]
+  }
+}
