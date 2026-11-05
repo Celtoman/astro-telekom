@@ -1,0 +1,533 @@
+{
+  "fileKey": "AcPPCDVqYqZIUJ0GXZVlHj",
+  "sessionId": "91187f32-38fd-4980-aefc-ebc9a1570f2f",
+  "issue": 498,
+  "selected": [
+    {
+      "key": "promised",
+      "lane": "A",
+      "title": "Условия и шаги отсрочки",
+      "pageId": "47:11",
+      "familyId": "54:746",
+      "variants": [
+        {
+          "id": "54:584",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 786.3829345703125
+        },
+        {
+          "id": "54:623",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1257.3829345703125
+        },
+        {
+          "id": "54:664",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1457.4586181640625
+        },
+        {
+          "id": "54:705",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1541.1064453125
+        }
+      ]
+    },
+    {
+      "key": "termination",
+      "lane": "A",
+      "title": "Два визуальных шага расторжения",
+      "pageId": "47:12",
+      "familyId": "54:869",
+      "variants": [
+        {
+          "id": "54:750",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 855.527587890625
+        },
+        {
+          "id": "54:779",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1393.8514404296875
+        },
+        {
+          "id": "54:809",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1318.978515625
+        },
+        {
+          "id": "54:839",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1414.49951171875
+        }
+      ]
+    },
+    {
+      "key": "pause",
+      "lane": "A",
+      "title": "Условия и порядок паузы",
+      "pageId": "47:13",
+      "familyId": "54:1045",
+      "variants": [
+        {
+          "id": "54:873",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 835.265625
+        },
+        {
+          "id": "54:916",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1485.824462890625
+        },
+        {
+          "id": "54:959",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1454.4630126953125
+        },
+        {
+          "id": "54:1002",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1597.21044921875
+        }
+      ]
+    },
+    {
+      "key": "app",
+      "lane": "A",
+      "title": "Установка и помощь в приложении",
+      "pageId": "47:16",
+      "familyId": "54:1321",
+      "variants": [
+        {
+          "id": "54:1197",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 618.0371704101562
+        },
+        {
+          "id": "54:1228",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1111.498046875
+        },
+        {
+          "id": "54:1259",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 997.1287841796875
+        },
+        {
+          "id": "54:1290",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1060.42236328125
+        }
+      ]
+    },
+    {
+      "key": "login",
+      "lane": "B",
+      "title": "Экран входа и типы реквизитов",
+      "pageId": "47:4",
+      "familyId": "53:303",
+      "variants": [
+        {
+          "id": "53:175",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 1166
+        },
+        {
+          "id": "53:207",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1858
+        },
+        {
+          "id": "53:239",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 2227.32666015625
+        },
+        {
+          "id": "53:271",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 2511.256591796875
+        }
+      ]
+    },
+    {
+      "key": "registration",
+      "lane": "B",
+      "title": "Регистрация и каналы обращения",
+      "pageId": "47:6",
+      "familyId": "84:1124",
+      "variants": [
+        {
+          "id": "84:1020",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 797.073486328125
+        },
+        {
+          "id": "84:1046",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1281.073486328125
+        },
+        {
+          "id": "84:1072",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1380.0933837890625
+        },
+        {
+          "id": "84:1098",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1576.209228515625
+        }
+      ]
+    },
+    {
+      "key": "features",
+      "lane": "B",
+      "title": "Сначала интерфейс, затем функции",
+      "pageId": "47:8",
+      "familyId": "56:1281",
+      "variants": [
+        {
+          "id": "56:1164",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 1319.368408203125
+        },
+        {
+          "id": "56:1192",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1356.157958984375
+        },
+        {
+          "id": "56:1221",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1449.592041015625
+        },
+        {
+          "id": "56:1251",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1507.5263671875
+        }
+      ]
+    },
+    {
+      "key": "payment",
+      "lane": "B",
+      "title": "Экран и порядок оплаты",
+      "pageId": "47:10",
+      "familyId": "56:1885",
+      "variants": [
+        {
+          "id": "56:1769",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 719.0140991210938
+        },
+        {
+          "id": "56:1798",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1140.126708984375
+        },
+        {
+          "id": "56:1827",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1011.8450927734375
+        },
+        {
+          "id": "56:1856",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1048.4366455078125
+        }
+      ]
+    },
+    {
+      "key": "business",
+      "lane": "B",
+      "title": "Назначение кабинета для компаний",
+      "pageId": "47:15",
+      "familyId": "56:2841",
+      "variants": [
+        {
+          "id": "56:2773",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 606
+        },
+        {
+          "id": "56:2790",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1110
+        },
+        {
+          "id": "56:2807",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1109.75
+        },
+        {
+          "id": "56:2824",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 1234
+        }
+      ]
+    },
+    {
+      "key": "navigation",
+      "lane": "C",
+      "title": "Компактное облако тем",
+      "pageId": "47:3",
+      "familyId": "66:340",
+      "variants": [
+        {
+          "id": "66:167",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 238
+        },
+        {
+          "id": "66:208",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 258
+        },
+        {
+          "id": "66:250",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 305
+        },
+        {
+          "id": "66:294",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 409
+        }
+      ]
+    },
+    {
+      "key": "recovery",
+      "lane": "C",
+      "title": "Сравнение четырёх маршрутов",
+      "pageId": "47:5",
+      "familyId": "51:998",
+      "variants": [
+        {
+          "id": "51:798",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 962
+        },
+        {
+          "id": "51:848",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 1673.29736328125
+        },
+        {
+          "id": "51:898",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 1985.15673828125
+        },
+        {
+          "id": "51:948",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 2179.23779296875
+        }
+      ]
+    },
+    {
+      "key": "overview",
+      "lane": "C",
+      "title": "Два тура по интерфейсу",
+      "pageId": "47:9",
+      "familyId": "54:2064",
+      "variants": [
+        {
+          "id": "54:1666",
+          "name": "Device=Desktop",
+          "width": 1360,
+          "height": 2229.8720703125
+        },
+        {
+          "id": "54:1761",
+          "name": "Device=Tablet",
+          "width": 720,
+          "height": 2831.75830078125
+        },
+        {
+          "id": "54:1862",
+          "name": "Device=Mobile",
+          "width": 358,
+          "height": 3231.570068359375
+        },
+        {
+          "id": "54:1963",
+          "name": "Device=Mobile320",
+          "width": 288,
+          "height": 3709.48095703125
+        }
+      ]
+    }
+  ],
+  "cross": {
+    "2561:752": {
+      "id": "2561:754",
+      "name": "BLK-0036 / Проверка подключения — только адрес",
+      "type": "COMPONENT_SET",
+      "key": "428a377c59538615c0d56029f642f3a675fecbd1",
+      "w": 1424,
+      "h": 1811,
+      "definitions": {
+        "Title#1658:0": {
+          "type": "TEXT",
+          "defaultValue": "Проверьте подключение Дом.ру по адресу"
+        },
+        "Intro#1658:2": {
+          "type": "TEXT",
+          "defaultValue": "Укажите город, улицу и дом — проверим возможность подключения Дом.ру по вашему адресу."
+        },
+        "Device": {
+          "type": "VARIANT",
+          "defaultValue": "Desktop",
+          "variantOptions": [
+            "Desktop",
+            "Tablet",
+            "Mobile",
+            "Mobile320"
+          ]
+        },
+        "State": {
+          "type": "VARIANT",
+          "defaultValue": "Default",
+          "variantOptions": [
+            "Default"
+          ]
+        }
+      },
+      "variants": [
+        {
+          "id": "2561:755",
+          "name": "Device=Desktop, State=Default",
+          "key": "df1e8d3a644d7853f96293b934b0c0cf14da4806",
+          "w": 1360,
+          "h": 336
+        },
+        {
+          "id": "2561:809",
+          "name": "Device=Tablet, State=Default",
+          "key": "69f07e0cf243ec1c26280a32702d66b5c96047f2",
+          "w": 720,
+          "h": 348.0570983886719
+        },
+        {
+          "id": "2561:863",
+          "name": "Device=Mobile, State=Default",
+          "key": "6e9c61bd80dbb5ec0ce84cf82a66ec595caeb0d6",
+          "w": 358,
+          "h": 386
+        },
+        {
+          "id": "2561:964",
+          "name": "Device=Mobile320, State=Default",
+          "key": "cc0da6a618ec66088ce9965268238d83df124d75",
+          "w": 288,
+          "h": 435
+        }
+      ]
+    },
+    "1745:1492": {
+      "id": "1745:1897",
+      "name": "BLK-0014 / Универсальный FAQ",
+      "type": "COMPONENT_SET",
+      "key": "40caf11f4f6b758af7e571cdf0b821fa44207baf",
+      "w": 2982,
+      "h": 850,
+      "definitions": {
+        "Heading#1745:22": {
+          "type": "TEXT",
+          "defaultValue": "Популярные вопросы"
+        },
+        "Device": {
+          "type": "VARIANT",
+          "defaultValue": "Desktop",
+          "variantOptions": [
+            "Desktop",
+            "Tablet",
+            "Mobile",
+            "Mobile320"
+          ]
+        }
+      },
+      "variants": [
+        {
+          "id": "1745:1493",
+          "name": "Device=Desktop",
+          "key": "bfbb734d95777a1a7052415944d4594f7b2877fc",
+          "w": 1360,
+          "h": 534
+        },
+        {
+          "id": "1745:1594",
+          "name": "Device=Tablet",
+          "key": "9d0cec9fbe06e5229b405f4eb5a0bc60a4eb4a91",
+          "w": 720,
+          "h": 518
+        },
+        {
+          "id": "1745:1695",
+          "name": "Device=Mobile",
+          "key": "36f14a661c1518983ac2d65be3561f97e29d3aaf",
+          "w": 358,
+          "h": 637
+        },
+        {
+          "id": "1745:1796",
+          "name": "Device=Mobile320",
+          "key": "14685657775c10711062b21ebe8ee37a9818029e",
+          "w": 288,
+          "h": 786
+        }
+      ]
+    }
+  },
+  "storeReference": {
+    "fileKey": "sXBwFG6P8vmsCMD28G4ZJL",
+    "pageId": "338:7"
+  },
+  "urls": {
+    "GooglePlay": "https://play.google.com/store/apps/details?id=com.ertelecom.agent&hl=ru",
+    "RuStore": "https://www.rustore.ru/catalog/app/com.ertelecom.agent",
+    "AppGallery": "https://appgallery.huawei.com/app/C101960911"
+  }
+}

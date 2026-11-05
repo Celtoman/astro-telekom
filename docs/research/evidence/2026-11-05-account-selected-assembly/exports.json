@@ -1,0 +1,38 @@
+[
+  {
+    "device": "Desktop",
+    "id": "118:5",
+    "width": 1440,
+    "height": 12049,
+    "filename": "page-Desktop.png",
+    "sha256": "f9504dd6310624088412b090a7982d266badeae06c99991ef1d3f176ec158a04",
+    "path": "native/page-Desktop.png"
+  },
+  {
+    "device": "Tablet",
+    "id": "118:1066",
+    "width": 834,
+    "height": 18328,
+    "filename": "page-Tablet.png",
+    "sha256": "fcbaa46a175e1c557b058941d18014a8cd5c77e17d92dc7dd232d55acf168c17",
+    "path": "native/page-Tablet.png"
+  },
+  {
+    "device": "Mobile",
+    "id": "118:2109",
+    "width": 390,
+    "height": 20834,
+    "filename": "page-Mobile.png",
+    "sha256": "572ad39f4298e3fc928680798e71dff3ca685b0b9bac1bc0cfb808fe8b1dff22",
+    "path": "native/page-Mobile.png"
+  },
+  {
+    "device": "Mobile320",
+    "id": "118:3096",
+    "width": 320,
+    "height": 23015,
+    "filename": "page-Mobile320.png",
+    "sha256": "a03ac9779b89675af135e8b799b9e637ebbb3101d0f97ac4954de135e619ee2d",
+    "path": "native/page-Mobile320.png"
+  }
+]

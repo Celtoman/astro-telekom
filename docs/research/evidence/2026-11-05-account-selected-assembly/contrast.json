@@ -1,0 +1,106 @@
+[
+  {
+    "device": "Desktop",
+    "id": "118:5",
+    "checkedSegments": 255,
+    "minContrast": 4.74,
+    "lowContrast": [],
+    "pageFill": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 1,
+          "g": 1,
+          "b": 1
+        },
+        "boundVariables": {
+          "color": {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "device": "Tablet",
+    "id": "118:1066",
+    "checkedSegments": 250,
+    "minContrast": 4.74,
+    "lowContrast": [],
+    "pageFill": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 1,
+          "g": 1,
+          "b": 1
+        },
+        "boundVariables": {
+          "color": {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "device": "Mobile",
+    "id": "118:2109",
+    "checkedSegments": 241,
+    "minContrast": 4.74,
+    "lowContrast": [],
+    "pageFill": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 1,
+          "g": 1,
+          "b": 1
+        },
+        "boundVariables": {
+          "color": {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "device": "Mobile320",
+    "id": "118:3096",
+    "checkedSegments": 241,
+    "minContrast": 4.74,
+    "lowContrast": [],
+    "pageFill": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 1,
+          "g": 1,
+          "b": 1
+        },
+        "boundVariables": {
+          "color": {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218"
+          }
+        }
+      }
+    ]
+  }
+]

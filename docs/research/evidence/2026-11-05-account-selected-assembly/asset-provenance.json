@@ -1,0 +1,35 @@
+[
+  {
+    "sourceFile": "sXBwFG6P8vmsCMD28G4ZJL",
+    "sourceId": "339:21",
+    "sourceKey": "f85b531c02455b87b664b3ee631b4d7885ba59c3",
+    "name": "Магазин приложения / Google Play",
+    "width": 159,
+    "height": 52,
+    "svgSha256": "c611fe6db292a44ea96b743fe0a917774da30c79f285350183ae3ea00c3757b4",
+    "localMasterId": "114:3",
+    "reason": "Exact whole-node SVG fallback: source key is unpublished and unavailable for component import."
+  },
+  {
+    "sourceFile": "sXBwFG6P8vmsCMD28G4ZJL",
+    "sourceId": "348:295",
+    "sourceKey": "704ab6461f9c4c90b263d132ea56d8169eda01d0",
+    "name": "Магазин приложения / RuStore",
+    "width": 145,
+    "height": 52,
+    "svgSha256": "ef167cf2191b8e2db4cce48de710f3fd490fdfe53d4ab56a5a2ecdec650e24b3",
+    "localMasterId": "114:16",
+    "reason": "Exact whole-node SVG fallback: source key is unpublished and unavailable for component import."
+  },
+  {
+    "sourceFile": "sXBwFG6P8vmsCMD28G4ZJL",
+    "sourceId": "360:423",
+    "sourceKey": "b9e9fa3c84b51d8d7681db5fe8ac5372323f90f3",
+    "name": "Магазин приложения / AppGallery",
+    "width": 138,
+    "height": 44,
+    "svgSha256": "f8c1d48c6439cdd668f816474f38586b4c9a4d54fd8314df84f8f97acf072d7a",
+    "localMasterId": "114:46",
+    "reason": "Exact whole-node SVG fallback: source key is unpublished and unavailable for component import."
+  }
+]

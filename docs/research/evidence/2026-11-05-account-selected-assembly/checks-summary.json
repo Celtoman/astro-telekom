@@ -1,0 +1,16 @@
+{
+  "screens": 4,
+  "sectionsPerScreen": 15,
+  "rootInstancesPerScreen": 17,
+  "textComparisons": 584,
+  "sourceImageComparisons": 56,
+  "removedZoomLinks": 56,
+  "connectedBodyInstances": 60,
+  "connectedShellInstances": 8,
+  "validScrollTargets": 56,
+  "faqOpenStates": 24,
+  "visibleTextSegments": 987,
+  "minimumTextContrast": 4.74,
+  "nativeAddressDecorativeBleeds": 3,
+  "canvasOverflow": 0
+}

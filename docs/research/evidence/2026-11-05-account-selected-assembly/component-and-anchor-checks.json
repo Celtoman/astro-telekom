@@ -1,0 +1,970 @@
+[
+  {
+    "device": "Desktop",
+    "connected": true,
+    "links": [
+      {
+        "key": "hero",
+        "instanceId": "118:138",
+        "mainId": "13:126",
+        "mainKey": "e7192a1c2ef390a632bc13d277cb0afa3bee0796",
+        "expectedMaster": "13:126",
+        "connected": true
+      },
+      {
+        "key": "navigation",
+        "instanceId": "118:164",
+        "mainId": "66:167",
+        "mainKey": "a5eb3f9f6a68c1937b750d65f539010431a19fa7",
+        "expectedMaster": "66:167",
+        "connected": true
+      },
+      {
+        "key": "address",
+        "instanceId": "118:199",
+        "mainId": "21:535",
+        "mainKey": "df1e8d3a644d7853f96293b934b0c0cf14da4806",
+        "expectedMaster": "21:535",
+        "connected": true
+      },
+      {
+        "key": "registration",
+        "instanceId": "118:258",
+        "mainId": "84:1020",
+        "mainKey": "99fd5982b4a4f5280666c2f365462f4a7e32db99",
+        "expectedMaster": "84:1020",
+        "connected": true
+      },
+      {
+        "key": "login",
+        "instanceId": "118:284",
+        "mainId": "53:175",
+        "mainKey": "d0642454ef9d34392ae4afefc72e156ac63d24be",
+        "expectedMaster": "53:175",
+        "connected": true
+      },
+      {
+        "key": "recovery",
+        "instanceId": "118:314",
+        "mainId": "51:798",
+        "mainKey": "b892f28bc2ddd5747f61878bc9126563d287f618",
+        "expectedMaster": "51:798",
+        "connected": true
+      },
+      {
+        "key": "features",
+        "instanceId": "118:386",
+        "mainId": "56:1164",
+        "mainKey": "ad8b8b9c91e760a171797fe5c8dacdfc838b1f97",
+        "expectedMaster": "56:1164",
+        "connected": true
+      },
+      {
+        "key": "overview",
+        "instanceId": "118:415",
+        "mainId": "54:1666",
+        "mainKey": "e3dacca73aac4e32bc4a982a49a35e4ef292d4d7",
+        "expectedMaster": "54:1666",
+        "connected": true
+      },
+      {
+        "key": "payment",
+        "instanceId": "118:554",
+        "mainId": "56:1769",
+        "mainKey": "d9a6ac7affbeb65531bbf2a5261a3d3dc12a6328",
+        "expectedMaster": "56:1769",
+        "connected": true
+      },
+      {
+        "key": "promised",
+        "instanceId": "118:593",
+        "mainId": "54:584",
+        "mainKey": "dfb20ea087f6e831e18ff41131d001e0683b680b",
+        "expectedMaster": "54:584",
+        "connected": true
+      },
+      {
+        "key": "termination",
+        "instanceId": "118:630",
+        "mainId": "54:750",
+        "mainKey": "d97c89c88755bf27acc46488c2c5c3452eb109cd",
+        "expectedMaster": "54:750",
+        "connected": true
+      },
+      {
+        "key": "pause",
+        "instanceId": "118:656",
+        "mainId": "54:873",
+        "mainKey": "96380d75ab89ac641c178ccb5cca7eb1512cb5fb",
+        "expectedMaster": "54:873",
+        "connected": true
+      },
+      {
+        "key": "business",
+        "instanceId": "118:697",
+        "mainId": "56:2773",
+        "mainKey": "ce9b8d4f5ee3de455274c593242c53a23f9bd7b3",
+        "expectedMaster": "56:2773",
+        "connected": true
+      },
+      {
+        "key": "app",
+        "instanceId": "118:712",
+        "mainId": "54:1197",
+        "mainKey": "94c526140417889ac53dcfebb99652a34350d4b3",
+        "expectedMaster": "54:1197",
+        "connected": true
+      },
+      {
+        "key": "faq",
+        "instanceId": "118:818",
+        "mainId": "21:417",
+        "mainKey": "bfbb734d95777a1a7052415944d4594f7b2877fc",
+        "expectedMaster": "21:417",
+        "connected": true
+      }
+    ],
+    "wiring": [
+      {
+        "id": "I118:164;66:170",
+        "name": "Чип / #reg / Как создать личный кабинете Дом ру?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:258",
+        "valid": true
+      },
+      {
+        "id": "I118:164;66:174",
+        "name": "Чип / #vhod / Как войти в личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:284",
+        "valid": true
+      },
+      {
+        "id": "I118:164;66:177",
+        "name": "Чип / #login / Как восстановить доступ в личный кабинет Дом Ру?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:314",
+        "valid": true
+      },
+      {
+        "id": "I118:164;66:180",
+        "name": "Чип / #vozm / Возможности личного кабинета",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:386",
+        "valid": true
+      },
+      {
+        "id": "I118:164;66:183",
+        "name": "Чип / #opisan / Описание главной страницы ЛК",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:415",
+        "valid": true
+      },
+      {
+        "id": "I118:164;66:186",
+        "name": "Чип / #oplata / Как оплатить Дом ру через личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:554",
+        "valid": true
+      },
+      {
+        "id": "I118:164;66:189",
+        "name": "Чип / #platej / Обещанный платеж через личный кабинет",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:593",
+        "valid": true
+      },
+      {
+        "id": "I118:164;66:192",
+        "name": "Чип / #otkl / Как отключить Дом Ру через личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:630",
+        "valid": true
+      },
+      {
+        "id": "I118:164;66:195",
+        "name": "Чип / #stop / Как приостановить действие договора?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:656",
+        "valid": true
+      },
+      {
+        "id": "I118:164;66:201",
+        "name": "Чип / #biz / Личный кабинет Дом ру для юридических лиц",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:697",
+        "valid": true
+      },
+      {
+        "id": "I118:164;66:205",
+        "name": "Чип / #mobile / Мобильное приложение Мой Dom.ru",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:712",
+        "valid": true
+      },
+      {
+        "id": "I118:138;13:135",
+        "name": "Якорь / #vhod",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:284",
+        "valid": true
+      },
+      {
+        "id": "I118:138;13:137",
+        "name": "Якорь / #login",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:314",
+        "valid": true
+      },
+      {
+        "id": "I118:138;38:23",
+        "name": "Содержание / быстрый переход",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:164",
+        "valid": true
+      }
+    ],
+    "scrollCount": 14,
+    "allTargetsValid": true
+  },
+  {
+    "device": "Tablet",
+    "connected": true,
+    "links": [
+      {
+        "key": "hero",
+        "instanceId": "118:1188",
+        "mainId": "13:147",
+        "mainKey": "8e425325391ba2e58b6660e9014197cd205f57fa",
+        "expectedMaster": "13:147",
+        "connected": true
+      },
+      {
+        "key": "navigation",
+        "instanceId": "118:1214",
+        "mainId": "66:208",
+        "mainKey": "d6066799fbf81baa31bdddb8d5de473c08191c1b",
+        "expectedMaster": "66:208",
+        "connected": true
+      },
+      {
+        "key": "address",
+        "instanceId": "118:1249",
+        "mainId": "21:536",
+        "mainKey": "69f07e0cf243ec1c26280a32702d66b5c96047f2",
+        "expectedMaster": "21:536",
+        "connected": true
+      },
+      {
+        "key": "registration",
+        "instanceId": "118:1301",
+        "mainId": "84:1046",
+        "mainKey": "9bd2d952fe242a39ec10daefdd615f1455e6634a",
+        "expectedMaster": "84:1046",
+        "connected": true
+      },
+      {
+        "key": "login",
+        "instanceId": "118:1325",
+        "mainId": "53:207",
+        "mainKey": "c21b38d94d961ed2218c957da67fd6359f66e5e9",
+        "expectedMaster": "53:207",
+        "connected": true
+      },
+      {
+        "key": "recovery",
+        "instanceId": "118:1355",
+        "mainId": "51:848",
+        "mainKey": "c62a3aa3749b259030e77a16aed2c00d7d603920",
+        "expectedMaster": "51:848",
+        "connected": true
+      },
+      {
+        "key": "features",
+        "instanceId": "118:1427",
+        "mainId": "56:1192",
+        "mainKey": "5d7a6c43f855ad54507a8bda9c4f76b7864bf6f3",
+        "expectedMaster": "56:1192",
+        "connected": true
+      },
+      {
+        "key": "overview",
+        "instanceId": "118:1456",
+        "mainId": "54:1761",
+        "mainKey": "65193b06903ab2d857b462dc006a82828025899b",
+        "expectedMaster": "54:1761",
+        "connected": true
+      },
+      {
+        "key": "payment",
+        "instanceId": "118:1601",
+        "mainId": "56:1798",
+        "mainKey": "0e0bd1483dcaacc9d5fdabef3aee8be30d0ac168",
+        "expectedMaster": "56:1798",
+        "connected": true
+      },
+      {
+        "key": "promised",
+        "instanceId": "118:1640",
+        "mainId": "54:623",
+        "mainKey": "dff0e12475e958851efac2791876c5c77a390564",
+        "expectedMaster": "54:623",
+        "connected": true
+      },
+      {
+        "key": "termination",
+        "instanceId": "118:1679",
+        "mainId": "54:779",
+        "mainKey": "16bca3330918a7d38d3b07728cb236bbc3d42713",
+        "expectedMaster": "54:779",
+        "connected": true
+      },
+      {
+        "key": "pause",
+        "instanceId": "118:1706",
+        "mainId": "54:916",
+        "mainKey": "1ce54a56b9e000eaa7d08e860827700481cf7c84",
+        "expectedMaster": "54:916",
+        "connected": true
+      },
+      {
+        "key": "business",
+        "instanceId": "118:1747",
+        "mainId": "56:2790",
+        "mainKey": "b4f42ecf0e00b62faef5b23c8f6c0b2910d4178a",
+        "expectedMaster": "56:2790",
+        "connected": true
+      },
+      {
+        "key": "app",
+        "instanceId": "118:1762",
+        "mainId": "54:1228",
+        "mainKey": "f7e34e29d4c7fc65cc18a3aa09ab55d3dae7de33",
+        "expectedMaster": "54:1228",
+        "connected": true
+      },
+      {
+        "key": "faq",
+        "instanceId": "118:1868",
+        "mainId": "21:418",
+        "mainKey": "9d0cec9fbe06e5229b405f4eb5a0bc60a4eb4a91",
+        "expectedMaster": "21:418",
+        "connected": true
+      }
+    ],
+    "wiring": [
+      {
+        "id": "I118:1214;66:211",
+        "name": "Чип / #reg / Как создать личный кабинете Дом ру?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1301",
+        "valid": true
+      },
+      {
+        "id": "I118:1214;66:215",
+        "name": "Чип / #vhod / Как войти в личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1325",
+        "valid": true
+      },
+      {
+        "id": "I118:1214;66:218",
+        "name": "Чип / #login / Как восстановить доступ в личный кабинет Дом Ру?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1355",
+        "valid": true
+      },
+      {
+        "id": "I118:1214;66:221",
+        "name": "Чип / #vozm / Возможности личного кабинета",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1427",
+        "valid": true
+      },
+      {
+        "id": "I118:1214;66:224",
+        "name": "Чип / #opisan / Описание главной страницы ЛК",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1456",
+        "valid": true
+      },
+      {
+        "id": "I118:1214;66:227",
+        "name": "Чип / #oplata / Как оплатить Дом ру через личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1601",
+        "valid": true
+      },
+      {
+        "id": "I118:1214;66:231",
+        "name": "Чип / #platej / Обещанный платеж через личный кабинет",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1640",
+        "valid": true
+      },
+      {
+        "id": "I118:1214;66:234",
+        "name": "Чип / #otkl / Как отключить Дом Ру через личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1679",
+        "valid": true
+      },
+      {
+        "id": "I118:1214;66:237",
+        "name": "Чип / #stop / Как приостановить действие договора?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1706",
+        "valid": true
+      },
+      {
+        "id": "I118:1214;66:243",
+        "name": "Чип / #biz / Личный кабинет Дом ру для юридических лиц",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1747",
+        "valid": true
+      },
+      {
+        "id": "I118:1214;66:247",
+        "name": "Чип / #mobile / Мобильное приложение Мой Dom.ru",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1762",
+        "valid": true
+      },
+      {
+        "id": "I118:1188;13:156",
+        "name": "Якорь / #vhod",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1325",
+        "valid": true
+      },
+      {
+        "id": "I118:1188;13:158",
+        "name": "Якорь / #login",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1355",
+        "valid": true
+      },
+      {
+        "id": "I118:1188;38:25",
+        "name": "Содержание / быстрый переход",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:1214",
+        "valid": true
+      }
+    ],
+    "scrollCount": 14,
+    "allTargetsValid": true
+  },
+  {
+    "device": "Mobile",
+    "connected": true,
+    "links": [
+      {
+        "key": "hero",
+        "instanceId": "118:2181",
+        "mainId": "13:168",
+        "mainKey": "69696a29e2865c8b9c40f9159a8aca972eb68fd0",
+        "expectedMaster": "13:168",
+        "connected": true
+      },
+      {
+        "key": "navigation",
+        "instanceId": "118:2207",
+        "mainId": "66:250",
+        "mainKey": "f190b875fd40293b2cb64b32db7ab7680485c5cb",
+        "expectedMaster": "66:250",
+        "connected": true
+      },
+      {
+        "key": "address",
+        "instanceId": "118:2242",
+        "mainId": "21:537",
+        "mainKey": "6e9c61bd80dbb5ec0ce84cf82a66ec595caeb0d6",
+        "expectedMaster": "21:537",
+        "connected": true
+      },
+      {
+        "key": "registration",
+        "instanceId": "118:2294",
+        "mainId": "84:1072",
+        "mainKey": "054f56ab8e7381585e23d9586a2fd871afb9b9fe",
+        "expectedMaster": "84:1072",
+        "connected": true
+      },
+      {
+        "key": "login",
+        "instanceId": "118:2318",
+        "mainId": "53:239",
+        "mainKey": "6e39f7f239f2dac897c9f813bb682b648120c01b",
+        "expectedMaster": "53:239",
+        "connected": true
+      },
+      {
+        "key": "recovery",
+        "instanceId": "118:2348",
+        "mainId": "51:898",
+        "mainKey": "cfa675aa989ec5b892bab7f8eff6f6b11b714cae",
+        "expectedMaster": "51:898",
+        "connected": true
+      },
+      {
+        "key": "features",
+        "instanceId": "118:2420",
+        "mainId": "56:1221",
+        "mainKey": "58d7e7a3713c128d7336d5e01dde81e97286d419",
+        "expectedMaster": "56:1221",
+        "connected": true
+      },
+      {
+        "key": "overview",
+        "instanceId": "118:2448",
+        "mainId": "54:1862",
+        "mainKey": "71537ec35da116ce4e9c5f3b2ee351149f98192f",
+        "expectedMaster": "54:1862",
+        "connected": true
+      },
+      {
+        "key": "payment",
+        "instanceId": "118:2593",
+        "mainId": "56:1827",
+        "mainKey": "dbd97193c833e56b4cd6ce359c19c98ecc24efb8",
+        "expectedMaster": "56:1827",
+        "connected": true
+      },
+      {
+        "key": "promised",
+        "instanceId": "118:2632",
+        "mainId": "54:664",
+        "mainKey": "a30581c9f3fbba8b9961716b3f81315a3878861d",
+        "expectedMaster": "54:664",
+        "connected": true
+      },
+      {
+        "key": "termination",
+        "instanceId": "118:2671",
+        "mainId": "54:809",
+        "mainKey": "dabbde4c012e9442867cae119e66406c29d2df6e",
+        "expectedMaster": "54:809",
+        "connected": true
+      },
+      {
+        "key": "pause",
+        "instanceId": "118:2698",
+        "mainId": "54:959",
+        "mainKey": "f73bff00b5a3beb1ca29e172471631bedb57ab88",
+        "expectedMaster": "54:959",
+        "connected": true
+      },
+      {
+        "key": "business",
+        "instanceId": "118:2739",
+        "mainId": "56:2807",
+        "mainKey": "b64a2d9da94ecbe65632aa4c3def6f5a10a230cb",
+        "expectedMaster": "56:2807",
+        "connected": true
+      },
+      {
+        "key": "app",
+        "instanceId": "118:2754",
+        "mainId": "54:1259",
+        "mainKey": "8cc44767416b0c5df18367b2001a831756d484fa",
+        "expectedMaster": "54:1259",
+        "connected": true
+      },
+      {
+        "key": "faq",
+        "instanceId": "118:2860",
+        "mainId": "21:419",
+        "mainKey": "36f14a661c1518983ac2d65be3561f97e29d3aaf",
+        "expectedMaster": "21:419",
+        "connected": true
+      }
+    ],
+    "wiring": [
+      {
+        "id": "I118:2207;66:253",
+        "name": "Чип / #reg / Как создать личный кабинете Дом ру?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2294",
+        "valid": true
+      },
+      {
+        "id": "I118:2207;66:257",
+        "name": "Чип / #vhod / Как войти в личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2318",
+        "valid": true
+      },
+      {
+        "id": "I118:2207;66:260",
+        "name": "Чип / #login / Как восстановить доступ в личный кабинет Дом Ру?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2348",
+        "valid": true
+      },
+      {
+        "id": "I118:2207;66:263",
+        "name": "Чип / #vozm / Возможности личного кабинета",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2420",
+        "valid": true
+      },
+      {
+        "id": "I118:2207;66:267",
+        "name": "Чип / #opisan / Описание главной страницы ЛК",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2448",
+        "valid": true
+      },
+      {
+        "id": "I118:2207;66:270",
+        "name": "Чип / #oplata / Как оплатить Дом ру через личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2593",
+        "valid": true
+      },
+      {
+        "id": "I118:2207;66:273",
+        "name": "Чип / #platej / Обещанный платеж через личный кабинет",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2632",
+        "valid": true
+      },
+      {
+        "id": "I118:2207;66:277",
+        "name": "Чип / #otkl / Как отключить Дом Ру через личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2671",
+        "valid": true
+      },
+      {
+        "id": "I118:2207;66:280",
+        "name": "Чип / #stop / Как приостановить действие договора?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2698",
+        "valid": true
+      },
+      {
+        "id": "I118:2207;66:287",
+        "name": "Чип / #biz / Личный кабинет Дом ру для юридических лиц",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2739",
+        "valid": true
+      },
+      {
+        "id": "I118:2207;66:290",
+        "name": "Чип / #mobile / Мобильное приложение Мой Dom.ru",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2754",
+        "valid": true
+      },
+      {
+        "id": "I118:2181;13:177",
+        "name": "Якорь / #vhod",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2318",
+        "valid": true
+      },
+      {
+        "id": "I118:2181;13:179",
+        "name": "Якорь / #login",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2348",
+        "valid": true
+      },
+      {
+        "id": "I118:2181;38:27",
+        "name": "Содержание / быстрый переход",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:2207",
+        "valid": true
+      }
+    ],
+    "scrollCount": 14,
+    "allTargetsValid": true
+  },
+  {
+    "device": "Mobile320",
+    "connected": true,
+    "links": [
+      {
+        "key": "hero",
+        "instanceId": "118:3146",
+        "mainId": "13:189",
+        "mainKey": "8b934cc17e920c1e1f94f2cea103fe22d92014b2",
+        "expectedMaster": "13:189",
+        "connected": true
+      },
+      {
+        "key": "navigation",
+        "instanceId": "118:3172",
+        "mainId": "66:294",
+        "mainKey": "a489cc8a8e0c4a6738e014ba5ffc37c16ebb2411",
+        "expectedMaster": "66:294",
+        "connected": true
+      },
+      {
+        "key": "address",
+        "instanceId": "118:3207",
+        "mainId": "21:538",
+        "mainKey": "cc0da6a618ec66088ce9965268238d83df124d75",
+        "expectedMaster": "21:538",
+        "connected": true
+      },
+      {
+        "key": "registration",
+        "instanceId": "118:3259",
+        "mainId": "84:1098",
+        "mainKey": "623f1a772ec64b3bb48cf7b3001a32a35683e281",
+        "expectedMaster": "84:1098",
+        "connected": true
+      },
+      {
+        "key": "login",
+        "instanceId": "118:3283",
+        "mainId": "53:271",
+        "mainKey": "473573bfea74bab3d3c96d3a92dfe3e609ba6e9f",
+        "expectedMaster": "53:271",
+        "connected": true
+      },
+      {
+        "key": "recovery",
+        "instanceId": "118:3313",
+        "mainId": "51:948",
+        "mainKey": "7d0276c25cfebd06b295ef25885fa187a6f2afcc",
+        "expectedMaster": "51:948",
+        "connected": true
+      },
+      {
+        "key": "features",
+        "instanceId": "118:3385",
+        "mainId": "56:1251",
+        "mainKey": "60ad687f8885cf92f06615c5189dcd8cfe6641d8",
+        "expectedMaster": "56:1251",
+        "connected": true
+      },
+      {
+        "key": "overview",
+        "instanceId": "118:3413",
+        "mainId": "54:1963",
+        "mainKey": "9e36050539e433ae6462f9af9e854400a2d18f77",
+        "expectedMaster": "54:1963",
+        "connected": true
+      },
+      {
+        "key": "payment",
+        "instanceId": "118:3558",
+        "mainId": "56:1856",
+        "mainKey": "5ba133ff63a49c2dfb3273e586ab25cd2ac913e4",
+        "expectedMaster": "56:1856",
+        "connected": true
+      },
+      {
+        "key": "promised",
+        "instanceId": "118:3597",
+        "mainId": "54:705",
+        "mainKey": "9f25b4e087c0a9757297dfc0082ab4aae69ee0de",
+        "expectedMaster": "54:705",
+        "connected": true
+      },
+      {
+        "key": "termination",
+        "instanceId": "118:3636",
+        "mainId": "54:839",
+        "mainKey": "9c0dbb07137d29177b01266bd4d143c0464c94af",
+        "expectedMaster": "54:839",
+        "connected": true
+      },
+      {
+        "key": "pause",
+        "instanceId": "118:3663",
+        "mainId": "54:1002",
+        "mainKey": "582b324758c868d09d475de2125052a9270274fb",
+        "expectedMaster": "54:1002",
+        "connected": true
+      },
+      {
+        "key": "business",
+        "instanceId": "118:3704",
+        "mainId": "56:2824",
+        "mainKey": "39cef784989f694d8ecbb45dd5135c38e8be753a",
+        "expectedMaster": "56:2824",
+        "connected": true
+      },
+      {
+        "key": "app",
+        "instanceId": "118:3719",
+        "mainId": "54:1290",
+        "mainKey": "c37e88d584c0e560b88189678ef0b43f87e1c6f2",
+        "expectedMaster": "54:1290",
+        "connected": true
+      },
+      {
+        "key": "faq",
+        "instanceId": "118:3825",
+        "mainId": "21:420",
+        "mainKey": "14685657775c10711062b21ebe8ee37a9818029e",
+        "expectedMaster": "21:420",
+        "connected": true
+      }
+    ],
+    "wiring": [
+      {
+        "id": "I118:3172;66:297",
+        "name": "Чип / #reg / Как создать личный кабинете Дом ру?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3259",
+        "valid": true
+      },
+      {
+        "id": "I118:3172;66:301",
+        "name": "Чип / #vhod / Как войти в личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3283",
+        "valid": true
+      },
+      {
+        "id": "I118:3172;66:304",
+        "name": "Чип / #login / Как восстановить доступ в личный кабинет Дом Ру?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3313",
+        "valid": true
+      },
+      {
+        "id": "I118:3172;66:308",
+        "name": "Чип / #vozm / Возможности личного кабинета",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3385",
+        "valid": true
+      },
+      {
+        "id": "I118:3172;66:311",
+        "name": "Чип / #opisan / Описание главной страницы ЛК",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3413",
+        "valid": true
+      },
+      {
+        "id": "I118:3172;66:315",
+        "name": "Чип / #oplata / Как оплатить Дом ру через личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3558",
+        "valid": true
+      },
+      {
+        "id": "I118:3172;66:318",
+        "name": "Чип / #platej / Обещанный платеж через личный кабинет",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3597",
+        "valid": true
+      },
+      {
+        "id": "I118:3172;66:322",
+        "name": "Чип / #otkl / Как отключить Дом Ру через личный кабинет?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3636",
+        "valid": true
+      },
+      {
+        "id": "I118:3172;66:326",
+        "name": "Чип / #stop / Как приостановить действие договора?",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3663",
+        "valid": true
+      },
+      {
+        "id": "I118:3172;66:333",
+        "name": "Чип / #biz / Личный кабинет Дом ру для юридических лиц",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3704",
+        "valid": true
+      },
+      {
+        "id": "I118:3172;66:336",
+        "name": "Чип / #mobile / Мобильное приложение Мой Dom.ru",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3719",
+        "valid": true
+      },
+      {
+        "id": "I118:3146;13:198",
+        "name": "Якорь / #vhod",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3283",
+        "valid": true
+      },
+      {
+        "id": "I118:3146;13:200",
+        "name": "Якорь / #login",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3313",
+        "valid": true
+      },
+      {
+        "id": "I118:3146;38:29",
+        "name": "Содержание / быстрый переход",
+        "type": "NODE",
+        "navigation": "SCROLL_TO",
+        "destinationId": "118:3172",
+        "valid": true
+      }
+    ],
+    "scrollCount": 14,
+    "allTargetsValid": true
+  }
+]
