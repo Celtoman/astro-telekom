@@ -1,0 +1,1956 @@
+[
+  {
+    "id": "118:5",
+    "w": 1440,
+    "h": 11784.759765625,
+    "b": {
+      "x": 80,
+      "y": 80,
+      "width": 1440,
+      "height": 11784.759765625
+    },
+    "before": 11784.759765625,
+    "sameFullSignature": true,
+    "sections": [
+      {
+        "id": "118:84",
+        "n": "00 / Готовая шапка",
+        "y": 0,
+        "w": 1360,
+        "h": 128,
+        "oldHeight": 128,
+        "contentSame": true,
+        "originalTextCount": 11,
+        "oldTextCount": 11,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:189"
+      },
+      {
+        "id": "118:138",
+        "n": "01 / Первый экран",
+        "y": 152,
+        "w": 1360,
+        "h": 401.0490417480469,
+        "oldHeight": 401.0490417480469,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "13:126"
+      },
+      {
+        "id": "118:164",
+        "n": "02 / Оглавление без заголовка",
+        "y": 577.049072265625,
+        "w": 1360,
+        "h": 44,
+        "oldHeight": 44,
+        "contentSame": true,
+        "originalTextCount": 11,
+        "oldTextCount": 11,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "66:167"
+      },
+      {
+        "id": "118:199",
+        "n": "03 / Проверка подключения",
+        "y": 645.049072265625,
+        "w": 1360,
+        "h": 336,
+        "oldHeight": 336,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:535"
+      },
+      {
+        "id": "118:258",
+        "n": "04 / Регистрация",
+        "y": 1005.049072265625,
+        "w": 1360,
+        "h": 732,
+        "oldHeight": 732,
+        "contentSame": true,
+        "originalTextCount": 10,
+        "oldTextCount": 10,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "84:1020"
+      },
+      {
+        "id": "118:284",
+        "n": "05 / Вход в кабинет",
+        "y": 1761.049072265625,
+        "w": 1360,
+        "h": 1019.94775390625,
+        "oldHeight": 1019.94775390625,
+        "contentSame": true,
+        "originalTextCount": 15,
+        "oldTextCount": 15,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "53:175"
+      },
+      {
+        "id": "118:314",
+        "n": "06 / Восстановление доступа",
+        "y": 2804.996826171875,
+        "w": 1360,
+        "h": 810,
+        "oldHeight": 810,
+        "contentSame": true,
+        "originalTextCount": 18,
+        "oldTextCount": 18,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "51:798"
+      },
+      {
+        "id": "118:386",
+        "n": "07 / Возможности",
+        "y": 3638.996826171875,
+        "w": 1360,
+        "h": 1179.368408203125,
+        "oldHeight": 1179.368408203125,
+        "contentSame": true,
+        "originalTextCount": 17,
+        "oldTextCount": 17,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "56:1164"
+      },
+      {
+        "id": "118:415",
+        "n": "08 / Описание интерфейса",
+        "y": 4842.365234375,
+        "w": 1360,
+        "h": 2091.24365234375,
+        "oldHeight": 2091.24365234375,
+        "contentSame": true,
+        "originalTextCount": 33,
+        "oldTextCount": 33,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:1666"
+      },
+      {
+        "id": "118:554",
+        "n": "09 / Оплата",
+        "y": 6957.60888671875,
+        "w": 1360,
+        "h": 625,
+        "oldHeight": 625,
+        "contentSame": true,
+        "originalTextCount": 13,
+        "oldTextCount": 13,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "56:1769"
+      },
+      {
+        "id": "118:593",
+        "n": "10 / Обещанный платёж",
+        "y": 7606.60888671875,
+        "w": 1360,
+        "h": 676.5870361328125,
+        "oldHeight": 676.5870361328125,
+        "contentSame": true,
+        "originalTextCount": 15,
+        "oldTextCount": 15,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:584"
+      },
+      {
+        "id": "118:630",
+        "n": "11 / Расторжение",
+        "y": 8307.1962890625,
+        "w": 1360,
+        "h": 688.9352416992188,
+        "oldHeight": 688.9352416992188,
+        "contentSame": true,
+        "originalTextCount": 9,
+        "oldTextCount": 9,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:750"
+      },
+      {
+        "id": "118:656",
+        "n": "12 / Приостановление",
+        "y": 9020.1318359375,
+        "w": 1360,
+        "h": 724.6287841796875,
+        "oldHeight": 724.6287841796875,
+        "contentSame": true,
+        "originalTextCount": 17,
+        "oldTextCount": 17,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:873"
+      },
+      {
+        "id": "118:697",
+        "n": "13 / Для бизнеса",
+        "y": 9768.7607421875,
+        "w": 1360,
+        "h": 474,
+        "oldHeight": 474,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "56:2773"
+      },
+      {
+        "id": "118:712",
+        "n": "14 / Приложение",
+        "y": 10266.7607421875,
+        "w": 1360,
+        "h": 374,
+        "oldHeight": 374,
+        "contentSame": true,
+        "originalTextCount": 3,
+        "oldTextCount": 3,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:1197"
+      },
+      {
+        "id": "118:818",
+        "n": "15 / FAQ",
+        "y": 10664.7607421875,
+        "w": 1360,
+        "h": 534,
+        "oldHeight": 534,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:417"
+      },
+      {
+        "id": "118:1005",
+        "n": "16 / Готовый подвал",
+        "y": 11222.7607421875,
+        "w": 1360,
+        "h": 562,
+        "oldHeight": 562,
+        "contentSame": true,
+        "originalTextCount": 25,
+        "oldTextCount": 25,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:22"
+      }
+    ],
+    "rails": [],
+    "pageOverflow": []
+  },
+  {
+    "id": "118:1066",
+    "w": 834,
+    "h": 17785.306640625,
+    "b": {
+      "x": 1820,
+      "y": 80,
+      "width": 834,
+      "height": 17785.306640625
+    },
+    "before": 17785.306640625,
+    "sameFullSignature": true,
+    "sections": [
+      {
+        "id": "118:1139",
+        "n": "00 / Готовая шапка",
+        "y": 0,
+        "w": 720,
+        "h": 120,
+        "oldHeight": 120,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:190"
+      },
+      {
+        "id": "118:1188",
+        "n": "01 / Первый экран",
+        "y": 144,
+        "w": 720,
+        "h": 808.7739868164062,
+        "oldHeight": 808.7739868164062,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "13:147"
+      },
+      {
+        "id": "118:1214",
+        "n": "02 / Оглавление без заголовка",
+        "y": 976.7739868164062,
+        "w": 720,
+        "h": 96,
+        "oldHeight": 96,
+        "contentSame": true,
+        "originalTextCount": 11,
+        "oldTextCount": 11,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "66:208"
+      },
+      {
+        "id": "118:1249",
+        "n": "03 / Проверка подключения",
+        "y": 1096.77392578125,
+        "w": 720,
+        "h": 348.0570983886719,
+        "oldHeight": 348.0570983886719,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:536"
+      },
+      {
+        "id": "118:1301",
+        "n": "04 / Регистрация",
+        "y": 1468.8310546875,
+        "w": 720,
+        "h": 1207.073486328125,
+        "oldHeight": 1207.073486328125,
+        "contentSame": true,
+        "originalTextCount": 10,
+        "oldTextCount": 10,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "84:1046"
+      },
+      {
+        "id": "118:1325",
+        "n": "05 / Вход в кабинет",
+        "y": 2699.904541015625,
+        "w": 720,
+        "h": 1699,
+        "oldHeight": 1699,
+        "contentSame": true,
+        "originalTextCount": 15,
+        "oldTextCount": 15,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "53:207"
+      },
+      {
+        "id": "118:1355",
+        "n": "06 / Восстановление доступа",
+        "y": 4422.904296875,
+        "w": 720,
+        "h": 1525.29736328125,
+        "oldHeight": 1525.29736328125,
+        "contentSame": true,
+        "originalTextCount": 18,
+        "oldTextCount": 18,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "51:848"
+      },
+      {
+        "id": "118:1427",
+        "n": "07 / Возможности",
+        "y": 5972.20166015625,
+        "w": 720,
+        "h": 1260.631591796875,
+        "oldHeight": 1260.631591796875,
+        "contentSame": true,
+        "originalTextCount": 17,
+        "oldTextCount": 17,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "56:1192"
+      },
+      {
+        "id": "118:1456",
+        "n": "08 / Описание интерфейса",
+        "y": 7256.8330078125,
+        "w": 720,
+        "h": 2724.619384765625,
+        "oldHeight": 2724.619384765625,
+        "contentSame": true,
+        "originalTextCount": 33,
+        "oldTextCount": 33,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:1761"
+      },
+      {
+        "id": "118:1601",
+        "n": "09 / Оплата",
+        "y": 10005.4521484375,
+        "w": 720,
+        "h": 1108.5211181640625,
+        "oldHeight": 1108.5211181640625,
+        "contentSame": true,
+        "originalTextCount": 13,
+        "oldTextCount": 13,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "56:1798"
+      },
+      {
+        "id": "118:1640",
+        "n": "10 / Обещанный платёж",
+        "y": 11137.9736328125,
+        "w": 720,
+        "h": 1162.3829345703125,
+        "oldHeight": 1162.3829345703125,
+        "contentSame": true,
+        "originalTextCount": 15,
+        "oldTextCount": 15,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:623"
+      },
+      {
+        "id": "118:1679",
+        "n": "11 / Расторжение",
+        "y": 12324.3564453125,
+        "w": 720,
+        "h": 1204.923828125,
+        "oldHeight": 1204.923828125,
+        "contentSame": true,
+        "originalTextCount": 9,
+        "oldTextCount": 9,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:779"
+      },
+      {
+        "id": "118:1706",
+        "n": "12 / Приостановление",
+        "y": 13553.2802734375,
+        "w": 720,
+        "h": 1364.026123046875,
+        "oldHeight": 1364.026123046875,
+        "contentSame": true,
+        "originalTextCount": 17,
+        "oldTextCount": 17,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:916"
+      },
+      {
+        "id": "118:1747",
+        "n": "13 / Для бизнеса",
+        "y": 14941.306640625,
+        "w": 720,
+        "h": 954,
+        "oldHeight": 954,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "56:2790"
+      },
+      {
+        "id": "118:1762",
+        "n": "14 / Приложение",
+        "y": 15919.306640625,
+        "w": 720,
+        "h": 638,
+        "oldHeight": 638,
+        "contentSame": true,
+        "originalTextCount": 3,
+        "oldTextCount": 3,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:1228"
+      },
+      {
+        "id": "118:1868",
+        "n": "15 / FAQ",
+        "y": 16581.306640625,
+        "w": 720,
+        "h": 518,
+        "oldHeight": 518,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:418"
+      },
+      {
+        "id": "118:2050",
+        "n": "16 / Готовый подвал",
+        "y": 17123.306640625,
+        "w": 720,
+        "h": 662,
+        "oldHeight": 662,
+        "contentSame": true,
+        "originalTextCount": 24,
+        "oldTextCount": 24,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:23"
+      }
+    ],
+    "rails": [],
+    "pageOverflow": []
+  },
+  {
+    "id": "118:2109",
+    "w": 390,
+    "h": 17992.140625,
+    "b": {
+      "x": 3560,
+      "y": 80,
+      "width": 390,
+      "height": 17992.140625
+    },
+    "before": 21242.140625,
+    "sameFullSignature": false,
+    "sections": [
+      {
+        "id": "118:2152",
+        "n": "00 / Готовая шапка",
+        "y": 0,
+        "w": 358,
+        "h": 108,
+        "oldHeight": 108,
+        "contentSame": true,
+        "originalTextCount": 3,
+        "oldTextCount": 3,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:191"
+      },
+      {
+        "id": "118:2181",
+        "n": "01 / Первый экран",
+        "y": 132,
+        "w": 358,
+        "h": 967.9765625,
+        "oldHeight": 967.9765625,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "13:168"
+      },
+      {
+        "id": "118:2207",
+        "n": "02 / Оглавление без заголовка",
+        "y": 1123.9765625,
+        "w": 358,
+        "h": 200,
+        "oldHeight": 200,
+        "contentSame": true,
+        "originalTextCount": 11,
+        "oldTextCount": 11,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "66:250"
+      },
+      {
+        "id": "118:2242",
+        "n": "03 / Проверка подключения",
+        "y": 1347.9765625,
+        "w": 358,
+        "h": 386,
+        "oldHeight": 386,
+        "contentSame": true,
+        "originalTextCount": 6,
+        "oldTextCount": 6,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:537"
+      },
+      {
+        "id": "118:2294",
+        "n": "04 / Регистрация",
+        "y": 1757.9765625,
+        "w": 358,
+        "h": 1393.0933837890625,
+        "oldHeight": 1393.0933837890625,
+        "contentSame": true,
+        "originalTextCount": 10,
+        "oldTextCount": 10,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "84:1072"
+      },
+      {
+        "id": "118:2318",
+        "n": "05 / Вход в кабинет",
+        "y": 3175.06982421875,
+        "w": 358,
+        "h": 1766.32666015625,
+        "oldHeight": 2494.32666015625,
+        "contentSame": true,
+        "originalTextCount": 15,
+        "oldTextCount": 15,
+        "imagesSame": true,
+        "unmovedStyleSame": false,
+        "master": "53:239"
+      },
+      {
+        "id": "118:2348",
+        "n": "06 / Восстановление доступа",
+        "y": 4965.396484375,
+        "w": 358,
+        "h": 1325.15673828125,
+        "oldHeight": 1933.15673828125,
+        "contentSame": true,
+        "originalTextCount": 18,
+        "oldTextCount": 18,
+        "imagesSame": true,
+        "unmovedStyleSame": false,
+        "master": "51:898"
+      },
+      {
+        "id": "118:2420",
+        "n": "07 / Возможности",
+        "y": 6314.55322265625,
+        "w": 358,
+        "h": 933.5921020507812,
+        "oldHeight": 1453.592041015625,
+        "contentSame": true,
+        "originalTextCount": 17,
+        "oldTextCount": 17,
+        "imagesSame": true,
+        "unmovedStyleSame": false,
+        "master": "56:1221"
+      },
+      {
+        "id": "118:2448",
+        "n": "08 / Описание интерфейса",
+        "y": 7272.1455078125,
+        "w": 358,
+        "h": 1821.570068359375,
+        "oldHeight": 3215.570068359375,
+        "contentSame": true,
+        "originalTextCount": 33,
+        "oldTextCount": 33,
+        "imagesSame": true,
+        "unmovedStyleSame": false,
+        "master": "54:1862"
+      },
+      {
+        "id": "118:2593",
+        "n": "09 / Оплата",
+        "y": 9117.7158203125,
+        "w": 358,
+        "h": 953.8450927734375,
+        "oldHeight": 953.8450927734375,
+        "contentSame": true,
+        "originalTextCount": 13,
+        "oldTextCount": 13,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "56:1827"
+      },
+      {
+        "id": "118:2632",
+        "n": "10 / Обещанный платёж",
+        "y": 10095.560546875,
+        "w": 358,
+        "h": 1404.4586181640625,
+        "oldHeight": 1404.4586181640625,
+        "contentSame": true,
+        "originalTextCount": 15,
+        "oldTextCount": 15,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:664"
+      },
+      {
+        "id": "118:2671",
+        "n": "11 / Расторжение",
+        "y": 11524.01953125,
+        "w": 358,
+        "h": 1192.90771484375,
+        "oldHeight": 1192.90771484375,
+        "contentSame": true,
+        "originalTextCount": 9,
+        "oldTextCount": 9,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:809"
+      },
+      {
+        "id": "118:2698",
+        "n": "12 / Приостановление",
+        "y": 12740.927734375,
+        "w": 358,
+        "h": 1423.4630126953125,
+        "oldHeight": 1423.4630126953125,
+        "contentSame": true,
+        "originalTextCount": 17,
+        "oldTextCount": 17,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:959"
+      },
+      {
+        "id": "118:2739",
+        "n": "13 / Для бизнеса",
+        "y": 14188.390625,
+        "w": 358,
+        "h": 1053.75,
+        "oldHeight": 1053.75,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "56:2807"
+      },
+      {
+        "id": "118:2754",
+        "n": "14 / Приложение",
+        "y": 15266.140625,
+        "w": 358,
+        "h": 886,
+        "oldHeight": 886,
+        "contentSame": true,
+        "originalTextCount": 3,
+        "oldTextCount": 3,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:1259"
+      },
+      {
+        "id": "118:2860",
+        "n": "15 / FAQ",
+        "y": 16176.140625,
+        "w": 358,
+        "h": 690,
+        "oldHeight": 690,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:419"
+      },
+      {
+        "id": "118:3041",
+        "n": "16 / Готовый подвал",
+        "y": 16890.140625,
+        "w": 358,
+        "h": 1102,
+        "oldHeight": 1102,
+        "contentSame": true,
+        "originalTextCount": 20,
+        "oldTextCount": 20,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:24"
+      }
+    ],
+    "rails": [
+      {
+        "id": "I118:2318;184:197",
+        "n": "CAR / Учётные данные",
+        "b": {
+          "x": 3576,
+          "y": 4247.396484375,
+          "width": 358,
+          "height": 502
+        },
+        "viewport": {
+          "id": "I118:2318;184:199",
+          "w": 358,
+          "h": 418,
+          "clip": true,
+          "overflow": "HORIZONTAL",
+          "vs": "HUG"
+        },
+        "track": {
+          "id": "I118:2318;53:258",
+          "w": 1010,
+          "h": 418,
+          "vs": "HUG"
+        },
+        "cards": [
+          {
+            "id": "I118:2318;53:259",
+            "n": "Учётные данные / 1",
+            "x": 0,
+            "w": 326,
+            "h": 418,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2318;53:262",
+            "n": "Учётные данные / 2",
+            "x": 342,
+            "w": 326,
+            "h": 418,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2318;53:265",
+            "n": "Учётные данные / 3",
+            "x": 684,
+            "w": 326,
+            "h": 418,
+            "min": null,
+            "vs": "FILL"
+          }
+        ],
+        "clipped": [],
+        "peek": 16,
+        "maxScroll": 652,
+        "reachable": true,
+        "buttons": [
+          {
+            "id": "I118:2318;184:201",
+            "w": 44,
+            "h": 44,
+            "target": "53:259",
+            "expectedMasterTarget": "53:259",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2318;184:204",
+            "w": 44,
+            "h": 44,
+            "target": "53:262",
+            "expectedMasterTarget": "53:262",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2318;184:207",
+            "w": 44,
+            "h": 44,
+            "target": "53:265",
+            "expectedMasterTarget": "53:265",
+            "targetMatches": true
+          }
+        ]
+      },
+      {
+        "id": "I118:2348;184:667",
+        "n": "CAR / Восстановление доступа",
+        "b": {
+          "x": 3576,
+          "y": 5914.55322265625,
+          "width": 358,
+          "height": 456
+        },
+        "viewport": {
+          "id": "I118:2348;184:669",
+          "w": 358,
+          "h": 372,
+          "clip": true,
+          "overflow": "HORIZONTAL",
+          "vs": "HUG"
+        },
+        "track": {
+          "id": "I118:2348;184:670",
+          "w": 1352,
+          "h": 372,
+          "vs": "HUG"
+        },
+        "cards": [
+          {
+            "id": "I118:2348;51:912",
+            "n": "Маршрут 1",
+            "x": 0,
+            "w": 326,
+            "h": 372,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2348;51:921",
+            "n": "Маршрут 2",
+            "x": 342,
+            "w": 326,
+            "h": 372,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2348;51:930",
+            "n": "Маршрут 3",
+            "x": 684,
+            "w": 326,
+            "h": 372,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2348;51:939",
+            "n": "Маршрут 4",
+            "x": 1026,
+            "w": 326,
+            "h": 372,
+            "min": null,
+            "vs": "FILL"
+          }
+        ],
+        "clipped": [],
+        "peek": 16,
+        "maxScroll": 994,
+        "reachable": true,
+        "buttons": [
+          {
+            "id": "I118:2348;184:672",
+            "w": 44,
+            "h": 44,
+            "target": "51:912",
+            "expectedMasterTarget": "51:912",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2348;184:675",
+            "w": 44,
+            "h": 44,
+            "target": "51:921",
+            "expectedMasterTarget": "51:921",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2348;184:678",
+            "w": 44,
+            "h": 44,
+            "target": "51:930",
+            "expectedMasterTarget": "51:930",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2348;184:681",
+            "w": 44,
+            "h": 44,
+            "target": "51:939",
+            "expectedMasterTarget": "51:939",
+            "targetMatches": true
+          }
+        ]
+      },
+      {
+        "id": "I118:2420;184:923",
+        "n": "CAR / Возможности кабинета",
+        "b": {
+          "x": 3576,
+          "y": 6847.1455078125,
+          "width": 358,
+          "height": 481
+        },
+        "viewport": {
+          "id": "I118:2420;184:925",
+          "w": 358,
+          "h": 397,
+          "clip": true,
+          "overflow": "HORIZONTAL",
+          "vs": "HUG"
+        },
+        "track": {
+          "id": "I118:2420;56:1230",
+          "w": 1010,
+          "h": 397,
+          "vs": "HUG"
+        },
+        "cards": [
+          {
+            "id": "I118:2420;56:1232",
+            "n": "Возможности / 1",
+            "x": 0,
+            "w": 326,
+            "h": 397,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2420;56:1240",
+            "n": "Возможности / 7",
+            "x": 342,
+            "w": 326,
+            "h": 397,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2420;56:1247",
+            "n": "Возможности / 12",
+            "x": 684,
+            "w": 326,
+            "h": 397,
+            "min": null,
+            "vs": "FILL"
+          }
+        ],
+        "clipped": [],
+        "peek": 16,
+        "maxScroll": 652,
+        "reachable": true,
+        "buttons": [
+          {
+            "id": "I118:2420;184:927",
+            "w": 44,
+            "h": 44,
+            "target": "56:1232",
+            "expectedMasterTarget": "56:1232",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2420;184:930",
+            "w": 44,
+            "h": 44,
+            "target": "56:1240",
+            "expectedMasterTarget": "56:1240",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2420;184:933",
+            "w": 44,
+            "h": 44,
+            "target": "56:1247",
+            "expectedMasterTarget": "56:1247",
+            "targetMatches": true
+          }
+        ]
+      },
+      {
+        "id": "I118:2448;184:1319",
+        "n": "CAR / Верхнее меню",
+        "b": {
+          "x": 3596,
+          "y": 7816.49755859375,
+          "width": 318,
+          "height": 384
+        },
+        "viewport": {
+          "id": "I118:2448;184:1321",
+          "w": 318,
+          "h": 300,
+          "clip": true,
+          "overflow": "HORIZONTAL",
+          "vs": "HUG"
+        },
+        "track": {
+          "id": "I118:2448;54:1882",
+          "w": 1192,
+          "h": 300,
+          "vs": "HUG"
+        },
+        "cards": [
+          {
+            "id": "I118:2448;54:1884",
+            "n": "Пункт верхнего меню 1",
+            "x": 0,
+            "w": 286,
+            "h": 300,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2448;54:1893",
+            "n": "Пункт верхнего меню 2",
+            "x": 302,
+            "w": 286,
+            "h": 300,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2448;54:1902",
+            "n": "Пункт верхнего меню 3",
+            "x": 604,
+            "w": 286,
+            "h": 300,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2448;54:1911",
+            "n": "Пункт верхнего меню 4",
+            "x": 906,
+            "w": 286,
+            "h": 300,
+            "min": null,
+            "vs": "FILL"
+          }
+        ],
+        "clipped": [],
+        "peek": 16,
+        "maxScroll": 874,
+        "reachable": true,
+        "buttons": [
+          {
+            "id": "I118:2448;184:1323",
+            "w": 44,
+            "h": 44,
+            "target": "54:1884",
+            "expectedMasterTarget": "54:1884",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2448;184:1326",
+            "w": 44,
+            "h": 44,
+            "target": "54:1893",
+            "expectedMasterTarget": "54:1893",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2448;184:1329",
+            "w": 44,
+            "h": 44,
+            "target": "54:1902",
+            "expectedMasterTarget": "54:1902",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2448;184:1332",
+            "w": 44,
+            "h": 44,
+            "target": "54:1911",
+            "expectedMasterTarget": "54:1911",
+            "targetMatches": true
+          }
+        ]
+      },
+      {
+        "id": "I118:2448;184:1335",
+        "n": "CAR / Главная страница кабинета",
+        "b": {
+          "x": 3576,
+          "y": 8591.7158203125,
+          "width": 358,
+          "height": 582
+        },
+        "viewport": {
+          "id": "I118:2448;184:1337",
+          "w": 358,
+          "h": 498,
+          "clip": true,
+          "overflow": "HORIZONTAL",
+          "vs": "HUG"
+        },
+        "track": {
+          "id": "I118:2448;54:1926",
+          "w": 1352,
+          "h": 498,
+          "vs": "HUG"
+        },
+        "cards": [
+          {
+            "id": "I118:2448;54:1928",
+            "n": "Область главной страницы / Главное меню",
+            "x": 0,
+            "w": 326,
+            "h": 498,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2448;54:1937",
+            "n": "Область главной страницы / Услуги активны",
+            "x": 342,
+            "w": 326,
+            "h": 498,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2448;54:1946",
+            "n": "Область главной страницы / Неполадки",
+            "x": 684,
+            "w": 326,
+            "h": 498,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:2448;54:1955",
+            "n": "Область главной страницы / Дом.ру Бонус",
+            "x": 1026,
+            "w": 326,
+            "h": 498,
+            "min": null,
+            "vs": "FILL"
+          }
+        ],
+        "clipped": [],
+        "peek": 16,
+        "maxScroll": 994,
+        "reachable": true,
+        "buttons": [
+          {
+            "id": "I118:2448;184:1339",
+            "w": 44,
+            "h": 44,
+            "target": "54:1928",
+            "expectedMasterTarget": "54:1928",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2448;184:1342",
+            "w": 44,
+            "h": 44,
+            "target": "54:1937",
+            "expectedMasterTarget": "54:1937",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2448;184:1345",
+            "w": 44,
+            "h": 44,
+            "target": "54:1946",
+            "expectedMasterTarget": "54:1946",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:2448;184:1348",
+            "w": 44,
+            "h": 44,
+            "target": "54:1955",
+            "expectedMasterTarget": "54:1955",
+            "targetMatches": true
+          }
+        ]
+      }
+    ],
+    "pageOverflow": []
+  },
+  {
+    "id": "118:3096",
+    "w": 320,
+    "h": 19881.787109375,
+    "b": {
+      "x": 5300,
+      "y": 80,
+      "width": 320,
+      "height": 19881.787109375
+    },
+    "before": 23491.787109375,
+    "sameFullSignature": false,
+    "sections": [
+      {
+        "id": "118:3121",
+        "n": "00 / Готовая шапка",
+        "y": 0,
+        "w": 288,
+        "h": 108,
+        "oldHeight": 108,
+        "contentSame": true,
+        "originalTextCount": 3,
+        "oldTextCount": 3,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:191"
+      },
+      {
+        "id": "118:3146",
+        "n": "01 / Первый экран",
+        "y": 132,
+        "w": 288,
+        "h": 1044.439208984375,
+        "oldHeight": 1044.439208984375,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "13:189"
+      },
+      {
+        "id": "118:3172",
+        "n": "02 / Оглавление без заголовка",
+        "y": 1200.439208984375,
+        "w": 288,
+        "h": 304,
+        "oldHeight": 304,
+        "contentSame": true,
+        "originalTextCount": 11,
+        "oldTextCount": 11,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "66:294"
+      },
+      {
+        "id": "118:3207",
+        "n": "03 / Проверка подключения",
+        "y": 1528.439208984375,
+        "w": 288,
+        "h": 435,
+        "oldHeight": 435,
+        "contentSame": true,
+        "originalTextCount": 6,
+        "oldTextCount": 6,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:538"
+      },
+      {
+        "id": "118:3259",
+        "n": "04 / Регистрация",
+        "y": 1987.439208984375,
+        "w": 288,
+        "h": 1588.209228515625,
+        "oldHeight": 1588.209228515625,
+        "contentSame": true,
+        "originalTextCount": 10,
+        "oldTextCount": 10,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "84:1098"
+      },
+      {
+        "id": "118:3283",
+        "n": "05 / Вход в кабинет",
+        "y": 3599.6484375,
+        "w": 288,
+        "h": 2072.256591796875,
+        "oldHeight": 2824.256591796875,
+        "contentSame": true,
+        "originalTextCount": 15,
+        "oldTextCount": 15,
+        "imagesSame": true,
+        "unmovedStyleSame": false,
+        "master": "53:271"
+      },
+      {
+        "id": "118:3313",
+        "n": "06 / Восстановление доступа",
+        "y": 5695.9052734375,
+        "w": 288,
+        "h": 1471.23779296875,
+        "oldHeight": 2127.23779296875,
+        "contentSame": true,
+        "originalTextCount": 18,
+        "oldTextCount": 18,
+        "imagesSame": true,
+        "unmovedStyleSame": false,
+        "master": "51:948"
+      },
+      {
+        "id": "118:3385",
+        "n": "07 / Возможности",
+        "y": 7191.14306640625,
+        "w": 288,
+        "h": 991.5263061523438,
+        "oldHeight": 1511.5263671875,
+        "contentSame": true,
+        "originalTextCount": 17,
+        "oldTextCount": 17,
+        "imagesSame": true,
+        "unmovedStyleSame": false,
+        "master": "56:1251"
+      },
+      {
+        "id": "118:3413",
+        "n": "08 / Описание интерфейса",
+        "y": 8206.6689453125,
+        "w": 288,
+        "h": 2011.48095703125,
+        "oldHeight": 3693.48095703125,
+        "contentSame": true,
+        "originalTextCount": 33,
+        "oldTextCount": 33,
+        "imagesSame": true,
+        "unmovedStyleSame": false,
+        "master": "54:1963"
+      },
+      {
+        "id": "118:3558",
+        "n": "09 / Оплата",
+        "y": 10242.150390625,
+        "w": 288,
+        "h": 965.4366455078125,
+        "oldHeight": 965.4366455078125,
+        "contentSame": true,
+        "originalTextCount": 13,
+        "oldTextCount": 13,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "56:1856"
+      },
+      {
+        "id": "118:3597",
+        "n": "10 / Обещанный платёж",
+        "y": 11231.5869140625,
+        "w": 288,
+        "h": 1521.1064453125,
+        "oldHeight": 1521.1064453125,
+        "contentSame": true,
+        "originalTextCount": 15,
+        "oldTextCount": 15,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:705"
+      },
+      {
+        "id": "118:3636",
+        "n": "11 / Расторжение",
+        "y": 12776.693359375,
+        "w": 288,
+        "h": 1288.4287109375,
+        "oldHeight": 1288.4287109375,
+        "contentSame": true,
+        "originalTextCount": 9,
+        "oldTextCount": 9,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:839"
+      },
+      {
+        "id": "118:3663",
+        "n": "12 / Приостановление",
+        "y": 14089.1220703125,
+        "w": 288,
+        "h": 1566.21044921875,
+        "oldHeight": 1566.21044921875,
+        "contentSame": true,
+        "originalTextCount": 17,
+        "oldTextCount": 17,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:1002"
+      },
+      {
+        "id": "118:3704",
+        "n": "13 / Для бизнеса",
+        "y": 15679.33203125,
+        "w": 288,
+        "h": 1178,
+        "oldHeight": 1178,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "56:2824"
+      },
+      {
+        "id": "118:3719",
+        "n": "14 / Приложение",
+        "y": 16881.33203125,
+        "w": 288,
+        "h": 1072.45458984375,
+        "oldHeight": 1072.45458984375,
+        "contentSame": true,
+        "originalTextCount": 3,
+        "oldTextCount": 3,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "54:1290"
+      },
+      {
+        "id": "118:3825",
+        "n": "15 / FAQ",
+        "y": 17977.787109375,
+        "w": 288,
+        "h": 738,
+        "oldHeight": 738,
+        "contentSame": true,
+        "originalTextCount": 7,
+        "oldTextCount": 7,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:420"
+      },
+      {
+        "id": "118:4001",
+        "n": "16 / Готовый подвал",
+        "y": 18739.787109375,
+        "w": 288,
+        "h": 1142,
+        "oldHeight": 1142,
+        "contentSame": true,
+        "originalTextCount": 20,
+        "oldTextCount": 20,
+        "imagesSame": true,
+        "unmovedStyleSame": true,
+        "master": "21:24"
+      }
+    ],
+    "rails": [
+      {
+        "id": "I118:3283;184:210",
+        "n": "CAR / Учётные данные",
+        "b": {
+          "x": 5316,
+          "y": 4833.9052734375,
+          "width": 288,
+          "height": 622
+        },
+        "viewport": {
+          "id": "I118:3283;184:212",
+          "w": 288,
+          "h": 538,
+          "clip": true,
+          "overflow": "HORIZONTAL",
+          "vs": "HUG"
+        },
+        "track": {
+          "id": "I118:3283;53:290",
+          "w": 800,
+          "h": 538,
+          "vs": "HUG"
+        },
+        "cards": [
+          {
+            "id": "I118:3283;53:291",
+            "n": "Учётные данные / 1",
+            "x": 0,
+            "w": 256,
+            "h": 538,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3283;53:294",
+            "n": "Учётные данные / 2",
+            "x": 272,
+            "w": 256,
+            "h": 538,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3283;53:297",
+            "n": "Учётные данные / 3",
+            "x": 544,
+            "w": 256,
+            "h": 538,
+            "min": null,
+            "vs": "FILL"
+          }
+        ],
+        "clipped": [],
+        "peek": 16,
+        "maxScroll": 512,
+        "reachable": true,
+        "buttons": [
+          {
+            "id": "I118:3283;184:214",
+            "w": 44,
+            "h": 44,
+            "target": "53:291",
+            "expectedMasterTarget": "53:291",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3283;184:217",
+            "w": 44,
+            "h": 44,
+            "target": "53:294",
+            "expectedMasterTarget": "53:294",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3283;184:220",
+            "w": 44,
+            "h": 44,
+            "target": "53:297",
+            "expectedMasterTarget": "53:297",
+            "targetMatches": true
+          }
+        ]
+      },
+      {
+        "id": "I118:3313;184:684",
+        "n": "CAR / Восстановление доступа",
+        "b": {
+          "x": 5316,
+          "y": 6671.14306640625,
+          "width": 288,
+          "height": 576
+        },
+        "viewport": {
+          "id": "I118:3313;184:686",
+          "w": 288,
+          "h": 492,
+          "clip": true,
+          "overflow": "HORIZONTAL",
+          "vs": "HUG"
+        },
+        "track": {
+          "id": "I118:3313;184:687",
+          "w": 1072,
+          "h": 492,
+          "vs": "HUG"
+        },
+        "cards": [
+          {
+            "id": "I118:3313;51:962",
+            "n": "Маршрут 1",
+            "x": 0,
+            "w": 256,
+            "h": 492,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3313;51:971",
+            "n": "Маршрут 2",
+            "x": 272,
+            "w": 256,
+            "h": 492,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3313;51:980",
+            "n": "Маршрут 3",
+            "x": 544,
+            "w": 256,
+            "h": 492,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3313;51:989",
+            "n": "Маршрут 4",
+            "x": 816,
+            "w": 256,
+            "h": 492,
+            "min": null,
+            "vs": "FILL"
+          }
+        ],
+        "clipped": [],
+        "peek": 16,
+        "maxScroll": 784,
+        "reachable": true,
+        "buttons": [
+          {
+            "id": "I118:3313;184:689",
+            "w": 44,
+            "h": 44,
+            "target": "51:962",
+            "expectedMasterTarget": "51:962",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3313;184:692",
+            "w": 44,
+            "h": 44,
+            "target": "51:971",
+            "expectedMasterTarget": "51:971",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3313;184:695",
+            "w": 44,
+            "h": 44,
+            "target": "51:980",
+            "expectedMasterTarget": "51:980",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3313;184:698",
+            "w": 44,
+            "h": 44,
+            "target": "51:989",
+            "expectedMasterTarget": "51:989",
+            "targetMatches": true
+          }
+        ]
+      },
+      {
+        "id": "I118:3385;184:936",
+        "n": "CAR / Возможности кабинета",
+        "b": {
+          "x": 5316,
+          "y": 7683.66943359375,
+          "width": 288,
+          "height": 579
+        },
+        "viewport": {
+          "id": "I118:3385;184:938",
+          "w": 288,
+          "h": 495,
+          "clip": true,
+          "overflow": "HORIZONTAL",
+          "vs": "HUG"
+        },
+        "track": {
+          "id": "I118:3385;56:1260",
+          "w": 800,
+          "h": 495,
+          "vs": "HUG"
+        },
+        "cards": [
+          {
+            "id": "I118:3385;56:1262",
+            "n": "Возможности / 1",
+            "x": 0,
+            "w": 256,
+            "h": 495,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3385;56:1270",
+            "n": "Возможности / 7",
+            "x": 272,
+            "w": 256,
+            "h": 495,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3385;56:1277",
+            "n": "Возможности / 12",
+            "x": 544,
+            "w": 256,
+            "h": 495,
+            "min": null,
+            "vs": "FILL"
+          }
+        ],
+        "clipped": [],
+        "peek": 16,
+        "maxScroll": 512,
+        "reachable": true,
+        "buttons": [
+          {
+            "id": "I118:3385;184:940",
+            "w": 44,
+            "h": 44,
+            "target": "56:1262",
+            "expectedMasterTarget": "56:1262",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3385;184:943",
+            "w": 44,
+            "h": 44,
+            "target": "56:1270",
+            "expectedMasterTarget": "56:1270",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3385;184:946",
+            "w": 44,
+            "h": 44,
+            "target": "56:1277",
+            "expectedMasterTarget": "56:1277",
+            "targetMatches": true
+          }
+        ]
+      },
+      {
+        "id": "I118:3413;184:1351",
+        "n": "CAR / Верхнее меню",
+        "b": {
+          "x": 5336,
+          "y": 8834.3212890625,
+          "width": 248,
+          "height": 408
+        },
+        "viewport": {
+          "id": "I118:3413;184:1353",
+          "w": 248,
+          "h": 324,
+          "clip": true,
+          "overflow": "HORIZONTAL",
+          "vs": "HUG"
+        },
+        "track": {
+          "id": "I118:3413;54:1983",
+          "w": 1040,
+          "h": 324,
+          "vs": "HUG"
+        },
+        "cards": [
+          {
+            "id": "I118:3413;54:1985",
+            "n": "Пункт верхнего меню 1",
+            "x": 0,
+            "w": 248,
+            "h": 324,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3413;54:1994",
+            "n": "Пункт верхнего меню 2",
+            "x": 264,
+            "w": 248,
+            "h": 324,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3413;54:2003",
+            "n": "Пункт верхнего меню 3",
+            "x": 528,
+            "w": 248,
+            "h": 324,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3413;54:2012",
+            "n": "Пункт верхнего меню 4",
+            "x": 792,
+            "w": 248,
+            "h": 324,
+            "min": null,
+            "vs": "FILL"
+          }
+        ],
+        "clipped": [],
+        "peek": 0,
+        "maxScroll": 792,
+        "reachable": true,
+        "buttons": [
+          {
+            "id": "I118:3413;184:1355",
+            "w": 44,
+            "h": 44,
+            "target": "54:1985",
+            "expectedMasterTarget": "54:1985",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3413;184:1358",
+            "w": 44,
+            "h": 44,
+            "target": "54:1994",
+            "expectedMasterTarget": "54:1994",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3413;184:1361",
+            "w": 44,
+            "h": 44,
+            "target": "54:2003",
+            "expectedMasterTarget": "54:2003",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3413;184:1364",
+            "w": 44,
+            "h": 44,
+            "target": "54:2012",
+            "expectedMasterTarget": "54:2012",
+            "targetMatches": true
+          }
+        ]
+      },
+      {
+        "id": "I118:3413;184:1367",
+        "n": "CAR / Главная страница кабинета",
+        "b": {
+          "x": 5316,
+          "y": 9620.1494140625,
+          "width": 288,
+          "height": 678
+        },
+        "viewport": {
+          "id": "I118:3413;184:1369",
+          "w": 288,
+          "h": 594,
+          "clip": true,
+          "overflow": "HORIZONTAL",
+          "vs": "HUG"
+        },
+        "track": {
+          "id": "I118:3413;54:2027",
+          "w": 1072,
+          "h": 594,
+          "vs": "HUG"
+        },
+        "cards": [
+          {
+            "id": "I118:3413;54:2029",
+            "n": "Область главной страницы / Главное меню",
+            "x": 0,
+            "w": 256,
+            "h": 594,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3413;54:2038",
+            "n": "Область главной страницы / Услуги активны",
+            "x": 272,
+            "w": 256,
+            "h": 594,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3413;54:2047",
+            "n": "Область главной страницы / Неполадки",
+            "x": 544,
+            "w": 256,
+            "h": 594,
+            "min": null,
+            "vs": "FILL"
+          },
+          {
+            "id": "I118:3413;54:2056",
+            "n": "Область главной страницы / Дом.ру Бонус",
+            "x": 816,
+            "w": 256,
+            "h": 594,
+            "min": null,
+            "vs": "FILL"
+          }
+        ],
+        "clipped": [],
+        "peek": 16,
+        "maxScroll": 784,
+        "reachable": true,
+        "buttons": [
+          {
+            "id": "I118:3413;184:1371",
+            "w": 44,
+            "h": 44,
+            "target": "54:2029",
+            "expectedMasterTarget": "54:2029",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3413;184:1374",
+            "w": 44,
+            "h": 44,
+            "target": "54:2038",
+            "expectedMasterTarget": "54:2038",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3413;184:1377",
+            "w": 44,
+            "h": 44,
+            "target": "54:2047",
+            "expectedMasterTarget": "54:2047",
+            "targetMatches": true
+          },
+          {
+            "id": "I118:3413;184:1380",
+            "w": 44,
+            "h": 44,
+            "target": "54:2056",
+            "expectedMasterTarget": "54:2056",
+            "targetMatches": true
+          }
+        ]
+      }
+    ],
+    "pageOverflow": []
+  }
+]

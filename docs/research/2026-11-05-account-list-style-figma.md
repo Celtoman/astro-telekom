@@ -1,5 +1,7 @@
 # Личный кабинет: единый стиль текстовых списков
 
+Следующая итерация [#505](2026-11-05-account-mobile-rails-figma.md): владелец принял Desktop/Tablet; на390/320 созданы компактные горизонтальные ленты. Ниже сохранено состояние до мобильной доработки.
+
 05.11.2026. [Задача #504](https://github.com/Celtoman/astro-telekom/issues/504), продолжение [#503](2026-11-05-account-row-content-fit-figma.md). **APPLIED_IN_FIGMA / REVIEW / UNPUBLISHED**.
 
 [Desktop1440](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-5) · [Tablet834](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-1066) · [Mobile390](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-2109) · [Mobile320](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-3096).

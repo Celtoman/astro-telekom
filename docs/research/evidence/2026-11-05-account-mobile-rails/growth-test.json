@@ -1,0 +1,25 @@
+{
+  "mutatedNodeIds": [
+    "54:1903"
+  ],
+  "before": 300,
+  "expanded": {
+    "h": 396,
+    "cards": [
+      396,
+      396,
+      396,
+      396
+    ]
+  },
+  "restored": {
+    "h": 300,
+    "cards": [
+      300,
+      300,
+      300,
+      300
+    ],
+    "textRestored": true
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "source": "Figma native full pages and temporary unoccluded track clones; rail crops derived from final full pages; no gesture test",
+  "files": [
+    {
+      "file": "Mobile-all-cards-1.png",
+      "width": 1010,
+      "height": 418,
+      "sha256": "290a87cc0a9b66303d6e54be2fb0c9e99814834438e2bf5a9dd6a3ce0591c49a"
+    },
+    {
+      "file": "Mobile-all-cards-2.png",
+      "width": 1352,
+      "height": 372,
+      "sha256": "9e28b4287aeb68cc89d29623a523be780fdd398626a95e95630a4ece83b46062"
+    },
+    {
+      "file": "Mobile-all-cards-3.png",
+      "width": 1010,
+      "height": 397,
+      "sha256": "8f7a7c17b291aae9488cd413e2f167ff0436a0810dd69a900b67bdcd3dcc75a8"
+    },
+    {
+      "file": "Mobile-all-cards-4.png",
+      "width": 1192,
+      "height": 300,
+      "sha256": "143311ef8b5242a81331b6a71da0ca28120d63a5bf127f4c517bf8af3f6d5d91"
+    },
+    {
+      "file": "Mobile-all-cards-5.png",
+      "width": 1352,
+      "height": 498,
+      "sha256": "645c26b193e779d4365a312f16e6ddcb572335e88c07e892997ceed092c24743"
+    },
+    {
+      "file": "Mobile-rail-1.png",
+      "width": 358,
+      "height": 511,
+      "sha256": "212aacc81d1f2fe5b421f1335abea5e115efad908bca37b00f39b6c93985bd1e"
+    },
+    {
+      "file": "Mobile-rail-2.png",
+      "width": 358,
+      "height": 465,
+      "sha256": "430cf774c086d05d1c6c5f008c6a2184ce5dbe6cab365a9fd8de62635e9bed17"
+    },
+    {
+      "file": "Mobile-rail-3.png",
+      "width": 358,
+      "height": 490,
+      "sha256": "83073c76159081b2bd995b3bf7983349d2637c1c21aeab8f06d80093f358be78"
+    },
+    {
+      "file": "Mobile-rail-4.png",
+      "width": 318,
+      "height": 393,
+      "sha256": "e23868f8eba9643cadb25e33bf1cdb6383cf5eb9fc7ef7c0f09724d1c5633079"
+    },
+    {
+      "file": "Mobile-rail-5.png",
+      "width": 358,
+      "height": 591,
+      "sha256": "f7641d464872f6bbc1ab6e133e4aeb452b45c8dd26608efea88010b44f5c1bbf"
+    },
+    {
+      "file": "Mobile.png",
+      "width": 390,
+      "height": 17993,
+      "sha256": "d90d8d1b341ac8b0a704d262f2f80631ddb69656c5640521064a71ad2f299e6a"
+    },
+    {
+      "file": "Mobile320-all-cards-1.png",
+      "width": 800,
+      "height": 538,
+      "sha256": "09fd2f6c4e521e4575a591da5292ba34cc7c7ecd8a815669ffcc4740c802066a"
+    },
+    {
+      "file": "Mobile320-all-cards-2.png",
+      "width": 1072,
+      "height": 492,
+      "sha256": "d6cf35268a782fe2aff44b930d0a598f3278921d1a2fc4edd09ecebc5b86938f"
+    },
+    {
+      "file": "Mobile320-all-cards-3.png",
+      "width": 800,
+      "height": 495,
+      "sha256": "7dc9d35f1645ce714834f2115d85c65f194ffa7a1dd3c2e53168fc0d26bb0550"
+    },
+    {
+      "file": "Mobile320-all-cards-4-final.png",
+      "width": 1040,
+      "height": 324,
+      "sha256": "79e7f3cb17bb205c8c777f8a26b24b9baa038e87fb1728e41f829824aaddf901"
+    },
+    {
+      "file": "Mobile320-all-cards-4.png",
+      "width": 1040,
+      "height": 324,
+      "sha256": "79e7f3cb17bb205c8c777f8a26b24b9baa038e87fb1728e41f829824aaddf901"
+    },
+    {
+      "file": "Mobile320-all-cards-5.png",
+      "width": 1072,
+      "height": 594,
+      "sha256": "1af42bddc86a1fb853b2cd79ae6a9cef49561df43a43618477935c3ebfefd043"
+    },
+    {
+      "file": "Mobile320-rail-1.png",
+      "width": 288,
+      "height": 631,
+      "sha256": "6d18083d7b069dfc04fa11d22b9e32a01d16f409ea97967ed688f0872d31a46e"
+    },
+    {
+      "file": "Mobile320-rail-2.png",
+      "width": 288,
+      "height": 585,
+      "sha256": "f4ca1b13e38be5b28f3f4e4417826a757e22686287de5ccdd3c5705c00495184"
+    },
+    {
+      "file": "Mobile320-rail-3.png",
+      "width": 288,
+      "height": 588,
+      "sha256": "893b7423d76175489ebe94352bbab44fbfb7f2142e8fe186f83d1c90ba285399"
+    },
+    {
+      "file": "Mobile320-rail-4.png",
+      "width": 248,
+      "height": 417,
+      "sha256": "18df5b25c018827463f0f8029bf6c3a9a00adecf4ff6ee22f94638f2f27324c9"
+    },
+    {
+      "file": "Mobile320-rail-5.png",
+      "width": 288,
+      "height": 687,
+      "sha256": "6652499db9c0e82230588af73a6967917eedf4cb79c46494f5307c9af75d8958"
+    },
+    {
+      "file": "Mobile320.png",
+      "width": 320,
+      "height": 19882,
+      "sha256": "f8b28a64c4d5119d0d27472d45d8f1bc58084adb9a134e5d59ddc0269856d162"
+    }
+  ]
+}

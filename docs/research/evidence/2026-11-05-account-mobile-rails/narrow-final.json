@@ -1,0 +1,44 @@
+{
+  "mutatedNodeIds": [
+    "54:1985",
+    "54:1994",
+    "54:2003",
+    "54:2012"
+  ],
+  "policy": "Mobile320 white menu cards use full viewport width 248; hint and numbered jump buttons provide scroll cues",
+  "cards": [
+    {
+      "id": "54:1985",
+      "w": 248,
+      "h": 372,
+      "title": "Сервис и подписки",
+      "titleWidth": 154,
+      "titleHeight": 50
+    },
+    {
+      "id": "54:1994",
+      "w": 248,
+      "h": 372,
+      "title": "Оборудование",
+      "titleWidth": 154,
+      "titleHeight": 25
+    },
+    {
+      "id": "54:2003",
+      "w": 248,
+      "h": 324,
+      "title": "Дом.ру сервис",
+      "titleWidth": 154,
+      "titleHeight": 25
+    },
+    {
+      "id": "54:2012",
+      "w": 248,
+      "h": 324,
+      "title": "Бонусы",
+      "titleWidth": 154,
+      "titleHeight": 25
+    }
+  ],
+  "trackHeight": 324
+}

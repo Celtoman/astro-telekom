@@ -1,0 +1,47 @@
+{
+  "mutatedNodeIds": [
+    "I54:1986;1608:3",
+    "I54:1986;1608:7",
+    "I54:1995;1608:3",
+    "I54:1995;1608:7",
+    "I54:2004;1608:3",
+    "I54:2004;1608:7",
+    "I54:2013;1608:3",
+    "I54:2013;1608:7"
+  ],
+  "cards": [
+    {
+      "card": "54:1985",
+      "header": "I54:1986;1608:3",
+      "title": "Сервис и подписки",
+      "titleWidth": 122,
+      "titleHeight": 50,
+      "cardHeight": 372
+    },
+    {
+      "card": "54:1994",
+      "header": "I54:1995;1608:3",
+      "title": "Оборудование",
+      "titleWidth": 122,
+      "titleHeight": 50,
+      "cardHeight": 372
+    },
+    {
+      "card": "54:2003",
+      "header": "I54:2004;1608:3",
+      "title": "Дом.ру сервис",
+      "titleWidth": 122,
+      "titleHeight": 50,
+      "cardHeight": 372
+    },
+    {
+      "card": "54:2012",
+      "header": "I54:2013;1608:3",
+      "title": "Бонусы",
+      "titleWidth": 122,
+      "titleHeight": 25,
+      "cardHeight": 372
+    }
+  ],
+  "trackHeight": 372
+}
