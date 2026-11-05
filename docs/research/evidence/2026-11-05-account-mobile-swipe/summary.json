@@ -1,0 +1,15 @@
+{
+  "widths": [
+    390,
+    320
+  ],
+  "rails": 10,
+  "cards": 36,
+  "scrollTransitionsPass": 26,
+  "returnPass": 10,
+  "dragPass": 10,
+  "verticalIndependentPass": 10,
+  "digitalControlsVisible": 0,
+  "heightReductionEachPx": 280,
+  "scope": "Actual IAB player with native mouse drag and wheel, no physical touchscreen/AT conformance claim"
+}

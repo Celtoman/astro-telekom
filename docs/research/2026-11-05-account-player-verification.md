@@ -1,5 +1,7 @@
 # Личный кабинет: проверка мобильных лент в плеере
 
+Актуализация после уточнения владельца: цифровые переключатели убраны из мобильных экземпляров. Повторная проверка прокрутки на 390/320 пройдена; [результат #508](2026-11-05-account-mobile-swipe.md). Ниже сохранён исходный результат проверки кнопок.
+
 05.11.2026. Проверка [#506](https://github.com/Celtoman/astro-telekom/issues/506), продолжение [#505](2026-11-05-account-mobile-rails-figma.md). **SCROLL_PASS / BUTTONS_FAIL / FIX_PENDING**. Дефект зарегистрирован отдельно: [#507](https://github.com/Celtoman/astro-telekom/issues/507). Макеты и переходы в этой проверке не редактировались.
 
 Проверены [Mobile 390](https://www.figma.com/proto/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-2109&starting-point-node-id=118%3A2109&scaling=scale-down-width) и [Mobile 320](https://www.figma.com/proto/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-3096&starting-point-node-id=118%3A3096&scaling=scale-down-width) в авторизованном браузере Codex/IAB. Авторизация Figma в Codex оказалась достаточной; повторный вход в Chrome не требовался.

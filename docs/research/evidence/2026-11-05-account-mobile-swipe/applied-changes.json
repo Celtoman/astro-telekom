@@ -1,0 +1,116 @@
+{
+  "mutatedNodeIds": [
+    "I118:2318;184:200",
+    "I118:2348;184:671",
+    "I118:2420;184:926",
+    "I118:2448;184:1322",
+    "I118:2448;184:1338",
+    "I118:3283;184:213",
+    "I118:3313;184:688",
+    "I118:3385;184:939",
+    "I118:3413;184:1354",
+    "I118:3413;184:1370",
+    "214:3852",
+    "218:4526"
+  ],
+  "screens": [
+    {
+      "id": "118:2109",
+      "width": 390,
+      "beforeHeight": 17992.140625,
+      "afterHeight": 17712.140625,
+      "hiddenNavCount": 5,
+      "rails": [
+        {
+          "id": "I118:2318;184:199",
+          "w": 358,
+          "h": 418,
+          "absoluteY": 4195.396484375,
+          "overflow": "HORIZONTAL",
+          "cardCount": 3
+        },
+        {
+          "id": "I118:2348;184:669",
+          "w": 358,
+          "h": 372,
+          "absoluteY": 5806.55322265625,
+          "overflow": "HORIZONTAL",
+          "cardCount": 4
+        },
+        {
+          "id": "I118:2420;184:925",
+          "w": 358,
+          "h": 397,
+          "absoluteY": 6683.1455078125,
+          "overflow": "HORIZONTAL",
+          "cardCount": 3
+        },
+        {
+          "id": "I118:2448;184:1321",
+          "w": 318,
+          "h": 300,
+          "absoluteY": 7596.49755859375,
+          "overflow": "HORIZONTAL",
+          "cardCount": 4
+        },
+        {
+          "id": "I118:2448;184:1337",
+          "w": 358,
+          "h": 498,
+          "absoluteY": 8315.7158203125,
+          "overflow": "HORIZONTAL",
+          "cardCount": 4
+        }
+      ]
+    },
+    {
+      "id": "118:3096",
+      "width": 320,
+      "beforeHeight": 19881.787109375,
+      "afterHeight": 19601.787109375,
+      "hiddenNavCount": 5,
+      "rails": [
+        {
+          "id": "I118:3283;184:212",
+          "w": 288,
+          "h": 538,
+          "absoluteY": 4781.9052734375,
+          "overflow": "HORIZONTAL",
+          "cardCount": 3
+        },
+        {
+          "id": "I118:3313;184:686",
+          "w": 288,
+          "h": 492,
+          "absoluteY": 6563.14306640625,
+          "overflow": "HORIZONTAL",
+          "cardCount": 4
+        },
+        {
+          "id": "I118:3385;184:938",
+          "w": 288,
+          "h": 495,
+          "absoluteY": 7519.66943359375,
+          "overflow": "HORIZONTAL",
+          "cardCount": 3
+        },
+        {
+          "id": "I118:3413;184:1353",
+          "w": 248,
+          "h": 324,
+          "absoluteY": 8614.322265625,
+          "overflow": "HORIZONTAL",
+          "cardCount": 4
+        },
+        {
+          "id": "I118:3413;184:1369",
+          "w": 288,
+          "h": 594,
+          "absoluteY": 9344.150390625,
+          "overflow": "HORIZONTAL",
+          "cardCount": 4
+        }
+      ]
+    }
+  ]
+}

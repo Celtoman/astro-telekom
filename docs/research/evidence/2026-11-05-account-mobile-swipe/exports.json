@@ -1,0 +1,227 @@
+{
+  "source": "Actual Codex/IAB Figma player screenshots; mobile-without-buttons.png is a crop and comparison of 390-normal-first.png and 320-normal-first.png",
+  "files": [
+    {
+      "file": "320-features-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "29f11478950038792621e70108fda1a87679bc2d5d3e4348762814d469bb880b"
+    },
+    {
+      "file": "320-features-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "c89f6317fd6126a18e670034bb9d0d02bb0ba44163e3208bb7f36ee870ef1643"
+    },
+    {
+      "file": "320-features-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "06d255efacb91f1f0140306a20d64479425d136fe49681595c8f7de7e285dd21"
+    },
+    {
+      "file": "320-login-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "09ad0a122465d8001dc440bdaeddfc83ced0c21517f8886520a67ff8f0103e2f"
+    },
+    {
+      "file": "320-login-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "51b8697800cf2a10e7c5b0e8ae7ffcc16dcfaf51c8f18adb6013d9d71428611b"
+    },
+    {
+      "file": "320-login-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "7211eea2c21a3e28ac472a1fb7df17246da9e44eb70d03b8cc8ce21113fd9ef9"
+    },
+    {
+      "file": "320-menu-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "7234ceaac8d96f7392cc2fee867f4517ce155fbc822e3738239e51bc9f85a323"
+    },
+    {
+      "file": "320-menu-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "eeeb3c2af2da44aad39280a3adf88aa1e9a48d7b98f234f8e6220e60586b2e9a"
+    },
+    {
+      "file": "320-menu-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "f4f3772a1af47151319512c6917c787e4557a2c190eab8a759588d4aecc67f46"
+    },
+    {
+      "file": "320-normal-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "ee302a3ff3a6e8c22ad53449e77678453986cb22398858dea56e28fd7928ebae"
+    },
+    {
+      "file": "320-normal-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "d489e709c32486af21bc08af8480bf39aa2c36ad06aab29ec40f68a5d5e809bd"
+    },
+    {
+      "file": "320-normal-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "ee302a3ff3a6e8c22ad53449e77678453986cb22398858dea56e28fd7928ebae"
+    },
+    {
+      "file": "320-overview-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "ee302a3ff3a6e8c22ad53449e77678453986cb22398858dea56e28fd7928ebae"
+    },
+    {
+      "file": "320-overview-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "d489e709c32486af21bc08af8480bf39aa2c36ad06aab29ec40f68a5d5e809bd"
+    },
+    {
+      "file": "320-overview-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "91a5dc80a65f370555bb867c1950431c0afb87124508fc0b6e3f696c7b75dbf4"
+    },
+    {
+      "file": "320-recovery-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "cc49866991e5c93dea251738e9f3f5d7e0a2e0caf764dafba846878145763ad4"
+    },
+    {
+      "file": "320-recovery-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "0f73ed5a58a967fd0c1fc26f3a393a85e0fd945011a3d327529f8ff351ad3f05"
+    },
+    {
+      "file": "320-recovery-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "bcc89f078394c9bd3c1bdd3d504fa0499319d0945054a1a6ccac33181cf218d8"
+    },
+    {
+      "file": "390-features-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "4a8d352e81f3b931d38c37d1ecb6140523a610016bb5198076da5841a0ae2667"
+    },
+    {
+      "file": "390-features-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "87270066c4ad8633493a49bd083eb705fc5d1776ce2b87740fcc348c073f7b52"
+    },
+    {
+      "file": "390-features-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "48d2e83c2c033bd54d0df28c2fc35c8ba4827db92e89ad94854974418755a40b"
+    },
+    {
+      "file": "390-login-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "9c02b91eb47d87d828ae73f8f36be66e4fa67625135a71c1257470c2e056d795"
+    },
+    {
+      "file": "390-login-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "185fa56a93d626894eeaa59ec537141acbd1b01817b5975d25a3c892a3bb8a4d"
+    },
+    {
+      "file": "390-login-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "b6e6a0923b649cda767b39b09f68acfc475b5dc0d5be2f0432bfcb08c832545f"
+    },
+    {
+      "file": "390-menu-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "9280a742c8df3bbc9b9f98c5c73927f9ed4fa2c516b21866716fc91d105d1e8d"
+    },
+    {
+      "file": "390-menu-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "4179e5ea066f36a610a8f649e9c08917ed61b90e8579655ec6897b2a671bce9a"
+    },
+    {
+      "file": "390-menu-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "ba3d4b54d82eed29ce47fb7df53a34e491d21413f75208a7525ec25f6a2c025b"
+    },
+    {
+      "file": "390-normal-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "9c02b91eb47d87d828ae73f8f36be66e4fa67625135a71c1257470c2e056d795"
+    },
+    {
+      "file": "390-normal-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "185fa56a93d626894eeaa59ec537141acbd1b01817b5975d25a3c892a3bb8a4d"
+    },
+    {
+      "file": "390-normal-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "9c02b91eb47d87d828ae73f8f36be66e4fa67625135a71c1257470c2e056d795"
+    },
+    {
+      "file": "390-overview-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "9ce1a49e24543fdc0454a68341302a3d1af5ab72061738570cbd238bbb7b0aba"
+    },
+    {
+      "file": "390-overview-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "b84bc494211b4bbb5fb36f7b6ef9ba077dabaa9db77ecfe391a8354a97f7689e"
+    },
+    {
+      "file": "390-overview-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "4a8feaef0db8cb9bf88745a85bb75d4e3a12971baec6418d3d2a7b3f445ce5ee"
+    },
+    {
+      "file": "390-recovery-first.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "47ed28bce696a3ddf3bab871f67917dadf0197bb65080c305c7c6a0d51266ed8"
+    },
+    {
+      "file": "390-recovery-last.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "b625374780d217724051c980605df0cd4219d0e40813b1e796059cf5013a56a8"
+    },
+    {
+      "file": "390-recovery-return.png",
+      "width": 1280,
+      "height": 720,
+      "sha256": "02fcb7c1e49019f24d9efbee24cd0ee110fd5e2492bcdb94fbc42c90b7c92a35"
+    },
+    {
+      "file": "mobile-without-buttons.png",
+      "width": 770,
+      "height": 760,
+      "sha256": "f6c160e09eca1fe96ca007bc8cb795cf26eb658d62164b4aee511918e6efd5aa"
+    }
+  ]
+}

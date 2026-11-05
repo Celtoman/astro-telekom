@@ -1,0 +1,129 @@
+ствия провайдера.
+  - article:
+    - paragraph: Мобильное приложение Мой Дом.ру
+    - paragraph: Удобное мобильное приложение «Мой Дом.ру» для Android также позволяет легко связаться со службой поддержки.
+    - link
+    - link
+    - link
+    - paragraph:
+      - text: Войдите в приложение под своей учетной записью и выберите «Помощь» на главном экране — иконка в виде сердечка. В этом разделе доступны несколько инструментов — онлайн-чат, диагностика неполадок,
+      - link:
+        - /url: https://tarify-dom.ru/proverit-skorost-interneta
+        - text: тест скорости интернета
+      - text: . Кроме того здесь размещена полезная база ответов на
+      - link:
+        - /url: https://tarify-dom.ru/faq
+        - text: популярные вопросы
+      - text: ", которая поможет решить проблему самостоятельно."
+    - article:
+  - article:
+    - paragraph: Часто задаваемые вопросы (FAQ)
+    - article:
+      - button:
+        - paragraph: Как позвонить в Дом.ру?
+        - article
+    - article:
+      - button:
+        - paragraph: Что такое личный кабинет Дом ру?
+        - article
+    - article:
+      - button:
+        - paragraph: Какие возможности предоставляет личный кабинет Дом.ру?
+        - article
+    - article:
+      - button:
+        - paragraph: Как оплатить Дом ру через личный кабинет?
+        - article
+    - article:
+      - button:
+        - paragraph: Как изменить тариф через личный кабинет Дом.ру?
+        - article
+    - article:
+      - button:
+        - paragraph: Какие способы оплаты доступны в личном кабинете Дом.ру?
+        - article
+  - article:
+    - paragraph: Подключение · 8:00–22:00
+    - link:
+      - paragraph:
+        - link:
+          - /url: tel:+78005557244
+          - text: 8-800-555-72-44
+    - paragraph: Поддержка · круглосуточно
+    - link:
+      - paragraph: 8-800-250-77-77
+    - link:
+      - paragraph: Оставить заявку
+    - article:
+    - paragraph: Домашний интернет
+    - paragraph: Интернет + ТВ
+    - paragraph: Телевидение
+    - paragraph: Тарифы
+    - paragraph: Популярные вопросы
+    - paragraph: Контакты
+    - paragraph: Проверить адрес
+    - paragraph: Оборудование
+    - link:
+      - link:
+        - link:
+          - /url: https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?node-id=620-43746&starting-point-node-id=620%3A43746
+          - text: Техническая поддержка
+    - link:
+      - link:
+        - link:
+          - /url: https://tarify-dom.ru/goroda-obsluzhivaniya-domru
+          - text: Города обслуживания
+    - link:
+      - paragraph:
+        - link:
+          - /url: https://tarify-dom.ru/policy
+          - text: Политика конфиденциальности
+    - link:
+      - paragraph:
+        - link:
+          - /url: https://tarify-dom.ru/soglasie
+          - text: Согласие на обработку данных
+    - link:
+      - paragraph:
+        - link:
+          - /url: https://tarify-dom.ru/politika-obrabotki-faylov-kuki
+          - text: Политика cookie
+    - paragraph: Материалы сайта носят информационный характер и не являются публичной офертой (ст. 437 ГК РФ).
+    - paragraph:
+      - text: "© 2020–2026 tarify-dom.ru — сайт ИП Кочергина Александра Андреевича (ИНН 165038398334, ОГРНИП 323169000159136) и не относится к официальным ресурсам Дом.ру. Официальный сайт:"
+      - link:
+        - /url: https://dom.ru/
+        - text: dom.ru
+      - text: .
+- navigation:
+  - button:
+    - text: Restart
+    - generic: R
+- text: Give feedback, ask a question, or just leave a note of appreciation. Click anywhere in the file to leave a comment.
+- dialog "Accessibility settings":
+  - heading "Accessibility settings" [level=2]
+  - checkbox "Adapt content for screen readers" [active]
+  - generic: Adapt content for screen readers
+  - paragraph: Provide text and structure for assistive technologies in Figma Design, FigJam, Slides, and Buzz.
+  - checkbox "Underline links in UI"
+  - generic: Underline links in UI
+  - paragraph: Distinguish links with an underline in panels and dialogs. Design content won’t change.
+  - checkbox "Simplify focus navigation in Actions menu"
+  - generic: Simplify focus navigation in Actions menu
+  - paragraph: Focus follows default tab stops. (Recommended for screen readers.)
+  - checkbox "Enhanced contrast mode"
+  - generic: Enhanced contrast mode
+  - paragraph: Contrast between text and controls and their backgrounds will be increased.
+  - checkbox "Ignore Figma shortcuts in text fields"
+  - generic: Ignore Figma shortcuts in text fields
+  - paragraph: Using special characters in text fields will not trigger Figma shortcuts.
+  - checkbox "Rotate layers with a keyboard shortcut"
+  - generic: Rotate layers with a keyboard shortcut
+  - paragraph: Ctrl+Alt+↑ and Ctrl+Alt+↓ will rotate layers instead of moving them forward and back.
+  - checkbox "Automatically follow a spotlight" [checked]
+  - generic: Automatically follow a spotlight
+  - paragraph:
+    - generic: When a collaborator spotlights themselves, you'll automatically follow them on your screen.
+  - button "Close":
+- alert
+- alert
