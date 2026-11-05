@@ -179,3 +179,5 @@ Worker поддерживает три provider-режима. Coolify Compose з
 ## ACCOUNT — внедрение в test-контуре
 
 Информационная страница `/lichnyy-kabinet-dom-ru` перенесена в код:13 собственных программных секций и готовые Header/Address-only/FAQ/Footer. Одна защищённая форма `/templates/account` редактирует H1, вступление, ссылку входа,14 фиксированных иллюстраций и FAQ; инструкции и условия остаются в коде. ACCOUNT добавляется только в новый snapshot, старые снимки совместимы. Код и согласованная CMS-ревизия29 выпущены в защищённый test-контур: [страница](https://tv-internet-dom.ru/lichnyy-kabinet-dom-ru), [редактор](https://admin.tv-internet-dom.ru/templates/account). [Внешний выпуск и полный diff](docs/research/2026-11-05-account-test-release.md), [локальные проверки и ограничения](docs/research/2026-11-05-account-implementation.md).
+
+Мобильная прокрутка ACCOUNT390/320: [диагностика #521 и воспроизводимый QA](docs/research/2026-11-05-account-mobile-scroll.md). Сценарий в `scripts/qa/account-mobile-scroll.mjs` проверяет natural touch, wheel и keyboard отдельно; публичный дизайн и CMS этим QA не меняются.

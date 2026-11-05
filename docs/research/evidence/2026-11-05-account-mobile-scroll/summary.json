@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-11-05T20:54:24.034Z",
+  "protocolSHA256": "c704b303973af0c187c81f0b1d9e7edc9bc0c53ea2fd09e4d608def49ad7e524",
+  "browsers": [
+    {
+      "name": "edge-final",
+      "version": "156.0.4314.58",
+      "touchContexts": 4,
+      "wheelKeyboardContexts": 2
+    },
+    {
+      "name": "chrome-final",
+      "version": "156.0.8078.80",
+      "touchContexts": 4,
+      "wheelKeyboardContexts": 2
+    }
+  ],
+  "touchRailRuns": 40,
+  "verticalGestures": 400,
+  "fastTransitions": 40,
+  "wheelKeyboardRailRuns": 20,
+  "fullyVisibleCardObservations": 288,
+  "programmaticWrites": 0,
+  "totalVerticalChecks": 460,
+  "status": "PASS"
+}

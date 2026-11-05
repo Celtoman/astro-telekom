@@ -260,7 +260,7 @@
 | TD-216 | [#515](https://github.com/Celtoman/astro-telekom/issues/515) 🟢 | Разобрать low/moderate advisories прямых и транзитивных зависимостей после high-fix ACCOUNT |
 | TD-217 | [#516](https://github.com/Celtoman/astro-telekom/issues/516) ✅ | Automatic CODE в isolated non-root runtime не завершает gate ACCOUNT; требуется диагностика причины |
 | TD-218 | [#517](https://github.com/Celtoman/astro-telekom/issues/517) 🟢 | Привязать abort Node test к остановке owned runtime fixture и гарантированному cleanup |
-| TD-219 | [#521](https://github.com/Celtoman/astro-telekom/issues/521) 🟢 | Стабилизировать составной CDP-прогон смены wheel/touch/reset; production-дефект не подтверждён |
+| TD-219 | [#521](https://github.com/Celtoman/astro-telekom/issues/521) ✅ | Стабилизировать составной CDP-прогон смены wheel/touch/reset; production-дефект не подтверждён |
 
 ## Находки review внедрения ADDRESS
 

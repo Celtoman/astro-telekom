@@ -6,7 +6,7 @@
 
 Живой документ. Обновлять в том же коммите, что и любое добавление, удаление или существенное изменение теста в `tests/`. Должен точно отражать, что проверяет каждый файл — не оставлять устаревшим.
 
-Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [AGENTS.md](../AGENTS.md)). Импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском.
+Все тесты — `node --test`, запускаются командой `node --test tests/*.test.cjs tests/*.test.mjs` (см. [AGENTS.md](../AGENTS.md)). API-тесты импортируют скомпилированный `apps/api/dist/*.js` — после правок в `apps/api/src` нужен `pnpm --filter @provider/api run build` перед запуском. Тесты QA-валидатора работают с чистым JavaScript-модулем и API dist не требуют.
 
 **Baseline: 889/889 passing на Linux, 3 ноября 2026 года** (`pnpm check`, включая HOME Hero 2.0.0, атомарный/idempotent seed и publication preflight на PostgreSQL 18, PostgreSQL 18/Redis rehearsal удаления расписания, Caddy rehearsal атомарного serving, реальную Astro-сборку exact snapshot, Redis/BullMQ-восстановление UNCERTAIN, HTTP-проверку serving context, изоляцию control-соединений при reload и сквозную SQL/HTTP/Astro/Caddy публикацию с восстановлением). Допустимого красного baseline нет: падение обязательной для затронутой области проверки требует исправления до коммита; перед push кода полный gate должен быть зеленым. Это единственный документ, где хранится точное количество тестов.
 
@@ -282,3 +282,7 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 Браузерные ручные/эмулированные проверки и ограничения внешнего rollout находятся в [отчёте ACCOUNT](research/2026-11-05-account-implementation.md); они не подменяются количеством unit tests.
 
 `publication-runtime.test.mjs` / `rehearse-publication-runtime.mjs` дополнительно проверяют переход old snapshot без ACCOUNT → CMS snapshot с ACCOUNT и14 native decoded assets в настоящем Linux/non-root image, выдачу нового URL/asset через Caddy и последующий CODE/restart. Windows observation budget240s для CODE с elapsed diagnostics, Linux120s; production activation guards неизменны. При неуспехе до cleanup читается защищённый CODE outcome без объявления ручного retry автоматическим успехом. Ограничение abort/child cleanup отдельно в #517.
+
+## ACCOUNT: проверка достоверности мобильного QA (#521)
+
+`account-mobile-scroll-qa.test.mjs` —8 regression cases для INVALID после программного reset/отсутствующего ввода/неполных данных, исходного zero-delta, двух направлений вертикали/root-X, полной видимости карточки вместо peek, видимого gesture hit-point и короткой коррекции320 без осцилляции. Это тесты валидатора QA, не физического touch. Standalone `scripts/qa/account-mobile-scroll.mjs` использует установленный Playwright, Edge/Chrome и Basic Auth из окружения;2 ширины/5 лент/18 карточек, natural touch отдельно от wheel/keyboard, контроль доставки ввода и нулевых JS reset. В обычный `pnpm test` сетевой браузерный прогон не запускается; [результаты и ограничения](research/2026-11-05-account-mobile-scroll.md) фиксируются отдельно.

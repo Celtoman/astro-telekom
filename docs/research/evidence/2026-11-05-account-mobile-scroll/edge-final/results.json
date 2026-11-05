@@ -1,0 +1,3055 @@
+{
+  "url": "https://tv-internet-dom.ru/lichnyy-kabinet-dom-ru",
+  "startedAt": "2026-11-05T20:42:12.347Z",
+  "protocolSHA256": "c704b303973af0c187c81f0b1d9e7edc9bc0c53ea2fd09e4d608def49ad7e524",
+  "node": "v22.23.2",
+  "environment": "win32 Chromium browser emulation; physical devices not tested",
+  "runs": [
+    {
+      "channel": "msedge",
+      "version": "156.0.4314.58",
+      "width": 390,
+      "height": 900,
+      "repetition": 0,
+      "input": "touch",
+      "rails": [
+        {
+          "index": 0,
+          "name": "Способы входа",
+          "forward": [
+            0,
+            1,
+            2
+          ],
+          "backward": [
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 3970,
+              "after": 4105,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4105,
+              "after": 3970,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 3970,
+              "after": 4105,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4105,
+              "after": 3970,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 3970,
+              "after": 4105,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 4105,
+              "after": 3970,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 3970,
+              "after": 4105,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4105,
+              "after": 3970,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 3970,
+              "after": 4105,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4105,
+              "after": 3970,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 3,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 1,
+          "name": "Способы восстановления доступа",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 5541,
+              "after": 5676,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 5676,
+              "after": 5541,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 5541,
+              "after": 5676,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 5676,
+              "after": 5541,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 5541,
+              "after": 5676,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 5676,
+              "after": 5541,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 5541,
+              "after": 5676,
+              "railXBefore": 994,
+              "railXAfter": 994,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 5676,
+              "after": 5541,
+              "railXBefore": 994,
+              "railXAfter": 994,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 5541,
+              "after": 5676,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 5676,
+              "after": 5541,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 2,
+          "name": "Возможности личного кабинета",
+          "forward": [
+            0,
+            1,
+            2
+          ],
+          "backward": [
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6460,
+              "after": 6595,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6595,
+              "after": 6460,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6460,
+              "after": 6595,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6595,
+              "after": 6460,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 6460,
+              "after": 6595,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 6595,
+              "after": 6460,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6460,
+              "after": 6595,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6595,
+              "after": 6460,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6460,
+              "after": 6595,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6595,
+              "after": 6460,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 3,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 3,
+          "name": "Разделы верхнего меню",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7355,
+              "after": 7490,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7490,
+              "after": 7355,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7355,
+              "after": 7490,
+              "railXBefore": 572,
+              "railXAfter": 572,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7490,
+              "after": 7355,
+              "railXBefore": 572,
+              "railXAfter": 572,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 7355,
+              "after": 7490,
+              "railXBefore": 572,
+              "railXAfter": 572,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 7490,
+              "after": 7355,
+              "railXBefore": 572,
+              "railXAfter": 572,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7355,
+              "after": 7490,
+              "railXBefore": 874,
+              "railXAfter": 874,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7490,
+              "after": 7355,
+              "railXBefore": 874,
+              "railXAfter": 874,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7355,
+              "after": 7490,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7490,
+              "after": 7355,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 4,
+          "name": "Блоки главной страницы кабинета",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7996,
+              "after": 8131,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8131,
+              "after": 7996,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7996,
+              "after": 8131,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8131,
+              "after": 7996,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 7996,
+              "after": 8131,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 8131,
+              "after": 7996,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7996,
+              "after": 8131,
+              "railXBefore": 994,
+              "railXAfter": 994,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8131,
+              "after": 7996,
+              "railXBefore": 994,
+              "railXAfter": 994,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7996,
+              "after": 8131,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8131,
+              "after": 7996,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        }
+      ],
+      "artifactId": "ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205",
+      "cardCount": 18,
+      "programmaticWrites": 0
+    },
+    {
+      "channel": "msedge",
+      "version": "156.0.4314.58",
+      "width": 390,
+      "height": 900,
+      "repetition": 1,
+      "input": "touch",
+      "rails": [
+        {
+          "index": 0,
+          "name": "Способы входа",
+          "forward": [
+            0,
+            1,
+            2
+          ],
+          "backward": [
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 3994,
+              "after": 4129,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4129,
+              "after": 3994,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 3994,
+              "after": 4129,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4129,
+              "after": 3994,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 3994,
+              "after": 4129,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 4129,
+              "after": 3994,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 3994,
+              "after": 4129,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4129,
+              "after": 3994,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 3994,
+              "after": 4129,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4129,
+              "after": 3994,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 3,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 1,
+          "name": "Способы восстановления доступа",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 5565,
+              "after": 5700,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 5700,
+              "after": 5565,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 5565,
+              "after": 5700,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 5700,
+              "after": 5565,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 5565,
+              "after": 5700,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 5700,
+              "after": 5565,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 5565,
+              "after": 5700,
+              "railXBefore": 994,
+              "railXAfter": 994,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 5700,
+              "after": 5565,
+              "railXBefore": 994,
+              "railXAfter": 994,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 5565,
+              "after": 5700,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 5700,
+              "after": 5565,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 2,
+          "name": "Возможности личного кабинета",
+          "forward": [
+            0,
+            1,
+            2
+          ],
+          "backward": [
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6484,
+              "after": 6619,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6619,
+              "after": 6484,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6484,
+              "after": 6619,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6619,
+              "after": 6484,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 6484,
+              "after": 6619,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 6619,
+              "after": 6484,
+              "railXBefore": 310,
+              "railXAfter": 310,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6484,
+              "after": 6619,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6619,
+              "after": 6484,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6484,
+              "after": 6619,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6619,
+              "after": 6484,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 3,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 3,
+          "name": "Разделы верхнего меню",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7379,
+              "after": 7514,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7514,
+              "after": 7379,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7379,
+              "after": 7514,
+              "railXBefore": 572,
+              "railXAfter": 572,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7514,
+              "after": 7379,
+              "railXBefore": 572,
+              "railXAfter": 572,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 7379,
+              "after": 7514,
+              "railXBefore": 572,
+              "railXAfter": 572,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 7514,
+              "after": 7379,
+              "railXBefore": 572,
+              "railXAfter": 572,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7379,
+              "after": 7514,
+              "railXBefore": 874,
+              "railXAfter": 874,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7514,
+              "after": 7379,
+              "railXBefore": 874,
+              "railXAfter": 874,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7379,
+              "after": 7514,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7514,
+              "after": 7379,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 4,
+          "name": "Блоки главной страницы кабинета",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8044,
+              "after": 8179,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8179,
+              "after": 8044,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8044,
+              "after": 8179,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8179,
+              "after": 8044,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 8044,
+              "after": 8179,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 8179,
+              "after": 8044,
+              "railXBefore": 652,
+              "railXAfter": 652,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8044,
+              "after": 8179,
+              "railXBefore": 994,
+              "railXAfter": 994,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8179,
+              "after": 8044,
+              "railXBefore": 994,
+              "railXAfter": 994,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8044,
+              "after": 8179,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8179,
+              "after": 8044,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        }
+      ],
+      "artifactId": "ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205",
+      "cardCount": 18,
+      "programmaticWrites": 0
+    },
+    {
+      "channel": "msedge",
+      "version": "156.0.4314.58",
+      "width": 320,
+      "height": 900,
+      "repetition": 0,
+      "input": "touch",
+      "rails": [
+        {
+          "index": 0,
+          "name": "Способы входа",
+          "forward": [
+            0,
+            1,
+            2
+          ],
+          "backward": [
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 4620,
+              "after": 4755,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4755,
+              "after": 4620,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 4620,
+              "after": 4755,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4755,
+              "after": 4620,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 4620,
+              "after": 4755,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 4755,
+              "after": 4620,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 4620,
+              "after": 4755,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4755,
+              "after": 4620,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 4620,
+              "after": 4755,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4755,
+              "after": 4620,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 3,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 1,
+          "name": "Способы восстановления доступа",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6374,
+              "after": 6509,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6509,
+              "after": 6374,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6374,
+              "after": 6509,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6509,
+              "after": 6374,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 6374,
+              "after": 6509,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 6509,
+              "after": 6374,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6374,
+              "after": 6509,
+              "railXBefore": 784,
+              "railXAfter": 784,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6509,
+              "after": 6374,
+              "railXBefore": 784,
+              "railXAfter": 784,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6374,
+              "after": 6509,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6509,
+              "after": 6374,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 2,
+          "name": "Возможности личного кабинета",
+          "forward": [
+            0,
+            1,
+            2
+          ],
+          "backward": [
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7349,
+              "after": 7484,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7484,
+              "after": 7349,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7349,
+              "after": 7484,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7484,
+              "after": 7349,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 7349,
+              "after": 7484,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 7484,
+              "after": 7349,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7349,
+              "after": 7484,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7484,
+              "after": 7349,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7349,
+              "after": 7484,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7484,
+              "after": 7349,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 3,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 3,
+          "name": "Разделы верхнего меню",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8389,
+              "after": 8524,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8524,
+              "after": 8389,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8389,
+              "after": 8524,
+              "railXBefore": 528,
+              "railXAfter": 528,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8524,
+              "after": 8389,
+              "railXBefore": 528,
+              "railXAfter": 528,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 8389,
+              "after": 8524,
+              "railXBefore": 528,
+              "railXAfter": 528,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 8524,
+              "after": 8389,
+              "railXBefore": 528,
+              "railXAfter": 528,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8389,
+              "after": 8524,
+              "railXBefore": 792,
+              "railXAfter": 792,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8524,
+              "after": 8389,
+              "railXBefore": 792,
+              "railXAfter": 792,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8389,
+              "after": 8524,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8524,
+              "after": 8389,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 4,
+          "name": "Блоки главной страницы кабинета",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 9183,
+              "after": 9318,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 9318,
+              "after": 9183,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 9183,
+              "after": 9318,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 9318,
+              "after": 9183,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 9183,
+              "after": 9318,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 9318,
+              "after": 9183,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 9183,
+              "after": 9318,
+              "railXBefore": 784,
+              "railXAfter": 784,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 9318,
+              "after": 9183,
+              "railXBefore": 784,
+              "railXAfter": 784,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 9183,
+              "after": 9318,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 9318,
+              "after": 9183,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        }
+      ],
+      "artifactId": "ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205",
+      "cardCount": 18,
+      "programmaticWrites": 0
+    },
+    {
+      "channel": "msedge",
+      "version": "156.0.4314.58",
+      "width": 320,
+      "height": 900,
+      "repetition": 1,
+      "input": "touch",
+      "rails": [
+        {
+          "index": 0,
+          "name": "Способы входа",
+          "forward": [
+            0,
+            1,
+            2
+          ],
+          "backward": [
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 4620,
+              "after": 4755,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4755,
+              "after": 4620,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 4620,
+              "after": 4755,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4755,
+              "after": 4620,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 4620,
+              "after": 4755,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 4755,
+              "after": 4620,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 4620,
+              "after": 4755,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4755,
+              "after": 4620,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 4620,
+              "after": 4755,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 4755,
+              "after": 4620,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 3,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 1,
+          "name": "Способы восстановления доступа",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6374,
+              "after": 6509,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6509,
+              "after": 6374,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6374,
+              "after": 6509,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6509,
+              "after": 6374,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 6374,
+              "after": 6509,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 6509,
+              "after": 6374,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6374,
+              "after": 6509,
+              "railXBefore": 784,
+              "railXAfter": 784,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6509,
+              "after": 6374,
+              "railXBefore": 784,
+              "railXAfter": 784,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 6374,
+              "after": 6509,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 6509,
+              "after": 6374,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 2,
+          "name": "Возможности личного кабинета",
+          "forward": [
+            0,
+            1,
+            2
+          ],
+          "backward": [
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7349,
+              "after": 7484,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7484,
+              "after": 7349,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7349,
+              "after": 7484,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7484,
+              "after": 7349,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 7349,
+              "after": 7484,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 7484,
+              "after": 7349,
+              "railXBefore": 240,
+              "railXAfter": 240,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7349,
+              "after": 7484,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7484,
+              "after": 7349,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 7349,
+              "after": 7484,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 7484,
+              "after": 7349,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 3,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 3,
+          "name": "Разделы верхнего меню",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8389,
+              "after": 8524,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8524,
+              "after": 8389,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8389,
+              "after": 8524,
+              "railXBefore": 528,
+              "railXAfter": 528,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8524,
+              "after": 8389,
+              "railXBefore": 528,
+              "railXAfter": 528,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 8389,
+              "after": 8524,
+              "railXBefore": 528,
+              "railXAfter": 528,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 8524,
+              "after": 8389,
+              "railXBefore": 528,
+              "railXAfter": 528,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8389,
+              "after": 8524,
+              "railXBefore": 792,
+              "railXAfter": 792,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8524,
+              "after": 8389,
+              "railXBefore": 792,
+              "railXAfter": 792,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 8389,
+              "after": 8524,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 8524,
+              "after": 8389,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        },
+        {
+          "index": 4,
+          "name": "Блоки главной страницы кабинета",
+          "forward": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "backward": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "vertical": [
+            {
+              "position": "first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 9183,
+              "after": 9318,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 9318,
+              "after": 9183,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": 1,
+              "diagonal": false,
+              "before": 9183,
+              "after": 9318,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle",
+              "direction": -1,
+              "diagonal": false,
+              "before": 9318,
+              "after": 9183,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": 1,
+              "diagonal": true,
+              "before": 9183,
+              "after": 9318,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "middle-diagonal",
+              "direction": -1,
+              "diagonal": true,
+              "before": 9318,
+              "after": 9183,
+              "railXBefore": 512,
+              "railXAfter": 512,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": 1,
+              "diagonal": false,
+              "before": 9183,
+              "after": 9318,
+              "railXBefore": 784,
+              "railXAfter": 784,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "last",
+              "direction": -1,
+              "diagonal": false,
+              "before": 9318,
+              "after": 9183,
+              "railXBefore": 784,
+              "railXAfter": 784,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": 1,
+              "diagonal": false,
+              "before": 9183,
+              "after": 9318,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": 135,
+              "horizontalDelta": 0
+            },
+            {
+              "position": "returned-first",
+              "direction": -1,
+              "diagonal": false,
+              "before": 9318,
+              "after": 9183,
+              "railXBefore": 0,
+              "railXAfter": 0,
+              "status": "PASS",
+              "verticalDelta": -135,
+              "horizontalDelta": 0
+            }
+          ],
+          "cards": 4,
+          "fastTransition": {
+            "status": "PASS",
+            "verticalDelta": 135,
+            "horizontalDelta": 0
+          },
+          "status": "PASS"
+        }
+      ],
+      "artifactId": "ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205",
+      "cardCount": 18,
+      "programmaticWrites": 0
+    },
+    {
+      "channel": "msedge",
+      "version": "156.0.4314.58",
+      "width": 390,
+      "height": 900,
+      "input": "wheel-keyboard",
+      "rails": [
+        {
+          "index": 0,
+          "name": "Способы входа",
+          "status": "PASS",
+          "wheelLast": 652,
+          "wheelFirst": 0,
+          "verticalDelta": 160,
+          "keyboardBothEdges": true
+        },
+        {
+          "index": 1,
+          "name": "Способы восстановления доступа",
+          "status": "PASS",
+          "wheelLast": 994,
+          "wheelFirst": 0,
+          "verticalDelta": 160,
+          "keyboardBothEdges": true
+        },
+        {
+          "index": 2,
+          "name": "Возможности личного кабинета",
+          "status": "PASS",
+          "wheelLast": 652,
+          "wheelFirst": 0,
+          "verticalDelta": 160,
+          "keyboardBothEdges": true
+        },
+        {
+          "index": 3,
+          "name": "Разделы верхнего меню",
+          "status": "PASS",
+          "wheelLast": 874,
+          "wheelFirst": 0,
+          "verticalDelta": 160,
+          "keyboardBothEdges": true
+        },
+        {
+          "index": 4,
+          "name": "Блоки главной страницы кабинета",
+          "status": "PASS",
+          "wheelLast": 994,
+          "wheelFirst": 0,
+          "verticalDelta": 160,
+          "keyboardBothEdges": true
+        }
+      ]
+    },
+    {
+      "channel": "msedge",
+      "version": "156.0.4314.58",
+      "width": 320,
+      "height": 900,
+      "input": "wheel-keyboard",
+      "rails": [
+        {
+          "index": 0,
+          "name": "Способы входа",
+          "status": "PASS",
+          "wheelLast": 512,
+          "wheelFirst": 0,
+          "verticalDelta": 160,
+          "keyboardBothEdges": true
+        },
+        {
+          "index": 1,
+          "name": "Способы восстановления доступа",
+          "status": "PASS",
+          "wheelLast": 784,
+          "wheelFirst": 0,
+          "verticalDelta": 160,
+          "keyboardBothEdges": true
+        },
+        {
+          "index": 2,
+          "name": "Возможности личного кабинета",
+          "status": "PASS",
+          "wheelLast": 512,
+          "wheelFirst": 0,
+          "verticalDelta": 160,
+          "keyboardBothEdges": true
+        },
+        {
+          "index": 3,
+          "name": "Разделы верхнего меню",
+          "status": "PASS",
+          "wheelLast": 792,
+          "wheelFirst": 0,
+          "verticalDelta": 160,
+          "keyboardBothEdges": true
+        },
+        {
+          "index": 4,
+          "name": "Блоки главной страницы кабинета",
+          "status": "PASS",
+          "wheelLast": 784,
+          "wheelFirst": 0,
+          "verticalDelta": 160,
+          "keyboardBothEdges": true
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "completedAt": "2026-11-05T20:50:10.268Z"
+}
