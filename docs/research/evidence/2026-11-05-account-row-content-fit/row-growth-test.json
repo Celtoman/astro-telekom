@@ -1,0 +1,21 @@
+{
+  "mutatedNodeIds": [
+    "54:1687"
+  ],
+  "before": 180,
+  "expanded": {
+    "height": 276,
+    "cards": [
+      276,
+      276
+    ],
+    "rowSizing": "HUG"
+  },
+  "restored": {
+    "height": 180,
+    "cards": [
+      180,
+      180
+    ]
+  }
+}

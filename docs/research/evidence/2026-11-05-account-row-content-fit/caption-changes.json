@@ -1,0 +1,109 @@
+[
+  {
+    "name": "hero",
+    "mutatedNodeIds": [
+      "13:146",
+      "13:143",
+      "13:167",
+      "13:164"
+    ],
+    "removedNodeIds": [],
+    "metrics": [
+      {
+        "caption": "13:146",
+        "image": "13:144",
+        "oldOffset": -50.2105712890625,
+        "newParent": "13:143"
+      },
+      {
+        "caption": "13:167",
+        "image": "13:165",
+        "oldOffset": -170,
+        "newParent": "13:164"
+      }
+    ]
+  },
+  {
+    "name": "registration",
+    "mutatedNodeIds": [
+      "84:1064",
+      "84:1062"
+    ],
+    "removedNodeIds": [],
+    "metrics": [
+      {
+        "caption": "84:1064",
+        "image": "84:1063",
+        "oldOffset": -80,
+        "newParent": "84:1062"
+      }
+    ]
+  },
+  {
+    "name": "login",
+    "mutatedNodeIds": [
+      "53:214",
+      "53:212"
+    ],
+    "removedNodeIds": [],
+    "metrics": [
+      {
+        "caption": "53:214",
+        "image": "53:213",
+        "oldOffset": -86.5,
+        "newParent": "53:212"
+      }
+    ]
+  },
+  {
+    "name": "features",
+    "mutatedNodeIds": [
+      "56:1170",
+      "56:1168"
+    ],
+    "removedNodeIds": [],
+    "metrics": [
+      {
+        "caption": "56:1170",
+        "image": "56:1169",
+        "oldOffset": -156,
+        "newParent": "56:1168"
+      }
+    ]
+  },
+  {
+    "name": "business",
+    "mutatedNodeIds": [
+      "56:2779",
+      "56:2777",
+      "56:2796",
+      "56:2794"
+    ],
+    "removedNodeIds": [],
+    "metrics": [
+      {
+        "caption": "56:2779",
+        "image": "56:2778",
+        "oldOffset": -14.864501953125,
+        "newParent": "56:2777"
+      },
+      {
+        "caption": "56:2796",
+        "image": "56:2795",
+        "oldOffset": -56,
+        "newParent": "56:2794"
+      }
+    ]
+  },
+  {
+    "name": "app",
+    "mutatedNodeIds": [],
+    "removedNodeIds": [
+      "54:1225",
+      "54:1256",
+      "54:1287",
+      "54:1318"
+    ],
+    "metrics": []
+  }
+]

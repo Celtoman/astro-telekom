@@ -1,0 +1,95 @@
+{
+  "source": "Figma native screenshot; detail crops derived from final native PNG",
+  "files": [
+    {
+      "file": "Desktop.png",
+      "width": 1440,
+      "height": 11753,
+      "sha256": "e51495a005a28d0354953e0b3e7c0b0980477587432a029f4f50b156e7bf9d56"
+    },
+    {
+      "file": "Tablet.png",
+      "width": 834,
+      "height": 17786,
+      "sha256": "216194291d292d190916febb27d3ca282fac554a8e4bb1ee3ec1a247e98bf904"
+    },
+    {
+      "file": "Mobile.png",
+      "width": 390,
+      "height": 21195,
+      "sha256": "636f881f72f2d0b0774dffe06e142c6ca94090ccb74719c42b90609dbb086992"
+    },
+    {
+      "file": "Mobile320.png",
+      "width": 320,
+      "height": 23420,
+      "sha256": "e96b90d39e927e240adc921e5fcf16d4ccf15746dcafb13cd180ab14273df55f"
+    },
+    {
+      "file": "Desktop-overview.png",
+      "width": 1440,
+      "height": 2075,
+      "sha256": "ad6b6192dd5b6c7163ddd736e20e2a2627dd7b6c50164bb25f70f33ede7602f4"
+    },
+    {
+      "file": "Tablet-overview.png",
+      "width": 834,
+      "height": 2709,
+      "sha256": "325c74f6fa0faeb9c5a8fa88a14547ce4099a16910435002e92352ed5ff860d1"
+    },
+    {
+      "file": "Mobile-overview.png",
+      "width": 390,
+      "height": 3199,
+      "sha256": "30aecbb31193947c715040d7195dd5f76119e737fa415005e9eac515b2d1874e"
+    },
+    {
+      "file": "Mobile320-blue-cards.png",
+      "width": 320,
+      "height": 1608,
+      "sha256": "6e96319b34345279374a72dd422e65f544f7c6ac2625eeb72483918135117190"
+    },
+    {
+      "file": "Desktop-app.png",
+      "width": 1440,
+      "height": 390,
+      "sha256": "1239875773fa27919163702fb4c04b6b3452e99fa1ae9471ac203de7d947c360"
+    },
+    {
+      "file": "Tablet-app.png",
+      "width": 834,
+      "height": 654,
+      "sha256": "b0cad47eeff28cba6023812e5663afa45a89335d563989cdedfbeed0ab713078"
+    },
+    {
+      "file": "Mobile-app.png",
+      "width": 390,
+      "height": 902,
+      "sha256": "d460356886da5b9be146ae44d5387cc4761b50397c25317fe96be0cb258c6f2e"
+    },
+    {
+      "file": "Mobile320-app.png",
+      "width": 320,
+      "height": 1088,
+      "sha256": "9358b30d6d3c1cd2465c8fc31c0b4b5b645959ddb626476be7ed03a8cd6a5b4a"
+    },
+    {
+      "file": "Tablet-hero.png",
+      "width": 834,
+      "height": 824,
+      "sha256": "37d6620b2d67f99664cccc24142b65b6ef685b32182bc425b0761607f3fcbc59"
+    },
+    {
+      "file": "Desktop-features.png",
+      "width": 1440,
+      "height": 1196,
+      "sha256": "3a53f8b97a0b115e7c1b160a4c9ca3c4b78cc2bcc95bc8e8b144a3502df4af45"
+    },
+    {
+      "file": "Desktop-business.png",
+      "width": 1440,
+      "height": 490,
+      "sha256": "8a6d8daf5f3d7053975f099dc724690f0deed027e432c004cca7058e03367c91"
+    }
+  ]
+}

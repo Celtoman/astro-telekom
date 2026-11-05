@@ -1,5 +1,7 @@
 # Личный кабинет: нумерация, заголовки, FAQ и способы оплаты
 
+Следующая итерация [#503](2026-11-05-account-row-content-fit-figma.md) исправляет ошибочный общий минимум карточек обзора: выравнивание теперь только внутри ряда, высота зависит от содержания. Также восстановлены список «Услуги активны» и выравнивание подписей, удалена подпись мокапа. Значения и рендеры ниже описывают историческое состояние #502.
+
 5 ноября2026. [Задача #502](https://github.com/Celtoman/astro-telekom/issues/502), продолжение [#501](2026-11-05-account-compact-polish-figma.md). Статус: **APPLIED_IN_FIGMA / REVIEW / UNPUBLISHED**. Правки выполнены по прямому поручению владельца, включая разрешённую небольшую редактуру карточки оплаты.
 
 [Desktop1440](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-5) · [Tablet834](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-1066) · [Mobile390](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-2109) · [Mobile320](https://www.figma.com/design/AcPPCDVqYqZIUJ0GXZVlHj?node-id=118-3096).
