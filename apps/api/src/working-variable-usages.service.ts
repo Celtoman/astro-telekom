@@ -1,4 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ACCOUNT_PAGE_SCHEMA } from './account-page-model';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
 import type { VariableUsage } from './catalog-variables';
@@ -71,6 +72,10 @@ export class WorkingVariableUsagesService {
         const path = `workingPages[${index}]`;
         const owner = { entityType: 'PAGE' as const, entityId: page.id, pageType: page.type, cityId: page.cityId ?? undefined, lifecycleStatus: page.status, editorHref: null };
         recordText(page.title, `${path}.title`, owner, usages);
+        if (page.type === 'ACCOUNT') {
+          recordStructured(page.content, ACCOUNT_PAGE_SCHEMA, `${path}.content`, { ...owner, editorHref: '/templates/account' }, usages);
+          continue;
+        }
         recordFields(page.content, ['text'], `${path}.content`, owner, usages);
         for (const [blockIndex, block] of page.blocks.entries()) {
           const blockPath = `${path}.blocks[${blockIndex}]`;

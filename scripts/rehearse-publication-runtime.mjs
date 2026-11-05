@@ -12,6 +12,8 @@ import { htmlInventoryDigest } from '../apps/web/scripts/publication/legacy-base
 const require = createRequire(import.meta.url);
 const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
 const { publicationSource, city } = require('../tests/helpers/publication-source.cjs');
+const { accountPageDefaults } = require('../apps/api/dist/account-page-defaults.js');
+const { ACCOUNT_PAGE_SLUG } = require('../apps/api/dist/account-page-model.js');
 const suffix = randomUUID().slice(0, 8);
 const name = `astro-publication-runtime-${suffix}`;
 const image = `astro-publication-runtime:fixture-${suffix}`;
@@ -22,6 +24,11 @@ const safeRoot = await realpath(root);
 const token = 'runtime-fixture-machine-token-'.repeat(2);
 const rotatedToken = 'rotated-runtime-fixture-machine-token-'.repeat(2);
 const commit = 'c'.repeat(40);
+// This is a fixture observation budget, not a production activation timeout.
+// Docker Desktop bind-mounted builds compete with other rehearsals on Windows.
+// Record elapsed time so a delayed automatic completion is distinguishable from
+// a manual retry. Keep the Linux/CI budget unchanged and every integrity check.
+const codeWaitMs = process.platform === 'win32' ? 240000 : 120000;
 const sha = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 function docker(args, optional = false, timeout = 90000) {
   const result = spawnSync('docker', args, { encoding: 'utf8', timeout, maxBuffer: 8 * 1024 * 1024 });
@@ -33,7 +40,7 @@ async function until(predicate, message, timeout = 30000) {
   while (Date.now() < end) { if (await predicate().catch(() => false)) return; await new Promise(done => setTimeout(done, 150)); }
   throw new Error(message);
 }
-let api, nextApi; let providerReads = 0; let originalError;
+let api, nextApi, diagnosticRequest, diagnosticRenderer; let providerReads = 0; let originalError;
 let currentToken = token; let deploymentId = 'deployment-1'; let deploymentStatus = 'in_progress';
 try {
   docker(['build', '--file', 'apps/web/Dockerfile', '--target', 'publication-runtime', '--tag', image, '.'], false, 600000);
@@ -45,6 +52,11 @@ try {
     siteRevision: 7, catalogDigest: sha(catalog), catalog }]]);
   const candidate = structuredClone(snapshots.get('publication-a'));
   candidate.publicationId = 'publication-b'; candidate.siteRevision = 8;
+  const accountSource = structuredClone(source);
+  accountSource.globalPages.push({ id: 'page-account-runtime', type: 'ACCOUNT', slug: ACCOUNT_PAGE_SLUG, title: 'Личный кабинет Дом.ру', status: 'PUBLISHED', content: accountPageDefaults(), blocks: [] });
+  accountSource.seoTemplates.push({ kind: 'ACCOUNT', titleTemplate: 'Личный кабинет Дом.ру — вход и инструкции', descriptionTemplate: 'Вход, восстановление доступа, оплата и приложение.', indexState: 'INDEX' });
+  candidate.catalog = new SiteCatalogService({}).renderSource(accountSource, new Date('2026-10-06T00:00:00Z'));
+  assert.equal(candidate.catalog.routes.length, catalog.routes.length + 1);
   candidate.catalog.seoByPath['/kazan'].title = 'Контент опубликован без deployment'; candidate.catalogDigest = sha(candidate.catalog);
   snapshots.set(candidate.publicationId, candidate);
   api = createServer((request, response) => {
@@ -89,6 +101,7 @@ try {
       headers: { 'x-admin-token': currentToken, 'content-type': 'application/json' }, ...(body ? { body: JSON.stringify(body) } : {}), signal: AbortSignal.timeout(120000) });
     return { status: response.status, body: await response.json() };
   };
+  diagnosticRequest = request;
   await until(async () => (await request('/active')).status === 200, 'Runtime did not become ready');
   const baseline = (await request('/active')).body;
   assert.equal(await fetch(publicUrl).then(response => response.text()), '<h1>Previously served HTML</h1>');
@@ -98,17 +111,25 @@ try {
   const job = { publicationId: 'publication-b', siteId: 'site-1', siteSlug: source.site.slug, rebuildId: 'cms-b', rebuildRevision: 1 };
   assert.equal((await request('/publish', job)).status, 202, 'CMS used the unreleased renderer');
   const renderer = (await request('/renderer')).body;
+  diagnosticRenderer = renderer;
   deploymentStatus = 'finished';
-  await until(async () => (await request('/active')).body.rendererId === renderer.rendererId, 'Automatic CODE did not finish', 120000);
+  const initialCodeStart = Date.now();
+  await until(async () => (await request('/active')).body.rendererId === renderer.rendererId, 'Automatic CODE did not finish', codeWaitMs);
+  console.log(`Runtime timing CODE A: ${Date.now() - initialCodeStart}ms (budget ${codeWaitMs}ms)`);
   const release = (await request('/active')).body;
   assert.equal(release.publicationId, 'publication-a');
   assert.equal(release.catalogDigest, baseline.catalogDigest); assert.equal(release.rendererId, renderer.rendererId);
+  assert.equal((await fetch(`${publicUrl}/${ACCOUNT_PAGE_SLUG}`)).status, 404, 'CODE added ACCOUNT to an old snapshot');
   assert.ok(providerReads >= 4); const beforeCms = providerReads;
   assert.equal((await fetch(`${publicUrl}/old.js`)).status, 200, 'CODE dropped a legacy unversioned asset');
   const published = await request('/publish', job);
   assert.equal(published.status, 200, JSON.stringify(published.body)); assert.equal(published.body.publicationId, 'publication-b');
   assert.equal(providerReads, beforeCms, 'CMS publication consulted the deployment provider');
   const html = await fetch(`${publicUrl}/kazan`).then(response => response.text()); assert.ok(html.includes(candidate.catalog.seoByPath['/kazan'].title));
+  const accountResponse = await fetch(`${publicUrl}/${ACCOUNT_PAGE_SLUG}`); assert.equal(accountResponse.status, 200);
+  const accountHtml = await accountResponse.text(); assert.equal((accountHtml.match(/data-account-image=/g) || []).length, 14);
+  const accountAsset = accountHtml.match(/<img[^>]*data-account-image="heroLogin"[^>]*src="([^"]+)"/)?.[1]; assert.ok(accountAsset);
+  assert.equal((await fetch(`${publicUrl}${accountAsset}`)).status, 200, 'Linux ACCOUNT asset was not served from the immutable artifact');
   const retained = `${publicUrl}/__publication_assets/${baseline.artifactId}/old.js`;
   assert.equal((await fetch(retained)).status, 200);
   assert.equal((await request('/publish', job)).body.artifactId, published.body.artifactId);
@@ -138,7 +159,9 @@ try {
   assert.equal((await request('/release-code', contextInput)).status, 202, 'Nonterminal deployment released new context');
   assert.deepEqual(await probe(), { backend: 'original', publicationId: 'publication-b', tokenDigest: proxyDigest(token) });
   deploymentStatus = 'finished';
-  await until(async () => (await request('/active')).body.rendererId === contextRenderer.rendererId, 'Automatic context CODE did not finish', 120000);
+  const contextCodeStart = Date.now();
+  await until(async () => (await request('/active')).body.rendererId === contextRenderer.rendererId, 'Automatic context CODE did not finish', codeWaitMs);
+  console.log(`Runtime timing context CODE: ${Date.now() - contextCodeStart}ms (budget ${codeWaitMs}ms)`);
   const contextRelease = (await request('/active')).body;
   assert.equal(contextRelease.publicationId, 'publication-b'); assert.equal(contextRelease.siteRevision, 8);
   assert.equal(contextRelease.catalogDigest, candidate.catalogDigest); assert.equal(contextRelease.rendererId, contextRenderer.rendererId);
@@ -161,9 +184,18 @@ try {
   docker(['exec', name, 'sh', '-c', 'kill -TERM $(pidof caddy)']);
   await until(async () => docker(['inspect', '--format', '{{.State.Running}}', name]) === 'false', 'Caddy exit did not stop its supervisor');
   assert.equal(docker(['inspect', '--format', '{{.State.ExitCode}}', name]), '1');
-  console.log('Runtime proof passed: CODE preserves serving A; CMS publishes B without provider; changed serving context waits for terminal CODE and preserves B; restart retains B/assets without API; Caddy exit stops supervisor');
+  console.log('Runtime proof passed: CODE preserves serving A; CMS publishes B without provider; ACCOUNT14 assets decode and serve on Linux/non-root; changed serving context waits for terminal CODE and preserves B; restart retains B/assets without API; Caddy exit stops supervisor');
 } catch (error) {
   originalError = error; console.error(error.stack || error.message);
+  // The automatic reconciler deliberately hides retryable errors. Surface the
+  // same guarded CODE operation in this isolated fixture before cleanup, rather
+  // than losing its cause among Caddy's polling diagnostics. Never change gates.
+  if (diagnosticRequest && diagnosticRenderer) {
+    try {
+      const result = await diagnosticRequest('/release-code', { deploymentId, expectedCommit: commit, rendererId: diagnosticRenderer.rendererId, instanceId: diagnosticRenderer.instanceId });
+      console.error('CODE diagnostic:', JSON.stringify(result).split(token).join('[redacted]').split(rotatedToken).join('[redacted]'));
+    } catch (detail) { console.error('CODE diagnostic unavailable:', detail.message); }
+  }
   let logs = docker(['logs', '--tail', '60', name], true) || '';
   // Docker writes Caddy/Node diagnostics to stderr as well as stdout.
   const observed = spawnSync('docker', ['logs', '--tail', '60', name], { encoding: 'utf8', timeout: 10000 });

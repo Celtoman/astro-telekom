@@ -1,4 +1,5 @@
 export const workspaceRoutes = {
+  "/templates/account": { screen: "account", active: "templates" },
   "/": { screen: "overview", active: "overview" },
   "/tariffs": { screen: "tariffs", active: "tariffs" },
   "/tariffs/edit": { screen: "tariffs-edit", active: "tariffs" },

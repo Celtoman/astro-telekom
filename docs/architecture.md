@@ -167,3 +167,8 @@ FLOW1 принимает необязательный тариф только в
 ## Городская проверка подключения
 
 Независимый PageTemplate CITY_ADDRESS_CHECK → materializeAddressPageSource → общий каталог и publication validation → static ADDRESS route каждого города. Модель/схемы общие для API и CMS, selector популярных тарифов чистый и детерминированный. Общие renderer и стили результатов/тарифов используются публичной страницей и sandbox preview; этапы, преимущества, консультация и FAQ используют готовые сквозные компоненты. Только API записывает редакционный data и ревизии; опубликованные снимки сохраняют свой inventory и исходный контент.
+
+
+## ACCOUNT: глобальная информационная страница
+
+ACCOUNT — самостоятельная site-scoped Page без PageTemplate/13 PageBlock. Типизированная Page.content хранит минимум CMS, инструкции/условия/композиция находятся в CODE. Один renderer обслуживает Astro и sandbox preview; Header, адресная форма, FAQ и Footer общие. `/admin/sites/:siteId/account` использует serializable expectedWorkingRevision. Published view привязан к actual serving publication, включая RUNNING с уже активированным receipt, а не к последнему SQL SUCCEEDED. GLOBAL FLOW2 сверяет canonical page в serving catalog и выбирает фактический город по очищенному адресу и региону. Private static builder проверяет изображения и локально фиксирует удалённые bytes в новом artifact; ошибка не меняет прежнюю публикацию.

@@ -1,6 +1,6 @@
 # Развертывание и эксплуатационный контур
 
-Migration head:65 каталогов до `0065_tvbox_availability`. Миграция 0065 применена в защищенном test-контуре на exact SHA 8b03ab78; она изменила рабочие атрибуты с аудитом и сохранением старого immutable snapshot. CODE и CMS подтверждены, текущие ревизии 28/28. [Деплой, receipt и live-проверки](research/2026-11-04-tariff-contract-release.md).
+Migration head:67 каталогов миграций до `0067_account_page`;0066/0067 пока проверены только локально. Миграция 0065 применена в защищенном test-контуре на exact SHA 8b03ab78; она изменила рабочие атрибуты с аудитом и сохранением старого immutable snapshot. CODE и CMS подтверждены, текущие ревизии 28/28. [Деплой, receipt и live-проверки](research/2026-11-04-tariff-contract-release.md).
 
 Сверка процедур: 6 октября 2026 года. Coolify использует постоянный publication runtime; CMS publish не запускает redeploy, code deployment выпускает renderer обслуживаемого snapshot. Контракт и восстановление — в [publication.md](publication.md), доказательства — в [research/README.md](research/README.md).
 
@@ -201,3 +201,8 @@ docker compose -f docker-compose.coolify.yml exec api node -e "fetch('http://loc
 Выпуск: полный `pnpm check` → push и зелёный CI exact SHA → finished healthy Coolify deployment и CODE rebuild прежнего обслуживаемого снимка → проверка рабочей ревизии/preview/полного состава изменений → CMS-публикация → подтверждённый receipt, SQL success и живой smoke. До CMS-активации старый snapshot сохраняет прежние URL; ADDRESS появляется у всех опубликованных городов одновременно. Basic Auth и noindex защищённого test-контура сохраняются. [Контракт](plans/2026-11-04-address-check-implementation-contract.md).
 
 ADDRESS-выпуск4 ноября подтверждён exact-SHA CI, finished/healthy Coolify MCP deployment, CODE-переходом с сохранением прежнего каталога, CMS27/27 и совпавшей квитанцией/HTML всех207 городов. [Техническая приёмка](research/2026-11-04-address-page-implementation.md).
+
+
+## ACCOUNT: изображения и внешний rollout
+
+Необязательный `ACCOUNT_IMAGE_ALLOWED_HOSTS` — список hostname через запятую, без URL/портов. По умолчанию разрешены tv-internet-dom.ru и HTTPS PUBLIC_SITE_URL; одинаковый список используется API и private builder. Редактор задаёт постоянный `/images/…-<SHA256>.png|jpg|jpeg|webp`, минимум16 hex SHA256; query/hash/credentials запрещены. Файл не больше10MiB/20MP, статический, полностью декодируемый. Сам загрузчик CMS не добавлен. Перед deployment нужны полный pnpm check и high audit; затем отдельное разрешение push/внешнего выпуска, exact-SHA CI→Coolify→CODE. Миграция готовит working ACCOUNT; для появления URL требуется отдельно согласованная CMS-активация.

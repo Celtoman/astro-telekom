@@ -1,0 +1,20 @@
+---
+import type { AccountPageContent } from '../../../../api/src/account-page-model';
+import { ACCOUNT_PAGE_SLUG } from '../../../../api/src/account-page-model';
+import type { SiteView } from '../../data/site';
+import { publicAsset } from '../../data/public-asset';
+import { renderAccountIntro, renderAccountBody } from '../../lib/account-page-render';
+import AddressOnly from '../general-home/AddressOnly.astro';
+import HomeFaq from '../general-home/HomeFaq.astro';
+import HomeBlockStyles from '../general-home/HomeBlockStyles.astro';
+import AccountPageStyles from './AccountPageStyles.astro';
+interface Props { content: AccountPageContent; site: SiteView; apiUrl: string }
+const { content, site, apiUrl } = Astro.props;
+---
+<div class="account-page">
+  <Fragment set:html={renderAccountIntro(content, site, { asset: publicAsset })} />
+  <AddressOnly {site} {apiUrl} pageSlug={ACCOUNT_PAGE_SLUG} pageScope="GLOBAL" />
+  <Fragment set:html={renderAccountBody(content, site, { asset: publicAsset, includeFaq: false })} />
+  <HomeFaq content={{ title: 'Часто задаваемые вопросы (FAQ)', items: content.faq.items }} phoneLinks={[site.connectionPhone, site.supportPhone, '78002228634']} />
+</div>
+<HomeBlockStyles /><AccountPageStyles />

@@ -1,0 +1,58 @@
+{
+  "heroLogin": {
+    "width": 469,
+    "height": 486
+  },
+  "registrationRequest": {
+    "width": 803,
+    "height": 469
+  },
+  "loginEntry": {
+    "width": 499,
+    "height": 250
+  },
+  "passwordRecovery": {
+    "width": 555,
+    "height": 594
+  },
+  "capabilitiesOverview": {
+    "width": 1520,
+    "height": 870
+  },
+  "interfaceTopMenu": {
+    "width": 1534,
+    "height": 103
+  },
+  "interfaceDashboard": {
+    "width": 1509,
+    "height": 806
+  },
+  "paymentScreen": {
+    "width": 1349,
+    "height": 798
+  },
+  "promisedPaymentScreen": {
+    "width": 423,
+    "height": 407
+  },
+  "terminationEntry": {
+    "width": 485,
+    "height": 280
+  },
+  "terminationScreen": {
+    "width": 1050,
+    "height": 481
+  },
+  "suspensionScreen": {
+    "width": 689,
+    "height": 534
+  },
+  "businessIllustration": {
+    "width": 800,
+    "height": 500
+  },
+  "appScreen": {
+    "width": 1080,
+    "height": 2132
+  }
+}

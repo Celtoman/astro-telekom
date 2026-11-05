@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "cfb9524d",
+  "scope": "ACCOUNT local implementation; no external push/deploy/CMS activation",
+  "environment": {
+    "os": "Windows",
+    "node": "22.23.2",
+    "dockerEngine": "29.9.2",
+    "gateAvailableParallelism": 4,
+    "affinityScope": "owned gate process tree only"
+  },
+  "fullGate": {
+    "command": "pnpm check",
+    "exitCode": 0,
+    "tests": 957,
+    "passed": 956,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 1,
+    "durationMs": 677617.4143,
+    "skipReason": "Windows symlink privilege unavailable"
+  },
+  "runtime": {
+    "nativeEnvironment": "Linux/musl non-root uid1001",
+    "oldSnapshotPreserved": true,
+    "accountAddedOnlyByCms": true,
+    "accountNativeDecodedImages": 14,
+    "codeElapsedMs": 95356,
+    "contextCodeElapsedMs": 83384,
+    "windowsObservationBudgetMs": 240000,
+    "linuxObservationBudgetMs": 120000,
+    "manualReleaseBeforeSuccess": false
+  },
+  "audit": {
+    "command": "pnpm audit --audit-level=high",
+    "exitCode": 0,
+    "high": 0,
+    "critical": 0,
+    "moderate": 8,
+    "low": 7,
+    "remainingIssue": 515
+  },
+  "reviews": {
+    "backend": "no remaining confirmed P1/P2 in reviewed feature code",
+    "frontend": "no remaining confirmed P1/P2 after fixes"
+  },
+  "limitations": [
+    "No external deployment or CMS activation",
+    "Missing destination pages remain public-release dependencies",
+    "Emulated mobile gestures; no physical iOS/Android or AT certification",
+    "Earlier120s full-gate timeouts did not reproduce in final run; exact cause unproven",
+    "Harness abort cleanup tracked in issue517"
+  ]
+}

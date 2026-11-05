@@ -1,0 +1,734 @@
+[
+  {
+    "width": 1440,
+    "pageWidth": 1440,
+    "height": 11810,
+    "broken": [],
+    "blocks": [
+      {
+        "tag": "SECTION",
+        "block": "hero",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 400.96875
+        }
+      },
+      {
+        "tag": "NAV",
+        "block": "toc",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 46
+        }
+      },
+      {
+        "tag": "SECTION",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 336
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "registration",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 692
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "login",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 957.9375
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "recovery",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 834
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "features",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 1127.21875
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "interface",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 2318.21875
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "payment",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 568.78125
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "promised_payment",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 652.640625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "termination",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 680
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "suspension",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 701.0625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "business",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 438
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "app",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 376
+        }
+      },
+      {
+        "tag": "SECTION",
+        "rect": {
+          "width": 1360,
+          "x": 40,
+          "height": 534
+        }
+      }
+    ],
+    "rails": [
+      {
+        "name": "Способы входа",
+        "count": 3,
+        "width": 1360,
+        "scrollWidth": 1360,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Способы восстановления доступа",
+        "count": 4,
+        "width": 945,
+        "scrollWidth": 945,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Возможности личного кабинета",
+        "count": 3,
+        "width": 1360,
+        "scrollWidth": 1360,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Разделы верхнего меню",
+        "count": 4,
+        "width": 1296,
+        "scrollWidth": 1296,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Блоки главной страницы кабинета",
+        "count": 4,
+        "width": 1360,
+        "scrollWidth": 1360,
+        "touch": "auto",
+        "snap": "none"
+      }
+    ]
+  },
+  {
+    "width": 834,
+    "pageWidth": 834,
+    "height": 18401,
+    "broken": [],
+    "blocks": [
+      {
+        "tag": "SECTION",
+        "block": "hero",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 828.96875
+        }
+      },
+      {
+        "tag": "NAV",
+        "block": "toc",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 100
+        }
+      },
+      {
+        "tag": "SECTION",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 356
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "registration",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 1309.34375
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "login",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 1652.65625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "recovery",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 1926.453125
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "features",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 1429.484375
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "interface",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 2403.40625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "payment",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 959.71875
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "promised_payment",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 1368.828125
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "termination",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 1305.640625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "suspension",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 1360.46875
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "business",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 966.75
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "app",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 656
+        }
+      },
+      {
+        "tag": "SECTION",
+        "rect": {
+          "width": 720,
+          "x": 57,
+          "height": 518
+        }
+      }
+    ],
+    "rails": [
+      {
+        "name": "Способы входа",
+        "count": 3,
+        "width": 720,
+        "scrollWidth": 720,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Способы восстановления доступа",
+        "count": 4,
+        "width": 720,
+        "scrollWidth": 720,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Возможности личного кабинета",
+        "count": 3,
+        "width": 720,
+        "scrollWidth": 720,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Разделы верхнего меню",
+        "count": 4,
+        "width": 656,
+        "scrollWidth": 656,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Блоки главной страницы кабинета",
+        "count": 4,
+        "width": 720,
+        "scrollWidth": 720,
+        "touch": "auto",
+        "snap": "none"
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "pageWidth": 390,
+    "height": 17567,
+    "broken": [],
+    "blocks": [
+      {
+        "tag": "SECTION",
+        "block": "hero",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 980.890625
+        }
+      },
+      {
+        "tag": "NAV",
+        "block": "toc",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 208
+        }
+      },
+      {
+        "tag": "SECTION",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 398
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "registration",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 1341.921875
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "login",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 1688.3125
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "recovery",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 1315.015625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "features",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 889.859375
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "interface",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 1750.34375
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "payment",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 881.578125
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "promised_payment",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 1356.53125
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "termination",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 1151.09375
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "suspension",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 1379.90625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "business",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 1029.5
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "app",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 886
+        }
+      },
+      {
+        "tag": "SECTION",
+        "rect": {
+          "width": 358,
+          "x": 16,
+          "height": 666
+        }
+      }
+    ],
+    "rails": [
+      {
+        "name": "Способы входа",
+        "count": 3,
+        "width": 358,
+        "scrollWidth": 1010,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Способы восстановления доступа",
+        "count": 4,
+        "width": 358,
+        "scrollWidth": 1352,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Возможности личного кабинета",
+        "count": 3,
+        "width": 358,
+        "scrollWidth": 1010,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Разделы верхнего меню",
+        "count": 4,
+        "width": 318,
+        "scrollWidth": 1192,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Блоки главной страницы кабинета",
+        "count": 4,
+        "width": 358,
+        "scrollWidth": 1352,
+        "touch": "auto",
+        "snap": "none"
+      }
+    ]
+  },
+  {
+    "width": 320,
+    "pageWidth": 320,
+    "height": 19659,
+    "broken": [],
+    "blocks": [
+      {
+        "tag": "SECTION",
+        "block": "hero",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 1048.359375
+        }
+      },
+      {
+        "tag": "NAV",
+        "block": "toc",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 316
+        }
+      },
+      {
+        "tag": "SECTION",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 451
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "registration",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 1517.03125
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "login",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 2067.234375
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "recovery",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 1389.09375
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "features",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 971.796875
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "interface",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 1998.265625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "payment",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 967.171875
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "promised_payment",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 1473.171875
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "termination",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 1266.625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "suspension",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 1522.65625
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "business",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 1129.75
+        }
+      },
+      {
+        "tag": "SECTION",
+        "block": "app",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 1119
+        }
+      },
+      {
+        "tag": "SECTION",
+        "rect": {
+          "width": 288,
+          "x": 16,
+          "height": 738
+        }
+      }
+    ],
+    "rails": [
+      {
+        "name": "Способы входа",
+        "count": 3,
+        "width": 288,
+        "scrollWidth": 800,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Способы восстановления доступа",
+        "count": 4,
+        "width": 288,
+        "scrollWidth": 1072,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Возможности личного кабинета",
+        "count": 3,
+        "width": 288,
+        "scrollWidth": 800,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Разделы верхнего меню",
+        "count": 4,
+        "width": 248,
+        "scrollWidth": 1040,
+        "touch": "auto",
+        "snap": "none"
+      },
+      {
+        "name": "Блоки главной страницы кабинета",
+        "count": 4,
+        "width": 288,
+        "scrollWidth": 1072,
+        "touch": "auto",
+        "snap": "none"
+      }
+    ]
+  }
+]

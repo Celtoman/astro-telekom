@@ -1,0 +1,86 @@
+[
+  {
+    "slot": "heroLogin",
+    "sha256": "07434dabcc931648b1e46130d82cfe9d5c4fa06112c47e62daf6b6160b2e5314",
+    "path": "apps/web/public/images/account/v1/hero-login-07434dabcc931648.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "registrationRequest",
+    "sha256": "a95efec9a128c7cfe81d3ca65b58034e3bdaceb6936230c0fb1e55ca83b37019",
+    "path": "apps/web/public/images/account/v1/registration-request-a95efec9a128c7cf.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "loginEntry",
+    "sha256": "ba7d0402929b891d2480fef774ebf4a2fd68a5480a6915a5ceb8c7188eab2f78",
+    "path": "apps/web/public/images/account/v1/login-entry-ba7d0402929b891d.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "passwordRecovery",
+    "sha256": "a24ac5d2ec3421bc8d245e45ff367a897db8c44f86638f3919525bf9b25f87c6",
+    "path": "apps/web/public/images/account/v1/password-recovery-a24ac5d2ec3421bc.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "capabilitiesOverview",
+    "sha256": "1e6afb354b5163bd946c0213514260549a114e7a4559aa25f82c799a397e9a72",
+    "path": "apps/web/public/images/account/v1/capabilities-overview-1e6afb354b5163bd.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "interfaceTopMenu",
+    "sha256": "138569ced478da72af2e1a9d5e5ad3e994862d2a77cf596ec9586cf5939dcbe5",
+    "path": "apps/web/public/images/account/v1/interface-top-menu-138569ced478da72.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "interfaceDashboard",
+    "sha256": "f6a48fbd3d7e55aa5334180772e32342974bfa80b4c768754aa433fe7eabd2c9",
+    "path": "apps/web/public/images/account/v1/interface-dashboard-f6a48fbd3d7e55aa.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "paymentScreen",
+    "sha256": "7567984a98709ba6339db0554d06e6765e8ccf570a6ee76bee349c1180a022e3",
+    "path": "apps/web/public/images/account/v1/payment-screen-7567984a98709ba6.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "promisedPaymentScreen",
+    "sha256": "4c3db734fc9bd330531e92680a3012c58d9be2844902b4f03dfa45b496992a00",
+    "path": "apps/web/public/images/account/v1/promised-payment-screen-4c3db734fc9bd330.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "terminationEntry",
+    "sha256": "fe49b7268207cd11c4399f7e26cd3ed036a38ed829d76670eeca7b6cb5164132",
+    "path": "apps/web/public/images/account/v1/termination-entry-fe49b7268207cd11.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "terminationScreen",
+    "sha256": "3136d94f64633cf01f6712d24a164190d3b7902cb5b6db5a75e60da92e8f2dba",
+    "path": "apps/web/public/images/account/v1/termination-screen-3136d94f64633cf0.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "suspensionScreen",
+    "sha256": "7eeb4216491ca286b594e66ac17c8c300cddda552d6472b1768e952be6cfb2f6",
+    "path": "apps/web/public/images/account/v1/suspension-screen-7eeb4216491ca286.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "businessIllustration",
+    "sha256": "9f23973c7882b747014b45e1c6bb6f9888282beec02ab15451473871a54d57ad",
+    "path": "apps/web/public/images/account/v1/business-illustration-9f23973c7882b747.png",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  },
+  {
+    "slot": "appScreen",
+    "sha256": "ebba0b7b3ccd1ae560d57b38798b988614c4acd797d53b712d1f01922bb27bdf",
+    "path": "apps/web/public/images/account/v1/app-screen-ebba0b7b3ccd1ae5.jpg",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI"
+  }
+]

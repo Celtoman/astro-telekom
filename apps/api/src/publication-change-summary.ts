@@ -1,4 +1,5 @@
 const pageKinds: Record<string, string> = {
+  ACCOUNT: 'Личный кабинет',
   HOME: 'Главная сайта', CITY_HOME: 'Главные страницы городов', CITY_TARIFF_DETAIL: 'Страницы тарифов',
   COVERAGE: 'Карта покрытия', CITIES: 'Города обслуживания', PRIVACY: 'Политика конфиденциальности',
   PERSONAL_DATA_CONSENT: 'Согласие на обработку данных', COOKIE_POLICY: 'Политика cookie',

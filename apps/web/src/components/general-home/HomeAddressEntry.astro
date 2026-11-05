@@ -3,12 +3,13 @@ import type { GeneralHomeDataByType } from '../../../../api/src/general-home-mod
 import { renderAddressEntry } from '../../lib/general-home-render';
 import { publicAsset } from '../../data/public-asset';
 import HomeBlockStyles from './HomeBlockStyles.astro';
+import HomeAddressFormStyles from './HomeAddressFormStyles.astro';
 interface Props { content: GeneralHomeDataByType['home.address_check']; phone: string; phoneHref: string; callbackWithinMinutes?: number }
 const { content, phone, phoneHref } = Astro.props;
 const addressForm = await Astro.slots.render('address');
 ---
 <Fragment set:html={renderAddressEntry(content, { asset: publicAsset, phone, phoneHref, callbackWithinMinutes: Astro.props.callbackWithinMinutes }, addressForm)} />
-<HomeBlockStyles />
+<HomeBlockStyles /><HomeAddressFormStyles />
 <style is:global>
   /* Paint the SSR block only after its final child has arrived. */
   .home-address:not(:has(> [data-address-render-complete])) { visibility: hidden; }
@@ -22,16 +23,6 @@ const addressForm = await Astro.slots.render('address');
   .home-address-art figcaption { position: absolute; top: 184px; left: -104px; width: 172px; padding: 12px; border-radius: 14px; background: #fff; color: #526071; font-size: 14px; line-height: 20px; white-space: pre-line; overflow-wrap: anywhere; }
   .home-address-form-area { position: relative; width: 100%; }
   .home-address .home-address-form-area .home-entry { margin: 0; }
-  .home-address .home-entry .address-form { display: grid; grid-template-columns: minmax(0, 1fr) 200px; max-width: none; gap: 8px 16px; padding: 0; margin: 0; border: 0; background: none; box-shadow: none; }
-  .home-address .home-entry .address-form > label { grid-column: 1 / -1; font-size: 14px; font-weight: 600; line-height: 20px; }
-  .home-address .home-entry .address-field { position: relative; grid-column: 1; grid-row: 2; }
-  .home-address .home-entry .address-icon { position: absolute; left: 16px; top: 14px; width: 20px; height: 20px; pointer-events: none; }
-  .home-address .home-entry .address-form input[name="address"], .home-address .home-entry .address-form input[type="text"] { min-width: 0; width: 100%; height: 48px; padding: 11px 16px 11px 46px; border: 1px solid #f0f3f6; border-radius: 14px; background: #fff; color: #18202a; font: inherit; font-size: 16px; line-height: 24px; }
-  .home-address .home-entry input::placeholder { color: #5c6b7d; opacity: 1; }
-  .home-address .home-entry .address-form > .button { grid-column: 2; grid-row: 2; width: 200px; min-width: 0; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; background: #e0231e; color: #fff; font: inherit; font-size: 14px; font-weight: 600; line-height: 20px; }
-  .home-address .home-entry .address-hint:not([data-state]) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-  .home-address .home-entry .address-hint, .home-address .home-entry .form-result { grid-column: 1 / -1; }
-  .home-address .home-entry .form-result:empty { display: none; }
   .home-address .home-address-reassurance { display: flex; align-items: flex-start; gap: 12px; min-height: 24px; margin-top: 16px; font-size: 14px; line-height: 20px; }
   .home-address-reassurance picture, .home-address-reassurance img { display: block; flex: 0 0 24px; width: 24px; height: 24px; }
   .home-address-specialist { display: flex; flex-direction: column; justify-content: space-between; gap: 8px; min-width: 0; min-height: 368px; padding: 32px 32px 24px; border-radius: 24px; background: #ffeae9; }
@@ -63,9 +54,6 @@ const addressForm = await Astro.slots.render('address');
     .home-address-primary { padding: 20px; }
     .home-address-art { display: none; }
     .home-address #home-address-title, .home-address #home-address-help-title { font-size: 20px; line-height: 25px; letter-spacing: -.2px; }
-    .home-address .home-entry .address-form { grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
-    .home-address .home-entry .address-form > label { margin-bottom: -4px; }
-    .home-address .home-entry .address-form > .button { grid-column: 1; grid-row: 3; width: 100%; }
     .home-address .home-address-reassurance { gap: 8px; min-height: 20px; margin-top: 12px; }
     .home-address-reassurance picture, .home-address-reassurance img { flex-basis: 20px; width: 20px; height: 20px; }
     .home-address-specialist { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 20px; }

@@ -51,6 +51,7 @@ services:
       TRUST_PROXY: "true"
       REBUILD_PROVIDER: "static"
       STATIC_PUBLICATION_URL: http://web:8081
+      PUBLIC_SITE_URL: https://${PUBLIC_DOMAIN:?Set PUBLIC_DOMAIN in Coolify}
     depends_on:
       migrate:
         condition: service_completed_successfully

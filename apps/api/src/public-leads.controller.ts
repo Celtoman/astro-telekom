@@ -13,6 +13,7 @@ import { classifyLeadReason } from './lead-reasons';
 import { analyzeLeadComment } from './lead-comment-analyzer';
 import { buildLeadAttribution } from './lead-attribution';
 import { servingEntities, servingPublication } from './serving-publication-context';
+import { ACCOUNT_PAGE_SLUG } from './account-page-model';
 
 function premiseKey(data: Record<string, unknown> | undefined): string {
   if (!data) return '';
@@ -48,6 +49,7 @@ export class PublicLeadsController {
     if (body.website) throw new BadRequestException('Некорректный запрос');
     const reason = classifyLeadReason(body.reasonCode);
     const callback = reason?.code === 'callback_consultation';
+    if (body.pageScope === 'GLOBAL' && (callback || body.tariffSlug || body.configuration || body.pageSlug !== ACCOUNT_PAGE_SLUG)) throw new BadRequestException('Некорректный источник общей страницы');
     if (callback && (body.consentAccepted !== true || body.addressCheckId || body.address || body.configuration || body.pageSlug || body.objectType || body.serviceType)) {
       throw new BadRequestException('Для обратного звонка подтвердите согласие; проверка адреса оформляется отдельно');
     }
@@ -87,7 +89,7 @@ export class PublicLeadsController {
         objectType: true,
         site: { select: { slug: true } },
         city: { select: { slug: true } },
-        page: { select: { slug: true } },
+        page: { select: { slug: true, type: true } },
         tariff: { select: { slug: true, serviceType: true } },
       },
     });
@@ -96,6 +98,7 @@ export class PublicLeadsController {
       const matches = existing.site.slug === (body.siteSlug || 'domru-site')
         && (existing.city?.slug ?? null) === (body.citySlug ?? null)
         && (existing.page?.slug ?? null) === (body.pageSlug || null)
+        && (existing.page?.type === 'ACCOUNT') === (body.pageScope === 'GLOBAL')
         && (existing.tariff?.slug ?? null) === (body.tariffSlug || null)
         && existing.addressCheckId === (body.addressCheckId ?? null)
         && (!body.address?.trim() || existing.address === body.address.trim())
@@ -116,7 +119,7 @@ export class PublicLeadsController {
     const existingSubmission = returnExistingSubmission(await findSubmission());
     if (existingSubmission) return existingSubmission;
 
-    const serving = body.citySlug ? await servingEntities(this.prisma, body.siteSlug || 'domru-site', body.citySlug, body.pageSlug) : null;
+    const serving = body.citySlug ? await servingEntities(this.prisma, body.siteSlug || 'domru-site', body.citySlug, body.pageSlug, body.pageScope) : null;
     const rootPublication = callback && !body.citySlug ? await servingPublication(this.prisma, body.siteSlug || 'domru-site') : null;
     const site = serving?.site ?? (rootPublication ? { id: rootPublication.siteId } : null) ?? await this.prisma.site.findFirst({
       where: { slug: body.siteSlug || 'domru-site', status: 'PUBLISHED' },
@@ -129,7 +132,7 @@ export class PublicLeadsController {
     if (!city && (!callback || body.citySlug)) throw new BadRequestException('Город не найден');
 
     const page = serving ? serving.page : body.pageSlug && city
-      ? await this.prisma.page.findFirst({ where: { cityId: city.id, slug: body.pageSlug, status: 'PUBLISHED' } })
+      ? await this.prisma.page.findFirst({ where: { ...(body.pageScope === 'GLOBAL' ? { siteId: site.id, cityId: null, type: 'ACCOUNT' as const } : { cityId: city.id }), slug: body.pageSlug, status: 'PUBLISHED' } })
       : null;
     const publication = serving ? serving.publication : body.configuration
       ? await this.prisma.sitePublication.findFirst({
@@ -154,6 +157,8 @@ export class PublicLeadsController {
     if (body.addressCheckId && !addressCheck) {
       throw new BadRequestException('Проверка адреса не найдена для этого города');
     }
+    if (addressCheck && addressCheck.pageId && addressCheck.pageId !== page?.id) throw new BadRequestException('Проверка адреса относится к другой странице');
+    if (body.pageScope === 'GLOBAL' && addressCheck?.pageId !== page?.id) throw new BadRequestException('Выполните проверку адреса с этой общей страницы');
     if (body.pageSlug && !page) {
       throw new BadRequestException('Страница не найдена или не опубликована');
     }

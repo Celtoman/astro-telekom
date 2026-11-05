@@ -26,7 +26,7 @@ export interface VariableDefinition {
 }
 
 const BLOCK_FIELDS = ['eyebrow', 'title', 'text', 'ctaText', 'items.title', 'items.text', 'items.question', 'items.answer'];
-const PAGE_FIELDS = ['Page.title', 'Page.content.text', ...BLOCK_FIELDS.map((field) => `PageBlock.data.${field}`),
+const PAGE_FIELDS = ['Page.title', 'Page.content.text', 'Page.content.faq.items[].question', 'Page.content.faq.items[].answer', ...BLOCK_FIELDS.map((field) => `PageBlock.data.${field}`),
   'PageTemplate.titleTemplate', 'PageTemplate.content.text', ...BLOCK_FIELDS.map((field) => `PageTemplateBlock.data.${field}`)];
 function homeVariableFields(rule: GeneralHomeFieldRule, path = ''): string[] {
   if (rule.kind === 'object') return Object.entries(rule.fields).flatMap(([key, child]) => homeVariableFields(child, path ? `${path}.${key}` : key));

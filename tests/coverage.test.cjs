@@ -46,7 +46,7 @@ test('normalized address from another city is checked and persisted with the pag
     } },
     {
       site: { findUnique: async () => ({ id: 'site', status: 'PUBLISHED' }) },
-      city: { findFirst: async () => ({ id: 'city', name: 'Казань', region: { name: 'Республика Татарстан' } }) },
+      city: { findFirst: async () => ({ id: 'city', slug: 'kazan', name: 'Казань', region: { name: 'Республика Татарстан' } }) },
       addressCheck: { create: async ({ data }) => {
         persisted = data;
         return { id: 'check' };

@@ -1,0 +1,140 @@
+-- Initialize only working ACCOUNT data; immutable snapshots and serving activation stay unchanged.
+BEGIN;
+LOCK TABLE "Site", "Page", "SeoTemplate", "ContentRevision", "AuditEvent" IN SHARE ROW EXCLUSIVE MODE;
+ALTER TABLE "Page" DROP CONSTRAINT "Page_global_scope_check";
+ALTER TABLE "Page" ADD CONSTRAINT "Page_global_scope_check" CHECK (
+ ("type" IN ('COVERAGE','CITIES','PRIVACY','PERSONAL_DATA_CONSENT','COOKIE_POLICY','ACCOUNT') AND "cityId" IS NULL)
+ OR ("type" NOT IN ('COVERAGE','CITIES','PRIVACY','PERSONAL_DATA_CONSENT','COOKIE_POLICY','ACCOUNT') AND "cityId" IS NOT NULL)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS "Page_account_site_key" ON "Page" ("siteId") WHERE "type"='ACCOUNT' AND "cityId" IS NULL;
+DO $$ BEGIN
+ IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname='Page_account_scope_check' AND conrelid='"Page"'::regclass) THEN
+  ALTER TABLE "Page" ADD CONSTRAINT "Page_account_scope_check" CHECK ("type"<>'ACCOUNT' OR ("cityId" IS NULL AND "slug"='lichnyy-kabinet-dom-ru'));
+ END IF;
+END $$;
+CREATE TEMP TABLE _account_sites ON COMMIT DROP AS
+SELECT s."id",s."workingRevision"+1 AS revision FROM "Site" s JOIN "Provider" p ON p."id"=s."providerId"
+WHERE p."slug"='domru' AND NOT EXISTS (SELECT 1 FROM "Page" a WHERE a."siteId"=s."id" AND a."type"='ACCOUNT');
+DO $$ BEGIN
+ IF EXISTS (SELECT 1 FROM "City" c JOIN _account_sites s ON s."id"=c."siteId" WHERE c.slug='lichnyy-kabinet-dom-ru')
+ OR EXISTS (SELECT 1 FROM "Page" p JOIN _account_sites s ON s."id"=p."siteId" WHERE p."cityId" IS NULL AND p.slug='lichnyy-kabinet-dom-ru')
+ OR EXISTS (SELECT 1 FROM "Redirect" r JOIN _account_sites s ON s."id"=r."siteId" WHERE r."sourcePath"='/lichnyy-kabinet-dom-ru')
+ THEN RAISE EXCEPTION 'ACCOUNT canonical URL is occupied; preserve authored content and resolve collision'; END IF;
+END $$;
+INSERT INTO "Page" (id,"siteId",type,slug,status,title,content,"createdAt","updatedAt")
+SELECT 'account_page_'||md5(s.id),s.id,'ACCOUNT','lichnyy-kabinet-dom-ru','PUBLISHED','Личный кабинет Дом.ру',$account${
+  "version": "1.0.0",
+  "hero": {
+    "h1": "Личный Кабинет Дом ру",
+    "intro": "Личный кабинет Дом ру — это онлайн-сервис, в котором клиенты компании могут узнать остаток на своем лицевом счете, управлять подключенным тарифом и услугами, узнавать о новых акциях и спецпредложениях.\n\nГлавный плюс ЛК — все операции и запросы можно делать удаленно, из любой точки мира, без посещения офиса или звонка в техническую поддержку.\n\nВнешне кабинет выглядит простым, но у многих новых клиентов возникают вопросы о том, как эффективно использовать все функции личного кабинета.\n\nВ статье подробно разбираем все фишки этого информационного портала."
+  },
+  "loginUrl": "https://dom.ru/user/login",
+  "images": {
+    "heroLogin": {
+      "src": "/images/account/v1/hero-login-07434dabcc931648.png",
+      "alt": "Меню входа в ЛК Дом.ру",
+      "caption": "Так выглядит вход в личный кабинет Dom ru"
+    },
+    "registrationRequest": {
+      "src": "/images/account/v1/registration-request-a95efec9a128c7cf.png",
+      "alt": "Оставить заявку на подключение к Дом ру",
+      "caption": "Заявка на подключение личного кабинета"
+    },
+    "loginEntry": {
+      "src": "/images/account/v1/login-entry-ba7d0402929b891d.png",
+      "alt": "Кнопка для входа в ЛК Дом.ру",
+      "caption": "Вход в ЛК Домру"
+    },
+    "passwordRecovery": {
+      "src": "/images/account/v1/password-recovery-a24ac5d2ec3421bc.png",
+      "alt": "Восстановить пароль к личному кабинету Домру",
+      "caption": "Восстановление пароля к ЛК Домру"
+    },
+    "capabilitiesOverview": {
+      "src": "/images/account/v1/capabilities-overview-1e6afb354b5163bd.png",
+      "alt": "Главная страница личного кабинета Дом ру",
+      "caption": "Интерфейс личного кабинета Домру"
+    },
+    "interfaceTopMenu": {
+      "src": "/images/account/v1/interface-top-menu-138569ced478da72.png",
+      "alt": "Меню личного кабинета Дом ру",
+      "caption": "Верхнее меню личного кабинета Дом ру"
+    },
+    "interfaceDashboard": {
+      "src": "/images/account/v1/interface-dashboard-f6a48fbd3d7e55aa.png",
+      "alt": "Меню личного кабинета Дом ру",
+      "caption": "Главная страница ЛК Дом ру"
+    },
+    "paymentScreen": {
+      "src": "/images/account/v1/payment-screen-7567984a98709ba6.png",
+      "alt": "Оплата Домру через личный кабинет",
+      "caption": "Меню оплаты услуг в ЛК Дом.ru"
+    },
+    "promisedPaymentScreen": {
+      "src": "/images/account/v1/promised-payment-screen-4c3db734fc9bd330.png",
+      "alt": "Как получить обещанный платеж в кабинете Дом ру",
+      "caption": "Как получить доверительный платеж"
+    },
+    "terminationEntry": {
+      "src": "/images/account/v1/termination-entry-fe49b7268207cd11.png",
+      "alt": "Где расторгнуть договор с дом ру",
+      "caption": "Меню «Управление договором»"
+    },
+    "terminationScreen": {
+      "src": "/images/account/v1/termination-screen-3136d94f64633cf0.png",
+      "alt": "Расторгнуть договор с Домру",
+      "caption": "Страница управления договором в ЛК Дом ру"
+    },
+    "suspensionScreen": {
+      "src": "/images/account/v1/suspension-screen-7eeb4216491ca286.png",
+      "alt": "Как приостановить договор в кабинете Дом ру",
+      "caption": "Меню приостановления оказания услуг"
+    },
+    "businessIllustration": {
+      "src": "/images/account/v1/business-illustration-9f23973c7882b747.png",
+      "alt": "CRM и ip-телефония",
+      "caption": "Возможности ЛК Дом Ру Бизнес"
+    },
+    "appScreen": {
+      "src": "/images/account/v1/app-screen-ebba0b7b3ccd1ae5.jpg",
+      "alt": "Экран приложения «Мой Дом.ру»"
+    }
+  },
+  "faq": {
+    "items": [
+      {
+        "question": "Как позвонить в Дом.ру?",
+        "answer": "Телефоны горячей линии Дом.ру:\n1. Подключение новых абонентов: {CONNECTION_PHONE}\n2. Служба технической поддержки: {SUPPORT_PHONE}\n3. Поддержка корпоративных клиентов: 8-800-222-86-34\nЗвонок бесплатный с любых телефонов на территории России, горячая линия работает круглосуточно."
+      },
+      {
+        "question": "Что такое личный кабинет Дом ру?",
+        "answer": "Личный кабинет Дом.ру — это онлайн-платформа для управления услугами и аккаунтом абонента. Он предоставляет удобный доступ к информации о подключенных услугах, балансе и позволяет управлять сервисами провайдера через интернет."
+      },
+      {
+        "question": "Какие возможности предоставляет личный кабинет Дом.ру?",
+        "answer": "Личный кабинет Дом.ру предоставляет следующие возможности:\n— Просмотр баланса и детализации расходов\n— Онлайн-оплата услуг\n— Управление тарифами и подключение дополнительных услуг\n— Настройка автоплатежа\n— Управление услугами ТВ и настройка пакетов каналов\n— Получение технической поддержки\n— Заказ оборудования\n— Управление несколькими договорами\n— Настройка уведомлений\n— Доступ к акциям и спецпредложениям"
+      },
+      {
+        "question": "Как оплатить Дом ру через личный кабинет?",
+        "answer": "Чтобы оплатить услуги Дом.ру через личный кабинет:\n1. Войдите в личный кабинет.\n2. На главной странице найдите раздел «Оплатить».\n3. Выберите удобный способ оплаты.\n4. Введите сумму платежа.\n5. Следуйте инструкциям для завершения оплаты.\n6. После успешной оплаты сохраните чек."
+      },
+      {
+        "question": "Как изменить тариф через личный кабинет Дом.ру?",
+        "answer": "Да, вы можете изменить тариф через личный кабинет Дом.ру. Для этого:\n1. Войдите в личный кабинет.\n2. Перейдите в раздел «Мои услуги» или «Управление тарифами».\n3. Выберите услугу, тариф которой хотите изменить.\n4. Просмотрите доступные тарифные планы.\n5. Выберите новый тариф и нажмите «Подключить».\n6. Подтвердите изменение тарифа.\nОбратите внимание, что некоторые изменения могут вступить в силу с начала следующего расчетного периода."
+      },
+      {
+        "question": "Какие способы оплаты доступны в личном кабинете Дом.ру?",
+        "answer": "В личном кабинете Дом.ру доступны следующие способы оплаты:\n— Банковские карты\n— Интернет-банкинг (Сбербанк Онлайн, Альфа-Клик)\n— Мобильный баланс (для некоторых операторов)\n— Система быстрых платежей (СБП)\nВыберите наиболее удобный для вас способ оплаты в разделе «Оплатить» личного кабинета."
+      }
+    ]
+  }
+}
+$account$::jsonb,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP FROM _account_sites s;
+INSERT INTO "SeoTemplate" (id,"siteId",kind,"titleTemplate","descriptionTemplate","indexState","createdAt","updatedAt")
+SELECT 'account_seo_'||md5(s.id),s.id,'ACCOUNT','Личный кабинет Дом.ру — вход и инструкции','Как войти в личный кабинет Дом.ру, восстановить доступ, оплатить услуги и пользоваться приложением.','INDEX',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP FROM _account_sites s ON CONFLICT ("siteId",kind) DO NOTHING;
+UPDATE "Site" s SET "workingRevision"=a.revision,"updatedAt"=CURRENT_TIMESTAMP FROM _account_sites a WHERE a.id=s.id;
+INSERT INTO "ContentRevision" (id,"siteId","entityType","entityId","entityRevision","siteRevision",action,snapshot,"changedFields",source,"createdAt")
+SELECT 'account_revision_'||md5(p.id),p."siteId",'PAGE',p.id,1,a.revision,'CREATE',to_jsonb(p),'["content","slug","status"]'::jsonb,'migration:0067:account',CURRENT_TIMESTAMP FROM "Page" p JOIN _account_sites a ON a.id=p."siteId" WHERE p.type='ACCOUNT';
+INSERT INTO "AuditEvent" (id,"siteId","siteRevision","entityType","entityId",action,"changedFields",changes,source,"createdAt")
+SELECT 'account_audit_'||md5(a.id),a.id,a.revision,'SITE',a.id,'UPDATE','["pages","seoTemplates"]'::jsonb,'{"initializedAccount":true,"preservedPublishedSnapshots":true}'::jsonb,'migration:0067:account',CURRENT_TIMESTAMP FROM _account_sites a;
+COMMIT;

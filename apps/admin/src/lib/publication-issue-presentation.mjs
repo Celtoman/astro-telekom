@@ -2,7 +2,8 @@ import { addressPageSections, addressPageFieldRule } from './address-page-editor
 import { tariffTemplateBlocks } from './tariff-template.mjs'
 import { generalHomeSections, generalHomeFieldRule, generalHomeFieldLabel } from './general-home-editor.mjs'
 import { cityHomeSections, cityHomeFieldRule } from './city-home-editor.mjs'
-const templates = { CITY_ADDRESS_CHECK: 'Проверка подключения', HOME: 'Главная сайта', CITY_HOME: 'Главная города', CITY_TARIFF_DETAIL: 'Страница тарифа' }
+import { accountEditableField, accountFieldLabel } from '../../../api/src/account-page-model.ts'
+const templates = { ACCOUNT: 'Личный кабинет', CITY_ADDRESS_CHECK: 'Проверка подключения', HOME: 'Главная сайта', CITY_HOME: 'Главная города', CITY_TARIFF_DETAIL: 'Страница тарифа' }
 const blocks = { ...Object.fromEntries(tariffTemplateBlocks.map(block => [block.id, block.title])), hero: 'Первый экран', 'home.hero': 'Первый экран', tariff_grid: 'Тарифы города', rich_text: 'Текстовый блок', service_grid: 'Услуги', feature_grid: 'Преимущества', steps: 'Этапы подключения' }
 export const publicationFieldLabels = {
   cityPlaceholder: 'Подсказка поиска города', searchButtonText: 'Текст основной кнопки', allCitiesText: 'Список городов', emptyMessage: 'Город не найден', inputErrorMessage: 'Сообщение при пустом поиске', steps: 'Три шага',
@@ -23,14 +24,16 @@ export function publicationIssuePresentation(issue, siteId) {
   const homeSection = (issue.template === 'CITY_ADDRESS_CHECK' ? addressPageSections : issue.template === 'HOME' ? generalHomeSections : issue.template === 'CITY_HOME' ? cityHomeSections : []).find(section => section.id === issue.block && section.id.includes('.'))
   const block = homeSection?.title ?? blocks[issue.block]
   const homeRule = homeSection && (issue.template === 'CITY_ADDRESS_CHECK' ? addressPageFieldRule : issue.template === 'CITY_HOME' ? cityHomeFieldRule : generalHomeFieldRule)(issue.block, issue.field)
-  const field = homeRule ? generalHomeFieldLabel(issue.field) : publicationFieldLabels[issue.field] ?? (issue.field ? `Поле ${issue.field}` : null)
+  const field = issue.template === 'ACCOUNT' && accountEditableField(issue.field) ? accountFieldLabel(issue.field) : homeRule ? generalHomeFieldLabel(issue.field) : publicationFieldLabels[issue.field] ?? (issue.field ? `Поле ${issue.field}` : null)
   const heading = system ? 'Не удалось проверить сборку сайта' : service ? `Служебные данные города · ${serviceNames[issue.pageType] ?? issue.pageType ?? 'Страница'}` : [template, block].filter(Boolean).join(' · ') || 'Проверка страницы'
   let href = null
   if (!system && !service && siteId) {
     const query = new URLSearchParams({ siteId })
     if (issue.field && publicationFieldLabels[issue.field]) query.set('field', issue.field)
     query.set('from', 'publication')
-    if (homeSection && issue.block !== 'home.hero') {
+    if (issue.template === 'ACCOUNT' && accountEditableField(issue.field)) {
+      query.set('field', issue.field); href = `/templates/account?${query}`
+    } else if (homeSection && issue.block !== 'home.hero') {
       query.set('kind', issue.template); query.set('block', issue.block)
       if (homeRule) query.set('field', issue.field)
       else query.delete('field')

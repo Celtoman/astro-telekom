@@ -112,3 +112,7 @@
 Действующий [план целевой платформы](../plans/2026-09-21-target-platform-implementation-plan.md) содержит незавершённые CMS/variables задачи и остаётся вне архива.
 
 - [Навигация админки и rate-limit request targets, 6 октября](2026-10-06-admin-navigation-and-rate-limits.md)
+
+## ACCOUNT — локальное внедрение 5 ноября 2026
+
+- [Перенос в код, минимум CMS, миграции и браузерные проверки](2026-11-05-account-implementation.md). Внешний rollout/активация отдельно; не является допуском к реальному трафику.

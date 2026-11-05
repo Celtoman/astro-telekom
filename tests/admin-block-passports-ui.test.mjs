@@ -26,6 +26,8 @@ test('placement filter distinguishes root, shared city template, tariff and futu
   assert.deepEqual(filterPassports(passports, '', 'global').map(passport => passport.id), ['header']);
   assert.equal(filterPassports(passports, '', 'tariff').length, 9);
   assert.equal(filterPassports(passports, '', 'city').length, 10);
+  assert.equal(filterPassports(passports, '', 'account').length, 13);
+  for (const passport of filterPassports(passports, '', 'account')) assert.equal(passportSource(passport).href, '/templates/account');
   assert.equal(filterPassports(passports, '', 'address').length, 8);
   for (const passport of filterPassports(passports, '', 'address')) assert.equal(passportSource(passport).href, `/templates/home?kind=CITY_ADDRESS_CHECK&block=${encodeURIComponent(passport.id)}`);
   assert.deepEqual(filterPassports(passports, '', 'future').map(passport => passport.id), []);

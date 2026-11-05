@@ -175,3 +175,7 @@ Worker поддерживает три provider-режима. Coolify Compose з
 Шаблон `CITY_ADDRESS_CHECK` создаёт страницу `/{location}/proverka-podklyucheniya-k-domru-po-adresu` для каждого опубликованного города. Восемь секций редактируются независимо от HOME/CITY_HOME в `/templates/home?kind=CITY_ADDRESS_CHECK`; общие компоненты, контакты и факты переиспользуются. [Контракт внедрения](docs/plans/2026-11-04-address-check-implementation-contract.md) и [проверки](docs/research/2026-11-04-address-page-implementation.md). Изменения кода выпускаются отдельно от CMS-публикации.
 
 Нормализация отступов ADDRESS и ширины H1 в коде, Screens и preview: [границы и проверка](docs/research/2026-11-04-address-page-spacing.md).
+
+## ACCOUNT — локальное внедрение
+
+Информационная страница `/lichnyy-kabinet-dom-ru` перенесена в код:13 собственных программных секций и готовые Header/Address-only/FAQ/Footer. Одна защищённая форма `/templates/account` редактирует H1, вступление, ссылку входа,14 фиксированных иллюстраций и FAQ; инструкции и условия остаются в коде. ACCOUNT добавляется только в новый snapshot, старые снимки совместимы. Внешний rollout ещё не выполнен. [Проверки и ограничения](docs/research/2026-11-05-account-implementation.md).

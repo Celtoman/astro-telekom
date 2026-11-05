@@ -1,0 +1,39 @@
+---
+import AddressForm from '../AddressForm.astro';
+import HomeAddressFormStyles from './HomeAddressFormStyles.astro';
+import { publicAsset } from '../../data/public-asset';
+import type { CityView, SiteView } from '../../data/site';
+import { renderAddressOnlyHeading, renderAddressOnlyArt } from '../../lib/address-only-render';
+interface Props { site: SiteView; apiUrl: string; city?: CityView; pageSlug: string; pageScope?: 'GLOBAL' }
+const { site, apiUrl, city, pageSlug, pageScope } = Astro.props;
+---
+<section class="home-block address-only" aria-label="Проверка подключения">
+  <div class="address-only-copy">
+    <Fragment set:html={renderAddressOnlyHeading()} />
+    <AddressForm {apiUrl} siteSlug={site.slug} {pageSlug} {pageScope} {city} {site} variant="home-entry" addressLabel="Адрес подключения" addressPlaceholder="Город, улица, дом" checkButtonText="Проверить адрес" />
+    <p class="address-only-reassurance"><img src={publicAsset('/images/general-home/address-shield.svg')} width="24" height="24" alt="" />Проверка бесплатная и ни к чему не обязывает.</p>
+  </div>
+  <Fragment set:html={renderAddressOnlyArt(publicAsset)} />
+</section>
+<HomeAddressFormStyles />
+<style is:global>
+  .address-only { position:relative; padding:32px 32px 24px; min-height:336px; border-radius:24px; background:#eaf7ff; }
+  .address-only-copy { display:flex; flex-direction:column; gap:24px; width:min(864px,calc(100% - 352px)); min-width:0; }
+  .address-only-heading { display:flex; flex-direction:column; gap:12px; }
+  .address-only-heading p { max-width:640px; color:#526071; }
+  .address-only-art { position:absolute; right:16px; top:0; width:320px; height:256px; }
+  .address-only-art img { display:block; width:320px; height:256px; object-fit:contain; }
+  .address-only-art figcaption { position:absolute; left:-96px; top:184px; width:172px; padding:12px; border-radius:14px; background:#fff; color:#526071; font-size:14px; line-height:20px; }
+  .address-only-reassurance { display:flex; align-items:center; gap:12px; font-size:14px; line-height:20px; }
+  .address-only-reassurance img { flex:0 0 24px; width:24px; height:24px; }
+  .address-only .address-check-root, .address-only .address-entry { width:100%; margin:0; padding:0; background:transparent; box-shadow:none; }
+  .address-only .address-form { width:100%; }
+  .address-only .address-form > label, .address-only .address-hint { width:100%; }
+  .address-only .address-field { flex:1; min-width:0; }
+  .address-only .address-form > button { width:200px; }
+  .address-only-preview { display:flex; flex-direction:column; gap:8px; }
+  .address-only-preview > div { display:flex; gap:16px; }
+  .address-only-preview input { min-width:0; flex:1; padding:12px 16px; border:1px solid #f0f3f6; border-radius:14px; font:inherit; background:#fff; }
+  @media(min-width:621px) and (max-width:1100px) { .address-only { padding:24px; } .address-only-copy { width:100%; } .address-only-heading { width:calc(100% - 224px); min-height:160px; } .address-only-art { right:16px; width:200px; height:160px; } .address-only-art img { width:200px; height:160px; } .address-only-art figcaption { left:-12px; top:146px; } }
+  @media(max-width:620px) { .address-only { padding:20px; min-height:0; } .address-only-copy { width:100%; gap:16px; } .address-only-art { display:none; } .address-only .address-form > button { width:100%; } .address-only-preview > div { flex-direction:column; } }
+</style>

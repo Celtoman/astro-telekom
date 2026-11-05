@@ -2,6 +2,8 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import { createPublicCsp } from '../../scripts/browser-security-policy.mjs';
 import { resolvePublicApiUrl, resolvePublicSiteUrl } from './scripts/public-site-url.mjs';
+import { materializeAccountAssets } from './scripts/account-assets.mjs';
+import { fileURLToPath } from 'node:url';
 
 const publicApiUrl = resolvePublicApiUrl(process.env);
 const publicSiteUrl = resolvePublicSiteUrl(process.env);
@@ -17,7 +19,9 @@ export default defineConfig({
   },
   site: publicSiteUrl,
   trailingSlash: 'never',
-  integrations: [react()],
+  integrations: [react(), { name: 'account-immutable-images', hooks: {
+    'astro:build:done': async ({ dir }) => { await materializeAccountAssets({ distDirectory: fileURLToPath(dir) }); },
+  } }],
   security: {
     csp: createPublicCsp({
       publicApiUrl,

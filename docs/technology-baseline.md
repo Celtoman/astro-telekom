@@ -1,6 +1,6 @@
 # Технологическая база
 
-В репозитории 65 каталогов миграций, последний — `0065_tvbox_availability`. Его применение в защищенном test-контуре, finished deployment exact SHA 8b03ab78 и публикация 28/28 подтверждены [внешней проверкой#495](research/2026-11-04-tariff-contract-release.md). Дата проверки —4 ноября 2026 года.
+В репозитории 67 каталогов миграций, последний — `0067_account_page`.0066/0067 подготовлены для ACCOUNT и пока проверены только локально. Применение0065 в защищенном test-контуре, finished deployment exact SHA 8b03ab78 и публикация 28/28 подтверждены [внешней проверкой#495](research/2026-11-04-tariff-contract-release.md). Дата проверки —4 ноября 2026 года.
 
 Последняя сверка с manifests, Dockerfiles, Compose и migrations: 6 октября 2026 года. Доказательства внешних rollout — в [research/README.md](research/README.md); ограничения запуска — в [current-state.md](current-state.md).
 

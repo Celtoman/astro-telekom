@@ -1,0 +1,106 @@
+[
+  {
+    "width": 390,
+    "rails": [
+      {
+        "name": "Способы входа",
+        "cards": 3,
+        "reachedLast": true,
+        "returnedFirst": true,
+        "touch": true,
+        "vertical": true,
+        "keyboard": true
+      },
+      {
+        "name": "Способы восстановления доступа",
+        "cards": 4,
+        "reachedLast": true,
+        "returnedFirst": true,
+        "touch": true,
+        "vertical": true,
+        "keyboard": true
+      },
+      {
+        "name": "Возможности личного кабинета",
+        "cards": 3,
+        "reachedLast": true,
+        "returnedFirst": true,
+        "touch": true,
+        "vertical": true,
+        "keyboard": true
+      },
+      {
+        "name": "Разделы верхнего меню",
+        "cards": 4,
+        "reachedLast": true,
+        "returnedFirst": true,
+        "touch": true,
+        "vertical": true,
+        "keyboard": true
+      },
+      {
+        "name": "Блоки главной страницы кабинета",
+        "cards": 4,
+        "reachedLast": true,
+        "returnedFirst": true,
+        "touch": true,
+        "vertical": true,
+        "keyboard": true
+      }
+    ],
+    "anchor": true,
+    "faqKeyboard": true
+  },
+  {
+    "width": 320,
+    "rails": [
+      {
+        "name": "Способы входа",
+        "cards": 3,
+        "reachedLast": true,
+        "returnedFirst": true,
+        "touch": true,
+        "vertical": true,
+        "keyboard": true
+      },
+      {
+        "name": "Способы восстановления доступа",
+        "cards": 4,
+        "reachedLast": true,
+        "returnedFirst": true,
+        "touch": true,
+        "vertical": true,
+        "keyboard": true
+      },
+      {
+        "name": "Возможности личного кабинета",
+        "cards": 3,
+        "reachedLast": true,
+        "returnedFirst": true,
+        "touch": true,
+        "vertical": true,
+        "keyboard": true
+      },
+      {
+        "name": "Разделы верхнего меню",
+        "cards": 4,
+        "reachedLast": true,
+        "returnedFirst": true,
+        "touch": true,
+        "vertical": true,
+        "keyboard": true
+      },
+      {
+        "name": "Блоки главной страницы кабинета",
+        "cards": 4,
+        "reachedLast": true,
+        "returnedFirst": true,
+        "touch": true,
+        "vertical": true,
+        "keyboard": true
+      }
+    ],
+    "anchor": true,
+    "faqKeyboard": true
+  }
+]

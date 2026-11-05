@@ -256,6 +256,10 @@
 | TD-63 | [#83](https://github.com/Celtoman/astro-telekom/issues/83) ✅ | `docs/worker.md` синхронизирован с фактическим routing и retry-поведением |
 | TD-70 | [#90](https://github.com/Celtoman/astro-telekom/issues/90) ✅ | DTO ограничивает query официальным максимумом DaData 300 символов |
 | TD-131 | [#214](https://github.com/Celtoman/astro-telekom/issues/214) ✅ | Каталог кодов указывает все четыре допустимых SEO/OG-текстовых поля, исключая URL изображения |
+| TD-215 | [#513](https://github.com/Celtoman/astro-telekom/issues/513) 🟢 | High advisories Sharp/Vite/Zod/Undici требуют совместимых точечных обновлений и повторной проверки |
+| TD-216 | [#515](https://github.com/Celtoman/astro-telekom/issues/515) 🟢 | Разобрать low/moderate advisories прямых и транзитивных зависимостей после high-fix ACCOUNT |
+| TD-217 | [#516](https://github.com/Celtoman/astro-telekom/issues/516) 🟢 | Automatic CODE в isolated non-root runtime не завершает gate ACCOUNT; требуется диагностика причины |
+| TD-218 | [#517](https://github.com/Celtoman/astro-telekom/issues/517) 🟢 | Привязать abort Node test к остановке owned runtime fixture и гарантированному cleanup |
 
 ## Находки review внедрения ADDRESS
 

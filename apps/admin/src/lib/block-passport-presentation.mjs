@@ -17,10 +17,12 @@ export const passportGroups = [
   { id: 'all', label: 'Все блоки' }, { id: 'global', label: 'Все публичные страницы' },
   { id: 'root', label: 'Общая главная' }, { id: 'city', label: 'Общий шаблон города' },
   { id: 'address', label: 'Проверка подключения' },
+  { id: 'account', label: 'Личный кабинет' },
   { id: 'tariff', label: 'Шаблон страницы тарифа' },
 ];
 export function passportGroup(passport) {
   if (passport.id === 'header') return 'global';
+  if (passport.id.startsWith('account.')) return 'account';
   if (passport.id.startsWith('address.')) return 'address';
   if (passport.id.startsWith('home.')) return 'root';
   if (passport.id === 'rich_text') return 'future';
@@ -48,6 +50,7 @@ export function passportContent(passport) {
   return fields.map(field => ({ key: field.key, label: fieldNames[field.key] ?? (passportGroup(passport) === 'root' || passport.id.startsWith('city.') || passport.id.startsWith('address.') ? generalHomeFieldLabel(field.key) : 'Дополнительное поле'), required: field.required }));
 }
 export function passportSource(passport) {
+  if (passport.id.startsWith('account.')) return { href: passport.editorReadiness === 'READY' ? '/templates/account' : null, label: passport.editorReadiness === 'READY' ? 'Открыть редактор' : null, note: 'Одна форма страницы: вступление, ссылка входа, иллюстрации и FAQ. Инструкции, условия и композиция заданы кодом.' };
   if (passport.id.startsWith('address.') && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=CITY_ADDRESS_CHECK&block=${encodeURIComponent(passport.id)}`, label: 'Открыть редактор', note: 'Независимый контент ADDRESS. Сохранение меняет рабочую версию; общие факты редактируются в настройках.' };
   if (passport.id.startsWith('city.') && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=CITY_HOME&block=${encodeURIComponent(passport.id)}`, label: 'Открыть редактор', note: 'Независимый контент шаблона города. Общие факты меняются в настройках сайта.' };
   if (passport.id === 'tariff_grid' && passport.editorReadiness === 'READY') return { href: '/templates/tariffs', label: 'Открыть редактор', note: 'Общий тарифный блок городов. Цены и закрепление меняются в каталоге тарифов.' };

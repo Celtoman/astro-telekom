@@ -14,6 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 // mounted afresh on navigation. Only display lists reuse session memory;
 // editorial reads remain fresh and preserve their optimistic revision checks.
 const screenLoaders = {
+  account: () => import("./AccountPageApp").then(m => ({ default: m.AccountPageApp })),
   overview: () => import("./AdminApp").then(m => ({ default: m.AdminApp })),
   tariffs: () => import("./TariffsApp").then(m => ({ default: m.TariffsApp })),
   "tariffs-edit": () => import("./TariffEditorApp").then(m => ({ default: m.TariffEditorApp })),

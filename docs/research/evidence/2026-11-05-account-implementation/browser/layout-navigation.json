@@ -1,0 +1,183 @@
+[
+  {
+    "width": 1440,
+    "overflow": false,
+    "captionOffsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "tocRows": 1,
+    "appCaption": 0,
+    "businessHeights": [
+      376,
+      376
+    ],
+    "terminationImageY": [
+      8532.765625,
+      8532.765625
+    ],
+    "numberedHeadings": []
+  },
+  {
+    "width": 834,
+    "overflow": false,
+    "captionOffsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "tocRows": 2,
+    "appCaption": 0,
+    "businessHeights": [
+      496.75,
+      376
+    ],
+    "terminationImageY": [
+      12925.859375,
+      13511.5
+    ],
+    "numberedHeadings": []
+  },
+  {
+    "width": 390,
+    "overflow": false,
+    "captionOffsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "tocRows": 4,
+    "appCaption": 0,
+    "businessHeights": [
+      267.5,
+      656
+    ],
+    "terminationImageY": [
+      11477.453125,
+      11946.71875
+    ],
+    "numberedHeadings": [],
+    "all11AnchorsBackDirect": true
+  },
+  {
+    "width": 320,
+    "overflow": false,
+    "captionOffsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "tocRows": 6,
+    "appCaption": 0,
+    "businessHeights": [
+      223.75,
+      800
+    ],
+    "terminationImageY": [
+      12938.125,
+      13438.984375
+    ],
+    "numberedHeadings": []
+  },
+  {
+    "width": 700,
+    "overflow": false,
+    "captionOffsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "tocRows": 2,
+    "appCaption": 0,
+    "businessHeights": [
+      464.25,
+      424
+    ],
+    "terminationImageY": [
+      12897.953125,
+      13453.578125
+    ],
+    "numberedHeadings": []
+  },
+  {
+    "width": 1101,
+    "overflow": false,
+    "captionOffsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "tocRows": 2,
+    "appCaption": 0,
+    "businessHeights": [
+      400,
+      400
+    ],
+    "terminationImageY": [
+      8772.25,
+      8772.25
+    ],
+    "numberedHeadings": []
+  }
+]

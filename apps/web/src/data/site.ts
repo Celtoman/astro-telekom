@@ -1,4 +1,5 @@
 import { ADDRESS_PAGE_SLUG, ADDRESS_PAGE_BLOCK_ORDER, ADDRESS_PAGE_VERSION, ADDRESS_PAGE_IMPLEMENTATION } from '../../../api/src/address-page-model';
+import { assertAccountPage } from './account-page';
 import { projectCityHomeBlocks } from '../../../api/src/tariff-collection-model';
 import { tariffView, type TariffView } from './tariff-view';
 import { readFile } from 'node:fs/promises';
@@ -119,14 +120,17 @@ function assertCityHomeTemplate(city: CityView): void {
 
 function expectedReleaseOneRoutes(cities: CityView[], globalPages: PageView[]): PublicRouteView[] {
   const pagesByType = new Map(globalPages.map((page) => [page.type, page]));
-  if (pagesByType.size !== releaseOneGlobalPages.length || globalPages.length !== releaseOneGlobalPages.length) {
+  const supported = [...releaseOneGlobalPages, { type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }];
+  if (pagesByType.size !== globalPages.length || globalPages.some(p => !supported.some(e => e.type === p.type))) {
     throw new Error(`Release 1 требует ровно ${releaseOneGlobalPages.length} опубликованные общие страницы`);
   }
 
   const routes: PublicRouteView[] = [{ id: 'HOME', kind: 'HOME', path: '/' }];
   const occupiedPaths = new Set(['/']);
-  for (const expected of releaseOneGlobalPages) {
+  for (const expected of supported) {
     const page = pagesByType.get(expected.type);
+    if (!page && expected.type === 'ACCOUNT') continue;
+    if (page?.type === 'ACCOUNT') assertAccountPage(page.content);
     if (!page) throw new Error(`Не опубликована обязательная общая страница Release 1: ${expected.type}`);
     if (page.slug !== expected.slug) throw new Error(`Некорректный slug общей страницы ${expected.type}: ожидается ${expected.slug}`);
     const path = publicHtmlPath(expected.slug);

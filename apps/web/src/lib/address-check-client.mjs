@@ -244,6 +244,7 @@ function initializeRoot(root) {
   };
 
   const renderBusinessResult = (check) => {
+    if (form.dataset.pageScope === 'GLOBAL' && typeof check.citySlug === 'string' && /^[a-z0-9-]+$/.test(check.citySlug)) form.dataset.citySlug = check.citySlug;
     clearResultPanels();
     for (const element of resultDialog.querySelectorAll('[data-result-address]')) element.textContent = check.address;
     const panel = resultDialog.querySelector(`[data-business-outcome="${check.outcome}"]`);
@@ -440,7 +441,7 @@ function initializeRoot(root) {
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           signal: controller.signal,
-          body: JSON.stringify({ siteSlug, citySlug: form.dataset.citySlug, query, website: '' }),
+          body: JSON.stringify({ siteSlug, citySlug: form.dataset.citySlug || undefined, pageScope: form.dataset.pageScope || undefined, pageSlug: form.dataset.pageScope ? form.dataset.pageSlug : undefined, query, website: '' }),
         });
         if (!response.ok) {
           const responseError = new Error(suggestionErrorMessage(response));
@@ -512,8 +513,9 @@ function initializeRoot(root) {
         signal: controller.signal,
         body: JSON.stringify({
           siteSlug,
-          citySlug: form.dataset.citySlug,
+          citySlug: form.dataset.citySlug || undefined,
           pageSlug: form.dataset.pageSlug || undefined,
+          pageScope: form.dataset.pageScope || undefined,
           address: addressInput.value,
           suggestion: selectedSuggestion,
           objectType: 'apartment',
@@ -643,8 +645,9 @@ function initializeRoot(root) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           siteSlug,
-          citySlug: form.dataset.citySlug,
+          citySlug: form.dataset.citySlug || undefined,
           pageSlug: form.dataset.pageSlug || undefined,
+          pageScope: form.dataset.pageScope || undefined,
           tariffSlug: form.dataset.tariffSlug || undefined,
           configuration: configuration || undefined,
           formName: 'address-result-dialog',

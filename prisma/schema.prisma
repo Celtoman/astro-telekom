@@ -14,6 +14,7 @@ enum PublishStatus {
 }
 
 enum PageType {
+  ACCOUNT
   HOME
   INTERNET
   INTERNET_TV
@@ -29,6 +30,7 @@ enum PageType {
 }
 
 enum SeoTemplateKind {
+  ACCOUNT
   HOME
   COVERAGE
   CITIES

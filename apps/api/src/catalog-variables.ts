@@ -1,4 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
+import { ACCOUNT_PAGE_SCHEMA } from './account-page-model';
 import { resolveVariableText, type VariableContext, type VariableWarning } from './variable-registry';
 import { HOME_HERO_VERSION, parseRedTitle } from './home-hero-model';
 import { validateFirstScreen } from './first-screen';
@@ -58,7 +59,7 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
   const resolvePage = (page: JsonObject, path: string, context: VariableContext, cityId?: string): JsonObject => ({
     ...page,
     title: resolveField(page.title, `${path}.title`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, cityId, editorHref: null }),
-    content: resolveNamedFields(page.content, ['text'], `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, cityId, editorHref: null }),
+    content: page.type === 'ACCOUNT' ? resolveStructured(page.content, ACCOUNT_PAGE_SCHEMA, `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, editorHref: '/templates/account' }) : resolveNamedFields(page.content, ['text'], `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, cityId, editorHref: null }),
     seo: {},
     blocks: Array.isArray(page.blocks) ? page.blocks.map((block: JsonObject, index: number) => {
       const blockPath = `${path}.blocks[${index}]`;

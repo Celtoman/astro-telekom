@@ -1,0 +1,27 @@
+{
+  "fixture": "intercepted synthetic API, no live writes",
+  "fields": {
+    "images": 14,
+    "alt": 14,
+    "captions": 13
+  },
+  "fieldRecovery": true,
+  "save": true,
+  "noPublish": true,
+  "disabledDuringSave": true,
+  "faqAddReorderDeleteFocus": true,
+  "conflictRetainsInput": true,
+  "unsavedNavigation": true,
+  "requests": [
+    "GET /api/v1/auth/me",
+    "GET /api/v1/admin/sites",
+    "GET /api/v1/admin/sites/site-1/account",
+    "GET /api/v1/admin/sites",
+    "GET /api/v1/admin/sites/site-1/variable-catalog/definitions",
+    "GET /api/v1/admin/sites/site-1/publication-state",
+    "PATCH /api/v1/admin/sites/site-1/account",
+    "GET /api/v1/admin/sites/site-1/publication-state",
+    "PATCH /api/v1/admin/sites/site-1/account"
+  ],
+  "errors": []
+}

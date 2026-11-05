@@ -10,7 +10,8 @@ interface Props {
   apiUrl: string;
   siteSlug: string;
   pageSlug: string;
-  city: CityView;
+  city?: CityView;
+  pageScope?: 'GLOBAL';
   site: SiteView;
   presentation?: Presentation;
   dialogId?: string;
@@ -27,6 +28,7 @@ const {
   siteSlug,
   pageSlug,
   city,
+  pageScope,
   presentation = 'embedded',
   dialogId,
   serviceType = 'INTERNET',
@@ -36,10 +38,12 @@ const {
   addressPlaceholder,
   checkButtonText,
 } = Astro.props as Props;
+if (!city && pageScope !== 'GLOBAL') throw new Error('Для городской формы необходим город');
+const sourceId = city?.slug || 'global-account';
 const suffix = tariff?.slug || pageSlug || 'catalog';
-const formId = `address-form-${city.slug}-${presentation}-${suffix}`;
-const entryDialogId = dialogId || `address-entry-${city.slug}-${suffix}`;
-const resultDialogId = `address-result-${city.slug}-${presentation}-${suffix}`;
+const formId = `address-form-${sourceId}-${presentation}-${suffix}`;
+const entryDialogId = dialogId || `address-entry-${sourceId}-${suffix}`;
+const resultDialogId = `address-result-${sourceId}-${presentation}-${suffix}`;
 const resultHeadingId = `${resultDialogId}-heading`;
 const consentVersion = 'lead-form-v1-2026-09-22';
 const tariffSummary = tariff ? JSON.stringify({
@@ -72,7 +76,8 @@ const EntryContainer = presentation === 'dialog' ? 'dialog' : 'section';
         data-address-form
         data-api-url={apiUrl}
         data-site-slug={siteSlug}
-        data-city-slug={city.slug}
+        data-city-slug={city?.slug || ''}
+        data-page-scope={pageScope}
         data-page-slug={pageSlug}
         data-service-type={tariff?.serviceType || serviceType}
         data-tariff-slug={tariff?.slug || ''}

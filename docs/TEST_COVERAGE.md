@@ -268,3 +268,17 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 ## Тарифы: внешняя проверка, 4 ноября 2026
 
 После exact-SHA8b03ab78 и CMS28/28 проверены25405 комплектаций фактически опубликованных3805 активных тарифов,347 HTTP quote-сценариев для207 городов и3805 живых HTML. Два браузерных примера на1440/834/390/320 проверяют первоначальные суммы, скрытие недоступной приставки и реальный пересчет после выбора выкупа. Ошибок нет; косметическая находка PF-179 отделена от расчета. [Результаты и воспроизводимые скрипты](research/2026-11-04-tariff-contract-release.md). Это release evidence, не новые runtime tests; реальные заявки не отправлялись.
+
+
+## ACCOUNT — проверки переноса
+
+- `account-page-contract.test.cjs`: строгий минимум CMS,14 слотов,6 начальных FAQ, запрет условий/раскладки, опциональные routes, SITE substitution, фактический город/регион.
+- `account-page-api.test.cjs`: GLOBAL source/check/suggest, несовместимый source, positive lead/idempotency, guarded save409, actual serving published view и отсутствие ложного SQL fallback.
+- `account-page-data.test.cjs` + `scripts/rehearse-account-page.mjs`: реальная PostgreSQL18, fresh seed,0067/idempotence, authored content, immutable snapshot, provider isolation, atomic save409, три canonical collision rollback.
+- `account-page-build.test.mjs`: реальные private Astro artifacts старого/нового snapshots, ровно+1 маршрут,14 изображений,5 лент,6FAQ, SEO/sitemap; broken image сохраняет прежние artifacts.
+- `account-page-editor.test.mjs`: адресная recovery link только к разрешённым полям, strict rendered schema без Nest,3 безопасных FAQ tel и disabled preview actions.
+- `account-assets.test.mjs`: full decode14 assets/JPEG trailer, повреждения/ограничения, allowlist/DNS/TLS pinning/MIME/redirect, SHA/import/prefix, repeatability и mixed-case HTTPS regression.
+
+Браузерные ручные/эмулированные проверки и ограничения внешнего rollout находятся в [отчёте ACCOUNT](research/2026-11-05-account-implementation.md); они не подменяются количеством unit tests.
+
+`publication-runtime.test.mjs` / `rehearse-publication-runtime.mjs` дополнительно проверяют переход old snapshot без ACCOUNT → CMS snapshot с ACCOUNT и14 native decoded assets в настоящем Linux/non-root image, выдачу нового URL/asset через Caddy и последующий CODE/restart. Windows observation budget240s для CODE с elapsed diagnostics, Linux120s; production activation guards неизменны. При неуспехе до cleanup читается защищённый CODE outcome без объявления ручного retry автоматическим успехом. Ограничение abort/child cleanup отдельно в #517.

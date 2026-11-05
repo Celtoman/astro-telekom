@@ -55,6 +55,8 @@ function field(value: unknown, rule: GeneralHomeFieldRule, block: string, path: 
   }
 }
 
+export function assertRenderedStructuredBlock(block: string, raw: unknown, schema: GeneralHomeFieldRule): void { field(raw, schema, block, ''); }
+
 /** Public rendered snapshots are stricter than editable raw templates: no unresolved variables or incomplete drafts. */
 export function generalHomeCatalog(raw: unknown): GeneralHomeCatalog | undefined {
   if (raw === undefined || raw === null) return undefined;

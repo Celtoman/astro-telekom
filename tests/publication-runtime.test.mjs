@@ -20,10 +20,12 @@ test('runtime cannot turn unknown legacy serving into EMPTY or resume an unrecog
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
-test('real Node/Caddy image separates CODE/CMS and resumes static HTML/assets without API', { timeout: 900000 }, async () => {
+test('real Node/Caddy image separates CODE/CMS and resumes static HTML/assets without API', { timeout: 900000 }, async (context) => {
   const child = spawn(process.execPath, [fileURLToPath(new URL('../scripts/rehearse-publication-runtime.mjs', import.meta.url)), '--non-root'], { windowsHide: true });
   let output = ''; child.stdout.on('data', chunk => { output += chunk; }); child.stderr.on('data', chunk => { output += chunk; });
   const code = await new Promise((accept, reject) => { child.once('error', reject); child.once('close', accept); });
   assert.equal(code, 0, output);
   assert.match(output, /CODE preserves serving A; CMS publishes B without provider/);
+  assert.match(output, /ACCOUNT14 assets decode and serve on Linux\/non-root/);
+  for (const line of output.split('\n').filter(line => line.startsWith('Runtime timing '))) context.diagnostic(line);
 });

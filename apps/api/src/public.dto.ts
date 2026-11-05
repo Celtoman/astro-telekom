@@ -227,6 +227,10 @@ export class LoginDto {
 }
 
 export class AddressCheckDto {
+  @IsOptional()
+  @IsIn(['GLOBAL'])
+  pageScope?: 'GLOBAL';
+
   @IsString()
   @MinLength(3)
   @MaxLength(500)
@@ -264,6 +268,16 @@ export class AddressCheckDto {
 }
 
 export class AddressSuggestionsDto {
+  @IsOptional()
+  @IsIn(['GLOBAL'])
+  pageScope?: 'GLOBAL';
+
+  @IsOptional()
+  @IsString()
+  @Matches(slug)
+  @MaxLength(120)
+  pageSlug?: string;
+
   @IsString()
   @MinLength(3)
   @MaxLength(300)
@@ -318,6 +332,10 @@ export class LeadDecisionStatusDto {
 }
 
 export class CreateLeadDto {
+  @IsOptional()
+  @IsIn(['GLOBAL'])
+  pageScope?: 'GLOBAL';
+
   @IsOptional()
   @Equals(true)
   consentAccepted?: true;

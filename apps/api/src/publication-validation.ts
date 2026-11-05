@@ -1,4 +1,6 @@
 import { validateTariffCollection } from './tariff-collection';
+import { validateAccountPage } from './account-page';
+import { SUPPORTED_GLOBAL_PAGES } from './public-route-policy';
 import { validateCityHomeBlocks, validatePublishedBlocks } from './block-validation';
 import { resolveCatalogVariables } from './catalog-variables';
 import { RELEASE_ONE_GLOBAL_PAGES, type PublicRoute } from './public-route-policy';
@@ -53,8 +55,9 @@ function message(error: unknown): string {
 
 function routeSources(source: CatalogSource): RouteSource[] {
   const routes: RouteSource[] = [{ route: { id: 'HOME', kind: 'HOME', path: '/' } }];
-  for (const expected of RELEASE_ONE_GLOBAL_PAGES) {
+  for (const expected of SUPPORTED_GLOBAL_PAGES) {
     const page = source.globalPages.find((item) => item.type === expected.type);
+    if (!page && expected.type === 'ACCOUNT') continue;
     routes.push({
       route: { id: expected.type, kind: 'GLOBAL_PAGE', path: `/${expected.slug}`, pageType: expected.type },
       page,
@@ -156,11 +159,11 @@ export function validatePublicationSource(
   for (const missing of sitePhoneReadinessErrors(site)) {
     add('BLOCKING', 'SITE_PHONE_MISSING', '/', `Не заполнено обязательное поле ${missing}`);
   }
-  if (source.globalPages.length !== RELEASE_ONE_GLOBAL_PAGES.length) {
+  if (RELEASE_ONE_GLOBAL_PAGES.some(expected => !source.globalPages.some(page => page.type === expected.type))) {
     add('BLOCKING', 'GLOBAL_PAGE_SET', '/', `Release 1 требует ровно ${RELEASE_ONE_GLOBAL_PAGES.length} общих страниц`);
   }
   for (const page of source.globalPages) {
-    const expected = RELEASE_ONE_GLOBAL_PAGES.find((item) => item.type === page.type);
+    const expected = SUPPORTED_GLOBAL_PAGES.find((item) => item.type === page.type);
     if (!expected) add('BLOCKING', 'UNKNOWN_GLOBAL_PAGE', `/${page.slug}`, `Неизвестный тип опубликованной общей страницы: ${page.type}`);
     else if (page.slug !== expected.slug) add('BLOCKING', 'GLOBAL_PAGE_SLUG', `/${expected.slug}`, `Некорректный slug общей страницы ${page.type}: ${page.slug}`);
     if (source.globalPages.filter((item) => item.type === page.type).length > 1) {
@@ -196,7 +199,7 @@ export function validatePublicationSource(
     if (route.kind === 'GLOBAL_PAGE') {
       if (!page) add('BLOCKING', 'GLOBAL_PAGE_MISSING', route.path, `Не опубликована обязательная страница ${route.pageType}`);
       else {
-        try { validatePublishedBlocks(page.blocks); } catch (error) { add('BLOCKING', 'PAGE_BLOCKS', route.path, message(error), undefined, contentErrorLocation(error)); }
+        try { if (page.type === 'ACCOUNT') validateAccountPage(page.content); else validatePublishedBlocks(page.blocks); } catch (error) { add('BLOCKING', 'PAGE_BLOCKS', route.path, message(error), undefined, { ...(page.type === 'ACCOUNT' ? { template: 'ACCOUNT' } : {}), ...contentErrorLocation(error) }); }
       }
     }
     if (route.kind === 'CITY_HOME') {
@@ -236,6 +239,7 @@ export function validatePublicationSource(
         provider: { name: provider.name },
         now,
       });
+      if (route.id === 'ACCOUNT' && resolved.globalPages[0]) validateAccountPage(resolved.globalPages[0].content);
       for (const warning of resolved.variableWarnings) {
         add('WARNING', `VARIABLE_${warning.reason}`, route.path, `Переменная {${warning.code}}: ${warning.reason} (${warning.path})`);
       }
@@ -243,7 +247,7 @@ export function validatePublicationSource(
       const detail = message(error);
       const tariffField = route.kind === 'CITY_TARIFF_DETAIL' && /\.promoText\b/.test(detail)
         ? { template: route.id, block: 'hero', field: 'promoText' } : undefined;
-      add('BLOCKING', 'VARIABLE_RESOLUTION', route.path, detail, undefined, tariffField);
+      add('BLOCKING', 'VARIABLE_RESOLUTION', route.path, detail, undefined, route.id === 'ACCOUNT' ? { template: 'ACCOUNT', ...contentErrorLocation(error) } : tariffField);
     }
     try {
       const seo = resolveSeoTemplates({

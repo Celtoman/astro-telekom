@@ -1,0 +1,17 @@
+<style is:global>
+  :is(.home-address,.address-only) .home-entry .address-form { display: grid; grid-template-columns: minmax(0, 1fr) 200px; max-width: none; gap: 8px 16px; padding: 0; margin: 0; border: 0; background: none; box-shadow: none; }
+  :is(.home-address,.address-only) .home-entry .address-form > label { grid-column: 1 / -1; font-size: 14px; font-weight: 600; line-height: 20px; }
+  :is(.home-address,.address-only) .home-entry .address-field { position: relative; grid-column: 1; grid-row: 2; }
+  :is(.home-address,.address-only) .home-entry .address-icon { position: absolute; left: 16px; top: 14px; width: 20px; height: 20px; pointer-events: none; }
+  :is(.home-address,.address-only) .home-entry .address-form input[name="address"], :is(.home-address,.address-only) .home-entry .address-form input[type="text"] { min-width: 0; width: 100%; height: 48px; padding: 11px 16px 11px 46px; border: 1px solid #f0f3f6; border-radius: 14px; background: #fff; color: #18202a; font: inherit; font-size: 16px; line-height: 24px; }
+  :is(.home-address,.address-only) .home-entry input::placeholder { color: #5c6b7d; opacity: 1; }
+  :is(.home-address,.address-only) .home-entry .address-form > .button { grid-column: 2; grid-row: 2; width: 200px; min-width: 0; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; background: #e0231e; color: #fff; font: inherit; font-size: 14px; font-weight: 600; line-height: 20px; }
+  :is(.home-address,.address-only) .home-entry .address-hint:not([data-state]) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  :is(.home-address,.address-only) .home-entry .address-hint, :is(.home-address,.address-only) .home-entry .form-result { grid-column: 1 / -1; }
+  :is(.home-address,.address-only) .home-entry .form-result:empty { display: none; }
+  @media(max-width:620px) {
+    :is(.home-address,.address-only) .home-entry .address-form { grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
+    :is(.home-address,.address-only) .home-entry .address-form > label { margin-bottom: -4px; }
+    :is(.home-address,.address-only) .home-entry .address-form > .button { grid-column: 1; grid-row: 3; width: 100%; }
+  }
+</style>

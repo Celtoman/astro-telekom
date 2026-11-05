@@ -10,7 +10,7 @@ import { resolvePublicApiUrl, resolvePublicSiteUrl } from '../public-site-url.mj
 const workspace = fileURLToPath(new URL('../../../../', import.meta.url));
 const sha = value => createHash('sha256').update(value).digest('hex');
 const id = /^[a-zA-Z0-9_-]{1,200}$/;
-const publicKeys = ['PUBLIC_SITE_URL', 'PUBLIC_API_URL', 'PUBLIC_SITE_SLUG', 'PUBLIC_YANDEX_METRIKA_ID', 'PUBLIC_CONNECTION_PHONE', 'PUBLIC_SUPPORT_PHONE'];
+const publicKeys = ['PUBLIC_SITE_URL', 'PUBLIC_API_URL', 'PUBLIC_SITE_SLUG', 'PUBLIC_YANDEX_METRIKA_ID', 'PUBLIC_CONNECTION_PHONE', 'PUBLIC_SUPPORT_PHONE', 'ACCOUNT_IMAGE_ALLOWED_HOSTS'];
 
 export class SnapshotUnavailableError extends Error {
   constructor(status) { super(`Exact snapshot unavailable (${status})`); this.httpStatus = status; }

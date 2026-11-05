@@ -9,14 +9,16 @@ export const RELEASE_ONE_GLOBAL_PAGES = [
 ] as const;
 
 export type ReleaseOneGlobalPageType = typeof RELEASE_ONE_GLOBAL_PAGES[number]['type'];
+export const OPTIONAL_GLOBAL_PAGES = [{ type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }] as const;
+export const SUPPORTED_GLOBAL_PAGES = [...RELEASE_ONE_GLOBAL_PAGES, ...OPTIONAL_GLOBAL_PAGES] as const;
 
 export type PublicRoute = {
-  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | ReleaseOneGlobalPageType;
+  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | ReleaseOneGlobalPageType | 'ACCOUNT';
   kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'GLOBAL_PAGE';
   path: string;
   citySlug?: string;
   tariffSlug?: string;
-  pageType?: ReleaseOneGlobalPageType;
+  pageType?: ReleaseOneGlobalPageType | 'ACCOUNT';
 };
 
 type CityRouteSource = { slug: string; tariffs?: Array<{ slug: string }>; pages?: Array<{ type: string; slug: string }> };
@@ -32,8 +34,9 @@ export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: Gl
 
   const routes: PublicRoute[] = [{ id: 'HOME', kind: 'HOME', path: '/' }];
   const occupiedPaths = new Set(['/']);
-  for (const expected of RELEASE_ONE_GLOBAL_PAGES) {
+  for (const expected of SUPPORTED_GLOBAL_PAGES) {
     const page = pagesByType.get(expected.type);
+    if (!page && expected.type === 'ACCOUNT') continue;
     if (!page) throw new Error(`Не опубликована обязательная общая страница Release 1: ${expected.type}`);
     if (page.slug !== expected.slug) {
       throw new Error(`Некорректный slug общей страницы ${expected.type}: ожидается ${expected.slug}`);
@@ -42,7 +45,7 @@ export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: Gl
     routes.push({ id: expected.type, kind: 'GLOBAL_PAGE', path, pageType: expected.type });
     occupiedPaths.add(path);
   }
-  if (globalPages.length !== RELEASE_ONE_GLOBAL_PAGES.length) {
+  if (globalPages.some(page => !SUPPORTED_GLOBAL_PAGES.some(expected => expected.type === page.type))) {
     throw new Error(`Release 1 требует ровно ${RELEASE_ONE_GLOBAL_PAGES.length} опубликованные общие страницы`);
   }
 

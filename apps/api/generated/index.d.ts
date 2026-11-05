@@ -173,6 +173,7 @@ export type PublishStatus = (typeof PublishStatus)[keyof typeof PublishStatus]
 
 
 export const PageType: {
+  ACCOUNT: 'ACCOUNT',
   HOME: 'HOME',
   INTERNET: 'INTERNET',
   INTERNET_TV: 'INTERNET_TV',
@@ -191,6 +192,7 @@ export type PageType = (typeof PageType)[keyof typeof PageType]
 
 
 export const SeoTemplateKind: {
+  ACCOUNT: 'ACCOUNT',
   HOME: 'HOME',
   COVERAGE: 'COVERAGE',
   CITIES: 'CITIES',

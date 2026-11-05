@@ -128,3 +128,8 @@ Provider.settings.content -> Site.settings.content -> Page.content
 ## ADDRESS 1.0.0
 
 PageTemplateKind и SeoTemplateKind расширены CITY_ADDRESS_CHECK. Существующий PageType ADDRESS_CHECK используется для городской shell с каноническим slug и templateId общего ADDRESS-шаблона. Новых таблиц нет. PageTemplate.content содержит `addressCheckCompositionVersion=1.0.0` и `addressCheckImplementationVersion=address-page-v1`; восемь PageTemplateBlock имеют фиксированные позиции10–80 и visible=true. Редакционный data принадлежит шаблону; материализация копирует его в захваченный catalog без записи в БД. Поля title/intro/results/CTA/FAQ независимы от других шаблонов; телефоны, графики и факты остаются в Site/publicDisplay и каталоге города.
+
+
+## ACCOUNT — Page.content1.0.0
+
+`PageType.ACCOUNT` и `SeoTemplateKind.ACCOUNT` добавлены0066; PageTemplateKind не расширен.0067 обновляет глобальный scope constraint, задаёт единственность ACCOUNT на сайт и canonical slug при cityId=NULL, создаёт рабочую страницу и SEO для существующих сайтов Дом.ру, одну ревизию/audit и сохраняет публикации. Повтор не перезаписывает контент; canonical collision откатывает транзакцию. Seed создаёт такой же минимум на свежей БД. Поля: version, hero.h1/intro, loginUrl,14 именованных images(src/alt/caption, appScreen без caption), faq.items(question/answer). Цены/сроки/условия и раскладка в JSON не допускаются.

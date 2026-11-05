@@ -2,6 +2,7 @@ import { BLOCK_TYPES } from './block-validation';
 import { GENERAL_HOME_PASSPORTS } from './general-home-passports';
 import { CITY_HOME_PASSPORTS } from './city-home-passports';
 import { ADDRESS_PAGE_PASSPORTS } from './address-page-passports';
+import { ACCOUNT_PAGE_PASSPORTS } from './account-page-passports';
 
 export const BLOCK_PASSPORT_LIFECYCLE = ['DRAFT', 'APPROVED', 'ACTIVE', 'DEPRECATED', 'ARCHIVED'] as const;
 export const BLOCK_PASSPORT_TRANSITIONS = {
@@ -26,7 +27,7 @@ export interface BlockPassportDesign {
   fileKey: string;
   nodeId: string;
   name: string;
-  variants: Array<{ device: 'Desktop' | 'Tablet' | 'Mobile'; nodeId: string }>;
+  variants: Array<{ device: 'Desktop' | 'Tablet' | 'Mobile' | 'Mobile320'; nodeId: string }>;
 }
 
 export interface BlockPassport {
@@ -297,5 +298,6 @@ export const BLOCK_PASSPORTS: readonly BlockPassport[] = [
   ...GENERAL_HOME_PASSPORTS,
   ...CITY_HOME_PASSPORTS,
   ...ADDRESS_PAGE_PASSPORTS,
+  ...ACCOUNT_PAGE_PASSPORTS,
   ...programmaticPassports,
 ].map(approvedFirstScreen);
