@@ -50,6 +50,17 @@ export function createServingConfig(artifact, options) {
       { handler: 'file_server', root: '/publication/releases' },
     ], terminal: true },
     { match: [{ path: ['/__publication_assets/*'] }], handle: [{ handler: 'static_response', status_code: 404 }], terminal: true },
+    // Stable discovery URLs must follow the active release, even with a pinned legacy baseline.
+    { match: [{ path: ['/site.webmanifest'] }], handle: [
+      { handler: 'headers', response: { set: {
+        'Cache-Control': ['no-cache'], 'Content-Type': ['application/manifest+json; charset=utf-8'],
+      } } },
+      { handler: 'file_server', root },
+    ], terminal: true },
+    { match: [{ path: ['/favicon.ico', '/favicon-96x96.png', '/apple-touch-icon.png'] }], handle: [
+      { handler: 'headers', response: { set: { 'Cache-Control': ['no-cache'] } } },
+      { handler: 'file_server', root },
+    ], terminal: true },
     ...(legacyAssetsArtifactId ? [{ match: [{ path_regexp: { pattern: '(?i)\\.(css|js|woff2?|png|jpe?g|webp|avif|gif|ico|svg|ttf|otf)$' } }],
       handle: [{ handler: 'file_server', root: `/publication/releases/${legacyAssetsArtifactId}`, pass_thru: true }] }] : []),
     ...artifact.redirects.map(({ id, sourcePath }) => ({ match: [{ path: [sourcePath, `${sourcePath}/`] }], handle: [

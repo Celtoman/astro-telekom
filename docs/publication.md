@@ -43,6 +43,8 @@ GET и POST к control API передают `Connection: close`: каждое с
 
 HTML, favicon, CSS, JS и изображения выдаются с диска. При отказе API обычные страницы и assets продолжают открываться; API-функции честно сообщают недоступность.
 
+Иконки сайта используют [отдельный контракт](research/2026-11-06-site-icons.md): стабильные `/favicon-96x96.png` и `/site.webmanifest` читаются из активного артефакта с `Cache-Control: no-cache`, прежде legacy asset fallback; это относится и к корневым ICO/Apple fallback. Для манифеста явно задан `application/manifest+json`. Подключённые ICO/Apple и изображения манифеста сохраняют точный `/__publication_assets/<artifactId>/...` и годовой immutable-кеш. Публичный `site.webmanifest` описывает только значки/обычное открытие сайта; приватный manifest артефакта и receipts остаются вне публичного дерева.
+
 ## Артефакт и подтверждение
 
 Builder использует выпущенный renderer и фиксированные зависимости, запрашивает точный immutable publication ID и выполняет существующие Astro/SEO gates. Команда и окружение сборки задаются кодом, а не данными CMS. Docker socket, новая установка зависимостей на каждую публикацию и загрузка произвольного кода из CMS не нужны.

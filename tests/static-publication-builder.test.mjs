@@ -51,6 +51,14 @@ test('real Astro builder seals the exact saved catalog with versioned assets and
     const prefix = `/__publication_assets/${artifact.artifactId}`;
     assert.ok(html.includes(`${prefix}/images/figma/domru-logo.png`));
     assert.ok(html.includes(`${prefix}/favicon.ico`));
+    assert.ok(html.includes('href="/favicon-96x96.png"'));
+    assert.ok(html.includes(`${prefix}/apple-touch-icon.png`));
+    assert.ok(html.includes('href="/site.webmanifest"'));
+    const manifest = JSON.parse(await readFile(join(root, 'releases', artifact.artifactId, 'site.webmanifest'), 'utf8'));
+    assert.equal(manifest.name, catalog.site.name);
+    assert.equal(manifest.display, 'browser');
+    assert.equal(manifest.id, '/'); assert.equal(manifest.start_url, '/'); assert.equal(manifest.scope, '/');
+    assert.deepEqual(manifest.icons.map(icon => icon.src), [192, 512].map(size => `${prefix}/web-app-manifest-${size}x${size}.png`));
     assert.match(html, new RegExp(`${prefix}/_astro/[^" ]+\\.css`));
     for (const [, attributes, content] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
       if (/\bsrc=/.test(attributes)) continue;

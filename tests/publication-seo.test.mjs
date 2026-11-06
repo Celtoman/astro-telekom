@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { copyFile, mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { copyFile, mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -9,18 +9,34 @@ import { verifyPublication } from '../apps/web/scripts/verify-publication.mjs';
 
 const publicSiteUrl = 'https://partner.example.ru';
 
+function iconLinks(prefix = '') {
+  return `<link rel="icon" type="image/vnd.microsoft.icon" sizes="16x16 32x32 48x48" href="${prefix}/favicon.ico"><link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="${prefix}/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">`;
+}
+
 function indexableHtml(url, overrides = {}) {
-  return `<!doctype html><html lang="ru"><head>${overrides.favicon ?? '<link rel="icon" href="/favicon.ico">'}<title>${overrides.title ?? 'Заголовок'}</title><meta name="description" content="${overrides.description ?? 'Описание страницы'}">${overrides.head ?? ''}<link rel="canonical" href="${overrides.canonical ?? url}"></head><body>${overrides.body ?? '<h1>Заголовок страницы</h1>'}</body></html>`;
+  return `<!doctype html><html lang="ru"><head>${overrides.favicon ?? iconLinks()}<title>${overrides.title ?? 'Заголовок'}</title><meta name="description" content="${overrides.description ?? 'Описание страницы'}">${overrides.head ?? ''}<link rel="canonical" href="${overrides.canonical ?? url}"></head><body>${overrides.body ?? '<h1>Заголовок страницы</h1>'}</body></html>`;
 }
 
 function notFoundHtml(overrides = {}) {
-  return `<!doctype html><html lang="ru"><head><link rel="icon" href="/favicon.ico"><title>Страница не найдена</title><meta name="description" content="Запрошенная страница не найдена.">${overrides.robots ?? '<meta name="robots" content="noindex, follow">'}${overrides.canonical ?? ''}</head><body><h1>Страница не найдена</h1></body></html>`;
+  return `<!doctype html><html lang="ru"><head>${overrides.favicon ?? iconLinks()}<title>Страница не найдена</title><meta name="description" content="Запрошенная страница не найдена.">${overrides.robots ?? '<meta name="robots" content="noindex, follow">'}${overrides.canonical ?? ''}</head><body><h1>Страница не найдена</h1></body></html>`;
 }
 
 async function createFixture(overrides = {}) {
   const directory = await mkdtemp(join(tmpdir(), 'publication-seo-'));
   await mkdir(join(directory, 'kazan'), { recursive: true });
   if (overrides.faviconAsset !== false) await copyFile(fileURLToPath(new URL('../apps/web/public/favicon.ico', import.meta.url)), join(directory, 'favicon.ico'));
+  for (const name of ['favicon-96x96.png', 'apple-touch-icon.png', 'web-app-manifest-192x192.png', 'web-app-manifest-512x512.png']) {
+    await copyFile(fileURLToPath(new URL(`../apps/web/public/${name}`, import.meta.url)), join(directory, name));
+  }
+  const prefix = overrides.artifactId ? `/__publication_assets/${overrides.artifactId}` : '';
+  await writeFile(join(directory, 'site.webmanifest'), JSON.stringify({
+    name: 'Партнёрский сайт', lang: 'ru', id: '/', start_url: '/', scope: '/', display: 'browser',
+    icons: [
+      { src: `${prefix}/web-app-manifest-192x192.png`, sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: `${prefix}/web-app-manifest-512x512.png`, sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+    ],
+    ...overrides.manifest,
+  }));
   await writeFile(join(directory, 'index.html'), overrides.root ?? indexableHtml(`${publicSiteUrl}/`));
   await writeFile(join(directory, 'kazan', 'index.html'), overrides.kazan ?? indexableHtml(`${publicSiteUrl}/kazan`));
   if (overrides.extra !== undefined) {
@@ -83,6 +99,69 @@ test('publication SEO verifier rejects an icon link that points to a city route'
       /favicon\.ico/i,
     );
   });
+});
+
+test('publication icons keep discovery URLs stable and bind other assets to the exact artifact', async () => {
+  const artifactId = 'a'.repeat(64), prefix = `/__publication_assets/${artifactId}`;
+  await withFixture({ artifactId,
+    root: indexableHtml(`${publicSiteUrl}/`, { favicon: iconLinks(prefix) }),
+    kazan: indexableHtml(`${publicSiteUrl}/kazan`, { favicon: iconLinks(prefix) }),
+    notFound: notFoundHtml({ favicon: iconLinks(prefix) }),
+  }, async distDirectory => {
+    assert.deepEqual(await verifyPublication({ distDirectory, publicSiteUrl, artifactId }), { indexablePages: 2, htmlPages: 3 });
+    const manifest = JSON.parse(await readFile(join(distDirectory, 'site.webmanifest'), 'utf8'));
+    manifest.icons[1].src = `/__publication_assets/${'b'.repeat(64)}/web-app-manifest-512x512.png`;
+    await writeFile(join(distDirectory, 'site.webmanifest'), JSON.stringify(manifest));
+    await assert.rejects(verifyPublication({ distDirectory, publicSiteUrl, artifactId }), /site\.webmanifest/);
+  });
+});
+
+test('publication verifier rejects duplicate icons, wrong sizes and missing Apple icon on 404', async () => {
+  for (const favicon of [
+    iconLinks() + '<link rel="icon" href="/unrelated.png">',
+    iconLinks().replace('sizes="96x96"', 'sizes="192x192"'),
+    iconLinks().replace('href="/favicon-96x96.png"', `href="/__publication_assets/${'a'.repeat(64)}/favicon-96x96.png"`),
+  ]) {
+    await withFixture({ root: indexableHtml(`${publicSiteUrl}/`, { favicon }) }, async distDirectory => {
+      await assert.rejects(verifyPublication({ distDirectory, publicSiteUrl }), /набор icon/);
+    });
+  }
+  await withFixture({ notFound: notFoundHtml({ favicon: iconLinks().replace(/<link rel="apple-touch-icon"[^>]+>/, '') }) }, async distDirectory => {
+    await assert.rejects(verifyPublication({ distDirectory, publicSiteUrl }), /404\.html.*apple-touch-icon/);
+  });
+});
+
+test('publication verifier rejects missing, corrupted or incorrectly sized icon files', async () => {
+  for (const name of ['favicon-96x96.png', 'apple-touch-icon.png', 'web-app-manifest-512x512.png', 'site.webmanifest']) {
+    await withFixture({}, async distDirectory => {
+      await rm(join(distDirectory, name));
+      await assert.rejects(verifyPublication({ distDirectory, publicSiteUrl }), new RegExp(name.replaceAll('.', '\\.')));
+    });
+  }
+  await withFixture({}, async distDirectory => {
+    await copyFile(join(distDirectory, 'favicon-96x96.png'), join(distDirectory, 'apple-touch-icon.png'));
+    await writeFile(join(distDirectory, 'web-app-manifest-192x192.png'), Buffer.from('not a PNG'));
+    const ico = await readFile(join(distDirectory, 'favicon.ico'));
+    ico.writeUInt32LE(ico.length, 6 + 12);
+    await writeFile(join(distDirectory, 'favicon.ico'), ico);
+    await assert.rejects(verifyPublication({ distDirectory, publicSiteUrl }), error => {
+      assert.match(error.message, /favicon\.ico/);
+      assert.match(error.message, /apple-touch-icon\.png/);
+      assert.match(error.message, /web-app-manifest-192x192\.png/);
+      return true;
+    });
+  });
+});
+
+test('publication verifier rejects manifest launch URLs, installation mode and incomplete icon sets', async () => {
+  for (const manifest of [
+    { name: '' }, { id: '/new-id' }, { scope: '/kazan' }, { start_url: '/__publication_assets/artifact/' },
+    { display: 'standalone' }, { icons: [] },
+  ]) {
+    await withFixture({ manifest }, async distDirectory => {
+      await assert.rejects(verifyPublication({ distDirectory, publicSiteUrl }), /site\.webmanifest/);
+    });
+  }
 });
 
 test('publication SEO verifier accepts noindex only when the HTML URL is absent from sitemap', async () => {

@@ -77,7 +77,10 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     <script is:inline set:html={shellBootstrap}></script>
     <script is:inline set:html={collectionBootstrap}></script>
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" href={publicAsset('/favicon.ico')} />
+    <link rel="icon" type="image/vnd.microsoft.icon" sizes="16x16 32x32 48x48" href={publicAsset('/favicon.ico')} />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href={publicAsset('/apple-touch-icon.png')} />
+    <link rel="manifest" href="/site.webmanifest" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta property="og:type" content="website" />

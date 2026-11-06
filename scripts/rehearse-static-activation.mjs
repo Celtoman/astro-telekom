@@ -43,6 +43,11 @@ async function artifact(letter, revision, renderer = 'f'.repeat(64), publication
   await writeFile(join(directory, 'city', 'index.html'), `<h1>City ${letter}</h1>`);
   await writeFile(join(directory, '404.html'), `<h1>404 ${letter}</h1>`);
   await writeFile(join(directory, '_astro', 'client.js'), `window.version = ${JSON.stringify(letter)};`);
+  for (const name of ['favicon.ico', 'favicon-96x96.png', 'apple-touch-icon.png', 'web-app-manifest-192x192.png', 'web-app-manifest-512x512.png']) {
+    await writeFile(join(directory, name), `${name}-${letter}`);
+  }
+  await writeFile(join(directory, 'site.webmanifest'), JSON.stringify({ name: `Version ${letter}`,
+    icons: [{ src: `/__publication_assets/${letter.repeat(64)}/web-app-manifest-512x512.png` }] }));
   return sealArtifact({ publicationRoot: root, sourceDirectory: directory, identity: {
     artifactId: letter.repeat(64), rendererId: renderer, catalogDigest,
     siteId: 'site-1', siteSlug: 'domru-site', siteRevision: revision,
@@ -61,6 +66,19 @@ async function visible(letter, revision = letter === 'a' ? 1 : 2) {
   assert.equal(catalog.trusted, true);
   assert.equal(redirect.status, 301);
   assert.equal(redirect.headers.get('location'), `/city?campaign=preserved`);
+  for (const name of ['favicon.ico', 'favicon-96x96.png', 'apple-touch-icon.png']) {
+    const icon = await publicFetch(`/${name}`);
+    assert.equal(icon.status, 200); assert.equal(icon.headers.get('cache-control'), 'no-cache');
+    assert.equal(await icon.text(), `${name}-${letter}`);
+  }
+  const manifest = await publicFetch('/site.webmanifest');
+  assert.equal(manifest.status, 200);
+  assert.match(manifest.headers.get('content-type'), /^application\/manifest\+json/);
+  assert.equal(manifest.headers.get('cache-control'), 'no-cache');
+  const metadata = await manifest.json(); assert.equal(metadata.name, `Version ${letter}`);
+  const icon = await publicFetch(metadata.icons[0].src);
+  assert.equal(icon.status, 200); assert.match(icon.headers.get('cache-control'), /immutable/);
+  assert.equal(await icon.text(), `web-app-manifest-512x512.png-${letter}`);
 }
 try {
   command(['network', 'create', network]);
@@ -151,6 +169,12 @@ try {
   const code = await artifact('f', 3, 'e'.repeat(64), 'publication-3', newer.catalogDigest);
   await restarted.activate({ artifactId: code.artifactId, expectedActiveArtifactId: newer.artifactId, kind: 'CODE' });
   await visible('f', 3);
+  // Discovery URLs follow the active release even when legacy image paths are pinned to A.
+  const beforeLegacy = await restarted.current();
+  const withLegacy = await fetch(`${adminUrl}/config/`, { method: 'POST', headers: {
+    origin: 'http://127.0.0.1:2019', 'content-type': 'application/json', 'if-match': beforeLegacy.etag,
+  }, body: JSON.stringify(createServingConfig(code, { ...options(), legacyAssetsArtifactId: a.artifactId })) });
+  assert.equal(withLegacy.ok, true); await visible('f', 3);
   command(['rm', '-f', api]);
   assert.match(await publicFetch('/').then((response) => response.text()), /<h1>f<\/h1>/);
   assert.match(await publicFetch(`/__publication_assets/${a.artifactId}/_astro/client.js`).then((response) => response.text()), /"a"/);

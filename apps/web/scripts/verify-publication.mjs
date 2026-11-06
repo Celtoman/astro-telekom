@@ -3,8 +3,9 @@ import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { isLoopbackHostname, resolvePublicSiteUrl } from './public-site-url.mjs';
+import { verifySiteIcons } from './verify-site-icons.mjs';
 
-const TEXT_ARTIFACT = /\.(?:html|xml|txt|caddy)$/i;
+const TEXT_ARTIFACT = /\.(?:html|xml|txt|caddy|webmanifest)$/i;
 
 async function collectFiles(directory) {
   const files = [];
@@ -99,9 +100,21 @@ function findLoopbackReference(content) {
 }
 
 function validateDocumentMetadata(html, label, errors, faviconUrl) {
-  const icons = tags(html, 'link').filter((tag) => getAttribute(tag, 'rel')?.toLowerCase().split(/\s+/).includes('icon'));
-  if (icons.length !== 1 || getAttribute(icons[0], 'href') !== faviconUrl) {
-    errors.push(`${label}: нужен ровно один favicon.ico из корня сайта`);
+  const links = tags(html, 'link');
+  const assetPrefix = faviconUrl.slice(0, -'/favicon.ico'.length);
+  for (const [rel, expected] of [
+    ['icon', [
+      { href: faviconUrl, type: 'image/vnd.microsoft.icon', sizes: '16x16 32x32 48x48' },
+      { href: '/favicon-96x96.png', type: 'image/png', sizes: '96x96' },
+    ]],
+    ['apple-touch-icon', [{ href: `${assetPrefix}/apple-touch-icon.png`, type: 'image/png', sizes: '180x180' }]],
+    ['manifest', [{ href: '/site.webmanifest' }]],
+  ]) {
+    const actual = links.filter(tag => getAttribute(tag, 'rel')?.toLowerCase().split(/\s+/).includes(rel));
+    if (actual.length !== expected.length || expected.some(attributes => actual.filter(tag =>
+      Object.entries(attributes).every(([name, value]) => getAttribute(tag, name) === value)).length !== 1)) {
+      errors.push(`${label}: неверный набор ${rel}: нужны favicon.ico, PNG 96, Apple 180 и site.webmanifest без дублей`);
+    }
   }
 
   const titleTags = tags(html, 'title', true);
@@ -174,15 +187,7 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
   const origin = new URL(publicSiteUrl).origin;
   const errors = [];
   const files = await collectFiles(distDirectory);
-  const faviconPath = files.find((path) => displayPath(distDirectory, path) === 'favicon.ico');
-  if (!faviconPath) {
-    errors.push('favicon.ico: файл отсутствует в корне сборки');
-  } else {
-    const icon = await readFile(faviconPath);
-    if (icon.length < 22 || icon.readUInt16LE(0) !== 0 || icon.readUInt16LE(2) !== 1 || icon.readUInt16LE(4) < 1) {
-      errors.push('favicon.ico: файл не содержит корректный ICO-заголовок');
-    }
-  }
+  await verifySiteIcons(distDirectory, artifactId ? `/__publication_assets/${artifactId}` : '', errors);
   const htmlFiles = files.filter((path) => path.toLowerCase().endsWith('.html'));
   const htmlInventory = htmlFiles.map((path) => ({ path, route: routeForHtml(distDirectory, path) }));
   const publicHtml = htmlInventory.filter(({ route }) => route !== null);
