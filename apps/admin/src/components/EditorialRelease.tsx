@@ -1,3 +1,4 @@
+import { editorialErrorMessage } from '../lib/editorial-errors.mjs'
 import { useEffect, useRef, useState } from 'react'
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components'
 import type { PublicationValidationReport } from '../../../api/src/publication-validation'
@@ -43,7 +44,7 @@ export function EditorialRelease<T extends {version:string}>({apiUrl,userId,site
   async function check(action:ReleaseAction){
     setRequestedAction(action);setOpen(true);setBusy(true);setError('');setReview(null)
     try{const saved=await draft.flush(),targetCategoryId=action==='REASSIGN'?retire?.targetCategoryId:undefined;const result=await requestJson<Review>(apiUrl,`${draft.endpoint}/review`,{method:'POST',body:{expectedRevision:saved.revision,action,...(targetCategoryId?{targetCategoryId}:{})}});setReview({...result,fingerprint:saved.fingerprint,revision:saved.revision,action,targetCategoryId})}
-    catch(error){setError(error instanceof Error?error.message:'Проверка недоступна. Текст остаётся в черновике.')}
+    catch(error){setError(editorialErrorMessage(error,'Проверка недоступна. Текст остаётся в черновике.'))}
     finally{setBusy(false)}
   }
   async function send(request:ReleaseRequest){
@@ -51,7 +52,7 @@ export function EditorialRelease<T extends {version:string}>({apiUrl,userId,site
     try{await requestJson(apiUrl,`${draft.endpoint}/publish`,{method:'POST',body:request});setOpen(false);setUnavailable(false)}
     catch(error){
       if(error instanceof AdminApiError&&[400,401,403,404,409,422].includes(error.status)){setPending(null);setOperation(null);try{localStorage.removeItem(key)}catch{};setError(error.message);setReview(null)}
-      else{setError(`${error instanceof Error?error.message:'Связь прервана.'} Проверяем результат по прежнему идентификатору операции.`);setUnavailable(true)}
+      else{setError(`${editorialErrorMessage(error,'Связь прервана.')} Проверяем результат по прежнему идентификатору операции.`);setUnavailable(true)}
     }
     finally{setBusy(false)}
   }

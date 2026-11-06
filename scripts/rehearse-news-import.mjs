@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {randomUUID} from 'node:crypto';
+const connection=process.env.EDITORIAL_REHEARSAL_DATABASE_URL,url=new URL(connection||'http://invalid');
+if(!['127.0.0.1','localhost'].includes(url.hostname)||url.pathname!=='/news_rehearsal')throw Error('Use isolated local news_rehearsal database');
+process.env.DATABASE_URL=connection;
+const require=createRequire(new URL('../apps/api/package.json',import.meta.url));
+const {PrismaService}=require('./dist/prisma.service.js'),{EditorialStoreService}=require('./dist/editorial-store.service.js'),{NewsImportService}=require('./dist/news-import.service.js'),{newsDraft}=require('./dist/news-types.js');
+const db=new PrismaService(),store=new EditorialStoreService(db),key=`import-${randomUUID()}`;
+const mediaCalls=[],service=new NewsImportService(db,store,{prepare:async(...args)=>mediaCalls.push(args)});let provider,site,otherSite;
+try{
+ await db.onModuleInit();provider=await db.provider.create({data:{name:'Import fixture',slug:key}});
+ site=await db.site.create({data:{providerId:provider.id,name:'Import fixture',slug:key,workingRevision:7,publishedRevision:5}});
+ otherSite=await db.site.create({data:{providerId:provider.id,name:'Other fixture',slug:`${key}-other`}});
+ const input={sourceId:29540,sourceHash:'a'.repeat(64),sourceUrl:'https://tarify-dom.ru/source-slug/',category:{sourceId:62,content:{version:'1.0.0',name:'Новости',slug:'novosti',description:'',seo:{},social:{}}},content:{...newsDraft(),title:'Исходный заголовок',slug:'source-slug',summary:'Исходный анонс',publishedDate:'2024-09-19T08:12:00Z',body:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:'Исходный текст.'}]}]}}};
+ const imported=await service.wordpress(site.id,input);assert.equal(imported.status,'IMPORTED_DRAFT');assert.equal(imported.publishedRevision,null);assert.equal(imported.pendingRedirect.active,false);
+ let row=await store.read(site.id,'ARTICLE',imported.id);assert.equal(row.content.publishedDate,input.content.publishedDate);assert.equal(row.content.slug,input.content.slug);
+ row=await store.save(site.id,'ARTICLE',row.id,row.revision,{...row.content,title:'Ручная редактура владельца'});
+ const repeat=await service.wordpress(site.id,input);assert.equal(repeat.status,'SKIPPED_IDENTICAL');assert.equal(repeat.revision,row.revision);assert.equal((await store.read(site.id,'ARTICLE',row.id)).content.title,'Ручная редактура владельца');assert.equal(mediaCalls.length,1);
+ await assert.rejects(()=>service.wordpress(site.id,{...input,sourceHash:'b'.repeat(64)}),error=>error.getStatus?.()===409);
+ await assert.rejects(()=>service.wordpress(site.id,{...input,sourceId:29541}),error=>error.getStatus?.()===409);
+ await assert.rejects(()=>service.wordpress(site.id,{...input,sourceUrl:'https://evil.invalid/source-slug/'}),error=>error.getStatus?.()===400);
+ const other=await service.wordpress(otherSite.id,input);assert.notEqual(other.id,imported.id);assert.notEqual(other.categoryId,imported.categoryId);
+ await db.newsArticle.update({where:{id:imported.id},data:{archivedAt:new Date()}});assert.equal((await service.wordpress(site.id,input)).status,'SKIPPED_ARCHIVED');
+ const unchanged=await db.site.findUniqueOrThrow({where:{id:site.id}});assert.equal(unchanged.workingRevision,7);assert.equal(unchanged.publishedRevision,5);
+ assert.equal(await db.sitePublication.count({where:{siteId:site.id}}),0);assert.equal(await db.redirect.count({where:{siteId:site.id}}),0);assert.equal(await db.editorialRevision.count({where:{siteId:site.id,kind:'ARTICLE'}}),2);
+ const failingMedia=new NewsImportService(db,store,{prepare:async()=>{throw Error('Fixture missing image checksum')}}),failedInput={...input,sourceId:29542,sourceUrl:'https://tarify-dom.ru/failed-media/',content:{...input.content,slug:'failed-media'},category:{sourceId:99,content:{...input.category.content,slug:'failed-media'}}};
+ await assert.rejects(()=>failingMedia.wordpress(site.id,failedInput),/missing image checksum/);assert.equal(await db.newsCategory.count({where:{siteId:site.id,sourceId:99}}),0);assert.equal(await db.newsArticle.count({where:{siteId:site.id,sourceId:29542}}),0);
+ await db.newsCategory.update({where:{id:imported.categoryId},data:{archivedAt:new Date()}});await assert.rejects(()=>service.wordpress(site.id,{...input,sourceId:29543,sourceUrl:'https://tarify-dom.ru/new-source/',content:{...input.content,slug:'new-source'}}),error=>error.getStatus?.()===409);assert.equal(await db.newsArticle.count({where:{siteId:site.id,sourceId:29543}}),0);
+ console.log(JSON.stringify({result:'PASS',draftOnly:true,idempotent:true,manualEditsPreserved:true,archivedNotResurrected:true,sourceConflict409:true,slugConflict409:true,siteIsolation:true,mediaFailureRollback:true,archivedCategoryRejected:true,legacyRevision:'7:5',publications:0,redirects:0}));
+}finally{if(otherSite)await db.site.delete({where:{id:otherSite.id}});if(site)await db.site.delete({where:{id:site.id}});if(provider)await db.provider.delete({where:{id:provider.id}});await db.onModuleDestroy()}

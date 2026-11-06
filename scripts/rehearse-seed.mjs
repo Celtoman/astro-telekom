@@ -24,7 +24,7 @@ try {
   docker(['run', '--rm', '-d', '--name', container, '-p', '127.0.0.1::5432', '-e', 'POSTGRES_PASSWORD=postgres', '-e', 'POSTGRES_DB=provider', 'postgres:18.6-alpine']);
   let ready = false;
   for (let attempt = 0; attempt < 60; attempt++) {
-    const probe = spawnSync('docker', ['exec', container, 'pg_isready', '-U', 'postgres', '-d', 'provider'], { encoding: 'utf8', timeout: 5000, windowsHide: true });
+    const probe = spawnSync('docker', ['exec', container, 'pg_isready', '-h', '127.0.0.1', '-U', 'postgres', '-d', 'provider'], { encoding: 'utf8', timeout: 5000, windowsHide: true });
     if (probe.status === 0) { ready = true; break; }
     Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200);
   }

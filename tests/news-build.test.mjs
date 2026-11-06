@@ -5,8 +5,11 @@ import {createHash} from 'node:crypto';
 import {mkdir,mkdtemp,readFile,rm} from 'node:fs/promises';
 import {join,resolve,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {basename} from 'node:path';
+import {readArtifact} from '../apps/web/scripts/publication/artifact-store.mjs';
+import {verifyNewsArtifactHttp} from '../scripts/qa/news-artifact-http.mjs';
 const require=createRequire(import.meta.url);
-test('immutable news build keeps old snapshots, renders C/A/404 and adds only canonical published routes', {timeout:360000}, async()=>{
+test('immutable news build keeps old snapshots, renders C/A/404 and adds only canonical published routes', {timeout:360000}, async context=>{
  const {StaticArtifactBuilder}=await import('../apps/web/scripts/publication/static-builder.mjs');
  const {SiteCatalogService}=require('../apps/api/dist/site-catalog.service.js');
  const {newsSource}=require('./helpers/news-source.cjs');
@@ -23,6 +26,7 @@ test('immutable news build keeps old snapshots, renders C/A/404 and adds only ca
   assert.equal((list.match(/class="news-card"/g)||[]).length,12);assert.equal((second.match(/class="news-card"/g)||[]).length,1);assert.equal((article.match(/<h1\b/g)||[]).length,1);assert.doesNotMatch(article,/<script id="news-injection">/);assert.match(article,/<meta property="og:type" content="article"/);const graph=JSON.parse(article.match(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)[1]);assert.equal(graph["@graph"].find(row=>row["@type"]==="NewsArticle").headline,source.editorial.articles[0].title);assert.match(article,/Текст сохранённой новости/);assert.match(article,/href="\/news">Все новости/);assert.match(notFound,/data-not-found/);assert.match(home,/data-home-block="home.news"/);assert.ok(home.indexOf('data-home-block="home.more_possibilities"')<home.indexOf('data-home-block="home.news"'));assert.ok(home.indexOf('data-home-block="home.news"')<home.indexOf('data-home-block="home.connection_help"'));
   const sitemap=await readFile(join(next,'sitemap-pages.xml'),'utf8');assert.match(sitemap,/\/news\/page\/2/);assert.doesNotMatch(sitemap,/\/news\/page\/1<|\/404</);assert.doesNotMatch(list,/figma\.com\/api\/mcp|Читать новость|Акции и скидки/);
   assert.equal(await readFile(join(before,'index.html'),'utf8'),oldHome);
+  const httpProof=await verifyNewsArtifactHttp(root,await readArtifact(root,basename(next)),{signal:context.signal});assert.equal(httpProof.result,'PASS');context.diagnostic(JSON.stringify(httpProof));
   const broken=structuredClone(catalog);broken.editorial.articles[0].body={type:'doc',content:[{type:'iframe'}]};await assert.rejects(build(broken,'bad-news'),/news|новост|блок|iframe|build|publication/i);assert.equal(await readFile(join(next,'news/index.html'),'utf8'),list);
  }finally{assert.ok(resolve(root).startsWith(resolve(temporary)+sep));await rm(root,{recursive:true,force:true})}
 });

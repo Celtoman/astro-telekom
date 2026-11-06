@@ -184,3 +184,7 @@ GeneralHomeApp использует существующие Card/Field/Input/Bu
 ## Полная HOME в общем preview
 
 PreviewApp использует прежние Card/Alert и sandboxed iframe, а полная HOME — общий renderer блоков/оболочки и явный trusted CSS/assets loader. Неполный безопасный черновик не подменяется демоданными: известный HOME block/field получает предметную подпись и переход «Исправить поле». Ссылка использует существующее поле редактора, неизвестные пути не создают произвольных назначений; общая ошибка и повторная загрузка убирают устаревшую ссылку. Реальный собранный экран проверен с fixture API, без записей. [Приёмка](research/2026-10-16-general-home-full-acceptance.md).
+
+## Новости и404: локальная реализация, 7 ноября2026
+
+План6ноября реализован в T5–T8: NewsApp/NewsEditor, справочник категорий, фиксированные settings list/404, media/crop, limited rich-text, autosave/recovery/history и selected release. Использованы существующие Tailwind/shadcn/React Aria примитивы и общий shell, без второй дизайн-системы. Preview использует public renderer/CSS/fonts и приватные media, четыре ширины. T10 добавляет понятные русские сетевые ошибки и один источник save feedback; retry очищает ошибку. Локальные browser/SQL проверки и границы — [T10](research/2026-11-07-news-integration-qa.md). Историческое описание запланированного раздела6ноября, если приведено выше, относится к состоянию до этой реализации. Внешний выпуск/owner acceptance остаются отдельно.

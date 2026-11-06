@@ -208,3 +208,7 @@ ADDRESS-выпуск4 ноября подтверждён exact-SHA CI, finished
 ## ACCOUNT: изображения и внешний rollout
 
 Необязательный `ACCOUNT_IMAGE_ALLOWED_HOSTS` — список hostname через запятую, без URL/портов. По умолчанию разрешены tv-internet-dom.ru и HTTPS PUBLIC_SITE_URL; одинаковый список используется API и private builder. Редактор задаёт постоянный `/images/…-<SHA256>.png|jpg|jpeg|webp`, минимум16 hex SHA256; query/hash/credentials запрещены. Файл не больше10MiB/20MP, статический, полностью декодируемый. Сам загрузчик CMS не добавлен. Перед deployment нужны полный pnpm check и high audit; затем отдельное разрешение push/внешнего выпуска, exact-SHA CI→Coolify→CODE. Миграция готовит working ACCOUNT; для появления URL требуется отдельно согласованная CMS-активация.
+
+## Редакционный backup: подготовка T10
+
+Локально проверены private DB/media bundle, изолированный PostgreSQL18 restore и ссылки текущих/исторических редакций. S3 bridge подготовлен; его внешний синтаксис/доступ проверяются до установки. Это ещё не серверный backup proof. Helper/service/timer устанавливаются по [runbook](runbooks/editorial-backup.md) после финального gate/CI; данные рабочего приложения не восстанавливаются и не активируются. API origin связан с реальным admin-контейнером ресурса. Существующий publication-retention сохраняется. Внешний WordPress apply зависит от настоящего proof и повторного восстановления уже перенесённых6drafts/6images; [#546](https://github.com/Celtoman/astro-telekom/issues/546) остаётся открытым до этой проверки.

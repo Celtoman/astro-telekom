@@ -1,3 +1,4 @@
+import { editorialErrorMessage } from '../lib/editorial-errors.mjs'
 import { useEffect, useId, useRef, useState } from 'react'
 import { Button as AriaButton, DropZone, FileTrigger, Text } from 'react-aria-components'
 import type { MediaUse } from '../../../api/src/news-types'
@@ -19,7 +20,7 @@ export function usePrivateMediaPreview(apiUrl:string, siteId:string, assetId:str
         if (!response.ok) { if (response.status===401) window.dispatchEvent(new Event('admin:session-expired')); throw new Error('Не удалось загрузить изображение') }
         const blob=await response.blob()
         return new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=reject;reader.readAsDataURL(blob)})
-      }).then(src=>{if(active)setState({src,error:''})}).catch(error=>{if(active&&!abort.signal.aborted)setState({src:'',error:error instanceof Error?error.message:'Не удалось загрузить изображение'})})
+      }).then(src=>{if(active)setState({src,error:''})}).catch(error=>{if(active&&!abort.signal.aborted)setState({src:'',error:editorialErrorMessage(error,'Не удалось загрузить изображение')})})
     return()=>{active=false;abort.abort()}
   },[apiUrl,siteId,assetId,kind,cropSignature])
   return state
@@ -40,7 +41,7 @@ export function EditorialMediaField({apiUrl,siteId,label,value,onChange,onBusyCh
       const form=new FormData();form.append('file',file)
       const result=await requestJson<{id:string;width:number;height:number}>(apiUrl,`/admin/sites/${encodeURIComponent(siteId)}/news/media`,{method:'POST',body:form,signal:abort.signal})
       if(current===generation.current){setDimensions(result);onChange({assetId:result.id,alt:'',decorative:false});setCropOpen(false)}
-    }catch(error){if(current===generation.current&&!abort.signal.aborted){setError(error instanceof Error?error.message:'Не удалось загрузить изображение. Текст новости сохранён в редакторе.');setRetry(true)}}
+    }catch(error){if(current===generation.current&&!abort.signal.aborted){setError(editorialErrorMessage(error,'Не удалось загрузить изображение. Текст новости сохранён в редакторе.'));setRetry(true)}}
     finally{if(current===generation.current){abortRef.current=null;markBusy(false)}}
   }
   const ratio=kind==='social'?40/21:16/9, sourceRatio=dimensions.width/dimensions.height
@@ -50,14 +51,14 @@ export function EditorialMediaField({apiUrl,siteId,label,value,onChange,onBusyCh
     if(!value || kind==='body')return
     markBusy(true);setError('')
     try{await requestJson(apiUrl,`/admin/sites/${encodeURIComponent(siteId)}/news/media/${encodeURIComponent(value.assetId)}/crop`,{method:'POST',body:{kind,crop}});if(valueRef.current?.assetId===value.assetId){onChange({...valueRef.current,crop});setCropOpen(false)}}
-    catch(error){setError(error instanceof Error?error.message:'Не удалось применить кадрирование')}
+    catch(error){setError(editorialErrorMessage(error,'Не удалось применить кадрирование'))}
     finally{markBusy(false)}
   }
   async function openCrop(){
     if(!value)return
     setError('')
     try{const result=await requestJson<{width:number;height:number}>(apiUrl,`/admin/sites/${encodeURIComponent(siteId)}/news/media/${encodeURIComponent(value.assetId)}`);setDimensions(result);setZoom(1);setHorizontal(50);setVertical(50);setCropOpen(true)}
-    catch(error){setError(error instanceof Error?error.message:'Не удалось открыть кадрирование')}
+    catch(error){setError(editorialErrorMessage(error,'Не удалось открыть кадрирование'))}
   }
   return <fieldset disabled={disabled} className="min-w-0 space-y-3"><legend className="mb-2 text-sm font-medium">{label}</legend>
     {preview.src && <div className="relative overflow-hidden rounded-lg bg-muted"><img className={cropOpen?'block h-auto w-full':'block max-h-80 w-full object-contain'} src={preview.src} alt={value?.alt||'Предпросмотр загруженного изображения'} />{cropOpen&&<div aria-hidden="true" className="pointer-events-none absolute border-2 border-primary" style={{left:`${crop.x*100}%`,top:`${crop.y*100}%`,width:`${crop.width*100}%`,height:`${crop.height*100}%`}} />}</div>}

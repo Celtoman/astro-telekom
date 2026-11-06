@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily Astro editorial backup
+
+[Timer]
+OnCalendar=*-*-* 00:45:00 UTC
+Persistent=true
+RandomizedDelaySec=300
+Unit=editorial-backup.service
+
+[Install]
+WantedBy=timers.target

@@ -285,3 +285,22 @@
 
 | TD-222 | [#540](https://github.com/Celtoman/astro-telekom/issues/540) ✅ | Предпросмотр выбирает сохранённую сущность по ID/kind при коллизии слага |
 | TD-226 | [#544](https://github.com/Celtoman/astro-telekom/issues/544) ✅ | Узкая пагинация разделяет номера и ряд действий справа |
+
+| TD-227 | [#545](https://github.com/Celtoman/astro-telekom/issues/545) ✅ | Неподдержанные дети WordPress-списка требуют проверки вместо потери текста |
+
+| TD-228 | [#546](https://github.com/Celtoman/astro-telekom/issues/546) 🟢 | Проверяемый backup/restore редакционных оригиналов и рабочих редакций перед внешним переносом |
+
+| TD-229 | [#547](https://github.com/Celtoman/astro-telekom/issues/547) ✅ | Backup proof привязан к фактическому API origin своего ресурса |
+
+| TD-230 | [#548](https://github.com/Celtoman/astro-telekom/issues/548) ✅ | Scratch preflight учитывает пиковые DB/media копии и запас диска |
+
+| TD-231 | [#549](https://github.com/Celtoman/astro-telekom/issues/549) ✅ | Неудачная очистка isolated restore fixture запрещает успешный proof |
+
+| TD-232 | [#550](https://github.com/Celtoman/astro-telekom/issues/550) ✅ | Restore fixture ждёт окончательный TCP server PostgreSQL после bootstrap |
+
+| TD-233 | [#551](https://github.com/Celtoman/astro-telekom/issues/551) ✅ | Русская сетевая ошибка редактора без дублирования и старого alert после retry |
+
+| TD-234 | [#552](https://github.com/Celtoman/astro-telekom/issues/552) ✅ | Seed fixture ждёт окончательную TCP-готовность перед миграцией |
+
+| TD-235 | [#553](https://github.com/Celtoman/astro-telekom/issues/553) 🟢 | Исследовать длительную подготовку исходников Coolify до Docker-сборки |
+| TD-236 | [#554](https://github.com/Celtoman/astro-telekom/issues/554) ✅ | Backup SQL fixture использует короткий system temp вместо Windows MAX_PATH |

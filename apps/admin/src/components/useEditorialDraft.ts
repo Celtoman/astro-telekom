@@ -1,3 +1,4 @@
+import { editorialErrorMessage } from '../lib/editorial-errors.mjs'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { AdminApiError, requestJson } from '../lib/admin-api.mjs'
 import { EditorialAutosave, editorialFingerprint, type EditorialSaveState } from '../lib/editorial-autosave.mjs'
@@ -45,7 +46,7 @@ export function useEditorialDraft<T extends {version:string}>({apiUrl,userId,sit
       }})
       engine.current=autosave;setWorkspace(result);setContent(structuredClone(result.content));setSaving({...autosave.state,recoveryAvailable:!!backup});setResetKey(key=>key+1)
     }
-    void load().catch(error=>{if(active)setError(error instanceof Error?error.message:'Не удалось открыть редактор')}).finally(()=>{if(active)setLoading(false)})
+    void load().catch(error=>{if(active)setError(editorialErrorMessage(error,'Не удалось открыть редактор'))}).finally(()=>{if(active)setLoading(false)})
     return()=>{active=false;engine.current?.dispose();engine.current=null;recovery.current=null}
   },[apiUrl,userId,siteId,entityId,kind,endpoint,refresh])
   const update=useCallback((mutate:(value:T)=>void)=>{const current=engine.current;if(!current)return;const next=structuredClone(current.latest);mutate(next);setContent(next);current.change(next)},[])

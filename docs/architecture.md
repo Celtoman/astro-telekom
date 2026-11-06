@@ -1,6 +1,6 @@
 # Архитектура платформы
 
-**Редакционный модуль, 6 ноября 2026:** в API локально подключены черновики/категории/settings/media/history и scoped review/publish от serving source. Миграции 0068/0069 добавляют release identity, ledger и ownership aliases без переписывания старых catalogs. Старые manifests совместимы; CODE добавляет sequence к их serving identity перед выпуском при одинаковой source revision. Новые API и protocol проходят T4 gates; admin workspace, публичная верстка и внешний выпуск ещё не приняты. [Реализация и границы](research/2026-11-06-news-scoped-backend.md), [план #534](plans/2026-11-06-news-and-404-integration.md).
+**Редакционный модуль, 6 ноября 2026:** в API локально подключены черновики/категории/settings/media/history и scoped review/publish от serving source. Миграции 0068/0069 добавляют release identity, ledger и ownership aliases без переписывания старых catalogs. Старые manifests совместимы; CODE добавляет sequence к их serving identity перед выпуском при одинаковой source revision. API/protocol прошли T4 gates; admin workspace и публичные C/A/404/shared preview проверены локально в T5–T8. Импорт и локальная сквозная приёмка T9–T10 прошли общий gate1061pass/0fail/1skip; внешний выпуск и приёмка владельца остаются T11. [Реализация и границы](research/2026-11-06-news-scoped-backend.md), [план #534](plans/2026-11-06-news-and-404-integration.md).
 
 Сверка с кодом и Compose: 6 октября 2026 года. Действующий [контракт публикации](publication.md) описывает static builder/controller, exact serving snapshot, CODE и восстановление. Датированные результаты внешних проверок — в [приёмках](research/README.md), актуальные ограничения — в [current-state.md](current-state.md).
 
@@ -111,7 +111,7 @@ CMS-поток городской HOME: `PageTemplate(CITY_HOME)` принадл
 
 1. Сущности `Site`, `City`, `Page`, `Tariff` имеют статус `DRAFT`, `PUBLISHED` или `ARCHIVED`.
 2. Public API возвращает опубликованные данные, но отдельно применяет release policy к URL.
-3. Astro получает authoritative inventory и выпускает `N + T + 6` indexable HTML для `N` опубликованных городов и `T` опубликованных тарифов этих городов плюс общую 404. Страница тарифа создаётся только из route с `kind = CITY_TARIFF_DETAIL`; service pages остаются вне Release 1.
+3. Astro получает authoritative inventory и собирает ровно его HTML URL: базовый Release1, опубликованные общие расширения и редакционные маршруты при включённом разделе, плюс общую404. Страница тарифа создаётся только из route с `kind = CITY_TARIFF_DETAIL`; service pages остаются вне Release 1.
 4. Ручные изменения cities/pages/blocks/tariffs/redirects и full-snapshot импорт тарифов сохраняют рабочую ревизию и before/after audit в одной транзакции; явные publication endpoints проверяют ожидаемый номер и фиксируют неизменяемый полный снимок для ручного запуска.
 5. Общий `/publication` через read-only review показывает все сохранения и проверку URL; только актуальная успешная проверка разрешает явный запуск. Публикации по времени отсутствуют.
 6. `SiteRebuild` получает ID именно этого снимка и ставит BullMQ job; изменения одного сайта дедуплицируются, но запрошенный и обрабатываемый snapshots не подменяют друг друга.

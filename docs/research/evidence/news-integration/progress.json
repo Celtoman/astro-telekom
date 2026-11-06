@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-06T22:06:23.721Z",
+  "updatedAt": "2026-11-06T23:00:42.557Z",
   "task": 534,
   "authorized": {
     "implementation": true,
@@ -152,7 +152,52 @@
         "exitCode": 0
       },
       "fullGateLog": ".codex-tmp/news-implementation/t7-t8-full-check-r2.log",
-      "externalRelease": "PENDING_T11"
+      "externalRelease": "PENDING_T11",
+      "commit": "f202dadc4c099e2837225db0167c528ab99a6d09",
+      "ci": {
+        "runId": 42302260447,
+        "conclusion": "success"
+      }
+    },
+    "T9": {
+      "status": "LOCAL_CHECKED",
+      "sourceFetched": 10,
+      "eligible": 6,
+      "excludedPromotions": 4,
+      "importedDrafts": 6,
+      "uploadedCovers": 6,
+      "failed": 0,
+      "readbackFailed": 0,
+      "repeat": {
+        "imported": 0,
+        "skipped": 6,
+        "failed": 0
+      },
+      "unchangedLegacyRevision": "52:50",
+      "externalImport": "PENDING_T11"
+    },
+    "T10": {
+      "status": "LOCAL_CHECKED",
+      "checkedTree": "b2daa5cf521d01ced62262a326d294204faafb8c",
+      "stagedMatchesFrozenFiles": 51,
+      "fullGate": {
+        "passed": 1061,
+        "failed": 0,
+        "skipped": 1,
+        "cancelled": 0,
+        "exitCode": 0
+      },
+      "fullGateLog": ".codex-tmp/news-implementation/t9-t10-full-check-r3.log",
+      "realCaddy": "PASS",
+      "isolatedPostgresMediaRestore": "PASS",
+      "recoveryRetryBrowser": "PASS",
+      "externalBackup": "PENDING_T11",
+      "unverified": [
+        "light theme",
+        "real browser zoom 200/400",
+        "physical touch",
+        "manual screen reader"
+      ]
     }
   },
   "baselineCheck": {

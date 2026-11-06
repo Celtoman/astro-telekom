@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { editorialErrorMessage } from '../lib/editorial-errors.mjs'
 import { Plus } from 'lucide-react'
 import { requestJson } from '../lib/admin-api.mjs'
 import { newsListUrl, newsStates, type NewsLifecycle } from '../lib/news-presentation.mjs'
@@ -28,7 +29,7 @@ export function NewsApp({apiUrl}:{apiUrl:string}) {
   useEffect(()=>{if(siteId)window.history.replaceState(window.history.state,'',listUrl)},[siteId,listUrl])
   useEffect(()=>{
     if(!siteId)return;let active=true;setCategories([]);setCategoryError('')
-    requestJson<{items:Category[]}>(apiUrl,`/admin/sites/${encodeURIComponent(siteId)}/news/categories`).then(result=>{if(active)setCategories(result.items)}).catch(error=>{if(active)setCategoryError(error instanceof Error?error.message:'Не удалось загрузить категории')})
+    requestJson<{items:Category[]}>(apiUrl,`/admin/sites/${encodeURIComponent(siteId)}/news/categories`).then(result=>{if(active)setCategories(result.items)}).catch(error=>{if(active)setCategoryError(editorialErrorMessage(error,'Не удалось загрузить категории'))})
     return()=>{active=false}
   },[apiUrl,siteId,refresh])
   useEffect(()=>{
@@ -38,7 +39,7 @@ export function NewsApp({apiUrl}:{apiUrl:string}) {
     requestJson<NewsList>(apiUrl,`/admin/sites/${encodeURIComponent(siteId)}/news?${params}`).then(result=>{
       if(!active)return;setData(result)
       if(restore.current){restore.current=false;try{const saved=JSON.parse(window.sessionStorage.getItem(`admin:news:list:${listUrl}`)||'null');if(saved&&Date.now()-saved.at<3600000)requestAnimationFrame(()=>window.scrollTo({top:saved.y,behavior:'instant'}))}catch{}}
-    }).catch(error=>{if(active)setError(error instanceof Error?error.message:'Не удалось загрузить новости')}).finally(()=>{if(active)setLoading(false)})
+    }).catch(error=>{if(active)setError(editorialErrorMessage(error,'Не удалось загрузить новости'))}).finally(()=>{if(active)setLoading(false)})
     return()=>{active=false}
   },[apiUrl,siteId,filters.search,filters.categoryId,filters.state,filters.page,refresh])
   const rememberPosition=()=>{try{window.sessionStorage.setItem(`admin:news:list:${listUrl}`,JSON.stringify({y:window.scrollY,at:Date.now()}))}catch{}}
