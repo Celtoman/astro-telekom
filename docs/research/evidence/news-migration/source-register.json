@@ -1,0 +1,249 @@
+{
+  "capturedAt": "2026-11-06T12:37:47.717720+00:00",
+  "source": "https://tarify-dom.ru/wp-json/wp/v2/posts",
+  "totalPosts": 10,
+  "eligibleNews": 6,
+  "excludedPromotions": 4,
+  "rows": [
+    {
+      "sourceId": 29540,
+      "sourceUrl": "https://tarify-dom.ru/novosti/novyj-router-wave-ot-dom-ru",
+      "slug": "novyj-router-wave-ot-dom-ru",
+      "title": "Новый роутер Wave от Дом.ру",
+      "date": "2024-09-19T11:47:18",
+      "dateGmt": "2024-09-19T08:47:18",
+      "modifiedGmt": "2024-09-19T08:48:12",
+      "categories": [
+        {
+          "sourceId": 62,
+          "slug": "novosti",
+          "name": "Новости"
+        }
+      ],
+      "classification": "NEWS",
+      "destination": "/news/novyj-router-wave-ot-dom-ru",
+      "featuredMediaId": 29541,
+      "contentSha256": "bb754ab0a4dc486ec78ceaf751528701dd5e27cff606fa787808a86c4cc243d3",
+      "authorSourceId": 1
+    },
+    {
+      "sourceId": 29533,
+      "sourceUrl": "https://tarify-dom.ru/novosti/provajder-dom-ru-povyshaet-ceny-na-uslugi-s-1-oktjabrja-2024",
+      "slug": "provajder-dom-ru-povyshaet-ceny-na-uslugi-s-1-oktjabrja-2024",
+      "title": "Провайдер Дом.ру повышает цены на услуги с 1 октября 2024",
+      "date": "2024-09-19T11:38:09",
+      "dateGmt": "2024-09-19T08:38:09",
+      "modifiedGmt": "2024-09-19T08:38:10",
+      "categories": [
+        {
+          "sourceId": 62,
+          "slug": "novosti",
+          "name": "Новости"
+        }
+      ],
+      "classification": "NEWS",
+      "destination": "/news/provajder-dom-ru-povyshaet-ceny-na-uslugi-s-1-oktjabrja-2024",
+      "featuredMediaId": 29534,
+      "contentSha256": "c20f852a770e7c2f2c1b881d94ee5735aa3cc4028bb19296720c6db1dff8a465",
+      "authorSourceId": 1
+    },
+    {
+      "sourceId": 29530,
+      "sourceUrl": "https://tarify-dom.ru/novosti/prilozhenie-umnyj-dom-ru-teper-dostupno-dlja-umnyh-chasov-na-baze-wear-os",
+      "slug": "prilozhenie-umnyj-dom-ru-teper-dostupno-dlja-umnyh-chasov-na-baze-wear-os",
+      "title": "Приложение «Умный Дом.ру» теперь доступно для умных часов на базе Wear OS",
+      "date": "2024-09-19T11:35:11",
+      "dateGmt": "2024-09-19T08:35:11",
+      "modifiedGmt": "2024-09-19T08:35:13",
+      "categories": [
+        {
+          "sourceId": 62,
+          "slug": "novosti",
+          "name": "Новости"
+        }
+      ],
+      "classification": "NEWS",
+      "destination": "/news/prilozhenie-umnyj-dom-ru-teper-dostupno-dlja-umnyh-chasov-na-baze-wear-os",
+      "featuredMediaId": 29531,
+      "contentSha256": "994f7afcc6c0293b00ba72ca739419cc01fc6609d0f913deebc41fb1055d124d",
+      "authorSourceId": 1
+    },
+    {
+      "sourceId": 29523,
+      "sourceUrl": "https://tarify-dom.ru/novosti/provajder-dom-ru-zapustil-onlajn-galereju-v-chest-jubileja-domena-ru",
+      "slug": "provajder-dom-ru-zapustil-onlajn-galereju-v-chest-jubileja-domena-ru",
+      "title": "Провайдер Дом.ру запустил онлайн-галерею в честь юбилея домена .ru",
+      "date": "2024-09-19T11:24:39",
+      "dateGmt": "2024-09-19T08:24:39",
+      "modifiedGmt": "2024-09-19T08:26:37",
+      "categories": [
+        {
+          "sourceId": 62,
+          "slug": "novosti",
+          "name": "Новости"
+        }
+      ],
+      "classification": "NEWS",
+      "destination": "/news/provajder-dom-ru-zapustil-onlajn-galereju-v-chest-jubileja-domena-ru",
+      "featuredMediaId": 29524,
+      "contentSha256": "ee64918e33d2941107bb48cc90b8a0b0a01930c416feabf91f249a1697c038c3",
+      "authorSourceId": 1
+    },
+    {
+      "sourceId": 29520,
+      "sourceUrl": "https://tarify-dom.ru/bez-rubriki/rasshirjaem-gorizonty-dom-ru-predstavljaet-14-novyh-telekanalov",
+      "slug": "rasshirjaem-gorizonty-dom-ru-predstavljaet-14-novyh-telekanalov",
+      "title": "Новые телеканалы в сетке вещания Movix от Дом.ру",
+      "date": "2024-09-19T11:14:06",
+      "dateGmt": "2024-09-19T08:14:06",
+      "modifiedGmt": "2024-09-19T08:28:37",
+      "categories": [
+        {
+          "sourceId": 62,
+          "slug": "novosti",
+          "name": "Новости"
+        }
+      ],
+      "classification": "NEWS",
+      "destination": "/news/rasshirjaem-gorizonty-dom-ru-predstavljaet-14-novyh-telekanalov",
+      "featuredMediaId": 29521,
+      "contentSha256": "65dbda698ef26a77bac2b30f378093a4c1b709f6950476b48d1b02fdef067ae8",
+      "authorSourceId": 1
+    },
+    {
+      "sourceId": 29517,
+      "sourceUrl": "https://tarify-dom.ru/akcii-i-skidki/multiki-i-ne-tolko-otkrojte-mir-detskogo-kontenta-s-movix-i-dom-ru",
+      "slug": "multiki-i-ne-tolko-otkrojte-mir-detskogo-kontenta-s-movix-i-dom-ru",
+      "title": "Мультики и не только: откройте мир детского контента с Movix и Дом.ру",
+      "date": "2024-09-19T11:06:40",
+      "dateGmt": "2024-09-19T08:06:40",
+      "modifiedGmt": "2024-09-30T11:14:12",
+      "categories": [
+        {
+          "sourceId": 62,
+          "slug": "novosti",
+          "name": "Новости"
+        }
+      ],
+      "classification": "NEWS",
+      "destination": "/news/multiki-i-ne-tolko-otkrojte-mir-detskogo-kontenta-s-movix-i-dom-ru",
+      "featuredMediaId": 29518,
+      "contentSha256": "9001cf4264dbba140985634bf67ebddf3f6b9c6cc648f5896f76c62522f577ef",
+      "authorSourceId": 1
+    },
+    {
+      "sourceId": 468,
+      "sourceUrl": "https://tarify-dom.ru/akcii-i-skidki/dom-ru-predlagaet-specialnye-uslovija-na-jandeks-360-premium",
+      "slug": "dom-ru-predlagaet-specialnye-uslovija-na-jandeks-360-premium",
+      "title": "Дом.ру предлагает специальные условия на Яндекс 360 Премиум",
+      "date": "2024-04-02T12:45:00",
+      "dateGmt": "2024-04-02T09:45:00",
+      "modifiedGmt": "2024-09-16T13:46:16",
+      "categories": [
+        {
+          "sourceId": 16,
+          "slug": "akcii-i-skidki",
+          "name": "Акции и скидки"
+        }
+      ],
+      "classification": "PROMOTION_EXCLUDED",
+      "destination": null,
+      "featuredMediaId": 469,
+      "contentSha256": "d032b33aa0b37d8cc18aca2c74dbd175080fb4f3f3fb41e20ccdf995361d5c92",
+      "authorSourceId": 1
+    },
+    {
+      "sourceId": 483,
+      "sourceUrl": "https://tarify-dom.ru/akcii-i-skidki/programma-lojalnosti-dom-ru",
+      "slug": "programma-lojalnosti-dom-ru",
+      "title": "Программа лояльности Дом.ру",
+      "date": "2024-03-17T12:57:00",
+      "dateGmt": "2024-03-17T09:57:00",
+      "modifiedGmt": "2024-07-17T09:57:34",
+      "categories": [
+        {
+          "sourceId": 16,
+          "slug": "akcii-i-skidki",
+          "name": "Акции и скидки"
+        }
+      ],
+      "classification": "PROMOTION_EXCLUDED",
+      "destination": null,
+      "featuredMediaId": 484,
+      "contentSha256": "1d20c674b410163392dcce36da617d1e97eab53ff84f8f0b78117a9fac4bbcb2",
+      "authorSourceId": 1
+    },
+    {
+      "sourceId": 486,
+      "sourceUrl": "https://tarify-dom.ru/akcii-i-skidki/tarif-klassnyj-internet-dlja-ucheby-i-razvlechenij",
+      "slug": "tarif-klassnyj-internet-dlja-ucheby-i-razvlechenij",
+      "title": "Тариф Классный — Интернет для учебы и развлечений",
+      "date": "2024-02-17T12:58:51",
+      "dateGmt": "2024-02-17T09:58:51",
+      "modifiedGmt": "2024-07-17T09:59:08",
+      "categories": [
+        {
+          "sourceId": 16,
+          "slug": "akcii-i-skidki",
+          "name": "Акции и скидки"
+        }
+      ],
+      "classification": "PROMOTION_EXCLUDED",
+      "destination": null,
+      "featuredMediaId": 487,
+      "contentSha256": "aca7f2bcea64e045627cfff84b51c734e37f8ca6cad138b2cd6da5845e3269c2",
+      "authorSourceId": 1
+    },
+    {
+      "sourceId": 489,
+      "sourceUrl": "https://tarify-dom.ru/akcii-i-skidki/tarify-zasmotris-s-kinoteatrami-tv-pristavkoj-i-50-skidkoj-na-2-mesjaca",
+      "slug": "tarify-zasmotris-s-kinoteatrami-tv-pristavkoj-i-50-skidkoj-na-2-mesjaca",
+      "title": "Тарифы «Засмотрись» с кинотеатрами, ТВ-приставкой и 50% скидкой на 2 месяца",
+      "date": "2024-01-01T13:01:00",
+      "dateGmt": "2024-01-01T10:01:00",
+      "modifiedGmt": "2024-08-30T09:06:37",
+      "categories": [
+        {
+          "sourceId": 16,
+          "slug": "akcii-i-skidki",
+          "name": "Акции и скидки"
+        }
+      ],
+      "classification": "PROMOTION_EXCLUDED",
+      "destination": null,
+      "featuredMediaId": 490,
+      "contentSha256": "68caa7d5271e73e866f72055e1e8981c37e71cdb7b605023a867d289a8ff2550",
+      "authorSourceId": 1
+    }
+  ],
+  "paginationEvidence": {
+    "requestedPerPage": 100,
+    "requestedPage": 1,
+    "reportedTotal": 10,
+    "reportedTotalPages": 1,
+    "fetchedIds": [
+      29540,
+      29533,
+      29530,
+      29523,
+      29520,
+      29517,
+      468,
+      483,
+      486,
+      489
+    ],
+    "verifiedIds": [
+      29540,
+      29533,
+      29530,
+      29523,
+      29520,
+      29517,
+      468,
+      483,
+      486,
+      489
+    ]
+  }
+}

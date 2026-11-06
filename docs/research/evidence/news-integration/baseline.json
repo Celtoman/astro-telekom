@@ -1,0 +1,27 @@
+{
+  "capturedAt": "2026-11-06T12:37:47.719330+00:00",
+  "gitSha": "828d6038e89f80a950f37594d5e12095a8293cae",
+  "branch": "master",
+  "preExistingPaths": 3229,
+  "preExistingCodeChanges": 0,
+  "privatePreservationDir": ".codex-tmp/news-implementation",
+  "figmaSession": "df082622-16c7-4b16-bc47-62207a7c20b9",
+  "screensFile": "BdxNHlBVZWejREtOEIWDkI",
+  "nodes": {
+    "list": "1091:395",
+    "article": "1091:1520",
+    "notFound": "1090:38"
+  },
+  "coolify": {
+    "uuid": "jlrsktdos9yhchkgnrd9f5fj",
+    "repository": "Celtoman/astro-telekom",
+    "branch": "master",
+    "statusAtRead": "running:healthy"
+  },
+  "sourceCounts": {
+    "news": 6,
+    "promotionsExcluded": 4
+  },
+  "implementationAuthorized": true,
+  "deployAuthorized": true
+}

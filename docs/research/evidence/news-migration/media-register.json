@@ -1,0 +1,68 @@
+[
+  {
+    "postId": 29540,
+    "mediaId": 29541,
+    "sourceUrl": "https://tarify-dom.ru/wp-content/uploads/2024/09/router-wave.jpeg",
+    "alt": "Роутер Wave от Домру",
+    "width": 720,
+    "height": 360,
+    "httpStatus": 200,
+    "contentType": "image/jpeg",
+    "contentLength": "253351"
+  },
+  {
+    "postId": 29533,
+    "mediaId": 29534,
+    "sourceUrl": "https://tarify-dom.ru/wp-content/uploads/2024/09/uslugi-domru.webp",
+    "alt": "Оплата услуг",
+    "width": 720,
+    "height": 360,
+    "httpStatus": 200,
+    "contentType": "image/webp",
+    "contentLength": "89884"
+  },
+  {
+    "postId": 29530,
+    "mediaId": 29531,
+    "sourceUrl": "https://tarify-dom.ru/wp-content/uploads/2024/09/umnyj-dom-ru.webp",
+    "alt": "Умный Домру на часах",
+    "width": 720,
+    "height": 360,
+    "httpStatus": 200,
+    "contentType": "image/webp",
+    "contentLength": "139388"
+  },
+  {
+    "postId": 29523,
+    "mediaId": 29524,
+    "sourceUrl": "https://tarify-dom.ru/wp-content/uploads/2024/09/istorjai-runeta.jpeg",
+    "alt": "Юбилей Рунета",
+    "width": 1024,
+    "height": 512,
+    "httpStatus": 200,
+    "contentType": "image/jpeg",
+    "contentLength": "47582"
+  },
+  {
+    "postId": 29520,
+    "mediaId": 29521,
+    "sourceUrl": "https://tarify-dom.ru/wp-content/uploads/2024/09/novj-kanaly-domru.webp",
+    "alt": "Каналы Домру",
+    "width": 720,
+    "height": 360,
+    "httpStatus": 200,
+    "contentType": "image/webp",
+    "contentLength": "92362"
+  },
+  {
+    "postId": 29517,
+    "mediaId": 29518,
+    "sourceUrl": "https://tarify-dom.ru/wp-content/uploads/2024/09/movix-i-dom.ru.webp",
+    "alt": "RuTube и Movix",
+    "width": 720,
+    "height": 360,
+    "httpStatus": 200,
+    "contentType": "image/webp",
+    "contentLength": "270898"
+  }
+]
