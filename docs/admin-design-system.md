@@ -1,5 +1,9 @@
 # Дизайн-система админки
 
+## Реализованные новости и404 —7 ноября 2026
+
+Рабочие /news, /news/categories, /pages/news и /pages/not-found выпущены наd5a12f0f. Список/поиск/фильтры, editor/sidebar, autosave/recovery/conflict/history, media/crop, общий preview4ширин и scoped review/publish используют текущий React-root, Tailwind/shadcn/React Aria. Отсутствие готового rich-text/crop паттерна и reuse описаны в [T5](research/2026-11-06-news-editor-workspace.md). Ранее согласованный план фиксирует исходный объём; актуальные доказательства — [внешний выпуск T11](research/2026-11-07-news-external-release.md).
+
 Карточка хода публикации использует текущие Card/Alert и React Aria `ProgressBar`/`Label`, адаптированные из `src/components/ui/progress.tsx` dashboard-референса. Специализированного pipeline-stepper в референсе нет: пять предметных этапов собраны как доступный список с текстовыми статусами и `aria-current=step`, без нового UI-kit. Вертикальный список помещается в боковую колонку и mobile. Счётчик/полоса относятся только к текущей измеряемой сборке или проверке страниц, общего искусственного процента нет. Завершение показывает только SQL-подтверждённый SUCCEEDED. Время сохраняется на сервере; ETA — приблизительный диапазон по минимум трём сопоставимым успешным запускам. Ожидание подготовки после deployment, retry, UNCERTAIN, устаревшие данные, ошибка и успех имеют отдельные объяснения; сбой polling автоматически повторяется. Индикатор шапки показывает текущий этап в подробностях.
 
 Общий экран ручной публикации развёрнут 6 октября на exact SHA `d440ec4`: cookie/API и выдача HTML/JS проверены; внешний browser E2E не выполнен. На `fbf2fb4` [внешний cookie save→review→publish smoke](research/2026-10-06-static-publication-live-acceptance.md) завершён без redeploy; интерактивный внешний browser E2E не выполнялся. Функция расписания удалена. Доказательства и границы — [приёмка rollout](research/2026-10-06-manual-publication-rollout.md).

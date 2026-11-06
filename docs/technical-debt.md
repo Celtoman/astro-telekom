@@ -288,7 +288,7 @@
 
 | TD-227 | [#545](https://github.com/Celtoman/astro-telekom/issues/545) ✅ | Неподдержанные дети WordPress-списка требуют проверки вместо потери текста |
 
-| TD-228 | [#546](https://github.com/Celtoman/astro-telekom/issues/546) 🟢 | Проверяемый backup/restore редакционных оригиналов и рабочих редакций перед внешним переносом |
+| TD-228 | [#546](https://github.com/Celtoman/astro-telekom/issues/546) ✅ | Проверяемый backup/restore редакционных оригиналов и рабочих редакций перед внешним переносом |
 
 | TD-229 | [#547](https://github.com/Celtoman/astro-telekom/issues/547) ✅ | Backup proof привязан к фактическому API origin своего ресурса |
 

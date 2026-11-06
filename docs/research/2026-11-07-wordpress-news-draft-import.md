@@ -1,5 +1,7 @@
 # T9: перенос WordPress в черновики
 
+**Обновление T11,7 ноября 2026:** внешний код/settings/404 выпущены;6 статей остаются DRAFT. 281 HTTP-проверка, стабильный повтор импорта0imported/6skipped и серверный S3 DB/media restore PASS. Ниже сохранена датированная локальная проверка этапа; актуальные внешние identities и ограничения — [в T11](2026-11-07-news-external-release.md).
+
 Статус: LOCAL CHECKED / COMBINED GATE:1061pass/0fail/1skip. Задача [#534](https://github.com/Celtoman/astro-telekom/issues/534). Внешний apply пока не выполнялся.
 
 CLI `scripts/import-wordpress-news.mjs` сначала получает полный paginated inventory с проверкой declared totals/exhaustion. Категория источника62 — новости,16 — акции; смешанные записи, дубли и зарезервированные слаги требуют отдельной проверки. Источник дал10 записей:6 новостей и4 исключённых акции. Исходные даты UTC и слаги сохраняются. WordPress account ID не превращается в выдуманного автора. Сырые исходники и отчёт хранятся только в приватной `.codex-tmp`.

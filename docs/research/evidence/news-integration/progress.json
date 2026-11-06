@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-06T23:00:42.557Z",
+  "updatedAt": "2026-11-06T23:40:33.182Z",
   "task": 534,
   "authorized": {
     "implementation": true,
@@ -174,7 +174,7 @@
         "failed": 0
       },
       "unchangedLegacyRevision": "52:50",
-      "externalImport": "PENDING_T11"
+      "externalImport": "PASS_6_DRAFTS_6_COVERS"
     },
     "T10": {
       "status": "LOCAL_CHECKED",
@@ -191,13 +191,76 @@
       "realCaddy": "PASS",
       "isolatedPostgresMediaRestore": "PASS",
       "recoveryRetryBrowser": "PASS",
-      "externalBackup": "PENDING_T11",
+      "externalBackup": "PASS_6_ASSETS_38_FILES_12_REFERENCES",
       "unverified": [
         "light theme",
         "real browser zoom 200/400",
         "physical touch",
         "manual screen reader"
       ]
+    },
+    "T11": {
+      "status": "EXTERNAL_TECHNICAL_CHECKED_OWNER_ACCEPTANCE_PENDING",
+      "commit": "d5a12f0f99b6092e20511b7e7ca14cc22f7f64e3",
+      "ci": {
+        "runId": 42309035496,
+        "conclusion": "success"
+      },
+      "deployment": {
+        "id": "rnk6abcw28mihjtmhnhgnnz5",
+        "status": "finished",
+        "seconds": 238
+      },
+      "code": "SUCCEEDED",
+      "publications": {
+        "news": {
+          "revision": 1,
+          "contentDigest": "5c0618276963099fa454e654b2295772b9de5f65b0d9a19f6bf223433aa84caa",
+          "operationId": "5929cdba-e0c8-4f0b-aa8e-bb5b2316219f",
+          "status": "SUCCEEDED",
+          "reviewDigest": "b9baff63927fa131e3cace10da1b07ce2c87cb6dc4501cdb08bdba29a8b095e8",
+          "affectedPaths": [
+            "/",
+            "/news"
+          ],
+          "publicationId": "cmw5lviqp000j01rpmpfapyzh",
+          "releaseSequence": 21
+        },
+        "not-found": {
+          "revision": 1,
+          "contentDigest": "d2b31e4ccc89e9426d0a7f9baba9405f7127cbdfe3033b8898451ffa88b49aa3",
+          "operationId": "52850ce4-2454-4b4a-8b35-31b30bcf4af9",
+          "status": "SUCCEEDED",
+          "reviewDigest": "052384928391a7a92e1aa544c428e5553ef97d11104dacee8c4651ade0dad151",
+          "affectedPaths": [
+            "/",
+            "/news/page/1",
+            "/novosti",
+            "/news",
+            "Все неизвестные адреса (HTTP 404)"
+          ],
+          "publicationId": "cmw5m0q3v000q01rp7d7yz8zs",
+          "releaseSequence": 22
+        }
+      },
+      "liveHTTP": {
+        "result": "PASS",
+        "checks": 281
+      },
+      "catalogComparison": {
+        "result": "PASS",
+        "cities": 207,
+        "tariffs": 3805,
+        "legacyRevision": "29:29"
+      },
+      "backup": {
+        "archiveSha256": "ca3cdfba61c3f9b3c4fcb7be2d01942504b8e6ae8e60e48a304552621d9b2e2b",
+        "assets": 6,
+        "verifiedFiles": 38,
+        "verifiedEditorialReferences": 12,
+        "editorialRecords": 40
+      },
+      "ownerAcceptance": false
     }
   },
   "baselineCheck": {

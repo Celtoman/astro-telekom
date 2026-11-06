@@ -1,5 +1,9 @@
 # Модель данных текущего прототипа
 
+## Внешнее состояние новостей —7 ноября 2026
+
+6 статей и1 категория перенесены в drafts с исходными слагами/датами и6 MediaAsset. NEWS_SETTINGS/NOT_FOUND revision 1 опубликованы отдельно; статьи revision 1 остаются неопубликованными. История и исходные pending aliases сохранены;207 городов/3805 тарифов и legacy 29/29 не изменены. [внешний выпуск T11](research/2026-11-07-news-external-release.md).
+
 T4 (#534): `0069_editorial_redirect_ownership` добавляет nullable `Redirect.managedEditorialKey` и индекс site/owner. Прежние ручные записи получают null без изменения адресов; новые `ARTICLE:id`, `CATEGORY:id`, `NEWS_SETTINGS` защищают автоматические aliases от отдельной правки. Активность определяется immutable catalog, а не этим признаком или working status DB. [Контракт и локальные проверки](research/2026-11-06-news-scoped-backend.md).
 
 ## Редакционные новости: фундамент T1,6ноября2026
@@ -124,7 +128,7 @@ Provider.settings.content -> Site.settings.content -> Page.content
 
 ## Чего в модели нет
 
-Нет сущностей для media library, analytics aggregates, универсального variable registry, category/collection, equipment, channel package, review, persisted legal retention policy и provider integration profile. Модели версий/аудита, ручная публикация точного snapshot, защищенный рабочий preview, общий read-only admin-журнал, корзина status-сущностей/PageBlock и guarded undo двух XLSX-импортов уже добавлены, но внешняя preview-ссылка и универсальный per-entity rollback поверх них еще не реализованы. Retention mechanism работает с согласованным сроком 180 дней из обязательной runtime-конфигурации; юридическое основание обработки остается отдельным решением владельца. Перед добавлением новых сущностей нужно утвердить их interface и ownership, а не использовать неструктурированный JSON как постоянную замену.
+Редакционные MediaAsset и NewsCategory реализованы отдельно; универсальных media library/category/collection, analytics aggregates, универсального variable registry, equipment, channel package, review, persisted legal retention policy и provider integration profile нет. Модели версий/аудита, ручная публикация точного snapshot, защищенный рабочий preview, общий read-only admin-журнал, корзина status-сущностей/PageBlock и guarded undo двух XLSX-импортов уже добавлены, но внешняя preview-ссылка и универсальный per-entity rollback поверх них еще не реализованы. Retention mechanism работает с согласованным сроком 180 дней из обязательной runtime-конфигурации; юридическое основание обработки остается отдельным решением владельца. Перед добавлением новых сущностей нужно утвердить их interface и ownership, а не использовать неструктурированный JSON как постоянную замену.
 
 `0058` сохраняет старые пять PageTemplateBlock с visible=false и их before/after историю; текущая композиция CITY_HOME — hero + tariff_grid. В content записываются homeCompositionVersion=2.0.0, tariffCollectionPassportVersion=1.0.0 и tariffCollectionImplementationVersion=tariff-collection-v1. Site.workingRevision увеличивается один раз, publishedRevision и SitePublication не меняются. Булевый attributes.is_sticky остаётся единственным источником приоритета; нового числового поля и изменения XLSX-контракта нет.
 

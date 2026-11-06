@@ -1,4 +1,4 @@
-# Длительность code deployment: проверка 7 ноября2026
+# Длительность code deployment: проверка 7 ноября 2026
 
 По замечанию владельца о deployments дольше10минут выполнено read-only сравнение двух завершённых выпусков. Задача измерения — [#553](https://github.com/Celtoman/astro-telekom/issues/553); оптимизация инфраструктуры в текущую интеграцию новостей не добавлена.
 
@@ -12,8 +12,10 @@
 | Start new app→containers started | 32.4с | 32.1с |
 | BuildKit cached steps | 34 | 47 |
 
-Даты запусков —6ноября2026UTC. MCP подтвердил exact commits и finished; приложение running:healthy. MCP summary не содержит времён шагов, поэтому через существующий pinned SSH выполнено чтение метаданных этих двух ApplicationDeploymentQueue records. На сервере обработаны timestamps и известные BuildKit markers; команды, значения env и raw logs не выводились и на компьютер не скачивались. Настройки приложения, Git, кешей, Docker и логирования не менялись.
+Даты запусков —6 ноября2026UTC. MCP подтвердил exact commits и finished; приложение running:healthy. MCP summary не содержит времён шагов, поэтому через существующий pinned SSH выполнено чтение метаданных этих двух ApplicationDeploymentQueue records. На сервере обработаны timestamps и известные BuildKit markers; команды, значения env и raw logs не выводились и на компьютер не скачивались. Настройки приложения, Git, кешей, Docker и логирования не менялись.
 
 В медленном выпуске основная задержка была до Docker build. Один долгий stderr интервал286.7с содержит сигнал Updating files, затем есть hidden stdout gap255.1с. Этого достаточно локализовать фазу подготовки исходников, но недостаточно объявить точную причину CPU/I/O/network/checkout. Сама admin build заняла73.9с; кеши также различались. Длительность запуска контейнеров почти одинакова и не объясняет разницу.
 
 Следующий отдельный read-only аудит должен сопоставить размеры/формат исходников, source download/checkout, host pressure/I/O и параллельные deployments. Публичный CODE rebuild и CMS activation измеряются отдельно. В текущем выпуске сохраняются один финальный deployment, ожидание его терминального состояния, exact-SHA CI/healthy/CODE и live readback; превышение10минут само по себе не считается отказом.
+
+Финальный выпускd5a12f0f: rnk6abcw28mihjtmhnhgnnz5,23:17:04→23:21:02UTC,238с(3мин58с),finished/running:healthy. CODE отдельно подтвердился23:25:26.892UTC. Затем scoped404 прошла за208.6с: Astro51.3с, проверка122.8с, activation22.5с, SQL confirmation7.5с. Это разные операции; повторного deployment для публикаций не было. #553 остаётся открытым: ускорение Git/source preparation не выполнено.

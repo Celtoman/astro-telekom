@@ -1,6 +1,6 @@
 # Резервирование редакционных медиа и БД
 
-Пункт принятого плана новостей T3/T10, [#534](https://github.com/Celtoman/astro-telekom/issues/534), [#546](https://github.com/Celtoman/astro-telekom/issues/546). Код подготовлен; внешнее применение и restore proof ещё не выполнены. Старый publication-retention продолжает резервировать только immutable публичные артефакты, его поведение не меняется.
+Пункт принятого плана новостей T3/T10, [#534](https://github.com/Celtoman/astro-telekom/issues/534), [#546](https://github.com/Celtoman/astro-telekom/issues/546). Код установлен изd5a12f0f; два реальных S3 download/hash/PG18 restore пройдены до и после переноса. После переноса проверены6 assets / 38 files / 12 editorial references; timer enabled/active, production DB не восстанавливалась. Первый автоматический ночной запуск ещё не наблюдался. [Внешние доказательства](../research/2026-11-07-news-external-release.md). Старый publication-retention продолжает резервировать только immutable публичные артефакты, его поведение не меняется.
 
 `deploy/editorial-backup.py` делает custom PostgreSQL dump работающей БД приложения и копию immutable originals/derivatives из фиксированного editorial-media volume. API сначала сохраняет неизменяемые файлы, затем коммитит ready metadata; удаления медиа нет. Поэтому снимок БД вместе с последующим полным набором immutable файлов содержит все ссылки этого снимка. Во время backup приложение не останавливается. Параллельный DDL может прервать dump; такой комплект не принимается.
 
