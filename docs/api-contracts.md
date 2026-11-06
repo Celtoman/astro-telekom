@@ -12,6 +12,10 @@ Private Node controller нового отдельного Docker target `publica
 
 Базовый prefix: `/api/v1`. Сверка маршрутов и ограничений: 6 октября 2026 года, по controllers/module. Private publication controller имеет собственный контракт в [publication.md](publication.md).
 
+## Редакционные медиа — локальная реализация T3
+
+Все маршруты под `/admin/sites/:siteId/news/media` защищены существующим `AdminTokenGuard`; базовый prefix `/api/v1` сохраняется. POST принимает один multipart file JPEG/PNG/WebP до 10 МБ и 24 млн пикселей. GET `/:id` возвращает метаданные и приватный preview path; GET `/:id/file?kind=body|cover|social` возвращает WebP с `private,no-store` и `nosniff`. POST `/:id/crop` принимает `{kind: 'cover'|'social', crop: {x,y,width,height}}` в нормализованных координатах; область должна помещаться в оригинал. Чужой site/asset не доступен. Произвольные storage keys и source filenames клиент не получает; endpoint удаления отсутствует. Публичные URLs выбранных производных формируются при публикации, а не этим API. [Реализация и границы](research/2026-11-06-news-media-foundation.md). Внешний выпуск T3 ещё не подтверждён.
+
 ## Общие правила
 
 - API работает на NestJS/Fastify и принимает JSON; server body limit — 35 MB.

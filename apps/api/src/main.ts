@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import fastifyCookie from '@fastify/cookie';
+import fastifyMultipart from '@fastify/multipart';
 import fastifyRateLimit from '@fastify/rate-limit';
 import IORedis from 'ioredis';
 import { AppModule } from './module';
@@ -16,6 +17,7 @@ async function bootstrap() {
   );
 
   await app.register(fastifyCookie);
+  await app.register(fastifyMultipart, { limits: { fileSize: 10 * 1024 * 1024, files: 1, fields: 0, parts: 1 } });
   const rateLimitRedis = process.env.REDIS_URL
     ? new IORedis(process.env.REDIS_URL, { connectTimeout: 1_000, maxRetriesPerRequest: 1, enableOfflineQueue: false })
     : undefined;

@@ -52,6 +52,9 @@ services:
       REBUILD_PROVIDER: "static"
       STATIC_PUBLICATION_URL: http://web:8081
       PUBLIC_SITE_URL: https://${PUBLIC_DOMAIN:?Set PUBLIC_DOMAIN in Coolify}
+      EDITORIAL_MEDIA_ROOT: /editorial-media
+    volumes:
+      - editorial_media:/editorial-media
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -123,12 +126,14 @@ services:
       PUBLIC_CONNECTION_PHONE: ${PUBLIC_CONNECTION_PHONE:-}
       PUBLIC_SUPPORT_PHONE: ${PUBLIC_SUPPORT_PHONE:-}
       PUBLIC_TEST_MODE: "true"
+      EDITORIAL_MEDIA_ROOT: /editorial-media
       COOLIFY_API_URL: ${COOLIFY_API_URL:?Set COOLIFY_API_URL in Coolify}
       COOLIFY_RESOURCE_UUID: ${COOLIFY_RESOURCE_UUID:?Set COOLIFY_RESOURCE_UUID in Coolify}
     expose:
       - "80"
     volumes:
       - web_publication:/publication
+      - editorial_media:/editorial-media:ro
     depends_on:
       bootstrap-seed:
         condition: service_completed_successfully
@@ -182,6 +187,7 @@ services:
       - "coolify.traefik.middlewares=admin-security-headers,test-basic-auth"
 
 volumes:
+  editorial_media:
   postgres_data:
   redis_data:
   web_publication:

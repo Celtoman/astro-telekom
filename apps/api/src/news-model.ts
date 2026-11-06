@@ -48,6 +48,10 @@ export function validateNewsBody(raw: unknown): boolean {
     const d = record(rawNode, field, ['type', 'text', 'attrs', 'marks', 'content']);
     const allowed = ['doc', 'paragraph', 'heading', 'text', 'bulletList', 'orderedList', 'listItem', 'blockquote', 'hardBreak', 'image'];
     if (!allowed.includes(d.type) || (field === 'body' && d.type !== 'doc') || (field !== 'body' && d.type === 'doc')) fail(field, 'NODE', 'Неподдерживаемый блок текста.');
+    const children: Record<string,string[]> = {doc:['paragraph','heading','bulletList','orderedList','blockquote','image'],paragraph:['text','hardBreak'],heading:['text','hardBreak'],bulletList:['listItem'],orderedList:['listItem'],listItem:['paragraph','heading','bulletList','orderedList','blockquote','image'],blockquote:['paragraph','heading','bulletList','orderedList','blockquote','image']};
+    if (parent && !children[parent]?.includes(d.type)) fail(field, 'STRUCTURE', 'Блок находится в неподходящей части текста.');
+    if (['text','hardBreak','image'].includes(d.type) && d.content !== undefined) fail(field, 'STRUCTURE', 'Этот узел не содержит вложенные блоки.');
+    if (d.type === 'listItem' && d.content?.[0]?.type !== 'paragraph') fail(field, 'STRUCTURE', 'Элемент списка начинается с абзаца.');
     if (d.type === 'text') {
       const value = text(d.text, `${field}.text`, 100_000); characters += value.length; meaningful ||= !!value.trim();
       if (!['paragraph', 'heading', 'listItem', 'blockquote'].includes(parent)) fail(field, 'STRUCTURE', 'Текст должен находиться внутри текстового блока.');
@@ -89,6 +93,15 @@ export function validateNewsArticle(raw: unknown, draft = false, currentId?: str
   if (!text(d.publishedDate, 'publishedDate', 50).match(/^\d{4}-\d{2}-\d{2}T.+(?:Z|[+-]\d{2}:\d{2})$/) || !Number.isFinite(Date.parse(d.publishedDate))) fail('publishedDate', 'DATE', 'Укажите дату и время с часовым поясом.');
   if (!validateNewsBody(d.body)) missing.push('body');
   if (d.cover !== null) media(d.cover, 'cover');
+  const imageAlt = (value: unknown, path: string) => {
+    if (!value || typeof value !== 'object') return;
+    const object = value as Record<string,any>;
+    if (object.assetId && !object.decorative && !object.alt?.trim()) missing.push(`${path}.alt`);
+    for (const [key,child] of Object.entries(object)) if (child && typeof child === 'object') {
+      if (Array.isArray(child)) child.forEach((item,index) => imageAlt(item,`${path}.${key}.${index}`)); else imageAlt(child,`${path}.${key}`);
+    }
+  };
+  imageAlt(d.cover,'cover'); imageAlt(d.body,'body'); imageAlt(d.social,'social');
   if (d.author !== null) { const a = record(d.author, 'author', ['type', 'name', 'url']); if (!['Person', 'Organization'].includes(a.type) || !text(a.name, 'author.name', 250).trim()) fail('author', 'AUTHOR', 'Укажите реального автора или организацию.'); if (a.url) safeNewsUrl(a.url, 'author.url'); }
   if (d.source !== null) { const source = record(d.source, 'source', ['label', 'url']); text(source.label, 'source.label', 250); if (source.url) safeNewsUrl(source.url, 'source.url'); }
   const related = record(d.related, 'related', ['mode', 'ids']);

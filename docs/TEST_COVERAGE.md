@@ -1,5 +1,13 @@
 # Покрытие тестами
 
+## Редакционные медиа и текст — T3
+
+- `editorial-media.test.cjs`: декодирование и пределы MIME/signature/bytes/pixels; геометрия body/16:9/social без увеличения; неизменность входа, crop и безопасные storage keys, сбор ссылок на assets.
+- `editorial-media-service.test.cjs`: сайт-владелец, дедупликация, сохранность оригинала и прежних вариантов при contextual crop, SHA-проверка чтения.
+- `editorial-media-http.test.cjs`: настоящий Nest/Fastify multipart, cookie guard, ограничение размера, приватные image headers; filesystem обработка проверяется отдельно service suite.
+- `news-document.test.cjs`: общий безопасный HTML serializer, escaping текста/alt/caption, запрет исполняемых/credential URLs, только зарегистрированные изображения; нормализация служебных defaults Tiptap.
+- `news-contract.test.cjs` дополнительно проверяет грамматику дерева и обязательный alt информативного изображения при выпуске; безопасный незавершённый draft разрешён. Визуальное поведение будущего editor workspace этими тестами не проверяется.
+
 ## Новости и редакционное хранение — T1
 
 - `news-contract.test.cjs`: готовая новость без необязательных данных, неполный безопасный draft/missingFields, whitelist body/URL/media, invalid version/slug/date/crop, manual related, категории и фиксированные destinations404.

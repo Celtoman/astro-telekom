@@ -6,6 +6,8 @@ node_modules
 **/.astro
 .pnpm-store
 coverage
+.local-media
+**/.local-media
 *.log
 .env
 .env.*

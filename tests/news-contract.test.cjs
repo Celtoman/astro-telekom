@@ -33,4 +33,15 @@ test('category and404 settings preserve fixed fields and safe route destinations
  assert.throws(()=>model.validateNotFound({...model.notFoundDefaults(),primary:{label:'Открыть',target:'https://invalid.test'}}));
 });
 
+test('stored documents follow the editor grammar, even for safe drafts',()=>{
+ for(const content of [[{type:'paragraph',content:[{type:'heading',attrs:{level:2},content:[{type:'text',text:'Wrong'}]}]}],[{type:'bulletList',content:[{type:'paragraph',content:[{type:'text',text:'Wrong'}]}]}],[{type:'hardBreak',content:[{type:'text',text:'Wrong'}]}]]){
+  const d=ready();d.body={type:'doc',content};assert.throws(()=>model.validateNewsArticle(d,true),e=>e.reason==='STRUCTURE');
+ }
+});
+test('informative images may lack alt in a draft but require it for publication',()=>{
+ const d=ready();d.cover={assetId:'cover',alt:''};d.body.content.push({type:'image',attrs:{assetId:'inline',alt:''}});
+ assert.deepEqual(model.validateNewsArticle(d,true),['cover.alt','body.content.1.attrs.alt']);
+ assert.throws(()=>model.validateNewsArticle(d),e=>e.field==='cover.alt');
+ d.cover.decorative=true;d.body.content[1].attrs.alt='Роутер в комнате';assert.deepEqual(model.validateNewsArticle(d),[]);
+});
 module.exports={ready};

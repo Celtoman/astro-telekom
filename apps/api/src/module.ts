@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { AdminEditorialMediaController } from './admin-editorial-media.controller';
+import { EditorialMediaService } from './editorial-media.service';
 import { CitiesController } from './cities.controller';
 import { HealthController } from './health.controller';
 import { PrismaService } from './prisma.service';
@@ -65,6 +67,7 @@ import { CodeReleaseService } from './code-release.service';
 
 @Module({
   controllers: [
+    AdminEditorialMediaController,
     HealthController,
     CitiesController,
     AddressChecksController,
@@ -102,6 +105,6 @@ import { CodeReleaseService } from './code-release.service';
     AdminTariffTemplateController,
     AdminPageTemplatesController,
   ],
-  providers: [PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, CodeReleaseService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, TariffPurgeService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [EditorialMediaService, PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, CodeReleaseService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, TariffPurgeService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

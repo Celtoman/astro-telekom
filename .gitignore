@@ -7,5 +7,6 @@ dist/
 .env.*
 !.env.example
 coverage/
+.local-media/
 *.log
 __pycache__/
