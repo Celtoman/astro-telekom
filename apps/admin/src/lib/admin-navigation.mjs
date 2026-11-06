@@ -5,9 +5,14 @@ export const adminNavigation = [
   { id: "overview", label: "Обзор", href: "/", icon: "home" },
   { id: "publication", label: "Публикация сайта", href: "/publication", icon: "publication" },
   { id: "preview", label: "Предпросмотр", href: "/preview", icon: "preview" },
-  { id: "news", label: "Новости", href: "/news", icon: "catalog" },
+  { id: "news", label: "Новости", href: "/news", icon: "news", children: [
+    { id: "news", label: "Все новости", href: "/news", icon: "news" },
+    { id: "news-categories", label: "Категории", href: "/news/categories", icon: "catalog" },
+  ] },
   { id: "pages", label: "Страницы", href: "/templates", icon: "catalog", children: [
     { id: "templates", label: "Шаблоны страниц", href: "/templates", icon: "catalog" },
+    { id: "pages-news", label: "Страница новостей", href: "/pages/news", icon: "news" },
+    { id: "pages-not-found", label: "Страница 404", href: "/pages/not-found", icon: "catalog" },
     { id: "block-passports", label: "Паспорта блоков", href: "/templates/passports", icon: "catalog" },
   ] },
   {

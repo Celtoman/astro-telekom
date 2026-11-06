@@ -44059,10 +44059,12 @@ export namespace Prisma {
   }
 
   export type RedirectAvgAggregateOutputType = {
+    managedEditorialReleaseSequence: number | null
     hitCount: number | null
   }
 
   export type RedirectSumAggregateOutputType = {
+    managedEditorialReleaseSequence: number | null
     hitCount: number | null
   }
 
@@ -44074,6 +44076,7 @@ export namespace Prisma {
     targetPath: string | null
     managedTariffId: string | null
     managedEditorialKey: string | null
+    managedEditorialReleaseSequence: number | null
     status: $Enums.PublishStatus | null
     hitCount: number | null
     lastHitAt: Date | null
@@ -44089,6 +44092,7 @@ export namespace Prisma {
     targetPath: string | null
     managedTariffId: string | null
     managedEditorialKey: string | null
+    managedEditorialReleaseSequence: number | null
     status: $Enums.PublishStatus | null
     hitCount: number | null
     lastHitAt: Date | null
@@ -44104,6 +44108,7 @@ export namespace Prisma {
     targetPath: number
     managedTariffId: number
     managedEditorialKey: number
+    managedEditorialReleaseSequence: number
     status: number
     hitCount: number
     lastHitAt: number
@@ -44114,10 +44119,12 @@ export namespace Prisma {
 
 
   export type RedirectAvgAggregateInputType = {
+    managedEditorialReleaseSequence?: true
     hitCount?: true
   }
 
   export type RedirectSumAggregateInputType = {
+    managedEditorialReleaseSequence?: true
     hitCount?: true
   }
 
@@ -44129,6 +44136,7 @@ export namespace Prisma {
     targetPath?: true
     managedTariffId?: true
     managedEditorialKey?: true
+    managedEditorialReleaseSequence?: true
     status?: true
     hitCount?: true
     lastHitAt?: true
@@ -44144,6 +44152,7 @@ export namespace Prisma {
     targetPath?: true
     managedTariffId?: true
     managedEditorialKey?: true
+    managedEditorialReleaseSequence?: true
     status?: true
     hitCount?: true
     lastHitAt?: true
@@ -44159,6 +44168,7 @@ export namespace Prisma {
     targetPath?: true
     managedTariffId?: true
     managedEditorialKey?: true
+    managedEditorialReleaseSequence?: true
     status?: true
     hitCount?: true
     lastHitAt?: true
@@ -44261,6 +44271,7 @@ export namespace Prisma {
     targetPath: string
     managedTariffId: string | null
     managedEditorialKey: string | null
+    managedEditorialReleaseSequence: number | null
     status: $Enums.PublishStatus
     hitCount: number
     lastHitAt: Date | null
@@ -44295,6 +44306,7 @@ export namespace Prisma {
     targetPath?: boolean
     managedTariffId?: boolean
     managedEditorialKey?: boolean
+    managedEditorialReleaseSequence?: boolean
     status?: boolean
     hitCount?: boolean
     lastHitAt?: boolean
@@ -44312,6 +44324,7 @@ export namespace Prisma {
     targetPath?: boolean
     managedTariffId?: boolean
     managedEditorialKey?: boolean
+    managedEditorialReleaseSequence?: boolean
     status?: boolean
     hitCount?: boolean
     lastHitAt?: boolean
@@ -44329,6 +44342,7 @@ export namespace Prisma {
     targetPath?: boolean
     managedTariffId?: boolean
     managedEditorialKey?: boolean
+    managedEditorialReleaseSequence?: boolean
     status?: boolean
     hitCount?: boolean
     lastHitAt?: boolean
@@ -44346,6 +44360,7 @@ export namespace Prisma {
     targetPath?: boolean
     managedTariffId?: boolean
     managedEditorialKey?: boolean
+    managedEditorialReleaseSequence?: boolean
     status?: boolean
     hitCount?: boolean
     lastHitAt?: boolean
@@ -44353,7 +44368,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type RedirectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "sourcePath" | "targetPath" | "managedTariffId" | "managedEditorialKey" | "status" | "hitCount" | "lastHitAt" | "createdAt" | "updatedAt", ExtArgs["result"]["redirect"]>
+  export type RedirectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "cityId" | "sourcePath" | "targetPath" | "managedTariffId" | "managedEditorialKey" | "managedEditorialReleaseSequence" | "status" | "hitCount" | "lastHitAt" | "createdAt" | "updatedAt", ExtArgs["result"]["redirect"]>
   export type RedirectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     city?: boolean | Redirect$cityArgs<ExtArgs>
@@ -44381,6 +44396,7 @@ export namespace Prisma {
       targetPath: string
       managedTariffId: string | null
       managedEditorialKey: string | null
+      managedEditorialReleaseSequence: number | null
       status: $Enums.PublishStatus
       hitCount: number
       lastHitAt: Date | null
@@ -44818,6 +44834,7 @@ export namespace Prisma {
     readonly targetPath: FieldRef<"Redirect", 'String'>
     readonly managedTariffId: FieldRef<"Redirect", 'String'>
     readonly managedEditorialKey: FieldRef<"Redirect", 'String'>
+    readonly managedEditorialReleaseSequence: FieldRef<"Redirect", 'Int'>
     readonly status: FieldRef<"Redirect", 'PublishStatus'>
     readonly hitCount: FieldRef<"Redirect", 'Int'>
     readonly lastHitAt: FieldRef<"Redirect", 'DateTime'>
@@ -49374,6 +49391,7 @@ export namespace Prisma {
     targetPath: 'targetPath',
     managedTariffId: 'managedTariffId',
     managedEditorialKey: 'managedEditorialKey',
+    managedEditorialReleaseSequence: 'managedEditorialReleaseSequence',
     status: 'status',
     hitCount: 'hitCount',
     lastHitAt: 'lastHitAt',
@@ -53133,6 +53151,7 @@ export namespace Prisma {
     targetPath?: StringFilter<"Redirect"> | string
     managedTariffId?: StringNullableFilter<"Redirect"> | string | null
     managedEditorialKey?: StringNullableFilter<"Redirect"> | string | null
+    managedEditorialReleaseSequence?: IntNullableFilter<"Redirect"> | number | null
     status?: EnumPublishStatusFilter<"Redirect"> | $Enums.PublishStatus
     hitCount?: IntFilter<"Redirect"> | number
     lastHitAt?: DateTimeNullableFilter<"Redirect"> | Date | string | null
@@ -53150,6 +53169,7 @@ export namespace Prisma {
     targetPath?: SortOrder
     managedTariffId?: SortOrderInput | SortOrder
     managedEditorialKey?: SortOrderInput | SortOrder
+    managedEditorialReleaseSequence?: SortOrderInput | SortOrder
     status?: SortOrder
     hitCount?: SortOrder
     lastHitAt?: SortOrderInput | SortOrder
@@ -53171,6 +53191,7 @@ export namespace Prisma {
     targetPath?: StringFilter<"Redirect"> | string
     managedTariffId?: StringNullableFilter<"Redirect"> | string | null
     managedEditorialKey?: StringNullableFilter<"Redirect"> | string | null
+    managedEditorialReleaseSequence?: IntNullableFilter<"Redirect"> | number | null
     status?: EnumPublishStatusFilter<"Redirect"> | $Enums.PublishStatus
     hitCount?: IntFilter<"Redirect"> | number
     lastHitAt?: DateTimeNullableFilter<"Redirect"> | Date | string | null
@@ -53188,6 +53209,7 @@ export namespace Prisma {
     targetPath?: SortOrder
     managedTariffId?: SortOrderInput | SortOrder
     managedEditorialKey?: SortOrderInput | SortOrder
+    managedEditorialReleaseSequence?: SortOrderInput | SortOrder
     status?: SortOrder
     hitCount?: SortOrder
     lastHitAt?: SortOrderInput | SortOrder
@@ -53211,6 +53233,7 @@ export namespace Prisma {
     targetPath?: StringWithAggregatesFilter<"Redirect"> | string
     managedTariffId?: StringNullableWithAggregatesFilter<"Redirect"> | string | null
     managedEditorialKey?: StringNullableWithAggregatesFilter<"Redirect"> | string | null
+    managedEditorialReleaseSequence?: IntNullableWithAggregatesFilter<"Redirect"> | number | null
     status?: EnumPublishStatusWithAggregatesFilter<"Redirect"> | $Enums.PublishStatus
     hitCount?: IntWithAggregatesFilter<"Redirect"> | number
     lastHitAt?: DateTimeNullableWithAggregatesFilter<"Redirect"> | Date | string | null
@@ -57029,6 +57052,7 @@ export namespace Prisma {
     targetPath: string
     managedTariffId?: string | null
     managedEditorialKey?: string | null
+    managedEditorialReleaseSequence?: number | null
     status?: $Enums.PublishStatus
     hitCount?: number
     lastHitAt?: Date | string | null
@@ -57046,6 +57070,7 @@ export namespace Prisma {
     targetPath: string
     managedTariffId?: string | null
     managedEditorialKey?: string | null
+    managedEditorialReleaseSequence?: number | null
     status?: $Enums.PublishStatus
     hitCount?: number
     lastHitAt?: Date | string | null
@@ -57059,6 +57084,7 @@ export namespace Prisma {
     targetPath?: StringFieldUpdateOperationsInput | string
     managedTariffId?: NullableStringFieldUpdateOperationsInput | string | null
     managedEditorialKey?: NullableStringFieldUpdateOperationsInput | string | null
+    managedEditorialReleaseSequence?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     hitCount?: IntFieldUpdateOperationsInput | number
     lastHitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57076,6 +57102,7 @@ export namespace Prisma {
     targetPath?: StringFieldUpdateOperationsInput | string
     managedTariffId?: NullableStringFieldUpdateOperationsInput | string | null
     managedEditorialKey?: NullableStringFieldUpdateOperationsInput | string | null
+    managedEditorialReleaseSequence?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     hitCount?: IntFieldUpdateOperationsInput | number
     lastHitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57091,6 +57118,7 @@ export namespace Prisma {
     targetPath: string
     managedTariffId?: string | null
     managedEditorialKey?: string | null
+    managedEditorialReleaseSequence?: number | null
     status?: $Enums.PublishStatus
     hitCount?: number
     lastHitAt?: Date | string | null
@@ -57104,6 +57132,7 @@ export namespace Prisma {
     targetPath?: StringFieldUpdateOperationsInput | string
     managedTariffId?: NullableStringFieldUpdateOperationsInput | string | null
     managedEditorialKey?: NullableStringFieldUpdateOperationsInput | string | null
+    managedEditorialReleaseSequence?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     hitCount?: IntFieldUpdateOperationsInput | number
     lastHitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57119,6 +57148,7 @@ export namespace Prisma {
     targetPath?: StringFieldUpdateOperationsInput | string
     managedTariffId?: NullableStringFieldUpdateOperationsInput | string | null
     managedEditorialKey?: NullableStringFieldUpdateOperationsInput | string | null
+    managedEditorialReleaseSequence?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     hitCount?: IntFieldUpdateOperationsInput | number
     lastHitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -60264,6 +60294,7 @@ export namespace Prisma {
     targetPath?: SortOrder
     managedTariffId?: SortOrder
     managedEditorialKey?: SortOrder
+    managedEditorialReleaseSequence?: SortOrder
     status?: SortOrder
     hitCount?: SortOrder
     lastHitAt?: SortOrder
@@ -60272,6 +60303,7 @@ export namespace Prisma {
   }
 
   export type RedirectAvgOrderByAggregateInput = {
+    managedEditorialReleaseSequence?: SortOrder
     hitCount?: SortOrder
   }
 
@@ -60283,6 +60315,7 @@ export namespace Prisma {
     targetPath?: SortOrder
     managedTariffId?: SortOrder
     managedEditorialKey?: SortOrder
+    managedEditorialReleaseSequence?: SortOrder
     status?: SortOrder
     hitCount?: SortOrder
     lastHitAt?: SortOrder
@@ -60298,6 +60331,7 @@ export namespace Prisma {
     targetPath?: SortOrder
     managedTariffId?: SortOrder
     managedEditorialKey?: SortOrder
+    managedEditorialReleaseSequence?: SortOrder
     status?: SortOrder
     hitCount?: SortOrder
     lastHitAt?: SortOrder
@@ -60306,6 +60340,7 @@ export namespace Prisma {
   }
 
   export type RedirectSumOrderByAggregateInput = {
+    managedEditorialReleaseSequence?: SortOrder
     hitCount?: SortOrder
   }
 
@@ -65349,6 +65384,7 @@ export namespace Prisma {
     targetPath: string
     managedTariffId?: string | null
     managedEditorialKey?: string | null
+    managedEditorialReleaseSequence?: number | null
     status?: $Enums.PublishStatus
     hitCount?: number
     lastHitAt?: Date | string | null
@@ -65364,6 +65400,7 @@ export namespace Prisma {
     targetPath: string
     managedTariffId?: string | null
     managedEditorialKey?: string | null
+    managedEditorialReleaseSequence?: number | null
     status?: $Enums.PublishStatus
     hitCount?: number
     lastHitAt?: Date | string | null
@@ -66213,6 +66250,7 @@ export namespace Prisma {
     targetPath?: StringFilter<"Redirect"> | string
     managedTariffId?: StringNullableFilter<"Redirect"> | string | null
     managedEditorialKey?: StringNullableFilter<"Redirect"> | string | null
+    managedEditorialReleaseSequence?: IntNullableFilter<"Redirect"> | number | null
     status?: EnumPublishStatusFilter<"Redirect"> | $Enums.PublishStatus
     hitCount?: IntFilter<"Redirect"> | number
     lastHitAt?: DateTimeNullableFilter<"Redirect"> | Date | string | null
@@ -70682,6 +70720,7 @@ export namespace Prisma {
     targetPath: string
     managedTariffId?: string | null
     managedEditorialKey?: string | null
+    managedEditorialReleaseSequence?: number | null
     status?: $Enums.PublishStatus
     hitCount?: number
     lastHitAt?: Date | string | null
@@ -70697,6 +70736,7 @@ export namespace Prisma {
     targetPath: string
     managedTariffId?: string | null
     managedEditorialKey?: string | null
+    managedEditorialReleaseSequence?: number | null
     status?: $Enums.PublishStatus
     hitCount?: number
     lastHitAt?: Date | string | null
@@ -77803,6 +77843,7 @@ export namespace Prisma {
     targetPath: string
     managedTariffId?: string | null
     managedEditorialKey?: string | null
+    managedEditorialReleaseSequence?: number | null
     status?: $Enums.PublishStatus
     hitCount?: number
     lastHitAt?: Date | string | null
@@ -78398,6 +78439,7 @@ export namespace Prisma {
     targetPath?: StringFieldUpdateOperationsInput | string
     managedTariffId?: NullableStringFieldUpdateOperationsInput | string | null
     managedEditorialKey?: NullableStringFieldUpdateOperationsInput | string | null
+    managedEditorialReleaseSequence?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     hitCount?: IntFieldUpdateOperationsInput | number
     lastHitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -78413,6 +78455,7 @@ export namespace Prisma {
     targetPath?: StringFieldUpdateOperationsInput | string
     managedTariffId?: NullableStringFieldUpdateOperationsInput | string | null
     managedEditorialKey?: NullableStringFieldUpdateOperationsInput | string | null
+    managedEditorialReleaseSequence?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     hitCount?: IntFieldUpdateOperationsInput | number
     lastHitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -78427,6 +78470,7 @@ export namespace Prisma {
     targetPath?: StringFieldUpdateOperationsInput | string
     managedTariffId?: NullableStringFieldUpdateOperationsInput | string | null
     managedEditorialKey?: NullableStringFieldUpdateOperationsInput | string | null
+    managedEditorialReleaseSequence?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     hitCount?: IntFieldUpdateOperationsInput | number
     lastHitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -79649,6 +79693,7 @@ export namespace Prisma {
     targetPath: string
     managedTariffId?: string | null
     managedEditorialKey?: string | null
+    managedEditorialReleaseSequence?: number | null
     status?: $Enums.PublishStatus
     hitCount?: number
     lastHitAt?: Date | string | null
@@ -80007,6 +80052,7 @@ export namespace Prisma {
     targetPath?: StringFieldUpdateOperationsInput | string
     managedTariffId?: NullableStringFieldUpdateOperationsInput | string | null
     managedEditorialKey?: NullableStringFieldUpdateOperationsInput | string | null
+    managedEditorialReleaseSequence?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     hitCount?: IntFieldUpdateOperationsInput | number
     lastHitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -80022,6 +80068,7 @@ export namespace Prisma {
     targetPath?: StringFieldUpdateOperationsInput | string
     managedTariffId?: NullableStringFieldUpdateOperationsInput | string | null
     managedEditorialKey?: NullableStringFieldUpdateOperationsInput | string | null
+    managedEditorialReleaseSequence?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     hitCount?: IntFieldUpdateOperationsInput | number
     lastHitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -80036,6 +80083,7 @@ export namespace Prisma {
     targetPath?: StringFieldUpdateOperationsInput | string
     managedTariffId?: NullableStringFieldUpdateOperationsInput | string | null
     managedEditorialKey?: NullableStringFieldUpdateOperationsInput | string | null
+    managedEditorialReleaseSequence?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
     hitCount?: IntFieldUpdateOperationsInput | number
     lastHitAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

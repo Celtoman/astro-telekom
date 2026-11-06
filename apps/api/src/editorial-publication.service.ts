@@ -1,3 +1,4 @@
+import { retiredEditorialPaths } from './editorial-redirects';
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
@@ -13,24 +14,34 @@ import { normalizeRedirectPath } from './redirect-path';
 import { validatePublicationSource } from './publication-validation';
 import { APP_VERSION } from './app-version';
 import { editorialLiveUrl } from './editorial-live-url';
+import { prepareCategoryRetirement } from './editorial-category-retirement';
+import { confirmedEditorialTransfers,remapEditorialAliasOwners,restoreEditorialAliases } from './editorial-redirects';
 type Tx=Prisma.TransactionClient;
-export type EditorialReleaseInput={kind:EditorialKind;entityId:string;expectedRevision:number;action:'PUBLISH'|'WITHDRAW'};
+export type EditorialReleaseInput={kind:EditorialKind;entityId:string;expectedRevision:number;action:'PUBLISH'|'WITHDRAW'|'REASSIGN';targetCategoryId?:string};
 const json=(value:unknown)=>JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
 @Injectable()
 export class EditorialPublicationService {
   constructor(private readonly prisma:PrismaService,private readonly store:EditorialStoreService,private readonly catalog:SiteCatalogService,private readonly media:EditorialMediaRegistryService,private readonly rebuilds:RebuildQueueService){}
-  private async candidate(siteId:string,input:EditorialReleaseInput,tx:Tx|PrismaService,commitAliases=false){
-    if(!['PUBLISH','WITHDRAW'].includes(input.action)||input.action==='WITHDRAW'&&input.kind!=='ARTICLE')throw new BadRequestException('Неподдерживаемое действие выпуска');
+  private async candidate(siteId:string,input:EditorialReleaseInput,tx:Tx|PrismaService,commitAliases=false,actorId?:string){
+    if(!['PUBLISH','WITHDRAW','REASSIGN'].includes(input.action)||input.action==='WITHDRAW'&&!['ARTICLE','CATEGORY'].includes(input.kind)||input.action==='REASSIGN'&&input.kind!=='CATEGORY'||input.targetCategoryId!==undefined&&input.action!=='REASSIGN')throw new BadRequestException('Неподдерживаемое действие выпуска');
+    if(input.action==='REASSIGN'&&(typeof input.targetCategoryId!=='string'||!input.targetCategoryId||input.targetCategoryId.length>200))throw new BadRequestException('Выберите категорию для переноса.');
     const site=await this.store.requireSite(siteId,tx),baseline=await editorialServingSource(tx,site);
     const pending=await tx.sitePublication.findFirst({where:{siteId,id:{not:baseline.publication.id},status:{in:['PENDING','RUNNING']}},select:{id:true}});
     if(pending)throw new ConflictException('На сайте уже выполняется публикация. Дождитесь её результата и повторите проверку.');
     const row=await this.store.row(siteId,input.kind,input.entityId,tx);
     if(!row||row.revision!==input.expectedRevision)throw new ConflictException('Черновик изменился. Сохраните текущую версию и повторите проверку.');
+    if(input.kind==='CATEGORY'&&input.action==='PUBLISH'&&await tx.editorialPublicationItem.findFirst({where:{kind:'CATEGORY',entityId:row.id,action:{in:['WITHDRAW','REASSIGN']},publication:{siteId,status:{in:['PENDING','RUNNING']}}},select:{id:true}}))throw new ConflictException('Категория готовится к удалению. Дождитесь подтверждения результата; повторная публикация недоступна.');
     const old=baseline.source.editorial;
-    if(input.action==='WITHDRAW'&&!old?.articles.some(a=>a.id===row.id))throw new ConflictException('Эта новость уже не опубликована');
+    if(input.kind==='ARTICLE'&&input.action==='WITHDRAW'&&!old?.articles.some(a=>a.id===row.id))throw new ConflictException('Эта новость уже не опубликована');
     const items:EditorialChange[]=[];
     let source=baseline.source;
     const selected=row.content as Record<string,any>;
+    const retirement=input.kind==='CATEGORY'&&input.action!=='PUBLISH'?await prepareCategoryRetirement(tx,this.store,siteId,row,input.targetCategoryId??null,old):null;
+    if(retirement){
+      for(const dependency of retirement.dependencies){items.push(dependency);source=applyEditorialChangeSet(source,dependency)}
+      for(const item of retirement.items){items.push(item);if(!item.snapshot?.draftOnly)source=applyEditorialChangeSet(source,item)}
+      if(commitAliases)await this.store.applyCategoryPatches(tx as Tx,siteId,retirement.plan.patches,actorId);
+    }
     if(input.action==='PUBLISH')editorialMissing(input.kind,selected,false,row.id);
     if(input.kind==='ARTICLE'&&input.action==='PUBLISH'){
       if(!old?.categories.some(c=>c.id===selected.categoryId)){
@@ -44,8 +55,8 @@ export class EditorialPublicationService {
     }
     const revision=await tx.editorialRevision.findUnique({where:{siteId_kind_entityId_revision:{siteId,kind:input.kind,entityId:row.id,revision:row.revision}}});
     if(!revision)throw new ConflictException('Сохранённая редакция недоступна. Повторите сохранение.');
-    const snapshot=input.action==='PUBLISH'?{...selected,id:row.id,revision:row.revision,...(input.kind==='ARTICLE'?{dateModified:row.sourceId&&row.revision===1?selected.publishedDate:revision.createdAt.toISOString()}: {})}:null;
-    const change:EditorialChange={kind:input.kind,entityId:row.id,revision:row.revision,action:input.action,snapshot};
+    const snapshot=input.action==='PUBLISH'?{...selected,id:row.id,revision:row.revision,...(input.kind==='ARTICLE'?{dateModified:row.sourceId&&row.revision===1?selected.publishedDate:revision.createdAt.toISOString()}: {})}:input.action==='REASSIGN'?{targetCategoryId:input.targetCategoryId}:null;
+    const change:EditorialChange={kind:input.kind,entityId:row.id,revision:row.revision,action:input.action,snapshot,...(input.targetCategoryId?{targetCategoryId:input.targetCategoryId}:{})};
     items.push(change);source=applyEditorialChangeSet(source,change);
     const mappings=new Map<string,string>();
     const aliasOwners=new Map<string,string>();
@@ -54,7 +65,7 @@ export class EditorialPublicationService {
       const to=`/news/${selected.slug}`,previous=old?.articles.find(a=>a.id===row.id);
       if(previous?.slug&&previous.slug!==selected.slug){
         const from=`/news/${previous.slug}`;addAlias(from,to);
-        for(const alias of baseline.source.redirects.filter(a=>a.targetPath===from))addAlias(alias.sourcePath,to);
+        for(const alias of baseline.source.redirects.filter(a=>a.targetPath===from))addAlias(alias.sourcePath,to,'@preserve');
       }
       if(row.sourceUrl){const from=new URL(row.sourceUrl).pathname.replace(/\/+$/,'')||'/';if(from!=='/'&&from!=='/akcii-domru')addAlias(from,to)}
     }
@@ -63,11 +74,22 @@ export class EditorialPublicationService {
       if(previous?.slug&&previous.slug!==selected.slug){
         for(const route of newsRoutes(old!).filter(r=>r.kind==='NEWS_CATEGORY'&&r.categorySlug===previous.slug)){
           const to=route.path.replace(`/news/category/${previous.slug}`,`/news/category/${selected.slug}`);addAlias(route.path,to);
-          for(const alias of baseline.source.redirects.filter(a=>a.targetPath===route.path))addAlias(alias.sourcePath,to);
+          for(const alias of baseline.source.redirects.filter(a=>a.targetPath===route.path))addAlias(alias.sourcePath,to,'@preserve');
         }
       }
     }
+    if(retirement&&input.targetCategoryId){
+      const previous=old?.categories.find(c=>c.id===row.id),target=source.editorial!.categories.find(c=>c.id===input.targetCategoryId);
+      if(previous&&target)for(const route of newsRoutes(old!).filter(r=>r.kind==='NEWS_CATEGORY'&&r.categorySlug===previous.slug)){
+        const to=route.path.replace(`/news/category/${previous.slug}`,`/news/category/${target.slug}`);addAlias(route.path,to);
+        for(const alias of baseline.source.redirects.filter(a=>a.targetPath===route.path))addAlias(alias.sourcePath,to,'@preserve');
+      }
+    }
     const newsPaths=new Set(newsRoutes(source.editorial!).map(r=>r.path));
+    const approved=await tx.redirect.findMany({where:{siteId,managedEditorialKey:{not:null},managedEditorialReleaseSequence:{not:null}},select:{id:true,sourcePath:true,targetPath:true,managedEditorialKey:true,managedEditorialReleaseSequence:true}});
+    const transfers=await confirmedEditorialTransfers(tx,siteId,baseline.publication.id);
+    if(retirement&&input.targetCategoryId)transfers.push({sourceId:row.id,targetId:input.targetCategoryId,releaseSequence:baseline.publication.releaseSequence+1});
+    for(const alias of restoreEditorialAliases(source.editorial!,remapEditorialAliasOwners(approved,transfers)))addAlias(alias.sourcePath,alias.targetPath,'@preserve');
     if(newsPaths.has('/news')){addAlias('/news/page/1','/news','NEWS_SETTINGS');addAlias('/novosti','/news','NEWS_SETTINGS')}
     for(const route of newsRoutes(source.editorial!).filter(r=>r.kind==='NEWS_CATEGORY'&&r.page===1))addAlias(`${route.path}/page/1`,route.path,`CATEGORY:${source.editorial!.categories.find(c=>c.slug===route.categorySlug)!.id}`);
     const owned=new Set(old?.redirectIds??[]);
@@ -75,7 +97,7 @@ export class EditorialPublicationService {
     for(const [from,to] of mappings){
       if(!newsPaths.has(to))continue;
       const existing=await tx.redirect.findUnique({where:{siteId_sourcePath:{siteId,sourcePath:from}}});
-      const owner=aliasOwners.get(from)!;
+      const requestedOwner=aliasOwners.get(from)!,owner=requestedOwner==='@preserve'?(existing?.managedEditorialKey??`${input.kind}:${input.entityId}`):requestedOwner;
       if(existing?.managedEditorialKey&&existing.managedEditorialKey!==owner)throw new ConflictException(`Адрес ${from} управляется другим материалом.`);
       if(existing&&!owned.has(existing.id)&&existing.managedEditorialKey!==owner&&existing.targetPath!==to)throw new ConflictException(`Адрес ${from} уже используется перенаправлением. Проверьте конфликт перед выпуском.`);
       const id=existing?.id??`edr_${editorialDigest({siteId,from}).slice(0,40)}`;
@@ -92,12 +114,13 @@ export class EditorialPublicationService {
     source.editorial=await this.media.prepare(siteId,source.editorial!);
     source.publicationBaseId=baseline.publication.id;
     const validation=validatePublicationSource(source,{appVersion:APP_VERSION,siteRevision:baseline.publication.siteRevision},(s,now)=>this.catalog.renderSource(s,now));
-    const reviewDigest=editorialDigest({basePublicationId:baseline.publication.id,items,editorial:source.editorial,redirects:source.redirects});
-    return {source,validation,reviewDigest,items,baseline:baseline.publication,selectedTitle:String(selected.title??selected.name??(input.kind==='NOT_FOUND'?'Страница 404':'Настройки новостей'))};
+    const reviewDigest=editorialDigest({basePublicationId:baseline.publication.id,items,editorial:source.editorial,redirects:source.redirects,...(retirement?{draftPatches:retirement.plan.patches,targetName:retirement.targetName}:{})});
+    return {source,validation,reviewDigest,items,previousSource:baseline.source,baseline:baseline.publication,retirement,selectedTitle:String(selected.title??selected.name??(input.kind==='NOT_FOUND'?'Страница 404':'Настройки новостей'))};
   }
   private publicReview(candidate:Awaited<ReturnType<EditorialPublicationService['candidate']>>){
     const {validation,items,baseline,reviewDigest,source}=candidate;
-    return {reviewDigest,basePublicationId:baseline.id,ready:!!validation.catalog,report:validation.report,items:items.map(item=>({kind:item.kind,entityId:item.entityId,revision:item.revision,action:item.action,title:item.snapshot?.title??item.snapshot?.name??candidate.selectedTitle})),affectedPaths:[...new Set(['/',...newsRoutes(source.editorial!).map(r=>r.path),...(items.some(i=>i.kind==='NOT_FOUND')?['Все неизвестные адреса (HTTP 404)']:[])])],redirects:source.redirects.filter(a=>source.editorial!.redirectIds?.includes(a.id)).map(({sourcePath,targetPath})=>({sourcePath,targetPath}))};
+    const retiredPaths=retiredEditorialPaths(candidate.previousSource.editorial,candidate.previousSource.redirects,source.editorial!,source.redirects);
+    return {retiredPaths,reviewDigest,basePublicationId:baseline.id,ready:!!validation.catalog,report:validation.report,retirementTarget:candidate.retirement?.targetName??null,items:items.map(item=>({kind:item.kind,entityId:item.entityId,revision:item.revision,action:item.action,title:item.snapshot?.title??item.snapshot?.name??candidate.selectedTitle,draftOnly:!!item.snapshot?.draftOnly})),draftChanges:candidate.retirement?.plan.patches.map(patch=>({entityId:patch.id,title:patch.workingContent.title||'Черновик без заголовка',previousRevision:patch.expectedRevision,revision:patch.workingRevision,categoryId:patch.workingContent.categoryId}))??[],affectedPaths:[...new Set(['/',...retiredPaths.map(row=>row.path),...newsRoutes(source.editorial!).map(r=>r.path),...(items.some(i=>i.kind==='NOT_FOUND')?['Все неизвестные адреса (HTTP 404)']:[])])],redirects:source.redirects.filter(a=>source.editorial!.redirectIds?.includes(a.id)).map(({sourcePath,targetPath})=>({sourcePath,targetPath}))};
   }
   async review(siteId:string,input:EditorialReleaseInput){return this.publicReview(await this.candidate(siteId,input,this.prisma))}
   async publish(siteId:string,input:EditorialReleaseInput,reviewDigest:string,operationId:string,actorId?:string){
@@ -107,7 +130,7 @@ export class EditorialPublicationService {
       await tx.$queryRaw`SELECT id FROM "Site" WHERE id=${siteId} FOR UPDATE`;
       const existing=await tx.sitePublication.findFirst({where:{siteId,scopeKey}});
       if(existing){if(existing.changeSetDigest!==reviewDigest)throw new ConflictException('Идентификатор операции уже использован для другого выпуска');return existing}
-      const candidate=await this.candidate(siteId,input,tx,true);
+      const candidate=await this.candidate(siteId,input,tx,true,actorId);
       if(candidate.reviewDigest!==reviewDigest)throw new ConflictException('Состав или опубликованная версия изменились после проверки. Повторите проверку.');
       if(!candidate.validation.catalog)throw new ConflictException({message:'Публикация заблокирована. Исправьте ошибки проверки.',report:candidate.validation.report});
       const validation=await tx.sitePublicationValidation.create({data:{siteId,siteRevision:candidate.baseline.siteRevision,sourceSnapshot:json(candidate.source),report:json(candidate.validation.report),appVersion:APP_VERSION,outcome:candidate.validation.report.outcome,checkedUrlCount:candidate.validation.report.checkedUrlCount,requestedById:actorId??null}});
@@ -133,7 +156,10 @@ export class EditorialPublicationService {
     }catch{publishedAvailable=false}
     const content=published?Object.fromEntries(Object.keys(working.content as object).map(key=>[key,published![key]])):null;
     const state=!publishedAvailable?'UNKNOWN':published?editorialDigest(content)===editorialDigest(working.content)?'PUBLISHED':'CHANGED':row?.everPublished?'WITHDRAWN':'DRAFT';
-    return {...working,published:content,publishedAvailable,publishedRevision:published?.revision??null,state,publicUrl};
+    const pendingRemoval=kind==='CATEGORY'&&!!await this.prisma.editorialPublicationItem.findFirst({where:{kind:'CATEGORY',entityId:id,action:{in:['WITHDRAW','REASSIGN']},publication:{siteId,status:{in:['PENDING','RUNNING']}}},select:{id:true}});
+    const categoryIds=kind==='ARTICLE'?[String((working.content as Record<string,any>).categoryId||''),String(published?.categoryId||'')].filter(Boolean):[];
+    const categoryNames=Object.fromEntries((categoryIds.length?await this.prisma.newsCategory.findMany({where:{siteId,id:{in:categoryIds}},select:{id:true,name:true}}):[]).map(category=>[category.id,category.name||'Категория без названия']));
+    return {...working,published:content,publishedAvailable,publishedRevision:published?.revision??null,state,publicUrl,pendingRemoval,categoryNames};
   }
   async list(siteId:string,query:{search?:string;categoryId?:string;state?:string;page?:number}={}){
     const site=await this.store.requireSite(siteId),rows=await this.prisma.newsArticle.findMany({where:{siteId,archivedAt:null,...(query.search?{title:{contains:query.search.slice(0,250),mode:'insensitive' as const}}:{}),...(query.categoryId?{categoryId:query.categoryId}:{})},orderBy:[{publishedDate:'desc'},{id:'asc'}],select:{id:true,title:true,summary:true,slug:true,categoryId:true,publishedDate:true,revision:true,content:true,everPublished:true,updatedAt:true}});
@@ -149,9 +175,10 @@ export class EditorialPublicationService {
   }
   async categories(siteId:string){
     const site=await this.store.requireSite(siteId),rows=await this.prisma.newsCategory.findMany({where:{siteId,archivedAt:null},orderBy:{name:'asc'},include:{_count:{select:{articles:{where:{archivedAt:null}}}}}});
-    let publishedAvailable=true,live:Array<Record<string,any>>=[],categories:Array<Record<string,any>>=[];
-    try{const source=(await editorialServingSource(this.prisma,site)).source.editorial;live=source?.articles??[];categories=source?.categories??[]}catch{publishedAvailable=false}
-    return {items:rows.map(row=>({id:row.id,name:row.name,slug:row.slug,revision:row.revision,totalCount:row._count.articles,liveCount:publishedAvailable?live.filter(a=>a.categoryId===row.id).length:null,publishedRevision:categories.find(c=>c.id===row.id)?.revision??null})),publishedAvailable};
+    const pending=await this.prisma.editorialPublicationItem.findMany({where:{kind:'CATEGORY',action:{in:['WITHDRAW','REASSIGN']},publication:{siteId,status:{in:['PENDING','RUNNING']}}},select:{entityId:true}});
+    let publishedAvailable=true,live:Array<Record<string,any>>=[],categories:Array<Record<string,any>>=[],baseline:Awaited<ReturnType<typeof editorialServingSource>>['source']|null=null;
+    try{baseline=(await editorialServingSource(this.prisma,site)).source;const source=baseline.editorial;live=source?.articles??[];categories=source?.categories??[]}catch{publishedAvailable=false}
+    return {items:rows.map(row=>({id:row.id,name:row.name,slug:row.slug,revision:row.revision,totalCount:row._count.articles,liveCount:publishedAvailable?live.filter(a=>a.categoryId===row.id).length:null,publishedRevision:categories.find(c=>c.id===row.id)?.revision??null,publishedName:categories.find(c=>c.id===row.id)?.name??null,publicUrl:baseline?editorialLiveUrl(baseline,'CATEGORY',row.id):null,pendingRemoval:pending.some(item=>item.entityId===row.id)})),publishedAvailable};
   }
   async relatedOptions(siteId:string,query:Parameters<typeof relatedNewsOptions>[1]) {
     const site=await this.store.requireSite(siteId),baseline=await editorialServingSource(this.prisma,site);

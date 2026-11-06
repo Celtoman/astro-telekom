@@ -2,31 +2,33 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { Button as AriaButton, DropZone, FileTrigger, Text } from 'react-aria-components'
 import type { MediaUse } from '../../../api/src/news-types'
 import { requestJson } from '../lib/admin-api.mjs'
+import { editorialMediaPreviewPath } from '../lib/editorial-media-preview.mjs'
 import { Button, buttonVariants } from './ui/button'
 import { Field, FieldLabel } from './ui/field'
 import { Input } from './ui/input'
 
 const accepted = ['image/jpeg','image/png','image/webp']
-export function usePrivateMediaPreview(apiUrl:string, siteId:string, assetId:string | undefined, kind='body') {
+export function usePrivateMediaPreview(apiUrl:string, siteId:string, assetId:string | undefined, kind='body',crop?:MediaUse['crop']) {
   const [state,setState] = useState({src:'',error:''})
+  const cropSignature=crop?JSON.stringify([crop.x,crop.y,crop.width,crop.height]):''
   useEffect(() => {
     setState({src:'',error:''}); if (!assetId || !siteId) return
     let active=true; const abort=new AbortController()
-    fetch(`${apiUrl.replace(/\/$/,'')}/admin/sites/${encodeURIComponent(siteId)}/news/media/${encodeURIComponent(assetId)}/file?kind=${kind}`,{credentials:'include',signal:abort.signal})
+    editorialMediaPreviewPath(siteId,assetId,kind,crop).then(path=>fetch(`${apiUrl.replace(/\/$/,'')}${path}`,{credentials:'include',signal:abort.signal}))
       .then(async response => {
         if (!response.ok) { if (response.status===401) window.dispatchEvent(new Event('admin:session-expired')); throw new Error('Не удалось загрузить изображение') }
         const blob=await response.blob()
         return new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=reject;reader.readAsDataURL(blob)})
       }).then(src=>{if(active)setState({src,error:''})}).catch(error=>{if(active&&!abort.signal.aborted)setState({src:'',error:error instanceof Error?error.message:'Не удалось загрузить изображение'})})
     return()=>{active=false;abort.abort()}
-  },[apiUrl,siteId,assetId,kind])
+  },[apiUrl,siteId,assetId,kind,cropSignature])
   return state
 }
 export function EditorialMediaField({apiUrl,siteId,label,value,onChange,onBusyChange,kind='cover',disabled=false}:{apiUrl:string;siteId:string;label:string;value:MediaUse|null;onChange:(value:MediaUse|null)=>void;onBusyChange?:(busy:boolean)=>void;kind?:'cover'|'social'|'body';disabled?:boolean}) {
   const id=useId(), fileRef=useRef<File|null>(null), abortRef=useRef<AbortController|null>(null), generation=useRef(0)
   const [busy,setBusy]=useState(false),[error,setError]=useState(''),[retry,setRetry]=useState(false),[cropOpen,setCropOpen]=useState(false)
   const [dimensions,setDimensions]=useState({width:1,height:1}),[zoom,setZoom]=useState(1),[horizontal,setHorizontal]=useState(50),[vertical,setVertical]=useState(50)
-  const preview=usePrivateMediaPreview(apiUrl,siteId,value?.assetId)
+  const preview=usePrivateMediaPreview(apiUrl,siteId,value?.assetId,cropOpen?'body':kind,cropOpen?undefined:value?.crop)
   const valueRef=useRef(value);valueRef.current=value
   useEffect(()=>()=>{generation.current++;abortRef.current?.abort();onBusyChange?.(false)},[])
   const markBusy=(next:boolean)=>{setBusy(next);onBusyChange?.(next)}

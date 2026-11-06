@@ -143,3 +143,5 @@ PageTemplateKind и SeoTemplateKind расширены CITY_ADDRESS_CHECK. Су�
 ## ACCOUNT — Page.content1.0.0
 
 `PageType.ACCOUNT` и `SeoTemplateKind.ACCOUNT` добавлены0066; PageTemplateKind не расширен.0067 обновляет глобальный scope constraint, задаёт единственность ACCOUNT на сайт и canonical slug при cityId=NULL, создаёт рабочую страницу и SEO для существующих сайтов Дом.ру, одну ревизию/audit и сохраняет публикации. Повтор не перезаписывает контент; canonical collision откатывает транзакцию. Seed создаёт такой же минимум на свежей БД. Поля: version, hero.h1/intro, loginUrl,14 именованных images(src/alt/caption, appScreen без caption), faq.items(question/answer). Цены/сроки/условия и раскладка в JSON не допускаются.
+
+T6 (#534): миграция0070 добавляет nullable `Redirect.managedEditorialReleaseSequence`. Только aliases из SUCCEEDED snapshots получают подтверждение. Категорийный transfer сохраняет отдельные working/canonical revisions и targetCategoryId в ledger; archive применяется после ack. [Проверки](research/2026-11-06-news-category-settings-workspace.md).

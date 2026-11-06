@@ -5,7 +5,7 @@ import { createEditorialRecovery, type EditorialRecoveryCandidate } from '../lib
 import { useUnsavedChanges } from './useUnsavedChanges'
 
 export type EditorialEditorKind = 'ARTICLE'|'CATEGORY'|'NEWS_SETTINGS'|'NOT_FOUND'
-export interface EditorialWorkspace<T> { id:string; content:T; revision:number; updatedAt:string|null; missingFields:string[]; published:T|null; publishedAvailable:boolean; publishedRevision:number|null; publicUrl?:string|null; state:'DRAFT'|'PUBLISHED'|'CHANGED'|'WITHDRAWN'|'UNKNOWN' }
+export interface EditorialWorkspace<T> { id:string; content:T; revision:number; updatedAt:string|null; missingFields:string[]; published:T|null; publishedAvailable:boolean; publishedRevision:number|null; publicUrl?:string|null; pendingRemoval?:boolean; categoryNames?:Record<string,string>; state:'DRAFT'|'PUBLISHED'|'CHANGED'|'WITHDRAWN'|'UNKNOWN' }
 export function editorialResource(siteId:string,kind:EditorialEditorKind,entityId:string) {
   const base=`/admin/sites/${encodeURIComponent(siteId)}`
   return kind==='ARTICLE'?`${base}/news/${encodeURIComponent(entityId)}`:kind==='CATEGORY'?`${base}/news/categories/${encodeURIComponent(entityId)}`:`${base}/editorial/${kind==='NEWS_SETTINGS'?'news':'not-found'}`
@@ -62,7 +62,7 @@ export function useEditorialDraft<T extends {version:string}>({apiUrl,userId,sit
   const dismissRecovery=useCallback(()=>{for(const candidate of candidates)recovery.current?.discard(candidate);setCandidates([])},[candidates])
   const refreshPublished=useCallback(async()=>{
     const result=await loadServer()
-    setWorkspace(previous=>previous?{...previous,published:result.published,publishedRevision:result.publishedRevision,publishedAvailable:result.publishedAvailable,publicUrl:result.publicUrl,state:result.state}:result)
+    setWorkspace(previous=>previous?{...previous,published:result.published,publishedRevision:result.publishedRevision,publishedAvailable:result.publishedAvailable,publicUrl:result.publicUrl,pendingRemoval:result.pendingRemoval,categoryNames:result.categoryNames,state:result.state}:result)
     return result
   },[loadServer])
   const acceptExternal=useCallback(async(expectedFingerprint:string)=>{
@@ -71,5 +71,5 @@ export function useEditorialDraft<T extends {version:string}>({apiUrl,userId,sit
     if(editorialFingerprint(current.latest)===expectedFingerprint){resolve(server,false)}
     else{current.recover({content:structuredClone(current.latest),baseRevision:-1});setWorkspace(server)}
   },[loadServer,resolve])
-  return {workspace,content,loading,error,saving,candidates,resetKey:`${entityId}:${resetKey}`,endpoint,update,flush,loadServer,resolve,restoreLocal,dismissRecovery,refreshPublished,acceptExternal,reload:()=>setRefresh(value=>value+1)}
+  return {workspace,content,loading,error,saving,candidates,resetKey:`${entityId}:${resetKey}`,endpoint,apiUrl,siteId,update,flush,loadServer,resolve,restoreLocal,dismissRecovery,refreshPublished,acceptExternal,reload:()=>setRefresh(value=>value+1)}
 }

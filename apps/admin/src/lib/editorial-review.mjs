@@ -4,7 +4,7 @@ export function editorialChanges(before, after, prefix='') {
   for(const key of new Set([...Object.keys(before??{}),...Object.keys(after??{})])) {
     const previous=before?.[key],next=after?.[key],path=prefix?`${prefix}.${key}`:key
     if(editorialFingerprint(previous)===editorialFingerprint(next))continue
-    if(previous&&next&&typeof previous==='object'&&typeof next==='object'&&!Array.isArray(previous)&&!Array.isArray(next))changes.push(...editorialChanges(previous,next,path))
+    if(previous&&next&&typeof previous==='object'&&typeof next==='object'&&!Array.isArray(previous)&&!Array.isArray(next)&&!previous.assetId&&!next.assetId)changes.push(...editorialChanges(previous,next,path))
     else changes.push({path,before:previous,after:next})
   }
   return changes

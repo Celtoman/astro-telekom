@@ -21,6 +21,8 @@ interface RedirectRecord {
   sourcePath: string
   targetPath: string
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED"
+  managedEditorialKey?: string | null
+  managedEditorialReleaseSequence?: number | null
   hitCount: number
   lastHitAt: string | null
   updatedAt: string
@@ -107,6 +109,7 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
   }
 
   async function changeStatus(item: RedirectRecord) {
+    if(item.managedEditorialKey)return
     setBusy(item.id)
     setActionError(null)
     setActionMessage(null)
@@ -165,7 +168,7 @@ export function RedirectsApp({ apiUrl }: { apiUrl: string }) {
               <Field><FieldLabel htmlFor="redirect-search" className="sr-only">Поиск редиректа</FieldLabel><Input id="redirect-search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Старый URL, новый URL или статус" /></Field>
               <FilterResetButton active={Boolean(search)} onReset={resetFilters} />
             </div>
-            {visibleRedirects.length ? <Table><TableHeader><TableRow><TableHead>Источник</TableHead><TableHead>Цель</TableHead><TableHead>Статус</TableHead><TableHead>Переходы</TableHead><TableHead>Последний переход</TableHead><TableHead>Действия</TableHead></TableRow></TableHeader><TableBody>{visibleRedirects.map((item) => <TableRow key={item.id}><TableCell className="font-medium">{item.sourcePath}</TableCell><TableCell>{item.targetPath}</TableCell><TableCell><StatusBadge kind="publishStatus" value={item.status} /></TableCell><TableCell>{item.hitCount.toLocaleString("ru-RU")}</TableCell><TableCell>{item.lastHitAt ? new Date(item.lastHitAt).toLocaleString("ru-RU") : "—"}</TableCell><TableCell><div className="flex gap-2"><Button variant="outline" size="sm" disabled={busy !== null} onClick={() => { setEditingId(item.id); setEditingStatus(item.status); setSourcePath(item.sourcePath); setTargetPath(item.targetPath) }}><Pencil data-icon="inline-start" />Изменить</Button><Button variant="outline" size="sm" disabled={busy !== null} onClick={() => void changeStatus(item)}>{item.status === "ARCHIVED" ? <RotateCcw data-icon="inline-start" /> : <Archive data-icon="inline-start" />}{item.status === "ARCHIVED" ? "Вернуть" : "Архив"}</Button></div></TableCell></TableRow>)}</TableBody></Table> : <Alert><Route /><AlertTitle>Редиректов пока нет</AlertTitle><AlertDescription>Создайте первое правило после изменения публичного URL.</AlertDescription></Alert>}
+            {visibleRedirects.length ? <Table><TableHeader><TableRow><TableHead>Источник</TableHead><TableHead>Цель</TableHead><TableHead>Статус</TableHead><TableHead>Переходы</TableHead><TableHead>Последний переход</TableHead><TableHead>Действия</TableHead></TableRow></TableHeader><TableBody>{visibleRedirects.map((item) => <TableRow key={item.id}><TableCell className="font-medium">{item.sourcePath}</TableCell><TableCell>{item.targetPath}</TableCell><TableCell>{item.managedEditorialKey ? <span className="text-sm">Новости · управляется публикацией{item.managedEditorialReleaseSequence==null ? " · ещё не подтверждён" : " · подтверждён ранее"}</span> : <StatusBadge kind="publishStatus" value={item.status} />}</TableCell><TableCell>{item.hitCount.toLocaleString("ru-RU")}</TableCell><TableCell>{item.lastHitAt ? new Date(item.lastHitAt).toLocaleString("ru-RU") : "—"}</TableCell><TableCell>{item.managedEditorialKey ? <a href="/news" className="text-sm underline underline-offset-4">К новостям</a> : <div className="flex gap-2"><Button variant="outline" size="sm" disabled={busy !== null} onClick={() => { setEditingId(item.id); setEditingStatus(item.status); setSourcePath(item.sourcePath); setTargetPath(item.targetPath) }}><Pencil data-icon="inline-start" />Изменить</Button><Button variant="outline" size="sm" disabled={busy !== null} onClick={() => void changeStatus(item)}>{item.status === "ARCHIVED" ? <RotateCcw data-icon="inline-start" /> : <Archive data-icon="inline-start" />}{item.status === "ARCHIVED" ? "Вернуть" : "Архив"}</Button></div>}</TableCell></TableRow>)}</TableBody></Table> : <Alert><Route /><AlertTitle>Редиректов пока нет</AlertTitle><AlertDescription>Создайте первое правило после изменения публичного URL.</AlertDescription></Alert>}
           </CardContent>
         </Card>
       </div>

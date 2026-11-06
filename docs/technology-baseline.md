@@ -1,6 +1,6 @@
 # Технологическая база
 
-В репозитории 69 каталогов миграций, последний — `0069_editorial_redirect_ownership`. Редакционные 0068/0069 проверены локально на PostgreSQL 18 с сохранением прежних снимков и ручных перенаправлений; внешнего применения ещё не было. Тарифный выпуск0065/exact SHA8b03ab78 и28/28 относится к [приёмке4ноября](research/2026-11-04-tariff-contract-release.md), последующий ACCOUNT — к [своей приёмке](research/2026-11-05-account-test-release.md). Исторические цифры не являются текущим состоянием контура.
+В репозитории 70 каталогов миграций, последний — `0070_editorial_redirect_approval`. Редакционные 0068–0070 проверены локально на PostgreSQL 18 с сохранением прежних снимков и ручных перенаправлений; внешний T4 deployment4803ba5 подтверждён healthy и CODE SUCCEEDED при прежних CMS29/29, но отдельного SQL readback ledger нет;0070 ещё не выпускалась. Тарифный выпуск0065/exact SHA8b03ab78 и28/28 относится к [приёмке4ноября](research/2026-11-04-tariff-contract-release.md), последующий ACCOUNT — к [своей приёмке](research/2026-11-05-account-test-release.md). Исторические цифры не являются текущим состоянием контура.
 
 Последняя сверка с manifests, Dockerfiles, Compose и migrations: 6 октября 2026 года. Доказательства внешних rollout — в [research/README.md](research/README.md); ограничения запуска — в [current-state.md](current-state.md).
 

@@ -148,7 +148,7 @@ export function AdminShellLayout({ apiUrl, user, active, children }: {
             </div>
             <div className="order-3 flex w-full flex-wrap items-center gap-2 sm:order-none sm:w-auto">
               {user ? <PublicationIndicator key={user.id} apiUrl={apiUrl} /> : null}
-              <Button asChild variant={active==='news'?'outline':'default'} className="min-h-11"><a href={active === "publication" ? "#publication-launch" : "/publication"}><CloudUpload data-icon="inline-start" />{active==='news'?'Публикация других разделов':'Опубликовать изменения'}</a></Button>
+              <Button asChild variant={['news','news-categories','pages-news','pages-not-found'].includes(active)?'outline':'default'} className="min-h-11"><a href={active === "publication" ? "#publication-launch" : "/publication"}><CloudUpload data-icon="inline-start" />{['news','news-categories','pages-news','pages-not-found'].includes(active)?'Публикация других разделов':'Опубликовать изменения'}</a></Button>
             </div>
             <Button variant="outline" onClick={() => void logout()}><LogOut data-icon="inline-start" /><span className="hidden sm:inline">Выйти</span><span className="sr-only sm:hidden">Выйти</span></Button>
           </header>

@@ -33,3 +33,7 @@ test('media paths reject traversal and cross-root keys and references include co
  const refs=media.mediaReferences?.({cover:{assetId:'cover'},social:{image:{assetId:'og'}},body:{type:'doc',content:[{type:'image',attrs:{assetId:'inline'}},{type:'paragraph',content:[{type:'text',text:'assetId:fake'}]}]}});
  assert.deepEqual([...refs].sort(),['cover','inline','og']);
 });
+
+test('crop keys do not depend on JSON property order',()=>{
+ assert.equal(media.mediaCropKey('cover',{x:.1,y:.2,width:.8,height:.7}),media.mediaCropKey('cover',{height:.7,width:.8,y:.2,x:.1}));
+});

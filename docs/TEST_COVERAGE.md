@@ -324,3 +324,9 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 ## ACCOUNT: проверка достоверности мобильного QA (#521)
 
 `account-mobile-scroll-qa.test.mjs` —8 regression cases для INVALID после программного reset/отсутствующего ввода/неполных данных, исходного zero-delta, двух направлений вертикали/root-X, полной видимости карточки вместо peek, видимого gesture hit-point и короткой коррекции320 без осцилляции. Это тесты валидатора QA, не физического touch. Standalone `scripts/qa/account-mobile-scroll.mjs` использует установленный Playwright, Edge/Chrome и Basic Auth из окружения;2 ширины/5 лент/18 карточек, natural touch отдельно от wheel/keyboard, контроль доставки ввода и нулевых JS reset. В обычный `pnpm test` сетевой браузерный прогон не запускается; [результаты и ограничения](research/2026-11-05-account-mobile-scroll.md) фиксируются отдельно.
+
+## Новости/404: T6 (#534)
+
+`editorial-category-plan.test.cjs` проверяет отдельные working/canonical patches, третий выбор категории и draft-only перенос. `editorial-category-retirement.test.mjs` запускает PostgreSQL18, migrations и реальный SQL rehearsal переноса/CAS/withdraw/republish. `editorial-redirects.test.cjs` проверяет approved-only aliases, существующую пагинацию, цепочку category owners и объяснение retired301/404. `editorial-media-preview.test.mjs` и расширенный media contract проверяют одинаковые browser/server crop keys независимо от порядкаJSON. Это локальные проверки, не external activation.
+
+`editorial-review-paths.test.cjs` проверяет настоящий review DTO для снятых canonical/aliases и301 после rename, а также независимый category-retirement barrier. SQL rehearsal T6 дополнительно моделирует serving-but-unacknowledged retirement и восстановление старого текста с явным выбором категории/CAS после архивации исходной.

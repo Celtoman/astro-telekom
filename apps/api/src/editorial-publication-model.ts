@@ -10,16 +10,16 @@ export function emptyEditorial(): EditorialSource { return { version: '1.0.0', a
 export function applyEditorialChangeSet<T extends Record<string, any>>(baseline: T, change: EditorialChange): T & { editorial: EditorialSource } {
   const next = structuredClone(baseline) as T & { editorial: EditorialSource; redirects?: Array<Record<string, any>> };
   next.editorial = next.editorial ?? emptyEditorial();
-  if(!baseline.editorial&&change.kind==='NOT_FOUND')next.editorial.newsEnabled=false;
-  if(change.kind!=='NOT_FOUND')next.editorial.newsEnabled=true;
+  if(!baseline.editorial&&(change.kind==='NOT_FOUND'||change.action!=='PUBLISH'))next.editorial.newsEnabled=false;
+  if(change.kind!=='NOT_FOUND'&&change.action==='PUBLISH')next.editorial.newsEnabled=true;
   const e = next.editorial;
   if (change.kind === 'ARTICLE') {
     const old = e.articles.find(item => item.id === change.entityId);
     if (change.action === 'PUBLISH' && change.snapshot) {
       const selected = structuredClone(change.snapshot);
       e.articles = old ? e.articles.map(item => item.id === change.entityId ? selected : item) : [...e.articles, selected];
-    } else e.articles = e.articles.filter(item => item.id !== change.entityId);
-    if (old?.slug && (change.action === 'WITHDRAW' || old.slug !== change.snapshot?.slug)) {
+    } else if(change.action==='WITHDRAW')e.articles = e.articles.filter(item => item.id !== change.entityId);
+    if (old?.slug && (change.action === 'WITHDRAW' || change.action==='PUBLISH'&&old.slug !== change.snapshot?.slug)) {
       const oldPath = `/news/${old.slug}`;
       next.redirects = (next.redirects ?? []).filter(item => item.targetPath !== oldPath);
     }

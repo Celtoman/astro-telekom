@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { Braces, Building2, ChevronRight, CloudUpload, Eye, FileClock, FileSearch, FileUp, Home, Inbox, List, Map, PackageOpen, Route, Trash2 } from "lucide-react"
+import { Braces, Building2, ChevronRight, CloudUpload, Eye, FileClock, FileSearch, FileUp, Home, Inbox, List, Map, PackageOpen, Route, Trash2, Newspaper } from "lucide-react"
 import { cn } from "cn"
 import { Button as AriaButton, Disclosure, DisclosurePanel, Header, Heading, Link as AriaLink, Menu, MenuItem, MenuSection, MenuTrigger, Popover, Tooltip, TooltipTrigger } from "react-aria-components"
 import {
@@ -13,6 +13,7 @@ import { Button, buttonVariants } from "./ui/button"
 
 const navigationIcons: Record<AdminNavigationIcon, LucideIcon> = {
   home: Home,
+  news: Newspaper,
   publication: CloudUpload,
   preview: Eye,
   tariffs: PackageOpen,

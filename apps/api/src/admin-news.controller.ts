@@ -25,7 +25,7 @@ export class AdminNewsController {
   @Get(':id/history/:revision')
   revision(@Param('siteId') siteId:string,@Param('id') id:string,@Param('revision') revision:string){return this.store.revision(siteId,'ARTICLE',id,Number(revision))}
   @Post(':id/restore')
-  restore(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown,@Req() request:EditorialRequest){const body=editorialBody(raw,['revision','expectedRevision']);return this.store.restore(siteId,'ARTICLE',id,body.revision,body.expectedRevision,request.user?.id)}
+  restore(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown,@Req() request:EditorialRequest){const body=editorialBody(raw,['revision','expectedRevision','categoryId']);return this.store.restore(siteId,'ARTICLE',id,body.revision,body.expectedRevision,request.user?.id,body.categoryId)}
   @Post(':id/review')
   review(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown){const body=editorialBody(raw,['expectedRevision','action']);return this.publications.review(siteId,{kind:'ARTICLE',entityId:id,expectedRevision:body.expectedRevision,action:body.action??'PUBLISH'})}
   @Post(':id/publish')

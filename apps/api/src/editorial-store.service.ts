@@ -4,6 +4,7 @@ import { PrismaService } from './prisma.service';
 import { newsSettingsDefaults, notFoundDefaults, validateNewsArticle, validateNewsCategory, validateNewsSettings, validateNotFound } from './news-model';
 import { editorialDigest, retainedEditorialRevisions } from './editorial-revisions';
 import type { EditorialKind } from './editorial-publication-model';
+import type { EditorialCategoryPatch } from './editorial-category-plan';
 
 type Tx=Prisma.TransactionClient;
 export type EditorialRow={id:string;siteId:string;content:Prisma.JsonValue;revision:number;publishedRevision:number|null;updatedAt:Date;createdAt:Date;[key:string]:any};
@@ -37,6 +38,8 @@ export class EditorialStoreService {
     try{return await this.prisma.$transaction(async tx=>{
       await this.requireSite(siteId,tx);
       let previous=await this.row(siteId,kind,id,tx);
+      const guardedCategory=kind==='CATEGORY'?id:kind==='ARTICLE'?next.categoryId:null;
+      if(guardedCategory&&await tx.editorialPublicationItem.findFirst({where:{kind:'CATEGORY',entityId:guardedCategory,action:{in:['WITHDRAW','REASSIGN']},publication:{siteId,status:{in:['PENDING','RUNNING']}}}}))throw new ConflictException('Категория готовится к удалению или переносу. Обновите данные и выберите доступную категорию. Введённый текст остался в редакторе.');
       if(previous&&previous.revision!==expectedRevision){
         if(expectedRevision===0&&previous.id===id&&editorialDigest(previous.content)===editorialDigest(content))return {id:previous.id,content:previous.content,revision:previous.revision,updatedAt:previous.updatedAt,missingFields};
         throw new ConflictException({message:'Новость изменена в другой вкладке. Введённый текст сохранён в редакторе. Сравните версии перед продолжением.',reason:'REVISION_CONFLICT',serverRevision:previous.revision});
@@ -75,6 +78,15 @@ export class EditorialStoreService {
     const keep=retainedEditorialRevisions(rows,revision,ids).map(row=>row.id);
     await tx.editorialRevision.deleteMany({where:{siteId,kind,entityId,id:{notIn:keep}}});
   }
+  async applyCategoryPatches(tx:Tx,siteId:string,patches:EditorialCategoryPatch[],actorId?:string) {
+    for(const patch of patches){
+      if(patch.liveContent)await tx.editorialRevision.create({data:{siteId,kind:'ARTICLE',entityId:patch.id,revision:patch.liveRevision!,snapshot:patch.liveContent as unknown as Prisma.InputJsonValue,digest:editorialDigest(patch.liveContent),actorId:actorId??null,checkpoint:false}});
+      await tx.newsArticle.update({where:{id:patch.id,siteId,revision:patch.expectedRevision},data:{revision:patch.workingRevision,categoryId:patch.workingContent.categoryId,content:patch.workingContent as unknown as Prisma.InputJsonValue}});
+      await tx.editorialRevision.create({data:{siteId,kind:'ARTICLE',entityId:patch.id,revision:patch.workingRevision,snapshot:patch.workingContent as unknown as Prisma.InputJsonValue,digest:editorialDigest(patch.workingContent),actorId:actorId??null,checkpoint:true}});
+      // Pending publication items are written after this method. Retain all new
+      // rows until that ledger exists; the next save applies the normal policy.
+    }
+  }
   async history(siteId:string,kind:EditorialKind,id:string){
     const workspace=await this.read(siteId,kind,id);
     return this.prisma.editorialRevision.findMany({where:{siteId,kind,entityId:workspace.id},orderBy:{revision:'desc'},select:{revision:true,createdAt:true,publishedAt:true,checkpoint:true,digest:true}});
@@ -83,9 +95,16 @@ export class EditorialStoreService {
     if(!Number.isSafeInteger(revision)||revision<1)throw new BadRequestException('Укажите положительный номер редакции');
     const workspace=await this.read(siteId,kind,id);
     const row=await this.prisma.editorialRevision.findUnique({where:{siteId_kind_entityId_revision:{siteId,kind,entityId:workspace.id,revision}}});
-    if(!row)throw new NotFoundException('Редакция не найдена');return {content:row.snapshot,revision:row.revision,createdAt:row.createdAt};
+    if(!row)throw new NotFoundException('Редакция не найдена');
+    const categoryId=kind==='ARTICLE'?String((row.snapshot as Record<string,any>).categoryId||''):'';
+    const category=categoryId?await this.prisma.newsCategory.findFirst({where:{siteId,id:categoryId},select:{id:true,name:true,archivedAt:true}}):null;
+    const restoreCategory=kind==='ARTICLE'?{required:!!categoryId&&(!category||!!category.archivedAt),options:await this.prisma.newsCategory.findMany({where:{siteId,archivedAt:null},select:{id:true,name:true},orderBy:{name:'asc'}})}:undefined;
+    return {restoreCategory,content:row.snapshot,revision:row.revision,createdAt:row.createdAt,...(category?{categoryNames:{[category.id]:category.name||'Категория без названия'}}:{})};
   }
-  async restore(siteId:string,kind:EditorialKind,id:string,revision:number,expectedRevision:number,actorId?:string){
-    const selected=await this.revision(siteId,kind,id,revision);return this.save(siteId,kind,id,expectedRevision,selected.content,actorId,true);
+  async restore(siteId:string,kind:EditorialKind,id:string,revision:number,expectedRevision:number,actorId?:string,categoryId?:string){
+    const selected=await this.revision(siteId,kind,id,revision);
+    if(selected.restoreCategory?.required&&!categoryId)throw new BadRequestException({field:'categoryId',message:'Категория этой редакции удалена. Явно выберите действующую категорию для восстановления текста.'});
+    if(categoryId!==undefined&&(kind!=='ARTICLE'||!selected.restoreCategory?.required||typeof categoryId!=='string'||!categoryId))throw new BadRequestException('Категорию восстановления можно выбрать только вместо недоступной исходной.');
+    const content=categoryId?{...selected.content as Record<string,any>,categoryId}:selected.content;return this.save(siteId,kind,id,expectedRevision,content,actorId,true);
   }
 }

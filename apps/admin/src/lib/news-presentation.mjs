@@ -22,7 +22,7 @@ export function newsLifecycle(workspace,content) {
   return workspace.state==='WITHDRAWN'?newsStates.WITHDRAWN:newsStates.DRAFT
 }
 export function newsFieldLabel(path) {
-  const labels={title:'Заголовок',slug:'Адрес новости',summary:'Анонс',categoryId:'Категория',publishedDate:'Дата публикации',body:'Основной текст',cover:'Обложка',author:'Автор',source:'Источник',related:'Связанные новости',seo:'SEO',social:'Социальные сети'}
+  const labels={name:'Название',description:'Описание',intro:'Вводный текст',emptyMessage:'Сообщение пустого списка',allNewsLabel:'Кнопка возврата к списку',relatedTitle:'Заголовок подборки',primary:'Основная кнопка',secondary:'Дополнительная кнопка',errorLabel:'Подпись к коду ошибки',title:'Заголовок',slug:'Адрес новости',summary:'Анонс',categoryId:'Категория',publishedDate:'Дата публикации',body:'Основной текст',cover:'Обложка',author:'Автор',source:'Источник',related:'Связанные новости',seo:'SEO',social:'Социальные сети'}
   if(path?.startsWith('body.')&&path.endsWith('.alt'))return 'Описание изображения в тексте'
   return (labels[path?.split('.')[0]]??'Содержание')+(path?.endsWith('.alt')?' — описание изображения':'')
 }

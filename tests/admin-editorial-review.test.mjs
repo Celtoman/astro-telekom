@@ -17,3 +17,8 @@ test('progress never displays a different publication or rebuild',()=>{
 test('comparison ignores object property order while retaining text and structure changes',()=>{
  assert.deepEqual(editorialChanges({body:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:'Текст'}]}]}},{body:{content:[{content:[{text:'Текст',type:'text'}],type:'paragraph'}],type:'doc'}}),[]);
 });
+
+test('media differences remain a single inspectable image change',()=>{
+ const differences=editorialChanges({cover:{assetId:'one',alt:'Первая обложка'}},{cover:{assetId:'two',alt:'Вторая обложка'}});
+ assert.deepEqual(differences.map(item=>item.path),['cover']);assert.equal(differences[0].before.assetId,'one');
+});

@@ -1,3 +1,4 @@
+import { acknowledgedEditorialAliases,confirmedEditorialTransfers } from './editorial-redirects';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { publishedVariableContext } from './published-variable-context';
 import { createHash } from 'node:crypto';
@@ -545,16 +546,21 @@ export class PublicationWorkflowService {
       if (publication.scopeKey && publication.scopeKey !== 'legacy') {
         const items = await transaction.editorialPublicationItem.findMany({where:{publicationId:publication.id}});
         for (const item of items) {
+          if(item.kind==='ARTICLE'&&item.action==='REASSIGN')continue;
           if (item.action === 'PUBLISH') await transaction.editorialRevision.updateMany({where:{siteId:publication.siteId,kind:item.kind,entityId:item.entityId,revision:item.revision,publishedAt:null},data:{publishedAt}});
           // A delayed receipt remains a historical success, never a rollback of a
           // newer confirmed entity watermark. Live reads still use serving source.
-          const latest = await transaction.editorialPublicationItem.findFirst({where:{kind:item.kind,entityId:item.entityId,publication:{siteId:publication.siteId,status:'SUCCEEDED'}},orderBy:{publication:{releaseSequence:'desc'}}});
+          const latest = await transaction.editorialPublicationItem.findFirst({where:{kind:item.kind,entityId:item.entityId,...(item.kind==='ARTICLE'?{action:{not:'REASSIGN' as const}}:{}),publication:{siteId:publication.siteId,status:'SUCCEEDED'}},orderBy:{publication:{releaseSequence:'desc'}}});
           if (latest?.publicationId !== publication.id) continue;
           const publishedRevision = item.action === 'WITHDRAW' || item.action === 'REASSIGN' ? null : item.revision;
           if (item.kind === 'ARTICLE') await transaction.newsArticle.updateMany({where:{id:item.entityId,siteId:publication.siteId},data:{publishedRevision,everPublished:true}});
-          else if (item.kind === 'CATEGORY') await transaction.newsCategory.updateMany({where:{id:item.entityId,siteId:publication.siteId},data:{publishedRevision}});
+          else if (item.kind === 'CATEGORY') await transaction.newsCategory.updateMany({where:{id:item.entityId,siteId:publication.siteId},data:{publishedRevision,...(['WITHDRAW','REASSIGN'].includes(item.action)?{archivedAt:publishedAt}:{})}});
           else await transaction.editorialSettings.updateMany({where:{id:item.entityId,siteId:publication.siteId},data:{publishedRevision}});
         }
+        for(const alias of acknowledgedEditorialAliases(publication.catalog as Record<string,any>))await transaction.redirect.updateMany({where:{id:alias.id,siteId:publication.siteId,managedEditorialKey:{not:null},OR:[{managedEditorialReleaseSequence:null},{managedEditorialReleaseSequence:{lt:publication.releaseSequence}}]},data:{managedEditorialKey:alias.managedEditorialKey,targetPath:alias.targetPath,managedEditorialReleaseSequence:publication.releaseSequence}});
+        // Replay confirmed replacements in order: an older delayed receipt can
+        // complete A→B after B→C, including aliases currently hidden by pagination.
+        for(const transfer of await confirmedEditorialTransfers(transaction,publication.siteId))await transaction.redirect.updateMany({where:{siteId:publication.siteId,managedEditorialKey:`CATEGORY:${transfer.sourceId}`,managedEditorialReleaseSequence:{not:null,lt:transfer.releaseSequence}},data:{managedEditorialKey:`CATEGORY:${transfer.targetId}`,managedEditorialReleaseSequence:transfer.releaseSequence}});
       }
       return updated;
     };

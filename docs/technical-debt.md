@@ -274,3 +274,11 @@
 | ID | Issue | Суть |
 | --- | --- | --- |
 | TD-220 | [#538](https://github.com/Celtoman/astro-telekom/issues/538) ✅ | ID новости защищены от коллизий со служебными маршрутами API |
+
+| TD-221 | [#539](https://github.com/Celtoman/astro-telekom/issues/539) ✅ | Повторная публикация восстанавливает подтверждённые исторические301 |
+
+| TD-223 | [#541](https://github.com/Celtoman/astro-telekom/issues/541) ✅ | Review показывает прежние canonical/aliases и итог301/404 |
+
+| TD-224 | [#542](https://github.com/Celtoman/astro-telekom/issues/542) ✅ | История восстанавливает текст с явным выбором категории после переноса |
+
+| TD-225 | [#543](https://github.com/Celtoman/astro-telekom/issues/543) ✅ | CATEGORY PUBLISH защищён от serving-but-unacknowledged retirement |

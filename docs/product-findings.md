@@ -918,3 +918,7 @@
 - Источники: [Google Search Central](https://developers.google.com/search/docs/appearance/favicon-in-search), [web.dev: HTML icons](https://web.dev/learn/html/document-structure/), [web.dev: manifest](https://web.dev/articles/add-manifest).
 - Итог обсуждения 6 ноября 2026: владелец поручил изучить вопрос и сделать правильно. Реализован [контракт иконок](research/2026-11-06-site-icons.md): ICO + стабильный PNG 96 + непрозрачный Apple 180 + манифест browser с PNG 192/512; safe zone проверяется тестом. Для Google PNG имеет стабильный URL; прочие изображения поддерживают immutable prefix. Физические iOS/Android требуют отдельной проверки и не выдаются за проверенные.
 - Связанные решения/issues: [#536](https://github.com/Celtoman/astro-telekom/issues/536) — завершённая замена только ICO.
+
+## Новости: пограничные сценарии редакций, 7 ноября 2026
+
+Статус: CONVERTED, исправление в принятом плане [#534](https://github.com/Celtoman/astro-telekom/issues/534). Независимая проверка уточнила последствия удаления категории и адресов: [#541](https://github.com/Celtoman/astro-telekom/issues/541), [#542](https://github.com/Celtoman/astro-telekom/issues/542), [#543](https://github.com/Celtoman/astro-telekom/issues/543). Полные сценарии и доказательства находятся в issues; архив Figma исключён.

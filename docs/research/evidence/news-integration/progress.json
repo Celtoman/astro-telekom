@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-06T20:17:47.351988+00:00",
+  "updatedAt": "2026-11-06T21:50:48.273Z",
   "task": 534,
   "authorized": {
     "implementation": true,
@@ -88,7 +88,16 @@
       "sourceStagedFiles": 63,
       "stagedMatchesFrozen": true,
       "frozenSource": "D:\\01 vibecode\\astro-telekom\\.codex-tmp\\news-implementation\\verification-t4-r5",
-      "externalRelease": "PENDING_T11"
+      "externalRelease": {
+        "sha": "4803ba5dd3b939c3a90052831d29776190536b36",
+        "deployment": "0qrjbv1yeao9qnwps28msntq",
+        "durationSeconds": 722,
+        "status": "finished",
+        "application": "running:healthy",
+        "CODE": "SUCCEEDED",
+        "CMS": "29:29",
+        "unchangedCatalog": true
+      }
     },
     "T5": {
       "status": "LOCAL_WORKSPACE_CHECKED",
@@ -102,12 +111,29 @@
       },
       "checkedTree": "a44570815bcdea81e7ed7586b9534d8e3112eeb5",
       "stagedMatchesFrozenFiles": 43,
-      "fullGateLog": ".codex-tmp/news-implementation/t5-full-check-r2.log"
+      "fullGateLog": ".codex-tmp/news-implementation/t5-full-check-r2.log",
+      "commit": "cea8b632cc8212753ad1e359548fec590b0bf82b",
+      "ci": {
+        "runId": 42287280234,
+        "conclusion": "success"
+      }
     },
     "T6": {
-      "status": "IN_PROGRESS",
-      "isolatedCategoryRehearsal": "PASS; further regression fixes in progress",
-      "fullGate": "PENDING"
+      "status": "LOCAL_CHECKED",
+      "checkedTree": "8c7e9c64a34ba22d3470f616f1d68ffb15fd11c4",
+      "fullGate": {
+        "passed": 1038,
+        "failed": 0,
+        "skipped": 1,
+        "cancelled": 0,
+        "exitCode": 0
+      },
+      "fullGateLog": ".codex-tmp/news-implementation/t6-full-check-r6.log",
+      "reviewProfile": {
+        "passed": 4,
+        "failed": 0
+      },
+      "externalRelease": "PENDING_T11"
     }
   },
   "baselineCheck": {

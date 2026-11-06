@@ -904,6 +904,7 @@ model Redirect {
   targetPath  String
   managedTariffId String?
   managedEditorialKey String?
+  managedEditorialReleaseSequence Int?
   status      PublishStatus @default(PUBLISHED)
   hitCount    Int      @default(0)
   lastHitAt   DateTime?

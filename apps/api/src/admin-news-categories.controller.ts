@@ -16,7 +16,13 @@ export class AdminNewsCategoriesController {
   @Patch(':id')
   save(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown,@Req() request:EditorialRequest){const body=editorialBody(raw,['content','expectedRevision','checkpoint']);return this.store.save(siteId,'CATEGORY',id,body.expectedRevision,body.content,request.user?.id,body.checkpoint===true)}
   @Post(':id/review')
-  review(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown){const body=editorialBody(raw,['expectedRevision']);return this.publications.review(siteId,{kind:'CATEGORY',entityId:id,expectedRevision:body.expectedRevision,action:'PUBLISH'})}
+  review(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown){const body=editorialBody(raw,['expectedRevision','action','targetCategoryId']);return this.publications.review(siteId,{kind:'CATEGORY',entityId:id,expectedRevision:body.expectedRevision,action:body.action??'PUBLISH',targetCategoryId:body.targetCategoryId})}
   @Post(':id/publish')
-  publish(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown,@Req() request:EditorialRequest){const body=editorialBody(raw,['expectedRevision','reviewDigest','operationId']);return this.publications.publish(siteId,{kind:'CATEGORY',entityId:id,expectedRevision:body.expectedRevision,action:'PUBLISH'},body.reviewDigest,body.operationId,request.user?.id)}
+  publish(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown,@Req() request:EditorialRequest){const body=editorialBody(raw,['expectedRevision','reviewDigest','operationId','action','targetCategoryId']);return this.publications.publish(siteId,{kind:'CATEGORY',entityId:id,expectedRevision:body.expectedRevision,action:body.action??'PUBLISH',targetCategoryId:body.targetCategoryId},body.reviewDigest,body.operationId,request.user?.id)}
+  @Get(':id/history')
+  history(@Param('siteId') siteId:string,@Param('id') id:string){return this.store.history(siteId,'CATEGORY',id)}
+  @Get(':id/history/:revision')
+  revision(@Param('siteId') siteId:string,@Param('id') id:string,@Param('revision') revision:string){return this.store.revision(siteId,'CATEGORY',id,Number(revision))}
+  @Post(':id/restore')
+  restore(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown,@Req() request:EditorialRequest){const body=editorialBody(raw,['revision','expectedRevision']);return this.store.restore(siteId,'CATEGORY',id,body.revision,body.expectedRevision,request.user?.id)}
 }

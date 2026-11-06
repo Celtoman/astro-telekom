@@ -14,6 +14,8 @@ import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 // mounted afresh on navigation. Only display lists reuse session memory;
 // editorial reads remain fresh and preserve their optimistic revision checks.
 const screenLoaders = {
+  "news-categories": () => import("./NewsCategoriesApp").then(m => ({ default: m.NewsCategoriesApp })),
+  "editorial-pages": () => import("./EditorialPagesApp").then(m => ({ default: m.EditorialPagesApp })),
   news: () => import("./NewsApp").then(m => ({ default: m.NewsApp })),
   "news-editor": () => import("./NewsEditorApp").then(m => ({ default: m.NewsEditorApp })),
   account: () => import("./AccountPageApp").then(m => ({ default: m.AccountPageApp })),

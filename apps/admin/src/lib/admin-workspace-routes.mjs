@@ -1,4 +1,7 @@
 export const workspaceRoutes = {
+  "/news/categories": { screen: "news-categories", active: "news-categories" },
+  "/pages/news": { screen: "editorial-pages", active: "pages-news" },
+  "/pages/not-found": { screen: "editorial-pages", active: "pages-not-found" },
   "/news": { screen: "news", active: "news" },
   "/news/new": { screen: "news-editor", active: "news" },
   "/news/edit": { screen: "news-editor", active: "news" },

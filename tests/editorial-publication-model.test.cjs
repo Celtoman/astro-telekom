@@ -28,3 +28,9 @@ test('publishing404 alone does not launch the news list or any article',()=>{
  assert.equal(source.editorial.newsEnabled,false);assert.deepEqual(source.editorial.articles,[]);
  const enabled=model.applyEditorialChangeSet(source,{kind:'NEWS_SETTINGS',entityId:'settings',revision:1,action:'PUBLISH',snapshot:{title:'Новости'}});assert.equal(enabled.editorial.newsEnabled,true);
 });
+
+test('private draft-only reassignment ledger cannot remove a serving article or launch an empty news section',()=>{
+ const before=base(),after=model.applyEditorialChangeSet(before,{kind:'ARTICLE',entityId:'a',revision:3,action:'REASSIGN',snapshot:{draftOnly:true,title:'Private draft'}});
+ assert.deepEqual(after.editorial.articles,before.editorial.articles);
+ const empty=model.applyEditorialChangeSet({site:{id:'s'},redirects:[]},{kind:'CATEGORY',entityId:'draft-cat',revision:1,action:'WITHDRAW',snapshot:null});assert.equal(empty.editorial.newsEnabled,false);
+});
