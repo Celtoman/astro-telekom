@@ -79,15 +79,15 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
   return <AdminShell apiUrl={apiUrl} user={user} active="publication">
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-4 sm:p-6 lg:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div><p className="mb-1 text-sm text-muted-foreground">{site?.name || "Сайт"}</p><h1 className="font-heading text-2xl font-semibold">Публикация сайта</h1><p className="mt-2 max-w-2xl text-sm text-muted-foreground">Сначала сохраните правки в редакторе. Здесь проверьте их и опубликуйте одним действием для всего сайта.</p></div>
+        <div><p className="mb-1 text-sm text-muted-foreground">{site?.name || "Сайт"}</p><h1 className="font-heading text-2xl font-semibold">Публикация сайта</h1><p className="mt-2 max-w-2xl text-sm text-muted-foreground">Здесь выпускаются сохранённые изменения общих страниц, тарифов и городов. Новости, категории и страница 404 публикуются отдельно из своих редакторов.</p></div>
         <Button className="min-h-11" variant="outline" disabled={loading} onClick={() => void load()}><RefreshCw data-icon="inline-start" />{loading ? "Проверяем…" : "Обновить проверку"}</Button>
       </div>
       {error ? <Alert variant="destructive" role="alert"><CircleAlert /><AlertTitle>Проверка недоступна</AlertTitle><AlertDescription>{error}. Публикация недоступна до успешного обновления проверки.</AlertDescription></Alert> : null}
       {stale && !loading ? <Alert role="status"><CircleAlert /><AlertTitle>Список изменений устарел</AlertTitle><AlertDescription>Состояние сайта изменилось после проверки. Обновите проверку, чтобы увидеть точный состав публикации.</AlertDescription></Alert> : null}
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_24rem]">
         <div className="min-w-0 space-y-6" aria-busy={loading}>
-          <Card><CardHeader><CardTitle role="heading" aria-level={2}>Что попадёт на сайт</CardTitle><CardDescription>Все сохранения после последней успешной публикации.</CardDescription></CardHeader><CardContent>
-            {!review ? <Skeleton className="h-40 w-full" /> : !review.hasUnpublishedChanges ? <div className="flex items-start gap-3 rounded-lg bg-muted/50 p-4"><CheckCircle2 className="mt-0.5 size-5 shrink-0" /><div><p className="font-medium">Всё сохранённое уже опубликовано</p><p className="mt-1 text-sm text-muted-foreground">После новых сохранений они появятся здесь.</p></div></div> : <>
+          <Card><CardHeader><CardTitle role="heading" aria-level={2}>Что попадёт на сайт</CardTitle><CardDescription>Сохранения в общем контуре сайта после последней публикации. Черновики новостей, категорий и 404 сюда не входят.</CardDescription></CardHeader><CardContent>
+            {!review ? <Skeleton className="h-40 w-full" /> : !review.hasUnpublishedChanges ? <div className="flex items-start gap-3 rounded-lg bg-muted/50 p-4"><CheckCircle2 className="mt-0.5 size-5 shrink-0" /><div><p className="font-medium">Все изменения общего контура опубликованы</p><p className="mt-1 text-sm text-muted-foreground">Новые сохранения общих страниц, тарифов и городов появятся здесь.</p></div></div> : <>
               <p className="mb-4 text-sm"><span className="font-semibold">Сохранений: {review.totalChanges}</span><span className="text-muted-foreground"> · версии {review.publishedRevision + 1}–{review.workingRevision}</span></p>
               <ul className="divide-y">
                 {review.changes.map((change) => <li key={change.id} className="py-4">

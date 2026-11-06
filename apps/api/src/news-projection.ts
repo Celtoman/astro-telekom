@@ -38,6 +38,13 @@ export function relatedNews(articles:Array<Record<string,any>>,current:Record<st
   if(current.related?.mode==='manual')for(const id of current.related.ids??[])add(sorted.find(a=>a.id===id));
   sorted.filter(a=>a.categoryId===current.categoryId).forEach(add);sorted.forEach(add);return selected;
 }
+export function relatedNewsOptions(articles:Array<Record<string,any>>,query:{currentId?:string;categoryId?:string;selectedIds?:string[];search?:string;page?:number}={}) {
+  const all=sortedNews(articles).filter(a=>a.id!==query.currentId),term=(query.search??'').trim().slice(0,250).toLocaleLowerCase('ru');
+  const summarize=(a:Record<string,any>)=>({id:String(a.id),title:String(a.title),categoryId:String(a.categoryId),publishedDate:String(a.publishedDate),slug:String(a.slug),available:true});
+  const filtered=all.filter(a=>!term||a.title.toLocaleLowerCase('ru').includes(term));
+  const page=Number.isSafeInteger(query.page)&&Number(query.page)>0?Number(query.page):1,pageSize=25;
+  return {items:filtered.slice((page-1)*pageSize,page*pageSize).map(summarize),total:filtered.length,page,pageSize,selected:(query.selectedIds??[]).slice(0,3).map(id=>{const article=all.find(a=>a.id===id);return article?summarize(article):{id,available:false}}),recommended:relatedNews(articles,{id:query.currentId,categoryId:query.categoryId,related:{mode:'auto'}},3).map(summarize)};
+}
 /** Slot count includes non-interactive ellipses; a one-page gap is always its page number. */
 export function newsPagination(current:number,total:number,slots=7):Array<number|string> {
   if(total<=1)return [];

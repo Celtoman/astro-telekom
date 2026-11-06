@@ -14,6 +14,8 @@ import {
   type AdminSection,
 } from "../lib/admin-navigation.mjs"
 import { requestJson } from "../lib/admin-api.mjs"
+import { hasUnsavedChanges } from "../lib/admin-navigation-guards.mjs"
+import { clearEditorialRecovery } from "../lib/editorial-recovery.mjs"
 import { AdminNavigation } from "./AdminNavigation"
 import { PublicationIndicator } from "./PublicationIndicator"
 import { Button } from "./ui/button"
@@ -42,6 +44,9 @@ export function AdminShellLayout({ apiUrl, user, active, children }: {
   const [sidebarExpanded, setSidebarExpanded] = useState(true)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set(activeGroup ? [activeGroup] : []))
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [logoutOpen, setLogoutOpen] = useState(false)
+  const [logoutBusy, setLogoutBusy] = useState(false)
+  const [logoutError, setLogoutError] = useState('')
 
   useEffect(() => {
     const storedSidebar = readStoredSidebarExpanded(window.localStorage.getItem(ADMIN_SIDEBAR_STORAGE_KEY))
@@ -103,9 +108,15 @@ export function AdminShellLayout({ apiUrl, user, active, children }: {
     })
   }
 
-  async function logout() {
-    await requestJson(apiUrl, "/auth/logout", { method: "POST", body: {} }).catch(() => undefined)
-    window.location.replace("/login")
+  async function logout(confirmed=false) {
+    if(!confirmed&&hasUnsavedChanges()){setLogoutOpen(true);return}
+    setLogoutBusy(true);setLogoutError('')
+    try {
+      await requestJson(apiUrl, "/auth/logout", { method: "POST", body: {} })
+      try { if(user)clearEditorialRecovery(window.localStorage,user.id) } catch {}
+      window.location.replace("/login")
+    } catch {setLogoutError('Не удалось завершить сессию. Повторите выход.');setLogoutOpen(true)}
+    finally {setLogoutBusy(false)}
   }
 
   return (
@@ -137,7 +148,7 @@ export function AdminShellLayout({ apiUrl, user, active, children }: {
             </div>
             <div className="order-3 flex w-full flex-wrap items-center gap-2 sm:order-none sm:w-auto">
               {user ? <PublicationIndicator key={user.id} apiUrl={apiUrl} /> : null}
-              <Button asChild className="min-h-11"><a href={active === "publication" ? "#publication-launch" : "/publication"}><CloudUpload data-icon="inline-start" />Опубликовать изменения</a></Button>
+              <Button asChild variant={active==='news'?'outline':'default'} className="min-h-11"><a href={active === "publication" ? "#publication-launch" : "/publication"}><CloudUpload data-icon="inline-start" />{active==='news'?'Публикация других разделов':'Опубликовать изменения'}</a></Button>
             </div>
             <Button variant="outline" onClick={() => void logout()}><LogOut data-icon="inline-start" /><span className="hidden sm:inline">Выйти</span><span className="sr-only sm:hidden">Выйти</span></Button>
           </header>
@@ -161,6 +172,7 @@ export function AdminShellLayout({ apiUrl, user, active, children }: {
         </Dialog>
         </Modal>
       </ModalOverlay>
+      <ModalOverlay isDismissable={!logoutBusy} isOpen={logoutOpen} onOpenChange={setLogoutOpen} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"><Modal className="w-full max-w-lg rounded-xl border bg-background p-5 text-foreground shadow-lg"><Dialog className="space-y-5 outline-none"><Heading slot="title" className="text-lg font-semibold">Выйти из админки?</Heading><Text slot="description" className="text-sm text-muted-foreground">Несохранённые изменения будут потеряны. При выходе временные копии новостей в этом браузере удаляются. Сохранённые черновики останутся на сервере.</Text>{logoutError&&<p role="alert" className="text-sm text-destructive">{logoutError}</p>}<div className="flex flex-wrap gap-2"><Button type="button" variant="outline" disabled={logoutBusy} onClick={()=>setLogoutOpen(false)}>Продолжить работу</Button><Button type="button" disabled={logoutBusy} onClick={()=>void logout(true)}>Выйти</Button></div></Dialog></Modal></ModalOverlay>
     </>
   )
 }

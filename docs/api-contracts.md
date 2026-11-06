@@ -278,3 +278,11 @@ HOME и CITY тексты независимы. Короткие factText ста
 ## ACCOUNT — минимум CMS и GLOBAL source
 
 `GET /admin/sites/:siteId/account` возвращает content, workingRevision, missingFields, published/publishedRevision и publishedAvailable. `PATCH` принимает только `{expectedWorkingRevision,content}`;409 предотвращает перезапись, безопасный неполный черновик сохраняется, unknown keys/условия/композиция отвергаются. Действует AdminTokenGuard; сохранение не публикует. `/address-suggestions`, `/address-checks`, `/leads` принимают `pageScope=GLOBAL` только для canonical ACCOUNT; suggest/check не требуют фиктивного citySlug. Check возвращает actual citySlug. Lead связывает site/city/global page с положительной адресной проверкой; CITY/null/foreign source нельзя переиспользовать. Callback/tariff/configuration-привилегии для GLOBAL не добавлены.
+
+## Рабочее место новостей — T5 (#534)
+
+- `GET /api/v1/admin/sites/:siteId/news/related-options`: только serving-проекция опубликованных статей. Query `currentId`, `categoryId`, `ids` (до трёх через запятую), `search`, `page`; 25 результатов, `selected` с available=false для исчезнувших материалов и auto `recommended`. Незавершённые заголовки других черновиков не подставляются.
+- Workspace возвращает необязательный `publicUrl` из фактически опубликованного slug и настроенного public origin. Для черновика, скрытой пустой категории и 404 отдельной ссылки нет. Operation read включает source `siteRevision`; progress админки привязан к тому же publication ID.
+- ARTICLE clientId не может занимать namespaces `media`, `categories`, `publications`, `related-options`; отказ 400 до записи (TD-220/#538). Стабильные client UUID и импортные ID сохраняются.
+- No-op save с `checkpoint=true` закрепляет существующую редакцию в истории без дублирующей revision. Безопасный draft может содержать незаполненное имя автора/URL источника; missingFields блокируют публикацию, небезопасный URL отклоняется.
+- UI перед review/history/preview сохраняет точный checkpoint. Локальная recovery-копия не является опубликованной или подтверждённой серверной редакцией.

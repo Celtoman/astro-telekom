@@ -45,3 +45,9 @@ test('informative images may lack alt in a draft but require it for publication'
  d.cover.decorative=true;d.body.content[1].attrs.alt='Роутер в комнате';assert.deepEqual(model.validateNewsArticle(d),[]);
 });
 module.exports={ready};
+test('optional author and source may remain unfinished in a safe draft but block publication until completed',()=>{
+ const article=ready();article.author={type:'Person',name:''};article.source={label:'',url:''};
+ assert.deepEqual(model.validateNewsArticle(article,true),['author.name','source.url']);
+ assert.throws(()=>model.validateNewsArticle(article),error=>error.field==='author.name');
+ article.author.name='Редакция';article.source.url='https://example.test/news';assert.deepEqual(model.validateNewsArticle(article),[]);
+});

@@ -28,6 +28,7 @@ export class EditorialStoreService {
   }
   async create(siteId:string,kind:'ARTICLE'|'CATEGORY',id:string,content:unknown,actorId?:string){
     if(!/^[a-zA-Z0-9_-]{1,200}$/.test(id))throw new BadRequestException('Нужен постоянный идентификатор нового черновика');
+    if(kind==='ARTICLE'&&['media','categories','publications','related-options'].includes(id))throw new BadRequestException('Этот идентификатор зарезервирован системой. Создайте новый черновик.');
     return this.save(siteId,kind,id,0,content,actorId,true);
   }
   async save(siteId:string,kind:EditorialKind,id:string,expectedRevision:number,content:unknown,actorId?:string,checkpoint=false){
@@ -41,7 +42,10 @@ export class EditorialStoreService {
         throw new ConflictException({message:'Новость изменена в другой вкладке. Введённый текст сохранён в редакторе. Сравните версии перед продолжением.',reason:'REVISION_CONFLICT',serverRevision:previous.revision});
       }
       if(!previous&&expectedRevision!==0)throw new ConflictException('Редакция больше не доступна. Обновите данные.');
-      if(previous&&editorialDigest(previous.content)===editorialDigest(content))return {id:previous.id,content:previous.content,revision:previous.revision,updatedAt:previous.updatedAt,missingFields};
+      if(previous&&editorialDigest(previous.content)===editorialDigest(content)){
+        if(checkpoint){await tx.editorialRevision.updateMany({where:{siteId,kind,entityId:previous.id,revision:previous.revision,checkpoint:false},data:{checkpoint:true}});await this.prune(tx,siteId,kind,previous.id,previous.revision)}
+        return {id:previous.id,content:previous.content,revision:previous.revision,updatedAt:previous.updatedAt,missingFields};
+      }
       if(kind==='ARTICLE'&&next.categoryId&&!await tx.newsCategory.findFirst({where:{id:next.categoryId,siteId,archivedAt:null}}))throw new BadRequestException({field:'categoryId',message:'Выберите категорию этого сайта'});
       if(kind==='ARTICLE'&&['page','category'].includes(next.slug))throw new ConflictException({field:'slug',message:'Этот адрес зарезервирован разделом новостей'});
       const revision=(previous?.revision??0)+1, data={content:next as Prisma.InputJsonValue,revision};

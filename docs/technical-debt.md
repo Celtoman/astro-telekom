@@ -268,3 +268,9 @@
 | --- | --- | --- |
 | [#481](https://github.com/Celtoman/astro-telekom/issues/481) | CLOSED | Отмена импорта с HOME и ADDRESS; regression и повторный review пройдены. |
 | [#483](https://github.com/Celtoman/astro-telekom/issues/483) | CLOSED | Пустой FAQ в ADDRESS preview; regression и повторный review пройдены. |
+
+## Редакционный API, 6 ноября 2026
+
+| ID | Issue | Суть |
+| --- | --- | --- |
+| TD-220 | [#538](https://github.com/Celtoman/astro-telekom/issues/538) ✅ | ID новости защищены от коллизий со служебными маршрутами API |

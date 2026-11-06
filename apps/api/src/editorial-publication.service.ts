@@ -8,10 +8,11 @@ import { RebuildQueueService } from './rebuild-queue.service';
 import { editorialServingSource } from './editorial-serving-source';
 import { applyEditorialChangeSet, type EditorialChange, type EditorialKind } from './editorial-publication-model';
 import { editorialDigest } from './editorial-revisions';
-import { newsRoutes } from './news-projection';
+import { newsRoutes, relatedNewsOptions } from './news-projection';
 import { normalizeRedirectPath } from './redirect-path';
 import { validatePublicationSource } from './publication-validation';
 import { APP_VERSION } from './app-version';
+import { editorialLiveUrl } from './editorial-live-url';
 type Tx=Prisma.TransactionClient;
 export type EditorialReleaseInput={kind:EditorialKind;entityId:string;expectedRevision:number;action:'PUBLISH'|'WITHDRAW'};
 const json=(value:unknown)=>JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
@@ -92,11 +93,11 @@ export class EditorialPublicationService {
     source.publicationBaseId=baseline.publication.id;
     const validation=validatePublicationSource(source,{appVersion:APP_VERSION,siteRevision:baseline.publication.siteRevision},(s,now)=>this.catalog.renderSource(s,now));
     const reviewDigest=editorialDigest({basePublicationId:baseline.publication.id,items,editorial:source.editorial,redirects:source.redirects});
-    return {source,validation,reviewDigest,items,baseline:baseline.publication};
+    return {source,validation,reviewDigest,items,baseline:baseline.publication,selectedTitle:String(selected.title??selected.name??(input.kind==='NOT_FOUND'?'Страница 404':'Настройки новостей'))};
   }
   private publicReview(candidate:Awaited<ReturnType<EditorialPublicationService['candidate']>>){
     const {validation,items,baseline,reviewDigest,source}=candidate;
-    return {reviewDigest,basePublicationId:baseline.id,ready:!!validation.catalog,report:validation.report,items:items.map(item=>({kind:item.kind,entityId:item.entityId,revision:item.revision,action:item.action,title:item.snapshot?.title??item.snapshot?.name??item.kind})),affectedPaths:[...new Set(['/',...newsRoutes(source.editorial!).map(r=>r.path),...(items.some(i=>i.kind==='NOT_FOUND')?['Все неизвестные адреса (HTTP 404)']:[])])],redirects:source.redirects.filter(a=>source.editorial!.redirectIds?.includes(a.id)).map(({sourcePath,targetPath})=>({sourcePath,targetPath}))};
+    return {reviewDigest,basePublicationId:baseline.id,ready:!!validation.catalog,report:validation.report,items:items.map(item=>({kind:item.kind,entityId:item.entityId,revision:item.revision,action:item.action,title:item.snapshot?.title??item.snapshot?.name??candidate.selectedTitle})),affectedPaths:[...new Set(['/',...newsRoutes(source.editorial!).map(r=>r.path),...(items.some(i=>i.kind==='NOT_FOUND')?['Все неизвестные адреса (HTTP 404)']:[])])],redirects:source.redirects.filter(a=>source.editorial!.redirectIds?.includes(a.id)).map(({sourcePath,targetPath})=>({sourcePath,targetPath}))};
   }
   async review(siteId:string,input:EditorialReleaseInput){return this.publicReview(await this.candidate(siteId,input,this.prisma))}
   async publish(siteId:string,input:EditorialReleaseInput,reviewDigest:string,operationId:string,actorId?:string){
@@ -116,22 +117,23 @@ export class EditorialPublicationService {
     return {publicationId:publication.id,status:publication.status,rebuild};
   }
   async operation(siteId:string,operationId:string){
-    const publication=await this.prisma.sitePublication.findFirst({where:{siteId,scopeKey:`editorial:${operationId}`},select:{id:true,status:true,lastError:true,releaseSequence:true,basePublicationId:true,validationId:true,publishedAt:true}});
+    const publication=await this.prisma.sitePublication.findFirst({where:{siteId,scopeKey:`editorial:${operationId}`},select:{id:true,status:true,lastError:true,siteRevision:true,releaseSequence:true,basePublicationId:true,validationId:true,publishedAt:true}});
     if(!publication)throw new NotFoundException('Операция не найдена');
-    const rebuild=await this.prisma.siteRebuild.findUnique({where:{dedupeKey:`site:${siteId}`},select:{id:true,status:true,requestedPublicationId:true,processingPublicationId:true,lastError:true}});
+    const rebuild=await this.prisma.siteRebuild.findUnique({where:{dedupeKey:`site:${siteId}`},select:{id:true,status:true,requestedRevision:true,publishedRevision:true,requestedPublicationId:true,processingPublicationId:true,lastError:true,providerStatus:true}});
     return {...publication,rebuild:rebuild&&[rebuild.requestedPublicationId,rebuild.processingPublicationId].includes(publication.id)?rebuild:null};
   }
   async workspace(siteId:string,kind:EditorialKind,id:string){
     const working=await this.store.read(siteId,kind,id),row=await this.store.row(siteId,kind,id);
     const site=await this.store.requireSite(siteId);
-    let publishedAvailable=true,published:Record<string,any>|null=null;
+    let publishedAvailable=true,published:Record<string,any>|null=null,publicUrl:string|null=null;
     try{
-      const source=(await editorialServingSource(this.prisma,site)).source.editorial;
+      const baseline=(await editorialServingSource(this.prisma,site)).source,source=baseline.editorial;
+      publicUrl=editorialLiveUrl(baseline,kind,id);
       published=kind==='ARTICLE'?source?.articles.find(a=>a.id===id)??null:kind==='CATEGORY'?source?.categories.find(c=>c.id===id)??null:kind==='NEWS_SETTINGS'?source&&source.newsEnabled!==false?source.settings:null:source?.notFound??null;
     }catch{publishedAvailable=false}
     const content=published?Object.fromEntries(Object.keys(working.content as object).map(key=>[key,published![key]])):null;
     const state=!publishedAvailable?'UNKNOWN':published?editorialDigest(content)===editorialDigest(working.content)?'PUBLISHED':'CHANGED':row?.everPublished?'WITHDRAWN':'DRAFT';
-    return {...working,published:content,publishedAvailable,publishedRevision:published?.revision??null,state};
+    return {...working,published:content,publishedAvailable,publishedRevision:published?.revision??null,state,publicUrl};
   }
   async list(siteId:string,query:{search?:string;categoryId?:string;state?:string;page?:number}={}){
     const site=await this.store.requireSite(siteId),rows=await this.prisma.newsArticle.findMany({where:{siteId,archivedAt:null,...(query.search?{title:{contains:query.search.slice(0,250),mode:'insensitive' as const}}:{}),...(query.categoryId?{categoryId:query.categoryId}:{})},orderBy:[{publishedDate:'desc'},{id:'asc'}],select:{id:true,title:true,summary:true,slug:true,categoryId:true,publishedDate:true,revision:true,content:true,everPublished:true,updatedAt:true}});
@@ -150,5 +152,9 @@ export class EditorialPublicationService {
     let publishedAvailable=true,live:Array<Record<string,any>>=[],categories:Array<Record<string,any>>=[];
     try{const source=(await editorialServingSource(this.prisma,site)).source.editorial;live=source?.articles??[];categories=source?.categories??[]}catch{publishedAvailable=false}
     return {items:rows.map(row=>({id:row.id,name:row.name,slug:row.slug,revision:row.revision,totalCount:row._count.articles,liveCount:publishedAvailable?live.filter(a=>a.categoryId===row.id).length:null,publishedRevision:categories.find(c=>c.id===row.id)?.revision??null})),publishedAvailable};
+  }
+  async relatedOptions(siteId:string,query:Parameters<typeof relatedNewsOptions>[1]) {
+    const site=await this.store.requireSite(siteId),baseline=await editorialServingSource(this.prisma,site);
+    return relatedNewsOptions(baseline.source.editorial?.articles??[],query);
   }
 }

@@ -21,6 +21,9 @@ try{
  assert.equal(writes.filter(x=>x.status==='fulfilled').length,1);const conflict=writes.find(x=>x.status==='rejected');assert.equal(conflict.reason.getStatus(),409);
  let current=await store.read(site.id,'ARTICLE',article.id);assert.equal(current.revision,2);
  const noChange=await store.save(site.id,'ARTICLE',article.id,current.revision,current.content);assert.equal(noChange.revision,2);
+ assert.equal((await db.editorialRevision.findFirstOrThrow({where:{entityId:article.id,revision:2}})).checkpoint,false);
+ const checkpoint=await store.save(site.id,'ARTICLE',article.id,current.revision,current.content,undefined,true);assert.equal(checkpoint.revision,2);
+ assert.equal((await db.editorialRevision.findFirstOrThrow({where:{entityId:article.id,revision:2}})).checkpoint,true,'exact preview protects the saved revision without a duplicate');
  await db.editorialRevision.updateMany({where:{siteId:site.id,entityId:article.id,revision:1},data:{publishedAt:new Date('2024-09-19T08:47:18Z')}});
  for(let i=0;i<24;i++)current=await store.save(site.id,'ARTICLE',article.id,current.revision,{...content,title:`Контрольная редакция ${i}`},undefined,true);
  const history=await store.history(site.id,'ARTICLE',article.id);assert.equal(history.length,21);assert.ok(history.some(r=>r.revision===1&&r.publishedAt));

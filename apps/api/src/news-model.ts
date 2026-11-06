@@ -103,8 +103,8 @@ export function validateNewsArticle(raw: unknown, draft = false, currentId?: str
     }
   };
   imageAlt(d.cover,'cover'); imageAlt(d.body,'body'); imageAlt(d.social,'social');
-  if (d.author !== null) { const a = record(d.author, 'author', ['type', 'name', 'url']); if (!['Person', 'Organization'].includes(a.type) || !text(a.name, 'author.name', 250).trim()) fail('author', 'AUTHOR', 'Укажите реального автора или организацию.'); if (a.url) safeNewsUrl(a.url, 'author.url'); }
-  if (d.source !== null) { const source = record(d.source, 'source', ['label', 'url']); text(source.label, 'source.label', 250); if (source.url) safeNewsUrl(source.url, 'source.url'); }
+  if (d.author !== null) { const a = record(d.author, 'author', ['type', 'name', 'url']); if (!['Person', 'Organization'].includes(a.type)) fail('author', 'AUTHOR', 'Укажите реального автора или организацию.'); if(!text(a.name, 'author.name', 250).trim())missing.push('author.name'); if (a.url) safeNewsUrl(a.url, 'author.url'); }
+  if (d.source !== null) { const source = record(d.source, 'source', ['label', 'url']); text(source.label, 'source.label', 250); if (source.url) safeNewsUrl(source.url, 'source.url'); else missing.push('source.url'); }
   const related = record(d.related, 'related', ['mode', 'ids']);
   if (!['auto', 'manual'].includes(related.mode) || !Array.isArray(related.ids) || related.ids.length > 3 || related.ids.some((id: unknown) => typeof id !== 'string' || !id || id === currentId) || new Set(related.ids).size !== related.ids.length) fail('related.ids', 'RELATED', 'Выберите до трёх разных опубликованных новостей, кроме текущей.');
   seo(d.seo, 'seo'); seo(d.social, 'social', true);

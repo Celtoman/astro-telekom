@@ -1,5 +1,16 @@
 # Покрытие тестами
 
+## Рабочее место новостей — T5
+
+- `editorial-autosave.test.mjs`: последовательные/coalesced saves, новый ввод во время запроса, retry, 409, dispose, checkpoint и recovery поверх более свежего сервера.
+- `editorial-recovery.test.mjs`: отдельные writer-копии, account/site/material scope, TTL, безопасная очистка и storage failure.
+- `admin-news-presentation.test.mjs`: предложение slug, сохранение адреса, фильтры/безопасный возврат и отдельные lifecycle/save состояния.
+- `admin-editorial-review.test.mjs`: содержательные различия независимо от порядка JSON-полей; чужие publication/rebuild/progress не показываются как свой выпуск.
+- `editorial-live-url.test.cjs`: ссылки из serving slug, отсутствие ссылки у draft/404/выключенного news, отказ небезопасному origin.
+- `editorial-client-id.test.cjs`: служебные namespaces нельзя использовать как ID статьи.
+- `news-contract.test.cjs` расширен безопасными незавершёнными author/source drafts; `news-projection.test.cjs` — serving-only picker, unavailable selection и рекомендации.
+- No-op checkpoint проверен на изолированной PostgreSQL в store rehearsal. Browser smoke списка/редактора, 409 и restore описан в [отчёте T5](research/2026-11-06-news-editor-workspace.md); viewport emulation не доказывает touch или AT.
+
 ## Scoped backend — T4
 
 - `editorial-api.test.cjs`: настоящий Nest/Fastify HTTP, cookie guard всех scopes, static categories/operations против dynamic article route, допустимые settings keys, write-body whitelist и actor.

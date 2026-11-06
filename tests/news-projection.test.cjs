@@ -28,3 +28,11 @@ test('numbered pagination obeys seven/five slots, always includes current and ed
  }
  assert.deepEqual(news.newsPagination(1,1,7),[]);assert.equal(news.newsPagePath?.('/news',1),'/news');assert.equal(news.newsPagePath('/news/category/tech',2),'/news/category/tech/page/2');
 });
+
+test('editorial related picker only exposes the provided serving projection and selected unavailability',()=>{
+ const e=fixture(30);const result=news.relatedNewsOptions?.(e.articles,{currentId:'article-000',categoryId:'c2',selectedIds:['article-029','draft','article-000'],search:'Новость 2',page:1});
+ assert.equal(result?.selected[0].title,'Новость 29');assert.equal(result?.selected[1].available,false);assert.equal(result?.selected[2].available,false);
+ assert.ok(result?.items.every(a=>a.id!=='article-000'&&a.title.includes('Новость 2')));
+ assert.deepEqual(result?.recommended.map(a=>a.id),['article-015','article-016','article-017']);
+ assert.equal(news.relatedNewsOptions(e.articles,{page:Infinity}).page,1);
+});
