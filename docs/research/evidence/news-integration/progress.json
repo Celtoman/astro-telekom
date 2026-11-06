@@ -1,0 +1,56 @@
+{
+  "updatedAt": "2026-11-06T13:48:36Z",
+  "task": 534,
+  "authorized": {
+    "implementation": true,
+    "commit": true,
+    "push": true,
+    "deployment": true
+  },
+  "phases": {
+    "T0": {
+      "status": "DONE",
+      "commit": "a52f295",
+      "sourceNews": 6,
+      "excludedPromotions": 4,
+      "availableFeaturedMedia": 6
+    },
+    "T1": {
+      "status": "CHECKED",
+      "profileTests": {
+        "passed": 29,
+        "failed": 0
+      },
+      "postgresMigration": {
+        "passed": true,
+        "previousMigrations": 67,
+        "preservedSnapshots": 2,
+        "unchangedLegacyRevision": "10:9"
+      },
+      "fullGateLog": ".codex-tmp/news-implementation/t1-check-final.log",
+      "fullGate": {
+        "passed": 976,
+        "failed": 0,
+        "skipped": 1,
+        "exitCode": 0
+      }
+    },
+    "T2": {
+      "status": "CONTRACT_READY",
+      "file": "docs/plans/2026-11-06-news-admin-interface-contract.md",
+      "uiImplementationAccepted": false
+    }
+  },
+  "baselineCheck": {
+    "passed": 963,
+    "failed": 1,
+    "skipped": 1,
+    "failure": "sourceIdentity changed while own implementation started",
+    "isolatedRepeat": {
+      "test": "static-publication-builder.test.mjs",
+      "passed": 2,
+      "failed": 0
+    }
+  },
+  "archiveChanged": false
+}
