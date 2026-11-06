@@ -1,3 +1,6 @@
+import { editorialCatalog } from './news';
+import { newsRoutes } from '../../../api/src/news-projection';
+import type { EditorialSource } from '../../../api/src/editorial-publication-model';
 import { ADDRESS_PAGE_SLUG, ADDRESS_PAGE_BLOCK_ORDER, ADDRESS_PAGE_VERSION, ADDRESS_PAGE_IMPLEMENTATION } from '../../../api/src/address-page-model';
 import { assertAccountPage } from './account-page';
 import { projectCityHomeBlocks } from '../../../api/src/tariff-collection-model';
@@ -51,14 +54,18 @@ export interface RedirectView {
 
 export interface PublicRouteView {
   id: string;
-  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'GLOBAL_PAGE';
+  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'GLOBAL_PAGE' | 'NEWS_LIST' | 'NEWS_CATEGORY' | 'NEWS_ARTICLE';
   path: string;
   citySlug?: string;
   tariffSlug?: string;
   pageType?: string;
+  page?: number;
+  newsSlug?: string;
+  categorySlug?: string;
 }
 
 export interface SiteCatalog {
+  editorial?: EditorialSource;
   generalHome?: GeneralHomeCatalog;
   homeHero?: Record<string, unknown>;
   homeHeroVersion?: '1.0.0' | '2.0.0';
@@ -68,7 +75,7 @@ export interface SiteCatalog {
   cities: CityView[];
   redirects: RedirectView[];
   sitemap: { excludedPaths: string[] };
-  seoByPath?: Record<string, { title: string; description: string; indexState: 'INDEX' | 'NOINDEX'; ogTitle: string; ogDescription: string; ogImage: string }>;
+  seoByPath?: Record<string, { title: string; description: string; indexState: 'INDEX' | 'NOINDEX'; ogTitle: string; ogDescription: string; ogImage: string; type?: "website" | "article"; ogImageWidth?: number; ogImageHeight?: number; ogImageAlt?: string }>;
 }
 
 export const defaultSiteImagePath = '/images/home-connection-equipment.webp';
@@ -181,6 +188,9 @@ function normalizeRoutes(value: unknown, expected: PublicRouteView[]) {
     ...(item.citySlug ? { citySlug: String(item.citySlug) } : {}),
     ...(item.tariffSlug ? { tariffSlug: String(item.tariffSlug) } : {}),
     ...(item.pageType ? { pageType: String(item.pageType) } : {}),
+    ...(item.page !== undefined ? {page: Number(item.page)} : {}),
+    ...(item.newsSlug ? {newsSlug: String(item.newsSlug)} : {}),
+    ...(item.categorySlug ? {categorySlug: String(item.categorySlug)} : {}),
   }));
   if (JSON.stringify(routes) !== JSON.stringify(expected)) {
     throw new Error('API вернул реестр маршрутов, который не соответствует структуре Release 1');
@@ -254,6 +264,8 @@ function normalizeSeoByPath(value: unknown, routes: PublicRouteView[]): SiteCata
       }
     }
     normalized[route.path] = {
+      ...(meta.type === "article" ? {type: "article" as const} : {}),
+      ...(Number.isSafeInteger(meta.ogImageWidth) && meta.ogImageWidth > 0 && Number.isSafeInteger(meta.ogImageHeight) && meta.ogImageHeight > 0 ? {ogImageWidth:meta.ogImageWidth,ogImageHeight:meta.ogImageHeight,ogImageAlt:String(meta.ogImageAlt ?? "")} : {}),
       title: meta.title.trim(), description: meta.description.trim(), indexState: meta.indexState,
       ogTitle: meta.ogTitle?.trim() || meta.title.trim(),
       ogDescription: meta.ogDescription?.trim() || meta.description.trim(),
@@ -348,7 +360,8 @@ function normalizedCatalog(value: unknown): SiteCatalog {
   const globalPages = payload.globalPages
     .filter((item: Record<string, unknown>) => item?.status === 'PUBLISHED')
     .map((item: Record<string, any>) => normalizePage(item));
-  const expectedRoutes = expectedReleaseOneRoutes(cities, globalPages);
+  const editorial = editorialCatalog(payload.editorial);
+  const expectedRoutes = [...expectedReleaseOneRoutes(cities, globalPages), ...(editorial ? newsRoutes(editorial) : [])];
   const routes = normalizeRoutes(payload.routes, expectedRoutes);
   const redirects = normalizeRedirects(payload.redirects, routes);
   const seoByPath = normalizeSeoByPath(payload.seoByPath, routes);
@@ -370,6 +383,7 @@ function normalizedCatalog(value: unknown): SiteCatalog {
       callbackWithinMinutes: publicDisplay.callbackWithinMinutes,
     },
     ...(generalHome ? { generalHome, homeHero: generalHome.blocks[0].data, homeHeroVersion: '2.0.0' as const } : payload.homeHero ? { homeHero: payload.homeHero, homeHeroVersion: normalizeHomeHeroVersion(payload.homeHeroVersion) } : {}),
+    ...(editorial ? {editorial} : {}),
     globalPages,
     routes,
     cities,

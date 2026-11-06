@@ -288,3 +288,7 @@ HOME и CITY тексты независимы. Короткие factText ста
 - UI перед review/history/preview сохраняет точный checkpoint. Локальная recovery-копия не является опубликованной или подтверждённой серверной редакцией.
 
 T6: история статьи возвращает `restoreCategory.required/options`. Если исходная категория архивирована, POST ARTICLE restore требует явно выбранный `categoryId`; другие restore scopes его не принимают. Текст остаётся draft, CAS и действующая категория проверяются сервером. CATEGORY PUBLISH блокируется при незавершённом retirement даже после смены serving baseline. Review DTO включает прежние canonical/aliases с итогом301/404.
+
+## Новости: точный preview — T8
+
+POST `/:id/preview` под news, news/categories и POST `/editorial/:kind/preview` принимают только `{expectedRevision,mode:"draft"|"published"}`. Сначала клиент сохраняет черновик; несовпадающая ревизия даёт409. Payload содержит kind/entityId/revision/selectedRevision/publicationId, проверенный catalog и editorial projection. Публичная версия читается из обслуживаемого baseline, не из pending snapshot. Только выбранный saved draft и необходимая новая категория перекрывают baseline; остальные рабочие изменения не включаются. Отсутствующая публичная версия возвращает available=false. Приватные mediaRequests остаются авторизованными; `file?kind=...&variant=<sha256>` выбирает только собственную проверенную производную, чужой или неизвестный hash отклоняется. Preview ничего не публикует.

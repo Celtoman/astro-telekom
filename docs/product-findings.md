@@ -922,3 +922,7 @@
 ## Новости: пограничные сценарии редакций, 7 ноября 2026
 
 Статус: CONVERTED, исправление в принятом плане [#534](https://github.com/Celtoman/astro-telekom/issues/534). Независимая проверка уточнила последствия удаления категории и адресов: [#541](https://github.com/Celtoman/astro-telekom/issues/541), [#542](https://github.com/Celtoman/astro-telekom/issues/542), [#543](https://github.com/Celtoman/astro-telekom/issues/543). Полные сценарии и доказательства находятся в issues; архив Figma исключён.
+
+## Новости: точность предпросмотра и узкая пагинация, 7 ноября 2026
+
+Статус: CONVERTED в рамках принятого плана [#534](https://github.com/Celtoman/astro-telekom/issues/534): [#540](https://github.com/Celtoman/astro-telekom/issues/540) — выбор сохранённого материала по постоянному ID и виду сущности, [#544](https://github.com/Celtoman/astro-telekom/issues/544) — два осмысленных ряда узкой пагинации. Это исправления согласованного поведения; отдельный визуальный редизайн не вводится. Полные доказательства остаются в issues.

@@ -67,7 +67,7 @@ export function newsSeoForRoute(editorial:EditorialSource,route:NewsRoute) {
   const category=route.kind==='NEWS_CATEGORY'?editorial.categories.find(c=>c.slug===route.categorySlug):null;
   const owner=article??category??settings;
   const title=String(owner.seo?.title||article?.title||category?.name||settings.title)+(route.page&&route.page>1?` — Страница ${route.page}`:'');
-  const description=String(owner.seo?.description||article?.summary||category?.description||settings.intro);
+  const description=String(owner.seo?.description||article?.summary||category?.description||settings.intro||newsSettingsDefaults().intro);
   const use=owner.social?.image??article?.cover??settings.social?.image;
   const variants=use?editorial.media?.[newsMediaUseKey(use,'social')]:null,image=variants?.at(-1);
   return {title,description,indexState:'INDEX' as const,ogTitle:String(owner.social?.title||title),ogDescription:String(owner.social?.description||description),ogImage:image?.src??'/images/home-connection-equipment.webp',...(image?{ogImageWidth:image.width,ogImageHeight:image.height,ogImageAlt:use.alt}:{}),type:article?'article':'website'};

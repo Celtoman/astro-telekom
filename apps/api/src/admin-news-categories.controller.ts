@@ -15,6 +15,8 @@ export class AdminNewsCategoriesController {
   get(@Param('siteId') siteId:string,@Param('id') id:string){return this.publications.workspace(siteId,'CATEGORY',id)}
   @Patch(':id')
   save(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown,@Req() request:EditorialRequest){const body=editorialBody(raw,['content','expectedRevision','checkpoint']);return this.store.save(siteId,'CATEGORY',id,body.expectedRevision,body.content,request.user?.id,body.checkpoint===true)}
+  @Post(':id/preview')
+  preview(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown){const body=editorialBody(raw,['expectedRevision','mode']);return this.publications.preview(siteId,'CATEGORY',id,body.expectedRevision,body.mode??'draft')}
   @Post(':id/review')
   review(@Param('siteId') siteId:string,@Param('id') id:string,@Body() raw:unknown){const body=editorialBody(raw,['expectedRevision','action','targetCategoryId']);return this.publications.review(siteId,{kind:'CATEGORY',entityId:id,expectedRevision:body.expectedRevision,action:body.action??'PUBLISH',targetCategoryId:body.targetCategoryId})}
   @Post(':id/publish')

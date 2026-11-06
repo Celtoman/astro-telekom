@@ -187,7 +187,7 @@ test('admin production build emits hash-based CSP while allowing only checkbox s
       assert.ok(styles.includes(`'sha256-${previewHash}'`), 'srcdoc stylesheet must be authorized by the inherited parent CSP');
       assert.match(getDirective(csp, 'img-src', path), /https:/);
     } else {
-      assert.ok(!styles.includes(`'sha256-${previewHash}'`), 'preview stylesheet authorization stays on /preview');
+      assert.equal(styles.includes(`'sha256-${previewHash}'`), html.includes('admin:history-navigation'), 'only persistent workspaces inherit the exact build-owned editorial preview CSS');
       assert.doesNotMatch(getDirective(csp, 'img-src', path), /https:/);
     }
     assert.equal(getDirective(csp, 'style-src-attr', path), "style-src-attr 'unsafe-inline'");

@@ -1,0 +1,7 @@
+---
+import type { NotFoundContent } from '../../../api/src/news-types';
+import { renderNotFound } from '../lib/news-render';
+import NewsStyles from './news/NewsStyles.astro';
+interface Props { content: NotFoundContent }
+---
+<Fragment set:html={renderNotFound(Astro.props.content)} /><NewsStyles />

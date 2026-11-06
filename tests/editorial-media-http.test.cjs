@@ -7,8 +7,8 @@ const {EditorialMediaService}=require('../apps/api/dist/editorial-media.service.
 const {AdminTokenGuard}=require('../apps/api/dist/admin-token.guard.js');
 const {ADMIN_SESSION_COOKIE,AuthService}=require('../apps/api/dist/auth.service.js');
 test('media HTTP uses cookie authentication, bounded multipart and private no-store image responses',async()=>{
- const uploads=[];
- const media={upload:async(siteId,input,mime)=>{uploads.push({siteId,input,mime});return{id:'uploaded'}},preview:async()=>Buffer.from('private-image')};
+ const uploads=[],previews=[];
+ const media={upload:async(siteId,input,mime)=>{uploads.push({siteId,input,mime});return{id:'uploaded'}},preview:async(...args)=>{previews.push(args);return Buffer.from('private-image')}};
  const auth={getUserByToken:async token=>token==='fixture-session'?{id:'editor'}:null};
  class Fixture{};Module({controllers:[AdminEditorialMediaController],providers:[{provide:EditorialMediaService,useValue:media},AdminTokenGuard,{provide:AuthService,useValue:auth}]})(Fixture);
  const app=await NestFactory.create(Fixture,new FastifyAdapter({bodyLimit:35*1024*1024}),{logger:false,abortOnError:false});
@@ -21,5 +21,6 @@ test('media HTTP uses cookie authentication, bounded multipart and private no-st
   const tooLarge=Buffer.concat([Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="big.png"\r\nContent-Type: image/png\r\n\r\n`),Buffer.alloc(10*1024*1024+1),Buffer.from(`\r\n--${boundary}--\r\n`)]);
   const rejected=await server.inject({method:'POST',url,headers,payload:tooLarge});assert.equal(rejected.statusCode,400,rejected.body);assert.equal(uploads.length,1);
   const image=await server.inject({method:'GET',url:`${url}/uploaded/file`,headers:{cookie:headers.cookie}});assert.equal(image.statusCode,200);assert.equal(image.headers['cache-control'],'private, no-store');assert.equal(image.headers['x-content-type-options'],'nosniff');assert.match(image.headers['content-type'],/image\/webp/);
+  const exact=await server.inject({method:'GET',url:`${url}/uploaded/file?kind=cover&variant=${'b'.repeat(64)}`,headers:{cookie:headers.cookie}});assert.equal(exact.statusCode,200);assert.deepEqual(previews.at(-1),['site-1','uploaded','cover',undefined,'b'.repeat(64)]);
  }finally{await app.close()}
 });

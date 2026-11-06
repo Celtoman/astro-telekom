@@ -1,0 +1,21 @@
+---
+import { newsStructuredData } from '../../lib/news-seo';
+import { publicAsset } from '../../data/public-asset';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsContent from '../../components/news/NewsContent.astro';
+import { loadSiteData, seoMeta } from '../../data/site';
+import { newsView } from '../../data/news';
+import type { NewsRoute } from '../../../../api/src/news-projection';
+export async function getStaticPaths() {
+  const catalog = await loadSiteData();
+  return catalog.routes.filter(r => ['NEWS_LIST', 'NEWS_CATEGORY', 'NEWS_ARTICLE'].includes(r.kind)).map(route => ({ params: { path: route.path === '/news' ? undefined : route.path.slice(6) }, props: { route } }));
+}
+const { route } = Astro.props as { route: NewsRoute };
+const catalog = await loadSiteData();
+if (!catalog.editorial) throw new Error('Редакционный снимок отсутствует');
+const view = newsView(catalog.editorial, route);
+const meta = seoMeta(catalog, route.path, { title: catalog.editorial.settings.title, description: catalog.editorial.settings.intro });
+---
+<BaseLayout structuredData={newsStructuredData(view, route.path, Astro.site!, publicAsset)} ogType={view.kind === "article" ? "article" : "website"} ogImageWidth={meta.ogImageWidth} ogImageHeight={meta.ogImageHeight} ogImageAlt={meta.ogImageAlt} articlePublishedTime={view.kind === "article" ? view.article.publishedDate : undefined} articleModifiedTime={view.kind === "article" ? view.article.dateModified : undefined} title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} indexable={meta.indexState !== 'NOINDEX'} site={catalog.site}>
+  <NewsContent {view} />
+</BaseLayout>

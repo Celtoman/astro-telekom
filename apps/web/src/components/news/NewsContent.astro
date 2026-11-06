@@ -1,0 +1,10 @@
+---
+import type { NewsView } from '../../data/news';
+import { renderNewsList, renderNewsArticle } from '../../lib/news-render';
+import { publicAsset } from '../../data/public-asset';
+import NewsStyles from './NewsStyles.astro';
+interface Props { view: NewsView }
+const { view } = Astro.props;
+---
+<Fragment set:html={view.kind === 'article' ? renderNewsArticle(view, { asset: publicAsset }) : renderNewsList(view, { asset: publicAsset })} />
+<NewsStyles />

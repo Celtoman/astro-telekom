@@ -6,6 +6,8 @@ import { publicAsset } from '../../data/public-asset';
 import { publishedMoscow } from '../../lib/city-context.mjs';
 import { projectBenefitFacts } from '../../lib/city-home-render';
 import { publicDisplayForCatalog } from '../../lib/public-display';
+import type { EditorialSource } from '../../../../api/src/editorial-publication-model';
+import HomeNews from './HomeNews.astro';
 import GeneralHomeHero from '../GeneralHomeHero.astro';
 import AddressForm from '../AddressForm.astro';
 import HomeAddressEntry from './HomeAddressEntry.astro';
@@ -17,8 +19,8 @@ import HomeMorePossibilities from './HomeMorePossibilities.astro';
 import HomeConnectionHelp from './HomeConnectionHelp.astro';
 import HomeCityDirectory from './HomeCityDirectory.astro';
 import HomeFaq from './HomeFaq.astro';
-interface Props { home: GeneralHomeCatalog; site: SiteView; cities: CityView[]; apiUrl: string; addressDialogId: string }
-const { home, site, cities, apiUrl, addressDialogId } = Astro.props as Props;
+interface Props { editorial?: EditorialSource; home: GeneralHomeCatalog; site: SiteView; cities: CityView[]; apiUrl: string; addressDialogId: string }
+const { home, site, cities, apiUrl, addressDialogId, editorial } = Astro.props as Props;
 const city = publishedMoscow(cities) ?? undefined;
 const phone = site.connectionPhone, phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
 const address = generalHomeBlock(home, 'home.address_check');
@@ -36,6 +38,7 @@ const display = publicDisplayForCatalog(site, home);
   <HomeConnectionSteps content={generalHomeBlock(home, 'home.connection_steps')} {phone} {phoneHref} addressDialogId={city ? addressDialogId : null} />
   <HomeMovix content={generalHomeBlock(home, 'home.movix')} tariffHref={city ? `/${city.slug}#tariffs` : null} />
   <HomeMorePossibilities content={generalHomeBlock(home, 'home.more_possibilities')} />
+  <HomeNews {editorial} />
   <HomeConnectionHelp content={generalHomeBlock(home, 'home.connection_help')} {phone} {phoneHref} {apiUrl} siteSlug={site.slug} callbackWithinMinutes={display.callbackWithinMinutes} />
   <HomeCityDirectory content={generalHomeBlock(home, 'home.city_directory')} {cities} />
   <HomeFaq content={generalHomeBlock(home, 'home.faq')} />

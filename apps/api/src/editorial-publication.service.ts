@@ -1,4 +1,6 @@
 import { retiredEditorialPaths } from './editorial-redirects';
+import { editorialPreviewOverlay } from './editorial-preview-model';
+import { mediaCropKey } from './editorial-media';
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { PrismaService } from './prisma.service';
@@ -179,6 +181,30 @@ export class EditorialPublicationService {
     let publishedAvailable=true,live:Array<Record<string,any>>=[],categories:Array<Record<string,any>>=[],baseline:Awaited<ReturnType<typeof editorialServingSource>>['source']|null=null;
     try{baseline=(await editorialServingSource(this.prisma,site)).source;const source=baseline.editorial;live=source?.articles??[];categories=source?.categories??[]}catch{publishedAvailable=false}
     return {items:rows.map(row=>({id:row.id,name:row.name,slug:row.slug,revision:row.revision,totalCount:row._count.articles,liveCount:publishedAvailable?live.filter(a=>a.categoryId===row.id).length:null,publishedRevision:categories.find(c=>c.id===row.id)?.revision??null,publishedName:categories.find(c=>c.id===row.id)?.name??null,publicUrl:baseline?editorialLiveUrl(baseline,'CATEGORY',row.id):null,pendingRemoval:pending.some(item=>item.entityId===row.id)})),publishedAvailable};
+  }
+  async preview(siteId:string,kind:EditorialKind,id:string,expectedRevision:number,mode:string='draft') {
+    if(!Number.isSafeInteger(expectedRevision)||expectedRevision<0||!['draft','published'].includes(mode))throw new BadRequestException('Укажите сохранённую редакцию и режим предпросмотра.');
+    const site=await this.store.requireSite(siteId),row=await this.store.read(siteId,kind,id);
+    if(row.revision!==expectedRevision)throw new ConflictException('Редакция изменилась. Сохраните или обновите материал перед предпросмотром.');
+    const baseline=await editorialServingSource(this.prisma,site);
+    let editorial=baseline.source.editorial;
+    if(mode==='draft'){
+      const content=row.content as Record<string,any>;
+      const category=kind==='ARTICLE'&&content.categoryId&&!editorial?.categories.some(c=>c.id===content.categoryId)?await this.store.row(siteId,'CATEGORY',content.categoryId):null;
+      editorial=editorialPreviewOverlay(editorial,kind,row as typeof row&{content:Record<string,any>},category?{...category.content as object,id:category.id,revision:category.revision}:undefined);
+    }
+    const selected=kind==='ARTICLE'?editorial?.articles.find(a=>a.id===row.id):kind==='CATEGORY'?editorial?.categories.find(c=>c.id===row.id):kind==='NEWS_SETTINGS'?(editorial?.newsEnabled===false?null:editorial?.settings):editorial?.notFound;
+    if(mode==='draft'&&selected&&!(selected.title||selected.name)?.trim())throw new BadRequestException('Добавьте заголовок или название перед предпросмотром.');
+    if(kind==='ARTICLE'&&selected&&!editorial?.categories.some(c=>c.id===selected.categoryId))throw new BadRequestException('Выберите категорию перед предпросмотром.');
+    if(!selected&&kind!=='NOT_FOUND')return {available:false,mode,revision:row.revision,publicationId:baseline.publication.id};
+    if(editorial)editorial=await this.media.prepare(siteId,editorial);
+    const mediaRequests:Record<string,string>={};
+    for(const [key,variants] of Object.entries(editorial?.media??{})){
+      const [assetId,mediaKind,crop]=key.split('|');const area=crop==='default'?null:JSON.parse(crop);
+      const cropKey=area?mediaCropKey(mediaKind as 'cover'|'social',{x:area[0],y:area[1],width:area[2],height:area[3]}):null;
+      for(const variant of variants){const query=new URLSearchParams({kind:mediaKind,variant:variant.sha256,...(cropKey?{crop:cropKey}:{})});mediaRequests[variant.src]=`/admin/sites/${encodeURIComponent(siteId)}/news/media/${encodeURIComponent(assetId)}/file?${query}`;}
+    }
+    return {available:true,mode,kind,entityId:row.id,revision:row.revision,selectedRevision:selected?.revision??null,publicationId:baseline.publication.id,editorial:editorial??null,mediaRequests,catalog:this.catalog.renderSource(baseline.source)};
   }
   async relatedOptions(siteId:string,query:Parameters<typeof relatedNewsOptions>[1]) {
     const site=await this.store.requireSite(siteId),baseline=await editorialServingSource(this.prisma,site);

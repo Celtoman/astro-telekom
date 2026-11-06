@@ -1,0 +1,11 @@
+---
+import type { EditorialSource } from '../../../../api/src/editorial-publication-model';
+import { homeNews } from '../../data/news';
+import { renderHomeNews } from '../../lib/news-render';
+import { publicAsset } from '../../data/public-asset';
+import NewsStyles from '../news/NewsStyles.astro';
+interface Props { editorial?: EditorialSource }
+const { editorial } = Astro.props;
+const articles = homeNews(editorial);
+---
+{editorial && articles.length > 0 && <><Fragment set:html={renderHomeNews(editorial, articles, { asset: publicAsset })} /><NewsStyles /></>}

@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const sources = [
+  ['news', 'components/news/NewsStyles.astro'],
   ['account', 'components/account/AccountPageStyles.astro'],
   ['account', 'components/general-home/AddressOnly.astro'],
   ['account', 'components/general-home/HomeAddressFormStyles.astro'],
@@ -40,6 +41,7 @@ assetPaths.push(...readdirSync(new URL('../apps/web/public/images/account/v1/', 
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/general-home/', import.meta.url)).filter(name => /^[a-z0-9-]+\.(?:png|svg)$/.test(name)).map(name => `/images/general-home/${name}`));
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/city-home/', import.meta.url)).filter(name => /^[a-z0-9-]+\.svg$/.test(name)).map(name => `/images/city-home/${name}`));
 assetPaths.push(...['available', 'alternatives', 'none', 'retry'].map(name => `/images/address-page/${name}.svg`));
+assetPaths.push('/images/news/broadcast.svg');
 assetPaths.push('/images/legal/caret-down.svg', '/images/legal/caret-up.svg');
 assetPaths.push('/images/cities-directory/search.svg', '/images/cities-directory/clear.svg');
 

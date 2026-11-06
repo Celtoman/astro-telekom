@@ -1,0 +1,5 @@
+---
+import { renderBreadcrumbs, type Breadcrumb } from '../../lib/breadcrumb-render';
+interface Props { items: Breadcrumb[] }
+---
+<Fragment set:html={renderBreadcrumbs(Astro.props.items)} />

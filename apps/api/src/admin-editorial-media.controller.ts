@@ -27,8 +27,8 @@ export class AdminEditorialMediaController {
   @Get(':id')
   async get(@Param('siteId') siteId: string, @Param('id') id: string) { return this.media.response(await this.media.get(siteId,id)); }
   @Get(':id/file')
-  async file(@Param('siteId') siteId: string, @Param('id') id: string, @Query('kind') kind: string, @Query('crop') crop: string, @Res() reply: ImageReply) {
-    const file = await this.media.preview(siteId,id,kind,crop);
+  async file(@Param('siteId') siteId: string, @Param('id') id: string, @Query('kind') kind: string, @Query('crop') crop: string, @Query('variant') variant: string, @Res() reply: ImageReply) {
+    const file = await this.media.preview(siteId,id,kind,crop,variant);
     reply.header('cache-control','private, no-store').header('x-content-type-options','nosniff').type('image/webp').send(file);
   }
   @Post(':id/crop')

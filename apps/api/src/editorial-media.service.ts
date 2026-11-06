@@ -60,12 +60,14 @@ export class EditorialMediaService {
     if (!asset) throw new NotFoundException('Изображение не найдено');
     return asset;
   }
-  async preview(siteId: string, id: string, kind: string, cropKey?: string) {
+  async preview(siteId: string, id: string, kind: string, cropKey?: string, variantHash?: string) {
     const asset = await this.get(siteId,id);
     const derivatives = asset.derivatives as MediaDerivatives;
     const variants = cropKey ? derivatives.crops?.[cropKey] : kind === 'cover' ? derivatives.cover : kind === 'social' ? derivatives.social : derivatives.body;
     if (!variants?.length) throw new NotFoundException('Вариант изображения не найден');
-    const variant = variants[variants.length-1];
+    if(variantHash!==undefined&&!/^[a-f0-9]{64}$/.test(variantHash))throw new BadRequestException('Некорректный вариант изображения');
+    const variant = variantHash ? variants.find(item=>item.sha256===variantHash) : variants[variants.length-1];
+    if(!variant)throw new NotFoundException('Вариант изображения не принадлежит этому материалу');
     const buffer = await readFile(safeMediaPath(this.root(),variant.key));
     if (mediaHash(buffer) !== variant.sha256) throw new ServiceUnavailableException('Контрольная сумма изображения не совпала');
     return buffer;

@@ -282,3 +282,6 @@
 | TD-224 | [#542](https://github.com/Celtoman/astro-telekom/issues/542) ✅ | История восстанавливает текст с явным выбором категории после переноса |
 
 | TD-225 | [#543](https://github.com/Celtoman/astro-telekom/issues/543) ✅ | CATEGORY PUBLISH защищён от serving-but-unacknowledged retirement |
+
+| TD-222 | [#540](https://github.com/Celtoman/astro-telekom/issues/540) ✅ | Предпросмотр выбирает сохранённую сущность по ID/kind при коллизии слага |
+| TD-226 | [#544](https://github.com/Celtoman/astro-telekom/issues/544) ✅ | Узкая пагинация разделяет номера и ряд действий справа |

@@ -204,21 +204,22 @@ function renderAddress(catalog, route) {
 export function previewStyleText(publicStyles) {
   return publicStyles.replaceAll('</style', '<\\/style') + '[class^="preview-"]{display:contents}a[aria-disabled],button:disabled{cursor:default}'
 }
-export function buildPreviewDocument(catalog, routePath, publicStyles = '', assets = {}) {
+export function buildPreviewDocument(catalog, routePath, publicStyles = '', assets = {}, override) {
   const published = item => !item.status || item.status === 'PUBLISHED'
   catalog = { ...catalog, previewAssets: assets, globalPages: list(catalog.globalPages).filter(published), cities: list(catalog.cities).filter(published).map(city => ({ ...city, pages: list(city.pages).filter(published), tariffs: list(city.tariffs).filter(published) })) }
   catalog.site = { ...catalog.site, publicDisplay: publicDisplayForCatalog(catalog.site, catalog.generalHome) };
-  const route = list(catalog?.routes).find(item => item.path === routePath)
+  const route = override ? {kind:'EDITORIAL_PREVIEW',path:routePath} : list(catalog?.routes).find(item => item.path === routePath)
   if (!route) throw new Error('Маршрут отсутствует в рабочем Release 1 inventory')
   const city = route.citySlug ? cityBySlug(catalog, route.citySlug) : null
   const shellOptions = { interactive: false, asset: path => asset(catalog, path), city: city || publishedMoscow(catalog.cities) || undefined }
   let content
-  if (route.kind === 'HOME') content = renderHome(catalog)
+  if (override) content = override.body
+  else if (route.kind === 'HOME') content = renderHome(catalog)
   else if (route.kind === 'CITY_HOME') content = renderCity(catalog, route)
   else if (route.kind === 'CITY_ADDRESS_CHECK') content = renderAddress(catalog, route)
   else if (route.kind === 'CITY_TARIFF_DETAIL') content = renderTariff(catalog, route)
   else if (route.kind === 'GLOBAL_PAGE') content = renderGlobal(catalog, route)
   else throw new Error('Тип маршрута не поддерживается предпросмотром')
   const assetOrigins = [...new Set(Object.values(assets).filter(value => /^https?:\/\//.test(value)).map(value => new URL(value).origin))].map(html).join(' ')
-  return `<!doctype html><html lang="ru" class="full-general-home"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https: ${assetOrigins}; font-src data:"><title>${html(routeLabel(catalog, route))} — предпросмотр</title><style>${previewStyleText(publicStyles)}</style></head><body class="general-home-page${route.kind === 'CITY_HOME' && city?.pages?.find(page => page.type === 'HOME' && page.slug === '')?.content?.homeCompositionVersion === '3.0.0' ? ' city-home-page' : ''}">${wrap('homeshell', renderHomeHeader(catalog.site, shellOptions))}<main>${content}</main>${wrap('homeshell', renderHomeFooter(catalog.site, shellOptions))}</body></html>`
+  return `<!doctype html><html lang="ru" class="full-general-home"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https: ${assetOrigins}; font-src data:"><title>${html(override?.title || routeLabel(catalog, route))} — предпросмотр</title><style>${previewStyleText(publicStyles)}</style></head><body class="general-home-page${route.kind === 'CITY_HOME' && city?.pages?.find(page => page.type === 'HOME' && page.slug === '')?.content?.homeCompositionVersion === '3.0.0' ? ' city-home-page' : ''}">${wrap('homeshell', renderHomeHeader(catalog.site, shellOptions))}<main>${content}</main>${wrap('homeshell', renderHomeFooter(catalog.site, shellOptions))}</body></html>`
 }

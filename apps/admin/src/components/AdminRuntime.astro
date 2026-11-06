@@ -1,5 +1,11 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import { createHash } from 'node:crypto';
+import publicPreviewStyles from 'virtual:preview-public-styles';
+import { previewStyleText } from '../lib/preview-document.mjs';
+// Persistent workspace may open the selected editorial preview after navigation.
+// Authorize only this exact build-owned CSS; scripts and arbitrary inline styles stay blocked.
+Astro.csp?.insertStyleHash(`sha256-${createHash('sha256').update(previewStyleText(publicPreviewStyles)).digest('base64')}`);
 ---
 <script is:inline transition:persist="admin-history-guard">
   // Register before the router's module runs: listeners on window itself follow
