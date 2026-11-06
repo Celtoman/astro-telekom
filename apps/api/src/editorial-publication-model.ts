@@ -1,15 +1,17 @@
-import { newsSettingsDefaults } from './news-types';
+import { newsSettingsDefaults, type PublishedNewsMediaVariant } from './news-types';
 
 export type EditorialKind = 'ARTICLE' | 'CATEGORY' | 'NEWS_SETTINGS' | 'NOT_FOUND';
 export type EditorialAction = 'PUBLISH' | 'WITHDRAW' | 'REASSIGN';
 export type EditorialChange = { kind: EditorialKind; entityId: string; revision: number; action: EditorialAction; snapshot: Record<string, any> | null; targetCategoryId?: string; redirects?: Array<Record<string, any>> };
-export type EditorialSource = { version: '1.0.0'; articles: Array<Record<string, any>>; categories: Array<Record<string, any>>; settings: Record<string, any>; notFound: Record<string, any> | null };
+export type EditorialSource = { version: '1.0.0'; articles: Array<Record<string, any>>; categories: Array<Record<string, any>>; settings: Record<string, any>; notFound: Record<string, any> | null; media?:Record<string,PublishedNewsMediaVariant[]>;redirectIds?:string[];newsEnabled?:boolean };
 export function emptyEditorial(): EditorialSource { return { version: '1.0.0', articles: [], categories: [], settings: newsSettingsDefaults(), notFound: null }; }
 
 /** Only selected immutable revisions enter this source. Never load unselected working rows here. */
 export function applyEditorialChangeSet<T extends Record<string, any>>(baseline: T, change: EditorialChange): T & { editorial: EditorialSource } {
   const next = structuredClone(baseline) as T & { editorial: EditorialSource; redirects?: Array<Record<string, any>> };
   next.editorial = next.editorial ?? emptyEditorial();
+  if(!baseline.editorial&&change.kind==='NOT_FOUND')next.editorial.newsEnabled=false;
+  if(change.kind!=='NOT_FOUND')next.editorial.newsEnabled=true;
   const e = next.editorial;
   if (change.kind === 'ARTICLE') {
     const old = e.articles.find(item => item.id === change.entityId);
@@ -30,6 +32,10 @@ export function applyEditorialChangeSet<T extends Record<string, any>>(baseline:
   if (change.redirects?.length) {
     const paths = new Set(change.redirects.map(item => item.sourcePath));
     next.redirects = [...(next.redirects ?? []).filter(item => !paths.has(item.sourcePath)), ...structuredClone(change.redirects)];
+  }
+  if (change.redirects?.length || e.redirectIds) {
+    const owned=new Set([...(e.redirectIds??[]),...(change.redirects??[]).map(item=>item.id)]);
+    e.redirectIds=(next.redirects??[]).filter(item=>owned.has(item.id)).map(item=>item.id);
   }
   return next;
 }

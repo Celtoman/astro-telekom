@@ -2,7 +2,7 @@ import { ConflictException, ServiceUnavailableException } from '@nestjs/common';
 import { createHash } from 'node:crypto';
 
 type Receipt = Record<string, unknown>;
-const receiptFields = ['artifactId', 'publicationId', 'siteId', 'siteRevision', 'rendererId', 'catalogDigest', 'rebuildId', 'rebuildRevision', 'manifestDigest'];
+const receiptFields = ['artifactId', 'publicationId', 'siteId', 'siteRevision', 'releaseSequence', 'basePublicationId', 'rendererId', 'catalogDigest', 'rebuildId', 'rebuildRevision', 'manifestDigest'];
 
 export async function confirmStaticReceipt(rebuildId: string, revision: number, submitted: Receipt): Promise<Receipt> {
   try {
@@ -25,9 +25,11 @@ export async function confirmStaticReceipt(rebuildId: string, revision: number, 
   }
 }
 
-export function assertReceiptSnapshot(receipt: Receipt, rebuild: { id: string; siteId: string | null; processingRevision: number; processingPublicationId: string | null }, publication: { id: string; siteId: string; siteRevision: number; status: string; catalog: unknown } | null) {
+export function assertReceiptSnapshot(receipt: Receipt, rebuild: { id: string; siteId: string | null; processingRevision: number; processingPublicationId: string | null }, publication: { id: string; siteId: string; siteRevision: number; releaseSequence?:number; basePublicationId?:string|null; scopeKey?:string; status: string; catalog: unknown } | null) {
   if (!publication || !['PENDING', 'RUNNING', 'SUCCEEDED'].includes(publication.status)
     || receipt.publicationId !== publication.id || receipt.siteId !== publication.siteId || receipt.siteRevision !== publication.siteRevision
+    || (receipt.releaseSequence !== undefined && receipt.releaseSequence !== publication.releaseSequence)
+    || (publication.scopeKey && publication.scopeKey !== 'legacy' && (receipt.releaseSequence !== publication.releaseSequence || receipt.basePublicationId !== publication.basePublicationId))
     || rebuild.processingPublicationId !== publication.id || rebuild.siteId !== publication.siteId
     || receipt.rebuildId !== rebuild.id || receipt.rebuildRevision !== rebuild.processingRevision
     || receipt.catalogDigest !== createHash('sha256').update(JSON.stringify(publication.catalog)).digest('hex')) {

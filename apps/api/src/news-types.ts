@@ -1,6 +1,8 @@
 export const NEWS_VERSION = '1.0.0' as const;
 export const NEWS_PAGE_SIZE = 12;
 export type MediaUse = { assetId: string; alt: string; caption?: string; decorative?: boolean; crop?: { x: number; y: number; width: number; height: number } };
+export function newsMediaUseKey(use:MediaUse,kind:'body'|'cover'|'social') { return `${use.assetId}|${kind}|${use.crop?JSON.stringify([use.crop.x,use.crop.y,use.crop.width,use.crop.height]):'default'}`; }
+export type PublishedNewsMediaVariant = {src:string;sourceKey:string;sha256:string;width:number;height:number;bytes:number};
 export type NewsAuthor = { type: 'Person' | 'Organization'; name: string; url?: string };
 export type NewsBodyNode = { type: string; text?: string; attrs?: Record<string, unknown>; marks?: Array<{ type: string; attrs?: Record<string, unknown> }>; content?: NewsBodyNode[] };
 export type NewsSeo = { title?: string; description?: string };

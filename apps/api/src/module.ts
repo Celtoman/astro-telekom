@@ -1,6 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AdminEditorialMediaController } from './admin-editorial-media.controller';
 import { EditorialMediaService } from './editorial-media.service';
+import { AdminNewsController } from './admin-news.controller';
+import { AdminNewsCategoriesController } from './admin-news-categories.controller';
+import { AdminEditorialSettingsController } from './admin-editorial-settings.controller';
+import { EditorialStoreService } from './editorial-store.service';
+import { EditorialPublicationService } from './editorial-publication.service';
+import { EditorialMediaRegistryService } from './editorial-media-registry.service';
 import { CitiesController } from './cities.controller';
 import { HealthController } from './health.controller';
 import { PrismaService } from './prisma.service';
@@ -68,6 +74,9 @@ import { CodeReleaseService } from './code-release.service';
 @Module({
   controllers: [
     AdminEditorialMediaController,
+    AdminNewsController,
+    AdminNewsCategoriesController,
+    AdminEditorialSettingsController,
     HealthController,
     CitiesController,
     AddressChecksController,
@@ -105,6 +114,6 @@ import { CodeReleaseService } from './code-release.service';
     AdminTariffTemplateController,
     AdminPageTemplatesController,
   ],
-  providers: [EditorialMediaService, PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, CodeReleaseService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, TariffPurgeService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [EditorialStoreService, EditorialPublicationService, EditorialMediaRegistryService, EditorialMediaService, PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, CodeReleaseService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, TariffPurgeService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

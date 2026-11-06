@@ -28,7 +28,7 @@ try {
   await client.connect();
   await client.query(`CREATE TABLE "Site" (id text PRIMARY KEY, slug text, status text);
     CREATE TABLE "SitePublicationValidation" (id text PRIMARY KEY, "sourceSnapshot" jsonb);
-    CREATE TABLE "SitePublication" (id text PRIMARY KEY, "siteId" text, "siteRevision" int, status text, catalog jsonb, "validationId" text);`);
+    CREATE TABLE "SitePublication" (id text PRIMARY KEY, "siteId" text, "siteRevision" int, status text, catalog jsonb, "validationId" text, "releaseSequence" serial);`);
   const template = { kind: 'CITY_HOME', content: { firstScreenPassportVersion: '1.0.0' }, blocks: [{ blockType: 'hero', data: { title: 'Город {CITY_NAME}' } }] };
   const home = { kind: 'HOME', content: { firstScreenPassportVersion: '1.0.0' }, blocks: [{ blockType: 'home.hero', data: { title: 'Главная' } }] };
   const catalog = {
@@ -42,10 +42,16 @@ try {
   const source = { pageTemplates: [home, template, { kind: 'TARIFF', content: { unused: true } }], cities: catalog.cities };
   await client.query('INSERT INTO "Site" VALUES ($1,$2,$3)', ['s', 'site', 'PUBLISHED']);
   await client.query('INSERT INTO "SitePublicationValidation" VALUES ($1,$2)', ['v', source]);
-  await client.query('INSERT INTO "SitePublication" VALUES ($1,$2,$3,$4,$5,$6)', ['old', 's', 1, 'SUCCEEDED', { ...catalog, homeHero: { title: 'Old' } }, null]);
-  await client.query('INSERT INTO "SitePublication" VALUES ($1,$2,$3,$4,$5,$6)', ['current', 's', 2, 'SUCCEEDED', catalog, 'v']);
-  await client.query('INSERT INTO "SitePublication" VALUES ($1,$2,$3,$4,$5,$6)', ['pending', 's', 3, 'PENDING', {}, null]);
+  const insertPublication='INSERT INTO "SitePublication" (id,"siteId","siteRevision",status,catalog,"validationId") VALUES ($1,$2,$3,$4,$5,$6)';
+  await client.query(insertPublication, ['old', 's', 1, 'SUCCEEDED', { ...catalog, homeHero: { title: 'Old' } }, null]);
+  await client.query(insertPublication, ['current', 's', 2, 'SUCCEEDED', catalog, 'v']);
+  await client.query(insertPublication, ['pending', 's', 3, 'PENDING', {}, null]);
   const prisma = { $queryRaw: async sql => (await client.query(sql.text, sql.values)).rows };
+  const scoped={...catalog,homeHero:{title:'Scoped latest'},site:{...catalog.site,connectionPhone:'78001234567'}};
+  await client.query(insertPublication,['scoped','s',2,'SUCCEEDED',scoped,'v']);
+  assert.equal((await publishedPageTemplateView(prisma,'s')).homeHero.title,'Scoped latest');
+  assert.equal((await publishedVariableContext(prisma,'site')).site.connectionPhone,'78001234567');
+  await client.query('DELETE FROM "SitePublication" WHERE id=$1',['scoped']);
   const blocks = await publishedPageTemplateView(prisma, 's');
   assert.deepEqual(blocks, { homeHero: catalog.homeHero, generalHome: null, pageTemplates: [home, template] });
   assert.equal(await publishedPageTemplateView(prisma, 'missing'), null);

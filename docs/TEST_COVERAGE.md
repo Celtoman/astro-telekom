@@ -1,5 +1,16 @@
 # Покрытие тестами
 
+## Scoped backend — T4
+
+- `editorial-api.test.cjs`: настоящий Nest/Fastify HTTP, cookie guard всех scopes, static categories/operations против dynamic article route, допустимые settings keys, write-body whitelist и actor.
+- `news-catalog.test.cjs`: article/category/pagination inventory и отдельные SEO overrides поверх прежних routes; malformed slug даёт blocking report.
+- `news-projection.test.cjs`: 12 записей, empty/out-of-range, скрытие пустых категорий, стабильная дата/id сортировка, related category/fresh/manual fallback; 7/5-slot pagination без скрытия одной страницы многоточием.
+- `editorial-release-order.test.mjs`: независимый sequence, CODE upgrade старого manifest при неизменном snapshot, CMS при одинаковом legacy revision, stale baseline и CODE sequence mutation. Caddy control HTTP — fixture.
+- `editorial-media-artifact.test.mjs`: копирование только выбранных производных, отказ unsafe path/size/hash/manifest; оригинал не попадает в public tree.
+- `editorial-publication-model.test.cjs`: выпуск только 404 не запускает news routes. `redirects.test.cjs`: managed aliases защищены от ручной правки; ручной redirect может вести на live news и не занимает её URL.
+- `scripts/rehearse-editorial-store.mjs`: отдельный PostgreSQL store/concurrency/history/restore rehearsal; `scripts/rehearse-editorial-publication.mjs`: шесть scoped SQL releases, draft isolation, edit-during-publish, stale review/idempotency, slug301/withdrawal/404/legacy capture. Queue/ack fixtures не доказывают внешний release. Принимают только local `news_rehearsal` URL и удаляют собственный fixture site/provider.
+- `scripts/rehearse-news-migration.mjs` расширен 0069: ручной redirect сохраняется без автоматического owner; исторические JSON и legacy revisions не меняются.
+
 ## Редакционные медиа и текст — T3
 
 - `editorial-media.test.cjs`: декодирование и пределы MIME/signature/bytes/pixels; геометрия body/16:9/social без увеличения; неизменность входа, crop и безопасные storage keys, сбор ссылок на assets.

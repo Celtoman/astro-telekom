@@ -24,6 +24,8 @@ function normalizeIdentity(input) {
     if (!Number.isSafeInteger(input[field]) || input[field] < (field === 'siteRevision' ? 0 : 1)) throw new Error(`Invalid ${field}`);
   }
   if (!Array.isArray(input.redirects)) throw new Error('Redirect inventory is required');
+  if (input.releaseSequence !== undefined && (!Number.isSafeInteger(input.releaseSequence) || input.releaseSequence < 1)) throw new Error('Invalid releaseSequence');
+  if (input.basePublicationId !== undefined && input.basePublicationId !== null && !ID.test(input.basePublicationId)) throw new Error('Invalid basePublicationId');
   const paths = new Set();
   const redirects = input.redirects.map(({ id, sourcePath }) => {
     if (!ID.test(id || '') || !/^\/[a-z0-9._~/-]+$/.test(sourcePath || '')
@@ -37,6 +39,8 @@ function normalizeIdentity(input) {
   return {
     formatVersion: 1, artifactId: input.artifactId, rendererId: input.rendererId, catalogDigest: input.catalogDigest,
     siteId: input.siteId, siteSlug: input.siteSlug, siteRevision: input.siteRevision,
+    ...(input.releaseSequence === undefined ? {} : {releaseSequence:input.releaseSequence}),
+    ...(input.basePublicationId ? {basePublicationId:input.basePublicationId} : {}),
     publicationId: input.publicationId, rebuildId: input.rebuildId, rebuildRevision: input.rebuildRevision, redirects,
   };
 }
@@ -125,7 +129,7 @@ export async function readIntegrityRecord(directory, name, digestField = 'record
 }
 
 export function verifyArtifactReceipt(artifact, receipt) {
-  if (receipt.status !== 'SUCCEEDED' || ['artifactId', 'publicationId', 'siteId', 'siteRevision', 'rendererId', 'catalogDigest', 'rebuildId', 'rebuildRevision', 'manifestDigest']
+  if (receipt.status !== 'SUCCEEDED' || ['artifactId', 'publicationId', 'siteId', 'siteRevision', 'releaseSequence', 'basePublicationId', 'rendererId', 'catalogDigest', 'rebuildId', 'rebuildRevision', 'manifestDigest']
     .some(field => receipt[field] !== artifact[field])) throw new Error('Publication receipt integrity mismatch');
   return receipt;
 }
@@ -223,6 +227,8 @@ export async function recordReceipt(publicationRoot, artifact) {
   const receipt = {
     status: 'SUCCEEDED', artifactId: artifact.artifactId, publicationId: artifact.publicationId,
     siteId: artifact.siteId, siteRevision: artifact.siteRevision, rendererId: artifact.rendererId, catalogDigest: artifact.catalogDigest,
+    ...(artifact.releaseSequence === undefined ? {} : {releaseSequence:artifact.releaseSequence}),
+    ...(artifact.basePublicationId ? {basePublicationId:artifact.basePublicationId} : {}),
     rebuildId: artifact.rebuildId, rebuildRevision: artifact.rebuildRevision, manifestDigest: artifact.manifestDigest,
   };
   await writeImmutableJson(join(resolve(publicationRoot), 'receipts'), `${artifact.artifactId}.json`, receipt);

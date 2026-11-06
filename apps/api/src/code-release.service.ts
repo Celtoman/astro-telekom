@@ -34,6 +34,7 @@ export class CodeReleaseService {
     if (['publicationId', 'siteId', 'siteSlug', 'siteRevision', 'catalogDigest'].some(key => active.result[key] !== (snapshot as Record<string, unknown>)[key])) {
       throw new ConflictException('Обслуживаемая версия не совпадает со снимком сайта');
     }
+    if (['releaseSequence','basePublicationId'].some(key => active.result[key] !== undefined && active.result[key] !== (snapshot as Record<string,unknown>)[key])) throw new ConflictException('Идентичность редакционного выпуска не совпала со снимком сайта');
     if (!/^[a-f0-9]{64}$/.test(String(renderer.result.rendererId)) || !/^[a-f0-9-]{36}$/.test(String(renderer.result.instanceId))) {
       throw new ServiceUnavailableException('Идентичность renderer не подтверждена');
     }

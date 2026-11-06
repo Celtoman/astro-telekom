@@ -13,7 +13,7 @@ export async function publishedPageTemplateView(prisma: Pick<PrismaService, '$qu
     FROM "SitePublication" p
     LEFT JOIN "SitePublicationValidation" v ON v.id = p."validationId"
     WHERE p."siteId" = ${siteId} AND p.status = 'SUCCEEDED'
-    ORDER BY p."siteRevision" DESC
+    ORDER BY p."releaseSequence" DESC
     LIMIT 1
   `);
   return rows[0] ?? null;

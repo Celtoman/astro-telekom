@@ -31,7 +31,7 @@ export class AdminAccountController {
       SELECT p."sourceSnapshot" -> 'globalPages' AS content, s."siteRevision" AS revision FROM "SitePublication" s
       LEFT JOIN "SitePublicationValidation" p ON s."validationId"=p.id WHERE s."siteId"=${siteId}
         AND ${serving ? Prisma.sql`s.id=${serving.id}` : Prisma.sql`s.status='SUCCEEDED'`}
-      ORDER BY s."siteRevision" DESC LIMIT 1`) : [];
+      ORDER BY s."releaseSequence" DESC LIMIT 1`) : [];
     const pages = rows[0]?.content;
     const published = Array.isArray(pages) ? pages.find(p => p.type === 'ACCOUNT')?.content ?? null : null;
     return { content: working.page.content, pageId: working.page.id, status: working.page.status,

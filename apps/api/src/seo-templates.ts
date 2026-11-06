@@ -1,8 +1,8 @@
 import { BadRequestException } from '@nestjs/common';
-import type { PublicRoute } from './public-route-policy';
+import type { LegacyPublicRoute } from './public-route-policy';
 import { resolveVariableText, type VariableContext } from './variable-registry';
 
-export type SeoTemplateKind = PublicRoute['id'];
+export type SeoTemplateKind = LegacyPublicRoute['id'];
 export type SeoIndexState = 'INDEX' | 'NOINDEX';
 
 export interface SeoTemplateDefinition {
@@ -40,7 +40,7 @@ interface SeoCity {
 }
 
 interface SeoResolutionInput {
-  routes: PublicRoute[];
+  routes: LegacyPublicRoute[];
   templates: SeoTemplateDefinition[];
   cities: SeoCity[];
   site: VariableContext['site'];

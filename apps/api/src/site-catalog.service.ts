@@ -17,6 +17,9 @@ import { firstScreenFromTemplate, validateFirstScreen } from './first-screen';
 import { generalHomeFromTemplate } from './general-home-template';
 import { readSitePublicDisplay } from './site-public-display';
 import { CITY_HOME_VERSION } from './city-home-model';
+import type { EditorialSource } from './editorial-publication-model';
+import { editorialServingSource } from './editorial-serving-source';
+import { newsRoutes, newsSeoForRoute } from './news-projection';
 import { cityTariffFacts } from './city-tariff-facts';
 
 type CatalogClient = Prisma.TransactionClient | PrismaService;
@@ -28,6 +31,8 @@ export type CatalogSource = {
   sitemapExclusions: Array<{ path: string }>;
   seoTemplates: any[];
   pageTemplates?: any[];
+  editorial?: EditorialSource;
+  publicationBaseId?: string;
 };
 
 @Injectable()
@@ -92,7 +97,27 @@ export class SiteCatalogService {
       }),
     ]);
 
-    return { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates, pageTemplates };
+    // No draft editorial rows enter legacy capture. Before editorial activation
+    // this leaves historical/bootstrap sources unchanged; afterwards live source
+    // is authoritative even when working legacy content has changed.
+    let editorial:EditorialSource|undefined;
+    let publicationBaseId:string|undefined;
+    if (client.sitePublication?.findFirst) {
+      const editorialRelease=await client.sitePublication.findFirst({where:{siteId:site.id,scopeKey:{not:'legacy'},status:{in:['PENDING','RUNNING','SUCCEEDED']}},select:{id:true}});
+      if(editorialRelease){
+        const serving=await editorialServingSource(client,site),baseline=serving.source;
+        publicationBaseId=serving.publication.id;
+        editorial=baseline.editorial;
+        const owned=new Set(editorial?.redirectIds??[]);
+        const aliases=baseline.redirects.filter(item=>owned.has(item.id));
+        for(const alias of aliases){
+          if(alias.status!=='PUBLISHED')throw new BadRequestException('Некорректный статус опубликованного редакционного перенаправления');
+          const index=redirects.findIndex(item=>item.id===alias.id);
+          if(index>=0)redirects.splice(index,1,{...alias,status:'PUBLISHED'});else redirects.push({...alias,status:'PUBLISHED'});
+        }
+      }
+    }
+    return { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates, pageTemplates, ...(editorial?{editorial}:{}),...(publicationBaseId?{publicationBaseId}:{}) };
   }
 
   renderSource(source: CatalogSource, now = new Date()) {
@@ -105,6 +130,9 @@ export class SiteCatalogService {
     if (homeScreen) validateFirstScreen('HOME', homeHero, false, homeScreen.passportVersion);
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
     const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages, { addressCheck: source.pageTemplates?.some(template => template.kind === 'CITY_ADDRESS_CHECK') });
+    const editorialRoutes=source.editorial?newsRoutes(source.editorial):[];
+    const allRoutes=[...routes,...editorialRoutes];
+    if(new Set(allRoutes.map(route=>route.path)).size!==allRoutes.length)throw new BadRequestException('Адрес раздела новостей занят существующей страницей');
     const resolved = resolveCatalogVariables({
       ...(generalHome ? { generalHome } : {}),
       ...(homeHero ? { homeHero, homeHeroVersion: homeScreen!.passportVersion, homeHeroBlockId: homeTemplate.blocks.find((block: any) => block.blockType === 'home.hero').id } : {}),
@@ -119,9 +147,9 @@ export class SiteCatalogService {
         publicDisplay,
       },
       globalPages: resolvedGlobalPages,
-      routes,
+      routes:allRoutes,
       sitemap: { excludedPaths: sitemapExclusions.map((item) => item.path) },
-      redirects: this.effectiveRedirects(routes, redirects),
+      redirects: this.effectiveRedirects(allRoutes, redirects),
       cities: cities.map((city: any) => this.cityResponse(city, site)),
     }, {
       site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
@@ -140,10 +168,11 @@ export class SiteCatalogService {
     const noindexPaths = Object.entries(seo.byPath).filter(([, meta]) => meta.indexState === 'NOINDEX').map(([path]) => path);
     return {
       ...resolved,
+      ...(source.editorial?{editorial:structuredClone(source.editorial)}:{}),
       variableUsages: [...resolved.variableUsages, ...collectSeoTemplateUsages(seoTemplates)],
       variableUsageVersion: 2,
       sitemap: { excludedPaths: [...new Set([...resolved.sitemap.excludedPaths, ...noindexPaths])].sort() },
-      seoByPath: seo.byPath,
+      seoByPath: {...seo.byPath,...Object.fromEntries(editorialRoutes.map(route=>[route.path,newsSeoForRoute(source.editorial!,route)]))},
       seoWarnings: seo.warnings,
     };
   }

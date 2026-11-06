@@ -21,6 +21,11 @@ try {
  ('old-a','news-fixture-site',5,'SUCCEEDED','{"immutable":"A"}','site','news-fixture-site','2024-01-01',NOW());`);
  const before=sql(`SELECT json_agg(json_build_object('id',id,'revision',"siteRevision",'catalog',catalog) ORDER BY id) FROM "SitePublication";`);
  sql(readFileSync(new URL('../prisma/migrations/0068_editorial_news/migration.sql',import.meta.url),'utf8'));
+ sql(`INSERT INTO "Redirect" (id,"siteId","sourcePath","targetPath","updatedAt") VALUES ('manual-before-news','news-fixture-site','/old','/',NOW());`);
+ const redirectBefore=sql(`SELECT to_jsonb(r)::text FROM "Redirect" r WHERE id='manual-before-news';`);
+ sql(readFileSync(new URL('../prisma/migrations/0069_editorial_redirect_ownership/migration.sql',import.meta.url),'utf8'));
+ assert.equal(sql(`SELECT (to_jsonb(r)-'managedEditorialKey')::text FROM "Redirect" r WHERE id='manual-before-news';`),redirectBefore);
+ assert.equal(sql(`SELECT "managedEditorialKey" IS NULL FROM "Redirect" WHERE id='manual-before-news';`),'t');
  assert.equal(sql(`SELECT json_agg(json_build_object('id',id,'revision',"siteRevision",'catalog',catalog) ORDER BY id) FROM "SitePublication";`),before);
  assert.equal(sql(`SELECT string_agg(id||':'||"releaseSequence"::text,',' ORDER BY "releaseSequence") FROM "SitePublication";`),'old-a:1,old-b:2');
  sql(`INSERT INTO "SitePublication" (id,"siteId","siteRevision","scopeKey",catalog,"triggerEntity","triggerEntityId","updatedAt") VALUES
@@ -31,5 +36,5 @@ try {
  assert.equal(sql(`SELECT count(*) FROM "EditorialSettings";`),'0');
  const duplicate=docker(['exec','-i',container,'psql','-h','127.0.0.1','-U','postgres','-d','news_rehearsal','-v','ON_ERROR_STOP=1'],`INSERT INTO "SitePublication" (id,"siteId","siteRevision",catalog,"triggerEntity","triggerEntityId","updatedAt") VALUES ('duplicate','news-fixture-site',9,'{}','site','news-fixture-site',NOW());`);
  assert.notEqual(duplicate.status,0,'Legacy source-revision dedup must remain enforced');
- console.log(JSON.stringify({result:'PASS',previousMigrations:previous.length,preservedSnapshots:2,editorialSameSourceReleases:2,uniqueReleaseSequence:4,legacyRevisions:'10:9',draftRowsCreated:0}));
+ console.log(JSON.stringify({result:'PASS',previousMigrations:previous.length,appliedHead:69,preservedSnapshots:2,preservedManualRedirects:1,editorialSameSourceReleases:2,uniqueReleaseSequence:4,legacyRevisions:'10:9',draftRowsCreated:0}));
 } finally {if(owned&&/^astro-news-migration-[a-f0-9]{8}$/.test(container))docker(['rm','-f',container]);}

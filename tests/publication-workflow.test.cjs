@@ -43,6 +43,7 @@ function fixture() {
   let source = publicationSource();
 
   const prisma = {
+    $queryRaw: async () => [],
     site: {
       findUnique: async ({ where }) => {
         if (where.id) return sites.get(where.id) || null;
@@ -87,7 +88,7 @@ function fixture() {
     sitePublication: {
       create: async ({ data }) => {
         publicationSequence += 1;
-        const row = { id: `publication-${publicationSequence}`, status: 'PENDING', createdAt: new Date(publicationSequence), ...data };
+        const row = { id: `publication-${publicationSequence}`, status: 'PENDING', scopeKey:'legacy', releaseSequence:publicationSequence, createdAt: new Date(publicationSequence), ...data };
         publications.set(row.id, row);
         return row;
       },
@@ -104,10 +105,12 @@ function fixture() {
       findFirst: async ({ where, orderBy, select }) => {
         const rows = [...publications.values()].filter((row) => {
           if (where.siteId && row.siteId !== where.siteId) return false;
-          if (where.status && row.status !== where.status) return false;
+          if (where.status && (typeof where.status==='string'?row.status!==where.status:!where.status.in.includes(row.status))) return false;
+          if (where.scopeKey?.not && row.scopeKey === where.scopeKey.not) return false;
           return true;
         });
         if (orderBy?.siteRevision === 'desc') rows.sort((a, b) => b.siteRevision - a.siteRevision);
+        if (orderBy?.releaseSequence === 'desc') rows.sort((a,b)=>(b.releaseSequence??b.siteRevision)-(a.releaseSequence??a.siteRevision));
         const row = rows[0] || null;
         if (!row || !select) return row;
         return Object.fromEntries(Object.keys(select).filter((key) => select[key]).map((key) => [key, row[key]]));

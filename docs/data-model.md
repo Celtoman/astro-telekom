@@ -1,5 +1,7 @@
 # Модель данных текущего прототипа
 
+T4 (#534): `0069_editorial_redirect_ownership` добавляет nullable `Redirect.managedEditorialKey` и индекс site/owner. Прежние ручные записи получают null без изменения адресов; новые `ARTICLE:id`, `CATEGORY:id`, `NEWS_SETTINGS` защищают автоматические aliases от отдельной правки. Активность определяется immutable catalog, а не этим признаком или working status DB. [Контракт и локальные проверки](research/2026-11-06-news-scoped-backend.md).
+
 ## Редакционные новости: фундамент T1,6ноября2026
 
 Добавлены модели `NewsArticle`, `NewsCategory`, `EditorialSettings`, `EditorialRevision`, `MediaAsset`, `EditorialPublicationItem` и миграция0068. Незавершённые новости/настройки хранятся отдельно от legacy Page. Типизированный контракт проверяет ограниченное дерево текста, ссылки, category/date, author/source, media/crop, SEO/OG и фиксированные поля404; безопасные неполные черновики возвращают missingFields.

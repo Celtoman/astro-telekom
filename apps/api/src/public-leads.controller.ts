@@ -137,7 +137,7 @@ export class PublicLeadsController {
     const publication = serving ? serving.publication : body.configuration
       ? await this.prisma.sitePublication.findFirst({
         where: { siteId: site.id, status: 'SUCCEEDED' },
-        orderBy: { siteRevision: 'desc' },
+        orderBy: { releaseSequence: 'desc' },
         select: { catalog: true },
       })
       : null;

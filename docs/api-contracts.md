@@ -14,6 +14,10 @@ Private Node controller нового отдельного Docker target `publica
 
 ## Редакционные медиа — локальная реализация T3
 
+T4 добавляет authenticated `/admin/sites/:siteId/news`: GET список (search/categoryId/state/page), POST создание `{clientId,content}`, GET/PATCH `/:id` (`{content,expectedRevision,checkpoint?}`), GET `/:id/history` и `/:id/history/:revision`, POST `/:id/restore` (`{revision,expectedRevision}`). В админском списке 25 строк на странице. `/news/categories` — список/создание/чтение/сохранение категорий. `/editorial/news` и `/editorial/not-found` — отдельные настройки с save/history/restore. Неизвестные поля отклоняются; `409` не означает успешное сохранение.
+
+POST article/category/settings `review` принимает `expectedRevision` (у article также action `PUBLISH|WITHDRAW`); `publish` требует ещё `reviewDigest` и `operationId`. Клиент не передаёт произвольный source snapshot. GET `/news/publications/:operationId` возвращает состояние операции без catalog/source payload. Category reassignment остаётся T6. [Локальные границы T4](research/2026-11-06-news-scoped-backend.md); внешнего выпуска ещё нет.
+
 Все маршруты под `/admin/sites/:siteId/news/media` защищены существующим `AdminTokenGuard`; базовый prefix `/api/v1` сохраняется. POST принимает один multipart file JPEG/PNG/WebP до 10 МБ и 24 млн пикселей. GET `/:id` возвращает метаданные и приватный preview path; GET `/:id/file?kind=body|cover|social` возвращает WebP с `private,no-store` и `nosniff`. POST `/:id/crop` принимает `{kind: 'cover'|'social', crop: {x,y,width,height}}` в нормализованных координатах; область должна помещаться в оригинал. Чужой site/asset не доступен. Произвольные storage keys и source filenames клиент не получает; endpoint удаления отсутствует. Публичные URLs выбранных производных формируются при публикации, а не этим API. [Реализация и границы](research/2026-11-06-news-media-foundation.md). Внешний выпуск T3 ещё не подтверждён.
 
 ## Общие правила

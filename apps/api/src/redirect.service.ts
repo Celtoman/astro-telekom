@@ -59,6 +59,7 @@ export class RedirectService {
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const current = await transaction.redirect.findUnique({ where: { id } });
       if (!current) throw new NotFoundException('Redirect not found');
+      if(current.managedEditorialKey)throw new ConflictException('Этот адрес управляется разделом новостей. Измените адрес статьи или категории в её редакторе.');
       const candidate = await this.prepareCandidate(transaction, {
         siteId: current.siteId,
         cityId: body.cityId === undefined ? current.cityId : body.cityId,
@@ -91,6 +92,7 @@ export class RedirectService {
     return this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
       const current = await transaction.redirect.findUnique({ where: { id } });
       if (!current) throw new NotFoundException('Redirect not found');
+      if(current.managedEditorialKey)throw new ConflictException('Этот адрес управляется разделом новостей и обновляется вместе с публикацией.');
       const redirect = await transaction.redirect.update({ where: { id }, data: { status: PublishStatus.ARCHIVED } });
       const revision = await this.publications.recordWorkingRevision(transaction, {
         siteId: redirect.siteId,
@@ -135,7 +137,7 @@ export class RedirectService {
     const targetPath = normalizeRedirectPath(body.targetPath, 'targetPath');
     if (sourcePath === targetPath) throw new BadRequestException('sourcePath и targetPath должны отличаться');
 
-    const site = await transaction.site.findUnique({ where: { id: body.siteId }, select: { id: true } });
+    const site = await transaction.site.findUnique({ where: { id: body.siteId }, select: { id: true,slug:true } });
     if (!site) throw new BadRequestException('Сайт не найден');
     if (body.cityId) {
       const city = await transaction.city.findUnique({ where: { id: body.cityId }, select: { siteId: true } });
@@ -150,12 +152,12 @@ export class RedirectService {
     if (occupied) throw new ConflictException(`Redirect для ${sourcePath} уже существует`);
 
     if (status === PublishStatus.PUBLISHED) {
-      await this.assertPublishedPolicy(transaction, body.siteId, sourcePath, targetPath, currentId);
+      await this.assertPublishedPolicy(transaction, body.siteId, sourcePath, targetPath,site.slug, currentId);
     }
     return { siteId: body.siteId, cityId: body.cityId || null, sourcePath, targetPath, status };
   }
 
-  private async assertPublishedPolicy(transaction: Transaction, siteId: string, sourcePath: string, targetPath: string, currentId?: string) {
+  private async assertPublishedPolicy(transaction: Transaction, siteId: string, sourcePath: string, targetPath: string,siteSlug:string, currentId?: string) {
     const [cities, globalPages, redirects] = await Promise.all([
       transaction.city.findMany({
         where: { siteId, status: PublishStatus.PUBLISHED },
@@ -179,6 +181,10 @@ export class RedirectService {
       publishedPaths = releaseOnePaths(cities, globalPages, { addressCheck: cities.some(city => city.pages?.some(page => page.slug === ADDRESS_PAGE_SLUG)) });
     } catch (error) {
       throw new ConflictException(`Release 1 route inventory не готов: ${(error as Error).message}`);
+    }
+    if(sourcePath.startsWith('/news')||targetPath.startsWith('/news')){
+      const published=await this.publications.getPublishedCatalog(siteSlug);
+      for(const route of (published.routes??[]) as Array<{kind:string;path:string}>)if(['NEWS_LIST','NEWS_ARTICLE','NEWS_CATEGORY'].includes(route.kind))publishedPaths.add(route.path);
     }
     if (publishedPaths.has(sourcePath)) throw new ConflictException(`sourcePath ${sourcePath} занят опубликованным ресурсом`);
     if (redirects.some((redirect) => (

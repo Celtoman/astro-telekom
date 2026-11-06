@@ -26,7 +26,7 @@ export async function publishedVariableContext(prisma: PrismaService, siteSlug: 
     ) AS catalog
     FROM "SitePublication" p JOIN "Site" s ON s.id = p."siteId"
     WHERE s.slug = ${siteSlug} AND s.status = 'PUBLISHED' AND p.status = 'SUCCEEDED'
-    ORDER BY p."siteRevision" DESC LIMIT 1
+    ORDER BY p."releaseSequence" DESC LIMIT 1
   `);
   return rows[0]?.catalog ?? null;
 }

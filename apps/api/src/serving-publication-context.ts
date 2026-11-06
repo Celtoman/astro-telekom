@@ -4,7 +4,7 @@ import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import { Observable } from 'rxjs';
 import { PrismaService } from './prisma.service';
 
-type ServingIdentity = { publicationId: string; siteId?: string; siteSlug?: string; siteRevision?: number; catalogDigest?: string };
+type ServingIdentity = { publicationId: string; siteId?: string; siteSlug?: string; siteRevision?: number; releaseSequence?:number; catalogDigest?: string };
 const requestPublication = new AsyncLocalStorage<ServingIdentity | undefined>();
 const validId = (value: unknown): value is string => typeof value === 'string' && /^[a-zA-Z0-9_-]{1,200}$/.test(value);
 const staticServing = () => process.env.REBUILD_PROVIDER === 'static';
@@ -39,6 +39,7 @@ async function activeServing(): Promise<ServingIdentity> {
     if (!identity || !validId(identity.publicationId) || !validId(identity.siteId)
       || typeof identity.siteSlug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(identity.siteSlug)
       || !Number.isSafeInteger(identity.siteRevision) || identity.siteRevision! < 0
+      || (identity.releaseSequence !== undefined && (!Number.isSafeInteger(identity.releaseSequence) || identity.releaseSequence < 1))
       || typeof identity.catalogDigest !== 'string' || !/^[a-f0-9]{64}$/.test(identity.catalogDigest)) throw new Error('Serving identity is invalid');
     return identity;
   } catch {
@@ -55,6 +56,7 @@ export async function servingPublication(client: Pick<PrismaService, 'sitePublic
   if (catalog?.site?.slug !== siteSlug || (identity.siteSlug && identity.siteSlug !== siteSlug)) throw new NotFoundException('Published site not found');
   if ((identity.siteId && identity.siteId !== publication.siteId)
     || (identity.siteRevision !== undefined && identity.siteRevision !== publication.siteRevision)
+    || (identity.releaseSequence !== undefined && identity.releaseSequence !== publication.releaseSequence)
     || (identity.catalogDigest && identity.catalogDigest !== createHash('sha256').update(JSON.stringify(publication.catalog)).digest('hex'))) {
     throw new ServiceUnavailableException('Обслуживаемый снимок не совпадает с подтверждённым каталогом');
   }

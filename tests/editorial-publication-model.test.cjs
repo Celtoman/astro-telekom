@@ -23,3 +23,8 @@ test('a revision acknowledgement never turns a newer saved draft into the publis
  assert.equal(model.editorialState({workingRevision:1,publishedRevision:null,everPublished:false}),'DRAFT');
  assert.equal(model.editorialState({workingRevision:3,publishedRevision:null,everPublished:true}),'WITHDRAWN');
 });
+test('publishing404 alone does not launch the news list or any article',()=>{
+ const source=model.applyEditorialChangeSet({site:{id:'site-1'},redirects:[]},{kind:'NOT_FOUND',entityId:'404',revision:1,action:'PUBLISH',snapshot:{title:'Страница не найдена'}});
+ assert.equal(source.editorial.newsEnabled,false);assert.deepEqual(source.editorial.articles,[]);
+ const enabled=model.applyEditorialChangeSet(source,{kind:'NEWS_SETTINGS',entityId:'settings',revision:1,action:'PUBLISH',snapshot:{title:'Новости'}});assert.equal(enabled.editorial.newsEnabled,true);
+});

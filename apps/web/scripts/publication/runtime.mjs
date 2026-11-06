@@ -37,7 +37,7 @@ export async function initialServing({ root, environment, options }) {
     const active = activePublication(JSON.parse(saved));
     if (active) {
       const artifact = await readArtifact(root, active.artifactId);
-      if (['publicationId', 'siteId', 'siteSlug', 'siteRevision', 'rendererId', 'catalogDigest', 'manifestDigest'].some(key => artifact[key] !== active[key])) throw new Error('Saved serving state does not match its sealed artifact');
+      if (['publicationId', 'siteId', 'siteSlug', 'siteRevision', 'releaseSequence', 'basePublicationId', 'rendererId', 'catalogDigest', 'manifestDigest'].some(key => artifact[key] !== active[key])) throw new Error('Saved serving state does not match its sealed artifact');
     }
     return { resume: true };
   }

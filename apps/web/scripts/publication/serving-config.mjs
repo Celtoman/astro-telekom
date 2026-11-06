@@ -27,6 +27,8 @@ export function createServingConfig(artifact, options) {
     protocol: '1', state: 'ACTIVE', artifactId: artifact.artifactId,
     publicationId: artifact.publicationId, siteId: artifact.siteId, siteSlug: artifact.siteSlug,
     siteRevision: String(artifact.siteRevision), rendererId: artifact.rendererId, catalogDigest: artifact.catalogDigest, manifestDigest: artifact.manifestDigest,
+    ...(artifact.releaseSequence === undefined ? {} : {releaseSequence:String(artifact.releaseSequence)}),
+    ...(artifact.basePublicationId ? {basePublicationId:artifact.basePublicationId} : {}),
   } : { protocol: '1', state: 'EMPTY' };
   const proxy = () => ({
     handler: 'reverse_proxy', upstreams: [{ dial: apiUpstream }],
@@ -102,6 +104,8 @@ export function activePublication(config) {
   requireArtifactId(marker.artifactId); requireArtifactId(marker.rendererId); requireArtifactId(marker.catalogDigest); requireArtifactId(marker.manifestDigest);
   const revision = Number(marker.siteRevision);
   if (!Number.isSafeInteger(revision) || revision < 0) throw new Error('Invalid active publication revision');
+  const releaseSequence = marker.releaseSequence === undefined ? undefined : Number(marker.releaseSequence);
+  if (releaseSequence !== undefined && (!Number.isSafeInteger(releaseSequence) || releaseSequence < 1)) throw new Error('Invalid active release sequence');
   const routes = handles.find((item) => item.handler === 'subroute')?.routes;
   const root = `/publication/releases/${marker.artifactId}`;
   if (!Array.isArray(routes) || !routes.some((route) => route.handle?.some((item) => item.handler === 'file_server' && item.root === root))) {
@@ -110,5 +114,7 @@ export function activePublication(config) {
   return {
     artifactId: marker.artifactId, publicationId: marker.publicationId, siteId: marker.siteId, siteSlug: marker.siteSlug,
     siteRevision: revision, rendererId: marker.rendererId, catalogDigest: marker.catalogDigest, manifestDigest: marker.manifestDigest,
+    ...(releaseSequence === undefined ? {} : {releaseSequence}),
+    ...(marker.basePublicationId ? {basePublicationId:marker.basePublicationId} : {}),
   };
 }

@@ -1,4 +1,5 @@
 import { ADDRESS_PAGE_SLUG } from './address-page-model';
+import type { NewsRoute } from './news-projection';
 
 export const RELEASE_ONE_GLOBAL_PAGES = [
   { type: 'COVERAGE', slug: 'karta-pokrytiya-provaydera' },
@@ -12,7 +13,7 @@ export type ReleaseOneGlobalPageType = typeof RELEASE_ONE_GLOBAL_PAGES[number]['
 export const OPTIONAL_GLOBAL_PAGES = [{ type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }] as const;
 export const SUPPORTED_GLOBAL_PAGES = [...RELEASE_ONE_GLOBAL_PAGES, ...OPTIONAL_GLOBAL_PAGES] as const;
 
-export type PublicRoute = {
+export type LegacyPublicRoute = {
   id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | ReleaseOneGlobalPageType | 'ACCOUNT';
   kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'GLOBAL_PAGE';
   path: string;
@@ -20,19 +21,21 @@ export type PublicRoute = {
   tariffSlug?: string;
   pageType?: ReleaseOneGlobalPageType | 'ACCOUNT';
 };
+export type PublicRoute = LegacyPublicRoute | (NewsRoute & {citySlug?:never;tariffSlug?:never;pageType?:never});
+export function isLegacyPublicRoute(route:PublicRoute):route is LegacyPublicRoute {return route.kind!=='NEWS_LIST'&&route.kind!=='NEWS_ARTICLE'&&route.kind!=='NEWS_CATEGORY'}
 
 type CityRouteSource = { slug: string; tariffs?: Array<{ slug: string }>; pages?: Array<{ type: string; slug: string }> };
 type GlobalPageRouteSource = { type: string; slug: string };
 export interface PublicRouteOptions { addressCheck?: boolean }
 
-export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: GlobalPageRouteSource[], options: PublicRouteOptions = {}): PublicRoute[] {
+export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: GlobalPageRouteSource[], options: PublicRouteOptions = {}): LegacyPublicRoute[] {
   const pagesByType = new Map<string, GlobalPageRouteSource>();
   for (const page of globalPages) {
     if (pagesByType.has(page.type)) throw new Error(`Дублируется общая страница Release 1: ${page.type}`);
     pagesByType.set(page.type, page);
   }
 
-  const routes: PublicRoute[] = [{ id: 'HOME', kind: 'HOME', path: '/' }];
+  const routes: LegacyPublicRoute[] = [{ id: 'HOME', kind: 'HOME', path: '/' }];
   const occupiedPaths = new Set(['/']);
   for (const expected of SUPPORTED_GLOBAL_PAGES) {
     const page = pagesByType.get(expected.type);

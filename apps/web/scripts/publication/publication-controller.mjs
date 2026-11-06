@@ -5,6 +5,7 @@ import { resolve, join } from 'node:path';
 import { readArtifact, readHistoricalArtifact, readReceipt, writeImmutableJson } from './artifact-store.mjs';
 import { planRetention, acknowledgeArchive, collectArtifact, restoreArtifact } from './artifact-retention.mjs';
 import { ActivationConflictError, ActivationUncertainError, ActivationRejectedError } from './caddy-activation.mjs';
+import { publicationIsNewer } from './publication-order.mjs';
 
 class InputError extends Error { constructor(message, status = 400) { super(message); this.status = status; } }
 class BuildFailedError extends Error {}
@@ -67,6 +68,7 @@ export class PublicationController {
   async eligible(artifact, job) {
     const snapshot = await this.builder.fetchSnapshot(job);
     if (['publicationId', 'siteId', 'siteSlug', 'siteRevision', 'catalogDigest'].some(field => snapshot[field] !== artifact[field])) throw new Error('Persisted snapshot identity/digest mismatch');
+    if ((artifact.releaseSequence !== undefined && artifact.releaseSequence !== snapshot.releaseSequence) || (artifact.basePublicationId !== undefined && artifact.basePublicationId !== snapshot.basePublicationId)) throw new Error('Persisted editorial publication identity mismatch');
   }
 
   async operation(rebuildId, revision) {
@@ -99,7 +101,7 @@ export class PublicationController {
   }
 
   verifyReceipt(artifact, receipt) {
-    if (receipt.status !== 'SUCCEEDED' || ['artifactId', 'publicationId', 'siteId', 'siteRevision', 'rendererId', 'catalogDigest', 'rebuildId', 'rebuildRevision', 'manifestDigest'].some(field => receipt[field] !== artifact[field])) throw new ActivationUncertainError('Publication receipt integrity mismatch');
+    if (receipt.status !== 'SUCCEEDED' || ['artifactId', 'publicationId', 'siteId', 'siteRevision', 'releaseSequence', 'basePublicationId', 'rendererId', 'catalogDigest', 'rebuildId', 'rebuildRevision', 'manifestDigest'].some(field => receipt[field] !== artifact[field])) throw new ActivationUncertainError('Publication receipt integrity mismatch');
     return receipt;
   }
 
@@ -188,7 +190,7 @@ export class PublicationController {
       if (!/^[a-f0-9]{64}\.json$/.test(name)) continue;
       const record = JSON.parse(await readFile(join(this.root, 'operations', name), 'utf8'));
       const operation = await this.operation(record.job.rebuildId, record.job.rebuildRevision);
-      if (operation.artifact.siteId !== active.siteId || operation.artifact.siteRevision <= active.siteRevision) continue;
+      if (operation.artifact.siteId !== active.siteId || !publicationIsNewer(operation.artifact,active)) continue;
       if ((await this.receiptSerial(record.job.rebuildId, record.job.rebuildRevision)).status === 'SUCCEEDED') continue;
       try { await this.eligible(operation.artifact, operation.job); }
       catch (error) { if ([404, 409].includes(error.httpStatus)) continue; throw error; }
@@ -224,7 +226,9 @@ export class PublicationController {
         rebuildId: `code-${digest(identity)}`, rebuildRevision: 1 };
       artifact = await this.builder.build(job);
       if (fields.some(field => artifact[field] !== job[field]) || artifact.rendererId !== release.rendererId
-        || artifact.siteRevision !== active.siteRevision || artifact.catalogDigest !== active.catalogDigest) throw new ActivationConflictError('Code builder changed the serving snapshot');
+        || artifact.siteRevision !== active.siteRevision || artifact.catalogDigest !== active.catalogDigest
+        || (active.releaseSequence !== undefined && artifact.releaseSequence !== active.releaseSequence)
+        || (active.basePublicationId !== undefined && artifact.basePublicationId !== active.basePublicationId)) throw new ActivationConflictError('Code builder changed the serving snapshot');
       const content = { release: identity, job, artifactId: artifact.artifactId, expectedActiveArtifactId: active.artifactId };
       record = { ...content, operationDigest: digest(content) };
       await writeImmutableJson(directory, name, record);

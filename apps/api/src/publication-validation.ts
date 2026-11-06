@@ -1,6 +1,6 @@
 import { validateTariffCollection } from './tariff-collection';
 import { validateAccountPage } from './account-page';
-import { SUPPORTED_GLOBAL_PAGES } from './public-route-policy';
+import { SUPPORTED_GLOBAL_PAGES, isLegacyPublicRoute } from './public-route-policy';
 import { validateCityHomeBlocks, validatePublishedBlocks } from './block-validation';
 import { resolveCatalogVariables } from './catalog-variables';
 import { RELEASE_ONE_GLOBAL_PAGES, type PublicRoute } from './public-route-policy';
@@ -19,6 +19,8 @@ import { CITY_HOME_VERSION } from './city-home-model';
 import { ADDRESS_PAGE_SLUG } from './address-page-model';
 import { addressPageFromTemplate } from './address-page-view';
 import { validateAddressPageComposition } from './address-page';
+import { newsRoutes } from './news-projection';
+import { validateNewsArticle, validateNewsCategory, validateNewsSettings, validateNotFound } from './news-model';
 
 export type PublicationValidationIssue = {
   severity: 'BLOCKING' | 'WARNING';
@@ -78,6 +80,7 @@ function routeSources(source: CatalogSource): RouteSource[] {
       });
     }
   }
+  if(source.editorial)routes.push(...newsRoutes(source.editorial).map(route=>({route})));
   return routes;
 }
 
@@ -117,7 +120,20 @@ export function validatePublicationSource(
     cityTemplateReady = false;
     add('BLOCKING', 'CITY_HOME_TEMPLATE', '/{city}', message(error), undefined, { template: 'CITY_HOME', ...contentErrorLocation(error) });
   }
-  const routes = routeSources(source);
+  let routes:RouteSource[];
+  try { routes=routeSources(source); }
+  catch(error){add('BLOCKING','NEWS_ROUTES','/news',message(error));routes=routeSources({...source,editorial:undefined});}
+  if(source.editorial){
+    const pick=(value:Record<string,any>,keys:string[])=>Object.fromEntries(keys.map(key=>[key,value[key]]));
+    const check=(path:string,validate:()=>unknown)=>{try{validate()}catch(error){add('BLOCKING','NEWS_CONTENT',path,message(error),undefined,contentErrorLocation(error))}};
+    for(const category of source.editorial.categories)check(`/news/category/${category.slug}`,()=>validateNewsCategory(pick(category,['version','slug','name','description','seo','social'])));
+    for(const article of source.editorial.articles)check(`/news/${article.slug}`,()=>{
+      validateNewsArticle(pick(article,['version','slug','title','summary','categoryId','publishedDate','body','cover','author','source','related','seo','social','schemaType']),false,article.id);
+      if(!source.editorial!.categories.some(c=>c.id===article.categoryId))throw new Error('Категория новости отсутствует в выбранном опубликованном источнике');
+    });
+    check('/news',()=>validateNewsSettings(pick(source.editorial!.settings,['version','title','intro','emptyMessage','allNewsLabel','relatedTitle','seo','social'])));
+    if(source.editorial.notFound)check('/404',()=>validateNotFound(pick(source.editorial!.notFound!,['version','title','description','primary','secondary','errorLabel'])));
+  }
   const seen = new Map<string, string>();
   const checkedPaths: string[] = [];
   const site = source.site;
@@ -192,6 +208,10 @@ export function validatePublicationSource(
     else {
       seen.set(route.path, route.id);
       checkedPaths.push(route.path);
+    }
+    if(!isLegacyPublicRoute(route)){
+      if(!/^\/news(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/.test(route.path))add('BLOCKING','INVALID_ROUTE',route.path,'Некорректный адрес раздела новостей');
+      continue; // Editorial SEO is resolved from selected content, never legacy templates.
     }
     if (!/^\/(?:[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)?)?$/.test(route.path)) {
       add('BLOCKING', 'INVALID_ROUTE', route.path, `Недопустимый путь ${route.path}`);

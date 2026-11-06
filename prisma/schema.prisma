@@ -903,6 +903,7 @@ model Redirect {
   sourcePath  String
   targetPath  String
   managedTariffId String?
+  managedEditorialKey String?
   status      PublishStatus @default(PUBLISHED)
   hitCount    Int      @default(0)
   lastHitAt   DateTime?
@@ -913,6 +914,7 @@ model Redirect {
   @@unique([siteId, sourcePath])
   @@index([siteId, status])
   @@index([managedTariffId])
+  @@index([siteId, managedEditorialKey])
 }
 
 model LeadStatusHistory {

@@ -1,5 +1,6 @@
 import { readArtifact, readReceipt, recordReceipt } from './artifact-store.mjs';
 import { activePublication, createServingConfig } from './serving-config.mjs';
+import { publicationIsNewer } from './publication-order.mjs';
 
 export class ActivationUncertainError extends Error {
   constructor(message, options) { super(message, options); this.name = 'ActivationUncertainError'; }
@@ -39,7 +40,7 @@ export class CaddyActivation {
   async reconcile(active) {
     if (!active) return null;
     const artifact = await readArtifact(this.publicationRoot, active.artifactId);
-    for (const field of ['publicationId', 'siteId', 'siteSlug', 'siteRevision', 'rendererId', 'catalogDigest', 'manifestDigest']) {
+    for (const field of ['publicationId', 'siteId', 'siteSlug', 'siteRevision', 'releaseSequence', 'basePublicationId', 'rendererId', 'catalogDigest', 'manifestDigest']) {
       if (artifact[field] !== active[field]) throw new ActivationUncertainError('Serving identity does not match its sealed manifest');
     }
     return recordReceipt(this.publicationRoot, artifact);
@@ -56,7 +57,7 @@ export class CaddyActivation {
     if (!['CMS', 'CODE', 'BOOTSTRAP'].includes(kind)) throw new Error('Invalid activation kind');
     const previousReceipt = await readReceipt(this.publicationRoot, artifactId).catch((error) => { if (error.code !== 'ENOENT') throw error; return null; });
     if (previousReceipt) {
-      if (previousReceipt.status !== 'SUCCEEDED' || ['artifactId', 'publicationId', 'siteId', 'siteRevision', 'rendererId', 'catalogDigest', 'rebuildId', 'rebuildRevision', 'manifestDigest'].some((field) => previousReceipt[field] !== candidate[field])) {
+      if (previousReceipt.status !== 'SUCCEEDED' || ['artifactId', 'publicationId', 'siteId', 'siteRevision', 'releaseSequence', 'basePublicationId', 'rendererId', 'catalogDigest', 'rebuildId', 'rebuildRevision', 'manifestDigest'].some((field) => previousReceipt[field] !== candidate[field])) {
         throw new ActivationUncertainError('Receipt integrity mismatch');
       }
       return previousReceipt;
@@ -69,10 +70,10 @@ export class CaddyActivation {
     if (!state.active && kind !== 'BOOTSTRAP') throw new ActivationConflictError('An explicit bootstrap activation is required');
     if (state.active) {
       if (kind === 'BOOTSTRAP' || candidate.siteId !== state.active.siteId) throw new ActivationConflictError('Activation site does not match serving');
-      if (kind === 'CMS' && (candidate.rendererId !== state.active.rendererId || candidate.siteRevision <= state.active.siteRevision)) {
+      if (kind === 'CMS' && (candidate.rendererId !== state.active.rendererId || !publicationIsNewer(candidate,state.active) || (candidate.basePublicationId && candidate.basePublicationId !== state.active.publicationId))) {
         throw new ActivationConflictError('CMS activation must use the released renderer and a newer publication');
       }
-      if (kind === 'CODE' && (candidate.publicationId !== state.active.publicationId || candidate.siteRevision !== state.active.siteRevision || candidate.catalogDigest !== state.active.catalogDigest)) {
+      if (kind === 'CODE' && (candidate.publicationId !== state.active.publicationId || candidate.siteRevision !== state.active.siteRevision || candidate.catalogDigest !== state.active.catalogDigest || (state.active.releaseSequence !== undefined && candidate.releaseSequence !== state.active.releaseSequence) || (state.active.basePublicationId !== undefined && candidate.basePublicationId !== state.active.basePublicationId))) {
         throw new ActivationConflictError('Code release must preserve the active publication snapshot');
       }
     }

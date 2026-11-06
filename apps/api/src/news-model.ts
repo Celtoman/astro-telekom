@@ -62,6 +62,7 @@ export function validateNewsBody(raw: unknown): boolean {
       if (![2, 3].includes(a.level)) fail(field, 'HEADING', 'В тексте доступны подзаголовки H2 и H3.');
     } else if (d.type === 'image') {
       media(d.attrs, `${field}.attrs`); meaningful = true;
+      if(d.attrs.crop!==undefined)fail(`${field}.attrs.crop`,'ATTRIBUTES','Кадрирование доступно у обложки и изображения для соцсетей.');
       if (d.content !== undefined) fail(field, 'STRUCTURE', 'Изображение не содержит вложенный текст.');
     } else if (d.type === 'orderedList') {
       if (d.attrs !== undefined) { const a = record(d.attrs, `${field}.attrs`, ['start']); if (!Number.isSafeInteger(a.start) || a.start < 1) fail(field, 'LIST', 'Неверное начало списка.'); }

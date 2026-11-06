@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-06T14:42:56Z",
+  "updatedAt": "2026-11-06T19:47:48.234916+00:00",
   "task": 534,
   "authorized": {
     "implementation": true,
@@ -62,7 +62,44 @@
         "critical": 0,
         "knownLowModerate": 15,
         "issue": 515
+      },
+      "commit": "fae096b2",
+      "ci": {
+        "runId": 42236656560,
+        "conclusion": "success"
       }
+    },
+    "T4": {
+      "status": "LOCAL_BACKEND_CHECKED",
+      "profileTests": {
+        "passed": 69,
+        "failed": 0
+      },
+      "postgresRehearsals": "PASS",
+      "fullGate": {
+        "passed": 1004,
+        "failed": 0,
+        "skipped": 1,
+        "exitCode": 0
+      },
+      "fullGateLog": ".codex-tmp/news-implementation/t4-full-check-r5.log",
+      "checkedBase": "7f19e1c658c482af3d0b78c256804dd32e7a05bf",
+      "checkedTree": "39be93935ef75037e9cdb5a1de133b67f0ba064a",
+      "sourceStagedFiles": 63,
+      "stagedMatchesFrozen": true,
+      "frozenSource": "D:\\01 vibecode\\astro-telekom\\.codex-tmp\\news-implementation\\verification-t4-r5",
+      "externalRelease": "PENDING_T11"
+    },
+    "T5": {
+      "status": "WORKSPACE_IN_PROGRESS",
+      "sourceSnapshot": ".codex-tmp/news-implementation/t5-source-blobs.json",
+      "browserSmoke": ".codex-tmp/news-implementation/t5-browser-smoke.json",
+      "fullGate": "PENDING"
+    },
+    "T6": {
+      "status": "IN_PROGRESS",
+      "isolatedCategoryRehearsal": "PASS; further regression fixes in progress",
+      "fullGate": "PENDING"
     }
   },
   "baselineCheck": {
@@ -76,5 +113,7 @@
       "failed": 0
     }
   },
-  "archiveChanged": false
+  "archiveChanged": false,
+  "pausedByOwner": false,
+  "previousPauseCheckpoint": "D:\\01 vibecode\\astro-telekom\\.codex-tmp\\news-implementation\\PAUSED-2026-11-06.md"
 }

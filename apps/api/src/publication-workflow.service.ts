@@ -49,6 +49,7 @@ type PublicationInput = {
   triggerEntityId: string;
   requestedById?: string | null;
   validationId?: string | null;
+  basePublicationId?: string | null;
 };
 
 type PreparePublicationInput = Omit<PublicationInput, 'siteRevision' | 'catalog'> & {
@@ -139,6 +140,7 @@ export class PublicationWorkflowService {
         triggerEntityId: input.triggerEntityId,
         requestedById: input.requestedById || null,
         validationId: input.validationId || null,
+        ...(input.basePublicationId ? {basePublicationId:input.basePublicationId}:{}),
         status: 'PENDING',
       },
     });
@@ -180,18 +182,22 @@ export class PublicationWorkflowService {
       blocked: false as const,
       validationId: validation.id,
       catalog: this.jsonSnapshot(result.catalog) as JsonObject,
+      basePublicationId: source.publicationBaseId,
     };
   }
 
   async captureWorkingPublication(transaction: Transaction, input: Omit<PublicationInput, 'catalog'>) {
     const validated = await this.validateWorkingSource(transaction, input);
     if (validated.blocked) return validated;
-    const publication = await this.createPublication(transaction, { ...input, catalog: validated.catalog, validationId: validated.validationId });
+    const publication = await this.createPublication(transaction, { ...input, catalog: validated.catalog, validationId: validated.validationId,basePublicationId:validated.basePublicationId });
     return { blocked: false as const, publication };
   }
 
   async preparePublication(input: PreparePublicationInput) {
     const result = await this.prisma.$transaction(async (transaction) => {
+      await transaction.$queryRaw(Prisma.sql`SELECT id FROM "Site" WHERE id=${input.siteId} FOR UPDATE`);
+      const editorialPending=await transaction.sitePublication.findFirst({where:{siteId:input.siteId,scopeKey:{not:'legacy'},status:{in:['PENDING','RUNNING']}},select:{id:true}});
+      if(editorialPending)throw new ConflictException('Выполняется редакционная публикация. Дождитесь её результата перед общим выпуском сайта.');
       const site = await transaction.site.findUnique({ where: { id: input.siteId } });
       if (!site) throw new NotFoundException('Site not found');
       if (site.workingRevision !== input.expectedWorkingRevision) {
@@ -222,6 +228,7 @@ export class PublicationWorkflowService {
           data: {
             catalog: validated.catalog as Prisma.InputJsonValue,
             validationId: validated.validationId,
+            basePublicationId: validated.basePublicationId??null,
             requestedById: input.requestedById || null,
             status: 'PENDING',
             lastError: null,
@@ -259,7 +266,7 @@ export class PublicationWorkflowService {
     const [latestPublication, rebuild, latestValidation] = await Promise.all([
       this.prisma.sitePublication.findFirst({
         where: { siteId },
-        orderBy: { siteRevision: 'desc' },
+        orderBy: { releaseSequence: 'desc' },
         select: {
           id: true,
           siteRevision: true,
@@ -432,7 +439,7 @@ export class PublicationWorkflowService {
     }
     const published = await this.prisma.sitePublication.findFirst({
       where: { siteId: site.id, status: 'SUCCEEDED' },
-      orderBy: { siteRevision: 'desc' },
+      orderBy: { releaseSequence: 'desc' },
     });
     if (published) return published.catalog as JsonObject;
 
@@ -441,7 +448,7 @@ export class PublicationWorkflowService {
       if (!current) throw new NotFoundException('Site not found');
       const existing = await transaction.sitePublication.findFirst({
         where: { siteId: site.id, status: 'SUCCEEDED' },
-        orderBy: { siteRevision: 'desc' },
+        orderBy: { releaseSequence: 'desc' },
       });
       if (existing) return { blocked: false as const, catalog: existing.catalog as JsonObject };
       const validated = await this.validateWorkingSource(transaction, {
@@ -478,6 +485,8 @@ export class PublicationWorkflowService {
     if (!['PENDING', 'RUNNING', 'SUCCEEDED'].includes(publication.status)) throw new ConflictException('Publication snapshot is not eligible for a build');
     return {
       publicationId: publication.id, siteId: site.id, siteSlug: site.slug, siteRevision: publication.siteRevision,
+      ...(publication.releaseSequence === undefined ? {} : {releaseSequence:publication.releaseSequence}),
+      ...(publication.basePublicationId ? {basePublicationId:publication.basePublicationId} : {}),
       catalogDigest: createHash('sha256').update(JSON.stringify(publication.catalog)).digest('hex'),
       catalog: publication.catalog as JsonObject,
     };
@@ -496,7 +505,7 @@ export class PublicationWorkflowService {
     if (!site) throw new NotFoundException('Site not found');
     const publication = await this.prisma.sitePublication.findFirst({
       where: { siteId: site.id, status: 'SUCCEEDED' },
-      orderBy: { siteRevision: 'desc' },
+      orderBy: { releaseSequence: 'desc' },
     });
     if (!publication) throw new NotFoundException('Published catalog not found');
     return publication.catalog as JsonObject;
@@ -527,11 +536,25 @@ export class PublicationWorkflowService {
       });
       const site = await transaction.site.findUnique({ where: { id: publication.siteId } });
       if (!site) throw new NotFoundException('Site not found');
-      if (publication.siteRevision > site.publishedRevision) {
+      if ((!publication.scopeKey || publication.scopeKey === 'legacy') && publication.siteRevision > site.publishedRevision) {
         await transaction.site.update({
           where: { id: site.id },
           data: { publishedRevision: publication.siteRevision },
         });
+      }
+      if (publication.scopeKey && publication.scopeKey !== 'legacy') {
+        const items = await transaction.editorialPublicationItem.findMany({where:{publicationId:publication.id}});
+        for (const item of items) {
+          if (item.action === 'PUBLISH') await transaction.editorialRevision.updateMany({where:{siteId:publication.siteId,kind:item.kind,entityId:item.entityId,revision:item.revision,publishedAt:null},data:{publishedAt}});
+          // A delayed receipt remains a historical success, never a rollback of a
+          // newer confirmed entity watermark. Live reads still use serving source.
+          const latest = await transaction.editorialPublicationItem.findFirst({where:{kind:item.kind,entityId:item.entityId,publication:{siteId:publication.siteId,status:'SUCCEEDED'}},orderBy:{publication:{releaseSequence:'desc'}}});
+          if (latest?.publicationId !== publication.id) continue;
+          const publishedRevision = item.action === 'WITHDRAW' || item.action === 'REASSIGN' ? null : item.revision;
+          if (item.kind === 'ARTICLE') await transaction.newsArticle.updateMany({where:{id:item.entityId,siteId:publication.siteId},data:{publishedRevision,everPublished:true}});
+          else if (item.kind === 'CATEGORY') await transaction.newsCategory.updateMany({where:{id:item.entityId,siteId:publication.siteId},data:{publishedRevision}});
+          else await transaction.editorialSettings.updateMany({where:{id:item.entityId,siteId:publication.siteId},data:{publishedRevision}});
+        }
       }
       return updated;
     };

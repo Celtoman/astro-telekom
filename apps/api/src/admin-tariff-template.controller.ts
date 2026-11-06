@@ -41,7 +41,7 @@ export class AdminTariffTemplateController {
     if (!site) throw new NotFoundException('Site not found');
     const publication = await this.prisma.sitePublication.findFirst({
       where: { siteId, status: 'SUCCEEDED' },
-      orderBy: { siteRevision: 'desc' },
+      orderBy: { releaseSequence: 'desc' },
       select: { siteRevision: true, catalog: true, publishedAt: true, providerDeploymentId: true },
     });
     return { site, publication, catalog: publication?.catalog as Record<string, unknown> | null ?? null };

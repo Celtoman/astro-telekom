@@ -35,6 +35,7 @@ export class AdminEditorialMediaController {
   async crop(@Param('siteId') siteId: string, @Param('id') id: string, @Body() body: {crop:MediaUse['crop'];kind:'cover'|'social'}) {
     if (!body || Object.keys(body).some(k => !['crop','kind'].includes(k)) || !['cover','social'].includes(body.kind) || !body.crop || Object.keys(body.crop).sort().join(',') !== 'height,width,x,y') throw new BadRequestException('Передайте область кадрирования и назначение cover/social');
     const asset = await this.media.prepareUse(siteId,{assetId:id,alt:'',crop:body.crop},body.kind);
+    if(body.kind==='cover')await this.media.prepareUse(siteId,{assetId:id,alt:'',crop:body.crop},'social');
     return this.media.response(asset);
   }
 }

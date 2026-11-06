@@ -4,6 +4,7 @@ import { spawn } from 'node:child_process';
 import { resolve, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readArtifact, sealArtifact } from './artifact-store.mjs';
+import { copyEditorialMedia } from './editorial-media.mjs';
 import { verifyPublication } from '../verify-publication.mjs';
 import { resolvePublicApiUrl, resolvePublicSiteUrl } from '../public-site-url.mjs';
 
@@ -81,11 +82,12 @@ async function validateAssets(directory, artifactId) {
 }
 
 export class StaticArtifactBuilder {
-  constructor({ publicationRoot, apiUrl, adminToken, publicEnv, servingContextDigest = null, fetchImpl = fetch }) {
+  constructor({ publicationRoot, apiUrl, adminToken, publicEnv, servingContextDigest = null, fetchImpl = fetch, mediaRoot = process.env.EDITORIAL_MEDIA_ROOT }) {
     if (!adminToken) throw new Error('Builder requires a private API token');
     this.root = resolve(publicationRoot);
     this.apiUrl = new URL(apiUrl).href.replace(/\/$/, '');
     this.adminToken = adminToken; this.fetchImpl = fetchImpl;
+    this.mediaRoot = mediaRoot;
     this.publicEnv = Object.fromEntries(publicKeys.map(key => [key, String(publicEnv[key] || '')]));
     this.publicEnv.PUBLIC_SITE_URL = resolvePublicSiteUrl(this.publicEnv);
     this.publicEnv.PUBLIC_API_URL = resolvePublicApiUrl(this.publicEnv);
@@ -143,6 +145,8 @@ export class StaticArtifactBuilder {
     if (await sourceIdentity(this.publicEnv, this.servingContextDigest) !== rendererId) throw new Error('Released renderer source changed');
     const identity = { publicationId: job.publicationId, siteId: job.siteId, siteSlug: job.siteSlug,
       siteRevision: snapshot.siteRevision, rebuildId: job.rebuildId, rebuildRevision: job.rebuildRevision,
+      ...(snapshot.releaseSequence === undefined ? {} : {releaseSequence:snapshot.releaseSequence}),
+      ...(snapshot.basePublicationId ? {basePublicationId:snapshot.basePublicationId} : {}),
       rendererId, catalogDigest: snapshot.catalogDigest,
       redirects: (snapshot.catalog.redirects || []).map(({ id, sourcePath }) => ({ id, sourcePath })) };
     identity.artifactId = sha(JSON.stringify(identity));
@@ -163,6 +167,7 @@ export class StaticArtifactBuilder {
         await cp(join(workspace, path), target, { recursive: true, errorOnExist: true, force: false });
       }
       const linkType = process.platform === 'win32' ? 'junction' : 'dir';
+      await copyEditorialMedia(snapshot.catalog.editorial,this.mediaRoot,join(projectRoot,'apps/web/public'));
       await symlink(join(workspace, 'node_modules'), join(projectRoot, 'node_modules'), linkType);
       await symlink(join(workspace, 'apps/web/node_modules'), join(projectRoot, 'apps/web/node_modules'), linkType);
       const environment = {};

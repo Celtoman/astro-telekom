@@ -307,3 +307,14 @@ test('redirect provenance migration normalizes legacy slash paths before adding 
   assert.match(migration, /SET "sourcePath" = regexp_replace/);
   assert.match(migration, /SET "targetPath" = regexp_replace/);
 });
+
+test('automatic news aliases cannot be changed or archived independently of their publication',async()=>{
+ const {RedirectService}=loadRedirectModules();const f=fixture({current:{id:'news-alias',siteId:'site-1',managedEditorialKey:'ARTICLE:a',sourcePath:'/old-news',targetPath:'/news/story',status:'DRAFT'}});const service=new RedirectService(f.prisma,f.publications);
+ await assert.rejects(()=>service.update('news-alias',{targetPath:'/kazan'}),e=>e.getStatus()===409);
+ await assert.rejects(()=>service.archive('news-alias'),e=>e.getStatus()===409);assert.equal(f.updated.length,0);assert.equal(f.revisions.length,0);
+});
+test('manual redirects may target actual published news and cannot occupy an existing article URL',async()=>{
+ const {RedirectService}=loadRedirectModules();const f=fixture(),service=new RedirectService(f.prisma,{...f.publications,getPublishedCatalog:async()=>({routes:[{kind:'NEWS_LIST',path:'/news'},{kind:'NEWS_ARTICLE',path:'/news/story'}]})});
+ const result=await service.create({siteId:'site-1',sourcePath:'/old-news',targetPath:'/news/story'});assert.equal(result.targetPath,'/news/story');assert.equal(f.created.length,1);
+ await assert.rejects(()=>service.create({siteId:'site-1',sourcePath:'/news/story',targetPath:'/kazan'}),e=>e.getStatus()===409);
+});
