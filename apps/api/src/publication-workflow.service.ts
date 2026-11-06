@@ -205,6 +205,7 @@ export class PublicationWorkflowService {
           siteId_siteRevision: {
             siteId: site.id,
             siteRevision: site.workingRevision,
+            scopeKey: 'legacy',
           },
         },
       });

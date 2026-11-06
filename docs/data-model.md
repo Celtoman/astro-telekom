@@ -1,5 +1,13 @@
 # Модель данных текущего прототипа
 
+## Редакционные новости: фундамент T1,6ноября2026
+
+Добавлены модели `NewsArticle`, `NewsCategory`, `EditorialSettings`, `EditorialRevision`, `MediaAsset`, `EditorialPublicationItem` и миграция0068. Незавершённые новости/настройки хранятся отдельно от legacy Page. Типизированный контракт проверяет ограниченное дерево текста, ссылки, category/date, author/source, media/crop, SEO/OG и фиксированные поля404; безопасные неполные черновики возвращают missingFields.
+
+`SitePublication` получает `releaseSequence` для порядка выпусков, `scopeKey` и provenance базового выпуска. Старый `siteRevision` остаётся ревизией legacy-source; dedup сохраняется в scope `legacy`. Сами immutable JSON snapshots и значения working/published revision миграция не меняет. Новые таблицы пусты, никакой автоматической публикации нет. [Технический контракт](plans/2026-11-06-news-scoped-publication-contract.md).
+
+На T1 готово хранение/чистые модели, а не редакционная API/админка или публичные news routes. Подключение scoped capture/acknowledgment и интерфейсов выполняется следующими этапами#534.
+
 Дополнение от 04.11.2026, #495: в JSON-контракт Tariff добавлен типизированный `tvbox_available`, всего 26 атрибутов и 38 импортных колонок. Доступность не выводится из цены 0; перенос 0065 сохраняет происхождение решения и before/after в истории. Для 29 отсутствующих в текущем источнике тарифов владелец подтвердил временное отсутствие предложения приставки. INCLUDED ONT с ценой оплачивается отдельно один раз при подключении, а `online_cinemas` отображается общим списком без альтернатив. Статус выпуска и проверки — в [отчете](research/2026-11-04-tariff-contract-implementation.md). Применено в test-контуре, публикация 28/28; [результат live-проверки](research/2026-11-04-tariff-contract-release.md).
 
 Seed соответствует текущей schema: Region хранит name/slug и связи; телефоны принадлежат Site. Новый bootstrap создаёт HOME Hero 2.0.0/CITY_HOME Hero 1.0.0 templates, восемь SEO-шаблонов и только DRAFT примеры тарифов без цен. Публикационный протокол использует существующие SitePublication/SiteRebuild JSON для progress, отдельной модели расписания больше нет.

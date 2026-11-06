@@ -1,6 +1,6 @@
 # Развертывание и эксплуатационный контур
 
-Migration head:67 каталогов миграций до `0067_account_page`;0066/0067 пока проверены только локально. Миграция 0065 применена в защищенном test-контуре на exact SHA 8b03ab78; она изменила рабочие атрибуты с аудитом и сохранением старого immutable snapshot. CODE и CMS подтверждены, текущие ревизии 28/28. [Деплой, receipt и live-проверки](research/2026-11-04-tariff-contract-release.md).
+Migration head:68 каталогов миграций до `0068_editorial_news`.0068 проверена локально на PostgreSQL18: старые snapshots и legacy revisions сохранены, новостные данные автоматически не создаются и не публикуются. Внешнее применение0068 ещё не выполнялось. Исторический тарифный выпуск0065/exact SHA8b03ab78 и28/28 подтверждён [приёмкой4ноября](research/2026-11-04-tariff-contract-release.md); последующий ACCOUNT — [отдельной приёмкой](research/2026-11-05-account-test-release.md). Эти даты не заменяют свежую проверку контура перед следующим deployment.
 
 Сверка процедур: 6 октября 2026 года. Coolify использует постоянный publication runtime; CMS publish не запускает redeploy, code deployment выпускает renderer обслуживаемого snapshot. Контракт и восстановление — в [publication.md](publication.md), доказательства — в [research/README.md](research/README.md).
 

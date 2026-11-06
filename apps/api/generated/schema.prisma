@@ -247,6 +247,11 @@ model Site {
   rebuilds               SiteRebuild[]
   contentRevisions       ContentRevision[]
   publications           SitePublication[]
+  newsArticles           NewsArticle[]
+  newsCategories         NewsCategory[]
+  editorialSettings      EditorialSettings[]
+  editorialRevisions     EditorialRevision[]
+  mediaAssets            MediaAsset[]
   publicationValidations SitePublicationValidation[]
   auditEvents            AuditEvent[]
   sitemapExclusions      SitemapExclusion[]
@@ -351,6 +356,10 @@ model SitePublication {
   id                   String                     @id @default(cuid())
   siteId               String
   siteRevision         Int
+  releaseSequence      Int                        @unique @default(autoincrement())
+  scopeKey             String                     @default("legacy")
+  basePublicationId    String?
+  changeSetDigest      String?
   status               SitePublicationStatus      @default(PENDING)
   catalog              Json
   triggerEntity        String
@@ -369,10 +378,129 @@ model SitePublication {
   requestedRebuilds    SiteRebuild[]              @relation("RequestedPublication")
   processingRebuilds   SiteRebuild[]              @relation("ProcessingPublication")
   publishedRebuilds    SiteRebuild[]              @relation("PublishedPublication")
+  editorialItems       EditorialPublicationItem[]
 
-  @@unique([siteId, siteRevision])
+  @@unique([siteId, siteRevision, scopeKey], name: "siteId_siteRevision")
+  @@index([siteId, releaseSequence])
   @@index([siteId, status, createdAt])
   @@index([requestedById, createdAt])
+}
+
+enum EditorialKind {
+  ARTICLE
+  CATEGORY
+  NEWS_SETTINGS
+  NOT_FOUND
+}
+
+model NewsArticle {
+  id                String        @id @default(cuid())
+  siteId            String
+  slug              String?
+  title             String        @default("")
+  summary           String        @default("")
+  categoryId        String?
+  publishedDate     DateTime      @db.Timestamptz(3)
+  content           Json
+  revision          Int           @default(1)
+  publishedRevision Int?
+  everPublished     Boolean       @default(false)
+  sourceId          Int?
+  sourceHash        String?
+  sourceUrl         String?
+  archivedAt        DateTime?     @db.Timestamptz(3)
+  createdAt         DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime      @updatedAt @db.Timestamptz(3)
+  site              Site          @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  category          NewsCategory? @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@unique([siteId, slug])
+  @@unique([siteId, sourceId])
+  @@index([siteId, publishedDate, id])
+  @@index([categoryId])
+}
+
+model NewsCategory {
+  id                String        @id @default(cuid())
+  siteId            String
+  slug              String?
+  name              String        @default("")
+  content           Json
+  revision          Int           @default(1)
+  publishedRevision Int?
+  sourceId          Int?
+  archivedAt        DateTime?     @db.Timestamptz(3)
+  createdAt         DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime      @updatedAt @db.Timestamptz(3)
+  site              Site          @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  articles          NewsArticle[]
+
+  @@unique([siteId, slug])
+  @@unique([siteId, sourceId])
+}
+
+model EditorialSettings {
+  id                String        @id @default(cuid())
+  siteId            String
+  kind              EditorialKind
+  content           Json
+  revision          Int           @default(1)
+  publishedRevision Int?
+  createdAt         DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime      @updatedAt @db.Timestamptz(3)
+  site              Site          @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([siteId, kind])
+}
+
+model EditorialRevision {
+  id          String        @id @default(cuid())
+  siteId      String
+  kind        EditorialKind
+  entityId    String
+  revision    Int
+  snapshot    Json
+  digest      String
+  actorId     String?
+  checkpoint  Boolean       @default(false)
+  publishedAt DateTime?     @db.Timestamptz(3)
+  createdAt   DateTime      @default(now()) @db.Timestamptz(3)
+  site        Site          @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([siteId, kind, entityId, revision])
+  @@index([siteId, kind, entityId, createdAt])
+}
+
+model MediaAsset {
+  id          String   @id @default(cuid())
+  siteId      String
+  originalKey String
+  sha256      String
+  mimeType    String
+  bytes       Int
+  width       Int
+  height      Int
+  derivatives Json
+  ready       Boolean  @default(false)
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+  site        Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([siteId, sha256])
+}
+
+model EditorialPublicationItem {
+  id            String          @id @default(cuid())
+  publicationId String
+  kind          EditorialKind
+  entityId      String
+  revision      Int
+  action        String
+  snapshot      Json?
+  publication   SitePublication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+
+  @@unique([publicationId, kind, entityId])
+  @@index([kind, entityId, revision])
 }
 
 model SitePublicationValidation {

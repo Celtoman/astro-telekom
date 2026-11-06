@@ -1,5 +1,12 @@
 # Покрытие тестами
 
+## Новости и редакционное хранение — T1
+
+- `news-contract.test.cjs`: готовая новость без необязательных данных, неполный безопасный draft/missingFields, whitelist body/URL/media, invalid version/slug/date/crop, manual related, категории и фиксированные destinations404.
+- `editorial-publication-model.test.cjs`: чистый overlay выбранной редакции поверх live source без мутации baseline/чужого контента; field-level category reassignment, снятие/aliases, разделение draft/live lifecycle. Это не проверка полноценной scoped activation.
+- `editorial-revisions.test.cjs`:20последних контрольных черновиков плюс все published/current/pending revisions и детерминированный digest.
+- `scripts/rehearse-news-migration.mjs` — отдельная PostgreSQL18-проверка, не часть unit suite: применяет67старых миграций, создаёт historical fixtures, затем0068; сохраняет2JSON snapshots/legacy revisions, проверяет порядок releaseSequence, два editorial releases при одном source revision и legacy dedup. Контейнер собственный и удаляется по точному имени.
+
 - `tariff-equipment-contract.test.cjs`: явная доступность приставки, запрет неподтвержденного0, бесплатный выкуп с подтверждением и платный выкуп без рассрочки; INCLUDED ONT один раз в разовом итоге и fingerprint,0/null/OPTIONAL. `scripts/rehearse-tvbox-availability.mjs` проверяет перенос0065 на копии всего актуального каталога, историю, отсутствие изменения цен/публикации и идемпотентность. [Результаты#495](research/2026-11-04-tariff-contract-implementation.md).
 
 Архивная retention (#440/#438): `publication-retention.test.mjs` проверяет protected set, незавершённые CMS intents, запрет удаления без проверенного архива, сохранение assets/metadata, crash/resume, symlink/path guards, исторические receipts без повторной активации, общую serial queue и восстановление полного sealed дерева с последующим закреплением. `publication-retention-archive.test.mjs` запускает `publication_retention_test.py`: полная файловая опись/restore, corruption, traversal, missing file и отказ S3 без archive acknowledgment/GC. На Linux symlink guard должен проходить без пропуска.

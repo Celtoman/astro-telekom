@@ -217,6 +217,10 @@ exports.Prisma.SitePublicationScalarFieldEnum = {
   id: 'id',
   siteId: 'siteId',
   siteRevision: 'siteRevision',
+  releaseSequence: 'releaseSequence',
+  scopeKey: 'scopeKey',
+  basePublicationId: 'basePublicationId',
+  changeSetDigest: 'changeSetDigest',
   status: 'status',
   catalog: 'catalog',
   triggerEntity: 'triggerEntity',
@@ -229,6 +233,90 @@ exports.Prisma.SitePublicationScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   publishedAt: 'publishedAt'
+};
+
+exports.Prisma.NewsArticleScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  slug: 'slug',
+  title: 'title',
+  summary: 'summary',
+  categoryId: 'categoryId',
+  publishedDate: 'publishedDate',
+  content: 'content',
+  revision: 'revision',
+  publishedRevision: 'publishedRevision',
+  everPublished: 'everPublished',
+  sourceId: 'sourceId',
+  sourceHash: 'sourceHash',
+  sourceUrl: 'sourceUrl',
+  archivedAt: 'archivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NewsCategoryScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  slug: 'slug',
+  name: 'name',
+  content: 'content',
+  revision: 'revision',
+  publishedRevision: 'publishedRevision',
+  sourceId: 'sourceId',
+  archivedAt: 'archivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EditorialSettingsScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  kind: 'kind',
+  content: 'content',
+  revision: 'revision',
+  publishedRevision: 'publishedRevision',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EditorialRevisionScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  kind: 'kind',
+  entityId: 'entityId',
+  revision: 'revision',
+  snapshot: 'snapshot',
+  digest: 'digest',
+  actorId: 'actorId',
+  checkpoint: 'checkpoint',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MediaAssetScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  originalKey: 'originalKey',
+  sha256: 'sha256',
+  mimeType: 'mimeType',
+  bytes: 'bytes',
+  width: 'width',
+  height: 'height',
+  derivatives: 'derivatives',
+  ready: 'ready',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EditorialPublicationItemScalarFieldEnum = {
+  id: 'id',
+  publicationId: 'publicationId',
+  kind: 'kind',
+  entityId: 'entityId',
+  revision: 'revision',
+  action: 'action',
+  snapshot: 'snapshot'
 };
 
 exports.Prisma.SitePublicationValidationScalarFieldEnum = {
@@ -658,6 +746,13 @@ exports.SitePublicationStatus = exports.$Enums.SitePublicationStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.EditorialKind = exports.$Enums.EditorialKind = {
+  ARTICLE: 'ARTICLE',
+  CATEGORY: 'CATEGORY',
+  NEWS_SETTINGS: 'NEWS_SETTINGS',
+  NOT_FOUND: 'NOT_FOUND'
+};
+
 exports.PublicationValidationOutcome = exports.$Enums.PublicationValidationOutcome = {
   BLOCKED: 'BLOCKED',
   PASSED_WITH_WARNINGS: 'PASSED_WITH_WARNINGS',
@@ -807,6 +902,12 @@ exports.Prisma.ModelName = {
   SiteRebuild: 'SiteRebuild',
   ContentRevision: 'ContentRevision',
   SitePublication: 'SitePublication',
+  NewsArticle: 'NewsArticle',
+  NewsCategory: 'NewsCategory',
+  EditorialSettings: 'EditorialSettings',
+  EditorialRevision: 'EditorialRevision',
+  MediaAsset: 'MediaAsset',
+  EditorialPublicationItem: 'EditorialPublicationItem',
   SitePublicationValidation: 'SitePublicationValidation',
   AuditEvent: 'AuditEvent',
   Region: 'Region',

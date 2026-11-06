@@ -1,5 +1,7 @@
 # Архитектура платформы
 
+**Редакционный фундамент T1,6ноября2026:** новости/категории/настройки/медиа и immutable entity revisions вынесены в типизированный модуль API. Миграция0068 добавляет отдельную release identity, не переписывая опубликованные catalogs. Чистая функция scoped overlay принимает только выбранные snapshots; подключение её к serving baseline и atomic pipeline — следующий этап, пока не действующий механизм публикации. [Контракт](plans/2026-11-06-news-scoped-publication-contract.md), [план#534](plans/2026-11-06-news-and-404-integration.md).
+
 Сверка с кодом и Compose: 6 октября 2026 года. Действующий [контракт публикации](publication.md) описывает static builder/controller, exact serving snapshot, CODE и восстановление. Датированные результаты внешних проверок — в [приёмках](research/README.md), актуальные ограничения — в [current-state.md](current-state.md).
 
 ## Статус архитектуры
