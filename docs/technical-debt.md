@@ -309,7 +309,9 @@
 
 | ID | Issue | Суть |
 | --- | --- | --- |
-| TD-237 | [#555](https://github.com/Celtoman/astro-telekom/issues/555) 🟢 | Двойной отступ новостей; локальное исправление в #558, внешний выпуск ожидается |
-| TD-238 | [#556](https://github.com/Celtoman/astro-telekom/issues/556) 🟢 | Состояния и необязательные обложки карточек; локальное исправление в #558 |
-| TD-239 | [#557](https://github.com/Celtoman/astro-telekom/issues/557) 🟢 | Лишний выбор сайта в редакционной админке; локальное исправление в #558 |
-| TD-240 | [#559](https://github.com/Celtoman/astro-telekom/issues/559) 🟢 | Guard числа тестов ошибочно трактует serving baseline и ревизии CMS |
+| TD-237 | [#555](https://github.com/Celtoman/astro-telekom/issues/555) ✅ | Двойной отступ новостей; исправлен и проверен в test по #558 |
+| TD-238 | [#556](https://github.com/Celtoman/astro-telekom/issues/556) ✅ | Состояния и необязательные обложки карточек; исправлено и проверено в test по #558 |
+| TD-239 | [#557](https://github.com/Celtoman/astro-telekom/issues/557) ✅ | Лишний выбор сайта в редакционной админке; исправлено и проверено в test по #558 |
+| TD-240 | [#559](https://github.com/Celtoman/astro-telekom/issues/559) ✅ | Guard числа тестов ошибочно трактует serving baseline и ревизии CMS |
+| TD-241 | [#560](https://github.com/Celtoman/astro-telekom/issues/560) 🟢 | Browser manifest fetch получает401 при Basic Auth в test |
+| TD-242 | [#561](https://github.com/Celtoman/astro-telekom/issues/561) 🟢 | Разобрать blocked runtime inline styles admin при CSP |
