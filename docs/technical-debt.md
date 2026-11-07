@@ -164,7 +164,7 @@
 | TD-171 | [#270](https://github.com/Celtoman/astro-telekom/issues/270) ✅ | Повторное открытие разделов админки снова ждёт внешние запросы; остаётся заметная пауза |
 | TD-172 | [#272](https://github.com/Celtoman/astro-telekom/issues/272) ✅ | После успешного сохранения города остаётся ложное предупреждение о несохранённых изменениях |
 | TD-173 | [#273](https://github.com/Celtoman/astro-telekom/issues/273) 🟢 | Ошибка сохранения города отображается за открытым модальным редактором |
-| TD-174 | [#276](https://github.com/Celtoman/astro-telekom/issues/276) 🟢 | Адресное действие шапки на общей главной ведёт к локальному якорю вместо городской проверки |
+| TD-174 | [#276](https://github.com/Celtoman/astro-telekom/issues/276) ✅ | Адресное действие шапки на общей главной ведёт к локальному якорю вместо городской проверки |
 | TD-168 | [#266](https://github.com/Celtoman/astro-telekom/issues/266) ✅ | Bounded publication budget для review/preview подтверждён конкурентными live200 на полном каталоге |
 | TD-169 | [#267](https://github.com/Celtoman/astro-telekom/issues/267) ✅ | CITY_HOME тарифные карточки расходятся с визуальными параметрами актуального Figma B04 |
 | TD-165 | [#262](https://github.com/Celtoman/astro-telekom/issues/262) ✅ | Control GET/POST не переносят pooled соединения через Caddy reload; readback и UNCERTAIN сохраняются |
