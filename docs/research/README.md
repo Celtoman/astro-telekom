@@ -1,6 +1,6 @@
 # Исследования проекта
 
-- [2026-11-07 — #562/#569: реализация ускоренного full build, Node/Astro и удаление повтора](2026-11-07-news-performance-implementation.md)
+- [2026-11-07 — #562/#569: test-выпуск ускоренного full build, Node/Astro и удаление повтора](2026-11-07-news-performance-implementation.md)
 
 - [2026-11-07 — #562/#569: причины, существующий замер и согласованный план](../plans/2026-11-07-news-publication-performance.md)
 

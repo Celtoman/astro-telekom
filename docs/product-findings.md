@@ -979,13 +979,12 @@
 
 ### PF-201 — Анонс повторяет начало статьи над обложкой
 
-- 7 ноября 2026, входящая обратная связь владельца. Статус: ROOT CAUSE CONFIRMED / PLAN PROPOSED. На6живых страницах article header summary равен первому абзацу body. Убрать вывод анонса из article header, сохранив body, карточки и SEO; данные не чистить. Проблема [#568](https://github.com/Celtoman/astro-telekom/issues/568), отдельный [план #569](https://github.com/Celtoman/astro-telekom/issues/569). Применение не выполнено.
+- 7 ноября 2026, обратная связь владельца. Статус: IMPLEMENTED / TEST RELEASED. Удалён article header summary в общем renderer публичной статьи и ARTICLE preview; первый абзац body, карточки и SEO сохранены. Regression с/без cover и live1440/834/390/320 прошли. Проблема [#568](https://github.com/Celtoman/astro-telekom/issues/568), [план #569](https://github.com/Celtoman/astro-telekom/issues/569). Данные статей не менялись.
 
 ### PF-202 — Обновление Astro и ускорение публикации
 
-- 7 ноября 2026, предложение владельца проверить latest Astro. Статус: AUDITED / PLAN PROPOSED. Установлен7.3.1, registry latest7.4.7; обновление требует сначала согласовать Node>=22.23.4 (фактически22.23.2). Incremental уже существует, но процесс удаляет cache и меняет asset prefix. Существующий batch4237страниц занял255.705с, включая135.545с CHECKING; аудит новых выпусков не запускал. Предложены отдельное обновление, детализация времени, оптимизация verify/seal и затем native reuse с full fallback. [#562](https://github.com/Celtoman/astro-telekom/issues/562), [доказательства и план](plans/2026-11-07-news-publication-performance.md). Реализация не согласована.
-
-- Применение #562/#569 разрешено владельцем. Повтор article summary убран с red/green regression; Node22.23.4/Astro7.4.7 и оптимизация I/O проверяются. Native probe подтвердил invalidation при каждом новом artifact prefix; production reuse не включён, отдельная оценка #571. Существующие advisory записаны в #570. [Протокол](research/2026-11-07-news-performance-implementation.md).
+- 7 ноября 2026, применение разрешено владельцем, статус: IMPLEMENTED / TEST RELEASED. Node проекта/CI/Docker22.23.4, Astro web/admin7.4.7. Bounded I/O и объединение HTML-проверок ускорили локальный файловый этап: медиана65.516→26.095с; это не время всей CMS-публикации. Полный локальный gate, exact CI, healthy/CODE и live read-only QA пройдены; реальные материалы и рабочие правки не публиковались.
+- Native probe подтвердил invalidation при новом artifact prefix и не показал общего ускорения на fixture. По резервному варианту [плана #562](https://github.com/Celtoman/astro-telekom/issues/562) сохранён optimized full build; отдельный asset-set/HTML reuse остаётся в #571. Существующие advisory — #570. [Протокол](research/2026-11-07-news-performance-implementation.md).
 
 ### PF-203 — Сторонний код, подключение Метрики и управление событиями сайта
 

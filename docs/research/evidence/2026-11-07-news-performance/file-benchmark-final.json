@@ -1,0 +1,76 @@
+{
+  "node": "v22.23.4",
+  "baseline": "8f04bc9f",
+  "pages": 4237,
+  "results": [
+    {
+      "mode": "baseline",
+      "run": 0,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 17324,
+      "seal": 36256,
+      "readback": 5624,
+      "total": 59211
+    },
+    {
+      "mode": "optimized",
+      "run": 0,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 5409,
+      "seal": 17144,
+      "readback": 1981,
+      "total": 24547
+    },
+    {
+      "mode": "optimized",
+      "run": 1,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 5368,
+      "seal": 18558,
+      "readback": 1469,
+      "total": 25400
+    },
+    {
+      "mode": "baseline",
+      "run": 1,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 18431,
+      "seal": 63834,
+      "readback": 14503,
+      "total": 96778
+    },
+    {
+      "mode": "baseline",
+      "run": 2,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 115884,
+      "seal": 90478,
+      "readback": 10525,
+      "total": 216892
+    },
+    {
+      "mode": "optimized",
+      "run": 2,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 6668,
+      "seal": 27130,
+      "readback": 2429,
+      "total": 36233
+    }
+  ],
+  "sameInventory": true,
+  "releaseCommit": "bc2ac7f139fc13a3b4554d13dcf57dcb6955adf6",
+  "note": "Repeated on final code. Host/OS cache not controlled; retain all samples and do not treat file-stage timing as CMS/VPS SLA."
+}

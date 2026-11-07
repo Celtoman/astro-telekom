@@ -43,7 +43,7 @@ Read-only HTTP-проверка 7 ноября в12:42UTC нашла уже за
 
 Предлагается убрать article header summary целиком, а не удалять первый абзац body и не сравнивать тексты эвристикой. Summary сохраняется в данных, карточках list/home/related, description/OG/JSON-LD. Общий renderer должен одинаково работать на публичной странице и в ARTICLE preview. Это отдельная короткая коррекция #569, не зависящая от оптимизации сборки.
 
-## Предлагаемый порядок применения
+## Исходный предлагаемый порядок применения (история аудита)
 
 - [ ] 1. Выполнить #569 отдельным изменением: regression для статьи с/без cover; убрать header summary и ненужный CSS selector; проверить сохранность первого абзаца, карточек, SEO/OG/JSON-LD и preview,4ширины/24px/h1. Без изменения БД.
 - [ ] 2. Отдельным коммитом выровнять Node до поддерживаемой patch-версии22, обновить Astro web/admin до7.4.7 и только необходимые интеграции. Выполнить audit high, frozen install, полный pnpm check, Docker runtime rehearsal, CSP positive/negative, SPA native/fallback/Back/dirty guard и preview. Не откатывать прежние исправления CSP на основании одной версии framework.
@@ -68,3 +68,15 @@ Read-only HTTP-проверка 7 ноября в12:42UTC нашла уже за
 ## Решение по native probe при применении
 
 3цикла по500страниц: одинаковый assetsPrefix переиспользует500/500, новый prefix каждый раз0/500. Общего ускорения на простом fixture не получено. Согласно разделу выбора применяется резервный вариант — оптимизированный full build. Отдельный versioned asset-set/HTML reuse остаётся в #571; SSR и экспериментальный flag в production не вводятся.
+
+## Итог применения 7 ноября 2026
+
+- [x] Убрана только повторная аннотация article header; body/cards/SEO и общий preview сохранены.
+- [x] Node22.23.4 и Astro7.4.7 согласованы в проекте/CI/Docker; frozen install, peers, audit high и полный локальный gate выполнены.
+- [x] Добавлены Astro --timings и advisory subphase workTimings. Review/queue/activation/ACK остаются существующими стадиями; новая сквозная метрика реальной CMS-публикации не заявляется.
+- [x] Ограниченный параллелизм8 и объединение HTML-checks применены с конечным readback, integrity/CAS/fsync/receipt/recovery. Две серии по3сравнения на4237HTML сохранены с ограничениями Windows-host/OS cache; полной cold-cache гарантии нет.
+- [x] Изолированный native probe500routes/3цикла выполнен; выбран предусмотренный планом optimized full fallback. Новый versioned asset-set, route cacheKey и production reuse НЕ реализованы: это отдельный #571.
+- [x] Regression, полный gate, Linux/non-root Node/Caddy crash/retry/ACK/old assets и exact-SHA CI прошли. Coolify test deployment healthy и CODE SUCCEEDED. Live1440/834/390/320: страницы/карточки/preview/admin/CSP/native+fallback SPA проверены.
+- [x] Реальные статьи, рабочие правки, категории, CMS/catalog/serving snapshot сверены до/после и сохранены; CMS publish не вызывался.
+
+Не все исходные идеи стали реализацией: page reuse и связанные с ним rename/withdraw/cache invalidation сценарии требуют #571; для текущего full build сохраняются существующие snapshot/route/integrity suites. [Фактический выпуск, измерения и границы](../research/2026-11-07-news-performance-implementation.md). Исходные unchecked пункты выше оставлены как историческое предложение, а не текущий чек-лист задач.
