@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from 'node:crypto';
-import { readFile, readdir, mkdir, writeFile, rm, lstat, cp, symlink } from 'node:fs/promises';
+import { readFile, readdir, mkdir, writeFile, rm, lstat, cp, symlink, statfs } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import { resolve, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,6 +15,15 @@ const publicKeys = ['PUBLIC_SITE_URL', 'PUBLIC_API_URL', 'PUBLIC_SITE_SLUG', 'PU
 
 export class SnapshotUnavailableError extends Error {
   constructor(status) { super(`Exact snapshot unavailable (${status})`); this.httpStatus = status; }
+}
+
+export async function requireBuildSpace(root, probe = statfs) {
+  const usage = await probe(root);
+  // 5 GiB operating reserve plus 3 GiB for source/output/sealing scratch.
+  if (usage.bavail * usage.bsize < 8 * 1024 ** 3) {
+    const error = new Error('Insufficient disk space for a new publication build; serving version is preserved');
+    error.httpStatus = 503; throw error;
+  }
 }
 
 async function sourceIdentity(publicEnv, servingContextDigest) {
@@ -62,12 +71,13 @@ function buildAstro(environment, project, report, totalPages) {
 }
 
 export class StaticArtifactBuilder {
-  constructor({ publicationRoot, apiUrl, adminToken, publicEnv, servingContextDigest = null, fetchImpl = fetch, mediaRoot = process.env.EDITORIAL_MEDIA_ROOT }) {
+  constructor({ publicationRoot, apiUrl, adminToken, publicEnv, servingContextDigest = null, fetchImpl = fetch, mediaRoot = process.env.EDITORIAL_MEDIA_ROOT, spaceProbe = statfs }) {
     if (!adminToken) throw new Error('Builder requires a private API token');
     this.root = resolve(publicationRoot);
     this.apiUrl = new URL(apiUrl).href.replace(/\/$/, '');
     this.adminToken = adminToken; this.fetchImpl = fetchImpl;
     this.mediaRoot = mediaRoot;
+    this.spaceProbe = spaceProbe;
     this.publicEnv = Object.fromEntries(publicKeys.map(key => [key, String(publicEnv[key] || '')]));
     this.publicEnv.PUBLIC_SITE_URL = resolvePublicSiteUrl(this.publicEnv);
     this.publicEnv.PUBLIC_API_URL = resolvePublicApiUrl(this.publicEnv);
@@ -145,6 +155,7 @@ export class StaticArtifactBuilder {
     identity.artifactId = sha(JSON.stringify(identity));
     const existing = await readArtifact(this.root, identity.artifactId).catch(error => { if (error.code !== 'ENOENT') throw error; return null; });
     if (existing) return existing;
+    await requireBuildSpace(this.root, this.spaceProbe);
     const builds = join(this.root, 'builds'); await mkdir(builds, { recursive: true });
     if (!(await lstat(builds)).isDirectory()) throw new Error('Private build directory cannot be a symlink');
     const operationRoot = join(builds, randomUUID()); await mkdir(operationRoot, { mode: 0o700 });

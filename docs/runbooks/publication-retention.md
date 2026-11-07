@@ -1,12 +1,14 @@
 # Архивирование и очистка публикаций
 
-Задача [#440](https://github.com/Celtoman/astro-telekom/issues/440), проблема [#438](https://github.com/Celtoman/astro-telekom/issues/438). Реализация не меняет опубликованный каталог и не создаёт CMS snapshot.
+Новая политика — задача [#580](https://github.com/Celtoman/astro-telekom/issues/580). Историческое внедрение — задача [#440](https://github.com/Celtoman/astro-telekom/issues/440), проблема [#438](https://github.com/Celtoman/astro-telekom/issues/438). Реализация не меняет опубликованный каталог и не создаёт CMS snapshot.
 
-Подтверждённое внедрение 29 октября 2026: [внешняя приёмка](../research/2026-10-29-publication-retention.md). Timer/path включены, ручной и событийный запуски проверены.
+Подтверждённое внедрение 29 октября 2026: [внешняя приёмка](../research/2026-10-29-publication-retention.md). На 29 октября timer/path были включены, ручной и событийный запуски проверены. Политика ниже подготовлена 7 ноября; её серверная приёмка фиксируется отдельно.
 
 ## Защищённые данные
 
-Controller читает фактическую Caddy configuration с разрешённым Origin. Сохраняются active, все serving/fallback roots, legacy baseline, две последние успешно подтверждённые версии помимо active, версии за семь суток, неподтверждённые артефакты и candidate/previous незавершённых CMS/CODE intents. Неопознанные release directories и legacy current не удаляются. Восстановленный оператором артефакт закрепляется и больше не попадает в автоматическую GC.
+Controller читает фактическую Caddy configuration с разрешённым Origin. Сохраняются active, все serving/fallback roots, legacy baseline, две последние успешно подтверждённые версии помимо active, до двух дополнительных успешно подтверждённых версий за последние 24 часа в пределах общего бюджета тома 8 ГиБ, неподтверждённые артефакты и candidate/previous незавершённых CMS/CODE intents. Неопознанные release directories и legacy current не удаляются. Восстановленный оператором артефакт закрепляется и больше не попадает в автоматическую GC.
+
+Бюджет рассчитывается по занятым блокам файлов и каталогов всего publication volume, включая сохраняемые assets, metadata и legacy current. Ссылки учитываются без следования по ним. Обязательные версии не удаляются при превышении бюджета; дополнительные версии тогда не защищаются. Перед новой сборкой builder требует 8 ГиБ свободного места: 5 ГиБ рабочего резерва и 3 ГиБ на source/output/sealing; готовый sealed артефакт можно переиспользовать без новой сборки.
 
 Host orchestrator проверяет отсутствие PENDING/QUEUED/RUNNING/RETRYING SiteRebuild, PENDING/RUNNING SitePublication и active/wait/paused/delayed BullMQ jobs. Это read-only SQL через psql и чтение Redis, не запись в базу из web/worker. Ошибка чтения запрещает очистку. При занятости процесс ждёт до минуты и откладывает запуск.
 
@@ -14,9 +16,9 @@ Host orchestrator проверяет отсутствие PENDING/QUEUED/RUNNING
 
 deploy/publication-retention.py создаёт отдельный tar.gz с полным release и неизменяемым manifest. Все файлы сверяются по размеру и SHA-256. Непривилегированные пользователи не могут передать произвольный путь: resource, volume и S3 prefix закреплены для этого контура.
 
-deploy/publication-retention-s3.php запускается только в существующем контейнере Coolify. Ключи берутся из его зашифрованной S3Storage model и не копируются в приложение, CLI arguments или журналы. Используется существующий Timeweb S3 storage 1; другой endpoint отклоняется. Файлы staging находятся в /data/coolify/backups/publication-retention, который смонтирован в Coolify как /var/www/html/storage/app/backups/publication-retention.
+deploy/publication-retention-s3.php запускается только в существующем контейнере Coolify. Ключи берутся из его зашифрованной S3Storage model и не копируются в приложение, CLI arguments или журналы. Новые архивы используют существующий Backblaze B2 storage 2 (`astrotelekom`, eu-central-003), как в проекте «Мониторинг и бэкап». Старые Timeweb S3 storage 1 остаются по исходному адресу. UUID, endpoint и bucket обоих назначений закреплены; произвольный endpoint отклоняется. Выбранное хранилище старого immutable proof не меняется при повторе. Файлы staging находятся в /data/coolify/backups/publication-retention, который смонтирован в Coolify как /var/www/html/storage/app/backups/publication-retention.
 
-Object key: astro-telekom/publications/<artifactId>/<manifestDigest>.tar.gz. Существующий объект не перезаписывается. После upload объект скачивается обратно; проверяются его checksum/размер и восстановление каждого файла в изолированный каталог. Только после этого machine-authenticated controller принимает archive proof. Архив хранится не менее 90 суток; helper не удаляет S3 objects и не меняет lifecycle общего bucket.
+Object key: astro-telekom/publications/<artifactId>/<manifestDigest>.tar.gz. Существующий объект не перезаписывается. После upload объект скачивается обратно; проверяются его checksum/размер и восстановление каждого файла в изолированный каталог. Весь выбранный пакет проходит архив/restore перед удалением первого HTML. Ошибка любого архива прерывает пакет до начала удаления. Только после этого machine-authenticated controller принимает archive proof. Архив хранится не менее 90 суток; helper не удаляет S3 objects и не меняет lifecycle общего bucket.
 
 Полный исходный архив на компьютере владельца и архивы в S3 — разные доказательства. Прерванный tar.gz.partial не считается резервной копией.
 
@@ -32,15 +34,18 @@ readArtifact по-прежнему требует полный локальны�
 
 ## Установка на проверенном контуре
 
+Перед массовой обработкой оценить суммарное скачивание всех архивов и повторные readback перед GC; учесть общий для аккаунта B2 Daily Download Bandwidth Cap. Исчерпание квоты запрещает удаление, поскольку restore не подтверждён. Самостоятельно отключать caps, менять платёжные настройки или переходить на другое хранилище нельзя. В #580 лимит был исчерпан во время начальной партии; владелец выбрал ограниченный платный cap и сам применил настройку. Регулярная партия остаётся ограниченной двумя версиями.
+
 После зелёного полного gate/CI и exact-SHA Coolify deployment:
 
+0. Перед выпуском кода временно остановить только publication-retention.timer/path и убедиться, что service не выполняется. Это исключает запуск старого helper с новым planner; остальные backup timers не останавливать. Сохранить точные старые helper/bridge/units и их SHA для отката.
 1. Скопировать versioned Python helper в /opt/astro-telekom-retention/publication-retention.py, mode 0700.
 2. Скопировать PHP bridge в /data/coolify/backups/publication-retention/publication-retention-s3.php, mode 0600; проверить php -l внутри Coolify.
 3. Установить три versioned systemd unit из deploy/; выполнить systemd-analyze verify и daemon-reload.
 4. Сначала запустить helper без --apply и сверить protected/candidates с live Caddy, baseline и очередями.
 5. --apply --limit 1: архив, download, изолированное восстановление, GC одной версии, readback HTML/assets/API и диск.
 6. После проверки обработать остальные кандидаты малыми партиями; --limit допускает 1–100.
-7. Только после успешной приёмки включить publication-retention.timer и publication-retention.path. Timer запускается ежедневно в 02:30 UTC, path реагирует на новые receipts. Каждый запуск повторяет protected/SQL/BullMQ/архивные проверки.
+7. Только после успешной приёмки включить publication-retention.timer и publication-retention.path. Timer запускается ежечасно в :30 UTC с jitter до пяти минут, path реагирует на новые receipts. Штатная партия — две версии, новые архивы направляются в B2. Не создавать второе native backup-расписание Coolify для этой же операции. Каждый запуск повторяет protected/SQL/BullMQ/архивные проверки.
 8. Проверить enabled/active, list-timers и journalctl -u publication-retention.service. Код scheduler и факт его включения фиксируются отдельно.
 
 Рекомендуемые команды:
@@ -51,7 +56,7 @@ readArtifact по-прежнему требует полный локальны�
     systemctl list-timers publication-retention.timer
     journalctl -u publication-retention.service --no-pager -n 30
 
-В журнале есть число кандидатов, archived/restored checksum, deleted HTML/байты и свободное место. При 75% выводится disk_warning, при 85% — disk_critical; превышение бюджета publication volume 12 GiB отмечается publication_budget_warning. Это запись в service journal, не отдельное письмо владельцу. Защищённые данные не удаляются ради лимита. Старые private builds не удаляются этим helper: их отдельная проверка и резервирование не заменяются возрастным rm.
+В журнале есть число кандидатов, archived/restored checksum, deleted HTML/байты и свободное место. При 75% выводится disk_warning, при 85% — disk_critical; превышение аварийного порога publication volume 12 GiB отмечается publication_budget_warning. Это запись в service journal, не отдельное письмо владельцу. Атомарный root-only `/var/lib/astro-publication-retention/status.json` содержит ход/успех/тип ошибки, диск, остаток кандидатов и policy/usage без credentials. Подход заимствован из действующего host backup workflow; Telegram-настройки и расписания «Мониторинга и бэкапа» не меняются, новые сообщения не отправляются. Защищённые данные не удаляются ради лимита. Старые private builds не удаляются этим helper: их отдельная проверка и резервирование не заменяются возрастным rm.
 
 ## Проверки и остановка
 
@@ -61,4 +66,4 @@ readArtifact по-прежнему требует полный локальны�
 
 ## Ручное обслуживание вне publication GC
 
-Private build от 13 октября удалена отдельно 30 октября после внешнего архива и полного Linux-восстановления; штатный helper по-прежнему не удаляет builds. [Результат и инцидент системного journal](../research/2026-10-30-vps-cleanup.md). Для строгого сохранения журнала за 30 суток перед удалением нужно прочитать tail realtime timestamp каждого закрытого файла и сохранить пересекающий границу файл вне VPS; один vacuum-time не является доказательством полноты окна. Инцидент [#444](https://github.com/Celtoman/astro-telekom/issues/444) остаётся открытым, утраченная история не восстановлена.
+Private build от 13 октября удалена отдельно 30 октября после внешнего архива и полного Linux-восстановления; штатный helper по-прежнему не удаляет builds. [Результат и инцидент системного journal](../research/2026-10-30-vps-cleanup.md). Для строгого сохранения журнала за 30 суток перед удалением нужно прочитать максимальную фактическую временную метку записей каждого закрытого файла и сохранить пересекающий границу файл вне VPS; один vacuum-time не является доказательством полноты окна. Инцидент [#444](https://github.com/Celtoman/astro-telekom/issues/444) закрыт владельцем как NOT_PLANNED; утраченная история не восстановлена. Эта задача журналов не касается.

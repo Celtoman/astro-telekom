@@ -13,7 +13,12 @@ try {
         if (!str_starts_with($path, $base) || !preg_match('#^artifact-[a-zA-Z0-9_-]+/(source|returned)\.tar\.gz$#D', substr($path, strlen($base)))) throw new RuntimeException('Invalid archive path');
     }
     $storage = App\Models\S3Storage::findOrFail((int)$storageId);
-    if ((string)$storage->endpoint !== 'https://s3.twcstorage.ru') throw new RuntimeException('Unexpected archive endpoint');
+    $known = [
+        1 => ['ffbq2trtdlvxv71d5z864bi5', 'https://s3.twcstorage.ru', '15f49e2d-baac-4c88-b252-5fff386e83ea'],
+        2 => ['38iyukf4l2e6ewxau3sfnlf5', 'https://s3.eu-central-003.backblazeb2.com', 'astrotelekom'],
+    ];
+    if (!isset($known[(int)$storageId]) || !$storage->is_usable
+        || [(string)$storage->uuid, (string)$storage->endpoint, (string)$storage->bucket] !== $known[(int)$storageId]) throw new RuntimeException('Unexpected archive destination');
     $disk = $storage->filesystem();
     // Never overwrite an existing off-server archive. A retry downloads and verifies the original.
     if (!$disk->exists($key)) {

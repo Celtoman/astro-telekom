@@ -20,6 +20,29 @@ ROOT = Path("/var/lib/docker/volumes") / (RESOURCE + "_web-publication") / "_dat
 STAGING = Path("/data/coolify/backups/publication-retention")
 CONTAINER_STAGING = "/var/www/html/storage/app/backups/publication-retention"
 WEB = "web-" + RESOURCE
+STATUS = Path("/var/lib/astro-publication-retention/status.json")
+
+def write_status(path, value):
+    path = Path(path)
+    if not path.is_absolute() or path.is_symlink() or path.parent.resolve() != path.parent:
+        raise ValueError("Unsafe status path")
+    path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(prefix=".status-", suffix=".tmp", dir=path.parent)
+    try:
+        with os.fdopen(fd, "w") as stream:
+            json.dump(value, stream)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+        if sys.platform != "win32":
+            directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+            try:
+                os.fsync(directory)
+            finally:
+                os.close(directory)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
 
 class MaintenanceBusy(RuntimeError):
     pass
@@ -153,11 +176,15 @@ def archive_and_verify(candidate, storage_id):
     if available < 2 * sum(f["size"] for f in manifest["files"]) + 1024**3:
         raise RuntimeError("Insufficient archive/restore scratch space")
     # Unique owned temporary directory; never a serving path.
+    existing = candidate.get("archive")
+    # Immutable identity includes the original storage; never silently migrate an old proof.
+    storage_id = existing["storageId"] if existing else storage_id
+    if storage_id not in (1, 2):
+        raise ValueError("Unexpected archive storage")
     with tempfile.TemporaryDirectory(prefix="artifact-", dir=STAGING) as temporary:
         temporary = Path(temporary)
         source = temporary / "source.tar.gz"
         returned = temporary / "returned.tar.gz"
-        existing = candidate.get("archive")
         if existing is None:
             create_archive(ROOT, manifest, source)
             verify_restore(source, manifest)
@@ -188,10 +215,10 @@ def archive_and_verify(candidate, storage_id):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--apply", action="store_true")
-    parser.add_argument("--storage-id", type=int, default=1)
+    parser.add_argument("--storage-id", type=int, default=2)
     parser.add_argument("--limit", type=int, default=10)
     args = parser.parse_args()
-    if args.limit < 1 or args.limit > 100 or args.storage_id < 1:
+    if args.limit < 1 or args.limit > 100 or args.storage_id not in (1, 2):
         raise ValueError("Invalid retention limits")
     for attempt in range(7):
         try:
@@ -204,13 +231,18 @@ def main():
             time.sleep(10)
     plan = rpc("/retention/plan")
     log("plan", activeArtifactId=plan["activeArtifactId"], candidates=len(plan["candidates"]),
-        protected=len(plan["protected"]), apply=args.apply)
+        protected=len(plan["protected"]), apply=args.apply, policy=plan.get("policy"), usage=plan.get("usage"))
     if not args.apply:
         return
-    for candidate in plan["candidates"][:args.limit]:
+    write_status(STATUS, dict(state="running", startedAt=dt.datetime.now(dt.timezone.utc).isoformat(),
+                             candidates=len(plan["candidates"]), protected=len(plan["protected"])))
+    selected = plan["candidates"][:args.limit]
+    # Restore-verify the entire selected batch before deleting its first byte.
+    for candidate in selected:
         require_idle()
         proof = archive_and_verify(candidate, args.storage_id)
         rpc("/retention/archive", proof)
+    for candidate in selected:
         require_idle()
         # Controller re-reads serving/protected set under the same serial queue as CMS/CODE.
         result = rpc("/retention/collect", {"artifactId": candidate["artifactId"]})
@@ -224,6 +256,11 @@ def main():
     if allocated >= 12 * 1024**3:
         log("publication_budget_warning", allocatedBytes=allocated, budgetBytes=12 * 1024**3,
             action="Protected artifacts are preserved; review the retention budget")
+    final = rpc("/retention/plan")
+    write_status(STATUS, dict(state="success", checkedAt=dt.datetime.now(dt.timezone.utc).isoformat(),
+        freeBytes=usage.free, usedPercent=round(percent, 2), allocatedBytes=allocated,
+        candidatesRemaining=len(final["candidates"]), protected=len(final["protected"]),
+        policy=final.get("policy"), usage=final.get("usage")))
 
 if __name__ == "__main__":
     try:
@@ -233,4 +270,6 @@ if __name__ == "__main__":
         log("deferred", reason="Another retention process is running")
     except Exception as error:
         log("failed", errorType=type(error).__name__, error=str(error)[:300])
+        write_status(STATUS, dict(state="failed", checkedAt=dt.datetime.now(dt.timezone.utc).isoformat(),
+                                 errorType=type(error).__name__))
         sys.exit(1)

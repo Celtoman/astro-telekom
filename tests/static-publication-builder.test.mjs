@@ -1,11 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, rm, lstat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
+
+test('disk admission rejects a new build before touching private build files', async () => {
+  const { requireBuildSpace } = await import('../apps/web/scripts/publication/static-builder.mjs');
+  const minimum = 8 * 1024 ** 3;
+  await assert.rejects(requireBuildSpace('.', async () => ({ bavail: minimum - 1, bsize: 1 })), error =>
+    error.httpStatus === 503 && /disk space/i.test(error.message));
+  await assert.doesNotReject(requireBuildSpace('.', async () => ({ bavail: minimum, bsize: 1 })));
+  await assert.rejects(requireBuildSpace('.', async () => { throw new Error('filesystem unavailable'); }), /filesystem unavailable/);
+});
 
 test('renderer identity binds normalized serving settings without exposing proxy tokens', async () => {
   const { StaticArtifactBuilder } = await import('../apps/web/scripts/publication/static-builder.mjs');
@@ -41,6 +50,11 @@ test('real Astro builder seals the exact saved catalog with versioned assets and
       publicEnv: { PUBLIC_SITE_URL: 'https://partner.example.test', PUBLIC_API_URL: 'https://partner.example.test/api/v1', PUBLIC_SITE_SLUG: 'domru-site' },
       fetchImpl: async (url, options) => { calls++; assert.equal(url, 'http://api.internal/api/v1/internal/site-publications/domru-site/snapshots/pub-a'); assert.equal(options.headers['x-admin-token'], 'synthetic'); return Response.json(bundle); } });
     const job = { publicationId: 'pub-a', siteSlug: 'domru-site', siteId: 'site-1', rebuildId: 'rebuild-1', rebuildRevision: 1 };
+    const originalProbe = builder.spaceProbe;
+    builder.spaceProbe = async () => ({ bavail: 0, bsize: 1 });
+    await assert.rejects(builder.build(job), /Insufficient disk space/);
+    await assert.rejects(lstat(join(root, 'builds')), { code: 'ENOENT' });
+    builder.spaceProbe = originalProbe; calls = 0;
     const progress = [];
     const artifact = await builder.build(job, async event => { progress.push(event); });
     assert.ok(progress.some(event => event.stage === 'BUILDING' && event.completedPages > 0));

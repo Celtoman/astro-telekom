@@ -69,8 +69,24 @@ function servingRoots(value, output = new Set()) {
   } else if (value && typeof value === 'object') for (const child of Object.values(value)) servingRoots(child, output);
   return output;
 }
-export async function planRetention({ root, serving, now = new Date(), keepDays = 7 }) {
-  if (!Number.isFinite(+now) || keepDays < 7 || !serving?.active) throw new Error('Serving state is required for retention');
+async function allocatedInventory(root) {
+  const files = new Map(); let allocatedBytes = 0; let pending = [root];
+  while (pending.length) {
+    const path = pending.pop(); const st = await lstat(path);
+    if ((!st.isDirectory() && !st.isFile() && !st.isSymbolicLink()) || (path === root && st.isSymbolicLink())) throw new Error('Unsafe symbolic publication path');
+    // Windows lacks allocated blocks; round conservatively there, including directories.
+    const allocated = st.blocks > 0 ? st.blocks * 512 : Math.max(4096, Math.ceil(st.size / 4096) * 4096);
+    allocatedBytes += allocated;
+    // The retained legacy current link is metadata, never an instruction to traverse.
+    // Candidate HTML still passes the strict ownedFile/readArtifact symlink guards.
+    if (st.isSymbolicLink()) continue;
+    if (st.isDirectory()) for (const name of await readdir(path)) pending.push(join(path, name));
+    else files.set(path, allocated);
+  }
+  return { allocatedBytes, files };
+}
+export async function planRetention({ root, serving, now = new Date(), budgetBytes = 8 * 1024 ** 3 }) {
+  if (!Number.isFinite(+now) || !Number.isSafeInteger(budgetBytes) || budgetBytes < 1 || !serving?.active) throw new Error('Serving state and valid budget are required for retention');
   requireArtifactId(serving.active.artifactId);
   const manifests = await records(root, 'manifests');
   const artifacts = await Promise.all(manifests.map(m => readManifest(root, m.artifactId)));
@@ -90,7 +106,7 @@ export async function planRetention({ root, serving, now = new Date(), keepDays 
     const receipt = await readReceipt(root, a.artifactId).catch(missing);
     if (receipt) { verifyArtifactReceipt(a, receipt); successful.push(a); }
     else protect(a.artifactId, 'unconfirmed');
-    if (Date.parse(a.sealedAt) >= +now - keepDays * DAY) protect(a.artifactId, 'recent');
+    if (Date.parse(a.sealedAt) > +now + 300000) protect(a.artifactId, 'clock-uncertain');
   }
   successful.sort((a, b) => b.sealedAt.localeCompare(a.sealedAt) || a.artifactId.localeCompare(b.artifactId));
   for (const a of successful.filter(a => a.artifactId !== serving.active.artifactId).slice(0, 2)) protect(a.artifactId, 'rollback');
@@ -104,7 +120,8 @@ export async function planRetention({ root, serving, now = new Date(), keepDays 
       protect(record.expectedActiveArtifactId, 'unresolved-previous');
     }
   }
-  const candidates = [];
+  const eligible = [];
+  const inventory = await allocatedInventory(root);
   for (const a of artifacts) {
     const retired = await readRetirement(root, a);
     const restored = await readIntegrityRecord(join(root, 'gc-restored'), `${a.artifactId}.json`).catch(missing);
@@ -113,11 +130,26 @@ export async function planRetention({ root, serving, now = new Date(), keepDays 
     const deleted = await readIntegrityRecord(join(root, 'gc-deleted'), `${a.artifactId}.json`).catch(missing);
     if (deleted && ((!retired && !restored) || deleted.manifestDigest !== a.manifestDigest)) throw new Error('GC completion integrity mismatch');
     if (protectedIds.has(a.artifactId) || deleted) continue;
-    candidates.push({ artifactId: a.artifactId, manifestDigest: a.manifestDigest, sealedAt: a.sealedAt,
+    const htmlAllocatedBytes = a.files.filter(f => f.path.endsWith('.html'))
+      .reduce((sum, f) => sum + (inventory.files.get(join(root, 'releases', a.artifactId, f.path)) || 0), 0);
+    eligible.push({ artifactId: a.artifactId, manifestDigest: a.manifestDigest, sealedAt: a.sealedAt,
+      htmlAllocatedBytes,
       htmlBytes: a.files.filter(f => f.path.endsWith('.html')).reduce((s, f) => s + f.size, 0),
       archive: await readIntegrityRecord(join(root, 'archives'), `${a.artifactId}.json`).catch(missing), resuming: !!retired });
   }
+  // Account for all retained assets, metadata, directory overhead and mandatory HTML.
+  // Empty directories may later disappear, but never assume that saving before GC.
+  const requiredBytes = inventory.allocatedBytes - eligible.reduce((sum, a) => sum + a.htmlAllocatedBytes, 0);
+  let projectedBytes = requiredBytes; let additional = 0;
+  for (const a of [...eligible].sort((a, b) => b.sealedAt.localeCompare(a.sealedAt) || a.artifactId.localeCompare(b.artifactId))) {
+    if (a.resuming || Date.parse(a.sealedAt) < +now - DAY || additional === 2) continue;
+    if (projectedBytes + a.htmlAllocatedBytes > budgetBytes) continue;
+    protect(a.artifactId, 'recent'); projectedBytes += a.htmlAllocatedBytes; additional++;
+  }
+  const candidates = eligible.filter(a => !protectedIds.has(a.artifactId));
   return { activeArtifactId: serving.active.artifactId, candidates: candidates.sort((a, b) => a.sealedAt.localeCompare(b.sealedAt)),
+    policy: { budgetBytes, recentHours: 24, maxAdditionalVersions: 2 },
+    usage: { allocatedBytes: inventory.allocatedBytes, requiredBytes, projectedBytes, mandatoryOverBudget: requiredBytes > budgetBytes },
     protected: [...protectedIds].map(([artifactId, reasons]) => ({ artifactId, reasons })) };
 }
 async function ownedFile(root, artifactId, path) {

@@ -34,6 +34,68 @@ async function fixture(t, count = 6) {
   return { root, artifacts, serving };
 }
 async function api() { return import('../apps/web/scripts/publication/artifact-retention.mjs'); }
+async function makeRecent(f) {
+  for (const [index, a] of f.artifacts.entries()) {
+    const { manifestDigest: _, ...body } = a;
+    body.sealedAt = new Date(+now - (f.artifacts.length - index) * 3600000).toISOString();
+    const updated = { ...body, manifestDigest: hash(body) };
+    await writeFile(join(f.root, 'manifests', a.artifactId + '.json'), JSON.stringify(updated));
+    const receipt = JSON.parse(await readFile(join(f.root, 'receipts', a.artifactId + '.json')));
+    await writeFile(join(f.root, 'receipts', a.artifactId + '.json'), JSON.stringify({ ...receipt, manifestDigest: updated.manifestDigest }));
+    f.artifacts[index] = updated;
+  }
+}
+test('frequent releases retain only two extra recent versions beyond mandatory roots', async t => {
+  const f = await fixture(t, 10); await makeRecent(f);
+  const { planRetention } = await api();
+  const p = await planRetention({ root: f.root, serving: await f.serving(), now });
+  assert.deepEqual(p.candidates.map(a => a.artifactId), f.artifacts.slice(1, 5).map(a => a.artifactId));
+  assert.deepEqual(p.protected.filter(a => a.reasons.includes('recent')).map(a => a.artifactId).sort(),
+    f.artifacts.slice(5, 7).map(a => a.artifactId).sort());
+  assert.equal(p.policy.budgetBytes, 8 * 1024 ** 3);
+});
+test('budget counts retained assets and preserves mandatory versions even when they exceed it', async t => {
+  const f = await fixture(t, 10); await makeRecent(f);
+  const { planRetention } = await api();
+  const p = await planRetention({ root: f.root, serving: await f.serving(), now, budgetBytes: 1 });
+  assert.equal(p.protected.length, 4);
+  assert.equal(p.usage.mandatoryOverBudget, true);
+  assert.equal(p.protected.some(a => a.reasons.includes('recent')), false);
+  assert.ok(p.usage.requiredBytes > 1);
+  const extra = p.candidates.find(a => a.artifactId === f.artifacts[6].artifactId);
+  const exact = await planRetention({ root: f.root, serving: await f.serving(), now,
+    budgetBytes: p.usage.requiredBytes + extra.htmlAllocatedBytes });
+  assert.deepEqual(exact.protected.filter(a => a.reasons.includes('recent')).map(a => a.artifactId), [extra.artifactId]);
+  assert.equal(exact.usage.projectedBytes, exact.policy.budgetBytes);
+  await mkdir(join(f.root, 'data'), { recursive: true });
+  await writeFile(join(f.root, 'data', 'retained-assets.bin'), Buffer.alloc(65536));
+  const assets = await planRetention({ root: f.root, serving: await f.serving(), now,
+    budgetBytes: exact.policy.budgetBytes });
+  assert.equal(assets.protected.some(a => a.reasons.includes('recent')), false);
+  assert.equal(assets.usage.mandatoryOverBudget, true);
+});
+test('unresolved candidate and previous version cannot be evicted by the byte budget', async t => {
+  const f = await fixture(t, 10); await makeRecent(f); const { planRetention } = await api();
+  const a = f.artifacts[1]; await rm(join(f.root, 'receipts', a.artifactId + '.json'));
+  const content = { artifactId: a.artifactId, expectedActiveArtifactId: f.artifacts[2].artifactId,
+    job: { publicationId: a.publicationId, siteId: a.siteId, siteSlug: a.siteSlug, rebuildId: a.rebuildId, rebuildRevision: 1 } };
+  await writeImmutableJson(join(f.root, 'operations'), 'a'.repeat(64) + '.json', { ...content, operationDigest: hash(content) });
+  const p = await planRetention({ root: f.root, serving: await f.serving(), now, budgetBytes: 1 });
+  assert.equal(p.protected.length, 6);
+  assert.ok(p.protected.find(x => x.artifactId === a.artifactId).reasons.includes('unresolved'));
+  assert.ok(p.protected.find(x => x.artifactId === f.artifacts[2].artifactId).reasons.includes('unresolved-previous'));
+});
+test('budget preserves the legacy current link without following or counting its external target', async t => {
+  const f = await fixture(t); const { planRetention } = await api();
+  const outside = await realpath(await mkdtemp(join(tmpdir(), 'retention-external-')));
+  t.after(() => rm(outside, { recursive: true, force: true }));
+  await writeFile(join(outside, 'outside.bin'), Buffer.alloc(1024 * 1024));
+  const before = await planRetention({ root: f.root, serving: await f.serving(), now });
+  await symlink(outside, join(f.root, 'current'), process.platform === 'win32' ? 'junction' : 'dir');
+  const after = await planRetention({ root: f.root, serving: await f.serving(), now });
+  assert.ok(after.usage.allocatedBytes - before.usage.allocatedBytes < 65536);
+  assert.equal((await lstat(join(f.root, 'current'))).isSymbolicLink(), true);
+});
 function archive(a) {
   return { artifactId: a.artifactId, manifestDigest: a.manifestDigest, storageId: 1,
     objectKey: 'astro-telekom/publications/' + a.artifactId + '/' + a.manifestDigest + '.tar.gz',

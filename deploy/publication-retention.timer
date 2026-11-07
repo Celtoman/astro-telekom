@@ -1,7 +1,7 @@
 [Unit]
-Description=Daily Astro Telekom publication retention
+Description=Hourly Astro Telekom publication retention
 [Timer]
-OnCalendar=*-*-* 02:30:00 UTC
+OnCalendar=*-*-* *:30:00 UTC
 Persistent=true
 RandomizedDelaySec=300
 Unit=publication-retention.service

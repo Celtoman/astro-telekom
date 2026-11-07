@@ -1,0 +1,260 @@
+{
+  "status": "PREPARED_NOT_DEPLOYED",
+  "task": 580,
+  "baseCommit": "d54879336adf257e7676be78e9480f971c912868",
+  "archives": {
+    "storageId": 2,
+    "count": 16,
+    "bytes": 2681403599,
+    "proofs": [
+      {
+        "artifactId": "fec0db1dfd7ed1d87a513c82f84fc42985b02e0b9916d79b07d62d1db8fa6953",
+        "manifestDigest": "d8476f485a5633028f5379a7e9816fc9eb97876d47aef2e6ef4f33f4cb665e2e",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/fec0db1dfd7ed1d87a513c82f84fc42985b02e0b9916d79b07d62d1db8fa6953/d8476f485a5633028f5379a7e9816fc9eb97876d47aef2e6ef4f33f4cb665e2e.tar.gz",
+        "archiveSha256": "6f28ae8b60f7413e8451f2b8cfb526e3436a9c855532d5eaf1f4ed465f42bdee",
+        "archiveBytes": 159518376,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T16:47:19.912648+00:00",
+        "retainUntil": "2027-02-05T16:47:19.912648+00:00"
+      },
+      {
+        "artifactId": "08b4078b8b6908d2f6ae3a4dbc0d2987d3a6037b8d751f45e72eea969aa34d41",
+        "manifestDigest": "458705eaf89334e905b0722b23f02a15a3a6e9e9b64deaac49edae079a717f2b",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/08b4078b8b6908d2f6ae3a4dbc0d2987d3a6037b8d751f45e72eea969aa34d41/458705eaf89334e905b0722b23f02a15a3a6e9e9b64deaac49edae079a717f2b.tar.gz",
+        "archiveSha256": "04be20bab9c669f62fc90cd839931a283e1c2583b179dc2c5f4bb8a632c724f3",
+        "archiveBytes": 159526771,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T16:48:12.490067+00:00",
+        "retainUntil": "2027-02-05T16:48:12.490067+00:00"
+      },
+      {
+        "artifactId": "d4d1ef1166c166d4fc0b5b70fbb7b50b3f15f7e89256f0468716da14d4cb43b2",
+        "manifestDigest": "fc3d256a95238d57374b2aebc214cd27d2a2ca65e4b76abd86efaae5f7f682fe",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/d4d1ef1166c166d4fc0b5b70fbb7b50b3f15f7e89256f0468716da14d4cb43b2/fc3d256a95238d57374b2aebc214cd27d2a2ca65e4b76abd86efaae5f7f682fe.tar.gz",
+        "archiveSha256": "93b11a4b7284f104769526d97d162eba48f058471876b184d1a5fb1ca464ca0b",
+        "archiveBytes": 159694456,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T16:49:22.188031+00:00",
+        "retainUntil": "2027-02-05T16:49:22.188031+00:00"
+      },
+      {
+        "artifactId": "b6bf93c5ba83c55b77246ac50a1038010f0bb292e6e760321f3cae92857f5930",
+        "manifestDigest": "06dc798aa92117d4229314096781da0f6144fa04750bb6186680dfd08fad67a0",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/b6bf93c5ba83c55b77246ac50a1038010f0bb292e6e760321f3cae92857f5930/06dc798aa92117d4229314096781da0f6144fa04750bb6186680dfd08fad67a0.tar.gz",
+        "archiveSha256": "3f2968db5d85fc4cdd4a26a3fbed06273eec033064a1b429bee44a6e31d068c4",
+        "archiveBytes": 167857098,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T16:50:33.163119+00:00",
+        "retainUntil": "2027-02-05T16:50:33.163119+00:00"
+      },
+      {
+        "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+        "manifestDigest": "9bf298675f91589f35d01b8dbf7282ec2a8e3f5d068c03c4dc999f2cf4fd0acf",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9/9bf298675f91589f35d01b8dbf7282ec2a8e3f5d068c03c4dc999f2cf4fd0acf.tar.gz",
+        "archiveSha256": "0fc27106e051bce6609a447c13a9e7f4574b3f13ba023e56d05ab962c81b547c",
+        "archiveBytes": 168302928,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T16:51:37.569920+00:00",
+        "retainUntil": "2027-02-05T16:51:37.569920+00:00"
+      },
+      {
+        "artifactId": "742ff98b33326e29b560ea34665cc1119defcffb8f4dc7157857536462435744",
+        "manifestDigest": "ab1229c6bd2818be49bbe24bc540cac9fd59251209802855e84f369c04ac438b",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/742ff98b33326e29b560ea34665cc1119defcffb8f4dc7157857536462435744/ab1229c6bd2818be49bbe24bc540cac9fd59251209802855e84f369c04ac438b.tar.gz",
+        "archiveSha256": "b9bc92844a7178b5ac4d6ac9b20082d6e616a0cb047cd6c48eacdac93f765033",
+        "archiveBytes": 168244663,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T16:52:58.256444+00:00",
+        "retainUntil": "2027-02-05T16:52:58.256444+00:00"
+      },
+      {
+        "artifactId": "cc5ba2386039e46e8db6a33ced4600df6023ccb6f1e0b3e76c8a06d7a1fed233",
+        "manifestDigest": "3cab54f196a032291d849c3621aaf0caab899f3580b129db254c69bebdf6fca7",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/cc5ba2386039e46e8db6a33ced4600df6023ccb6f1e0b3e76c8a06d7a1fed233/3cab54f196a032291d849c3621aaf0caab899f3580b129db254c69bebdf6fca7.tar.gz",
+        "archiveSha256": "41f438a0cf389e7b6b2ecbe751b9fa85097c8eceba584bf86f9e12fb7cbc91d9",
+        "archiveBytes": 168230699,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T16:54:00.826855+00:00",
+        "retainUntil": "2027-02-05T16:54:00.826855+00:00"
+      },
+      {
+        "artifactId": "c91416093bcaf27574182e7a50d98b03f09c33c3b2d3dada1fca1a7f0636abca",
+        "manifestDigest": "36d003133953f9009d2b16e8b0f5fe6d7c270704bb8241d820d889310f4e8404",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/c91416093bcaf27574182e7a50d98b03f09c33c3b2d3dada1fca1a7f0636abca/36d003133953f9009d2b16e8b0f5fe6d7c270704bb8241d820d889310f4e8404.tar.gz",
+        "archiveSha256": "96b8915d5696199cbf5f450c3202a625ecbf396adef8798eb9acab2b0476cea3",
+        "archiveBytes": 169351078,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T16:55:27.132869+00:00",
+        "retainUntil": "2027-02-05T16:55:27.132869+00:00"
+      },
+      {
+        "artifactId": "a9cff827de8640693cfdb9a4a2e78048dbee442911d1666013065fe0248f3885",
+        "manifestDigest": "0487a5b38cbd476412fe6f3bfa566cf6888f67c297b5f6dfac03b150e09a0183",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/a9cff827de8640693cfdb9a4a2e78048dbee442911d1666013065fe0248f3885/0487a5b38cbd476412fe6f3bfa566cf6888f67c297b5f6dfac03b150e09a0183.tar.gz",
+        "archiveSha256": "0bf915b419407f762679eb5714a681876f5273b5a639bc2f9e457c5d942251cf",
+        "archiveBytes": 170003745,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T17:16:41.887158+00:00",
+        "retainUntil": "2027-02-05T17:16:41.887158+00:00"
+      },
+      {
+        "artifactId": "777e34a32f9134e9d07ebb6eea6f9514929d664b7445d6f980c5151057f3ed5e",
+        "manifestDigest": "9fb8f81fc97def7c80e2107d8fa1e893bd5ad51438aebab4713b9f043af03774",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/777e34a32f9134e9d07ebb6eea6f9514929d664b7445d6f980c5151057f3ed5e/9fb8f81fc97def7c80e2107d8fa1e893bd5ad51438aebab4713b9f043af03774.tar.gz",
+        "archiveSha256": "7f2e9b1ffb6d06553f648d6ce2a2e0b54a045091c09505d3e4ff067408359b04",
+        "archiveBytes": 169997524,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T17:22:16.284191+00:00",
+        "retainUntil": "2027-02-05T17:22:16.284191+00:00"
+      },
+      {
+        "artifactId": "af6860991143a306210cc6da732a3630a8c35209ca8ee60897e4da51b0895ea3",
+        "manifestDigest": "7e933b6c0728547500372f334bb5d6f20964c60c0dc2956e6a72861ce33b3d00",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/af6860991143a306210cc6da732a3630a8c35209ca8ee60897e4da51b0895ea3/7e933b6c0728547500372f334bb5d6f20964c60c0dc2956e6a72861ce33b3d00.tar.gz",
+        "archiveSha256": "87227ca67738d6ac3c260a38a32c63f4ba41b3648f8c451acbd300627fbbec69",
+        "archiveBytes": 170044183,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T17:23:14.832134+00:00",
+        "retainUntil": "2027-02-05T17:23:14.832134+00:00"
+      },
+      {
+        "artifactId": "0b6cc4815bbda4a3065a0e1b390931da9bac999adbedf7dfc4d154abf0000880",
+        "manifestDigest": "468122880df39932b4b3ed7e2c0e5dd3864c03e4b45961bb317e1dbba5330e3b",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/0b6cc4815bbda4a3065a0e1b390931da9bac999adbedf7dfc4d154abf0000880/468122880df39932b4b3ed7e2c0e5dd3864c03e4b45961bb317e1dbba5330e3b.tar.gz",
+        "archiveSha256": "6ab25432301972241de9d9ac24de7084bf9c057d75864acf0bbd7bc72814c1ab",
+        "archiveBytes": 170041372,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T17:24:17.334516+00:00",
+        "retainUntil": "2027-02-05T17:24:17.334516+00:00"
+      },
+      {
+        "artifactId": "f6cc7bd948ce139d8b109ce8892c87330d8d0ecf16add3c056f2040e08ac447b",
+        "manifestDigest": "e3bd222c9b98dabb03fd33b0693ad36848928b5db12d3c1fcaa719ffd6ecb458",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/f6cc7bd948ce139d8b109ce8892c87330d8d0ecf16add3c056f2040e08ac447b/e3bd222c9b98dabb03fd33b0693ad36848928b5db12d3c1fcaa719ffd6ecb458.tar.gz",
+        "archiveSha256": "aafff9036c35c6a97b1640784f1dafc0b875703f2768ea08e007109480c4bf51",
+        "archiveBytes": 170072141,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T17:25:42.879167+00:00",
+        "retainUntil": "2027-02-05T17:25:42.879167+00:00"
+      },
+      {
+        "artifactId": "c0fbcfc447e68feb767e968c28ca52b324f2fdf59fc5af3ce8503ce89be991f8",
+        "manifestDigest": "29c8db82b838f187895e28c0f2137d0523c4f9b4c1606db146685cbea4dc9b6b",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/c0fbcfc447e68feb767e968c28ca52b324f2fdf59fc5af3ce8503ce89be991f8/29c8db82b838f187895e28c0f2137d0523c4f9b4c1606db146685cbea4dc9b6b.tar.gz",
+        "archiveSha256": "ce1f93c851ba6ba72c4204af81e1413b796ab646dd0d5d6dd6429e667abd7ca4",
+        "archiveBytes": 170063606,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T17:26:55.029143+00:00",
+        "retainUntil": "2027-02-05T17:26:55.029143+00:00"
+      },
+      {
+        "artifactId": "0532b392cd84b2b5d8da6435a32f77e0581cb9ab3d356ebac9134ccb64f72f43",
+        "manifestDigest": "19533909656e9b7385df6a47e7f3c17cf99a7d6079bb81fd475b5f7a7be8d65a",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/0532b392cd84b2b5d8da6435a32f77e0581cb9ab3d356ebac9134ccb64f72f43/19533909656e9b7385df6a47e7f3c17cf99a7d6079bb81fd475b5f7a7be8d65a.tar.gz",
+        "archiveSha256": "6da2676671fc40c38c71ff606f7068501a5abfb3c1e23724ec82f56dd467ddf4",
+        "archiveBytes": 170189687,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T17:27:57.938147+00:00",
+        "retainUntil": "2027-02-05T17:27:57.938147+00:00"
+      },
+      {
+        "artifactId": "530457bb2e745d81c8ba258e3b07ad1b480ee98935ffa4137c1ea630bd251492",
+        "manifestDigest": "d41ab2eb431afbed0bbd4be8b9cdf7a8fcdc55cbfb686ac1327def6a0cb48405",
+        "storageId": 2,
+        "objectKey": "astro-telekom/publications/530457bb2e745d81c8ba258e3b07ad1b480ee98935ffa4137c1ea630bd251492/d41ab2eb431afbed0bbd4be8b9cdf7a8fcdc55cbfb686ac1327def6a0cb48405.tar.gz",
+        "archiveSha256": "fde1bb457200908163c2fa0931c35613e38fbcd5b3e55ccaaeab3bdbe6b98db3",
+        "archiveBytes": 170265272,
+        "restoreVerified": true,
+        "verifiedAt": "2026-11-07T17:28:54.405601+00:00",
+        "retainUntil": "2027-02-05T17:28:54.405601+00:00"
+      }
+    ]
+  },
+  "htmlRemoved": false,
+  "runtimeChanged": false,
+  "schedulerChanged": false,
+  "checks": {
+    "pnpmCheck": "PASS",
+    "linuxFilesystem": "PASS",
+    "linuxArchiveRestore": "PASS",
+    "phpLint": "PASS",
+    "codeMatchesValidationWorktree": true
+  },
+  "mandatoryBeforeRelease": {
+    "active": "d51a14414358d6490ea71cde0cff5d79b0c0385d23f905a2184c634121012bf0",
+    "protected": [
+      {
+        "id": "d51a14414358d6490ea71cde0cff5d79b0c0385d23f905a2184c634121012bf0",
+        "manifestDigest": "278f9f262cd8ad334ea7c26d9b7e3fcec955b6ba7151555fd0f939fe3e600e4d",
+        "files": 4463,
+        "reasons": [
+          "active",
+          "serving",
+          "recent"
+        ]
+      },
+      {
+        "id": "a5c3994b11742c77eed7721b8b2d993adff8102ece136aea0025ce630402b475",
+        "manifestDigest": "d8b6da877d84ac2b4f42f28b77330257b29dfe545f9514b2b12168756404692f",
+        "files": 4059,
+        "reasons": [
+          "serving",
+          "baseline"
+        ]
+      },
+      {
+        "id": "28cec25b179fc7e3dd7cd2b48a94a82870f230efd362694bc67041181b6c9b56",
+        "manifestDigest": "a56d5072b1aabadabd61ea0083ee7ace2e7563d34c47f8abe2777e1f97140621",
+        "files": 4463,
+        "reasons": [
+          "recent",
+          "rollback"
+        ]
+      },
+      {
+        "id": "78f2c7331642c65700a32759aed169731dfafb2433e6b328541f9e7ab0fa0a55",
+        "manifestDigest": "7e5007f924248cdab121ca01022ec52e807da507402fc814c719e5f02112d5e4",
+        "files": 4425,
+        "reasons": [
+          "unconfirmed",
+          "recent",
+          "unresolved"
+        ]
+      },
+      {
+        "id": "7a24691471b9acd22f08d4b0d56913985b1358203da8523f92e18f526f54168f",
+        "manifestDigest": "f8150fae12fabbb1214906ac8f62d220dbd159d88662858977a4b1679c4d436a",
+        "files": 4461,
+        "reasons": [
+          "recent",
+          "rollback"
+        ]
+      },
+      {
+        "id": "ae106d4e0ae6cafae1ffe9c439ad3ee255ed52000c1067355e88b4b90bcea205",
+        "manifestDigest": "83ece902d78a709cc896cdd049d9a7c7df9a9de12f0a13276c8a32c11a9a911b",
+        "files": 4425,
+        "reasons": [
+          "recent",
+          "unresolved-previous"
+        ]
+      }
+    ],
+    "oldCandidates": 0
+  }
+}

@@ -84,6 +84,7 @@ class ArchiveTest(unittest.TestCase):
         candidate = dict(artifactId="a" * 64)
         with patch.object(retention.sys, "argv", ["retention", "--apply"]), \
              patch.object(retention, "require_idle"), \
+             patch.object(retention, "write_status"), \
              patch.object(retention, "rpc", return_value=dict(activeArtifactId="b" * 64, candidates=[candidate], protected=[])) as rpc, \
              patch.object(retention, "archive_and_verify", side_effect=RuntimeError("S3 unavailable")):
             with self.assertRaisesRegex(RuntimeError, "S3 unavailable"):
@@ -97,18 +98,62 @@ class ArchiveTest(unittest.TestCase):
             retention.create_archive(root, manifest, archived)
             staging = Path(directory).resolve() / "staging"
             staging.mkdir()
-            old = dict(artifactId=manifest["artifactId"], manifestDigest=manifest["manifestDigest"],
+            old = dict(artifactId=manifest["artifactId"], manifestDigest=manifest["manifestDigest"], storageId=1,
                        archiveSha256=retention.file_sha(archived), archiveBytes=archived.stat().st_size,
                        verifiedAt="2000-01-01T00:00:00+00:00", retainUntil="2000-04-01T00:00:00+00:00")
             def bridge(args, **kwargs):
                 self.assertEqual(args[-1], "read-only")
+                self.assertEqual(args[7], "1", "Existing Timeweb archive must stay in its original storage")
                 returned = Path(args[-2].replace(retention.CONTAINER_STAGING, str(staging)))
                 shutil.copyfile(archived, returned)
                 return json.dumps(dict(downloadSha256=old["archiveSha256"], downloadBytes=old["archiveBytes"]))
             with patch.object(retention, "ROOT", root), patch.object(retention, "STAGING", staging), patch.object(retention, "run", side_effect=bridge):
-                fresh = retention.archive_and_verify(dict(artifactId=manifest["artifactId"], manifestDigest=manifest["manifestDigest"], archive=old), 1)
+                fresh = retention.archive_and_verify(dict(artifactId=manifest["artifactId"], manifestDigest=manifest["manifestDigest"], archive=old), 2)
             self.assertNotEqual(fresh["verifiedAt"], old["verifiedAt"])
             self.assertEqual(fresh["archiveSha256"], old["archiveSha256"])
+            self.assertEqual(fresh["storageId"], 1)
+
+    def test_new_archive_uses_b2_and_failed_readback_never_collects(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = self.fixture(directory)
+            staging = Path(directory).resolve() / "staging"
+            staging.mkdir()
+            def bridge(args, **kwargs):
+                self.assertEqual(args[7], "2")
+                self.assertEqual(args[-1], "create-or-read")
+                source = Path(args[-3].replace(retention.CONTAINER_STAGING, str(staging)))
+                returned = Path(args[-2].replace(retention.CONTAINER_STAGING, str(staging)))
+                shutil.copyfile(source, returned)
+                return json.dumps(dict(downloadSha256=retention.file_sha(returned), downloadBytes=returned.stat().st_size))
+            with patch.object(retention, "ROOT", root), patch.object(retention, "STAGING", staging), patch.object(retention, "run", side_effect=bridge):
+                proof = retention.archive_and_verify(dict(artifactId=manifest["artifactId"], manifestDigest=manifest["manifestDigest"]), 2)
+            self.assertEqual(proof["storageId"], 2)
+            self.assertTrue(proof["restoreVerified"])
+
+    def test_entire_selected_batch_is_restore_verified_before_any_collection(self):
+        candidates = [dict(artifactId="a" * 64), dict(artifactId="b" * 64)]
+        with patch.object(retention.sys, "argv", ["retention", "--apply"]), \
+             patch.object(retention, "require_idle"), patch.object(retention, "write_status"), \
+             patch.object(retention, "rpc", return_value=dict(activeArtifactId="c" * 64, candidates=candidates, protected=[])) as rpc, \
+             patch.object(retention, "archive_and_verify", side_effect=[dict(artifactId="a" * 64), RuntimeError("second archive restore failed")]):
+            with self.assertRaisesRegex(RuntimeError, "second archive"):
+                retention.main()
+            self.assertNotIn("/retention/collect", [call.args[0] for call in rpc.call_args_list])
+
+    def test_durable_status_atomically_replaces_document(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory).resolve() / "status.json"
+            retention.write_status(target, dict(state="success", candidates=0))
+            self.assertEqual(json.loads(target.read_text())["state"], "success")
+            self.assertFalse(list(Path(directory).glob("*.tmp")))
+
+    def test_hourly_scheduler_uses_b2_without_adding_a_second_backup_schedule(self):
+        root = Path(__file__).parents[1] / "deploy"
+        timer = (root / "publication-retention.timer").read_text()
+        service = (root / "publication-retention.service").read_text()
+        self.assertIn("OnCalendar=*-*-* *:30:00 UTC", timer)
+        self.assertIn("--storage-id 2", service)
+        self.assertIn("--limit 2", service)
 
 if __name__ == "__main__":
     unittest.main()

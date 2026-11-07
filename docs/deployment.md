@@ -16,7 +16,7 @@ Direct prod Compose использует migration target с Prisma CLI; отд�
 
 ## Хранение публикаций
 
-Старый HTML обслуживается отдельной [архивной retention](runbooks/publication-retention.md), не Docker prune. Host helper использует существующее S3-хранилище Coolify без передачи credentials в web; полное скачивание/восстановление архива обязательно до удаления. Приватный controller разделяет очередь с CMS/CODE и защищает active/baseline/две rollback/семь суток/незавершённые операции. Versioned assets и immutable metadata сохраняются. Systemd timer/path включаются только после exact-SHA выпуска и первой успешной очистки; факт включения фиксируется отдельно.
+Старый HTML обслуживается отдельной [архивной retention](runbooks/publication-retention.md), не Docker prune. Host helper использует существующее S3-хранилище Coolify без передачи credentials в web; полное скачивание/восстановление архива обязательно до удаления. Приватный controller разделяет очередь с CMS/CODE и защищает active/baseline/две rollback/незавершённые операции и закреплённые восстановленные версии. До двух дополнительных подтверждённых версий за 24 часа сохраняются в бюджете 8 ГиБ всего тома; обязательная защита имеет приоритет. Перед новой static-сборкой требуется 8 ГиБ свободного места. Новые архивы предназначены для существующего Backblaze B2 storage 2; ранее подтверждённые объекты читаются в исходном storage 1 или 2. Versioned assets и immutable metadata сохраняются. Systemd timer/path включаются только после exact-SHA выпуска и первой успешной очистки; факт включения фиксируется отдельно.
 
 ## Контуры
 
