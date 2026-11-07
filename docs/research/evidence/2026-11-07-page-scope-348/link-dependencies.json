@@ -1,0 +1,55 @@
+{
+  "checkedAt": "2026-11-07T12:15:30.262Z",
+  "method": "GET of existing pages; anchor href inspection against separately confirmed missing targets, no clicks/submissions",
+  "rows": [
+    {
+      "path": "/",
+      "status": 200,
+      "knownMissingTargets": []
+    },
+    {
+      "path": "/kazan",
+      "status": 200,
+      "knownMissingTargets": []
+    },
+    {
+      "path": "/lichnyy-kabinet-dom-ru",
+      "status": 200,
+      "knownMissingTargets": [
+        "/official-site-domru",
+        "/proverit-skorost-interneta",
+        "/faq"
+      ]
+    },
+    {
+      "path": "/news/novyj-router-wave-ot-dom-ru",
+      "status": 200,
+      "knownMissingTargets": []
+    },
+    {
+      "path": "/news/provajder-dom-ru-povyshaet-ceny-na-uslugi-s-1-oktjabrja-2024",
+      "status": 200,
+      "knownMissingTargets": []
+    },
+    {
+      "path": "/news/provajder-dom-ru-zapustil-onlajn-galereju-v-chest-jubileja-domena-ru",
+      "status": 200,
+      "knownMissingTargets": []
+    },
+    {
+      "path": "/news/prilozhenie-umnyj-dom-ru-teper-dostupno-dlja-umnyh-chasov-na-baze-wear-os",
+      "status": 200,
+      "knownMissingTargets": []
+    },
+    {
+      "path": "/news/rasshirjaem-gorizonty-dom-ru-predstavljaet-14-novyh-telekanalov",
+      "status": 200,
+      "knownMissingTargets": []
+    },
+    {
+      "path": "/news/multiki-i-ne-tolko-otkrojte-mir-detskogo-kontenta-s-movix-i-dom-ru",
+      "status": 200,
+      "knownMissingTargets": []
+    }
+  ]
+}

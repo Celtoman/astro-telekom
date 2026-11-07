@@ -48,7 +48,7 @@ HOME Hero 1d реализован в коде по [паспорту 2.0.0](docs
 | Нужно узнать | Источник |
 | --- | --- |
 | Что сейчас работает и какие ограничения есть | [Текущее состояние](docs/current-state.md) |
-| Что согласовано и что дальше делать | [План релизов](docs/release-plan.md), [план целевой платформы](docs/plans/2026-09-21-target-platform-implementation-plan.md), [GitHub Issues](https://github.com/Celtoman/astro-telekom/issues) |
+| Что согласовано и что дальше делать | [Остаток страниц #348](docs/plans/2026-10-16-missing-pages-analysis-plan.md), [План релизов](docs/release-plan.md), [план целевой платформы](docs/plans/2026-09-21-target-platform-implementation-plan.md), [GitHub Issues](https://github.com/Celtoman/astro-telekom/issues) |
 | Целевой продукт и решения владельца | [Продуктовый контракт](docs/product-contract.md), [реестр решений](docs/decisions.md) |
 | URL и границы Release 1 | [Структура сайта](docs/site-structure.md) |
 | Сохранение, публикация, CODE и восстановление | [Контракт публикации](docs/publication.md) |
