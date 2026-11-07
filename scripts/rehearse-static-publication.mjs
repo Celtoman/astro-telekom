@@ -141,6 +141,9 @@ try {
   await until(async () => (await fetch(`${adminUrl}/config/`, { headers: { origin: 'http://127.0.0.1:2019' } })).ok, 'Caddy did not become ready');
   manager = new CaddyActivation({ publicationRoot: root, adminUrl, servingOptions: options });
   builder = new StaticArtifactBuilder({ publicationRoot: root, apiUrl, adminToken: token,
+    // Synthetic fixture: admission has its own negative/boundary tests.
+    // Production keeps the native statfs probe and full 8 GiB reserve.
+    spaceProbe: async () => ({ bavail: 8 * 1024 ** 3, bsize: 1 }),
     publicEnv: { PUBLIC_SITE_URL: 'https://partner.example.test', PUBLIC_API_URL: 'https://partner.example.test/api/v1', PUBLIC_SITE_SLUG: source.site.slug } });
   const countedBuilder = { renderer: builder.renderer, fetchSnapshot: job => builder.fetchSnapshot(job),
     progressReporter: job => builder.progressReporter(job),

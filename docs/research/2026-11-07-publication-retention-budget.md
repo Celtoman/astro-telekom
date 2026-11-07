@@ -1,6 +1,6 @@
 # Хранение публикаций по бюджету — подготовка 7 ноября 2026
 
-Задача [#580](https://github.com/Celtoman/astro-telekom/issues/580), согласованная находка PF-155. Новая политика пока не объявлена внедрённой: старый runtime и прежний timer сохранены. Push требует отдельного явного разрешения по AGENTS.md.
+Задача [#580](https://github.com/Celtoman/astro-telekom/issues/580), согласованная находка PF-155. Новая политика пока не объявлена внедрённой: старый runtime и прежний timer сохранены. Владелец явно разрешил push в master и продолжение выпуска/очистки.
 
 ## Согласованный объём
 
@@ -42,8 +42,12 @@ Read-only исполнение нового planner на реальном том
 
 [Backblaze Caps & Alerts](https://www.backblaze.com/docs/en/cloud-storage-data-caps-and-alerts?highlight=cap) описывает суточный сброс в 00:00 GMT и категории caps. [Backblaze API](https://www.backblaze.com/apidocs/b2-download-file-by-id) указывает HTTP 403 для download_cap_exceeded. Опубликованная [цена egress](https://help.backblaze.com/hc/en-us/articles/217667478-Understanding-B2-Pricing-Structure) сверх бесплатного объёма — $0.01/GB; фактическое применение бесплатного объёма определяется аккаунтом.
 
+## Дополнительная проверка CI
+
+Первый GitHub CI для 3d961c5 завершился неуспешно: после Docker suites на runner осталось меньше производственного резерва 8 ГиБ, поэтому два позитивных теста небольших синтетических сборок были отклонены. Реальный Node/Caddy runtime case прошёл. Для этих двух fixtures используется явный положительный spaceProbe; отдельные отрицательная/граничная проверки и проверка отсутствия build files при нулевом месте сохраняются. Production runtime продолжает использовать native statfs без понижения порога. После исправления обязательны новый полный gate и новый exact-SHA CI.
+
 ## Что ещё требуется
 
-Полный gate завершён. Подготовить Conventional Commit. После разрешения на push — exact-SHA green CI/finished healthy deployment, повторный live planner, все необходимые архивы/restore, canary GC и smoke, затем остальные версии и hourly/path scheduler. Сохранность исходных обязательных IDs проверять дополнительно к контроллеру. Старые backup jobs, чужие volumes/containers и журналы не менять.
+Полный gate после изоляции двух CI fixtures завершён успешно (pnpm-check-ci-fixtures.log); код обоих fixtures сверён по SHA, профильные проверки документации и локальных ссылок прошли. Отправить исправление и дождаться exact-SHA green CI/finished healthy deployment. Затем повторный live planner, все необходимые архивы/restore, canary GC и smoke, остальные версии и hourly/path scheduler. Сохранность исходных обязательных IDs проверять дополнительно к контроллеру. Старые backup jobs, чужие volumes/containers и журналы не менять.
 
 Evidence на компьютере владельца: D:\01 vibecode\server-backups\20261107-publication-retention. b2-archive-checkpoint.json сохраняет историческую остановку на cap, b2-archive-complete.json содержит все проверенные proofs; pnpm-check-first-CRLF-failure.log сохраняет первый неуспех; pnpm-check-final.log сохраняет повтор на C: с отказами по реальному свободному месту, pnpm-check-drive-d-final.log — успешный итоговый gate.

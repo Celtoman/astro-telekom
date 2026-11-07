@@ -47,6 +47,9 @@ test('real Astro builder seals the exact saved catalog with versioned assets and
   let calls = 0;
   try {
     const builder = new StaticArtifactBuilder({ publicationRoot: root, apiUrl: 'http://api.internal/api/v1', adminToken: 'synthetic',
+      // A small positive fixture must not depend on space left by other Docker suites.
+      // The same builder is explicitly checked with a zero-space probe below.
+      spaceProbe: async () => ({ bavail: 8 * 1024 ** 3, bsize: 1 }),
       publicEnv: { PUBLIC_SITE_URL: 'https://partner.example.test', PUBLIC_API_URL: 'https://partner.example.test/api/v1', PUBLIC_SITE_SLUG: 'domru-site' },
       fetchImpl: async (url, options) => { calls++; assert.equal(url, 'http://api.internal/api/v1/internal/site-publications/domru-site/snapshots/pub-a'); assert.equal(options.headers['x-admin-token'], 'synthetic'); return Response.json(bundle); } });
     const job = { publicationId: 'pub-a', siteSlug: 'domru-site', siteId: 'site-1', rebuildId: 'rebuild-1', rebuildRevision: 1 };
