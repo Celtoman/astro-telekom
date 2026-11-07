@@ -958,15 +958,15 @@
 
 ### PF-198 — Manifest в защищённом test-контуре
 
-- Дата: 2026-11-07. Область: web | browser | test access. Статус: NEW / REQUIRES_DISCUSSION.
+- Дата: 2026-11-07. Область: web | browser | test access. Статус: APPROVED / TEST RELEASED.
 - Во время внешней проверки новостей Chromium получил401 на manifest fetch при успешно открытом с Basic Auth HTML. Техническая проблема и границы записаны в [#560](https://github.com/Celtoman/astro-telekom/issues/560); это отдельный сценарий от локальной раздачи manifest200 в #537.
-- Гипотеза: уточнить credentials policy manifest link и повторить браузерную проверку, сохранив защиту test-контура. В текущий выпуск новостей исправление не включено; установка на физические устройства не проверена.
+- Гипотеза: уточнить credentials policy manifest link и повторить браузерную проверку, сохранив защиту test-контура. Исправление согласовано и выпущено в #564, browser manifest200 подтверждён; установка на физические устройства не проверена.
 
 ### PF-199 — Admin runtime styles и CSP
 
-- Дата: 2026-11-07. Область: admin | browser | accessibility. Статус: NEW / REQUIRES_DISCUSSION.
-- Внешний браузер фиксирует blocked inline styles, включая AdminShell; отдельно есть инъекция антивируса. UI-сценарий пакетного review прошёл, но это не доказывает безвредность всех блокировок. Разделить источники и оценить React Aria runtime contract; [#561](https://github.com/Celtoman/astro-telekom/issues/561). Защитную политику в текущем выпуске не меняли.
+- Дата: 2026-11-07. Область: admin | browser | accessibility. Статус: APPROVED / TEST RELEASED.
+- Внешний браузер фиксирует blocked inline styles, включая AdminShell; отдельно есть инъекция антивируса. UI-сценарий пакетного review прошёл, но это не доказывает безвредность всех блокировок. Разделить источники и оценить React Aria runtime contract; [#561](https://github.com/Celtoman/astro-telekom/issues/561). В #564 разрешён точный hash usePress, scoped Astro styles заменены статическим CSS; blanket разрешения не добавлялись.
 
 ### PF-200 — Пакетные редакционные изменения
 
-- Владелец07.11.2026 подтвердил расширение #565: DRAFT+CHANGED одним review/публикацией/сборкой, без фактической публикации своих материалов при проверке. Статус: APPROVED / LOCAL IMPLEMENTATION. Полное описание [#565](https://github.com/Celtoman/astro-telekom/issues/565); проверки и выпуск вместе с [#564](https://github.com/Celtoman/astro-telekom/issues/564).
+- Владелец07.11.2026 подтвердил расширение #565: DRAFT+CHANGED одним review/публикацией/сборкой, без фактической публикации своих материалов при проверке. Статус: APPROVED / TEST RELEASED. Live review всех шести CHANGED готов; содержимое/редакции сохранены без публикации. Полное описание [#565](https://github.com/Celtoman/astro-telekom/issues/565); проверки и выпуск вместе с [#564](https://github.com/Celtoman/astro-telekom/issues/564).
