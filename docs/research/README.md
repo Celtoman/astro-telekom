@@ -1,5 +1,7 @@
 # Исследования проекта
 
+- [2026-11-07 — Закрытие #352, объединение TEMP #493→#455 и внешняя проверка #435](2026-11-07-issues-352-493-435-reconciliation.md)
+
 - [2026-11-07 — Исправления новостей: test-выпуск,24px,карточки,admin и сохранность4drafts](2026-11-07-news-fix-test-release.md)
 
 - [2026-11-07 — Новости/404: exact-SHA выпуск, scoped settings,6 drafts,281 HTTP-проверка и настоящий backup/restore](2026-11-07-news-external-release.md)

@@ -21,7 +21,7 @@
 | --- | --- | --- |
 | TD-207 | [#487](https://github.com/Celtoman/astro-telekom/issues/487) ✅ | Накопленные отступы ADDRESS в Screens и коде расходятся с ритмом HOME/CITY_HOME |
 | TD-208 | [#488](https://github.com/Celtoman/astro-telekom/issues/488) ✅ | Глобальное ограничение H1 до780px вызывает лишний перенос на Desktop |
-| TD-209 | [#493](https://github.com/Celtoman/astro-telekom/issues/493) 🟢 | Недостаток места в Windows TEMP блокирует rehearsal архивации |
+| TD-209 | [#493](https://github.com/Celtoman/astro-telekom/issues/493) ✅ | TEMP-сценарий объединён с открытой [#455](https://github.com/Celtoman/astro-telekom/issues/455); закрыт как дубликат, не как исправление capacity |
 
 ## Контракт кинотеатров тарифа, 3 ноября 2026
 
@@ -37,7 +37,7 @@
 | TD-202 | [#442](https://github.com/Celtoman/astro-telekom/issues/442) 🟢 | CRLF shell helper из Windows ломает Linux Docker rehearsal |
 | TD-201 | [#441](https://github.com/Celtoman/astro-telekom/issues/441) 🟢 | Docker rehearsals оставляют анонимные PostgreSQL volumes |
 | TD-200 | [#438](https://github.com/Celtoman/astro-telekom/issues/438) ✅ | Неограниченное накопление publication HTML заполняет диск; архивная очистка — [#440](https://github.com/Celtoman/astro-telekom/issues/440) |
-| TD-199 | [#433](https://github.com/Celtoman/astro-telekom/issues/433) 🟢 | Outline SVG шапки и лишняя mobile стрелка не соответствуют Screens |
+| TD-199 | [#433](https://github.com/Celtoman/astro-telekom/issues/433) ✅ | SVG и mobile стрелка исправлены; внешняя проверка [#435](https://github.com/Celtoman/astro-telekom/issues/435) завершена 7 ноября 2026 |
 | TD-198 | [#430](https://github.com/Celtoman/astro-telekom/issues/430) 🟢 | Диагностировать нехватку памяти Windows при полном gate |
 | TD-192 | [#420](https://github.com/Celtoman/astro-telekom/issues/420) ✅ | Поле над шапкой ошибочно перенесено из макета |
 | TD-193 | [#423](https://github.com/Celtoman/astro-telekom/issues/423) ✅ | Первый кадр каталога меняет список после JS-инициализации |

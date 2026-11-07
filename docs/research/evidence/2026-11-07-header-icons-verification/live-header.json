@@ -1,0 +1,603 @@
+{
+  "checkedAt": "2026-11-07T11:54:42.355Z",
+  "rows": [
+    {
+      "status": 200,
+      "path": "/",
+      "width": 1440,
+      "overflow": false,
+      "images": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "display": "block",
+          "width": 14,
+          "height": 14,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "display": "block",
+          "width": 157.890625,
+          "height": 51.984375,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "display": "block",
+          "width": 22,
+          "height": 22,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        }
+      ],
+      "phone": [
+        {
+          "href": "tel:+78002507777",
+          "text": "Техническая поддержка",
+          "visible": true
+        },
+        {
+          "href": "tel:+78005557244",
+          "text": "8-800-555-72-44Подключение, 8:00–22:00",
+          "visible": true
+        }
+      ],
+      "menu": true
+    },
+    {
+      "status": 200,
+      "path": "/kazan",
+      "width": 1440,
+      "overflow": false,
+      "images": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "display": "block",
+          "width": 14,
+          "height": 14,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "display": "block",
+          "width": 157.890625,
+          "height": 51.984375,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "display": "block",
+          "width": 22,
+          "height": 22,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        }
+      ],
+      "phone": [
+        {
+          "href": "tel:+78002507777",
+          "text": "Техническая поддержка",
+          "visible": true
+        },
+        {
+          "href": "tel:+78005557244",
+          "text": "8-800-555-72-44Подключение, 8:00–22:00",
+          "visible": true
+        }
+      ],
+      "menu": true
+    },
+    {
+      "status": 200,
+      "path": "/",
+      "width": 834,
+      "overflow": false,
+      "images": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "display": "block",
+          "width": 14,
+          "height": 14,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "display": "block",
+          "width": 133.609375,
+          "height": 43.984375,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "display": "block",
+          "width": 44,
+          "height": 44,
+          "loaded": true
+        }
+      ],
+      "phone": [
+        {
+          "href": "tel:+78002507777",
+          "text": "Техническая поддержка",
+          "visible": true
+        },
+        {
+          "href": "tel:+78005557244",
+          "text": "8-800-555-72-44Подключение, 8:00–22:00",
+          "visible": false
+        }
+      ],
+      "menu": true
+    },
+    {
+      "status": 200,
+      "path": "/kazan",
+      "width": 834,
+      "overflow": false,
+      "images": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "display": "block",
+          "width": 14,
+          "height": 14,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "display": "block",
+          "width": 133.609375,
+          "height": 43.984375,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "display": "block",
+          "width": 44,
+          "height": 44,
+          "loaded": true
+        }
+      ],
+      "phone": [
+        {
+          "href": "tel:+78002507777",
+          "text": "Техническая поддержка",
+          "visible": true
+        },
+        {
+          "href": "tel:+78005557244",
+          "text": "8-800-555-72-44Подключение, 8:00–22:00",
+          "visible": false
+        }
+      ],
+      "menu": true
+    },
+    {
+      "status": 200,
+      "path": "/",
+      "width": 390,
+      "overflow": false,
+      "images": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "display": "block",
+          "width": 109.3125,
+          "height": 35.984375,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "display": "block",
+          "width": 18,
+          "height": 18,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "display": "block",
+          "width": 44,
+          "height": 44,
+          "loaded": true
+        }
+      ],
+      "phone": [
+        {
+          "href": "tel:+78002507777",
+          "text": "Техническая поддержка",
+          "visible": false
+        },
+        {
+          "href": "tel:+78005557244",
+          "text": "8-800-555-72-44Подключение, 8:00–22:00",
+          "visible": true
+        }
+      ],
+      "menu": true
+    },
+    {
+      "status": 200,
+      "path": "/kazan",
+      "width": 390,
+      "overflow": false,
+      "images": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "display": "block",
+          "width": 109.3125,
+          "height": 35.984375,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "display": "block",
+          "width": 18,
+          "height": 18,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "display": "block",
+          "width": 44,
+          "height": 44,
+          "loaded": true
+        }
+      ],
+      "phone": [
+        {
+          "href": "tel:+78002507777",
+          "text": "Техническая поддержка",
+          "visible": false
+        },
+        {
+          "href": "tel:+78005557244",
+          "text": "8-800-555-72-44Подключение, 8:00–22:00",
+          "visible": true
+        }
+      ],
+      "menu": true
+    },
+    {
+      "status": 200,
+      "path": "/",
+      "width": 320,
+      "overflow": false,
+      "images": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "display": "block",
+          "width": 91.078125,
+          "height": 29.984375,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "display": "block",
+          "width": 44,
+          "height": 44,
+          "loaded": true
+        }
+      ],
+      "phone": [
+        {
+          "href": "tel:+78002507777",
+          "text": "Техническая поддержка",
+          "visible": false
+        },
+        {
+          "href": "tel:+78005557244",
+          "text": "8-800-555-72-44Подключение, 8:00–22:00",
+          "visible": true
+        }
+      ],
+      "menu": true
+    },
+    {
+      "status": 200,
+      "path": "/kazan",
+      "width": 320,
+      "overflow": false,
+      "images": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "display": "block",
+          "width": 16,
+          "height": 16,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "display": "block",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "display": "block",
+          "width": 91.078125,
+          "height": 29.984375,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "display": "none",
+          "width": 0,
+          "height": 0,
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "display": "block",
+          "width": 44,
+          "height": 44,
+          "loaded": true
+        }
+      ],
+      "phone": [
+        {
+          "href": "tel:+78002507777",
+          "text": "Техническая поддержка",
+          "visible": false
+        },
+        {
+          "href": "tel:+78005557244",
+          "text": "8-800-555-72-44Подключение, 8:00–22:00",
+          "visible": true
+        }
+      ],
+      "menu": true
+    }
+  ],
+  "hashes": [
+    {
+      "url": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+      "status": 200,
+      "sha256": "c2e18e6d1173f3bcb5212bee524b6f918ef006632d5839e6f7218866181b232e",
+      "bytes": 2524
+    },
+    {
+      "url": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+      "status": 200,
+      "sha256": "6a5b42302c8a110bc04bcc340a78b797cca0b0577dd668b5feb2b5adf66e5ad1",
+      "bytes": 1036
+    },
+    {
+      "url": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+      "status": 200,
+      "sha256": "a591c7610b07d88ff6193a67d6b4d82394e1509ec3c9c3f393a9de24f4e17f02",
+      "bytes": 2104
+    },
+    {
+      "url": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+      "status": 200,
+      "sha256": "957387707ba70c9c9a96c7f670ca75f0fe525db5e2921fafeefe7dee19d30c77",
+      "bytes": 2434
+    },
+    {
+      "url": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+      "status": 200,
+      "sha256": "9ea46cab0c9bc84bdc18d2c50b2bc9de7da2fb226d98a87565ada1fa3604294a",
+      "bytes": 2930
+    },
+    {
+      "url": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+      "status": 200,
+      "sha256": "0f1413fa1a049956dc14d34539820c2aa91ec99ecf63e060818e3ae659da9efe",
+      "bytes": 3417
+    }
+  ]
+}

@@ -1,0 +1,311 @@
+{
+  "checkedAt": "2026-11-07T11:58:11.154Z",
+  "menu": {
+    "visible": true,
+    "open": true,
+    "hidden": false
+  },
+  "cityPicker": {
+    "visible": true,
+    "open": true,
+    "hidden": false
+  },
+  "noJs": [
+    {
+      "status": 200,
+      "path": "/",
+      "width": 1440,
+      "overflow": false,
+      "arrow": "block",
+      "headerAssets": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "path": "/kazan",
+      "width": 1440,
+      "overflow": false,
+      "arrow": "block",
+      "headerAssets": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "path": "/",
+      "width": 834,
+      "overflow": false,
+      "arrow": "block",
+      "headerAssets": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "path": "/kazan",
+      "width": 834,
+      "overflow": false,
+      "arrow": "block",
+      "headerAssets": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "path": "/",
+      "width": 390,
+      "overflow": false,
+      "arrow": "none",
+      "headerAssets": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "path": "/kazan",
+      "width": 390,
+      "overflow": false,
+      "arrow": "none",
+      "headerAssets": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "path": "/",
+      "width": 320,
+      "overflow": false,
+      "arrow": "none",
+      "headerAssets": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "path": "/kazan",
+      "width": 320,
+      "overflow": false,
+      "arrow": "none",
+      "headerAssets": [
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-map-pin.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-chevron-down.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-search.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-support.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/figma/domru-logo.png",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-phone.svg",
+          "loaded": true
+        },
+        {
+          "src": "/__publication_assets/f7825391fe45f7963cae23c7bf94367fd4aee54efe2b27871d611551a302a63d/images/general-home/header-menu.svg",
+          "loaded": true
+        }
+      ]
+    }
+  ]
+}
