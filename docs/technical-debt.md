@@ -319,3 +319,9 @@
 | TD-243 | [#563](https://github.com/Celtoman/astro-telekom/issues/563) ✅ | Astro transition:animate генерирует CSS без разрешённого CSP-хеша; план #564 |
 | TD-244 | [#565](https://github.com/Celtoman/astro-telekom/issues/565) ✅ | Пакет не принимал опубликованные новости с рабочими правками CHANGED |
 | TD-245 | [#567](https://github.com/Celtoman/astro-telekom/issues/567) 🟢 | Локальный ACCOUNT seed P2028 при параллельном gate; изоляция и concurrency2 проходят |
+| TD-246 | [#568](https://github.com/Celtoman/astro-telekom/issues/568) ✅ | Повтор анонса над обложкой дублирует первый абзац новости; план #569 |
+| TD-247 | [#570](https://github.com/Celtoman/astro-telekom/issues/570) 🟢 | Разобрать13существующих low/moderate advisory; high/critical0 |
+| TD-248 | [#571](https://github.com/Celtoman/astro-telekom/issues/571) 🟢 | Отдельный asset-set protocol и production HTML reuse после native probe |
+| TD-249 | [#573](https://github.com/Celtoman/astro-telekom/issues/573) ✅ | Runner options после file patterns игнорировались Node; исправлен launcher |
+| TD-250 | [#574](https://github.com/Celtoman/astro-telekom/issues/574) ✅ | Восстановить явные owner-only/P3 формулировки readiness docs |
+| TD-251 | [#575](https://github.com/Celtoman/astro-telekom/issues/575) ✅ | LF shell-скриптов в Windows export и Linux Docker rehearsal |

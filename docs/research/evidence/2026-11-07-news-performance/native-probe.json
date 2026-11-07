@@ -1,0 +1,103 @@
+{
+  "node": "v22.23.4",
+  "pages": 500,
+  "records": [
+    {
+      "mode": "full",
+      "cycle": 0,
+      "kind": "new-publication",
+      "rendered": 500,
+      "reused": 0,
+      "durationMs": 87444
+    },
+    {
+      "mode": "full",
+      "cycle": 0,
+      "kind": "warm",
+      "rendered": 500,
+      "reused": 0,
+      "durationMs": 7951
+    },
+    {
+      "mode": "full",
+      "cycle": 1,
+      "kind": "new-publication",
+      "rendered": 500,
+      "reused": 0,
+      "durationMs": 7494
+    },
+    {
+      "mode": "full",
+      "cycle": 1,
+      "kind": "warm",
+      "rendered": 500,
+      "reused": 0,
+      "durationMs": 7914
+    },
+    {
+      "mode": "full",
+      "cycle": 2,
+      "kind": "new-publication",
+      "rendered": 500,
+      "reused": 0,
+      "durationMs": 9109
+    },
+    {
+      "mode": "full",
+      "cycle": 2,
+      "kind": "warm",
+      "rendered": 500,
+      "reused": 0,
+      "durationMs": 8701
+    },
+    {
+      "mode": "incremental",
+      "cycle": 0,
+      "kind": "new-publication",
+      "rendered": 500,
+      "reused": 0,
+      "durationMs": 18884
+    },
+    {
+      "mode": "incremental",
+      "cycle": 0,
+      "kind": "warm",
+      "rendered": 0,
+      "reused": 500,
+      "durationMs": 9995
+    },
+    {
+      "mode": "incremental",
+      "cycle": 1,
+      "kind": "new-publication",
+      "rendered": 500,
+      "reused": 0,
+      "durationMs": 16310
+    },
+    {
+      "mode": "incremental",
+      "cycle": 1,
+      "kind": "warm",
+      "rendered": 0,
+      "reused": 500,
+      "durationMs": 13935
+    },
+    {
+      "mode": "incremental",
+      "cycle": 2,
+      "kind": "new-publication",
+      "rendered": 500,
+      "reused": 0,
+      "durationMs": 12318
+    },
+    {
+      "mode": "incremental",
+      "cycle": 2,
+      "kind": "warm",
+      "rendered": 0,
+      "reused": 500,
+      "durationMs": 9542
+    }
+  ],
+  "conclusion": "Stable-prefix native reuse works; a new publication assetsPrefix invalidates all pages. This probe does not authorize a serving-protocol change."
+}

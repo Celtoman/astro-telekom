@@ -116,6 +116,15 @@ test('publication icons keep discovery URLs stable and bind other assets to the 
   });
 });
 
+test('combined HTML and asset checks reject foreign, missing and escaped resources', async () => {
+  const artifactId='a'.repeat(64),prefix=`/__publication_assets/${artifactId}`;
+  for(const src of [`/__publication_assets/${'b'.repeat(64)}/favicon.ico`,`${prefix}/missing.webp`,`${prefix}/%2e%2e/private.webp`]){
+    await withFixture({artifactId,root:indexableHtml(`${publicSiteUrl}/`,{favicon:iconLinks(prefix),body:`<h1>Новость</h1><img src="${src}">`}),kazan:indexableHtml(`${publicSiteUrl}/kazan`,{favicon:iconLinks(prefix)}),notFound:notFoundHtml({favicon:iconLinks(prefix)})},async distDirectory=>{
+      await assert.rejects(verifyPublication({distDirectory,publicSiteUrl,artifactId}),/different artifact|invalid or missing/);
+    });
+  }
+});
+
 test('publication verifier rejects duplicate icons, wrong sizes and missing Apple icon on 404', async () => {
   for (const favicon of [
     iconLinks() + '<link rel="icon" href="/unrelated.png">',

@@ -163,10 +163,10 @@ test('API images share filtered build dependencies and keep a dedicated producti
 
   assert.match(dockerfile, /sh scripts\/pnpm-install-retry\.sh --filter @provider\/api --prod --frozen-lockfile/);
   assert.match(dockerfile, /sh scripts\/pnpm-install-retry\.sh --filter @provider\/api --filter @provider\/database --frozen-lockfile/);
-  assert.match(dockerfile, /FROM node:22\.23\.2-alpine AS migration/);
+  assert.match(dockerfile, /FROM node:22\.23\.4-alpine AS migration/);
   assert.doesNotMatch(dockerfile, /AS migration-deps/);
   assert.match(dockerfile, /COPY --from=build-deps \/workspace\/node_modules \.\/node_modules/);
-  assert.match(dockerfile, /FROM node:22\.23\.2-alpine AS runtime/);
+  assert.match(dockerfile, /FROM node:22\.23\.4-alpine AS runtime/);
   assert.match(dockerfile, /COPY --from=runtime-deps \/workspace\/node_modules \.\/node_modules/);
   assert.match(dockerfile, /COPY --from=runtime-deps \/workspace\/apps\/api\/node_modules \.\/apps\/api\/node_modules/);
   assert.doesNotMatch(dockerfile, /COPY --from=build \/workspace\/node_modules/);

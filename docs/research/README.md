@@ -1,5 +1,9 @@
 # Исследования проекта
 
+- [2026-11-07 — #562/#569: реализация ускоренного full build, Node/Astro и удаление повтора](2026-11-07-news-performance-implementation.md)
+
+- [2026-11-07 — #562/#569: причины, существующий замер и согласованный план](../plans/2026-11-07-news-publication-performance.md)
+
 - [2026-11-07 — #564/#565: CSP, manifest и пакет DRAFT+CHANGED; test-выпуск и сохранность правок](2026-11-07-csp-manifest-and-changed-batch.md)
 
 - [2026-11-07 — #348: актуальный остаток страниц, уже внедрённое и переходы URL](../plans/2026-10-16-missing-pages-analysis-plan.md)

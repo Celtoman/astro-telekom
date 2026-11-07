@@ -1,0 +1,74 @@
+{
+  "node": "v22.23.4",
+  "baseline": "8f04bc9f",
+  "pages": 4237,
+  "results": [
+    {
+      "mode": "baseline",
+      "run": 0,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 18276,
+      "seal": 40534,
+      "readback": 6700,
+      "total": 65516
+    },
+    {
+      "mode": "optimized",
+      "run": 0,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 4072,
+      "seal": 20035,
+      "readback": 1977,
+      "total": 26095
+    },
+    {
+      "mode": "optimized",
+      "run": 1,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 5421,
+      "seal": 18571,
+      "readback": 2640,
+      "total": 26642
+    },
+    {
+      "mode": "baseline",
+      "run": 1,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 22770,
+      "seal": 37340,
+      "readback": 6465,
+      "total": 66580
+    },
+    {
+      "mode": "baseline",
+      "run": 2,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 22206,
+      "seal": 36323,
+      "readback": 5241,
+      "total": 63775
+    },
+    {
+      "mode": "optimized",
+      "run": 2,
+      "pages": 4237,
+      "files": 4248,
+      "bytes": 351160159,
+      "verify": 4780,
+      "seal": 15700,
+      "readback": 1931,
+      "total": 22416
+    }
+  ],
+  "sameInventory": true
+}

@@ -83,7 +83,7 @@ async function visible(letter, revision = letter === 'a' ? 1 : 2) {
 try {
   command(['network', 'create', network]);
   const mockApi = `const http=require('node:http'); http.createServer((q,s)=>{const trusted=q.headers['x-site-publication-token']===${JSON.stringify(token)};if(q.url.includes('/redirects/')){s.writeHead(trusted?301:403,{location:'/city'+(q.url.includes('?')?q.url.slice(q.url.indexOf('?')):'')});s.end();return;}s.setHeader('content-type','application/json');s.end(JSON.stringify({publicationId:q.headers['x-site-publication-id'],trusted}));}).listen(3000,'0.0.0.0');`;
-  command(['run', '--rm', '-d', '--name', api, '--network', network, 'node:22.23.2-alpine', 'node', '-e', mockApi]);
+  command(['run', '--rm', '-d', '--name', api, '--network', network, 'node:22.23.4-alpine', 'node', '-e', mockApi]);
   let apiReady = false;
   for (let attempt = 0; attempt < 40; attempt += 1) {
     const probe = spawnSync('docker', ['exec', api, 'node', '-e', "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"], { encoding: 'utf8', timeout: 5000 });

@@ -2,6 +2,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { constants } from 'node:fs';
 import { mkdir, readdir, open, lstat, rename, link, readFile, rm } from 'node:fs/promises';
 import { join, resolve, relative, sep } from 'node:path';
+import { mapFiles } from './file-work.mjs';
 
 const HASH = /^[a-f0-9]{64}$/;
 const ID = /^[a-zA-Z0-9_-]{1,200}$/;
@@ -53,21 +54,32 @@ async function fileBytes(path) {
   } finally { await handle.close(); }
 }
 
-async function inventory(root, directory = root) {
-  if (!(await lstat(directory)).isDirectory()) throw new Error('Artifact contains a symbolic directory');
-  const files = [];
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
-    if (entry.name.startsWith('.')) throw new Error('Artifact contains a private/hidden path');
-    const path = join(directory, entry.name);
-    if (entry.isSymbolicLink()) throw new Error('Artifact contains a symbolic link');
-    if (entry.isDirectory()) files.push(...await inventory(root, path));
-    else if (entry.isFile()) {
-      const name = relative(root, path).split(sep).join('/');
-      if (name === 'redirects.caddy') continue;
-      const data = await fileBytes(path);
-      files.push({ path: name, size: data.length, sha256: sha256(data) });
-    } else throw new Error('Artifact contains a non-regular path');
+async function inventory(root) {
+  const paths = [];
+  let directories = [root];
+  while (directories.length) {
+    const children = await mapFiles(directories, async directory => {
+      if (!(await lstat(directory)).isDirectory()) throw new Error('Artifact contains a symbolic directory');
+      const nested = [];
+      for (const entry of await readdir(directory, { withFileTypes: true })) {
+        if (entry.name.startsWith('.')) throw new Error('Artifact contains a private/hidden path');
+        const path = join(directory, entry.name);
+        if (entry.isSymbolicLink()) throw new Error('Artifact contains a symbolic link');
+        if (entry.isDirectory()) nested.push(path);
+        else if (entry.isFile()) {
+          const name = relative(root, path).split(sep).join('/');
+          if (name === 'redirects.caddy') continue;
+          paths.push({ path, name });
+        } else throw new Error('Artifact contains a non-regular path');
+      }
+      return nested;
+    });
+    directories = children.flat();
   }
+  const files = await mapFiles(paths, async ({ path, name }) => {
+    const data = await fileBytes(path);
+    return { path: name, size: data.length, sha256: sha256(data) };
+  });
   return files.sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
 }
 
@@ -167,12 +179,17 @@ export async function readHistoricalArtifact(publicationRoot, artifactId) {
   return await readRetirement(publicationRoot, artifact) ? artifact : readArtifact(publicationRoot, artifactId);
 }
 
-export async function sealArtifact({ publicationRoot, sourceDirectory, identity: rawIdentity }) {
+export async function sealArtifact({ publicationRoot, sourceDirectory, identity: rawIdentity, onTiming = async () => {} }) {
+  const timed = async (name, operation) => {
+    const started = performance.now();
+    try { return await operation(); }
+    finally { try { await onTiming(name, Math.round(performance.now() - started)); } catch { /* Telemetry cannot affect durability. */ } }
+  };
   const identity = normalizeIdentity(rawIdentity);
   const root = resolve(publicationRoot);
   const source = resolve(sourceDirectory);
   if (!(await lstat(source)).isDirectory()) throw new Error('Artifact source must not be a symbolic link');
-  const files = await inventory(source);
+  const files = await timed('sealInventory', () => inventory(source));
   if (!files.some((file) => file.path === 'index.html') || !files.some((file) => file.path === '404.html')) throw new Error('Incomplete static artifact');
   const existing = await readArtifact(root, identity.artifactId).catch((error) => { if (error.code !== 'ENOENT') throw error; return null; });
   if (existing) {
@@ -194,26 +211,30 @@ export async function sealArtifact({ publicationRoot, sourceDirectory, identity:
   }
   const temporary = join(staging, randomUUID()); await mkdir(temporary);
   try {
-    for (const file of files) {
+    await timed('sealWrite', () => mapFiles(files, async file => {
       const target = join(temporary, ...file.path.split('/'));
       await mkdir(resolve(target, '..'), { recursive: true });
       const data = await fileBytes(join(source, ...file.path.split('/')));
       if (sha256(data) !== file.sha256) throw new Error('Build artifact changed during sealing');
       const handle = await open(target, 'wx', 0o644);
       try { await handle.writeFile(data); await handle.sync(); } finally { await handle.close(); }
-    }
+    }));
     const directories = new Set();
     for (const file of files) {
       let directory = resolve(join(temporary, ...file.path.split('/')), '..');
       while (directory !== temporary) { directories.add(directory); directory = resolve(directory, '..'); }
     }
-    for (const directory of [...directories].sort((a, b) => b.length - a.length)) await syncDirectory(directory);
-    await syncDirectory(temporary);
+    // Children must be durable before their parents; siblings can sync together.
+    const depths = [...new Set([...directories].map(path => path.split(sep).length))].sort((a, b) => b - a);
+    await timed('sealSync', async () => {
+      for (const depth of depths) await mapFiles([...directories].filter(path => path.split(sep).length === depth), syncDirectory);
+      await syncDirectory(temporary);
+    });
     await rename(temporary, targetDirectory); await syncDirectory(releases);
     const content = { ...identity, sealedAt: new Date().toISOString(), files };
     const manifest = { ...content, manifestDigest: sha256(bytes(content)) };
     await writeImmutableJson(join(root, 'manifests'), `${identity.artifactId}.json`, manifest);
-    return await readArtifact(root, identity.artifactId);
+    return await timed('sealReadback', () => readArtifact(root, identity.artifactId));
   } finally { await rm(temporary, { recursive: true, force: true }); }
 }
 

@@ -5,6 +5,7 @@ export type CmsProgress = {
   version: 1; runId: string; publicationId: string; revision: number; sequence: number;
   stage: PublicationStage; startedAt: string; updatedAt: string; completedAt?: string | null;
   sampleEligible: boolean; rendererId?: string; totalPages?: number; completedPages?: number;
+  workTimings?: Record<string, number>;
   waitingReason?: 'WAITING_DEPLOYMENT' | 'CODE_BUILDING' | 'CODE_UNAVAILABLE';
   stages: Partial<Record<PublicationStage, Timing>>;
 };
@@ -28,6 +29,13 @@ export function advanceCmsProgress(current: CmsProgress, event: Record<string, u
   if (event.rendererId !== undefined && !/^[a-f0-9]{64}$/.test(String(event.rendererId))) throw new Error('Invalid renderer identity');
   if (event.waitingReason !== undefined && (stage !== 'PREPARING' || !['WAITING_DEPLOYMENT', 'CODE_BUILDING', 'CODE_UNAVAILABLE'].includes(String(event.waitingReason)))) throw new Error('Invalid publication wait reason');
   if (current.rendererId && event.rendererId && current.rendererId !== event.rendererId) return null;
+  let workTimings = current.workTimings;
+  if (event.workTimings !== undefined) {
+    const allowed = ['snapshot', 'sourceCheck', 'sourceCopy', 'media', 'astro', 'verify', 'seal', 'sealInventory', 'sealWrite', 'sealSync', 'sealReadback'];
+    if (!event.workTimings || typeof event.workTimings !== 'object' || Array.isArray(event.workTimings)
+      || Object.entries(event.workTimings).some(([key, value]) => !allowed.includes(key) || typeof value !== 'number' || !Number.isFinite(value) || value < 0 || value > 30 * 60_000)) throw new Error('Invalid publication work timings');
+    workTimings = { ...current.workTimings, ...event.workTimings as Record<string, number> };
+  }
   const totalPages = event.totalPages === undefined ? current.totalPages : Number(event.totalPages);
   const completedPages = event.completedPages === undefined ? (stage === current.stage ? current.completedPages : undefined) : Number(event.completedPages);
   if (completedPages !== undefined && (totalPages === undefined || completedPages > totalPages)) throw new Error('Invalid publication page count');
@@ -42,7 +50,7 @@ export function advanceCmsProgress(current: CmsProgress, event: Record<string, u
     sampleEligible: current.sampleEligible && !event.waitingReason,
     waitingReason: event.waitingReason as CmsProgress['waitingReason'],
     ...(event.rendererId ? { rendererId: String(event.rendererId) } : {}),
-    totalPages, completedPages };
+    totalPages, completedPages, ...(workTimings ? { workTimings } : {}) };
 }
 export function estimatePublicationRemaining(current: CmsProgress, history: CmsProgress[], now = Date.now()) {
   const unavailable = { estimate: null, overdue: false };

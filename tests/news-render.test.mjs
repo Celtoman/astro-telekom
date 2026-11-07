@@ -2,8 +2,22 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {renderNewsArticle,renderNewsList,renderNewsBody,renderNewsCard,renderNewsGrid,renderNotFound,renderNewsPagination} from '../apps/web/src/lib/news-render.ts';
 import {newsDraft,newsSettingsDefaults,notFoundDefaults} from '../apps/api/src/news-types.ts';
+import {newsStructuredData} from '../apps/web/src/lib/news-seo.ts';
 const article={...newsDraft(),id:'a',slug:'a',categoryId:'c',title:'<img src=x onerror=alert(1)>',summary:'Анонс & новости',publishedDate:'2024-10-01T23:30:00Z',body:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:'<script>alert(1)</script>',marks:[{type:'bold'}]}]}]}};
 const editorial={version:'1.0.0',articles:[article],categories:[{id:'c',slug:'equipment',name:'Оборудование'}],settings:newsSettingsDefaults(),notFound:null};
+
+test('article omits card summary before the cover without deleting body, card or structured description',()=>{
+ for(const cover of [null,{assetId:'cover',alt:'Фото',decorative:false,crop:null}]){
+  const text='Первый абзац новости.',a={...article,summary:text,body:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text}]}]},cover};
+  const e={...editorial,articles:[a],media:{'cover|cover|default':[{src:'/photo.webp',width:600,height:338}]}};
+  const view={kind:'article',editorial:e,article:a,categories:e.categories,related:[]};
+  const html=renderNewsArticle(view);
+  assert.doesNotMatch(html,/news-article-summary/);
+  assert.equal(html.split(text).length-1,1);
+  assert.match(renderNewsCard(e,a),new RegExp(text));
+  assert.equal(newsStructuredData(view,'/news/a','https://example.test')['@graph'][1].description,text);
+ }
+});
 test('news card is one semantic link with escaped title, Moscow date and optional cover fallback',()=>{
  const html=renderNewsCard(editorial,article);assert.equal((html.match(/<a\b/g)||[]).length,1);assert.match(html,/&lt;img src=x onerror=alert\(1\)&gt;/);assert.doesNotMatch(html,/<img src=x/);assert.match(html,/2 октября 2024/);assert.doesNotMatch(html,/news-card-media/);assert.doesNotMatch(html,/читать новость/i);
 });

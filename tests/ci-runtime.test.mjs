@@ -15,9 +15,11 @@ test('GitHub workflows use Node 24 actions without weakening the release gate', 
   assert.match(ci, /pnpm\/action-setup@v6/);
   assert.match(ci, /actions\/setup-node@v7/);
   assert.match(release, /actions\/checkout@v7/);
-  assert.match(ci, /node-version:\s*["']22\.23\.2["']/);
+  assert.match(ci, /node-version:\s*["']22\.23\.4["']/);
   assert.match(ci, /pnpm install --frozen-lockfile/);
   assert.match(ci, /pnpm check/);
+  assert.match(readFileSync(join(repositoryRoot, '.gitattributes'), 'utf8'), /^\*\.sh text eol=lf$/m);
+  assert.doesNotMatch(readFileSync(join(repositoryRoot, 'scripts', 'pnpm-install-retry.sh'), 'utf8'), /\r/);
   assert.doesNotMatch(`${ci}\n${release}`, /(?:actions\/(?:checkout|setup-node)|pnpm\/action-setup)@v4/);
 });
 

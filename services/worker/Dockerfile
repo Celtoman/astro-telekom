@@ -1,4 +1,4 @@
-FROM node:22.23.2-alpine AS worker-deps
+FROM node:22.23.4-alpine AS worker-deps
 WORKDIR /workspace
 RUN corepack enable
 ENV NODE_ENV=production
@@ -13,7 +13,7 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
     sh scripts/pnpm-install-retry.sh --filter @provider/worker --prod --frozen-lockfile --trust-lockfile
 COPY services/worker ./services/worker
 
-FROM node:22.23.2-alpine
+FROM node:22.23.4-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=worker-deps /workspace/node_modules ./node_modules

@@ -1,4 +1,4 @@
-FROM node:22.23.2-alpine AS manifests
+FROM node:22.23.4-alpine AS manifests
 WORKDIR /workspace
 RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -24,7 +24,7 @@ COPY . .
 RUN pnpm --filter @provider/database generate
 RUN pnpm --filter @provider/api run build
 
-FROM node:22.23.2-alpine AS migration
+FROM node:22.23.4-alpine AS migration
 WORKDIR /workspace
 ENV NODE_ENV=production
 COPY --from=build-deps /workspace/node_modules ./node_modules
@@ -34,7 +34,7 @@ COPY --from=build /workspace/apps/api/generated ./apps/api/generated
 COPY --from=build /workspace/prisma ./prisma
 COPY --from=build /workspace/prisma.config.ts ./prisma.config.ts
 
-FROM node:22.23.2-alpine AS runtime
+FROM node:22.23.4-alpine AS runtime
 WORKDIR /workspace
 ENV NODE_ENV=production
 COPY --from=build /workspace/package.json ./package.json

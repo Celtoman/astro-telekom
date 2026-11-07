@@ -8,10 +8,10 @@
 
 | Технология | Версия в проекте | Использование |
 | --- | --- | --- |
-| Node.js | 22.23.2 в Dockerfiles и локальной проверке | API, worker, Astro build, Prisma CLI. |
+| Node.js | 22.23.4 в Dockerfiles и локальной проверке | API, worker, Astro build, Prisma CLI. |
 | pnpm | 11.19.0 | package manager, указан в root `packageManager`. |
 | TypeScript | 6.0.3 | API и web; API не повышается до TypeScript 7, пока Nest CLI требует Compiler API. |
-| Astro | 7.3.1 | Static web и admin. |
+| Astro | 7.4.7 | Static web и admin. |
 | React | 19.2.8 | Интерактивные страницы admin как React-roots внутри Astro. |
 | Tailwind CSS | 4.3.3 | Стили shadcn/ui в admin. |
 | Vite | 8 через Astro | Сборка Astro-приложений. |

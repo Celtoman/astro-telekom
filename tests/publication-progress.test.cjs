@@ -11,6 +11,15 @@ function sample(seconds = 20) {
     rendererId, totalPages: 100, completedPages: 100, sampleEligible: true, stages,
     startedAt: stages.PREPARING.startedAt, updatedAt: stages.CONFIRMING.completedAt, completedAt: stages.CONFIRMING.completedAt };
 }
+
+test('publication work timings survive stages but reject unbounded or private fields',()=>{
+ const {advanceCmsProgress}=helper();
+ const current={...sample(),completedAt:null,stage:'CHECKING'};
+ const next=advanceCmsProgress(current,{stage:'CHECKING',sequence:6,workTimings:{astro:68048,verify:1200}});
+ assert.deepEqual(next.workTimings,{astro:68048,verify:1200});
+ assert.deepEqual(advanceCmsProgress(next,{stage:'ACTIVATING',sequence:7}).workTimings,next.workTimings);
+ for(const workTimings of [{token:1},{seal:-1},{seal:Infinity},{seal:'10'},{seal:1800001},[]])assert.throws(()=>advanceCmsProgress(current,{stage:'CHECKING',sequence:6,workTimings}),/Invalid publication work timings/);
+});
 test('ETA uses matching measured stage history and never manufactures a countdown without samples', () => {
   const { estimatePublicationRemaining } = helper();
   const current = { ...sample(), completedAt: null, stage: 'BUILDING' };

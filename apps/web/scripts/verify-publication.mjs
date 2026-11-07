@@ -4,17 +4,26 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { isLoopbackHostname, resolvePublicSiteUrl } from './public-site-url.mjs';
 import { verifySiteIcons } from './verify-site-icons.mjs';
+import { mapFiles } from './publication/file-work.mjs';
 
 const TEXT_ARTIFACT = /\.(?:html|xml|txt|caddy|webmanifest)$/i;
 
 async function collectFiles(directory) {
   const files = [];
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
-    const path = join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...await collectFiles(path));
-    else if (entry.isFile()) files.push(path);
+  let directories = [directory];
+  while (directories.length) {
+    const nested = await mapFiles(directories, async directory => {
+      const children = [];
+      for (const entry of await readdir(directory, { withFileTypes: true })) {
+        const path = join(directory, entry.name);
+        if (entry.isDirectory()) children.push(path);
+        else if (entry.isFile()) files.push(path);
+      }
+      return children;
+    });
+    directories = nested.flat();
   }
-  return files;
+  return files.sort();
 }
 
 function displayPath(distDirectory, path) {
@@ -187,6 +196,22 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
   const origin = new URL(publicSiteUrl).origin;
   const errors = [];
   const files = await collectFiles(distDirectory);
+  const fileSet = new Set(files.map(path => resolve(path))), inspected = new Set();
+  const inspectText = (path, content) => {
+    inspected.add(path);
+    if (!allowDemoData && TEXT_ARTIFACT.test(path)) {
+      const leaked = findLoopbackReference(content);
+      if (leaked) errors.push(`${leaked} обнаружен в ${displayPath(distDirectory, path)}`);
+    }
+    if (artifactId && /\.(html|css|js)$/.test(path)) {
+      const prefix = `/__publication_assets/${artifactId}/`;
+      for (const match of content.matchAll(/\/__publication_assets\/[a-f0-9]{64}\/[^\s"'<>`)?,;]+/g)) {
+        if (!match[0].startsWith(prefix)) throw new Error('Build references a different artifact');
+        const target = resolve(distDirectory, decodeURIComponent(match[0].slice(prefix.length)));
+        if (!target.startsWith(`${resolve(distDirectory)}${sep}`) || !fileSet.has(target)) throw new Error('Build references an invalid or missing versioned asset');
+      }
+    }
+  };
   await verifySiteIcons(distDirectory, artifactId ? `/__publication_assets/${artifactId}` : '', errors);
   const htmlFiles = files.filter((path) => path.toLowerCase().endsWith('.html'));
   const htmlInventory = htmlFiles.map((path) => ({ path, route: routeForHtml(distDirectory, path) }));
@@ -259,12 +284,14 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
 
   let checkedPages = 0;
   const notify = async () => { try { await onProgress({ completedPages: checkedPages, totalPages: publicHtml.length + 1 }); } catch { /* Progress is not a validation result. */ } };
-  for (const { path, route } of publicHtml) {
+  await mapFiles(publicHtml, async ({ path, route }) => {
     const html = await readFile(path, 'utf8');
     validateIndexableHtml(html, route, `${origin}${route}`, sitemapRouteSet.has(route), errors, faviconUrl);
+    inspectText(path, html);
     checkedPages++; await notify();
-  }
+  });
   validateNotFoundHtml(notFound, errors, faviconUrl);
+  inspectText(notFoundPath, notFound);
   checkedPages++; await notify();
 
   const sitemapDirectives = robots.split(/\r?\n/).filter((line) => /^\s*Sitemap\s*:/i.test(line));
@@ -275,12 +302,11 @@ export async function verifyPublication({ distDirectory, publicSiteUrl, allowDem
     errors.push('robots.txt: группа User-agent: * закрывает весь сайт от индексации');
   }
 
-  if (!allowDemoData) {
-    for (const path of files.filter((file) => TEXT_ARTIFACT.test(file))) {
+  {
+    await mapFiles(files.filter(file => !inspected.has(file) && ((!allowDemoData && TEXT_ARTIFACT.test(file)) || (artifactId && /\.(html|css|js)$/.test(file)))), async path => {
       const content = await readFile(path, 'utf8');
-      const leaked = findLoopbackReference(content);
-      if (leaked) errors.push(`${leaked} обнаружен в ${displayPath(distDirectory, path)}`);
-    }
+      inspectText(path, content);
+    });
   }
 
   if (errors.length > 0) {

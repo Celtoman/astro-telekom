@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@11.19.0",
+  "engines": { "node": ">=22.23.4" },
   "devDependencies": {
     "@prisma/client": "7.10.0",
     "commit-and-tag-version": "^13.1.2",
@@ -20,7 +21,7 @@
     "db:generate": "pnpm --filter @provider/database generate",
     "db:validate": "pnpm --filter @provider/database validate",
     "cities:import": "node scripts/import-cities.mjs",
-    "test": "node --test tests/*.test.cjs tests/*.test.mjs",
+    "test": "node scripts/run-tests.mjs",
     "test:build": "pnpm --filter @provider/api run build && pnpm test",
     "check": "pnpm lint && pnpm db:validate && pnpm run build:ci && pnpm test",
     "release:dry-run": "commit-and-tag-version --dry-run",

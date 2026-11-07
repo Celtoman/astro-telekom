@@ -1,5 +1,7 @@
 # Развертывание и эксплуатационный контур
 
+7 ноября 2026, #562/#569: реализованы удаление повторного анонса статьи, Node22.23.4/Astro7.4.7, bounded file I/O, объединённые HTML/asset checks и подробные workTimings. Полный локальный gate пройден; внешний выпуск ожидается. Native incremental проверен изолированно, production сохраняет оптимизированный full build; изменение asset-set protocol вынесено в #571 по резервному варианту плана. Реальные статьи/рабочие правки не публиковать. [Проверки и выпуск](research/2026-11-07-news-performance-implementation.md).
+
 **Выпуск #564/#565, 7 ноября 2026.** d7902939 прошёл exact CI42370608795; Coolify MCP deployment ymqhbymyr4m25n5jonrl5gbx finished за198с, exact SHA/running:healthy; CODE SUCCEEDED. Для выпуска проверенного SHA источник временно закреплялся на d7902939, затем восстановлен HEAD. Внешние manifest/CSP/SPA/preview и общий review шести CHANGED проверены; реальные рабочие правки не опубликованы. Publication/catalog/news/categories/CMS29/29 сохранены. [Результаты](research/2026-11-07-csp-manifest-and-changed-batch.md).
 
 Новости, исправления #558: a09c2c71, CI42362418321success (1070 pass/0 fail/0 skip), deployment hz8jdregiwjcnddzpwdtaxo9 finished95с/exact SHA/running:healthy, CODE SUCCEEDED. Serving snapshot, catalog digest,29/29 и состав2PUBLISHED/4DRAFT сохранены. [Внешняя проверка](research/2026-11-07-news-fix-test-release.md).

@@ -34,7 +34,7 @@ async function sourceIdentity(publicEnv, servingContextDigest) {
 
 function buildAstro(environment, project, report, totalPages) {
   return new Promise((accept, reject) => {
-    const child = spawn(process.execPath, [join(workspace, 'apps/web/node_modules/astro/bin/astro.mjs'), 'build'], {
+    const child = spawn(process.execPath, [join(workspace, 'apps/web/node_modules/astro/bin/astro.mjs'), 'build', '--timings'], {
       cwd: project, env: environment, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true,
     });
     let output = '';
@@ -59,26 +59,6 @@ function buildAstro(environment, project, report, totalPages) {
       code === 0 ? accept(output) : reject(new Error(`Static Astro build failed (${code}): ${output}`));
     });
   });
-}
-
-async function validateAssets(directory, artifactId) {
-  const prefix = `/__publication_assets/${artifactId}/`;
-  async function visit(path) {
-    for (const entry of await readdir(path, { withFileTypes: true })) {
-      const file = join(path, entry.name);
-      if (entry.isDirectory()) await visit(file);
-      else if (entry.isFile() && /\.(html|css|js)$/.test(entry.name)) {
-        const content = await readFile(file, 'utf8');
-        for (const match of content.matchAll(/\/__publication_assets\/[a-f0-9]{64}\/[^\s"'<>`)?,;]+/g)) {
-          if (!match[0].startsWith(prefix)) throw new Error('Build references a different artifact');
-          const assetPath = decodeURIComponent(match[0].slice(prefix.length));
-          const target = resolve(directory, assetPath);
-          if (!target.startsWith(`${resolve(directory)}${sep}`) || !(await lstat(target)).isFile()) throw new Error('Build references an invalid or missing versioned asset');
-        }
-      }
-    }
-  }
-  await visit(directory);
 }
 
 export class StaticArtifactBuilder {
@@ -115,7 +95,11 @@ export class StaticArtifactBuilder {
   }
 
   build(job, report = async () => {}) {
-    const safeReport = async event => { try { await report(event); } catch { /* Observability is advisory. */ } };
+    let previous = {};
+    const safeReport = async event => {
+      previous = previous.stage === event.stage ? { ...previous, ...event } : { ...event };
+      try { await report(previous); } catch { /* Observability is advisory. */ }
+    };
     const operation = this.pending.then(() => this.buildSerial(job, safeReport));
     this.pending = operation.catch(() => undefined);
     return operation;
@@ -138,11 +122,20 @@ export class StaticArtifactBuilder {
   }
 
   async buildSerial(job, report) {
-    const snapshot = await this.fetchSnapshot(job);
+    let stage = 'PREPARING'; const workTimings = {};
+    const measure = async (name, operation) => {
+      const started = performance.now();
+      try { return await operation(); }
+      finally {
+        workTimings[name] = Math.round((workTimings[name] || 0) + performance.now() - started);
+        await report({ stage, workTimings: { ...workTimings } });
+      }
+    };
+    const snapshot = await measure('snapshot', () => this.fetchSnapshot(job));
     const rendererId = await this.renderer;
     const totalPages = snapshot.catalog.routes.length + 1;
     await report({ stage: 'PREPARING', rendererId, totalPages });
-    if (await sourceIdentity(this.publicEnv, this.servingContextDigest) !== rendererId) throw new Error('Released renderer source changed');
+    if (await measure('sourceCheck', () => sourceIdentity(this.publicEnv, this.servingContextDigest)) !== rendererId) throw new Error('Released renderer source changed');
     const identity = { publicationId: job.publicationId, siteId: job.siteId, siteSlug: job.siteSlug,
       siteRevision: snapshot.siteRevision, rebuildId: job.rebuildId, rebuildRevision: job.rebuildRevision,
       ...(snapshot.releaseSequence === undefined ? {} : {releaseSequence:snapshot.releaseSequence}),
@@ -162,36 +155,37 @@ export class StaticArtifactBuilder {
       // Astro writes prerender/type files inside its project root. Give every build
       // a private copy of the released sources while sharing installed dependencies.
       const projectRoot = join(operationRoot, 'renderer');
-      for (const path of ['package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'apps/web/package.json', 'apps/web/astro.config.mjs', 'apps/web/src', 'apps/web/public', 'apps/web/scripts', 'apps/api/src', 'scripts']) {
+      await measure('sourceCopy', async () => { for (const path of ['package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'apps/web/package.json', 'apps/web/astro.config.mjs', 'apps/web/src', 'apps/web/public', 'apps/web/scripts', 'apps/api/src', 'scripts']) {
         const target = join(projectRoot, path); await mkdir(resolve(target, '..'), { recursive: true });
         await cp(join(workspace, path), target, { recursive: true, errorOnExist: true, force: false });
-      }
+      } });
       const linkType = process.platform === 'win32' ? 'junction' : 'dir';
-      await copyEditorialMedia(snapshot.catalog.editorial,this.mediaRoot,join(projectRoot,'apps/web/public'));
+      await measure('media', () => copyEditorialMedia(snapshot.catalog.editorial,this.mediaRoot,join(projectRoot,'apps/web/public')));
       await symlink(join(workspace, 'node_modules'), join(projectRoot, 'node_modules'), linkType);
       await symlink(join(workspace, 'apps/web/node_modules'), join(projectRoot, 'apps/web/node_modules'), linkType);
       const environment = {};
       for (const key of ['PATH', 'Path', 'HOME', 'USERPROFILE', 'TEMP', 'TMP', 'SYSTEMROOT', 'SystemRoot', 'APPDATA', 'LOCALAPPDATA', 'LANG']) {
         if (process.env[key]) environment[key] = process.env[key];
       }
-      await report({ stage: 'BUILDING', completedPages: 0, totalPages });
-      const buildLog = await buildAstro({ ...environment, ...this.publicEnv, ALLOW_DEMO_DATA: 'false', NODE_ENV: 'production',
+      stage = 'BUILDING'; await report({ stage, completedPages: 0, totalPages });
+      const buildLog = await measure('astro', () => buildAstro({ ...environment, ...this.publicEnv, ALLOW_DEMO_DATA: 'false', NODE_ENV: 'production',
         ASTRO_TELEMETRY_DISABLED: '1', XDG_CONFIG_HOME: join(operationRoot, 'config'),
         XDG_CACHE_HOME: join(operationRoot, 'cache'), APPDATA: join(operationRoot, 'appdata'),
         PUBLIC_STATIC_ARTIFACT_ID: identity.artifactId, PUBLICATION_BUILD_OUT_DIR: output,
         PUBLICATION_BUILD_CACHE_DIR: join(operationRoot, 'cache'),
-        SITE_DATA_SNAPSHOT_FILE: snapshotPath, SITE_DATA_PUBLICATION_ID: job.publicationId }, join(projectRoot, 'apps/web'), report, totalPages);
-      await report({ stage: 'CHECKING', completedPages: 0, totalPages });
+        SITE_DATA_SNAPSHOT_FILE: snapshotPath, SITE_DATA_PUBLICATION_ID: job.publicationId }, join(projectRoot, 'apps/web'), report, totalPages));
+      stage = 'CHECKING'; await report({ stage, completedPages: 0, totalPages });
       let lastCheck = 0;
-      try { await verifyPublication({ distDirectory: output, publicSiteUrl: this.publicEnv.PUBLIC_SITE_URL, allowDemoData: false, artifactId: identity.artifactId,
+      try { await measure('verify', () => verifyPublication({ distDirectory: output, publicSiteUrl: this.publicEnv.PUBLIC_SITE_URL, allowDemoData: false, artifactId: identity.artifactId,
         onProgress: async count => { if (Date.now() - lastCheck > 1500 || count.completedPages === count.totalPages) {
           lastCheck = Date.now(); await report({ stage: 'CHECKING', ...count });
         } },
-      }); }
+      })); }
       catch (error) { throw new Error(`Static publication validation failed: ${error.message}\n${buildLog}`, { cause: error }); }
-      await validateAssets(output, identity.artifactId);
-      if (await sourceIdentity(this.publicEnv, this.servingContextDigest) !== rendererId) throw new Error('Released renderer changed during build');
-      return await sealArtifact({ publicationRoot: this.root, sourceDirectory: output, identity });
+      if (await measure('sourceCheck', () => sourceIdentity(this.publicEnv, this.servingContextDigest)) !== rendererId) throw new Error('Released renderer changed during build');
+      return await measure('seal', () => sealArtifact({ publicationRoot: this.root, sourceDirectory: output, identity,
+        onTiming: async (name, duration) => { workTimings[name] = duration; await report({ stage, workTimings: { ...workTimings } }); },
+      }));
     } finally {
       if (resolve(operationRoot, '..') !== resolve(builds)) throw new Error('Unsafe private build cleanup');
       await rm(operationRoot, { recursive: true, force: true });

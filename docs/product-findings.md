@@ -970,3 +970,13 @@
 ### PF-200 — Пакетные редакционные изменения
 
 - Владелец07.11.2026 подтвердил расширение #565: DRAFT+CHANGED одним review/публикацией/сборкой, без фактической публикации своих материалов при проверке. Статус: APPROVED / TEST RELEASED. Live review всех шести CHANGED готов; содержимое/редакции сохранены без публикации. Полное описание [#565](https://github.com/Celtoman/astro-telekom/issues/565); проверки и выпуск вместе с [#564](https://github.com/Celtoman/astro-telekom/issues/564).
+
+### PF-201 — Анонс повторяет начало статьи над обложкой
+
+- 7 ноября 2026, входящая обратная связь владельца. Статус: ROOT CAUSE CONFIRMED / PLAN PROPOSED. На6живых страницах article header summary равен первому абзацу body. Убрать вывод анонса из article header, сохранив body, карточки и SEO; данные не чистить. Проблема [#568](https://github.com/Celtoman/astro-telekom/issues/568), отдельный [план #569](https://github.com/Celtoman/astro-telekom/issues/569). Применение не выполнено.
+
+### PF-202 — Обновление Astro и ускорение публикации
+
+- 7 ноября 2026, предложение владельца проверить latest Astro. Статус: AUDITED / PLAN PROPOSED. Установлен7.3.1, registry latest7.4.7; обновление требует сначала согласовать Node>=22.23.4 (фактически22.23.2). Incremental уже существует, но процесс удаляет cache и меняет asset prefix. Существующий batch4237страниц занял255.705с, включая135.545с CHECKING; аудит новых выпусков не запускал. Предложены отдельное обновление, детализация времени, оптимизация verify/seal и затем native reuse с full fallback. [#562](https://github.com/Celtoman/astro-telekom/issues/562), [доказательства и план](plans/2026-11-07-news-publication-performance.md). Реализация не согласована.
+
+- Применение #562/#569 разрешено владельцем. Повтор article summary убран с red/green regression; Node22.23.4/Astro7.4.7 и оптимизация I/O проверяются. Native probe подтвердил invalidation при каждом новом artifact prefix; production reuse не включён, отдельная оценка #571. Существующие advisory записаны в #570. [Протокол](research/2026-11-07-news-performance-implementation.md).

@@ -1,5 +1,9 @@
 # Покрытие тестами
 
+## Дополнение #562/#569
+
+`publication-file-work.test.mjs` проверяет ограничение нагрузки, порядок результатов и ожидание уже начатых записей перед ошибкой/cleanup. `news-render.test.mjs` проверяет отсутствие анонса в article header при сохранении body/card/JSON-LD с/без cover. `publication-seo.test.mjs` проверяет foreign/missing/escaped assets после объединения проходов. `publication-progress.test.cjs` — ограниченный workTimings и сохранение между этапами. Existing activation/retention/builder suites проверяют integrity, crash/retry и old assets с параллельным I/O. Изолированные сравнительные сценарии: `scripts/rehearse-publication-performance.mjs` и `scripts/probe-astro-incremental.mjs`; они не вызывают внешнюю CMS.
+
 ## Дополнение #564/#565
 
 `admin-csp-runtime.test.mjs` сравнивает разрешённый SHA256 с точным stylesheet установленного ReactAria usePress. `browser-security.test.mjs` проверяет digest каждого emitted style всех admin HTML. `publication-seo.test.mjs` отклоняет manifest link без use-credentials и anonymous. `admin-news-presentation.test.mjs` задаёт выбор только DRAFT+CHANGED. `editorial-batch.test.cjs` проверяет смешанный пакет, category changes, isolation и rejection unchanged/withdrawn; SQL category rehearsal проверяет CHANGED+new, один enqueue/publication, category dependency dedup и ACK captured revisions при последующем autosave. Полный `pnpm check --test-concurrency=2`:1074 pass/0 fail/1 Windows symlink skip,539447ms. Native/fallback SPA, touch emulation, CSP negative probes и mixed-batch recovery подтверждены локально. Exact Linux CI42370608795:1075 pass/0 fail/0 skip,401346ms. Внешний выпуск/CODE завершены; review шести CHANGED готов, публикация не запускалась. Подробные результаты в [отчёте](research/2026-11-07-csp-manifest-and-changed-batch.md).
@@ -356,3 +360,8 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 ## Сквозная приёмка и редакционный backup — T10 (#534)
 
 `news-build.test.mjs` дополнительно запускает Caddy2.11.4 с настоящим createServingConfig поверх полученного immutable артефакта: list/article/category/page2/root200, unknown/invalid/empty/image404, slash301/query, CSS immutable и HTML/assets при недоступном API502. `editorial-backup.test.mjs` запускает4Python unittest из `editorial_backup_test.py`: все восстановленные байты/metadata references, missing/corrupt/duplicate/traversal, cross-site ownership, origin binding, размерозависимый scratch и cleanup failure. `editorial-backup-sql.test.mjs` создаёт собственную PostgreSQL18, media asset/derivatives/article/history, custom dump/bundle и отдельную network=none restore PostgreSQL с проверкой ссылок/hash; fixture удаляется по завершении. `editorial-errors.test.mjs` проверяет русские fetch/5xx ошибки при сохранении исходных HTTP409/validation messages. Seed rehearsal ждёт окончательную TCP-готовность, а не временный bootstrap socket. Внешние S3/systemd/restore и AT/zoom имеют отдельные границы в отчёте T10.
+
+Дополнение проверок #573/#574: `test-runner-options.test.mjs` запускает3реальных test processes с exclusive lock и проверяет фактический concurrency1 и ненулевой exit при failing fixture. `pnpm test` теперь вызывает launcher, размещающий flags перед patterns; прежние записи команды с флагом после файлов не подтверждают cap. Existing documentation-consistency test проходит после восстановления owner-only traffic/P3 формулировок.
+
+
+Финальная локальная проверка #562/#569: pnpm check с фактическим test concurrency2, 1079pass/0fail/0cancel/1skip, total1080; проверенный treede569d2c32f94efdd127fabf6148ffcfc671f87b. Linux CI и внешний выпуск ожидаются.

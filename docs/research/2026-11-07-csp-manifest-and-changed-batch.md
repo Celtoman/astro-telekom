@@ -38,3 +38,6 @@
 - MCP Playwright после обновления подключений сообщил shared-profile busy. Общий браузер не закрывался: проверки выполнены установленным Playwright в отдельном headless Chrome context, собственные browser/context закрыты. Safari, физическое touch и screen reader остаются ручными границами.
 
 Локальные proof: .codex-tmp/csp-564/{deployment.json,source-pin.json,code-verification.json,live-admin-result.json,live-public-result.json,live-preview-result.json,live-csp-result.json,preservation.json}. Ключи/пароли в proof не записывались. #560/#561/#563/#565 закрыты кодовым коммитом; #567 остаётся отдельной открытой проблемой локального ACCOUNT seed, #562 — отдельный замер и оценка reuse.
+
+
+Поправка аудита #562 от7ноября: прежняя команда `pnpm check --test-concurrency=2` действительно завершилась с указанными результатами, однако Node игнорировал concurrency option после file patterns. Утверждение о фактически ограниченной параллельности этого прошлого прогона не подтверждено. Наблюдавшиеся counts/exit0 и Linux CI остаются фактом. Исправление launcher и проверка реального лимита выполнены отдельно в #573; прежний ACCOUNT flake #567 не считается этим автоматически решённым.
