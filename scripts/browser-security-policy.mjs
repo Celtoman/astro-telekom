@@ -1,3 +1,5 @@
+import { reactAriaPressableHash } from './react-aria-csp.mjs';
+
 const YANDEX_METRIKA_HOSTS = [
   'mc.yandex.ru',
   'mc.yandex.az',
@@ -82,6 +84,7 @@ export function createAdminCsp({ publicApiUrl, adminUrl }) {
     ],
     styleDirective: {
       resources: [{ resource: "'unsafe-inline'", kind: 'attribute' }],
+      hashes: [reactAriaPressableHash],
     },
   };
 }

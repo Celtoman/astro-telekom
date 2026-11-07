@@ -1,5 +1,7 @@
 # Развертывание и эксплуатационный контур
 
+**Подготовка #564/#565, 7 ноября 2026.** Исправления CSP/manifest и пакет CHANGED локально проверены; новый внешний выпуск пока не выполнен. Code deployment не публикует реальные статьи или их рабочие правки. [Результаты](research/2026-11-07-csp-manifest-and-changed-batch.md).
+
 Новости, исправления #558: a09c2c71, CI42362418321success (1070 pass/0 fail/0 skip), deployment hz8jdregiwjcnddzpwdtaxo9 finished95с/exact SHA/running:healthy, CODE SUCCEEDED. Serving snapshot, catalog digest,29/29 и состав2PUBLISHED/4DRAFT сохранены. [Внешняя проверка](research/2026-11-07-news-fix-test-release.md).
 
 История первого редакционного выпуска (#534): API EDITORIAL_MEDIA_ROOT=/editorial-media и постоянный editorial_media volume; builder читает его read-only. d5a12f0f прошёл exact CI42309035496, finished deployment rnk6abcw28mihjtmhnhgnnz5 за238с, healthy и CODE SUCCEEDED. NEWS_SETTINGS/404 были опубликованы отдельно; на момент того выпуска6 статей оставались DRAFT. Реальные S3 DB/media backups до/после импорта восстановлены в изолированном PostgreSQL18; после импорта проверены6 assets / 38 files / 12 editorial references. [внешний выпуск T11](research/2026-11-07-news-external-release.md).

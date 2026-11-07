@@ -1,5 +1,10 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 let view={};try{view=await import('../apps/admin/src/lib/news-presentation.mjs')}catch(error){if(error.code!=='ERR_MODULE_NOT_FOUND')throw error}
+
+test('batch accepts new and changed materials but never unchanged, withdrawn or unavailable states',()=>{
+ for(const state of ['DRAFT','CHANGED'])assert.equal(view.canBatchPublishNews(state),true);
+ for(const state of ['PUBLISHED','WITHDRAWN','UNKNOWN'])assert.equal(view.canBatchPublishNews(state),false);
+});
 test('new-title slug suggestions are readable while list navigation retains filters and rejects foreign return destinations',()=>{
  assert.equal(view.newsSlugSuggestion?.('Новый Wi-Fi роутер — Wave!'),'novyy-wi-fi-router-wave');
  const url=view.newsListUrl?.({siteId:'site',search:'Новый роутер',categoryId:'cat',state:'CHANGED',page:3});const parsed=new URL(url,'https://admin.example');assert.equal(parsed.searchParams.get('search'),'Новый роутер');assert.equal(parsed.searchParams.get('page'),'3');

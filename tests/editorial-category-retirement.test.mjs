@@ -12,6 +12,6 @@ test('category retirement preserves live/draft content and acknowledges archival
   const connection=`postgresql://postgres:${password}@127.0.0.1:${port}/${database}`,environment={...process.env,DATABASE_URL:connection,EDITORIAL_REHEARSAL_DATABASE_URL:connection};
   await command(process.execPath,[requireDatabase.resolve('prisma/build/index.js'),'migrate','deploy','--config','prisma.config.ts'],{env:environment,timeout:90000});
   const output=(await command(process.execPath,['scripts/rehearse-editorial-category-retirement.mjs'],{env:environment,timeout:90000})).stdout;
-  const proof=JSON.parse(output.trim());assert.equal(proof.result,'PASS');assert.ok(proof.liveDraftIsolation&&proof.separateRevisions&&proof.draftOnlyNeverPublished&&proof.archiveAfterAcknowledgment&&proof.failedReleasePreservesCategory);assert.equal(proof.legacyRevision,'52:50');
+  const proof=JSON.parse(output.trim());assert.equal(proof.result,'PASS');assert.ok(proof.changedBatchIsolation&&proof.liveDraftIsolation&&proof.separateRevisions&&proof.draftOnlyNeverPublished&&proof.archiveAfterAcknowledgment&&proof.failedReleasePreservesCategory);assert.equal(proof.legacyRevision,'52:50');
  }finally{if(started)await exec('docker',['rm','-f',name],{windowsHide:true,timeout:30000}).catch(()=>undefined)}
 });

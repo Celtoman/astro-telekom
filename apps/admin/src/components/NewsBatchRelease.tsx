@@ -11,11 +11,11 @@ import { PublicationIssueCard } from './PublicationIssueCard'
 import { Alert, AlertDescription } from './ui/alert'
 import { Button } from './ui/button'
 
-export interface SelectedDraft { id: string; title: string; revision: number }
+export interface SelectedMaterial { id: string; title: string; revision: number }
 interface BatchItem { entityId: string; expectedRevision: number }
 interface Review { ready: boolean; reviewDigest: string; items: Array<{kind:string;entityId:string;revision:number;title:string}>; affectedPaths:string[]; report:PublicationValidationReport }
 interface Pending { operationId: string; reviewDigest: string; items: BatchItem[] }
-export function NewsBatchRelease({apiUrl,siteId,userId,selected,disabled,onCompleted,onBusyChange}:{apiUrl:string;siteId:string;userId:string;selected:SelectedDraft[];disabled:boolean;onCompleted:(status:string)=>void;onBusyChange:(busy:boolean)=>void}) {
+export function NewsBatchRelease({apiUrl,siteId,userId,selected,disabled,onCompleted,onBusyChange}:{apiUrl:string;siteId:string;userId:string;selected:SelectedMaterial[];disabled:boolean;onCompleted:(status:string)=>void;onBusyChange:(busy:boolean)=>void}) {
   const [open,setOpen]=useState(false),[review,setReview]=useState<Review|null>(null),[items,setItems]=useState<BatchItem[]>([])
   const [busy,setBusy]=useState(false),[error,setError]=useState(''),[storageError,setStorageError]=useState(''),[unavailable,setUnavailable]=useState(false)
   const [errorEntityId,setErrorEntityId]=useState('')
@@ -49,7 +49,7 @@ export function NewsBatchRelease({apiUrl,siteId,userId,selected,disabled,onCompl
     const captured=selected.map(row=>({entityId:row.id,expectedRevision:row.revision}))
     setOpen(true);setReview(null);setError('');setErrorEntityId('');setBusy(true);setItems(captured)
     try{setReview(await requestJson<Review>(apiUrl,`${endpoint}/batch/review`,{method:'POST',body:{items:captured}}))}
-    catch(error){setError(editorialErrorMessage(error,'Проверка выбранных черновиков недоступна.'));if(error instanceof AdminApiError&&typeof error.payload?.entityId==='string')setErrorEntityId(error.payload.entityId)}
+    catch(error){setError(editorialErrorMessage(error,'Проверка выбранных материалов недоступна.'));if(error instanceof AdminApiError&&typeof error.payload?.entityId==='string')setErrorEntityId(error.payload.entityId)}
     finally{setBusy(false)}
   }
   async function send(request:Pending){
@@ -77,10 +77,10 @@ export function NewsBatchRelease({apiUrl,siteId,userId,selected,disabled,onCompl
     {operation?.status==='SUCCEEDED'&&<p role="status" className="text-sm">Выбранные материалы опубликованы одной операцией.</p>}
     {operation?.status==='FAILED'&&<Alert variant="destructive"><AlertDescription>{operation.lastError||'Публикация не завершена. Обновите список и повторите проверку состава.'}</AlertDescription></Alert>}
     <ModalOverlay isOpen={open} onOpenChange={setOpen} isDismissable={!busy} className={editorialOverlay}><Modal className={editorialModal}><Dialog className="space-y-5 p-6 outline-none">
-      <Heading slot="title" className="text-xl font-semibold">Публикация выбранных черновиков</Heading>
-      <p className="text-sm text-muted-foreground">Выбранные материалы и указанные категории выйдут вместе. Сайт будет собран один раз. Остальные черновики останутся без публикации.</p>
+      <Heading slot="title" className="text-xl font-semibold">Публикация выбранных материалов</Heading>
+      <p className="text-sm text-muted-foreground">Выбранные материалы и указанные категории выйдут вместе. Сайт будет собран один раз. Остальные материалы и правки останутся без публикации.</p>
       {busy&&<p role="status">Проверяем состав…</p>}
-      {error&&<Alert variant="destructive"><AlertDescription>{error}{errorEntityId&&<a className="ml-2 underline underline-offset-4" href={`/news/edit?id=${encodeURIComponent(errorEntityId)}`}>Открыть проблемный черновик</a>}</AlertDescription></Alert>}
+      {error&&<Alert variant="destructive"><AlertDescription>{error}{errorEntityId&&<a className="ml-2 underline underline-offset-4" href={`/news/edit?id=${encodeURIComponent(errorEntityId)}`}>Открыть проблемный материал</a>}</AlertDescription></Alert>}
       {review&&<><ul className="divide-y rounded-lg border">{review.items.map(item=><li key={`${item.kind}:${item.entityId}`} className="break-words p-3 text-sm"><strong>{item.title}</strong> · редакция {item.revision}{item.kind==='CATEGORY'?' · категория-зависимость':''}</li>)}</ul>
         <details><summary className="cursor-pointer py-2 text-sm">Затронутые адреса ({review.affectedPaths.length})</summary><ul className="max-h-48 overflow-auto text-sm">{review.affectedPaths.map(path=><li key={path} className="break-all">{path}</li>)}</ul></details>
         {review.report.issues.map((issue,index)=><PublicationIssueCard key={index} issue={issue} siteId={siteId}/>)}

@@ -108,7 +108,7 @@ function validateDocumentMetadata(html, label, errors, faviconUrl) {
       { href: '/favicon-96x96.png', type: 'image/png', sizes: '96x96' },
     ]],
     ['apple-touch-icon', [{ href: `${assetPrefix}/apple-touch-icon.png`, type: 'image/png', sizes: '180x180' }]],
-    ['manifest', [{ href: '/site.webmanifest' }]],
+    ['manifest', [{ href: '/site.webmanifest', crossorigin: 'use-credentials' }]],
   ]) {
     const actual = links.filter(tag => getAttribute(tag, 'rel')?.toLowerCase().split(/\s+/).includes(rel));
     if (actual.length !== expected.length || expected.some(attributes => actual.filter(tag =>

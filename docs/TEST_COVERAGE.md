@@ -1,5 +1,9 @@
 # Покрытие тестами
 
+## Дополнение #564/#565
+
+`admin-csp-runtime.test.mjs` сравнивает разрешённый SHA256 с точным stylesheet установленного ReactAria usePress. `browser-security.test.mjs` проверяет digest каждого emitted style всех admin HTML. `publication-seo.test.mjs` отклоняет manifest link без use-credentials и anonymous. `admin-news-presentation.test.mjs` задаёт выбор только DRAFT+CHANGED. `editorial-batch.test.cjs` проверяет смешанный пакет, category changes, isolation и rejection unchanged/withdrawn; SQL category rehearsal проверяет CHANGED+new, один enqueue/publication, category dependency dedup и ACK captured revisions при последующем autosave. Полный `pnpm check --test-concurrency=2`:1074 pass/0 fail/1 Windows symlink skip,539447ms. Native/fallback SPA, touch emulation, CSP negative probes и mixed-batch recovery подтверждены локально; внешний выпуск ожидается. Подробные результаты в [отчёте](research/2026-11-07-csp-manifest-and-changed-batch.md).
+
 ## Дополнение: пакетный выпуск и UI новостей, #558
 
 **Локальная проверка 7 ноября 2026:** полный `pnpm check` по окончательному staged export `f9559a99d4782f126697eb0cc53802da85ca8f6b`: 1069 pass / 0 fail / 1 skip, 476658 ms. Пропущена Windows-проверка файловой symlink без соответствующей привилегии. Остальные проверки, включая реальные PostgreSQL/Redis/Astro/Caddy rehearsals, выполнены; красный результат не принят как baseline.

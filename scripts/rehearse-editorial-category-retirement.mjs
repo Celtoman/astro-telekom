@@ -7,7 +7,8 @@ const require=createRequire(new URL('../apps/api/package.json',import.meta.url))
 const {PrismaService}=require('./dist/prisma.service.js'),{EditorialStoreService}=require('./dist/editorial-store.service.js'),{EditorialPublicationService}=require('./dist/editorial-publication.service.js'),{EditorialMediaService}=require('./dist/editorial-media.service.js'),{EditorialMediaRegistryService}=require('./dist/editorial-media-registry.service.js'),{SiteCatalogService}=require('./dist/site-catalog.service.js'),{PublicationWorkflowService}=require('./dist/publication-workflow.service.js'),{newsDraft}=require('./dist/news-types.js');
 const {publicationSource}=require('../../tests/helpers/publication-source.cjs');
 const db=new PrismaService(),store=new EditorialStoreService(db),catalog=new SiteCatalogService(db),workflow=new PublicationWorkflowService(db,catalog),key=`category-retirement-${randomUUID()}`;
-const service=new EditorialPublicationService(db,store,catalog,new EditorialMediaRegistryService(new EditorialMediaService(db)),{enqueue:async()=>({id:'fixture',status:'QUEUED'})});let provider,site;
+let enqueueCount=0;
+const service=new EditorialPublicationService(db,store,catalog,new EditorialMediaRegistryService(new EditorialMediaService(db)),{enqueue:async()=>{enqueueCount++;return {id:'fixture',status:'QUEUED'}}});let provider,site;
 async function publish(kind,id,revision,action='PUBLISH',targetCategoryId){const input={kind,entityId:id,expectedRevision:revision,action,...(targetCategoryId?{targetCategoryId}:{})},review=await service.review(site.id,input);assert.equal(review.ready,true,JSON.stringify(review.report.issues));const operationId=randomUUID(),result=await service.publish(site.id,input,review.reviewDigest,operationId);return {input,review,result,operationId}}
 const acknowledge=id=>workflow.markSucceeded(id,{deploymentId:'category-sql-ack-fixture'});
 try{
@@ -67,6 +68,23 @@ try{
  assert.ok(!(await workflow.getPublishedCatalog(site.slug)).redirects.some(row=>row.sourcePath==='/news/alias-original'));
  const aliasRepublished=await publish('ARTICLE',aliasArticle.id,aliasSaved.revision);await acknowledge(aliasRepublished.result.publicationId);
  assert.ok((await workflow.getPublishedCatalog(site.slug)).redirects.some(row=>row.sourcePath==='/news/alias-original'&&row.targetPath==='/news/alias-current'),'approved historical alias must return after republication');
+ const destination=await category('Пакетная категория','batch-destination');
+ const batchRows=[];for(const title of ['BatchX','BatchY','BatchU'])batchRows.push(await store.create(site.id,'ARTICLE',`${key}-${title}`,{...article(title),categoryId:target.id}));
+ const seedItems=batchRows.map(row=>({entityId:row.id,expectedRevision:1})),seedReview=await service.reviewBatch(site.id,seedItems),seedRelease=await service.publishBatch(site.id,seedItems,seedReview.reviewDigest,randomUUID());await acknowledge(seedRelease.publicationId);
+ for(const row of batchRows)await store.save(site.id,'ARTICLE',row.id,1,{...row.content,categoryId:destination.id});
+ const fresh=await store.create(site.id,'ARTICLE',`${key}-BatchD`,{...article('BatchD'),categoryId:destination.id});
+ const changedItems=[...batchRows.slice(0,2).map(row=>({entityId:row.id,expectedRevision:2})),{entityId:fresh.id,expectedRevision:1}],changedReview=await service.reviewBatch(site.id,changedItems);
+ assert.equal(changedReview.ready,true);assert.equal(changedReview.items.filter(row=>row.kind==='CATEGORY').length,1);
+ const changedCount=await db.sitePublication.count({where:{siteId:site.id}}),beforeEnqueue=enqueueCount,changedOperation=randomUUID(),changedRelease=await service.publishBatch(site.id,changedItems,changedReview.reviewDigest,changedOperation);
+ assert.equal(enqueueCount,beforeEnqueue+1);assert.equal(await db.sitePublication.count({where:{siteId:site.id}}),changedCount+1);
+ const changedCatalog=(await db.sitePublication.findUniqueOrThrow({where:{id:changedRelease.publicationId}})).catalog;
+ for(const row of batchRows.slice(0,2))assert.equal(changedCatalog.editorial.articles.find(a=>a.id===row.id).categoryId,destination.id);
+ assert.equal(changedCatalog.editorial.articles.find(a=>a.id===batchRows[2].id).categoryId,target.id,'unselected category edit stays working only');
+ await store.save(site.id,'ARTICLE',batchRows[0].id,2,{...batchRows[0].content,categoryId:destination.id,title:'Later autosave'});
+ await acknowledge(changedRelease.publicationId);
+ assert.equal((await db.newsArticle.findUniqueOrThrow({where:{id:batchRows[0].id}})).publishedRevision,2);assert.equal((await db.newsArticle.findUniqueOrThrow({where:{id:batchRows[0].id}})).revision,3);
+ assert.equal((await db.newsArticle.findUniqueOrThrow({where:{id:batchRows[1].id}})).publishedRevision,2);assert.equal((await db.newsArticle.findUniqueOrThrow({where:{id:fresh.id}})).publishedRevision,1);assert.equal((await service.workspace(site.id,'ARTICLE',batchRows[2].id)).state,'CHANGED');
+ assert.equal((await service.publishBatch(site.id,changedItems,changedReview.reviewDigest,changedOperation)).publicationId,changedRelease.publicationId);
  const unchanged=await db.site.findUniqueOrThrow({where:{id:site.id}});assert.equal(unchanged.workingRevision,52);assert.equal(unchanged.publishedRevision,50);
- console.log(JSON.stringify({result:'PASS',liveDraftIsolation:true,separateRevisions:true,reviewReadOnly:true,idempotentOperation:true,draftOnlyNeverPublished:true,pendingReferenceGuard:true,archiveAfterAcknowledgment:true,restoreArchivedCategoryExplicitly:true,servingRetirementPublicationGuard:true,failedReleasePreservesCategory:true,legacyRevision:'52:50',activation:'SQL_ACK_FIXTURE'}));
+ console.log(JSON.stringify({result:'PASS',changedBatchIsolation:true,liveDraftIsolation:true,separateRevisions:true,reviewReadOnly:true,idempotentOperation:true,draftOnlyNeverPublished:true,pendingReferenceGuard:true,archiveAfterAcknowledgment:true,restoreArchivedCategoryExplicitly:true,servingRetirementPublicationGuard:true,failedReleasePreservesCategory:true,legacyRevision:'52:50',activation:'SQL_ACK_FIXTURE'}));
 }finally{if(site)await db.site.delete({where:{id:site.id}});if(provider)await db.provider.delete({where:{id:provider.id}});await db.onModuleDestroy()}

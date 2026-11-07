@@ -966,3 +966,7 @@
 
 - Дата: 2026-11-07. Область: admin | browser | accessibility. Статус: NEW / REQUIRES_DISCUSSION.
 - Внешний браузер фиксирует blocked inline styles, включая AdminShell; отдельно есть инъекция антивируса. UI-сценарий пакетного review прошёл, но это не доказывает безвредность всех блокировок. Разделить источники и оценить React Aria runtime contract; [#561](https://github.com/Celtoman/astro-telekom/issues/561). Защитную политику в текущем выпуске не меняли.
+
+### PF-200 — Пакетные редакционные изменения
+
+- Владелец07.11.2026 подтвердил расширение #565: DRAFT+CHANGED одним review/публикацией/сборкой, без фактической публикации своих материалов при проверке. Статус: APPROVED / LOCAL IMPLEMENTATION. Полное описание [#565](https://github.com/Celtoman/astro-telekom/issues/565); проверки и выпуск вместе с [#564](https://github.com/Celtoman/astro-telekom/issues/564).

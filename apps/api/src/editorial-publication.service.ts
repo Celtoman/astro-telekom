@@ -21,7 +21,7 @@ import { confirmedEditorialTransfers,remapEditorialAliasOwners,restoreEditorialA
 type Tx=Prisma.TransactionClient;
 export type EditorialReleaseInput={kind:EditorialKind;entityId:string;expectedRevision:number;action:'PUBLISH'|'WITHDRAW'|'REASSIGN';targetCategoryId?:string};
 export function editorialBatchInputs(raw:unknown):EditorialReleaseInput[]{
-  if(!Array.isArray(raw)||raw.length<1||raw.length>100)throw new BadRequestException('Выберите от 1 до 100 черновиков.');
+  if(!Array.isArray(raw)||raw.length<1||raw.length>100)throw new BadRequestException('Выберите от 1 до 100 новых или изменённых материалов.');
   const ids=new Set<string>();
   return raw.map((item):EditorialReleaseInput=>{
     if(!item||typeof item!=='object'||Object.keys(item).some(key=>!['entityId','expectedRevision'].includes(key))||typeof item.entityId!=='string'||!/^[a-zA-Z0-9_-]{1,200}$/.test(item.entityId)||!Number.isSafeInteger(item.expectedRevision)||item.expectedRevision<1||ids.has(item.entityId))throw new BadRequestException('Нужен список разных материалов с точными сохранёнными редакциями.');
@@ -59,7 +59,11 @@ export class EditorialPublicationService {
     const selected=(row?.content??{}) as Record<string,any>;
     selectedTitle=String(selected.title||selected.name||(input.kind==='NOT_FOUND'?'Страница 404':input.kind==='NEWS_SETTINGS'?'Настройки новостей':selectedTitle));
     if(!row||row.revision!==input.expectedRevision)throw new ConflictException('Черновик изменился. Сохраните текущую версию и повторите проверку.');
-    if(batch&&(row.everPublished||old?.articles.some(a=>a.id===row.id)))throw new ConflictException(`«${row.title||row.id}» уже публиковалась. Выберите только черновики.`);
+    if(batch){
+      const published=old?.articles.find(a=>a.id===row.id);
+      const publishedContent=published?Object.fromEntries(Object.keys(selected).map(key=>[key,published[key]])):null;
+      if(published?editorialDigest(publishedContent)===editorialDigest(selected):row.everPublished)throw new ConflictException('Выберите новые или изменённые материалы. Новость без изменений или снятая с публикации недоступна для пакетного выпуска.');
+    }
     if(input.kind==='CATEGORY'&&input.action==='PUBLISH'&&await tx.editorialPublicationItem.findFirst({where:{kind:'CATEGORY',entityId:row.id,action:{in:['WITHDRAW','REASSIGN']},publication:{siteId,status:{in:['PENDING','RUNNING']}}},select:{id:true}}))throw new ConflictException('Категория готовится к удалению. Дождитесь подтверждения результата; повторная публикация недоступна.');
     if(input.kind==='ARTICLE'&&input.action==='WITHDRAW'&&!old?.articles.some(a=>a.id===row.id))throw new ConflictException('Эта новость уже не опубликована');
     retirement=input.kind==='CATEGORY'&&input.action!=='PUBLISH'?await prepareCategoryRetirement(tx,this.store,siteId,row,input.targetCategoryId??null,old):null;

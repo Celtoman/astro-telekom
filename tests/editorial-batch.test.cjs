@@ -39,7 +39,7 @@ test('selected drafts become one reviewed publication with one category dependen
  assert.equal(repeat.publicationId,result.publicationId);assert.equal(f.publications.length,1);
  assert.equal(new Set(f.enqueues.map(x=>x.publicationId)).size,1);
 });
-test('batch rejects changed, invalid, repeated and already published selections before enqueue',async()=>{
+test('batch rejects stale, invalid, repeated and withdrawn selections before enqueue',async()=>{
  for(const scenario of ['changed','invalid','duplicate','published','empty','foreign']){
   const f=fixture();let input=f.input;
   if(scenario==='changed')f.rows.get('news-1').revision=2;
@@ -51,6 +51,36 @@ test('batch rejects changed, invalid, repeated and already published selections 
   await assert.rejects(()=>f.service.reviewBatch(f.site.id,input),scenario);
   assert.equal(f.publications.length,0);assert.equal(f.enqueues.length,0);
  }
+});
+
+test('changed categories and new drafts share one batch without publishing unselected working changes',async()=>{
+ const f=fixture();
+ f.source.editorial.categories=structuredClone(newsSource().editorial.categories);
+ for(const id of ['news-0','news-2']){
+  const row=f.rows.get(id);row.everPublished=true;
+  f.source.editorial.articles.push({...row.content,id,revision:row.revision,dateModified:'2024-11-01T09:00:00.000Z'});
+  row.content={...row.content,categoryId:'services',title:row.content.title+' (правка)'};row.revision=2;
+ }
+ f.input[0].expectedRevision=2;
+ const review=await f.service.reviewBatch(f.site.id,f.input);
+ assert.equal(review.ready,true,JSON.stringify(review.report));
+ const released=await f.service.publishBatch(f.site.id,f.input,review.reviewDigest,'changed-and-new','owner');
+ const catalog=f.publications[0].catalog;
+ assert.equal(catalog.editorial.articles.find(a=>a.id==='news-0').categoryId,'services');
+ assert.equal(catalog.editorial.articles.find(a=>a.id==='news-1').revision,1);
+ assert.equal(catalog.editorial.articles.find(a=>a.id==='news-2').title,f.source.editorial.articles.find(a=>a.id==='news-2').title);
+ assert.equal(f.publications.length,1);assert.equal(f.enqueues.length,1);
+ const again=await f.service.publishBatch(f.site.id,f.input,review.reviewDigest,'changed-and-new','owner');
+ assert.equal(again.publicationId,released.publicationId);assert.equal(f.publications.length,1);
+});
+
+test('unchanged live articles cannot enter a batch even with a newer saved revision',async()=>{
+ const f=fixture(),row=f.rows.get('news-0');row.everPublished=true;
+ f.source.editorial.categories=structuredClone(newsSource().editorial.categories);
+ f.source.editorial.articles=[{...row.content,id:row.id,revision:1,dateModified:'2024-11-01T09:00:00.000Z'}];
+ row.revision=2;f.input[0].expectedRevision=2;
+ await assert.rejects(()=>f.service.reviewBatch(f.site.id,f.input),error=>error.getStatus?.()===409);
+ assert.equal(f.publications.length,0);assert.equal(f.enqueues.length,0);
 });
 test('stale batch review cannot publish changed drafts or quietly omit invalid items',async()=>{
  const f=fixture(),review=await f.service.reviewBatch(f.site.id,f.input);

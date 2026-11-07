@@ -10,7 +10,7 @@ import { verifyPublication } from '../apps/web/scripts/verify-publication.mjs';
 const publicSiteUrl = 'https://partner.example.ru';
 
 function iconLinks(prefix = '') {
-  return `<link rel="icon" type="image/vnd.microsoft.icon" sizes="16x16 32x32 48x48" href="${prefix}/favicon.ico"><link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="${prefix}/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">`;
+  return `<link rel="icon" type="image/vnd.microsoft.icon" sizes="16x16 32x32 48x48" href="${prefix}/favicon.ico"><link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="${prefix}/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest" crossorigin="use-credentials">`;
 }
 
 function indexableHtml(url, overrides = {}) {
@@ -151,6 +151,14 @@ test('publication verifier rejects missing, corrupted or incorrectly sized icon 
       return true;
     });
   });
+});
+
+test('publication verifier requires credentials mode on the manifest link', async () => {
+  for (const favicon of [iconLinks().replace(' crossorigin="use-credentials"', ''), iconLinks().replace('crossorigin="use-credentials"', 'crossorigin="anonymous"')]) {
+    await withFixture({ root: indexableHtml(`${publicSiteUrl}/`, { favicon }) }, async distDirectory => {
+      await assert.rejects(verifyPublication({ distDirectory, publicSiteUrl }), /набор manifest/);
+    });
+  }
 });
 
 test('publication verifier rejects manifest launch URLs, installation mode and incomplete icon sets', async () => {

@@ -315,3 +315,7 @@
 | TD-240 | [#559](https://github.com/Celtoman/astro-telekom/issues/559) ✅ | Guard числа тестов ошибочно трактует serving baseline и ревизии CMS |
 | TD-241 | [#560](https://github.com/Celtoman/astro-telekom/issues/560) 🟢 | Browser manifest fetch получает401 при Basic Auth в test |
 | TD-242 | [#561](https://github.com/Celtoman/astro-telekom/issues/561) 🟢 | Разобрать blocked runtime inline styles admin при CSP |
+
+| TD-243 | [#563](https://github.com/Celtoman/astro-telekom/issues/563) 🟢 | Astro transition:animate генерирует CSS без разрешённого CSP-хеша; план #564 |
+| TD-244 | [#565](https://github.com/Celtoman/astro-telekom/issues/565) 🟢 | Пакет не принимал опубликованные новости с рабочими правками CHANGED |
+| TD-245 | [#567](https://github.com/Celtoman/astro-telekom/issues/567) 🟢 | Локальный ACCOUNT seed P2028 при параллельном gate; изоляция и concurrency2 проходят |

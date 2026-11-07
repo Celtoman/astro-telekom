@@ -16,6 +16,7 @@ export function newsReturnUrl(raw) {
   return url.pathname+'?'+url.searchParams
 }
 export const newsStates={DRAFT:{label:'Черновик',variant:'neutral'},PUBLISHED:{label:'На сайте',variant:'success'},CHANGED:{label:'На сайте · есть изменения',variant:'warning'},WITHDRAWN:{label:'Снята с публикации',variant:'outline'},UNKNOWN:{label:'Статус сайта недоступен',variant:'neutral'}}
+export function canBatchPublishNews(state) {return state==='DRAFT'||state==='CHANGED'}
 export function newsLifecycle(workspace,content) {
   if(!workspace?.publishedAvailable)return newsStates.UNKNOWN
   if(workspace.published)return editorialFingerprint(workspace.published)===editorialFingerprint(content)?newsStates.PUBLISHED:newsStates.CHANGED

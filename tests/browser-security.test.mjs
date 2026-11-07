@@ -180,6 +180,10 @@ test('admin production build emits hash-based CSP while allowing only checkbox s
     assert.match(styles, /'self'/);
     assert.match(styles, /'sha256-[A-Za-z0-9+/=]+'/);
     assert.doesNotMatch(styles, /'unsafe-inline'/);
+    for (const [, css] of html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)) {
+      const hash = createHash('sha256').update(css.replace(/\r\n?/g, '\n')).digest('base64');
+      assert.ok(styles.includes(`'sha256-${hash}'`), `${path}: every emitted stylesheet must have an authorized digest`);
+    }
     const { readPreviewPublicStyles } = await import('../scripts/preview-public-styles.mjs');
     const { previewStyleText } = await import('../apps/admin/src/lib/preview-document.mjs');
     const previewHash = createHash('sha256').update(previewStyleText(readPreviewPublicStyles())).digest('base64');
