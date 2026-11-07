@@ -1,6 +1,6 @@
 # Текущее состояние проекта
 
-Сверка исходников и GitHub — **7 ноября 2026**. Статус — **прототип с защищённым внешним test-контуром**. Решение о готовности к реальному трафику принимает владелец.
+Сверка исходников и GitHub — **7 ноября 2026**. Статус — **прототип с защищённым внешним test-контуром**. Только владелец определяет готовность к реальному трафику.
 
 Документ описывает реализованное поведение и известные ограничения. Целевой замысел хранится в [product-contract.md](product-contract.md) и [decisions.md](decisions.md), порядок работы — в [release-plan.md](release-plan.md). Open/closed задач проверяется в [GitHub Issues](https://github.com/Celtoman/astro-telekom/issues). Датированные CI, SHA, revisions и deployment IDs принадлежат [протоколам](research/README.md), а не постоянной сводке состояния.
 
@@ -55,7 +55,7 @@ Static output строится из точного inventory опубликов�
 
 Локальные Windows/Docker-сбои и ограничения ресурсов остаются отдельными записями, включая [#455](https://github.com/Celtoman/astro-telekom/issues/455), [#496](https://github.com/Celtoman/astro-telekom/issues/496), [#517](https://github.com/Celtoman/astro-telekom/issues/517) и [#567](https://github.com/Celtoman/astro-telekom/issues/567). Успешный повтор проверки не считается установленным исправлением их причин.
 
-Синтетическая доставка в Tarifnik и email ранее подтверждена отдельным [протоколом](research/2026-09-25-release-one-synthetic-lead-acceptance.md). Production campaign Tarifnik не меняется агентом без отдельного решения. Дополнительная legal-проверка [#144](https://github.com/Celtoman/astro-telekom/issues/144) оставлена владельцем как P3 вне Release 1 и не является автоматическим gate допуска трафика.
+Синтетическая доставка в Tarifnik и email ранее подтверждена отдельным [протоколом](research/2026-09-25-release-one-synthetic-lead-acceptance.md). Production campaign Tarifnik не меняется агентом без отдельного решения. Дополнительная legal-проверка [#144](https://github.com/Celtoman/astro-telekom/issues/144) оставлена владельцем как P3 вне milestone Release 1 и не является автоматическим gate допуска трафика.
 
 Окружение/секреты и процедура агента с Coolify — [deployment.md](deployment.md); API — [api-contracts.md](api-contracts.md); worker — [worker.md](worker.md). В этой документационной сверке новые build/test/deployment и внешняя приёмка не выполнялись.
 
