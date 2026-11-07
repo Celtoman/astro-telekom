@@ -1,0 +1,211 @@
+{
+  "status": "COMPLETED",
+  "checkedAt": "2026-11-07T18:53:53.581072+00:00",
+  "sourceCommit": "a761d6c29fcbcb4d09f885451bbd121a846f7f51",
+  "deployment": "4ah9sejatv3b2guodvohthcv",
+  "ciRun": 42399889710,
+  "collectedArtifacts": [
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "fec0db1dfd7ed1d87a513c82f84fc42985b02e0b9916d79b07d62d1db8fa6953",
+      "manifestDigest": "d8476f485a5633028f5379a7e9816fc9eb97876d47aef2e6ef4f33f4cb665e2e",
+      "gcRecordDigest": "40ae989153ca007bb8dce1eb76753fba87dbf57ca44c81ead7f4120644d9b082",
+      "deletedFiles": 4019,
+      "logicalBytes": 858251910,
+      "completedAt": "2026-11-07T18:35:54.533Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "08b4078b8b6908d2f6ae3a4dbc0d2987d3a6037b8d751f45e72eea969aa34d41",
+      "manifestDigest": "458705eaf89334e905b0722b23f02a15a3a6e9e9b64deaac49edae079a717f2b",
+      "gcRecordDigest": "815b3995f64bea4e4a8e06981e720cdda72fe6e216af271e7fd6b7101d2b40e4",
+      "deletedFiles": 4019,
+      "logicalBytes": 858251871,
+      "completedAt": "2026-11-07T18:47:46.486Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "d4d1ef1166c166d4fc0b5b70fbb7b50b3f15f7e89256f0468716da14d4cb43b2",
+      "manifestDigest": "fc3d256a95238d57374b2aebc214cd27d2a2ca65e4b76abd86efaae5f7f682fe",
+      "gcRecordDigest": "422b606d465ed96670182a4b6b835dd426e2adf651a161d6e023c571b5f759eb",
+      "deletedFiles": 4019,
+      "logicalBytes": 859047086,
+      "completedAt": "2026-11-07T18:48:11.736Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "b6bf93c5ba83c55b77246ac50a1038010f0bb292e6e760321f3cae92857f5930",
+      "manifestDigest": "06dc798aa92117d4229314096781da0f6144fa04750bb6186680dfd08fad67a0",
+      "gcRecordDigest": "3e87166674d524b9f32f3823fbdca0a333326e253cb3fa69b61cbbd80f694323",
+      "deletedFiles": 4226,
+      "logicalBytes": 905466711,
+      "completedAt": "2026-11-07T18:48:34.000Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "1672b75f3817ee1b4b0a09109432d988f7ec266809ea92b2ccd30d0d255066e9",
+      "manifestDigest": "9bf298675f91589f35d01b8dbf7282ec2a8e3f5d068c03c4dc999f2cf4fd0acf",
+      "gcRecordDigest": "1a114f32b558c13c5fdf8ee7841c6f5abf65a401f782b23d34826671f9a09f53",
+      "deletedFiles": 4226,
+      "logicalBytes": 906505970,
+      "completedAt": "2026-11-07T18:48:54.975Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "742ff98b33326e29b560ea34665cc1119defcffb8f4dc7157857536462435744",
+      "manifestDigest": "ab1229c6bd2818be49bbe24bc540cac9fd59251209802855e84f369c04ac438b",
+      "gcRecordDigest": "51ca4da6722c9ccf1cd3fd5db5a3aa3694a23829e81e60933d1c180472a2d76f",
+      "deletedFiles": 4226,
+      "logicalBytes": 905695029,
+      "completedAt": "2026-11-07T18:49:17.903Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "cc5ba2386039e46e8db6a33ced4600df6023ccb6f1e0b3e76c8a06d7a1fed233",
+      "manifestDigest": "3cab54f196a032291d849c3621aaf0caab899f3580b129db254c69bebdf6fca7",
+      "gcRecordDigest": "0a86046e2e3456ebfb02d4c2b29647d3459b94aa26b719ea52603e8a6d712205",
+      "deletedFiles": 4226,
+      "logicalBytes": 905695017,
+      "completedAt": "2026-11-07T18:49:37.887Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "c91416093bcaf27574182e7a50d98b03f09c33c3b2d3dada1fca1a7f0636abca",
+      "manifestDigest": "36d003133953f9009d2b16e8b0f5fe6d7c270704bb8241d820d889310f4e8404",
+      "gcRecordDigest": "607abbf8f6f6cea854aac6ff7a3e1fe5a62ff7c1a19846525f569e6c27f66102",
+      "deletedFiles": 4226,
+      "logicalBytes": 905699864,
+      "completedAt": "2026-11-07T18:49:58.717Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "a9cff827de8640693cfdb9a4a2e78048dbee442911d1666013065fe0248f3885",
+      "manifestDigest": "0487a5b38cbd476412fe6f3bfa566cf6888f67c297b5f6dfac03b150e09a0183",
+      "gcRecordDigest": "4c17f73ce41d1b5e3f20147a2a6160e5f1f516bf21d96a56071d8e492430f8e4",
+      "deletedFiles": 4227,
+      "logicalBytes": 907439426,
+      "completedAt": "2026-11-07T18:50:27.458Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "777e34a32f9134e9d07ebb6eea6f9514929d664b7445d6f980c5151057f3ed5e",
+      "manifestDigest": "9fb8f81fc97def7c80e2107d8fa1e893bd5ad51438aebab4713b9f043af03774",
+      "gcRecordDigest": "d58b9afd0b0a711757f63920aae06982ba23595a08a3bcfb28761a37452deb30",
+      "deletedFiles": 4227,
+      "logicalBytes": 907439586,
+      "completedAt": "2026-11-07T18:50:46.708Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "af6860991143a306210cc6da732a3630a8c35209ca8ee60897e4da51b0895ea3",
+      "manifestDigest": "7e933b6c0728547500372f334bb5d6f20964c60c0dc2956e6a72861ce33b3d00",
+      "gcRecordDigest": "d0fb7e2a90315e0a16479ae49a9970cab46332f4a01b4add1a990e4d03905eea",
+      "deletedFiles": 4227,
+      "logicalBytes": 907621585,
+      "completedAt": "2026-11-07T18:51:05.309Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "0b6cc4815bbda4a3065a0e1b390931da9bac999adbedf7dfc4d154abf0000880",
+      "manifestDigest": "468122880df39932b4b3ed7e2c0e5dd3864c03e4b45961bb317e1dbba5330e3b",
+      "gcRecordDigest": "ebef369f05baf4a483d55ed979c156a9480f593785b99b5e23ac35a7eade4701",
+      "deletedFiles": 4227,
+      "logicalBytes": 907621597,
+      "completedAt": "2026-11-07T18:51:23.293Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "f6cc7bd948ce139d8b109ce8892c87330d8d0ecf16add3c056f2040e08ac447b",
+      "manifestDigest": "e3bd222c9b98dabb03fd33b0693ad36848928b5db12d3c1fcaa719ffd6ecb458",
+      "gcRecordDigest": "977f0f169c5ea889d7c36693a26420fcf5a1b338490d4833e8b69b78ea010d49",
+      "deletedFiles": 4228,
+      "logicalBytes": 907802576,
+      "completedAt": "2026-11-07T18:51:39.854Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "c0fbcfc447e68feb767e968c28ca52b324f2fdf59fc5af3ce8503ce89be991f8",
+      "manifestDigest": "29c8db82b838f187895e28c0f2137d0523c4f9b4c1606db146685cbea4dc9b6b",
+      "gcRecordDigest": "9d78aeb6142994587924fb7015dcfae5beca321ce880a80a293d6b2472d46a5f",
+      "deletedFiles": 4228,
+      "logicalBytes": 907803026,
+      "completedAt": "2026-11-07T18:51:56.032Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "0532b392cd84b2b5d8da6435a32f77e0581cb9ab3d356ebac9134ccb64f72f43",
+      "manifestDigest": "19533909656e9b7385df6a47e7f3c17cf99a7d6079bb81fd475b5f7a7be8d65a",
+      "gcRecordDigest": "cadea3782437221f0daeff1159466fe2e46f36155aa5e1acacf2b2232ec923c2",
+      "deletedFiles": 4230,
+      "logicalBytes": 908178259,
+      "completedAt": "2026-11-07T18:52:15.862Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "530457bb2e745d81c8ba258e3b07ad1b480ee98935ffa4137c1ea630bd251492",
+      "manifestDigest": "d41ab2eb431afbed0bbd4be8b9cdf7a8fcdc55cbfb686ac1327def6a0cb48405",
+      "gcRecordDigest": "a2ebc69c33ce93af7ffe7f104d10d44c4b915e253a248db7be6dbdb095ccab7a",
+      "deletedFiles": 4231,
+      "logicalBytes": 908375684,
+      "completedAt": "2026-11-07T18:52:32.320Z"
+    },
+    {
+      "event": "collected",
+      "status": "DELETED",
+      "artifactId": "f2d976ce32e7a64c0a0d5d8f534bfc15401da6b945579aa7afd977cb398565c5",
+      "manifestDigest": "02b1b65e651d5e5ddae02b2cc3266fe016998b2350842a4fd75d52597543398e",
+      "gcRecordDigest": "e7b3579e10b227d10a1876078d52e988a9588077ec5a0ce786c720846771d8d0",
+      "deletedFiles": 4231,
+      "logicalBytes": 908376045,
+      "completedAt": "2026-11-07T18:52:49.282Z"
+    }
+  ],
+  "deletedHtmlFiles": 71243,
+  "deletedHtmlLogicalBytes": 15275271242,
+  "publicationAllocatedBeforeBytes": 23438524416,
+  "publicationAllocatedAfterBytes": 7735586816,
+  "publicationFreedBytes": 15702937600,
+  "disk": {
+    "total": 83053432832,
+    "used": 55569592320,
+    "free": 27414544384
+  },
+  "helperStatus": {
+    "state": "success",
+    "checkedAt": "2026-11-07T18:53:12.832079+00:00",
+    "freeBytes": 27414740992,
+    "usedPercent": 66.99,
+    "allocatedBytes": 7735586816,
+    "candidatesRemaining": 0,
+    "protected": 8,
+    "policy": {
+      "budgetBytes": 8589934592,
+      "recentHours": 24,
+      "maxAdditionalVersions": 2
+    },
+    "usage": {
+      "allocatedBytes": 7735590912,
+      "requiredBytes": 5900537856,
+      "projectedBytes": 7735590912,
+      "mandatoryOverBudget": false
+    }
+  },
+  "scheduler": "NextElapseUSecRealtime=Sat 2026-11-07 22:31:41 MSK\nId=publication-retention.timer\nActiveState=active\nUnitFileState=enabled\n\nId=publication-retention.path\nActiveState=active\nUnitFileState=enabled\n",
+  "extraManualChecksPerformed": false
+}
