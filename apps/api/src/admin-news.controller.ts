@@ -16,6 +16,10 @@ export class AdminNewsController {
   operation(@Param('siteId') siteId:string,@Param('operationId') operationId:string){return this.publications.operation(siteId,operationId)}
   @Get('related-options')
   related(@Param('siteId') siteId:string,@Query('currentId') currentId:string,@Query('categoryId') categoryId:string,@Query('ids') ids:string,@Query('search') search:string,@Query('page') page:string){return this.publications.relatedOptions(siteId,{currentId,categoryId,selectedIds:(ids??'').split(',').filter(Boolean),search,page:Number(page)||1})}
+  @Post('batch/review')
+  reviewBatch(@Param('siteId') siteId:string,@Body() raw:unknown){const body=editorialBody(raw,['items']);return this.publications.reviewBatch(siteId,body.items)}
+  @Post('batch/publish')
+  publishBatch(@Param('siteId') siteId:string,@Body() raw:unknown,@Req() request:EditorialRequest){const body=editorialBody(raw,['items','reviewDigest','operationId']);return this.publications.publishBatch(siteId,body.items,body.reviewDigest,body.operationId,request.user?.id)}
   @Get(':id')
   get(@Param('siteId') siteId:string,@Param('id') id:string){return this.publications.workspace(siteId,'ARTICLE',id)}
   @Patch(':id')

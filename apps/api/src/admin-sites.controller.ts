@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, ConflictException, Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { Prisma } from '../generated';
 import { AdminTokenGuard } from './admin-token.guard';
 import { PrismaService } from './prisma.service';
@@ -39,6 +39,14 @@ export class AdminSitesController {
 
   @Get('values')
   listValues() { return this.values.list(); }
+
+  @Get('editorial-context')
+  async editorialContext() {
+    const slug=process.env.PUBLIC_SITE_SLUG?.trim()||'domru-site';
+    const site=await this.prisma.site.findUnique({where:{slug},select:{id:true,name:true,slug:true}});
+    if(!site)throw new ConflictException('Сайт Дом.ру не настроен. Проверьте PUBLIC_SITE_SLUG на сервере.');
+    return site;
+  }
 
   @Post()
   create(@Body() body: SiteBody, @Req() request?: AdminRequest) {

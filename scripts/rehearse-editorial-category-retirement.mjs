@@ -22,7 +22,16 @@ try{
  assert.equal(draftCatalog.editorial.newsEnabled,false,'draft-only transfer must not launch news or publish target category');assert.deepEqual(draftCatalog.editorial.articles,[]);assert.ok(!draftTransfer.review.items.some(item=>item.kind==='CATEGORY'&&item.entityId===draftTarget.id));await acknowledge(draftTransfer.result.publicationId);assert.equal((await db.newsCategory.findUniqueOrThrow({where:{id:draftTarget.id}})).publishedRevision,null);assert.equal((await store.read(site.id,'ARTICLE',draftOnly.id)).content.categoryId,draftTarget.id);
  const article=title=>({...newsDraft(),title,slug:title.toLowerCase(),summary:'Анонс',categoryId:old.id,publishedDate:'2024-09-19T08:00:00Z',body:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:`Published body ${title}`}]}]}});
  const a=await store.create(site.id,'ARTICLE',`${key}-a`,article('A')),b=await store.create(site.id,'ARTICLE',`${key}-b`,article('B')),c=await store.create(site.id,'ARTICLE',`${key}-c`,article('C'));
- for(const row of [a,b]){const release=await publish('ARTICLE',row.id,1);await acknowledge(release.result.publicationId)}
+ const batchItems=[a,b].map(row=>({entityId:row.id,expectedRevision:1}));
+ const batchReview=await service.reviewBatch(site.id,batchItems);assert.equal(batchReview.ready,true);assert.equal(batchReview.items.filter(row=>row.kind==='CATEGORY').length,1);
+ const publicationCount=await db.sitePublication.count({where:{siteId:site.id}}),batchOperation=randomUUID();
+ const batchRelease=await service.publishBatch(site.id,batchItems,batchReview.reviewDigest,batchOperation);
+ const repeatedBatch=await service.publishBatch(site.id,batchItems,batchReview.reviewDigest,batchOperation);
+ assert.equal(repeatedBatch.publicationId,batchRelease.publicationId);assert.equal(await db.sitePublication.count({where:{siteId:site.id}}),publicationCount+1);
+ assert.equal(await db.editorialPublicationItem.count({where:{publicationId:batchRelease.publicationId,kind:'ARTICLE'}}),2);
+ assert.equal((await db.sitePublication.findUniqueOrThrow({where:{id:batchRelease.publicationId}})).catalog.editorial.articles.some(row=>row.id===c.id),false);
+ await acknowledge(batchRelease.publicationId);
+ assert.equal((await db.newsArticle.findUniqueOrThrow({where:{id:a.id}})).publishedRevision,1);assert.equal((await db.newsArticle.findUniqueOrThrow({where:{id:b.id}})).publishedRevision,1);assert.equal((await db.newsArticle.findUniqueOrThrow({where:{id:c.id}})).publishedRevision,null);
  await store.save(site.id,'ARTICLE',a.id,1,{...article('A'),title:'',body:{type:'doc',content:[]}});
  await store.save(site.id,'ARTICLE',b.id,1,{...article('B'),title:'Новый рабочий B',categoryId:third.id});
  const input={kind:'CATEGORY',entityId:old.id,expectedRevision:1,action:'REASSIGN',targetCategoryId:target.id},review=await service.review(site.id,input);

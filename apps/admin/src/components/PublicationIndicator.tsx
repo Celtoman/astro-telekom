@@ -15,7 +15,7 @@ type IndicatorState =
   | { status: "unavailable"; reason: string }
   | { status: "ready"; site: SiteSummary; publication: PublicationState }
 
-export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
+export function PublicationIndicator({ apiUrl, editorial=false }: { apiUrl: string; editorial?:boolean }) {
   const [state, setState] = useState<IndicatorState>({ status: "loading" })
   const [site, setSite] = useState<SiteSummary | null>(null)
   const [open, setOpen] = useState(false)
@@ -38,7 +38,7 @@ export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
 
   const loadSite = useCallback(async () => {
     try {
-      const sites = await requestJson<SiteSummary[]>(apiUrl, "/admin/sites?summary=true")
+      const sites = editorial ? [await requestJson<SiteSummary>(apiUrl, "/admin/sites/editorial-context")] : await requestJson<SiteSummary[]>(apiUrl, "/admin/sites?summary=true")
       const selected = resolvePublicationSite(sites)
       if (!selected) {
         setSite(null)
@@ -51,7 +51,7 @@ export function PublicationIndicator({ apiUrl }: { apiUrl: string }) {
       setSite(null)
       setState({ status: "unavailable", reason: "Не удалось получить список сайтов. Попробуйте обновить." })
     }
-  }, [apiUrl, loadState])
+  }, [apiUrl, loadState, editorial])
 
   useEffect(() => { void loadSite() }, [loadSite])
 

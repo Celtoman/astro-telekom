@@ -29,7 +29,7 @@ export class EditorialStoreService {
   }
   async create(siteId:string,kind:'ARTICLE'|'CATEGORY',id:string,content:unknown,actorId?:string){
     if(!/^[a-zA-Z0-9_-]{1,200}$/.test(id))throw new BadRequestException('Нужен постоянный идентификатор нового черновика');
-    if(kind==='ARTICLE'&&['media','categories','publications','related-options'].includes(id))throw new BadRequestException('Этот идентификатор зарезервирован системой. Создайте новый черновик.');
+    if(kind==='ARTICLE'&&['media','categories','publications','related-options','batch'].includes(id))throw new BadRequestException('Этот идентификатор зарезервирован системой. Создайте новый черновик.');
     return this.save(siteId,kind,id,0,content,actorId,true);
   }
   async save(siteId:string,kind:EditorialKind,id:string,expectedRevision:number,content:unknown,actorId?:string,checkpoint=false){

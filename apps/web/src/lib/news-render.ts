@@ -12,11 +12,16 @@ export function renderNewsImage(editorial: EditorialSource, use: MediaUse | null
   if (!image) throw new Error('Изображение новости не подготовлено');
   return `<img src="${asset(options, image.src)}" srcset="${variants.map(v => `${asset(options, v.src)} ${v.width}w`).join(', ')}" sizes="${kind === 'body' || eager ? '(max-width: 752px) calc(100vw - 32px), 720px' : '(max-width: 620px) calc(100vw - 72px), (max-width: 1100px) 298px, 387px'}" width="${image.width}" height="${image.height}" alt="${esc(use.decorative ? '' : use.alt)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async"${eager ? ' fetchpriority="high"' : ''}>`;
 }
-export function renderNewsCard(editorial: EditorialSource, article: Record<string, any>, options: Options = {}, heading: 'h2' | 'h3' = 'h2') {
+export function renderNewsCard(editorial: EditorialSource, article: Record<string, any>, options: Options = {}, heading: 'h2' | 'h3' = 'h2', mediaRows = { wide: !!article.cover, tablet: !!article.cover }) {
   const category = editorial.categories.find(c => c.id === article.categoryId);
-  return `<a class="news-card" href="/news/${esc(article.slug)}" aria-labelledby="news-title-${esc(article.id)}"><div class="news-card-meta"><span class="news-category-chip">${esc(category?.name)}</span><time datetime="${esc(article.publishedDate)}">${newsDate(article.publishedDate)}</time></div><${heading} id="news-title-${esc(article.id)}" class="news-card-title">${esc(article.title)}</${heading}><p class="news-card-summary">${esc(article.summary)}</p><div class="news-card-media">${article.cover ? renderNewsImage(editorial, article.cover, 'cover', options) : `<div class="news-cover-fallback" aria-hidden="true"><img src="${asset(options, '/images/news/broadcast.svg')}" width="64" height="64" alt=""></div>`}</div></a>`;
+  const fallback = /тариф|цен|оплат/i.test(category?.name ?? '') ? 'wallet' : 'broadcast';
+  const media = article.cover || mediaRows.wide || mediaRows.tablet ? `<div class="news-card-media"${article.cover ? '' : ' data-fallback'}>${article.cover ? renderNewsImage(editorial, article.cover, 'cover', options) : `<div class="news-cover-fallback" aria-hidden="true"><img src="${asset(options, `/images/news/${fallback}.svg`)}" width="64" height="64" alt=""></div>`}</div>` : '';
+  return `<a class="news-card" data-media-wide="${mediaRows.wide}" data-media-tablet="${mediaRows.tablet}" href="/news/${esc(article.slug)}" aria-labelledby="news-title-${esc(article.id)}"><div class="news-card-meta"><span class="news-category-chip">${esc(category?.name)}</span><time datetime="${esc(article.publishedDate)}">${newsDate(article.publishedDate)}</time></div><${heading} id="news-title-${esc(article.id)}" class="news-card-title">${esc(article.title)}</${heading}><p class="news-card-summary">${esc(article.summary)}</p>${media}</a>`;
 }
-export function renderNewsGrid(editorial: EditorialSource, articles: Array<Record<string, any>>, options: Options = {}, heading: 'h2' | 'h3' = 'h2') { return `<div class="news-grid">${articles.map(a => renderNewsCard(editorial, a, options, heading)).join('')}</div>`; }
+export function renderNewsGrid(editorial: EditorialSource, articles: Array<Record<string, any>>, options: Options = {}, heading: 'h2' | 'h3' = 'h2') {
+  const rowHasPhoto = (index: number, columns: number) => articles.slice(Math.floor(index / columns) * columns, Math.floor(index / columns) * columns + columns).some(a => !!a.cover);
+  return `<div class="news-grid">${articles.map((a, index) => renderNewsCard(editorial, a, options, heading, { wide: rowHasPhoto(index, 3), tablet: rowHasPhoto(index, 2) })).join('')}</div>`;
+}
 export function renderNewsPagination(view: Extract<NewsView, { kind: 'list' }>) {
   if (view.totalPages <= 1) return '';
   const href = (page: number) => page === 1 ? view.base : `${view.base}/page/${page}`;

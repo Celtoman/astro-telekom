@@ -1,5 +1,15 @@
 # Покрытие тестами
 
+## Дополнение: пакетный выпуск и UI новостей, #558
+
+**Локальная проверка 7 ноября 2026:** полный `pnpm check` по окончательному staged export `f9559a99d4782f126697eb0cc53802da85ca8f6b`: 1069 pass / 0 fail / 1 skip, 476658 ms. Пропущена Windows-проверка файловой symlink без соответствующей привилегии. Остальные проверки, включая реальные PostgreSQL/Redis/Astro/Caddy rehearsals, выполнены; красный результат не принят как baseline.
+
+`admin-publication-indicator.test.mjs` проверяет общий editorial scope новостей/категорий/settings/404 и отличие legacy-разделов. `admin-preview-ui.test.mjs` дополнен проверкой локальной привязки обеих новостных SVG-заглушек в sandbox preview.
+
+`ci-runtime.test.mjs` дополнен регрессией #559: serving baseline и ревизии CMS не считаются объявлением числа тестов; явные `Baseline: N/N`, `baseline тестов — N/N` и `pnpm test: N тестов` по-прежнему запрещены вне этого документа.
+
+`editorial-batch.test.cjs` проверяет публичные review/publish: одну публикацию/запрос сборки для двух черновиков, общую категорию один раз, изоляцию третьего материала, stale/invalid/duplicate/foreign/published selection и сохранение подтверждённых aliases при следующем выпуске. `editorial-site-context.test.cjs` — точный настроенный slug и запрет fallback на другой сайт. `editorial-api.test.cjs` дополнен HTTP auth/static routing/forwarding и whitelist для batch review/publish; `editorial-client-id.test.cjs` — резервирование batch. `news-render.test.mjs` проверяет отсутствие медиазоны у полностью текстового набора и независимые D/T-ряды mixed cover; существующие HTML/SEO/build проверки сохраняются. Реальный PostgreSQL в `editorial-category-retirement.test.mjs` / `scripts/rehearse-editorial-category-retirement.mjs` дополнительно проверяет единый batch publication, два ARTICLE ledger items, повтор operationId и ACK выбранных revisions без публикации третьей. Браузерные геометрия, Hover/Pressed/Focus и редакционный сценарий фиксируются отдельно в [отчёте](research/2026-11-07-news-batch-and-ui-fixes.md); автоматические тесты не выдаются за физический touch или screen reader.
+
 ## Рабочее место новостей — T5
 
 - `editorial-autosave.test.mjs`: последовательные/coalesced saves, новый ввод во время запроса, retry, 409, dispose, checkpoint и recovery поверх более свежего сервера.

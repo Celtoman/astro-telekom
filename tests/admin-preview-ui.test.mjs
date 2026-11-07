@@ -3,7 +3,18 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { buildPreviewDocument, previewRouteOptions } from '../apps/admin/src/lib/preview-document.mjs';
 import { adminNavigation } from '../apps/admin/src/lib/admin-navigation.mjs';
-import { readPreviewPublicStyles } from '../scripts/preview-public-styles.mjs';
+import { readPreviewPublicStyles, previewPublicStylesPlugin } from '../scripts/preview-public-styles.mjs';
+
+test('editorial preview bundles every thematic news fallback as a local asset', async () => {
+  const plugin=previewPublicStylesPlugin(),watched=[];
+  const module=plugin.load.call({addWatchFile:path=>watched.push(path)},plugin.resolveId('virtual:preview-public-styles'));
+  for(const name of ['broadcast','wallet']){
+    assert.ok(module.includes(`"/images/news/${name}.svg"`));
+    const path=watched.find(path=>path.replaceAll('\\','/').endsWith(`/images/news/${name}.svg`));
+    assert.ok(path,`${name} must be a bundled asset, not a URL relative to admin`);
+    assert.match(await readFile(path,'utf8'),/<svg\b/);
+  }
+});
 
 const catalog = {
   site: { name: 'Дом.ру', slug: 'domru-site', connectionPhone: '+7 (800) 000-00-00', supportPhone: '+7 (800) 111-11-11' },

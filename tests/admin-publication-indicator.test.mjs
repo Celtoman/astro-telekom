@@ -8,6 +8,12 @@ const root = join(import.meta.dirname, '..');
 const moduleUrl = (name) => pathToFileURL(join(root, 'apps', 'admin', 'src', 'lib', name)).href;
 const source = (name) => readFileSync(join(root, 'apps', 'admin', 'src', 'components', name), 'utf8');
 
+test('editorial navigation uses one context and resets the indicator when leaving legacy workspaces', async () => {
+  const {publicationScope}=await import(moduleUrl('publication-indicator.mjs'));
+  for(const section of ['news','news-categories','pages-news','pages-not-found'])assert.equal(publicationScope(section),'editorial');
+  for(const section of ['overview','tariffs','publication','templates'])assert.equal(publicationScope(section),'legacy');
+});
+
 test('global indicator resolves only an unambiguous site and bounds active polling', async () => {
   const { resolvePublicationSite, publicationRefreshDelay } = await import(moduleUrl('publication-indicator.mjs'));
   const site = { id: 'site-1', name: 'Дом.ру' };

@@ -304,3 +304,12 @@
 
 | TD-235 | [#553](https://github.com/Celtoman/astro-telekom/issues/553) 🟢 | Исследовать длительную подготовку исходников Coolify до Docker-сборки |
 | TD-236 | [#554](https://github.com/Celtoman/astro-telekom/issues/554) ✅ | Backup SQL fixture использует короткий system temp вместо Windows MAX_PATH |
+
+## Исправления новостей после аудита, 7 ноября 2026
+
+| ID | Issue | Суть |
+| --- | --- | --- |
+| TD-237 | [#555](https://github.com/Celtoman/astro-telekom/issues/555) 🟢 | Двойной отступ новостей; локальное исправление в #558, внешний выпуск ожидается |
+| TD-238 | [#556](https://github.com/Celtoman/astro-telekom/issues/556) 🟢 | Состояния и необязательные обложки карточек; локальное исправление в #558 |
+| TD-239 | [#557](https://github.com/Celtoman/astro-telekom/issues/557) 🟢 | Лишний выбор сайта в редакционной админке; локальное исправление в #558 |
+| TD-240 | [#559](https://github.com/Celtoman/astro-telekom/issues/559) 🟢 | Guard числа тестов ошибочно трактует serving baseline и ревизии CMS |

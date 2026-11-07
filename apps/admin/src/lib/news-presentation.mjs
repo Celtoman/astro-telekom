@@ -4,15 +4,15 @@ export function newsSlugSuggestion(title) {
   const letters={а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'kh',ц:'ts',ч:'ch',ш:'sh',щ:'shch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'}
   return String(title).toLocaleLowerCase('ru').split('').map(letter=>letters[letter]??letter).join('').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,200).replace(/-$/,'')
 }
-export function newsListUrl({siteId='',search='',categoryId='',state='',page=1}={}) {
+export function newsListUrl({search='',categoryId='',state='',page=1}={}) {
   const params=new URLSearchParams()
-  for(const [key,value] of Object.entries({siteId,search,categoryId,state}))if(value)params.set(key,value)
+  for(const [key,value] of Object.entries({search,categoryId,state}))if(value)params.set(key,value)
   if(page>1)params.set('page',String(page))
   return `/news${params.size?'?'+params:''}`
 }
 export function newsReturnUrl(raw) {
   if(typeof raw!=='string'||!/^\/news(?:\?|$)/.test(raw))return '/news'
-  const url=new URL(raw,'https://admin.invalid');url.searchParams.set('restore','1')
+  const url=new URL(raw,'https://admin.invalid');url.searchParams.delete('siteId');url.searchParams.set('restore','1')
   return url.pathname+'?'+url.searchParams
 }
 export const newsStates={DRAFT:{label:'Черновик',variant:'neutral'},PUBLISHED:{label:'На сайте',variant:'success'},CHANGED:{label:'На сайте · есть изменения',variant:'warning'},WITHDRAWN:{label:'Снята с публикации',variant:'outline'},UNKNOWN:{label:'Статус сайта недоступен',variant:'neutral'}}
