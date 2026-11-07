@@ -1,0 +1,16 @@
+{
+  "status": "RUNNING_INITIAL_BATCH",
+  "sourceCommit": "a761d6c29fcbcb4d09f885451bbd121a846f7f51",
+  "ciRun": 42399889710,
+  "deployment": "4ah9sejatv3b2guodvohthcv",
+  "deploymentStatus": "finished",
+  "applicationStatus": "running:healthy",
+  "codeStatus": "SUCCEEDED",
+  "activeArtifactId": "736d2794e2c67e02b7d4b7457cab5641b56ae490edba43581fd41c49a517b7dd",
+  "protected": 8,
+  "canaryCollected": 1,
+  "initialBatchCandidates": 16,
+  "schedulerEnabled": true,
+  "additionalManualChecksStoppedAtOwnerRequest": true,
+  "finalFreedBytes": null
+}

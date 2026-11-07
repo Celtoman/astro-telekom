@@ -380,3 +380,5 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 Проверка #580 от 7 ноября 2026: полный `pnpm check --test-concurrency=2` на Node 22.23.4 в отдельном Windows worktree на D: завершён успешно — 1084 pass, 0 fail, 1 symlink skip (1085 всего). Отдельный Linux Node filesystem-прогон — 15 pass без skips; Linux Python archive/restore — 10 pass без skips. Исходники кода/конфигурации/связанных тестов между рабочим и проверочным деревом сверены по SHA. Это локальная проверка, не подтверждение серверного внедрения или нового exact-SHA Linux CI.
 
 Позитивные fixtures `static-publication-builder.test.mjs` и `rehearse-static-publication.mjs` получают положительный disk probe и не зависят от остатка места после других Docker suites. Нулевая/граничная ёмкость проверяется отдельно, а production runtime сохраняет native statfs и 8 ГиБ; это не отключение guard в приложении.
+
+Linux CI42399889710 для a761d6c: 1085pass,0fail,0skip; полный gate прошёл.
