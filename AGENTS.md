@@ -28,7 +28,7 @@ pnpm check                                # lint -> db:validate -> ALLOW_DEMO_DA
 pnpm lint                                 # tsc --noEmit (api), astro check (web/admin), node --check (worker)
 pnpm db:validate
 ALLOW_DEMO_DATA=true pnpm build           # без API apps/web build падает намеренно — см. «Известные особенности» ниже
-pnpm test                                 # node --test tests/*.test.cjs tests/*.test.mjs
+pnpm test                                 # scripts/run-tests.mjs -> node --test; runner options before files
 pnpm test:build                           # пересобрать apps/api, затем pnpm test — после правок в apps/api/src
 ```
 

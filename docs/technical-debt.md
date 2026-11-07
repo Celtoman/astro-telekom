@@ -34,7 +34,7 @@
 | ID | Issue | Суть |
 | --- | --- | --- |
 | TD-203 | [#444](https://github.com/Celtoman/astro-telekom/issues/444) 🟢 | Утрачен пограничный архив journald внутри 30-дневного окна; восстановление не выполнено |
-| TD-202 | [#442](https://github.com/Celtoman/astro-telekom/issues/442) 🟢 | CRLF shell helper из Windows ломает Linux Docker rehearsal |
+| TD-202 | [#442](https://github.com/Celtoman/astro-telekom/issues/442) ✅ | CRLF shell helper из Windows ломает Linux Docker rehearsal |
 | TD-201 | [#441](https://github.com/Celtoman/astro-telekom/issues/441) 🟢 | Docker rehearsals оставляют анонимные PostgreSQL volumes |
 | TD-200 | [#438](https://github.com/Celtoman/astro-telekom/issues/438) ✅ | Неограниченное накопление publication HTML заполняет диск; архивная очистка — [#440](https://github.com/Celtoman/astro-telekom/issues/440) |
 | TD-199 | [#433](https://github.com/Celtoman/astro-telekom/issues/433) ✅ | SVG и mobile стрелка исправлены; внешняя проверка [#435](https://github.com/Celtoman/astro-telekom/issues/435) завершена 7 ноября 2026 |
@@ -257,7 +257,7 @@
 | TD-70 | [#90](https://github.com/Celtoman/astro-telekom/issues/90) ✅ | DTO ограничивает query официальным максимумом DaData 300 символов |
 | TD-131 | [#214](https://github.com/Celtoman/astro-telekom/issues/214) ✅ | Каталог кодов указывает все четыре допустимых SEO/OG-текстовых поля, исключая URL изображения |
 | TD-215 | [#513](https://github.com/Celtoman/astro-telekom/issues/513) ✅ | High advisories Sharp/Vite/Zod/Undici требуют совместимых точечных обновлений и повторной проверки |
-| TD-216 | [#515](https://github.com/Celtoman/astro-telekom/issues/515) 🟢 | Разобрать low/moderate advisories прямых и транзитивных зависимостей после high-fix ACCOUNT |
+| TD-216 | [#515](https://github.com/Celtoman/astro-telekom/issues/515) ✅ | Закрыт как дубликат; полный остаток dependency advisories перенесён в #570 |
 | TD-217 | [#516](https://github.com/Celtoman/astro-telekom/issues/516) ✅ | Automatic CODE в isolated non-root runtime не завершает gate ACCOUNT; требуется диагностика причины |
 | TD-218 | [#517](https://github.com/Celtoman/astro-telekom/issues/517) 🟢 | Привязать abort Node test к остановке owned runtime fixture и гарантированному cleanup |
 | TD-219 | [#521](https://github.com/Celtoman/astro-telekom/issues/521) ✅ | Стабилизировать составной CDP-прогон смены wheel/touch/reset; production-дефект не подтверждён |
@@ -320,8 +320,10 @@
 | TD-244 | [#565](https://github.com/Celtoman/astro-telekom/issues/565) ✅ | Пакет не принимал опубликованные новости с рабочими правками CHANGED |
 | TD-245 | [#567](https://github.com/Celtoman/astro-telekom/issues/567) 🟢 | Локальный ACCOUNT seed P2028 при параллельном gate; изоляция и concurrency2 проходят |
 | TD-246 | [#568](https://github.com/Celtoman/astro-telekom/issues/568) ✅ | Повтор анонса над обложкой дублирует первый абзац новости; план #569 |
-| TD-247 | [#570](https://github.com/Celtoman/astro-telekom/issues/570) 🟢 | Разобрать13существующих low/moderate advisory; high/critical0 |
+| TD-247 | [#570](https://github.com/Celtoman/astro-telekom/issues/570) 🟢 | Разобрать оставшиеся low/moderate advisory текущего dependency baseline |
 | TD-248 | [#571](https://github.com/Celtoman/astro-telekom/issues/571) 🟢 | Отдельный asset-set protocol и production HTML reuse после native probe |
 | TD-249 | [#573](https://github.com/Celtoman/astro-telekom/issues/573) ✅ | Runner options после file patterns игнорировались Node; исправлен launcher |
 | TD-250 | [#574](https://github.com/Celtoman/astro-telekom/issues/574) ✅ | Восстановить явные owner-only/P3 формулировки readiness docs |
 | TD-251 | [#575](https://github.com/Celtoman/astro-telekom/issues/575) ✅ | LF shell-скриптов в Windows export и Linux Docker rehearsal |
+
+| TD-252 | [#572](https://github.com/Celtoman/astro-telekom/issues/572) ✅ | Сверены живые документы, ссылки и учёт статусов без изменения кода и страниц |

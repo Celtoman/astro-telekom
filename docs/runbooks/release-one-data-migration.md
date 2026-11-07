@@ -1,6 +1,8 @@
-# Безопасная миграция данных на структуру Release 1
+# Исторический runbook миграции данных на структуру Release 1
 
-Этот runbook впервые применялся перед deployment ревизии с миграциями `0021`–`0026`, а текущая процедура дополнена для `0032_canonical_city_home` и forward-only repair `0039_repair_site_publication_revision`. После уточнения владельца 14 сентября 2026 года route inventory включает отдельный URL каждого опубликованного тарифа опубликованного города. Решение о готовности платформы к реальному трафику принимает только владелец; runbook не выносит такой вердикт. Его задача — сохранить доказательства состояния данных, применить миграции без потери связей и подтвердить точный route inventory.
+**Область: первоначальный переход сентября 2026 и legacy SQL-аудит в редакции 7 октября 2026, до CITY3.** Этот runbook впервые применялся перед deployment ревизии с миграциями `0021`–`0026`, затем был дополнен для `0032_canonical_city_home` и forward-only repair `0039_repair_site_publication_revision`. После уточнения владельца 14 сентября 2026 года route inventory включает отдельный URL каждого опубликованного тарифа опубликованного города. Решение о готовности платформы к реальному трафику принимает только владелец; runbook не выносит такой вердикт. Его задача — сохранить доказательства состояния данных, применить миграции без потери связей и подтвердить точный route inventory.
+
+SQL helper ниже проверяет legacy HOME с двумя видимыми блоками `hero`/`tariff_grid` и прежний inventory `N + T + 6`. Эти условия не являются универсальным gate для современных HOME/CITY3/ADDRESS/ACCOUNT/новостей: применение helper к новому составу не доказывает дефект данных. Команды и исторические counts сохранены для воспроизведения перехода; перед новым rollout выбирать профильный rehearsal по фактической миграции и точный inventory обслуживаемого/кандидатного immutable snapshot из [deployment.md](../deployment.md) и [publication.md](../publication.md). Сам SQL этим уточнением не изменён.
 
 ## Ограничения безопасности
 
@@ -51,7 +53,7 @@ $backupFile | Select-Object FullName, Length, LastWriteTimeUtc
 
 Читаемый список `pg_restore --list` подтверждает структуру custom dump, но не заменяет restore rehearsal. До применения `0032` восстановить эту копию в отдельную PostgreSQL 18 и повторить audit уже на восстановленной базе.
 
-## 3. Выполнить pre-migration audit
+## 3. Выполнить legacy pre-migration audit
 
 Скрипт [release-one-database-audit.sql](../../scripts/release-one-database-audit.sql) начинает `BEGIN TRANSACTION READ ONLY` и завершает `ROLLBACK`. Он выводит migration history, точные totals и разрезы по статусам, пять обязательных global pages, отсутствующие/legacy/неканонические/повторные городские HOME, dangling page references, route collisions, redirects за пределы Release 1 и нарушения связей.
 
@@ -114,7 +116,7 @@ Get-Content -Raw scripts/release-one-database-audit.sql |
 if ($LASTEXITCODE -ne 0) { throw 'Post-migration audit завершился ошибкой' }
 ```
 
-Приемка post-migration:
+Приёмка исторического post-migration в указанной legacy-модели:
 
 - migration history содержит завершенные `0021`–`0039` без `rolled_back_at`;
 - totals сайтов, городов, тарифов, проверок адреса, заявок и redirects точно равны pre-migration;
@@ -147,7 +149,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Post-migration audit завершился ош
 
 ## 7. Проверить production-like build и deployment
 
-Получить public catalog через live API и доказать:
+Историческая приёмка ниже относится к snapshot без ADDRESS/ACCOUNT/editorial routes и без sitemap exclusions. Для нового выпуска сверять точный snapshot inventory и indexable sitemap subset, как требует действующий publication contract. В рамках воспроизводимого legacy-перехода получить public catalog через live API и доказать:
 
 ```text
 published city routes = N
@@ -166,4 +168,4 @@ effective redirect targets outside inventory = 0
 3. Не снимая запрет на CMS-записи, штатным `POST /admin/sites/:siteId/publications` опубликовать зафиксированный после migration точный `workingRevision` как `expectedWorkingRevision`. Дождаться `SUCCEEDED` и подтвердить, что build catalog этого immutable snapshot содержит ровно одну HOME с пустым slug для каждого города.
 4. **B — contract:** отдельным exact-SHA deployment включить строгую web-проверку дублей/непустого slug, выполнить production-like build без `ALLOW_DEMO_DATA`, post-build SEO gate и HTTP/canonical smoke.
 
-Не объединять A1 и B: при отсутствии активной publication Coolify build берет последний `SUCCEEDED` snapshot, который до нового snapshot еще содержит legacy-дубли или устаревшую Site identity/contact и закономерно блокируется строгим reader. Для `0039` A1 завершается только после проверки repair revision и явной публикации именно ее номера; migration сама не разрешает переход к strict build. В evidence сохранить SHA и deployment ID, номера рабочей/опубликованной ревизий, repair `ContentRevision`/`AuditEvent`, неизменный historical snapshot, число опубликованных городов, exact список sitemap URL и HTTP/canonical smoke. Эти проверки подтверждают технический результат, но решение о готовности платформы к трафику остается только за владельцем.
+Историческое ограничение той rollout-цепочки: не объединять A1 и B. Её legacy reader при отсутствии активной publication брал последний `SUCCEEDED` snapshot, который до нового snapshot ещё содержал legacy-дубли или устаревшую Site identity/contact и закономерно блокировался строгим reader. Для `0039` A1 завершается только после проверки repair revision и явной публикации именно ее номера; migration сама не разрешает переход к strict build. В evidence сохранить SHA и deployment ID, номера рабочей/опубликованной ревизий, repair `ContentRevision`/`AuditEvent`, неизменный historical snapshot, число опубликованных городов, exact список sitemap URL и HTTP/canonical smoke. Эти проверки подтверждают технический результат, но решение о готовности платформы к трафику остается только за владельцем.
