@@ -1,0 +1,523 @@
+{
+  "source": "https://tarify-dom.ru/official-site-domru",
+  "new": "https://tv-internet-dom.ru/official-site-domru#official-regional",
+  "allSourceCoreBlocksAccounted": true,
+  "coreSourceBlocks": 48,
+  "mapping": [
+    {
+      "sourceBlock": 0,
+      "newBlocks": [
+        0
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 1,
+      "newBlocks": [
+        1
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 2,
+      "newBlocks": [
+        2
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 3,
+      "newBlocks": [
+        3
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 4,
+      "newBlocks": [
+        4
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 5,
+      "newBlocks": [
+        5
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 6,
+      "newBlocks": [
+        7
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": false
+    },
+    {
+      "sourceBlock": 7,
+      "newBlocks": [
+        8
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": false
+    },
+    {
+      "sourceBlock": 8,
+      "newBlocks": [
+        12
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": false
+    },
+    {
+      "sourceBlock": 9,
+      "newBlocks": [
+        42
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 10,
+      "newBlocks": [
+        44
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 11,
+      "newBlocks": [
+        46
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 12,
+      "newBlocks": [
+        48
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 13,
+      "newBlocks": [
+        49
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 14,
+      "newBlocks": [
+        50
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 15,
+      "newBlocks": [
+        51
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 16,
+      "newBlocks": [
+        53
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 17,
+      "newBlocks": [
+        54
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 18,
+      "newBlocks": [
+        55
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 19,
+      "newBlocks": [
+        56
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 20,
+      "newBlocks": [
+        57
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 21,
+      "newBlocks": [
+        59
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 22,
+      "newBlocks": [
+        60,
+        62,
+        65
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 23,
+      "newBlocks": [
+        66
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 24,
+      "newBlocks": [
+        68
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 25,
+      "newBlocks": [
+        69
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 26,
+      "newBlocks": [
+        70
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 27,
+      "newBlocks": [
+        73,
+        74
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 28,
+      "newBlocks": [
+        75,
+        76
+      ],
+      "wordsIdentical": false,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 29,
+      "newBlocks": [
+        77,
+        78
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 30,
+      "newBlocks": [
+        79,
+        80
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 31,
+      "newBlocks": [
+        81,
+        82
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 32,
+      "newBlocks": [
+        83
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 33,
+      "newBlocks": [
+        84
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 34,
+      "newBlocks": [
+        86
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 35,
+      "newBlocks": [
+        87
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 36,
+      "newBlocks": [
+        88
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 37,
+      "newBlocks": [
+        89
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 38,
+      "newBlocks": [
+        90
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 39,
+      "newBlocks": [
+        91
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 40,
+      "newBlocks": [
+        92
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 41,
+      "newBlocks": [
+        93
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 42,
+      "newBlocks": [
+        95
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 43,
+      "newBlocks": [
+        96
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 44,
+      "newBlocks": [
+        97
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 45,
+      "newBlocks": [
+        98
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 46,
+      "newBlocks": [
+        99
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    },
+    {
+      "sourceBlock": 47,
+      "newBlocks": [
+        100
+      ],
+      "wordsIdentical": true,
+      "equalAfterDocumentedEditsAndWhitespace": true
+    }
+  ],
+  "prosConsUnchanged": 13,
+  "faq": [
+    {
+      "index": 1,
+      "answerEqualIgnoringWhitespace": true,
+      "questionEqual": true,
+      "sourceLinks": [
+        {
+          "href": "tel:8-800-555-72-44",
+          "text": "8-800-555-72-44"
+        },
+        {
+          "href": "tel:8-800-250-77-77",
+          "text": "8-800-250-77-77"
+        },
+        {
+          "href": "tel:8-800-222-86-34",
+          "text": "8-800-222-86-34"
+        }
+      ],
+      "newLinks": [
+        {
+          "href": "tel:+78005557244",
+          "text": "8-800-555-72-44"
+        },
+        {
+          "href": "tel:+78002507777",
+          "text": "8-800-250-77-77"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "answerEqualIgnoringWhitespace": true,
+      "questionEqual": true,
+      "sourceLinks": [],
+      "newLinks": []
+    },
+    {
+      "index": 3,
+      "answerEqualIgnoringWhitespace": true,
+      "questionEqual": true,
+      "sourceLinks": [
+        {
+          "href": "tel:8-800-555-72-44",
+          "text": "8-800-555-72-44"
+        }
+      ],
+      "newLinks": [
+        {
+          "href": "tel:+78005557244",
+          "text": "8-800-555-72-44"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "answerEqualIgnoringWhitespace": true,
+      "questionEqual": true,
+      "sourceLinks": [],
+      "newLinks": []
+    },
+    {
+      "index": 5,
+      "answerEqualIgnoringWhitespace": true,
+      "questionEqual": true,
+      "sourceLinks": [
+        {
+          "href": "tel:8-800-555-72-44",
+          "text": "8-800-555-72-44"
+        }
+      ],
+      "newLinks": [
+        {
+          "href": "tel:+78005557244",
+          "text": "8-800-555-72-44"
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "answerEqualIgnoringWhitespace": true,
+      "questionEqual": false,
+      "sourceLinks": [
+        {
+          "href": "tel:8-800-555-72-44",
+          "text": "8-800-250-77-77"
+        }
+      ],
+      "newLinks": [
+        {
+          "href": "tel:+78002507777",
+          "text": "8-800-250-77-77"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "answerEqualIgnoringWhitespace": true,
+      "questionEqual": true,
+      "sourceLinks": [
+        {
+          "href": "tel:8-800-555-72-44",
+          "text": "8-800-555-72-44"
+        }
+      ],
+      "newLinks": []
+    },
+    {
+      "index": 8,
+      "answerEqualIgnoringWhitespace": true,
+      "questionEqual": true,
+      "sourceLinks": [
+        {
+          "href": "tel:8-800-250-77-77",
+          "text": "8-800-250-77-77"
+        }
+      ],
+      "newLinks": []
+    }
+  ],
+  "sourceFaqLinks": 8,
+  "newFaqLinks": 5,
+  "scope": "Initial article, closed FAQ content, captions/alt/metadata and shared shell; real application/address responses not triggered."
+}
