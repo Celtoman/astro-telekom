@@ -11,6 +11,7 @@ const { AdminOfficialSiteController } = require('../apps/api/dist/admin-official
 const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
 const { PublicationWorkflowService } = require('../apps/api/dist/publication-workflow.service.js');
 const migration = readFileSync(new URL('../prisma/migrations/0072_official_site_page/migration.sql', import.meta.url), 'utf8');
+const historicalContent = JSON.parse(migration.match(/\$official_site\$([\s\S]*?)\$official_site\$::jsonb/)[1]);
 const container = `astro-official-site-${randomUUID().slice(0, 8)}`;
 const docker = (args, options = {}) => spawnSync('docker', args, { encoding: 'utf8', timeout: 120000, windowsHide: true, ...options });
 const checked = result => { assert.equal(result.status, 0, result.stderr || result.stdout || result.error?.message); return result.stdout.trim(); };
@@ -43,7 +44,7 @@ try {
   checked(apply());
   const audit = await db.auditEvent.findFirstOrThrow({ where: { siteId: site.id, source: 'migration:0072:official_site' } });
   assert.deepEqual(audit.changes, { initializedOfficialSite: true, preservedPublishedSnapshots: true });
-  assert.deepEqual((await pageQuery()).content, officialSitePageDefaults());
+  assert.deepEqual((await pageQuery()).content, historicalContent);
   assert.equal(await db.page.count({ where: { siteId: site.id, type: 'OFFICIAL_SITE', cityId: null, slug: OFFICIAL_SITE_PAGE_SLUG } }), 1);
   assert.equal(await db.page.count({ where: { siteId: other.sites[0].id, type: 'OFFICIAL_SITE' } }), 0);
   assert.deepEqual(json(await db.page.findMany({ where: { siteId: site.id, type: { not: 'OFFICIAL_SITE' } }, orderBy: { id: 'asc' } })), existing);

@@ -48,7 +48,7 @@ function selectedValue(code: string, scope: string, catalog: CatalogRecord | nul
   if (code === 'YEAR' && !sourceSnapshot?.resolvedAt) return unavailable('UNAVAILABLE');
   const now = sourceSnapshot?.resolvedAt ? new Date(sourceSnapshot.resolvedAt) : new Date(0);
   const context: VariableContext = {
-    site: { ...catalog.site?.publicDisplay, connectionPhone: catalog.site?.connectionPhone, supportPhone: catalog.site?.supportPhone },
+    site: { ...catalog.site?.publicDisplay, connectionPhone: catalog.site?.connectionPhone, supportPhone: catalog.site?.supportPhone, corporatePhone: catalog.site?.corporatePhone },
     provider: { name: sourceSnapshot?.providerName },
     city,
     tariff,

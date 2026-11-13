@@ -3,7 +3,7 @@ import type {OfficialSitePageContent} from '../../../../api/src/official-site-pa
 import {OFFICIAL_SITE_PAGE_SLUG} from '../../../../api/src/official-site-page-model';
 import type {SiteView} from '../../data/site';
 import {publicAsset} from '../../data/public-asset';
-import {renderOfficialSiteIntro,renderOfficialSiteBody,renderOfficialSiteFaqTail} from '../../lib/official-site-render';
+import {renderOfficialSiteIntro,renderOfficialSiteBody,renderOfficialSiteFaqTail,officialSiteFaqItems,officialSiteFaqPhoneLinks} from '../../lib/official-site-render';
 import AddressOnly from '../general-home/AddressOnly.astro';
 import HomeFaq from '../general-home/HomeFaq.astro';
 import HomeBlockStyles from '../general-home/HomeBlockStyles.astro';
@@ -15,6 +15,6 @@ const {content,site,apiUrl}=Astro.props;
  <Fragment set:html={renderOfficialSiteIntro(content,{asset:publicAsset})}/>
  <AddressOnly {site} {apiUrl} pageSlug={OFFICIAL_SITE_PAGE_SLUG} pageScope="GLOBAL"/>
  <Fragment set:html={renderOfficialSiteBody(content,{asset:publicAsset,includeFaq:false})}/>
- <div id="official-faq" class:list={['official-faq',{'has-extra':content.faq.items.length>6}]}><HomeFaq content={{title:'Часто задаваемые вопросы (FAQ)',items:content.faq.items.slice(0,6)}} phoneLinks={[site.connectionPhone,site.supportPhone]}/>{content.faq.items.length>6&&<div class="official-faq-extra"><Fragment set:html={renderOfficialSiteFaqTail(content,{asset:publicAsset})}/></div>}</div>
+ <div id="official-faq" class:list={['official-faq',{'has-extra':content.faq.items.length>6}]}><HomeFaq content={{title:'Часто задаваемые вопросы (FAQ)',items:officialSiteFaqItems(content).slice(0,6)}} phoneLinks={officialSiteFaqPhoneLinks(content)}/>{content.faq.items.length>6&&<div class="official-faq-extra"><Fragment set:html={renderOfficialSiteFaqTail(content,{asset:publicAsset})}/></div>}</div>
 </div>
 <HomeBlockStyles/><OfficialSiteStyles/>

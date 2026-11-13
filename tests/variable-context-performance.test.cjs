@@ -5,7 +5,7 @@ const { buildVariableCatalogView } = require('../apps/api/dist/variable-catalog'
 const { Prisma } = require('../apps/api/generated');
 
 test('variable context preserves typed values, published-only selection and revision without rendering pages', async () => {
-  const site = { id: 's', slug: 'site', status: 'PUBLISHED', provider: { name: 'Дом.ру' }, connectionPhone: '78005557244', supportPhone: null, workingRevision: 8, publishedRevision: 7 };
+  const site = { id: 's', slug: 'site', status: 'PUBLISHED', provider: { name: 'Дом.ру' }, connectionPhone: '78005557244', supportPhone: null, settings: { contactPhones: { corporatePhone: '78002228634' }, privateNamespace: 'not-for-catalog' }, workingRevision: 8, publishedRevision: 7 };
   const cities = [{ id: 'c', name: 'Казань', slug: 'kazan', nameGenitive: 'Казани', namePrepositional: 'Казани', tariffs: [{ id: 't', name: 'Гига', slug: 'giga', speed: 500, standardPrice: new Prisma.Decimal('799'), promoPrice: new Prisma.Decimal('0'), attributes: { tv_channels_total: 150 } }] }];
   let isolation;
   const service = new PublicationWorkflowService({
@@ -30,6 +30,8 @@ test('variable context preserves typed values, published-only selection and revi
   assert.deepEqual(values.CITY_NAME_PREPOSITIONAL, { status: 'VALUE', value: 'Казани' });
   assert.deepEqual(values.TARIFF_CHANNELS, { status: 'VALUE', value: '150' });
   assert.deepEqual(values.PROVIDER_NAME, { status: 'VALUE', value: 'Дом.ру' });
+  assert.deepEqual(values.CORPORATE_PHONE, { status: 'VALUE', value: '+7 (800) 222-86-34' });
+  assert.equal(context.catalog.site.settings, undefined);
   assert.equal(view.publishedUsageAvailable, false); assert.equal(view.items[0].publishedUsages, null);
 });
 

@@ -53,6 +53,7 @@ async function main() {
         status: PUBLISHED,
         connectionPhone: '78005557244',
         supportPhone: '78002507777',
+        settings: { contactPhones: { corporatePhone: '78002228634' } },
       },
     });
 

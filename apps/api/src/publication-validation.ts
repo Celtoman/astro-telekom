@@ -1,3 +1,4 @@
+import { readCorporatePhone } from './site-contact-settings';
 import { validateOfficialSitePage } from './official-site-page';
 import { validateTariffCollection } from './tariff-collection';
 import { validateAccountPage } from './account-page';
@@ -256,7 +257,7 @@ export function validatePublicationSource(
         sitemap: { excludedPaths: [] },
       };
       const resolved = resolveCatalogVariables(mini, {
-        site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
+        site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, corporatePhone: readCorporatePhone(site.settings) },
         provider: { name: provider.name },
         now,
       });

@@ -5,7 +5,7 @@ import { GENERAL_HOME_SCHEMAS, CITY_HOME_SCHEMAS, type GeneralHomeFieldRule } fr
 type VariableType = 'text' | 'number' | 'phone' | 'date';
 type VariableScope = 'SITE' | 'CITY' | 'TARIFF';
 type VariableCode =
-  | 'CONNECTION_PHONE' | 'SUPPORT_PHONE' | 'PROVIDER_NAME'
+  | 'CONNECTION_PHONE' | 'SUPPORT_PHONE' | 'CORPORATE_PHONE' | 'PROVIDER_NAME'
   | 'CITY_NAME' | 'CITY_NAME_GENITIVE' | 'CITY_NAME_PREPOSITIONAL'
   | 'TARIFF_NAME' | 'TARIFF_SPEED' | 'TARIFF_PRICE' | 'TARIFF_CHANNELS' | 'YEAR'
   | 'CONNECTION_HOURS' | 'SUPPORT_HOURS' | 'ONLINE_APPLICATIONS_HOURS' | 'CALLBACK_WITHIN_MINUTES'
@@ -44,6 +44,7 @@ const TARIFF_CONTEXTS = ['Тариф'];
 const DEFINITIONS: readonly VariableDefinition[] = [
   { code: 'CONNECTION_PHONE', type: 'phone', source: 'Site.connectionPhone', scope: 'SITE', name: 'Телефон подключения', description: 'Единый номер для новых подключений.', example: '+7 (800) 555-72-44', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
   { code: 'SUPPORT_PHONE', type: 'phone', source: 'Site.supportPhone', scope: 'SITE', name: 'Телефон техподдержки', description: 'Единый номер поддержки действующих абонентов.', example: '+7 (800) 250-77-77', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
+  { code: 'CORPORATE_PHONE', type: 'phone', source: 'Site.settings.contactPhones.corporatePhone', scope: 'SITE', name: 'Телефон корпоративной поддержки', description: 'Номер поддержки корпоративных клиентов из общих значений сайта.', example: '+7 (800) 222-86-34', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: PAGE_FIELDS },
   { code: 'PROVIDER_NAME', type: 'text', source: 'Provider.name', scope: 'SITE', name: 'Название провайдера', description: 'Публичное имя провайдера из его карточки.', example: 'Дом.ру', status: 'ACTIVE', allowedContexts: SITE_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
   { code: 'CITY_NAME', type: 'text', source: 'City.name', scope: 'CITY', name: 'Город', description: 'Название выбранного города в именительном падеже.', example: 'Казань', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
   { code: 'CITY_NAME_GENITIVE', type: 'text', source: 'City.nameGenitive', scope: 'CITY', name: 'Город в родительном падеже', description: 'Форма выбранного города для фраз «жители Казани».', example: 'Казани', status: 'ACTIVE', allowedContexts: CITY_CONTEXTS, allowedFields: [...PAGE_FIELDS, ...TARIFF_FIELDS, ...SEO_TEMPLATE_FIELDS] },
@@ -65,7 +66,7 @@ const DEFINITIONS: readonly VariableDefinition[] = [
 const BY_CODE = new Map(DEFINITIONS.map((definition) => [definition.code, definition]));
 
 export interface VariableContext {
-  site?: { connectionPhone?: string | null; supportPhone?: string | null; connectionHours?: string | null; supportHours?: string | null; onlineApplicationsHours?: string | null; callbackWithinMinutes?: number | null };
+  site?: { connectionPhone?: string | null; supportPhone?: string | null; corporatePhone?: string | null; connectionHours?: string | null; supportHours?: string | null; onlineApplicationsHours?: string | null; callbackWithinMinutes?: number | null };
   provider?: { name?: string | null };
   city?: { name?: string | null; nameGenitive?: string | null; namePrepositional?: string | null; tariffFacts?: { minPrice?: number | null; maxSpeed?: number | null; maxChannels?: number | null } };
   tariff?: {
@@ -95,6 +96,7 @@ function sourceValue(code: VariableCode, context: VariableContext): unknown {
   switch (code) {
     case 'CONNECTION_PHONE': return context.site?.connectionPhone;
     case 'SUPPORT_PHONE': return context.site?.supportPhone;
+    case 'CORPORATE_PHONE': return context.site?.corporatePhone;
     case 'CONNECTION_HOURS': return context.site?.connectionHours;
     case 'SUPPORT_HOURS': return context.site?.supportHours;
     case 'ONLINE_APPLICATIONS_HOURS': return context.site?.onlineApplicationsHours;

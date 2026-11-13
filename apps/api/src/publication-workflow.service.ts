@@ -1,6 +1,7 @@
 import { acknowledgedEditorialAliases,confirmedEditorialTransfers } from './editorial-redirects';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { publishedVariableContext } from './published-variable-context';
+import { readCorporatePhone } from './site-contact-settings';
 import { createHash } from 'node:crypto';
 import { servingPublication } from './serving-publication-context';
 import { Prisma } from '../generated';
@@ -356,7 +357,7 @@ export class PublicationWorkflowService {
   async getVariableContext(siteId: string, cityId?: string) {
     return this.prisma.$transaction(async transaction => {
       const site = await transaction.site.findUnique({ where: { id: siteId }, select: {
-        id: true, slug: true, status: true, connectionPhone: true, supportPhone: true, workingRevision: true, publishedRevision: true,
+        id: true, slug: true, status: true, connectionPhone: true, supportPhone: true, settings: true, workingRevision: true, publishedRevision: true,
         provider: { select: { name: true } },
       } });
       if (!site || site.status !== 'PUBLISHED') throw new NotFoundException('Site not found');
@@ -368,7 +369,7 @@ export class PublicationWorkflowService {
         },
       });
       return { siteId, workingRevision: site.workingRevision, publishedRevision: site.publishedRevision,
-        catalog: this.jsonSnapshot({ site, cities,
+        catalog: this.jsonSnapshot({ site: { ...site, settings: undefined, corporatePhone: readCorporatePhone(site.settings) }, cities,
           variableSources: { providerName: site.provider.name, resolvedAt: new Date().toISOString() },
         }) as JsonObject };
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });

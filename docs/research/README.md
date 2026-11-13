@@ -136,3 +136,5 @@
 - [Перенос в код, минимум CMS, миграции и браузерные проверки](2026-11-05-account-implementation.md). [Exact-SHA CI/deployment, CODE, согласованная CMS29 и live-проверки](2026-11-05-account-test-release.md). Не является допуском к реальному трафику.
 
 - [ACCOUNT: диагностика #521 и прокрутка390/320](2026-11-05-account-mobile-scroll.md), исходные failure traces и повторяемый natural-input протокол; без изменения публичного дизайна/CMS.
+
+- [OFFICIAL_SITE: согласованные правки владельца, интервал24px и корпоративный телефон](2026-11-13-official-site-owner-fixes.md).

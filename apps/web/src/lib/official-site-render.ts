@@ -2,23 +2,27 @@ import copy from './official-site-copy.json' with {type:'json'};
 import {OFFICIAL_SITE_ANCHORS, type OfficialSiteImageSlot, type OfficialSitePageContent} from '../../../api/src/official-site-page-model.ts';
 import {homeHtml as html, renderHomeFaq} from './general-home-render.ts';
 import dimensions from './official-site-image-dimensions.json' with {type:'json'};
+import {publicPhoneLabel} from './public-display.ts';
 interface Node {n:string;t:string;text?:string;runs?:{s:string;b:boolean;u?:string}[];c?:Node[]}
 const blocks=copy as unknown as Node[];
 const children=(n:Node)=>n.c||[];
 const texts=(n:Node):Node[]=>n.t==='TEXT'?[n]:children(n).flatMap(texts);
 export interface OfficialSiteRenderOptions {asset?:(path:string)=>string;interactive?:boolean;includeFaq?:boolean}
+const officialPhonePattern=/(?:\+7|8)[\s(−-]*\d{3}[\s)−-]*\d{3}[\s−-]*\d{2}[\s−-]*\d{2}/g;
+export function officialSiteFaqItems(content:OfficialSitePageContent){return content.faq.items.map(item=>({...item,answer:item.answer.replace(officialPhonePattern,publicPhoneLabel)}));}
+export function officialSiteFaqPhoneLinks(content:OfficialSitePageContent){return officialSiteFaqItems(content).flatMap(item=>item.answer.match(officialPhonePattern)||[]);}
 function view(content:OfficialSitePageContent,options:OfficialSiteRenderOptions){
  const link=(s:string,u:string)=>options.interactive===false?`<a aria-disabled="true">${html(s)}</a>`:`<a href="${html(u)}"${u.startsWith('https:')?' target="_blank" rel="noopener"':''}>${html(s)}</a>`;
  const rich=(n:Node)=>n.runs?.map(r=>r.u?link(r.s,r.u==='https://tarify-dom.ru/lichnyy-kabinet-dom-ru'?'/lichnyy-kabinet-dom-ru':r.u):r.b?`<strong>${html(r.s)}</strong>`:html(r.s)).join('')??html(n.text||'');
  const p=(n:Node)=>`<p>${rich(n)}</p>`;
- const figure=(slot:OfficialSiteImageSlot,scroll=false)=>{const image=content.images[slot],size=dimensions[slot];return `<figure class="official-figure official-${slot==='hero'?'hero-figure':slot}"><div class="official-image-window"${scroll?` tabindex="0" role="region" aria-label="${html(image.alt)}" data-official-scroll="${slot}"`:''}><img data-official-image="${slot}" src="${html((options.asset??(p=>p))(image.src))}" width="${size.width}" height="${size.height}" alt="${html(image.alt)}" ${slot==='hero'?'fetchpriority="high"':'loading="lazy"'} decoding="async"></div><figcaption>${html(image.caption||'')}</figcaption></figure>`;};
+ const figure=(slot:OfficialSiteImageSlot,scroll=false)=>{const image=content.images[slot],size=dimensions[slot];return `<figure class="official-figure official-${slot==='hero'?'hero-figure':slot}"><div class="official-image-window"${scroll?` tabindex="0" role="region" aria-label="${html(image.alt)}" data-official-scroll="${slot}"`:''}><img data-official-image="${slot}" src="${html((options.asset??(p=>p))(image.src))}" width="${size.width}" height="${size.height}" alt="${html(image.alt)}" ${slot==='hero'?'fetchpriority="high"':'loading="lazy"'} decoding="async"></div>${slot==='hero'?'':`<figcaption>${html(image.caption||'')}</figcaption>`}</figure>`;};
  const section=(key:string,title:string,body:string,extra='')=>`<section class="home-block official-section ${extra}" data-official-block="${key}" aria-labelledby="official-${key}"><h2 id="official-${key}" tabindex="-1">${html(title)}</h2>${body}</section>`;
  const cards=(items:Node[][],key:string)=>`<div class="official-card-group official-${key}-cards"><p class="official-swipe-hint" aria-hidden="true">${items.length} ${items.length===3?'карточки':'карточек'} · Листайте →</p><div class="official-cards" tabindex="0" role="region" aria-label="${key==='services'?'Предложения провайдера':'Дополнительные услуги'}" data-official-scroll="${key}">${items.map(row=>`<article class="official-card">${row.map((n,i)=>row.length>1&&i===0?`<h3>${rich(n)}</h3>`:p(n)).join('')}</article>`).join('')}</div></div>`;
  return {link,rich,p,figure,section,cards};
 }
 export function renderOfficialSiteIntro(content:OfficialSitePageContent,options:OfficialSiteRenderOptions={}){
  const v=view(content,options);
- return `<section class="home-block official-section official-hero" data-official-block="hero"><h1>${html(content.hero.h1)}</h1><div class="official-hero-row"><div class="official-stack">${content.hero.intro.split(/\n\s*\n/).filter(Boolean).map(t=>`<p>${html(t)}</p>`).join('')}<p class="official-url">Официальный сайт доступен по адресу ${v.link(content.officialUrl,content.officialUrl)}</p>${v.link('Перейти на официальный сайт',content.officialUrl).replace('<a ','<a class="home-action" ').replace('<span>','<span class="home-action" aria-disabled="true">')}</div>${v.figure('hero')}</div></section><nav class="official-toc" aria-label="Оглавление">${OFFICIAL_SITE_ANCHORS.map(([id,label])=>`<a href="#official-${id}">${html(label)}</a>`).join('')}</nav>`;
+ return `<section class="home-block official-section official-hero" data-official-block="hero"><h1>${html(content.hero.h1)}</h1><div class="official-hero-row"><div class="official-stack">${content.hero.intro.split(/\n\s*\n/).filter(Boolean).map(t=>`<p>${html(t)}</p>`).join('')}<p class="official-url">Официальный сайт доступен по адресу ${html(content.officialUrl)}</p>${v.link('Перейти на официальный сайт',content.officialUrl).replace('<a ','<a class="home-action" ').replace('<span>','<span class="home-action" aria-disabled="true">')}</div>${v.figure('hero')}</div></section><nav class="official-toc" aria-label="Оглавление">${OFFICIAL_SITE_ANCHORS.map(([id,label])=>`<a href="#official-${id}">${html(label)}</a>`).join('')}</nav>`;
 }
 export function renderOfficialSiteBody(content:OfficialSitePageContent,options:OfficialSiteRenderOptions={}){
  const v=view(content,options),[s,c,r,e,a,pc]=blocks.slice(1),p=v.p;
@@ -35,8 +39,8 @@ export function renderOfficialSiteBody(content:OfficialSitePageContent,options:O
 }
 export function renderOfficialSiteFaqTail(content:OfficialSitePageContent,options:OfficialSiteRenderOptions={}) {
  if(content.faq.items.length<=6)return '';
- return renderHomeFaq({title:'FAQ',items:content.faq.items.slice(6)},{asset:options.asset}).match(/<div class="home-faq-stack">([\s\S]*)<\/div><\/section>$/)![1];
+ return renderHomeFaq({title:'FAQ',items:officialSiteFaqItems(content).slice(6)},{asset:options.asset,faqPhoneLinks:options.interactive===false?[]:officialSiteFaqPhoneLinks(content)}).match(/<div class="home-faq-stack">([\s\S]*)<\/div><\/section>$/)![1];
 }
 export function renderOfficialSiteFaq(content:OfficialSitePageContent,options:OfficialSiteRenderOptions={}) {
- return `<div id="official-faq" class="official-faq${content.faq.items.length>6?' has-extra':''}">${renderHomeFaq({title:'Часто задаваемые вопросы (FAQ)',items:content.faq.items.slice(0,6)},{asset:options.asset})}${content.faq.items.length>6?`<div class="official-faq-extra">${renderOfficialSiteFaqTail(content,options)}</div>`:''}</div>`;
+ return `<div id="official-faq" class="official-faq${content.faq.items.length>6?' has-extra':''}">${renderHomeFaq({title:'Часто задаваемые вопросы (FAQ)',items:officialSiteFaqItems(content).slice(0,6)},{asset:options.asset,faqPhoneLinks:options.interactive===false?[]:officialSiteFaqPhoneLinks(content)})}${content.faq.items.length>6?`<div class="official-faq-extra">${renderOfficialSiteFaqTail(content,options)}</div>`:''}</div>`;
 }

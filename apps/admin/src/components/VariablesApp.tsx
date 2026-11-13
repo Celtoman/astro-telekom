@@ -24,6 +24,8 @@ interface SiteValues {
   slug: string
   connectionPhone: string | null
   supportPhone: string | null
+  corporatePhone: string | null
+  corporatePhoneFormatted: string | null
   connectionPhoneFormatted: string | null
   supportPhoneFormatted: string | null
   workingRevision: number
@@ -205,6 +207,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
   const [state, setState] = useState<ScreenState>({ status: "loading" })
   const [connectionPhone, setConnectionPhone] = useState("")
   const [supportPhone, setSupportPhone] = useState("")
+  const [corporatePhone, setCorporatePhone] = useState("")
   const [publicDisplay, setPublicDisplay] = useState<SitePublicDisplay | null>(null)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<{ kind: "error" | "success"; text: string } | null>(null)
@@ -221,6 +224,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
       if (!values.publicDisplay) throw new Error("Общие настройки сайта недоступны")
       setConnectionPhone(values.connectionPhoneFormatted || values.connectionPhone || "")
       setSupportPhone(values.supportPhoneFormatted || values.supportPhone || "")
+      setCorporatePhone(values.corporatePhoneFormatted || values.corporatePhone || "")
       setPublicDisplay(values.publicDisplay)
       setState({ status: "ready", user: session.user, site: sites[0], values })
     } catch (caught: unknown) {
@@ -245,11 +249,13 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
           expectedWorkingRevision: state.values.workingRevision,
           connectionPhone,
           supportPhone,
+          corporatePhone,
           publicDisplay,
         },
       })
       setConnectionPhone(values.connectionPhoneFormatted || "")
       setSupportPhone(values.supportPhoneFormatted || "")
+      setCorporatePhone(values.corporatePhoneFormatted || "")
       setPublicDisplay(values.publicDisplay)
       setState({ ...state, values })
       setMessage({ kind: "success", text: `Рабочая версия ${values.workingRevision} сохранена. Публичный сайт изменится после общей публикации.` })
@@ -260,7 +266,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
     }
   }
 
-  useUnsavedChanges(state.status === "ready" && (connectionPhone !== (state.values.connectionPhoneFormatted || state.values.connectionPhone || "") || supportPhone !== (state.values.supportPhoneFormatted || state.values.supportPhone || "") || JSON.stringify(publicDisplay) !== JSON.stringify(state.values.publicDisplay)))
+  useUnsavedChanges(state.status === "ready" && (connectionPhone !== (state.values.connectionPhoneFormatted || state.values.connectionPhone || "") || supportPhone !== (state.values.supportPhoneFormatted || state.values.supportPhone || "") || corporatePhone !== (state.values.corporatePhoneFormatted || state.values.corporatePhone || "") || JSON.stringify(publicDisplay) !== JSON.stringify(state.values.publicDisplay)))
   if (state.status === "loading") return <div className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 p-8" aria-busy="true"><Skeleton className="h-10 w-72" /><Skeleton className="h-80 w-full" /></div>
   if (state.status === "error") return <div className="flex min-h-screen items-center justify-center bg-muted/30 p-6"><Card className="w-full max-w-lg"><CardHeader><CardTitle>Переменные недоступны</CardTitle><CardDescription>Не удалось загрузить значения сайта.</CardDescription></CardHeader><CardContent className="flex flex-col gap-4"><Alert variant="destructive"><CircleAlert /><AlertTitle>Ошибка API</AlertTitle><AlertDescription>{state.message}</AlertDescription></Alert><Button onClick={() => void load()}>Повторить</Button></CardContent></Card></div>
 
@@ -277,6 +283,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
             <CardContent className="flex flex-col gap-5">
               <Field><FieldLabel htmlFor="connection-phone">Телефон подключения</FieldLabel><Input id="connection-phone" inputMode="tel" disabled={saving} value={connectionPhone} onChange={(event) => setConnectionPhone(event.target.value)} placeholder="+7 (800) 555-72-44" /><FieldDescription>{state.values.connectionPhoneFormatted ? <a className="underline" href={`tel:+${state.values.connectionPhone}`}>{state.values.connectionPhoneFormatted}</a> : "Не задан"}</FieldDescription></Field>
               <Field><FieldLabel htmlFor="support-phone">Телефон техподдержки</FieldLabel><Input id="support-phone" inputMode="tel" disabled={saving} value={supportPhone} onChange={(event) => setSupportPhone(event.target.value)} placeholder="+7 (800) 250-77-77" /><FieldDescription>{state.values.supportPhoneFormatted ? <a className="underline" href={`tel:+${state.values.supportPhone}`}>{state.values.supportPhoneFormatted}</a> : "Не задан"}</FieldDescription></Field>
+              <Field><FieldLabel htmlFor="corporate-phone">Телефон корпоративной поддержки</FieldLabel><Input id="corporate-phone" inputMode="tel" disabled={saving} value={corporatePhone} onChange={(event) => setCorporatePhone(event.target.value)} placeholder="+7 (800) 222-86-34" /><FieldDescription>Используется в текстах через {"{CORPORATE_PHONE}"}. {state.values.corporatePhoneFormatted ? <a className="underline" href={`tel:+${state.values.corporatePhone}`}>{state.values.corporatePhoneFormatted}</a> : "Не задан"}</FieldDescription></Field>
               {publicDisplay ? <>
                 <p className="border-t pt-4 text-sm text-muted-foreground">Графики и короткие подписи используются совместно на главной и городских страницах. Показатели тарифов рассчитываются отдельно.</p>
                 {displayTextFields.map(({ key, label, limit }) => <Field key={key}>

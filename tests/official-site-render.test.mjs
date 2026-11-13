@@ -1,7 +1,10 @@
-import {test} from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';
+import {test} from 'node:test';import assert from 'node:assert/strict';import {createRequire} from 'node:module';
 import {renderOfficialSiteIntro,renderOfficialSiteBody} from '../apps/web/src/lib/official-site-render.ts';
 import {renderHomeFooter} from '../apps/web/src/lib/general-home-shell.ts';
-const content=JSON.parse(await readFile(new URL('../apps/api/src/assets/official-site-page-v1.json',import.meta.url),'utf8'));
+const require=createRequire(import.meta.url);
+const {SiteCatalogService}=require('../apps/api/dist/site-catalog.service.js');
+const {officialSiteSource}=require('./helpers/official-site-source.cjs');
+const content=new SiteCatalogService({}).renderSource(officialSiteSource()).globalPages.find(p=>p.type==='OFFICIAL_SITE').content;
 test('runtime and read-only preview preserve the accepted content and use native FAQ without external preview actions',()=>{
  const live=renderOfficialSiteIntro(content)+renderOfficialSiteBody(content);
  const preview=renderOfficialSiteIntro(content,{interactive:false})+renderOfficialSiteBody(content,{interactive:false});

@@ -1,3 +1,4 @@
+import { readCorporatePhone } from './site-contact-settings';
 import { validateOfficialSitePage } from './official-site-page';
 import { projectCityHomeBlocks } from './tariff-collection-model';
 import { validateAccountPage } from './account-page';
@@ -143,6 +144,7 @@ export class SiteCatalogService {
         domain: site.domain,
         connectionPhone: site.connectionPhone ? formatSitePhone(site.connectionPhone) : null,
         supportPhone: site.supportPhone ? formatSitePhone(site.supportPhone) : null,
+        corporatePhone: readCorporatePhone(site.settings) ? formatSitePhone(readCorporatePhone(site.settings)!) : null,
         connectionHours: publicDisplay.connectionHours,
         callbackWithinMinutes: publicDisplay.callbackWithinMinutes,
         publicDisplay,
@@ -153,7 +155,7 @@ export class SiteCatalogService {
       redirects: this.effectiveRedirects(allRoutes, redirects),
       cities: cities.map((city: any) => this.cityResponse(city, site)),
     }, {
-      site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone },
+      site: { ...publicDisplay, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, corporatePhone: readCorporatePhone(site.settings) },
       provider: { name: site.provider.name },
       now,
     });

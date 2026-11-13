@@ -26,7 +26,7 @@ test('registry has unique fixed codes, explicit types and one authoritative sour
   assert.equal(new Set(codes).size, codes.length);
   assert.ok(codes.every((code) => /^[A-Z0-9_]+$/.test(code)));
   assert.deepEqual(codes, [
-    'CONNECTION_PHONE', 'SUPPORT_PHONE', 'PROVIDER_NAME', 'CITY_NAME', 'CITY_NAME_GENITIVE',
+    'CONNECTION_PHONE', 'SUPPORT_PHONE', 'CORPORATE_PHONE', 'PROVIDER_NAME', 'CITY_NAME', 'CITY_NAME_GENITIVE',
     'CITY_NAME_PREPOSITIONAL', 'TARIFF_NAME', 'TARIFF_SPEED', 'TARIFF_PRICE', 'TARIFF_CHANNELS', 'YEAR',
     'CONNECTION_HOURS', 'SUPPORT_HOURS', 'ONLINE_APPLICATIONS_HOURS', 'CALLBACK_WITHIN_MINUTES',
     'CITY_MIN_PRICE', 'CITY_MAX_SPEED', 'CITY_MAX_CHANNELS',

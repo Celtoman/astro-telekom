@@ -6,6 +6,7 @@ interface UpdateSiteValuesBody {
   expectedWorkingRevision: number;
   connectionPhone: string;
   supportPhone: string;
+  corporatePhone?: string;
   publicDisplay?: unknown;
 }
 

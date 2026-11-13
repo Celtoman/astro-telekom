@@ -4,9 +4,14 @@ const {readFileSync}=require('node:fs');
 const {spawnSync}=require('node:child_process');
 const {officialSitePageDefaults}=require('../apps/api/dist/official-site-page-defaults');
 
-test('OFFICIAL_SITE migration payload matches the accepted defaults and contains only permanent assets',()=>{
+test('OFFICIAL_SITE historical migration remains valid independently of later authored defaults',()=>{
  const sql=readFileSync('prisma/migrations/0072_official_site_page/migration.sql','utf8');
- assert.deepEqual(JSON.parse(sql.match(/\$official_site\$([\s\S]*?)\$official_site\$::jsonb/)[1]),officialSitePageDefaults());
+ const historical=JSON.parse(sql.match(/\$official_site\$([\s\S]*?)\$official_site\$::jsonb/)[1]);
+ const {validateOfficialSitePage}=require('../apps/api/dist/official-site-page');
+ assert.deepEqual(validateOfficialSitePage(historical),[]);
+ assert.equal(historical.hero.h1,'Официальный сайт провайдера Дом.ру');
+ assert.ok(historical.faq.items[0].answer.includes('8-800-222-86-34'));
+ assert.ok(officialSitePageDefaults().faq.items[0].answer.includes('{CORPORATE_PHONE}'));
  assert.doesNotMatch(sql,/figma\.com\/api\/mcp/);
 });
 test('PostgreSQL OFFICIAL_SITE rollout preserves authored data and snapshots and rejects canonical collisions',{timeout:240000},()=>{

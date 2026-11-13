@@ -1,0 +1,1 @@
+{"command":"pnpm check --test-concurrency=2","node":"24.22.1","tests":1107,"pass":1106,"fail":0,"skipped":1,"durationMs":660666.2051,"exitCode":0,"skipReason":"Windows symlink permission platform fixture","browser":"Codex in-app browser only","localWidths":[1440,834,390,320],"nativeScrollCases":18,"externalRelease":"pending"}
