@@ -1,0 +1,19 @@
+{
+  "http": 200,
+  "deploymentId": "mw9vjct6enmm5n4pq2uwxm00",
+  "expectedCommit": "35446c505791feff82253726176ea111a5feefb9",
+  "body": {
+    "status": "SUCCEEDED",
+    "artifactId": "ad28e7c47f2a0d40a3355bcb30f3583a5d59814e5b3417ffde8234761a677a8a",
+    "publicationId": "cmwep5tx0000301modif9sg7q",
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "siteRevision": 30,
+    "rendererId": "bb47a3a2fe956f3c9581dfb771fb8380a5bd47954ded57c7e8c2441761ec577e",
+    "catalogDigest": "d9c5320870c0d344a950e541e802bcbf4c62b5ec558e667bfa70a1507556dd33",
+    "releaseSequence": 29,
+    "basePublicationId": "cmw7umvfy001l01nxvbdrcahn",
+    "rebuildId": "code-90d9f370958ce02298ecf0b6e669b5fd8ed7d1239c51b8b618fdb900b9a776b2",
+    "rebuildRevision": 1,
+    "manifestDigest": "9905aaffe68d708971efe90dda401fd5916ca7ba2236a7f437278f2aba3888f0"
+  }
+}

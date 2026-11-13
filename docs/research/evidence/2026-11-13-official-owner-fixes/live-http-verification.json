@@ -1,0 +1,19 @@
+{
+  "codeCommit": "35446c505791feff82253726176ea111a5feefb9",
+  "publicationId": "cmweuuve1000a01mrxlwxb32p",
+  "workingRevision": 32,
+  "publishedRevision": 32,
+  "rebuildId": "cmtw6dpwj015g01o0ho99ow05",
+  "rebuildRevision": 35,
+  "rebuildStatus": "SUCCEEDED",
+  "catalogMatchesReviewedPreview": true,
+  "catalogHash": "1cd1246fb9f9b8947edeceeafeac1700d2c29176dbefecfdf4801fdd91c12a1e",
+  "routes": 4242,
+  "cities": 207,
+  "tariffs": 3805,
+  "pendingChanges": 0,
+  "corporatePhone": "78002228634",
+  "rawCorporateVariableRetained": true,
+  "http": 200,
+  "robots": "noindex, nofollow"
+}

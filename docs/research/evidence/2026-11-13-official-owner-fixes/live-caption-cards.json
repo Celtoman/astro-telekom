@@ -1,0 +1,222 @@
+[
+  {
+    "captions": [
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "menu",
+        "text": "Главное меню"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "overview",
+        "text": "Главная страница сайта Дом ру"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "constructor",
+        "text": "Собери уникальный тариф"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "regional",
+        "text": "Карточки тарифов и фильтры"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "equipment",
+        "text": "Роутеры и ТВ-приставки"
+      },
+      {
+        "gap": 8,
+        "leftInset": 64,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "additional",
+        "text": "Дополнительные услуги"
+      }
+    ],
+    "carouselButtons": 0,
+    "clippedCards": 0,
+    "width": 1440
+  },
+  {
+    "captions": [
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "menu",
+        "text": "Главное меню"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "overview",
+        "text": "Главная страница сайта Дом ру"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "constructor",
+        "text": "Собери уникальный тариф"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "regional",
+        "text": "Карточки тарифов и фильтры"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "equipment",
+        "text": "Роутеры и ТВ-приставки"
+      },
+      {
+        "gap": 8,
+        "leftInset": 54,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "additional",
+        "text": "Дополнительные услуги"
+      }
+    ],
+    "carouselButtons": 0,
+    "clippedCards": 0,
+    "width": 834
+  },
+  {
+    "captions": [
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "menu",
+        "text": "Главное меню"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "overview",
+        "text": "Главная страница сайта Дом ру"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "constructor",
+        "text": "Собери уникальный тариф"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "regional",
+        "text": "Карточки тарифов и фильтры"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "equipment",
+        "text": "Роутеры и ТВ-приставки"
+      },
+      {
+        "gap": 8,
+        "leftInset": 96,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "additional",
+        "text": "Дополнительные услуги"
+      }
+    ],
+    "carouselButtons": 0,
+    "clippedCards": 0,
+    "width": 390
+  },
+  {
+    "captions": [
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "menu",
+        "text": "Главное меню"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "overview",
+        "text": "Главная страница сайта Дом ру"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "constructor",
+        "text": "Собери уникальный тариф"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "regional",
+        "text": "Карточки тарифов и фильтры"
+      },
+      {
+        "gap": 8,
+        "leftInset": 0,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "equipment",
+        "text": "Роутеры и ТВ-приставки"
+      },
+      {
+        "gap": 8,
+        "leftInset": 96,
+        "overflow": 0,
+        "rightInset": 0,
+        "slot": "additional",
+        "text": "Дополнительные услуги"
+      }
+    ],
+    "carouselButtons": 0,
+    "clippedCards": 0,
+    "width": 320
+  }
+]
