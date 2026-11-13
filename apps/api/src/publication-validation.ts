@@ -1,3 +1,4 @@
+import { validateOfficialSitePage } from './official-site-page';
 import { validateTariffCollection } from './tariff-collection';
 import { validateAccountPage } from './account-page';
 import { SUPPORTED_GLOBAL_PAGES, isLegacyPublicRoute } from './public-route-policy';
@@ -59,7 +60,7 @@ function routeSources(source: CatalogSource): RouteSource[] {
   const routes: RouteSource[] = [{ route: { id: 'HOME', kind: 'HOME', path: '/' } }];
   for (const expected of SUPPORTED_GLOBAL_PAGES) {
     const page = source.globalPages.find((item) => item.type === expected.type);
-    if (!page && expected.type === 'ACCOUNT') continue;
+    if (!page && (expected.type === 'ACCOUNT' || expected.type === 'OFFICIAL_SITE')) continue;
     routes.push({
       route: { id: expected.type, kind: 'GLOBAL_PAGE', path: `/${expected.slug}`, pageType: expected.type },
       page,
@@ -219,7 +220,7 @@ export function validatePublicationSource(
     if (route.kind === 'GLOBAL_PAGE') {
       if (!page) add('BLOCKING', 'GLOBAL_PAGE_MISSING', route.path, `Не опубликована обязательная страница ${route.pageType}`);
       else {
-        try { if (page.type === 'ACCOUNT') validateAccountPage(page.content); else validatePublishedBlocks(page.blocks); } catch (error) { add('BLOCKING', 'PAGE_BLOCKS', route.path, message(error), undefined, { ...(page.type === 'ACCOUNT' ? { template: 'ACCOUNT' } : {}), ...contentErrorLocation(error) }); }
+        try { if (page.type === 'OFFICIAL_SITE') validateOfficialSitePage(page.content); else if (page.type === 'ACCOUNT') validateAccountPage(page.content); else validatePublishedBlocks(page.blocks); } catch (error) { add('BLOCKING', 'PAGE_BLOCKS', route.path, message(error), undefined, { ...(['ACCOUNT','OFFICIAL_SITE'].includes(page.type) ? { template: page.type } : {}), ...contentErrorLocation(error) }); }
       }
     }
     if (route.kind === 'CITY_HOME') {
@@ -259,6 +260,7 @@ export function validatePublicationSource(
         provider: { name: provider.name },
         now,
       });
+      if (route.id === 'OFFICIAL_SITE' && resolved.globalPages[0]) validateOfficialSitePage(resolved.globalPages[0].content);
       if (route.id === 'ACCOUNT' && resolved.globalPages[0]) validateAccountPage(resolved.globalPages[0].content);
       for (const warning of resolved.variableWarnings) {
         add('WARNING', `VARIABLE_${warning.reason}`, route.path, `Переменная {${warning.code}}: ${warning.reason} (${warning.path})`);
@@ -267,7 +269,7 @@ export function validatePublicationSource(
       const detail = message(error);
       const tariffField = route.kind === 'CITY_TARIFF_DETAIL' && /\.promoText\b/.test(detail)
         ? { template: route.id, block: 'hero', field: 'promoText' } : undefined;
-      add('BLOCKING', 'VARIABLE_RESOLUTION', route.path, detail, undefined, route.id === 'ACCOUNT' ? { template: 'ACCOUNT', ...contentErrorLocation(error) } : tariffField);
+      add('BLOCKING', 'VARIABLE_RESOLUTION', route.path, detail, undefined, ['ACCOUNT','OFFICIAL_SITE'].includes(route.id) ? { template: route.id, ...contentErrorLocation(error) } : tariffField);
     }
     try {
       const seo = resolveSeoTemplates({

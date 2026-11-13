@@ -22,6 +22,7 @@ export const passportGroups = [
 ];
 export function passportGroup(passport) {
   if (passport.id === 'header') return 'global';
+  if (passport.id.startsWith('official-site.')) return { href: '/templates/official-site', label: 'Открыть редактор', note: 'Вступление, основной переход, семь иллюстраций и FAQ. Принятый дизайн задан кодом.' };
   if (passport.id.startsWith('account.')) return 'account';
   if (passport.id.startsWith('address.')) return 'address';
   if (passport.id.startsWith('home.')) return 'root';

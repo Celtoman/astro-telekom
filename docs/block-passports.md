@@ -159,3 +159,7 @@ API-реестр расширен восемью CITY-паспортами: comp
 ## ACCOUNT:13 программных паспортов
 
 Реестр `account-page-passports.ts` добавляет13 PROGRAMMATIC/CODE контрактов ACCOUNT1.0.0 с52 адаптивными design variants. Это13 функций композиции и одна форма Page.content, без13 редактируемых записей блоков. Header/Address-only/FAQ/Footer используют сквозные источники. APPROVED относится к принятому контракту, editorReadiness — наличию проверенного редактора; внешнее ACTIVE требует отдельной приёмки deployment/данных. [Подробные паспорта](plans/2026-11-05-account-block-passports.md), [test-приёмка кода и данных29](research/2026-11-05-account-test-release.md). Сам lifecycle реестра остаётся APPROVED, автоматически ACTIVE не назначается.
+
+## OFFICIAL_SITE — принятый перенос12ноября2026
+
+Реестр дополнен9 PROGRAMMATIC-паспортами собственных секций, оглавления и FAQ; Header/Address/Footer переиспользуют сквозные контракты. Один редактор `/templates/official-site`, без9поблочных CMS-форм. Источник — текущие четыре Screens, не старые варианты. [Контракт12размещений](plans/2026-11-12-official-site-implementation-plan.md). Статус паспорта не подтверждает deployment или публикацию.

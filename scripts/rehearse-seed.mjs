@@ -60,8 +60,8 @@ try {
   source = await catalogService.captureSourceBySiteId(site.id);
   const validation = validatePublicationSource(source, { appVersion: 'seed-rehearsal', siteRevision: site.workingRevision }, (candidate, now) => catalogService.renderSource(candidate, now));
   assert.notEqual(validation.report.outcome, 'BLOCKED', JSON.stringify(validation.report.issues));
-  assert.equal(validation.catalog.routes.length, 10, 'root, five required globals plus ACCOUNT, city HOME, ADDRESS and one synthetic published tariff; other unpriced demo tariffs remain drafts');
-  assert.equal(source.seoTemplates.length, 10);
+  assert.equal(validation.catalog.routes.length, 11, 'root, five required globals plus ACCOUNT and OFFICIAL_SITE, city HOME, ADDRESS and one synthetic published tariff; other unpriced demo tariffs remain drafts');
+  assert.equal(source.seoTemplates.length, 11);
   assert.equal(source.pageTemplates.length, 3);
   assert.equal(source.cities[0].pages.find(page => page.type === 'HOME').templateId, source.pageTemplates.find(template => template.kind === 'CITY_HOME').id);
   assert.equal(validation.catalog.homeHero.searchButtonText, 'Найти город');

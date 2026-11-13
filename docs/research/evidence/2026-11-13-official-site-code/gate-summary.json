@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-13",
+  "baseline": "e870e7a957745319a83e9b4a38dd5608fafb1b16",
+  "node": "24.22.1",
+  "platform": "Windows",
+  "command": "pnpm check --test-concurrency=2",
+  "exitCode": 0,
+  "tests": 1101,
+  "pass": 1100,
+  "fail": 0,
+  "cancelled": 0,
+  "skipped": 1,
+  "durationMs": 681931.1742,
+  "skip": "Windows symlink privilege unavailable; Linux rehearsal covers guard",
+  "stages": [
+    "lint/typecheck",
+    "db:validate",
+    "build:ci",
+    "test"
+  ],
+  "dependencyReuse": "existing node_modules junctions; verifyDepsBeforeRun=warn; Linux CI performs frozen install"
+}

@@ -1,0 +1,809 @@
+{
+  "started": "2026-11-13T06:19:22.031Z",
+  "runs": [
+    {
+      "engine": "chromium",
+      "width": 1440,
+      "previewGeometry": [
+        {
+          "key": "hero",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "NAV",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "SECTION",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "services",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "constructor",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "regional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "equipment",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "additional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "pros-cons",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "official-faq",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "FOOTER",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        }
+      ],
+      "flow": {
+        "suggestionKeyboard": true,
+        "check": true,
+        "lead": true,
+        "close": true,
+        "requestEndpoints": [
+          "address-suggestions",
+          "address-checks",
+          "leads"
+        ],
+        "source": {
+          "pageScope": "GLOBAL",
+          "pageSlug": "official-site-domru",
+          "citySlug": "test-b",
+          "addressCheckId": "synthetic-check"
+        }
+      }
+    },
+    {
+      "engine": "chromium",
+      "width": 834,
+      "previewGeometry": [
+        {
+          "key": "hero",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "NAV",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "SECTION",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "services",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "constructor",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "regional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "equipment",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "additional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "pros-cons",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "official-faq",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "FOOTER",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        }
+      ],
+      "flow": {
+        "suggestionKeyboard": true,
+        "check": true,
+        "lead": true,
+        "close": true,
+        "requestEndpoints": [
+          "address-suggestions",
+          "address-checks",
+          "leads"
+        ],
+        "source": {
+          "pageScope": "GLOBAL",
+          "pageSlug": "official-site-domru",
+          "citySlug": "test-b",
+          "addressCheckId": "synthetic-check"
+        }
+      }
+    },
+    {
+      "engine": "chromium",
+      "width": 390,
+      "previewGeometry": [
+        {
+          "key": "hero",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "NAV",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "SECTION",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "services",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "constructor",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "regional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "equipment",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "additional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "pros-cons",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "official-faq",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "FOOTER",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        }
+      ],
+      "flow": {
+        "suggestionKeyboard": true,
+        "check": true,
+        "lead": true,
+        "close": true,
+        "requestEndpoints": [
+          "address-suggestions",
+          "address-checks",
+          "leads"
+        ],
+        "source": {
+          "pageScope": "GLOBAL",
+          "pageSlug": "official-site-domru",
+          "citySlug": "test-b",
+          "addressCheckId": "synthetic-check"
+        }
+      }
+    },
+    {
+      "engine": "chromium",
+      "width": 320,
+      "previewGeometry": [
+        {
+          "key": "hero",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "NAV",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "SECTION",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "services",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "constructor",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "regional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "equipment",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "additional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "pros-cons",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "official-faq",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "FOOTER",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        }
+      ],
+      "flow": {
+        "suggestionKeyboard": true,
+        "check": true,
+        "lead": true,
+        "close": true,
+        "requestEndpoints": [
+          "address-suggestions",
+          "address-checks",
+          "leads"
+        ],
+        "source": {
+          "pageScope": "GLOBAL",
+          "pageSlug": "official-site-domru",
+          "citySlug": "test-b",
+          "addressCheckId": "synthetic-check"
+        }
+      }
+    },
+    {
+      "engine": "webkit",
+      "width": 1440,
+      "previewGeometry": [
+        {
+          "key": "hero",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "NAV",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "SECTION",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "services",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "constructor",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "regional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "equipment",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "additional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "pros-cons",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "official-faq",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "FOOTER",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        }
+      ],
+      "flow": {
+        "suggestionKeyboard": true,
+        "check": true,
+        "lead": true,
+        "close": true,
+        "requestEndpoints": [
+          "address-suggestions",
+          "address-checks",
+          "leads"
+        ],
+        "source": {
+          "pageScope": "GLOBAL",
+          "pageSlug": "official-site-domru",
+          "citySlug": "test-b",
+          "addressCheckId": "synthetic-check"
+        }
+      }
+    },
+    {
+      "engine": "webkit",
+      "width": 834,
+      "previewGeometry": [
+        {
+          "key": "hero",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "NAV",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "SECTION",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "services",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "constructor",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "regional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "equipment",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "additional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "pros-cons",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "official-faq",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "FOOTER",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        }
+      ],
+      "flow": {
+        "suggestionKeyboard": true,
+        "check": true,
+        "lead": true,
+        "close": true,
+        "requestEndpoints": [
+          "address-suggestions",
+          "address-checks",
+          "leads"
+        ],
+        "source": {
+          "pageScope": "GLOBAL",
+          "pageSlug": "official-site-domru",
+          "citySlug": "test-b",
+          "addressCheckId": "synthetic-check"
+        }
+      }
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "previewGeometry": [
+        {
+          "key": "hero",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "NAV",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "SECTION",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "services",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "constructor",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "regional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "equipment",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "additional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "pros-cons",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "official-faq",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "FOOTER",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        }
+      ],
+      "flow": {
+        "suggestionKeyboard": true,
+        "check": true,
+        "lead": true,
+        "close": true,
+        "requestEndpoints": [
+          "address-suggestions",
+          "address-checks",
+          "leads"
+        ],
+        "source": {
+          "pageScope": "GLOBAL",
+          "pageSlug": "official-site-domru",
+          "citySlug": "test-b",
+          "addressCheckId": "synthetic-check"
+        }
+      }
+    },
+    {
+      "engine": "webkit",
+      "width": 320,
+      "previewGeometry": [
+        {
+          "key": "hero",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "NAV",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "SECTION",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "services",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "constructor",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "regional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "equipment",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "additional",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "pros-cons",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "official-faq",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        },
+        {
+          "key": "FOOTER",
+          "dx": 0,
+          "dy": 0,
+          "dw": 0,
+          "dh": 0
+        }
+      ],
+      "flow": {
+        "suggestionKeyboard": true,
+        "check": true,
+        "lead": true,
+        "close": true,
+        "requestEndpoints": [
+          "address-suggestions",
+          "address-checks",
+          "leads"
+        ],
+        "source": {
+          "pageScope": "GLOBAL",
+          "pageSlug": "official-site-domru",
+          "citySlug": "test-b",
+          "addressCheckId": "synthetic-check"
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Synthetic intercepted API; no real lead or notification",
+    "Browser emulation; no physical device or assistive technology certification"
+  ]
+}

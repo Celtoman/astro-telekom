@@ -71,8 +71,8 @@ export async function servingEntities(client: Pick<PrismaService, 'sitePublicati
   const catalog = publication.catalog as { site: { slug: string }; cities: FrozenCity[]; globalPages?: FrozenPage[] };
   const city = catalog.cities?.find(item => item.slug === citySlug);
   if (!city || !validId(city.id)) throw new BadRequestException('Город недоступен в опубликованной версии');
-  if (pageScope === 'GLOBAL' && pageSlug !== 'lichnyy-kabinet-dom-ru') throw new BadRequestException('Неизвестная общая страница');
-  const page = pageScope === 'GLOBAL' ? catalog.globalPages?.find(item => item.slug === pageSlug && item.type === 'ACCOUNT') : pageSlug ? city.pages?.find(item => item.slug === pageSlug) : null;
+  if (pageScope === 'GLOBAL' && !['lichnyy-kabinet-dom-ru','official-site-domru'].includes(pageSlug || '')) throw new BadRequestException('Неизвестная общая страница');
+  const page = pageScope === 'GLOBAL' ? catalog.globalPages?.find(item => item.slug === pageSlug && item.type === (pageSlug === 'official-site-domru' ? 'OFFICIAL_SITE' : 'ACCOUNT')) : pageSlug ? city.pages?.find(item => item.slug === pageSlug) : null;
   if (pageSlug && (!page || !validId(page.id))) throw new BadRequestException('Страница недоступна в опубликованной версии');
   return { publication, catalog, site: { ...catalog.site, id: publication.siteId }, city, page: page || null };
 }

@@ -1,3 +1,4 @@
+import { renderOfficialSiteIntro,renderOfficialSiteBody } from '../../../web/src/lib/official-site-render.ts'
 import { renderAccountIntro, renderAccountBody } from '../../../web/src/lib/account-page-render.ts'
 import { renderAddressOnlyPreview } from '../../../web/src/lib/address-only-render.ts'
 import { renderAddressIntro, renderAddressResults, renderAddressTariffs } from '../../../web/src/lib/address-page-render.ts'
@@ -161,6 +162,7 @@ function renderCities(catalog) {
 function renderGlobal(catalog, route) {
   const page = pageByType(catalog, route.pageType)
   if (!page) throw new Error('Общая страница маршрута предпросмотра не найдена')
+  if (route.pageType === 'OFFICIAL_SITE') { const options={interactive:false,asset:path=>asset(catalog,path)}; return wrap('officialsite', `<div class="official-page">${renderOfficialSiteIntro(page.content,options)}${renderAddressOnlyPreview(options.asset,{matchRuntime:true})}${renderOfficialSiteBody(page.content,options)}</div>`) }
   if (route.pageType === 'ACCOUNT') { const options = { interactive: false, asset: path => asset(catalog, path) }; return wrap('account', `<div class="account-page">${renderAccountIntro(page.content, catalog.site, options)}${renderAddressOnlyPreview(options.asset)}${renderAccountBody(page.content, catalog.site, options)}</div>`) }
   if (route.pageType === 'CITIES') return renderCities(catalog)
   const coverage = route.pageType === 'COVERAGE', cities = list(catalog.cities)
@@ -210,6 +212,10 @@ export function buildPreviewDocument(catalog, routePath, publicStyles = '', asse
   catalog.site = { ...catalog.site, publicDisplay: publicDisplayForCatalog(catalog.site, catalog.generalHome) };
   const route = override ? {kind:'EDITORIAL_PREVIEW',path:routePath} : list(catalog?.routes).find(item => item.path === routePath)
   if (!route) throw new Error('Маршрут отсутствует в рабочем Release 1 inventory')
+  // This long illustrated page can exceed the optional font loading window on
+  // its first iframe render. Wait for the embedded fonts instead of retaining
+  // fallback metrics in the accepted Screens composition.
+  if (route.pageType === 'OFFICIAL_SITE') publicStyles = publicStyles.replaceAll('font-display: optional;', 'font-display: swap;')
   const city = route.citySlug ? cityBySlug(catalog, route.citySlug) : null
   const shellOptions = { interactive: false, asset: path => asset(catalog, path), city: city || publishedMoscow(catalog.cities) || undefined }
   let content
@@ -221,5 +227,5 @@ export function buildPreviewDocument(catalog, routePath, publicStyles = '', asse
   else if (route.kind === 'GLOBAL_PAGE') content = renderGlobal(catalog, route)
   else throw new Error('Тип маршрута не поддерживается предпросмотром')
   const assetOrigins = [...new Set(Object.values(assets).filter(value => /^https?:\/\//.test(value)).map(value => new URL(value).origin))].map(html).join(' ')
-  return `<!doctype html><html lang="ru" class="full-general-home"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https: ${assetOrigins}; font-src data:"><title>${html(override?.title || routeLabel(catalog, route))} — предпросмотр</title><style>${previewStyleText(publicStyles)}</style></head><body class="general-home-page${route.kind === 'CITY_HOME' && city?.pages?.find(page => page.type === 'HOME' && page.slug === '')?.content?.homeCompositionVersion === '3.0.0' ? ' city-home-page' : ''}">${wrap('homeshell', renderHomeHeader(catalog.site, shellOptions))}<main>${content}</main>${wrap('homeshell', renderHomeFooter(catalog.site, shellOptions))}</body></html>`
+  return `<!doctype html><html lang="ru" class="full-general-home"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https: ${assetOrigins}; font-src data:"><title>${html(override?.title || routeLabel(catalog, route))} — предпросмотр</title><style>${previewStyleText(publicStyles)}</style></head><body class="general-home-page${route.kind === 'CITY_HOME' && city?.pages?.find(page => page.type === 'HOME' && page.slug === '')?.content?.homeCompositionVersion === '3.0.0' ? ' city-home-page' : ''}">${wrap('homeshell', renderHomeHeader(catalog.site, shellOptions))}<main>${content}</main>${wrap('homeshell', renderHomeFooter(catalog.site, { ...shellOptions, footerProfile: route.pageType === 'OFFICIAL_SITE' ? 'OFFICIAL_SITE' : undefined }))}</body></html>`
 }

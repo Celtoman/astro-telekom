@@ -110,7 +110,7 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     <main>
       <slot />
     </main>
-    <GeneralHomeFooter {site} {city} cities={catalog.cities} {localSections} {addressPageSlug} />
+    <GeneralHomeFooter {site} {city} cities={catalog.cities} {localSections} {addressPageSlug} footerProfile={currentRoute?.id === 'OFFICIAL_SITE' ? 'OFFICIAL_SITE' : undefined} />
     <CallbackDialog {site} {city} requireConfirmedCity={!city} />
     <LegalDocuments />
     <script>

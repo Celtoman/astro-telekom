@@ -49,7 +49,7 @@ export class PublicLeadsController {
     if (body.website) throw new BadRequestException('Некорректный запрос');
     const reason = classifyLeadReason(body.reasonCode);
     const callback = reason?.code === 'callback_consultation';
-    if (body.pageScope === 'GLOBAL' && (callback || body.tariffSlug || body.configuration || body.pageSlug !== ACCOUNT_PAGE_SLUG)) throw new BadRequestException('Некорректный источник общей страницы');
+    if (body.pageScope === 'GLOBAL' && (callback || body.tariffSlug || body.configuration || ![ACCOUNT_PAGE_SLUG,'official-site-domru'].includes(body.pageSlug || ''))) throw new BadRequestException('Некорректный источник общей страницы');
     if (callback && (body.consentAccepted !== true || body.addressCheckId || body.address || body.configuration || body.pageSlug || body.objectType || body.serviceType)) {
       throw new BadRequestException('Для обратного звонка подтвердите согласие; проверка адреса оформляется отдельно');
     }
@@ -98,7 +98,7 @@ export class PublicLeadsController {
       const matches = existing.site.slug === (body.siteSlug || 'domru-site')
         && (existing.city?.slug ?? null) === (body.citySlug ?? null)
         && (existing.page?.slug ?? null) === (body.pageSlug || null)
-        && (existing.page?.type === 'ACCOUNT') === (body.pageScope === 'GLOBAL')
+        && (['ACCOUNT','OFFICIAL_SITE'].includes(existing.page?.type || '')) === (body.pageScope === 'GLOBAL')
         && (existing.tariff?.slug ?? null) === (body.tariffSlug || null)
         && existing.addressCheckId === (body.addressCheckId ?? null)
         && (!body.address?.trim() || existing.address === body.address.trim())
@@ -132,7 +132,7 @@ export class PublicLeadsController {
     if (!city && (!callback || body.citySlug)) throw new BadRequestException('Город не найден');
 
     const page = serving ? serving.page : body.pageSlug && city
-      ? await this.prisma.page.findFirst({ where: { ...(body.pageScope === 'GLOBAL' ? { siteId: site.id, cityId: null, type: 'ACCOUNT' as const } : { cityId: city.id }), slug: body.pageSlug, status: 'PUBLISHED' } })
+      ? await this.prisma.page.findFirst({ where: { ...(body.pageScope === 'GLOBAL' ? { siteId: site.id, cityId: null, type: body.pageSlug === 'official-site-domru' ? 'OFFICIAL_SITE' as const : 'ACCOUNT' as const } : { cityId: city.id }), slug: body.pageSlug, status: 'PUBLISHED' } })
       : null;
     const publication = serving ? serving.publication : body.configuration
       ? await this.prisma.sitePublication.findFirst({

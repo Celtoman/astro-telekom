@@ -103,3 +103,7 @@ API создает `lead-decisions`, `lead-deliveries` и `site-rebuilds` при
 ## ADDRESS 1.0.0 — 4 ноября 2026
 
 65 миграций до `0065_tvbox_availability`; отдельная0063 вводит CITY_ADDRESS_CHECK в PageTemplateKind/SeoTemplateKind. Новый ADDRESS snapshot добавляет по одному URL для каждого опубликованного города, всего `2N + T + 6`. Исторический inventory `N + T + 6` поддерживается для CODE rebuild прежних снимков без ADDRESS. Явный `[city]/proverka-podklyucheniya-k-domru-po-adresu.astro` строится только из inventory; `[city]/[slug]` продолжает обслуживать тарифы. Тот же inventory покрывают SEO, sitemap и redirects. Новых runtime-зависимостей нет.
+
+## OFFICIAL_SITE — 13 ноября2026
+
+В коде 72 каталога миграций, последний — `0072_official_site_page`; предшествующий `0071_official_site_kind` вводит enum. Общая страница `/official-site-domru` добавляется только при наличии опубликованной валидной OFFICIAL_SITE в snapshot. Старые serving snapshots не меняются и не получают этот маршрут при CODE rebuild. Это число каталогов в репозитории; применение во внешнем test-контуре подтверждается отдельно. Новых runtime-зависимостей нет.

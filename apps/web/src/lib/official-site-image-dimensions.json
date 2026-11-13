@@ -1,0 +1,30 @@
+{
+  "hero": {
+    "width": 1448,
+    "height": 1086
+  },
+  "menu": {
+    "width": 1586,
+    "height": 105
+  },
+  "overview": {
+    "width": 1581,
+    "height": 862
+  },
+  "constructor": {
+    "width": 1012,
+    "height": 348
+  },
+  "regional": {
+    "width": 1532,
+    "height": 611
+  },
+  "equipment": {
+    "width": 1517,
+    "height": 442
+  },
+  "additional": {
+    "width": 1814,
+    "height": 588
+  }
+}

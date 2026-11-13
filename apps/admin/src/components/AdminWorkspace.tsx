@@ -18,6 +18,7 @@ const screenLoaders = {
   "editorial-pages": () => import("./EditorialPagesApp").then(m => ({ default: m.EditorialPagesApp })),
   news: () => import("./NewsApp").then(m => ({ default: m.NewsApp })),
   "news-editor": () => import("./NewsEditorApp").then(m => ({ default: m.NewsEditorApp })),
+  "official-site": () => import("./OfficialSitePageApp").then(m => ({ default: m.OfficialSitePageApp })),
   account: () => import("./AccountPageApp").then(m => ({ default: m.AccountPageApp })),
   overview: () => import("./AdminApp").then(m => ({ default: m.AdminApp })),
   tariffs: () => import("./TariffsApp").then(m => ({ default: m.TariffsApp })),

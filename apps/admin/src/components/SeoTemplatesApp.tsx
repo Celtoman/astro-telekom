@@ -13,7 +13,7 @@ import { Field, FieldDescription, FieldLabel } from "./ui/field"
 import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
 
-type Kind = "ACCOUNT" | "HOME" | "COVERAGE" | "CITIES" | "PRIVACY" | "PERSONAL_DATA_CONSENT" | "COOKIE_POLICY" | "CITY_HOME" | "CITY_TARIFF_DETAIL" | "CITY_ADDRESS_CHECK"
+type Kind = "OFFICIAL_SITE" | "ACCOUNT" | "HOME" | "COVERAGE" | "CITIES" | "PRIVACY" | "PERSONAL_DATA_CONSENT" | "COOKIE_POLICY" | "CITY_HOME" | "CITY_TARIFF_DETAIL" | "CITY_ADDRESS_CHECK"
 type IndexState = "INDEX" | "NOINDEX"
 type TextField = "titleTemplate" | "descriptionTemplate" | "ogTitleTemplate" | "ogDescriptionTemplate"
 interface Administrator { id: string; email: string }
@@ -29,6 +29,7 @@ interface Workspace {
 }
 
 const labels: Record<Kind, string> = {
+  OFFICIAL_SITE: "Официальный сайт",
   ACCOUNT: "Личный кабинет",
   HOME: "Главная сайта", COVERAGE: "Карта покрытия", CITIES: "Города обслуживания",
   PRIVACY: "Политика конфиденциальности", PERSONAL_DATA_CONSENT: "Согласие на обработку данных",

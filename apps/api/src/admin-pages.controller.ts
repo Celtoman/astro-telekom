@@ -85,7 +85,7 @@ export class AdminPagesController {
 
   @Post()
   async create(@Body() body: PageBody, @Req() request?: AdminRequest) {
-    if ((body.type as string) === 'ACCOUNT') throw new BadRequestException('Личный кабинет создаётся миграцией и редактируется в отдельной форме ACCOUNT');
+    if (['ACCOUNT','OFFICIAL_SITE'].includes(body.type as string)) throw new BadRequestException('Личный кабинет создаётся миграцией и редактируется в отдельной форме ACCOUNT');
     if (Object.hasOwn(body, 'seo')) throw new BadRequestException('SEO меняется только через SEO-шаблон');
     if (body.type === 'HOME') throw new BadRequestException('Городская HOME создается из общего шаблона вместе с городом');
     assertPageScope(body);
@@ -117,7 +117,7 @@ export class AdminPagesController {
       return await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
         const current = await transaction.page.findUnique({ where: { id } });
         if (!current) throw new NotFoundException('Page not found');
-        if (current.type === 'ACCOUNT' || (body.type as string) === 'ACCOUNT') throw new BadRequestException('Личный кабинет редактируется через /admin/sites/:siteId/account');
+        if (current.type === 'ACCOUNT' || current.type === 'OFFICIAL_SITE' || ['ACCOUNT','OFFICIAL_SITE'].includes(body.type as string)) throw new BadRequestException('Информационная страница редактируется в своей отдельной форме');
         if (current.type === 'ADDRESS_CHECK' && current.slug === ADDRESS_PAGE_SLUG && current.templateId) throw new BadRequestException('Страница проверки подключения редактируется через общий шаблон ADDRESS');
         if (current.type === 'HOME' || body.type === 'HOME') throw new BadRequestException('Городская HOME редактируется через общий шаблон');
         const nextScope = {

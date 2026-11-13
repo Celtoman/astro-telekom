@@ -1,0 +1,1092 @@
+{
+  "runs": [
+    {
+      "engine": "chromium",
+      "width": 1440,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 442.65625,
+            "h": 168,
+            "clipped": false
+          },
+          {
+            "w": 442.671875,
+            "h": 168,
+            "clipped": false
+          },
+          {
+            "w": 442.65625,
+            "h": 168,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 442.65625,
+            "h": 137,
+            "clipped": false
+          },
+          {
+            "w": 442.671875,
+            "h": 137,
+            "clipped": false
+          },
+          {
+            "w": 442.65625,
+            "h": 137,
+            "clipped": false
+          },
+          {
+            "w": 671.984375,
+            "h": 113,
+            "clipped": false
+          },
+          {
+            "w": 672,
+            "h": 113,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 340,
+          "w": 760
+        },
+        {
+          "x": 340,
+          "w": 760
+        },
+        {
+          "x": 340,
+          "w": 760
+        }
+      ],
+      "captionPadding": 64,
+      "pros": 561,
+      "cons": 441
+    },
+    {
+      "engine": "chromium",
+      "width": 834,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 80,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 89,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 89,
+          "w": 656
+        },
+        {
+          "x": 57,
+          "w": 720
+        },
+        {
+          "x": 57,
+          "w": 720
+        }
+      ],
+      "captionPadding": 54,
+      "pros": 561,
+      "cons": 441
+    },
+    {
+      "engine": "chromium",
+      "width": 390,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 326,
+            "h": 200,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 200,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 200,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 326,
+            "h": 186,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 186,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 186,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 186,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 186,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 32,
+          "w": 326
+        },
+        {
+          "x": 16,
+          "w": 358
+        },
+        {
+          "x": 16,
+          "w": 358
+        }
+      ],
+      "captionPadding": 96,
+      "pros": 769,
+      "cons": 625
+    },
+    {
+      "engine": "chromium",
+      "width": 320,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 256,
+            "h": 248,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 248,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 248,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 256,
+            "h": 210,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 210,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 210,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 210,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 210,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 32,
+          "w": 256
+        },
+        {
+          "x": 16,
+          "w": 288
+        },
+        {
+          "x": 16,
+          "w": 288
+        }
+      ],
+      "captionPadding": 96,
+      "pros": 961,
+      "cons": 793
+    },
+    {
+      "engine": "chromium",
+      "width": 360,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 296,
+            "h": 224,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 224,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 224,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 296,
+            "h": 209,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 209,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 209,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 209,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 209,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 32,
+          "w": 296
+        },
+        {
+          "x": 16,
+          "w": 328
+        },
+        {
+          "x": 16,
+          "w": 328
+        }
+      ],
+      "captionPadding": 96,
+      "pros": 865,
+      "cons": 697
+    },
+    {
+      "engine": "chromium",
+      "width": 768,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 80,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 89,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 56,
+          "w": 656
+        },
+        {
+          "x": 24,
+          "w": 720
+        },
+        {
+          "x": 24,
+          "w": 720
+        }
+      ],
+      "captionPadding": 54,
+      "pros": 561,
+      "cons": 441
+    },
+    {
+      "engine": "chromium",
+      "width": 1024,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 80,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 89,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 184,
+          "w": 656
+        },
+        {
+          "x": 152,
+          "w": 720
+        },
+        {
+          "x": 152,
+          "w": 720
+        }
+      ],
+      "captionPadding": 54,
+      "pros": 561,
+      "cons": 441
+    },
+    {
+      "engine": "chromium",
+      "width": 1280,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 389.328125,
+            "h": 168,
+            "clipped": false
+          },
+          {
+            "w": 389.328125,
+            "h": 168,
+            "clipped": false
+          },
+          {
+            "w": 389.34375,
+            "h": 168,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 389.328125,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 389.328125,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 389.34375,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 592,
+            "h": 137,
+            "clipped": false
+          },
+          {
+            "w": 592,
+            "h": 137,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 260,
+          "w": 760
+        },
+        {
+          "x": 260,
+          "w": 760
+        },
+        {
+          "x": 260,
+          "w": 760
+        }
+      ],
+      "captionPadding": 64,
+      "pros": 609,
+      "cons": 465
+    },
+    {
+      "engine": "webkit",
+      "width": 1440,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 442.65625,
+            "h": 168,
+            "clipped": false
+          },
+          {
+            "w": 442.671875,
+            "h": 168,
+            "clipped": false
+          },
+          {
+            "w": 442.671875,
+            "h": 168,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 442.65625,
+            "h": 137,
+            "clipped": false
+          },
+          {
+            "w": 442.671875,
+            "h": 137,
+            "clipped": false
+          },
+          {
+            "w": 442.671875,
+            "h": 137,
+            "clipped": false
+          },
+          {
+            "w": 672,
+            "h": 113,
+            "clipped": false
+          },
+          {
+            "w": 672,
+            "h": 113,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 340,
+          "w": 760
+        },
+        {
+          "x": 340,
+          "w": 760
+        },
+        {
+          "x": 340,
+          "w": 760
+        }
+      ],
+      "captionPadding": 64,
+      "pros": 561,
+      "cons": 441
+    },
+    {
+      "engine": "webkit",
+      "width": 834,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 80,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 89,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 89,
+          "w": 656
+        },
+        {
+          "x": 57,
+          "w": 720
+        },
+        {
+          "x": 57,
+          "w": 720
+        }
+      ],
+      "captionPadding": 54,
+      "pros": 561,
+      "cons": 441
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 326,
+            "h": 200,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 200,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 200,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 326,
+            "h": 186,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 186,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 186,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 186,
+            "clipped": false
+          },
+          {
+            "w": 326,
+            "h": 186,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 32,
+          "w": 326
+        },
+        {
+          "x": 16,
+          "w": 358
+        },
+        {
+          "x": 16,
+          "w": 358
+        }
+      ],
+      "captionPadding": 96,
+      "pros": 769,
+      "cons": 625
+    },
+    {
+      "engine": "webkit",
+      "width": 320,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 256,
+            "h": 248,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 248,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 248,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 256,
+            "h": 210,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 210,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 210,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 210,
+            "clipped": false
+          },
+          {
+            "w": 256,
+            "h": 210,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 32,
+          "w": 256
+        },
+        {
+          "x": 16,
+          "w": 288
+        },
+        {
+          "x": 16,
+          "w": 288
+        }
+      ],
+      "captionPadding": 96,
+      "pros": 961,
+      "cons": 793
+    },
+    {
+      "engine": "webkit",
+      "width": 360,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 296,
+            "h": 224,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 224,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 224,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 296,
+            "h": 209,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 209,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 209,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 209,
+            "clipped": false
+          },
+          {
+            "w": 296,
+            "h": 209,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 32,
+          "w": 296
+        },
+        {
+          "x": 16,
+          "w": 328
+        },
+        {
+          "x": 16,
+          "w": 328
+        }
+      ],
+      "captionPadding": 96,
+      "pros": 865,
+      "cons": 697
+    },
+    {
+      "engine": "webkit",
+      "width": 768,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 80,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 89,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 56,
+          "w": 656
+        },
+        {
+          "x": 24,
+          "w": 720
+        },
+        {
+          "x": 24,
+          "w": 720
+        }
+      ],
+      "captionPadding": 54,
+      "pros": 561,
+      "cons": 441
+    },
+    {
+      "engine": "webkit",
+      "width": 1024,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 176,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 80,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 185,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 352,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 720,
+            "h": 89,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 184,
+          "w": 656
+        },
+        {
+          "x": 152,
+          "w": 720
+        },
+        {
+          "x": 152,
+          "w": 720
+        }
+      ],
+      "captionPadding": 54,
+      "pros": 561,
+      "cons": 441
+    },
+    {
+      "engine": "webkit",
+      "width": 1280,
+      "bodyOverflow": 0,
+      "cards": {
+        "services": [
+          {
+            "w": 389.328125,
+            "h": 168,
+            "clipped": false
+          },
+          {
+            "w": 389.328125,
+            "h": 168,
+            "clipped": false
+          },
+          {
+            "w": 389.328125,
+            "h": 168,
+            "clipped": false
+          }
+        ],
+        "additional": [
+          {
+            "w": 389.328125,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 389.328125,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 389.328125,
+            "h": 161,
+            "clipped": false
+          },
+          {
+            "w": 591.984375,
+            "h": 137,
+            "clipped": false
+          },
+          {
+            "w": 592,
+            "h": 137,
+            "clipped": false
+          }
+        ]
+      },
+      "readings": [
+        {
+          "x": 260,
+          "w": 760
+        },
+        {
+          "x": 260,
+          "w": 760
+        },
+        {
+          "x": 260,
+          "w": 760
+        }
+      ],
+      "captionPadding": 64,
+      "pros": 609,
+      "cons": 465
+    }
+  ]
+}

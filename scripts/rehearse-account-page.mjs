@@ -11,10 +11,15 @@ const { AdminAccountController } = require('../apps/api/dist/admin-account.contr
 const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js');
 const { PublicationWorkflowService } = require('../apps/api/dist/publication-workflow.service.js');
 const migration = readFileSync(new URL('../prisma/migrations/0067_account_page/migration.sql', import.meta.url), 'utf8');
+const oldGlobalScope = /ALTER TABLE "Page" ADD CONSTRAINT "Page_global_scope_check" CHECK \([\s\S]*?\n\);/;
+assert.ok(oldGlobalScope.test(migration), 'historical ACCOUNT scope statement must be identifiable');
+let currentGlobalScope;
 const container = `astro-account-${randomUUID().slice(0, 8)}`;
 const docker = (args, options = {}) => spawnSync('docker', args, { encoding: 'utf8', timeout: 120000, windowsHide: true, ...options });
 const checked = result => { assert.equal(result.status, 0, result.stderr || result.stdout || result.error?.message); return result.stdout.trim(); };
-const apply = () => docker(['exec', '-i', container, 'psql', '-U', 'postgres', '-d', 'provider', '-v', 'ON_ERROR_STOP=1'], { input: migration });
+// Replay the ACCOUNT backfill against the current schema without replacing the
+// newer global-scope guard owned by 0072. Existing OFFICIAL_SITE data must stay.
+const apply = () => docker(['exec', '-i', container, 'psql', '-U', 'postgres', '-d', 'provider', '-v', 'ON_ERROR_STOP=1'], { input: migration.replace(oldGlobalScope, `ALTER TABLE "Page" ADD CONSTRAINT "Page_global_scope_check" ${currentGlobalScope};`) });
 const json = value => JSON.parse(JSON.stringify(value));
 let db, owned = false;
 try {
@@ -31,6 +36,8 @@ try {
   const seed = () => checked(spawnSync(process.execPath, ['apps/api/dist/seed.js'], { env: { ...process.env, ADMIN_EMAIL: 'account-rehearsal@example.test', ADMIN_PASSWORD: 'synthetic-account-rehearsal-password' }, encoding: 'utf8', timeout: 30000, windowsHide: true }));
   seed();
   db = new PrismaService(); await db.onModuleInit();
+  currentGlobalScope = checked(docker(['exec', container, 'psql', '-U', 'postgres', '-d', 'provider', '-Atc', `SELECT pg_get_constraintdef(oid) FROM pg_constraint WHERE conname='Page_global_scope_check' AND conrelid='"Page"'::regclass`]));
+  assert.match(currentGlobalScope, /OFFICIAL_SITE/, 'fresh migration chain includes the latest global page kind');
   const site = await db.site.findUniqueOrThrow({ where: { slug: 'domru-site' } });
   const pageQuery = () => db.page.findFirstOrThrow({ where: { siteId: site.id, type: 'ACCOUNT' } });
   assert.deepEqual((await pageQuery()).content, accountPageDefaults(), 'fresh seed initializes ACCOUNT after migrations on empty DB');

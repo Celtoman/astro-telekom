@@ -300,3 +300,9 @@ POST `/:id/preview` под news, news/categories и POST `/editorial/:kind/previ
 ## Импорт новостей WordPress — T9
 
 POST `/admin/sites/:siteId/news/imports/wordpress` защищён AdminTokenGuard и принимает только `{sourceId,sourceHash,sourceUrl,category:{sourceId,content},content}`. Источник ограничен HTTPS tarify-dom.ru, slug исходного path совпадает с content.slug. Новый материал возвращает IMPORTED_DRAFT, revision1, categoryId, missingFields и pendingRedirect(active=false); статья/категория не публикуются. Повтор того же sourceHash возвращает SKIPPED_IDENTICAL/SKIPPED_ARCHIVED и текущую revision без перезаписи ручных правок; изменившийся источник, занятый slug и архивная/удаляемая категория дают409. Media проверяются до commit; сбой откатывает также новую категорию и историю. ID и sourceId уникальны внутри своего site. Импорт не создаёт SitePublication/Redirect и не меняет legacy revisions.
+
+## OFFICIAL_SITE — минимальный редактор
+
+`GET /admin/sites/:siteId/official-site` возвращает рабочий content, missingFields и ревизии с фактически обслуживаемой опубликованной версией. `PATCH` принимает только `{expectedWorkingRevision,content}`; атомарный guarded save сохраняет Page.content, ContentRevision и рабочую ревизию, без публикации. Устаревшая ревизия409 не перезаписывает данные.
+
+Content1.0.0: hero.h1/intro, officialUrl (HTTPS dom.ru), семь фиксированных images (src/alt/caption), FAQ1–50 пар. Разметка/цены/порядок/цвета/число карточек не редактируются. SEO отдельно. GLOBAL address suggestions/checks/leads поддерживают также canonical `official-site-domru`, с pageId этого serving snapshot, фактическим городом/регионом выбранного дома и существующим FLOW2; callback/tariff privileges не расширены. Generic Page create/PATCH не обходят предметный редактор.

@@ -693,6 +693,7 @@ exports.PublishStatus = exports.$Enums.PublishStatus = {
 };
 
 exports.SeoTemplateKind = exports.$Enums.SeoTemplateKind = {
+  OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
   HOME: 'HOME',
   COVERAGE: 'COVERAGE',
@@ -767,6 +768,7 @@ exports.CityOfficeState = exports.$Enums.CityOfficeState = {
 };
 
 exports.PageType = exports.$Enums.PageType = {
+  OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
   HOME: 'HOME',
   INTERNET: 'INTERNET',

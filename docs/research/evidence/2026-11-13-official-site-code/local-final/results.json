@@ -1,0 +1,1829 @@
+{
+  "url": "http://127.0.0.1:4399/official-site-domru",
+  "started": "2026-11-13T06:12:23.113Z",
+  "runs": [
+    {
+      "engine": "chromium",
+      "version": "157.0.4341.46",
+      "width": 1440,
+      "scrolls": [],
+      "layout": {
+        "client": 1440,
+        "body": 1440,
+        "height": 7340,
+        "blocks": [
+          {
+            "key": "hero",
+            "x": 40,
+            "y": 160,
+            "w": 1360,
+            "h": 532.8125
+          },
+          {
+            "key": "official-toc",
+            "x": 40,
+            "y": 716.8125,
+            "w": 1360,
+            "h": 44
+          },
+          {
+            "key": "home-block address-only",
+            "x": 40,
+            "y": 824.8125,
+            "w": 1360,
+            "h": 336
+          },
+          {
+            "key": "services",
+            "x": 40,
+            "y": 1224.8125,
+            "w": 1360,
+            "h": 1625.296875
+          },
+          {
+            "key": "constructor",
+            "x": 40,
+            "y": 2914.109375,
+            "w": 1360,
+            "h": 486
+          },
+          {
+            "key": "regional",
+            "x": 40,
+            "y": 3464.109375,
+            "w": 1360,
+            "h": 528
+          },
+          {
+            "key": "equipment",
+            "x": 40,
+            "y": 4056.109375,
+            "w": 1360,
+            "h": 438
+          },
+          {
+            "key": "additional",
+            "x": 40,
+            "y": 4558.109375,
+            "w": 1360,
+            "h": 750.875
+          },
+          {
+            "key": "pros-cons",
+            "x": 40,
+            "y": 5372.984375,
+            "w": 1360,
+            "h": 631
+          },
+          {
+            "key": "official-faq",
+            "x": 40,
+            "y": 6067.984375,
+            "w": 1360,
+            "h": 678
+          }
+        ],
+        "images": [
+          {
+            "slot": "hero",
+            "src": "/images/official-site/v1/hero-16c4c3a2c8d854e0.png",
+            "w": 1448,
+            "h": 1086,
+            "loaded": true
+          },
+          {
+            "slot": "menu",
+            "src": "/images/official-site/v1/menu-c7a9ad412cfdd31c.png",
+            "w": 1586,
+            "h": 105,
+            "loaded": true
+          },
+          {
+            "slot": "overview",
+            "src": "/images/official-site/v1/overview-c5da044f96e4e279.png",
+            "w": 1581,
+            "h": 862,
+            "loaded": true
+          },
+          {
+            "slot": "constructor",
+            "src": "/images/official-site/v1/constructor-2b2bfe8c4ac08b68.png",
+            "w": 1012,
+            "h": 348,
+            "loaded": true
+          },
+          {
+            "slot": "regional",
+            "src": "/images/official-site/v1/regional-281a0a4554144631.png",
+            "w": 1532,
+            "h": 611,
+            "loaded": true
+          },
+          {
+            "slot": "equipment",
+            "src": "/images/official-site/v1/equipment-6590634011bb2127.png",
+            "w": 1517,
+            "h": 442,
+            "loaded": true
+          },
+          {
+            "slot": "additional",
+            "src": "/images/official-site/v1/additional-ed816a01ede6c88a.png",
+            "w": 1814,
+            "h": 588,
+            "loaded": true
+          }
+        ],
+        "footer": {
+          "x": 0,
+          "y": 6777.984375,
+          "width": 1440,
+          "height": 562,
+          "top": 6777.984375,
+          "right": 1440,
+          "bottom": 7339.984375,
+          "left": 0
+        }
+      },
+      "geometry": [
+        {
+          "key": "hero",
+          "deltaH": -0.00347900390625,
+          "deltaW": 0
+        },
+        {
+          "key": "official-toc",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "home-block address-only",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "services",
+          "deltaH": -0.00927734375,
+          "deltaW": 0
+        },
+        {
+          "key": "constructor",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "regional",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "equipment",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "additional",
+          "deltaH": -0.00042724609375,
+          "deltaW": 0
+        },
+        {
+          "key": "pros-cons",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "official-faq",
+          "deltaH": 0,
+          "deltaW": 0
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "engine": "chromium",
+      "version": "157.0.4341.46",
+      "width": 834,
+      "scrolls": [],
+      "layout": {
+        "client": 834,
+        "body": 834,
+        "height": 9357,
+        "blocks": [
+          {
+            "key": "hero",
+            "x": 57,
+            "y": 152,
+            "w": 720,
+            "h": 990.4375
+          },
+          {
+            "key": "official-toc",
+            "x": 57,
+            "y": 1166.4375,
+            "w": 720,
+            "h": 96
+          },
+          {
+            "key": "home-block address-only",
+            "x": 57,
+            "y": 1326.4375,
+            "w": 720,
+            "h": 348
+          },
+          {
+            "key": "services",
+            "x": 57,
+            "y": 1738.4375,
+            "w": 720,
+            "h": 1361.96875
+          },
+          {
+            "key": "constructor",
+            "x": 57,
+            "y": 3164.40625,
+            "w": 720,
+            "h": 761.578125
+          },
+          {
+            "key": "regional",
+            "x": 57,
+            "y": 3989.984375,
+            "w": 720,
+            "h": 962.859375
+          },
+          {
+            "key": "equipment",
+            "x": 57,
+            "y": 5016.84375,
+            "w": 720,
+            "h": 697.703125
+          },
+          {
+            "key": "additional",
+            "x": 57,
+            "y": 5778.546875,
+            "w": 720,
+            "h": 1030.375
+          },
+          {
+            "key": "pros-cons",
+            "x": 57,
+            "y": 6872.921875,
+            "w": 720,
+            "h": 1104
+          },
+          {
+            "key": "official-faq",
+            "x": 57,
+            "y": 8040.921875,
+            "w": 720,
+            "h": 662
+          }
+        ],
+        "images": [
+          {
+            "slot": "hero",
+            "src": "/images/official-site/v1/hero-16c4c3a2c8d854e0.png",
+            "w": 1448,
+            "h": 1086,
+            "loaded": true
+          },
+          {
+            "slot": "menu",
+            "src": "/images/official-site/v1/menu-c7a9ad412cfdd31c.png",
+            "w": 1586,
+            "h": 105,
+            "loaded": true
+          },
+          {
+            "slot": "overview",
+            "src": "/images/official-site/v1/overview-c5da044f96e4e279.png",
+            "w": 1581,
+            "h": 862,
+            "loaded": true
+          },
+          {
+            "slot": "constructor",
+            "src": "/images/official-site/v1/constructor-2b2bfe8c4ac08b68.png",
+            "w": 1012,
+            "h": 348,
+            "loaded": true
+          },
+          {
+            "slot": "regional",
+            "src": "/images/official-site/v1/regional-281a0a4554144631.png",
+            "w": 1532,
+            "h": 611,
+            "loaded": true
+          },
+          {
+            "slot": "equipment",
+            "src": "/images/official-site/v1/equipment-6590634011bb2127.png",
+            "w": 1517,
+            "h": 442,
+            "loaded": true
+          },
+          {
+            "slot": "additional",
+            "src": "/images/official-site/v1/additional-ed816a01ede6c88a.png",
+            "w": 1814,
+            "h": 588,
+            "loaded": true
+          }
+        ],
+        "footer": {
+          "x": 0,
+          "y": 8734.921875,
+          "width": 834,
+          "height": 622,
+          "top": 8734.921875,
+          "right": 834,
+          "bottom": 9356.921875,
+          "left": 0
+        }
+      },
+      "geometry": [
+        {
+          "key": "hero",
+          "deltaH": -0.0155029296875,
+          "deltaW": 0
+        },
+        {
+          "key": "official-toc",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "home-block address-only",
+          "deltaH": -0.057098388671875,
+          "deltaW": 0
+        },
+        {
+          "key": "services",
+          "deltaH": -0.02294921875,
+          "deltaW": 0
+        },
+        {
+          "key": "constructor",
+          "deltaH": -0.01080322265625,
+          "deltaW": 0
+        },
+        {
+          "key": "regional",
+          "deltaH": -0.0126953125,
+          "deltaW": 0
+        },
+        {
+          "key": "equipment",
+          "deltaH": -0.0068359375,
+          "deltaW": 0
+        },
+        {
+          "key": "additional",
+          "deltaH": -0.009765625,
+          "deltaW": 0
+        },
+        {
+          "key": "pros-cons",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "official-faq",
+          "deltaH": 0,
+          "deltaW": 0
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "engine": "chromium",
+      "version": "157.0.4341.46",
+      "width": 390,
+      "scrolls": [
+        {
+          "key": "menu",
+          "cards": 0,
+          "input": "native touch",
+          "endReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "overview",
+          "cards": 0,
+          "input": "native touch",
+          "endReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "services",
+          "cards": 3,
+          "input": "native touch",
+          "allCardsReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "regional",
+          "cards": 0,
+          "input": "native touch",
+          "endReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "equipment",
+          "cards": 0,
+          "input": "native touch",
+          "endReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "additional",
+          "cards": 0,
+          "input": "native touch",
+          "endReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "additional",
+          "cards": 5,
+          "input": "native touch",
+          "allCardsReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        }
+      ],
+      "layout": {
+        "client": 390,
+        "body": 390,
+        "height": 11322,
+        "blocks": [
+          {
+            "key": "hero",
+            "x": 16,
+            "y": 132,
+            "w": 358,
+            "h": 926.921875
+          },
+          {
+            "key": "official-toc",
+            "x": 16,
+            "y": 1082.921875,
+            "w": 358,
+            "h": 200
+          },
+          {
+            "key": "home-block address-only",
+            "x": 16,
+            "y": 1330.921875,
+            "w": 358,
+            "h": 386
+          },
+          {
+            "key": "services",
+            "x": 16,
+            "y": 1764.921875,
+            "w": 358,
+            "h": 1919.875
+          },
+          {
+            "key": "constructor",
+            "x": 16,
+            "y": 3732.796875,
+            "w": 358,
+            "h": 772.09375
+          },
+          {
+            "key": "regional",
+            "x": 16,
+            "y": 4552.890625,
+            "w": 358,
+            "h": 1189.859375
+          },
+          {
+            "key": "equipment",
+            "x": 16,
+            "y": 5790.75,
+            "w": 358,
+            "h": 892.703125
+          },
+          {
+            "key": "additional",
+            "x": 16,
+            "y": 6731.453125,
+            "w": 358,
+            "h": 1102.90625
+          },
+          {
+            "key": "pros-cons",
+            "x": 16,
+            "y": 7882.359375,
+            "w": 358,
+            "h": 1500
+          },
+          {
+            "key": "official-faq",
+            "x": 16,
+            "y": 9430.359375,
+            "w": 358,
+            "h": 786
+          }
+        ],
+        "images": [
+          {
+            "slot": "hero",
+            "src": "/images/official-site/v1/hero-16c4c3a2c8d854e0.png",
+            "w": 1448,
+            "h": 1086,
+            "loaded": true
+          },
+          {
+            "slot": "menu",
+            "src": "/images/official-site/v1/menu-c7a9ad412cfdd31c.png",
+            "w": 1586,
+            "h": 105,
+            "loaded": true
+          },
+          {
+            "slot": "overview",
+            "src": "/images/official-site/v1/overview-c5da044f96e4e279.png",
+            "w": 1581,
+            "h": 862,
+            "loaded": true
+          },
+          {
+            "slot": "constructor",
+            "src": "/images/official-site/v1/constructor-2b2bfe8c4ac08b68.png",
+            "w": 1012,
+            "h": 348,
+            "loaded": true
+          },
+          {
+            "slot": "regional",
+            "src": "/images/official-site/v1/regional-281a0a4554144631.png",
+            "w": 1532,
+            "h": 611,
+            "loaded": true
+          },
+          {
+            "slot": "equipment",
+            "src": "/images/official-site/v1/equipment-6590634011bb2127.png",
+            "w": 1517,
+            "h": 442,
+            "loaded": true
+          },
+          {
+            "slot": "additional",
+            "src": "/images/official-site/v1/additional-ed816a01ede6c88a.png",
+            "w": 1814,
+            "h": 588,
+            "loaded": true
+          }
+        ],
+        "footer": {
+          "x": 0,
+          "y": 10240.359375,
+          "width": 390,
+          "height": 1082,
+          "top": 10240.359375,
+          "right": 390,
+          "bottom": 11322.359375,
+          "left": 0
+        }
+      },
+      "geometry": [
+        {
+          "key": "hero",
+          "deltaH": -0.00335693359375,
+          "deltaW": 0
+        },
+        {
+          "key": "official-toc",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "home-block address-only",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "services",
+          "deltaH": -0.012451171875,
+          "deltaW": 0
+        },
+        {
+          "key": "constructor",
+          "deltaH": -0.012939453125,
+          "deltaW": 0
+        },
+        {
+          "key": "regional",
+          "deltaH": -0.0126953125,
+          "deltaW": 0
+        },
+        {
+          "key": "equipment",
+          "deltaH": -0.0068359375,
+          "deltaW": 0
+        },
+        {
+          "key": "additional",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "pros-cons",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "official-faq",
+          "deltaH": 0,
+          "deltaW": 0
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "engine": "chromium",
+      "version": "157.0.4341.46",
+      "width": 320,
+      "scrolls": [
+        {
+          "key": "menu",
+          "cards": 0,
+          "input": "native touch",
+          "endReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "overview",
+          "cards": 0,
+          "input": "native touch",
+          "endReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "services",
+          "cards": 3,
+          "input": "native touch",
+          "allCardsReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "regional",
+          "cards": 0,
+          "input": "native touch",
+          "endReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "equipment",
+          "cards": 0,
+          "input": "native touch",
+          "endReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "additional",
+          "cards": 0,
+          "input": "native touch",
+          "endReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        },
+        {
+          "key": "additional",
+          "cards": 5,
+          "input": "native touch",
+          "allCardsReached": true,
+          "vertical": {
+            "status": "PASS",
+            "verticalDelta": 155,
+            "horizontalDelta": 0
+          }
+        }
+      ],
+      "layout": {
+        "client": 320,
+        "body": 320,
+        "height": 12879,
+        "blocks": [
+          {
+            "key": "hero",
+            "x": 16,
+            "y": 132,
+            "w": 288,
+            "h": 977.375
+          },
+          {
+            "key": "official-toc",
+            "x": 16,
+            "y": 1133.375,
+            "w": 288,
+            "h": 304
+          },
+          {
+            "key": "home-block address-only",
+            "x": 16,
+            "y": 1485.375,
+            "w": 288,
+            "h": 435
+          },
+          {
+            "key": "services",
+            "x": 16,
+            "y": 1968.375,
+            "w": 288,
+            "h": 2140.875
+          },
+          {
+            "key": "constructor",
+            "x": 16,
+            "y": 4157.25,
+            "w": 288,
+            "h": 869.03125
+          },
+          {
+            "key": "regional",
+            "x": 16,
+            "y": 5074.28125,
+            "w": 288,
+            "h": 1386.859375
+          },
+          {
+            "key": "equipment",
+            "x": 16,
+            "y": 6509.140625,
+            "w": 288,
+            "h": 1065.703125
+          },
+          {
+            "key": "additional",
+            "x": 16,
+            "y": 7622.84375,
+            "w": 288,
+            "h": 1218.90625
+          },
+          {
+            "key": "pros-cons",
+            "x": 16,
+            "y": 8889.75,
+            "w": 288,
+            "h": 1889
+          },
+          {
+            "key": "official-faq",
+            "x": 16,
+            "y": 10826.75,
+            "w": 288,
+            "h": 906
+          }
+        ],
+        "images": [
+          {
+            "slot": "hero",
+            "src": "/images/official-site/v1/hero-16c4c3a2c8d854e0.png",
+            "w": 1448,
+            "h": 1086,
+            "loaded": true
+          },
+          {
+            "slot": "menu",
+            "src": "/images/official-site/v1/menu-c7a9ad412cfdd31c.png",
+            "w": 1586,
+            "h": 105,
+            "loaded": true
+          },
+          {
+            "slot": "overview",
+            "src": "/images/official-site/v1/overview-c5da044f96e4e279.png",
+            "w": 1581,
+            "h": 862,
+            "loaded": true
+          },
+          {
+            "slot": "constructor",
+            "src": "/images/official-site/v1/constructor-2b2bfe8c4ac08b68.png",
+            "w": 1012,
+            "h": 348,
+            "loaded": true
+          },
+          {
+            "slot": "regional",
+            "src": "/images/official-site/v1/regional-281a0a4554144631.png",
+            "w": 1532,
+            "h": 611,
+            "loaded": true
+          },
+          {
+            "slot": "equipment",
+            "src": "/images/official-site/v1/equipment-6590634011bb2127.png",
+            "w": 1517,
+            "h": 442,
+            "loaded": true
+          },
+          {
+            "slot": "additional",
+            "src": "/images/official-site/v1/additional-ed816a01ede6c88a.png",
+            "w": 1814,
+            "h": 588,
+            "loaded": true
+          }
+        ],
+        "footer": {
+          "x": 0,
+          "y": 11756.75,
+          "width": 320,
+          "height": 1122,
+          "top": 11756.75,
+          "right": 320,
+          "bottom": 12878.75,
+          "left": 0
+        }
+      },
+      "geometry": [
+        {
+          "key": "hero",
+          "deltaH": -0.0062255859375,
+          "deltaW": 0
+        },
+        {
+          "key": "official-toc",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "home-block address-only",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "services",
+          "deltaH": -0.012451171875,
+          "deltaW": 0
+        },
+        {
+          "key": "constructor",
+          "deltaH": -0.00433349609375,
+          "deltaW": 0
+        },
+        {
+          "key": "regional",
+          "deltaH": -0.0126953125,
+          "deltaW": 0
+        },
+        {
+          "key": "equipment",
+          "deltaH": -0.0068359375,
+          "deltaW": 0
+        },
+        {
+          "key": "additional",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "pros-cons",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "official-faq",
+          "deltaH": 0,
+          "deltaW": 0
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "width": 1440,
+      "scrolls": [],
+      "layout": {
+        "client": 1440,
+        "body": 1440,
+        "height": 7340,
+        "blocks": [
+          {
+            "key": "hero",
+            "x": 40,
+            "y": 160,
+            "w": 1360,
+            "h": 532.8125
+          },
+          {
+            "key": "official-toc",
+            "x": 40,
+            "y": 716.8125,
+            "w": 1360,
+            "h": 44
+          },
+          {
+            "key": "home-block address-only",
+            "x": 40,
+            "y": 824.8125,
+            "w": 1360,
+            "h": 336
+          },
+          {
+            "key": "services",
+            "x": 40,
+            "y": 1224.8125,
+            "w": 1360,
+            "h": 1625.296875
+          },
+          {
+            "key": "constructor",
+            "x": 40,
+            "y": 2914.109375,
+            "w": 1360,
+            "h": 486
+          },
+          {
+            "key": "regional",
+            "x": 40,
+            "y": 3464.109375,
+            "w": 1360,
+            "h": 528
+          },
+          {
+            "key": "equipment",
+            "x": 40,
+            "y": 4056.109375,
+            "w": 1360,
+            "h": 438
+          },
+          {
+            "key": "additional",
+            "x": 40,
+            "y": 4558.109375,
+            "w": 1360,
+            "h": 750.875
+          },
+          {
+            "key": "pros-cons",
+            "x": 40,
+            "y": 5372.984375,
+            "w": 1360,
+            "h": 631
+          },
+          {
+            "key": "official-faq",
+            "x": 40,
+            "y": 6067.984375,
+            "w": 1360,
+            "h": 678
+          }
+        ],
+        "images": [
+          {
+            "slot": "hero",
+            "src": "/images/official-site/v1/hero-16c4c3a2c8d854e0.png",
+            "w": 1448,
+            "h": 1086,
+            "loaded": true
+          },
+          {
+            "slot": "menu",
+            "src": "/images/official-site/v1/menu-c7a9ad412cfdd31c.png",
+            "w": 1586,
+            "h": 105,
+            "loaded": true
+          },
+          {
+            "slot": "overview",
+            "src": "/images/official-site/v1/overview-c5da044f96e4e279.png",
+            "w": 1581,
+            "h": 862,
+            "loaded": true
+          },
+          {
+            "slot": "constructor",
+            "src": "/images/official-site/v1/constructor-2b2bfe8c4ac08b68.png",
+            "w": 1012,
+            "h": 348,
+            "loaded": true
+          },
+          {
+            "slot": "regional",
+            "src": "/images/official-site/v1/regional-281a0a4554144631.png",
+            "w": 1532,
+            "h": 611,
+            "loaded": true
+          },
+          {
+            "slot": "equipment",
+            "src": "/images/official-site/v1/equipment-6590634011bb2127.png",
+            "w": 1517,
+            "h": 442,
+            "loaded": true
+          },
+          {
+            "slot": "additional",
+            "src": "/images/official-site/v1/additional-ed816a01ede6c88a.png",
+            "w": 1814,
+            "h": 588,
+            "loaded": true
+          }
+        ],
+        "footer": {
+          "x": 0,
+          "y": 6777.984375,
+          "width": 1440,
+          "height": 562,
+          "top": 6777.984375,
+          "right": 1440,
+          "bottom": 7339.984375,
+          "left": 0
+        }
+      },
+      "geometry": [
+        {
+          "key": "hero",
+          "deltaH": -0.00347900390625,
+          "deltaW": 0
+        },
+        {
+          "key": "official-toc",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "home-block address-only",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "services",
+          "deltaH": -0.00927734375,
+          "deltaW": 0
+        },
+        {
+          "key": "constructor",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "regional",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "equipment",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "additional",
+          "deltaH": -0.00042724609375,
+          "deltaW": 0
+        },
+        {
+          "key": "pros-cons",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "official-faq",
+          "deltaH": 0,
+          "deltaW": 0
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "width": 834,
+      "scrolls": [],
+      "layout": {
+        "client": 834,
+        "body": 834,
+        "height": 9357,
+        "blocks": [
+          {
+            "key": "hero",
+            "x": 57,
+            "y": 152,
+            "w": 720,
+            "h": 990.4375
+          },
+          {
+            "key": "official-toc",
+            "x": 57,
+            "y": 1166.4375,
+            "w": 720,
+            "h": 96
+          },
+          {
+            "key": "home-block address-only",
+            "x": 57,
+            "y": 1326.4375,
+            "w": 720,
+            "h": 348
+          },
+          {
+            "key": "services",
+            "x": 57,
+            "y": 1738.4375,
+            "w": 720,
+            "h": 1361.96875
+          },
+          {
+            "key": "constructor",
+            "x": 57,
+            "y": 3164.40625,
+            "w": 720,
+            "h": 761.578125
+          },
+          {
+            "key": "regional",
+            "x": 57,
+            "y": 3989.984375,
+            "w": 720,
+            "h": 962.859375
+          },
+          {
+            "key": "equipment",
+            "x": 57,
+            "y": 5016.84375,
+            "w": 720,
+            "h": 697.703125
+          },
+          {
+            "key": "additional",
+            "x": 57,
+            "y": 5778.546875,
+            "w": 720,
+            "h": 1030.375
+          },
+          {
+            "key": "pros-cons",
+            "x": 57,
+            "y": 6872.921875,
+            "w": 720,
+            "h": 1104
+          },
+          {
+            "key": "official-faq",
+            "x": 57,
+            "y": 8040.921875,
+            "w": 720,
+            "h": 662
+          }
+        ],
+        "images": [
+          {
+            "slot": "hero",
+            "src": "/images/official-site/v1/hero-16c4c3a2c8d854e0.png",
+            "w": 1448,
+            "h": 1086,
+            "loaded": true
+          },
+          {
+            "slot": "menu",
+            "src": "/images/official-site/v1/menu-c7a9ad412cfdd31c.png",
+            "w": 1586,
+            "h": 105,
+            "loaded": true
+          },
+          {
+            "slot": "overview",
+            "src": "/images/official-site/v1/overview-c5da044f96e4e279.png",
+            "w": 1581,
+            "h": 862,
+            "loaded": true
+          },
+          {
+            "slot": "constructor",
+            "src": "/images/official-site/v1/constructor-2b2bfe8c4ac08b68.png",
+            "w": 1012,
+            "h": 348,
+            "loaded": true
+          },
+          {
+            "slot": "regional",
+            "src": "/images/official-site/v1/regional-281a0a4554144631.png",
+            "w": 1532,
+            "h": 611,
+            "loaded": true
+          },
+          {
+            "slot": "equipment",
+            "src": "/images/official-site/v1/equipment-6590634011bb2127.png",
+            "w": 1517,
+            "h": 442,
+            "loaded": true
+          },
+          {
+            "slot": "additional",
+            "src": "/images/official-site/v1/additional-ed816a01ede6c88a.png",
+            "w": 1814,
+            "h": 588,
+            "loaded": true
+          }
+        ],
+        "footer": {
+          "x": 0,
+          "y": 8734.921875,
+          "width": 834,
+          "height": 622,
+          "top": 8734.921875,
+          "right": 834,
+          "bottom": 9356.921875,
+          "left": 0
+        }
+      },
+      "geometry": [
+        {
+          "key": "hero",
+          "deltaH": -0.0155029296875,
+          "deltaW": 0
+        },
+        {
+          "key": "official-toc",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "home-block address-only",
+          "deltaH": -0.057098388671875,
+          "deltaW": 0
+        },
+        {
+          "key": "services",
+          "deltaH": -0.02294921875,
+          "deltaW": 0
+        },
+        {
+          "key": "constructor",
+          "deltaH": -0.01080322265625,
+          "deltaW": 0
+        },
+        {
+          "key": "regional",
+          "deltaH": -0.0126953125,
+          "deltaW": 0
+        },
+        {
+          "key": "equipment",
+          "deltaH": -0.0068359375,
+          "deltaW": 0
+        },
+        {
+          "key": "additional",
+          "deltaH": -0.009765625,
+          "deltaW": 0
+        },
+        {
+          "key": "pros-cons",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "official-faq",
+          "deltaH": 0,
+          "deltaW": 0
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "width": 390,
+      "scrolls": [
+        {
+          "key": "menu",
+          "cards": 0,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "overview",
+          "cards": 0,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "services",
+          "cards": 3,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "regional",
+          "cards": 0,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "equipment",
+          "cards": 0,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "additional",
+          "cards": 0,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "additional",
+          "cards": 5,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        }
+      ],
+      "layout": {
+        "client": 390,
+        "body": 390,
+        "height": 11322,
+        "blocks": [
+          {
+            "key": "hero",
+            "x": 16,
+            "y": 132,
+            "w": 358,
+            "h": 926.921875
+          },
+          {
+            "key": "official-toc",
+            "x": 16,
+            "y": 1082.921875,
+            "w": 358,
+            "h": 200
+          },
+          {
+            "key": "home-block address-only",
+            "x": 16,
+            "y": 1330.921875,
+            "w": 358,
+            "h": 386
+          },
+          {
+            "key": "services",
+            "x": 16,
+            "y": 1764.921875,
+            "w": 358,
+            "h": 1919.859375
+          },
+          {
+            "key": "constructor",
+            "x": 16,
+            "y": 3732.78125,
+            "w": 358,
+            "h": 772.09375
+          },
+          {
+            "key": "regional",
+            "x": 16,
+            "y": 4552.875,
+            "w": 358,
+            "h": 1189.859375
+          },
+          {
+            "key": "equipment",
+            "x": 16,
+            "y": 5790.734375,
+            "w": 358,
+            "h": 892.703125
+          },
+          {
+            "key": "additional",
+            "x": 16,
+            "y": 6731.4375,
+            "w": 358,
+            "h": 1102.90625
+          },
+          {
+            "key": "pros-cons",
+            "x": 16,
+            "y": 7882.34375,
+            "w": 358,
+            "h": 1500
+          },
+          {
+            "key": "official-faq",
+            "x": 16,
+            "y": 9430.34375,
+            "w": 358,
+            "h": 786
+          }
+        ],
+        "images": [
+          {
+            "slot": "hero",
+            "src": "/images/official-site/v1/hero-16c4c3a2c8d854e0.png",
+            "w": 1448,
+            "h": 1086,
+            "loaded": true
+          },
+          {
+            "slot": "menu",
+            "src": "/images/official-site/v1/menu-c7a9ad412cfdd31c.png",
+            "w": 1586,
+            "h": 105,
+            "loaded": true
+          },
+          {
+            "slot": "overview",
+            "src": "/images/official-site/v1/overview-c5da044f96e4e279.png",
+            "w": 1581,
+            "h": 862,
+            "loaded": true
+          },
+          {
+            "slot": "constructor",
+            "src": "/images/official-site/v1/constructor-2b2bfe8c4ac08b68.png",
+            "w": 1012,
+            "h": 348,
+            "loaded": true
+          },
+          {
+            "slot": "regional",
+            "src": "/images/official-site/v1/regional-281a0a4554144631.png",
+            "w": 1532,
+            "h": 611,
+            "loaded": true
+          },
+          {
+            "slot": "equipment",
+            "src": "/images/official-site/v1/equipment-6590634011bb2127.png",
+            "w": 1517,
+            "h": 442,
+            "loaded": true
+          },
+          {
+            "slot": "additional",
+            "src": "/images/official-site/v1/additional-ed816a01ede6c88a.png",
+            "w": 1814,
+            "h": 588,
+            "loaded": true
+          }
+        ],
+        "footer": {
+          "x": 0,
+          "y": 10240.34375,
+          "width": 390,
+          "height": 1082,
+          "top": 10240.34375,
+          "right": 390,
+          "bottom": 11322.34375,
+          "left": 0
+        }
+      },
+      "geometry": [
+        {
+          "key": "hero",
+          "deltaH": -0.00335693359375,
+          "deltaW": 0
+        },
+        {
+          "key": "official-toc",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "home-block address-only",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "services",
+          "deltaH": -0.028076171875,
+          "deltaW": 0
+        },
+        {
+          "key": "constructor",
+          "deltaH": -0.012939453125,
+          "deltaW": 0
+        },
+        {
+          "key": "regional",
+          "deltaH": -0.0126953125,
+          "deltaW": 0
+        },
+        {
+          "key": "equipment",
+          "deltaH": -0.0068359375,
+          "deltaW": 0
+        },
+        {
+          "key": "additional",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "pros-cons",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "official-faq",
+          "deltaH": 0,
+          "deltaW": 0
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "width": 320,
+      "scrolls": [
+        {
+          "key": "menu",
+          "cards": 0,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "overview",
+          "cards": 0,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "services",
+          "cards": 3,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "regional",
+          "cards": 0,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "equipment",
+          "cards": 0,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "additional",
+          "cards": 0,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        },
+        {
+          "key": "additional",
+          "cards": 5,
+          "input": "native wheel+keyboard",
+          "keyboardMoved": true
+        }
+      ],
+      "layout": {
+        "client": 320,
+        "body": 320,
+        "height": 12879,
+        "blocks": [
+          {
+            "key": "hero",
+            "x": 16,
+            "y": 132,
+            "w": 288,
+            "h": 977.375
+          },
+          {
+            "key": "official-toc",
+            "x": 16,
+            "y": 1133.375,
+            "w": 288,
+            "h": 304
+          },
+          {
+            "key": "home-block address-only",
+            "x": 16,
+            "y": 1485.375,
+            "w": 288,
+            "h": 435
+          },
+          {
+            "key": "services",
+            "x": 16,
+            "y": 1968.375,
+            "w": 288,
+            "h": 2140.859375
+          },
+          {
+            "key": "constructor",
+            "x": 16,
+            "y": 4157.234375,
+            "w": 288,
+            "h": 869.03125
+          },
+          {
+            "key": "regional",
+            "x": 16,
+            "y": 5074.265625,
+            "w": 288,
+            "h": 1386.859375
+          },
+          {
+            "key": "equipment",
+            "x": 16,
+            "y": 6509.125,
+            "w": 288,
+            "h": 1065.703125
+          },
+          {
+            "key": "additional",
+            "x": 16,
+            "y": 7622.828125,
+            "w": 288,
+            "h": 1218.90625
+          },
+          {
+            "key": "pros-cons",
+            "x": 16,
+            "y": 8889.734375,
+            "w": 288,
+            "h": 1889
+          },
+          {
+            "key": "official-faq",
+            "x": 16,
+            "y": 10826.734375,
+            "w": 288,
+            "h": 906
+          }
+        ],
+        "images": [
+          {
+            "slot": "hero",
+            "src": "/images/official-site/v1/hero-16c4c3a2c8d854e0.png",
+            "w": 1448,
+            "h": 1086,
+            "loaded": true
+          },
+          {
+            "slot": "menu",
+            "src": "/images/official-site/v1/menu-c7a9ad412cfdd31c.png",
+            "w": 1586,
+            "h": 105,
+            "loaded": true
+          },
+          {
+            "slot": "overview",
+            "src": "/images/official-site/v1/overview-c5da044f96e4e279.png",
+            "w": 1581,
+            "h": 862,
+            "loaded": true
+          },
+          {
+            "slot": "constructor",
+            "src": "/images/official-site/v1/constructor-2b2bfe8c4ac08b68.png",
+            "w": 1012,
+            "h": 348,
+            "loaded": true
+          },
+          {
+            "slot": "regional",
+            "src": "/images/official-site/v1/regional-281a0a4554144631.png",
+            "w": 1532,
+            "h": 611,
+            "loaded": true
+          },
+          {
+            "slot": "equipment",
+            "src": "/images/official-site/v1/equipment-6590634011bb2127.png",
+            "w": 1517,
+            "h": 442,
+            "loaded": true
+          },
+          {
+            "slot": "additional",
+            "src": "/images/official-site/v1/additional-ed816a01ede6c88a.png",
+            "w": 1814,
+            "h": 588,
+            "loaded": true
+          }
+        ],
+        "footer": {
+          "x": 0,
+          "y": 11756.734375,
+          "width": 320,
+          "height": 1122,
+          "top": 11756.734375,
+          "right": 320,
+          "bottom": 12878.734375,
+          "left": 0
+        }
+      },
+      "geometry": [
+        {
+          "key": "hero",
+          "deltaH": -0.0062255859375,
+          "deltaW": 0
+        },
+        {
+          "key": "official-toc",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "home-block address-only",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "services",
+          "deltaH": -0.028076171875,
+          "deltaW": 0
+        },
+        {
+          "key": "constructor",
+          "deltaH": -0.00433349609375,
+          "deltaW": 0
+        },
+        {
+          "key": "regional",
+          "deltaH": -0.0126953125,
+          "deltaW": 0
+        },
+        {
+          "key": "equipment",
+          "deltaH": -0.0068359375,
+          "deltaW": 0
+        },
+        {
+          "key": "additional",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "pros-cons",
+          "deltaH": 0,
+          "deltaW": 0
+        },
+        {
+          "key": "official-faq",
+          "deltaH": 0,
+          "deltaW": 0
+        }
+      ],
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "limits": [
+    "Browser emulation; no physical-device or assistive-technology certification",
+    "No real application or notification submitted"
+  ]
+}

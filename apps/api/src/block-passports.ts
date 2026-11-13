@@ -1,3 +1,4 @@
+import { OFFICIAL_SITE_PAGE_PASSPORTS } from './official-site-page-passports';
 import { BLOCK_TYPES } from './block-validation';
 import { GENERAL_HOME_PASSPORTS } from './general-home-passports';
 import { CITY_HOME_PASSPORTS } from './city-home-passports';
@@ -299,5 +300,6 @@ export const BLOCK_PASSPORTS: readonly BlockPassport[] = [
   ...CITY_HOME_PASSPORTS,
   ...ADDRESS_PAGE_PASSPORTS,
   ...ACCOUNT_PAGE_PASSPORTS,
+  ...OFFICIAL_SITE_PAGE_PASSPORTS,
   ...programmaticPassports,
 ].map(approvedFirstScreen);

@@ -116,3 +116,7 @@ ADDRESS публикуется общей ручной CMS-публикацие�
 ## ACCOUNT и сохранность старых снимков
 
 Пять обязательных global pages сохраняются. ACCOUNT — дополнительная глобальная страница только при наличии валидной PUBLISHED-записи данного snapshot; новый ACCOUNT добавляет ровно+1 URL. CODE rebuild старого snapshot её не создаёт. Preflight проверяет схему до/после SITE-переменных FAQ, даёт ошибку с template=ACCOUNT и адресным полем; разрешённые поля ведут в `/templates/account`. Редактор сохраняет только рабочую ревизию. Build gate проверяет все14 изображений: allowlist HTTPS/DNS public+IP pinning, отсутствие redirect, MIME/размер/full decode/SHA256, копирование удалённых bytes под artifact prefix. Ошибка нового изображения не активирует новый artifact. CMS-активация требует отдельного review полного working diff; чужие изменения не публикуются автоматически.
+
+## OFFICIAL_SITE — дополнительный общий маршрут
+
+OFFICIAL_SITE опционален, как ACCOUNT: старые snapshots не расширяются. Миграция0072 меняет только working source; CODE не активирует новую Page. Семь изображений проверяются тем же безопасным download/decode/digest gate; snapshot/digest остаются неизменными. Перед общей CMS-активацией проверяется полный working diff; чужие drafts требуют отдельного решения. Владелец разрешил исходные факты/иллюстрации для защищённого test с последующей отдельной публичной актуализацией. [Принятый план](plans/2026-11-12-official-site-implementation-plan.md).

@@ -10,16 +10,16 @@ export const RELEASE_ONE_GLOBAL_PAGES = [
 ] as const;
 
 export type ReleaseOneGlobalPageType = typeof RELEASE_ONE_GLOBAL_PAGES[number]['type'];
-export const OPTIONAL_GLOBAL_PAGES = [{ type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }] as const;
+export const OPTIONAL_GLOBAL_PAGES = [{ type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }, { type: 'OFFICIAL_SITE', slug: 'official-site-domru' }] as const;
 export const SUPPORTED_GLOBAL_PAGES = [...RELEASE_ONE_GLOBAL_PAGES, ...OPTIONAL_GLOBAL_PAGES] as const;
 
 export type LegacyPublicRoute = {
-  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | ReleaseOneGlobalPageType | 'ACCOUNT';
+  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE';
   kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'GLOBAL_PAGE';
   path: string;
   citySlug?: string;
   tariffSlug?: string;
-  pageType?: ReleaseOneGlobalPageType | 'ACCOUNT';
+  pageType?: ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE';
 };
 export type PublicRoute = LegacyPublicRoute | (NewsRoute & {citySlug?:never;tariffSlug?:never;pageType?:never});
 export function isLegacyPublicRoute(route:PublicRoute):route is LegacyPublicRoute {return route.kind!=='NEWS_LIST'&&route.kind!=='NEWS_ARTICLE'&&route.kind!=='NEWS_CATEGORY'}
@@ -39,7 +39,7 @@ export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: Gl
   const occupiedPaths = new Set(['/']);
   for (const expected of SUPPORTED_GLOBAL_PAGES) {
     const page = pagesByType.get(expected.type);
-    if (!page && expected.type === 'ACCOUNT') continue;
+    if (!page && OPTIONAL_GLOBAL_PAGES.some(p => p.type === expected.type)) continue;
     if (!page) throw new Error(`Не опубликована обязательная общая страница Release 1: ${expected.type}`);
     if (page.slug !== expected.slug) {
       throw new Error(`Некорректный slug общей страницы ${expected.type}: ожидается ${expected.slug}`);

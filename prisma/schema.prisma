@@ -14,6 +14,7 @@ enum PublishStatus {
 }
 
 enum PageType {
+  OFFICIAL_SITE
   ACCOUNT
   HOME
   INTERNET
@@ -30,6 +31,7 @@ enum PageType {
 }
 
 enum SeoTemplateKind {
+  OFFICIAL_SITE
   ACCOUNT
   HOME
   COVERAGE

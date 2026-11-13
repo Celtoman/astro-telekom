@@ -16,6 +16,7 @@ import { AddressChecksController } from './address-checks.controller';
 import { AdminCitiesController } from './admin-cities.controller';
 import { AdminPagesController } from './admin-pages.controller';
 import { AdminAccountController } from './admin-account.controller';
+import { AdminOfficialSiteController } from './admin-official-site.controller';
 import { AdminTariffsController } from './admin-tariffs.controller';
 import { CrmLeadsController } from './crm-leads.controller';
 import { PublicLeadsController } from './public-leads.controller';
@@ -87,6 +88,7 @@ import { CodeReleaseService } from './code-release.service';
     AdminCitiesController,
     AdminPagesController,
     AdminAccountController,
+    AdminOfficialSiteController,
     AdminTariffsController,
     CrmLeadsController,
     PublicLeadsController,

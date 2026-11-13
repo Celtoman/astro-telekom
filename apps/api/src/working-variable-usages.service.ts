@@ -1,3 +1,4 @@
+import { OFFICIAL_SITE_PAGE_SCHEMA } from './official-site-page-model';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { ACCOUNT_PAGE_SCHEMA } from './account-page-model';
 import { Prisma } from '../generated';
@@ -72,6 +73,7 @@ export class WorkingVariableUsagesService {
         const path = `workingPages[${index}]`;
         const owner = { entityType: 'PAGE' as const, entityId: page.id, pageType: page.type, cityId: page.cityId ?? undefined, lifecycleStatus: page.status, editorHref: null };
         recordText(page.title, `${path}.title`, owner, usages);
+        if (page.type === 'OFFICIAL_SITE') { recordStructured(page.content, OFFICIAL_SITE_PAGE_SCHEMA, `${path}.content`, { ...owner, editorHref: '/templates/official-site' }, usages); }
         if (page.type === 'ACCOUNT') {
           recordStructured(page.content, ACCOUNT_PAGE_SCHEMA, `${path}.content`, { ...owner, editorHref: '/templates/account' }, usages);
           continue;

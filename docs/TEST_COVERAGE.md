@@ -382,3 +382,16 @@ OG-сценарий в `tests/web-build-data.test.mjs` дополнительн�
 Позитивные fixtures `static-publication-builder.test.mjs` и `rehearse-static-publication.mjs` получают положительный disk probe и не зависят от остатка места после других Docker suites. Нулевая/граничная ёмкость проверяется отдельно, а production runtime сохраняет native statfs и 8 ГиБ; это не отключение guard в приложении.
 
 Linux CI42399889710 для a761d6c: 1085pass,0fail,0skip; полный gate прошёл.
+## OFFICIAL_SITE — проверки переноса
+
+| Файл | Что проверяется |
+| --- | --- |
+| `tests/official-site-contract.test.cjs` | Строгая минимальная схема7слотов/8начальных FAQ, безопасный draft, разрешение SITE-переменных, неизменность source, optional canonical route/коллизии и GLOBAL source страницы |
+| `tests/official-site-api.test.cjs` | Собственный serving pageId, город+регион по дому, запрет чужого address-check/callback/tariff privileges, idempotent lead, guarded save409, рабочая/обслуживаемая версии при RUNNING или недоступности controller |
+| `tests/official-site-render.test.mjs` | Семь иллюстраций, восемь native FAQ и принятые переходы в runtime/preview; профиль футера сохраняет общие действия и не меняет default-профиль остальных страниц |
+| `tests/official-site-build.test.mjs` | Реальная immutable Astro-сборка, ровно+1URL поверх ACCOUNT,7assets/7scroll areas/8FAQ, повреждённый asset не портит предыдущие artifacts |
+| `tests/official-site-data.test.cjs` | Точное совпадение migration payload с принятыми defaults и автоматический PostgreSQL rehearsal сохранности данных, снимков и отката canonical collisions |
+| `scripts/rehearse-official-site.mjs` | Изолированный PostgreSQL18: миграции/seed, повторное применение, сохранность authored data и historical publications, отдельный provider, атомарное сохранение и откат трёх canonical collisions |
+| `scripts/qa/official-site.mjs` | Chromium/WebKit1440/834/390/320, точная геометрия, реальные touch/wheel/keyboard inputs,7мобильных областей,3+5карточек, возврат/вертикальная прокрутка и FAQ; реальные заявки не отправляются |
+
+Исторический ACCOUNT rehearsal повторяет backfill0067 на текущей схеме, сохраняя актуальный Page_global_scope_check из БД и уже существующую OFFICIAL_SITE. Свежий seed проверяет11маршрутов (с одним синтетическим тарифом) и11SEO-шаблонов. Полная цепочка0071/0072 отдельно выполняется настоящим PostgreSQL rehearsal OFFICIAL_SITE.

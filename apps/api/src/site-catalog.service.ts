@@ -1,3 +1,4 @@
+import { validateOfficialSitePage } from './official-site-page';
 import { projectCityHomeBlocks } from './tariff-collection-model';
 import { validateAccountPage } from './account-page';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
@@ -156,7 +157,7 @@ export class SiteCatalogService {
       provider: { name: site.provider.name },
       now,
     });
-    for (const page of resolved.globalPages) if (page.type === 'ACCOUNT') validateAccountPage(page.content);
+    for (const page of resolved.globalPages) { if (page.type === 'ACCOUNT') validateAccountPage(page.content); if (page.type === 'OFFICIAL_SITE') validateOfficialSitePage(page.content); }
     const seo = resolveSeoTemplates({
       routes,
       templates: seoTemplates,
@@ -224,6 +225,7 @@ export class SiteCatalogService {
   }
 
   pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string) {
+    if (page.type === 'OFFICIAL_SITE') { validateOfficialSitePage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'ACCOUNT') { validateAccountPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'HOME' && cityName) { page = { ...page, blocks: projectCityHomeBlocks(page.blocks || []) }; validateCityHomeBlocks(page.blocks, cityName, page.content?.homeCompositionVersion); }
     else if (page.type === 'ADDRESS_CHECK' && page.content?.addressCheckCompositionVersion) validateAddressPageComposition(page.blocks.map(({ blockType, data }: any) => ({ blockType, data })), { version: page.content.addressCheckCompositionVersion });

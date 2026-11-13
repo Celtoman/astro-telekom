@@ -1,4 +1,6 @@
 ---
+import OfficialSitePage from '../../components/official-site/OfficialSitePage.astro';
+import type {OfficialSitePageContent} from '../../../../api/src/official-site-page-model';
 import AccountPage from '../../components/account/AccountPage.astro';
 import type { AccountPageContent } from '../../../../api/src/account-page-model';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -8,29 +10,31 @@ import CityHomeComposition from '../../components/city-home/CityHomeComposition.
 import { cityHomeImageOrigins } from '../../data/general-home';
 import { loadSiteData, pageMeta, seoMeta, publicSiteSlug, type CityView, type SiteView, type PageView } from '../../data/site';
 
-interface Props { city?: CityView; site: SiteView; account?: PageView }
+interface Props { city?: CityView; site: SiteView; account?: PageView; official?: PageView }
 
 export async function getStaticPaths() {
   const { cities, site, globalPages } = await loadSiteData();
   const paths: Array<{ params: { city: string }; props: Props }> = cities.map((city) => ({ params: { city: city.slug }, props: { city, site } }));
   const account = globalPages.find(page => page.type === 'ACCOUNT');
   if (account) paths.push({ params: { city: account.slug }, props: { account, site } });
+  const official=globalPages.find(page=>page.type==='OFFICIAL_SITE');
+  if(official) paths.push({params:{city:official.slug},props:{official,site}});
   return paths;
 }
 
-const { city, site, account } = Astro.props as Props;
+const { city, site, account, official } = Astro.props as Props;
 const homePage = city?.pages.find((page) => page.type === 'HOME' && page.slug === '');
-if (!account && !homePage) throw new Error(`Не опубликована HOME города «${city?.name}»`);
-const meta = seoMeta(await loadSiteData(), account ? `/${account.slug}` : `/${city!.slug}`, pageMeta(account?.title || `Домашний интернет в ${city?.nameIn}`, account ? 'Вход и инструкции личного кабинета Дом.ру.' : `Тарифы домашнего интернета, телевидения и подключения в ${city?.nameIn}.`));
+if (!official && !account && !homePage) throw new Error(`Не опубликована HOME города «${city?.name}»`);
+const meta = seoMeta(await loadSiteData(), official ? `/${official.slug}` : account ? `/${account.slug}` : `/${city!.slug}`, pageMeta(official?.title || account?.title || `Домашний интернет в ${city?.nameIn}`, account ? 'Вход и инструкции личного кабинета Дом.ру.' : `Тарифы домашнего интернета, телевидения и подключения в ${city?.nameIn}.`));
 const heroBlock = homePage?.blocks?.find((block) => block.blockType === 'hero');
-if (!account && !heroBlock) throw new Error(`HOME города «${city?.name}» не содержит hero канонического шаблона`);
+if (!official && !account && !heroBlock) throw new Error(`HOME города «${city?.name}» не содержит hero канонического шаблона`);
 const contentBlocks = homePage?.blocks?.filter((block) => block.blockType !== 'hero') || [];
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 const imageOrigins = cityHomeImageOrigins(homePage?.blocks ?? []);
 ---
 
-<BaseLayout title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} firstScreenImage={account ? (account.content as unknown as AccountPageContent).images.heroLogin.src : heroBlock?.data.image} {imageOrigins} indexable={meta.indexState !== 'NOINDEX'} city={city} pages={city?.pages} {site}>
-  {account ? <AccountPage content={account.content as unknown as AccountPageContent} {site} {apiUrl} /> : city && homePage && heroBlock ? <>
+<BaseLayout title={meta.title} description={meta.description} ogTitle={meta.ogTitle} ogDescription={meta.ogDescription} ogImage={meta.ogImage} firstScreenImage={official ? (official.content as unknown as OfficialSitePageContent).images.hero.src : account ? (account.content as unknown as AccountPageContent).images.heroLogin.src : heroBlock?.data.image} {imageOrigins} indexable={meta.indexState !== 'NOINDEX'} city={city} pages={city?.pages} {site}>
+  {official ? <OfficialSitePage content={official.content as unknown as OfficialSitePageContent} {site} {apiUrl}/> : account ? <AccountPage content={account.content as unknown as AccountPageContent} {site} {apiUrl} /> : city && homePage && heroBlock ? <>
   {homePage.content?.homeCompositionVersion === '3.0.0' ? <CityHomeComposition page={homePage} {city} {site} {apiUrl} cities={(await loadSiteData()).cities} /> : <>
   <CityHomeFirstScreen block={heroBlock} {city} {site} tariffs={city.tariffs} {apiUrl} siteSlug={publicSiteSlug} pageSlug={homePage.slug} />
   <BlockRenderer
