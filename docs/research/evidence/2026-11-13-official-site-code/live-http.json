@@ -1,0 +1,60 @@
+{
+  "checkedAt": "2026-11-13T08:18:10.117Z",
+  "unauthenticatedStatus": 401,
+  "status": 200,
+  "robots": "noindex, nofollow",
+  "canonical": "<link rel=\"canonical\" href=\"https://tv-internet-dom.ru/official-site-domru\">",
+  "assets": [
+    {
+      "slot": "hero",
+      "path": "/__publication_assets/feecfcbddd2dbe857d7e171e881d84206f83aff71f661065f51a3f30033cfcdb/images/official-site/v1/hero-16c4c3a2c8d854e0.png",
+      "status": 200,
+      "type": "image/png",
+      "bytes": 1359552
+    },
+    {
+      "slot": "menu",
+      "path": "/__publication_assets/feecfcbddd2dbe857d7e171e881d84206f83aff71f661065f51a3f30033cfcdb/images/official-site/v1/menu-c7a9ad412cfdd31c.png",
+      "status": 200,
+      "type": "image/png",
+      "bytes": 8290
+    },
+    {
+      "slot": "overview",
+      "path": "/__publication_assets/feecfcbddd2dbe857d7e171e881d84206f83aff71f661065f51a3f30033cfcdb/images/official-site/v1/overview-c5da044f96e4e279.png",
+      "status": 200,
+      "type": "image/png",
+      "bytes": 289143
+    },
+    {
+      "slot": "constructor",
+      "path": "/__publication_assets/feecfcbddd2dbe857d7e171e881d84206f83aff71f661065f51a3f30033cfcdb/images/official-site/v1/constructor-2b2bfe8c4ac08b68.png",
+      "status": 200,
+      "type": "image/png",
+      "bytes": 77126
+    },
+    {
+      "slot": "regional",
+      "path": "/__publication_assets/feecfcbddd2dbe857d7e171e881d84206f83aff71f661065f51a3f30033cfcdb/images/official-site/v1/regional-281a0a4554144631.png",
+      "status": 200,
+      "type": "image/png",
+      "bytes": 210963
+    },
+    {
+      "slot": "equipment",
+      "path": "/__publication_assets/feecfcbddd2dbe857d7e171e881d84206f83aff71f661065f51a3f30033cfcdb/images/official-site/v1/equipment-6590634011bb2127.png",
+      "status": 200,
+      "type": "image/png",
+      "bytes": 48903
+    },
+    {
+      "slot": "additional",
+      "path": "/__publication_assets/feecfcbddd2dbe857d7e171e881d84206f83aff71f661065f51a3f30033cfcdb/images/official-site/v1/additional-ed816a01ede6c88a.png",
+      "status": 200,
+      "type": "image/png",
+      "bytes": 68293
+    }
+  ],
+  "sitemapStatus": 200,
+  "inSitemap": true
+}

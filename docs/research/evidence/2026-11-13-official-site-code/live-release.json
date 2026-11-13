@@ -1,0 +1,197 @@
+{
+  "checkedAt": "2026-11-13T08:23:55.111Z",
+  "commit": "e20e8a896936cd2647165c61cc58d031f42ed953",
+  "ci": {
+    "id": 43386744518,
+    "status": "completed",
+    "conclusion": "success",
+    "tests": {
+      "pass": 1101,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "coolify": {
+    "applicationUuid": "jlrsktdos9yhchkgnrd9f5fj",
+    "deploymentUuid": "zjhhy9eaeyc1zmgbxk15ex7s",
+    "deploymentStatus": "finished",
+    "finishedAt": "2026-11-13T07:54:06Z",
+    "applicationStatus": "running:healthy"
+  },
+  "code": {
+    "http": 200,
+    "body": {
+      "status": "SUCCEEDED",
+      "artifactId": "d54ce89d029c00aa3867810c8823148761a1c9e5510bc602b91343a3b9b18c42",
+      "publicationId": "cmw7umvfy001l01nxvbdrcahn",
+      "siteId": "cmtuaqqj1000107lkiiiia2xa",
+      "siteRevision": 29,
+      "rendererId": "fad26f5ca1f6d9ca3beed831a264632529b3bfa76b13ba1dc16d67d2a79f9361",
+      "catalogDigest": "f7abb7410bc8ec66df29bcf3f32d0150ba9a2ca7e8ebf846c21294e9d030a970",
+      "releaseSequence": 28,
+      "basePublicationId": "cmw7uf504001501nxho348hxn",
+      "rebuildId": "code-69db369fcdae1f01beeac66ec6d6bf93210bfc3384293edc9d5bed28adeb0442",
+      "rebuildRevision": 1,
+      "manifestDigest": "e6c7ee95369c86460fe3f94b6ff4a196c4c48043d4e156cb8a95e069eaa27872"
+    }
+  },
+  "preactivation": {
+    "workingRevision": 30,
+    "publishedRevision": 29,
+    "totalChanges": 1,
+    "changes": [
+      {
+        "id": "official_site_revision_7cb2f5eb91716ceb6419c6e15fe1a747",
+        "siteRevision": 30,
+        "entityType": "PAGE",
+        "entityId": "official_site_page_e2124e97458f4ccc6280a94b4e435b08",
+        "action": "CREATE",
+        "changedFields": [
+          "content",
+          "slug",
+          "status"
+        ],
+        "source": "migration:0072:official_site",
+        "createdAt": "2026-11-13T07:53:46.604Z",
+        "subject": "Официальный сайт",
+        "textChanges": []
+      }
+    ],
+    "validation": {
+      "outcome": "PASSED",
+      "issues": [],
+      "checkedUrlCount": 4242
+    },
+    "comparison": {
+      "pageOrderChanged": true,
+      "projection": "Same public fields as CitiesController; five private usage/warning metadata keys removed",
+      "beforeRoutes": 4241,
+      "afterRoutes": 4242,
+      "cities": 207,
+      "tariffs": 3805,
+      "addedRoutes": [
+        {
+          "id": "OFFICIAL_SITE",
+          "kind": "GLOBAL_PAGE",
+          "path": "/official-site-domru",
+          "pageType": "OFFICIAL_SITE"
+        }
+      ],
+      "unrelatedChangedSections": [],
+      "beforeHash": "b2c71136ce9d49bacc1991fed9606c38ab050790608dff89397bff11ac7f8964",
+      "remainingHash": "b2c71136ce9d49bacc1991fed9606c38ab050790608dff89397bff11ac7f8964",
+      "matches": true
+    },
+    "acceptedContentHash": "c65d0d13d6db1ea5a8e1e5d7236f779290c9968913005cc5a04f5442bb009af8",
+    "matchesAcceptedDefaults": true
+  },
+  "activation": {
+    "http": 201,
+    "publication": {
+      "id": "cmwep5tx0000301modif9sg7q",
+      "siteRevision": 30,
+      "releaseSequence": 29,
+      "basePublicationId": "cmw7umvfy001l01nxvbdrcahn"
+    }
+  },
+  "state": {
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "workingRevision": 30,
+    "publishedRevision": 30,
+    "hasUnpublishedChanges": false,
+    "latestPublication": {
+      "id": "cmwep5tx0000301modif9sg7q",
+      "siteRevision": 30,
+      "status": "SUCCEEDED",
+      "triggerEntity": "site",
+      "triggerEntityId": "cmtuaqqj1000107lkiiiia2xa",
+      "requestedById": "cmtuaqr0b000n07lkpte6ezh2",
+      "validationId": "cmwep5rdo000201mo8y39kbov",
+      "lastError": null,
+      "providerDeploymentId": null,
+      "createdAt": "2026-11-13T08:10:33.780Z",
+      "updatedAt": "2026-11-13T08:16:29.655Z",
+      "publishedAt": "2026-11-13T08:16:29.651Z"
+    },
+    "latestValidation": {
+      "id": "cmwep5rdo000201mo8y39kbov",
+      "siteRevision": 30,
+      "appVersion": "0.1.0",
+      "outcome": "PASSED",
+      "checkedUrlCount": 4242,
+      "requestedById": "cmtuaqr0b000n07lkpte6ezh2",
+      "validatedAt": "2026-11-13T08:10:18.086Z"
+    },
+    "rebuild": {
+      "id": "cmtw6dpwj015g01o0ho99ow05",
+      "status": "SUCCEEDED",
+      "requestedRevision": 34,
+      "processingRevision": 34,
+      "publishedRevision": 34,
+      "requestedPublicationId": "cmwep5tx0000301modif9sg7q",
+      "processingPublicationId": "cmwep5tx0000301modif9sg7q",
+      "publishedPublicationId": "cmwep5tx0000301modif9sg7q",
+      "attempts": 1,
+      "maxAttempts": 3,
+      "lastError": null,
+      "providerStatus": "SUCCEEDED",
+      "providerDeploymentId": null,
+      "queuedAt": "2026-11-13T08:10:36.232Z",
+      "startedAt": "2026-11-13T08:16:09.291Z",
+      "completedAt": "2026-11-13T08:16:28.984Z",
+      "updatedAt": "2026-11-13T08:16:28.988Z"
+    },
+    "progress": {
+      "runId": "616b7dc3-807f-4451-a221-7a16500be05c",
+      "stage": "PREPARING",
+      "stages": {
+        "PREPARING": {
+          "startedAt": "2026-11-13T08:16:09.291Z"
+        },
+        "CONFIRMING": {
+          "completedAt": "2026-11-13T08:16:28.984Z"
+        }
+      },
+      "version": 1,
+      "revision": 34,
+      "sequence": 0,
+      "startedAt": "2026-11-13T08:10:36.784Z",
+      "updatedAt": "2026-11-13T08:16:09.291Z",
+      "completedAt": "2026-11-13T08:16:28.984Z",
+      "publicationId": "cmwep5tx0000301modif9sg7q",
+      "sampleEligible": false,
+      "estimate": null,
+      "overdue": false,
+      "elapsedSeconds": 352,
+      "stale": false
+    }
+  },
+  "publicCatalogComparison": {
+    "pageOrderChanged": true,
+    "projection": "Same public fields as CitiesController; five private usage/warning metadata keys removed",
+    "beforeRoutes": 4241,
+    "afterRoutes": 4242,
+    "cities": 207,
+    "tariffs": 3805,
+    "addedRoutes": [
+      {
+        "id": "OFFICIAL_SITE",
+        "kind": "GLOBAL_PAGE",
+        "path": "/official-site-domru",
+        "pageType": "OFFICIAL_SITE"
+      }
+    ],
+    "unrelatedChangedSections": [],
+    "beforeHash": "b2c71136ce9d49bacc1991fed9606c38ab050790608dff89397bff11ac7f8964",
+    "remainingHash": "b2c71136ce9d49bacc1991fed9606c38ab050790608dff89397bff11ac7f8964",
+    "matches": true,
+    "acceptedContentHash": "c65d0d13d6db1ea5a8e1e5d7236f779290c9968913005cc5a04f5442bb009af8",
+    "matchesAcceptedDefaults": true
+  },
+  "normalization": "Only globalPages collection order aligned by id after exact object equality; nested arrays and all other public data preserve order.",
+  "limitations": [
+    "External CMS UI sign-in/iframe not verified due IAB Basic Auth pending/failure. Read-only API successful; local UI/preview tests separate.",
+    "Native wheel and keyboard live; physical touch/AT not tested.",
+    "Full address/lead flow verified locally with synthetic API only; no real leads or notifications."
+  ]
+}

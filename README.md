@@ -105,4 +105,4 @@ pnpm dev:worker
 
 Единая версия ведётся в корневом `package.json`. `pnpm release:dry-run` показывает предполагаемые изменения; `pnpm release` вручную создаёт version/changelog commit и тег в `master`. Push, выпуск кода и допуск трафика выполняются по правилам [AGENTS.md](AGENTS.md) и [плана релизов](docs/release-plan.md).
 
-OFFICIAL_SITE: `/official-site-domru` переносится из принятых Screens в отдельный тип общей страницы с минимальной CMS. [План и границы test-выпуска](docs/plans/2026-11-12-official-site-implementation-plan.md).
+OFFICIAL_SITE: `/official-site-domru` перенесён из принятых Screens в отдельный тип общей страницы с минимальной CMS и активирован в защищённом test-контуре. Четыре ширины и нативная прокрутка проверены во встроенном браузере; внешняя визуальная проверка CMS ограничена авторизацией этого браузера. [Результат и границы проверки](docs/research/2026-11-13-official-site-code-and-test.md).

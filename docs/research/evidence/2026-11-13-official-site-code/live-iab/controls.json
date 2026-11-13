@@ -1,0 +1,42 @@
+[
+  {
+    "width": 1440,
+    "toc": {
+      "focused": true,
+      "top": -0.46875
+    },
+    "faqOpened": true,
+    "faqClosed": true,
+    "submitDisabled": true
+  },
+  {
+    "width": 834,
+    "toc": {
+      "focused": true,
+      "top": 0.40625
+    },
+    "faqOpened": true,
+    "faqClosed": true,
+    "submitDisabled": true
+  },
+  {
+    "width": 390,
+    "toc": {
+      "focused": true,
+      "top": 0.03125
+    },
+    "faqOpened": true,
+    "faqClosed": true,
+    "submitDisabled": true
+  },
+  {
+    "width": 320,
+    "toc": {
+      "focused": true,
+      "top": 0.484375
+    },
+    "faqOpened": true,
+    "faqClosed": true,
+    "submitDisabled": true
+  }
+]

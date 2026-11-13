@@ -221,4 +221,4 @@ ADDRESS-выпуск4 ноября подтверждён exact-SHA CI, finished
 
 ## OFFICIAL_SITE — additive migrations0071/0072
 
-На 13 ноября2026 в коде 72 каталога миграций; текущая цепочка включает `0071_official_site_kind` и `0072_official_site_page`: enum PageType/SeoTemplateKind и рабочая общая Page с canonical guard, уникальностью на сайт, SEO и audit/revision. Immutable published snapshots не переписываются. Test deployment и CMS-активация — отдельные проверяемые операции; отсутствие чужих working changes сверяется непосредственно перед активацией.
+На 13 ноября2026 в коде 72 каталога миграций; текущая цепочка включает `0071_official_site_kind` и `0072_official_site_page`: enum PageType/SeoTemplateKind и рабочая общая Page с canonical guard, уникальностью на сайт, SEO и audit/revision. Immutable published snapshots не переписываются. Test deployment, CODE и CMS-активация выполнены отдельно; перед активацией полный diff содержал только OFFICIAL_SITE. Итог30/30, SUCCEEDED; сохранены207городов/3805тарифов, добавлен один маршрут. [Протокол, SHA и ограничения браузерной проверки](research/2026-11-13-official-site-code-and-test.md).
