@@ -101,7 +101,8 @@ test('preview uses saved grid title and the full public tariff model for raw cat
 });
 
 test('preview includes current header, footer and shared legal sections', () => {
-  const root = buildPreviewDocument(catalog, '/');
+  const source = { ...catalog, routes: [...catalog.routes, { kind: 'GLOBAL_PAGE', path: '/goroda-obsluzhivaniya', pageType: 'CITIES' }] };
+  const root = buildPreviewDocument(source, '/');
   for (const value of ['Города обслуживания', 'Техническая поддержка', 'Заказать звонок', 'Политика cookie']) assert.ok(root.includes(value), value);
   const legal = buildPreviewDocument(catalog, '/politika');
   assert.match(legal, /165038398334/);

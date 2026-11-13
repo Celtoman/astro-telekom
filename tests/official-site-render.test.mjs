@@ -16,9 +16,12 @@ test('runtime and read-only preview preserve the accepted content and use native
  assert.match(live,/href="https:\/\/tarify-dom.ru\/wifi-router"/);
  assert.match(live,/href="https:\/\/tarify-dom.ru\/movix"/);
 });
-test('OFFICIAL_SITE footer profile preserves shared actions and does not change the default profile',()=>{
+test('OFFICIAL_SITE uses the same shared footer as every other page',()=>{
  const site={name:'Дом.ру',slug:'domru-site',connectionPhone:'78005557244',supportPhone:'78002507777'};
- const before=renderHomeFooter(site),accepted=renderHomeFooter(site,{footerProfile:'OFFICIAL_SITE'}),after=renderHomeFooter(site);
- assert.equal(before,after);assert.doesNotMatch(before,/official-site-footer|Телевидение/);assert.match(accepted,/official-site-footer/);assert.match(accepted,/Телевидение/);assert.match(accepted,/Оборудование/);assert.match(accepted,/data-callback-trigger/);assert.match(accepted,/data-city-choice-trigger/);
- assert.doesNotMatch(accepted,/figma\.com/);
+ const options={city:{slug:'moscow',name:'Москва'},footerRoutes:[{path:'/official-site-domru'}]};
+ const footer=renderHomeFooter(site,options);
+ assert.equal(footer,renderHomeFooter(site,{...options,localSections:['faq','tariffs','movix']}));
+ assert.doesNotMatch(footer,/official-site-footer|Телевидение|Оборудование/);
+ assert.match(footer,/href="\/official-site-domru"/);
+ assert.match(footer,/data-callback-trigger/);
 });

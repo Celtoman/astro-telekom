@@ -388,7 +388,7 @@ Linux CI42399889710 для a761d6c: 1085pass,0fail,0skip; полный gate пр
 | --- | --- |
 | `tests/official-site-contract.test.cjs` | Строгая минимальная схема7слотов/8начальных FAQ, безопасный draft, разрешение SITE-переменных, неизменность source, optional canonical route/коллизии и GLOBAL source страницы |
 | `tests/official-site-api.test.cjs` | Собственный serving pageId, город+регион по дому, запрет чужого address-check/callback/tariff privileges, idempotent lead, guarded save409, рабочая/обслуживаемая версии при RUNNING или недоступности controller |
-| `tests/official-site-render.test.mjs` | Семь иллюстраций, восемь native FAQ и принятые переходы в runtime/preview; профиль футера сохраняет общие действия и не меняет default-профиль остальных страниц |
+| `tests/official-site-render.test.mjs` | Семь иллюстраций, восемь native FAQ и принятые переходы в runtime/preview; OFFICIAL_SITE использует тот же сквозной футер, что и остальные страницы, без изменения menu из-за localSections |
 | `tests/official-site-build.test.mjs` | Реальная immutable Astro-сборка, ровно+1URL поверх ACCOUNT,7assets/7scroll areas/8FAQ, повреждённый asset не портит предыдущие artifacts |
 | tests/official-site-owner-fixes.test.mjs | Согласованные тексты/alt и отсутствие Hero caption/ссылки у plain URL; восемь телефонных ссылок FAQ; guarded corporatePhone с сохранением settings и stale-write отказом; динамический CORPORATE_PHONE; независимость рабочего и immutable опубликованного значения. |
 | `tests/official-site-data.test.cjs` | Точное совпадение migration payload с принятыми defaults и автоматический PostgreSQL rehearsal сохранности данных, снимков и отката canonical collisions |
@@ -400,3 +400,6 @@ Linux CI42399889710 для a761d6c: 1085pass,0fail,0skip; полный gate пр
 Дополнение #590: положительный Docker runtime rehearsal изолирует statfs capacity временным Node preload только в собственном disposable container. Настоящий образ, runtime CLI, non-root, CODE/CMS и restart recovery сохранены; отдельный smoke проверяет применение preload. Production и `requireBuildSpace` продолжают использовать native statfs/8ГиБ, нулевой/граничный объём и ошибки probe проверяются `static-publication-builder.test.mjs`.
 
 Дополнение #591: PostgreSQL OFFICIAL_SITE rehearsal проверяет точное содержимое AuditEvent.changes — initializedOfficialSite и preservedPublishedSnapshots.
+
+
+- `tests/site-footer-navigation.test.mjs`: три сценария единого13-пунктного меню, canonical city URL на всех страницах, отсутствия фиктивных TV/equipment ссылок, фильтрации глобальных страниц по снимку, выбора города без подстановки и общего неактивного CMS preview. `admin-preview-ui` проверяет города с явно доступным CITIES-маршрутом в fixture.

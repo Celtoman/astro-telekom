@@ -43,6 +43,7 @@
   .gh-footer { display: flex; flex-direction: column; align-items: stretch; gap: 32px; padding: 48px 40px 32px; background: #18202a; color: #fff; }
   .gh-footer-content { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; min-height: 140px; }
   .gh-footer .gh-brand { width: 151.833px; height: 50px; }
+  .gh-footer-group-stack { display: contents; }
   .gh-footer-column { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-width: 0; font-size: 14px; line-height: 20px; }
   .gh-footer-column > strong { font-weight: 600; }
   .gh-footer-column a, .gh-footer-column button { display: block; max-width: 100%; padding: 0; border: 0; background: none; color: #fff; font-size: 14px; font-weight: 400; line-height: 20px; text-align: left; overflow-wrap: anywhere; }
@@ -58,9 +59,9 @@
   .gh-footer-legal > div { display: flex; flex-wrap: wrap; gap: 0 12px; width: 430px; }
   .gh-footer-legal span { display: inline; }
   .gh-contact-strip { display: grid; grid-template-columns: 1fr 1fr 224px; align-items: center; gap: 24px; }
-  .gh-contact-strip > div { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-width: 0; }
+  .gh-contact-strip > div { display: flex; flex-direction: column; align-items: flex-start; gap: 0; min-width: 0; }
   .gh-contact-strip strong { font-size: 14px; font-weight: 600; line-height: 20px; }
-  .gh-contact-strip a { font-size: 24px; font-weight: 700; line-height: 29px; letter-spacing: -.5px; overflow-wrap: anywhere; }
+  .gh-contact-strip a { display: flex; align-items: center; min-height: 44px; font-size: 24px; font-weight: 700; line-height: 29px; letter-spacing: -.5px; overflow-wrap: anywhere; }
   .gh-contact-strip span { font-size: 14px; line-height: 20px; color: #cbd5e1; overflow-wrap: anywhere; }
   .gh-contact-mobile-hours, .gh-contact-mobile-label { display: none; }
   .gh-footer-apply { min-width: 0; max-width: 100%; min-height: 48px; padding: 14px 24px; border: 0; border-radius: 14px; background: #e0231e; color: #fff; font-size: 14px; font-weight: 600; line-height: 20px; overflow-wrap: anywhere; }
@@ -95,9 +96,11 @@
     .gh-footer-apply { justify-self: stretch; }
     .gh-footer-content { gap: 16px; }
     .gh-footer .gh-brand { width: 109.32px; height: 36px; }
-    .gh-footer-services, .gh-footer-help { width: 150px; }
+    .gh-footer-group-stack { display: flex; flex-direction: column; gap: 24px; width: 180px; }
+    .gh-footer-services, .gh-footer-clients { width: 180px; }
+    .gh-footer-help { width: 190px; }
     .gh-footer-contact { width: 190px; }
-    .gh-footer-clients, .gh-desktop-services, .gh-desktop-help { display: none; }
+    .gh-desktop-services, .gh-desktop-help { display: none; }
     .gh-tablet-services, .gh-tablet-help { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
     .gh-footer-legal { display: contents; }
     .gh-footer-legal p, .gh-footer-legal > div { width: 100%; font-size: 14px; line-height: 20px; }
@@ -124,7 +127,7 @@
     .gh-phone-copy { max-width: 140px; }
     .gh-menu { padding: 24px 20px; }
     .gh-footer { gap: 24px; padding: 32px 16px; }
-    .gh-contact-strip { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .gh-contact-strip { grid-template-columns: minmax(0, 1fr); gap: 16px; }
     .gh-contact-strip a { font-size: 22px; line-height: 27px; letter-spacing: 0; }
     .gh-contact-strip .gh-contact-hours, .gh-contact-desktop-label { display: none; }
     .gh-contact-mobile-label, .gh-contact-mobile-hours { display: inline; }
@@ -133,11 +136,10 @@
     .gh-footer-legal nav { flex-direction: column; gap: 0; }
     .gh-footer-legal nav a { display: flex; align-items: center; min-height: 44px; }
     .gh-footer-content { display: contents; }
-    .gh-footer-column { display: none; }
+    .gh-footer-group-stack, .gh-footer-column { display: none; }
     .gh-footer-mobile-links { display: flex; flex-direction: column; align-items: flex-start; gap: 0; }
     .gh-footer-mobile-links a, .gh-footer-mobile-links button { max-width: 100%; padding: 0; border: 0; background: none; color: #fff; font-size: 14px; line-height: 20px; text-align: left; overflow-wrap: anywhere; }
-    .gh-footer-mobile-links :is(a, button) { display: flex; align-items: center; min-height: 32px; padding-block: 6px; }
-    .gh-footer-mobile-links > :nth-last-child(-n+2) { min-height: 44px; margin-top: 12px; }
+    .gh-footer-mobile-links :is(a, button) { display: flex; align-items: center; min-height: 44px; padding-block: 12px; }
     .gh-footer-mobile-contact { display: contents; }
     .gh-footer-mobile-contact a { font-size: 20px; font-weight: 700; line-height: 25px; letter-spacing: -.2px; overflow-wrap: anywhere; }
     .gh-footer-mobile-contact > span { font-size: 12px; line-height: 16px; }

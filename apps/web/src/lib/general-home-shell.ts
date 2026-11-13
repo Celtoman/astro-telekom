@@ -2,9 +2,10 @@ import { homeHtml, type HomeRenderOptions } from './general-home-render.ts';
 import { publicDisplayForCatalog, publicPhoneLabel, compactConnectionHours } from './public-display.ts';
 import type { SitePublicDisplay } from '../../../api/src/site-public-display-model.ts';
 import { cityServicePath } from './city-context.mjs';
+import { siteFooterGroups } from './site-footer-navigation.ts';
 
 interface ShellSite { name: string; slug: string; connectionPhone: string; supportPhone: string; connectionHours?: string; callbackWithinMinutes?: number; publicDisplay?: SitePublicDisplay }
-export interface HomeShellOptions extends HomeRenderOptions { city?: { slug: string; name: string }; addressDialogId?: string | null; routeCity?: string; localSections?: string[]; addressPageSlug?: string; citySwitchPath?: string; footerProfile?: 'OFFICIAL_SITE' }
+export interface HomeShellOptions extends HomeRenderOptions { city?: { slug: string; name: string }; addressDialogId?: string | null; routeCity?: string; localSections?: string[]; addressPageSlug?: string; citySwitchPath?: string; footerRoutes?: readonly { path: string }[] }
 const phoneHref = (phone: string) => {
   const href = `tel:${phone.replace(/[^+\d]/g, '')}`;
   if (!/^tel:\+?[0-9]{10,15}$/.test(href)) throw new Error('Некорректный телефон сайта.');
@@ -45,16 +46,21 @@ export function renderHomeHeader(site: ShellSite, options: HomeShellOptions = {}
 export function renderHomeFooter(site: ShellSite, options: HomeShellOptions = {}): string {
   checkSite(site, options);
   const display = publicDisplayForCatalog(site);
-  const accepted = options.footerProfile === 'OFFICIAL_SITE';
-  const equipment = link('Оборудование', '#official-equipment', options);
-  const services = `${service(accepted ? '<span class="official-footer-long">Домашний интернет</span><span class="official-footer-short">Интернет</span>' : 'Домашний интернет', 'internet', options)}${service('Интернет + ТВ', 'internet_tv', options)}${accepted ? service('Телевидение','tv',options)+`<span class="official-footer-tablet-equipment">${equipment}</span>` : ''}`;
-  const tariffs = anchor('Тарифы', 'tariffs', options), address = anchor('Проверить адрес', 'address-check', options, ' data-address-focus');
-  const contacts = options.city ? link('Контакты', `/${options.city.slug}#contacts`, options, ' data-city-context-anchor="contacts"') : anchor('Контакты', 'contacts', options);
-  const questions = anchor(accepted ? '<span class="official-footer-long">Популярные вопросы</span><span class="official-footer-short">FAQ</span>' : 'Популярные вопросы', 'faq', options), movix = accepted ? equipment : anchor('О Movix', 'movix', options);
-  const support = link('Техническая поддержка', phoneHref(site.supportPhone), options), cities = link('Города обслуживания', '/goroda-obsluzhivaniya', options);
+  // Footer destinations are canonical for the selected city, independent of
+  // the current page's local anchors (the header keeps its existing behavior).
+  const footerOptions = { ...options, localSections: [] };
+  const groups = siteFooterGroups.map(group => ({ ...group, links: group.items
+    .filter(item => !('path' in item) || (options.footerRoutes
+      ? options.footerRoutes.some(route => route.path === item.path)
+      : 'required' in item))
+    .map(item => 'service' in item ? service(item.label, item.service, footerOptions)
+      : 'anchor' in item ? anchor(item.label, item.anchor, footerOptions, item.anchor === 'address-check' ? ' data-address-focus' : '')
+      : 'path' in item ? link(item.label, item.path, footerOptions)
+      : link(item.label, phoneHref(site.supportPhone), footerOptions)).join('') }));
+  const columns = groups.map(group => `<div class="gh-footer-column ${group.className}"><strong>${group.title}</strong>${group.links}</div>`);
   const connection = link(homeHtml(publicPhoneLabel(site.connectionPhone)), phoneHref(site.connectionPhone), options), supportPhone = link(homeHtml(publicPhoneLabel(site.supportPhone)), phoneHref(site.supportPhone), options);
   const apply = button(homeHtml(display.footerCtaText), options, ' data-callback-trigger aria-haspopup="dialog"', 'gh-footer-apply');
   const documents = [['Политика конфиденциальности', '/politika-konfidencialnosti'], ['Согласие на обработку данных', '/soglasie-na-obrabotku-personalnyh-dannyh'], ['Политика cookie', '/politika-obrabotki-faylov-kuki']].map(([label, href]) => link(label, href, options)).join('');
   const legalCopy = homeHtml(display.footerLegalText).replace(/(^|[\s(:])dom\.ru(?=$|[\s),;!?]|\.(?=$|[\s),;!?]))/g, `$1${link('dom.ru', 'https://dom.ru/', options, ' target="_blank" rel="noopener noreferrer"')}`);
-  return `<footer class="gh-footer${accepted ? ' official-site-footer' : ''}" data-general-home-footer><div class="gh-contact-strip"><div><span class="gh-contact-label">Подключение<span class="gh-contact-mobile-hours"> · ${homeHtml(compactConnectionHours(display.connectionHours))}</span></span>${connection}<span class="gh-contact-hours">${homeHtml(display.connectionHours)}</span></div><div><span class="gh-contact-label"><span class="gh-contact-desktop-label">Техническая поддержка</span><span class="gh-contact-mobile-label">Поддержка</span><span class="gh-contact-mobile-hours"> · ${homeHtml(display.supportHours)}</span></span>${supportPhone}<span class="gh-contact-hours">${homeHtml(display.supportHours)}</span></div>${apply}</div><div class="gh-footer-divider"></div><div class="gh-footer-content">${brand(options)}<div class="gh-footer-column gh-footer-services"><strong>Услуги</strong>${services}</div><div class="gh-footer-column gh-footer-clients"><strong>Клиентам</strong>${address}${tariffs}${movix}</div><div class="gh-footer-column gh-footer-help"><strong>Помощь</strong>${support}<span class="gh-tablet-help">${tariffs}</span>${questions}${contacts}<span class="gh-tablet-help">${address}</span>${cities}</div><nav class="gh-footer-mobile-links" aria-label="Навигация в подвале">${services}${tariffs}${questions}${contacts}${address}${movix}${support}${cities}</nav></div><div class="gh-footer-divider"></div><div class="gh-footer-legal"><nav aria-label="Юридические документы">${documents}</nav><div class="gh-footer-information"><p>Материалы сайта носят информационный характер и не являются публичной офертой (ст. 437 ГК РФ).</p><p>${legalCopy}</p></div></div></footer>`;
+  return `<footer class="gh-footer" data-general-home-footer><div class="gh-contact-strip"><div><span class="gh-contact-label">Подключение<span class="gh-contact-mobile-hours"> · ${homeHtml(compactConnectionHours(display.connectionHours))}</span></span>${connection}<span class="gh-contact-hours">${homeHtml(display.connectionHours)}</span></div><div><span class="gh-contact-label"><span class="gh-contact-desktop-label">Техническая поддержка</span><span class="gh-contact-mobile-label">Поддержка</span><span class="gh-contact-mobile-hours"> · ${homeHtml(display.supportHours)}</span></span>${supportPhone}<span class="gh-contact-hours">${homeHtml(display.supportHours)}</span></div>${apply}</div><div class="gh-footer-divider"></div><div class="gh-footer-content">${brand(options)}<div class="gh-footer-group-stack">${columns[0]}${columns[1]}</div>${columns[2]}<nav class="gh-footer-mobile-links" aria-label="Навигация в подвале">${groups.map(group => group.links).join('')}</nav></div><div class="gh-footer-divider"></div><div class="gh-footer-legal"><nav aria-label="Юридические документы">${documents}</nav><div class="gh-footer-information"><p>Материалы сайта носят информационный характер и не являются публичной офертой (ст. 437 ГК РФ).</p><p>${legalCopy}</p></div></div></footer>`;
 }

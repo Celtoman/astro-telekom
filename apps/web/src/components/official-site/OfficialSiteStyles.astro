@@ -1,11 +1,6 @@
 <style is:global>
  body:has(.official-page){padding-bottom:0;}
  .general-home-page>main:has(.official-page){padding:0;}
- .official-site-footer{width:100%;max-width:none;margin:0;}
- .preview-homeshell .official-site-footer{width:100%;max-width:none;margin:0;}
- .official-site-footer .official-footer-short,.official-footer-tablet-equipment{display:none;}
- .official-site-footer .gh-contact-strip>div{gap:0;}
- .official-site-footer .gh-contact-strip a{display:flex;align-items:center;min-height:44px;}
  .official-page {display:flex;flex-direction:column;gap:24px;width:min(1360px,calc(100% - 80px));margin:24px auto;color:#18202a;font:400 16px/24px 'Geist Variable',sans-serif;}
  .official-page *,.official-page *::before,.official-page *::after{box-sizing:border-box;}
  .official-page :is(h1,h2,h3,p,figure,ul,ol){margin:0;}
@@ -82,9 +77,6 @@
   .official-hero .official-image-window{width:min(100cqw,calc(100cqh*597.6/388.816));height:auto;flex-shrink:0;}
  }
  @media(min-width:621px) and (max-width:1100px){
-  .official-site-footer{padding-inline:max(24px,calc((100% - 720px)/2));}
-  .official-site-footer .gh-footer-help{width:190px;}
-  .official-site-footer .official-footer-long{display:none;}.official-site-footer .official-footer-short{display:inline;}.official-footer-tablet-equipment{display:contents;}
   .official-page{width:min(720px,calc(100% - 48px));gap:24px;margin-top:24px;}
   .official-page h1{max-width:100%;font-size:40px;line-height:43px;font-weight:700;letter-spacing:-1.6px;}
   .official-hero-row,.official-split,.official-equipment-row,.official-additional-row{grid-template-columns:1fr;gap:24px;}
@@ -101,10 +93,6 @@
   .official-pros-cons{grid-template-columns:1fr;gap:32px;}.official-pros-cons article{padding:32px;}
  }
  @media(max-width:620px){
-  .official-site-footer .gh-contact-strip{gap:16px;}
-  .official-site-footer .gh-footer-mobile-links{gap:12px;}
-  .official-site-footer .gh-footer-mobile-links :is(a,button){min-height:20px;padding-block:0;}
-  .official-site-footer .gh-footer-mobile-links>:nth-last-child(-n+2){min-height:44px;margin-top:0;}
   .official-page{width:calc(100% - 32px);gap:24px;margin:24px auto;}
   .official-page h1{max-width:100%;font-size:28px;line-height:33px;font-weight:700;letter-spacing:-1.5px;}
   .official-page h2{font-size:24px;line-height:29px;letter-spacing:-.8px;}
