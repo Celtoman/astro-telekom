@@ -403,3 +403,5 @@ Linux CI42399889710 для a761d6c: 1085pass,0fail,0skip; полный gate пр
 
 
 - `tests/site-footer-navigation.test.mjs`: три сценария единого13-пунктного меню, canonical city URL на всех страницах, отсутствия фиктивных TV/equipment ссылок, фильтрации глобальных страниц по снимку, выбора города без подстановки и общего неактивного CMS preview. `admin-preview-ui` проверяет города с явно доступным CITIES-маршрутом в fixture.
+
+Проверка сквозного футера13ноября: полный локальный gate1110tests/1109pass/0fail/1Windows-symlinkskip; exact Linux CI43426126697 —1110pass/0fail/0skip. Реальные36IAB viewport cases и12переходов учитываются отдельно от автоматических тестов: [протокол](research/2026-11-13-shared-footer.md).

@@ -333,3 +333,5 @@
 | TD-251 | [#575](https://github.com/Celtoman/astro-telekom/issues/575) ✅ | LF shell-скриптов в Windows export и Linux Docker rehearsal |
 
 | TD-252 | [#572](https://github.com/Celtoman/astro-telekom/issues/572) ✅ | Сверены живые документы, ссылки и учёт статусов без изменения кода и страниц |
+
+| TD-254 | [#597](https://github.com/Celtoman/astro-telekom/issues/597) ✅ | Унифицировать BLK-0016 на всех страницах и добавить реализованные маршруты |
