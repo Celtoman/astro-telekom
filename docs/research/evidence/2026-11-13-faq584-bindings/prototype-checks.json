@@ -1,0 +1,72 @@
+{
+  "file": "BdxNHlBVZWejREtOEIWDkI",
+  "page": "1167:3",
+  "method": "Codex IAB native clicks and wheel in Figma player",
+  "checks": [
+    {
+      "width": 1440,
+      "question": 8,
+      "opened": true,
+      "answerVisible": true,
+      "followingContentReflow": true,
+      "closedAgain": true
+    },
+    {
+      "width": 1440,
+      "question": 1,
+      "opened": true,
+      "answerVisible": true,
+      "followingContentReflow": true,
+      "closedAgain": true
+    },
+    {
+      "width": 834,
+      "question": 1,
+      "opened": true,
+      "answerVisible": true,
+      "followingContentReflow": true,
+      "closedAgain": true
+    },
+    {
+      "width": 834,
+      "question": 8,
+      "opened": true,
+      "answerVisible": true,
+      "followingContentReflow": true,
+      "closedAgain": true
+    },
+    {
+      "width": 390,
+      "question": 1,
+      "opened": true,
+      "answerVisible": true,
+      "followingContentReflow": true,
+      "closedAgain": true
+    },
+    {
+      "width": 390,
+      "question": 8,
+      "opened": true,
+      "answerVisible": true,
+      "followingContentReflow": true,
+      "closedAgain": true
+    },
+    {
+      "width": 320,
+      "question": 1,
+      "opened": true,
+      "answerVisible": true,
+      "followingContentReflow": true,
+      "closedAgain": true
+    },
+    {
+      "width": 320,
+      "question": 8,
+      "opened": true,
+      "answerVisible": true,
+      "followingContentReflow": true,
+      "closedAgain": true
+    }
+  ],
+  "physicalTouchOrAT": false
+}

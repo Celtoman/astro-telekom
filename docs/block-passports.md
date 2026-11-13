@@ -163,3 +163,5 @@ API-реестр расширен восемью CITY-паспортами: comp
 ## OFFICIAL_SITE — принятый перенос12ноября2026
 
 Реестр дополнен9 PROGRAMMATIC-паспортами собственных секций, оглавления и FAQ; Header/Address/Footer переиспользуют сквозные контракты. Один редактор `/templates/official-site`, без9поблочных CMS-форм. Источник — текущие четыре Screens, не старые варианты. [Контракт12размещений](plans/2026-11-12-official-site-implementation-plan.md). Статус паспорта не подтверждает deployment или публикацию.
+
+13 ноября2026 завершён Figma-остаток #584: четыре FAQ-оболочки в source/assembly/Screens используют точные blue/25 и radius/26; дизайн и компонентные связи сохранены. [Протокол привязок и живого player](research/2026-11-13-official-site-faq-bindings.md).

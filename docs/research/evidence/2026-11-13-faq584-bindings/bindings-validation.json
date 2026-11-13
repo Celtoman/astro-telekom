@@ -1,0 +1,297 @@
+{
+  "scope": "FAQ variable bindings only; preserve accepted design",
+  "sourceFile": "DmpJRONhjGuKh1X8PGgDP3",
+  "screensFile": "BdxNHlBVZWejREtOEIWDkI",
+  "tokens": {
+    "color": {
+      "name": "blue/25",
+      "key": "9e9747a8bc8ffd013084d11df54159a3166c5af8",
+      "value": "#EEF8FF"
+    },
+    "radius": {
+      "name": "radius/26",
+      "key": "fd3ce9599678b7628171ef8d5dd62985957d8f1c",
+      "value": 26
+    }
+  },
+  "masters": [
+    {
+      "id": "10:665",
+      "key": "18be5549d6548d0a158e1d17b416ceee845d0174",
+      "before": {
+        "hash": "b714c71c",
+        "bytes": 62162
+      },
+      "after": {
+        "hash": "b714c71c",
+        "bytes": 62162
+      },
+      "fillAlias": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+      "radiusAliases": [
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35"
+      ]
+    },
+    {
+      "id": "10:1218",
+      "key": "74096bc474826a874dece5f0f4f4545303e8c3dd",
+      "before": {
+        "hash": "a1c79a7f",
+        "bytes": 62209
+      },
+      "after": {
+        "hash": "a1c79a7f",
+        "bytes": 62209
+      },
+      "fillAlias": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+      "radiusAliases": [
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35"
+      ]
+    },
+    {
+      "id": "10:1747",
+      "key": "bbd669c779a17ca33a2a65c0f36a7c5c4e43dd2d",
+      "before": {
+        "hash": "faa31e73",
+        "bytes": 62284
+      },
+      "after": {
+        "hash": "faa31e73",
+        "bytes": 62284
+      },
+      "fillAlias": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+      "radiusAliases": [
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35"
+      ]
+    },
+    {
+      "id": "10:2235",
+      "key": "d662f2f02736af69c17e5c0e42b380aa31735694",
+      "before": {
+        "hash": "1dd19bd8",
+        "bytes": 62293
+      },
+      "after": {
+        "hash": "1dd19bd8",
+        "bytes": 62293
+      },
+      "fillAlias": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+      "radiusAliases": [
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+        "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35"
+      ]
+    }
+  ],
+  "assembly": {
+    "checks": [
+      {
+        "root": "71:6",
+        "hash": "8e62d117",
+        "bytes": 277584,
+        "unchanged": true
+      },
+      {
+        "root": "71:116",
+        "hash": "dad6f131",
+        "bytes": 268413,
+        "unchanged": true
+      },
+      {
+        "root": "71:224",
+        "hash": "6e0f280e",
+        "bytes": 251192,
+        "unchanged": true
+      },
+      {
+        "root": "71:333",
+        "hash": "1ab3b0fb",
+        "bytes": 251215,
+        "unchanged": true
+      }
+    ],
+    "bindings": [
+      {
+        "id": "120:2203",
+        "key": "18be5549d6548d0a158e1d17b416ceee845d0174",
+        "fill": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+        "radiusFields": [
+          "topLeftRadius",
+          "topRightRadius",
+          "bottomLeftRadius",
+          "bottomRightRadius"
+        ]
+      },
+      {
+        "id": "121:1560",
+        "key": "74096bc474826a874dece5f0f4f4545303e8c3dd",
+        "fill": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+        "radiusFields": [
+          "topLeftRadius",
+          "topRightRadius",
+          "bottomLeftRadius",
+          "bottomRightRadius"
+        ]
+      },
+      {
+        "id": "121:2078",
+        "key": "bbd669c779a17ca33a2a65c0f36a7c5c4e43dd2d",
+        "fill": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+        "radiusFields": [
+          "topLeftRadius",
+          "topRightRadius",
+          "bottomLeftRadius",
+          "bottomRightRadius"
+        ]
+      },
+      {
+        "id": "121:2570",
+        "key": "d662f2f02736af69c17e5c0e42b380aa31735694",
+        "fill": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+        "radiusFields": [
+          "topLeftRadius",
+          "topRightRadius",
+          "bottomLeftRadius",
+          "bottomRightRadius"
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "nodeId": "71:6",
+        "name": "Официальный сайт / Desktop 1440"
+      },
+      {
+        "nodeId": "71:116",
+        "name": "Официальный сайт / Tablet 834"
+      },
+      {
+        "nodeId": "71:224",
+        "name": "Официальный сайт / Mobile 390"
+      },
+      {
+        "nodeId": "71:333",
+        "name": "Официальный сайт / Mobile 320"
+      }
+    ]
+  },
+  "screens": {
+    "checks": [
+      {
+        "root": "1168:1797",
+        "hash": "72dd744a",
+        "bytes": 284565,
+        "unchanged": true
+      },
+      {
+        "root": "1168:1813",
+        "hash": "bccfdb4e",
+        "bytes": 278049,
+        "unchanged": true
+      },
+      {
+        "root": "1168:1829",
+        "hash": "170371c6",
+        "bytes": 264379,
+        "unchanged": true
+      },
+      {
+        "root": "1168:1845",
+        "hash": "73a40816",
+        "bytes": 264402,
+        "unchanged": true
+      }
+    ],
+    "bindings": [
+      {
+        "id": "1168:1811",
+        "key": "18be5549d6548d0a158e1d17b416ceee845d0174",
+        "fill": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+        "radiusFields": [
+          "topLeftRadius",
+          "topRightRadius",
+          "bottomLeftRadius",
+          "bottomRightRadius"
+        ]
+      },
+      {
+        "id": "1168:1827",
+        "key": "74096bc474826a874dece5f0f4f4545303e8c3dd",
+        "fill": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+        "radiusFields": [
+          "topLeftRadius",
+          "topRightRadius",
+          "bottomLeftRadius",
+          "bottomRightRadius"
+        ]
+      },
+      {
+        "id": "1168:1843",
+        "key": "bbd669c779a17ca33a2a65c0f36a7c5c4e43dd2d",
+        "fill": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+        "radiusFields": [
+          "topLeftRadius",
+          "topRightRadius",
+          "bottomLeftRadius",
+          "bottomRightRadius"
+        ]
+      },
+      {
+        "id": "1168:1859",
+        "key": "d662f2f02736af69c17e5c0e42b380aa31735694",
+        "fill": "VariableID:9e9747a8bc8ffd013084d11df54159a3166c5af8/2:46",
+        "radiusFields": [
+          "topLeftRadius",
+          "topRightRadius",
+          "bottomLeftRadius",
+          "bottomRightRadius"
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "nodeId": "1168:1797",
+        "name": "Официальный сайт / Desktop 1440"
+      },
+      {
+        "nodeId": "1168:1813",
+        "name": "Официальный сайт / Tablet 834"
+      },
+      {
+        "nodeId": "1168:1829",
+        "name": "Официальный сайт / Mobile 390"
+      },
+      {
+        "nodeId": "1168:1845",
+        "name": "Официальный сайт / Mobile 320"
+      }
+    ]
+  },
+  "originalFlows": [
+    {
+      "nodeId": "1168:1797",
+      "name": "Официальный сайт / Desktop 1440"
+    },
+    {
+      "nodeId": "1168:1813",
+      "name": "Официальный сайт / Tablet 834"
+    },
+    {
+      "nodeId": "1168:1829",
+      "name": "Официальный сайт / Mobile 390"
+    },
+    {
+      "nodeId": "1168:1845",
+      "name": "Официальный сайт / Mobile 320"
+    }
+  ]
+}
