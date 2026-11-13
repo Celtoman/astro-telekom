@@ -395,3 +395,7 @@ Linux CI42399889710 для a761d6c: 1085pass,0fail,0skip; полный gate пр
 | `scripts/qa/official-site.mjs` | Chromium/WebKit1440/834/390/320, точная геометрия, реальные touch/wheel/keyboard inputs,7мобильных областей,3+5карточек, возврат/вертикальная прокрутка и FAQ; реальные заявки не отправляются |
 
 Исторический ACCOUNT rehearsal повторяет backfill0067 на текущей схеме, сохраняя актуальный Page_global_scope_check из БД и уже существующую OFFICIAL_SITE. Свежий seed проверяет11маршрутов (с одним синтетическим тарифом) и11SEO-шаблонов. Полная цепочка0071/0072 отдельно выполняется настоящим PostgreSQL rehearsal OFFICIAL_SITE.
+
+Дополнение #590: положительный Docker runtime rehearsal изолирует statfs capacity временным Node preload только в собственном disposable container. Настоящий образ, runtime CLI, non-root, CODE/CMS и restart recovery сохранены; отдельный smoke проверяет применение preload. Production и `requireBuildSpace` продолжают использовать native statfs/8ГиБ, нулевой/граничный объём и ошибки probe проверяются `static-publication-builder.test.mjs`.
+
+Дополнение #591: PostgreSQL OFFICIAL_SITE rehearsal проверяет точное содержимое AuditEvent.changes — initializedOfficialSite и preservedPublishedSnapshots.

@@ -111,5 +111,5 @@ UPDATE "Site" s SET "workingRevision"=a.revision,"updatedAt"=CURRENT_TIMESTAMP F
 INSERT INTO "ContentRevision" (id,"siteId","entityType","entityId","entityRevision","siteRevision",action,snapshot,"changedFields",source,"createdAt")
 SELECT 'official_site_revision_'||md5(p.id),p."siteId",'PAGE',p.id,1,a.revision,'CREATE',to_jsonb(p),'["content","slug","status"]'::jsonb,'migration:0072:official_site',CURRENT_TIMESTAMP FROM "Page" p JOIN _official_site_sites a ON a.id=p."siteId" WHERE p.type='OFFICIAL_SITE';
 INSERT INTO "AuditEvent" (id,"siteId","siteRevision","entityType","entityId",action,"changedFields",changes,source,"createdAt")
-SELECT 'official_site_audit_'||md5(a.id),a.id,a.revision,'SITE',a.id,'UPDATE','["pages","seoTemplates"]'::jsonb,'{"initializedAccount":true,"preservedPublishedSnapshots":true}'::jsonb,'migration:0072:official_site',CURRENT_TIMESTAMP FROM _official_site_sites a;
+SELECT 'official_site_audit_'||md5(a.id),a.id,a.revision,'SITE',a.id,'UPDATE','["pages","seoTemplates"]'::jsonb,'{"initializedOfficialSite":true,"preservedPublishedSnapshots":true}'::jsonb,'migration:0072:official_site',CURRENT_TIMESTAMP FROM _official_site_sites a;
 COMMIT;

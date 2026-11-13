@@ -1,0 +1,85 @@
+{
+  "url": "http://127.0.0.1:4399/official-site-domru",
+  "runs": [
+    {
+      "engine": "chromium",
+      "width": 1440,
+      "rails": [
+        {
+          "key": "regional",
+          "max": 256,
+          "endReached": true,
+          "reverse": true,
+          "keyboard": true
+        },
+        {
+          "key": "equipment",
+          "max": 202,
+          "endReached": true,
+          "reverse": true,
+          "keyboard": true
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "width": 834,
+      "rails": [
+        {
+          "key": "regional",
+          "max": 240,
+          "endReached": true,
+          "reverse": true,
+          "keyboard": true
+        },
+        {
+          "key": "equipment",
+          "max": 304,
+          "endReached": true,
+          "reverse": true,
+          "keyboard": true
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "width": 1440,
+      "rails": [
+        {
+          "key": "regional",
+          "max": 256,
+          "endReached": true,
+          "reverse": true,
+          "keyboard": true
+        },
+        {
+          "key": "equipment",
+          "max": 202,
+          "endReached": true,
+          "reverse": true,
+          "keyboard": true
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "width": 834,
+      "rails": [
+        {
+          "key": "regional",
+          "max": 240,
+          "endReached": true,
+          "reverse": true,
+          "keyboard": true
+        },
+        {
+          "key": "equipment",
+          "max": 304,
+          "endReached": true,
+          "reverse": true,
+          "keyboard": true
+        }
+      ]
+    }
+  ]
+}

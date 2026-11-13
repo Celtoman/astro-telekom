@@ -44,6 +44,16 @@ let api, nextApi, diagnosticRequest, diagnosticRenderer; let providerReads = 0; 
 let currentToken = token; let deploymentId = 'deployment-1'; let deploymentStatus = 'in_progress';
 try {
   docker(['build', '--file', 'apps/web/Dockerfile', '--target', 'publication-runtime', '--tag', image, '.'], false, 600000);
+  // This positive transport/recovery fixture must not depend on disk left by
+  // other Docker suites. Keep the real image/CLI unchanged: a temporary Node
+  // preload supplies only statfs capacity inside this disposable container.
+  // Native statfs and the 8 GiB rejection boundary remain tested separately.
+  const capacityPreload = '/publication/fixture-capacity.mjs';
+  await writeFile(join(root, 'fixture-capacity.mjs'), `import fs from 'node:fs/promises';
+import { syncBuiltinESMExports } from 'node:module';
+fs.statfs = async () => ({ bavail: 8 * 1024 ** 3, bsize: 1 });
+syncBuiltinESMExports();
+`);
   const source = publicationSource([city('kazan')]);
   source.cities[0].status = 'PUBLISHED'; source.cities[0].pages[0].status = 'PUBLISHED';
   for (const page of source.globalPages) page.status = 'PUBLISHED';
@@ -92,8 +102,11 @@ try {
     '-e', `SOURCE_COMMIT=${commit}`,
     '-e', 'PUBLIC_SITE_URL=https://partner.example.test', '-e', 'PUBLIC_API_URL=https://partner.example.test/api/v1', '-e', `PUBLIC_SITE_SLUG=${source.site.slug}`,
     '-e', `SITE_DATA_API_URL=http://host.docker.internal:${apiPort}/api/v1`, '-e', `API_UPSTREAM=host.docker.internal:${upstreamPort}`,
-    '-e', `COOLIFY_API_URL=http://host.docker.internal:${apiPort}/api/v1`, '-e', 'COOLIFY_API_TOKEN=fixture-provider', '-e', 'COOLIFY_RESOURCE_UUID=application-1', image]);
+    '-e', `COOLIFY_API_URL=http://host.docker.internal:${apiPort}/api/v1`, '-e', 'COOLIFY_API_TOKEN=fixture-provider', '-e', 'COOLIFY_RESOURCE_UUID=application-1', image,
+    'node', '--import', capacityPreload, 'apps/web/scripts/publication/runtime.mjs']);
   start(apiPort);
+  assert.equal(docker(['exec', name, 'node', '--import', capacityPreload, '--input-type=module', '-e',
+    "import {statfs} from 'node:fs/promises'; const s=await statfs('/publication'); console.log(s.bavail*s.bsize)"]), String(8 * 1024 ** 3));
   const port = service => Number(docker(['port', name, service]).match(/:(\d+)\s*$/)[1]);
   let publicUrl = `http://127.0.0.1:${port('80/tcp')}`; let privateUrl = `http://127.0.0.1:${port('8081/tcp')}`;
   const request = async (path, body) => {

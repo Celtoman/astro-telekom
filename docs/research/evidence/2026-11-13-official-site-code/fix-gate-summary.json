@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-13",
+  "parent": "8e312e7b1ab10202d62d64774d3a13d3d3b5158c",
+  "issues": [
+    590,
+    591
+  ],
+  "command": "pnpm check --test-concurrency=2",
+  "node": "24.22.1",
+  "platform": "Windows",
+  "exitCode": 0,
+  "tests": 1101,
+  "pass": 1100,
+  "fail": 0,
+  "cancelled": 0,
+  "skipped": 1,
+  "durationMs": 613678.8106,
+  "scope": "Fixture-only statfs preload; accurate audit metadata before first external0072; accepted page design unchanged"
+}

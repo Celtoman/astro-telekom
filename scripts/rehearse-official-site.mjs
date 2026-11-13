@@ -41,6 +41,8 @@ try {
   const publication = json(await db.sitePublication.create({ data: { siteId: site.id, siteRevision: 0, status: 'SUCCEEDED', catalog: { historical: true }, triggerEntity: 'site', triggerEntityId: site.id } }));
   const other = await db.provider.create({ data: { name: 'Other', slug: 'other', sites: { create: { name: 'Other', slug: 'other-site' } } }, include: { sites: true } });
   checked(apply());
+  const audit = await db.auditEvent.findFirstOrThrow({ where: { siteId: site.id, source: 'migration:0072:official_site' } });
+  assert.deepEqual(audit.changes, { initializedOfficialSite: true, preservedPublishedSnapshots: true });
   assert.deepEqual((await pageQuery()).content, officialSitePageDefaults());
   assert.equal(await db.page.count({ where: { siteId: site.id, type: 'OFFICIAL_SITE', cityId: null, slug: OFFICIAL_SITE_PAGE_SLUG } }), 1);
   assert.equal(await db.page.count({ where: { siteId: other.sites[0].id, type: 'OFFICIAL_SITE' } }), 0);
