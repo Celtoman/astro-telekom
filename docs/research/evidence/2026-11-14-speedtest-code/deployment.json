@@ -1,0 +1,11 @@
+{
+  "deployment": "1eizs70shs3t89ssfztzzga3",
+  "application": "jlrsktdos9yhchkgnrd9f5fj",
+  "status": "finished",
+  "commit": "8a3ccfbd3cdea524e22212c5c186f3ac3dee4038",
+  "createdAt": "2026-11-14T16:20:45.000000Z",
+  "updatedAt": "2026-11-14T16:32:07.000000Z",
+  "finishedAt": "2026-11-14T16:32:05.000000Z",
+  "requestedVia": "Coolify MCP",
+  "readbackVia": "REST fallback after MCP read timeouts"
+}

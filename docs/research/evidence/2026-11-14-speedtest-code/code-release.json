@@ -1,0 +1,14 @@
+{
+  "status": "SUCCEEDED",
+  "artifactId": "5ef9ab5903a16ae4751580b18fa7fd4244a9fc10ceb5e319f1cea3b39e2cad36",
+  "publicationId": "cmweuuve1000a01mrxlwxb32p",
+  "siteId": "cmtuaqqj1000107lkiiiia2xa",
+  "siteRevision": 32,
+  "rendererId": "fd444b0af80e6158ad74ada59e76692d2d2d01f80b4899c007885a7709bfa0df",
+  "catalogDigest": "2c047b1f4516a725f6d4a473d61af9331125b0d0b2a7b7554fb3dc832366f25f",
+  "releaseSequence": 30,
+  "basePublicationId": "cmwep5tx0000301modif9sg7q",
+  "rebuildId": "code-0033fe28a26be019b8053ed7c28eed92cb79a3d69f9d15155210d760b340be63",
+  "rebuildRevision": 1,
+  "manifestDigest": "e41054c8e81632140fcd919777fbe2ee91cf2df96fa13d9e3c53d106dc4c2f54"
+}

@@ -1,0 +1,8 @@
+{
+  "uuid": "jlrsktdos9yhchkgnrd9f5fj",
+  "name": "astro-telekom",
+  "status": "running:healthy",
+  "gitBranch": "master",
+  "gitCommitSetting": "HEAD",
+  "automaticDeployment": false
+}

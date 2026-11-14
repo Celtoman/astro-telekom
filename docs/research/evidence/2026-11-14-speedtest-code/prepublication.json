@@ -1,0 +1,62 @@
+{
+  "phase": "precms",
+  "siteId": "cmtuaqqj1000107lkiiiia2xa",
+  "workingRevision": 33,
+  "publishedRevision": 32,
+  "hasUnpublishedChanges": true,
+  "totalChanges": 1,
+  "changes": [
+    {
+      "id": "speed_test_revision_5e2ec1a773a410fbd3d98bc6695b1160",
+      "siteRevision": 33,
+      "entityType": "PAGE",
+      "entityId": "speed_test_page_e2124e97458f4ccc6280a94b4e435b08",
+      "action": "CREATE",
+      "changedFields": [
+        "content",
+        "slug",
+        "status"
+      ],
+      "source": "migration:0074:speed_test",
+      "createdAt": "2026-11-14T16:31:42.333Z",
+      "subject": "Проверка скорости",
+      "textChanges": []
+    }
+  ],
+  "validation": {
+    "outcome": "PASSED",
+    "checkedUrlCount": 4243,
+    "issues": []
+  },
+  "latestPublication": {
+    "id": "cmweuuve1000a01mrxlwxb32p",
+    "status": "SUCCEEDED",
+    "siteRevision": 32
+  },
+  "rebuild": {
+    "id": "cmtw6dpwj015g01o0ho99ow05",
+    "status": "SUCCEEDED",
+    "requestedRevision": 35,
+    "processingRevision": 35,
+    "publishedRevision": 35,
+    "requestedPublicationId": "cmweuuve1000a01mrxlwxb32p",
+    "processingPublicationId": "cmweuuve1000a01mrxlwxb32p",
+    "publishedPublicationId": "cmweuuve1000a01mrxlwxb32p",
+    "attempts": 1,
+    "maxAttempts": 3,
+    "lastError": null,
+    "providerStatus": "SUCCEEDED",
+    "providerDeploymentId": null,
+    "queuedAt": "2026-11-13T10:50:04.064Z",
+    "startedAt": "2026-11-13T10:50:04.704Z",
+    "completedAt": "2026-11-13T10:54:06.507Z",
+    "updatedAt": "2026-11-13T10:54:06.509Z"
+  },
+  "publicRoutes": 4242,
+  "workingRoutes": 4243,
+  "beforeDigest": "1cd1246fb9f9b8947edeceeafeac1700d2c29176dbefecfdf4801fdd91c12a1e",
+  "publicUnchangedWithoutSpeed": true,
+  "workingUnchangedWithoutSpeed": true,
+  "publicDigest": "1cd1246fb9f9b8947edeceeafeac1700d2c29176dbefecfdf4801fdd91c12a1e",
+  "workingDigest": "f66ae07504b9f7edeaa5ffa10a7a1cebc27fdf6df9c2f1d08e47e69f2c608177"
+}

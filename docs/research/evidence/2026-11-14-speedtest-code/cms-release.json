@@ -1,0 +1,88 @@
+{
+  "publication": {
+    "id": "cmwgmwk86000101rwcm9tyfhf",
+    "siteRevision": 33,
+    "status": "SUCCEEDED",
+    "triggerEntity": "site",
+    "triggerEntityId": "cmtuaqqj1000107lkiiiia2xa",
+    "requestedById": null,
+    "validationId": "cmwgmwi4v000001rwtazcngko",
+    "lastError": null,
+    "providerDeploymentId": null,
+    "createdAt": "2026-11-14T16:42:54.438Z",
+    "updatedAt": "2026-11-14T16:46:25.874Z",
+    "publishedAt": "2026-11-14T16:46:25.868Z"
+  },
+  "rebuild": {
+    "id": "cmtw6dpwj015g01o0ho99ow05",
+    "status": "SUCCEEDED",
+    "requestedRevision": 36,
+    "processingRevision": 36,
+    "publishedRevision": 36,
+    "requestedPublicationId": "cmwgmwk86000101rwcm9tyfhf",
+    "processingPublicationId": "cmwgmwk86000101rwcm9tyfhf",
+    "publishedPublicationId": "cmwgmwk86000101rwcm9tyfhf",
+    "attempts": 1,
+    "maxAttempts": 3,
+    "lastError": null,
+    "providerStatus": "SUCCEEDED",
+    "providerDeploymentId": null,
+    "queuedAt": "2026-11-14T16:42:56.186Z",
+    "startedAt": "2026-11-14T16:42:56.568Z",
+    "completedAt": "2026-11-14T16:46:25.116Z",
+    "updatedAt": "2026-11-14T16:46:25.124Z"
+  },
+  "progress": {
+    "runId": "f63b1c50-8034-4583-b3c1-3f7b213d2730",
+    "stage": "CONFIRMING",
+    "stages": {
+      "BUILDING": {
+        "startedAt": "2026-11-14T16:43:02.365Z",
+        "completedAt": "2026-11-14T16:44:24.111Z"
+      },
+      "CHECKING": {
+        "startedAt": "2026-11-14T16:44:24.111Z",
+        "completedAt": "2026-11-14T16:46:01.955Z"
+      },
+      "PREPARING": {
+        "startedAt": "2026-11-14T16:42:56.568Z",
+        "completedAt": "2026-11-14T16:43:02.365Z"
+      },
+      "ACTIVATING": {
+        "startedAt": "2026-11-14T16:46:01.955Z",
+        "completedAt": "2026-11-14T16:46:18.488Z"
+      },
+      "CONFIRMING": {
+        "startedAt": "2026-11-14T16:46:18.488Z",
+        "completedAt": "2026-11-14T16:46:25.116Z"
+      }
+    },
+    "version": 1,
+    "revision": 36,
+    "sequence": 171,
+    "startedAt": "2026-11-14T16:42:56.568Z",
+    "updatedAt": "2026-11-14T16:46:18.488Z",
+    "rendererId": "fd444b0af80e6158ad74ada59e76692d2d2d01f80b4899c007885a7709bfa0df",
+    "totalPages": 4244,
+    "completedAt": "2026-11-14T16:46:25.116Z",
+    "workTimings": {
+      "seal": 23012,
+      "astro": 81701,
+      "media": 72,
+      "verify": 71522,
+      "sealSync": 272,
+      "snapshot": 2217,
+      "sealWrite": 12555,
+      "sourceCopy": 697,
+      "sourceCheck": 1288,
+      "sealReadback": 4892,
+      "sealInventory": 5112
+    },
+    "publicationId": "cmwgmwk86000101rwcm9tyfhf",
+    "sampleEligible": true,
+    "estimate": null,
+    "overdue": false,
+    "elapsedSeconds": 208,
+    "stale": false
+  }
+}

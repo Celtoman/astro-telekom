@@ -1,0 +1,45 @@
+{
+  "phase": "afterpublish",
+  "siteId": "cmtuaqqj1000107lkiiiia2xa",
+  "workingRevision": 33,
+  "publishedRevision": 33,
+  "hasUnpublishedChanges": false,
+  "totalChanges": 0,
+  "changes": [],
+  "validation": {
+    "outcome": "PASSED",
+    "checkedUrlCount": 4243,
+    "issues": []
+  },
+  "latestPublication": {
+    "id": "cmwgmwk86000101rwcm9tyfhf",
+    "status": "SUCCEEDED",
+    "siteRevision": 33
+  },
+  "rebuild": {
+    "id": "cmtw6dpwj015g01o0ho99ow05",
+    "status": "SUCCEEDED",
+    "requestedRevision": 36,
+    "processingRevision": 36,
+    "publishedRevision": 36,
+    "requestedPublicationId": "cmwgmwk86000101rwcm9tyfhf",
+    "processingPublicationId": "cmwgmwk86000101rwcm9tyfhf",
+    "publishedPublicationId": "cmwgmwk86000101rwcm9tyfhf",
+    "attempts": 1,
+    "maxAttempts": 3,
+    "lastError": null,
+    "providerStatus": "SUCCEEDED",
+    "providerDeploymentId": null,
+    "queuedAt": "2026-11-14T16:42:56.186Z",
+    "startedAt": "2026-11-14T16:42:56.568Z",
+    "completedAt": "2026-11-14T16:46:25.116Z",
+    "updatedAt": "2026-11-14T16:46:25.124Z"
+  },
+  "publicRoutes": 4243,
+  "workingRoutes": 4243,
+  "beforeDigest": "1cd1246fb9f9b8947edeceeafeac1700d2c29176dbefecfdf4801fdd91c12a1e",
+  "publicUnchangedWithoutSpeed": true,
+  "workingUnchangedWithoutSpeed": true,
+  "publicDigest": "f66ae07504b9f7edeaa5ffa10a7a1cebc27fdf6df9c2f1d08e47e69f2c608177",
+  "workingDigest": "f66ae07504b9f7edeaa5ffa10a7a1cebc27fdf6df9c2f1d08e47e69f2c608177"
+}

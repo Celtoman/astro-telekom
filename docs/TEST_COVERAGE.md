@@ -1,6 +1,6 @@
 # Покрытие тестами
 
-14 ноября2026, SPEED_TEST #601: полный `pnpm check --test-concurrency=2` —1141test/1140pass/0fail/1Windows-symlinkskip, exit0. Проверка Linux CI и внешний выпуск фиксируются отдельно в [протоколе](research/2026-11-14-speedtest-code-and-test.md).
+14 ноября2026, SPEED_TEST #601: полный `pnpm check --test-concurrency=2` —1141test/1140pass/0fail/1Windows-symlinkskip, exit0; exact-SHA Linux CI43613999383 —1141pass/0fail/0skip. Защищённый test-выпуск/CODE/CMS33/33 и вёрстка четырёх ширин подтверждены; live-замер внешнего iframe не принят из-за TLS connection reset в сети проверки (#605). [Протокол](research/2026-11-14-speedtest-code-and-test.md).
 
 ## SPEED_TEST — backend, 14 ноября 2026
 

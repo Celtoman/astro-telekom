@@ -1,0 +1,143 @@
+{
+  "origin": "https://tv-internet-dom.ru",
+  "path": "/proverit-skorost-interneta",
+  "status": 200,
+  "canonical": "https://tv-internet-dom.ru/proverit-skorost-interneta",
+  "h1": "Проверьте скорость вашего интернета",
+  "frames": 1,
+  "iframeSrc": "https://openspeedtest.com/speedtest",
+  "iframeLoading": "eager",
+  "blocks": [
+    "hero",
+    "preparation",
+    "metrics",
+    "tasks",
+    "factors",
+    "diagnosis",
+    "support",
+    "faq"
+  ],
+  "framePolicy": "frame-src 'none' https://openspeedtest.com",
+  "scriptPolicyHasUnsafeInline": false,
+  "externalWidgetCaptionsOrFallback": false,
+  "svg": [
+    {
+      "name": "network.svg",
+      "status": 200,
+      "sha256": "50f9d38d68cc43bce0cdf94e3a8cf0eafd60e61a0935c028c82c48621fc12479"
+    },
+    {
+      "name": "wifi.svg",
+      "status": 200,
+      "sha256": "875cb34b585341042f43660151f2be01592b1f2d08c30e7775075a932834c946"
+    },
+    {
+      "name": "pause.svg",
+      "status": 200,
+      "sha256": "eefb7b8d64706f362c86c9cdbb92da414875e452881dddf6a2827c7764f38612"
+    },
+    {
+      "name": "devices.svg",
+      "status": 200,
+      "sha256": "702797725e3a6d1329642e3f8b71856aa75dc0c6b11e20d159dcce8b1fa83798"
+    },
+    {
+      "name": "shield.svg",
+      "status": 200,
+      "sha256": "f342b31b446096a20e5d8f9ded6dcc3b0759b9599ce03f72b80ee278aa174678"
+    },
+    {
+      "name": "app-window.svg",
+      "status": 200,
+      "sha256": "625f321989ba560196eeb0ad48aa22b293f86f283bdbde85957b7796c992852a"
+    },
+    {
+      "name": "file-text.svg",
+      "status": 200,
+      "sha256": "6a7897e03e39110ec8913acda6020f653da86d23aac52e527867ef80b508bf85"
+    },
+    {
+      "name": "download.svg",
+      "status": 200,
+      "sha256": "87a3064b915b25904c5c1ced0f2f86c1e4e8d6d0aadc89df5a04c44eae0d9132"
+    },
+    {
+      "name": "upload.svg",
+      "status": 200,
+      "sha256": "284bdd03cec7e030630e5919b7218485e3c871861ee8e4ac1ce9ec4fb7613094"
+    },
+    {
+      "name": "gauge.svg",
+      "status": 200,
+      "sha256": "0a1d39a6620be7c0fb5f1e3575cd82b27b78692d19831895f69e17a1c2d54760"
+    },
+    {
+      "name": "pulse.svg",
+      "status": 200,
+      "sha256": "c6d977addbfd817c01a74225f208e39dedd979e6354f514c7bbe956f0320ecad"
+    },
+    {
+      "name": "video.svg",
+      "status": 200,
+      "sha256": "0d41c7268bd3d879b538cb3e36cff373b7272c2dd3bb2b162cb063ac59157061"
+    },
+    {
+      "name": "handshake.svg",
+      "status": 200,
+      "sha256": "3cda0543ed8365ee42c7acea70802e55af62e8d211491767b62a6e323966dcd4"
+    },
+    {
+      "name": "clock.svg",
+      "status": 200,
+      "sha256": "baf90c9c606e443d86802554f18373a5cee145ea7cfb4dc1865642a477853485"
+    },
+    {
+      "name": "database.svg",
+      "status": 200,
+      "sha256": "888c79332cc952b566a1c776bdaf21f879021908b21732f00cb6f5cfa9b604b0"
+    },
+    {
+      "name": "wifi-warning.svg",
+      "status": 200,
+      "sha256": "c2491c75610db5750c22b66d4ae565c83271d0bb6476389028ec9edbe1352049"
+    },
+    {
+      "name": "equipment.svg",
+      "status": 200,
+      "sha256": "702797725e3a6d1329642e3f8b71856aa75dc0c6b11e20d159dcce8b1fa83798"
+    },
+    {
+      "name": "traffic.svg",
+      "status": 200,
+      "sha256": "eefb7b8d64706f362c86c9cdbb92da414875e452881dddf6a2827c7764f38612"
+    },
+    {
+      "name": "server-network.svg",
+      "status": 200,
+      "sha256": "50f9d38d68cc43bce0cdf94e3a8cf0eafd60e61a0935c028c82c48621fc12479"
+    },
+    {
+      "name": "support.svg",
+      "status": 200,
+      "sha256": "b8b4644b5bec80011a29676b3553ed5dd8cedbc7cb438e0fdd5419864f371819"
+    },
+    {
+      "name": "round-clock.svg",
+      "status": 200,
+      "sha256": "4440e5a990e8b01f8d1648e2215177476e7a9a126d0ae3dc0931543879ccd263"
+    },
+    {
+      "name": "phone-call.svg",
+      "status": 200,
+      "sha256": "ae6a94e7ae521a93a456fc18427f0ca15f26fc82c2a6fa5ffd59a038c6a7de99"
+    },
+    {
+      "name": "help.svg",
+      "status": 200,
+      "sha256": "11ea502dc3d1b05c2745c4353591bbd97c2f49042336faca0eeaa09f63774b00"
+    }
+  ],
+  "anonymousStatus": 401,
+  "xRobotsTag": "noindex, nofollow",
+  "htmlSha256": "81e5c6f4ca59200a15e4fe61a9cd9e332ffab37f1a045a2b653416bc0d2c264d"
+}

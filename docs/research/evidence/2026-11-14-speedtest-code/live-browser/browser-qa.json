@@ -1,0 +1,265 @@
+{
+  "browser": "owner-authorized headless Chromium/Playwright",
+  "widths": [
+    {
+      "name": "desktop",
+      "client": 1440,
+      "scroll": 1440,
+      "fonts": "loaded",
+      "heights": [
+        {
+          "name": "hero",
+          "height": 754
+        },
+        {
+          "name": "preparation",
+          "height": 1078
+        },
+        {
+          "name": "metrics",
+          "height": 843
+        },
+        {
+          "name": "tasks",
+          "height": 761
+        },
+        {
+          "name": "factors",
+          "height": 658
+        },
+        {
+          "name": "diagnosis",
+          "height": 577
+        },
+        {
+          "name": "support",
+          "height": 566
+        },
+        {
+          "name": "faq",
+          "height": 534
+        }
+      ],
+      "overflow": [],
+      "imagesLoaded": true,
+      "iframe": [
+        {
+          "src": "https://openspeedtest.com/speedtest",
+          "width": 1360,
+          "height": 680
+        }
+      ]
+    },
+    {
+      "name": "tablet",
+      "client": 834,
+      "scroll": 834,
+      "fonts": "loaded",
+      "heights": [
+        {
+          "name": "hero",
+          "height": 550
+        },
+        {
+          "name": "preparation",
+          "height": 1426
+        },
+        {
+          "name": "metrics",
+          "height": 1054
+        },
+        {
+          "name": "tasks",
+          "height": 952
+        },
+        {
+          "name": "factors",
+          "height": 770
+        },
+        {
+          "name": "diagnosis",
+          "height": 826
+        },
+        {
+          "name": "support",
+          "height": 827
+        },
+        {
+          "name": "faq",
+          "height": 518
+        }
+      ],
+      "overflow": [],
+      "imagesLoaded": true,
+      "iframe": [
+        {
+          "src": "https://openspeedtest.com/speedtest",
+          "width": 720,
+          "height": 440
+        }
+      ]
+    },
+    {
+      "name": "mobile",
+      "client": 390,
+      "scroll": 390,
+      "fonts": "loaded",
+      "heights": [
+        {
+          "name": "hero",
+          "height": 530
+        },
+        {
+          "name": "preparation",
+          "height": 1208
+        },
+        {
+          "name": "metrics",
+          "height": 902
+        },
+        {
+          "name": "tasks",
+          "height": 672
+        },
+        {
+          "name": "factors",
+          "height": 577
+        },
+        {
+          "name": "diagnosis",
+          "height": 1181
+        },
+        {
+          "name": "support",
+          "height": 1047
+        },
+        {
+          "name": "faq",
+          "height": 618
+        }
+      ],
+      "overflow": [],
+      "imagesLoaded": true,
+      "iframe": [
+        {
+          "src": "https://openspeedtest.com/speedtest",
+          "width": 358,
+          "height": 440
+        }
+      ]
+    },
+    {
+      "name": "mobile320",
+      "client": 320,
+      "scroll": 320,
+      "fonts": "loaded",
+      "heights": [
+        {
+          "name": "hero",
+          "height": 530
+        },
+        {
+          "name": "preparation",
+          "height": 1417
+        },
+        {
+          "name": "metrics",
+          "height": 1110
+        },
+        {
+          "name": "tasks",
+          "height": 736
+        },
+        {
+          "name": "factors",
+          "height": 698
+        },
+        {
+          "name": "diagnosis",
+          "height": 1435
+        },
+        {
+          "name": "support",
+          "height": 1185
+        },
+        {
+          "name": "faq",
+          "height": 714
+        }
+      ],
+      "overflow": [],
+      "imagesLoaded": true,
+      "iframe": [
+        {
+          "src": "https://openspeedtest.com/speedtest",
+          "width": 288,
+          "height": 440
+        }
+      ]
+    }
+  ],
+  "rails": [
+    {
+      "name": "preparation",
+      "end": {
+        "left": 1518,
+        "max": 1518,
+        "cards": 6
+      },
+      "start": 0,
+      "verticalDelta": 600
+    },
+    {
+      "name": "metrics",
+      "end": {
+        "left": 994,
+        "max": 994,
+        "cards": 4
+      },
+      "start": 0,
+      "verticalDelta": 600
+    },
+    {
+      "name": "tasks",
+      "end": {
+        "left": 922,
+        "max": 922,
+        "cards": 4
+      },
+      "start": 0,
+      "verticalDelta": 600
+    },
+    {
+      "name": "factors",
+      "end": {
+        "left": 994,
+        "max": 994,
+        "cards": 4
+      },
+      "start": 0,
+      "verticalDelta": 600
+    }
+  ],
+  "widget": {
+    "loaded": false,
+    "completed": false,
+    "repeated": false,
+    "frames": [
+      "https://tv-internet-dom.ru/proverit-skorost-interneta",
+      "chrome-error://chromewebdata/"
+    ]
+  },
+  "failed": [
+    {
+      "host": "openspeedtest.com",
+      "type": "document",
+      "error": "net::ERR_SSL_PROTOCOL_ERROR"
+    }
+  ],
+  "errors": [],
+  "systemNetworkChanged": false,
+  "tlsValidationDisabled": false,
+  "faqFirstLastKeyboard": true,
+  "menuEscapeFocus": true,
+  "callbackEscapeFocus": true
+}
