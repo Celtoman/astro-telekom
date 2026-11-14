@@ -1,0 +1,55 @@
+{
+  "synthetic": true,
+  "checkAttempts": 2,
+  "leadAttempts": 2,
+  "checkSource": [
+    {
+      "pageScope": "GLOBAL",
+      "pageSlug": "proverit-skorost-interneta",
+      "mode": "address-error"
+    },
+    {
+      "pageScope": "GLOBAL",
+      "pageSlug": "proverit-skorost-interneta",
+      "mode": "lead-error"
+    }
+  ],
+  "leadRequestSame": false,
+  "leadFields": [
+    "siteSlug",
+    "citySlug",
+    "pageSlug",
+    "pageScope",
+    "formName",
+    "reasonCode",
+    "consentAccepted",
+    "phone",
+    "submissionKey",
+    "consentVersion",
+    "session",
+    "address",
+    "serviceType",
+    "addressCheckId",
+    "utm",
+    "referrer",
+    "pageUrl",
+    "timeOnSiteSeconds",
+    "viewedPages",
+    "website"
+  ],
+  "leadContext": {
+    "pageScope": "GLOBAL",
+    "pageSlug": "proverit-skorost-interneta",
+    "citySlug": "moscow"
+  },
+  "firstErrorThenSuccess": [
+    "lead-error",
+    "success"
+  ],
+  "changedFields": [
+    "timeOnSiteSeconds"
+  ],
+  "phonePreserved": true,
+  "submissionKeyPreserved": true,
+  "consentPreserved": true
+}

@@ -12,10 +12,13 @@ const { SiteCatalogService } = require('../apps/api/dist/site-catalog.service.js
 const { PublicationWorkflowService } = require('../apps/api/dist/publication-workflow.service.js');
 const migration = readFileSync(new URL('../prisma/migrations/0072_official_site_page/migration.sql', import.meta.url), 'utf8');
 const historicalContent = JSON.parse(migration.match(/\$official_site\$([\s\S]*?)\$official_site\$::jsonb/)[1]);
+const oldGlobalScope = /ALTER TABLE "Page" ADD CONSTRAINT "Page_global_scope_check" CHECK \([\s\S]*?\n\);/;
+assert.ok(oldGlobalScope.test(migration), 'historical OFFICIAL_SITE scope statement must be identifiable');
+let currentGlobalScope;
 const container = `astro-official-site-${randomUUID().slice(0, 8)}`;
 const docker = (args, options = {}) => spawnSync('docker', args, { encoding: 'utf8', timeout: 120000, windowsHide: true, ...options });
 const checked = result => { assert.equal(result.status, 0, result.stderr || result.stdout || result.error?.message); return result.stdout.trim(); };
-const apply = () => docker(['exec', '-i', container, 'psql', '-U', 'postgres', '-d', 'provider', '-v', 'ON_ERROR_STOP=1'], { input: migration });
+const apply = () => docker(['exec', '-i', container, 'psql', '-U', 'postgres', '-d', 'provider', '-v', 'ON_ERROR_STOP=1'], { input: migration.replace(oldGlobalScope, `ALTER TABLE "Page" ADD CONSTRAINT "Page_global_scope_check" ${currentGlobalScope};`) });
 const json = value => JSON.parse(JSON.stringify(value));
 let db, owned = false;
 try {
@@ -32,6 +35,8 @@ try {
   const seed = () => checked(spawnSync(process.execPath, ['apps/api/dist/seed.js'], { env: { ...process.env, ADMIN_EMAIL: 'official-site-rehearsal@example.test', ADMIN_PASSWORD: 'synthetic-official-site-rehearsal-password' }, encoding: 'utf8', timeout: 30000, windowsHide: true }));
   seed();
   db = new PrismaService(); await db.onModuleInit();
+  currentGlobalScope = checked(docker(['exec', container, 'psql', '-U', 'postgres', '-d', 'provider', '-Atc', `SELECT pg_get_constraintdef(oid) FROM pg_constraint WHERE conname='Page_global_scope_check' AND conrelid='"Page"'::regclass`]));
+  assert.match(currentGlobalScope, /SPEED_TEST/, 'preserve current global scope and newer pages while replaying the historic backfill');
   const site = await db.site.findUniqueOrThrow({ where: { slug: 'domru-site' } });
   const pageQuery = () => db.page.findFirstOrThrow({ where: { siteId: site.id, type: 'OFFICIAL_SITE' } });
   assert.deepEqual((await pageQuery()).content, officialSitePageDefaults(), 'fresh seed initializes OFFICIAL_SITE after migrations on empty DB');

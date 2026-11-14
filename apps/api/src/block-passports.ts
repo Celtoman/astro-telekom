@@ -1,3 +1,4 @@
+import { SPEED_TEST_PAGE_PASSPORTS } from './speed-test-page-passports';
 import { OFFICIAL_SITE_PAGE_PASSPORTS } from './official-site-page-passports';
 import { BLOCK_TYPES } from './block-validation';
 import { GENERAL_HOME_PASSPORTS } from './general-home-passports';
@@ -301,5 +302,6 @@ export const BLOCK_PASSPORTS: readonly BlockPassport[] = [
   ...ADDRESS_PAGE_PASSPORTS,
   ...ACCOUNT_PAGE_PASSPORTS,
   ...OFFICIAL_SITE_PAGE_PASSPORTS,
+  ...SPEED_TEST_PAGE_PASSPORTS,
   ...programmaticPassports,
 ].map(approvedFirstScreen);

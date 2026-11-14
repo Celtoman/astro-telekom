@@ -174,3 +174,7 @@ FLOW1 принимает необязательный тариф только в
 ## ACCOUNT: глобальная информационная страница
 
 ACCOUNT — самостоятельная site-scoped Page без PageTemplate/13 PageBlock. Типизированная Page.content хранит минимум CMS, инструкции/условия/композиция находятся в CODE. Один renderer обслуживает Astro и sandbox preview; Header, адресная форма, FAQ и Footer общие. `/admin/sites/:siteId/account` использует serializable expectedWorkingRevision. Published view привязан к actual serving publication, включая RUNNING с уже активированным receipt, а не к последнему SQL SUCCEEDED. GLOBAL FLOW2 сверяет canonical page в serving catalog и выбирает фактический город по очищенному адресу и региону. Private static builder проверяет изображения и локально фиксирует удалённые bytes в новом artifact; ошибка не меняет прежнюю публикацию.
+
+## SPEED_TEST — опциональная общая страница
+
+Глобальная Page(SPEED_TEST) хранит типизированный Page.content1.0.0 с фиксированными смысловыми ключами; профильный GET/PATCH `/admin/sites/:siteId/speed-test` меняет working с expectedWorkingRevision. Миграции0073/0074 не создают публикацию. SiteCatalog/route inventory добавляет один URL только для валидной страницы снимка; исторические каталоги без SPEED_TEST сохраняются. Общие runtime/preview renderer/styles отделяют безопасное preview от живого стороннего iframe. GLOBAL FLOW2 разрешает новый источник через обслуживаемый snapshot; выбранный дом определяет фактический город. [Контракт и приёмка](research/2026-11-14-speedtest-code-and-test.md).

@@ -1,4 +1,5 @@
 const pageKinds: Record<string, string> = {
+  SPEED_TEST: 'Проверка скорости',
   OFFICIAL_SITE: 'Официальный сайт',
   ACCOUNT: 'Личный кабинет',
   HOME: 'Главная сайта', CITY_HOME: 'Главные страницы городов', CITY_TARIFF_DETAIL: 'Страницы тарифов',

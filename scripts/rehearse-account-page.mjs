@@ -18,7 +18,7 @@ const container = `astro-account-${randomUUID().slice(0, 8)}`;
 const docker = (args, options = {}) => spawnSync('docker', args, { encoding: 'utf8', timeout: 120000, windowsHide: true, ...options });
 const checked = result => { assert.equal(result.status, 0, result.stderr || result.stdout || result.error?.message); return result.stdout.trim(); };
 // Replay the ACCOUNT backfill against the current schema without replacing the
-// newer global-scope guard owned by 0072. Existing OFFICIAL_SITE data must stay.
+// current global-scope guard. Existing OFFICIAL_SITE and SPEED_TEST data must stay.
 const apply = () => docker(['exec', '-i', container, 'psql', '-U', 'postgres', '-d', 'provider', '-v', 'ON_ERROR_STOP=1'], { input: migration.replace(oldGlobalScope, `ALTER TABLE "Page" ADD CONSTRAINT "Page_global_scope_check" ${currentGlobalScope};`) });
 const json = value => JSON.parse(JSON.stringify(value));
 let db, owned = false;
@@ -37,7 +37,7 @@ try {
   seed();
   db = new PrismaService(); await db.onModuleInit();
   currentGlobalScope = checked(docker(['exec', container, 'psql', '-U', 'postgres', '-d', 'provider', '-Atc', `SELECT pg_get_constraintdef(oid) FROM pg_constraint WHERE conname='Page_global_scope_check' AND conrelid='"Page"'::regclass`]));
-  assert.match(currentGlobalScope, /OFFICIAL_SITE/, 'fresh migration chain includes the latest global page kind');
+  assert.match(currentGlobalScope, /SPEED_TEST/, 'fresh migration chain includes the latest global page kind');
   const site = await db.site.findUniqueOrThrow({ where: { slug: 'domru-site' } });
   const pageQuery = () => db.page.findFirstOrThrow({ where: { siteId: site.id, type: 'ACCOUNT' } });
   assert.deepEqual((await pageQuery()).content, accountPageDefaults(), 'fresh seed initializes ACCOUNT after migrations on empty DB');

@@ -4,6 +4,7 @@ import { newsRoutes } from '../../../api/src/news-projection';
 import type { EditorialSource } from '../../../api/src/editorial-publication-model';
 import { ADDRESS_PAGE_SLUG, ADDRESS_PAGE_BLOCK_ORDER, ADDRESS_PAGE_VERSION, ADDRESS_PAGE_IMPLEMENTATION } from '../../../api/src/address-page-model';
 import { assertAccountPage } from './account-page';
+import { assertSpeedTestPage } from './speed-test-page';
 import { projectCityHomeBlocks } from '../../../api/src/tariff-collection-model';
 import { tariffView, type TariffView } from './tariff-view';
 import { readFile } from 'node:fs/promises';
@@ -128,7 +129,7 @@ function assertCityHomeTemplate(city: CityView): void {
 
 function expectedReleaseOneRoutes(cities: CityView[], globalPages: PageView[]): PublicRouteView[] {
   const pagesByType = new Map(globalPages.map((page) => [page.type, page]));
-  const supported = [...releaseOneGlobalPages, { type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }, { type: 'OFFICIAL_SITE', slug: 'official-site-domru' }];
+  const supported = [...releaseOneGlobalPages, { type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }, { type: 'OFFICIAL_SITE', slug: 'official-site-domru' }, { type: 'SPEED_TEST', slug: 'proverit-skorost-interneta' }];
   if (pagesByType.size !== globalPages.length || globalPages.some(p => !supported.some(e => e.type === p.type))) {
     throw new Error(`Release 1 требует ровно ${releaseOneGlobalPages.length} опубликованные общие страницы`);
   }
@@ -137,7 +138,8 @@ function expectedReleaseOneRoutes(cities: CityView[], globalPages: PageView[]): 
   const occupiedPaths = new Set(['/']);
   for (const expected of supported) {
     const page = pagesByType.get(expected.type);
-    if (!page && ['ACCOUNT','OFFICIAL_SITE'].includes(expected.type)) continue;
+    if (!page && ['ACCOUNT','OFFICIAL_SITE','SPEED_TEST'].includes(expected.type)) continue;
+    if (page?.type === 'SPEED_TEST') assertSpeedTestPage(page.content);
     if (page?.type === 'OFFICIAL_SITE') assertOfficialSitePage(page.content);
     if (page?.type === 'ACCOUNT') assertAccountPage(page.content);
     if (!page) throw new Error(`Не опубликована обязательная общая страница Release 1: ${expected.type}`);

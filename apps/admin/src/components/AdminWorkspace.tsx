@@ -19,6 +19,7 @@ const screenLoaders = {
   news: () => import("./NewsApp").then(m => ({ default: m.NewsApp })),
   "news-editor": () => import("./NewsEditorApp").then(m => ({ default: m.NewsEditorApp })),
   "official-site": () => import("./OfficialSitePageApp").then(m => ({ default: m.OfficialSitePageApp })),
+  "speed-test": () => import("./SpeedTestPageApp").then(m => ({ default: m.SpeedTestPageApp })),
   account: () => import("./AccountPageApp").then(m => ({ default: m.AccountPageApp })),
   overview: () => import("./AdminApp").then(m => ({ default: m.AdminApp })),
   tariffs: () => import("./TariffsApp").then(m => ({ default: m.TariffsApp })),

@@ -1,0 +1,135 @@
+<style is:global>
+  body:has(.speed-test-page) { padding-bottom:0; }
+  .general-home-page > main:has(.speed-test-page) { padding:0; }
+  .speed-test-page { display:flex; flex-direction:column; gap:24px; width:min(1360px,calc(100% - 80px)); margin:24px auto; color:#18202a; font:400 16px/24px 'Geist Variable',sans-serif; }
+  .speed-test-page *, .speed-test-page *::before, .speed-test-page *::after { box-sizing:border-box; }
+  .speed-test-page :is(h1,h2,h3,h4,p,figure) { margin:0; }
+  .speed-test-page :is(h1,h2,h3,h4,p) { overflow-wrap:anywhere; }
+  .speed-test-page h1 { max-width:100%; font-size:48px; line-height:50px; font-weight:800; letter-spacing:-2.4px; }
+  .speed-test-page h2 { font-size:32px; line-height:38px; font-weight:700; letter-spacing:-1.1px; }
+  .speed-test-page :is(h3,h4) { font-size:20px; line-height:25px; font-weight:700; letter-spacing:-.2px; }
+  .speed-test-page p { color:#526071; white-space:pre-line; }
+  .speed-test-page .speed-test-small { font-size:14px; line-height:20px; }
+  .speed-test-page :is(a,[tabindex],summary):focus-visible { outline:3px solid #1769aa; outline-offset:3px; }
+  .speed-test-page ::selection { color:#18202a; background:#cceaff; }
+  .speed-test-hero { display:flex; flex-direction:column; gap:24px; min-width:0; }
+  .speed-test-widget { display:block; width:100%; min-width:0; height:auto; min-height:440px; aspect-ratio:2 / 1; border:0; background:#fff; }
+  .speed-test-widget-preview { background:#eef8ff; border-radius:24px; }
+  .speed-test-section { display:flex; flex-direction:column; gap:32px; padding:48px; min-width:0; }
+  .speed-test-section-heading { display:flex; flex-direction:column; gap:12px; min-width:0; }
+  .speed-test-section-preparation, .speed-test-section-tasks, .speed-test-section-diagnosis { background:#eaf7ff; border-radius:24px; }
+  .speed-test-methods { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+  .speed-test-card { display:flex; flex-direction:column; gap:16px; min-width:0; padding:24px; border-radius:24px; background:#fff; }
+  .speed-test-methods .speed-test-card { min-height:184px; }
+  .speed-test-card-heading { display:flex; align-items:center; gap:16px; min-height:48px; min-width:0; }
+  .speed-test-card-heading :is(h3,h4) { flex:1; min-width:0; }
+  .speed-test-icon { display:flex; justify-content:center; align-items:center; flex:0 0 48px; width:48px; height:48px; border-radius:14px; background:#eef8ff; }
+  .speed-test-icon img { display:block; width:32px; height:32px; }
+  .speed-test-comparison { display:flex; flex-direction:column; gap:8px; padding:24px; border-radius:24px; background:#ffeae9; }
+  .speed-test-steps { display:flex; flex-direction:column; gap:16px; min-width:0; }
+  .speed-test-card-group { min-width:0; }
+  .speed-test-rail { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; align-items:stretch; }
+  .speed-test-preparation .speed-test-rail { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .speed-test-preparation .speed-test-card:nth-child(-n+3) { min-height:234px; }
+  .speed-test-preparation .speed-test-card:nth-child(n+4) { min-height:208px; }
+  .speed-test-swipe-hint { display:none; }
+  .speed-test-metrics .speed-test-card, .speed-test-factors .speed-test-card { background:#eef8ff; border:1px solid #dcecf7; }
+  .speed-test-metrics .speed-test-rail, .speed-test-factors .speed-test-rail { row-gap:32px; }
+  .speed-test-metrics .speed-test-icon, .speed-test-factors .speed-test-icon { background:#fff; }
+  .speed-test-metrics .speed-test-card { min-height:210px; }
+  .speed-test-units { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; padding:24px; border-radius:24px; background:#ffeae9; }
+  .speed-test-units > div { display:flex; flex-direction:column; gap:12px; min-width:0; }
+  .speed-test-page .speed-test-formula { font-size:20px; line-height:25px; font-weight:700; letter-spacing:-.2px; color:#18202a; }
+  .speed-test-tasks .speed-test-rail { gap:24px; }
+  .speed-test-tasks .speed-test-card { border:1px solid #dcecf7; }
+  .speed-test-tasks .speed-test-card:nth-child(-n+2) { min-height:268px; }
+  .speed-test-tasks .speed-test-card:nth-child(n+3) { min-height:243px; }
+  .speed-test-tasks .speed-test-card-heading { gap:12px; min-height:40px; }
+  .speed-test-tasks .speed-test-icon { flex-basis:40px; width:40px; height:40px; border-radius:10px; }
+  .speed-test-tasks .speed-test-icon img { width:24px; height:24px; }
+  .speed-test-task-value { display:flex; flex-direction:column; gap:4px; }
+  .speed-test-task-value > p:first-child { font-size:20px; line-height:25px; font-weight:700; letter-spacing:-.2px; color:#1769aa; }
+  .speed-test-factors .speed-test-card:nth-child(-n+2) { min-height:162px; }
+  .speed-test-factors .speed-test-card:nth-child(n+3) { min-height:186px; }
+  .speed-test-diagnosis { display:flex; flex-direction:column; gap:16px; }
+  .speed-test-diagnosis-row { display:grid; grid-template-columns:320px minmax(0,1fr); gap:32px; padding:24px; border-radius:24px; background:#fff; }
+  .speed-test-diagnosis-row > div { display:flex; flex-direction:column; gap:8px; min-width:0; }
+  .speed-test-page .speed-test-diagnosis-row > p { color:#18202a; }
+  .speed-test-support-row { display:grid; grid-template-columns:400px minmax(0,1fr); gap:32px; align-items:stretch; }
+  .speed-test-contact { display:flex; flex-direction:column; gap:12px; padding:24px; border-radius:24px; background:#eaf7ff; min-width:0; }
+  .speed-test-contact-heading { display:flex; gap:12px; align-items:flex-start; }
+  .speed-test-contact-heading > div { display:flex; flex-direction:column; gap:4px; min-width:0; }
+  .speed-test-contact-icon { display:flex; align-items:center; justify-content:center; flex:0 0 44px; height:44px; border-radius:10px; background:#fff; }
+  .speed-test-contact-icon img { display:block; width:24px; height:24px; }
+  .speed-test-contact-main { display:flex; flex-direction:column; gap:8px; }
+  .speed-test-phone { display:flex; align-items:center; min-height:44px; color:#1769aa; font-size:20px; line-height:25px; font-weight:700; letter-spacing:-.2px; text-decoration:none; overflow-wrap:anywhere; }
+  .speed-test-phone:hover { text-decoration:underline; text-underline-offset:3px; }
+  .speed-test-contact-meta { display:flex; flex-wrap:wrap; gap:8px; }
+  .speed-test-contact-meta > div, .speed-test-contact-description { display:flex; align-items:flex-start; gap:8px; min-width:0; }
+  .speed-test-contact-meta img, .speed-test-contact-description img { display:block; width:20px; height:20px; flex:0 0 20px; }
+  .speed-test-support-preparation { display:flex; flex-direction:column; gap:24px; min-width:0; }
+  .speed-test-support-preparation > div { display:flex; flex-direction:column; gap:8px; }
+  @media (min-width:1101px) {
+    /* The accepted Desktop text frame reserves two lines for this explanation. */
+    .speed-test-support-preparation > div:last-child > p { min-height:48px; }
+  }
+  @media (min-width:621px) and (max-width:1100px) {
+    .speed-test-page { width:min(720px,calc(100% - 48px)); }
+    .speed-test-page h1 { font-size:40px; line-height:43px; font-weight:700; letter-spacing:-1.6px; }
+    .speed-test-section { padding:32px; }
+    .speed-test-section-preparation { padding:24px; }
+    .speed-test-preparation .speed-test-rail { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .speed-test-preparation .speed-test-card { min-height:234px; }
+    .speed-test-preparation .speed-test-card:nth-child(-n+2) { min-height:258px; }
+    .speed-test-preparation .speed-test-card:nth-child(n+3) { min-height:234px; }
+    .speed-test-metrics .speed-test-card { min-height:258px; }
+    .speed-test-tasks .speed-test-card:nth-child(-n+2) { min-height:394px; }
+    .speed-test-tasks .speed-test-card:nth-child(n+3) { min-height:316px; }
+    .speed-test-factors .speed-test-card:nth-child(-n+2) { min-height:210px; }
+    .speed-test-factors .speed-test-card:nth-child(n+3) { min-height:236px; }
+    .speed-test-diagnosis-row { grid-template-columns:220px minmax(0,1fr); }
+    .speed-test-section-support > .speed-test-section-heading > p { min-height:72px; }
+    .speed-test-support-row { grid-template-columns:minmax(0,1fr); }
+  }
+  @media (max-width:620px) {
+    .speed-test-page { width:calc(100% - 32px); margin:16px auto 24px; }
+    .speed-test-page h1 { font-size:28px; line-height:33px; font-weight:700; letter-spacing:-1.5px; }
+    .speed-test-page h2 { font-size:24px; line-height:29px; letter-spacing:-.8px; }
+    .speed-test-section { gap:24px; padding:32px 0; }
+    .speed-test-section-preparation, .speed-test-section-tasks, .speed-test-section-diagnosis { padding:16px; }
+    .speed-test-section-tasks > .speed-test-section-heading > p { min-height:144px; }
+    .speed-test-methods { grid-template-columns:minmax(0,1fr); }
+    .speed-test-methods .speed-test-card { min-height:0; }
+    .speed-test-card, .speed-test-comparison { padding:16px; }
+    .speed-test-card, .speed-test-methods .speed-test-card { gap:12px; }
+    .speed-test-card-heading { gap:8px; min-height:40px; }
+    .speed-test-icon { flex-basis:40px; width:40px; height:40px; border-radius:10px; }
+    .speed-test-icon img { width:24px; height:24px; }
+    .speed-test-card-group { display:flex; flex-direction:column; gap:8px; }
+    .speed-test-page .speed-test-swipe-hint { display:block; font-size:12px; line-height:16px; }
+    .speed-test-rail, .speed-test-preparation .speed-test-rail { display:grid; grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:calc(100% - 32px); gap:16px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x proximity; scrollbar-width:none; padding:0; }
+    .speed-test-rail::-webkit-scrollbar { display:none; }
+    .speed-test-rail > article { scroll-snap-align:start; }
+    .speed-test-preparation .speed-test-card:nth-child(n) { min-height:238px; }
+    .speed-test-metrics .speed-test-card { min-height:234px; gap:16px; }
+    .speed-test-tasks .speed-test-card:nth-child(n) { min-height:378px; gap:16px; }
+    .speed-test-factors .speed-test-card:nth-child(n) { min-height:220px; gap:16px; }
+    .speed-test-units { grid-template-columns:minmax(0,1fr); padding:16px; }
+    .speed-test-diagnosis-row { grid-template-columns:minmax(0,1fr); gap:12px; padding:16px; }
+    .speed-test-diagnosis-row:last-child > div > p { min-height:60px; }
+    .speed-test-support-row { grid-template-columns:minmax(0,1fr); }
+    .speed-test-contact { padding:20px; }
+  }
+  @media (max-width:350px) {
+    .speed-test-section-preparation, .speed-test-section-tasks, .speed-test-section-diagnosis { padding:12px; }
+    .speed-test-section-preparation > .speed-test-section-heading > p { min-height:144px; }
+    .speed-test-comparison > p { min-height:168px; }
+    .speed-test-units > div:first-child > p { min-height:192px; }
+    .speed-test-preparation .speed-test-card:nth-child(n) { min-height:311px; }
+    .speed-test-metrics .speed-test-card { min-height:292px; }
+    .speed-test-tasks .speed-test-card:nth-child(n) { min-height:426px; }
+    .speed-test-factors .speed-test-card:nth-child(n) { min-height:268px; }
+    .speed-test-contact-heading h3 { min-height:50px; }
+    .speed-test-diagnosis-row:last-child > p { min-height:240px; }
+  }
+</style>

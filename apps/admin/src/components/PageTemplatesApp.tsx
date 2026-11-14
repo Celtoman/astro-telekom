@@ -17,6 +17,7 @@ export function PageTemplatesApp({ apiUrl }: { apiUrl: string }) {
   }, [apiUrl])
   if (!user) return <div className="p-6" role="status">{error ?? "Загружаем шаблоны…"}</div>
   const templates = [
+    { name: "Проверка скорости интернета", path: "/proverit-skorost-interneta", description: "Заголовок, шесть информационных разделов и FAQ. Состав карточек и оформление сохраняются.", blocks: [{ label: "Редактировать страницу", href: "/templates/speed-test" }] },
     { name: "Официальный сайт", path: "/official-site-domru", description: "Вступление, иллюстрации, основной переход и FAQ. Принятая структура сохраняется.", blocks: [{ label: "Редактировать страницу", href: "/templates/official-site" }] },
     { name: "Личный кабинет", path: "/lichnyy-kabinet-dom-ru", description: "Вступление, изображения и вопросы. Инструкции и структура страницы сохраняются.", blocks: [{ label: "Редактировать страницу", href: "/templates/account" }] },
     { name: "Проверка подключения", path: "/{город}/proverka-podklyucheniya-k-domru-po-adresu", description: "Восемь редактируемых блоков ADDRESS для всех городов. Тарифы и общие факты подставляются автоматически.", blocks: [{ label: "Редактировать страницу", href: "/templates/home?kind=CITY_ADDRESS_CHECK" }] },

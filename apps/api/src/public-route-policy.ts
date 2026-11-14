@@ -10,16 +10,16 @@ export const RELEASE_ONE_GLOBAL_PAGES = [
 ] as const;
 
 export type ReleaseOneGlobalPageType = typeof RELEASE_ONE_GLOBAL_PAGES[number]['type'];
-export const OPTIONAL_GLOBAL_PAGES = [{ type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }, { type: 'OFFICIAL_SITE', slug: 'official-site-domru' }] as const;
+export const OPTIONAL_GLOBAL_PAGES = [{ type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }, { type: 'OFFICIAL_SITE', slug: 'official-site-domru' }, { type: 'SPEED_TEST', slug: 'proverit-skorost-interneta' }] as const;
 export const SUPPORTED_GLOBAL_PAGES = [...RELEASE_ONE_GLOBAL_PAGES, ...OPTIONAL_GLOBAL_PAGES] as const;
 
 export type LegacyPublicRoute = {
-  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE';
+  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE' | 'SPEED_TEST';
   kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'GLOBAL_PAGE';
   path: string;
   citySlug?: string;
   tariffSlug?: string;
-  pageType?: ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE';
+  pageType?: ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE' | 'SPEED_TEST';
 };
 export type PublicRoute = LegacyPublicRoute | (NewsRoute & {citySlug?:never;tariffSlug?:never;pageType?:never});
 export function isLegacyPublicRoute(route:PublicRoute):route is LegacyPublicRoute {return route.kind!=='NEWS_LIST'&&route.kind!=='NEWS_ARTICLE'&&route.kind!=='NEWS_CATEGORY'}

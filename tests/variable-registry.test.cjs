@@ -18,6 +18,33 @@ const context = () => ({
   now: new Date('2026-09-23T00:00:00.000Z'),
 });
 
+test('SPEED_TEST native text paths derive from schema and extend SITE definitions only', () => {
+  const { SPEED_TEST_PAGE_SCHEMA } = require('../apps/api/dist/speed-test-page-model.js');
+  const collect = (rule, path = 'Page.content') => rule.kind === 'object'
+    ? Object.entries(rule.fields).flatMap(([key, child]) => collect(child, `${path}.${key}`))
+    : rule.kind === 'list' ? collect(rule.item, `${path}[]`)
+    : rule.variables ? [path] : [];
+  const paths = collect(SPEED_TEST_PAGE_SCHEMA);
+  assert.ok(paths.includes('Page.content.support.items.results.body'));
+  assert.ok(paths.includes('Page.content.faq.items[].answer'));
+  assert.ok(!paths.includes('Page.content.version'));
+  const definitions = variables().listVariableDefinitions();
+  for (const definition of definitions) {
+    if (definition.scope === 'SITE') {
+      for (const path of paths) assert.ok(definition.allowedFields.includes(path), `${definition.code}: ${path}`);
+      assert.ok(definition.allowedFields.includes('Page.title'));
+      assert.ok(definition.allowedFields.some(path => path.startsWith('PageTemplateBlock.data.')));
+    } else {
+      assert.ok(!definition.allowedFields.includes('Page.content.support.items.results.body'));
+      assert.ok(!definition.allowedFields.includes('Page.content.hero.h1'));
+    }
+    assert.ok(!definition.allowedFields.includes('Page.content.version'));
+    assert.equal(new Set(definition.allowedFields).size, definition.allowedFields.length);
+  }
+  definitions[0].allowedFields.push('Page.content.untrusted');
+  assert.ok(!variables().listVariableDefinitions()[0].allowedFields.includes('Page.content.untrusted'));
+});
+
 test('registry has unique fixed codes, explicit types and one authoritative source per code', () => {
   const { listVariableDefinitions } = variables();
   const definitions = listVariableDefinitions();

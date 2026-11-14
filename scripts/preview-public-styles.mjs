@@ -39,6 +39,11 @@ const sources = [
   ['cities', 'components/CitiesDirectory.astro'],
   // The page-specific overrides follow the shared blocks, as in the web build.
   ['global', 'components/official-site/OfficialSiteStyles.astro'],
+  ['speedtest', 'components/general-home/HomeBlockStyles.astro'],
+  ['speedtest', 'components/general-home/HomeFaq.astro'],
+  ['speedtest', 'components/general-home/AddressOnly.astro'],
+  ['speedtest', 'components/general-home/HomeAddressFormStyles.astro'],
+  ['global', 'components/speed-test/SpeedTestStyles.astro'],
 ].map(([name, path]) => [name, fileURLToPath(new URL(`../apps/web/src/${path}`, import.meta.url))]);
 const assetPaths = ['home-hero.png', 'domru-logo.png', 'map-pin.svg', 'chevron-down.svg', 'search.svg', 'headphones.svg', 'phone.svg', 'menu.svg', 'tag.svg', 'wifi.svg', 'tv.svg', 'tag-blue.svg', 'wifi-blue.svg', 'hero-speed.svg', 'hero-speed-blue.svg', 'tv-blue.svg', 'hero-television.svg', 'hero-television-blue.svg', 'shield-check.svg', 'check.svg']
   .map(name => `/images/figma/${name}`).concat(['/images/figma/hero1d-desktop-imglocationicon.svg', ...['desktop', 'tablet', 'mobile'].flatMap(device => [0, 1, 2].map(index => `/images/figma/hero1d-${device}-imgicon${index || ''}.svg`))]);
@@ -51,6 +56,7 @@ assetPaths.push(...readdirSync(new URL('../apps/web/public/images/news/', import
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/official-site/v1/', import.meta.url)).filter(name => /^[a-z0-9-]+\.png$/.test(name)).map(name => `/images/official-site/v1/${name}`));
 assetPaths.push('/images/legal/caret-down.svg', '/images/legal/caret-up.svg');
 assetPaths.push('/images/cities-directory/search.svg', '/images/cities-directory/clear.svg');
+assetPaths.push(...readdirSync(new URL('../apps/web/public/images/speed-test/v1/', import.meta.url)).filter(name => /^[a-z0-9-]+\.svg$/.test(name)).map(name => `/images/speed-test/v1/${name}`));
 
 // Only trusted repository CSS is embedded. Catalog data never reaches this loader.
 // Native CSS nesting isolates Astro's local selectors from other preview components.

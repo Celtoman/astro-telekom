@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-14",
+  "source": "NYPu7SUTORyJbm5tGUMO9K",
+  "screens": "BdxNHlBVZWejREtOEIWDkI",
+  "method": "Source library Publish -> Screens Manage libraries Update all on current page only",
+  "releases": [
+    {
+      "items": 25,
+      "reason": "approved content, hero caption removal and heights",
+      "verified": "Successfully published library updates; Screens 44/44 normalized trees match"
+    },
+    {
+      "items": 20,
+      "reason": "nonbreaking Wi-Fi typography",
+      "sourceUI": "Published by ... 1 minute ago; release description verified in Screens Updates",
+      "screensUI": "Successfully updated assets",
+      "verified": "Final 44/44 normalized trees match"
+    }
+  ],
+  "sharedLibraryPublished": false,
+  "otherScreensPagesUpdated": false
+}

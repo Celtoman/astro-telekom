@@ -1,0 +1,38 @@
+{
+  "synthetic": true,
+  "fixedTextFields": 90,
+  "siteVariableInsertion": {
+    "value": "До{PROVIDER_NAME} После",
+    "caret": 17,
+    "focusRestored": true
+  },
+  "conflict": {
+    "status": 409,
+    "inputPreserved": true
+  },
+  "networkError": {
+    "message": "Failed to fetch",
+    "inputPreserved": true
+  },
+  "dirtyRefresh": {
+    "promptObserved": "Отменить несохранённые изменения?",
+    "dismissalVerified": false,
+    "note": "IAB dialog control did not close the native prompt; synthetic tab reopened. No production input or publication involved."
+  },
+  "save": {
+    "workingRevision": 2,
+    "publishedRevision": 1,
+    "publishes": false
+  },
+  "faq": {
+    "added": 7,
+    "moved": true,
+    "removedBackTo6": true,
+    "cleanAfterRestoration": true
+  },
+  "preview": {
+    "savedVariableResolved": true,
+    "sandbox": "",
+    "liveWidget": false
+  }
+}

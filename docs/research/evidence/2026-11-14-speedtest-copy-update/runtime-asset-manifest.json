@@ -1,0 +1,209 @@
+[
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "prep-icon.svg",
+    "bytes": 2589,
+    "sourceGroup": "prep",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "50f9d38d68cc43bce0cdf94e3a8cf0eafd60e61a0935c028c82c48621fc12479",
+    "file": "network.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "prep-icon1.svg",
+    "bytes": 1948,
+    "sourceGroup": "prep",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "875cb34b585341042f43660151f2be01592b1f2d08c30e7775075a932834c946",
+    "file": "wifi.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "prep-icon2.svg",
+    "bytes": 2287,
+    "sourceGroup": "prep",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "eefb7b8d64706f362c86c9cdbb92da414875e452881dddf6a2827c7764f38612",
+    "file": "pause.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "prep-glyphphosphorduotone.svg",
+    "bytes": 2373,
+    "sourceGroup": "prep",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "702797725e3a6d1329642e3f8b71856aa75dc0c6b11e20d159dcce8b1fa83798",
+    "file": "devices.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "prep-icon3.svg",
+    "bytes": 2009,
+    "sourceGroup": "prep",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "f342b31b446096a20e5d8f9ded6dcc3b0759b9599ce03f72b80ee278aa174678",
+    "file": "shield.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "prep-icon4.svg",
+    "bytes": 1835,
+    "sourceGroup": "prep",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "625f321989ba560196eeb0ad48aa22b293f86f283bdbde85957b7796c992852a",
+    "file": "app-window.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "prep-icon5.svg",
+    "bytes": 1538,
+    "sourceGroup": "prep",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "6a7897e03e39110ec8913acda6020f653da86d23aac52e527867ef80b508bf85",
+    "file": "file-text.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "metrics-phosphorduotonedownloadsimple.svg",
+    "bytes": 1931,
+    "sourceGroup": "metrics",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "87a3064b915b25904c5c1ced0f2f86c1e4e8d6d0aadc89df5a04c44eae0d9132",
+    "file": "download.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "metrics-phosphorduotoneuploadsimple.svg",
+    "bytes": 1731,
+    "sourceGroup": "metrics",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "284bdd03cec7e030630e5919b7218485e3c871861ee8e4ac1ce9ec4fb7613094",
+    "file": "upload.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "metrics-icon.svg",
+    "bytes": 2195,
+    "sourceGroup": "metrics",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "0a1d39a6620be7c0fb5f1e3575cd82b27b78692d19831895f69e17a1c2d54760",
+    "file": "gauge.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "metrics-phosphorduotonepulse.svg",
+    "bytes": 1311,
+    "sourceGroup": "metrics",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "c6d977addbfd817c01a74225f208e39dedd979e6354f514c7bbe956f0320ecad",
+    "file": "pulse.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "tasks-cmp0120.svg",
+    "bytes": 1475,
+    "sourceGroup": "tasks",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "888c79332cc952b566a1c776bdaf21f879021908b21732f00cb6f5cfa9b604b0",
+    "file": "database.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "tasks-cmp0013.svg",
+    "bytes": 2401,
+    "sourceGroup": "tasks",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "baf90c9c606e443d86802554f18373a5cee145ea7cfb4dc1865642a477853485",
+    "file": "clock.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "tasks-cmp0119.svg",
+    "bytes": 3073,
+    "sourceGroup": "tasks",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "3cda0543ed8365ee42c7acea70802e55af62e8d211491767b62a6e323966dcd4",
+    "file": "handshake.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "tasks-cmp0110.svg",
+    "bytes": 2405,
+    "sourceGroup": "tasks",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "0d41c7268bd3d879b538cb3e36cff373b7272c2dd3bb2b162cb063ac59157061",
+    "file": "video.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "factors-icon.svg",
+    "bytes": 4929,
+    "sourceGroup": "factors",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "c2491c75610db5750c22b66d4ae565c83271d0bb6476389028ec9edbe1352049",
+    "file": "wifi-warning.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "factors-glyphphosphorduotone.svg",
+    "bytes": 2373,
+    "sourceGroup": "factors",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "702797725e3a6d1329642e3f8b71856aa75dc0c6b11e20d159dcce8b1fa83798",
+    "file": "equipment.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "factors-icon1.svg",
+    "bytes": 2287,
+    "sourceGroup": "factors",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "eefb7b8d64706f362c86c9cdbb92da414875e452881dddf6a2827c7764f38612",
+    "file": "traffic.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "factors-icon2.svg",
+    "bytes": 2589,
+    "sourceGroup": "factors",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "50f9d38d68cc43bce0cdf94e3a8cf0eafd60e61a0935c028c82c48621fc12479",
+    "file": "server-network.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "help-cmp0113.svg",
+    "bytes": 2992,
+    "sourceGroup": "help",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "4440e5a990e8b01f8d1648e2215177476e7a9a126d0ae3dc0931543879ccd263",
+    "file": "round-clock.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "help-cmp0015.svg",
+    "bytes": 2880,
+    "sourceGroup": "help",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "b8b4644b5bec80011a29676b3553ed5dd8cedbc7cb438e0fdd5419864f371819",
+    "file": "support.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "help-cmp010920px.svg",
+    "bytes": 4450,
+    "sourceGroup": "help",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "ae6a94e7ae521a93a456fc18427f0ca15f26fc82c2a6fa5ffd59a038c6a7de99",
+    "file": "phone-call.svg"
+  },
+  {
+    "figmaPage": "1237:3",
+    "sourceFile": "help-cmp011420px.svg",
+    "bytes": 2598,
+    "sourceGroup": "help",
+    "figmaFile": "BdxNHlBVZWejREtOEIWDkI",
+    "sha256": "11ea502dc3d1b05c2745c4353591bbd97c2f49042336faca0eeaa09f63774b00",
+    "file": "help.svg"
+  }
+]

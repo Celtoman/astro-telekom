@@ -1,0 +1,2962 @@
+{
+  "roots": [
+    {
+      "id": "22:611",
+      "name": "SPEED_TEST V4 / Desktop / 1440",
+      "w": 1440,
+      "h": 6782,
+      "gap": 24,
+      "sections": [
+        {
+          "id": "22:612",
+          "name": "BLK-0001 / Шапка сайта",
+          "w": 1360,
+          "h": 129,
+          "x": 40,
+          "y": 0,
+          "count": 53,
+          "hash": "82f9c48d",
+          "appearanceHash": "7186b95e",
+          "textHash": "44f02fa4",
+          "masterHash": "a44c2c66",
+          "variableHash": "184f31e7",
+          "urls": [
+            {
+              "id": "I22:612;2719:95",
+              "name": "Проверка подключения / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:381"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "22:383"
+                }
+              ]
+            },
+            {
+              "id": "I22:612;2719:97",
+              "name": "Техническая поддержка / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:381"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "22:383"
+                }
+              ]
+            },
+            {
+              "id": "I22:612;2716:85",
+              "name": "nav-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:39"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:41"
+                }
+              ]
+            },
+            {
+              "id": "I22:612;2716:87",
+              "name": "nav-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:39"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:41"
+                }
+              ]
+            },
+            {
+              "id": "I22:612;2716:89",
+              "name": "nav-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:39"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:41"
+                }
+              ]
+            },
+            {
+              "id": "I22:612;2716:91",
+              "name": "nav-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:39"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:41"
+                }
+              ]
+            },
+            {
+              "id": "I22:612;2716:93",
+              "name": "nav-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:39"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:41"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 11,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:705",
+          "name": "SPEED_TEST V2 / Первый экран",
+          "w": 1360,
+          "h": 498,
+          "x": 40,
+          "y": 153,
+          "count": 7,
+          "hash": "9966b6f1",
+          "appearanceHash": "5dced656",
+          "textHash": "b3c717a1",
+          "masterHash": "f94a9e1e",
+          "variableHash": "7ce1961f",
+          "urls": [
+            {
+              "id": "I22:705;46:66",
+              "name": "OpenSpeedTest / Start Test",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://openspeedtest.com?ref&speedtest"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 3,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:1222",
+          "name": "BLK-0036 / Проверка подключения — только адрес",
+          "w": 1360,
+          "h": 336,
+          "x": 40,
+          "y": 675,
+          "count": 31,
+          "hash": "40c8ee74",
+          "appearanceHash": "40c8ee74",
+          "textHash": "47b20c85",
+          "masterHash": "60e4b463",
+          "variableHash": "2285c55d",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 1,
+          "outside": [
+            {
+              "id": "I22:1222;2561:774",
+              "name": "Badge / Проверим за пару секунд",
+              "parent": "I22:1222;2561:986",
+              "x": -96,
+              "y": 184,
+              "w": 172,
+              "h": 64,
+              "pw": 320,
+              "ph": 256.09130859375
+            }
+          ],
+          "texts": 7,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:1938",
+          "name": "SPEED_TEST / Подготовка А / Desktop",
+          "w": 1360,
+          "h": 1078,
+          "x": 40,
+          "y": 1035,
+          "count": 93,
+          "hash": "4f4990f6",
+          "appearanceHash": "4f4990f6",
+          "textHash": "96864cf9",
+          "masterHash": "4565debc",
+          "variableHash": "ee56d2d2",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 21,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:1983",
+          "name": "SPEED_TEST V4 / Что означают результаты / Desktop",
+          "w": 1360,
+          "h": 843,
+          "x": 40,
+          "y": 2137,
+          "count": 53,
+          "hash": "4bad6df9",
+          "appearanceHash": "4bad6df9",
+          "textHash": "764003bb",
+          "masterHash": "bd3941c4",
+          "variableHash": "dcf68f9e",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 14,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:2066",
+          "name": "SPEED_TEST V4 / Какая скорость нужна / Desktop",
+          "w": 1360,
+          "h": 761,
+          "x": 40,
+          "y": 3004,
+          "count": 59,
+          "hash": "e2358932",
+          "appearanceHash": "e2358932",
+          "textHash": "8fa8e767",
+          "masterHash": "128d8e1d",
+          "variableHash": "c2e2c6f5",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 18,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:2155",
+          "name": "SPEED_TEST V4 / От чего зависит результат / Desktop",
+          "w": 1360,
+          "h": 658,
+          "x": 40,
+          "y": 3789,
+          "count": 47,
+          "hash": "a5529234",
+          "appearanceHash": "a5529234",
+          "textHash": "469a4773",
+          "masterHash": "47a35c97",
+          "variableHash": "e57f89f4",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 11,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:2206",
+          "name": "SPEED_TEST V4 / Интернет тормозит / Desktop",
+          "w": 1360,
+          "h": 577,
+          "x": 40,
+          "y": 4471,
+          "count": 20,
+          "hash": "86e48c93",
+          "appearanceHash": "86e48c93",
+          "textHash": "7c72749b",
+          "masterHash": "979e6db7",
+          "variableHash": "458dea05",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 11,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:2279",
+          "name": "SPEED_TEST V4 / Куда обращаться, если скорость низкая / Desktop",
+          "w": 1360,
+          "h": 566,
+          "x": 40,
+          "y": 5072,
+          "count": 51,
+          "hash": "d6d0fb6a",
+          "appearanceHash": "f759f845",
+          "textHash": "d92afca4",
+          "masterHash": "23c4f2f5",
+          "variableHash": "58c1366b",
+          "urls": [
+            {
+              "id": "I58:2279;137:3586;1998:41",
+              "name": "Phone action / 8-800-250-77-77",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78002507777"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 15,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:960",
+          "name": "BLK-0014 / Универсальный FAQ",
+          "w": 1360,
+          "h": 534,
+          "x": 40,
+          "y": 5662,
+          "count": 58,
+          "hash": "1d0ec914",
+          "appearanceHash": "c27e5ce8",
+          "textHash": "67ec65e5",
+          "masterHash": "54a6902e",
+          "variableHash": "5372b88d",
+          "urls": [
+            {
+              "id": "I22:960;1745:1499;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            },
+            {
+              "id": "I22:960;1745:1515;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            },
+            {
+              "id": "I22:960;1745:1531;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            },
+            {
+              "id": "I22:960;1745:1547;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            },
+            {
+              "id": "I22:960;1745:1563;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            },
+            {
+              "id": "I22:960;1745:1579;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 7,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:1281",
+          "name": "BLK-0016 / Футер",
+          "w": 1360,
+          "h": 562,
+          "x": 40,
+          "y": 6220,
+          "count": 60,
+          "hash": "b4c14f5b",
+          "appearanceHash": "e36625f6",
+          "textHash": "1889c449",
+          "masterHash": "5d5ed951",
+          "variableHash": "e909f528",
+          "urls": [
+            {
+              "id": "I22:1281;2317:26",
+              "name": "Позвонить для подключения",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78005557244"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2317:30",
+              "name": "Позвонить в техническую поддержку",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78002507777"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2317:35",
+              "name": "Оставить заявку / FLOW2",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://www.figma.com/proto/PiSCXYR88uqqcS6tKVfd8T?node-id=1084-968&starting-point-node-id=1084%3A968"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:414",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:416",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:418",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:420",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:422",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:424",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:426",
+              "name": "footer-link / Техническая поддержка / UI link",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?node-id=620-43710&starting-point-node-id=620%3A43710"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:429",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:431",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:433",
+              "name": "footer-link / Города обслуживания / UI link",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/goroda-obsluzhivaniya-domru"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2324:158",
+              "name": "Открыть / Политика конфиденциальности",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/policy"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:436",
+              "name": "Политика конфиденциальности / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2324:161",
+              "name": "Открыть / Согласие на обработку данных",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/soglasie"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:438",
+              "name": "Согласие на обработку данных / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2324:164",
+              "name": "Открыть / Политика cookie",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/politika-obrabotki-faylov-kuki"
+                }
+              ]
+            },
+            {
+              "id": "I22:1281;2716:440",
+              "name": "Политика cookie / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 25,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        }
+      ]
+    },
+    {
+      "id": "22:1357",
+      "name": "SPEED_TEST V4 / Tablet / 834",
+      "w": 834,
+      "h": 8260.056640625,
+      "gap": 24,
+      "sections": [
+        {
+          "id": "22:1358",
+          "name": "BLK-0001 / Шапка сайта",
+          "w": 720,
+          "h": 121,
+          "x": 57,
+          "y": 0,
+          "count": 46,
+          "hash": "870124fa",
+          "appearanceHash": "692732df",
+          "textHash": "f3099db",
+          "masterHash": "58d833ba",
+          "variableHash": "ec0ec96c",
+          "urls": [
+            {
+              "id": "I22:1358;2719:103",
+              "name": "Проверка подключения / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:381"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "22:383"
+                }
+              ]
+            },
+            {
+              "id": "I22:1358;2719:105",
+              "name": "Техническая поддержка / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:381"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "22:383"
+                }
+              ]
+            },
+            {
+              "id": "I22:1358;2716:95",
+              "name": "nav-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:39"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:41"
+                }
+              ]
+            },
+            {
+              "id": "I22:1358;2716:97",
+              "name": "nav-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:39"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:41"
+                }
+              ]
+            },
+            {
+              "id": "I22:1358;2716:99",
+              "name": "nav-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:39"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:41"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 7,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:1442",
+          "name": "SPEED_TEST V2 / Первый экран",
+          "w": 720,
+          "h": 518,
+          "x": 57,
+          "y": 145,
+          "count": 7,
+          "hash": "e841a72b",
+          "appearanceHash": "b52ea338",
+          "textHash": "b3c717a1",
+          "masterHash": "fe7ada75",
+          "variableHash": "a2f6ba4b",
+          "urls": [
+            {
+              "id": "I22:1442;46:73",
+              "name": "OpenSpeedTest / Start Test",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://openspeedtest.com?ref&speedtest"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 3,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:1950",
+          "name": "BLK-0036 / Проверка подключения — только адрес",
+          "w": 720,
+          "h": 348.0570983886719,
+          "x": 57,
+          "y": 687,
+          "count": 29,
+          "hash": "72d4d2a0",
+          "appearanceHash": "72d4d2a0",
+          "textHash": "2d900bcf",
+          "masterHash": "b40d1bcd",
+          "variableHash": "8f63974c",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 2,
+          "outside": [
+            {
+              "id": "I22:1950;2561:817",
+              "name": "Illustration / House & Check Badge",
+              "parent": "I22:1950;2561:811",
+              "x": 488,
+              "y": -24,
+              "w": 200,
+              "h": 160.05709838867188,
+              "pw": 672,
+              "ph": 160.05709838867188
+            },
+            {
+              "id": "I22:1950;2561:819",
+              "name": "Badge / Проверим за пару секунд",
+              "parent": "I22:1950;2561:817",
+              "x": -12,
+              "y": 146,
+              "w": 172,
+              "h": 64,
+              "pw": 200,
+              "ph": 160.05709838867188
+            }
+          ],
+          "texts": 7,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:2454",
+          "name": "SPEED_TEST V4 / Подготовка А / Tablet720",
+          "w": 720,
+          "h": 1426,
+          "x": 57,
+          "y": 1059.05712890625,
+          "count": 94,
+          "hash": "2a2556fe",
+          "appearanceHash": "2a2556fe",
+          "textHash": "96864cf9",
+          "masterHash": "b4dc541a",
+          "variableHash": "1c967ef6",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 21,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:2499",
+          "name": "SPEED_TEST V4 / Что означают результаты / Tablet",
+          "w": 720,
+          "h": 1054,
+          "x": 57,
+          "y": 2509.05712890625,
+          "count": 53,
+          "hash": "f254f8bc",
+          "appearanceHash": "f254f8bc",
+          "textHash": "764003bb",
+          "masterHash": "2d41d66",
+          "variableHash": "3e13a5f4",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 14,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:2582",
+          "name": "SPEED_TEST V4 / Какая скорость нужна / Tablet",
+          "w": 720,
+          "h": 952,
+          "x": 57,
+          "y": 3587.05712890625,
+          "count": 59,
+          "hash": "90357359",
+          "appearanceHash": "90357359",
+          "textHash": "8fa8e767",
+          "masterHash": "49f9bf94",
+          "variableHash": "f73b4c73",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 18,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:2671",
+          "name": "SPEED_TEST V4 / От чего зависит результат / Tablet",
+          "w": 720,
+          "h": 768,
+          "x": 57,
+          "y": 4563.05712890625,
+          "count": 47,
+          "hash": "a7448451",
+          "appearanceHash": "a7448451",
+          "textHash": "469a4773",
+          "masterHash": "7f8c8164",
+          "variableHash": "11e95fea",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 11,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:2722",
+          "name": "SPEED_TEST V4 / Интернет тормозит / Tablet",
+          "w": 720,
+          "h": 826,
+          "x": 57,
+          "y": 5355.05712890625,
+          "count": 20,
+          "hash": "6fa74bf6",
+          "appearanceHash": "6fa74bf6",
+          "textHash": "7c72749b",
+          "masterHash": "6bed22ba",
+          "variableHash": "fb13b107",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 11,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:2795",
+          "name": "SPEED_TEST V4 / Куда обращаться, если скорость низкая / Tablet",
+          "w": 720,
+          "h": 827,
+          "x": 57,
+          "y": 6205.05712890625,
+          "count": 51,
+          "hash": "3ca9acef",
+          "appearanceHash": "dc4ec9ea",
+          "textHash": "d92afca4",
+          "masterHash": "e89b5932",
+          "variableHash": "bddbbb8a",
+          "urls": [
+            {
+              "id": "I58:2795;137:3701;1998:41",
+              "name": "Phone action / 8-800-250-77-77",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78002507777"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 15,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:1694",
+          "name": "BLK-0014 / Универсальный FAQ",
+          "w": 720,
+          "h": 518,
+          "x": 57,
+          "y": 7056.05712890625,
+          "count": 58,
+          "hash": "e664a465",
+          "appearanceHash": "85070281",
+          "textHash": "67ec65e5",
+          "masterHash": "3e83b9ca",
+          "variableHash": "f352901a",
+          "urls": [
+            {
+              "id": "I22:1694;1745:1600;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            },
+            {
+              "id": "I22:1694;1745:1616;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            },
+            {
+              "id": "I22:1694;1745:1632;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            },
+            {
+              "id": "I22:1694;1745:1648;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            },
+            {
+              "id": "I22:1694;1745:1664;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            },
+            {
+              "id": "I22:1694;1745:1680;1753:31",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:36"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 7,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:2002",
+          "name": "BLK-0016 / Футер",
+          "w": 720,
+          "h": 662,
+          "x": 57,
+          "y": 7598.05712890625,
+          "count": 58,
+          "hash": "871953f",
+          "appearanceHash": "db732d42",
+          "textHash": "efaa0003",
+          "masterHash": "b387567c",
+          "variableHash": "c4afa324",
+          "urls": [
+            {
+              "id": "I22:2002;2317:43",
+              "name": "Позвонить для подключения",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78005557244"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2317:47",
+              "name": "Позвонить в техническую поддержку",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78002507777"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2317:52",
+              "name": "Оставить заявку / FLOW2",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://www.figma.com/proto/PiSCXYR88uqqcS6tKVfd8T?node-id=1084-1543&starting-point-node-id=1084%3A1543"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:442",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:444",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:446",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:448",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:450",
+              "name": "footer-link / Техническая поддержка / UI link",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?node-id=620-43728&starting-point-node-id=620%3A43728"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:453",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:455",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:457",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:459",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:461",
+              "name": "footer-link / Города обслуживания / UI link",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/goroda-obsluzhivaniya-domru"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2324:176",
+              "name": "Открыть / Политика конфиденциальности",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/policy"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:464",
+              "name": "Политика конфиденциальности / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2324:179",
+              "name": "Открыть / Согласие на обработку данных",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/soglasie"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:466",
+              "name": "Согласие на обработку данных / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2324:182",
+              "name": "Открыть / Политика cookie",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/politika-obrabotki-faylov-kuki"
+                }
+              ]
+            },
+            {
+              "id": "I22:2002;2716:468",
+              "name": "Политика cookie / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 24,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        }
+      ]
+    },
+    {
+      "id": "22:2076",
+      "name": "SPEED_TEST V4 / Mobile / 390",
+      "w": 390,
+      "h": 8528,
+      "gap": 24,
+      "sections": [
+        {
+          "id": "22:2077",
+          "name": "BLK-0001 / Шапка сайта",
+          "w": 358,
+          "h": 109,
+          "x": 16,
+          "y": 0,
+          "count": 25,
+          "hash": "74f582ea",
+          "appearanceHash": "74f582ea",
+          "textHash": "f45a2a3a",
+          "masterHash": "54ebf227",
+          "variableHash": "f06aba6",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 3,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:2120",
+          "name": "SPEED_TEST V2 / Первый экран",
+          "w": 358,
+          "h": 486,
+          "x": 16,
+          "y": 133,
+          "count": 7,
+          "hash": "334f116f",
+          "appearanceHash": "8fcd001c",
+          "textHash": "b3c717a1",
+          "masterHash": "9ea0180a",
+          "variableHash": "7634573c",
+          "urls": [
+            {
+              "id": "I22:2120;46:80",
+              "name": "OpenSpeedTest / Start Test",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://openspeedtest.com?ref&speedtest"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 3,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:2632",
+          "name": "BLK-0036 / Проверка подключения — только адрес",
+          "w": 358,
+          "h": 386,
+          "x": 16,
+          "y": 643,
+          "count": 25,
+          "hash": "102f05e5",
+          "appearanceHash": "102f05e5",
+          "textHash": "3c132e82",
+          "masterHash": "12f656f8",
+          "variableHash": "19dc8e82",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 6,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:2967",
+          "name": "SPEED_TEST / Подготовка А / Mobile",
+          "w": 358,
+          "h": 1208,
+          "x": 16,
+          "y": 1053,
+          "count": 94,
+          "hash": "148fa",
+          "appearanceHash": "148fa",
+          "textHash": "47f0f9fa",
+          "masterHash": "9d10f5a6",
+          "variableHash": "e43c637c",
+          "urls": [],
+          "rails": [
+            {
+              "id": "I58:2967;113:636",
+              "name": "CAR / prep / область прокрутки",
+              "w": 326,
+              "h": 238,
+              "clip": true,
+              "gap": 16,
+              "cards": 6
+            }
+          ],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 22,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:3012",
+          "name": "SPEED_TEST V4 / Что означают результаты / Mobile",
+          "w": 358,
+          "h": 902,
+          "x": 16,
+          "y": 2285,
+          "count": 55,
+          "hash": "4bcdc428",
+          "appearanceHash": "4bcdc428",
+          "textHash": "a3f80afd",
+          "masterHash": "c8e3e6e",
+          "variableHash": "cce83efb",
+          "urls": [],
+          "rails": [
+            {
+              "id": "I58:3012;154:1364",
+              "name": "CAR / metrics / область прокрутки",
+              "w": 358,
+              "h": 234,
+              "clip": true,
+              "gap": 16,
+              "cards": 4
+            }
+          ],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 15,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:3095",
+          "name": "SPEED_TEST V4 / Какая скорость нужна / Mobile",
+          "w": 358,
+          "h": 672,
+          "x": 16,
+          "y": 3211,
+          "count": 60,
+          "hash": "7ed4afc7",
+          "appearanceHash": "7ed4afc7",
+          "textHash": "1ce0ac80",
+          "masterHash": "51ea75df",
+          "variableHash": "5592b78c",
+          "urls": [],
+          "rails": [
+            {
+              "id": "I58:3095;125:1185",
+              "name": "CAR / tasks / область прокрутки",
+              "w": 326,
+              "h": 378,
+              "clip": true,
+              "gap": 16,
+              "cards": 4
+            }
+          ],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 19,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:3186",
+          "name": "SPEED_TEST V4 / От чего зависит результат / Mobile",
+          "w": 358,
+          "h": 577,
+          "x": 16,
+          "y": 3907,
+          "count": 49,
+          "hash": "d7ae746c",
+          "appearanceHash": "d7ae746c",
+          "textHash": "a26de156",
+          "masterHash": "e4c0129",
+          "variableHash": "25c01b9f",
+          "urls": [],
+          "rails": [
+            {
+              "id": "I58:3186;154:2000",
+              "name": "CAR / factors / область прокрутки",
+              "w": 358,
+              "h": 220,
+              "clip": true,
+              "gap": 16,
+              "cards": 4
+            }
+          ],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 12,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:3237",
+          "name": "SPEED_TEST V4 / Интернет тормозит / Mobile",
+          "w": 358,
+          "h": 1181,
+          "x": 16,
+          "y": 4508,
+          "count": 20,
+          "hash": "15bbf04c",
+          "appearanceHash": "15bbf04c",
+          "textHash": "7c72749b",
+          "masterHash": "5b79dd5",
+          "variableHash": "2c9f8e54",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 11,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:3310",
+          "name": "SPEED_TEST V4 / Куда обращаться, если скорость низкая / Mobile",
+          "w": 358,
+          "h": 1047,
+          "x": 16,
+          "y": 5713,
+          "count": 50,
+          "hash": "d721f682",
+          "appearanceHash": "445a77eb",
+          "textHash": "d92afca4",
+          "masterHash": "bbd46d64",
+          "variableHash": "22668b1a",
+          "urls": [
+            {
+              "id": "I58:3310;137:3787;1998:145",
+              "name": "Phone action / 8-800-250-77-77",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78002507777"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 15,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:2370",
+          "name": "BLK-0014 / Универсальный FAQ",
+          "w": 358,
+          "h": 618,
+          "x": 16,
+          "y": 6784,
+          "count": 58,
+          "hash": "8286e08",
+          "appearanceHash": "c2b631a",
+          "textHash": "67ec65e5",
+          "masterHash": "132685e3",
+          "variableHash": "ed1a1787",
+          "urls": [
+            {
+              "id": "I22:2370;1745:1701;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            },
+            {
+              "id": "I22:2370;1745:1717;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            },
+            {
+              "id": "I22:2370;1745:1733;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            },
+            {
+              "id": "I22:2370;1745:1749;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            },
+            {
+              "id": "I22:2370;1745:1765;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            },
+            {
+              "id": "I22:2370;1745:1781;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 7,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:2682",
+          "name": "BLK-0016 / Футер",
+          "w": 358,
+          "h": 1102,
+          "x": 16,
+          "y": 7426,
+          "count": 54,
+          "hash": "4161d491",
+          "appearanceHash": "3354ed6e",
+          "textHash": "47859f85",
+          "masterHash": "149fd7e5",
+          "variableHash": "590bc55e",
+          "urls": [
+            {
+              "id": "I22:2682;2317:60",
+              "name": "Позвонить для подключения",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78005557244"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2317:64",
+              "name": "Позвонить в техническую поддержку",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78002507777"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2317:68",
+              "name": "Оставить заявку / FLOW2",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://www.figma.com/proto/PiSCXYR88uqqcS6tKVfd8T?node-id=1084-2118&starting-point-node-id=1084%3A2118"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:470",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:472",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:474",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:476",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:478",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:480",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:482",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:484",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2324:192",
+              "name": "footer-link / Техническая поддержка / tap 44",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?node-id=620-43746&starting-point-node-id=620%3A43746"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:486",
+              "name": "footer-link / Техническая поддержка / UI link",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?node-id=620-43746&starting-point-node-id=620%3A43746"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2324:194",
+              "name": "footer-link / Города обслуживания / tap 44",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/goroda-obsluzhivaniya-domru"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:489",
+              "name": "footer-link / Города обслуживания / UI link",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/goroda-obsluzhivaniya-domru"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2324:198",
+              "name": "Открыть / Политика конфиденциальности",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/policy"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:492",
+              "name": "Политика конфиденциальности / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2324:201",
+              "name": "Открыть / Согласие на обработку данных",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/soglasie"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:494",
+              "name": "Согласие на обработку данных / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2324:204",
+              "name": "Открыть / Политика cookie",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/politika-obrabotki-faylov-kuki"
+                }
+              ]
+            },
+            {
+              "id": "I22:2682;2716:496",
+              "name": "Политика cookie / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 20,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        }
+      ]
+    },
+    {
+      "id": "22:2752",
+      "name": "SPEED_TEST V4 / Mobile320 / 320",
+      "w": 320,
+      "h": 9707,
+      "gap": 24,
+      "sections": [
+        {
+          "id": "22:2753",
+          "name": "BLK-0001 / Шапка сайта",
+          "w": 288,
+          "h": 109,
+          "x": 16,
+          "y": 0,
+          "count": 21,
+          "hash": "3f9d73ec",
+          "appearanceHash": "3f9d73ec",
+          "textHash": "f45a2a3a",
+          "masterHash": "cdb3eb1f",
+          "variableHash": "c1a1872e",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 3,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:2782",
+          "name": "SPEED_TEST V2 / Первый экран",
+          "w": 288,
+          "h": 486,
+          "x": 16,
+          "y": 133,
+          "count": 7,
+          "hash": "a6392ca8",
+          "appearanceHash": "33a66af9",
+          "textHash": "b3c717a1",
+          "masterHash": "4bdef1de",
+          "variableHash": "7634573c",
+          "urls": [
+            {
+              "id": "I22:2782;46:87",
+              "name": "OpenSpeedTest / Start Test",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://openspeedtest.com?ref&speedtest"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 3,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:3285",
+          "name": "BLK-0036 / Проверка подключения — только адрес",
+          "w": 288,
+          "h": 435,
+          "x": 16,
+          "y": 643,
+          "count": 25,
+          "hash": "e59e1d63",
+          "appearanceHash": "e59e1d63",
+          "textHash": "3c132e82",
+          "masterHash": "f7a77506",
+          "variableHash": "19dc8e82",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 6,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:3485",
+          "name": "SPEED_TEST / Подготовка А / Mobile320",
+          "w": 288,
+          "h": 1417,
+          "x": 16,
+          "y": 1102,
+          "count": 94,
+          "hash": "9a91b07a",
+          "appearanceHash": "9a91b07a",
+          "textHash": "47f0f9fa",
+          "masterHash": "9ddd476",
+          "variableHash": "44b6abe",
+          "urls": [],
+          "rails": [
+            {
+              "id": "I58:3485;113:875",
+              "name": "CAR / prep / область прокрутки",
+              "w": 264,
+              "h": 311,
+              "clip": true,
+              "gap": 16,
+              "cards": 6
+            }
+          ],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 22,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:3530",
+          "name": "SPEED_TEST V4 / Что означают результаты / Mobile320",
+          "w": 288,
+          "h": 1110,
+          "x": 16,
+          "y": 2543,
+          "count": 55,
+          "hash": "731f7bf2",
+          "appearanceHash": "731f7bf2",
+          "textHash": "5bbd362d",
+          "masterHash": "5a9bbc12",
+          "variableHash": "cce83efb",
+          "urls": [],
+          "rails": [
+            {
+              "id": "I58:3530;154:1368",
+              "name": "CAR / metrics / область прокрутки",
+              "w": 288,
+              "h": 292,
+              "clip": true,
+              "gap": 16,
+              "cards": 4
+            }
+          ],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 15,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:3613",
+          "name": "SPEED_TEST V4 / Какая скорость нужна / Mobile320",
+          "w": 288,
+          "h": 736,
+          "x": 16,
+          "y": 3677,
+          "count": 60,
+          "hash": "ce14bd2a",
+          "appearanceHash": "ce14bd2a",
+          "textHash": "1ce0ac80",
+          "masterHash": "33943802",
+          "variableHash": "b99e4b5a",
+          "urls": [],
+          "rails": [
+            {
+              "id": "I58:3613;125:1252",
+              "name": "CAR / tasks / область прокрутки",
+              "w": 264,
+              "h": 426,
+              "clip": true,
+              "gap": 16,
+              "cards": 4
+            }
+          ],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 19,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:3704",
+          "name": "SPEED_TEST V4 / От чего зависит результат / Mobile320",
+          "w": 288,
+          "h": 698,
+          "x": 16,
+          "y": 4437,
+          "count": 49,
+          "hash": "42ff758d",
+          "appearanceHash": "42ff758d",
+          "textHash": "a26de156",
+          "masterHash": "8e87793",
+          "variableHash": "25c01b9f",
+          "urls": [],
+          "rails": [
+            {
+              "id": "I58:3704;154:2004",
+              "name": "CAR / factors / область прокрутки",
+              "w": 288,
+              "h": 268,
+              "clip": true,
+              "gap": 16,
+              "cards": 4
+            }
+          ],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 12,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:3755",
+          "name": "SPEED_TEST V4 / Интернет тормозит / Mobile320",
+          "w": 288,
+          "h": 1435,
+          "x": 16,
+          "y": 5159,
+          "count": 20,
+          "hash": "e99e4081",
+          "appearanceHash": "e99e4081",
+          "textHash": "7c72749b",
+          "masterHash": "372b2e88",
+          "variableHash": "cc708a56",
+          "urls": [],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 11,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "58:3828",
+          "name": "SPEED_TEST V4 / Куда обращаться, если скорость низкая / Mobile320",
+          "w": 288,
+          "h": 1185,
+          "x": 16,
+          "y": 6618,
+          "count": 50,
+          "hash": "d9870812",
+          "appearanceHash": "c107c4b1",
+          "textHash": "d92afca4",
+          "masterHash": "52c56278",
+          "variableHash": "22668b1a",
+          "urls": [
+            {
+              "id": "I58:3828;137:3901;1998:145",
+              "name": "Phone action / 8-800-250-77-77",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78002507777"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 15,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:3029",
+          "name": "BLK-0014 / Универсальный FAQ",
+          "w": 288,
+          "h": 714,
+          "x": 16,
+          "y": 7827,
+          "count": 58,
+          "hash": "e0e6363e",
+          "appearanceHash": "a8b393d6",
+          "textHash": "67ec65e5",
+          "masterHash": "c3b4a449",
+          "variableHash": "ed1a1787",
+          "urls": [
+            {
+              "id": "I22:3029;1745:1802;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            },
+            {
+              "id": "I22:3029;1745:1818;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            },
+            {
+              "id": "I22:3029;1745:1834;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            },
+            {
+              "id": "I22:3029;1745:1850;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            },
+            {
+              "id": "I22:3029;1745:1866;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            },
+            {
+              "id": "I22:3029;1745:1882;1753:105",
+              "name": "Question header / button",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "22:40"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 7,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        },
+        {
+          "id": "22:3335",
+          "name": "BLK-0016 / Футер",
+          "w": 288,
+          "h": 1142,
+          "x": 16,
+          "y": 8565,
+          "count": 54,
+          "hash": "ccbd9c7d",
+          "appearanceHash": "8fea7958",
+          "textHash": "47859f85",
+          "masterHash": "149fd7e5",
+          "variableHash": "590bc55e",
+          "urls": [
+            {
+              "id": "I22:3335;2317:60",
+              "name": "Позвонить для подключения",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78005557244"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2317:64",
+              "name": "Позвонить в техническую поддержку",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "tel:+78002507777"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2317:68",
+              "name": "Оставить заявку / FLOW2",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://www.figma.com/proto/PiSCXYR88uqqcS6tKVfd8T?node-id=1084-2118&starting-point-node-id=1084%3A2118"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:470",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:472",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:474",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:476",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:478",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:480",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:482",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:484",
+              "name": "footer-link / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2324:192",
+              "name": "footer-link / Техническая поддержка / tap 44",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?node-id=620-43746&starting-point-node-id=620%3A43746"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:486",
+              "name": "footer-link / Техническая поддержка / UI link",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://www.figma.com/proto/BdxNHlBVZWejREtOEIWDkI?node-id=620-43746&starting-point-node-id=620%3A43746"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2324:194",
+              "name": "footer-link / Города обслуживания / tap 44",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/goroda-obsluzhivaniya-domru"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:489",
+              "name": "footer-link / Города обслуживания / UI link",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/goroda-obsluzhivaniya-domru"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2324:198",
+              "name": "Открыть / Политика конфиденциальности",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/policy"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:492",
+              "name": "Политика конфиденциальности / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2324:201",
+              "name": "Открыть / Согласие на обработку данных",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/soglasie"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:494",
+              "name": "Согласие на обработку данных / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2324:204",
+              "name": "Открыть / Политика cookie",
+              "actions": [
+                {
+                  "type": "URL",
+                  "url": "https://tarify-dom.ru/politika-obrabotki-faylov-kuki"
+                }
+              ]
+            },
+            {
+              "id": "I22:3335;2716:496",
+              "name": "Политика cookie / UI link",
+              "actions": [
+                {
+                  "type": "NODE",
+                  "destinationId": "19:43"
+                },
+                {
+                  "type": "NODE",
+                  "destinationId": "19:45"
+                }
+              ]
+            }
+          ],
+          "rails": [],
+          "outsideCount": 0,
+          "outside": [],
+          "texts": 20,
+          "fonts": [
+            "Geist"
+          ],
+          "missingFonts": []
+        }
+      ]
+    }
+  ],
+  "instances": {
+    "count": 468,
+    "missing": [],
+    "localCount": 40,
+    "keyCount": 86
+  },
+  "variables": [
+    {
+      "id": "VariableID:fed75c9d1483fa6bf164e575484028db0d373ab2/2:218",
+      "key": "fed75c9d1483fa6bf164e575484028db0d373ab2",
+      "name": "color/bg/surface"
+    },
+    {
+      "id": "VariableID:5c4986ad2470acb385e9e77f1a2bcd677d9959b7/2:258",
+      "key": "5c4986ad2470acb385e9e77f1a2bcd677d9959b7",
+      "name": "color/border/default"
+    },
+    {
+      "id": "VariableID:81d90357a78fa6af5b55fb28d01fe8a7ba656b26/2:262",
+      "key": "81d90357a78fa6af5b55fb28d01fe8a7ba656b26",
+      "name": "color/border/neutral"
+    },
+    {
+      "id": "VariableID:005d4e0460be4be65eb15ff9aacba86daf761e28/49:19",
+      "key": "005d4e0460be4be65eb15ff9aacba86daf761e28",
+      "name": "color/icon/default"
+    },
+    {
+      "id": "VariableID:fc8cd05d03bc9e83400cf041c67e0f5808712bb8/2:242",
+      "key": "fc8cd05d03bc9e83400cf041c67e0f5808712bb8",
+      "name": "color/text/secondary"
+    },
+    {
+      "id": "VariableID:ccb0a2935b1d0e3895cb0d1fd30554e36fdb86d5/2:238",
+      "key": "ccb0a2935b1d0e3895cb0d1fd30554e36fdb86d5",
+      "name": "color/text/primary"
+    },
+    {
+      "id": "VariableID:be942210042c388cc6532521c0a3989160289fb6/159:2",
+      "key": "be942210042c388cc6532521c0a3989160289fb6",
+      "name": "color/icon/brand"
+    },
+    {
+      "id": "VariableID:86af8f7aa49221d0eda35b36b1ddb9ffc1218735/529:8",
+      "key": "86af8f7aa49221d0eda35b36b1ddb9ffc1218735",
+      "name": "color/bg/accent"
+    },
+    {
+      "id": "VariableID:11ab9a6c9dacf94215e728a54b3f306b745ae7f5/2:142",
+      "key": "11ab9a6c9dacf94215e728a54b3f306b745ae7f5",
+      "name": "radius/14"
+    },
+    {
+      "id": "VariableID:8ab5af0a4be74f944f8dd511ec06ac05fff10f53/2:82",
+      "key": "8ab5af0a4be74f944f8dd511ec06ac05fff10f53",
+      "name": "spacing/8"
+    },
+    {
+      "id": "VariableID:4732388f1b3839a0f8f6b7d32ce54974f537078f/2:106",
+      "key": "4732388f1b3839a0f8f6b7d32ce54974f537078f",
+      "name": "spacing/24"
+    },
+    {
+      "id": "VariableID:810ec233267bbd246f3aaadc60358079470027ba/2:250",
+      "key": "810ec233267bbd246f3aaadc60358079470027ba",
+      "name": "color/text/on-accent"
+    },
+    {
+      "id": "VariableID:9425575b183f57cabef65400158c6898a1f0b2cf/2:114",
+      "key": "9425575b183f57cabef65400158c6898a1f0b2cf",
+      "name": "spacing/32"
+    },
+    {
+      "id": "VariableID:db2f824c5ab3c5e1b8fb2fdc95090c113657aa7c/2:150",
+      "key": "db2f824c5ab3c5e1b8fb2fdc95090c113657aa7c",
+      "name": "radius/24"
+    },
+    {
+      "id": "VariableID:6ac823682bf7ffe46ff5c318cd45edaab570351c/2:90",
+      "key": "6ac823682bf7ffe46ff5c318cd45edaab570351c",
+      "name": "spacing/12"
+    },
+    {
+      "id": "VariableID:4a7f2ef681f205944e73d749a113a8124a332a8a/2:146",
+      "key": "4a7f2ef681f205944e73d749a113a8124a332a8a",
+      "name": "radius/18"
+    },
+    {
+      "id": "VariableID:e918bf005e9f8216a2c098af85b605dd3189abe5/2:226",
+      "key": "e918bf005e9f8216a2c098af85b605dd3189abe5",
+      "name": "color/bg/hero"
+    },
+    {
+      "id": "VariableID:a46d6bee5914b574aa3e32f247415e0f7280f30b/2:98",
+      "key": "a46d6bee5914b574aa3e32f247415e0f7280f30b",
+      "name": "spacing/16"
+    },
+    {
+      "id": "VariableID:a764cb40372bcd2ce8a1e82732c85f1e380c8300/224:3",
+      "key": "a764cb40372bcd2ce8a1e82732c85f1e380c8300",
+      "name": "color/text/muted"
+    },
+    {
+      "id": "VariableID:6b41b2a1111752a583597b0a03a9ede995338d62/2:122",
+      "key": "6b41b2a1111752a583597b0a03a9ede995338d62",
+      "name": "spacing/48"
+    },
+    {
+      "id": "VariableID:19861fcd644586cf525e9da74226446ab08c4d46/2:222",
+      "key": "19861fcd644586cf525e9da74226446ab08c4d46",
+      "name": "color/bg/subtle"
+    },
+    {
+      "id": "VariableID:7a5c9d79f29ef5a44cd028c7d4c8f7f6d2b1efa6/159:7",
+      "key": "7a5c9d79f29ef5a44cd028c7d4c8f7f6d2b1efa6",
+      "name": "color/bg/accent-soft"
+    },
+    {
+      "id": "VariableID:8dffa7cdad9e5cfb5ba90147a8ee5fbf76964855/2:138",
+      "key": "8dffa7cdad9e5cfb5ba90147a8ee5fbf76964855",
+      "name": "radius/10"
+    },
+    {
+      "id": "VariableID:bb95deac3232c5ef693fadba27ad185ff1d42da3/2:254",
+      "key": "bb95deac3232c5ef693fadba27ad185ff1d42da3",
+      "name": "color/text/link"
+    },
+    {
+      "id": "VariableID:fd3ce9599678b7628171ef8d5dd62985957d8f1c/49:35",
+      "key": "fd3ce9599678b7628171ef8d5dd62985957d8f1c",
+      "name": "radius/26"
+    },
+    {
+      "id": "VariableID:f8b57539f8e8fe329907333326aba913d1550cd9/2:78",
+      "key": "f8b57539f8e8fe329907333326aba913d1550cd9",
+      "name": "spacing/4"
+    },
+    {
+      "id": "VariableID:a0b5e8b8335c1640c08e9ce84a3dfd03851d013d/2:102",
+      "key": "a0b5e8b8335c1640c08e9ce84a3dfd03851d013d",
+      "name": "spacing/20"
+    },
+    {
+      "id": "VariableID:a27f354cb692acd228beb8102756ea1542996aa1/1234:3",
+      "key": "a27f354cb692acd228beb8102756ea1542996aa1",
+      "name": "color/icon/link"
+    },
+    {
+      "id": "VariableID:9f14eb009d297ae7e4f45684c544b1f6961c4b59/49:11",
+      "key": "9f14eb009d297ae7e4f45684c544b1f6961c4b59",
+      "name": "color/bg/inverse"
+    },
+    {
+      "id": "VariableID:15702063a4c50a6d02e4267c709b589986ab0c28/49:15",
+      "key": "15702063a4c50a6d02e4267c709b589986ab0c28",
+      "name": "color/text/inverse"
+    },
+    {
+      "id": "VariableID:054b94f557f93b51783533de9e49732fe9b85605/2:22",
+      "key": "054b94f557f93b51783533de9e49732fe9b85605",
+      "name": "slate/700"
+    }
+  ],
+  "styles": [
+    {
+      "id": "S:9ebe885871bd021892f8664bd58a790d9ccfdbf5,2:333",
+      "key": "9ebe885871bd021892f8664bd58a790d9ccfdbf5",
+      "name": "Label/Small"
+    },
+    {
+      "id": "S:d394a104fc266f37198e34ebb8528281d291ad29,2:327",
+      "key": "d394a104fc266f37198e34ebb8528281d291ad29",
+      "name": "Label/Medium"
+    },
+    {
+      "id": "S:8fcc389eb533e41749e8e1b13775812839067708,689:7",
+      "key": "8fcc389eb533e41749e8e1b13775812839067708",
+      "name": "Heading/Page/Desktop"
+    },
+    {
+      "id": "S:9bffbf485c5a01eb99fa81918541ab4370a17dd8,790:2",
+      "key": "9bffbf485c5a01eb99fa81918541ab4370a17dd8",
+      "name": "Mobile/Section"
+    },
+    {
+      "id": "S:c6ed82c0324df362e4ce89f81e9949fd8122ed83,689:15",
+      "key": "c6ed82c0324df362e4ce89f81e9949fd8122ed83",
+      "name": "Heading/Page/Tablet"
+    },
+    {
+      "id": "S:18b6e1fde86066169179aa1d791f4c788c01ef6f,49:79",
+      "key": "18b6e1fde86066169179aa1d791f4c788c01ef6f",
+      "name": "Heading/Section"
+    },
+    {
+      "id": "S:90415c26f7185c2b08e4f20340d8313b5a0ff028,2:313",
+      "key": "90415c26f7185c2b08e4f20340d8313b5a0ff028",
+      "name": "Body/Medium"
+    },
+    {
+      "id": "S:dbc4e1c78da73742ed523d83c462fe53892d9606,2:320",
+      "key": "dbc4e1c78da73742ed523d83c462fe53892d9606",
+      "name": "Body/Small"
+    },
+    {
+      "id": "S:328f4158c1fa014f2a1e5b9c76fa7adeae6e5264,49:95",
+      "key": "328f4158c1fa014f2a1e5b9c76fa7adeae6e5264",
+      "name": "Heading/Card"
+    },
+    {
+      "id": "S:e695f7fec64500efbf78c6beb0b821ffde790eb0,717:13",
+      "key": "e695f7fec64500efbf78c6beb0b821ffde790eb0",
+      "name": "Heading/FAQ Question"
+    },
+    {
+      "id": "S:5a35e91a30df5d77acd466309faec06e255f2028,699:0",
+      "key": "5a35e91a30df5d77acd466309faec06e255f2028",
+      "name": "Heading/Page/Mobile"
+    },
+    {
+      "id": "S:b3b5c237f33b7f0b309cdaeaf3e1849952f46aa7,49:134",
+      "key": "b3b5c237f33b7f0b309cdaeaf3e1849952f46aa7",
+      "name": "Caption/Regular"
+    }
+  ],
+  "targets": [
+    {
+      "id": "22:381",
+      "key": "c4c5b92200398133583489e2f1d746e5c64216f1",
+      "name": "Preset=Utility, State=Hover",
+      "type": "COMPONENT"
+    },
+    {
+      "id": "22:383",
+      "key": "914a54748ca4de4fe63d279998464509bf4dd3d8",
+      "name": "Preset=Utility, State=Pressed",
+      "type": "COMPONENT"
+    },
+    {
+      "id": "19:39",
+      "key": "417d299cf46650f8ff854164deb01349bf0bbebc",
+      "name": "Preset=Header, State=Hover",
+      "type": "COMPONENT"
+    },
+    {
+      "id": "19:41",
+      "key": "458599b8d03fd8092b823180dfbf5e08eb7d6612",
+      "name": "Preset=Header, State=Pressed",
+      "type": "COMPONENT"
+    },
+    {
+      "id": "22:36",
+      "key": "e114fca81f221a46ac10f0105bea7b4e6d551535",
+      "name": "Expanded=True, State=Default, Layout=FullWidth",
+      "type": "COMPONENT"
+    },
+    {
+      "id": "19:43",
+      "key": "702156a1b020a1e2417d8f2b4c5bc648e6c222f5",
+      "name": "Preset=Footer, State=Hover",
+      "type": "COMPONENT"
+    },
+    {
+      "id": "19:45",
+      "key": "e9c8f226eff1258bd0e519e0b10cbd1a7ca39b46",
+      "name": "Preset=Footer, State=Pressed",
+      "type": "COMPONENT"
+    },
+    {
+      "id": "22:40",
+      "key": "3c1309d34b8daab7a8799b4f23820af91582188b",
+      "name": "Expanded=True, State=Default, Layout=FullWidthMobile",
+      "type": "COMPONENT"
+    }
+  ],
+  "pages": [
+    {
+      "id": "0:1",
+      "name": "00 / Обложка"
+    },
+    {
+      "id": "18:18",
+      "name": "01 / Пример собранной страницы"
+    },
+    {
+      "id": "18:19",
+      "name": "02 / Блок — Первый экран"
+    },
+    {
+      "id": "113:75",
+      "name": "03 / Блок — Подготовка А"
+    },
+    {
+      "id": "55:53",
+      "name": "04 / Блок — Результаты"
+    },
+    {
+      "id": "55:54",
+      "name": "05 / Блок — Скорость для задач"
+    },
+    {
+      "id": "55:55",
+      "name": "06 / Блок — Факторы результата"
+    },
+    {
+      "id": "55:56",
+      "name": "07 / Блок — Диагностика"
+    },
+    {
+      "id": "55:57",
+      "name": "08 / Блок — Куда обращаться"
+    }
+  ]
+}

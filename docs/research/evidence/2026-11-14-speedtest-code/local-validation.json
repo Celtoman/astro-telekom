@@ -1,0 +1,24 @@
+{
+  "command": "pnpm check --test-concurrency=2",
+  "node": "24.22.1",
+  "pnpm": "11.19.0",
+  "exitCode": 0,
+  "counts": {
+    "tests": 1141,
+    "pass": 1140,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 1,
+    "todo": 0
+  },
+  "skipReason": "Windows symlink privilege unavailable; Linux CI required",
+  "durationMs": 901604.0712,
+  "logSha256": "4915549a76e3d9f6d5624c98c989da3f5817afa4b6a89252c93e928afde058ed",
+  "independentReviews": "PASS / CLEAN",
+  "scopedFixes": [
+    "admin exact route inventory",
+    "migration-head docs74",
+    "seed12routes/12SEO plus explicit SPEED assertions",
+    "SVG LF bytes pinned"
+  ]
+}

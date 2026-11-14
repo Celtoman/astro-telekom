@@ -203,6 +203,7 @@ export type PublishStatus = (typeof PublishStatus)[keyof typeof PublishStatus]
 
 
 export const PageType: {
+  SPEED_TEST: 'SPEED_TEST',
   OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
   HOME: 'HOME',
@@ -223,6 +224,7 @@ export type PageType = (typeof PageType)[keyof typeof PageType]
 
 
 export const SeoTemplateKind: {
+  SPEED_TEST: 'SPEED_TEST',
   OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
   HOME: 'HOME',

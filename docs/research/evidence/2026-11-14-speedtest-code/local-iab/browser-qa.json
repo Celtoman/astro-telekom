@@ -1,0 +1,118 @@
+{
+  "widths": [
+    {
+      "name": "desktop",
+      "client": 1440,
+      "scroll": 1440,
+      "heights": [
+        754,
+        1078,
+        843,
+        761,
+        658,
+        577,
+        566,
+        534
+      ],
+      "overflow": [],
+      "imagesLoaded": true
+    },
+    {
+      "name": "tablet",
+      "client": 834,
+      "scroll": 834,
+      "heights": [
+        550,
+        1426,
+        1054,
+        952,
+        770,
+        826,
+        827,
+        518
+      ],
+      "overflow": [],
+      "imagesLoaded": true
+    },
+    {
+      "name": "mobile",
+      "client": 390,
+      "scroll": 390,
+      "heights": [
+        530,
+        1208,
+        902,
+        672,
+        577,
+        1181,
+        1047,
+        618
+      ],
+      "overflow": [],
+      "imagesLoaded": true
+    },
+    {
+      "name": "mobile320",
+      "client": 320,
+      "scroll": 320,
+      "heights": [
+        530,
+        1417,
+        1110,
+        736,
+        698,
+        1435,
+        1185,
+        714
+      ],
+      "overflow": [],
+      "imagesLoaded": true
+    }
+  ],
+  "rails": [
+    {
+      "name": "preparation",
+      "end": {
+        "left": 1208,
+        "max": 1208
+      },
+      "start": 0,
+      "verticalDelta": 865
+    },
+    {
+      "name": "metrics",
+      "end": {
+        "left": 784,
+        "max": 784
+      },
+      "start": 0,
+      "verticalDelta": 866
+    },
+    {
+      "name": "tasks",
+      "end": {
+        "left": 736,
+        "max": 736
+      },
+      "start": 0,
+      "verticalDelta": 865
+    },
+    {
+      "name": "factors",
+      "end": {
+        "left": 784,
+        "max": 784
+      },
+      "start": 0,
+      "verticalDelta": 866
+    }
+  ],
+  "menuEscapeFocus": true,
+  "callbackEscapeFocus": true,
+  "faqFirstLastKeyboard": true,
+  "readonlyPreview": {
+    "iframes": 0,
+    "forms": 0,
+    "links": 0
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "blocks": [
+    {
+      "h": 530,
+      "name": "hero",
+      "w": 288,
+      "y": 124
+    },
+    {
+      "h": 1417,
+      "name": "preparation",
+      "w": 288,
+      "y": 1153
+    },
+    {
+      "h": 1110,
+      "name": "metrics",
+      "w": 288,
+      "y": 2594
+    },
+    {
+      "h": 736,
+      "name": "tasks",
+      "w": 288,
+      "y": 3728
+    },
+    {
+      "h": 698,
+      "name": "factors",
+      "w": 288,
+      "y": 4488
+    },
+    {
+      "h": 1435,
+      "name": "diagnosis",
+      "w": 288,
+      "y": 5210
+    },
+    {
+      "h": 1185,
+      "name": "support",
+      "w": 288,
+      "y": 6669
+    },
+    {
+      "h": 714,
+      "name": "faq",
+      "w": 288,
+      "y": 7878
+    }
+  ],
+  "client": 320,
+  "fonts": "loaded",
+  "images": [
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/network.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/wifi.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/network.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/pause.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/devices.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/shield.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/app-window.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/file-text.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/download.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/upload.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/gauge.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/pulse.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/video.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/handshake.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/clock.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/database.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/wifi-warning.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/equipment.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/traffic.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/server-network.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/support.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/round-clock.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/phone-call.svg"
+    },
+    {
+      "loaded": true,
+      "src": "/images/speed-test/v1/help.svg"
+    }
+  ],
+  "overflow": [],
+  "scroll": 320
+}

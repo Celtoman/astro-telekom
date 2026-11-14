@@ -1,0 +1,20 @@
+---
+import type { SpeedTestPageContent } from '../../../../api/src/speed-test-page-model';
+import { SPEED_TEST_PAGE_SLUG } from '../../../../api/src/speed-test-page-model';
+import type { SiteView } from '../../data/site';
+import { publicAsset } from '../../data/public-asset';
+import { renderSpeedTestIntro, renderSpeedTestBody, speedTestFaq } from '../../lib/speed-test-render';
+import AddressOnly from '../general-home/AddressOnly.astro';
+import HomeFaq from '../general-home/HomeFaq.astro';
+import HomeBlockStyles from '../general-home/HomeBlockStyles.astro';
+import SpeedTestStyles from './SpeedTestStyles.astro';
+interface Props { content: SpeedTestPageContent; site: SiteView; apiUrl: string }
+const { content, site, apiUrl } = Astro.props;
+---
+<div class="speed-test-page">
+  <Fragment set:html={renderSpeedTestIntro(content)} />
+  <AddressOnly {site} {apiUrl} pageSlug={SPEED_TEST_PAGE_SLUG} pageScope="GLOBAL" />
+  <Fragment set:html={renderSpeedTestBody(content, site, { asset: publicAsset, includeFaq: false })} />
+  <div data-speed-test-block="faq"><HomeFaq content={speedTestFaq(content)} phoneLinks={[site.connectionPhone, site.supportPhone]} /></div>
+</div>
+<HomeBlockStyles /><SpeedTestStyles />

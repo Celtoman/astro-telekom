@@ -1,0 +1,190 @@
+[
+  {
+    "id": "1238:867",
+    "checks": [
+      {
+        "kind": "prep",
+        "all": true,
+        "count": 21,
+        "bad": []
+      },
+      {
+        "kind": "metrics",
+        "all": true,
+        "count": 14,
+        "bad": []
+      },
+      {
+        "kind": "tasks",
+        "all": true,
+        "count": 18,
+        "bad": []
+      },
+      {
+        "kind": "factors",
+        "all": true,
+        "count": 11,
+        "bad": []
+      },
+      {
+        "kind": "diagnosis",
+        "all": true,
+        "count": 11,
+        "bad": []
+      },
+      {
+        "kind": "help",
+        "all": true,
+        "count": 15,
+        "bad": []
+      }
+    ],
+    "heroCaption": false,
+    "heroTexts": [
+      "Проверьте скорость вашего интернета",
+      "SpeedTest by OpenSpeedTest™",
+      "Start Test"
+    ]
+  },
+  {
+    "id": "1238:879",
+    "checks": [
+      {
+        "kind": "prep",
+        "all": true,
+        "count": 21,
+        "bad": []
+      },
+      {
+        "kind": "metrics",
+        "all": true,
+        "count": 14,
+        "bad": []
+      },
+      {
+        "kind": "tasks",
+        "all": true,
+        "count": 18,
+        "bad": []
+      },
+      {
+        "kind": "factors",
+        "all": true,
+        "count": 11,
+        "bad": []
+      },
+      {
+        "kind": "diagnosis",
+        "all": true,
+        "count": 11,
+        "bad": []
+      },
+      {
+        "kind": "help",
+        "all": true,
+        "count": 15,
+        "bad": []
+      }
+    ],
+    "heroCaption": false,
+    "heroTexts": [
+      "Проверьте скорость вашего интернета",
+      "SpeedTest by OpenSpeedTest™",
+      "Start Test"
+    ]
+  },
+  {
+    "id": "1238:891",
+    "checks": [
+      {
+        "kind": "prep",
+        "all": true,
+        "count": 22,
+        "bad": []
+      },
+      {
+        "kind": "metrics",
+        "all": true,
+        "count": 15,
+        "bad": []
+      },
+      {
+        "kind": "tasks",
+        "all": true,
+        "count": 19,
+        "bad": []
+      },
+      {
+        "kind": "factors",
+        "all": true,
+        "count": 12,
+        "bad": []
+      },
+      {
+        "kind": "diagnosis",
+        "all": true,
+        "count": 11,
+        "bad": []
+      },
+      {
+        "kind": "help",
+        "all": true,
+        "count": 15,
+        "bad": []
+      }
+    ],
+    "heroCaption": false,
+    "heroTexts": [
+      "Проверьте скорость вашего интернета",
+      "SpeedTest by OpenSpeedTest™",
+      "Start Test"
+    ]
+  },
+  {
+    "id": "1238:903",
+    "checks": [
+      {
+        "kind": "prep",
+        "all": true,
+        "count": 22,
+        "bad": []
+      },
+      {
+        "kind": "metrics",
+        "all": true,
+        "count": 15,
+        "bad": []
+      },
+      {
+        "kind": "tasks",
+        "all": true,
+        "count": 19,
+        "bad": []
+      },
+      {
+        "kind": "factors",
+        "all": true,
+        "count": 12,
+        "bad": []
+      },
+      {
+        "kind": "diagnosis",
+        "all": true,
+        "count": 11,
+        "bad": []
+      },
+      {
+        "kind": "help",
+        "all": true,
+        "count": 15,
+        "bad": []
+      }
+    ],
+    "heroCaption": false,
+    "heroTexts": [
+      "Проверьте скорость вашего интернета",
+      "SpeedTest by OpenSpeedTest™",
+      "Start Test"
+    ]
+  }
+]

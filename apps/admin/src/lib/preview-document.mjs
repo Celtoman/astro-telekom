@@ -1,5 +1,6 @@
 import { renderOfficialSiteIntro,renderOfficialSiteBody } from '../../../web/src/lib/official-site-render.ts'
 import { renderAccountIntro, renderAccountBody } from '../../../web/src/lib/account-page-render.ts'
+import { renderSpeedTestIntro, renderSpeedTestBody } from '../../../web/src/lib/speed-test-render.ts'
 import { renderAddressOnlyPreview } from '../../../web/src/lib/address-only-render.ts'
 import { renderAddressIntro, renderAddressResults, renderAddressTariffs } from '../../../web/src/lib/address-page-render.ts'
 import { renderTariffCollection, projectCityHomeBlocks, sortCollectionTariffs } from '../../../api/src/tariff-collection-model.ts'
@@ -162,6 +163,7 @@ function renderCities(catalog) {
 function renderGlobal(catalog, route) {
   const page = pageByType(catalog, route.pageType)
   if (!page) throw new Error('Общая страница маршрута предпросмотра не найдена')
+  if (route.pageType === 'SPEED_TEST') { const options = { interactive: false, asset: path => asset(catalog, path) }; return wrap('speedtest', `<div class="speed-test-page">${renderSpeedTestIntro(page.content, options)}${renderAddressOnlyPreview(options.asset, { matchRuntime: true })}${renderSpeedTestBody(page.content, catalog.site, options)}</div>`) }
   if (route.pageType === 'OFFICIAL_SITE') { const options={interactive:false,asset:path=>asset(catalog,path)}; return wrap('officialsite', `<div class="official-page">${renderOfficialSiteIntro(page.content,options)}${renderAddressOnlyPreview(options.asset,{matchRuntime:true})}${renderOfficialSiteBody(page.content,options)}</div>`) }
   if (route.pageType === 'ACCOUNT') { const options = { interactive: false, asset: path => asset(catalog, path) }; return wrap('account', `<div class="account-page">${renderAccountIntro(page.content, catalog.site, options)}${renderAddressOnlyPreview(options.asset)}${renderAccountBody(page.content, catalog.site, options)}</div>`) }
   if (route.pageType === 'CITIES') return renderCities(catalog)

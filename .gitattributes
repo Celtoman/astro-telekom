@@ -1,1 +1,2 @@
 *.sh text eol=lf
+apps/web/public/images/speed-test/v1/*.svg text eol=lf

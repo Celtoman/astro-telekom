@@ -1,3 +1,4 @@
+import { speedTestPageDefaults } from './speed-test-page-defaults';
 import { officialSitePageDefaults } from './official-site-page-defaults';
 import { ensureAddressTemplate, ensureCityAddressPage } from './address-page-storage';
 import { PrismaClient } from '../generated/index.js';
@@ -63,13 +64,14 @@ async function main() {
       { type: 'PRIVACY', title: 'Политика обработки персональных данных', slug: 'politika-konfidencialnosti', content: { legalTemplate: 'privacy-2026-09-14' } },
       { type: 'PERSONAL_DATA_CONSENT', title: 'Согласие на обработку персональных данных', slug: 'soglasie-na-obrabotku-personalnyh-dannyh', content: { legalTemplate: 'consent-2026-09-14' } },
       { type: 'COOKIE_POLICY', title: 'Политика обработки файлов cookie', slug: 'politika-obrabotki-faylov-kuki', content: { legalTemplate: 'cookies-2026-09-14' } },
+      { type: 'SPEED_TEST', title: 'Проверка скорости интернета', slug: 'proverit-skorost-interneta', content: JSON.parse(JSON.stringify(speedTestPageDefaults())) },
       { type: 'OFFICIAL_SITE', title:'Официальный сайт Дом.ру', slug:'official-site-domru', content:JSON.parse(JSON.stringify(officialSitePageDefaults())) },
       { type: 'ACCOUNT', title: 'Личный кабинет Дом.ру', slug: ACCOUNT_PAGE_SLUG, content: JSON.parse(JSON.stringify(accountPageDefaults())) },
     ] as const;
     for (const page of globalPages) {
       const existingPage = await prisma.page.findFirst({ where: { siteId: site.id, cityId: null, type: page.type } });
       if (!existingPage) {
-        if (['ACCOUNT','OFFICIAL_SITE'].includes(page.type) && (await prisma.city.count({ where: { siteId: site.id, slug: page.slug } })
+        if (['ACCOUNT','OFFICIAL_SITE','SPEED_TEST'].includes(page.type) && (await prisma.city.count({ where: { siteId: site.id, slug: page.slug } })
           || await prisma.page.count({ where: { siteId: site.id, cityId: null, slug: page.slug } })
           || await prisma.redirect.count({ where: { siteId: site.id, sourcePath: `/${page.slug}` } }))) throw new Error('ACCOUNT canonical URL is occupied; seed preserves existing content');
         await prisma.page.create({
@@ -151,6 +153,7 @@ async function main() {
       ['PRIVACY', 'Политика конфиденциальности', 'Политика конфиденциальности сайта партнёра {PROVIDER_NAME}.'],
       ['PERSONAL_DATA_CONSENT', 'Согласие на обработку персональных данных', 'Согласие на обработку персональных данных на сайте партнёра {PROVIDER_NAME}.'],
       ['COOKIE_POLICY', 'Политика обработки файлов cookie', 'Правила использования файлов cookie на сайте партнёра {PROVIDER_NAME}.'],
+      ['SPEED_TEST', 'Проверить скорость интернета — спидтест онлайн', 'Проверьте входящую и исходящую скорость интернета, пинг и джиттер. Узнайте, как подготовиться к замеру и оценить результат.'],
       ['OFFICIAL_SITE','Официальный сайт Дом.ру — обзор и навигация','Обзор официального сайта Дом.ру: услуги, тарифы, оборудование и ответы на вопросы.'],
       ['ACCOUNT', 'Личный кабинет Дом.ру — вход и инструкции', 'Как войти в личный кабинет Дом.ру, восстановить доступ, оплатить услуги и пользоваться приложением.'],
       ['CITY_HOME', 'Домашний интернет в {CITY_NAME_PREPOSITIONAL}', 'Тарифы домашнего интернета, телевидения и подключения в {CITY_NAME_PREPOSITIONAL}.'],

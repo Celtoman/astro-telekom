@@ -6,19 +6,19 @@ import { extractDomruLocation, normalizeDomruLocality, normalizeDomruRegion } fr
 
 /** A global source never borrows a city's page or the example city from a mockup. */
 export async function accountPublicSource(prisma: PrismaService, siteSlug: string, pageSlug?: string) {
-  const type = pageSlug === ACCOUNT_PAGE_SLUG ? 'ACCOUNT' : pageSlug === 'official-site-domru' ? 'OFFICIAL_SITE' : null;
+  const type = pageSlug === ACCOUNT_PAGE_SLUG ? 'ACCOUNT' : pageSlug === 'official-site-domru' ? 'OFFICIAL_SITE' : pageSlug === 'proverit-skorost-interneta' ? 'SPEED_TEST' : null;
   if (!type) throw new BadRequestException('Неизвестная общая страница обращения');
   const publication = await servingPublication(prisma, siteSlug);
   if (publication) {
     const catalog = publication.catalog as any;
     const page = catalog.globalPages?.find((p: any) => p.type === type && p.slug === pageSlug);
-    if (!page?.id) throw new BadRequestException('Личный кабинет недоступен в обслуживаемой публикации');
+    if (!page?.id) throw new BadRequestException('Общая страница недоступна в обслуживаемой публикации');
     return { site: { ...catalog.site, id: publication.siteId }, page, cities: catalog.cities as any[], publication };
   }
   const site = await prisma.site.findFirst({ where: { slug: siteSlug, status: 'PUBLISHED' } });
   if (!site) throw new BadRequestException('Сайт недоступен');
   const page = await prisma.page.findFirst({ where: { siteId: site.id, cityId: null, type, slug: pageSlug, status: 'PUBLISHED' } });
-  if (!page) throw new BadRequestException('Личный кабинет недоступен');
+  if (!page) throw new BadRequestException('Общая страница недоступна');
   const cities = await prisma.city.findMany({ where: { siteId: site.id, status: 'PUBLISHED' }, include: { region: { select: { name: true } } } });
   return { site, page, cities, publication: null };
 }
