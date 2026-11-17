@@ -345,3 +345,7 @@
 | TD-256 | [#613](https://github.com/Celtoman/astro-telekom/issues/613) ✅ | SUPPORT: сохранить порядок элементов и якоря независимо от порядка ключей JSONB |
 | TD-257 | [#614](https://github.com/Celtoman/astro-telekom/issues/614) ✅ | SUPPORT CMS: не включать dirty-state при инициализации rich-text |
 | TD-258 | [#615](https://github.com/Celtoman/astro-telekom/issues/615) 🟢 | SUPPORT: согласовать редакционное исправление пробела внутри слова в исходнике |
+| TD-259 | [#616](https://github.com/Celtoman/astro-telekom/issues/616) ✅ | SUPPORT: привести блок приложения к планшетной композиции Screens |
+| TD-260 | [#617](https://github.com/Celtoman/astro-telekom/issues/617) ✅ | SUPPORT: вернуть десктопную композицию карточек сообществ |
+| TD-261 | [#618](https://github.com/Celtoman/astro-telekom/issues/618) ✅ | SUPPORT: сверить мобильный первый экран |
+| TD-262 | [#619](https://github.com/Celtoman/astro-telekom/issues/619) 🟢 | SUPPORT: сверить типографику и высоту отдельного введения на ПК |

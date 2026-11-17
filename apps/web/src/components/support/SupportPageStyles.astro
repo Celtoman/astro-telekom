@@ -99,6 +99,7 @@
   .support-chat-portrait-window { position:relative; aspect-ratio:370/456; border:1px solid var(--ui-border,#dcecf7); border-radius:14px; }
   .support-chat-portrait-window>img { position:absolute; width:287.837838%; max-width:none; left:-185.675676%; top:-31.578947%; height:auto; }
   .support-social>.support-two-column { grid-template-columns:minmax(0,680fr) minmax(0,632fr); }
+  .support-social-copy { display:flex; flex-direction:column; gap:32px; min-width:0; }
   .support-social-channels { display:flex; flex-direction:column; gap:24px; min-width:0; }
   .support-news-channels>h3 { font-size:16px; line-height:24px; font-weight:400; letter-spacing:0; }
   .support-news-channels { display:flex; flex-direction:column; gap:16px; min-width:0; }
@@ -110,7 +111,6 @@
   .support-page .support-channel-link { display:flex; align-items:center; gap:8px; min-height:44px; margin-top:auto; font-weight:600; text-decoration:none; font-size:14px; line-height:20px; }
   .support-channel-link::after { content:'›'; font-size:24px; line-height:24px; }
   .support-rail { display:grid; gap:16px; grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .support-rail-news { grid-template-columns:1fr; }
   .support-swipe-hint { display:none; }
   .support-account-figure { padding:16px; border-radius:24px; background:var(--ui-subtle,#eef8ff); }
   .support-account-figure .support-image-window { border:1px solid var(--ui-border,#dcecf7); border-radius:14px; }
@@ -119,6 +119,7 @@
   .support-app-copy { display:flex; flex-direction:column; gap:16px; min-width:0; }
   .support-app-copy>p { color:var(--ui-secondary,#526071); }
   .support-app-stores { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .support-app-stores--tablet { display:none; }
   .support-app-stores a { display:block; flex:0 0 auto; border-radius:7px; }
   .support-app-stores img { height:44px; width:auto; }
   .support-app-art { display:flex; justify-content:center; min-width:0; }
@@ -147,6 +148,15 @@
   .support-business-grid>.support-figure { width:min(416px,100%); justify-self:end; }
   .support-page #support-faq { margin-top:64px; scroll-margin-top:24px; }
 
+  @media(min-width:1101px) {
+    .support-social-copy { gap:24px; }
+    .support-social .support-channel { padding:24px; gap:12px; }
+    .support-social .support-channel-icon { width:24px; height:24px; flex-basis:24px; }
+    .support-social .support-channel-content { gap:0; }
+    .support-social .support-channel-content>p { margin-top:8px; }
+    .support-rail-news { gap:24px; }
+  }
+
   @media(min-width:621px) and (max-width:1100px) {
     .support-page { width:min(720px,calc(100% - 64px)); }
     .support-page h1 { font-size:40px; line-height:43px; font-weight:700; letter-spacing:-1.6px; }
@@ -168,25 +178,35 @@
     .support-chat-grid { gap:24px; }
     .support-chat-dialogue .support-chat-portrait { align-self:center; }
     .support-social-channels { gap:24px; }
-    .support-rail-news { grid-template-columns:repeat(2,minmax(0,1fr)); }
     .support-rail-competence { gap:24px; }
     .support-rail-competence .support-card-heading { min-height:50px; }
     .support-rail-limits { grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
-    .support-app { padding:24px; }
-    .support-app-grid { grid-template-columns:1fr; gap:32px; }
+    .support-app-grid { grid-template-columns:minmax(0,384fr) minmax(0,240fr); gap:32px; }
+    .support-app-phone { width:100%; max-width:240px; height:auto; aspect-ratio:240/459.6; }
+    .support-app-stores--default { display:none; }
+    .support-app-stores--tablet {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:8px 16px;
+    }
+    .support-app-stores--tablet img { width:100%; height:52px; object-fit:contain; object-position:left center; }
     .support-business-grid>.support-figure { justify-self:center; }
   }
   @media(max-width:620px) {
     .support-page { width:calc(100% - 32px); margin-top:8px; margin-bottom:24px; }
-    .support-page h1 { font-size:32px; line-height:38px; font-weight:700; letter-spacing:-1.1px; }
+    .support-hero h1 { font-size:28px; line-height:33px; font-weight:700; letter-spacing:-1.5px; }
+    .support-hero .public-breadcrumbs { margin-bottom:12px; }
+    .support-hero .public-breadcrumbs ol { flex-wrap:nowrap; }
+    .support-hero .public-breadcrumbs li:last-child { flex:1 1 auto; min-width:0; }
     .support-page h2 { font-size:24px; line-height:29px; letter-spacing:-.8px; }
-    .support-hero-intro { font-size:16px!important; line-height:24px!important; }
+    .support-hero-intro { margin-top:12px!important; font-size:16px!important; line-height:24px!important; }
     .support-hero-contacts { grid-template-columns:1fr; gap:16px; margin-top:24px; }
-    .support-hero-card { padding:24px; gap:24px; }
+    .support-hero-card { padding:16px; }
     .support-page .support-contact-heading h2 { font-size:20px; line-height:25px; letter-spacing:-.2px; }
     .support-contact-number>p { font-size:16px; line-height:24px; }
     .support-page .support-phone { font-size:28px; line-height:34px; letter-spacing:-.8px; }
     .support-contact-meta { flex-direction:column; gap:8px; }
+    .support-hero .support-contact-meta>span { min-height:24px; }
     .support-chip-viewport { display:block; height:72px; overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain; scrollbar-width:none; }
     .support-chip-viewport::-webkit-scrollbar { display:none; }
     .support-chip-track { display:flex; flex-direction:column; width:max-content; gap:8px; }
@@ -210,6 +230,7 @@
     .support-phone-evidence>.support-small { margin-top:-8px; }
     .support-phone-zoom { width:100%; }
     .support-two-column,.support-chat-grid,.support-social>.support-two-column,.support-business-grid { grid-template-columns:1fr; gap:24px; }
+    .support-social-copy { gap:24px; }
     .support-copy { gap:24px; }
     .support-copy-tight { gap:16px; }
     .support-steps { gap:16px; }
@@ -242,7 +263,6 @@
   @media(max-width:359px) {
     .support-number-card { padding:12px; }
     .support-number-card .support-phone { font-size:26px; letter-spacing:-.8px; }
-    .support-hero-card { padding:16px; }
     .support-rail-limits .support-card-heading { min-height:50px; }
     .support-app-stores { flex-direction:column; align-items:flex-start; }
     .support-rail-competence .support-info-card { min-height:412px; }

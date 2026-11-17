@@ -35,6 +35,10 @@ CITY_SUPPORT выпущен 17 ноября 2026 года в защищённо�
 
 Каталог фиксирует `supportMedia`: выбранные full/crop варианты с ключами, SHA и размерами. Builder переносит только captured variants вместе с editorial media и проверяет целостность. Authenticated preview получает private bytes и использует общий с витриной renderer/CSS. Исходники, производные, working content, ContentRevision и sourceSnapshot в отчётах проверки входят в reference-аудит резервной копии; очистка по одному лишь текущему опубликованному каталогу недопустима.
 
+## Адаптивы Screens
+
+На ПК введение и карточки сообществ занимают левую колонку, снимок VK начинается справа на уровне введения. Карточки «Одноклассники» и Telegram стоят рядом, ссылки выровнены по нижнему краю. На планшете приложение сохраняет текст и магазины слева, мокап справа. Кнопки магазинов идут после двух абзацев в раскладке 2+1. На мобильных H1 использует 28/33 px, карточки первого экрана имеют поля 16 px, чипы занимают два ряда общей высотой 72 px. [Экраны поддержки](https://www.figma.com/design/BdxNHlBVZWejREtOEIWDkI?node-id=619-22436), [задача #620](https://github.com/Celtoman/astro-telekom/issues/620).
+
 ## Проверки и выпуск
 
 Модель, типизированные ссылки, rich-text, переменные, старые snapshots, all-city routes и финальный Astro HTML проверяются SUPPORT suites. SQL rehearsal проверяет fresh seed/backfill/idempotence/provider isolation/rollback, HTTP rehearsal — реальный upload/crop/private bytes/save/409 и чужой сайт. Браузерная проверка редактора и четырёх раскладок фиксируется отдельно от автоматических тестов.
