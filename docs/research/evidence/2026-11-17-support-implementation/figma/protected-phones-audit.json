@@ -1,0 +1,114 @@
+{
+  "scope": "Read-only audit after owner requested CMS contract discussion",
+  "comparison": [
+    "w",
+    "h",
+    "textHash",
+    "imageHash",
+    "uiHash",
+    "textCount",
+    "imageCount",
+    "uiCount"
+  ],
+  "baseline": [
+    {
+      "id": "426:7047",
+      "w": 1360,
+      "h": 1267.2186279296875,
+      "textHash": "41705c8e",
+      "imageHash": "2bd1fdc4",
+      "uiHash": "aeb00d00",
+      "treeHash": "fb6eb3f5",
+      "textCount": 23,
+      "imageCount": 3,
+      "uiCount": 5
+    },
+    {
+      "id": "426:7941",
+      "w": 720,
+      "h": 1862.152587890625,
+      "textHash": "5ada8510",
+      "imageHash": "44b7a2a5",
+      "uiHash": "1c308c35",
+      "treeHash": "462705d5",
+      "textCount": 23,
+      "imageCount": 3,
+      "uiCount": 5
+    },
+    {
+      "id": "426:8806",
+      "w": 358,
+      "h": 2689.027099609375,
+      "textHash": "9aab2291",
+      "imageHash": "87658122",
+      "uiHash": "28155cd4",
+      "treeHash": "9980c221",
+      "textCount": 23,
+      "imageCount": 3,
+      "uiCount": 5
+    },
+    {
+      "id": "426:9669",
+      "w": 288,
+      "h": 2966.891357421875,
+      "textHash": "8139b5e2",
+      "imageHash": "350b5438",
+      "uiHash": "4994e3ea",
+      "treeHash": "940fc57a",
+      "textCount": 23,
+      "imageCount": 3,
+      "uiCount": 5
+    }
+  ],
+  "current": [
+    {
+      "id": "426:7047",
+      "w": 1360,
+      "h": 1267.2186279296875,
+      "textHash": "41705c8e",
+      "imageHash": "2bd1fdc4",
+      "uiHash": "aeb00d00",
+      "treeHash": "fb6eb3f5",
+      "textCount": 23,
+      "imageCount": 3,
+      "uiCount": 5
+    },
+    {
+      "id": "426:7941",
+      "w": 720,
+      "h": 1862.152587890625,
+      "textHash": "5ada8510",
+      "imageHash": "44b7a2a5",
+      "uiHash": "1c308c35",
+      "treeHash": "462705d5",
+      "textCount": 23,
+      "imageCount": 3,
+      "uiCount": 5
+    },
+    {
+      "id": "426:8806",
+      "w": 358,
+      "h": 2689.027099609375,
+      "textHash": "9aab2291",
+      "imageHash": "87658122",
+      "uiHash": "28155cd4",
+      "treeHash": "69d25e45",
+      "textCount": 23,
+      "imageCount": 3,
+      "uiCount": 5
+    },
+    {
+      "id": "426:9669",
+      "w": 288,
+      "h": 2966.891357421875,
+      "textHash": "8139b5e2",
+      "imageHash": "350b5438",
+      "uiHash": "4994e3ea",
+      "treeHash": "7def8369",
+      "textCount": 23,
+      "imageCount": 3,
+      "uiCount": 5
+    }
+  ],
+  "result": "All four phone blocks preserve content, assets and component bindings. Root page position is excluded because the approved quick-link reorder moves sections."
+}

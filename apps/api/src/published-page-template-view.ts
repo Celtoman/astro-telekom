@@ -9,7 +9,7 @@ export async function publishedPageTemplateView(prisma: Pick<PrismaService, '$qu
   const rows = await prisma.$queryRaw<PublishedTemplateView[]>(Prisma.sql`
     SELECT p.catalog -> 'homeHero' AS "homeHero",
            p.catalog -> 'generalHome' AS "generalHome",
-           jsonb_path_query_array(v."sourceSnapshot", '$.pageTemplates[*] ? (@.kind == "HOME" || @.kind == "CITY_HOME" || @.kind == "CITY_ADDRESS_CHECK")') AS "pageTemplates"
+           jsonb_path_query_array(v."sourceSnapshot", '$.pageTemplates[*] ? (@.kind == "HOME" || @.kind == "CITY_HOME" || @.kind == "CITY_ADDRESS_CHECK" || @.kind == "CITY_SUPPORT")') AS "pageTemplates"
     FROM "SitePublication" p
     LEFT JOIN "SitePublicationValidation" v ON v.id = p."validationId"
     WHERE p."siteId" = ${siteId} AND p.status = 'SUCCEEDED'

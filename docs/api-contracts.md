@@ -1,5 +1,9 @@
 # API-контракты текущего прототипа
 
+## CITY_SUPPORT, 17 ноября 2026
+
+Локально добавлены guarded GET/PATCH `/admin/sites/:siteId/support`, приватные upload/preview/crop маршруты и saved preview общего городского шаблона. Полный контракт полей, типов ссылок, изображений, optimistic save и publication gate — в [support-page.md](support-page.md). Внешний выпуск этой реализации пока не подтверждён.
+
 ## Редакционный контекст и пакетный выпуск, 7 ноября 2026 (#558)
 
 Маршруты этого редакционного раздела защищены действующим AdminTokenGuard. `GET /admin/sites/editorial-context` возвращает `{id,name,slug}` ровно для `PUBLIC_SITE_SLUG` (по умолчанию `domru-site`); если такой записи нет — 409 без выбора другого сайта. `POST /admin/sites/:siteId/news/batch/review` принимает только `{items:[{entityId,expectedRevision}]}`, 1–100 разных сохранённых DRAFT или CHANGED. `POST .../batch/publish` добавляет `reviewDigest` и `operationId`; создаёт одну публикацию/запрос сборки. Вложенные неизвестные поля, дубли и некорректные номера редакций — 400; устаревшие редакции, unchanged PUBLISHED и WITHDRAWN — 409. Ошибки проверки материала сохраняют `entityId` и `details`. Неизбранные черновики не выпускаются. Ход и результат доступны прежним `GET .../publications/:operationId`. Пространство ARTICLE id `batch` зарезервировано. [Подробный контракт](research/2026-11-07-news-batch-and-ui-fixes.md).

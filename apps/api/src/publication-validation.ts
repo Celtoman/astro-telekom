@@ -1,3 +1,6 @@
+import { supportPageFromTemplate } from './support-page-view';
+import { validateSupportPage } from './support-page';
+import { assertSupportMedia } from './support-media-model';
 import { validateSpeedTestPage } from './speed-test-page';
 import { readCorporatePhone } from './site-contact-settings';
 import { validateOfficialSitePage } from './official-site-page';
@@ -75,6 +78,7 @@ function routeSources(source: CatalogSource): RouteSource[] {
       route: { id: 'CITY_ADDRESS_CHECK', kind: 'CITY_ADDRESS_CHECK', path: `${cityPath}/${ADDRESS_PAGE_SLUG}`, citySlug: city.slug }, city,
       page: city.pages.find((page: any) => page.type === 'ADDRESS_CHECK' && page.slug === ADDRESS_PAGE_SLUG),
     });
+    if (source.pageTemplates?.some(template=>template.kind==='CITY_SUPPORT')) routes.push({route:{id:'CITY_SUPPORT',kind:'CITY_SUPPORT',path:cityPath+'/tehpodderzhka',citySlug:city.slug},city,page:city.pages.find((p:any)=>p.type==='CITY_SUPPORT'&&p.slug==='tehpodderzhka')});
     for (const tariff of city.tariffs || []) {
       routes.push({
         route: { id: 'CITY_TARIFF_DETAIL', kind: 'CITY_TARIFF_DETAIL', path: `${cityPath}/${tariff.slug}`, citySlug: city.slug, tariffSlug: tariff.slug },
@@ -114,6 +118,8 @@ export function validatePublicationSource(
   };
   let source = rawSource;
   for (const template of rawSource.pageTemplates ?? []) {
+    if (template.kind === 'CITY_SUPPORT') try { const content=supportPageFromTemplate(template);assertSupportMedia(content,rawSource.supportMedia); }
+    catch(error){add('BLOCKING','SUPPORT_TEMPLATE','/{city}/tehpodderzhka',message(error),undefined,{template:'CITY_SUPPORT',...contentErrorLocation(error)});}
     if (template.kind === 'CITY_ADDRESS_CHECK') try { addressPageFromTemplate(template); }
     catch (error) { add('BLOCKING', 'ADDRESS_TEMPLATE', `/{city}/${ADDRESS_PAGE_SLUG}`, message(error), undefined, { template: 'CITY_ADDRESS_CHECK', ...contentErrorLocation(error) }); }
   }
@@ -242,6 +248,10 @@ export function validatePublicationSource(
           { template: diagnostic.template, block: diagnostic.block, field: diagnostic.field, entityId: tariff.id });
       }
     }
+    if (route.kind === 'CITY_SUPPORT') {
+      try{if(!page)throw new Error('Не опубликована поддержка города');validateSupportPage(page.content);assertSupportMedia(page.content,source.supportMedia);}
+      catch(error){add('BLOCKING','SUPPORT_PAGE',route.path,message(error),undefined,{template:'CITY_SUPPORT',...contentErrorLocation(error)});}
+    }
     if (route.kind === 'CITY_ADDRESS_CHECK') {
       try {
         if (!page) throw new Error('Не опубликована страница проверки подключения города');
@@ -252,7 +262,7 @@ export function validatePublicationSource(
       const mini = {
         site: { name: site.name, slug: site.slug, domain: site.domain, connectionPhone: site.connectionPhone, supportPhone: site.supportPhone, publicDisplay },
         globalPages: route.kind === 'GLOBAL_PAGE' && page ? [page] : [],
-        cities: city ? [{ ...city, tariffFacts: factsForCity(city), pages: route.kind === 'CITY_ADDRESS_CHECK' ? (page ? [page] : []) : route.kind === 'CITY_HOME' ? (city.pages || []).filter((candidate: any) => candidate.type === 'HOME') : [], tariffs: tariff ? [tariff] : [] }] : [],
+        cities: city ? [{ ...city, tariffFacts: factsForCity(city), pages: ['CITY_ADDRESS_CHECK','CITY_SUPPORT'].includes(route.kind) ? (page ? [page] : []) : route.kind === 'CITY_HOME' ? (city.pages || []).filter((candidate: any) => candidate.type === 'HOME') : [], tariffs: tariff ? [tariff] : [] }] : [],
         routes: [route],
         redirects: [],
         sitemap: { excludedPaths: [] },
@@ -262,6 +272,7 @@ export function validatePublicationSource(
         provider: { name: provider.name },
         now,
       });
+      if(route.id==='CITY_SUPPORT'&&resolved.cities[0]?.pages[0])validateSupportPage(resolved.cities[0].pages[0].content);
       if (route.id === 'SPEED_TEST' && resolved.globalPages[0]) validateSpeedTestPage(resolved.globalPages[0].content);
       if (route.id === 'OFFICIAL_SITE' && resolved.globalPages[0]) validateOfficialSitePage(resolved.globalPages[0].content);
       if (route.id === 'ACCOUNT' && resolved.globalPages[0]) validateAccountPage(resolved.globalPages[0].content);
@@ -272,7 +283,7 @@ export function validatePublicationSource(
       const detail = message(error);
       const tariffField = route.kind === 'CITY_TARIFF_DETAIL' && /\.promoText\b/.test(detail)
         ? { template: route.id, block: 'hero', field: 'promoText' } : undefined;
-      add('BLOCKING', 'VARIABLE_RESOLUTION', route.path, detail, undefined, ['ACCOUNT','OFFICIAL_SITE','SPEED_TEST'].includes(route.id) ? { template: route.id, ...contentErrorLocation(error) } : tariffField);
+      add('BLOCKING', 'VARIABLE_RESOLUTION', route.path, detail, undefined, ['ACCOUNT','OFFICIAL_SITE','SPEED_TEST','CITY_SUPPORT'].includes(route.id) ? { template: route.id, ...contentErrorLocation(error) } : tariffField);
     }
     try {
       const seo = resolveSeoTemplates({

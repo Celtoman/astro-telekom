@@ -1,4 +1,6 @@
 import { validateSpeedTestPage } from './speed-test-page';
+import { captureSupportMedia, assertSupportMedia, type SupportMediaRegistry } from './support-media-registry';
+import { validateSupportPage } from './support-page';
 import { readCorporatePhone } from './site-contact-settings';
 import { validateOfficialSitePage } from './official-site-page';
 import { projectCityHomeBlocks } from './tariff-collection-model';
@@ -36,6 +38,7 @@ export type CatalogSource = {
   pageTemplates?: any[];
   editorial?: EditorialSource;
   publicationBaseId?: string;
+  supportMedia?: SupportMediaRegistry;
 };
 
 @Injectable()
@@ -120,7 +123,8 @@ export class SiteCatalogService {
         }
       }
     }
-    return { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates, pageTemplates, ...(editorial?{editorial}:{}),...(publicationBaseId?{publicationBaseId}:{}) };
+    const supportMedia=await captureSupportMedia(site.id,pageTemplates,client.mediaAsset);
+    return { site, cities, globalPages, redirects, sitemapExclusions, seoTemplates, pageTemplates, ...(Object.keys(supportMedia).length?{supportMedia}:{}), ...(editorial?{editorial}:{}),...(publicationBaseId?{publicationBaseId}:{}) };
   }
 
   renderSource(source: CatalogSource, now = new Date()) {
@@ -130,9 +134,10 @@ export class SiteCatalogService {
     const homeHero = homeScreen?.data;
     const generalHome = homeTemplate ? generalHomeFromTemplate(homeTemplate) : null;
     const publicDisplay = readSitePublicDisplay(site.settings);
+    if (source.pageTemplates?.some(t => t.kind === 'CITY_SUPPORT') && !readCorporatePhone(site.settings)) throw new BadRequestException('CITY_SUPPORT: заполните телефон корпоративной поддержки в общих настройках сайта.');
     if (homeScreen) validateFirstScreen('HOME', homeHero, false, homeScreen.passportVersion);
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
-    const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages, { addressCheck: source.pageTemplates?.some(template => template.kind === 'CITY_ADDRESS_CHECK') });
+    const routes = buildReleaseOneRoutes(cities, resolvedGlobalPages, { addressCheck: source.pageTemplates?.some(template => template.kind === 'CITY_ADDRESS_CHECK'), support: source.pageTemplates?.some(template => template.kind === 'CITY_SUPPORT') });
     const editorialRoutes=source.editorial?newsRoutes(source.editorial):[];
     const allRoutes=[...routes,...editorialRoutes];
     if(new Set(allRoutes.map(route=>route.path)).size!==allRoutes.length)throw new BadRequestException('Адрес раздела новостей занят существующей страницей');
@@ -161,6 +166,7 @@ export class SiteCatalogService {
       now,
     });
     for (const page of resolved.globalPages) { if (page.type === 'ACCOUNT') validateAccountPage(page.content); if (page.type === 'SPEED_TEST') validateSpeedTestPage(page.content); if (page.type === 'OFFICIAL_SITE') validateOfficialSitePage(page.content); }
+    for (const city of resolved.cities) for (const page of city.pages) if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content); assertSupportMedia(page.content,source.supportMedia); }
     const seo = resolveSeoTemplates({
       routes,
       templates: seoTemplates,
@@ -172,6 +178,7 @@ export class SiteCatalogService {
     const noindexPaths = Object.entries(seo.byPath).filter(([, meta]) => meta.indexState === 'NOINDEX').map(([path]) => path);
     return {
       ...resolved,
+      ...(source.supportMedia?{supportMedia:source.supportMedia}:{}),
       ...(source.editorial?{editorial:structuredClone(source.editorial)}:{}),
       variableUsages: [...resolved.variableUsages, ...collectSeoTemplateUsages(seoTemplates)],
       variableUsageVersion: 2,
@@ -228,6 +235,7 @@ export class SiteCatalogService {
   }
 
   pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string) {
+    if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'SPEED_TEST') { validateSpeedTestPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'OFFICIAL_SITE') { validateOfficialSitePage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'ACCOUNT') { validateAccountPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }

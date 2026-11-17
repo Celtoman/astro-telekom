@@ -14,6 +14,7 @@ enum PublishStatus {
 }
 
 enum PageType {
+  CITY_SUPPORT
   SPEED_TEST
   OFFICIAL_SITE
   ACCOUNT
@@ -32,6 +33,7 @@ enum PageType {
 }
 
 enum SeoTemplateKind {
+  CITY_SUPPORT
   SPEED_TEST
   OFFICIAL_SITE
   ACCOUNT
@@ -170,6 +172,7 @@ enum ContentEntityType {
 }
 
 enum PageTemplateKind {
+  CITY_SUPPORT
   HOME
   COVERAGE
   CITIES

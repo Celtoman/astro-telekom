@@ -80,11 +80,21 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
       return
     }
     let active = true
+    const mediaAbort=new AbortController()
     setLoadingPreview(true)
     setPreviewError(null)
     setPreviewIssue(null)
     void requestJson<PreviewResponse>(apiUrl, `/admin/sites/${encodeURIComponent(selectedSiteId)}/preview-catalog`)
-      .then((result) => {
+      .then(async (result) => {
+        const mediaAssets:Record<string,string>={}
+        await Promise.all(Object.entries(result.catalog.supportMedia??{}).map(async ([key,raw])=>{
+          const variants=raw as Array<{src:string;sha256:string}>,last=variants.at(-1);if(!last)return
+          const id=key.split('|')[0]
+          const response=await fetch(apiUrl.replace(/\/$/,'')+'/admin/sites/'+encodeURIComponent(selectedSiteId)+'/support/media/'+encodeURIComponent(id)+'/file?variant='+encodeURIComponent(last.sha256),{credentials:'include',signal:mediaAbort.signal})
+          if(!response.ok)throw new AdminApiError(response.status,'Не удалось загрузить изображение поддержки для предпросмотра.')
+          mediaAssets[last.src]=await new Promise<string>((resolve,reject)=>{response.blob().then(blob=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=reject;reader.readAsDataURL(blob)}).catch(reject)})
+        }))
+        result.catalog.supportPreviewAssets=mediaAssets
         if (!active) return
         const options = previewRouteOptions(result.catalog)
         setPreview(result)
@@ -99,7 +109,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
         if (message) { setPreviewError(message); setPreviewIssue(previewContentIssue(caught, selectedSiteId)) }
       })
       .finally(() => { if (active) setLoadingPreview(false) })
-    return () => { active = false }
+    return () => { active = false; mediaAbort.abort() }
   }, [apiUrl, handleError, refreshKey, selectedSiteId, state.status])
 
   const routeOptions: PreviewRouteOption[] = useMemo(
@@ -109,7 +119,7 @@ export function PreviewApp({ apiUrl }: { apiUrl: string }) {
   const documentResult = useMemo(() => {
     if (!preview || !selectedPath) return { html: "", error: null, issue: null }
     try {
-      const assets = Object.fromEntries(Object.entries(publicPreviewAssets).map(([path, url]) => [path, new URL(url, window.location.origin).href]))
+      const assets = {...Object.fromEntries(Object.entries(publicPreviewAssets).map(([path, url]) => [path, new URL(url, window.location.origin).href])),...preview.catalog.supportPreviewAssets}
       return { html: buildPreviewDocument(preview.catalog, selectedPath, publicPreviewStyles, assets), error: null, issue: null }
     } catch (caught: unknown) {
       return { html: "", error: caught instanceof Error ? caught.message : "Страница не может быть показана", issue: previewContentIssue(caught, selectedSiteId) }

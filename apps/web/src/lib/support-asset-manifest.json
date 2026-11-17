@@ -1,0 +1,300 @@
+{
+  "hero-D:imgIcon": {
+    "src": "/images/support/v1/hero-d-img-icon-ae6a94e7ae521a93a456fc18.svg",
+    "width": 20,
+    "height": 20,
+    "sha256": "ae6a94e7ae521a93a456fc18427f0ca15f26fc82c2a6fa5ffd59a038c6a7de99",
+    "context": "hero-D",
+    "variable": "imgIcon"
+  },
+  "hero-D:img": {
+    "src": "/images/support/v1/hero-d-img-0e32cdd76db8fff15e294e2e.svg",
+    "width": 8,
+    "height": 24,
+    "sha256": "0e32cdd76db8fff15e294e2e08c5de71edb391e3f36a3596a90f2b9f6fe552c3",
+    "context": "hero-D",
+    "variable": "img"
+  },
+  "hero-D:imgIcon1": {
+    "src": "/images/support/v1/hero-d-img-icon1-3731668cd2d3516cb22c2316.svg",
+    "width": 20,
+    "height": 20,
+    "sha256": "3731668cd2d3516cb22c2316b053b0fb781cae1c27690c59c6261b94433d6ee3",
+    "context": "hero-D",
+    "variable": "imgIcon1"
+  },
+  "hero-D:imgCmp0015": {
+    "src": "/images/support/v1/hero-d-img-cmp0015-82e0c976ee3a1009a209a8af.svg",
+    "width": 20,
+    "height": 20,
+    "sha256": "82e0c976ee3a1009a209a8af7a14828ca15d622a43432c0b121844545ee59247",
+    "context": "hero-D",
+    "variable": "imgCmp0015"
+  },
+  "introduction": {
+    "src": "/images/support/v1/introduction-3928f4daecce4a9d1ce95787.png",
+    "width": 1168,
+    "height": 912,
+    "sha256": "3928f4daecce4a9d1ce95787ab3192bd4e0fd4b5e517b4e655fa78a0b0f22abd",
+    "context": "1310:4979",
+    "variable": "img1168912Fit"
+  },
+  "brand": {
+    "src": "/images/support/v1/brand-6513a291f1b65495c13e0b7d.png",
+    "width": 2071,
+    "height": 682,
+    "sha256": "6513a291f1b65495c13e0b7dee25793c6ec994bce57166b543c6dad06f4b126f",
+    "context": "1310:4983",
+    "variable": "img"
+  },
+  "phone": {
+    "src": "/images/support/v1/phone-96eb76c738cb3b1f4e9384c0.png",
+    "width": 697,
+    "height": 519,
+    "sha256": "96eb76c738cb3b1f4e9384c0f7c345da8e4da5a5001af321ed5f1f4af28c0484",
+    "context": "1310:4983",
+    "variable": "imgImg697519"
+  },
+  "1310:4983:imgIconPhone": {
+    "src": "/images/support/v1/1310-4983-img-icon-phone-9eb18510de48233cea6a8911.svg",
+    "width": 24,
+    "height": 24,
+    "sha256": "9eb18510de48233cea6a8911bc4df3edd78e9f2459e2eae2c19d1b66eb7d89d0",
+    "context": "1310:4983",
+    "variable": "imgIconPhone"
+  },
+  "callbackMenu": {
+    "src": "/images/support/v1/callbackmenu-029126b2cafde1baabc881a7.png",
+    "width": 767,
+    "height": 574,
+    "sha256": "029126b2cafde1baabc881a7233521db547528486f291f47f98294b5a02bbf2b",
+    "context": "1310:4985",
+    "variable": "imgMenu"
+  },
+  "callbackForm": {
+    "src": "/images/support/v1/callbackform-5d45af31654b989b701622b9.png",
+    "width": 1554,
+    "height": 766,
+    "sha256": "5d45af31654b989b701622b912adbdd6ae9e71f0546af5f2529b43476f542314",
+    "context": "1310:4985",
+    "variable": "imgForm"
+  },
+  "chatEntry": {
+    "src": "/images/support/v1/chatentry-d948e16f0a56eb23dbb608ca.png",
+    "width": 757,
+    "height": 426,
+    "sha256": "d948e16f0a56eb23dbb608ca9941329026e0e33521400ed739f23a7651333df3",
+    "context": "1310:4987",
+    "variable": "imgEntry"
+  },
+  "chatDialogue": {
+    "src": "/images/support/v1/chatdialogue-fafd16d2e12dbbf5d665f7db.png",
+    "width": 1065,
+    "height": 599,
+    "sha256": "fafd16d2e12dbbf5d665f7db6563a5ccd7efb344a5432348f96ebd3e339e3074",
+    "context": "1310:4987",
+    "variable": "imgOpen"
+  },
+  "1310:4989:imgCmp0117Telegram": {
+    "src": "/images/support/v1/1310-4989-img-cmp0117-telegram-83de154062267f4df461b459.svg",
+    "width": 24,
+    "height": 24,
+    "sha256": "83de154062267f4df461b4594dce0bc098fcc7d5ca62b2f4ff33abf6d11e5e7b",
+    "context": "1310:4989",
+    "variable": "imgCmp0117Telegram"
+  },
+  "1310:4989:imgCmp0116": {
+    "src": "/images/support/v1/1310-4989-img-cmp0116-101bd2725ede06b8be73b857.svg",
+    "width": 24,
+    "height": 24,
+    "sha256": "101bd2725ede06b8be73b857a47557ca5e5390e2211f21505bbb929fb9ba6230",
+    "context": "1310:4989",
+    "variable": "imgCmp0116"
+  },
+  "1310:4989:imgCmp0115": {
+    "src": "/images/support/v1/1310-4989-img-cmp0115-cd4e73125fbe7e587330c858.svg",
+    "width": 24,
+    "height": 24,
+    "sha256": "cd4e73125fbe7e587330c858311d6b53495d1dc9812eeb3da71821a671124681",
+    "context": "1310:4989",
+    "variable": "imgCmp0115"
+  },
+  "social": {
+    "src": "/images/support/v1/social-069c4ed1610673e35a9d7fbb.png",
+    "width": 921,
+    "height": 405,
+    "sha256": "069c4ed1610673e35a9d7fbba90587149bc96df998a441bad334c6e1ccb04cbd",
+    "context": "1310:4989",
+    "variable": "imgVk"
+  },
+  "account": {
+    "src": "/images/support/v1/account-ae00e0dcc92620e8d6e26468.png",
+    "width": 772,
+    "height": 504,
+    "sha256": "ae00e0dcc92620e8d6e26468fb2bbd29080092418e64bbba2bfd0739e1919ef7",
+    "context": "1310:4991",
+    "variable": "img"
+  },
+  "app": {
+    "src": "/images/support/v1/app-ebba0b7b3ccd1ae560d57b38.jpg",
+    "width": 1080,
+    "height": 2132,
+    "sha256": "ebba0b7b3ccd1ae560d57b38798b988614c4acd797d53b712d1f01922bb27bdf",
+    "context": "1310:4993",
+    "variable": "img"
+  },
+  "1310:4993:imgAppGallery": {
+    "src": "/images/support/v1/1310-4993-img-app-gallery-1f2eecda15047faeebd7645b.svg",
+    "width": 138,
+    "height": 44,
+    "sha256": "1f2eecda15047faeebd7645bdc1e330ac0a898f260dcef9270a7670701776c7c",
+    "context": "1310:4993",
+    "variable": "imgAppGallery"
+  },
+  "1310:4993:imgRuStore": {
+    "src": "/images/support/v1/1310-4993-img-ru-store-28aa80a5ced9871c343df32a.svg",
+    "width": 145,
+    "height": 52,
+    "sha256": "28aa80a5ced9871c343df32a7efce7d5f8ad02c7a2e427fcc727fdef6b454dc3",
+    "context": "1310:4993",
+    "variable": "imgRuStore"
+  },
+  "1310:4993:imgGroup": {
+    "src": "/images/support/v1/1310-4993-img-group-2d5a26c12ef56a3100469d0e.svg",
+    "width": 144.3,
+    "height": 52,
+    "sha256": "2d5a26c12ef56a3100469d0efc159d9a83da47d7a277ad1c7a192cf8ebe35a43",
+    "context": "1310:4993",
+    "variable": "imgGroup"
+  },
+  "1310:4993:imgGroup1": {
+    "src": "/images/support/v1/1310-4993-img-group1-3cdafb07bef70f0041662c92.svg",
+    "width": 144.3,
+    "height": 52,
+    "sha256": "3cdafb07bef70f0041662c92a894cfa5bfaff0d4e0d724abf566a5fd47d7e752",
+    "context": "1310:4993",
+    "variable": "imgGroup1"
+  },
+  "1310:4993:imgGroup2": {
+    "src": "/images/support/v1/1310-4993-img-group2-ed8554be2dfea0cb02942610.svg",
+    "width": 123.501,
+    "height": 31.6896,
+    "sha256": "ed8554be2dfea0cb0294261085aa4b4137553897e123c450a0a0b8f6a36f4492",
+    "context": "1310:4993",
+    "variable": "imgGroup2"
+  },
+  "1310:4993:imgGooglePlay": {
+    "src": "/images/support/v1/1310-4993-img-google-play-dc4a37749404de345eb0113c.svg",
+    "width": 159,
+    "height": 52,
+    "sha256": "dc4a37749404de345eb0113cfa939eeca745d4bd599dfde3d935ffa86db48058",
+    "context": "1310:4993",
+    "variable": "imgGooglePlay"
+  },
+  "1310:4993:imgGroup3": {
+    "src": "/images/support/v1/1310-4993-img-group3-931d7b5bf907d963511d5b6e.svg",
+    "width": 118,
+    "height": 28,
+    "sha256": "931d7b5bf907d963511d5b6effc9262c3138211efa97035648352ac7d3e2e618",
+    "context": "1310:4993",
+    "variable": "imgGroup3"
+  },
+  "1310:4993:imgGroup4": {
+    "src": "/images/support/v1/1310-4993-img-group4-3ec66470d3c24174e145ec4a.svg",
+    "width": 117.85,
+    "height": 27.5233,
+    "sha256": "3ec66470d3c24174e145ec4aa35c6004ec85beeedd56d297f040aa091966a13c",
+    "context": "1310:4993",
+    "variable": "imgGroup4"
+  },
+  "1310:4993:imgVector": {
+    "src": "/images/support/v1/1310-4993-img-vector-cb7574916ddaebc7460f4220.svg",
+    "width": 53.4368,
+    "height": 6.69313,
+    "sha256": "cb7574916ddaebc7460f4220d32b79f4143f53139e9cc1049d7f087d13ec78b8",
+    "context": "1310:4993",
+    "variable": "imgVector"
+  },
+  "1310:4995:imgIcon": {
+    "src": "/images/support/v1/1310-4995-img-icon-e9252b74fd65abbedea1a4c1.svg",
+    "width": 20,
+    "height": 20,
+    "sha256": "e9252b74fd65abbedea1a4c1c9d5a8c75a2e99cd0ce66a308381d0ab2ed8aaff",
+    "context": "1310:4995",
+    "variable": "imgIcon"
+  },
+  "1310:4995:imgIcon1": {
+    "src": "/images/support/v1/1310-4995-img-icon1-3966e22faa86db7126249cdd.svg",
+    "width": 20,
+    "height": 20,
+    "sha256": "3966e22faa86db7126249cdddaf8d20592b43081b5692bd90c97865bb41b3656",
+    "context": "1310:4995",
+    "variable": "imgIcon1"
+  },
+  "1310:4995:imgIcon2": {
+    "src": "/images/support/v1/1310-4995-img-icon2-dba12e941df3c1ed6c17fc12.svg",
+    "width": 20,
+    "height": 20,
+    "sha256": "dba12e941df3c1ed6c17fc128a7ff32bab673d4c9a59aae0df72464aac58cbe3",
+    "context": "1310:4995",
+    "variable": "imgIcon2"
+  },
+  "1310:4995:imgIcon3": {
+    "src": "/images/support/v1/1310-4995-img-icon3-06f43cd879d0c4bab83e7f72.svg",
+    "width": 20,
+    "height": 20,
+    "sha256": "06f43cd879d0c4bab83e7f72b8b3e93c5fbff11a26ba831c814328b8acd153f3",
+    "context": "1310:4995",
+    "variable": "imgIcon3"
+  },
+  "1310:4995:imgIcon4": {
+    "src": "/images/support/v1/1310-4995-img-icon4-6d4fa93b41afdb697fff54c6.svg",
+    "width": 20,
+    "height": 20,
+    "sha256": "6d4fa93b41afdb697fff54c614d33033a974afc83149d54f0da4a3e5bf173f00",
+    "context": "1310:4995",
+    "variable": "imgIcon4"
+  },
+  "1310:4995:imgIcon5": {
+    "src": "/images/support/v1/1310-4995-img-icon5-876d07966a9f8ba68f36bf5e.svg",
+    "width": 20,
+    "height": 20,
+    "sha256": "876d07966a9f8ba68f36bf5e73c64107cc213129672a724c96b6544eea4d7303",
+    "context": "1310:4995",
+    "variable": "imgIcon5"
+  },
+  "business": {
+    "src": "/images/support/v1/business-734271a567ea7bc8a3fd98df.png",
+    "width": 1053,
+    "height": 787,
+    "sha256": "734271a567ea7bc8a3fd98dfcfcd255a7a1ba9018112bc7ff30ab7bcc71c09c0",
+    "context": "1310:4997",
+    "variable": "img1053787Fit"
+  },
+  "1310:4999:imgGlyphPhosphorDuotone": {
+    "src": "/images/support/v1/1310-4999-img-glyph-phosphor-duotone-d78856fbf30a198014d0736d.svg",
+    "width": 20,
+    "height": 20,
+    "sha256": "d78856fbf30a198014d0736db744399f0f8fcde3b990271cf84bdbd55eab9fde",
+    "context": "1310:4999",
+    "variable": "imgGlyphPhosphorDuotone"
+  },
+  "googlePlay": {
+    "src": "/images/support/v1/googleplay-f1d7c7dba26254d91aad379f.png",
+    "width": 135,
+    "height": 44,
+    "sha256": "f1d7c7dba26254d91aad379fd2e702a9265e712234e7aee9f6ba692a516d4c35"
+  },
+  "ruStore": {
+    "src": "/images/support/v1/rustore-fbd40c613ccde36d473bc45b.png",
+    "width": 123,
+    "height": 44,
+    "sha256": "fbd40c613ccde36d473bc45b785453bf47bc0faf67b88f6339d1df4635f33cd3"
+  },
+  "appGallery": {
+    "src": "/images/support/v1/appgallery-25be47af5cd18f401b64f577.png",
+    "width": 138,
+    "height": 44,
+    "sha256": "25be47af5cd18f401b64f577eb0ad73c95a549ad6066db21669063f183f4c218"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "checks": [
+    "cookie guard",
+    "real multipart upload",
+    "prepared crop",
+    "saved media capture",
+    "full phone and detail share asset",
+    "byte hashes and dimensions",
+    "bad crop rejected",
+    "foreign site rejected",
+    "unknown variant rejected",
+    "spoofed src rejected",
+    "stale revision rejected",
+    "initial content restored"
+  ]
+}

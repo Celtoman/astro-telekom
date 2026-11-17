@@ -3,6 +3,7 @@ import react from '@astrojs/react';
 import { createPublicCsp } from '../../scripts/browser-security-policy.mjs';
 import { resolvePublicApiUrl, resolvePublicSiteUrl } from './scripts/public-site-url.mjs';
 import { materializeAccountAssets } from './scripts/account-assets.mjs';
+import { verifySupportAssets } from './scripts/support-assets.mjs';
 import { materializeOfficialSiteAssets } from './scripts/official-site-assets.mjs';
 import { fileURLToPath } from 'node:url';
 
@@ -21,7 +22,7 @@ export default defineConfig({
   site: publicSiteUrl,
   trailingSlash: 'never',
   integrations: [react(), { name: 'account-immutable-images', hooks: {
-    'astro:build:done': async ({ dir }) => { await materializeAccountAssets({ distDirectory: fileURLToPath(dir) }); await materializeOfficialSiteAssets({ distDirectory: fileURLToPath(dir) }); },
+    'astro:build:done': async ({ dir }) => { await materializeAccountAssets({ distDirectory: fileURLToPath(dir) }); await materializeOfficialSiteAssets({ distDirectory: fileURLToPath(dir) }); await verifySupportAssets({distDirectory:fileURLToPath(dir)}); },
   } }],
   security: {
     csp: createPublicCsp({

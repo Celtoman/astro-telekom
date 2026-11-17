@@ -1,0 +1,21 @@
+---
+import type { SupportPageContent } from '../../../../api/src/support-page-model';
+import { SUPPORT_PAGE_SLUG } from '../../../../api/src/support-page-model';
+import type { CityView, SiteView } from '../../data/site';
+import { publicAsset } from '../../data/public-asset';
+import { renderSupportIntro, renderSupportBody, supportFaq, supportAnswerRenderer } from '../../lib/support-page-render';
+import AddressOnly from '../general-home/AddressOnly.astro';
+import HomeFaq from '../general-home/HomeFaq.astro';
+import HomeBlockStyles from '../general-home/HomeBlockStyles.astro';
+import SupportPageStyles from './SupportPageStyles.astro';
+import type { SupportMediaRegistry } from '../../../../api/src/support-media-model';
+interface Props { media?: SupportMediaRegistry; content: SupportPageContent; site: SiteView; city: CityView; apiUrl: string }
+const {content,site,city,apiUrl,media}=Astro.props;
+---
+<div class="support-page">
+  <Fragment set:html={renderSupportIntro(content,site,city,{asset:publicAsset,media})}/>
+  <AddressOnly {site} {city} {apiUrl} pageSlug={SUPPORT_PAGE_SLUG}/>
+  <Fragment set:html={renderSupportBody(content,site,city,{asset:publicAsset,includeFaq:false,media})}/>
+  <div id="support-faq" data-support-block="faq"><HomeFaq content={supportFaq(content)} phoneLinks={[site.connectionPhone,site.supportPhone]} answerRenderer={supportAnswerRenderer(content,site,city)}/></div>
+</div>
+<HomeBlockStyles/><SupportPageStyles/>

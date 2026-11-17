@@ -1,3 +1,4 @@
+import { renderSupportIntro,renderSupportBody } from '../../../web/src/lib/support-page-render.ts'
 import { renderOfficialSiteIntro,renderOfficialSiteBody } from '../../../web/src/lib/official-site-render.ts'
 import { renderAccountIntro, renderAccountBody } from '../../../web/src/lib/account-page-render.ts'
 import { renderSpeedTestIntro, renderSpeedTestBody } from '../../../web/src/lib/speed-test-render.ts'
@@ -35,6 +36,7 @@ function routeLabel(catalog, route) {
   const city = cityBySlug(catalog, route.citySlug)
   if (route.kind === 'HOME') return 'Главная сайта'
   if (route.kind === 'CITY_HOME') return city?.name || route.citySlug
+  if(route.kind==='CITY_SUPPORT')return `Поддержка — ${city?.name||route.citySlug}`
   if (route.kind === 'CITY_ADDRESS_CHECK') return `Проверка подключения — ${city?.name || route.citySlug}`
   if (route.kind === 'CITY_TARIFF_DETAIL') return `${list(city?.tariffs).find(tariff => tariff.slug === route.tariffSlug)?.name || route.tariffSlug} — ${city?.name || route.citySlug}`
   return pageByType(catalog, route.pageType)?.title || route.pageType || route.path
@@ -224,6 +226,11 @@ export function buildPreviewDocument(catalog, routePath, publicStyles = '', asse
   if (override) content = override.body
   else if (route.kind === 'HOME') content = renderHome(catalog)
   else if (route.kind === 'CITY_HOME') content = renderCity(catalog, route)
+  else if(route.kind==='CITY_SUPPORT'){
+    const page=list(city?.pages).find(page=>page.type==='CITY_SUPPORT');if(!page)throw new Error('Поддержка выбранного города не найдена');
+    const options={interactive:false,asset:path=>asset(catalog,path),media:catalog.supportMedia};
+    content=wrap('support',`<div class="support-page">${renderSupportIntro(page.content,catalog.site,city,options)}${renderAddressOnlyPreview(options.asset,{matchRuntime:true})}${renderSupportBody(page.content,catalog.site,city,options)}</div>`);
+  }
   else if (route.kind === 'CITY_ADDRESS_CHECK') content = renderAddress(catalog, route)
   else if (route.kind === 'CITY_TARIFF_DETAIL') content = renderTariff(catalog, route)
   else if (route.kind === 'GLOBAL_PAGE') content = renderGlobal(catalog, route)

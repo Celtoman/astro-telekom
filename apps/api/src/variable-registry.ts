@@ -1,4 +1,5 @@
 import { SPEED_TEST_PAGE_SCHEMA } from './speed-test-page-model';
+import { SUPPORT_PAGE_SCHEMA } from './support-page-model';
 import { BadRequestException } from '@nestjs/common';
 import { formatSitePhone } from './site-phone';
 import { GENERAL_HOME_SCHEMAS, CITY_HOME_SCHEMAS, type GeneralHomeFieldRule } from './general-home-model';
@@ -37,6 +38,7 @@ function homeVariableFields(rule: GeneralHomeFieldRule, path = '', prefix = 'Pag
 const HOME_VARIABLE_FIELDS = [...new Set(Object.values(GENERAL_HOME_SCHEMAS).flatMap(rule => homeVariableFields(rule)))];
 const CITY_VARIABLE_FIELDS = [...new Set(Object.values(CITY_HOME_SCHEMAS).flatMap(rule => homeVariableFields(rule)))];
 const SPEED_TEST_VARIABLE_FIELDS = homeVariableFields(SPEED_TEST_PAGE_SCHEMA, '', 'Page.content');
+const SUPPORT_VARIABLE_FIELDS = [...homeVariableFields(SUPPORT_PAGE_SCHEMA, '', 'Page.content'), ...homeVariableFields(SUPPORT_PAGE_SCHEMA, '', 'PageTemplateBlock.data')];
 const TARIFF_FIELDS = ['Tariff.promoText'];
 const SEO_TEMPLATE_FIELDS = ['SeoTemplate.titleTemplate', 'SeoTemplate.descriptionTemplate', 'SeoTemplate.ogTitleTemplate', 'SeoTemplate.ogDescriptionTemplate'];
 const SITE_CONTEXTS = ['Общая страница', 'Городская страница', 'Тариф'];
@@ -89,7 +91,7 @@ export interface VariableWarning {
 
 export function listVariableDefinitions(): VariableDefinition[] {
   return DEFINITIONS.map((definition) => ({ ...definition, allowedContexts: [...definition.allowedContexts], allowedFields: [...new Set([
-    ...definition.allowedFields, ...(definition.scope === 'SITE' ? [...HOME_VARIABLE_FIELDS, ...SPEED_TEST_VARIABLE_FIELDS] : []),
+    ...definition.allowedFields, ...(definition.scope === 'SITE' ? [...HOME_VARIABLE_FIELDS, ...SPEED_TEST_VARIABLE_FIELDS] : []), ...(['SITE', 'CITY'].includes(definition.scope) ? SUPPORT_VARIABLE_FIELDS : []),
     ...(['SITE', 'CITY'].includes(definition.scope) ? CITY_VARIABLE_FIELDS : []),
   ])] }));
 }

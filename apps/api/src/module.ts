@@ -17,6 +17,8 @@ import { AdminCitiesController } from './admin-cities.controller';
 import { AdminPagesController } from './admin-pages.controller';
 import { AdminAccountController } from './admin-account.controller';
 import { AdminSpeedTestController } from './admin-speed-test.controller';
+import { AdminSupportMediaController } from './admin-support-media.controller';
+import { AdminSupportController } from './admin-support.controller';
 import { AdminOfficialSiteController } from './admin-official-site.controller';
 import { AdminTariffsController } from './admin-tariffs.controller';
 import { CrmLeadsController } from './crm-leads.controller';
@@ -77,6 +79,8 @@ import { CodeReleaseService } from './code-release.service';
 
 @Module({
   controllers: [
+    AdminSupportController,
+    AdminSupportMediaController,
     AdminEditorialMediaController,
     AdminNewsImportController,
     AdminNewsController,

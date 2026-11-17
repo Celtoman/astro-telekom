@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict';
+import {readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url),sharp=require('../apps/web/node_modules/sharp');
+const runtime=JSON.parse(await readFile('.codex-tmp/support-db/runtime.json','utf8'));
+assert.match(runtime.container,/^astro-support-[a-f0-9]{8}$/);
+const origin='http://localhost:4939/api/v1',base='/admin/sites/'+runtime.siteId+'/support';
+const login=await fetch(origin+'/auth/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'support-rehearsal@example.test',password:'synthetic-support-rehearsal-password'})});
+assert.equal(login.status,201);const cookie=login.headers.get('set-cookie').split(';')[0];
+const request=async(path,{method='GET',body,cookieValue=cookie,status}={})=>{
+ const response=await fetch(origin+path,{method,headers:{...(cookieValue?{cookie:cookieValue}:{}),...(body&&!(body instanceof FormData)?{'content-type':'application/json'}:{})},...(body?{body:body instanceof FormData?body:JSON.stringify(body)}:{})});
+ assert.equal(response.status,status??(method==='POST'?201:200),await response.clone().text());return response;
+};
+await request(base,{cookieValue:'',status:401});
+const before=await(await request(base)).json(),content=structuredClone(before.content);
+const bytes=await readFile('apps/web/public/images/support/v1/phone-96eb76c738cb3b1f4e9384c0.png');
+const form=new FormData();form.append('file',new Blob([bytes],{type:'image/png'}),'support-phone.png');
+const uploaded=await(await request(base+'/media',{method:'POST',body:form})).json();assert.ok(uploaded.id);
+const crop=content.phones.image.crop;
+await request(base+'/media/'+uploaded.id+'/crop',{method:'POST',body:{crop}});
+content.phones.image={...content.phones.image,assetId:uploaded.id,src:uploaded.src};
+const saved=await(await request(base,{method:'PATCH',body:{expectedWorkingRevision:before.workingRevision,content}})).json();
+const catalog=(await(await request('/admin/sites/'+runtime.siteId+'/preview-catalog')).json()).catalog;
+const entries=Object.entries(catalog.supportMedia).filter(([key])=>key.startsWith(uploaded.id+'|'));assert.equal(entries.length,2);
+for(const [key,variants]of entries){const last=variants.at(-1),response=await request(base+'/media/'+uploaded.id+'/file?variant='+last.sha256),file=Buffer.from(await response.arrayBuffer());assert.equal(createHash('sha256').update(file).digest('hex'),last.sha256);const meta=await sharp(file).metadata();assert.equal(meta.width,last.width);assert.equal(meta.height,last.height);if(key.endsWith('default'))assert.equal(meta.width,697);else assert.equal(meta.width,162);}
+await request(base+'/media/'+uploaded.id+'/crop',{method:'POST',body:{crop:{x:0,y:0,width:2,height:1}},status:400});
+await request(base+'/media/'+uploaded.id+'/file?variant='+'a'.repeat(64),{status:404});
+await request(base+'/media/'+uploaded.id+'/file',{cookieValue:'',status:401});
+const other=(await(await request('/admin/sites?summary=true')).json()).find(s=>s.id!==runtime.siteId);
+assert.ok(other);await request('/admin/sites/'+other.id+'/support/media/'+uploaded.id+'/file',{status:404});
+const spoof=structuredClone(content);spoof.phones.image.src='/media/editorial/'+'a'.repeat(64)+'/'+'b'.repeat(64)+'.webp';
+await request(base,{method:'PATCH',body:{expectedWorkingRevision:saved.workingRevision,content:spoof},status:400});
+await request(base,{method:'PATCH',body:{expectedWorkingRevision:before.workingRevision,content},status:409});
+await request(base,{method:'PATCH',body:{expectedWorkingRevision:saved.workingRevision,content:before.content}});
+const proof={passed:true,checks:['cookie guard','real multipart upload','prepared crop','saved media capture','full phone and detail share asset','byte hashes and dimensions','bad crop rejected','foreign site rejected','unknown variant rejected','spoofed src rejected','stale revision rejected','initial content restored']};
+await writeFile('.codex-tmp/support-db/http-proof.json',JSON.stringify(proof,null,2));console.log(JSON.stringify(proof));

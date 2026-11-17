@@ -337,7 +337,7 @@ for (const withAddress of [false, true]) test(`city import captures complete und
   };
   const prisma = {
     $transaction: async (callback) => callback({
-      pageTemplate: { findUnique: async ({ where }) => where.siteId_kind.kind === 'CITY_HOME' ? ({ id: 'template-city-home' }) : withAddress ? ({ id: 'template-address', titleTemplate: 'Проверка' }) : null },
+      pageTemplate: { findUnique: async ({ where }) => where.siteId_kind.kind === 'CITY_HOME' ? ({ id: 'template-city-home' }) : where.siteId_kind.kind==='CITY_ADDRESS_CHECK' && withAddress ? ({ id: 'template-address', titleTemplate: 'Проверка' }) : null },
       region: {
         findMany: async () => [],
         create: async ({ data }) => ({ id: 'region-created', ...data, phone: null, content: null }),

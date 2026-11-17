@@ -36,7 +36,7 @@ test('SPEED_TEST native text paths derive from schema and extend SITE definition
       assert.ok(definition.allowedFields.some(path => path.startsWith('PageTemplateBlock.data.')));
     } else {
       assert.ok(!definition.allowedFields.includes('Page.content.support.items.results.body'));
-      assert.ok(!definition.allowedFields.includes('Page.content.hero.h1'));
+      assert.equal(definition.allowedFields.includes('Page.content.hero.h1'),definition.scope==='CITY','CITY_SUPPORT shares this path; SPEED_TEST keeps its own SITE validation');
     }
     assert.ok(!definition.allowedFields.includes('Page.content.version'));
     assert.equal(new Set(definition.allowedFields).size, definition.allowedFields.length);

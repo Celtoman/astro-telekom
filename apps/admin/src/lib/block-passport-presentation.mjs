@@ -1,3 +1,4 @@
+import {supportFieldLabel} from '../../../api/src/support-page-model.ts';
 import { speedTestFieldLabel } from '../../../api/src/speed-test-page-model.ts';
 import { generalHomeFieldLabel } from './general-home-editor.mjs';
 const names = {
@@ -18,12 +19,14 @@ export const passportGroups = [
   { id: 'all', label: 'Все блоки' }, { id: 'global', label: 'Все публичные страницы' },
   { id: 'root', label: 'Общая главная' }, { id: 'city', label: 'Общий шаблон города' },
   { id: 'address', label: 'Проверка подключения' },
+  { id:'support',label:'Техническая поддержка' },
   { id: 'speed-test', label: 'Проверка скорости интернета' },
   { id: 'account', label: 'Личный кабинет' },
   { id: 'tariff', label: 'Шаблон страницы тарифа' },
 ];
 export function passportGroup(passport) {
   if (passport.id === 'header') return 'global';
+  if(passport.id.startsWith('support.'))return 'support';
   if (passport.id.startsWith('speed-test.')) return 'speed-test';
   if (passport.id.startsWith('official-site.')) return { href: '/templates/official-site', label: 'Открыть редактор', note: 'Вступление, основной переход, семь иллюстраций и FAQ. Принятый дизайн задан кодом.' };
   if (passport.id.startsWith('account.')) return 'account';
@@ -51,9 +54,10 @@ export function passportContent(passport) {
   const fields = passport.id === 'header'
     ? passport.fields.filter(field => ['connectionPhone', 'supportPhone'].includes(field.key))
     : passport.fields.filter(field => field.control !== 'read_only');
-  return fields.map(field => ({ key: field.key, label: passport.id.startsWith('speed-test.') ? speedTestFieldLabel(field.key) : fieldNames[field.key] ?? (passportGroup(passport) === 'root' || passport.id.startsWith('city.') || passport.id.startsWith('address.') ? generalHomeFieldLabel(field.key) : 'Дополнительное поле'), required: field.required }));
+  return fields.map(field => ({ key: field.key, label: passport.id.startsWith('support.')?supportFieldLabel(field.key):passport.id.startsWith('speed-test.') ? speedTestFieldLabel(field.key) : fieldNames[field.key] ?? (passportGroup(passport) === 'root' || passport.id.startsWith('city.') || passport.id.startsWith('address.') ? generalHomeFieldLabel(field.key) : 'Дополнительное поле'), required: field.required }));
 }
 export function passportSource(passport) {
+  if(passport.id.startsWith('support.'))return {href:'/templates/support',label:'Открыть редактор',note:'Тексты, типизированные ссылки, изображения и отдельный FAQ; ручное сохранение и публикация отдельно.'};
   if (passport.id.startsWith('speed-test.')) return { href: passport.editorReadiness === 'READY' ? '/templates/speed-test' : null, label: passport.editorReadiness === 'READY' ? 'Открыть редактор' : null, note: 'Заголовок, тексты шести разделов и FAQ. Сохранение меняет рабочую версию. Телефоны и график — в общих настройках.' };
   if (passport.id.startsWith('account.')) return { href: passport.editorReadiness === 'READY' ? '/templates/account' : null, label: passport.editorReadiness === 'READY' ? 'Открыть редактор' : null, note: 'Одна форма страницы: вступление, ссылка входа, иллюстрации и FAQ. Инструкции, условия и композиция заданы кодом.' };
   if (passport.id.startsWith('address.') && passport.editorReadiness === 'READY') return { href: `/templates/home?kind=CITY_ADDRESS_CHECK&block=${encodeURIComponent(passport.id)}`, label: 'Открыть редактор', note: 'Независимый контент ADDRESS. Сохранение меняет рабочую версию; общие факты редактируются в настройках.' };

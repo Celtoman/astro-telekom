@@ -1,0 +1,126 @@
+{
+  "source": "sXBwFG6P8vmsCMD28G4ZJL",
+  "screens": "BdxNHlBVZWejREtOEIWDkI",
+  "publishedFamilies": [
+    "512:87",
+    "375:669",
+    "319:200",
+    "339:11",
+    "286:11"
+  ],
+  "screensSnapshot": [
+    {
+      "id": "620:43710",
+      "w": 1440,
+      "h": 9086.8876953125,
+      "sections": 15,
+      "textCount": 194,
+      "imageCount": 15,
+      "instanceCount": 125,
+      "textHash": "dbd6124d",
+      "imageHash": "c3707ddc",
+      "uiKeyHash": "532369fa",
+      "geometryHash": "b4e33d21",
+      "localInstanceCount": 0,
+      "reactionHash": "7de44397",
+      "reactionNodes": 34,
+      "actionCounts": {
+        "URL": 19,
+        "NODE": 36
+      }
+    },
+    {
+      "id": "620:43728",
+      "w": 834,
+      "h": 12775.7666015625,
+      "sections": 15,
+      "textCount": 189,
+      "imageCount": 15,
+      "instanceCount": 126,
+      "textHash": "3e144291",
+      "imageHash": "c1552e6e",
+      "uiKeyHash": "681014e8",
+      "geometryHash": "33efc5ae",
+      "localInstanceCount": 0,
+      "reactionHash": "9baa5cf1",
+      "reactionNodes": 34,
+      "actionCounts": {
+        "URL": 19,
+        "NODE": 36
+      }
+    },
+    {
+      "id": "620:43746",
+      "w": 390,
+      "h": 15598.150390625,
+      "sections": 15,
+      "textCount": 183,
+      "imageCount": 14,
+      "instanceCount": 123,
+      "textHash": "cb12ac06",
+      "imageHash": "8782b156",
+      "uiKeyHash": "688f6477",
+      "geometryHash": "b435beca",
+      "localInstanceCount": 0,
+      "reactionHash": "23f81a9a",
+      "reactionNodes": 35,
+      "actionCounts": {
+        "NODE": 36,
+        "URL": 20
+      }
+    },
+    {
+      "id": "620:43764",
+      "w": 320,
+      "h": 17340.974609375,
+      "sections": 15,
+      "textCount": 183,
+      "imageCount": 14,
+      "instanceCount": 122,
+      "textHash": "6138f561",
+      "imageHash": "8782b156",
+      "uiKeyHash": "9f164b3d",
+      "geometryHash": "a17c7e35",
+      "localInstanceCount": 0,
+      "reactionHash": "5d29a9f",
+      "reactionNodes": 35,
+      "actionCounts": {
+        "NODE": 36,
+        "URL": 20
+      }
+    }
+  ],
+  "archive": {
+    "archive": "1312:7404",
+    "mutated": [
+      {
+        "id": "620:43710",
+        "w": 1440,
+        "h": 9086.8876953125,
+        "sections": 15,
+        "backup": "1312:7405"
+      },
+      {
+        "id": "620:43728",
+        "w": 834,
+        "h": 12775.7666015625,
+        "sections": 15,
+        "backup": "1312:7406"
+      },
+      {
+        "id": "620:43746",
+        "w": 390,
+        "h": 15598.150390625,
+        "sections": 15,
+        "backup": "1312:7407"
+      },
+      {
+        "id": "620:43764",
+        "w": 320,
+        "h": 17340.974609375,
+        "sections": 15,
+        "backup": "1312:7408"
+      }
+    ]
+  }
+}

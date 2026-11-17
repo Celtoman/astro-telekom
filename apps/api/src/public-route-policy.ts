@@ -1,4 +1,5 @@
 import { ADDRESS_PAGE_SLUG } from './address-page-model';
+import { SUPPORT_PAGE_SLUG } from './support-page-model';
 import type { NewsRoute } from './news-projection';
 
 export const RELEASE_ONE_GLOBAL_PAGES = [
@@ -14,8 +15,8 @@ export const OPTIONAL_GLOBAL_PAGES = [{ type: 'ACCOUNT', slug: 'lichnyy-kabinet-
 export const SUPPORTED_GLOBAL_PAGES = [...RELEASE_ONE_GLOBAL_PAGES, ...OPTIONAL_GLOBAL_PAGES] as const;
 
 export type LegacyPublicRoute = {
-  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE' | 'SPEED_TEST';
-  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'GLOBAL_PAGE';
+  id: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'CITY_SUPPORT' | ReleaseOneGlobalPageType | 'ACCOUNT' | 'OFFICIAL_SITE' | 'SPEED_TEST';
+  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'CITY_SUPPORT' | 'GLOBAL_PAGE';
   path: string;
   citySlug?: string;
   tariffSlug?: string;
@@ -26,7 +27,7 @@ export function isLegacyPublicRoute(route:PublicRoute):route is LegacyPublicRout
 
 type CityRouteSource = { slug: string; tariffs?: Array<{ slug: string }>; pages?: Array<{ type: string; slug: string }> };
 type GlobalPageRouteSource = { type: string; slug: string };
-export interface PublicRouteOptions { addressCheck?: boolean }
+export interface PublicRouteOptions { addressCheck?: boolean; support?: boolean }
 
 export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: GlobalPageRouteSource[], options: PublicRouteOptions = {}): LegacyPublicRoute[] {
   const pagesByType = new Map<string, GlobalPageRouteSource>();
@@ -64,6 +65,14 @@ export function buildReleaseOneRoutes(cities: CityRouteSource[], globalPages: Gl
       if (occupiedPaths.has(addressPath)) throw new Error(`Конфликт маршрута Release 1: ${addressPath}`);
       occupiedPaths.add(addressPath);
       routes.push({ id: 'CITY_ADDRESS_CHECK', kind: 'CITY_ADDRESS_CHECK', path: addressPath, citySlug: city.slug });
+    }
+    if (options.support) {
+      const pages = (city.pages ?? []).filter(page => page.type === 'CITY_SUPPORT');
+      if (pages.length !== 1 || pages[0].slug !== SUPPORT_PAGE_SLUG) throw new Error('Не найдена единственная страница поддержки города: ' + city.slug);
+      const supportPath = '/' + city.slug + '/' + SUPPORT_PAGE_SLUG;
+      if (occupiedPaths.has(supportPath)) throw new Error('Конфликт маршрута Release 1: ' + supportPath);
+      occupiedPaths.add(supportPath);
+      routes.push({ id: 'CITY_SUPPORT', kind: 'CITY_SUPPORT', path: supportPath, citySlug: city.slug });
     }
     for (const tariff of city.tariffs || []) {
       const tariffPath = `/${city.slug}/${tariff.slug}`;

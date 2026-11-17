@@ -67,6 +67,6 @@ export function mediaReferences(content: unknown): Set<string> {
   };
   visit(content); return refs;
 }
-export function mediaCropKey(kind: 'cover' | 'social', crop?: MediaUse['crop']) {
+export function mediaCropKey(kind: 'body' | 'cover' | 'social', crop?: MediaUse['crop']) {
   return mediaHash(JSON.stringify({kind,crop:crop?{x:crop.x,y:crop.y,width:crop.width,height:crop.height}:null}));
 }

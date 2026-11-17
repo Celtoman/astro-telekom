@@ -5,6 +5,8 @@ import type { EditorialSource } from '../../../api/src/editorial-publication-mod
 import { ADDRESS_PAGE_SLUG, ADDRESS_PAGE_BLOCK_ORDER, ADDRESS_PAGE_VERSION, ADDRESS_PAGE_IMPLEMENTATION } from '../../../api/src/address-page-model';
 import { assertAccountPage } from './account-page';
 import { assertSpeedTestPage } from './speed-test-page';
+import { assertSupportMedia, type SupportMediaRegistry } from '../../../api/src/support-media-model';
+import { assertSupportPage } from './support-page';
 import { projectCityHomeBlocks } from '../../../api/src/tariff-collection-model';
 import { tariffView, type TariffView } from './tariff-view';
 import { readFile } from 'node:fs/promises';
@@ -42,6 +44,7 @@ export interface SiteView {
   domain?: string | null;
   connectionPhone: string;
   supportPhone: string;
+  corporatePhone?: string | null;
   connectionHours?: string;
   callbackWithinMinutes?: number;
   publicDisplay?: SitePublicDisplay;
@@ -56,7 +59,7 @@ export interface RedirectView {
 
 export interface PublicRouteView {
   id: string;
-  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'GLOBAL_PAGE' | 'NEWS_LIST' | 'NEWS_CATEGORY' | 'NEWS_ARTICLE';
+  kind: 'HOME' | 'CITY_HOME' | 'CITY_TARIFF_DETAIL' | 'CITY_ADDRESS_CHECK' | 'CITY_SUPPORT' | 'GLOBAL_PAGE' | 'NEWS_LIST' | 'NEWS_CATEGORY' | 'NEWS_ARTICLE';
   path: string;
   citySlug?: string;
   tariffSlug?: string;
@@ -67,6 +70,7 @@ export interface PublicRouteView {
 }
 
 export interface SiteCatalog {
+  supportMedia?: SupportMediaRegistry;
   editorial?: EditorialSource;
   generalHome?: GeneralHomeCatalog;
   homeHero?: Record<string, unknown>;
@@ -166,6 +170,16 @@ function expectedReleaseOneRoutes(cities: CityView[], globalPages: PageView[]): 
       routes.push({ id: 'CITY_ADDRESS_CHECK', kind: 'CITY_ADDRESS_CHECK', path: addressPath, citySlug: city.slug });
     }
 
+    const supportPages = city.pages.filter(page => page.type === 'CITY_SUPPORT');
+    if (supportPages.length > 1) throw new Error('Дублируется страница поддержки: ' + city.slug);
+    if (supportPages.length) {
+      if (supportPages[0].slug !== 'tehpodderzhka') throw new Error('Некорректный адрес поддержки: ' + city.slug);
+      assertSupportPage(supportPages[0].content);
+      const supportPath = publicHtmlPath(city.slug, 'tehpodderzhka');
+      if (occupiedPaths.has(supportPath)) throw new Error('Конфликт маршрута поддержки: ' + supportPath);
+      occupiedPaths.add(supportPath);
+      routes.push({ id: 'CITY_SUPPORT', kind: 'CITY_SUPPORT', path: supportPath, citySlug: city.slug });
+    }
     for (const tariff of city.tariffs) {
       if (!slugPattern.test(tariff.slug)) throw new Error(`Некорректный slug опубликованного тарифа: ${tariff.slug || '(пусто)'}`);
       const tariffPath = publicHtmlPath(city.slug, tariff.slug);
@@ -365,6 +379,10 @@ function normalizedCatalog(value: unknown): SiteCatalog {
     .filter((item: Record<string, unknown>) => item?.status === 'PUBLISHED')
     .map((item: Record<string, any>) => normalizePage(item));
   const editorial = editorialCatalog(payload.editorial);
+  const supportCities=cities.filter((city:CityView)=>city.pages.some(page=>page.type==='CITY_SUPPORT'));
+  if(supportCities.length && supportCities.length!==cities.length)throw new Error('SUPPORT: страница должна существовать у каждого опубликованного города.');
+  for(const city of supportCities)for(const page of city.pages.filter((p:PageView)=>p.type==='CITY_SUPPORT')){assertSupportPage(page.content);assertSupportMedia(page.content,payload.supportMedia);}
+  if(supportCities.length && String(payload.site.corporatePhone??'').replace(/\D/g,'').length!==11)throw new Error('SUPPORT: не задан телефон для бизнеса.');
   const expectedRoutes = [...expectedReleaseOneRoutes(cities, globalPages), ...(editorial ? newsRoutes(editorial) : [])];
   const routes = normalizeRoutes(payload.routes, expectedRoutes);
   const redirects = normalizeRedirects(payload.redirects, routes);
@@ -382,12 +400,14 @@ function normalizedCatalog(value: unknown): SiteCatalog {
       domain: typeof payload.site.domain === 'string' ? payload.site.domain : null,
       connectionPhone,
       supportPhone,
+      corporatePhone: typeof payload.site.corporatePhone==='string'?payload.site.corporatePhone:null,
       publicDisplay,
       connectionHours: publicDisplay.connectionHours,
       callbackWithinMinutes: publicDisplay.callbackWithinMinutes,
     },
     ...(generalHome ? { generalHome, homeHero: generalHome.blocks[0].data, homeHeroVersion: '2.0.0' as const } : payload.homeHero ? { homeHero: payload.homeHero, homeHeroVersion: normalizeHomeHeroVersion(payload.homeHeroVersion) } : {}),
     ...(editorial ? {editorial} : {}),
+    ...(payload.supportMedia?{supportMedia:payload.supportMedia}:{}),
     globalPages,
     routes,
     cities,

@@ -1,6 +1,7 @@
 import { speedTestPageDefaults } from './speed-test-page-defaults';
 import { officialSitePageDefaults } from './official-site-page-defaults';
 import { ensureAddressTemplate, ensureCityAddressPage } from './address-page-storage';
+import { ensureSupportTemplate, ensureCitySupportPage } from './support-page-storage';
 import { PrismaClient } from '../generated/index.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
@@ -113,6 +114,7 @@ async function main() {
 
     const homeTemplate = await ensureCityHomeTemplate(prisma, site.id);
     await ensureAddressTemplate(prisma, site.id);
+    await ensureSupportTemplate(prisma, site.id);
     await prisma.pageTemplate.upsert({
       where: { siteId_kind: { siteId: site.id, kind: 'HOME' } },
       update: {},
@@ -146,7 +148,9 @@ async function main() {
     // Migration backfills apply only to sites that already exist. A new site
     // needs the same eight sources before its catalog can pass preflight.
     await ensureCityAddressPage(prisma, city);
+    await ensureCitySupportPage(prisma, city);
     const seoTemplates = [
+      ['CITY_SUPPORT', 'Техническая поддержка Дом.ру в {CITY_NAME_PREPOSITIONAL}', 'Телефоны и способы связи с поддержкой Дом.ру в {CITY_NAME_PREPOSITIONAL}: горячая линия, городской номер, официальный чат, личный кабинет и приложение.'],
       ['HOME', 'Домашний интернет и телевидение {PROVIDER_NAME}', 'Выберите город, чтобы посмотреть тарифы домашнего интернета и телевидения.'],
       ['COVERAGE', 'Карта покрытия {PROVIDER_NAME}', 'Выберите город и проверьте возможность подключения {PROVIDER_NAME} по адресу.'],
       ['CITIES', 'Города обслуживания {PROVIDER_NAME}', 'Опубликованные города, в которых можно проверить подключение {PROVIDER_NAME}.'],

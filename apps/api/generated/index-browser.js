@@ -693,6 +693,7 @@ exports.PublishStatus = exports.$Enums.PublishStatus = {
 };
 
 exports.SeoTemplateKind = exports.$Enums.SeoTemplateKind = {
+  CITY_SUPPORT: 'CITY_SUPPORT',
   SPEED_TEST: 'SPEED_TEST',
   OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
@@ -769,6 +770,7 @@ exports.CityOfficeState = exports.$Enums.CityOfficeState = {
 };
 
 exports.PageType = exports.$Enums.PageType = {
+  CITY_SUPPORT: 'CITY_SUPPORT',
   SPEED_TEST: 'SPEED_TEST',
   OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
@@ -787,6 +789,7 @@ exports.PageType = exports.$Enums.PageType = {
 };
 
 exports.PageTemplateKind = exports.$Enums.PageTemplateKind = {
+  CITY_SUPPORT: 'CITY_SUPPORT',
   HOME: 'HOME',
   COVERAGE: 'COVERAGE',
   CITIES: 'CITIES',

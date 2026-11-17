@@ -1,4 +1,5 @@
 import { ensureCityAddressPage } from './address-page-storage';
+import { ensureCitySupportPage } from './support-page-storage';
 import { ADDRESS_PAGE_SLUG } from './address-page-model';
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { isDeepStrictEqual } from 'node:util';
@@ -460,6 +461,8 @@ export class CityImportService {
             },
           });
           const addressPage = await ensureCityAddressPage(tx, city);
+          const supportPage = await ensureCitySupportPage(tx, city);
+          if (supportPage) { createdPageIds.push(supportPage.id); pagesCreated += 1; }
           if (addressPage) { createdPageIds.push(addressPage.id); pagesCreated += 1; }
           affectedCityIds.push(city.id);
           createdCityIds.push(city.id);

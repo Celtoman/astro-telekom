@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-11-17T13:54:39.545Z",
+  "baselineCommit": "ed3635b0c9c5f59eed0189f7181c9bd7fa00e99e",
+  "command": "pnpm check --test-concurrency=2",
+  "node": "24.22.3",
+  "rustWorkers": 2,
+  "goWorkers": 2,
+  "exitCode": 0,
+  "tests": 1155,
+  "pass": 1154,
+  "fail": 0,
+  "skip": 1,
+  "durationMs": 665723.9291,
+  "runtimePatchSha256": "7af61c8c48069faf6ad55087d8f64c006bb9eba55deb98b4aefa8d4fbb022cbb"
+}

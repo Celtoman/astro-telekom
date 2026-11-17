@@ -171,7 +171,7 @@ export class StaticArtifactBuilder {
         await cp(join(workspace, path), target, { recursive: true, errorOnExist: true, force: false });
       } });
       const linkType = process.platform === 'win32' ? 'junction' : 'dir';
-      await measure('media', () => copyEditorialMedia(snapshot.catalog.editorial,this.mediaRoot,join(projectRoot,'apps/web/public')));
+      await measure('media', () => copyEditorialMedia({media:{...snapshot.catalog.editorial?.media,...snapshot.catalog.supportMedia}},this.mediaRoot,join(projectRoot,'apps/web/public')));
       await symlink(join(workspace, 'node_modules'), join(projectRoot, 'node_modules'), linkType);
       await symlink(join(workspace, 'apps/web/node_modules'), join(projectRoot, 'apps/web/node_modules'), linkType);
       const environment = {};

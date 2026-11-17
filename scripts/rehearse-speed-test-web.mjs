@@ -21,10 +21,10 @@ export function speedTestFixtureCatalog({ includePage = true } = {}) {
   }
   return new SiteCatalogService({}).renderSource(source);
 }
-export async function buildSpeedTestFixture({ root = join(workspace, '.codex-tmp/speed-test-web'), origin = 'http://localhost:4932', includePage = true, metrikaId = '' } = {}) {
+export async function buildSpeedTestFixture({ root = join(workspace, '.codex-tmp/speed-test-web'), origin = 'http://localhost:4932', includePage = true, metrikaId = '', catalog:providedCatalog } = {}) {
   root = resolve(root);
   if (!root.startsWith(resolve(workspace, '.codex-tmp') + sep)) throw new Error('Fixture output must remain inside this checkout/.codex-tmp');
-  const catalog = speedTestFixtureCatalog({ includePage });
+  const catalog = providedCatalog??speedTestFixtureCatalog({ includePage });
   const publicationId = includePage ? 'speed-test-web-fixture' : 'before-speed-test-web-fixture';
   const snapshot = { publicationId, siteSlug: 'domru-site', catalogDigest: createHash('sha256').update(JSON.stringify(catalog)).digest('hex'), catalog };
   await mkdir(root, { recursive: true });
@@ -95,9 +95,9 @@ export async function serveSpeedTestFixture(fixture, { port = 4932 } = {}) {
       if (path === '/api/v1/address-checks') return json({ type: 'business', outcome: 'TARGET_AVAILABLE', checkId: 'synthetic-speed-test-check', address: suggestion.value, citySlug: 'moscow' });
       if (path === '/api/v1/leads') return json({ id: 'synthetic-speed-test-lead' });
       if (path.startsWith('/api/v1/geo')) return json({ citySlug: 'moscow', source: 'fixture' });
-      if (path === '/__preview-speed-test') {
+      if (path === '/__preview-speed-test' || path === '/__preview-support') {
         response.setHeader('Content-Type', 'text/html; charset=utf-8');
-        return response.end(buildPreviewDocument(fixture.catalog, '/proverit-skorost-interneta', readPreviewPublicStyles()));
+        return response.end(buildPreviewDocument(fixture.catalog, path==='/__preview-support'?fixture.catalog.routes.find(r=>r.kind==='CITY_SUPPORT').path:'/proverit-skorost-interneta', readPreviewPublicStyles()));
       }
       let file = resolve(fixture.dist, '.' + decodeURIComponent(path));
       if (file !== fixture.dist && !file.startsWith(fixture.dist + sep)) { response.writeHead(403); return response.end(); }

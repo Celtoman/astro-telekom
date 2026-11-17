@@ -1,4 +1,5 @@
 import { SPEED_TEST_PAGE_SCHEMA } from './speed-test-page-model';
+import { SUPPORT_PAGE_SCHEMA } from './support-page-model';
 import { OFFICIAL_SITE_PAGE_SCHEMA } from './official-site-page-model';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { ACCOUNT_PAGE_SCHEMA } from './account-page-model';
@@ -98,8 +99,8 @@ export class WorkingVariableUsagesService {
         for (const [index, block] of template.blocks.entries()) {
           const blockPath = `${path}.blocks[${index}]`;
           const blockOwner = { entityType: 'PAGE_TEMPLATE_BLOCK' as const, entityId: block.id, pageType: template.kind,
-            blockType: block.blockType, lifecycleStatus: template.status, visible: block.visible, editorHref: null };
-          const schemas: Record<string, GeneralHomeFieldRule> = template.kind === 'CITY_HOME' ? CITY_HOME_SCHEMAS : template.kind === 'HOME' ? GENERAL_HOME_SCHEMAS : {};
+            blockType: block.blockType, lifecycleStatus: template.status, visible: block.visible, editorHref: template.kind==='CITY_SUPPORT'?'/templates/support':null };
+          const schemas: Record<string, GeneralHomeFieldRule> = template.kind === 'CITY_HOME' ? CITY_HOME_SCHEMAS : template.kind === 'HOME' ? GENERAL_HOME_SCHEMAS : template.kind === 'CITY_SUPPORT' && SUPPORT_PAGE_SCHEMA.kind === 'object' ? Object.fromEntries(Object.entries(SUPPORT_PAGE_SCHEMA.fields).map(([key, value]) => ['support.' + key, value])) : {};
           if (schemas[block.blockType]) {
             recordStructured(block.data, schemas[block.blockType], `${blockPath}.data`, blockOwner, usages);
             continue;

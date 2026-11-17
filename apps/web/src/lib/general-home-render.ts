@@ -2,7 +2,7 @@ import type { GeneralHomeDataByType } from '../../../api/src/general-home-model.
 import { safeHomeUrl } from '../data/general-home.ts';
 import { callbackMinutesLabel, publicPhoneLabel } from './public-display.ts';
 
-export interface HomeRenderOptions { asset?: (path: string) => string; interactive?: boolean; tariffHref?: string | null; callbackWithinMinutes?: number; firstFaqOpen?: boolean; faqPhoneLinks?: readonly string[] }
+export interface HomeRenderOptions { asset?: (path: string) => string; interactive?: boolean; tariffHref?: string | null; callbackWithinMinutes?: number; firstFaqOpen?: boolean; faqPhoneLinks?: readonly string[]; faqAnswerRenderer?: (value:string)=>string }
 export interface HomeContactRenderOptions extends HomeRenderOptions { phone: string; phoneHref?: string; addressDialogId?: string | null; chooseCityForAddress?: boolean }
 export interface HomeDirectoryCity { id?: string; slug: string; name: string; region: { name: string } }
 export interface HomeHelpRenderOptions extends HomeContactRenderOptions { apiUrl?: string; siteSlug?: string }
@@ -25,7 +25,7 @@ export function renderHomeFaq(data: GeneralHomeDataByType['home.faq'], options: 
   const minus = `<img class="home-faq-minus" src="${resolveAsset('/images/general-home/faq-minus.svg', options)}" width="20" height="20" alt="" loading="lazy">`;
   const phoneKey = (value: string) => value.replace(/\D/g, '').slice(-10);
   const allowed = new Set((options.faqPhoneLinks || []).map(phoneKey));
-  const answer = (value: string) => homeHtml(value).replace(/(?:\+7|8)[\s(−-]*\d{3}[\s)−-]*\d{3}[\s−-]*\d{2}[\s−-]*\d{2}/g, label => allowed.has(phoneKey(label)) && options.interactive !== false ? `<a href="tel:+7${phoneKey(label)}">${label}</a>` : label);
+  const answer = (value: string) => options.faqAnswerRenderer ? options.faqAnswerRenderer(value) : homeHtml(value).replace(/(?:\+7|8)[\s(−-]*\d{3}[\s)−-]*\d{3}[\s−-]*\d{2}[\s−-]*\d{2}/g, label => allowed.has(phoneKey(label)) && options.interactive !== false ? `<a href="tel:+7${phoneKey(label)}">${label}</a>` : label);
   return `<section id="faq" class="home-block home-faq" data-home-block="home.faq" aria-labelledby="home-faq-title"><h2 id="home-faq-title">${homeHtml(data.title)}</h2><div class="home-faq-stack">${data.items.map((item, index) => options.interactive === false
     ? `<div class="home-faq-item"${options.firstFaqOpen && index === 0 ? ' open' : ''}><div class="home-faq-question"><span>${homeHtml(item.question)}</span>${options.firstFaqOpen && index === 0 ? minus : plus}</div>${options.firstFaqOpen && index === 0 ? `<div class="home-faq-answer"><p>${answer(item.answer)}</p></div>` : ''}</div>`
     : `<details class="home-faq-item"${options.firstFaqOpen && index === 0 ? ' open' : ''}><summary class="home-faq-question"><span>${homeHtml(item.question)}</span>${plus}${minus}</summary><div class="home-faq-answer"><p>${answer(item.answer)}</p></div></details>`).join('')}</div></section>`;

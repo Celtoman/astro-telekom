@@ -72,7 +72,7 @@ export class EditorialMediaService {
     if (mediaHash(buffer) !== variant.sha256) throw new ServiceUnavailableException('Контрольная сумма изображения не совпала');
     return buffer;
   }
-  async prepareUse(siteId: string, use: MediaUse, kind: 'cover'|'social') {
+  async prepareUse(siteId: string, use: MediaUse, kind: 'body'|'cover'|'social') {
     const asset = await this.get(siteId,use.assetId);
     if (!use.crop) return asset;
     const key = mediaCropKey(kind,use.crop);

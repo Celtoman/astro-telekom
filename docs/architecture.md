@@ -8,7 +8,7 @@
 
 Архивная очистка publication volume разделена между host orchestrator и private controller. Host helper выполняет read-only SQL/BullMQ preflight, tar/SHA, upload в существующее S3 и полное download/restore; credentials остаются в Coolify. Controller под общей очередью с builder/activation пересчитывает protected set, сохраняет immutable GC marker и удаляет только старый HTML. Assets, manifests, receipts и intents остаются; terminal historical reads отделены от строгого полного readArtifact для activation/baseline. Systemd timer/path запускают тот же процесс; [контракт и восстановление](runbooks/publication-retention.md).
 
-В репозитории реализован прототип статической витрины Дом.ру с защищённым внешним test-контуром в Coolify. Public web, admin, backoffice API и worker разделены. Точный inventory каждого immutable snapshot включает корень, пять обязательных общих страниц, HOME опубликованных городов и detail их опубликованных тарифов; ADDRESS, опциональный ACCOUNT и редакционные маршруты добавляются по версии и составу снимка. Городской импорт сохраняет статус существующих городов, а новые создаёт в DRAFT с HOME-shell, связанной с общим шаблоном CITY_HOME. Импорт сам по себе не публикует город или сайт.
+В репозитории реализован прототип статической витрины Дом.ру с защищённым внешним test-контуром в Coolify. Public web, admin, backoffice API и worker разделены. Точный inventory каждого immutable snapshot включает корень, пять обязательных общих страниц, HOME опубликованных городов и detail их опубликованных тарифов; ADDRESS, CITY_SUPPORT, опциональные ACCOUNT/OFFICIAL_SITE/SPEED_TEST и редакционные маршруты добавляются по версии и составу снимка. Городской импорт сохраняет статус существующих городов, а новые создаёт в DRAFT с HOME-shell, связанной с общим шаблоном CITY_HOME. Импорт сам по себе не публикует город или сайт.
 
 ## Стек и приложения
 
@@ -77,7 +77,7 @@ FLOW 2 сначала сохраняет `AddressCheck`, затем показы
 
 ## API-модули и их ответственность
 
-SEO-поток: `SeoTemplate` хранит по одному Title/Description/index-state для восьми типов маршрута Release 1. API разрешает шаблоны по конкретным URL при построении рабочего каталога, блокирует пустые/неразрешённые значения и фиксирует `seoByPath` в неизменяемом publication snapshot. Astro берёт SEO из этого снимка; исторические записи `SitePublication` не переписываются, а локальные JSON Page/Tariff не используются. `NOINDEX` автоматически исключает URL из sitemap того же снимка, сохраняя HTML. Ручное sitemap-исключение само по себе не меняет robots.
+SEO-поток: `SeoTemplate` хранит по одному Title/Description/index-state для тринадцати поддерживаемых типов маршрута. API разрешает шаблоны по конкретным URL при построении рабочего каталога, блокирует пустые/неразрешённые значения и фиксирует `seoByPath` в неизменяемом publication snapshot. Astro берёт SEO из этого снимка; исторические записи `SitePublication` не переписываются, а локальные JSON Page/Tariff не используются. `NOINDEX` автоматически исключает URL из sitemap того же снимка, сохраняя HTML. Ручное sitemap-исключение само по себе не меняет robots.
 
 CMS-поток городской HOME: `PageTemplate(CITY_HOME)` принадлежит Site и хранит общий редакционный заголовок и десять фиксированных `PageTemplateBlock` версии3.0.0 (Hero, тарифы и восемь независимых секций); City содержит факты и формы названия. `Page.templateId` временно связывает старую shell-запись с шаблоном для сохранения ссылок Lead/AddressCheck и маршрута. `SiteCatalogService` собирает эффективную HOME из шаблона, затем разрешает `{CITY_NAME_PREPOSITIONAL}` в контексте конкретного города. `SitePublication` сохраняет результат только по явной публикации рабочей ревизии. Защищённый PATCH общего шаблона создаёт `PAGE_TEMPLATE` revision/audit; прежний `/admin/pages` и mutators PageBlock не меняют городские HOME. Старые строки PageBlock сохраняются до C6, исторические снимки не меняются.
 
@@ -111,7 +111,7 @@ CMS-поток городской HOME: `PageTemplate(CITY_HOME)` принадл
 
 1. Сущности `Site`, `City`, `Page`, `Tariff` имеют статус `DRAFT`, `PUBLISHED` или `ARCHIVED`.
 2. Public API возвращает опубликованные данные, но отдельно применяет release policy к URL.
-3. Astro получает authoritative inventory и собирает ровно его HTML URL: базовый Release1, опубликованные общие расширения и редакционные маршруты при включённом разделе, плюс общую404. Страница тарифа создаётся только из route с `kind = CITY_TARIFF_DETAIL`; service pages остаются вне Release 1.
+3. Astro получает authoritative inventory и собирает ровно его HTML URL: базовый Release1, опубликованные общие расширения и редакционные маршруты при включённом разделе, плюс общую404. Страница тарифа создаётся только из route с `kind = CITY_TARIFF_DETAIL`; остальные не реализованные service pages не получают маршруты автоматически.
 4. Ручные изменения cities/pages/blocks/tariffs/redirects и full-snapshot импорт тарифов сохраняют рабочую ревизию и before/after audit в одной транзакции; явные publication endpoints проверяют ожидаемый номер и фиксируют неизменяемый полный снимок для ручного запуска.
 5. Общий `/publication` через read-only review показывает все сохранения и проверку URL; только актуальная успешная проверка разрешает явный запуск. Публикации по времени отсутствуют.
 6. `SiteRebuild` получает ID именно этого снимка и ставит BullMQ job; изменения одного сайта дедуплицируются, но запрошенный и обрабатываемый snapshots не подменяют друг друга.
@@ -178,3 +178,6 @@ ACCOUNT — самостоятельная site-scoped Page без PageTemplate/
 ## SPEED_TEST — опциональная общая страница
 
 Глобальная Page(SPEED_TEST) хранит типизированный Page.content1.0.0 с фиксированными смысловыми ключами; профильный GET/PATCH `/admin/sites/:siteId/speed-test` меняет working с expectedWorkingRevision. Миграции0073/0074 не создают публикацию. SiteCatalog/route inventory добавляет один URL только для валидной страницы снимка; исторические каталоги без SPEED_TEST сохраняются. Общие runtime/preview renderer/styles отделяют безопасное preview от живого стороннего iframe. GLOBAL FLOW2 разрешает новый источник через обслуживаемый snapshot; выбранный дом определяет фактический город. [Контракт и приёмка](research/2026-11-14-speedtest-code-and-test.md).
+## CITY_SUPPORT — локальная реализация 17 ноября 2026
+
+Городская поддержка использует общий PageTemplate → городские Page-shell → материализацию переменных → immutable public catalog → Astro route и общий с authenticated preview renderer/CSS. Редактор работает через HTTP API с ручным сохранением и отдельной публикацией. Выбранные изображения фиксируются в `supportMedia` и проходят существующий media/build/backup путь. Подробности и текущая граница внешнего выпуска — в [support-page.md](support-page.md).

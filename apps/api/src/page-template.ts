@@ -9,6 +9,7 @@ import { projectCityHomeBlocks, TARIFF_COLLECTION_VERSION, TARIFF_COLLECTION_IMP
 import { cityHomeFromTemplate } from './city-home-view';
 import { CITY_HOME_METADATA } from './city-home-model';
 import { materializeAddressPageSource } from './address-page-view';
+import { materializeSupportPageSource } from './support-page-view';
 
 const CITY_TOKEN = '{CITY_NAME_PREPOSITIONAL}';
 
@@ -43,6 +44,7 @@ export async function ensureCityHomeTemplate(
 
 export function materializeCityHomeSource<T extends CatalogSource>(source: T): T {
   source = materializeAddressPageSource(source);
+  source = materializeSupportPageSource(source);
   if (!source.pageTemplates?.length) {
     if (source.cities.some((city: any) => city.pages.some((page: any) => page.type === 'HOME' && page.templateId))) {
       throw new BadRequestException('Не найден шаблон городской HOME');

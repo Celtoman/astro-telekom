@@ -13,7 +13,7 @@ import { Field, FieldDescription, FieldLabel } from "./ui/field"
 import { Input } from "./ui/input"
 import { Skeleton } from "./ui/skeleton"
 
-type Kind = "SPEED_TEST" | "OFFICIAL_SITE" | "ACCOUNT" | "HOME" | "COVERAGE" | "CITIES" | "PRIVACY" | "PERSONAL_DATA_CONSENT" | "COOKIE_POLICY" | "CITY_HOME" | "CITY_TARIFF_DETAIL" | "CITY_ADDRESS_CHECK"
+type Kind = "CITY_SUPPORT" | "SPEED_TEST" | "OFFICIAL_SITE" | "ACCOUNT" | "HOME" | "COVERAGE" | "CITIES" | "PRIVACY" | "PERSONAL_DATA_CONSENT" | "COOKIE_POLICY" | "CITY_HOME" | "CITY_TARIFF_DETAIL" | "CITY_ADDRESS_CHECK"
 type IndexState = "INDEX" | "NOINDEX"
 type TextField = "titleTemplate" | "descriptionTemplate" | "ogTitleTemplate" | "ogDescriptionTemplate"
 interface Administrator { id: string; email: string }
@@ -29,6 +29,7 @@ interface Workspace {
 }
 
 const labels: Record<Kind, string> = {
+  CITY_SUPPORT:'Техническая поддержка городов',
   SPEED_TEST: "Проверка скорости интернета",
   OFFICIAL_SITE: "Официальный сайт",
   ACCOUNT: "Личный кабинет",
@@ -169,7 +170,7 @@ export function SeoTemplatesApp({ apiUrl }: { apiUrl: string }) {
             <Field><FieldLabel htmlFor="seo-og-description">OG Description</FieldLabel><textarea id="seo-og-description" className={textareaClass} value={ogDescriptionTemplate} onChange={(event) => setOgDescriptionTemplate(event.target.value)} onFocus={(event) => rememberField("ogDescriptionTemplate", event.currentTarget)} onSelect={(event) => rememberField("ogDescriptionTemplate", event.currentTarget)} maxLength={1000} /></Field>
             <Field><FieldLabel htmlFor="seo-og-image">OG image URL</FieldLabel><Input id="seo-og-image" value={ogImageUrl} onChange={(event) => setOgImageUrl(event.target.value)} maxLength={2048} placeholder="https://…/image.webp" /><FieldDescription>HTTPS-изображение либо доступный локальный asset; подстановки в URL запрещены.</FieldDescription></Field>
           </div>
-          {site ? <VariableInsertionPicker apiUrl={apiUrl} siteId={site.id} field={activeField ? `SeoTemplate.${activeField}` : null} context={kind === "CITY_TARIFF_DETAIL" ? "TARIFF" : ["CITY_HOME", "CITY_ADDRESS_CHECK"].includes(kind) ? "CITY" : "SITE"} onInsert={insertCode} /> : null}
+          {site ? <VariableInsertionPicker apiUrl={apiUrl} siteId={site.id} field={activeField ? `SeoTemplate.${activeField}` : null} context={kind === "CITY_TARIFF_DETAIL" ? "TARIFF" : ["CITY_HOME", "CITY_ADDRESS_CHECK", "CITY_SUPPORT"].includes(kind) ? "CITY" : "SITE"} onInsert={insertCode} /> : null}
           {insertionError ? <Alert variant="destructive"><CircleAlert /><AlertDescription>{insertionError}</AlertDescription></Alert> : null}
           <Field><FieldLabel htmlFor="seo-index">Индексация</FieldLabel><select id="seo-index" className={selectClass} value={indexState} onChange={(event) => { setIndexState(event.target.value as IndexState); setConfirmed(false) }}><option value="INDEX">index</option><option value="NOINDEX">noindex, follow</option></select><FieldDescription>При noindex URL исключаются из sitemap того же снимка публикации.</FieldDescription></Field>
           {enteringNoindex ? <Alert variant="destructive"><CircleAlert /><AlertTitle>Массовое изменение индексации</AlertTitle><AlertDescription>После публикации {affectedCount} URL получат noindex и исчезнут из sitemap. Подтвердите точное число URL перед сохранением.</AlertDescription><label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={confirmed} onChange={(event) => setConfirmed(event.target.checked)} />Подтверждаю noindex для {affectedCount} URL</label></Alert> : null}

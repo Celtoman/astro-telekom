@@ -194,7 +194,12 @@ SELECT "siteId",content FROM "NewsArticle" UNION ALL
 SELECT "siteId",content FROM "NewsCategory" UNION ALL
 SELECT "siteId",snapshot AS content FROM "EditorialRevision" UNION ALL
 SELECT "siteId",content FROM "EditorialSettings" UNION ALL
-SELECT "siteId",catalog->'editorial' AS content FROM "SitePublication"
+SELECT "siteId",catalog->'editorial' AS content FROM "SitePublication" UNION ALL
+SELECT "siteId",catalog->'supportMedia' AS content FROM "SitePublication" UNION ALL
+SELECT "siteId","sourceSnapshot" AS content FROM "SitePublicationValidation" UNION ALL
+SELECT "siteId",content FROM "PageTemplate" WHERE kind='CITY_SUPPORT' UNION ALL
+SELECT t."siteId",b.data AS content FROM "PageTemplateBlock" b JOIN "PageTemplate" t ON t.id=b."templateId" WHERE t.kind='CITY_SUPPORT' UNION ALL
+SELECT "siteId",snapshot AS content FROM "ContentRevision" WHERE "entityType"='PAGE_TEMPLATE'
 ) t;'''
         records = json.loads(run(['docker', 'exec', name, 'psql', '-U', 'news_restore', '-d', 'news_restore', '-At', '-c', sql]))
         return {'assets': len(rows), 'verifiedFiles': verify_media_rows(rows, restored), 'verifiedEditorialReferences': verify_editorial_references(records, rows, restored), 'editorialRecords': len(records)}

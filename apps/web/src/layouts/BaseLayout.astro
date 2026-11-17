@@ -42,7 +42,8 @@ const homeShell = (Astro.props as Props).homeShell;
 const catalog = await loadSiteData();
 const currentRoute = catalog.routes.find(route => route.path === normalizePublicHtmlPath(Astro.url.pathname));
 const addressPageSlug = catalog.routes.some(route => route.kind === 'CITY_ADDRESS_CHECK') ? 'proverka-podklyucheniya-k-domru-po-adresu' : undefined;
-const citySwitchPath = currentRoute?.kind === 'CITY_ADDRESS_CHECK' ? addressPageSlug : undefined;
+const citySwitchPath = currentRoute?.kind === 'CITY_ADDRESS_CHECK' ? addressPageSlug : currentRoute?.kind === 'CITY_SUPPORT' ? 'tehpodderzhka' : undefined;
+const supportPageSlug = catalog.routes.some(route => route.kind === 'CITY_SUPPORT') ? 'tehpodderzhka' : undefined;
 const cityComposition = city?.pages.find(page => page.type === 'HOME' && page.slug === '')?.content?.homeCompositionVersion;
 const localSections = homeShell ? ['faq', 'movix', 'address-check']
   : currentRoute?.kind === 'CITY_HOME' ? ['tariffs', 'address-check', ...(cityComposition === '3.0.0' ? ['comparison', 'faq', 'movix', 'contacts'] : [])]
@@ -106,11 +107,11 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     {metrikaBootstrap && <script is:inline set:html={metrikaBootstrap}></script>}
   </head>
   <body class:list={["general-home-page", { "city-home-page": currentRoute?.kind === "CITY_HOME" && cityComposition === "3.0.0" }]}>
-    <GeneralHomeHeader {site} {city} cities={catalog.cities} {localSections} {addressPageSlug} {citySwitchPath} addressDialogId={homeShell?.addressDialogId} />
+    <GeneralHomeHeader {site} {city} cities={catalog.cities} {localSections} {addressPageSlug} {supportPageSlug} {citySwitchPath} addressDialogId={homeShell?.addressDialogId} />
     <main>
       <slot />
     </main>
-    <GeneralHomeFooter {site} {city} cities={catalog.cities} {localSections} {addressPageSlug} footerRoutes={catalog.routes} />
+    <GeneralHomeFooter {site} {city} cities={catalog.cities} {localSections} {addressPageSlug} {supportPageSlug} footerRoutes={catalog.routes} />
     <CallbackDialog {site} {city} requireConfirmedCity={!city} />
     <LegalDocuments />
     <script>

@@ -58,11 +58,11 @@ try {
   source = await catalogService.captureSourceBySiteId(site.id);
   const withoutTariffs = validatePublicationSource(source, { appVersion: 'seed-rehearsal', siteRevision: site.workingRevision }, (candidate, now) => catalogService.renderSource(candidate, now));
   assert.ok(withoutTariffs.report.issues.some(issue => issue.code === 'CITY_TARIFFS_REQUIRED'));
-  await db.tariff.create({ data: { providerId: site.providerId, cityId: source.cities[0].id, name: 'Синтетический тариф проверки', slug: 'synthetic-seed-proof', identityKey: 'rehearsal:synthetic-seed-proof', dataSource: 'rehearsal', serviceType: 'INTERNET', status: 'PUBLISHED', availability: 'ACTIVE', standardPrice: '799', speed: 500 } });
+  await db.tariff.create({ data: { providerId: site.providerId, cityId: source.cities[0].id, name: 'Синтетический тариф проверки', slug: 'synthetic-seed-proof', identityKey: 'rehearsal:synthetic-seed-proof', dataSource: 'rehearsal', serviceType: 'INTERNET_TV', status: 'PUBLISHED', availability: 'ACTIVE', standardPrice: '799', speed: 500, attributes:{tv_channels_total:190,tv_channels_hd:60} } });
   source = await catalogService.captureSourceBySiteId(site.id);
   const validation = validatePublicationSource(source, { appVersion: 'seed-rehearsal', siteRevision: site.workingRevision }, (candidate, now) => catalogService.renderSource(candidate, now));
   assert.notEqual(validation.report.outcome, 'BLOCKED', JSON.stringify(validation.report.issues));
-  assert.equal(validation.catalog.routes.length, 12, 'root, five required globals plus ACCOUNT, OFFICIAL_SITE and SPEED_TEST, city HOME, ADDRESS and one synthetic published tariff; other unpriced demo tariffs remain drafts');
+  assert.equal(validation.catalog.routes.length, 13, 'root, five required globals plus ACCOUNT, OFFICIAL_SITE and SPEED_TEST, city HOME, ADDRESS, SUPPORT and one synthetic published tariff; other unpriced demo tariffs remain drafts');
   assert.deepEqual(validation.catalog.routes.filter(route => route.id === 'SPEED_TEST'), [{ id: 'SPEED_TEST', kind: 'GLOBAL_PAGE', path: `/${SPEED_TEST_PAGE_SLUG}`, pageType: 'SPEED_TEST' }]);
   const speedTestPages = source.globalPages.filter(page => page.type === 'SPEED_TEST');
   assert.equal(speedTestPages.length, 1, 'seed initializes one site-global SPEED_TEST source');
@@ -72,10 +72,10 @@ try {
   assert.equal(speedTestPages[0].status, 'PUBLISHED');
   assert.deepEqual(speedTestPages[0].content, speedTestPageDefaults());
   assert.deepEqual(validation.catalog.globalPages.find(page => page.type === 'SPEED_TEST').content, speedTestPageDefaults());
-  assert.equal(source.seoTemplates.length, 12);
+  assert.equal(source.seoTemplates.length, 13);
   assert.equal(source.seoTemplates.filter(template => template.kind === 'SPEED_TEST').length, 1, 'SPEED_TEST has its own SEO template');
   assert.ok(validation.catalog.seoByPath[`/${SPEED_TEST_PAGE_SLUG}`]);
-  assert.equal(source.pageTemplates.length, 3);
+  assert.deepEqual(source.pageTemplates.map(template=>template.kind).sort(), ['HOME','CITY_HOME','CITY_ADDRESS_CHECK','CITY_SUPPORT'].sort());
   assert.equal(source.cities[0].pages.find(page => page.type === 'HOME').templateId, source.pageTemplates.find(template => template.kind === 'CITY_HOME').id);
   assert.equal(validation.catalog.homeHero.searchButtonText, 'Найти город');
   assert.equal(validation.catalog.homeHeroVersion, '2.0.0');

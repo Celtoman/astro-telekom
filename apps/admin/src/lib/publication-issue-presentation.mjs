@@ -1,3 +1,4 @@
+import { supportEditableField, supportFieldLabel } from '../../../api/src/support-page-model.ts'
 import { speedTestEditableField, speedTestFieldLabel } from '../../../api/src/speed-test-page-model.ts'
 import { officialSiteEditableField,officialSiteFieldLabel } from '../../../api/src/official-site-page-model.ts'
 import { addressPageSections, addressPageFieldRule } from './address-page-editor.mjs'
@@ -5,7 +6,7 @@ import { tariffTemplateBlocks } from './tariff-template.mjs'
 import { generalHomeSections, generalHomeFieldRule, generalHomeFieldLabel } from './general-home-editor.mjs'
 import { cityHomeSections, cityHomeFieldRule } from './city-home-editor.mjs'
 import { accountEditableField, accountFieldLabel } from '../../../api/src/account-page-model.ts'
-const templates = { SPEED_TEST: 'Проверка скорости интернета', OFFICIAL_SITE:'Официальный сайт', ACCOUNT: 'Личный кабинет', CITY_ADDRESS_CHECK: 'Проверка подключения', HOME: 'Главная сайта', CITY_HOME: 'Главная города', CITY_TARIFF_DETAIL: 'Страница тарифа' }
+const templates = { CITY_SUPPORT:'Техническая поддержка', SPEED_TEST: 'Проверка скорости интернета', OFFICIAL_SITE:'Официальный сайт', ACCOUNT: 'Личный кабинет', CITY_ADDRESS_CHECK: 'Проверка подключения', HOME: 'Главная сайта', CITY_HOME: 'Главная города', CITY_TARIFF_DETAIL: 'Страница тарифа' }
 const blocks = { ...Object.fromEntries(tariffTemplateBlocks.map(block => [block.id, block.title])), hero: 'Первый экран', 'home.hero': 'Первый экран', tariff_grid: 'Тарифы города', rich_text: 'Текстовый блок', service_grid: 'Услуги', feature_grid: 'Преимущества', steps: 'Этапы подключения' }
 export const publicationFieldLabels = {
   cityPlaceholder: 'Подсказка поиска города', searchButtonText: 'Текст основной кнопки', allCitiesText: 'Список городов', emptyMessage: 'Город не найден', inputErrorMessage: 'Сообщение при пустом поиске', steps: 'Три шага',
@@ -26,14 +27,15 @@ export function publicationIssuePresentation(issue, siteId) {
   const homeSection = (issue.template === 'CITY_ADDRESS_CHECK' ? addressPageSections : issue.template === 'HOME' ? generalHomeSections : issue.template === 'CITY_HOME' ? cityHomeSections : []).find(section => section.id === issue.block && section.id.includes('.'))
   const block = homeSection?.title ?? blocks[issue.block]
   const homeRule = homeSection && (issue.template === 'CITY_ADDRESS_CHECK' ? addressPageFieldRule : issue.template === 'CITY_HOME' ? cityHomeFieldRule : generalHomeFieldRule)(issue.block, issue.field)
-  const field = issue.template === 'SPEED_TEST' && speedTestEditableField(issue.field) ? speedTestFieldLabel(issue.field) : issue.template === 'OFFICIAL_SITE' && officialSiteEditableField(issue.field) ? officialSiteFieldLabel(issue.field) : issue.template === 'ACCOUNT' && accountEditableField(issue.field) ? accountFieldLabel(issue.field) : homeRule ? generalHomeFieldLabel(issue.field) : publicationFieldLabels[issue.field] ?? (issue.field ? `Поле ${issue.field}` : null)
+  const field = issue.template==='CITY_SUPPORT'&&supportEditableField(issue.field)?supportFieldLabel(issue.field):issue.template === 'SPEED_TEST' && speedTestEditableField(issue.field) ? speedTestFieldLabel(issue.field) : issue.template === 'OFFICIAL_SITE' && officialSiteEditableField(issue.field) ? officialSiteFieldLabel(issue.field) : issue.template === 'ACCOUNT' && accountEditableField(issue.field) ? accountFieldLabel(issue.field) : homeRule ? generalHomeFieldLabel(issue.field) : publicationFieldLabels[issue.field] ?? (issue.field ? `Поле ${issue.field}` : null)
   const heading = system ? 'Не удалось проверить сборку сайта' : service ? `Служебные данные города · ${serviceNames[issue.pageType] ?? issue.pageType ?? 'Страница'}` : [template, block].filter(Boolean).join(' · ') || 'Проверка страницы'
   let href = null
   if (!system && !service && siteId) {
     const query = new URLSearchParams({ siteId })
     if (issue.field && publicationFieldLabels[issue.field]) query.set('field', issue.field)
     query.set('from', 'publication')
-    if (issue.template === 'SPEED_TEST' && speedTestEditableField(issue.field)) { query.set('field', issue.field); href = `/templates/speed-test?${query}` }
+    if(issue.template==='CITY_SUPPORT'&&supportEditableField(issue.field)){query.set('field',issue.field);href=`/templates/support?${query}`}
+    else if (issue.template === 'SPEED_TEST' && speedTestEditableField(issue.field)) { query.set('field', issue.field); href = `/templates/speed-test?${query}` }
     else if (issue.template === 'OFFICIAL_SITE' && officialSiteEditableField(issue.field)) { query.set('field', issue.field); href = `/templates/official-site?${query}` }
     else if (issue.template === 'ACCOUNT' && accountEditableField(issue.field)) {
       query.set('field', issue.field); href = `/templates/account?${query}`

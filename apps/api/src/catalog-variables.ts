@@ -1,4 +1,8 @@
+import {ContentValidationError} from './content-validation-error';
+import {supportRichField,supportTextRuns,supportSerializeRuns} from './support-rich-text';
 import { SPEED_TEST_PAGE_SCHEMA } from './speed-test-page-model';
+import { supportSchemaValue,supportRestoreImages } from './support-image-model';
+import { SUPPORT_PAGE_SCHEMA } from './support-page-model';
 import { OFFICIAL_SITE_PAGE_SCHEMA } from './official-site-page-model';
 import { BadRequestException } from '@nestjs/common';
 import { ACCOUNT_PAGE_SCHEMA } from './account-page-model';
@@ -58,10 +62,22 @@ export function resolveCatalogVariables<T extends JsonObject>(catalog: T, source
     if (rule.kind === 'list') return value.map((item: unknown, index: number) => resolveStructured(item, rule.item, `${path}[${index}]`, context, owner));
     return rule.variables ? resolveField(value, path, context, owner) : value;
   };
+  const resolveSupportContent=(value:any,path:string,context:VariableContext,owner:UsageOwner)=>{
+    const visit=(raw:any,rule:GeneralHomeFieldRule,fullPath:string,localPath:string):any=>{
+      if(rule.kind==='object')return Object.fromEntries(Object.entries(rule.fields).map(([k,r])=>[k,visit(raw[k],r,fullPath+'.'+k,localPath?localPath+'.'+k:k)]));
+      if(rule.kind==='list')return raw.map((item:any,i:number)=>visit(item,rule.item,fullPath+'['+i+']',localPath+'.'+i));
+      if(!rule.variables)return raw;
+      const beforeWarnings=warnings.length;
+      const output=supportRichField(localPath)?supportSerializeRuns(supportTextRuns(raw).map(run=>({...run,text:resolveField(run.text,fullPath,context,owner) as string}))):resolveField(raw,fullPath,context,owner);
+      if(warnings.length>beforeWarnings){const error=new ContentValidationError(localPath,'VARIABLE_EMPTY','SUPPORT: для переменной в этом поле нет значения выбранного города.');error.block='support';throw error;}
+      return output;
+    };
+    return supportRestoreImages(value,visit(supportSchemaValue(value),SUPPORT_PAGE_SCHEMA,path,''));
+  };
   const resolvePage = (page: JsonObject, path: string, context: VariableContext, cityId?: string): JsonObject => ({
     ...page,
     title: resolveField(page.title, `${path}.title`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, cityId, editorHref: null }),
-    content: page.type === 'SPEED_TEST' ? resolveStructured(page.content, SPEED_TEST_PAGE_SCHEMA, `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, editorHref: '/templates/speed-test' }) : page.type === 'OFFICIAL_SITE' ? resolveStructured(page.content, OFFICIAL_SITE_PAGE_SCHEMA, `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, editorHref: '/templates/official-site' }) : page.type === 'ACCOUNT' ? resolveStructured(page.content, ACCOUNT_PAGE_SCHEMA, `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, editorHref: '/templates/account' }) : resolveNamedFields(page.content, ['text'], `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, cityId, editorHref: null }),
+    content: page.type === 'CITY_SUPPORT' ? resolveSupportContent(page.content, `${path}.content`, context, { entityType: 'PAGE_TEMPLATE', entityId: String(page.supportTemplateId), pageType: page.type, cityId, editorHref: '/templates/support' }) : page.type === 'SPEED_TEST' ? resolveStructured(page.content, SPEED_TEST_PAGE_SCHEMA, `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, editorHref: '/templates/speed-test' }) : page.type === 'OFFICIAL_SITE' ? resolveStructured(page.content, OFFICIAL_SITE_PAGE_SCHEMA, `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, editorHref: '/templates/official-site' }) : page.type === 'ACCOUNT' ? resolveStructured(page.content, ACCOUNT_PAGE_SCHEMA, `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, editorHref: '/templates/account' }) : resolveNamedFields(page.content, ['text'], `${path}.content`, context, { entityType: 'PAGE', entityId: String(page.id), pageType: page.type, cityId, editorHref: null }),
     seo: {},
     blocks: Array.isArray(page.blocks) ? page.blocks.map((block: JsonObject, index: number) => {
       const blockPath = `${path}.blocks[${index}]`;

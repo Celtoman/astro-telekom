@@ -203,6 +203,7 @@ export type PublishStatus = (typeof PublishStatus)[keyof typeof PublishStatus]
 
 
 export const PageType: {
+  CITY_SUPPORT: 'CITY_SUPPORT',
   SPEED_TEST: 'SPEED_TEST',
   OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
@@ -224,6 +225,7 @@ export type PageType = (typeof PageType)[keyof typeof PageType]
 
 
 export const SeoTemplateKind: {
+  CITY_SUPPORT: 'CITY_SUPPORT',
   SPEED_TEST: 'SPEED_TEST',
   OFFICIAL_SITE: 'OFFICIAL_SITE',
   ACCOUNT: 'ACCOUNT',
@@ -410,6 +412,7 @@ export type ContentEntityType = (typeof ContentEntityType)[keyof typeof ContentE
 
 
 export const PageTemplateKind: {
+  CITY_SUPPORT: 'CITY_SUPPORT',
   HOME: 'HOME',
   COVERAGE: 'COVERAGE',
   CITIES: 'CITIES',
