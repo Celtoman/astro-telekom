@@ -1,12 +1,16 @@
 # Покрытие тестами
 
-17 ноября2026, SUPPORT #611: полный `pnpm check --test-concurrency=2` на Node24.22.3 —1155tests/1154pass/0fail/1Windows-symlinkskip, exit0,665724ms. [Протокол](research/2026-11-17-support-implementation.md). Linux CI и внешний выпуск ожидаются.
+17 ноября2026, корректировки SUPPORT #613/#614: локальный полный `pnpm check --test-concurrency=2` —1156tests/1155pass/0fail/1Windows-symlinkskip. После последнего исправления editable отдельно выполнены admin lint/build и браузерная проверка локальной сборки с чтением test-CMS: чистое открытие → предпросмотр без сохранения. Exact-SHA CI и повторный CODE ожидаются; [протокол](research/2026-11-17-support-implementation.md).
+
+17 ноября2026, SUPPORT #611: полный `pnpm check --test-concurrency=2` на Node24.22.3 —1155tests/1154pass/0fail/1Windows-symlinkskip, exit0,665724ms. Exact-SHA Linux [CI44097798216](https://github.com/Celtoman/astro-telekom/actions/runs/44097798216) для `f114518a3fe559d0391a83d7b29d44dfa8593105` —1155pass/0fail/0skip. [Протокол](research/2026-11-17-support-implementation.md).
 
 ## CITY_SUPPORT — дополнение 17 ноября 2026
 
 `support-page.test.cjs` проверяет фиксированную схему, безопасный неполный draft, строгий publication gate, optional all-city маршруты и старые snapshots. `support-render.test.mjs` проверяет typed links, экранирование переменных, общий renderer/preview и один полный телефонный источник с увеличением. `support-build.test.mjs` собирает настоящий Astro artifact трёх синтетических городов и проверяет HTML, изображения, H1, локальные назначения и sitemap.
 
-`support-data.test.cjs` сверяет начальный payload миграции с принятым содержанием и запускает `scripts/rehearse-support-page.mjs`: проверяются миграции PostgreSQL, seed/backfill/idempotence, provider isolation, авторские FAQ, optimistic save и rollback коллизий. `scripts/rehearse-support-http.mjs` проверяет реальный multipart upload, crop, private bytes/dimensions/hashes, media capture, сохранение, stale409 и отказ чужому сайту. Численный baseline полного прогона ниже относится к предыдущему выпуску до завершения нового gate.
+Регрессия renderer рекурсивно переставляет ключи объектов и требует неизменного HTML, порядка карточек и соответствия подписей чипов назначениям. Порядок массивов сохраняется. Это проверяет границу JSONB storage → renderer.
+
+`support-data.test.cjs` сверяет начальный payload миграции с принятым содержанием и запускает `scripts/rehearse-support-page.mjs`: проверяются миграции PostgreSQL, seed/backfill/idempotence, provider isolation, авторские FAQ, optimistic save и rollback коллизий. `scripts/rehearse-support-http.mjs` проверяет реальный multipart upload, crop, private bytes/dimensions/hashes, media capture, сохранение, stale409 и отказ чужому сайту. Предыдущие датированные результаты ниже сохраняются как история отдельных выпусков.
 
 14 ноября2026, SPEED_TEST #601: полный `pnpm check --test-concurrency=2` —1141test/1140pass/0fail/1Windows-symlinkskip, exit0; exact-SHA Linux CI43613999383 —1141pass/0fail/0skip. Защищённый test-выпуск/CODE/CMS33/33 и вёрстка четырёх ширин подтверждены; live-замер внешнего iframe не принят из-за TLS connection reset в сети проверки (#605). [Протокол](research/2026-11-14-speedtest-code-and-test.md).
 

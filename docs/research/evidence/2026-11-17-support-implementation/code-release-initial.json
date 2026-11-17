@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-11-17T14:29:41.798Z",
+  "source": "coolify MCP",
+  "status": 200,
+  "health": "running:healthy",
+  "deploymentId": "bhsgfotbnmedykn5iyjkvgsw",
+  "commit": "f114518a3fe559d0391a83d7b29d44dfa8593105",
+  "value": {
+    "status": "SUCCEEDED",
+    "artifactId": "284303e5314869822ca9abdbce8514df911f6759dc0ad46f020b1b04219d331f",
+    "publicationId": "cmwgmwk86000101rwcm9tyfhf",
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "siteRevision": 33,
+    "rendererId": "6b93b4e50a3bb32a17fbadc432b27b0421f47178c662746ac7c4ee9d807c5290",
+    "catalogDigest": "284bd028954c1b90bb70b6ddd8e2a3b6937daa7fbd4a8913578d75579f79a9a3",
+    "releaseSequence": 31,
+    "basePublicationId": "cmweuuve1000a01mrxlwxb32p",
+    "rebuildId": "code-89256ab7671222969eb921d941418e3e9f46c9ea45ec3857265cbce3728b6524",
+    "rebuildRevision": 1,
+    "manifestDigest": "5c70aa2d0bde81c830a750ba060bfa48b81077e045f06933709a7e08bb75c976"
+  }
+}

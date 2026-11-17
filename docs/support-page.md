@@ -1,6 +1,8 @@
 # Городская техническая поддержка
 
-Локальная реализация CITY_SUPPORT от 17 ноября 2026 года; внешний выпуск ещё не подтверждён. Согласование: [контракт CMS](plans/2026-11-17-support-cms-contract.md), [план переноса](plans/2026-11-17-support-implementation-plan.md), задача [#611](https://github.com/Celtoman/astro-telekom/issues/611).
+CITY_SUPPORT от 17 ноября 2026 года включён в защищённый test-контур для 207 городов, CMS34/34. Финальная приёмка исправлений #613/#614 ведётся в [протоколе](research/2026-11-17-support-implementation.md). Согласование: [контракт CMS](plans/2026-11-17-support-cms-contract.md), [план переноса](plans/2026-11-17-support-implementation-plan.md), задача [#611](https://github.com/Celtoman/astro-telekom/issues/611).
+
+Порядок чипов, магазинов, тем, шагов и ограничений задаёт renderer по явным ключам; порядок ключей PostgreSQL JSONB не используется как композиция. Переключение доступности rich-text не создаёт событие изменения и не должно включать несохранённый draft.
 
 ## Содержание и маршруты
 

@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-11-17T14:36:49.662Z",
+  "workingRevision": 34,
+  "publishedRevision": 34,
+  "publication": "cmwksjwbj000801p5xf2gqcx5",
+  "publishedAt": "2026-11-17T14:37:14.748Z",
+  "rebuildStatus": "SUCCEEDED",
+  "sqlAcknowledgedPublicationId": "cmwksjwbj000801p5xf2gqcx5",
+  "receipt": {
+    "status": "SUCCEEDED",
+    "artifactId": "9cc5c8e2c2977be7354ed3430a452d13162d9dc663892a17183cc5845bdbc2ed",
+    "publicationId": "cmwksjwbj000801p5xf2gqcx5",
+    "siteId": "cmtuaqqj1000107lkiiiia2xa",
+    "siteRevision": 34,
+    "releaseSequence": 32,
+    "basePublicationId": "cmwgmwk86000101rwcm9tyfhf",
+    "rendererId": "6b93b4e50a3bb32a17fbadc432b27b0421f47178c662746ac7c4ee9d807c5290",
+    "catalogDigest": "fb96f1d947ce031a6de145159ed16794d574bfa54aa924d26cb690367d14ac92",
+    "rebuildId": "cmtw6dpwj015g01o0ho99ow05",
+    "rebuildRevision": 37,
+    "manifestDigest": "a89775911a2f4f9941501cdea825fcd82fc26bd28e1d7f2421c88ad01742275f"
+  }
+}

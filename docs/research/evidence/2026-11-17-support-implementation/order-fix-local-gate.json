@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-11-17T15:00:33.036Z",
+  "tests": 1156,
+  "passed": 1155,
+  "failed": 0,
+  "skipped": 1,
+  "durationMs": 668931.1048,
+  "fullGateExitCode": 0,
+  "finalAdminEffectCheckedAfterFullGateBuild": {
+    "lint": "passed, 0 errors / 0 warnings / 2 existing hints",
+    "build": "passed, PUBLIC_API_URL=/api/v1",
+    "candidateBrowser": "passed, read only"
+  },
+  "apiCodeChanged": false
+}

@@ -12,6 +12,15 @@ const {supportPageDefaults}=require('../apps/api/dist/support-page-defaults');
 const {supportPlainText}=require('../apps/api/dist/support-rich-text');
 const service=new SiteCatalogService({});
 
+test('SUPPORT composition and destinations survive JSONB object-key reordering',()=>{
+ const catalog=service.renderSource(supportPageSource()),city=catalog.cities[0],content=city.pages.find(p=>p.type==='CITY_SUPPORT').content;
+ const reorder=value=>Array.isArray(value)?value.map(reorder):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).reverse().map(key=>[key,reorder(value[key])])):value;
+ assert.equal(renderSupportIntro(reorder(content),catalog.site,city),renderSupportIntro(content,catalog.site,city));
+ assert.equal(renderSupportBody(reorder(content),catalog.site,city),renderSupportBody(content,catalog.site,city));
+ const chips=[...renderSupportIntro(reorder(content),catalog.site,city).matchAll(/class="support-chip" href="([^"]+)">([^<]+)<\/a>/g)];
+ assert.equal(chips[0][1],'#support-phones');assert.equal(chips[0][2],content.quickLinks.hotline);assert.equal(chips[6][1],'#support-app');assert.equal(chips[6][2],content.quickLinks.app);
+});
+
 test('SUPPORT public page and saved preview preserve all cities, typed links and the complete phone source',()=>{
  const source=supportPageSource(),catalog=service.renderSource(source);
  assert.equal(catalog.routes.filter(r=>r.kind==='CITY_SUPPORT').length,catalog.cities.length);

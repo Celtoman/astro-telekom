@@ -28,7 +28,7 @@ export function SupportRichTextEditor({id,label,value,resetKey,maxLength,disable
  const state=useEditorState({editor,selector:({editor})=>({bold:editor?.isActive('bold'),link:editor?.isActive('link'),undo:editor?.can().undo(),redo:editor?.can().redo()})})
  const reset=useRef(resetKey)
  useEffect(()=>{if(editor&&reset.current!==resetKey){editor.commands.setContent(supportEditorDocument(value),{emitUpdate:false});reset.current=resetKey}},[editor,resetKey,value])
- useEffect(()=>{editor?.setEditable(!disabled)},[editor,disabled])
+ useEffect(()=>{editor?.setEditable(!disabled,false)},[editor,disabled])
  useEffect(()=>{if(editor)editor.setOptions({editorProps:{...editor.options.editorProps,attributes:{...editor.options.editorProps.attributes,'aria-invalid':invalid?'true':'false','aria-describedby':describedBy||''}}})},[editor,invalid,describedBy])
  if(!editor)return <p role="status" className="rounded-lg border p-4 text-sm">Загружаем редактор…</p>
  const tool=(name:string,icon:React.ReactNode,action:()=>void,pressed=false,unavailable=false)=><Button type="button" variant={pressed?'secondary':'ghost'} size="icon-lg" aria-label={name} title={name} aria-pressed={pressed||undefined} disabled={disabled||unavailable} onClick={action}>{icon}</Button>

@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-11-17T14:40:16.671Z",
+  "passedCities": 207,
+  "urls": 4450,
+  "assets": 38,
+  "artifactId": "9cc5c8e2c2977be7354ed3430a452d13162d9dc663892a17183cc5845bdbc2ed",
+  "tariffDigest": "c722c7f395a30fb0a284687d789c1e55a8ce9e5f147392746a318374a815eb9f",
+  "tariffsPreserved": true,
+  "otherPagesPreserved": true,
+  "sitemap": true,
+  "protected401": true,
+  "failures": []
+}

@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-11-17T14:26:30.953Z",
+  "workingRevision": 34,
+  "publishedRevision": 33,
+  "totalChanges": 1,
+  "changes": [
+    {
+      "source": "migration:0076:support",
+      "entityType": "PAGE_TEMPLATE",
+      "action": "CREATE"
+    }
+  ],
+  "validation": {
+    "schemaVersion": 1,
+    "appVersion": "0.1.0",
+    "validatedAt": "2026-11-17T14:25:41.061Z",
+    "requestedById": null,
+    "siteRevision": 34,
+    "checkedUrlCount": 4450,
+    "issues": [],
+    "outcome": "PASSED"
+  },
+  "previousServing": {
+    "checkedAt": "2026-11-17T13:58:16.872Z",
+    "publicationId": "cmwgmwk86000101rwcm9tyfhf",
+    "siteRevision": 33,
+    "artifactId": "9814d2e820f33f796db8b1eed11299de9bdd6c335c5856c758cc3347d7acc0ba",
+    "machineReadStatus": 200,
+    "catalogDigest": "284bd028954c1b90bb70b6ddd8e2a3b6937daa7fbd4a8913578d75579f79a9a3"
+  },
+  "preservation": {
+    "tariffs": true,
+    "globalPages": true,
+    "cityPages": true,
+    "editorial": true,
+    "oldPaths": true
+  }
+}
