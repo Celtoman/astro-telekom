@@ -178,6 +178,6 @@ ACCOUNT — самостоятельная site-scoped Page без PageTemplate/
 ## SPEED_TEST — опциональная общая страница
 
 Глобальная Page(SPEED_TEST) хранит типизированный Page.content1.0.0 с фиксированными смысловыми ключами; профильный GET/PATCH `/admin/sites/:siteId/speed-test` меняет working с expectedWorkingRevision. Миграции0073/0074 не создают публикацию. SiteCatalog/route inventory добавляет один URL только для валидной страницы снимка; исторические каталоги без SPEED_TEST сохраняются. Общие runtime/preview renderer/styles отделяют безопасное preview от живого стороннего iframe. GLOBAL FLOW2 разрешает новый источник через обслуживаемый snapshot; выбранный дом определяет фактический город. [Контракт и приёмка](research/2026-11-14-speedtest-code-and-test.md).
-## CITY_SUPPORT — локальная реализация 17 ноября 2026
+## CITY_SUPPORT — реализация и тестовый выпуск 17 ноября 2026
 
 Городская поддержка использует общий PageTemplate → городские Page-shell → материализацию переменных → immutable public catalog → Astro route и общий с authenticated preview renderer/CSS. Редактор работает через HTTP API с ручным сохранением и отдельной публикацией. Выбранные изображения фиксируются в `supportMedia` и проходят существующий media/build/backup путь. Подробности и текущая граница внешнего выпуска — в [support-page.md](support-page.md).

@@ -1,0 +1,8 @@
+{
+  "checkedAt": "2026-11-17T17:48:03.496Z",
+  "artifactId": "c2a06cf30efb26ded096dd2075b8b5314d266acc235de4543d6d660d4eadf239",
+  "baselineArtifact": "9cc5c8e2c2977be7354ed3430a452d13162d9dc663892a17183cc5845bdbc2ed",
+  "entirePhoneSectionUnchanged": true,
+  "normalizedHtmlDigest": "a35b81004b4ad09a133aafad4998c3d0e1ff1d5a2826ea8d799a95745ca9b0d6",
+  "normalization": "Only immutable asset-version prefix replaced; no text or layout removed"
+}

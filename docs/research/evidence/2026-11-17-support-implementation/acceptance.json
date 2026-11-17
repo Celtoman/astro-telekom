@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-11-17T17:55:43.730Z",
+  "commit": "703df070c25b08a56c11b5e400c994994d6e102e",
+  "ciRun": 44109814569,
+  "deploymentId": "ihaqrzspx5qzfcg2rdfe69ki",
+  "publicationId": "cmwksjwbj000801p5xf2gqcx5",
+  "siteRevision": 34,
+  "artifactId": "c2a06cf30efb26ded096dd2075b8b5314d266acc235de4543d6d660d4eadf239",
+  "allCities": 207,
+  "existingRoutesPreserved": 4243,
+  "totalRoutes": 4450,
+  "assetsVerified": 38,
+  "sourceFragmentsPreserved": 145,
+  "widths": [
+    1440,
+    834,
+    390,
+    320
+  ],
+  "mobileCardRails": 6,
+  "mobileChipRegions": 2,
+  "editorStartsClean": true,
+  "savedPreview": true,
+  "originalWorkspaceIndexPreserved": true,
+  "physicalTouch": false,
+  "realLeadRequestsSent": false,
+  "externalRollbackPerformed": false
+}

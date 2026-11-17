@@ -1,6 +1,6 @@
 # Покрытие тестами
 
-17 ноября2026, корректировки SUPPORT #613/#614: локальный полный `pnpm check --test-concurrency=2` —1156tests/1155pass/0fail/1Windows-symlinkskip. После последнего исправления editable отдельно выполнены admin lint/build и браузерная проверка локальной сборки с чтением test-CMS: чистое открытие → предпросмотр без сохранения. Exact-SHA CI и повторный CODE ожидаются; [протокол](research/2026-11-17-support-implementation.md).
+17 ноября 2026 для исправлений SUPPORT #613 и #614 полный локальный `pnpm check --test-concurrency=2` дал 1155 успешных тестов и один пропуск Windows symlink. Изменение инициализации редактора отдельно прошло проверку типов, сборку и проверку предпросмотра. Linux CI для `703df070` прошёл все 1156 тестов. Внешний аудит охватил 207 маршрутов, 38 изображений и четыре адаптива. [CI](https://github.com/Celtoman/astro-telekom/actions/runs/44109814569), [протокол](research/2026-11-17-support-implementation.md).
 
 17 ноября2026, SUPPORT #611: полный `pnpm check --test-concurrency=2` на Node24.22.3 —1155tests/1154pass/0fail/1Windows-symlinkskip, exit0,665724ms. Exact-SHA Linux [CI44097798216](https://github.com/Celtoman/astro-telekom/actions/runs/44097798216) для `f114518a3fe559d0391a83d7b29d44dfa8593105` —1155pass/0fail/0skip. [Протокол](research/2026-11-17-support-implementation.md).
 

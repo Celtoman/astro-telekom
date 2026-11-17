@@ -1,8 +1,31 @@
 {
-  "checkedAt": "2026-11-17T14:59:37.609Z",
+  "checkedAt": "2026-11-17T15:02:45.670Z",
   "candidateStaticFiles": true,
   "api": "existing protected test CMS, read only",
   "editorStartsClean": true,
   "previewNavigation": true,
+  "preview390Stores": [
+    {
+      "y": 331.765625,
+      "label": "Скачать в Google Play"
+    },
+    {
+      "y": 331.765625,
+      "label": "Скачать в RuStore"
+    },
+    {
+      "y": 383.765625,
+      "label": "Скачать в AppGallery"
+    }
+  ],
+  "previewChipOrder": [
+    "Горячая линия 8-800",
+    "Городские телефоны",
+    "Обратный звонок",
+    "Онлайн-чат",
+    "Соцсети",
+    "Личный кабинет",
+    "Приложение"
+  ],
   "pageErrors": []
 }

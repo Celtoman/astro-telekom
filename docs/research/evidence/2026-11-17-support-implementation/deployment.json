@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-11-17T15:32:01.916Z",
+  "source": "coolify MCP",
+  "status": "finished",
+  "health": "running:healthy",
+  "deploymentId": "ihaqrzspx5qzfcg2rdfe69ki",
+  "commit": "703df070c25b08a56c11b5e400c994994d6e102e",
+  "createdAt": "2026-11-17T15:15:15.000000Z",
+  "finishedAt": "2026-11-17T15:32:35.000000Z",
+  "applicationUuid": "jlrsktdos9yhchkgnrd9f5fj"
+}

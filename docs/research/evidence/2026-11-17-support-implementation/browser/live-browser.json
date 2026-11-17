@@ -1,0 +1,1102 @@
+{
+  "checkedAt": "2026-11-17T17:48:45.038Z",
+  "engine": "headless Chromium, explicit owner permission after IAB Basic Auth failure",
+  "physicalTouch": false,
+  "reports": [
+    {
+      "width": 1440,
+      "geometry": {
+        "width": 1440,
+        "client": 1440,
+        "scroll": 1440,
+        "h1": [
+          "Техническая поддержка Дом.ру в Казани"
+        ],
+        "images": [
+          {
+            "slot": "introduction",
+            "loaded": true,
+            "natural": [
+              1168,
+              912
+            ]
+          },
+          {
+            "slot": "phone",
+            "loaded": true,
+            "natural": [
+              697,
+              519
+            ]
+          },
+          {
+            "slot": "phone",
+            "loaded": true,
+            "natural": [
+              697,
+              519
+            ]
+          },
+          {
+            "slot": "callbackMenu",
+            "loaded": true,
+            "natural": [
+              767,
+              574
+            ]
+          },
+          {
+            "slot": "callbackForm",
+            "loaded": true,
+            "natural": [
+              1554,
+              766
+            ]
+          },
+          {
+            "slot": "chatEntry",
+            "loaded": true,
+            "natural": [
+              757,
+              426
+            ]
+          },
+          {
+            "slot": "chatDialogue",
+            "loaded": true,
+            "natural": [
+              1065,
+              599
+            ]
+          },
+          {
+            "slot": "social",
+            "loaded": true,
+            "natural": [
+              921,
+              405
+            ]
+          },
+          {
+            "slot": "account",
+            "loaded": true,
+            "natural": [
+              772,
+              504
+            ]
+          },
+          {
+            "slot": "app",
+            "loaded": true,
+            "natural": [
+              1080,
+              2132
+            ]
+          },
+          {
+            "slot": "business",
+            "loaded": true,
+            "natural": [
+              1053,
+              787
+            ]
+          }
+        ],
+        "chips": [
+          {
+            "height": 44,
+            "y": 697
+          },
+          {
+            "height": 44,
+            "y": 697
+          },
+          {
+            "height": 44,
+            "y": 697
+          },
+          {
+            "height": 44,
+            "y": 697
+          },
+          {
+            "height": 44,
+            "y": 697
+          },
+          {
+            "height": 44,
+            "y": 697
+          },
+          {
+            "height": 44,
+            "y": 697
+          }
+        ],
+        "chipRegion": {
+          "height": 44,
+          "width": 1360,
+          "scroll": 1360
+        },
+        "stores": [
+          {
+            "x": 72,
+            "y": 5846.203125
+          },
+          {
+            "x": 215,
+            "y": 5846.203125
+          },
+          {
+            "x": 346,
+            "y": 5846.203125
+          }
+        ],
+        "phone": {
+          "client": 294,
+          "scroll": 294,
+          "height": 44,
+          "lines": 1
+        },
+        "faq": 6,
+        "anchorMap": [
+          {
+            "text": "Горячая линия 8-800",
+            "href": "#support-phones",
+            "targetExists": true
+          },
+          {
+            "text": "Городские телефоны",
+            "href": "#support-city-phones",
+            "targetExists": true
+          },
+          {
+            "text": "Обратный звонок",
+            "href": "#support-callback",
+            "targetExists": true
+          },
+          {
+            "text": "Онлайн-чат",
+            "href": "#support-chat",
+            "targetExists": true
+          },
+          {
+            "text": "Соцсети",
+            "href": "#support-social",
+            "targetExists": true
+          },
+          {
+            "text": "Личный кабинет",
+            "href": "#support-account",
+            "targetExists": true
+          },
+          {
+            "text": "Приложение",
+            "href": "#support-app",
+            "targetExists": true
+          }
+        ],
+        "anchorMapValid": true,
+        "competence": [
+          {
+            "height": 187,
+            "descriptionTop": 6867.984375
+          },
+          {
+            "height": 187,
+            "descriptionTop": 6867.984375
+          }
+        ],
+        "storeLayoutValid": true
+      },
+      "rails": [],
+      "anchorsActivated": 7,
+      "faqToggle": true,
+      "faqInput": "Enter and Space, first and last questions",
+      "citySwitch": true,
+      "pageErrors": []
+    },
+    {
+      "width": 834,
+      "geometry": {
+        "width": 834,
+        "client": 834,
+        "scroll": 834,
+        "h1": [
+          "Техническая поддержка Дом.ру в Казани"
+        ],
+        "images": [
+          {
+            "slot": "introduction",
+            "loaded": true,
+            "natural": [
+              1168,
+              912
+            ]
+          },
+          {
+            "slot": "phone",
+            "loaded": true,
+            "natural": [
+              697,
+              519
+            ]
+          },
+          {
+            "slot": "phone",
+            "loaded": true,
+            "natural": [
+              697,
+              519
+            ]
+          },
+          {
+            "slot": "callbackMenu",
+            "loaded": true,
+            "natural": [
+              767,
+              574
+            ]
+          },
+          {
+            "slot": "callbackForm",
+            "loaded": true,
+            "natural": [
+              1554,
+              766
+            ]
+          },
+          {
+            "slot": "chatEntry",
+            "loaded": true,
+            "natural": [
+              757,
+              426
+            ]
+          },
+          {
+            "slot": "chatDialogue",
+            "loaded": true,
+            "natural": [
+              1065,
+              599
+            ]
+          },
+          {
+            "slot": "social",
+            "loaded": true,
+            "natural": [
+              921,
+              405
+            ]
+          },
+          {
+            "slot": "account",
+            "loaded": true,
+            "natural": [
+              772,
+              504
+            ]
+          },
+          {
+            "slot": "app",
+            "loaded": true,
+            "natural": [
+              1080,
+              2132
+            ]
+          },
+          {
+            "slot": "business",
+            "loaded": true,
+            "natural": [
+              1053,
+              787
+            ]
+          }
+        ],
+        "chips": [
+          {
+            "height": 44,
+            "y": 800
+          },
+          {
+            "height": 44,
+            "y": 800
+          },
+          {
+            "height": 44,
+            "y": 800
+          },
+          {
+            "height": 44,
+            "y": 800
+          },
+          {
+            "height": 44,
+            "y": 852
+          },
+          {
+            "height": 44,
+            "y": 852
+          },
+          {
+            "height": 44,
+            "y": 852
+          }
+        ],
+        "chipRegion": {
+          "height": 96,
+          "width": 720,
+          "scroll": 720
+        },
+        "stores": [
+          {
+            "x": 81,
+            "y": 8320.734375
+          },
+          {
+            "x": 224,
+            "y": 8320.734375
+          },
+          {
+            "x": 355,
+            "y": 8320.734375
+          }
+        ],
+        "phone": {
+          "client": 253,
+          "scroll": 253,
+          "height": 44,
+          "lines": 1
+        },
+        "faq": 6,
+        "anchorMap": [
+          {
+            "text": "Горячая линия 8-800",
+            "href": "#support-phones",
+            "targetExists": true
+          },
+          {
+            "text": "Городские телефоны",
+            "href": "#support-city-phones",
+            "targetExists": true
+          },
+          {
+            "text": "Обратный звонок",
+            "href": "#support-callback",
+            "targetExists": true
+          },
+          {
+            "text": "Онлайн-чат",
+            "href": "#support-chat",
+            "targetExists": true
+          },
+          {
+            "text": "Соцсети",
+            "href": "#support-social",
+            "targetExists": true
+          },
+          {
+            "text": "Личный кабинет",
+            "href": "#support-account",
+            "targetExists": true
+          },
+          {
+            "text": "Приложение",
+            "href": "#support-app",
+            "targetExists": true
+          }
+        ],
+        "anchorMapValid": true,
+        "competence": [
+          {
+            "height": 356,
+            "descriptionTop": 10039.296875
+          },
+          {
+            "height": 356,
+            "descriptionTop": 10039.296875
+          }
+        ],
+        "chatCenterDelta": 0,
+        "storeLayoutValid": true
+      },
+      "rails": [],
+      "anchorsActivated": 7,
+      "faqToggle": true,
+      "faqInput": "Enter and Space, first and last questions",
+      "citySwitch": false,
+      "pageErrors": []
+    },
+    {
+      "width": 390,
+      "geometry": {
+        "width": 390,
+        "client": 390,
+        "scroll": 390,
+        "h1": [
+          "Техническая поддержка Дом.ру в Казани"
+        ],
+        "images": [
+          {
+            "slot": "introduction",
+            "loaded": true,
+            "natural": [
+              1168,
+              912
+            ]
+          },
+          {
+            "slot": "phone",
+            "loaded": true,
+            "natural": [
+              697,
+              519
+            ]
+          },
+          {
+            "slot": "phone",
+            "loaded": true,
+            "natural": [
+              697,
+              519
+            ]
+          },
+          {
+            "slot": "callbackMenu",
+            "loaded": true,
+            "natural": [
+              767,
+              574
+            ]
+          },
+          {
+            "slot": "callbackForm",
+            "loaded": true,
+            "natural": [
+              1554,
+              766
+            ]
+          },
+          {
+            "slot": "chatEntry",
+            "loaded": true,
+            "natural": [
+              757,
+              426
+            ]
+          },
+          {
+            "slot": "chatDialogue",
+            "loaded": true,
+            "natural": [
+              1065,
+              599
+            ]
+          },
+          {
+            "slot": "social",
+            "loaded": true,
+            "natural": [
+              921,
+              405
+            ]
+          },
+          {
+            "slot": "account",
+            "loaded": true,
+            "natural": [
+              772,
+              504
+            ]
+          },
+          {
+            "slot": "app",
+            "loaded": true,
+            "natural": [
+              1080,
+              2132
+            ]
+          },
+          {
+            "slot": "business",
+            "loaded": true,
+            "natural": [
+              1053,
+              787
+            ]
+          }
+        ],
+        "chips": [
+          {
+            "height": 32,
+            "y": 1172
+          },
+          {
+            "height": 32,
+            "y": 1172
+          },
+          {
+            "height": 32,
+            "y": 1172
+          },
+          {
+            "height": 32,
+            "y": 1172
+          },
+          {
+            "height": 32,
+            "y": 1212
+          },
+          {
+            "height": 32,
+            "y": 1212
+          },
+          {
+            "height": 32,
+            "y": 1212
+          }
+        ],
+        "chipRegion": {
+          "height": 72,
+          "width": 358,
+          "scroll": 599
+        },
+        "stores": [
+          {
+            "x": 40,
+            "y": 9778.765625
+          },
+          {
+            "x": 183,
+            "y": 9778.765625
+          },
+          {
+            "x": 40,
+            "y": 9830.765625
+          }
+        ],
+        "phone": {
+          "client": 226,
+          "scroll": 226,
+          "height": 44,
+          "lines": 1
+        },
+        "faq": 6,
+        "anchorMap": [
+          {
+            "text": "Горячая линия 8-800",
+            "href": "#support-phones",
+            "targetExists": true
+          },
+          {
+            "text": "Городские телефоны",
+            "href": "#support-city-phones",
+            "targetExists": true
+          },
+          {
+            "text": "Обратный звонок",
+            "href": "#support-callback",
+            "targetExists": true
+          },
+          {
+            "text": "Онлайн-чат",
+            "href": "#support-chat",
+            "targetExists": true
+          },
+          {
+            "text": "Соцсети",
+            "href": "#support-social",
+            "targetExists": true
+          },
+          {
+            "text": "Личный кабинет",
+            "href": "#support-account",
+            "targetExists": true
+          },
+          {
+            "text": "Приложение",
+            "href": "#support-app",
+            "targetExists": true
+          }
+        ],
+        "anchorMapValid": true,
+        "competence": [
+          {
+            "height": 340,
+            "descriptionTop": 11887.40625
+          },
+          {
+            "height": 340,
+            "descriptionTop": 11887.40625
+          }
+        ],
+        "accountStepAlignment": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "storeLayoutValid": true
+      },
+      "rails": [
+        {
+          "selector": ".support-chip-viewport",
+          "before": {
+            "x": 0,
+            "max": 241
+          },
+          "keyboard": {
+            "x": 7,
+            "outline": "rgb(23, 105, 170) solid 2px"
+          },
+          "end": {
+            "x": 241,
+            "max": 241,
+            "lastFullyVisible": true
+          },
+          "wheelInputs": 1,
+          "vertical": {
+            "yBefore": 708,
+            "down": {
+              "y": 1008,
+              "x": 0
+            },
+            "up": {
+              "y": 708,
+              "x": 0
+            }
+          },
+          "input": "Playwright keyboard and mouse wheel; no JS scroll reset"
+        },
+        {
+          "selector": "[data-support-rail=\"news\"]",
+          "before": {
+            "x": 0,
+            "max": 310
+          },
+          "keyboard": {
+            "x": 6,
+            "outline": "rgb(23, 105, 170) solid 2px"
+          },
+          "end": {
+            "x": 310,
+            "max": 310,
+            "lastFullyVisible": true
+          },
+          "wheelInputs": 1,
+          "vertical": {
+            "yBefore": 7636,
+            "down": {
+              "y": 7936,
+              "x": 0
+            },
+            "up": {
+              "y": 7636,
+              "x": 0
+            }
+          },
+          "input": "Playwright keyboard and mouse wheel; no JS scroll reset"
+        },
+        {
+          "selector": "[data-support-rail=\"competence\"]",
+          "before": {
+            "x": 0,
+            "max": 310
+          },
+          "keyboard": {
+            "x": 1,
+            "outline": "rgb(23, 105, 170) solid 2px"
+          },
+          "end": {
+            "x": 310,
+            "max": 310,
+            "lastFullyVisible": true
+          },
+          "wheelInputs": 1,
+          "vertical": {
+            "yBefore": 11475,
+            "down": {
+              "y": 11775,
+              "x": 0
+            },
+            "up": {
+              "y": 11475,
+              "x": 0
+            }
+          },
+          "input": "Playwright keyboard and mouse wheel; no JS scroll reset"
+        },
+        {
+          "selector": "[data-support-rail=\"limits\"]",
+          "before": {
+            "x": 0,
+            "max": 994
+          },
+          "keyboard": {
+            "x": 2,
+            "outline": "rgb(23, 105, 170) solid 2px"
+          },
+          "end": {
+            "x": 994,
+            "max": 994,
+            "lastFullyVisible": true
+          },
+          "wheelInputs": 2,
+          "vertical": {
+            "yBefore": 11672,
+            "down": {
+              "y": 11972,
+              "x": 0
+            },
+            "up": {
+              "y": 11672,
+              "x": 0
+            }
+          },
+          "input": "Playwright keyboard and mouse wheel; no JS scroll reset"
+        }
+      ],
+      "anchorsActivated": 7,
+      "faqToggle": true,
+      "faqInput": "Enter and Space, first and last questions",
+      "citySwitch": false,
+      "pageErrors": []
+    },
+    {
+      "width": 320,
+      "geometry": {
+        "width": 320,
+        "client": 320,
+        "scroll": 320,
+        "h1": [
+          "Техническая поддержка Дом.ру в Казани"
+        ],
+        "images": [
+          {
+            "slot": "introduction",
+            "loaded": true,
+            "natural": [
+              1168,
+              912
+            ]
+          },
+          {
+            "slot": "phone",
+            "loaded": true,
+            "natural": [
+              697,
+              519
+            ]
+          },
+          {
+            "slot": "phone",
+            "loaded": true,
+            "natural": [
+              697,
+              519
+            ]
+          },
+          {
+            "slot": "callbackMenu",
+            "loaded": true,
+            "natural": [
+              767,
+              574
+            ]
+          },
+          {
+            "slot": "callbackForm",
+            "loaded": true,
+            "natural": [
+              1554,
+              766
+            ]
+          },
+          {
+            "slot": "chatEntry",
+            "loaded": true,
+            "natural": [
+              757,
+              426
+            ]
+          },
+          {
+            "slot": "chatDialogue",
+            "loaded": true,
+            "natural": [
+              1065,
+              599
+            ]
+          },
+          {
+            "slot": "social",
+            "loaded": true,
+            "natural": [
+              921,
+              405
+            ]
+          },
+          {
+            "slot": "account",
+            "loaded": true,
+            "natural": [
+              772,
+              504
+            ]
+          },
+          {
+            "slot": "app",
+            "loaded": true,
+            "natural": [
+              1080,
+              2132
+            ]
+          },
+          {
+            "slot": "business",
+            "loaded": true,
+            "natural": [
+              1053,
+              787
+            ]
+          }
+        ],
+        "chips": [
+          {
+            "height": 32,
+            "y": 1193
+          },
+          {
+            "height": 32,
+            "y": 1193
+          },
+          {
+            "height": 32,
+            "y": 1193
+          },
+          {
+            "height": 32,
+            "y": 1193
+          },
+          {
+            "height": 32,
+            "y": 1233
+          },
+          {
+            "height": 32,
+            "y": 1233
+          },
+          {
+            "height": 32,
+            "y": 1233
+          }
+        ],
+        "chipRegion": {
+          "height": 72,
+          "width": 288,
+          "scroll": 599
+        },
+        "stores": [
+          {
+            "x": 40,
+            "y": 10559.1875
+          },
+          {
+            "x": 40,
+            "y": 10611.1875
+          },
+          {
+            "x": 40,
+            "y": 10663.1875
+          }
+        ],
+        "phone": {
+          "client": 209,
+          "scroll": 209,
+          "height": 44,
+          "lines": 1
+        },
+        "faq": 6,
+        "anchorMap": [
+          {
+            "text": "Горячая линия 8-800",
+            "href": "#support-phones",
+            "targetExists": true
+          },
+          {
+            "text": "Городские телефоны",
+            "href": "#support-city-phones",
+            "targetExists": true
+          },
+          {
+            "text": "Обратный звонок",
+            "href": "#support-callback",
+            "targetExists": true
+          },
+          {
+            "text": "Онлайн-чат",
+            "href": "#support-chat",
+            "targetExists": true
+          },
+          {
+            "text": "Соцсети",
+            "href": "#support-social",
+            "targetExists": true
+          },
+          {
+            "text": "Личный кабинет",
+            "href": "#support-account",
+            "targetExists": true
+          },
+          {
+            "text": "Приложение",
+            "href": "#support-app",
+            "targetExists": true
+          }
+        ],
+        "anchorMapValid": true,
+        "competence": [
+          {
+            "height": 412,
+            "descriptionTop": 13004.828125
+          },
+          {
+            "height": 412,
+            "descriptionTop": 13004.828125
+          }
+        ],
+        "accountStepAlignment": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "storeLayoutValid": true
+      },
+      "rails": [
+        {
+          "selector": ".support-chip-viewport",
+          "before": {
+            "x": 0,
+            "max": 311
+          },
+          "keyboard": {
+            "x": 1,
+            "outline": "rgb(23, 105, 170) solid 2px"
+          },
+          "end": {
+            "x": 311,
+            "max": 311,
+            "lastFullyVisible": true
+          },
+          "wheelInputs": 1,
+          "vertical": {
+            "yBefore": 729,
+            "down": {
+              "y": 1029,
+              "x": 0
+            },
+            "up": {
+              "y": 729,
+              "x": 0
+            }
+          },
+          "input": "Playwright keyboard and mouse wheel; no JS scroll reset"
+        },
+        {
+          "selector": "[data-support-rail=\"news\"]",
+          "before": {
+            "x": 0,
+            "max": 240
+          },
+          "keyboard": {
+            "x": 2,
+            "outline": "rgb(23, 105, 170) solid 2px"
+          },
+          "end": {
+            "x": 240,
+            "max": 240,
+            "lastFullyVisible": true
+          },
+          "wheelInputs": 1,
+          "vertical": {
+            "yBefore": 8194,
+            "down": {
+              "y": 8494,
+              "x": 0
+            },
+            "up": {
+              "y": 8194,
+              "x": 0
+            }
+          },
+          "input": "Playwright keyboard and mouse wheel; no JS scroll reset"
+        },
+        {
+          "selector": "[data-support-rail=\"competence\"]",
+          "before": {
+            "x": 0,
+            "max": 240
+          },
+          "keyboard": {
+            "x": 8,
+            "outline": "rgb(23, 105, 170) solid 2px"
+          },
+          "end": {
+            "x": 240,
+            "max": 240,
+            "lastFullyVisible": true
+          },
+          "wheelInputs": 1,
+          "vertical": {
+            "yBefore": 12629,
+            "down": {
+              "y": 12929,
+              "x": 0
+            },
+            "up": {
+              "y": 12629,
+              "x": 0
+            }
+          },
+          "input": "Playwright keyboard and mouse wheel; no JS scroll reset"
+        },
+        {
+          "selector": "[data-support-rail=\"limits\"]",
+          "before": {
+            "x": 0,
+            "max": 784
+          },
+          "keyboard": {
+            "x": 2,
+            "outline": "rgb(23, 105, 170) solid 2px"
+          },
+          "end": {
+            "x": 784,
+            "max": 784,
+            "lastFullyVisible": true
+          },
+          "wheelInputs": 1,
+          "vertical": {
+            "yBefore": 13325,
+            "down": {
+              "y": 13625,
+              "x": 0
+            },
+            "up": {
+              "y": 13325,
+              "x": 0
+            }
+          },
+          "input": "Playwright keyboard and mouse wheel; no JS scroll reset"
+        }
+      ],
+      "anchorsActivated": 7,
+      "faqToggle": true,
+      "faqInput": "Enter and Space, first and last questions",
+      "citySwitch": false,
+      "pageErrors": []
+    }
+  ]
+}

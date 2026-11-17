@@ -342,5 +342,6 @@
 
 | TD-254 | [#597](https://github.com/Celtoman/astro-telekom/issues/597) ✅ | Унифицировать BLK-0016 на всех страницах и добавить реализованные маршруты |
 | TD-255 | [#612](https://github.com/Celtoman/astro-telekom/issues/612) 🟢 | Группа паспортов OFFICIAL_SITE возвращает объект вместо строкового ID |
-| TD-256 | [#613](https://github.com/Celtoman/astro-telekom/issues/613) 🟢 | SUPPORT: сохранить порядок элементов и якоря независимо от порядка ключей JSONB |
-| TD-257 | [#614](https://github.com/Celtoman/astro-telekom/issues/614) 🟢 | SUPPORT CMS: не включать dirty-state при инициализации rich-text |
+| TD-256 | [#613](https://github.com/Celtoman/astro-telekom/issues/613) ✅ | SUPPORT: сохранить порядок элементов и якоря независимо от порядка ключей JSONB |
+| TD-257 | [#614](https://github.com/Celtoman/astro-telekom/issues/614) ✅ | SUPPORT CMS: не включать dirty-state при инициализации rich-text |
+| TD-258 | [#615](https://github.com/Celtoman/astro-telekom/issues/615) 🟢 | SUPPORT: согласовать редакционное исправление пробела внутри слова в исходнике |

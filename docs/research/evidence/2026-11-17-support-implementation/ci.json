@@ -1,0 +1,10 @@
+{
+  "runId": 44109814569,
+  "url": "https://github.com/Celtoman/astro-telekom/actions/runs/44109814569",
+  "commit": "703df070c25b08a56c11b5e400c994994d6e102e",
+  "conclusion": "success",
+  "tests": 1156,
+  "passed": 1156,
+  "failed": 0,
+  "skipped": 0
+}

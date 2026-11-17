@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-11-17T17:48:31.632Z",
+  "passedCities": 207,
+  "urls": 4450,
+  "assets": 38,
+  "artifactId": "c2a06cf30efb26ded096dd2075b8b5314d266acc235de4543d6d660d4eadf239",
+  "baselineTariffDigest": "c722c7f395a30fb0a284687d789c1e55a8ce9e5f147392746a318374a815eb9f",
+  "comparison": "deepStrictEqual: object key order ignored, array order retained",
+  "tariffsPreserved": true,
+  "otherPagesPreserved": true,
+  "oldPathsPreserved": true,
+  "sitemap": true,
+  "protected401": true,
+  "noindex": true,
+  "failures": []
+}

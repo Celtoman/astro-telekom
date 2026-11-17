@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-11-17T17:52:22.332Z",
+  "layoutWidth": 320,
+  "geometry": {
+    "height": 17637,
+    "h1": 1,
+    "rootY": 0
+  },
+  "captureScale": 0.75,
+  "fullBottomMean": [
+    220,
+    222,
+    225
+  ],
+  "viewportBottomMean": [
+    61,
+    69,
+    77
+  ],
+  "viewportFooterSaved": true
+}
