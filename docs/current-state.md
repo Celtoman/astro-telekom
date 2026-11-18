@@ -67,6 +67,8 @@ Static output строится из точного inventory опубликов�
 
 Синтетическая доставка в Tarifnik и email ранее подтверждена отдельным [протоколом](research/2026-09-25-release-one-synthetic-lead-acceptance.md). Production campaign Tarifnik не меняется агентом без отдельного решения. Дополнительная legal-проверка [#144](https://github.com/Celtoman/astro-telekom/issues/144) оставлена владельцем как P3 вне milestone Release 1 и не является автоматическим gate допуска трафика.
 
+С 18 ноября 2026 года защищённый внешний контур запускает готовые GHCR-образы через Coolify. Compose закреплён в `Celtoman/astro-telekom-release`. В первом выпуске сохранены SHA кода `bf230692`, четыре тома и обслуживаемый снимок ревизии 34. Сборка образов, обновление Compose и запуск Coolify выполняются по отдельным шагам. [Порядок выпуска и проверка первого деплоя](runbooks/ghcr-release.md).
+
 Окружение/секреты и процедура агента с Coolify — [deployment.md](deployment.md); API — [api-contracts.md](api-contracts.md); worker — [worker.md](worker.md). В этой документационной сверке полный gate, build/deployment и внешняя приёмка не выполнялись; профильные документационные guards проверены отдельно.
 
 ## Исторические протоколы

@@ -81,7 +81,7 @@ API создает `lead-decisions`, `lead-deliveries` и `site-rebuilds` при
 | Schema.org | Общие Product/FAQ/Organization-графы не реализованы. Базовый `WebPage` и новостные `CollectionPage`, `ItemList`, `BreadcrumbList`, `Article`/`NewsArticle` реализованы; это не подтверждает завершение всей целевой спецификации. |
 | Queue для import | Worker слушает `tariff-imports`, но API не публикует jobs: validate/apply выполняются напрямую. |
 | Monitoring, tracing, error tracker | Не подключены. |
-| CI/CD | `.github/workflows/ci.yml` запускает `pnpm check` на push и pull request в `master`; JavaScript actions используют Node 24 majors (`actions/checkout@v7`, `actions/setup-node@v7`, `pnpm/action-setup@v6`). GitHub workflow не выполняет deployment приложения; внешняя цепочка Coolify/CODE описана в [publication.md](publication.md). `.github/workflows/release.yml` создаёт GitHub Release после push тега `v*`. |
+| CI/CD | `.github/workflows/ci.yml` запускает `pnpm check` на push и pull request в `master`; JavaScript actions используют Node 24 majors (`actions/checkout@v7`, `actions/setup-node@v7`, `pnpm/action-setup@v6`). Отдельный workflow собирает готовые образы точного SHA и публикует в приватном GHCR. Coolify запускается вручную на закреплённом SHA Compose. `.github/workflows/release.yml` создаёт GitHub Release после push тега `v*`. [Инструкция выпуска](runbooks/ghcr-release.md), [CODE/CMS](publication.md). |
 
 Переходить на другие major-версии или включать экспериментальные возможности Astro/Nest/Prisma можно только с отдельной проверкой compatibility, migration plan и rollback.
 

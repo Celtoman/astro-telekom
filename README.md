@@ -89,6 +89,12 @@ pnpm dev:worker
 
 Обычный `pnpm build` требует действующего API и корректного production origin. Тихого fallback на demo нет. Точный состав тестов — в [TEST_COVERAGE.md](docs/TEST_COVERAGE.md), выбор проверок и правила commit/push — в [AGENTS.md](AGENTS.md). Исторический зелёный прогон не заменяет проверку изменённого кода.
 
+## Внешний деплой
+
+Коммит и разрешённый push в `master` запускают CI. После зелёного CI выбранного SHA GitHub Actions собирает готовые образы и публикует их в приватном GHCR. Coolify получает закреплённый Compose из отдельного репозитория `Celtoman/astro-telekom-release`. Обновление Compose и запуск деплоя выполняются вручную по [runbook GHCR](docs/runbooks/ghcr-release.md).
+
+Выпуск кода проверяется по SHA образов и Compose, состоянию приложения, сохранности томов и обслуживаемого снимка. Публикация правок из CMS запускается отдельно. [Контракт публикации](docs/publication.md).
+
 ## Документация
 
 | Нужно узнать | Источник |
@@ -99,7 +105,7 @@ pnpm dev:worker
 | Целевой продукт, решения и URL | [Продуктовый контракт](docs/product-contract.md), [решения](docs/decisions.md), [структура сайта](docs/site-structure.md) |
 | Датированная сверка оставшихся страниц | [#348 и список страниц](docs/plans/2026-10-16-missing-pages-analysis-plan.md); задачи по страницам задаёт владелец отдельно |
 | Модули, HTTP и данные | [Архитектура](docs/architecture.md), [API](docs/api-contracts.md), [модель данных](docs/data-model.md) |
-| Окружение и эксплуатация | [Deployment и процедура Coolify MCP](docs/deployment.md), [публикация](docs/publication.md), [worker](docs/worker.md) |
+| Окружение и эксплуатация | [Выпуск через GHCR](docs/runbooks/ghcr-release.md), [настройка и процедура Coolify MCP](docs/deployment.md), [публикация](docs/publication.md), [worker](docs/worker.md) |
 | Дизайн и Figma | [Admin](docs/admin-design-system.md), [public web](docs/web-design-system.md), [регламент Figma](docs/figma-design-rules.md), [паспорта](docs/block-passports.md) |
 | Проверки, находки и исторические доказательства | [Покрытие тестами](docs/TEST_COVERAGE.md), [product findings](docs/product-findings.md), [индекс долга](docs/technical-debt.md), [исследования](docs/research/README.md) |
 
