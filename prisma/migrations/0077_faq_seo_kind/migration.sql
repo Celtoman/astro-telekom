@@ -1,0 +1,1 @@
+ALTER TYPE "SeoTemplateKind" ADD VALUE IF NOT EXISTS 'FAQ';

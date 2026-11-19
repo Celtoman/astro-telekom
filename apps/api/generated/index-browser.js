@@ -693,6 +693,7 @@ exports.PublishStatus = exports.$Enums.PublishStatus = {
 };
 
 exports.SeoTemplateKind = exports.$Enums.SeoTemplateKind = {
+  FAQ: 'FAQ',
   CITY_SUPPORT: 'CITY_SUPPORT',
   SPEED_TEST: 'SPEED_TEST',
   OFFICIAL_SITE: 'OFFICIAL_SITE',

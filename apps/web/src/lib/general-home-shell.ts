@@ -5,7 +5,7 @@ import { cityServicePath } from './city-context.mjs';
 import { siteFooterGroups } from './site-footer-navigation.ts';
 
 interface ShellSite { name: string; slug: string; connectionPhone: string; supportPhone: string; connectionHours?: string; callbackWithinMinutes?: number; publicDisplay?: SitePublicDisplay }
-export interface HomeShellOptions extends HomeRenderOptions { city?: { slug: string; name: string }; addressDialogId?: string | null; routeCity?: string; localSections?: string[]; addressPageSlug?: string; supportPageSlug?: string; citySwitchPath?: string; footerRoutes?: readonly { path: string }[] }
+export interface HomeShellOptions extends HomeRenderOptions { city?: { slug: string; name: string }; addressDialogId?: string | null; routeCity?: string; localSections?: string[]; addressPageSlug?: string; supportPageSlug?: string; citySwitchPath?: string; globalFaq?: boolean; footerRoutes?: readonly { path: string }[] }
 const phoneHref = (phone: string) => {
   const href = `tel:${phone.replace(/[^+\d]/g, '')}`;
   if (!/^tel:\+?[0-9]{10,15}$/.test(href)) throw new Error('Некорректный телефон сайта.');
@@ -17,7 +17,7 @@ const button = (label: string, options: HomeShellOptions, attrs: string, classNa
 const service = (label: string, key: string, options: HomeShellOptions, className = '') => options.city
   ? link(label, cityServicePath(options.city.slug, key), options, ` data-city-context-service="${key}"`, className)
   : button(label, options, ` data-city-choice-trigger data-city-choice-service="${key}" data-city-context-service="${key}" aria-haspopup="dialog"`, className);
-const anchor = (label: string, key: string, options: HomeShellOptions, attrs = '', className = '') => key === 'address-check' && options.addressPageSlug
+const anchor = (label: string, key: string, options: HomeShellOptions, attrs = '', className = '') => key === 'faq' && options.globalFaq ? link(label, '/faq', options, attrs, className) : key === 'address-check' && options.addressPageSlug
   ? options.city ? link(label, `/${options.city.slug}/${options.addressPageSlug}`, options, ` data-city-context-address="${homeHtml(options.addressPageSlug)}"`, className)
     : button(label, options, ` data-city-choice-trigger data-city-choice-path="${homeHtml(options.addressPageSlug)}" data-city-context-address="${homeHtml(options.addressPageSlug)}" aria-haspopup="dialog"`, className)
   : options.localSections?.includes(key)

@@ -1,3 +1,4 @@
+import { FaqCookiePublicationCard } from "./FaqCookiePublicationCard"
 import { PublicationIssueCard } from "./PublicationIssueCard"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { CheckCircle2, CircleAlert, FileCheck2, History, RefreshCw } from "lucide-react"
@@ -84,6 +85,7 @@ export function PublicationApp({ apiUrl }: { apiUrl: string }) {
       </div>
       {error ? <Alert variant="destructive" role="alert"><CircleAlert /><AlertTitle>Проверка недоступна</AlertTitle><AlertDescription>{error}. Публикация недоступна до успешного обновления проверки.</AlertDescription></Alert> : null}
       {stale && !loading ? <Alert role="status"><CircleAlert /><AlertTitle>Список изменений устарел</AlertTitle><AlertDescription>Состояние сайта изменилось после проверки. Обновите проверку, чтобы увидеть точный состав публикации.</AlertDescription></Alert> : null}
+      {site && <FaqCookiePublicationCard key={site.id} apiUrl={apiUrl} siteId={site.id} />}
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_24rem]">
         <div className="min-w-0 space-y-6" aria-busy={loading}>
           <Card><CardHeader><CardTitle role="heading" aria-level={2}>Что попадёт на сайт</CardTitle><CardDescription>Сохранения в общем контуре сайта после последней публикации. Черновики новостей, категорий и 404 сюда не входят.</CardDescription></CardHeader><CardContent>

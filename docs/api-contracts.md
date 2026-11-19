@@ -318,3 +318,10 @@ Content1.0.0: hero.h1/intro, officialUrl (HTTPS dom.ru), семь фиксиро
 `SpeedTestPageContent` 1.0.0 содержит hero.h1, preparation, metrics, tasks, factors, diagnosis, support и faq. Разделы и смысловые карточки имеют фиксированные object keys; FAQ допускает0–50 пар в draft и1–50 полных пар при публикации. Текст редактируется native-полями с разрешёнными SITE-переменными; version, телефоны/графики, цвета, иконки, композиция, widget URL и scripts не редактируются. HTML/служебные символы, неизвестные ключи/версии и недоступные переменные отклоняются. Пустые безопасные строки сохраняются черновиком и блокируют публикацию с точным полем.
 
 GLOBAL suggestions/checks/leads принимают canonical `proverit-skorost-interneta` только при наличии SPEED_TEST в serving source. PageId принадлежит этому снимку, город и регион определяются по выбранному дому через существующий FLOW2; callback/tariff/configuration privileges не расширяются. Это описание локального кода, а не утверждение о внешнем выпуске.
+
+## FAQ и настройки cookie
+
+- `GET/PATCH /admin/sites/:siteId/faq` и `GET/PATCH /admin/sites/:siteId/cookie-notice`. Возвращают `content` и `workingRevision`. PATCH принимает полное содержание и `expectedWorkingRevision`. Отсутствующий источник возвращается как `content: null`. Устаревшая ревизия даёт 409.
+- `POST /admin/sites/:siteId/faq-cookie-publication/review` с массивом `scopes` из `FAQ` и `COOKIE_NOTICE`. Ответ включает содержимое до и после, отчёт, digest и ID исходной публикации.
+- `POST /admin/sites/:siteId/faq-cookie-publication/publish` с теми же `scopes`, `reviewDigest` и `operationId`. Повтор той же операции идемпотентен. Если выбранная версия или обслуживаемый снимок сменились, нужна новая проверка.
+- `GET /admin/sites/:siteId/faq-cookie-publication/operations/:operationId` возвращает состояние конкретной публикации. Все перечисленные маршруты требуют существующей admin-авторизации.

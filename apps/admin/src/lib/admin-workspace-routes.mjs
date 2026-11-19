@@ -6,6 +6,7 @@ export const workspaceRoutes = {
   "/news/new": { screen: "news-editor", active: "news" },
   "/news/edit": { screen: "news-editor", active: "news" },
   "/templates/official-site": { screen: "official-site", active: "templates" },
+  "/templates/faq": { screen: "faq", active: "templates" },
   "/templates/speed-test": { screen: "speed-test", active: "templates" },
   "/templates/support": { screen: "support", active: "templates" },
   "/templates/account": { screen: "account", active: "templates" },

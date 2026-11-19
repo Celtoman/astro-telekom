@@ -10,6 +10,7 @@ import { defaultSiteImagePath, loadSiteData } from '../data/site';
 import { publicAsset } from '../data/public-asset';
 import GeneralHomeHeader from '../components/general-home/GeneralHomeHeader.astro';
 import GeneralHomeFooter from '../components/general-home/GeneralHomeFooter.astro';
+import CookieNotice from "../components/CookieNotice.astro";
 import CallbackDialog from '../components/CallbackDialog.astro';
 import LegalDocuments from '../components/LegalDocuments.astro';
 import '../styles/public-ui.css';
@@ -45,6 +46,7 @@ const addressPageSlug = catalog.routes.some(route => route.kind === 'CITY_ADDRES
 const citySwitchPath = currentRoute?.kind === 'CITY_ADDRESS_CHECK' ? addressPageSlug : currentRoute?.kind === 'CITY_SUPPORT' ? 'tehpodderzhka' : undefined;
 const supportPageSlug = catalog.routes.some(route => route.kind === 'CITY_SUPPORT') ? 'tehpodderzhka' : undefined;
 const cityComposition = city?.pages.find(page => page.type === 'HOME' && page.slug === '')?.content?.homeCompositionVersion;
+const globalFaq = catalog.routes.some(route => route.id === "FAQ");
 const localSections = homeShell ? ['faq', 'movix', 'address-check']
   : currentRoute?.kind === 'CITY_HOME' ? ['tariffs', 'address-check', ...(cityComposition === '3.0.0' ? ['comparison', 'faq', 'movix', 'contacts'] : [])]
     : currentRoute?.kind === 'CITY_TARIFF_DETAIL' ? ['faq'] : [];
@@ -107,13 +109,14 @@ if (metrikaBootstrap) Astro.csp.insertScriptHash(scriptHash(metrikaBootstrap));
     {metrikaBootstrap && <script is:inline set:html={metrikaBootstrap}></script>}
   </head>
   <body class:list={["general-home-page", { "city-home-page": currentRoute?.kind === "CITY_HOME" && cityComposition === "3.0.0" }]}>
-    <GeneralHomeHeader {site} {city} cities={catalog.cities} {localSections} {addressPageSlug} {supportPageSlug} {citySwitchPath} addressDialogId={homeShell?.addressDialogId} />
+    <GeneralHomeHeader {globalFaq} {site} {city} cities={catalog.cities} {localSections} {addressPageSlug} {supportPageSlug} {citySwitchPath} addressDialogId={homeShell?.addressDialogId} />
     <main>
       <slot />
     </main>
-    <GeneralHomeFooter {site} {city} cities={catalog.cities} {localSections} {addressPageSlug} {supportPageSlug} footerRoutes={catalog.routes} />
+    <GeneralHomeFooter {globalFaq} {site} {city} cities={catalog.cities} {localSections} {addressPageSlug} {supportPageSlug} footerRoutes={catalog.routes} />
     <CallbackDialog {site} {city} requireConfirmedCity={!city} />
     <LegalDocuments />
+    <CookieNotice notice={catalog.site.cookieNotice} pages={catalog.globalPages} scope={site.slug} />
     <script>
       import { SUBSCRIBER_MODE_EVENT } from '../lib/subscriber-mode.mjs';
       import { applySubscriberPhone } from '../lib/public-shell-state.mjs';

@@ -225,6 +225,7 @@ export type PageType = (typeof PageType)[keyof typeof PageType]
 
 
 export const SeoTemplateKind: {
+  FAQ: 'FAQ',
   CITY_SUPPORT: 'CITY_SUPPORT',
   SPEED_TEST: 'SPEED_TEST',
   OFFICIAL_SITE: 'OFFICIAL_SITE',

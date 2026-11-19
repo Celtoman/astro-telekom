@@ -1,0 +1,60 @@
+<style is:global>
+  .general-home-page > main:has(.faq-page) { padding-block: 32px 48px; }
+  .faq-page { width: min(1360px, calc(100% - 32px)); margin-inline: auto; display: grid; gap: 48px; color: #18202a; }
+  .faq-intro { display: grid; gap: 16px; }
+  .faq-intro h1 { margin: 0; max-width: none; font-size: 48px; line-height: 50px; font-weight: 800; letter-spacing: -2.4px; }
+  .faq-intro p, .faq-answer { color: #526071; font-size: 16px; line-height: 24px; }
+  .faq-intro p { max-width: 820px; margin: 0; }
+  .faq-intro .public-breadcrumbs { min-height: 44px; display: flex; align-items: center; }
+  .faq-intro .public-breadcrumbs ol { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; font-size: 14px; }
+  .faq-intro .public-breadcrumbs li { display: flex; align-items: center; gap: 8px; }
+  .faq-intro .public-breadcrumbs a, .faq-answer a, .faq-inactive-link { color: #1769aa; }
+  .faq-grid { display: grid; grid-template-columns: 288px minmax(0, 1fr); gap: 48px; align-items: start; }
+  .faq-index { padding: 24px; background: #eaf7ff; border-radius: 24px; }
+  .faq-index summary, .faq-question summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; list-style: none; }
+  .faq-index summary::-webkit-details-marker, .faq-question summary::-webkit-details-marker { display: none; }
+  .faq-index summary { min-height: 44px; font-size: 20px; line-height: 25px; font-weight: 700; }
+  .faq-index summary img { flex: 0 0 auto; }
+  .faq-index details[open] .faq-plus { display: none; }
+  .faq-index details[open] .faq-minus { display: block; }
+  .faq-index ul { list-style: none; display: flex; flex-wrap: wrap; gap: 4px; margin: 12px 0 0; padding: 0; }
+  .faq-index a { display: block; padding: 12px 16px; border: 1px solid #dcecf7; border-radius: 10px; background: #eef8ff; color: #1769aa; font-size: 14px; line-height: 20px; font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+  .faq-index a:hover, .faq-index a:focus-visible { text-decoration: underline; }
+  .faq-topics { min-width: 0; display: grid; gap: 40px; }
+  .faq-topic { display: grid; gap: 16px; }
+  .faq-topic h2 { font-size: 32px; line-height: 38px; font-weight: 700; letter-spacing: -1.1px; margin: 0; overflow-wrap: anywhere; }
+  .faq-questions { border: 1px solid #dcecf7; border-radius: 18px; padding-inline: 15px; }
+  .faq-question + .faq-question { border-top: 1px solid #dcecf7; }
+  .faq-question summary { padding: 16px 5px 12px; align-items: flex-start; font-size: 16px; line-height: 24px; font-weight: 600; overflow-wrap: anywhere; }
+  .faq-indicator { flex: 0 0 20px; display: flex; padding-top: 2px; }
+  .faq-minus, .faq-question[open] .faq-plus { display: none; }
+  .faq-question[open] .faq-minus { display: block; }
+  .faq-answer { max-width: 820px; overflow-wrap: anywhere; padding: 0 5px 16px; }
+  .faq-answer > :first-child { margin-top: 0; }
+  .faq-answer > :last-child { margin-bottom: 0; }
+  .faq-answer li p { margin: 0; }
+  .faq-permalink { display: inline-block; margin-top: 8px; font-size: 14px; }
+  .faq-page :is(.faq-topic,.faq-question) { scroll-margin-top: 128px; }
+  .faq-page summary:focus-visible, .faq-page a:focus-visible { outline: 2px solid #1769aa; outline-offset: 2px; border-radius: 4px; }
+  @media (min-width: 1101px) { .faq-index ul { flex-direction: column; align-items: flex-start; } }
+  @media (min-width: 621px) { .faq-index summary { pointer-events: none; } .faq-index summary .faq-indicator { display: none; } .faq-index details > ul { display: flex; } }
+  @media (max-width: 1100px) {
+    .faq-page { width: min(720px, calc(100% - 48px)); gap: 32px; }
+    .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .faq-topics { gap: 32px; }
+    .faq-intro h1 { font-size: 40px; line-height: 43px; letter-spacing: -1.6px; }
+  }
+  @media (max-width: 620px) {
+    .general-home-page > main:has(.faq-page) { padding-block: 20px 32px; }
+    .faq-page { width: calc(100% - 32px); }
+    .faq-intro .public-breadcrumbs .breadcrumb-wide { display: none; }
+    .faq-intro h1 { font-size: 28px; line-height: 33px; letter-spacing: -.8px; }
+    .faq-grid { gap: 24px; }
+    .faq-index { padding: 16px; }
+    .faq-index ul { flex-direction: column; align-items: flex-start; }
+    .faq-topics { gap: 32px; }
+    .faq-topic { gap: 12px; }
+    .faq-topic h2 { font-size: 24px; line-height: 29px; letter-spacing: -.8px; }
+    .faq-questions { padding-inline: 11px; }
+  }
+</style>

@@ -15,6 +15,8 @@ import { PrismaService } from './prisma.service';
 import { AddressChecksController } from './address-checks.controller';
 import { AdminCitiesController } from './admin-cities.controller';
 import { AdminPagesController } from './admin-pages.controller';
+import { AdminFaqCookieController } from './admin-faq-cookie.controller';
+import { FaqCookieService } from './faq-cookie.service';
 import { AdminAccountController } from './admin-account.controller';
 import { AdminSpeedTestController } from './admin-speed-test.controller';
 import { AdminSupportMediaController } from './admin-support-media.controller';
@@ -93,6 +95,7 @@ import { CodeReleaseService } from './code-release.service';
     AdminCitiesController,
     AdminPagesController,
     AdminAccountController,
+    AdminFaqCookieController,
     AdminOfficialSiteController,
     AdminSpeedTestController,
     AdminTariffsController,
@@ -125,6 +128,6 @@ import { CodeReleaseService } from './code-release.service';
     AdminTariffTemplateController,
     AdminPageTemplatesController,
   ],
-  providers: [NewsImportService, EditorialStoreService, EditorialPublicationService, EditorialMediaRegistryService, EditorialMediaService, PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, CodeReleaseService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, TariffPurgeService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
+  providers: [NewsImportService, EditorialStoreService, EditorialPublicationService, EditorialMediaRegistryService, EditorialMediaService, PrismaService, HealthService, ReleaseReadinessService, PiiRetentionService, NotificationsService, LeadNotificationOutboxService, AuthService, AdminTokenGuard, CoverageService, DadataService, SiteCatalogService, SitemapService, PublicationWorkflowService, FaqCookieService, CodeReleaseService, SeoTemplateService, SiteValuesService, WorkingVariableUsagesService, CityReadinessService, RebuildQueueService, TariffImportService, TariffPurgeService, DomruContractService, LeadDecisionService, LeadDeliveryService, CityImportService, LeadAccessService, RedirectService],
 })
 export class AppModule {}

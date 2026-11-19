@@ -2,6 +2,7 @@ import { validateSpeedTestPage } from './speed-test-page';
 import { captureSupportMedia, assertSupportMedia, type SupportMediaRegistry } from './support-media-registry';
 import { validateSupportPage } from './support-page';
 import { readCorporatePhone } from './site-contact-settings';
+import { readCookieNotice, validateFaqPage } from './faq-cookie-validation';
 import { validateOfficialSitePage } from './official-site-page';
 import { projectCityHomeBlocks } from './tariff-collection-model';
 import { validateAccountPage } from './account-page';
@@ -134,6 +135,7 @@ export class SiteCatalogService {
     const homeHero = homeScreen?.data;
     const generalHome = homeTemplate ? generalHomeFromTemplate(homeTemplate) : null;
     const publicDisplay = readSitePublicDisplay(site.settings);
+    const cookieNotice = readCookieNotice(site.settings);
     if (source.pageTemplates?.some(t => t.kind === 'CITY_SUPPORT') && !readCorporatePhone(site.settings)) throw new BadRequestException('CITY_SUPPORT: заполните телефон корпоративной поддержки в общих настройках сайта.');
     if (homeScreen) validateFirstScreen('HOME', homeHero, false, homeScreen.passportVersion);
     const resolvedGlobalPages = globalPages.map((page: any) => this.pageResponse(page, mergeContent(publicContent(site.provider.settings), publicContent(site.settings)), {}));
@@ -154,6 +156,7 @@ export class SiteCatalogService {
         connectionHours: publicDisplay.connectionHours,
         callbackWithinMinutes: publicDisplay.callbackWithinMinutes,
         publicDisplay,
+        ...(cookieNotice ? { cookieNotice } : {}),
       },
       globalPages: resolvedGlobalPages,
       routes:allRoutes,
@@ -236,6 +239,7 @@ export class SiteCatalogService {
 
   pageResponse(page: any, inheritedContent: Record<string, unknown>, inheritedSeo: Record<string, unknown>, cityName?: string) {
     if (page.type === 'CITY_SUPPORT') { validateSupportPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
+    if (page.type === 'FAQ' && page.cityId === null) { validateFaqPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'SPEED_TEST') { validateSpeedTestPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'OFFICIAL_SITE') { validateOfficialSitePage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }
     if (page.type === 'ACCOUNT') { validateAccountPage(page.content); return { ...page, content: page.content, seo: inheritedSeo }; }

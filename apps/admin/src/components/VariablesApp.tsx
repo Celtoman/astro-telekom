@@ -1,3 +1,4 @@
+import { CookieNoticeCard } from "./CookieNoticeCard"
 import { useNavigationQuery } from "./useNavigationQuery"
 import { useCallback, useEffect, useState } from "react"
 import { CircleAlert, Save } from "lucide-react"
@@ -296,6 +297,7 @@ export function VariablesApp({ apiUrl }: { apiUrl: string }) {
               <div className="flex items-center justify-between gap-4 border-t pt-4 text-sm text-muted-foreground"><span>Рабочая версия: {state.values.workingRevision}; опубликована: {state.values.publishedRevision}</span><Button disabled={saving || !connectionPhone.trim() || !supportPhone.trim() || !publicDisplay || !Number.isInteger(publicDisplay.callbackWithinMinutes) || publicDisplay.callbackWithinMinutes < 1 || publicDisplay.callbackWithinMinutes > 1440 || displayTextFields.some(({ key }) => !publicDisplay[key].trim())} onClick={() => void save()}><Save data-icon="inline-start" />{saving ? "Сохраняем…" : "Сохранить"}</Button></div>
             </CardContent>
           </Card>
+          <CookieNoticeCard key={state.site.id} apiUrl={apiUrl} siteId={state.site.id} />
         </TabsContent>
         <TabsContent value="catalog"><VariableCatalogPanel apiUrl={apiUrl} siteId={state.site.id} /></TabsContent></TabsPanels>
       </Tabs>

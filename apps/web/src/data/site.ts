@@ -1,3 +1,4 @@
+import type { CookieNotice } from '../../../api/src/cookie-notice-model';
 import { assertOfficialSitePage } from './official-site-page';
 import { editorialCatalog } from './news';
 import { newsRoutes } from '../../../api/src/news-projection';
@@ -45,6 +46,7 @@ export interface SiteView {
   connectionPhone: string;
   supportPhone: string;
   corporatePhone?: string | null;
+  cookieNotice?: CookieNotice;
   connectionHours?: string;
   callbackWithinMinutes?: number;
   publicDisplay?: SitePublicDisplay;
@@ -133,7 +135,7 @@ function assertCityHomeTemplate(city: CityView): void {
 
 function expectedReleaseOneRoutes(cities: CityView[], globalPages: PageView[]): PublicRouteView[] {
   const pagesByType = new Map(globalPages.map((page) => [page.type, page]));
-  const supported = [...releaseOneGlobalPages, { type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }, { type: 'OFFICIAL_SITE', slug: 'official-site-domru' }, { type: 'SPEED_TEST', slug: 'proverit-skorost-interneta' }];
+  const supported = [...releaseOneGlobalPages, { type: 'FAQ', slug: 'faq' }, { type: 'ACCOUNT', slug: 'lichnyy-kabinet-dom-ru' }, { type: 'OFFICIAL_SITE', slug: 'official-site-domru' }, { type: 'SPEED_TEST', slug: 'proverit-skorost-interneta' }];
   if (pagesByType.size !== globalPages.length || globalPages.some(p => !supported.some(e => e.type === p.type))) {
     throw new Error(`Release 1 требует ровно ${releaseOneGlobalPages.length} опубликованные общие страницы`);
   }
@@ -142,7 +144,7 @@ function expectedReleaseOneRoutes(cities: CityView[], globalPages: PageView[]): 
   const occupiedPaths = new Set(['/']);
   for (const expected of supported) {
     const page = pagesByType.get(expected.type);
-    if (!page && ['ACCOUNT','OFFICIAL_SITE','SPEED_TEST'].includes(expected.type)) continue;
+    if (!page && ['ACCOUNT','OFFICIAL_SITE','SPEED_TEST','FAQ'].includes(expected.type)) continue;
     if (page?.type === 'SPEED_TEST') assertSpeedTestPage(page.content);
     if (page?.type === 'OFFICIAL_SITE') assertOfficialSitePage(page.content);
     if (page?.type === 'ACCOUNT') assertAccountPage(page.content);
@@ -401,6 +403,7 @@ function normalizedCatalog(value: unknown): SiteCatalog {
       connectionPhone,
       supportPhone,
       corporatePhone: typeof payload.site.corporatePhone==='string'?payload.site.corporatePhone:null,
+      ...(payload.site.cookieNotice ? { cookieNotice: payload.site.cookieNotice as CookieNotice } : {}),
       publicDisplay,
       connectionHours: publicDisplay.connectionHours,
       callbackWithinMinutes: publicDisplay.callbackWithinMinutes,

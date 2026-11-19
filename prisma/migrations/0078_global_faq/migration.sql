@@ -1,0 +1,9 @@
+BEGIN;
+ALTER TABLE "Page" DROP CONSTRAINT "Page_global_scope_check";
+ALTER TABLE "Page" ADD CONSTRAINT "Page_global_scope_check" CHECK (
+  ("type" IN ('COVERAGE','CITIES','PRIVACY','PERSONAL_DATA_CONSENT','COOKIE_POLICY','ACCOUNT','OFFICIAL_SITE','SPEED_TEST') AND "cityId" IS NULL)
+  OR ("type" NOT IN ('COVERAGE','CITIES','PRIVACY','PERSONAL_DATA_CONSENT','COOKIE_POLICY','ACCOUNT','OFFICIAL_SITE','SPEED_TEST') AND "cityId" IS NOT NULL)
+  OR ("type" = 'FAQ' AND "cityId" IS NULL AND slug = 'faq')
+);
+CREATE UNIQUE INDEX "Page_global_faq_site_key" ON "Page" ("siteId") WHERE "type" = 'FAQ' AND "cityId" IS NULL;
+COMMIT;

@@ -1,0 +1,47 @@
+---
+import type { FaqPageContent } from '../../../../api/src/faq-page-model';
+import { renderFaqPage } from '../../lib/faq-render';
+import { publicAsset } from '../../data/public-asset';
+import { publicDisplayForCatalog } from '../../lib/public-display';
+import type { SiteView } from '../../data/site';
+import CityHomeStyles from '../city-home/CityHomeStyles.astro';
+import FaqStyles from './FaqStyles.astro';
+
+interface Props { content: FaqPageContent; site: SiteView }
+const { content, site } = Astro.props;
+---
+<Fragment set:html={renderFaqPage(content, { ...site, publicDisplay: publicDisplayForCatalog(site) }, { asset: publicAsset })} />
+<CityHomeStyles />
+<FaqStyles />
+<script>
+  const topics = document.querySelector<HTMLDetailsElement>('[data-faq-topics]');
+  const mobile = matchMedia('(max-width: 620px)');
+  function updateTopics() {
+    if (!topics) return;
+    topics.open = !mobile.matches;
+    const summary = topics.querySelector('summary');
+    if (summary) summary.tabIndex = mobile.matches ? 0 : -1;
+  }
+  updateTopics();
+  mobile.addEventListener('change', updateTopics);
+  topics?.querySelector('summary')?.addEventListener('click', event => {
+    if (!mobile.matches) event.preventDefault();
+  });
+  topics?.querySelector('ul')?.addEventListener('click', event => {
+    if (!mobile.matches || !(event.target instanceof Element)) return;
+    const href = event.target.closest('a')?.getAttribute('href');
+    if (!href) return;
+    const target = document.getElementById(href.slice(1));
+    if (topics) topics.open = false;
+    target?.focus({ preventScroll: true });
+  });
+  function showQuestion() {
+    if (!/^#question-[a-z0-9-]+$/.test(location.hash)) return;
+    const target = document.getElementById(location.hash.slice(1));
+    if (!(target instanceof HTMLDetailsElement) || !target.closest('[data-faq-page]')) return;
+    target.open = true;
+    target.scrollIntoView();
+  }
+  showQuestion();
+  window.addEventListener('hashchange', showQuestion);
+</script>

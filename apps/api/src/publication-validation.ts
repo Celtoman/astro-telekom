@@ -3,6 +3,7 @@ import { validateSupportPage } from './support-page';
 import { assertSupportMedia } from './support-media-model';
 import { validateSpeedTestPage } from './speed-test-page';
 import { readCorporatePhone } from './site-contact-settings';
+import { readCookieNotice, validateFaqPage } from './faq-cookie-validation';
 import { validateOfficialSitePage } from './official-site-page';
 import { validateTariffCollection } from './tariff-collection';
 import { validateAccountPage } from './account-page';
@@ -65,7 +66,7 @@ function routeSources(source: CatalogSource): RouteSource[] {
   const routes: RouteSource[] = [{ route: { id: 'HOME', kind: 'HOME', path: '/' } }];
   for (const expected of SUPPORTED_GLOBAL_PAGES) {
     const page = source.globalPages.find((item) => item.type === expected.type);
-    if (!page && (expected.type === 'ACCOUNT' || expected.type === 'OFFICIAL_SITE' || expected.type === 'SPEED_TEST')) continue;
+    if (!page && (expected.type === 'ACCOUNT' || expected.type === 'OFFICIAL_SITE' || expected.type === 'SPEED_TEST' || expected.type === 'FAQ')) continue;
     routes.push({
       route: { id: expected.type, kind: 'GLOBAL_PAGE', path: `/${expected.slug}`, pageType: expected.type },
       page,
@@ -147,6 +148,12 @@ export function validatePublicationSource(
   const checkedPaths: string[] = [];
   const site = source.site;
   const provider = site.provider;
+  try {
+    const notice = readCookieNotice(site.settings);
+    if (notice?.enabled && notice.links.some(link => !source.globalPages.some(page => page.type === link.document))) {
+      add('BLOCKING', 'PAGE_BLOCKS', '/', 'Для уведомления cookie нужен опубликованный юридический документ.');
+    }
+  } catch (error) { add('BLOCKING', 'PAGE_BLOCKS', '/', message(error)); }
   let publicDisplay = sitePublicDisplayDefaults();
   try { publicDisplay = readSitePublicDisplay(site.settings); }
   catch (error) {
@@ -228,7 +235,7 @@ export function validatePublicationSource(
     if (route.kind === 'GLOBAL_PAGE') {
       if (!page) add('BLOCKING', 'GLOBAL_PAGE_MISSING', route.path, `Не опубликована обязательная страница ${route.pageType}`);
       else {
-        try { if (page.type === 'SPEED_TEST') validateSpeedTestPage(page.content); else if (page.type === 'OFFICIAL_SITE') validateOfficialSitePage(page.content); else if (page.type === 'ACCOUNT') validateAccountPage(page.content); else validatePublishedBlocks(page.blocks); } catch (error) { add('BLOCKING', 'PAGE_BLOCKS', route.path, message(error), undefined, { ...(['ACCOUNT','OFFICIAL_SITE','SPEED_TEST'].includes(page.type) ? { template: page.type } : {}), ...contentErrorLocation(error) }); }
+        try { if (page.type === 'FAQ') validateFaqPage(page.content); else if (page.type === 'SPEED_TEST') validateSpeedTestPage(page.content); else if (page.type === 'OFFICIAL_SITE') validateOfficialSitePage(page.content); else if (page.type === 'ACCOUNT') validateAccountPage(page.content); else validatePublishedBlocks(page.blocks); } catch (error) { add('BLOCKING', 'PAGE_BLOCKS', route.path, message(error), undefined, { ...(['ACCOUNT','OFFICIAL_SITE','SPEED_TEST','FAQ'].includes(page.type) ? { template: page.type } : {}), ...contentErrorLocation(error) }); }
       }
     }
     if (route.kind === 'CITY_HOME') {

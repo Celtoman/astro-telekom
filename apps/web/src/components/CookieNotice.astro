@@ -1,0 +1,44 @@
+---
+import type { CookieNotice } from '../../../api/src/cookie-notice-model';
+import type { PageView } from '../data/site';
+import { publicAsset } from '../data/public-asset';
+interface Props { notice?: CookieNotice; pages: PageView[]; scope: string }
+const { notice, pages, scope } = Astro.props as Props;
+const links = notice?.links.map(link => ({ ...link, page: pages.find(page => page.type === link.document) }));
+---
+{notice?.enabled && links?.every(link => link.page) && <aside class="cookie-notice" data-cookie-notice={scope} hidden aria-label="Уведомление о cookie">
+  <span class="cookie-notice-icon"><img src={publicAsset('/images/figma/cookie-notice.svg')} width="32" height="32" alt="" /></span>
+  <div class="cookie-notice-copy">
+    <p>{notice.message}</p>
+    <div class="cookie-notice-links">{links.map(link => <a href={'/' + link.page!.slug}>{link.label}</a>)}</div>
+  </div>
+  <button type="button" data-close-cookie>{notice.button}</button>
+</aside>}
+<script>
+  import { initializeCookieNotice } from '../lib/cookie-notice-client.mjs';
+  initializeCookieNotice(document, window);
+</script>
+<style>
+  .cookie-notice {
+    position: fixed; z-index: 40; inset: auto 16px max(24px, env(safe-area-inset-bottom)) 16px; width: min(960px, calc(100% - 32px)); margin-inline: auto;
+    max-height: calc(100dvh - 40px); overflow: auto; display: flex; align-items: center; gap: 24px; padding: 20px;
+    border: 1px solid #dcecf7; border-radius: 24px; background: #fff; color: #18202a;
+  }
+  .cookie-notice[hidden], :global(body:has(dialog[open])) .cookie-notice { display: none; }
+  .cookie-notice-icon { flex: 0 0 48px; height: 48px; display: grid; place-items: center; border-radius: 14px; background: #eef8ff; }
+  .cookie-notice-copy { min-width: 0; flex: 1; display: grid; gap: 8px; }
+  .cookie-notice p { margin: 0; font-size: 16px; line-height: 24px; overflow-wrap: anywhere; }
+  .cookie-notice-links { display: flex; flex-wrap: wrap; gap: 0 16px; align-items: center; }
+  .cookie-notice-links a { display: flex; align-items: center; min-height: 44px; color: #1769aa; font-size: 14px; line-height: 20px; overflow-wrap: anywhere; text-decoration: none; }
+  .cookie-notice-links a:first-child, .cookie-notice-links a:hover { text-decoration: underline; }
+  .cookie-notice button { font: 600 14px/20px 'Geist Variable', sans-serif; min-height: 48px; width: 128px; flex: 0 0 auto; padding: 12px; border: 0; border-radius: 14px; background: #e0231e; color: #fff; cursor: pointer; overflow-wrap: anywhere; }
+  .cookie-notice :is(a,button):focus-visible { outline: 2px solid #1769aa; outline-offset: 3px; }
+  @media (max-width: 1100px) { .cookie-notice { width: min(720px, calc(100% - 32px)); } }
+  @media (max-width: 620px) {
+    .cookie-notice { flex-direction: column; align-items: stretch; gap: 16px; padding: 16px; bottom: max(16px, env(safe-area-inset-bottom)); }
+    .cookie-notice-icon { display: none; }
+    .cookie-notice-links { display: grid; gap: 0; justify-items: start; }
+    .cookie-notice-links a { min-height: 32px; }
+    .cookie-notice button { width: 100%; }
+  }
+</style>

@@ -71,7 +71,8 @@ test('public catalog does not expose authored variable templates or operator-onl
 
 test('Release 1 route policy rejects missing, extra and colliding route sources', () => {
   assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], releaseOneGlobalPages.slice(0, 4)), /Не опубликована обязательная/);
-  assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], [...releaseOneGlobalPages, { type: 'FAQ', slug: 'faq' }]), /ровно 5/);
+  assert.throws(() => buildReleaseOneRoutes([{ slug: 'kazan' }], [...releaseOneGlobalPages, { type: 'TV', slug: 'tv' }]), /ровно 5/);
+  assert.throws(() => buildReleaseOneRoutes([{ slug: 'faq' }], [...releaseOneGlobalPages, { type: 'FAQ', slug: 'faq' }]), /Конфликт маршрута.*faq/);
   assert.throws(() => buildReleaseOneRoutes([{ slug: 'goroda-obsluzhivaniya' }], releaseOneGlobalPages), /Конфликт маршрута Release 1/);
   assert.throws(
     () => buildReleaseOneRoutes([{ slug: 'kazan', tariffs: [{ slug: 'giga-500' }, { slug: 'giga-500' }] }], releaseOneGlobalPages),

@@ -33,6 +33,7 @@ enum PageType {
 }
 
 enum SeoTemplateKind {
+  FAQ
   CITY_SUPPORT
   SPEED_TEST
   OFFICIAL_SITE

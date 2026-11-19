@@ -85,7 +85,7 @@ export class AdminPagesController {
 
   @Post()
   async create(@Body() body: PageBody, @Req() request?: AdminRequest) {
-    if (['ACCOUNT','OFFICIAL_SITE','SPEED_TEST','CITY_SUPPORT'].includes(body.type as string)) throw new BadRequestException('Информационная страница создаётся миграцией и редактируется в своей отдельной форме');
+    if ((body.type === 'FAQ' && body.cityId === null) || ['ACCOUNT','OFFICIAL_SITE','SPEED_TEST','CITY_SUPPORT'].includes(body.type as string)) throw new BadRequestException('Информационная страница создаётся миграцией и редактируется в своей отдельной форме');
     if (Object.hasOwn(body, 'seo')) throw new BadRequestException('SEO меняется только через SEO-шаблон');
     if (body.type === 'HOME') throw new BadRequestException('Городская HOME создается из общего шаблона вместе с городом');
     assertPageScope(body);
@@ -117,7 +117,7 @@ export class AdminPagesController {
       return await this.prisma.$transaction(async (transaction: Prisma.TransactionClient) => {
         const current = await transaction.page.findUnique({ where: { id } });
         if (!current) throw new NotFoundException('Page not found');
-        if (current.type === 'ACCOUNT' || current.type === 'OFFICIAL_SITE' || current.type === 'SPEED_TEST' || ['ACCOUNT','OFFICIAL_SITE','SPEED_TEST','CITY_SUPPORT'].includes(body.type as string)) throw new BadRequestException('Информационная страница редактируется в своей отдельной форме');
+        if ((current.type === 'FAQ' && current.cityId === null) || (body.type === 'FAQ' && body.cityId === null) || current.type === 'ACCOUNT' || current.type === 'OFFICIAL_SITE' || current.type === 'SPEED_TEST' || ['ACCOUNT','OFFICIAL_SITE','SPEED_TEST','CITY_SUPPORT'].includes(body.type as string)) throw new BadRequestException('Информационная страница редактируется в своей отдельной форме');
         if (current.type === 'ADDRESS_CHECK' && current.slug === ADDRESS_PAGE_SLUG && current.templateId) throw new BadRequestException('Страница проверки подключения редактируется через общий шаблон ADDRESS');
         if (current.type === 'CITY_SUPPORT') throw new BadRequestException('Поддержка редактируется через общий шаблон CITY_SUPPORT');
         if (current.type === 'HOME' || body.type === 'HOME') throw new BadRequestException('Городская HOME редактируется через общий шаблон');
