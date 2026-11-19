@@ -61,7 +61,7 @@ assetPaths.push(...['available', 'alternatives', 'none', 'retry'].map(name => `/
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/news/', import.meta.url)).filter(name => /^[a-z0-9-]+\.svg$/.test(name)).map(name => `/images/news/${name}`));
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/official-site/v1/', import.meta.url)).filter(name => /^[a-z0-9-]+\.png$/.test(name)).map(name => `/images/official-site/v1/${name}`));
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/support/v1/',import.meta.url)).filter(name=>/^[a-z0-9-]+\.(png|jpg|svg)$/.test(name)).map(name=>`/images/support/v1/${name}`));
-assetPaths.push('/images/figma/faq-question-plus.svg');
+assetPaths.push('/images/figma/faq-question-minus.svg');
 assetPaths.push('/images/legal/caret-down.svg', '/images/legal/caret-up.svg');
 assetPaths.push('/images/cities-directory/search.svg', '/images/cities-directory/clear.svg');
 assetPaths.push(...readdirSync(new URL('../apps/web/public/images/speed-test/v1/', import.meta.url)).filter(name => /^[a-z0-9-]+\.svg$/.test(name)).map(name => `/images/speed-test/v1/${name}`));

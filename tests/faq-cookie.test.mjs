@@ -39,6 +39,8 @@ test('FAQ validates grouped editorial content and keeps HTML aligned with Schema
   assert.match(html, /<strong>&lt;&amp;&gt;<\/strong>/);
   assert.match(html, /<ol><li><p><a href="\/lichnyy-kabinet-dom-ru">Перейти<\/a>/);
   assert.doesNotMatch(html, /Пустая группа|Раскрыть все|Офис в Казани/);
+  assert.equal((html.match(/class="faq-plus"[^>]*src="\/images\/general-home\/faq-plus\.svg"/g) ?? []).length, 16);
+  assert.equal((html.match(/class="faq-minus"[^>]*src="\/images\/figma\/faq-question-minus\.svg"/g) ?? []).length, 16);
   assert.equal(schema.filter(entity => entity['@type'] === 'FAQPage').length, 1);
   assert.equal(schema[0].mainEntity.length, 15);
   assert.match(schema[0].mainEntity[0].acceptedAnswer.text, /<a href="https:\/\/partner.example.test\/lichnyy-kabinet-dom-ru">Перейти/);

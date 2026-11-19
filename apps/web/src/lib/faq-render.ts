@@ -34,19 +34,20 @@ export function renderFaqAnswer(answer: FaqAnswer, options: { interactive?: bool
 export function renderFaqPage(content: FaqPageContent, site: Parameters<typeof renderCityContacts>[1], options: HomeRenderOptions = {}) {
   const groups = faqGroups(content);
   const asset = options.asset ?? (value => value);
-  const icon = (name: string) => `<img width="20" height="20" alt="" src="${escape(asset('/images/general-home/' + name + '.svg'))}">`;
+  const icon = (state: 'plus' | 'minus', path: string) => `<img class="faq-${state}" width="20" height="20" alt="" src="${escape(asset(path))}">`;
+  const indicator = `<span class="faq-indicator" aria-hidden="true">${icon('plus', '/images/general-home/faq-plus.svg')}${icon('minus', '/images/figma/faq-question-minus.svg')}</span>`;
   const breadcrumbs = renderBreadcrumbs([{ title: 'Главная', ...(options.interactive !== false ? { href: '/' } : {}) }, { title: content.h1, mobileHidden: true }]);
   const navigation = groups.map(group => `<li><a href="#group-${escape(group.id)}">${escape(group.title)}</a></li>`).join('');
   const sections = groups.map((group, groupIndex) => `<section class="faq-topic" id="group-${escape(group.id)}" aria-labelledby="title-${escape(group.id)}" tabindex="-1">
     <h2 id="title-${escape(group.id)}">${escape(group.title)}</h2>
     <div class="faq-questions">${group.items.map((item, itemIndex) => `<details id="question-${escape(item.id)}" class="faq-question"${groupIndex === 0 && itemIndex === 0 ? ' open' : ''}>
-      <summary><span>${escape(item.question)}</span><span class="faq-indicator" aria-hidden="true"><img class="faq-plus" width="20" height="20" alt="" src="${escape(asset('/images/figma/faq-question-plus.svg'))}"><span class="faq-minus">${icon('faq-minus')}</span></span></summary>
+      <summary><span>${escape(item.question)}</span>${indicator}</summary>
       <div class="faq-answer">${renderFaqAnswer(item.answer, options)}<a href="#question-${escape(item.id)}" class="faq-permalink">Ссылка на вопрос</a></div>
     </details>`).join('')}</div>
   </section>`).join('');
   return `<div class="faq-page" data-faq-page>
     <header class="faq-intro">${breadcrumbs}<h1>${escape(content.h1)}</h1><p>${escape(content.intro)}</p></header>
-    <div class="faq-grid"><nav class="faq-index" aria-label="Темы вопросов"><details data-faq-topics open><summary>Темы вопросов <span class="faq-indicator" aria-hidden="true"><img class="faq-plus" width="20" height="20" alt="" src="${escape(asset('/images/figma/faq-question-plus.svg'))}"><span class="faq-minus">${icon('faq-minus')}</span></span></summary><ul>${navigation}</ul></details></nav><div class="faq-topics">${sections}</div></div>
+    <div class="faq-grid"><nav class="faq-index" aria-label="Темы вопросов"><details data-faq-topics open><summary>Темы вопросов ${indicator}</summary><ul>${navigation}</ul></details></nav><div class="faq-topics">${sections}</div></div>
     ${renderCityContacts(content.contacts, site, options)}
   </div>`;
 }
