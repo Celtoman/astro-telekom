@@ -258,6 +258,8 @@ Baseline включает legal-тесты, parser-time регрессию ка�
 
 Современные полные HOME/CITY3, ADDRESS, ACCOUNT и редакционные routes проверяются отдельными профильными suites ниже. Legacy Hero/service_grid fixtures проверяют совместимость прежних snapshots, а не состав нового выпуска.
 
+Регрессия пакетного импорта в `tests/tariff-import.test.cjs` проверяет границу 256 строк, SQL-параметры, сохранение `externalId` при apply, его восстановление в undo и отказ при несовпадении числа обновлённых строк. Сравнение полного diff, состояния и аудита на синтетической PostgreSQL описано в [протоколе #643](research/2026-11-20-tariff-import-performance.md).
+
 OG-сценарий в `tests/web-build-data.test.mjs` дополнительно проверяет сборку явных `og:title`, `og:description`, `og:image`, HTML-экранирование кавычек и амперсанда, абсолютный URL изображения и fallback исторического SEO-снимка без OG-полей.
 
 ## Что не покрыто тестами (известные пробелы)

@@ -10,6 +10,8 @@ const {
   parseWorkbook,
 } = require('../apps/api/dist/tariff-import.service.js');
 const { AdminTariffsController } = require('../apps/api/dist/admin-tariffs.controller.js');
+const { Prisma } = require('../apps/api/generated');
+const { TARIFF_IMPORT_WRITE_BATCH, insertImportedTariffs, updateImportedTariffs } = require('../apps/api/dist/tariff-import-writes.js');
 const SNAPSHOT_TIME = new Date('2026-09-11T00:00:00.000Z');
 
 const row = (overrides = {}) => ({
@@ -489,6 +491,35 @@ test('full snapshot transaction rolls back all changes when one write fails', as
 
   await assert.rejects(instance.applyReport(report, { confirmWarnings: true }), /database write failed/);
   assert.deepEqual(records, original);
+});
+
+test('large tariff writes are chunked and bind all row values while preserving the update mode', async () => {
+  const writes = Array.from({ length: TARIFF_IMPORT_WRITE_BATCH + 1 }, (_, index) => ({
+    id: `tariff-${index}`,
+    data: { name: 'Тариф с апострофом \'', externalId: null, attributes: Prisma.JsonNull },
+  }));
+  const inserts = [], updates = [];
+  const transaction = {
+    tariff: { createMany: async ({ data }) => inserts.push(data) },
+    $executeRaw: async sql => {
+      const encodedRows = sql.values.find(value => typeof value === 'string');
+      const rows = JSON.parse(encodedRows);
+      updates.push({ text: sql.text, rows });
+      return rows.length;
+    },
+  };
+  await insertImportedTariffs(transaction, writes.map(row => row.data));
+  assert.deepEqual(inserts.map(batch => batch.length), [TARIFF_IMPORT_WRITE_BATCH, 1]);
+  await updateImportedTariffs(transaction, writes);
+  assert.deepEqual(updates.map(({ rows }) => rows.length), [TARIFF_IMPORT_WRITE_BATCH, 1]);
+  assert.equal(updates[0].rows[0].attributes, null);
+  assert.equal(updates[0].rows[0].name, writes[0].data.name);
+  assert.doesNotMatch(updates[0].text, /Тариф с апострофом|"externalId" =/);
+
+  updates.length = 0;
+  await updateImportedTariffs(transaction, writes, true);
+  assert.match(updates[0].text, /"externalId" = item\."externalId"/);
+  await assert.rejects(updateImportedTariffs({ $executeRaw: async () => 0 }, writes), { status: 409 });
 });
 
 test('full snapshot apply records one audited working revision per affected site', async () => {
