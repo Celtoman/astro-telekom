@@ -366,3 +366,6 @@
 | TD-262 | [#619](https://github.com/Celtoman/astro-telekom/issues/619) 🟢 | SUPPORT: сверить типографику и высоту отдельного введения на ПК |
 
 - [#625](https://github.com/Celtoman/astro-telekom/issues/625) — OPEN, P1: защищённый тестовый web-контур возвращает HTTP 503 на прежнем GHCR-выпуске.
+
+- [#650](https://github.com/Celtoman/astro-telekom/issues/650) — OPEN, P2: превышение Redis rate limit возвращает HTTP 500 вместо 429.
+- [#651](https://github.com/Celtoman/astro-telekom/issues/651) — OPEN, P1: нехватка дискового места блокирует CODE при здоровом Coolify deployment.
